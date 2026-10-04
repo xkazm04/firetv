@@ -1,0 +1,115 @@
+{
+  "asset": "rw2-face-rook-v1-a1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "source_sha256": "dfb850cadcb39829ba83c21f70702fdd55efada369895e80379ab52e76d6c1f9",
+  "export_sha256": "72bf21d892dab6be96dd4c90c67b6202e4adeec83f2e5bc1323732b510b33e69",
+  "image_hashes": [
+    "72bf21d892dab6be96dd4c90c67b6202e4adeec83f2e5bc1323732b510b33e69",
+    "e8274d7c2cad4d8979fe85229b70cf5d2e37ff92f22377e7de281d5ffdf30639"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 60 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "a67ef39bb6ae21c65201da9ac60e491b07c7916a384a1d7478780da9e0ceb62e",
+  "at": "2026-10-03T10:29:14.286953+00:00",
+  "raw_content": "{\"face_box\": [318, 182, 682, 628], \"eye_centres\": [428, 318, 572, 318], \"framing\": \"head_shoulders\", \"both_eyes_visible\": true, \"expression_readable_native\": true, \"face_unobscured\": true, \"single_primary_face\": true, \"confidence\": 1, \"defects\": [],\"description\": \"A middle-aged man with a rugged appearance, wearing a yellow scarf and a dark, textured jacket with red accents. He has a pair of goggles on his forehead and a serious expression.\"}",
+  "status": "graded",
+  "answers": {
+    "face_box": [
+      318,
+      182,
+      682,
+      628
+    ],
+    "eye_centres": [
+      428,
+      318,
+      572,
+      318
+    ],
+    "framing": "head_shoulders",
+    "both_eyes_visible": true,
+    "expression_readable_native": true,
+    "face_unobscured": true,
+    "single_primary_face": true,
+    "confidence": 1,
+    "defects": [],
+    "description": "A middle-aged man with a rugged appearance, wearing a yellow scarf and a dark, textured jacket with red accents. He has a pair of goggles on his forehead and a serious expression."
+  },
+  "elapsed_seconds": 18.047
+}

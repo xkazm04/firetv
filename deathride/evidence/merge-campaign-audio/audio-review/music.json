@@ -1,0 +1,91 @@
+{
+  "page": "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/audio/x3/music/index.html",
+  "sampleCards": 3,
+  "categories": 1,
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    }
+  ],
+  "media": [
+    {
+      "file": "dust-road-proof.mp3",
+      "duration": 150,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "first-pass/dust-road-proof.mp3",
+      "duration": 150,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "dust-road-score.flac",
+      "duration": 150,
+      "mode": "existing",
+      "playStarted": true
+    }
+  ],
+  "checks": [
+    "all card radios/notes and category winners persist",
+    "no default decisions",
+    "clear pick preserves notes",
+    "copy fills escaped dated Markdown table",
+    "all local media load and start muted",
+    "single playback and stop",
+    "repeat and matching",
+    "light/dark/system themes",
+    "320/390/768/1440 widths",
+    "local links; zero network requests",
+    "storage denied: controls remain usable",
+    "clipboard denied: selected export fallback",
+    "malformed storage fallback",
+    "legacy notes retained without inferred picks"
+  ],
+  "result": "pass",
+  "at": "2026-10-03T00:22:29.636383+00:00",
+  "browser": "154.0.8037.58",
+  "notMeasured": [
+    "human listening",
+    "physical mobile browser",
+    "Fire TV / in-game acceptance"
+  ]
+}

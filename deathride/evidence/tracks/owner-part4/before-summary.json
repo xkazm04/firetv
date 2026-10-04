@@ -1,0 +1,292 @@
+{
+  "tag": "owner-before",
+  "physical": {
+    "trials": 11520,
+    "early": 0,
+    "completedLead": 10785,
+    "unfinishedLead": 735,
+    "rounds": 34
+  },
+  "bossPhysical": [
+    {
+      "event": 7,
+      "skill": 0,
+      "trials": 240,
+      "firsts": 3
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "trials": 240,
+      "firsts": 35
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "trials": 240,
+      "firsts": 44
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "trials": 360,
+      "firsts": 2
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "trials": 360,
+      "firsts": 16
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "trials": 360,
+      "firsts": 44
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "trials": 480,
+      "firsts": 1
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "trials": 480,
+      "firsts": 11
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "trials": 480,
+      "firsts": 52
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "trials": 600,
+      "firsts": 9
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "trials": 600,
+      "firsts": 84
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "trials": 600,
+      "firsts": 146
+    }
+  ],
+  "bossDifficulty": [
+    {
+      "event": 7,
+      "skill": 0,
+      "trials": 32,
+      "wins": 7,
+      "beatBoss": 10,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "trials": 32,
+      "wins": 9,
+      "beatBoss": 10,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "trials": 32,
+      "wins": 15,
+      "beatBoss": 18,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "trials": 32,
+      "wins": 4,
+      "beatBoss": 14,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "trials": 32,
+      "wins": 6,
+      "beatBoss": 20,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "trials": 32,
+      "wins": 4,
+      "beatBoss": 20,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "trials": 32,
+      "wins": 3,
+      "beatBoss": 11,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "trials": 32,
+      "wins": 2,
+      "beatBoss": 4,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "trials": 32,
+      "wins": 3,
+      "beatBoss": 6,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "trials": 32,
+      "wins": 12,
+      "beatBoss": 20,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "trials": 32,
+      "wins": 8,
+      "beatBoss": 18,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "trials": 32,
+      "wins": 9,
+      "beatBoss": 16,
+      "early": 0,
+      "unresolved": 0
+    }
+  ],
+  "duels": [
+    {
+      "skill": 0,
+      "trials": 1024,
+      "wins": 150,
+      "draws": 101,
+      "timeouts": 101,
+      "mutualWrecks": 0,
+      "early": 0,
+      "oneShots": 0,
+      "medianSeconds": 287.4
+    },
+    {
+      "skill": 1,
+      "trials": 1024,
+      "wins": 187,
+      "draws": 78,
+      "timeouts": 78,
+      "mutualWrecks": 0,
+      "early": 0,
+      "oneShots": 0,
+      "medianSeconds": 266.65
+    },
+    {
+      "skill": 2,
+      "trials": 1024,
+      "wins": 151,
+      "draws": 95,
+      "timeouts": 95,
+      "mutualWrecks": 0,
+      "early": 0,
+      "oneShots": 0,
+      "medianSeconds": 259.71
+    }
+  ],
+  "careers": {
+    "race": {
+      "status": "complete",
+      "trials": 2000,
+      "completed": 868,
+      "bankrupt": 0,
+      "censoredAt70": 1132,
+      "medianRaces": 70.0,
+      "medianHours": 4.98,
+      "completedMedianHours": 4.26,
+      "bySkill": [
+        {
+          "skill": 0,
+          "trials": 667,
+          "completed": 0,
+          "medianRaces": 70
+        },
+        {
+          "skill": 1,
+          "trials": 667,
+          "completed": 403,
+          "medianRaces": 68
+        },
+        {
+          "skill": 2,
+          "trials": 666,
+          "completed": 465,
+          "medianRaces": 63.0
+        }
+      ]
+    },
+    "pr": {
+      "status": "complete",
+      "trials": 2000,
+      "completed": 905,
+      "bankrupt": 0,
+      "censoredAt70": 1095,
+      "medianRaces": 70.0,
+      "medianHours": 4.99,
+      "completedMedianHours": 4.0,
+      "bySkill": [
+        {
+          "skill": 0,
+          "trials": 667,
+          "completed": 0,
+          "medianRaces": 70
+        },
+        {
+          "skill": 1,
+          "trials": 667,
+          "completed": 282,
+          "medianRaces": 70
+        },
+        {
+          "skill": 2,
+          "trials": 666,
+          "completed": 623,
+          "medianRaces": 57.0
+        }
+      ]
+    }
+  },
+  "exactReplays": "34 event samples reproduced their exact physical-library hashes on the final core."
+}

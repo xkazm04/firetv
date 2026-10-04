@@ -1,0 +1,210 @@
+{
+  "id": "defeat",
+  "cue": "race.defeat",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:40.427152+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\defeat.mp3.json",
+    "sourceSha256": "e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24",
+    "generatedAt": "2026-10-02T21:36:51.624Z",
+    "request": {
+      "text": "Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 3,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 120,
+    "providerCredits": 30,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/defeat.mp3",
+    "sha256": "e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24",
+    "bytes": 48945,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 3.0,
+    "durationWindowSeconds": [
+      2.85,
+      3.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 132300,
+    "decodedBytes": 529200,
+    "integratedLufs": -17.96,
+    "truePeakDbtp": 0.28,
+    "loudnessRangeLu": 8.6,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 23,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          90793,
+          132103
+        ]
+      ],
+      "fraction": 0.3122448979591837,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 66150,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.345860354055948,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/defeat.wav",
+      "sha256": "84d9cd618fc7886b262bfb7f17246fb1d9b62af120ab6fe7f5294b1797be803e",
+      "bytes": 132378,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 3.0,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 66150,
+      "decodedBytes": 132300,
+      "integratedLufs": -20.04,
+      "truePeakDbtp": -3.82,
+      "loudnessRangeLu": 5.6,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            48717,
+            66063
+          ]
+        ],
+        "fraction": 0.26222222222222225,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 48937,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 0.8203515443298184,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/defeat.wav",
+    "sha256": "f3eea32a6ee1917a7dba80baf05433e6d4ead5fcd9358aba2ba41bb8c1dccc26",
+    "bytes": 97952,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 2.219365079365079,
+    "durationWindowSeconds": [
+      2.2173650793650794,
+      2.221365079365079
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 48937,
+    "decodedBytes": 97874,
+    "integratedLufs": -20.01,
+    "truePeakDbtp": -5.54,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          46010,
+          48937
+        ]
+      ],
+      "fraction": 0.0598115944990498,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

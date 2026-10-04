@@ -1,0 +1,32 @@
+{
+  "id": "372142a1-af75-4601-8ac5-63124d53df57",
+  "ts": "2026-10-02T21:34:39.780Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/hammer-hit.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24562,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 33062,
+  "providerCredits": 20,
+  "sha256": "c2ccf3cdb878f1326a59e53e08c08ba8b086e2c2b1c1e02d9e954c2216148f18",
+  "completedAt": "2026-10-02T21:34:44.781Z",
+  "creditsAfter": 24562,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 900
+}

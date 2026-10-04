@@ -1,0 +1,32 @@
+{
+  "id": "7851a11d-da55-4f1d-8c26-a7cba91ed6d9",
+  "ts": "2026-10-02T21:38:16.008Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-shoulder.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24385,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "73fd743ed66fdbf3f573f45114463100452fc159a63bc887755d82128ac2f1c2",
+  "completedAt": "2026-10-02T21:38:21.319Z",
+  "creditsAfter": 24385,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2740
+}

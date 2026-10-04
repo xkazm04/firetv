@@ -1,0 +1,89 @@
+Starting a Gradle Daemon, 3 busy and 1 incompatible and 4 stopped Daemons could not be reused, use --status for details
+
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+
+> Task :core:compileKotlin UP-TO-DATE
+
+> Task :core:compileJava NO-SOURCE
+
+> Task :core:processResources UP-TO-DATE
+
+> Task :core:classes UP-TO-DATE
+
+> Task :core:jar UP-TO-DATE
+
+> Task :core:compileTestKotlin UP-TO-DATE
+
+> Task :core:compileTestJava NO-SOURCE
+
+> Task :core:processTestResources NO-SOURCE
+
+> Task :core:testClasses UP-TO-DATE
+
+
+
+> Task :core:rosterReport
+
+rookie/equal/technical: [Needle=40.8333333333323s wins=1, Line=50.92222222222062s wins=0]
+
+rookie/equal/straight: [Needle=242.75555555564088s wins=0, Line=218.98333333339974s wins=1]
+
+rookie/equal/loose: [Needle=73.84999999999711s wins=1, Line=82.49444444444104s wins=0]
+
+rookie/skill/technical: [Needle=37.12777777777695s wins=1, Line=50.60555555555396s wins=0]
+
+club/equal/technical: [Bastion=51.63888888888724s wins=0, Trail=42.94444444444329s wins=1]
+
+club/equal/straight: [Bastion=192.655555555601s wins=1, Trail=228.33333333340718s wins=0]
+
+club/equal/loose: [Bastion=79.43888888888567s wins=0, Trail=59.86666666666455s wins=1]
+
+club/skill/technical: [Bastion=48.87777777777629s wins=0, Trail=33.488888888888276s wins=1]
+
+pro/equal/technical: [Comet=46.62777777777641s wins=0, Flint=41.50555555555448s wins=1]
+
+pro/equal/straight: [Comet=176.8388888889218s wins=1, Flint=209.6888888889479s wins=0]
+
+pro/equal/loose: [Comet=73.87777777777488s wins=0, Flint=65.83888888888644s wins=1]
+
+pro/skill/technical: [Comet=44.427777777776534s wins=0, Flint=33.84444444444381s wins=1]
+
+elite/equal/technical: [Quill=36.49999999999921s wins=1, Vandal=39.80555555555458s wins=0]
+
+elite/equal/straight: [Quill=198.0555555556053s wins=0, Vandal=179.63333333336845s wins=1]
+
+elite/equal/loose: [Quill=57.894444444442435s wins=1, Vandal=66.94999999999749s wins=0]
+
+elite/skill/technical: [Quill=32.88333333333275s wins=1, Vandal=43.43333333333215s wins=0]
+
+champion/equal/technical: [Kestrel=34.09444444444379s wins=1, Bulwark=39.58888888888793s wins=0]
+
+champion/equal/straight: [Kestrel=187.95555555559727s wins=0, Bulwark=175.06666666669813s wins=1]
+
+champion/equal/loose: [Kestrel=59.533333333331235s wins=1, Bulwark=65.17777777777536s wins=0]
+
+champion/skill/technical: [Kestrel=30.84999999999953s wins=1, Bulwark=37.59999999999915s wins=0]
+
+
+
+
+
+[Incubating] Problems report is available at: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/build/reports/problems/problems-report.html
+
+
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+
+
+BUILD SUCCESSFUL in 12s
+
+5 actionable tasks: 1 executed, 4 up-to-date

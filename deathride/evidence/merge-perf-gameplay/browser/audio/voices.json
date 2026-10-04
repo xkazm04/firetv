@@ -1,0 +1,241 @@
+{
+  "page": "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/audio/x3/voices/index.html",
+  "sampleCards": 14,
+  "categories": 16,
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    }
+  ],
+  "media": [
+    {
+      "file": "edited/announcer.debt.wav",
+      "duration": 5.44576,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.debt.mp3",
+      "duration": 5.804989,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/announcer.boss.wav",
+      "duration": 3.669615,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.boss.mp3",
+      "duration": 4.086712,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/announcer.ally.wav",
+      "duration": 4.674467,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.ally.mp3",
+      "duration": 5.06195,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/announcer.seizure.wav",
+      "duration": 3.785533,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.seizure.mp3",
+      "duration": 4.086712,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/announcer.duel.wav",
+      "duration": 3.879819,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.duel.mp3",
+      "duration": 4.179592,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/announcer.freedom.wav",
+      "duration": 3.282948,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/announcer.freedom.mp3",
+      "duration": 3.715193,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.welcome.wav",
+      "duration": 5.458367,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.welcome.mp3",
+      "duration": 5.804989,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.repair.wav",
+      "duration": 4.803311,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.repair.mp3",
+      "duration": 5.20127,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.books.wav",
+      "duration": 4.350068,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.books.mp3",
+      "duration": 4.736871,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.ally.wav",
+      "duration": 5.49288,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.ally.mp3",
+      "duration": 5.851429,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.seizure.wav",
+      "duration": 7.047075,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.seizure.mp3",
+      "duration": 7.430385,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.rig.wav",
+      "duration": 5.43424,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.rig.mp3",
+      "duration": 5.804989,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.duel.wav",
+      "duration": 3.710884,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.duel.mp3",
+      "duration": 4.040272,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "edited/mechanic.after.wav",
+      "duration": 4.118231,
+      "mode": "existing",
+      "playStarted": true
+    },
+    {
+      "file": "raw/mechanic.after.mp3",
+      "duration": 4.458231,
+      "mode": "existing",
+      "playStarted": true
+    }
+  ],
+  "checks": [
+    "all card radios/notes and category winners persist",
+    "no default decisions",
+    "clear pick preserves notes",
+    "copy fills escaped dated Markdown table",
+    "all local media load and start muted",
+    "single playback and stop",
+    "repeat and matching",
+    "light/dark/system themes",
+    "320/390/768/1440 widths",
+    "local links; zero network requests",
+    "storage denied: controls remain usable",
+    "clipboard denied: selected export fallback",
+    "malformed storage fallback",
+    "legacy notes retained without inferred picks"
+  ],
+  "result": "pass",
+  "at": "2026-10-03T09:37:19.558708+00:00",
+  "browser": "154.0.8037.58",
+  "notMeasured": [
+    "human listening",
+    "physical mobile browser",
+    "Fire TV / in-game acceptance"
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "asset": "rw2-control-old-mechanic",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "source_sha256": "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689",
+  "export_sha256": "54d86fdfd5f843e8f478685a17c1de58ce015fb723e304ac8e6b4b1a7bc9641b",
+  "image_hashes": [
+    "54d86fdfd5f843e8f478685a17c1de58ce015fb723e304ac8e6b4b1a7bc9641b",
+    "c574c8ddb9fdca8c7b8d85c68ef091aba153eb18e610d3b94eb4c80575b47f02",
+    "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 96 pixel preview, image 3 the original identity reference (body-heavy old framing is intentionally NOT to be preserved). Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. Check face identity against image 3, allow changed expression and tighter framing. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition, lost identity or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "identity_matches": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "identity_matches",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "31e8d3075e433d4e6e562603139466267d8bad03ea64cc2bf3f25f3c0a8366ae",
+  "at": "2026-10-03T10:04:43.798216+00:00",
+  "raw_content": "{\"both_eyes_visible\": true, \"confidence\": 0.75, \"defects\": [\"small_face\", \"body_dominant_composition\", \"lost_identity\"], \"description\": \"Face is small in frame, occupying roughly 100px of a 1000px canvas. Body/apron dominates the composition. Identity differs from reference image 3: reference has a clean, clearly readable smiling face with visible eyes, brows, nose and mouth; the exported frame shows a much smaller, less legible face with reduced facial detail and a less distinct expression.\",\"expression_readable_native\": true, \"eye_centres\": [424, 128, 576, 128], \"face_box\": [390, 88, 610, 210], \"face_unobscured\": true, \"framing\": \"full_body\", \"identity_matches\": false}",
+  "status": "graded",
+  "answers": {
+    "both_eyes_visible": true,
+    "confidence": 0.75,
+    "defects": [
+      "small_face",
+      "body_dominant_composition",
+      "lost_identity"
+    ],
+    "description": "Face is small in frame, occupying roughly 100px of a 1000px canvas. Body/apron dominates the composition. Identity differs from reference image 3: reference has a clean, clearly readable smiling face with visible eyes, brows, nose and mouth; the exported frame shows a much smaller, less legible face with reduced facial detail and a less distinct expression.",
+    "expression_readable_native": true,
+    "eye_centres": [
+      424,
+      128,
+      576,
+      128
+    ],
+    "face_box": [
+      390,
+      88,
+      610,
+      210
+    ],
+    "face_unobscured": true,
+    "framing": "full_body",
+    "identity_matches": false
+  },
+  "elapsed_seconds": 10.875
+}

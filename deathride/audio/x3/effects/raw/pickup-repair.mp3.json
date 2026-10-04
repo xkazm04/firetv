@@ -1,0 +1,32 @@
+{
+  "id": "83395ba6-e361-4c5a-8a7a-8964bbca8379",
+  "ts": "2026-10-02T21:35:40.545Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/pickup-repair.mp3",
+  "seconds": 0.7,
+  "request": {
+    "text": "One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+    "duration_seconds": 0.7,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24505,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 12164,
+  "providerCredits": 7,
+  "sha256": "9f1330313af206f5d02a8c99f136c2a57a753f8397fd8624bdc8ac9e2433099d",
+  "completedAt": "2026-10-02T21:35:45.360Z",
+  "creditsAfter": 24505,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1400
+}

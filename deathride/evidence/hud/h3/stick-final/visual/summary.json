@@ -1,0 +1,187 @@
+{
+  "startedUtc": "2026-10-02T16:53:25.359Z",
+  "finishedUtc": "2026-10-02T17:05:28.495Z",
+  "apkSha256": "da03b96cdb6a2e94f54a0153d599ba2518a57cb946e99aef3f90f36f34842ebc",
+  "model": "AFTKM",
+  "hostPriority": "Normal",
+  "screenshotsEnabled": true,
+  "minesEnabled": true,
+  "mineBlastRadiiM": [
+    0.5
+  ],
+  "mineTriggerRadiiM": [
+    0.5
+  ],
+  "peakLiveMines": 16,
+  "mineShotsAcrossRounds": 273,
+  "durationSeconds": 720.0847596,
+  "rounds": 16,
+  "completedRounds": 8,
+  "observedWindows": 436,
+  "completeActiveWindows": 349,
+  "adbReconnects": [],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 21603,
+      "accepted": 21598,
+      "rejected": 5,
+      "hz": 30.000634941920246
+    },
+    {
+      "slot": 1,
+      "sent": 21603,
+      "accepted": 21598,
+      "rejected": 5,
+      "hz": 30.000634941920246
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 0,
+      "q": 6689,
+      "second": 223.26297689999998,
+      "rttMs": 290.2477999999828
+    },
+    {
+      "slot": 1,
+      "q": 6689,
+      "second": 223.26303049999999,
+      "rttMs": 290.25560000000405
+    },
+    {
+      "slot": 0,
+      "q": 6690,
+      "second": 223.26304739999998,
+      "rttMs": 259.15479999998934
+    },
+    {
+      "slot": 1,
+      "q": 6690,
+      "second": 223.2646882,
+      "rttMs": 260.7514000000083
+    },
+    {
+      "slot": 0,
+      "q": 6699,
+      "second": 223.5956476,
+      "rttMs": 295.33400000000256
+    },
+    {
+      "slot": 1,
+      "q": 6699,
+      "second": 223.5957417,
+      "rttMs": 295.38959999999497
+    },
+    {
+      "slot": 1,
+      "q": 6718,
+      "second": 224.5270221,
+      "rttMs": 586.6367000000027
+    },
+    {
+      "slot": 0,
+      "q": 6718,
+      "second": 224.536047,
+      "rttMs": 595.6970000000147
+    },
+    {
+      "slot": 1,
+      "q": 6728,
+      "second": 224.805188,
+      "rttMs": 536.0979999999981
+    },
+    {
+      "slot": 0,
+      "q": 6728,
+      "second": 224.8157057,
+      "rttMs": 546.6529999999912
+    }
+  ],
+  "classUses": {
+    "Needle": 5,
+    "Line": 14,
+    "Bastion": 20,
+    "Comet": 9,
+    "Trail": 5,
+    "Flint": 12,
+    "Quill": 4,
+    "Vandal": 6,
+    "Kestrel": 7,
+    "Bulwark": 9
+  },
+  "classActiveHudSamples": {
+    "Line": 187,
+    "Needle": 40,
+    "Bastion": 199,
+    "Comet": 118,
+    "Trail": 70,
+    "Flint": 21,
+    "Quill": 72,
+    "Vandal": 118,
+    "Kestrel": 21,
+    "Bulwark": 162
+  },
+  "peakConcurrentCommittedAbilities": 4,
+  "frameMs": {
+    "activeP50Range": [
+      16.504769,
+      16.821693
+    ],
+    "worstActiveP95": 25.591385000000002,
+    "activeMaximum": 59.023615,
+    "allWindowMaximum": 233.58092299999998
+  },
+  "stepMs": {
+    "activeP50Range": [
+      1.311462,
+      1.909462
+    ],
+    "worstActiveP95": 3.699539,
+    "activeMaximum": 31.271615,
+    "allWindowMaximum": 31.271615
+  },
+  "discardedSimulationMsSinceAppStart": 995,
+  "discardedMsInAnyCompleteActiveWindow": 0,
+  "inputAgeWorstActiveP95Ms": [
+    212.29623999996693,
+    212.1039799999853
+  ],
+  "staleConsumeSamplesSinceAppStart": [
+    93,
+    69
+  ],
+  "pssMiBRange": [
+    105.0224609375,
+    117.349609375
+  ],
+  "warmFirstLastMedianMiB": [
+    114.5029296875,
+    105.1669921875
+  ],
+  "warmMedianGrowthMiB": -9.3359375,
+  "warmPssTrendMiBPerMinute": -0.744172909118525,
+  "thermalStatuses": [
+    0
+  ],
+  "maxOwnedTexturesMiB": 31.9697265625,
+  "maxArtMiB": 10.75,
+  "gates": {
+    "allClassActivations": true,
+    "inputs": false,
+    "frameP95AtMost16_7Ms": false,
+    "activeMaxAtMost33Ms": false,
+    "activeMedians16to18Ms": true,
+    "pssAtMost192MiB": true,
+    "warmMedianGrowthAtMost8MiB": true,
+    "textureBudget": true
+  },
+  "limits": [
+    "Windows overlap: their percentiles are not averaged or added.",
+    "Active windows require at least ten simulated race seconds; preparation and startup tails remain separately visible.",
+    "Class cycling includes interrupted practice rounds; completed round count is separate.",
+    "Normal AI and mortal cars, not a forced maximum-effects stress fixture.",
+    "Scripted LAN traffic is not optical latency, physical-phone comfort, fairness or fun."
+  ]
+}

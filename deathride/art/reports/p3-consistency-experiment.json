@@ -1,0 +1,17 @@
+{
+  "anchor_sha256": "9ef64eae55a3a5f380ddd69da1a8a249feb2131cfa6d27a3b8386ffd6c608fe8",
+  "n_per_arm": 1,
+  "method": "Bounding-box-normalized silhouette IoU; aspect ratio and role-palette distance. Paint change is intentional. No statistical or owner acceptance claim.",
+  "metrics": {
+    "p3-method-conditioned-v1": {
+      "aligned_silhouette_iou": 0.9980371163454675,
+      "aspect_ratio": 2.1011494252873564,
+      "palette_p90_delta_e": 9.537389792142998
+    },
+    "p3-method-control-v1": {
+      "aligned_silhouette_iou": 0.9499228262733664,
+      "aspect_ratio": 2.251851851851852,
+      "palette_p90_delta_e": 12.243046109576468
+    }
+  }
+}

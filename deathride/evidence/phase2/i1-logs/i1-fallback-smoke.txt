@@ -1,0 +1,54 @@
+Starting a Gradle Daemon, 3 busy and 1 stopped Daemons could not be reused, use --status for details
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :desktop:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:processResources NO-SOURCE
+> Task :link:processResources NO-SOURCE
+> Task :desktop:processResources UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :link:compileKotlin UP-TO-DATE
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :game:compileKotlin UP-TO-DATE
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar UP-TO-DATE
+> Task :desktop:compileKotlin
+> Task :desktop:compileJava NO-SOURCE
+> Task :desktop:classes UP-TO-DATE
+
+> Task :desktop:run
+[DeathRide] art fallback catalog: SerializationException: Error reading file: absent-art-audit/catalog.json
+[DeathRide] art ready regions=0 bytes=0 failures=1 heading=runtime-rotation
+.\gradlew.bat : [DefaultDispatcher-worker-4] INFO ktor.application - Autoreload is disabled because the development
+mode is off.
+At line:2 char:1
++ .\gradlew.bat :desktop:run '--args=--smoke --no-art' *> i1-fallback-s ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([DefaultDispatc...nt mode is off.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[DefaultDispatcher-worker-4] INFO ktor.application - Application started in 0.044 seconds.
+DeathRide pairing http://172.25.208.1:8765/?pin=4178
+[DefaultDispatcher-worker-4] INFO ktor.application - Responding at http://127.0.0.1:8765
+[DeathRide] sceneryBake foundry slicedFrames=8 totalCpuMs=27.6709 maxSliceMs=6.5559
+DeathRide race countdown mode=practice
+DeathRide desktop smoke complete; GL NVIDIA GeForce RTX 4090/PCIe/SSE2; hash 4097186915007188043
+w: Detected multiple Kotlin daemon sessions at
+
+[Incubating] Problems report is available at: file:///C:/Users/kazda/kiro/firetv-deathride-int/deathride/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 20s
+10 actionable tasks: 2 executed, 8 up-to-date

@@ -1,0 +1,12 @@
+car,id,name,kind,windupSeconds,activeSeconds,recoverySeconds,cooldownSeconds,energyCapacity,energyCost,energyPerSecond,engineScale,speedScale,gripScale,steerScale,damageReduction,damage,rangeM,radiusM,slowScale,slowSeconds,weaponLock,aiRangeM,aiMaxCurvature,aiMinSpeedMps,perceptionSeconds,escapeSpeedMps,prAdjustment,effectId
+Needle,steel-flick,Steel Flick,DASH,0.15,0.80,0.25,7,100,35,12,1.80,1,0.96,1,0,0,0,0,1,0,1,16,0.025,7,0.25,10,0,abilities/steel-flick
+Line,flywheel,Flywheel,SURGE,0.25,1.40,0.30,9,100,40,10,1.35,1,1,0.88,0,0,0,0,1,0,1,20,0.012,9,0.25,10,0,abilities/flywheel
+Bastion,shoulder,Shoulder,CHARGE,0.40,1.00,0.35,10,100,45,10,1.40,1,1,0.65,0,10,0,0,1,0,1,16,0.016,7,0.25,10,0,abilities/shoulder
+Comet,turbine,Turbine,TURBINE,0.40,1.30,0.50,13,100,60,9,1.75,1.06,0.78,0.72,0,0,0,0,1,0,1,28,0.008,15,0.25,10,0,abilities/turbine
+Trail,ground-bite,Ground Bite,GRIP,0.20,1.80,0.25,9,100,40,10,1,0.95,1.25,1,0,0,0,0,1,0,1,16,0.10,5,0.25,10,0,abilities/ground-bite
+Flint,punch-lance,Punch Lance,LANCE,0.75,0.20,0.30,9,100,45,10,0.80,1,1,1,0,12,42,1.2,1,0,1,42,0.03,0,0.25,10,0,abilities/punch-lance
+Quill,bone-rack,Bone Rack,SPIKES,0.40,1.80,0.30,9,100,40,10,1,0.94,1,0.86,0,9,0,0,1,0,1,14,0.10,3,0.25,10,0,abilities/bone-rack
+Vandal,scrambler,Scrambler,PATCH,1.00,2.00,0.30,12,100,55,10,1,1,1,1,0,6,0,4,0.70,0.90,1,20,0.10,5,0.25,10,0,abilities/scrambler
+Kestrel,arc-harpoon,Arc Harpoon,HARPOON,0.75,0.25,0.35,10,100,65,8,0.85,1,1,1,0,9,32,1.0,0.65,0.90,1,32,0.03,0,0.25,10,0,abilities/arc-harpoon
+Bulwark,plate-brace,Plate Brace,GUARD,0.25,1.80,0.35,12,100,50,10,0.72,0.95,1,0.90,0.45,0,0,0,1,0,1,18,0.10,0,0.25,10,0,abilities/plate-brace
+MechanicRig,mine-dispatcher,Mine Dispatcher,DISPATCHER,0.75,0.10,0.30,4,100,30,10,1,1,1,1,0,0,0,0,1,0,0,20,0.10,4,0.25,10,0,abilities/mine-dispatcher

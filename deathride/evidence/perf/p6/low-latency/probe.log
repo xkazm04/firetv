@@ -1,0 +1,50 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[124,124],"rejected":[0,0],"hostPumpStalls":0}
+{"second":69,"accepted":[2070,2070],"rejected":[0,0],"hostPumpStalls":0}
+{"second":129,"accepted":[3880,3880],"rejected":[0,0],"hostPumpStalls":0}
+{"second":189,"accepted":[6136,6136],"rejected":[0,0],"hostPumpStalls":1}
+{"second":249,"accepted":[7067,7067],"rejected":[0,0],"hostPumpStalls":1}
+{"second":309,"accepted":[8871,8871],"rejected":[0,0],"hostPumpStalls":1}
+{"second":369,"accepted":[10672,10672],"rejected":[0,0],"hostPumpStalls":1}
+{"second":429,"accepted":[12477,12477],"rejected":[0,0],"hostPumpStalls":1}
+{"second":489,"accepted":[14283,14283],"rejected":[0,0],"hostPumpStalls":1}
+{"second":549,"accepted":[16081,16081],"rejected":[0,0],"hostPumpStalls":1}
+{"second":610,"accepted":[17886,17886],"rejected":[0,0],"hostPumpStalls":1}
+{"second":670,"accepted":[19690,19690],"rejected":[0,0],"hostPumpStalls":1}
+{"second":730,"accepted":[21492,21492],"rejected":[0,0],"hostPumpStalls":1}
+{"second":790,"accepted":[23293,23293],"rejected":[0,0],"hostPumpStalls":1}
+{"second":850,"accepted":[25100,25100],"rejected":[0,0],"hostPumpStalls":1}
+{"second":900,"accepted":[26595,26595],"rejected":[0,0],"hostPumpStalls":1}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:109:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.158605,
+  "rounds": 18,
+  "classUses": {
+    "Needle": 27,
+    "Line": 13,
+    "Bastion": 16,
+    "Comet": 14,
+    "Trail": 13,
+    "Flint": 10,
+    "Quill": 12,
+    "Vandal": 8,
+    "Kestrel": 15,
+    "Bulwark": 8
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26595,
+      "accepted": 26595,
+      "rejected": 0,
+      "hz": 29.544793386716556
+    },
+    {
+      "slot": 1,
+      "sent": 26595,
+      "accepted": 26595,
+      "rejected": 0,
+      "hz": 29.544793386716556
+    }
+  ]
+}

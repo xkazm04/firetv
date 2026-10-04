@@ -1,0 +1,676 @@
+{
+  "records": [
+    {
+      "id": "v4-hud-instrument-v1",
+      "source": "sources/v4-hud-instrument-v1.jpg",
+      "pixels": "pixels/v4-hud-instrument-v1.png",
+      "source_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+      "export_sha256": "55a2497b1f33880b0f0b954806b9edc70be9544bbd4c07e28073c4067cac4af7",
+      "selection": {
+        "id": "v4-hud-instrument-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+        "processed_sha256": "55a2497b1f33880b0f0b954806b9edc70be9544bbd4c07e28073c4067cac4af7",
+        "review_note": "Bone/rust open rectangle with quiet opening. Corrected margin passes. Source is compact rather than 4:1; fixed-corner runtime expansion supplies the wide instrument. No text or directional shadow.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A wide low rectangular hollow instrument frame with a thin battered bone-white steel border, rust-orange corner plates, and a huge empty magenta rectangular opening. The frame is flat front-facing with straight horizontal and vertical inner edges, isolated on a magenta background. Small yellow warning labels and dark rust stains are visible on the border, but no symbols, ticks, or text are present. The subject is centered within the middle 75 percent of the canvas with at least 12 percent empty magenta margin on every side.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A wide, low rectangular hollow instrument frame centered on a solid magenta background. The frame features a thin, battered bone-white steel border with visible scratches and rust spots. The top-left and top-right corners are reinforced with rust-orange metal plates secured by bolts, while the bottom corners have white plates with dark grime. The central opening is a large, empty magenta rectangle with straight edges, matching the background color. The object is isolated with no surrounding scene, text, or symbols."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": [
+        47,
+        84,
+        215,
+        173
+      ]
+    },
+    {
+      "id": "v4-hud-meter-v1",
+      "source": "sources/v4-hud-meter-v1.jpg",
+      "pixels": "pixels/v4-hud-meter-v1.png",
+      "source_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+      "export_sha256": "0951f93eb1e2408f5be6833eef893952d34bc494427d71893244dfb83a9b88c8",
+      "selection": {
+        "id": "v4-hud-meter-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+        "processed_sha256": "0951f93eb1e2408f5be6833eef893952d34bc494427d71893244dfb83a9b88c8",
+        "review_note": "Thin bone rim, rust inner edge and ochre end cap. Empty measured opening supports authoritative linear fill. Compact source expands through fixed corners; no generated ticks or numbers.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A wide horizontal hollow energy gauge frame with a bone-metal rim, ochre end cap, and empty magenta opening, isolated on a pink background.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A wide, horizontal, hollow rectangular frame with a distressed, bone-metal appearance, featuring a single ochre end cap on the right side. The frame has a very large, completely empty magenta opening with straight rectangular inner edges. It is centered on a solid magenta background, with no surrounding scene, filled bars, ticks, numbers, or symbols. The frame has a flat front view UI style, with a clear silhouette and at least 12 percent empty magenta margin on every side."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": [
+        43,
+        94,
+        211,
+        160
+      ]
+    },
+    {
+      "id": "v4-hud-button-v1",
+      "source": "sources/v4-hud-button-v1.jpg",
+      "pixels": "pixels/v4-hud-button-v1.png",
+      "source_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+      "export_sha256": "356143094e937ad2a28c8fe54dd6446f9c1ce79624da4a891db92f5f9c06b39a",
+      "selection": {
+        "id": "v4-hud-button-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+        "processed_sha256": "356143094e937ad2a28c8fe54dd6446f9c1ce79624da4a891db92f5f9c06b39a",
+        "review_note": "Broad square bone plates, rust lower edge and dark worn seams; transparent centre stays empty for a live label. Corner wear is sparse enough for a small control.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+            "answers": {
+              "confidence": 1,
+              "description": "A square hollow button frame with clipped battered corners, bone metal with a rust-orange lower edge, large completely empty magenta rectangular opening and straight inner edges. Quiet border, no symbol, no text. Flat front view. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A square, hollow button frame with a distressed, industrial appearance. The frame is constructed from what looks like bone-white metal, showing significant wear, chipping, and rust. The lower edge of the frame is predominantly rust-orange, with some yellow accents. The corners are clipped and battered, giving it a rugged look. The center of the frame is a large, completely empty rectangular opening with straight inner edges, filled with a solid magenta color. The frame is isolated against a plain magenta background, with no surrounding scene or additional elements. The overall design suggests a functional, possibly mechanical component, with a flat front view and a clear silhouette."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": [
+        48,
+        50,
+        207,
+        206
+      ]
+    },
+    {
+      "id": "v4-hud-dial-v1",
+      "source": "sources/v4-hud-dial-v1.jpg",
+      "pixels": "pixels/v4-hud-dial-v1.png",
+      "source_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+      "export_sha256": "fe17c0b0d89fff7aa59c3bbc251bb178c3d98d5051a9242209f836dd1cf7dfed",
+      "selection": {
+        "id": "v4-hud-dial-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+        "processed_sha256": "fe17c0b0d89fff7aa59c3bbc251bb178c3d98d5051a9242209f836dd1cf7dfed",
+        "review_note": "Bone square bezel and four hazard-yellow corner anchors. Large empty centre suits the countdown and exact procedural minimap. No numeric gauge baked into art.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A square hollow instrument bezel with clipped corners, broad thin chipped bone metal rim, tiny hazard-yellow corner plates, and a very large empty magenta rectangular centre. Flat front view. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A square hollow instrument bezel with clipped corners, broad thin chipped bone metal rim, tiny hazard-yellow corner plates, very large empty magenta rectangular centre. No ticks, marks, symbols or text. Flat front view. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": [
+        51,
+        51,
+        205,
+        203
+      ]
+    },
+    {
+      "id": "v4-hud-steel-flick-v1",
+      "source": "sources/v4-hud-steel-flick-v1.jpg",
+      "pixels": "pixels/v4-hud-steel-flick-v1.png",
+      "source_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+      "export_sha256": "654bc8b91150075c2480f089aae75a4ae181e77ffa5b4a9566148a869c5b8e52",
+      "selection": {
+        "id": "v4-hud-steel-flick-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+        "processed_sha256": "654bc8b91150075c2480f089aae75a4ae181e77ffa5b4a9566148a869c5b8e52",
+        "review_note": "Sharp silver arrowhead with compact attached ochre fins; clear dash silhouette. Local Qwen calls it aircraft-like and flags forbidden details, but direct inspection finds no lettering/brand or occupant. Retain that disagreement; use only as a labelled HUD dash symbol, not a car sprite.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+            "answers": {
+              "confidence": 0.5,
+              "description": "A single stylized, weathered orange and silver aircraft-like object with swept wings and tail fins, isolated on a flat magenta background. The subject is centered and occupies roughly the middle 75 percent of the canvas, with a clear silhouette. The object appears to be a compact, angular craft with a pointed nose, layered wing planes, and small rear fins. There are no visible letters, numbers, logos, or watermarks. The background is a uniform magenta with no surrounding scene. The object is rendered in a flat, graphic style with visible panel lines and chipped paint details.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "not_applicable",
+              "subject_matches": "no",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+            "answers": {
+              "forbidden_details": true,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "no",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A stylized, weathered aircraft or spacecraft with a pointed nose, swept wings, and rear fins, rendered in orange, brown, and white tones against a solid magenta background. The object shows signs of wear, including scratches, rust-like patches, and chipped edges. It is centered on the canvas with no surrounding scene or ground shadow."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-flywheel-v1",
+      "source": "sources/v4-hud-flywheel-v1.jpg",
+      "pixels": "pixels/v4-hud-flywheel-v1.png",
+      "source_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+      "export_sha256": "4f1bca4d69cebfe66d5e3b3c0317e65c8155bee503f9e836c312122e2242fee9",
+      "selection": {
+        "id": "v4-hud-flywheel-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+        "processed_sha256": "4f1bca4d69cebfe66d5e3b3c0317e65c8155bee503f9e836c312122e2242fee9",
+        "review_note": "Three-spoke wheel with attached curved forward arrow; recognisable circular silhouette and bone/ochre roles. No lettering or external shadow.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A single isolated chunky circular mechanical flywheel with three broad spokes, a central hub, and an attached curved forward arrow, rendered in bone and ochre tones with rust and grime, on a flat magenta background.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated, chunky circular mechanical flywheel with three broad spokes and an attached curved forward arrow, rendered in bone and ochre tones with large clean gaps. The subject is centered within the middle 75 percent of the canvas, surrounded by at least 12 percent empty magenta margin on every side, with no surrounding scene or cast shadows."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-shoulder-v1",
+      "source": "sources/v4-hud-shoulder-v1.jpg",
+      "pixels": "pixels/v4-hud-shoulder-v1.png",
+      "source_sha256": "9f4e7d0cb7f716b848539274fc0a8fd41a04f79d77595d97529cd15909e8f5be",
+      "export_sha256": "0014fc1f1431d21d7c48962ad197e0e5298bcaea42cb0b7b8afac8beaae3d0f2",
+      "selection": {
+        "id": "v4-hud-shoulder-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "9f4e7d0cb7f716b848539274fc0a8fd41a04f79d77595d97529cd15909e8f5be",
+        "processed_sha256": "0014fc1f1431d21d7c48962ad197e0e5298bcaea42cb0b7b8afac8beaae3d0f2",
+        "review_note": "Chunky plated triangular ram with a broad bone nose and rust shoulder bracing. Repaired margins pass; mass reads distinctly from the thin lance.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "9f4e7d0cb7f716b848539274fc0a8fd41a04f79d77595d97529cd15909e8f5be",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A stylized wedge-shaped battering ram with a bone-colored pointed leading edge, rust-orange and dark metal body, two shoulder braces, and a yellow warning triangle.",
+              "forbidden_details": false,
+              "heading_right": "yes",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "9f4e7d0cb7f716b848539274fc0a8fd41a04f79d77595d97529cd15909e8f5be",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated, wedge-shaped battering ram pointing to the right, featuring a rusted orange and brown body with a bone-colored leading edge. It is reinforced by two dark shoulder braces and set against a solid magenta background with no surrounding scene or ground shadow."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-turbine-v1",
+      "source": "sources/v4-hud-turbine-v1.jpg",
+      "pixels": "pixels/v4-hud-turbine-v1.png",
+      "source_sha256": "1fb42521b5d64858e8fc514c3471c587972202120294db0fb7a3cbdee52609fa",
+      "export_sha256": "40667faffadc27eebfaa3afa0ab06e486df2f964923afbe22ea346e66fa696c2",
+      "selection": {
+        "id": "v4-hud-turbine-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "1fb42521b5d64858e8fc514c3471c587972202120294db0fb7a3cbdee52609fa",
+        "processed_sha256": "40667faffadc27eebfaa3afa0ab06e486df2f964923afbe22ea346e66fa696c2",
+        "review_note": "Paired large intake fans with attached exhaust structures, clear twin circular silhouette. Third source restores safe margins; tiny blade detail is decorative. Actual size and prompt compliance remain separate from model confidence.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "1fb42521b5d64858e8fc514c3471c587972202120294db0fb7a3cbdee52609fa",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A compact stylized icon of two parallel air turbine housings, one rust-orange and one bone-white, each with a bold dark intake fan, yellow hub stripe, sharp spikes, and short jagged rear exhaust streaks, isolated on a flat magenta background.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "1fb42521b5d64858e8fc514c3471c587972202120294db0fb7a3cbdee52609fa",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "Two massive parallel air turbine housings with bold intake fan blades and short attached rear exhaust streaks. Rust and bone, a compact turbo icon. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-ground-bite-v1",
+      "source": "sources/v4-hud-ground-bite-v1.jpg",
+      "pixels": "pixels/v4-hud-ground-bite-v1.png",
+      "source_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+      "export_sha256": "7ed2fe19757cfbc1956130c164209a32f8c22d7f12982a3436dd79499ed9d45a",
+      "selection": {
+        "id": "v4-hud-ground-bite-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+        "processed_sha256": "7ed2fe19757cfbc1956130c164209a32f8c22d7f12982a3436dd79499ed9d45a",
+        "review_note": "Large treaded tyre, small earth teeth attached below. Dark inner void preserves the tyre read on the soot backing; label explains grip, no colour-only meaning.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A single chunky treaded tyre shown in a near-frontal three-quarter view, with three small angular earth teeth attached along its lower edge. The tyre is bone-tan and ochre with dark soot, rust-brown grime, and black outlines. A red circular traction symbol with a white arrow is painted on the upper-right sidewall. The background is flat magenta.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated, chunky treaded tire is centered on a solid magenta background. The tire features a rugged, blocky tread pattern with a weathered texture of dark soot and ochre earth tones. Several small, angular, yellowish teeth or spikes are attached to the lower portion of the tire's circumference. A circular traction symbol with an arrow is visible on the upper right sidewall. The object has a clear, defined silhouette and is surrounded by a significant empty magenta margin on all sides, with no other scene elements present."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-punch-lance-v1",
+      "source": "sources/v4-hud-punch-lance-v1.jpg",
+      "pixels": "pixels/v4-hud-punch-lance-v1.png",
+      "source_sha256": "35f61825e203d27c704fa6854b1acae161fd6bcd38e6b8fef3af6c376da842db",
+      "export_sha256": "74e91f34b74f5596325d5d7681d5094132ac28ef9379a91363f8e890c41b4aa7",
+      "selection": {
+        "id": "v4-hud-punch-lance-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "35f61825e203d27c704fa6854b1acae161fd6bcd38e6b8fef3af6c376da842db",
+        "processed_sha256": "74e91f34b74f5596325d5d7681d5094132ac28ef9379a91363f8e890c41b4aa7",
+        "review_note": "Long narrow pointed mechanical lance with compact rust breech; clean single-line silhouette. Repaired complete margins pass. Label differentiates its ranged role from other arrows.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "35f61825e203d27c704fa6854b1acae161fd6bcd38e6b8fef3af6c376da842db",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A single isolated mechanical lance projectile on a flat magenta background. It is a long horizontal object with a heavy rust-orange and dark-brown armored breech on the left, a narrow bone-white spear tip on the right, and a small dark metal collar between them. The breech has angular fins, panels, yellow worn patches, and a small orange arrow-like ranged piercing symbol near the tip. The object points right, with its nose at the right edge of the subject.",
+              "forbidden_details": false,
+              "heading_right": "yes",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "35f61825e203d27c704fa6854b1acae161fd6bcd38e6b8fef3af6c376da842db",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated mechanical lance or projectile is centered horizontally against a solid magenta background. The object features a heavy, rust-orange breech with visible wear and mechanical details on the left, transitioning into a long, narrow, bone-white spear tip pointing to the right. The design is consistent with a ranged piercing shot symbol, and the subject is clearly defined with a sharp silhouette."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-bone-rack-v1",
+      "source": "sources/v4-hud-bone-rack-v1.jpg",
+      "pixels": "pixels/v4-hud-bone-rack-v1.png",
+      "source_sha256": "4b1e99a79d248b55da938d65b15013a64365bb47b6b07d9f25ff4b0fc8ca5ddc",
+      "export_sha256": "37f66e5d3a7a1e21262d56fafda35f107bff47f7ca0aa0903da074416aa1bf8b",
+      "selection": {
+        "id": "v4-hud-bone-rack-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "4b1e99a79d248b55da938d65b15013a64365bb47b6b07d9f25ff4b0fc8ca5ddc",
+        "processed_sha256": "37f66e5d3a7a1e21262d56fafda35f107bff47f7ca0aa0903da074416aa1bf8b",
+        "review_note": "Central dark plate with THREE bone spikes on BOTH left and right. Third source corrects clipping while preserving bilateral contact identity. Red X-shaped paint scratches are not lettering; no gore or detached bones.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "4b1e99a79d248b55da938d65b15013a64365bb47b6b07d9f25ff4b0fc8ca5ddc",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A compact central armoured plate with three large ivory spikes projecting left and three projecting right, on a flat magenta background. The plate is dark grey with red horizontal bands, a red cross symbol, rivets, and a yellow triangular hazard sticker. The spikes are sharp and pointed, with a clean silhouette.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "4b1e99a79d248b55da938d65b15013a64365bb47b6b07d9f25ff4b0fc8ca5ddc",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated, compact armored plate centered on a solid magenta background. The plate is dark grey with red horizontal stripes and features a red symbol of a crossed hammer and pickaxe. It has three large, ivory-colored spikes projecting from the left side and three from the right side. A yellow triangular warning sign with a skull and crossbones is visible on the lower right corner of the plate. The object has a weathered, industrial appearance with rust and dirt marks. There are no other objects, text, or scene elements present."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-scrambler-v1",
+      "source": "sources/v4-hud-scrambler-v1.jpg",
+      "pixels": "pixels/v4-hud-scrambler-v1.png",
+      "source_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+      "export_sha256": "c2e4b87e60aa9ba0342ad092cb2be11b84384ebb327a42c828c661a171df2da5",
+      "selection": {
+        "id": "v4-hud-scrambler-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+        "processed_sha256": "c2e4b87e60aa9ba0342ad092cb2be11b84384ebb327a42c828c661a171df2da5",
+        "review_note": "Squat transmitter puck with two zigzag antenna arms; wider round silhouette distinct from the flywheel. Fine circuitry is decorative; name/state remain live text.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A squat rust-orange interference transmitter puck with bone-colored circuitry shapes, two attached zigzag antenna arms, and a magenta background.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A squat, rust-orange circular puck with a segmented top surface and two attached zigzag antenna arms extending upward and outward. The object features bone-like circuitry shapes and dark, weathered patches, set against a solid magenta background with no surrounding scene or text."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-arc-harpoon-v1",
+      "source": "sources/v4-hud-arc-harpoon-v1.jpg",
+      "pixels": "pixels/v4-hud-arc-harpoon-v1.png",
+      "source_sha256": "ba0570afc0e7948b7a33673a1ff4987460e2b7d580aceb665785b9aec517c094",
+      "export_sha256": "5eb0773f645569c63d5c048829254e1806f2cb05691c383cc2543421b943d9ed",
+      "selection": {
+        "id": "v4-hud-arc-harpoon-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "ba0570afc0e7948b7a33673a1ff4987460e2b7d580aceb665785b9aec517c094",
+        "processed_sha256": "5eb0773f645569c63d5c048829254e1806f2cb05691c383cc2543421b943d9ed",
+        "review_note": "Barbed bone point on a rail with a large circular coiled tether and pale contained energy line. Complete safe margins after correction; no detached lightning or ground glow.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "ba0570afc0e7948b7a33673a1ff4987460e2b7d580aceb665785b9aec517c094",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A single stylized electric harpoon weapon isolated on a flat magenta background. It has a large bone-white barbed spearhead pointing right, a dark rusted rail, a bone handle on the left, and a coiled tan insulated tether with a pale zigzag arc inside the coil.",
+              "forbidden_details": false,
+              "heading_right": "yes",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "ba0570afc0e7948b7a33673a1ff4987460e2b7d580aceb665785b9aec517c094",
+            "answers": {
+              "forbidden_details": false,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A single, isolated electric harpoon pointing right, featuring a large barbed bone spearhead, a short rusted rail, and a coiled insulated tether with a pale zigzag arc inside the coil, set against a solid magenta background."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    },
+    {
+      "id": "v4-hud-plate-brace-v1",
+      "source": "sources/v4-hud-plate-brace-v1.jpg",
+      "pixels": "pixels/v4-hud-plate-brace-v1.png",
+      "source_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+      "export_sha256": "c27d1b0224624e9f5ef844d8d1e934c5116aae859f7d6310e5f9f1399c70551f",
+      "selection": {
+        "id": "v4-hud-plate-brace-v1",
+        "status": "technical-accepted",
+        "owner_approved": false,
+        "source_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+        "processed_sha256": "c27d1b0224624e9f5ef844d8d1e934c5116aae859f7d6310e5f9f1399c70551f",
+        "review_note": "Three overlapping broad bone armour plates, dark seams and rivets. Bold slab silhouette distinguishes defence from engine icons; hazard band is pigment, no text.",
+        "model_observations": [
+          {
+            "model": "mimo-9b:q8-64k",
+            "status": "graded",
+            "image_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+            "answers": {
+              "confidence": 0.75,
+              "description": "A single isolated three-plate bone armour shield icon on a flat magenta background. The shield is built from three overlapping off-white bone armour plates with dark seams, rust rivets, blackened edges, and painted yellow, red, and orange markings. The top plate carries a partially visible orange 'DEF' lettering. The object is centred and occupies roughly the middle 75 percent of the canvas, with generous magenta margin on all sides. No surrounding scene is present.",
+              "forbidden_details": false,
+              "heading_right": "not_applicable",
+              "neutral_lighting": "yes",
+              "subject_matches": "yes",
+              "true_top_down": "not_applicable"
+            }
+          },
+          {
+            "model": "qwen3.8:27b-64k",
+            "status": "graded",
+            "image_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+            "answers": {
+              "forbidden_details": true,
+              "true_top_down": "not_applicable",
+              "heading_right": "not_applicable",
+              "subject_matches": "yes",
+              "neutral_lighting": "yes",
+              "confidence": 1.0,
+              "description": "A stylized, heavy defensive shield composed of three overlapping bone-colored armor plates. The shield features dark seams, rusted rivets, and a prominent yellow diagonal stripe across the central plate. It is isolated against a solid magenta background with no surrounding scene or ground shadow."
+            }
+          }
+        ]
+      },
+      "hud_interior_px": null
+    }
+  ],
+  "owner_approved": false,
+  "spend": {
+    "week": "2026-W40",
+    "images_reserved": 432,
+    "remaining": 118,
+    "videos": 0,
+    "stop": null
+  }
+}

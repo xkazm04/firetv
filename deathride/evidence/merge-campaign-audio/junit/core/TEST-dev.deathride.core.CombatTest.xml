@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.core.CombatTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-03T00:20:24.602Z" hostname="KAZIHO" time="47.485">
+  <properties/>
+  <testcase name="rayAndSweptProjectileNeverHitShooterAndUseAmmoCooldown()" classname="dev.deathride.core.CombatTest" time="0.005"/>
+  <testcase name="seededCombatResolvesAllCoursesAndReplayMatches()" classname="dev.deathride.core.CombatTest" time="45.001"/>
+  <testcase name="armorHasOneAuthorityAndWreckRejectsEveryAction()" classname="dev.deathride.core.CombatTest" time="0.009"/>
+  <testcase name="staleAndReconnectClearAllAttackHolds()" classname="dev.deathride.core.CombatTest" time="0.001"/>
+  <testcase name="mineArmsThenHitsEachCarOnceIncludingOwnerAndPoolReuseIsClean()" classname="dev.deathride.core.CombatTest" time="0.005"/>
+  <testcase name="pickupsRespectCapsRespawnAndUnavailableMounts()" classname="dev.deathride.core.CombatTest" time="0.005"/>
+  <testcase name="activeCombatAllocatesNothingAcrossRepeatedLiveStarts()" classname="dev.deathride.core.CombatTest" time="2.447"/>
+  <testcase name="startProtectionIsVisibleAndDoesNotSpendAmmunition()" classname="dev.deathride.core.CombatTest" time="0.001"/>
+  <testcase name="smallMineTriggersOnlyAtItsDamageBoundaryAndAiUsesThatRadius()" classname="dev.deathride.core.CombatTest" time="0.005"/>
+  <testcase name="ramsDeduplicatePerPairAndLastSurvivorWins()" classname="dev.deathride.core.CombatTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

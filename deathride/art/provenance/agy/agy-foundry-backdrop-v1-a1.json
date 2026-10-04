@@ -1,0 +1,76 @@
+{
+  "asset": "agy-foundry-backdrop-v1",
+  "provider": "agy",
+  "origin": "agy-cli",
+  "model": "gemini-3.8-flash-high",
+  "image_model": "Nano Banana 2 (provider built-in image tool)",
+  "timestamp": "2026-10-04T13:03:13.351224+00:00",
+  "attempt": 1,
+  "brief": {
+    "id": "agy-foundry-backdrop-v1",
+    "class": "backdrop",
+    "prompt_action": "Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "none",
+    "count": "1",
+    "status": "ready",
+    "kind": "backdrop",
+    "reference": "",
+    "batch": "agy-foundry-panels",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "512",
+    "style_file": "style-fusion.json",
+    "wave": "V4",
+    "asset_family": "backdrops",
+    "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+    "logical_name": "regions/foundry/panels/backdrop",
+    "region": "foundry"
+  },
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "input_hash": "7ba0c2d29e296db6694bff477a07ba15f07a55f88094967cfe1b63c4cec67b40",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-foundry-backdrop-v1\\attempt-01\\image.png",
+  "mode": "generate",
+  "references": [],
+  "owner_approved": false,
+  "runtime_enabled": false,
+  "returncode": 0,
+  "session_id": "6b9f073a-ac5b-48e1-b5b6-d173fc6f46d8",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "image_tool_evidence": {
+    "calls": [
+      {
+        "session": "aa3435fc-b07b-457b-b208-2b11b383ea15",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "1:1",
+          "ImageName": "foundry_backdrop",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating environment panel",
+          "toolSummary": "Environment panel generation"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "6b9f073a-ac5b-48e1-b5b6-d173fc6f46d8",
+        "sha256": "8095658d7731b5e09ec145156ccf9f3b8fd94e075fa9b3de3cdea70ba9af3b2e"
+      },
+      {
+        "session": "aa3435fc-b07b-457b-b208-2b11b383ea15",
+        "sha256": "dafd185d89d6f4ec6eea106f7da15e542ac6f139c145a4601704674321704015"
+      }
+    ],
+    "errors": []
+  },
+  "sha256": "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+  "continuation_verified": true,
+  "prompt_verbatim_verified": true,
+  "prompt_verification": "Exact tool parameters from this session and explicitly linked image-generator children",
+  "elapsed_seconds": 61.688
+}

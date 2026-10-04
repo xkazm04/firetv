@@ -1,0 +1,145 @@
+{
+  "id": "start",
+  "cue": "race.start",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:39.034327+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\start.mp3.json",
+    "sourceSha256": "37877203532cb0d42cfdc1d30ae0398b9d0af643b30a6bb7e51f9251499cc057",
+    "generatedAt": "2026-10-02T21:36:18.304Z",
+    "request": {
+      "text": "Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/start.mp3",
+    "sha256": "37877203532cb0d42cfdc1d30ae0398b9d0af643b30a6bb7e51f9251499cc057",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -14.52,
+    "truePeakDbtp": 1.17,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 18,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          29437,
+          44057
+        ]
+      ],
+      "fraction": 0.33151927437641726,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 13386,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.571478636671867,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/start.wav",
+    "sha256": "41d9cb64a4b4ed01cd5a5eb6d11f1aa4b54da4e6d8387175ea52b4c39d1ca70c",
+    "bytes": 26850,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.6070748299319728,
+    "durationWindowSeconds": [
+      0.6050748299319728,
+      0.6090748299319728
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 13386,
+    "decodedBytes": 26772,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -2.86,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

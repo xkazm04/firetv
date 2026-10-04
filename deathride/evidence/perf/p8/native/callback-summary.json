@@ -1,0 +1,18 @@
+{
+  "pid": 7130,
+  "vsyncLagUs": {
+    "count": 1198,
+    "p50": 562,
+    "p95": 3061,
+    "max": 6400
+  },
+  "callbackIntervalMs": {
+    "count": 1197,
+    "p50": 16.68399991467595,
+    "p95": 19.028999842703342,
+    "max": 31.05300012975931
+  },
+  "lateBeyond4ms": 7,
+  "totalCallbacks": 1198,
+  "limit": "Intrusive 20 s capture; actual app callback timing, not optical/presentation interval."
+}

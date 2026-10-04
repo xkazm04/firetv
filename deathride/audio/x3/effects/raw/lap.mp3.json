@@ -1,0 +1,32 @@
+{
+  "id": "0b8460d9-a40d-44dd-a171-8152467f6c52",
+  "ts": "2026-10-02T21:36:29.549Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/lap.mp3",
+  "seconds": 0.8,
+  "request": {
+    "text": "Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 0.8,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24473,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 13836,
+  "providerCredits": 8,
+  "sha256": "d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100",
+  "completedAt": "2026-10-02T21:36:34.648Z",
+  "creditsAfter": 24473,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1800
+}

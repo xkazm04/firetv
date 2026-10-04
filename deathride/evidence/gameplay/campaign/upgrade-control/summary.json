@@ -1,0 +1,136 @@
+{
+  "scope": "Rejected headroom candidate runtime, useful funded parts, identical seeds/course/tier/rotation/obstacle factors; only car-upgrade-caps.csv overrides Elite and Champion back to 10. Before/after are 6,000 races each, not new careers. Raw unchanged-tier rows must match exactly. Higher caps are not shipped.",
+  "unchangedTierRowsMatched": 3600,
+  "cells": [
+    {
+      "obstacles": false,
+      "tier": 3,
+      "before": {
+        "races": 600,
+        "winners": {
+          "Quill": 411,
+          "Vandal": 189
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 85.35918981481126
+      },
+      "after": {
+        "races": 600,
+        "winners": {
+          "Quill": 342,
+          "Vandal": 258
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 81.20887037036705
+      },
+      "winnerShareDeltaPoints": {
+        "Quill": -11.5,
+        "Vandal": 11.5
+      }
+    },
+    {
+      "obstacles": false,
+      "tier": 4,
+      "before": {
+        "races": 600,
+        "winners": {
+          "Kestrel": 363,
+          "Bulwark": 237
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 85.63187962962606
+      },
+      "after": {
+        "races": 600,
+        "winners": {
+          "Kestrel": 485,
+          "Bulwark": 115
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 76.48508796295991
+      },
+      "winnerShareDeltaPoints": {
+        "Bulwark": -20.333333333333332,
+        "Kestrel": 20.333333333333332
+      }
+    },
+    {
+      "obstacles": true,
+      "tier": 3,
+      "before": {
+        "races": 600,
+        "winners": {
+          "Quill": 413,
+          "Vandal": 187
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 85.34448611110756
+      },
+      "after": {
+        "races": 600,
+        "winners": {
+          "Quill": 344,
+          "Vandal": 256
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 81.18516203703372
+      },
+      "winnerShareDeltaPoints": {
+        "Quill": -11.5,
+        "Vandal": 11.5
+      }
+    },
+    {
+      "obstacles": true,
+      "tier": 4,
+      "before": {
+        "races": 600,
+        "winners": {
+          "Kestrel": 361,
+          "Bulwark": 239
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 85.64940740740383
+      },
+      "after": {
+        "races": 600,
+        "winners": {
+          "Kestrel": 481,
+          "Bulwark": 119
+        },
+        "finishers": 3600,
+        "wrecks": 0,
+        "unresolved": 0,
+        "earlyWrecks": 0,
+        "meanFinishSeconds": 76.48468518518213
+      },
+      "winnerShareDeltaPoints": {
+        "Bulwark": -20.0,
+        "Kestrel": 20.0
+      }
+    }
+  ],
+  "cap10RawSha256": "96cea1ee5ecf5f6495dfe40f1ee5e0c3b3ab4867273cb7b91c0195bbc8e355a4",
+  "finalRawSha256": "e1b903531415362049a850593b32b8d3a0331380f5cfedc63478ff74be82852a"
+}

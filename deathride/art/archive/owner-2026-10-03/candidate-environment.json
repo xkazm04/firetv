@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "owner_approved": false,
+  "theme_sets": {
+    "industrial": [
+      "environment/scrap-pile",
+      "environment/tyre-wall",
+      "environment/oil-drums",
+      "environment/rust-pylon",
+      "environment/league-gantry",
+      "environment/smelter-stacks",
+      "environment/league-hoarding",
+      "environment/wreck-car"
+    ],
+    "quarry": [
+      "environment/quarry-face",
+      "environment/derelict-crane",
+      "environment/slag-heap",
+      "environment/wreck-car",
+      "environment/oil-drums",
+      "environment/rust-pylon"
+    ],
+    "desert": [
+      "environment/salt-crust",
+      "environment/dead-brush",
+      "props/soft-dune",
+      "environment/league-hoarding",
+      "environment/wreck-car",
+      "environment/rust-pylon"
+    ],
+    "wetland": [
+      "environment/sluice-gate",
+      "environment/dead-tree",
+      "environment/smelter-stacks",
+      "environment/scrap-pile",
+      "environment/oil-drums",
+      "environment/tyre-wall"
+    ],
+    "alpine": [
+      "environment/guard-rail",
+      "environment/rock-fall",
+      "environment/rock-spire",
+      "environment/tyres-scattered",
+      "environment/dead-brush",
+      "environment/wreck-car"
+    ]
+  },
+  "obstacles": [
+    {
+      "id": "brush",
+      "logical_name": "environment/dead-brush",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.9,
+          1.4
+        ]
+      },
+      "visual_extent_m": [
+        3.8,
+        2.8
+      ],
+      "height_m": 0.5,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rock-field",
+      "logical_name": "environment/rock-fall",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "visual_extent_m": [
+        4.5,
+        3.1
+      ],
+      "height_m": 1.1,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "soft-dune",
+      "logical_name": "props/soft-dune",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.9,
+          1.6
+        ]
+      },
+      "visual_extent_m": [
+        5.8,
+        3.2
+      ],
+      "height_m": 0.4,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "dead-tree",
+      "logical_name": "environment/dead-tree",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "visual_extent_m": [
+        3.19,
+        2.72
+      ],
+      "height_m": 5.4,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rock-spire",
+      "logical_name": "environment/rock-spire",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.25,
+          0.9
+        ]
+      },
+      "visual_extent_m": [
+        3.625,
+        2.8800000000000003
+      ],
+      "height_m": 6.2,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "tyres-scattered",
+      "logical_name": "environment/tyres-scattered",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.6,
+          1.25
+        ]
+      },
+      "visual_extent_m": [
+        3.2,
+        2.5
+      ],
+      "height_m": 0.7,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rubble",
+      "logical_name": "environment/rock-fall",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "visual_extent_m": [
+        4.5,
+        3.1
+      ],
+      "height_m": 1.1,
+      "drag_multiplier": 0.78,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "tree-decoration",
+      "logical_name": "environment/dead-tree",
+      "effect_class": "none",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "visual_extent_m": [
+        3.19,
+        2.72
+      ],
+      "height_m": 5.4,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    }
+  ],
+  "slogans": [
+    "THE TRACK COLLECTS",
+    "YOUR DEBT. OUR FINISH.",
+    "WIN THE HEAT. KEEP THE RECEIPT."
+  ],
+  "slogan_policy": "Original league copy typeset with the existing game font during scenery baking; no real brands or generated lettering.",
+  "core_obstacles_sha256": "dc36d648de889c4fbc3805ba7f5c1fd45c708ddcc5a5d80fd1dd890b8790ea05",
+  "retained_visuals": {
+    "props/soft-dune": {
+      "asset_id": "v4-fusion-props-soft-dune-v1-despill-v1",
+      "source": "art/review/fusion/sources/v4-fusion-props-soft-dune-v1-despill-v1.png",
+      "source_sha256": "959eb3dedeb1fd60e11c5bf949072bb43c34f6a234d229b102732008b56ff209",
+      "reason": "All three new dune attempts failed content screening; inspected existing natural loose-sand crescent already matches salt-flat grit. Retained unchanged, no new approval or generation claim."
+    }
+  }
+}

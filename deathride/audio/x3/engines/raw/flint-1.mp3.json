@@ -1,0 +1,32 @@
+{
+  "id": "c0620133-e84f-437e-ae0e-93c80e876862",
+  "ts": "2026-10-02T21:48:19.375Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/flint-1.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: short-stroke brawler growl with hard exhaust edges. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24073,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "8f621328732ab02f1643c3d2030bd8c16b7fb34245ea1281d76682e3a477d4ef",
+  "completedAt": "2026-10-02T21:48:23.154Z",
+  "creditsAfter": 24073,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 4540
+}

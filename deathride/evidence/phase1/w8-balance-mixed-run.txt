@@ -1,0 +1,24 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:compileTestKotlin
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:balanceReport
+mixed-upgraded: 250/2000 races
+mixed-upgraded: 500/2000 races
+mixed-upgraded: 750/2000 races
+mixed-upgraded: 1000/2000 races
+mixed-upgraded: 1250/2000 races
+mixed-upgraded: 1500/2000 races
+mixed-upgraded: 1750/2000 races
+mixed-upgraded: 2000/2000 races
+mixed-upgraded: 2000 distinct; mean wrecks 2.302; unresolved 0
+
+BUILD SUCCESSFUL in 3m 31s
+5 actionable tasks: 2 executed, 3 up-to-date

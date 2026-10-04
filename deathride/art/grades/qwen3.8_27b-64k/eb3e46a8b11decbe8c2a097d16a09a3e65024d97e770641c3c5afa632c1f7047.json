@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-vandal-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "eb3e46a8b11decbe8c2a097d16a09a3e65024d97e770641c3c5afa632c1f7047",
+  "image_hashes": [
+    "046df107f9e4661a1f0a8903e828eeb95bf1ea44abb304f11da2c6e859e756c7",
+    "44ae5165a1cfe7881c9113539383f542b4c6278312c0ca3e6d9344a8028b5eff"
+  ],
+  "prompt": "Image 1 is the target Vandal car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:07:33.426603+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle retains the core color roles: charcoal rubber tires, blue-black glass, and a cool metal accent on the front bumper. Its silhouette is distinct within the family, characterized by a wide, low-slung body, a prominent rear wing, and a unique hood scoop, setting it apart from the other vehicles shown.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle retains the core color roles: charcoal rubber tires, blue-black glass, and a cool metal accent on the front bumper. Its silhouette is distinct within the family, characterized by a wide, low-slung body, a prominent rear wing, and a unique hood scoop, setting it apart from the other vehicles shown."
+  },
+  "eval_count": 98,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.219
+}

@@ -1,0 +1,199 @@
+{
+  "startedUtc": "2026-10-02T17:22:46.786Z",
+  "finishedUtc": "2026-10-02T17:37:49.895Z",
+  "apkSha256": "559999a93fb0b601408123ea04ad08af2db7cc273d87bd9a186fc067327efb4b",
+  "model": "AFTKM",
+  "hostPriority": "AboveNormal",
+  "screenshotsEnabled": false,
+  "minesEnabled": true,
+  "mineBlastRadiiM": [
+    0.5
+  ],
+  "mineTriggerRadiiM": [
+    0.5
+  ],
+  "peakLiveMines": 13,
+  "mineShotsAcrossRounds": 287,
+  "durationSeconds": 900.1947729,
+  "rounds": 17,
+  "completedRounds": 6,
+  "observedWindows": 752,
+  "completeActiveWindows": 593,
+  "adbReconnects": [],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27006,
+      "accepted": 27000,
+      "rejected": 6,
+      "hz": 30.000174198967514
+    },
+    {
+      "slot": 1,
+      "sent": 27006,
+      "accepted": 27000,
+      "rejected": 6,
+      "hz": 30.000174198967514
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 1,
+      "q": 7914,
+      "second": 264.0839744,
+      "rttMs": 277.5046999999904
+    },
+    {
+      "slot": 0,
+      "q": 7914,
+      "second": 264.0856544,
+      "rttMs": 279.24619999999413
+    },
+    {
+      "slot": 1,
+      "q": 7923,
+      "second": 264.4000418,
+      "rttMs": 287.4238999999943
+    },
+    {
+      "slot": 0,
+      "q": 7923,
+      "second": 264.4058891,
+      "rttMs": 293.3306000000448
+    },
+    {
+      "slot": 0,
+      "q": 7924,
+      "second": 264.4058934,
+      "rttMs": 263.4042999999947
+    },
+    {
+      "slot": 1,
+      "q": 7924,
+      "second": 264.4059209,
+      "rttMs": 263.39120000001276
+    },
+    {
+      "slot": 1,
+      "q": 7933,
+      "second": 264.72165029999996,
+      "rttMs": 273.77289999998175
+    },
+    {
+      "slot": 0,
+      "q": 7933,
+      "second": 264.7218837,
+      "rttMs": 274.0585999999894
+    },
+    {
+      "slot": 1,
+      "q": 7943,
+      "second": 265.0373093,
+      "rttMs": 268.32620000001043
+    },
+    {
+      "slot": 0,
+      "q": 7943,
+      "second": 265.0381841,
+      "rttMs": 269.25150000001304
+    },
+    {
+      "slot": 1,
+      "q": 7962,
+      "second": 265.68010200000003,
+      "rttMs": 268.54730000003474
+    },
+    {
+      "slot": 0,
+      "q": 7962,
+      "second": 265.68024379999997,
+      "rttMs": 268.7397999999812
+    }
+  ],
+  "classUses": {
+    "Needle": 18,
+    "Line": 16,
+    "Bastion": 12,
+    "Comet": 15,
+    "Trail": 10,
+    "Flint": 9,
+    "Quill": 19,
+    "Vandal": 9,
+    "Kestrel": 10,
+    "Bulwark": 7
+  },
+  "classActiveHudSamples": {
+    "Needle": 139,
+    "Line": 220,
+    "Comet": 181,
+    "Bastion": 116,
+    "Trail": 178,
+    "Flint": 18,
+    "Quill": 337,
+    "Vandal": 165,
+    "Bulwark": 113,
+    "Kestrel": 25
+  },
+  "peakConcurrentCommittedAbilities": 5,
+  "frameMs": {
+    "activeP50Range": [
+      16.582693,
+      16.860153999999998
+    ],
+    "worstActiveP95": 20.950615999999997,
+    "activeMaximum": 35.475846,
+    "allWindowMaximum": 232.737077
+  },
+  "stepMs": {
+    "activeP50Range": [
+      1.214847,
+      1.961385
+    ],
+    "worstActiveP95": 3.404615,
+    "activeMaximum": 13.528077,
+    "allWindowMaximum": 21.312231
+  },
+  "discardedSimulationMsSinceAppStart": 806,
+  "discardedMsInAnyCompleteActiveWindow": 0,
+  "inputAgeWorstActiveP95Ms": [
+    229.52235300000757,
+    230.3776530000614
+  ],
+  "staleConsumeSamplesSinceAppStart": [
+    92,
+    70
+  ],
+  "pssMiBRange": [
+    104.3818359375,
+    113.5576171875
+  ],
+  "warmFirstLastMedianMiB": [
+    107.484375,
+    109.8466796875
+  ],
+  "warmMedianGrowthMiB": 2.3623046875,
+  "warmPssTrendMiBPerMinute": 0.08878377023917462,
+  "thermalStatuses": [
+    0
+  ],
+  "maxOwnedTexturesMiB": 31.9697265625,
+  "maxArtMiB": 10.75,
+  "gates": {
+    "allClassActivations": true,
+    "inputs": false,
+    "frameP95AtMost16_7Ms": false,
+    "activeMaxAtMost33Ms": false,
+    "activeMedians16to18Ms": true,
+    "pssAtMost192MiB": true,
+    "warmMedianGrowthAtMost8MiB": true,
+    "textureBudget": true
+  },
+  "limits": [
+    "Windows overlap: their percentiles are not averaged or added.",
+    "Active windows require at least ten simulated race seconds; preparation and startup tails remain separately visible.",
+    "Class cycling includes interrupted practice rounds; completed round count is separate.",
+    "Normal AI and mortal cars, not a forced maximum-effects stress fixture.",
+    "Scripted LAN traffic is not optical latency, physical-phone comfort, fairness or fun."
+  ]
+}

@@ -1,0 +1,21 @@
+# Abilities session log
+
+## A0 — 2026-10-02
+
+Read the ability/progression/combat/roster/G2/drift references, owner section C in the art worktree and registry game-production notes read-only. Merged drift into abilities; seven conflicts preserve both streams. Cosmetic pool remains 64, smoke uses the combat threshold, and career lap targets coexist with drift telemetry/haptics. App defaults are `dev.deathride.abilities` / 8767. Full build passed in 5m51s: 105 core / 3 link / 3 renderer, including determinism/allocation. Actual XML count supersedes the plan's estimate. Design/evidence: A0-drift-merge.md and `deathride/evidence/abilities/a0/`. No device install, push or owner-feel claim. Next A1.
+
+## A1 — 2026-10-02
+
+Authored A1-signature-abilities.md with source references, ten distinct signatures, input/cost/tell/counter/AI/art/PR contracts and evidence scope. Added the sole ability tuning CSV. Owner's medium-weight Quill direction explicitly supersedes the historical light class; proposed stat rebudget is for A2. Zero net ability PR is paid by energy, cooldown, weapon downtime and driving costs, a hypothesis requiring A3 simulation. Static proposal/escape checks and the full 105 core / 3 link / 3 renderer / APK gate pass (5m18s). No runtime ability or felt claim yet. Next A2.
+
+## A2 — 2026-10-02
+
+Implemented the ten CSV signatures in the fixed step, Quill's medium-mass rebudget, common physics and Combat damage/reduction, bounded deduplicated activations, AI perception/costs, snapshots, procedural/atlas hooks, Q keyboard input, phone control and TV HUD. Final build: 116 core / 3 link / 3 renderer / APK plus desktop distribution green (4m08s). All ten classes activate in a 20,000-step zero-byte allocation witness; replay and existing drift/edge/endurance checks pass. Final desktop/Chrome CDP check passes all six layouts/mirrors, real energy spend and lifecycle release (1,672 inputs). One test-only compile typo was corrected before focused tests passed; no acceptance threshold was relaxed. Design and source-bound evidence: A2-ability-implementation.md and `deathride/evidence/abilities/a2/`. No Stick/owner-feel claim yet. Next A3 balance and device.
+
+## A3 - 2026-10-02
+
+Completed the data-bound 66,000-race final matrix (78 cells, 78 first-seed replays, full hash diversity), independent/adversarial audit, all ten owner checks and device evidence. Fixed Rookie Scrambler use and signed-seed lane bias; refined Needle's burst and traded one Line acceleration point for grip while retaining PR bands. Applied owner N2 literally: 0.5 m mine blast and effective trigger, 24 damage/timing retained, scaled visuals and tested body overlap/arming/AI avoidance. Its full rerun exposed a two-car Elite recovery jam; the recovery-only centreline target resolves the reproduced seed in 51.43 seconds. A fresh complete matrix passes all dominance/skill/rotation/early-wreck/no-one-shot gates. Failed pilots, the pre-N2 baseline and failed intermediate matrix are retained.
+
+Final build green in 6m: 120 core / 3 link / 3 renderer, APK and desktop distribution; allocation/determinism preserved. Final APK SHA-256 `2c0f1dc30084c80b7824f363e43d7697c604ced78c4d454a068d9e612f7ee240`, installed only as `dev.deathride.abilities` / 8767 on AFTKM at scanned address 10.0.0.139. TV package install metadata is unchanged. Six final controller layouts/mirrors pass (1,827 packets); separate 420-second visual run observes all ten signatures (25,210 accepted packets). Final 900.097-second Stick run: 54,001/54,006 accepted, five rejects during 268.6-869.4 ms RTT bursts, no host stalls, active frame p95 20.914 ms / max 48.153 ms, PSS 106.79-113.55 MiB. Frame and zero-loss input gates remain FAILED; thresholds were not weakened. Physics active step p95/max 3.234/10.700 ms, memory/texture gates pass.
+
+Design/results: A3-balance-and-device.md; compressed raw evidence and source/APK bindings in `deathride/evidence/abilities/a3/`. N1 styling is handed to the owner-authored H0-H3 plan; it should preserve/recheck N2 after its art merge. Physical-phone/optical/sofa/fun verdicts, frame-tail/input-delay investigation and two noted HUD contrast/overlap defects remain open. One A3 commit; never pushed. Session remained within the approximate five-hour budget.

@@ -1,0 +1,149 @@
+{
+  "id": "mine-drop",
+  "cue": "weapon.mine.drop",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:40.559613+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\mine-drop.mp3.json",
+    "sourceSha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+    "generatedAt": "2026-10-02T21:34:52.563Z",
+    "request": {
+      "text": "Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 0.7,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 7,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/mine-drop.mp3",
+    "sha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+    "bytes": 12164,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 0.6802494331065759,
+    "durationWindowSeconds": [
+      0.5499999999999999,
+      0.85
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 29999,
+    "decodedBytes": 119996,
+    "integratedLufs": -16.97,
+    "truePeakDbtp": 0.76,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 11,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          20601,
+          29775
+        ]
+      ],
+      "fraction": 0.30581019367312245,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 0,
+    "endFrameExclusive": 15000,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "gain": 0.734513868157115,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/mine-drop.wav",
+    "sha256": "32111c138da1e7eb263ac7e7cf1b838f4485d343b00cd415272846fc0c65b3bd",
+    "bytes": 30078,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.6802721088435374,
+    "durationWindowSeconds": [
+      0.6782721088435374,
+      0.6822721088435374
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 15000,
+    "decodedBytes": 30000,
+    "integratedLufs": -20.53,
+    "truePeakDbtp": -2.0,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          10300,
+          14909
+        ]
+      ],
+      "fraction": 0.3072666666666667,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

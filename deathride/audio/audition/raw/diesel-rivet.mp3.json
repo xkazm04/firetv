@@ -1,0 +1,32 @@
+{
+  "id": "d51bc90f-88f3-4479-9e03-5cea01c214ee",
+  "ts": "2026-10-02T19:23:07.917Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/diesel-rivet.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40769,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "26063c8f24d809569a25a3a77afdd6114d4f198a43c52f876820a92d21097768",
+  "completedAt": "2026-10-02T19:23:17.667Z",
+  "creditsAfter": 40769,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3432
+}

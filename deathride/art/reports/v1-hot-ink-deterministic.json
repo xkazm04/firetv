@@ -1,0 +1,629 @@
+[
+  {
+    "id": "v1-hot-ink-heavy-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-heavy-v1\\attempt-03\\1.jpg",
+    "source_sha256": "ceb7b0815915a81850afa1c3bd72021b61fb056c4297dc3a117cc2eb455e77a0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-heavy-v1",
+      "class": "Bastion",
+      "prompt_action": "One single original heavy combat wagon: a broad spiked fortress with four oversized exposed tyres, a blunt welded ram at the RIGHT nose, a short roof cannon pointing RIGHT, bolted roof plates and tyre-stack rear bumper at LEFT. Length twice width. Visible dents, chipped mismatched panels and rust, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "heavy"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3172330856323242,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        24,
+        241,
+        1008,
+        778
+      ],
+      "margin_fraction": 0.015625,
+      "aspect": 1.8324022346368716,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.08379888268156421,
+      "principal_axis_degrees": 0.06989986761912595,
+      "estimated_key_rgb": [
+        241.0,
+        151.0,
+        249.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.203279228195941,
+      "palette_p90_delta_e": 9.179478667062245
+    },
+    "placement": {
+      "source_bounds_px": [
+        24,
+        241,
+        1008,
+        778
+      ],
+      "source_pivot_px": [
+        516.0,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        122
+      ],
+      "scale": 0.2266260162601626,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-heavy-v1.png",
+    "sha256": "91ad2ade8b9d6dd7df014e74d1589c3693092140e4512940aa10cdcf5876096e"
+  },
+  {
+    "id": "v1-hot-ink-light-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-light-v1\\attempt-02\\1.jpg",
+    "source_sha256": "13435ab0cdfd6eb6e9cdaeaca90470720c7bc53227a6e8d309a66b5054054309",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-light-v1",
+      "class": "Needle",
+      "prompt_action": "One single original light combat buggy: a very narrow stripped rat-rod with four exposed skinny wheels, empty skeletal cage, exposed engine at LEFT rear and a tapered forked ram at RIGHT nose. Length just over twice width. Patched panels, dents and soot, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "light"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.15787506103515625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        107,
+        327,
+        968,
+        678
+      ],
+      "margin_fraction": 0.0546875,
+      "aspect": 2.452991452991453,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.11499611499611517,
+      "principal_axis_degrees": 0.5272541625095158,
+      "estimated_key_rgb": [
+        206.0,
+        79.0,
+        178.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.943672112371859,
+      "palette_p90_delta_e": 12.272930214964193
+    },
+    "placement": {
+      "source_bounds_px": [
+        107,
+        327,
+        968,
+        678
+      ],
+      "source_pivot_px": [
+        537.5,
+        502.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        64
+      ],
+      "scale": 0.1835075493612079,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-light-v1.png",
+    "sha256": "0aa502e600cb9e7622f39a6968048326577eabd0f59eac26ee855eb5be38a7f1"
+  },
+  {
+    "id": "v1-hot-ink-portrait-v1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-portrait-v1\\attempt-02\\1.jpg",
+    "source_sha256": "ca552c8b8b8f53be1514630db62f58fc390a1331b843e56ee0c6272feae163be",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-portrait-v1",
+      "class": "rook",
+      "prompt_action": "One isolated original fictional adult rival portrait, chest-up facing the viewer: gaunt weathered scavenger with angular cheekbones, a healed cheek scar, broken-lens goggles on the forehead, uneven cropped hair, dust scarf and one welded shoulder plate. Bitter calculating expression. The entire head and shoulder silhouette fits inside the middle three quarters with generous margin. Flat neutral even light; this is a portrait, not a person inside a vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "portrait"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3930940628051758,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        108,
+        91,
+        979,
+        929
+      ],
+      "margin_fraction": 0.0439453125,
+      "aspect": 1.0393794749403342,
+      "estimated_key_rgb": [
+        226.0,
+        110.0,
+        192.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.232868140323798,
+      "palette_p90_delta_e": 11.84553503902989
+    },
+    "placement": {
+      "source_bounds_px": [
+        108,
+        91,
+        979,
+        929
+      ],
+      "source_pivot_px": [
+        543.5,
+        510.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        239
+      ],
+      "scale": 0.2847301951779564,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-portrait-v1.png",
+    "sha256": "7a6ff5a80243c49787540fc5e0ec080cad6a36aff49d2400f6e30e966002c5d0"
+  },
+  {
+    "id": "v1-hot-ink-ground-v1",
+    "class": "asphalt-worn",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-ground-v1\\attempt-03\\1.jpg",
+    "source_sha256": "32788a6545b6b20fe8a1825b1f73aadedf89b48f773646e3644f65a85330ddd6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-ground-v1",
+      "class": "asphalt-worn",
+      "prompt_action": "Entire image is ONLY an empty worn asphalt material patch viewed directly overhead. Anonymous fine cracks, tiny abrasion strokes and grit; low contrast middle-dark values, uniform density and even light. One unrepeated stochastic field fills every edge and continues seamlessly across all boundaries. No repeated quadrants, mirrored halves, large cracks, identifiable motifs, objects, road markings, cars, border or grid.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "ground"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN"
+    ],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.1328061172385621,
+      "edge_y_mean": 0.08453584558823529,
+      "edge_x_peak": 0.2980392156862745,
+      "edge_y_peak": 0.2823529411764706,
+      "autocorrelation_peak": 0.2910814600805615,
+      "autocorrelation_shift_px": [
+        0,
+        93
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.09408700980392155,
+      "edge_y_mean": 0.08193933823529412,
+      "edge_x_peak": 0.21568627450980393,
+      "edge_y_peak": 0.20392156862745098,
+      "autocorrelation_peak": 0.281820912916113,
+      "autocorrelation_shift_px": [
+        0,
+        35
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-ground-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-ground-v1.png",
+    "sha256": "bf79b5e6fa0cb328a5fc13c73401f3aaca811ecb4da9da8967367f05fe7dfff0"
+  },
+  {
+    "id": "v1-hot-ink-barrier-v1",
+    "class": "concrete",
+    "kind": "prop",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-barrier-v1\\attempt-02\\1.jpg",
+    "source_sha256": "73c61ea010919c191610a4af816541acdb3c687d3e100268adfa9e36385d6962",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-barrier-v1",
+      "class": "concrete",
+      "prompt_action": "One isolated original road barricade viewed strictly from above: a horizontal battered concrete block with bolted scrap end caps and a few blank hazard-yellow diagonal paint bands worn away. Chips, rust fasteners and patched top surface, no readable symbols. Top plane only, entire silhouette in the middle three quarters with generous margin; no ground or cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "prop",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "barrier"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.32999134063720703,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        44,
+        298,
+        988,
+        740
+      ],
+      "margin_fraction": 0.03515625,
+      "aspect": 2.1357466063348416,
+      "estimated_key_rgb": [
+        203.0,
+        75.0,
+        167.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.40182431013096,
+      "palette_p90_delta_e": 13.567252207497326
+    },
+    "placement": {
+      "source_bounds_px": [
+        44,
+        298,
+        988,
+        740
+      ],
+      "source_pivot_px": [
+        516.0,
+        519.0
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        56
+      ],
+      "scale": 0.1271186440677966,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-barrier-v1.png",
+    "sha256": "5846b8debca228ba00e16b5205fbc9891a82253cc0c53148ae70bc1d3f09d8ab"
+  },
+  {
+    "id": "v1-hot-ink-icon-v1",
+    "class": "repair",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-icon-v1\\attempt-01\\1.jpg",
+    "source_sha256": "86bc10f3f8c6b9ad97c255fe2bb6e34d0541abead5ffc54999460e0bf3e46ba9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-icon-v1",
+      "class": "repair",
+      "prompt_action": "One isolated repair HUD icon: a single battered open-ended wrench with a wide recognisable jaw and taped grip, chipped bone metal and one small hazard-yellow patch. Diagonal simple silhouette legible at 32 pixels, sparse large marks, no badge, circular backing, lettering or additional objects. Entire wrench in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "icon"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.18015575408935547,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        104,
+        113,
+        932,
+        915
+      ],
+      "margin_fraction": 0.08984375,
+      "aspect": 1.032418952618454,
+      "estimated_key_rgb": [
+        249.0,
+        250.0,
+        251.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.830612411756941,
+      "palette_p90_delta_e": 12.584530537178335
+    },
+    "placement": {
+      "source_bounds_px": [
+        104,
+        113,
+        932,
+        915
+      ],
+      "source_pivot_px": [
+        518.0,
+        514.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        116
+      ],
+      "scale": 0.14492753623188406,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-icon-v1.png",
+    "sha256": "c1021b2bbe477f22b76e364092019ef67f46234b5e72a3115169579d053711b0"
+  },
+  {
+    "id": "v1-hot-ink-effect-v1",
+    "class": "spark-burst",
+    "kind": "effect",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-hot-ink-effect-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3c271b8a1bacabcb2f8686d765f4ceab1c0fe7cd09cdd8b04a5248478e9efbe6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-hot-ink-effect-v1",
+      "class": "spark-burst",
+      "prompt_action": "One isolated compact impact spark burst, a single still effect sprite: a central pale bone star with seven uneven short hot ochre and rust-orange tapered sparks radiating outwards. Strong central mass, crisp opaque painted sparks, no smoke, glow gradient, sheet, grid, object, lettering or background scene. Everything in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "effect",
+      "reference": "",
+      "batch": "v1-hot-ink",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-hot-ink.json",
+      "wave": "V1",
+      "proof_role": "effect"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "47b0103a54f80a870d3473792b26892e3c85a3f54167ff7caa2f3c087c23aaa8",
+    "style_version": "wasteland-hot-ink-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2556438446044922,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        101,
+        948,
+        930
+      ],
+      "margin_fraction": 0.07421875,
+      "aspect": 1.0325693606755126,
+      "estimated_key_rgb": [
+        240.0,
+        241.0,
+        243.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 21,
+      "palette_mean_delta_e": 9.120839796902988,
+      "palette_p90_delta_e": 12.902768021585004
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        101,
+        948,
+        930
+      ],
+      "source_pivot_px": [
+        520.0,
+        515.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        116
+      ],
+      "scale": 0.14018691588785046,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-hot-ink\\v1-hot-ink-effect-v1.png",
+    "sha256": "de4b127c21af05d48b87f69b99cea46f95eb6bafd14b6e47aa4d35152d61288d"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "id": "0cf4ac3c-7587-4eb3-a52a-7190f3bc985e",
+  "ts": "2026-10-02T19:25:26.075Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/funk-crunch.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a blunt car panel crunch followed by a quick loose bumper twang. Dirty close garage foley, springy snap, loose metal, short raw room, dangerous comic punch. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39274,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "f674570a7a6100c9cd444cdbeec436c40910fc1233fa6e3fcc8090aec7d53f68",
+  "completedAt": "2026-10-02T19:25:35.699Z",
+  "creditsAfter": 39142,
+  "observedAccountDelta": 132,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5564
+}

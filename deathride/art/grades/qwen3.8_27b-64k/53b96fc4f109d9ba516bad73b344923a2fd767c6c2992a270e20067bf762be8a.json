@@ -1,0 +1,68 @@
+{
+  "asset": "test-car-trail",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "53b96fc4f109d9ba516bad73b344923a2fd767c6c2992a270e20067bf762be8a",
+  "image_hashes": [
+    "05bc558ec3134b3d737a9064b416647366eb6b44d6ee409de1ced96e3a94f6d2",
+    "cafeff4258d7d8773e4e3959ff4c5e7acc5b2a659250d4948bf5d206f96d3b44"
+  ],
+  "prompt": "Image 1 is the target Trail car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T08:48:14.385426+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle is a blue, two-door hatchback with a rugged, off-road aesthetic. It features wide, flared wheel arches, large knobby tires, a roof-mounted spoiler, and a hood scoop. The body has white racing stripes and visible signs of wear, such as dirt and scuffs. The windows are dark, and the headlights are illuminated. The overall design suggests a modified, high-performance trail or rally car.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle is a blue, two-door hatchback with a rugged, off-road aesthetic. It features wide, flared wheel arches, large knobby tires, a roof-mounted spoiler, and a hood scoop. The body has white racing stripes and visible signs of wear, such as dirt and scuffs. The windows are dark, and the headlights are illuminated. The overall design suggests a modified, high-performance trail or rally car."
+  },
+  "eval_count": 124,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.281
+}

@@ -1,0 +1,192 @@
+[
+  {
+    "id": "v4-hud-instrument-v1",
+    "class": "frame-instrument",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-instrument-v1\\attempt-01\\1.jpg",
+    "source_sha256": "692045d0fea71573d401ec04849c89beac582e9d9c6a47f61c8890854dd716b5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-instrument-v1",
+      "class": "frame-instrument",
+      "prompt_action": "A wide low rectangular hollow instrument frame, 4:1 outer width to height, a thin battered bone steel border with two rust-orange corner plates. Huge completely empty magenta rectangular opening, straight horizontal and vertical inner edges. Flat front view UI frame. No symbols, ticks or text. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-instrument"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.17095470428466797,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        32,
+        168,
+        996,
+        850
+      ],
+      "margin_fraction": 0.02734375,
+      "aspect": 1.4134897360703813,
+      "estimated_key_rgb": [
+        203.0,
+        45.0,
+        135.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.074960396864787,
+      "palette_p90_delta_e": 15.535072755893443
+    },
+    "placement": {
+      "source_bounds_px": [
+        32,
+        168,
+        996,
+        850
+      ],
+      "source_pivot_px": [
+        514.0,
+        509.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        175
+      ],
+      "scale": 0.2572614107883817,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-instrument-v1.png",
+    "sha256": "7f2ac7d39fc1d8e2f03f8f79abe5f06463e28d4838f9cdd7567d129f909b0875"
+  },
+  {
+    "id": "v4-hud-steel-flick-v1",
+    "class": "steel-flick",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-steel-flick-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-steel-flick-v1",
+      "class": "steel-flick",
+      "prompt_action": "One compact silver steel arrowhead with two short attached rear speed fins. A narrow quick evasive dash symbol, large clean negative gaps. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-steel-flick"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1965465545654297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        82,
+        245,
+        949,
+        780
+      ],
+      "margin_fraction": 0.0732421875,
+      "aspect": 1.6205607476635513,
+      "estimated_key_rgb": [
+        231.0,
+        95.0,
+        165.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 10.920358196724628,
+      "palette_p90_delta_e": 18.685916338995764
+    },
+    "placement": {
+      "source_bounds_px": [
+        82,
+        245,
+        949,
+        780
+      ],
+      "source_pivot_px": [
+        515.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        74
+      ],
+      "scale": 0.1384083044982699,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-steel-flick-v1.png",
+    "sha256": "654bc8b91150075c2480f089aae75a4ae181e77ffa5b4a9566148a869c5b8e52"
+  }
+]

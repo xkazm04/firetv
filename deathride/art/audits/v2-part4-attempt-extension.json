@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-02T15:36:30.446439+00:00",
+  "authorization": "Executing ART PART 4 owner instruction: raise per-asset attempt ceiling only with a logged reason; keep total new spend under about 120 images.",
+  "starting_budget": {
+    "week": "2026-W40",
+    "images_reserved": 401,
+    "remaining": 149,
+    "videos": 0,
+    "stop": null
+  },
+  "slots": {
+    "v2-part3-rework-comet": {
+      "old_limit": 3,
+      "new_limit": 7,
+      "reason": "Three prior calls exhausted: v1 margin 13/1024; v2/v3 also aspect. Four additional maximum calls, starting with framing-only edit of strongest turbine reference."
+    },
+    "v2-part3-rework-kestrel": {
+      "old_limit": 3,
+      "new_limit": 7,
+      "reason": "Three prior calls exhausted: v2 has two launchers; v3 single harpoon has wide tether and fails margin/aspect. Four additional maximum calls to split narrow chassis structure from electric engine/single harpoon, using approved sibling input."
+    }
+  },
+  "prior_binding": {
+    "schema": 1,
+    "owner_choice": "approved",
+    "owner_evidence": "OWNER-CHOICE.md, owner quotations A/B and appended C (2026-10-02); executing Part 3 instruction authorizes continued fusion and six exact car approvals",
+    "owner_choice_sha256": "74dfc061338e14a4a896c573a5dfbe96ea95480fac05c74a29e7ee312702c7de",
+    "style_file": "style-fusion.json",
+    "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+    "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+    "compiled_by": "executing agent; compilation is not owner reference approval"
+  },
+  "prior_approvals_sha256": "a4f5f6f371440ef22f04b6b7ef15a72f454e75bd016c84720f3b812900ad9b3a",
+  "gates_sha256": "896979b649ebe7b49d8288fd31db4f90cfcd570be455fc63cb98dc0bec33818e",
+  "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be"
+}

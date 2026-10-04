@@ -1,0 +1,32 @@
+{
+  "id": "13ead437-9157-4870-a7ef-4203385bb403",
+  "ts": "2026-10-02T21:37:42.202Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ui-purchase.mp3",
+  "seconds": 0.7,
+  "request": {
+    "text": "One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+    "duration_seconds": 0.7,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24385,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 12164,
+  "providerCredits": 7,
+  "sha256": "fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42",
+  "completedAt": "2026-10-02T21:37:44.960Z",
+  "creditsAfter": 24385,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2440
+}

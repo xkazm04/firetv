@@ -1,0 +1,60 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[133,133],"rejected":[0,0],"hostPumpStalls":0}
+{"second":64,"accepted":[1932,1932],"rejected":[0,0],"hostPumpStalls":0}
+{"second":124,"accepted":[3737,3737],"rejected":[0,0],"hostPumpStalls":0}
+{"second":184,"accepted":[5543,5543],"rejected":[0,0],"hostPumpStalls":0}
+{"second":244,"accepted":[7340,7340],"rejected":[0,0],"hostPumpStalls":0}
+{"second":304,"accepted":[9148,9148],"rejected":[0,0],"hostPumpStalls":0}
+{"second":364,"accepted":[10942,10942],"rejected":[0,0],"hostPumpStalls":0}
+{"second":424,"accepted":[12744,12743],"rejected":[0,0],"hostPumpStalls":0}
+{"second":485,"accepted":[14552,14552],"rejected":[0,0],"hostPumpStalls":0}
+{"second":545,"accepted":[16352,16352],"rejected":[0,0],"hostPumpStalls":0}
+{"rejectionTrace":{"slot":0,"q":17860,"hostPerfMs":598542.0275,"utc":"2026-10-03T03:52:02.255Z"}}
+{"rejectionTrace":{"slot":1,"q":17860,"hostPerfMs":598542.3373,"utc":"2026-10-03T03:52:02.255Z"}}
+{"second":605,"accepted":[18158,18159],"rejected":[1,1],"hostPumpStalls":0}
+{"second":665,"accepted":[19960,19960],"rejected":[1,1],"hostPumpStalls":0}
+{"second":725,"accepted":[21767,21767],"rejected":[1,1],"hostPumpStalls":0}
+{"second":785,"accepted":[23570,23570],"rejected":[1,1],"hostPumpStalls":0}
+{"second":847,"accepted":[25438,25438],"rejected":[1,1],"hostPumpStalls":0}
+{"rejectionTrace":{"slot":0,"q":26897,"hostPerfMs":900067.1579,"utc":"2026-10-03T03:57:03.780Z"}}
+{"rejectionTrace":{"slot":1,"q":26897,"hostPerfMs":900067.2899,"utc":"2026-10-03T03:57:03.780Z"}}
+{"rejectionTrace":{"slot":1,"q":26933,"hostPerfMs":901280.4147,"utc":"2026-10-03T03:57:04.993Z"}}
+{"rejectionTrace":{"slot":0,"q":26933,"hostPerfMs":901280.5612,"utc":"2026-10-03T03:57:04.994Z"}}
+{"rejectionTrace":{"slot":0,"q":26942,"hostPerfMs":901291.2839,"utc":"2026-10-03T03:57:05.004Z"}}
+{"rejectionTrace":{"slot":1,"q":26942,"hostPerfMs":901599.3765,"utc":"2026-10-03T03:57:05.312Z"}}
+{"rejectionTrace":{"slot":0,"q":26952,"hostPerfMs":901607.6681,"utc":"2026-10-03T03:57:05.321Z"}}
+{"rejectionTrace":{"slot":1,"q":26952,"hostPerfMs":901882.4561,"utc":"2026-10-03T03:57:05.594Z"}}
+{"second":900,"accepted":[27000,27000],"rejected":[5,5],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:114:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.1575392999999,
+  "rounds": 20,
+  "classUses": {
+    "Needle": 27,
+    "Line": 19,
+    "Bastion": 11,
+    "Comet": 12,
+    "Trail": 12,
+    "Flint": 16,
+    "Quill": 10,
+    "Vandal": 7,
+    "Kestrel": 8,
+    "Bulwark": 15
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27005,
+      "accepted": 27000,
+      "rejected": 5,
+      "hz": 30.000304192308622
+    },
+    {
+      "slot": 1,
+      "sent": 27005,
+      "accepted": 27000,
+      "rejected": 5,
+      "hz": 30.000304192308622
+    }
+  ]
+}

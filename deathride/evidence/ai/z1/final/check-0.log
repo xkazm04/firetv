@@ -1,0 +1,412 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :desktop:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:processResources NO-SOURCE
+> Task :link:processResources NO-SOURCE
+> Task :link:processTestResources NO-SOURCE
+> Task :game:processTestResources NO-SOURCE
+> Task :app:extractNatives UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :desktop:processResources UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :core:processResources
+> Task :core:classes
+> Task :core:jar
+> Task :core:processTestResources UP-TO-DATE
+> Task :link:compileKotlin
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :link:compileTestKotlin
+> Task :link:compileTestJava NO-SOURCE
+> Task :link:testClasses UP-TO-DATE
+> Task :game:compileKotlin
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :game:compileTestKotlin
+> Task :game:compileTestJava NO-SOURCE
+> Task :game:testClasses UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :desktop:compileKotlin
+> Task :desktop:compileJava NO-SOURCE
+> Task :desktop:classes UP-TO-DATE
+> Task :desktop:jar UP-TO-DATE
+> Task :desktop:startScripts
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-ai/deathride/core/src/test/kotlin/dev/deathride/core/TracksTest.kt:81:68 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :desktop:installDist
+
+> Task :link:test
+
+CompactLinkTest > compactHudReconnectionAndFreshnessUseActualSockets() STANDARD_ERROR
+    SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    SLF4J: Defaulting to no-operation (NOP) logger implementation
+    SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
+CompactLinkTest > compactHudReconnectionAndFreshnessUseActualSockets() PASSED
+
+HudMetadataTest > deltasRefreshChangesPhasesAndPeriodicSnapshots() PASSED
+
+HudMetadataTest > legacyClientsStillGetEveryMetadataFieldEveryTime() PASSED
+
+> Task :game:test FAILED
+
+AudioTest > campaignSeizureSequencePlaysDeliveredVoiceAndCancelsOnSkipPauseOrExit() FAILED
+    java.lang.ExceptionInInitializerError at AudioTest.kt:176
+        Caused by: java.lang.IllegalArgumentException at AudioTest.kt:176
+
+AudioTest > actualDeathDuelDispatchReachesAudioWithoutLapCuesOrChangingReplay() FAILED
+    java.lang.NoClassDefFoundError at AudioTest.kt:176
+        Caused by: java.lang.ExceptionInInitializerError at AudioTest.kt:176
+
+AudioTest > committedBossAndFinaleResultsReachNarrationButLossesAndDuplicateReceiptsDoNot() FAILED
+    java.lang.NoClassDefFoundError at AudioTest.kt:176
+        Caused by: java.lang.ExceptionInInitializerError at AudioTest.kt:176
+
+StoryArtTest > panelsFollowEarnedPromotionSeizureAndActualVictory() FAILED
+    java.lang.NoClassDefFoundError at StoryArtTest.kt:53
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+37 tests completed, 4 failed
+
+> Task :core:test
+
+AbilitiesTest > continuouslyRequestedPlateBraceCannotMakeTheHeavyUntouchable() PASSED
+
+AbilitiesTest > abilityMailboxRejectsNonfiniteAndOldInputsAndClearsStaleReconnect() PASSED
+
+AbilitiesTest > wreckFinishAndAbsentCarsCannotEmitAQueuedAbility() PASSED
+
+AbilitiesTest > patchArmsEscapesHitsItsOwnerOnceAndCanHitAgainOnANewActivation() PASSED
+
+AbilitiesTest > aiNeedsLocalVisibleTargetsAndSnapshotKeepsTheActualCommittedRegion() PASSED
+
+AbilitiesTest > movementSignaturesChangeTheCommonSolverAndExpireWithoutMutatingSpecs() PASSED
+
+AbilitiesTest > raysFreezeTheirTellCanMissRespectRoadAndDeduplicate() PASSED
+
+AbilitiesTest > protectionCooldownEnergyWeaponLockAndResetHaveActualConsumersForEveryClass() PASSED
+
+AbilitiesTest > definitionsHaveBudgetedCostsEscapableRegionsAndSurvivableDamage() PASSED
+
+AbilitiesTest > frontChargeAndFrontRearSpikesRequireActualDirectionalContact() PASSED
+
+AbilitiesTest > guardReducesOneHpAuthorityAndShockExpiresWithoutStackingOrDisablingSteering() PASSED
+
+AbilitiesTest > allSignaturesReplayAndAllocateZeroBytesWhileActivating() PASSED
+
+BalanceSmokeTest > scenarioCastAndDamageTimingAreValidAndReplay() FAILED
+    java.lang.ExceptionInInitializerError at BalanceReport.kt:42
+        Caused by: java.lang.IllegalArgumentException at BalanceReport.kt:42
+
+CampaignBalanceTest > allFourRebalancedCashChoicesUseExactOnceCappedTransactions() FAILED
+    java.lang.NoClassDefFoundError at CampaignBalanceTest.kt:28
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignBalanceTest > curveRejectsPrizeCliffsAndConflictingFinaleMeaning() FAILED
+    java.lang.NoClassDefFoundError at CampaignBalanceTest.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignClassLimitsTest > fixedMissionRigKeepsItsDeclaredBodyAndDoesNotBecomeAnOwnedUpgrade() FAILED
+    java.lang.NoClassDefFoundError at CampaignClassLimitsTest.kt:7
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignClassLimitsTest > legalShopsPreserveClassWeaknessesInsideTheGlobalEnvelope() FAILED
+    java.lang.NoClassDefFoundError at CampaignClassLimitsTest.kt:7
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignClassLimitsTest > savedInstalledPartsStayOwnedAndBothPlayerAndRivalDeriveTheSharedLimits() FAILED
+    java.lang.NoClassDefFoundError at CampaignClassLimitsTest.kt:42
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignClassLimitsTest > fractionalHeadroomIsDisplayedPricedAndInstalledWithoutRoundingThePhysicalResult() FAILED
+    java.lang.NoClassDefFoundError at CampaignClassLimitsTest.kt:7
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignContentTest > qualifierLicencesOpenBeforeTheBossWithoutGivingAwayTheCar() FAILED
+    java.lang.NoClassDefFoundError at CampaignContentTest.kt:9
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignContentTest > plotDataCoversEveryEventAndOnlyLegalPromotionAssets() FAILED
+    java.lang.NoClassDefFoundError at CampaignContentTest.kt:21
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignInstrumentTest > longSyntheticRosterCoursesRejectThePlayableRaceWatchdog() PASSED
+
+CampaignDesignV2Test > ownerPromotionRequiresFirstPlaceAndASurvivingFinish() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > rhythmIsVariedAndThePhysicalClassEnvelopeIsStillShared() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:112
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > actualV5FixtureKeepsAssetsAndAcquiresOnlyUnreturnedRestitution() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:70
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > stolenMoneySurvivesDebtPayoffWalletCapAndRestart() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > realGuestGridFindsTheBossByRivalIdentityAndNeverTheGuestSlot() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > promotionChoiceNamesTheMissingPeerAndAUsefulFallbackPart() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignDesignV2Test > repeatedLossesNeverChargeEntryOrRemoveTheRoadworthyRetry() FAILED
+    java.lang.NoClassDefFoundError at CampaignDesignV2Test.kt:8
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignReuseTest > onlyAnUnchangedPhysicalPrefixAndInactiveMarrowCanBeReused() PASSED
+
+CampaignReuseTest > narrowLineReuseRejectsOtherPhysicalChangesAndWrongCeilings() PASSED
+
+CampaignSamplingTest > streamingSupplementRejectsPartialDuplicateAndMalformedInput() PASSED
+
+CampaignTest > versionFourKeepsEveryOldAssetAndAddsNeitherDebtNorRetroactiveGrants() FAILED
+    java.lang.NoClassDefFoundError at CampaignTest.kt:17
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignTest > leagueReceiptConservesMoneyAndNeverSpendsTheProtectedIncomeTwice() FAILED
+    java.lang.NoClassDefFoundError at CampaignTest.kt:22
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignTest > eachRewardUsesRealOwnershipOrPartCapsAndSurvivesRestartWithoutDuplication() FAILED
+    java.lang.NoClassDefFoundError at CampaignTest.kt:17
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignTest > browserFixtureUsesActualPromotionSettlements() FAILED
+    java.lang.NoClassDefFoundError at CampaignTest.kt:9
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CampaignTest > losingBossCannotPromoteAndOxRecoversTheStolenMoneyExactlyOnce() FAILED
+    java.lang.NoClassDefFoundError at CampaignTest.kt:58
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerTest > orderedContentUnlocksCupTargetsAndDuplicateSettlement() FAILED
+    java.lang.NoClassDefFoundError at CareerTest.kt:13
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerTest > versionOneMigratesAndImpossibleCareerStateIsRejected() FAILED
+    java.lang.NoClassDefFoundError at CareerTest.kt:31
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerTest > tiersChangeDecisionsWithoutChangingPower() FAILED
+    java.lang.NoClassDefFoundError at CareerTest.kt:46
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerTest > campaignCombatReplaysAndAllocatesNothing() FAILED
+    java.lang.NoClassDefFoundError at CareerTest.kt:58
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > allFiveActsUseEveryCourseAndOriginalStoryCardsWithoutPowerDifficulty() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:10
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > finalDuelHasTwoPhysicalEntrantsAndRequiresVictory() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:97
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > nominalLedgerUsesRealShopsAndFixedFieldSchedule() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:24
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > resultsFundRivalsAndGrudgesOnlyAlterDecisions() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:42
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > rivalSettlementIsIdempotentAndDuelSteppingAllocatesNothing() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:115
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > everyLegacyDivisionCanFundEligibleRivalsAndRepeatSeasonsKeepAnEntryCar() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:82
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > actualVersionThreeSaveMigratesWithoutLosingPropertyOrAddingDebt() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:59
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > guestReplacesARegularRivalAndPreservesTheNamedBoss() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:137
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > fixedCupAndContractCreditsAreNotMultipliedAgainByDivisionPrizes() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:130
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CareerV2Test > versionTwoRetainsCarsEarnedUnderTheOldUnlockSchedule() FAILED
+    java.lang.NoClassDefFoundError at CareerV2Test.kt:70
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+> Task :link:test FAILED
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() FAILED
+    kotlinx.serialization.json.internal.JsonDecodingException at LinkTest.kt:50
+
+LinkTest > statsWindowAndLifetimeHaveIndependentCounts() PASSED
+
+LinkTest > occupiedPortReportsFailureWithoutKillingTheHost() PASSED
+
+PerfTraceTest > wrapAndCursorRetainChronologicalRawRows() PASSED
+
+PerfTraceTest > appendAllocatesNothingAfterWarmup() PASSED
+
+8 tests completed, 1 failed
+
+> Task :core:test
+
+CarsTest > lapAndPairedRaceMatrix() PASSED
+
+CarsTest > catalogHasTenClassesAndEveryMappingIsConsumed() PASSED
+
+CombatDepthTest > scatterDeduplicatesBodyCirclesAndRaysAndCostsAmmo() PASSED
+
+CombatDepthTest > reservesChangeAccelerationWithoutRaisingTheSpeedCap() PASSED
+
+CombatDepthTest > fullLoadoutReplaysAndNewStepPathsAllocateNothing() FAILED
+    java.lang.NoClassDefFoundError at CombatDepthTest.kt:53
+        Caused by: java.lang.ExceptionInInitializerError at Career.kt:72
+
+CombatDepthTest > cashPickupIsBoundedAndHullRepairUsesTheClassMaximum() PASSED
+
+CombatDepthTest > spikesUseTheRamCooldownAndSabotageIsDeclaredAndNonCumulative() PASSED
+
+CombatTest > rayAndSweptProjectileNeverHitShooterAndUseAmmoCooldown() PASSED
+
+Unexpected exception thrown.
+org.gradle.internal.remote.internal.MessageIOException: Could not write '/127.0.0.1:58581'.
+	at org.gradle.internal.remote.internal.inet.SocketConnection.flush(SocketConnection.java:142)
+	at org.gradle.internal.remote.internal.hub.MessageHub$ConnectionDispatch.run(MessageHub.java:333)
+	at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+	at org.gradle.internal.concurrent.AbstractManagedExecutor$1.run(AbstractManagedExecutor.java:48)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1570)
+Caused by: java.io.IOException: Connection reset by peer
+	at java.base/sun.nio.ch.SocketDispatcher.write0(Native Method)
+	at java.base/sun.nio.ch.SocketDispatcher.write(SocketDispatcher.java:54)
+	at java.base/sun.nio.ch.IOUtil.writeFromNativeBuffer(IOUtil.java:137)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:81)
+	at java.base/sun.nio.ch.IOUtil.write(IOUtil.java:58)
+	at java.base/sun.nio.ch.SocketChannelImpl.implWrite(SocketChannelImpl.java:566)
+	at java.base/sun.nio.ch.SocketChannelImpl.write(SocketChannelImpl.java:618)
+	at org.gradle.internal.remote.internal.inet.SocketConnection$SocketOutputStream.writeWithNonBlockingRetry(SocketConnection.java:282)
+	at org.gradle.internal.remote.internal.inet.SocketConnection$SocketOutputStream.writeBufferToChannel(SocketConnection.java:269)
+	at org.gradle.internal.remote.internal.inet.SocketConnection$SocketOutputStream.flush(SocketConnection.java:263)
+	at org.gradle.internal.remote.internal.inet.SocketConnection.flush(SocketConnection.java:140)
+	... 6 more
+
+> Task :core:test FAILED
+
+CombatTest > seededCombatResolvesAllCoursesAndReplayMatches() SKIPPED
+
+60 tests completed, 36 failed, 1 skipped
+
+FAILURE: Build completed with 3 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':game:test'.
+> There were failing tests. See the report at: file:///C:/Users/kazda/kiro/firetv-deathride-ai/deathride/game/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':link:test'.
+> There were failing tests. See the report at: file:///C:/Users/kazda/kiro/firetv-deathride-ai/deathride/link/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+==============================================================================
+
+3: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':core:test'.
+> Process 'Gradle Test Executor 14' finished with non-zero exit value -1
+  This problem might be caused by incorrect test process configuration.
+  For more on test execution, please refer to https://docs.gradle.org/8.14/userguide/java_testing.html#sec:test_execution in the Gradle documentation.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 2m
+55 actionable tasks: 17 executed, 38 up-to-date

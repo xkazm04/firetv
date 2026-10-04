@@ -1,0 +1,37 @@
+[
+  {
+    "case": "valid-raw-rows",
+    "pass": true,
+    "exitCode": 0
+  },
+  {
+    "case": "wrong-winner",
+    "pass": true,
+    "exitCode": 1
+  },
+  {
+    "case": "duplicate-seed",
+    "pass": true,
+    "exitCode": 1
+  },
+  {
+    "case": "repeated-state-alarm",
+    "pass": true,
+    "exitCode": 0
+  },
+  {
+    "case": "wrong-step-clock",
+    "pass": true,
+    "exitCode": 1
+  },
+  {
+    "case": "ability-used-while-off",
+    "pass": true,
+    "exitCode": 1
+  },
+  {
+    "case": "incomplete-matrix-not-accepted",
+    "pass": true,
+    "exitCode": 1
+  }
+]

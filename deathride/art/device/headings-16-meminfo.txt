@@ -1,0 +1,37 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 2082270776 Realtime: 2082270776
+
+** MEMINFO in pid 824 [dev.deathride.artprobe] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap     4049     4024        8       23     4536        0        0        0
+  Dalvik Heap      428      328       12       90     1016        0        0        0
+ Dalvik Other      667      576        8        3     1024                           
+        Stack      420      420        0        0      420                           
+       Ashmem        2        0        0        0        8                           
+    Other dev       14        0       12        0      308                           
+     .so mmap     6684      152     1468        4    28120                           
+    .jar mmap     4385        0     1580        0    24192                           
+    .apk mmap      334        0        8        0     8440                           
+    .dex mmap       21        0        0        0       56                           
+    .oat mmap      129        0        4        0     1744                           
+    .art mmap     6395     6008       12      116    13828                           
+   Other mmap        8        4        0        0      544                           
+    GL mtrack    14124    14124        0        0    14124                           
+      Unknown      315      264        4        1      544                           
+        TOTAL    38212    25900     3116      237    98904        0        0        0
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:     6348                          14844
+         Native Heap:     4024                           4536
+                Code:     3212                          62716
+               Stack:      420                            420
+            Graphics:    14124                          14124
+       Private Other:      888
+              System:     9196
+             Unknown:                                    2264
+ 
+           TOTAL PSS:    38212            TOTAL RSS:    98904       TOTAL SWAP PSS:      237

@@ -1,0 +1,30 @@
+{
+  "id": "28033c71-02cd-4f9e-975f-9492925143cf",
+  "ts": "2026-10-02T19:22:46.192Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "music",
+  "out": "audio/audition/raw/diesel-race.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Original instrumental combat-racing music. Heavy industrial metal-on-metal percussion, piston rhythms, low distorted bass drones, abrasive resonant steel, nearly no melody. Dense but separated transients, engine-forward mechanical insistence, threatening close physical pressure, deliberately unpolished analog saturation. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody.",
+    "music_length_ms": 20000,
+    "force_instrumental": true
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 40769,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 321037,
+  "providerCredits": null,
+  "sha256": "145204ad38a9718aac560abc5cb0c98356251f2f929958fdf6c51d93c8ef054b",
+  "completedAt": "2026-10-02T19:22:54.070Z",
+  "creditsAfter": 40769,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 3232
+}

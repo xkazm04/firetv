@@ -1,0 +1,157 @@
+{
+  "startedUtc": "2026-10-02T15:00:57.983Z",
+  "finishedUtc": "2026-10-02T15:16:01.158Z",
+  "apkSha256": "2c0f1dc30084c80b7824f363e43d7697c604ced78c4d454a068d9e612f7ee240",
+  "model": "AFTKM",
+  "hostPriority": "AboveNormal",
+  "screenshotsEnabled": false,
+  "minesEnabled": true,
+  "mineBlastRadiiM": [
+    0.5
+  ],
+  "mineTriggerRadiiM": [
+    0.5
+  ],
+  "peakLiveMines": 17,
+  "mineShotsAcrossRounds": 310,
+  "durationSeconds": 900.096828,
+  "rounds": 18,
+  "completedRounds": 9,
+  "observedWindows": 746,
+  "completeActiveWindows": 579,
+  "adbReconnects": [],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27003,
+      "accepted": 27000,
+      "rejected": 3,
+      "hz": 30.000105721959063
+    },
+    {
+      "slot": 1,
+      "sent": 27003,
+      "accepted": 27001,
+      "rejected": 2,
+      "hz": 30.000105721959063
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 1,
+      "q": 19837,
+      "second": 661.5064739,
+      "rttMs": 268.64059999992605
+    },
+    {
+      "slot": 0,
+      "q": 19837,
+      "second": 661.5066743,
+      "rttMs": 268.8851999999024
+    },
+    {
+      "slot": 0,
+      "q": 19865,
+      "second": 663.0469133,
+      "rttMs": 869.3680000000168
+    },
+    {
+      "slot": 1,
+      "q": 19874,
+      "second": 663.0657921,
+      "rttMs": 593.8831999999238
+    },
+    {
+      "slot": 0,
+      "q": 19874,
+      "second": 663.0659381,
+      "rttMs": 594.079299999983
+    }
+  ],
+  "classUses": {
+    "Needle": 26,
+    "Line": 9,
+    "Bastion": 21,
+    "Comet": 17,
+    "Trail": 17,
+    "Flint": 9,
+    "Quill": 12,
+    "Vandal": 8,
+    "Kestrel": 15,
+    "Bulwark": 5
+  },
+  "classActiveHudSamples": {
+    "Needle": 207,
+    "Line": 123,
+    "Comet": 216,
+    "Bastion": 207,
+    "Trail": 301,
+    "Flint": 18,
+    "Quill": 213,
+    "Vandal": 155,
+    "Bulwark": 87,
+    "Kestrel": 35
+  },
+  "peakConcurrentCommittedAbilities": 5,
+  "frameMs": {
+    "activeP50Range": [
+      16.556923,
+      16.839769
+    ],
+    "worstActiveP95": 20.914230999999997,
+    "activeMaximum": 48.152538,
+    "allWindowMaximum": 256.745616
+  },
+  "stepMs": {
+    "activeP50Range": [
+      1.155077,
+      1.911846
+    ],
+    "worstActiveP95": 3.233693,
+    "activeMaximum": 10.699769,
+    "allWindowMaximum": 21.077923
+  },
+  "discardedSimulationMsSinceAppStart": 952,
+  "discardedMsInAnyCompleteActiveWindow": 0,
+  "inputAgeWorstActiveP95Ms": [
+    223.00555599993095,
+    223.8824700000696
+  ],
+  "staleConsumeSamplesSinceAppStart": [
+    87,
+    64
+  ],
+  "pssMiBRange": [
+    106.7880859375,
+    113.5517578125
+  ],
+  "warmFirstLastMedianMiB": [
+    107.669921875,
+    109.9091796875
+  ],
+  "warmMedianGrowthMiB": 2.2392578125,
+  "warmPssTrendMiBPerMinute": 0.23054658467099157,
+  "thermalStatuses": [
+    0
+  ],
+  "maxOwnedTexturesMiB": 37.9697265625,
+  "maxArtMiB": 10.75,
+  "gates": {
+    "allClassActivations": true,
+    "inputs": false,
+    "frameP95AtMost16_7Ms": false,
+    "activeMaxAtMost33Ms": false,
+    "activeMedians16to18Ms": true,
+    "pssAtMost192MiB": true,
+    "warmMedianGrowthAtMost8MiB": true,
+    "textureBudget": true
+  },
+  "limits": [
+    "Windows overlap: their percentiles are not averaged or added.",
+    "Active windows require at least ten simulated race seconds; preparation and startup tails remain separately visible.",
+    "Class cycling includes interrupted practice rounds; completed round count is separate.",
+    "Normal AI and mortal cars, not a forced maximum-effects stress fixture.",
+    "Scripted LAN traffic is not optical latency, physical-phone comfort, fairness or fun."
+  ]
+}

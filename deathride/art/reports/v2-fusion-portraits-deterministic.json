@@ -1,0 +1,560 @@
+[
+  {
+    "id": "v2-fusion-portraits-rook-v1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-rook-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b491e401e9fbf8193acd4eeae75407d7647d5391ad55f4cef209a7a628951a3d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-rook-v1",
+      "class": "rook",
+      "prompt_action": "Original adult male bitter scavenger, medium-brown skin, gaunt angular cheeks, healed cheek scar, one broken goggle lens on the forehead, uneven close-cropped hair, dust scarf, single oversized jagged welded shoulder plate. Calculating sour expression and a narrow hunched silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33112144470214844,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 0.9267676767676768,
+      "estimated_key_rgb": [
+        236.0,
+        92.0,
+        224.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.180977951581086,
+      "palette_p90_delta_e": 11.270185931722818
+    },
+    "placement": {
+      "source_bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "source_pivot_px": [
+        532.0,
+        508.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        230,
+        248
+      ],
+      "scale": 0.31313131313131315,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-rook-v1.png",
+    "sha256": "75bc390f3f9a36ccf08fdec2a11c2cc39f96552b1242bdc4af3e596f6984a67a"
+  },
+  {
+    "id": "v2-fusion-portraits-ox-v1",
+    "class": "ox",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-ox-v1\\attempt-01\\1.jpg",
+    "source_sha256": "90eed57a771aa23277c970f2d48023a6179c8dc390e4b848ee24ffa482859bfb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-ox-v1",
+      "class": "ox",
+      "prompt_action": "Original adult female heavy hauler, pale weathered skin, broad square face and neck, short silver bristle hair, dark eyebrow scar, enormous unequal slab shoulder armour and a patched soot work vest. Calm implacable stare, low wide fortress silhouette; chipped bone collar bolts. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.37069034576416016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        75,
+        181,
+        962,
+        884
+      ],
+      "margin_fraction": 0.060546875,
+      "aspect": 1.2617354196301565,
+      "estimated_key_rgb": [
+        227.0,
+        227.0,
+        227.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.746269048934694,
+      "palette_p90_delta_e": 13.872671170177604
+    },
+    "placement": {
+      "source_bounds_px": [
+        75,
+        181,
+        962,
+        884
+      ],
+      "source_pivot_px": [
+        518.5,
+        532.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        197
+      ],
+      "scale": 0.27959413754227735,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-ox-v1.png",
+    "sha256": "9dbcc54d409bf3d7d17942516e96416f0ed7cb9dcad92bdc8b5377c6a97608b4"
+  },
+  {
+    "id": "v2-fusion-portraits-vex-v1",
+    "class": "vex",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-vex-v1\\attempt-02\\1.jpg",
+    "source_sha256": "212484a7338ccaa6f420db397c7da46ff72ebb5ccaa0b2ec1765586737c5b88b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-vex-v1",
+      "class": "vex",
+      "prompt_action": "Original adult male speed addict, light-brown skin, swept-back ragged tall crest of dark hair, small moustache, chipped racing goggles hanging at the neck, rust-orange patched sleeveless suit, narrow sharp shoulders. Wild clenched grin, asymmetrical scarf ends and restless pointed silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3515644073486328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        178,
+        117,
+        867,
+        908
+      ],
+      "margin_fraction": 0.11328125,
+      "aspect": 0.8710493046776233,
+      "estimated_key_rgb": [
+        239.0,
+        21.0,
+        197.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.4973030628647965,
+      "palette_p90_delta_e": 10.714289118109225
+    },
+    "placement": {
+      "source_bounds_px": [
+        178,
+        117,
+        867,
+        908
+      ],
+      "source_pivot_px": [
+        522.5,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        248
+      ],
+      "scale": 0.31352718078381797,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-vex-v1.png",
+    "sha256": "c738dbf34b2041a0341ed8e01511343e6ae23ec15ab3e0f449e60dc44749c5f7"
+  },
+  {
+    "id": "v2-fusion-portraits-mica-v1",
+    "class": "mica",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-mica-v1\\attempt-01\\1.jpg",
+    "source_sha256": "8bf05b77a0445b76b80ee564fa4afe96f0496dbf1836f346dbc20e62be6c252e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-mica-v1",
+      "class": "mica",
+      "prompt_action": "Original adult female grip artist, dark skin, short coiled hair under a dirty bone head wrap, patient focused eyes, two short soot cheek-paint dashes, cropped patched ochre jacket, tyre-rubber shoulder guards. Balanced compact silhouette, rust ear protector, deliberate controlled expression. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3802461624145508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        79,
+        911,
+        965
+      ],
+      "margin_fraction": 0.0576171875,
+      "aspect": 0.8939051918735892,
+      "estimated_key_rgb": [
+        224.0,
+        224.0,
+        224.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.734068769562446,
+      "palette_p90_delta_e": 11.404199319585572
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        79,
+        911,
+        965
+      ],
+      "source_pivot_px": [
+        515.0,
+        522.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        222,
+        248
+      ],
+      "scale": 0.2799097065462754,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-mica-v1.png",
+    "sha256": "498672f81171df8232ce67a8205a3d88e62599fe08b031fbbea1a77ce0c52809"
+  },
+  {
+    "id": "v2-fusion-portraits-relay-v1",
+    "class": "relay",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-relay-v1\\attempt-01\\1.jpg",
+    "source_sha256": "6409720aafe6b754547b9ed45a5b2c4d714d588390551b85dbbdd0314d3e202b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-relay-v1",
+      "class": "relay",
+      "prompt_action": "Original adult androgynous racer, fair weathered skin, short asymmetrical dark undercut, repaired ear defenders with a short broken aerial, dried-red and bone patched high-neck jacket, one thin scrap shoulder fin. Thoughtful alert expression, distinctive slanted silhouette, no letters or display screens. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3669090270996094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        69,
+        89,
+        956,
+        934
+      ],
+      "margin_fraction": 0.06640625,
+      "aspect": 1.0497041420118343,
+      "estimated_key_rgb": [
+        240.0,
+        240.0,
+        240.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.010030282932387,
+      "palette_p90_delta_e": 13.395745656622855
+    },
+    "placement": {
+      "source_bounds_px": [
+        69,
+        89,
+        956,
+        934
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        236
+      ],
+      "scale": 0.27959413754227735,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-relay-v1.png",
+    "sha256": "c4db2e1bbcaf12cbe74928e9d730022d39faacd31124cf9dc4b25b53ce3204b8"
+  },
+  {
+    "id": "v2-fusion-portraits-marrow-v1",
+    "class": "marrow",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-marrow-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4c6f10f94631619e7edfd8d71f6aeb9ce19a8e24a5b5bbea3f77fc0388ffebe8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-marrow-v1",
+      "class": "marrow",
+      "prompt_action": "Original older adult league boss, olive weathered skin, angular face, deeply lined mouth, silver hair swept into a severe short crest, high soot-black jagged collar and layered rust metal shoulder mantle. Stern hostile composure, imposing wide triangular silhouette, bone scarf and one old healed temple scar; no crown or insignia. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2759590148925781,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        133,
+        910,
+        922
+      ],
+      "margin_fraction": 0.099609375,
+      "aspect": 1.002534854245881,
+      "estimated_key_rgb": [
+        199.0,
+        54.0,
+        160.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.429975720362787,
+      "palette_p90_delta_e": 10.997873341095183
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        133,
+        910,
+        922
+      ],
+      "source_pivot_px": [
+        514.5,
+        527.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        247
+      ],
+      "scale": 0.31352718078381797,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-marrow-v1.png",
+    "sha256": "f171b2379f83b80f5a5a21bb38ae64d7256f15656bb4754539c6cd0e0bf0e409"
+  }
+]

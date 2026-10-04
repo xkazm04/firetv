@@ -1,0 +1,194 @@
+{
+  "device": "AFTKM; Chromium touch emulation over LAN, not physical phone",
+  "checks": [
+    "All five authored courses selected on Stick through paired touch browser",
+    "Enlarged Bastion drives and releases throttle"
+  ],
+  "errors": [],
+  "stats": {
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 26564.965617,
+    "phase": "lobby",
+    "raceSeconds": 0.19999999999999998,
+    "paused": false,
+    "frameNumber": 1424,
+    "flashFrames": 0,
+    "heapUsedMB": 11.772003173828125,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.776077,
+        "p95": 21.463077000000002,
+        "max": 368.592308,
+        "count": 504
+      },
+      "sinceStart": {
+        "p50": 16.7,
+        "p95": 20.5,
+        "max": 368.592308,
+        "count": 1424
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 0.920231,
+        "p95": 1.427307,
+        "max": 4.338462,
+        "count": 349
+      },
+      "sinceStart": {
+        "p50": 0.719,
+        "p95": 1.572,
+        "max": 8.226538,
+        "count": 1282
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 1231,
+      "sinceStart": 1499
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 23.722922958277195,
+            "p95": 44.29899999404006,
+            "max": 110.85607801192236,
+            "count": 349
+          },
+          "sinceStart": {
+            "p50": 23.700000000000003,
+            "p95": 44.1,
+            "max": 110.85607801192236,
+            "count": 396
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 2
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Bastion",
+          "role": "Armored bruiser",
+          "stats": {
+            "speed": 4,
+            "acceleration": 3,
+            "grip": 5,
+            "armor": 10,
+            "mass": 10,
+            "handling": 3,
+            "slots": 3
+          }
+        },
+        "speedMps": 0,
+        "xM": -51.43526156115874,
+        "yM": 45.42258140363993
+      },
+      {
+        "slot": 1,
+        "connected": false,
+        "reserved": false,
+        "clockSynced": false,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "drifting": false,
+        "loadTransfer": -0.06784821497915063,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2
+          }
+        },
+        "speedMps": 1.7968004993743032,
+        "xM": -51.27828767309073,
+        "yM": 52.023208192629404
+      }
+    ]
+  }
+}

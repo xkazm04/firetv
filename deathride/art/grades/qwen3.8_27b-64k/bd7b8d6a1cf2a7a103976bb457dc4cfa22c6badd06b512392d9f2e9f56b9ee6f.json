@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-comet-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "bd7b8d6a1cf2a7a103976bb457dc4cfa22c6badd06b512392d9f2e9f56b9ee6f",
+  "image_hashes": [
+    "2aee691f15a9dbec7f64b453f826567c79ae50b625a860a973856a9ba11e2e51",
+    "f2ac8184779e1003036a520e2bac8d2ac7998cbce9549bee0a38d4c883553381"
+  ],
+  "prompt": "Image 1 is the target Comet car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:04:30.761312+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle features a distinct, elongated, and pointed nose cone that tapers to a sharp tip, creating a unique silhouette not shared by the other vehicles in the reference set. Its color palette consists of a vibrant orange body, dark blue-black glass for the cockpit and side windows, and charcoal-black rubber tires. A prominent, light-gray, cool-metal rear wing is also visible. These elements are consistent with the 'Comet' designation and are visually distinct from the other cars shown, which have different body shapes and color schemes.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle features a distinct, elongated, and pointed nose cone that tapers to a sharp tip, creating a unique silhouette not shared by the other vehicles in the reference set. Its color palette consists of a vibrant orange body, dark blue-black glass for the cockpit and side windows, and charcoal-black rubber tires. A prominent, light-gray, cool-metal rear wing is also visible. These elements are consistent with the 'Comet' designation and are visually distinct from the other cars shown, which have different body shapes and color schemes."
+  },
+  "eval_count": 141,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.828
+}

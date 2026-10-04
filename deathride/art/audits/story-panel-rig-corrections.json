@@ -1,0 +1,30 @@
+[
+  {
+    "asset": "story-ally-ox-v2",
+    "source_sha256": "30e7d3bcc82fa1531b1ad7d6074b15e486d88aa9a94662e8e33fe4fdb7b276e0",
+    "reason": "Direct review finds a pale paper border inconsistent with the quiet soot field of the narrative set. Preserve face, gesture and blank evidence; change background edges only.",
+    "at": "2026-10-03T00:53:59.552525+00:00",
+    "attempt_ceiling": 3
+  },
+  {
+    "asset": "story-ally-mica-v2",
+    "source_sha256": "48d4686caa659dd9479aa9bfb5271f5b29ceb00497bde6822a8f2ba4ecb375b9",
+    "reason": "Direct review finds a pale paper border inconsistent with the quiet soot field of the narrative set. Preserve face, gesture and blank evidence; change background edges only.",
+    "at": "2026-10-03T00:53:59.553534+00:00",
+    "attempt_ceiling": 3
+  },
+  {
+    "asset": "story-rig-reference-v2",
+    "source_sha256": "cbb600ea917e06cf61c505a2120759d5d4cd59894c607620d0d54eef5a031d4e",
+    "reason": "Both generated references failed source margin. Final third attempt is a framing-only edit, no gate changes.",
+    "at": "2026-10-03T00:53:59.553534+00:00",
+    "attempt_ceiling": 3
+  },
+  {
+    "asset": "story-icon-diversion-v2",
+    "source_sha256": "28edb61d5212800be47acae00b249a66044633c7c54bb096ae38a7ebedb04671",
+    "reason": "At actual 32px the branching pipe resembles a shovel or paintbrush and does not communicate diverted funds. Replace with a simple payment split pictogram.",
+    "at": "2026-10-03T00:53:59.553534+00:00",
+    "attempt_ceiling": 3
+  }
+]

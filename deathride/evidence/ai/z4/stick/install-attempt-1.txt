@@ -1,0 +1,1 @@
+Initial installation attempt used the shared default ADB server (5037). It lost the device connection between discovery/identity and install: adb device 10.0.0.139:5555 not found. No successful install was reported. Retry uses dedicated ADB server 5043 and rejects stderr during package identity checks. No lifecycle operation was issued to dev.deathride.tv.

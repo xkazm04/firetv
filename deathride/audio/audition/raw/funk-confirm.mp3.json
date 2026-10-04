@@ -1,0 +1,32 @@
+{
+  "id": "237d6688-e23e-433e-989c-fc16409114db",
+  "ts": "2026-10-02T19:25:52.923Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/funk-confirm.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a chunky mechanical pushbutton with a short spring bounce. Dirty close garage foley, springy snap, loose metal, short raw room, dangerous comic punch. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39142,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "5188fffe7d53a6cac1ccf7d8dd18b726044952116a20a6f2d0b8ac38c041902f",
+  "completedAt": "2026-10-02T19:25:56.440Z",
+  "creditsAfter": 39142,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5764
+}

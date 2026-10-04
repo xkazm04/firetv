@@ -1,0 +1,153 @@
+{
+  "id": "announcer.freedom",
+  "cue": "voice.announcer.freedom",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:39.214343+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\announcer.freedom.mp3.json",
+    "sourceSha256": "20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5",
+    "generatedAt": "2026-10-02T21:52:34.637Z",
+    "request": {
+      "text": "The ledger is closed. This road belongs to the living.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.55,
+        "similarity_boost": 0.75,
+        "style": 0.3,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 54,
+    "providerCredits": 54,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/announcer.freedom.mp3",
+    "sha256": "20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5",
+    "bytes": 60648,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 3.7151927437641725,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 163840,
+    "decodedBytes": 327680,
+    "integratedLufs": -23.58,
+    "truePeakDbtp": -5.56,
+    "loudnessRangeLu": 1.7,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          61468,
+          74328
+        ],
+        [
+          148751,
+          163840
+        ]
+      ],
+      "fraction": 0.170587158203125,
+      "longestInteriorSeconds": 0.291609977324263
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1787,
+    "endFrameExclusive": 74176,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1415633046188454,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/announcer.freedom.wav",
+    "sha256": "b4767c9c67a8bff83249dd4b8b967dd69a0faf73e25d68687bde107c9b57fad4",
+    "bytes": 144856,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 3.2829478458049888,
+    "durationWindowSeconds": [
+      3.280947845804989,
+      3.2849478458049886
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 72389,
+    "decodedBytes": 144778,
+    "integratedLufs": -18.01,
+    "truePeakDbtp": -5.29,
+    "loudnessRangeLu": 1.0,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          29073,
+          35370
+        ]
+      ],
+      "fraction": 0.08698835458426003,
+      "longestInteriorSeconds": 0.285578231292517
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

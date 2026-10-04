@@ -1,0 +1,674 @@
+[
+  {
+    "id": "v2-part3-bastion-state-intact-v2",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-state-intact-v2\\attempt-01\\1.jpg",
+    "source_sha256": "63723399956962878f9c84a677078a55969f92f52e125216ecdd3a9610ae62f1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-state-intact-v2",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY state: Intact ROADWORTHY state with the EXACT ORIGINAL wear, ink texture, rust, scratched pigment and patched plates fully retained. No additional collision damage. All original braces, ribs, spikes and markings stay unchanged. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery. Direct proof review: the word clean stripped too much characteristic Rust and Ink wear from the intact baseline. Flint also lost its rear-bed cross-brace. Preserve the exact original rough ink strokes, worn pigment, rust, bone structural patches and every attachment. Intact means roadworthy, NOT cleaned, repainted, factory-new, smooth plastic or 3D shaded. Keep the full original material texture and structural fittings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2839202880859375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.12824570807960547,
+      "estimated_key_rgb": [
+        238.0,
+        28.0,
+        148.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.645535921922239,
+      "palette_p90_delta_e": 12.721814264492094
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-state-intact-v2.png",
+    "sha256": "f83a26dab1f9c4e1397ff7f8e260827d0401ad254ac2717f4021c0172b781e2d"
+  },
+  {
+    "id": "v2-part3-bastion-state-damaged-1-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3c5c6b1f4ed19ad4571ef9b144f66b041c566e6c59232cb8ae995538bb22b066",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-state-damaged-1-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY state: Add a few small dents and restrained paint chips on the hood; keep chassis silhouette and all wheel positions. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2839527130126953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.007351102748435234,
+      "estimated_key_rgb": [
+        244.0,
+        29.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.425434670330036,
+      "palette_p90_delta_e": 12.371877328060464
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-state-damaged-1-v1.png",
+    "sha256": "db3142fcdc3a62b990c795a5cfb809cbe7c20b45cc1a7d66f5a4a7e9806adc9b"
+  },
+  {
+    "id": "v2-part3-bastion-state-damaged-2-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "6af6a2d290c1a40cc250aaba9fc444fa755f1088d5a371e5fbacb5cb396a6441",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-state-damaged-2-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY state: Add deeper buckled panels, cracked glass and exposed metal scars, visibly more severe than damaged-1; retain overall chassis footprint and all wheels. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28711891174316406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        256,
+        911,
+        768
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.556640625,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.2216796875,
+      "principal_axis_degrees": 0.06428928956756641,
+      "estimated_key_rgb": [
+        236.0,
+        30.0,
+        148.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.9212667576382305,
+      "palette_p90_delta_e": 10.916776769532104
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        256,
+        911,
+        768
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        143
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-state-damaged-2-v1.png",
+    "sha256": "becc0c42595c83ad93dc95ce5ac59f4f8f90d3816abde2cd7e0b6b6c70bf0f0d"
+  },
+  {
+    "id": "v2-part3-bastion-state-wreck-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-state-wreck-v1\\attempt-01\\1.jpg",
+    "source_sha256": "2cdef7942d2550f62ea73479b4b1774110bd79e5647f61f45a7f64794d52dec3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-state-wreck-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY state: Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass; retain recognizable chassis footprint, no detached parts, no smoke or flames. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2836017608642578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.007141474726749594,
+      "estimated_key_rgb": [
+        232.0,
+        33.0,
+        147.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.67607834518573,
+      "palette_p90_delta_e": 9.338669727384158
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-state-wreck-v1.png",
+    "sha256": "3f2792306b0c505e00b9259f94f237c7ac236a4105a07e9cddad980dd3e23fc1"
+  },
+  {
+    "id": "v2-part3-bastion-livery-bone-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fc75c79b73debd128f0f174ef43bbef1b2db9db1d43accdf17345b2028a572d0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-livery-bone-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28371429443359375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.014070556404558872,
+      "estimated_key_rgb": [
+        238.0,
+        30.0,
+        149.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.312890619757822,
+      "palette_p90_delta_e": 12.66492647584804
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-livery-bone-v1.png",
+    "sha256": "879130826b208016aca60583a7bca83f127f1914e64c1600da7f921856fba914"
+  },
+  {
+    "id": "v2-part3-bastion-livery-red-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e9ff8481ca8c10819aad1028d77202dfa375d6d80ac6fe2c31cb869434e23f57",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-livery-red-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY painted body panels to dried blood red #6C2427. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2839040756225586,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.035018264537731054,
+      "estimated_key_rgb": [
+        245.0,
+        28.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.548717056923196,
+      "palette_p90_delta_e": 9.301632732838875
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-livery-red-v1.png",
+    "sha256": "df6ba52cdc886aaf35a4c63bcb81755e678c40fafa44f3da8d87ea64ac432517"
+  },
+  {
+    "id": "v2-part3-bastion-livery-ochre-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "77c5fb1d09636a9577ca5447ede2bb40bc90efc210ff4fb54324c6b15096efa7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-livery-ochre-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY painted body panels to sun-baked ochre #A37738. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2838554382324219,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.0162817265774719,
+      "estimated_key_rgb": [
+        238.0,
+        31.0,
+        147.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.809272054791446,
+      "palette_p90_delta_e": 11.315732324216544
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-bastion-review\\v2-part3-bastion-livery-ochre-v1.png",
+    "sha256": "2f9ef0977908e3ec2641123e75a11188488d841d8972a173c218244276f32495"
+  }
+]

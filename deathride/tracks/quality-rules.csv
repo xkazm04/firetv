@@ -1,0 +1,37 @@
+key,value,unit,meaning
+sections,48,bins,Equal arc bins around a lap
+lanes,9,bins,Lateral occupancy including outside edges
+sampleSteps,6,ticks,Observe speed and lines at 10 Hz
+raceLaps,3,laps,Standard instrument race independent of campaign event lap counts
+raceLimitSeconds,180,seconds,Right censor standard instrument races
+arenaLimitSeconds,360,seconds,Right censor six-car arena stress races
+seeds,12,seeds,Independent seeds per course
+rotations,6,slots,Rotate car and style identities through every starting slot
+seedBase,7319,integer,Versioned reproducible seed namespace
+seedStride,104729,integer,Separate seeds
+minimumCornerDegrees,10,degrees,Discard insignificant heading noise
+hairpinDegrees,135,degrees,Hairpin angle threshold
+sweeperRadiusL,6,car lengths,Sweeper radius floor
+tightRadiusL,4,car lengths,Tight radius class ceiling
+compoundGapL,6,car lengths,Maximum same-sign corner phrase gap
+chicaneGapL,3,car lengths,Maximum chicane gap
+radiusChangeRatio,1.5,ratio,Increasing or decreasing curvature threshold
+compressionWidthW,4.2,car widths,Narrow gate full width threshold
+overtakeWidthW,5,car widths,Full width required for passing zone
+overtakeLengthL,4,car lengths,Minimum passing zone length
+brakingLookbackL,8,car lengths,Approach window before corner
+brakingDropFraction,0.12,fraction,Required approach to apex target-speed reduction
+contactCooldownSeconds,0.5,seconds,Debounce repeated pair or material contacts
+passMarginL,0.3,car lengths,Required lead for a confirmed live-car pass
+passHoldSeconds,0.5,seconds,New pair order must persist before counting
+stuckSpeedMps,1.2,m/s,Low speed threshold
+stuckSeconds,3,seconds,Continuous low speed defines stuck episode
+launchGraceSeconds,5,seconds,Ignore launch acceleration for stuck counts
+trapRangeL,3,car lengths,Nearby cars needed fore and aft of leader
+trapSpeedFraction,0.55,fraction,Slow leader relative to stock top speed
+trapHoldSeconds,0.5,seconds,Compression must persist
+restMinimumSeconds,3,seconds,Geometric rest candidate minimum
+referenceLimitSeconds,240,seconds,Timeout for clean two-lap reference driver
+rotationToleranceSeconds,3,seconds,Tolerance for 90-degree reference simulation cross-check
+seedSplitTolerance,0.35,fraction,Maximum early-wreck rate difference across seed halves
+rotationSpreadTolerance,0.5,fraction,Maximum early-wreck rate spread across identity rotations

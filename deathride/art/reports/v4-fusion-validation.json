@@ -1,0 +1,53 @@
+{
+  "at": "2026-10-01T21:32:47.524042+00:00",
+  "status": "pass-with-three-car-rejections",
+  "totals": {
+    "v2-fusion": {
+      "attempts": 34,
+      "identities": 16,
+      "max_attempts": 3
+    },
+    "v4-fusion": {
+      "attempts": 106,
+      "identities": 68,
+      "max_attempts": 3
+    }
+  },
+  "local_observations": 312,
+  "world_selections": 74,
+  "world_derivatives": 11,
+  "effects_export_reviews": 5,
+  "bundle": {
+    "status": "pass",
+    "atlas_groups": [
+      "autotile-barrier",
+      "autotile-track-edge",
+      "ui",
+      "world"
+    ],
+    "regions": 178,
+    "logical_assets": 74,
+    "tile_pages": 11,
+    "theme_pages": 5,
+    "content_coverage": {
+      "rivals": 5,
+      "track-themes": 5,
+      "weapons": 4,
+      "consumables": 4,
+      "provisional_rivals": 1
+    },
+    "resident_mib_with_car_reserve": 31.25,
+    "scope": "PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim"
+  },
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 338,
+    "remaining": 12,
+    "videos": 0,
+    "stop": null
+  },
+  "session_images_reserved": 140,
+  "no_damage_states_or_liveries": true,
+  "owner_approval": "pending; exact-source gate retained",
+  "scope": "local raw and processed hashes, exact style resolution, combined revision attempt caps, two model observations per attempt/derivative/export, selected world gates, atlas packing/residency. Owner taste and integrated gameplay remain pending."
+}

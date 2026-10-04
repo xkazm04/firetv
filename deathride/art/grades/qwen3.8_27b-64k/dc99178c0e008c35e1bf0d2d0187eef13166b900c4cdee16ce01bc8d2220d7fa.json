@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-trail-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "dc99178c0e008c35e1bf0d2d0187eef13166b900c4cdee16ce01bc8d2220d7fa",
+  "image_hashes": [
+    "61c6474a61f3f80a05d290b9688d4a8209e1d0bd0be0e8f305e5a2fa3f9d0219",
+    "44ae5165a1cfe7881c9113539383f542b4c6278312c0ca3e6d9344a8028b5eff"
+  ],
+  "prompt": "Image 1 is the target Trail car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:07:23.364143+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a cool metal blue body. Its silhouette, characterized by a boxy, angular shape with a prominent rear spoiler and distinct wheel arches, is clearly different from the other vehicles shown in the reference image, which include more rounded sedans, a low-profile race car, and a rugged off-road vehicle.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a cool metal blue body. Its silhouette, characterized by a boxy, angular shape with a prominent rear spoiler and distinct wheel arches, is clearly different from the other vehicles shown in the reference image, which include more rounded sedans, a low-profile race car, and a rugged off-road vehicle."
+  },
+  "eval_count": 112,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.375
+}

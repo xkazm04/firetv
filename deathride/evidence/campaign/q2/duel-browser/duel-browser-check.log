@@ -1,0 +1,16 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Duel state timeout
+    at until (file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/tools/duel-browser-check.mjs:15:94)
+    at async file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/tools/duel-browser-check.mjs:32:2 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: undefined,
+  operator: 'fail',
+  diff: 'simple'
+}
+
+Node.js v24.14.0

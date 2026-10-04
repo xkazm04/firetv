@@ -1,0 +1,27 @@
+{
+  "branch": "deathride/gameplay",
+  "productionStatus": "Partial campaign correction; late boss targets and censoring not accepted",
+  "headroomCapsShipped": false,
+  "marrow610Shipped": false,
+  "stickAccess": false,
+  "ownerAndStickChecks": "pending",
+  "pushed": false,
+  "requiredBuild": "core:test link:test game:test app:assembleDebug GREEN",
+  "tests": {
+    "core": 150,
+    "link": 3,
+    "game": 21
+  },
+  "instrumentTests": 9,
+  "htmlPagesChecked": 6,
+  "missingLocalTargets": [],
+  "rawArchivesVerified": 36,
+  "sampledReleaseMainAndResourceBytesIdentical": true,
+  "apkSha256": "0cfacbecb06c41e0ac03286d35fdf8f8c2724f01b5cd294807a36c5435fcb008",
+  "documentsTextLfSha256": {
+    "OWNER-CHECKS.md": "02a29d76f9d4f8ed97879a9ae37dbf9dde841f9135fa854add3f28eb947ef28a",
+    "../docs/concepts/deathride/G-campaign-balance.md": "03c32ae5938a4db918e0f82d030fe3bb86078c293764c4809980ddd91c9b13a3",
+    "../docs/concepts/DEATH-RIDE-PHASE2.md": "062f80fb83d6ff7875eee02261279f694a0d7f6bdd94fcd1dbc723fc66e245ef",
+    "../docs/concepts/DEATH-RIDE-PROGRESSION.md": "eeb8c513692361542ce716436e75470bb1ebdfea0283568eb49dbf17ee0887ea"
+  }
+}

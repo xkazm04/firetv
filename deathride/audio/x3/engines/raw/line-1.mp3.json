@@ -1,0 +1,32 @@
+{
+  "id": "de8301e7-880b-497a-bfca-3a8e5a0cf046",
+  "ts": "2026-10-02T21:47:15.420Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/line-1.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: uneven old coupe throb with worn valve chatter. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24273,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "8c0765bb150452a80e7127aa766373a2694acc7c29b5e011ecf2c88b656aa9a2",
+  "completedAt": "2026-10-02T21:47:19.213Z",
+  "creditsAfter": 24273,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3740
+}

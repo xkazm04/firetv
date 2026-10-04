@@ -1,0 +1,286 @@
+{
+  "sourceSha256": "fece83c61bbb286c45e9b4ad904bcc657c13c63594d2a1d60c4f1a47df0b77e9",
+  "apkSha256": "41d87f006d9b0ed3733f44fbe7eab62ebd080cb65c31556cc959f26e2167918c",
+  "durationSeconds": 900.158605,
+  "functionalPass": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n1 !== 0\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:109:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26595,
+      "accepted": 26595,
+      "rejected": 0,
+      "hz": 29.544793386716556
+    },
+    {
+      "slot": 1,
+      "sent": 26595,
+      "accepted": 26595,
+      "rejected": 0,
+      "hz": 29.544793386716556
+    }
+  ],
+  "pumpStalls": [
+    {
+      "second": 202.5621678,
+      "lateMs": 13628.834466656583
+    }
+  ],
+  "rejections": [],
+  "allWindows": {
+    "count": 772,
+    "worstP95Ms": 23.951923999999998,
+    "maxMs": 330.299539,
+    "p50RangeMs": [
+      16.655922999999998,
+      16.752923
+    ],
+    "stepWorstP95Ms": 7.272615
+  },
+  "activeWindows": {
+    "count": 589,
+    "worstP95Ms": 20.272,
+    "maxMs": 32.746538,
+    "p50RangeMs": [
+      16.670231,
+      16.752923
+    ],
+    "stepWorstP95Ms": 3.426846
+  },
+  "sixLiveWindows": {
+    "count": 70,
+    "worstP95Ms": 20.272,
+    "maxMs": 32.746538,
+    "p50RangeMs": [
+      16.674616,
+      16.692922999999997
+    ],
+    "stepWorstP95Ms": 3.426846
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 18.7,
+    "max": 330.299539,
+    "count": 53931
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 1648
+  },
+  "inputAgeWorstP95Ms": [
+    13179.277113000047,
+    13180.359605999984
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 886
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 862
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    123.0693359375,
+    139.453125
+  ],
+  "warmPssGrowthMiB": -14.8994140625,
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 7,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4213,
+    "suppressed": 8785,
+    "stolen": 84,
+    "missing": 35,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "handoff": "spsc-mailboxes",
+      "nativeActive": 7,
+      "nativeHighWater": 8,
+      "starts": 4186,
+      "failedStarts": 0,
+      "staleStarts": 0,
+      "cancelledStarts": 27,
+      "overflow": 0,
+      "maxQueueMs": 91.648154,
+      "maxNativeCallMs": 71.358847,
+      "maxStartCompletionMs": 114.364462,
+      "maxParameterQueueMs": 139.049538,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 27,
+    "Line": 13,
+    "Bastion": 16,
+    "Comet": 14,
+    "Trail": 13,
+    "Flint": 10,
+    "Quill": 12,
+    "Vandal": 8,
+    "Kestrel": 15,
+    "Bulwark": 8
+  },
+  "rounds": 18,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "ackRttMs": {
+    "count": 53190,
+    "p50": 9.73489999998128,
+    "p95": 61.65260000000126,
+    "p99": 70.35609999999724,
+    "max": 100.21210000000428,
+    "mean": 19.38393189697314
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 53190,
+    "p50": 4.441807999974117,
+    "p95": 11.115598000003956,
+    "p99": 15.76365999999689,
+    "max": 35.7747029999955,
+    "mean": 5.2276974210496014
+  },
+  "estimatedAckReturnMs": {
+    "count": 53190,
+    "p50": 3.5449460000090767,
+    "p95": 56.38628700003028,
+    "p99": 63.33004499999879,
+    "max": 95.23565700009931,
+    "mean": 14.156234475928011
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": true,
+      "hudMessages": 8918,
+      "hudCharacters": 14373441,
+      "hudFullSnapshots": 212
+    },
+    {
+      "hudDelta": true,
+      "hudMessages": 8914,
+      "hudCharacters": 14169457,
+      "hudFullSnapshots": 212
+    }
+  ],
+  "lastLoadObservation": {
+    "second": 899.97377,
+    "slots": [
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 869
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 24.096614000038244,
+            "p95": 42.688398999976926,
+            "max": 49.29555300006177,
+            "count": 529
+          },
+          "sinceStart": {
+            "p50": 22.1,
+            "p95": 43.7,
+            "max": 13691.282882000029,
+            "count": 49666
+          }
+        }
+      },
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 845
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.63196299993433,
+            "p95": 41.24494799983222,
+            "max": 47.80595499987248,
+            "count": 529
+          },
+          "sinceStart": {
+            "p50": 22.6,
+            "p95": 44.1,
+            "max": 13692.371606,
+            "count": 49666
+          }
+        }
+      }
+    ],
+    "frame": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.685847,
+        "p95": 18.712462,
+        "max": 24.937462,
+        "count": 599
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 18.7,
+        "max": 330.299539,
+        "count": 53888
+      }
+    }
+  },
+  "finalStatsLimit": "finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.",
+  "gates": {
+    "duration": true,
+    "zeroRejected": true,
+    "inputStream": false,
+    "functional": false,
+    "frameP95": false,
+    "frameMax": true,
+    "memory": true,
+    "textures": true
+  }
+}

@@ -1,0 +1,42 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-int/deathride/core/src/test/kotlin/dev/deathride/core/TracksTest.kt:81:68 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:test FAILED
+
+TracksTest > remainingSixGeometryAndPacingRulesRejectTheirNamedMutants() FAILED
+    java.lang.IllegalArgumentException at TracksTest.kt:11
+
+VergeTest > everyCarCanReachVergeSlowdownWhileContainedByEitherWall() FAILED
+    org.opentest4j.AssertionFailedError at VergeTest.kt:31
+.\gradlew.bat :
+At line:2 char:1
++ .\gradlew.bat :core:test --tests '*VergeTest*' --tests '*TracksTest.r ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+2 tests completed, 2 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:test'.
+> There were failing tests. See the report at:
+file:///C:/Users/kazda/kiro/firetv-deathride-int/deathride/core/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 2s
+6 actionable tasks: 2 executed, 4 up-to-date

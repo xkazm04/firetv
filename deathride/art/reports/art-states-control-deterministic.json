@@ -1,0 +1,101 @@
+[
+  {
+    "id": "v2-art-states-control-comet-bone-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-art-states-control-comet-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "5e8303f92f18b6e943e02d6bfb07c5c2793b99832bbe5091af6a92bf575b9f0d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-art-states-control-comet-bone-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-art-states-control",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4141092300415039,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        28,
+        220,
+        994,
+        804
+      ],
+      "margin_fraction": 0.02734375,
+      "aspect": 1.654109589041096,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.3567351598173516,
+      "principal_axis_degrees": 0.06260307632345849,
+      "estimated_key_rgb": [
+        240.0,
+        168.0,
+        249.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.236331770117035,
+      "palette_p90_delta_e": 12.598785914171254
+    },
+    "placement": {
+      "source_bounds_px": [
+        28,
+        220,
+        994,
+        804
+      ],
+      "source_pivot_px": [
+        511.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        131
+      ],
+      "scale": 0.2236024844720497,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states-control\\v2-art-states-control-comet-bone-v1.png",
+    "sha256": "d4399db88e057aabecea5253780b2db4b5ad2638f3ab56e552b278bb450bc894"
+  }
+]

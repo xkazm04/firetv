@@ -1,0 +1,32 @@
+{
+  "id": "742a2fac-0fad-49b9-9b6d-23a567519a90",
+  "ts": "2026-10-02T21:48:30.783Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/flint-2.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: compact angry V motor snarl with rattling mounts. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24073,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "6eea8d7ba9ca131540726c57c821f5837aab48a0202319c9841e6e939adb073f",
+  "completedAt": "2026-10-02T21:48:34.513Z",
+  "creditsAfter": 24073,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 4640
+}

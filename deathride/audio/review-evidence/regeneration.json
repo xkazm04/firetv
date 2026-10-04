@@ -1,0 +1,36 @@
+{
+  "result": "pass",
+  "pageSha256": {
+    "audio\\index.html": "6f8a89f6820e4c4c70b77bd2354f40ff1faa4d995ff31588f7b98eb7c5e50914",
+    "audio\\audition\\index.html": "4952538b784e3b9747aa80522085da2121d07c390f4ae746595a908b9f9cd8fd",
+    "audio\\x3\\effects\\index.html": "47967952895cef901d242ae999afc5f9e765ea3607ad1f87a317569c073496fb",
+    "audio\\x3\\engines\\index.html": "13cb2175a0067e4bad1ad16bc40285924e1e4145154cb6b31853d50653be8b47",
+    "audio\\x3\\voices\\index.html": "f13ee6e4cf7386281d609140f037b0e04f2057647a54aa5e7cf6da6598430b31",
+    "audio\\x3\\music\\index.html": "cff5da69f4824be8283e9466e7fe8f02f31a1e85eb28635aa27c889f5204b623"
+  },
+  "commands": [
+    [
+      "build-audition.py"
+    ],
+    [
+      "build-x3-page.py",
+      "effects"
+    ],
+    [
+      "build-x3-page.py",
+      "engines"
+    ],
+    [
+      "build-x3-page.py",
+      "voices"
+    ],
+    [
+      "build-x3-music-page.py"
+    ],
+    [
+      "build-review-index.py"
+    ]
+  ],
+  "audioGeneration": false,
+  "spend": 0
+}

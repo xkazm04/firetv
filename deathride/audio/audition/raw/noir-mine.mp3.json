@@ -1,0 +1,32 @@
+{
+  "id": "dd5d2fbe-79fc-4da0-8c85-5d97e3e5d02e",
+  "ts": "2026-10-02T19:27:02.267Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/noir-mine.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a low compact concussive thud and brief dark fractured-metal tail. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 2 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 38375,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 33062,
+  "providerCredits": 20,
+  "sha256": "6d652fe63d97e6a63bdb37bd630aa26eb23d6cffbb604397fb11934521b52e8c",
+  "completedAt": "2026-10-02T19:27:05.151Z",
+  "creditsAfter": 38375,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 7396
+}

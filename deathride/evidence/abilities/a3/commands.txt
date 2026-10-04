@@ -1,0 +1,24 @@
+Working directory: deathride (PowerShell). No push was issued.
+
+Final build:
+  .\gradlew.bat :core:test :link:test :game:test :app:assembleDebug :desktop:installDist
+
+Final headless executions, after test classes/resources were compiled:
+  $abilityCp=(Get-Content core/build/report-classpath.txt -Raw).Trim()
+  java -Djava.util.concurrent.ForkJoinPool.common.parallelism=4 -Xmx1g -cp $abilityCp dev.deathride.core.AbilityReportKt 2000 200 roster accepted-final all abilities/acceptance-v2
+  java -Djava.util.concurrent.ForkJoinPool.common.parallelism=4 -Xmx1g -cp $abilityCp dev.deathride.core.AbilityReportKt 2000 2000 early accepted-final all abilities/acceptance-v2
+  java -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Xmx1g -cp $abilityCp dev.deathride.core.AbilityReportKt 200 0 rotation accepted-final all abilities/acceptance-v2
+The report JVMs ran BelowNormal priority. Gradle :core:abilityReport constructs the same runtime classpath for reproduction on another machine.
+
+Final controller:
+  CHROME_EXECUTABLE=C:\Program Files\Google\Chrome\Application\chrome.exe
+  node tools/ability-controller-check.mjs http://10.0.0.139:8767 DISPLAYED_PIN evidence/abilities/a3/controller-release
+
+Final visual probe:
+  PROBE_DEVICE=10.0.0.139:5555 PROBE_MINES=1 PROBE_SCREENSHOTS=1 PROBE_PRIORITY=AboveNormal
+  node tools/ability-stick-probe.mjs http://10.0.0.139:8767 DISPLAYED_PIN evidence/abilities/a3/final-visual-soak/raw.json 420
+
+Final performance probe (after headless JVMs exited):
+  PROBE_DEVICE=10.0.0.139:5555 PROBE_MINES=1 PROBE_SCREENSHOTS=0 PROBE_PRIORITY=AboveNormal
+  node tools/ability-stick-probe.mjs http://10.0.0.139:8767 DISPLAYED_PIN evidence/abilities/a3/release-soak/raw.json 900
+Environment rows describe process environment, not literal PowerShell assignment syntax. Only the abilities package was restarted between device runs.

@@ -1,0 +1,194 @@
+[
+  {
+    "id": "v2-part3-flint-state-intact-v3",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-flint-state-intact-v3\\attempt-01\\1.jpg",
+    "source_sha256": "ec72d7e7a3b3887aa9c8bcae64cf8e861eef9563e1e05d543c891f37a1e58b33",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-flint-state-intact-v3",
+      "class": "Flint",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, rectangular scrap cargo bed with its original pale flat floor panel at LEFT, four oversized squared tyres. The LEFT bed contains one plain broad pale worn structural floor panel with two short rectangular edge brackets. NO cross-brace, X, loose bones or new bed structure. Very squat blocky footprint and broad rightward ram, no occupants. Change ONLY state: Intact ROADWORTHY state with the EXACT ORIGINAL wear, ink texture, rust, scratched pigment and patched plates fully retained. No additional collision damage. All original braces, ribs, spikes and markings stay unchanged. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery. Direct proof review: the word clean stripped too much characteristic Rust and Ink wear from the intact baseline. Flint also lost its rear-bed cross-brace. Preserve the exact original rough ink strokes, worn pigment, rust, bone structural patches and every attachment. Intact means roadworthy, NOT cleaned, repainted, factory-new, smooth plastic or 3D shaded. Keep the full original material texture and structural fittings. The exact approved source image overrides any verbal identity description. Preserve the pale plain bed floor with its two small rectangular brackets; NO new cross-brace, X or bone-shaped object. Preserve the hood red chevron and yellow hazard markings as contrasting identity patches, including during livery edits.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+      "batch": "v2-part3-flint-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-flint-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.27581787109375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        106,
+        286,
+        992,
+        736
+      ],
+      "margin_fraction": 0.03125,
+      "aspect": 1.968888888888889,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.136964006259781,
+      "principal_axis_degrees": 0.08153023812462329,
+      "estimated_key_rgb": [
+        245.0,
+        54.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.079978689818213,
+      "palette_p90_delta_e": 10.353759193894547
+    },
+    "placement": {
+      "source_bounds_px": [
+        106,
+        286,
+        992,
+        736
+      ],
+      "source_pivot_px": [
+        549.0,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        86
+      ],
+      "scale": 0.19187358916478556,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-flint-proofs\\v2-part3-flint-state-intact-v3.png",
+    "sha256": "2e59db5ad7fbef250f041a7c74a89660c4b2c2190a0c2405fe7cf13d83da94c4"
+  },
+  {
+    "id": "v2-part3-flint-livery-bone-v2",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-flint-livery-bone-v2\\attempt-01\\1.jpg",
+    "source_sha256": "4f290242a7ee7dd6a45f8d85caa38e0cff1a1aacfcf47110839094cb55a7d898",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-flint-livery-bone-v2",
+      "class": "Flint",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, rectangular scrap cargo bed with its original pale flat floor panel at LEFT, four oversized squared tyres. The LEFT bed contains one plain broad pale worn structural floor panel with two short rectangular edge brackets. NO cross-brace, X, loose bones or new bed structure. Very squat blocky footprint and broad rightward ram, no occupants. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border. The exact approved source image overrides any verbal identity description. Preserve the pale plain bed floor with its two small rectangular brackets; NO new cross-brace, X or bone-shaped object. Preserve the hood red chevron and yellow hazard markings as contrasting identity patches, including during livery edits.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+      "batch": "v2-part3-flint-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-flint-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3379497528076172,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        67,
+        258,
+        992,
+        758
+      ],
+      "margin_fraction": 0.03125,
+      "aspect": 1.85,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.0683098591549296,
+      "principal_axis_degrees": 0.09545650676144361,
+      "estimated_key_rgb": [
+        245.0,
+        53.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.457012911726976,
+      "palette_p90_delta_e": 10.286811226292164
+    },
+    "placement": {
+      "source_bounds_px": [
+        67,
+        258,
+        992,
+        758
+      ],
+      "source_pivot_px": [
+        529.5,
+        508.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        92
+      ],
+      "scale": 0.1837837837837838,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-flint-proofs\\v2-part3-flint-livery-bone-v2.png",
+    "sha256": "90da03e39a8d753fd5dfc44c35bf1abc07a297f4fc7e4750efebe72f7eecb6b3"
+  }
+]

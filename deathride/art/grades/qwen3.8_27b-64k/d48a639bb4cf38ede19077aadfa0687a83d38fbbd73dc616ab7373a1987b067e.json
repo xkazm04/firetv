@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-bulwark-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "d48a639bb4cf38ede19077aadfa0687a83d38fbbd73dc616ab7373a1987b067e",
+  "image_hashes": [
+    "156fd98f289347e66d4c2fccdbaf9afc2556472eae266a91c843e88ecd48e2f6",
+    "f2ac8184779e1003036a520e2bac8d2ac7998cbce9549bee0a38d4c883553381"
+  ],
+  "prompt": "Image 1 is the target Bulwark car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:04:53.167746+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent color scheme with charcoal black tires, dark blue-black glass for the windshield and side windows, and light grey or cool metal accents on the roof rails and front bumper. Its silhouette is a boxy, high-clearance utility vehicle, which is visually distinct from the low-slung sports cars, the open-wheel race car, and the other sedan-style vehicles shown in the reference grid.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle maintains a consistent color scheme with charcoal black tires, dark blue-black glass for the windshield and side windows, and light grey or cool metal accents on the roof rails and front bumper. Its silhouette is a boxy, high-clearance utility vehicle, which is visually distinct from the low-slung sports cars, the open-wheel race car, and the other sedan-style vehicles shown in the reference grid."
+  },
+  "eval_count": 115,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.531
+}

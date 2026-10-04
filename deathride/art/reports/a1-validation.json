@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-04T13:16:25.837656+00:00",
+  "status": "pass-for-recorded-candidates",
+  "budget": {
+    "provider": "agy",
+    "model": "gemini-3.8-flash-high",
+    "images_reserved": 9,
+    "remaining": 111,
+    "cap": 120,
+    "real_allowance": "unknown",
+    "stop": {
+      "at": "2026-10-04T13:06:15.381789+00:00",
+      "reason": "agy-foundry-clinker-v1: failed to generate"
+    }
+  },
+  "proofs": [
+    "agy-scrap-panels"
+  ],
+  "generated_attempts": 5,
+  "technical_candidates": 1,
+  "gate_failures": {
+    "CROPPED_OR_MARGIN": 1
+  },
+  "owner_approvals": 0,
+  "runtime_activations": 0
+}

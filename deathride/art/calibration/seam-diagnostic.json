@@ -1,0 +1,103 @@
+{
+  "label_author": "executing-agent inspection of exported 256px tiles repeated 2x2",
+  "status": "provisional; fitted on five samples, no held-out or human calibration",
+  "items": [
+    {
+      "id": "test-tile-asphalt",
+      "sha256": "9259975b646828142e816782b5d48b485ecce0012680e7679a219c7c06d1a81c",
+      "source_sha256": "ffd3d580de21eb853da64ba0568f8f5d42e8dc3979a61aecaa0108eb8ee6121d",
+      "agent_label_seam_visible": false,
+      "predicted_seam": false,
+      "metrics": {
+        "edge_x_mean": 0.039261642156862744,
+        "edge_y_mean": 0.052951388888888895,
+        "edge_x_peak": 0.30980392156862746,
+        "edge_y_peak": 0.3686274509803922,
+        "autocorrelation_peak": 0.9556873215484107,
+        "autocorrelation_shift_px": [
+          0,
+          64
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      }
+    },
+    {
+      "id": "test-tile-gravel",
+      "sha256": "b26d1dfe41f3ba8f3f2602d9ebcd35f8b1ed38fec6e1f149dedcb0c6c1c975af",
+      "source_sha256": "dbc3c5305d9ffff084d05e3a290fa5d226ff125a3ecbeae38c631e3eb69f8882",
+      "agent_label_seam_visible": false,
+      "predicted_seam": false,
+      "metrics": {
+        "edge_x_mean": 0.047972834967320264,
+        "edge_y_mean": 0.05725081699346405,
+        "edge_x_peak": 0.2823529411764706,
+        "edge_y_peak": 0.28235294117647064,
+        "autocorrelation_peak": 0.9309651893897328,
+        "autocorrelation_shift_px": [
+          64,
+          0
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      }
+    },
+    {
+      "id": "test-tile-ice",
+      "sha256": "b09a8424f2bd288366a432ed6425cd0246f8d3cd8f8f785fdc9e2b4b7f3defb4",
+      "source_sha256": "de55e413d1b33fdbaae5c6454fb6a521eb63364e6fc9e26a632b194c48151e61",
+      "agent_label_seam_visible": true,
+      "predicted_seam": true,
+      "metrics": {
+        "edge_x_mean": 0.040400326797385616,
+        "edge_y_mean": 0.03580984477124183,
+        "edge_x_peak": 0.44705882352941173,
+        "edge_y_peak": 0.2666666666666666,
+        "autocorrelation_peak": 0.10103496248468218,
+        "autocorrelation_shift_px": [
+          9,
+          22
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      }
+    },
+    {
+      "id": "test-tile-kerb",
+      "sha256": "d12a92d3e9d158339b9d1d21a6722679f3d888d9d18c5facb1fe4e55136513e4",
+      "source_sha256": "0a4a04ad9cc5d358fd289019948c10560438c5fc77d6ad9127f24cea8e8b297a",
+      "agent_label_seam_visible": true,
+      "predicted_seam": true,
+      "metrics": {
+        "edge_x_mean": 0.03740298202614379,
+        "edge_y_mean": 0.2145578022875817,
+        "edge_x_peak": 0.3372549019607843,
+        "edge_y_peak": 0.403921568627451,
+        "autocorrelation_peak": 0.9887100283961693,
+        "autocorrelation_shift_px": [
+          16,
+          0
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      }
+    },
+    {
+      "id": "test-tile-oil",
+      "sha256": "23242f286083c1a496e6a9ace2dc0ef8490325156a43df4b4020e91aae2a4e6b",
+      "source_sha256": "fb50887bd8357e77fb2bff39bb698c9d0d6384f9388545a3bab3eb4b51b5495d",
+      "agent_label_seam_visible": true,
+      "predicted_seam": true,
+      "metrics": {
+        "edge_x_mean": 0.08702001633986928,
+        "edge_y_mean": 0.1393331290849673,
+        "edge_x_peak": 0.6313725490196078,
+        "edge_y_peak": 0.6627450980392157,
+        "autocorrelation_peak": 0.41248154769037687,
+        "autocorrelation_shift_px": [
+          112,
+          13
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      }
+    }
+  ],
+  "false_accept": 0,
+  "false_reject": 0
+}

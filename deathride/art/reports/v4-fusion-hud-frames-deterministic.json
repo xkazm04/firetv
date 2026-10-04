@@ -1,0 +1,302 @@
+[
+  {
+    "id": "v4-fusion-hud-frames-frame-health-v2",
+    "class": "frame-health",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-health-v2\\attempt-01\\1.jpg",
+    "source_sha256": "dbd17e3c3a86fa8839b6874fbe15e301e89e1936f81cd5f5be0767dc0acc1343",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-hud-frames-frame-health-v2",
+      "class": "frame-health",
+      "prompt_action": "Edit the provided reference image. DELETE the entire aircraft drawing in the lower half, restoring uniform pure magenta everywhere it was. Keep ONLY the single empty rectangular health-bar FRAME in the upper half. Move that frame to the image centre, keep its width small and unchanged. Preserve battered bone metal and small red end cap. Interior opening and ALL background must be pure MAGENTA. Exactly one small EMPTY RECTANGULAR BORDER and nothing else. No aircraft, vehicle, spaceship, solid object, emblem, text or extra decoration.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-health-v1\\attempt-02\\1.jpg",
+      "batch": "v4-fusion-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-health"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.10726261138916016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        156,
+        368,
+        884,
+        651
+      ],
+      "margin_fraction": 0.13671875,
+      "aspect": 2.5724381625441697,
+      "estimated_key_rgb": [
+        240.0,
+        30.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.948404089579621,
+      "palette_p90_delta_e": 11.838394558164845
+    },
+    "placement": {
+      "source_bounds_px": [
+        156,
+        368,
+        884,
+        651
+      ],
+      "source_pivot_px": [
+        520.0,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        248,
+        96
+      ],
+      "scale": 0.34065934065934067,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      27,
+      38,
+      222,
+      90
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-hud-frames\\v4-fusion-hud-frames-frame-health-v2.png",
+    "sha256": "2f33009a68a5a436d8c899f0f69b8ee50eba700e4146af054b5bff256ca9aaef"
+  },
+  {
+    "id": "v4-fusion-hud-frames-frame-turbo-v2",
+    "class": "frame-turbo",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-turbo-v2\\attempt-01\\1.jpg",
+    "source_sha256": "c3b55f1d336f4f794d21abecc4cd0207959a26451ba3a50d31d42ffb76ad3acc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-hud-frames-frame-turbo-v2",
+      "class": "frame-turbo",
+      "prompt_action": "Edit the provided image. ERASE the entire aircraft/machine drawing and restore uniform pure MAGENTA in its place. Preserve ONLY the EMPTY RECTANGULAR FRAME. Move the frame to the centre of the square, make its width occupy the middle HALF of the canvas. Keep the worn metal border and orange end cap. The interior opening and all background are pure magenta. Exactly one empty rectangular border, no other object, aircraft, vehicle, spaceship, text, number, emblem, panel content or decoration.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-turbo-v1\\attempt-01\\1.jpg",
+      "batch": "v4-fusion-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-turbo"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1366891860961914,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        110,
+        319,
+        925,
+        695
+      ],
+      "margin_fraction": 0.0966796875,
+      "aspect": 2.1675531914893615,
+      "estimated_key_rgb": [
+        234.0,
+        17.0,
+        197.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.460600663132046,
+      "palette_p90_delta_e": 12.221741365112992
+    },
+    "placement": {
+      "source_bounds_px": [
+        110,
+        319,
+        925,
+        695
+      ],
+      "source_pivot_px": [
+        517.5,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        248,
+        114
+      ],
+      "scale": 0.3042944785276074,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      36,
+      38,
+      210,
+      92
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-hud-frames\\v4-fusion-hud-frames-frame-turbo-v2.png",
+    "sha256": "11fd075bf379a9bbfcbb9b71f932af4d38322655acf39f07df82e6db8da7fde2"
+  },
+  {
+    "id": "v4-fusion-hud-frames-frame-panel-v2",
+    "class": "frame-panel",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-panel-v2\\attempt-01\\1.jpg",
+    "source_sha256": "f0dcdc91aa4f2e181e34c35bbf371b84d2eaa8aca08a57488b4aad933e6991f9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-hud-frames-frame-panel-v2",
+      "class": "frame-panel",
+      "prompt_action": "Edit the provided image. ERASE the entire aircraft/machine drawing and restore uniform pure MAGENTA in its place. Preserve ONLY the EMPTY RECTANGULAR FRAME. Move the frame to the centre of the square, make its width occupy the middle HALF of the canvas. Keep the worn metal border and four clipped corners. The interior opening and all background are pure magenta. Exactly one empty rectangular border, no other object, aircraft, vehicle, spaceship, text, number, emblem, panel content or decoration.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-hud-frames-frame-panel-v1\\attempt-01\\1.jpg",
+      "batch": "v4-fusion-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-panel"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.06801605224609375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        246,
+        324,
+        783,
+        699
+      ],
+      "margin_fraction": 0.2353515625,
+      "aspect": 1.432,
+      "estimated_key_rgb": [
+        238.0,
+        14.0,
+        235.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.329779856939324,
+      "palette_p90_delta_e": 9.72360462731917
+    },
+    "placement": {
+      "source_bounds_px": [
+        246,
+        324,
+        783,
+        699
+      ],
+      "source_pivot_px": [
+        514.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        173
+      ],
+      "scale": 0.4618249534450652,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      30,
+      68,
+      222,
+      187
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-hud-frames\\v4-fusion-hud-frames-frame-panel-v2.png",
+    "sha256": "b4cb026a383871bf577ff473ac15296a1063bc40afa1de2382fef2ef16e81b33"
+  }
+]

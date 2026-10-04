@@ -1,0 +1,484 @@
+{
+  "hardware": {
+    "model": "AFTKM",
+    "display": "Physical size: 3840x2160\r\nOverride size: 1920x1080\r\n",
+    "wifi": "Wifi is enabled\r\nWifi scanning is only available when wifi is enabled\r\nWifi is connected to \"O2-Internet_100\"\r\nWifiInfo: SSID: XXX, BSSID: XXX, MAC: XXX, OUI: 7c:f1:7e, Supplicant state: COMPLETED, Wi-Fi standard: 0, RSSI: -51, Link speed: 154Mbps, Tx Link speed: 154Mbps, Max Supported Tx Link speed: -1Mbps, Rx Link speed: -1Mbps, Max Supported Rx Link speed: -1Mbps, Frequency: 2442MHz, Net ID: 0, Metered hint: false, score: 60\r\nsuccessfulTxPackets: 8672220\r\nsuccessfulTxPacketsPerSecond: 1.5881420442932979\r\nretriedTxPackets: 0\r\nretriedTxPacketsPerSecond: 0.0\r\nlostTxPackets: 0\r\nlostTxPacketsPerSecond: 0.0\r\nsuccessfulRxPackets: 9849205\r\nsuccessfulRxPacketsPerSecond: 1.5798069941353003\r\n",
+    "startedUtc": "2026-10-01T13:50:48.974Z",
+    "preheated": true,
+    "memoryMethod": "dumpsys meminfo --local: kernel/system-side details without calling application"
+  },
+  "apkSha256": "d362ad43909a3fa2071fdf2f64040bdc42b011b49948adef6a95608c563cf7b3",
+  "inputDurationSeconds": 900.0097016999999,
+  "completed": false,
+  "ranFullDuration": true,
+  "checksPassed": false,
+  "inputHz": [
+    29.9285662689207,
+    29.9285662689207
+  ],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26936,
+      "accepted": 26931,
+      "rejected": 5,
+      "pending": 0,
+      "bestRtt": 4.412799999990966,
+      "offset": 9325.52437899998,
+      "rtt": {
+        "n": 26936,
+        "p50": 12.815800000098534,
+        "p95": 64.93800000008196,
+        "max": 313.60119999999006
+      }
+    },
+    {
+      "slot": 1,
+      "sent": 26936,
+      "accepted": 26930,
+      "rejected": 6,
+      "pending": 0,
+      "bestRtt": 5.317700000014156,
+      "offset": 9326.286598000006,
+      "rtt": {
+        "n": 26936,
+        "p50": 13.019000000000233,
+        "p95": 65.17319999996107,
+        "max": 414.00659999999334
+      }
+    }
+  ],
+  "minute1": {
+    "frame": {
+      "second": 60.051575,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "p50": 16.738076,
+      "p95": 20.547923,
+      "max": 155.749385,
+      "count": 590
+    },
+    "inputAgeMs": [
+      {
+        "p50": 21.475766999996267,
+        "p95": 42.60332900000503,
+        "max": 57.37752900000487,
+        "count": 234
+      },
+      {
+        "p50": 21.930063000007067,
+        "p95": 43.775731999994605,
+        "max": 57.73076299999957,
+        "count": 234
+      }
+    ],
+    "simStepMs": {
+      "p50": 1.289385,
+      "p95": 1.858616,
+      "max": 3.65023,
+      "count": 234
+    }
+  },
+  "minute15": {
+    "frame": {
+      "second": 900.0097016999999,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": true,
+      "p50": 16.789307,
+      "p95": 20.593462,
+      "max": 25.024615,
+      "count": 600
+    },
+    "inputAgeMs": [
+      {
+        "p50": 22.003960000001825,
+        "p95": 42.94596800010186,
+        "max": 60.58786000008695,
+        "count": 601
+      },
+      {
+        "p50": 21.329848999972455,
+        "p95": 43.25454100011848,
+        "max": 79.95119499997236,
+        "count": 601
+      }
+    ],
+    "simStepMs": {
+      "p50": 1.139231,
+      "p95": 1.608538,
+      "max": 4.687385,
+      "count": 601
+    }
+  },
+  "allWindows": {
+    "windows": 90,
+    "frameSamples": 53750,
+    "worstP95": {
+      "second": 10.0883947,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": false,
+      "p50": 16.673692,
+      "p95": 21.707846,
+      "max": 271.09623100000005,
+      "count": 586
+    },
+    "worstMax": {
+      "second": 10.0883947,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": false,
+      "p50": 16.673692,
+      "p95": 21.707846,
+      "max": 271.09623100000005,
+      "count": 586
+    }
+  },
+  "activeWindows": {
+    "windows": 69,
+    "frameSamples": 41361,
+    "worstP95": {
+      "second": 290.0441053,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": true,
+      "p50": 16.685923,
+      "p95": 20.990846,
+      "max": 26.784,
+      "count": 600
+    },
+    "worstMax": {
+      "second": 560.0477541,
+      "phase": "race",
+      "track": "saltline",
+      "fullRace": true,
+      "p50": 16.69577,
+      "p95": 20.708462,
+      "max": 32.343616,
+      "count": 599
+    }
+  },
+  "sinceProcessStartFrameMs": {
+    "p50": 16.7,
+    "p95": 20.5,
+    "max": 271.09623100000005,
+    "count": 54414
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 889
+  },
+  "loadDiscardedSimulationMs": 884,
+  "worstActiveInputAgeMs": [
+    {
+      "p95": 158.7156370000157,
+      "max": 297.6318060000194
+    },
+    {
+      "p95": 161.477962999983,
+      "max": 297.5610009999946
+    }
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 0,
+        "sinceStart": 142
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 5
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 0,
+        "sinceStart": 107
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 6
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "loadInputCounterDelta": [
+    {
+      "stale": 9,
+      "dropped": 5,
+      "outOfOrder": 0
+    },
+    {
+      "stale": 7,
+      "dropped": 6,
+      "outOfOrder": 0
+    }
+  ],
+  "loadObservations": {
+    "racePolls": 4911,
+    "sixActivePolls": 776,
+    "weaponEffectPolls": 2156,
+    "peakProjectiles": 3,
+    "peakMines": 18,
+    "peakBlasts": 2,
+    "surfaces": [
+      "Asphalt",
+      "Kerb",
+      "Offtrack",
+      "Oil",
+      "Gravel",
+      "Ice"
+    ]
+  },
+  "phaseWallSeconds": {
+    "lobby": 6.070786499999915,
+    "countdown": 60.54943889999993,
+    "race": 831.1020178000001,
+    "results": 2.222357599999931
+  },
+  "telemetryPolling": "100 ms wait after each HTTP response, nominal maximum 10 Hz; response time lowers actual rate",
+  "observedRacePollHz": 5.9090218707443976,
+  "completedRaces": 11,
+  "courses": [
+    "foundry",
+    "ridge",
+    "saltline",
+    "scree",
+    "sluice"
+  ],
+  "completedRaceShots": 1919,
+  "thermal": [
+    {
+      "second": 0,
+      "status": 0,
+      "sensors": {
+        "CPU": 58.512,
+        "GPU": 41.722,
+        "BATTERY": 41.105,
+        "SKIN": 41.525
+      },
+      "pssKb": 109795
+    },
+    {
+      "second": 60,
+      "status": 0,
+      "sensors": {
+        "CPU": 58.903,
+        "GPU": 41.916,
+        "BATTERY": 41.327,
+        "SKIN": 41.619
+      },
+      "pssKb": 112650
+    },
+    {
+      "second": 120,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.422,
+        "GPU": 42.155,
+        "BATTERY": 41.55,
+        "SKIN": 41.793
+      },
+      "pssKb": 116547
+    },
+    {
+      "second": 180,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.474,
+        "GPU": 42.19,
+        "BATTERY": 41.572,
+        "SKIN": 41.915
+      },
+      "pssKb": 115706
+    },
+    {
+      "second": 240,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.699,
+        "GPU": 42.35,
+        "BATTERY": 41.731,
+        "SKIN": 42.015
+      },
+      "pssKb": 114910
+    },
+    {
+      "second": 300,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.844,
+        "GPU": 42.433,
+        "BATTERY": 41.876,
+        "SKIN": 42.179
+      },
+      "pssKb": 112927
+    },
+    {
+      "second": 360,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.662,
+        "GPU": 42.411,
+        "BATTERY": 41.812,
+        "SKIN": 42.083
+      },
+      "pssKb": 118486
+    },
+    {
+      "second": 420,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.998,
+        "GPU": 42.495,
+        "BATTERY": 41.895,
+        "SKIN": 42.188
+      },
+      "pssKb": 114794
+    },
+    {
+      "second": 480,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.123,
+        "GPU": 42.551,
+        "BATTERY": 41.934,
+        "SKIN": 42.24
+      },
+      "pssKb": 113118
+    },
+    {
+      "second": 540,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.896,
+        "GPU": 42.566,
+        "BATTERY": 42.012,
+        "SKIN": 42.293
+      },
+      "pssKb": 115582
+    },
+    {
+      "second": 600,
+      "status": 0,
+      "sensors": {
+        "CPU": 59.78,
+        "GPU": 42.566,
+        "BATTERY": 41.952,
+        "SKIN": 42.241
+      },
+      "pssKb": 117585
+    },
+    {
+      "second": 660,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.223,
+        "GPU": 42.61,
+        "BATTERY": 42.013,
+        "SKIN": 42.3
+      },
+      "pssKb": 117481
+    },
+    {
+      "second": 720,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.285,
+        "GPU": 42.708,
+        "BATTERY": 42.093,
+        "SKIN": 42.366
+      },
+      "pssKb": 114590
+    },
+    {
+      "second": 780,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.159,
+        "GPU": 42.627,
+        "BATTERY": 42.032,
+        "SKIN": 42.313
+      },
+      "pssKb": 115517
+    },
+    {
+      "second": 840,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.008,
+        "GPU": 42.61,
+        "BATTERY": 42.032,
+        "SKIN": 42.35
+      },
+      "pssKb": 116277
+    },
+    {
+      "second": 900.0097016999999,
+      "status": 0,
+      "sensors": {
+        "CPU": 60.054,
+        "GPU": 42.593,
+        "BATTERY": 42.012,
+        "SKIN": 42.299
+      },
+      "pssKb": 115304
+    }
+  ],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n5 !== 0\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-int/deathride/tools/integration-soak.mjs:54:33\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "memoryBudget": {
+    "method": "dumpsys meminfo --local dev.deathride.tv",
+    "limitMiB": 192,
+    "growthLimitMiB": 8,
+    "minimumMiB": 107.2216796875,
+    "maximumMiB": 115.708984375,
+    "firstThreeWarmMedianMiB": 112.994140625,
+    "lastThreeWarmMedianMiB": 112.8095703125,
+    "medianGrowthMiB": -0.1845703125,
+    "warmLinearTrendMiBPerMinute": 0.09549650529697445,
+    "withinLimit": true,
+    "growthWithinLimit": true
+  },
+  "textures": {
+    "artLimitMiB": 32,
+    "ownedLimitMiB": 52,
+    "allWithinLimit": true,
+    "maximumArtMiB": 10.75,
+    "maximumOwnedMiB": 37.9697265625,
+    "final": {
+      "regions": 78,
+      "textureBytes": 11272192,
+      "sceneryBytes": 16777216,
+      "fontBytes": 11534336,
+      "qrBytes": 230400,
+      "ownedTextureBytes": 39814144,
+      "artBudgetBytes": 33554432,
+      "ownedBudgetBytes": 54525952,
+      "budgetOk": true,
+      "failures": 0,
+      "draws": 1138682,
+      "carStrategy": "runtime rotation; procedural for unapproved/missing states"
+    },
+    "drawsDuringLoad": 1121171
+  },
+  "frameTargets": {
+    "activeP50RangeMs": [
+      16.599769000000002,
+      16.845154
+    ],
+    "activeMediansNear16_7": true,
+    "activeMaxWithin33": true,
+    "activeP95WithinOriginal16_7": false,
+    "activeP95WithinG1_21_60": true
+  }
+}

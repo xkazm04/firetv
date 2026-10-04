@@ -1,0 +1,140 @@
+{
+  "id": "ui-purchase",
+  "cue": "ui.purchase",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:46.095796+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ui-purchase.mp3.json",
+    "sourceSha256": "fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42",
+    "generatedAt": "2026-10-02T21:37:42.202Z",
+    "request": {
+      "text": "One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "duration_seconds": 0.7,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 7,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ui-purchase.mp3",
+    "sha256": "fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42",
+    "bytes": 12164,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "failures": [
+      "silence"
+    ],
+    "durationSeconds": 0.6802494331065759,
+    "durationWindowSeconds": [
+      0.5499999999999999,
+      0.85
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 29999,
+    "decodedBytes": 119996,
+    "integratedLufs": -21.09,
+    "truePeakDbtp": -2.06,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          9275,
+          29999
+        ]
+      ],
+      "fraction": 0.6908230274342478,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 0,
+    "endFrameExclusive": 4762,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "gain": 1.2516992730317251,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/ui-purchase.wav",
+    "sha256": "af0fdbb28aed1652b55dfcf408b12d84a35a75252a7ffd7e41afba570d0f0109",
+    "bytes": 9602,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.21596371882086168,
+    "durationWindowSeconds": [
+      0.21396371882086168,
+      0.21796371882086168
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 4762,
+    "decodedBytes": 9524,
+    "integratedLufs": -20.25,
+    "truePeakDbtp": -2.0,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 4058,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "silence"
+  ]
+}

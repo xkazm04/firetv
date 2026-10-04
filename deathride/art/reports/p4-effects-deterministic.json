@@ -1,0 +1,1517 @@
+[
+  {
+    "id": "p4-effects-muzzle-v1",
+    "class": "muzzle",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-effects-muzzle-v1\\attempt-03\\1.jpg",
+    "source_sha256": "c9237537b3bfb7d3bb231014c654c91b3c3602b1b159e969bb398db1928911b7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-effects-muzzle-v1",
+      "class": "muzzle",
+      "prompt_action": "Exactly SIX separate animation frames arranged in a regular THREE-column TWO-row layout. Equal square cells, each with generous clear margin; NO visible grid or separators. Sequence reads left to right across the top row, then left to right across the bottom row. A short rightward muzzle flash, from tiny ivory ignition to orange pointed burst, widest three-pronged flare, shorter yellow flare, two small sparks, then a tiny orange ember. No gun. Each comma-separated phase is one successive frame, with visible progression. Keep every effect at the exact centre of its own cell, same fixed camera and scale. All six frames contain visible effect pixels. Nothing crosses between cells. No letters, numbers, labels, weapons or people.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "p4-effects",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-0.png",
+        "sha256": "6660fba1b04f69b67c5171e570498d24c25c3509092f673ac628bf478b117a25",
+        "duration_ms": 35,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.023918621700879765,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.05919947528679459,
+          0.01769879220545978
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-1.png",
+        "sha256": "4621bb3e2c1ff29ed8719cb9cec483ca77aef3e1a4f1cc111336128d9ca81603",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.09658260233918128,
+        "key_residue_fraction": 5.912961210974456e-05,
+        "centroid_offset_fraction": [
+          0.02545339618361575,
+          0.017456863100165587
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.021320252927559916,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-2.png",
+        "sha256": "d8b96abc38a854a2b6fba66dd22343350c5667114e8f4573a7464ea4aebb530c",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.14884989002932553,
+        "key_residue_fraction": 0.00019239649068800984,
+        "centroid_offset_fraction": [
+          -0.059546431761647756,
+          0.019717333480837262
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.024577463695854156,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-3.png",
+        "sha256": "1c50793a3259b9dfba5c0f5d7def1d080fc66bc2a68af813bccce6ff6ddbceaf",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.08258110337243402,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.06402025164861946,
+          -0.017787959278332655
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.03236367485362201,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-4.png",
+        "sha256": "2898ca842528ff771355c8db4e3af76910910c41b7b57d816de3f6950d1ef428",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.0188687865497076,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0020575803916571545,
+          -0.027023352375907972
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.023493811912785947,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1-frame-5.png",
+        "sha256": "2c149c27b0d2fc00ad6ba6b12d42b8b605fedb969977424cafbc1281a0e7e389",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.006764342008797654,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.018265747254302578,
+          -0.016973665061388643
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.006098147847782905,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        178.0,
+        46.0,
+        108.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 8,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              222.0,
+              154.0,
+              211.0
+            ]
+          ],
+          [
+            [
+              220.0,
+              155.0,
+              213.0
+            ]
+          ],
+          [
+            [
+              220.0,
+              155.0,
+              213.0
+            ]
+          ],
+          [
+            [
+              220.0,
+              155.0,
+              211.0
+            ]
+          ],
+          [
+            [
+              220.0,
+              155.0,
+              213.0
+            ]
+          ],
+          [
+            [
+              220.0,
+              155.0,
+              213.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 87,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        45,
+        45,
+        40,
+        40,
+        45
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-muzzle-v1.png",
+    "sha256": "a3a2c294c3fef08bbc2676fc2eaa512b2947e26a0d0ec4116039fbd328fb7da5"
+  },
+  {
+    "id": "p4-effects-explosion-v2",
+    "class": "explosion",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-effects-explosion-v2\\attempt-01\\1.jpg",
+    "source_sha256": "a99b015554806bb7ac3254f6fa2aea5527916f9c188ab2a8e78a448edbf832c7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-effects-explosion-v2",
+      "class": "explosion",
+      "prompt_action": "SIX separate small overhead explosion effects in a landscape image, arranged as THREE columns and TWO rows of equal square cells. ONLY TWO ROWS. All cells share the same pure magenta background with no visible grid. Top row has: a tiny ivory ignition dot; a small orange starburst; a medium orange round blast cloud. Bottom row has: a large orange cloud; a medium charcoal smoke puff; a tiny grey wisp. Exactly one effect centred in each cell, each fully inside its cell with generous clear space. No additional effects, duplicates, objects, hardware, debris, text or labels.",
+      "size": "1536x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "p4-effects",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-0.png",
+        "sha256": "5144fa3d71ada0361d1a2b5b436a8eed1e83506d4f92905dd737efec92422ce9",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          416,
+          416
+        ],
+        "occupancy": 0.002276719674556213,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.0004453826630222424,
+          -0.004209781335415885
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-1.png",
+        "sha256": "d1430f62eb67c5ee22b8d9f7ce77c4f7ca7b99b75023673d08d99aa69932f1c1",
+        "duration_ms": 55,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          416,
+          0,
+          832,
+          416
+        ],
+        "occupancy": 0.14185003698224852,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.01094245497048163,
+          -0.004764115986262418
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.04797640681068179,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-2.png",
+        "sha256": "e90aaa4eb244d58518e4194c01ae5bbe1cd829a8b4d9b01b60b57570045468e9",
+        "duration_ms": 65,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          832,
+          0,
+          1248,
+          416
+        ],
+        "occupancy": 0.35297822670118345,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.01675099246950973,
+          -0.009782416210702638
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.09548926870074011,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-3.png",
+        "sha256": "b452b24b894255012a0413f48e66fe3fb007067bba18b001203c175705c0942f",
+        "duration_ms": 75,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          416,
+          416,
+          832
+        ],
+        "occupancy": 0.40008436575443784,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.0030484582776439395,
+          0.016755835724784784
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.035493252294790466,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-4.png",
+        "sha256": "15fdf9b31932d60ef631068b2849b636c2df8e7cc39be76dfa0b8b3795f00eaa",
+        "duration_ms": 90,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          416,
+          416,
+          832,
+          832
+        ],
+        "occupancy": 0.302942400147929,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.012492654481481624,
+          -0.0021797665720766357
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.1207586249879854,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2-frame-5.png",
+        "sha256": "40a0b78ad0fa18d5db13cfbde79c9aff0c936dd8dec989d37f6a3934361f2523",
+        "duration_ms": 110,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          832,
+          416,
+          1248,
+          832
+        ],
+        "occupancy": 0.031845183062130175,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.027794280320477927,
+          -0.0023739671007634855
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.05052405162177207,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        241.0,
+        39.0,
+        148.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 7,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              241.0,
+              40.0,
+              149.0
+            ]
+          ],
+          [
+            [
+              242.0,
+              40.0,
+              150.0
+            ]
+          ],
+          [
+            [
+              241.0,
+              39.0,
+              148.0
+            ],
+            [
+              95.0,
+              36.0,
+              55.0
+            ]
+          ],
+          [
+            [
+              241.0,
+              39.0,
+              149.0
+            ]
+          ],
+          [
+            [
+              241.0,
+              39.0,
+              149.0
+            ],
+            [
+              230.0,
+              36.0,
+              141.0
+            ]
+          ],
+          [
+            [
+              241.0,
+              39.0,
+              149.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 23,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 27692
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1248,
+        832
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        45,
+        55,
+        65,
+        75,
+        90,
+        110
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-explosion-v2.png",
+    "sha256": "71b5e4711e8696d247ea4546ddfac95647068d64cd16b2c93e864dd2e1fcf136"
+  },
+  {
+    "id": "p4-effects-smoke-v1",
+    "class": "smoke",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-effects-smoke-v1\\attempt-02\\1.jpg",
+    "source_sha256": "2e8dbe8edaca68749d38ed3506c98e5cb515e6b56b6d80202b3df8c6e82a2b4d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-effects-smoke-v1",
+      "class": "smoke",
+      "prompt_action": "Exactly SIX separate animation frames arranged in a regular THREE-column TWO-row layout. Equal square cells, each with generous clear margin; NO visible grid or separators. Sequence reads left to right across the top row, then left to right across the bottom row. A dissipating grey smoke puff viewed from above, from compact dark puff to growing three-lobed cloud, broad grey billow, widest thin grey cloud, sparse broken wisps, then two tiny faint grey wisps. No fire. Each comma-separated phase is one successive frame, with visible progression. Keep every effect at the exact centre of its own cell, same fixed camera and scale. All six frames contain visible effect pixels. Nothing crosses between cells. No letters, numbers, labels, weapons or people. The entire canvas and every border/gap is one pure magenta field. No white gutters, cell backgrounds, grid, drawn separators, hardware, guns or vehicle pieces. Effects remain in the middle half of each cell.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "p4-effects",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-0.png",
+        "sha256": "7f9ca2246172a54a69609567c7eda866b763e1923171e5e794487a99179a4fcd",
+        "duration_ms": 90,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.10381346224340177,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.06598119122257051,
+          0.08848927801724138
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-1.png",
+        "sha256": "5b98fd3bec2a052fa98249788619f7ef9ec14d71811c3ea81b2ad2251a0d70ee",
+        "duration_ms": 100,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.21488372624269006,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.010888931784551303,
+          0.09636346676754726
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.048967422197892636,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-2.png",
+        "sha256": "7ba7d1e1018ed4c5da77bc76f76dbbd43c5697a76314af719b9b5a1a56eba613",
+        "duration_ms": 120,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.18106786107038123,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.06044517674482075,
+          0.08501437922096922
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.025474712250096117,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-3.png",
+        "sha256": "67c76b4439883c2027200df75d3bbee4e146a6c81dffa64d288b2efb301e60cc",
+        "duration_ms": 140,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.23333256964809385,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.07105386556449922,
+          -0.10460926568866907
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.0792456549038631,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-4.png",
+        "sha256": "f39fcc1b3de28f539d571d510b7309787a747edb9ca2054dd686d69989660f88",
+        "duration_ms": 160,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.18535841557017543,
+        "key_residue_fraction": 0.005114459130541948,
+        "centroid_offset_fraction": [
+          0.0063760923809765835,
+          -0.10175719870713562
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.04679600268927015,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1-frame-5.png",
+        "sha256": "1e7aa934fae2e260d34e1cef4be1268873b497dacea3e7088a47c30194f523c9",
+        "duration_ms": 180,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.019674440982404694,
+        "key_residue_fraction": 0.001455604075691412,
+        "centroid_offset_fraction": [
+          -0.11617598722824812,
+          -0.13132022152474526
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07177838501617968,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        219.0,
+        29.0,
+        114.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 6,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              219.0,
+              29.0,
+              115.0
+            ],
+            [
+              218.0,
+              190.0,
+              239.0
+            ]
+          ],
+          [
+            [
+              218.0,
+              29.0,
+              113.0
+            ],
+            [
+              218.0,
+              190.0,
+              239.0
+            ]
+          ],
+          [
+            [
+              217.0,
+              28.0,
+              112.0
+            ],
+            [
+              218.0,
+              190.0,
+              239.0
+            ]
+          ],
+          [
+            [
+              217.0,
+              29.0,
+              113.0
+            ],
+            [
+              218.0,
+              190.0,
+              239.0
+            ]
+          ],
+          [
+            [
+              218.0,
+              190.0,
+              239.0
+            ],
+            [
+              218.0,
+              28.0,
+              114.0
+            ]
+          ],
+          [
+            [
+              219.0,
+              191.0,
+              239.0
+            ],
+            [
+              218.0,
+              29.0,
+              113.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 1530,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        90,
+        100,
+        120,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-smoke-v1.png",
+    "sha256": "cb802fff08613d24ad08467b033a594bdfbe05dc5f3c140919b8a8439a4c7dbb"
+  },
+  {
+    "id": "p4-effects-sparks-v1",
+    "class": "sparks",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-effects-sparks-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1444a208e3246890c93332c1b7c3f92325355ac7251ea727122d3c309f7d5a88",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-effects-sparks-v1",
+      "class": "sparks",
+      "prompt_action": "Exactly SIX separate animation frames arranged in a regular THREE-column TWO-row layout. Equal square cells, each with generous clear margin; NO visible grid or separators. Sequence reads left to right across the top row, then left to right across the bottom row. A rightward impact spark spray, from tiny ivory point to three short yellow streaks, six longer orange streaks, widest sparse sparks, three tiny red-orange sparks, then one tiny orange spark. No metal object. Each comma-separated phase is one successive frame, with visible progression. Keep every effect at the exact centre of its own cell, same fixed camera and scale. All six frames contain visible effect pixels. Nothing crosses between cells. No letters, numbers, labels, weapons or people. The entire canvas and every border/gap is one pure magenta field. No white gutters, cell backgrounds, grid, drawn separators, hardware, guns or vehicle pieces. Effects remain in the middle half of each cell.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "p4-effects",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-0.png",
+        "sha256": "07140a4a72bdb129451088a75554aa419b3811021f0baf745deecaf65283f61d",
+        "duration_ms": 35,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.022039956011730207,
+        "key_residue_fraction": 0.0015592515592515593,
+        "centroid_offset_fraction": [
+          0.1457061900610288,
+          0.1484034928859148
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-1.png",
+        "sha256": "abb5f8183ce2e5c4c6e81c054f774e172088cdf349af22a922984b08a7c3fb4b",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.03945655153508772,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.12129001158756403,
+          0.1516136956777392
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.010093158593349515,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-2.png",
+        "sha256": "9f35350417704983300b6832d080836f43dd1ba4d6f52c6fe3686f82218de255",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.052201704545454544,
+        "key_residue_fraction": 0.00021944261575597982,
+        "centroid_offset_fraction": [
+          0.08938393255325017,
+          0.15830105983925824
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.014759087675613547,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-3.png",
+        "sha256": "cff19563fbfa5842c095ab2bdd3dfa81641ce04e88ff69e378a7c41eca3374fb",
+        "duration_ms": 55,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.05173776576246334,
+        "key_residue_fraction": 0.0002214103841470165,
+        "centroid_offset_fraction": [
+          0.20465624089969237,
+          -0.14068975821294144
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.024616897272082855,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-4.png",
+        "sha256": "f9bd4dc3c6beb98b8ae39c4dd098aaab31f8143f19f9f1536a32973ccdd3b67c",
+        "duration_ms": 65,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.02976516812865497,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.12479579288461629,
+          -0.14530957705775133
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.0123897271582244,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1-frame-5.png",
+        "sha256": "589af7f2006eba532fb713b5f8fd2713e65c36cf9889d5828e1847009cd70cea",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.0052465175953079176,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.044350036496817735,
+          -0.15294503957423583
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.004790625087606529,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        185.0,
+        36.0,
+        105.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 42,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              185.0,
+              36.0,
+              104.0
+            ],
+            [
+              199.0,
+              77.0,
+              134.0
+            ]
+          ],
+          [
+            [
+              185.0,
+              36.0,
+              104.0
+            ],
+            [
+              199.0,
+              77.0,
+              134.0
+            ],
+            [
+              106.0,
+              85.0,
+              121.0
+            ]
+          ],
+          [
+            [
+              185.0,
+              36.0,
+              104.0
+            ],
+            [
+              200.0,
+              78.0,
+              135.0
+            ]
+          ],
+          [
+            [
+              184.0,
+              35.0,
+              103.0
+            ],
+            [
+              196.0,
+              79.0,
+              129.0
+            ]
+          ],
+          [
+            [
+              200.0,
+              79.0,
+              133.0
+            ],
+            [
+              185.0,
+              36.0,
+              105.0
+            ]
+          ],
+          [
+            [
+              201.0,
+              79.0,
+              136.0
+            ],
+            [
+              182.0,
+              35.0,
+              103.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 110,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        40,
+        45,
+        55,
+        65,
+        80
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-sparks-v1.png",
+    "sha256": "f1edf9fd3376773abf8c8757357cd69d52c174e800dcb7cd5e49863e7ad769c7"
+  },
+  {
+    "id": "p4-effects-fire-v1",
+    "class": "fire",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-effects-fire-v1\\attempt-02\\1.jpg",
+    "source_sha256": "001b84a4b9d3b7b6837370d90d091107d605f79fa668229e4ac79500a0560e03",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-effects-fire-v1",
+      "class": "fire",
+      "prompt_action": "Exactly SIX separate animation frames arranged in a regular THREE-column TWO-row layout. Equal square cells, each with generous clear margin; NO visible grid or separators. Sequence reads left to right across the top row, then left to right across the bottom row. An overhead looping small fire, six visibly different radial flame shapes: compact three-lobed orange flame, taller yellow tongue, broad split orange flare, compact leftward curl, broad rightward curl, then a compact shape similar to the first. No logs or smoke. Each comma-separated phase is one successive frame, with visible progression. Keep every effect at the exact centre of its own cell, same fixed camera and scale. All six frames contain visible effect pixels. Nothing crosses between cells. No letters, numbers, labels, weapons or people. The entire canvas and every border/gap is one pure magenta field. No white gutters, cell backgrounds, grid, drawn separators, hardware, guns or vehicle pieces. Effects remain in the middle half of each cell.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "p4-effects",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-0.png",
+        "sha256": "fafda6b8521ee6c5ea84caa07ed556f33962dc58d51c3fd646d354e2b3f41b30",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.21396742118768328,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.05080574314392394,
+          0.053353742061394094
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-1.png",
+        "sha256": "7c948675404f41388c848859267d3c8bbb15f06166e5249d1a3f48bf33a476a3",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.27110745614035087,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.004738034559491622,
+          0.04332014957501262
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.03187308079124215,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-2.png",
+        "sha256": "85009c888654539bbe0a6f341178a5af0daa4e2c20d1700b6b594decfce84710",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.31121700879765396,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.046044822872518654,
+          0.03887475758475045
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.029872044718878155,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-3.png",
+        "sha256": "3a3c9408ac3a46d2b17ede418b7385a8ca0c5badb0c31cb9b670aa847c86b99f",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.23182047287390029,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.05286040768795919,
+          -0.020409659210233744
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.04748145651362056,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-4.png",
+        "sha256": "4f88a8f77ac1b4e066084c7494badd7594b4cc8673e82a3f1f0810645292bae3",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.3004671509502924,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.0020744267170755837,
+          -0.034471730044143056
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.03376706950651993,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1-frame-5.png",
+        "sha256": "de60693d559a6bb2b827075e071ddd93b52346368c3e0f785d4a915acb3833c6",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.18510584677419356,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.03795448057509143,
+          -0.02119211333467419
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.038409296016456006,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        226.0,
+        2.0,
+        124.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 7,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              240.0,
+              199.0,
+              235.0
+            ]
+          ],
+          [
+            [
+              239.0,
+              198.0,
+              236.0
+            ]
+          ],
+          [
+            [
+              240.0,
+              198.0,
+              236.0
+            ]
+          ],
+          [
+            [
+              240.0,
+              198.0,
+              234.0
+            ]
+          ],
+          [
+            [
+              239.0,
+              199.0,
+              236.0
+            ]
+          ],
+          [
+            [
+              240.0,
+              198.0,
+              236.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 2027,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-effects\\p4-effects-fire-v1.png",
+    "sha256": "fc26e61dbdf555761c2f5eb73ba63af2c2e743b7728f68418a1a873d3be43725"
+  }
+]

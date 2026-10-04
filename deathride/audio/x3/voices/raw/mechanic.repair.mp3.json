@@ -1,0 +1,35 @@
+{
+  "id": "60a16de7-62ec-4fbf-a725-a3ef0cec2396",
+  "ts": "2026-10-02T21:52:42.206Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/mechanic.repair.mp3",
+  "seconds": null,
+  "request": {
+    "text": "Easy. I can hold this together. Just bring it back in one piece, all right?",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 75,
+  "budgetCharge": 75,
+  "creditsBefore": 23608,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 84471,
+  "providerCredits": 75,
+  "sha256": "573f0cd8926d50182207b10c1be85a9fb4b7037dd0d436fcd15561c59282f3e9",
+  "completedAt": "2026-10-02T21:52:46.765Z",
+  "creditsAfter": 23608,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5963
+}

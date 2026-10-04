@@ -1,0 +1,785 @@
+{
+  "assets": [
+    {
+      "logical_name": "tiles/asphalt-worn",
+      "asset_id": "p4-tiles-asphalt-worn-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/grass",
+      "asset_id": "p4-tiles-grass-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/dirt",
+      "asset_id": "p4-tiles-dirt-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/metal",
+      "asset_id": "p4-tiles-metal-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/concrete-straight",
+      "asset_id": "p4-barriers-concrete-straight-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/concrete-corner",
+      "asset_id": "p4-barriers-concrete-corner-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/metal-straight",
+      "asset_id": "p4-barriers-metal-straight-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/metal-corner",
+      "asset_id": "p4-barriers-metal-corner-v2",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/hazard-straight",
+      "asset_id": "p4-barriers-hazard-straight-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/hazard-corner",
+      "asset_id": "p4-barriers-hazard-corner-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/tyres",
+      "asset_id": "p4-props-tyres-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/crate",
+      "asset_id": "p4-props-crate-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/cone",
+      "asset_id": "p4-props-cone-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/sign",
+      "asset_id": "p4-props-sign-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/drum",
+      "asset_id": "p4-props-drum-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/tyres-scattered",
+      "asset_id": "p4-props-tyres-scattered-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/crate-metal",
+      "asset_id": "p4-props-crate-metal-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "props/drum-red",
+      "asset_id": "p4-props-drum-red-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/ammo",
+      "asset_id": "p4-pickups-ammo-v2",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/repair",
+      "asset_id": "p4-pickups-repair-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/cash",
+      "asset_id": "p4-pickups-cash-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/mine",
+      "asset_id": "p4-pickups-mine-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/turbo",
+      "asset_id": "p4-pickups-turbo-v2",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/skid",
+      "asset_id": "p4-decals-skid-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/oil",
+      "asset_id": "p4-decals-oil-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/scorch",
+      "asset_id": "p4-decals-scorch-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/cracks",
+      "asset_id": "p4-decals-cracks-v2",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/impact",
+      "asset_id": "p4-decals-impact-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "effects/muzzle",
+      "asset_id": "p4-effects-muzzle-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "p4-effects-muzzle-v1-0",
+        "p4-effects-muzzle-v1-1",
+        "p4-effects-muzzle-v1-2",
+        "p4-effects-muzzle-v1-3",
+        "p4-effects-muzzle-v1-4",
+        "p4-effects-muzzle-v1-5"
+      ],
+      "durations_ms": [
+        35,
+        45,
+        45,
+        40,
+        40,
+        45
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/explosion",
+      "asset_id": "p4-effects-explosion-v2",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "p4-effects-explosion-v2-0",
+        "p4-effects-explosion-v2-1",
+        "p4-effects-explosion-v2-2",
+        "p4-effects-explosion-v2-3",
+        "p4-effects-explosion-v2-4",
+        "p4-effects-explosion-v2-5"
+      ],
+      "durations_ms": [
+        45,
+        55,
+        65,
+        75,
+        90,
+        110
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/smoke",
+      "asset_id": "p4-effects-smoke-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "p4-effects-smoke-v1-0",
+        "p4-effects-smoke-v1-1",
+        "p4-effects-smoke-v1-2",
+        "p4-effects-smoke-v1-3",
+        "p4-effects-smoke-v1-4",
+        "p4-effects-smoke-v1-5"
+      ],
+      "durations_ms": [
+        90,
+        100,
+        120,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/sparks",
+      "asset_id": "p4-effects-sparks-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "p4-effects-sparks-v1-0",
+        "p4-effects-sparks-v1-1",
+        "p4-effects-sparks-v1-2",
+        "p4-effects-sparks-v1-3",
+        "p4-effects-sparks-v1-4",
+        "p4-effects-sparks-v1-5"
+      ],
+      "durations_ms": [
+        35,
+        40,
+        45,
+        55,
+        65,
+        80
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/fire",
+      "asset_id": "p4-effects-fire-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "p4-effects-fire-v1-0",
+        "p4-effects-fire-v1-1",
+        "p4-effects-fire-v1-2",
+        "p4-effects-fire-v1-3",
+        "p4-effects-fire-v1-4",
+        "p4-effects-fire-v1-5"
+      ],
+      "durations_ms": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "hud/frame-health",
+      "asset_id": "p4-hud-frame-health-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-turbo",
+      "asset_id": "p4-hud-frame-turbo-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-panel",
+      "asset_id": "p4-hud-frame-panel-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-armour",
+      "asset_id": "p4-hud-icon-armour-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-engine",
+      "asset_id": "p4-hud-icon-engine-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-handling",
+      "asset_id": "p4-hud-icon-handling-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-light-gun",
+      "asset_id": "p4-hud-icon-light-gun-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-heavy-gun",
+      "asset_id": "p4-hud-icon-heavy-gun-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-fuel",
+      "asset_id": "p4-hud-icon-fuel-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/scatter",
+      "asset_id": "p4-combat-icons-scatter-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/spikes",
+      "asset_id": "p4-combat-icons-spikes-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/sabotage",
+      "asset_id": "p4-combat-icons-sabotage-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/rook",
+      "asset_id": "p4-portraits-rook-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/ox",
+      "asset_id": "p4-portraits-ox-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/mica",
+      "asset_id": "p4-portraits-mica-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/vex",
+      "asset_id": "p4-portraits-vex-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/relay",
+      "asset_id": "p4-portraits-relay-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/industrial",
+      "asset_id": "p4-backdrops-industrial-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/quarry",
+      "asset_id": "p4-backdrops-quarry-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/desert",
+      "asset_id": "p4-backdrops-desert-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/wetland",
+      "asset_id": "p4-backdrops-wetland-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/alpine",
+      "asset_id": "p4-backdrops-alpine-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/gantry",
+      "asset_id": "p4-landmarks-gantry-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/sluice",
+      "asset_id": "p4-landmarks-sluice-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/snow-pole",
+      "asset_id": "p4-landmarks-snow-pole-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/split-marker",
+      "asset_id": "p4-landmarks-split-marker-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/stone-stack",
+      "asset_id": "p4-landmarks-stone-stack-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "landmarks/sun-sign",
+      "asset_id": "p4-landmarks-sun-sign-v1",
+      "group": "world",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/kerb",
+      "asset_id": "p1-tile-kerb-v2",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/oil",
+      "asset_id": "p1-tile-oil-v3",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/asphalt-heavy",
+      "asset_id": "p4-tiles-asphalt-heavy-v1-wrap-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/concrete",
+      "asset_id": "p4-tiles-concrete-v1-wrap-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/asphalt-clean",
+      "asset_id": "p1-tile-asphalt-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/gravel",
+      "asset_id": "p4-gravel-period-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/ice",
+      "asset_id": "p4-ice-centre-768-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/marrow",
+      "asset_id": "p4-portraits-marrow-v1",
+      "group": "ui",
+      "owner_approved": false
+    }
+  ],
+  "content_contracts": {
+    "rivals": [
+      {
+        "id": "rook",
+        "name": "Rook",
+        "car": "Needle",
+        "style": "Late pass specialist",
+        "laneBiasM": "1.8",
+        "passDistanceScale": "1.25",
+        "fireRangeScale": "0.8",
+        "heavyRangeScale": "1.4",
+        "mines": "0"
+      },
+      {
+        "id": "ox",
+        "name": "Ox",
+        "car": "Bastion",
+        "style": "Close-range bruiser",
+        "laneBiasM": "-1.8",
+        "passDistanceScale": "0.85",
+        "fireRangeScale": "0.85",
+        "heavyRangeScale": "0.7",
+        "mines": "1"
+      },
+      {
+        "id": "mica",
+        "name": "Mica",
+        "car": "Trail",
+        "style": "Patient corner hunter",
+        "laneBiasM": "0.8",
+        "passDistanceScale": "1.1",
+        "fireRangeScale": "0.75",
+        "heavyRangeScale": "1.3",
+        "mines": "1"
+      },
+      {
+        "id": "vex",
+        "name": "Vex",
+        "car": "Comet",
+        "style": "Straight-line gunner",
+        "laneBiasM": "-0.8",
+        "passDistanceScale": "1.3",
+        "fireRangeScale": "1",
+        "heavyRangeScale": "0.8",
+        "mines": "1"
+      },
+      {
+        "id": "relay",
+        "name": "Relay",
+        "car": "Line",
+        "style": "All-round tactician",
+        "laneBiasM": "0",
+        "passDistanceScale": "1",
+        "fireRangeScale": "0.9",
+        "heavyRangeScale": "1",
+        "mines": "1"
+      }
+    ],
+    "track-themes": [
+      {
+        "id": "industrial",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "oxide",
+        "propSet": "gantry;split-marker;tyre-stack",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "quarry",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "slate",
+        "propSet": "gantry;split-marker;stone-stack",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "desert",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "salt",
+        "propSet": "gantry;split-marker;sun-sign",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "wetland",
+        "surfaces": "Asphalt;Gravel;Oil;Ice",
+        "paletteKey": "moss",
+        "propSet": "gantry;split-marker;sluice",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "alpine",
+        "surfaces": "Asphalt;Gravel;Ice;Oil",
+        "paletteKey": "frost",
+        "propSet": "gantry;split-marker;snow-pole",
+        "hazardSet": "oil-drum"
+      }
+    ],
+    "weapons": [
+      {
+        "id": "Rivet",
+        "kind": "ray",
+        "damage": "2.4",
+        "cooldownSeconds": "0.20",
+        "ammo": "180",
+        "rangeM": "48",
+        "speedMps": "0",
+        "radiusM": "0.15",
+        "armingSeconds": "0",
+        "lifeSeconds": "0.08",
+        "traceSeconds": "0.08"
+      },
+      {
+        "id": "Hammer",
+        "kind": "projectile",
+        "damage": "21",
+        "cooldownSeconds": "1.4",
+        "ammo": "5",
+        "rangeM": "65",
+        "speedMps": "55",
+        "radiusM": "0.6",
+        "armingSeconds": "0",
+        "lifeSeconds": "1.19",
+        "traceSeconds": "0.06"
+      },
+      {
+        "id": "Mine",
+        "kind": "mine",
+        "damage": "24",
+        "cooldownSeconds": "2.5",
+        "ammo": "4",
+        "rangeM": "0",
+        "speedMps": "0",
+        "radiusM": "5",
+        "armingSeconds": "1.4",
+        "lifeSeconds": "18",
+        "traceSeconds": "0.35"
+      },
+      {
+        "id": "Scatter",
+        "kind": "spread",
+        "damage": "12",
+        "cooldownSeconds": "1.0",
+        "ammo": "12",
+        "rangeM": "22",
+        "speedMps": "0",
+        "radiusM": "0.25",
+        "armingSeconds": "0",
+        "lifeSeconds": "0.10",
+        "traceSeconds": "0.10"
+      }
+    ],
+    "consumables": [
+      {
+        "id": "spikes",
+        "name": "Contact spikes",
+        "price": "45",
+        "durationSeconds": "0",
+        "magnitude": "1.35",
+        "description": "One race of stronger contact damage with the normal ram cooldown"
+      },
+      {
+        "id": "turbo",
+        "name": "Turbo reserve",
+        "price": "55",
+        "durationSeconds": "4",
+        "magnitude": "1.30",
+        "description": "Four seconds of extra engine force on clear straights above launch speed"
+      },
+      {
+        "id": "fuel",
+        "name": "Hot fuel",
+        "price": "35",
+        "durationSeconds": "30",
+        "magnitude": "1.10",
+        "description": "Thirty seconds of extra engine force without raising the speed cap"
+      },
+      {
+        "id": "sabotage",
+        "name": "Ammo switch",
+        "price": "60",
+        "durationSeconds": "0",
+        "magnitude": "0.35",
+        "description": "Declared before the start: the first opposing driver loses a share of ammunition"
+      }
+    ]
+  },
+  "provisional_c4": {
+    "at": "2026-10-01T10:13:46.349865+00:00",
+    "status": "read-only uncommitted C4 preview, not claimed as committed authority",
+    "rivals_sha256": "805821d03aa92bac0160f005fc0456beabc5eeee0210f1e8be19959752e40678",
+    "stories_sha256": "6e85b6a7cc5ab9d7cc3122c84e2c0fda9bc786a91e2863536d6e6c209519cf0b",
+    "rival": {
+      "id": "marrow",
+      "name": "Marrow",
+      "car": "Bulwark",
+      "style": "Calculated close-range enforcer",
+      "laneBiasM": "0.4",
+      "passDistanceScale": "0.95",
+      "fireRangeScale": "0.95",
+      "heavyRangeScale": "0.9",
+      "mines": "1"
+    },
+    "story": {
+      "id": "marrow",
+      "portraitKey": "rival-marrow",
+      "biography": "The circuit owner who turned racing debts into a private fleet",
+      "taunt": "Every road here is in my books",
+      "grudgeTaunt": "You have damaged league property"
+    }
+  },
+  "content_portrait_aliases": {
+    "rival-rook": "p4-portraits-rook-v1",
+    "rival-ox": "p4-portraits-ox-v1",
+    "rival-mica": "p4-portraits-mica-v1",
+    "rival-vex": "p4-portraits-vex-v1",
+    "rival-relay": "p4-portraits-relay-v1",
+    "rival-marrow": "p4-portraits-marrow-v1"
+  },
+  "content_landmark_aliases": {
+    "tyre-stack": "p4-props-tyres-v1",
+    "oil-drum": "p4-props-drum-v1",
+    "gantry": "p4-landmarks-gantry-v1",
+    "sluice": "p4-landmarks-sluice-v1",
+    "snow-pole": "p4-landmarks-snow-pole-v1",
+    "split-marker": "p4-landmarks-split-marker-v1",
+    "stone-stack": "p4-landmarks-stone-stack-v1",
+    "sun-sign": "p4-landmarks-sun-sign-v1"
+  },
+  "content_combat_aliases": {
+    "weapons": {
+      "Rivet": "p4-hud-icon-light-gun-v1",
+      "Hammer": "p4-hud-icon-heavy-gun-v1",
+      "Mine": "p4-pickups-mine-v1",
+      "Scatter": "p4-combat-icons-scatter-v1"
+    },
+    "consumables": {
+      "spikes": "p4-combat-icons-spikes-v1",
+      "turbo": "p4-pickups-turbo-v2",
+      "fuel": "p4-hud-icon-fuel-v1",
+      "sabotage": "p4-combat-icons-sabotage-v1"
+    }
+  },
+  "content_source": {
+    "commit": "e1640f0331a426489dad56a2a51f6b4eacf566e4",
+    "captured_at": "2026-10-01T09:56:30.476753+00:00",
+    "sources": {
+      "rivals": {
+        "path": "deathride/core/src/main/resources/data/rivals.csv",
+        "sha256": "7d88adab42262bb1ca7b333af496e50db823a43baf3bbf58a6629e2382a0c3fe"
+      },
+      "tracks": {
+        "path": "deathride/core/src/main/resources/data/tracks.csv",
+        "sha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c"
+      },
+      "track-themes": {
+        "path": "deathride/core/src/main/resources/data/track-themes.csv",
+        "sha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9"
+      },
+      "weapons": {
+        "path": "deathride/core/src/main/resources/data/weapons.csv",
+        "sha256": "77405ce9bde4d8bf6d3f82442c9c91eec952728189a635d06ecf3ba448139a80"
+      },
+      "consumables": {
+        "path": "deathride/core/src/main/resources/data/consumables.csv",
+        "sha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be"
+      }
+    },
+    "scope": "Committed Content handoff; future C2/C4 additions must be reconciled at integration.",
+    "rival_count": 5,
+    "track_count": 25,
+    "themes": [
+      "industrial",
+      "quarry",
+      "desert",
+      "wetland",
+      "alpine"
+    ]
+  },
+  "scale": "Car dimensions and W6 camera stay authoritative. Atlas tile pixels do not define track width or world collision geometry."
+}

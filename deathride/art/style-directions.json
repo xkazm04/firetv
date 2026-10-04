@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "status": "owner-choice-pending",
+  "subjects": [
+    "heavy",
+    "light",
+    "portrait",
+    "ground",
+    "barrier",
+    "icon",
+    "effect"
+  ],
+  "directions": [
+    {
+      "slug": "rust-ink",
+      "name": "Rust and Ink",
+      "style_file": "style-rust-ink.json",
+      "rationale": "Strongest silhouette and simplest moving read; scratches may disappear at sofa scale."
+    },
+    {
+      "slug": "bleached-poster",
+      "name": "Bleached Poster",
+      "style_file": "style-bleached-poster.json",
+      "rationale": "Graphic economy and pale heat; must remain a vehicle rather than an emblem."
+    },
+    {
+      "slug": "hot-ink",
+      "name": "Hot Ink",
+      "style_file": "style-hot-ink.json",
+      "rationale": "Most kinetic outlines; monitor tiny spatter and action marks becoming detached noise."
+    },
+    {
+      "slug": "scrap-collage",
+      "name": "Scrap Collage",
+      "style_file": "style-scrap-collage.json",
+      "rationale": "Patchwork identity and tactile planes; dense panels must survive downsampling."
+    },
+    {
+      "slug": "soot-pulp",
+      "name": "Soot Pulp",
+      "style_file": "style-soot-pulp.json",
+      "rationale": "Darkest shape language with bone cutouts; neutral lighting and ground contrast need care."
+    }
+  ],
+  "planned_image_allowance": 70,
+  "generation": "Grok CLI through gen.py, no fixed pixel seed",
+  "production_gate": "OWNER-CHOICE.md; exact reference approval additionally required for damage/livery"
+}

@@ -1,0 +1,32 @@
+{
+  "id": "aa1ab32e-04ac-45d3-a144-33a80ef20699",
+  "ts": "2026-10-02T21:49:43.098Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/kestrel-2.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: low electric motor buzz and high strained inverter harmonics. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 23953,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "d0e503e684250009d7b1a09dcb62e7540860ce94d40988da6484c19ac579a823",
+  "completedAt": "2026-10-02T21:49:46.991Z",
+  "creditsAfter": 23953,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5240
+}

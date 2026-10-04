@@ -1,0 +1,194 @@
+{
+  "id": "noir-engine",
+  "measuredAt": "2026-10-02T19:28:43.437591+00:00",
+  "generationSidecar": "raw/noir-engine.mp3.json",
+  "raw": {
+    "file": "raw/noir-engine.mp3",
+    "sha256": "5d6df7b26f22c55829d51408ea84f5c21f5a31aca5d21dd7872f221b31763e5f",
+    "bytes": 37242,
+    "status": "fail",
+    "failures": [
+      "duration"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": true
+    },
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "containerDurationSeconds": 2.298776,
+    "integratedLufs": -18.09,
+    "truePeakDbtp": -10.57,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-18.09",
+      "input_tp": "-10.57",
+      "input_lra": "0.00",
+      "input_thresh": "-28.09",
+      "output_i": "-19.99",
+      "output_tp": "-12.48",
+      "output_lra": "0.00",
+      "output_thresh": "-29.99",
+      "normalization_type": "linear",
+      "target_offset": "-0.01"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -10.569626314539867,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "pass",
+      "sampleJumpFullScale": 0.0006881020963191986,
+      "boundaryRmsStepDb": 1.3238058553602374,
+      "spectralCosine": 0.9942603913647371,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.0006881020963191986,
+        0.0006881020963191986
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "matched": {
+    "file": "matched/noir-engine.mp3",
+    "sha256": "d6c60fc52410dc080e04d7a46682cc28c7c3c0ca981f51693a8e8fa600975932",
+    "bytes": 37241,
+    "status": "fail",
+    "failures": [
+      "duration"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": true
+    },
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "containerDurationSeconds": 2.298776,
+    "integratedLufs": -20.43,
+    "truePeakDbtp": -12.93,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.43",
+      "input_tp": "-12.93",
+      "input_lra": "0.00",
+      "input_thresh": "-30.43",
+      "output_i": "-19.99",
+      "output_tp": "-12.49",
+      "output_lra": "0.00",
+      "output_thresh": "-29.99",
+      "normalization_type": "linear",
+      "target_offset": "-0.01"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -12.92752396807288,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "pass",
+      "sampleJumpFullScale": 0.000459291972219944,
+      "boundaryRmsStepDb": 1.3276163728949988,
+      "spectralCosine": 0.9942371566069359,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.000459291972219944,
+        0.000459291972219944
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-18.09:measured_TP=-10.57:measured_LRA=0.00:measured_thresh=-28.09:offset=-0.01:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "5d6df7b26f22c55829d51408ea84f5c21f5a31aca5d21dd7872f221b31763e5f",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "repeat": {
+    "file": "repeats/noir-engine-three-cycles.ogg",
+    "cycles": 3,
+    "credits": 0,
+    "sourceSha256": "d6c60fc52410dc080e04d7a46682cc28c7c3c0ca981f51693a8e8fa600975932",
+    "sha256": "de89778522a120ae08a75ce76b8e52bb44dfd203173dcd06fc5d7aae0f9e0e78",
+    "operation": "three exact decoded cycles concatenated without fades, encoded OGG",
+    "durationSeconds": 6.75,
+    "truePeakDbtp": -12.89,
+    "decodePass": true,
+    "humanListen": "not measured"
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

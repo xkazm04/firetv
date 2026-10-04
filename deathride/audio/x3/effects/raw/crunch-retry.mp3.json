@@ -1,0 +1,32 @@
+{
+  "id": "9f7f9350-e4b8-433d-bee3-a670acdfc224",
+  "ts": "2026-10-02T21:34:07.679Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/crunch-retry.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24672,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff",
+  "completedAt": "2026-10-02T21:34:10.488Z",
+  "creditsAfter": 24672,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 400
+}

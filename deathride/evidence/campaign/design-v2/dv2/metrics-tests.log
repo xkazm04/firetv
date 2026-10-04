@@ -1,0 +1,11 @@
+﻿python : ...............
+At line:24 char:1
++ python -X utf8 -m unittest discover -s tools -p test_*metrics.py 2>&1 ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (...............:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+----------------------------------------------------------------------
+Ran 15 tests in 0.184s
+
+OK

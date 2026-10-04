@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-02T11:27:43.364914+00:00",
+  "Comet": {
+    "selected": "v2-part3-rework-comet-v1",
+    "last_attempt": "v2-part3-rework-comet-v3",
+    "reason": "All three generated attempts fail source margins. First turbine edit retains the original long nose and passes aspect band; later redraws also fail aspect. Select the first as strongest REJECTED candidate, never accept or pad it.",
+    "calls_used": 3
+  },
+  "Kestrel": {
+    "selected": "v2-part3-rework-kestrel-v3",
+    "alternative": "v2-part3-rework-kestrel-v2",
+    "reason": "Final version implements one centreline electric harpoon but fails source margin/aspect because of the new tether loop. Prior two-launcher version passes pixel gates but does not fulfil the requested single weapon. Both remain unapproved.",
+    "calls_used": 3
+  }
+}

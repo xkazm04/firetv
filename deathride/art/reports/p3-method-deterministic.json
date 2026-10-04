@@ -1,0 +1,254 @@
+[
+  {
+    "id": "owner-line-anchor",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_line.png",
+    "source_sha256": "9ef64eae55a3a5f380ddd69da1a8a249feb2131cfa6d27a3b8386ffd6c608fe8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "owner-line-anchor",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, blank ivory centre stripe, rounded RIGHT nose, broad blue-black windshield, short flat rear spoiler at LEFT. True orthographic roof-only plan view, four wheels seen only from above, no visible side walls. Keep the entire vehicle in the central three quarters. Preserve the clean chassis geometry, wheel positions, silhouette, glass and metal. Change only body paint to steel blue, preserving the ivory stripe. No damage, numbers, text or driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p3-method-conditioned",
+      "approval": "pending",
+      "requires_approval": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3238706588745117,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.103448275862069,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.011273209549071517,
+      "principal_axis_degrees": 0.0479689265593092,
+      "estimated_key_rgb": [
+        244.0,
+        25.0,
+        237.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.3992095923337935,
+      "palette_p90_delta_e": 12.395460324847766
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "source_pivot_px": [
+        517.5,
+        510.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        89
+      ],
+      "scale": 0.20437158469945355,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p3-method\\owner-line-anchor.png",
+    "sha256": "c788601771bb25d0f866e50ea36345372827e71beeff6a7acf8c2fc6775b4fd0"
+  },
+  {
+    "id": "p3-method-conditioned-v1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-method-conditioned-v1\\attempt-01\\1.jpg",
+    "source_sha256": "45133cba17e94cfd2447c35aa0cba3daa3b3ea2f2c815b56afcbf643c57628ce",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p3-method-conditioned-v1",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, blank ivory centre stripe, rounded RIGHT nose, broad blue-black windshield, short flat rear spoiler at LEFT. True orthographic roof-only plan view, four wheels seen only from above, no visible side walls. Keep the entire vehicle in the central three quarters. Preserve the clean chassis geometry, wheel positions, silhouette, glass and metal. Change only body paint to steel blue, preserving the ivory stripe. No damage, numbers, text or driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_line.png",
+      "batch": "p3-method-conditioned",
+      "approval": "pending",
+      "requires_approval": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3237037658691406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        61,
+        293,
+        975,
+        728
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.1011494252873564,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.010167992926613634,
+      "principal_axis_degrees": 0.0647177492223345,
+      "estimated_key_rgb": [
+        226.0,
+        43.0,
+        213.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 6.031791435354987,
+      "palette_p90_delta_e": 9.537389792142998
+    },
+    "placement": {
+      "source_bounds_px": [
+        61,
+        293,
+        975,
+        728
+      ],
+      "source_pivot_px": [
+        518.0,
+        510.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        89
+      ],
+      "scale": 0.20459518599562362,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p3-method\\p3-method-conditioned-v1.png",
+    "sha256": "dda76da4e9f2198c6f832c0935a9ee2aa4858d73ab3a9152420eb47b19cc9dff"
+  },
+  {
+    "id": "p3-method-control-v1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-method-control-v1\\attempt-01\\1.jpg",
+    "source_sha256": "499442be0c551fafdf09b024ac173fe9501b35b75d5619410617881ae3644719",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p3-method-control-v1",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, blank ivory centre stripe, rounded RIGHT nose, broad blue-black windshield, short flat rear spoiler at LEFT. True orthographic roof-only plan view, four wheels seen only from above, no visible side walls. Keep the entire vehicle in the central three quarters. Preserve the clean chassis geometry, wheel positions, silhouette, glass and metal. Change only body paint to steel blue, preserving the ivory stripe. No damage, numbers, text or driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p3-method-control",
+      "approval": "pending",
+      "requires_approval": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3096170425415039,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        59,
+        309,
+        971,
+        714
+      ],
+      "margin_fraction": 0.0517578125,
+      "aspect": 2.251851851851852,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.0826210826210827,
+      "principal_axis_degrees": 0.02792622950392107,
+      "estimated_key_rgb": [
+        237.0,
+        237.0,
+        237.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.33091014019192,
+      "palette_p90_delta_e": 12.243046109576468
+    },
+    "placement": {
+      "source_bounds_px": [
+        59,
+        309,
+        971,
+        714
+      ],
+      "source_pivot_px": [
+        515.0,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        83
+      ],
+      "scale": 0.2050438596491228,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p3-method\\p3-method-control-v1.png",
+    "sha256": "e68c7819daaebbc92ee6621b188b5101482a14cb54829266f8a7268f2d823d2a"
+  }
+]

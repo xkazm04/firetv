@@ -1,0 +1,12 @@
+<!doctype html><meta charset="utf-8"><title>Death Ride: natural obstacles</title>
+<style>body{font:18px system-ui;background:#18211f;color:#eee;max-width:1100px;margin:2rem auto;padding:1rem}img{max-width:100%}a{color:#e5c584}td,th{padding:.7rem;border:1px solid #69746b}table{border-collapse:collapse}</style>
+<h1>Natural obstacles: desktop and headless evidence</h1>
+<p>125 seeded placements across 25 courses; Crucible uses decoration only. Actual atlas props and shadows, physical ellipses, and procedural fallback. Owner feel/art approval and every Stick check remain pending. No Stick access or generated art.</p>
+<img src="desktop.png" alt="Actual libGDX rendering of atlas obstacles and procedural fallback">
+<h2>Final paired sweeps</h2>
+<p>Each report has 3,000 obstacle-off/on pairs, all 25 courses, five stock tier pairs, six grid rotations and four seeds per cell. Winner share is wins divided by races. The cohorts include out-of-pool stress entries and are not human balance studies.</p>
+<table><tr><th>Mode</th><th>Observed result</th></tr><tr><td><a href="shoulder-campaign/index.html">Campaign damage</a></td><td>18,000 finishers per arm; zero wrecks, early wrecks or watchdog survivors. Maximum tier winner-share change 0.8333 percentage points.</td></tr><tr><td><a href="shoulder-practice/index.html">Full practice damage</a></td><td>9,974 to 9,980 wrecks; early wrecks 7,158 to 7,102. One moving watchdog survivor remains, so full resolution fails.</td></tr></table>
+<p>The practice survivor is a Bastion on Switchback, seed 101058111, at 12.48 m/s after two laps with zero blocked steps. Both full outputs are replayed against the final runtime; replay and active-contact counters are retained alongside each report. Replay runs are not extra independent samples.</p>
+<h2>Rejected experiments retained</h2>
+<p><a href="initial/index.html">Initial deeper placements</a>; <a href="accepted-practice/index.html">first recovery candidate, practice</a>; <a href="accepted-campaign/index.html">first recovery candidate, campaign</a>. The old “accepted” directory names are run tags: these candidates failed and are not accepted. Their stuck cars led to shallow solid placement and straight recovery requirements.</p>
+<p><a href="desktop.json">Desktop audit</a>. Detailed rules, mutation tests, limitations and owner checks are in G-obstacles.md and OWNER-CHECKS.md. Persistent stuck cars were not seen in the final campaign sweep; transient no-progress intervals still reach 17.95 seconds.</p>

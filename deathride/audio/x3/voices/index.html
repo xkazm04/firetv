@@ -1,0 +1,1189 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Death Ride X3 — voices audition</title><link rel="stylesheet" href="../../report.css"></head><body data-round="deathride.audio.x3.voices" data-page-title="X3 voices" data-legacy-key="deathride-x3-voices"><main><p id="owner-applied"><b>Owner decisions applied, 2026-10-03.</b> This is a historical audition archive. <a href="../../../evidence/owner-decisions/audio/index.html">See current engine routing, kept audio, silent gaps and no-music mode</a>. Scratchpad controls below do not override the dated decisions. Technical failures remain visible; the owner accepted all delivered voices.</p>
+<header><h1>Death Ride / voices</h1><p>Announcer: Callum, noir read. Mechanic: Harry, helpful and nervous. Original lines adapted from the campaign owner choice. Check every word, Marrow pronunciation, identity and delivery; no ASR or listening verdict is claimed.</p><p>This wave estimate 960 credits; session conservative total 6400/9,000. Account before 23873, after 23040; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
+<nav class="report-toolbar" aria-label="Review controls">
+<a href="../../index.html">All audio reports</a>
+<label>Theme <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label><input id="matched" type="checkbox" checked> Matched playback level</label>
+<a href="#category-choices">Choose category winners</a><a href="#review-export">Copy decisions</a></nav>
+<p class="muted">Matching targets −26 LUFS with playback attenuation only and a −3 dBTP ceiling; quieter or peak-limited clips can remain below target. Short-cue matching is approximate. Files and acceptance results stay unchanged. Compare within a category at one listening volume. One player at a time; repeat controls support seam listening.</p>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<nav class="report-toolbar"><label>Group <select id="filter" aria-label="Group"><option value="all">All groups</option><option>announcer</option><option>mechanic</option></select></label><button id="stop">Stop all</button></nav>
+<p id="count"></p><div class="cards"><article class="card" data-group="announcer" data-id="announcer.debt" data-direction="announcer.debt" data-label="Announcer / announcer.debt" data-samples="announcer.debt" data-categories="[&quot;Announcer&quot;, &quot;Announcer / debt line&quot;]">
+<h2>announcer.debt</h2><p class="badge pass">PASS — signal screen only</p>
+<p>5.446 s / -18.01 LUFS / -4.65 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>campaign opening: survival debt</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.debt.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.debt.mp3" data-version="Original" data-gain="-2.79"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Your engine is collateral. Every race buys another day. Marrow keeps the books.&quot;,
+  &quot;beat&quot;: &quot;campaign opening: survival debt&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.debt.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;de403b7568cf2de1d6ebe8cdd58770a9e098b2519126d17ad3bd45b4350b8142&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:04.591Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Your engine is collateral. Every race buys another day. Marrow keeps the books.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 79,
+    &quot;providerCredits&quot;: 79,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1427,
+    &quot;endFrameExclusive&quot;: 121506,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1721953655481303,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        82211,
+        87569
+      ]
+    ],
+    &quot;fraction&quot;: 0.04462062475536938,
+    &quot;longestInteriorSeconds&quot;: 0.24299319727891155
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="announcer" data-id="announcer.boss" data-direction="announcer.boss" data-label="Announcer / announcer.boss" data-samples="announcer.boss" data-categories="[&quot;Announcer&quot;, &quot;Announcer / boss line&quot;]">
+<h2>announcer.boss</h2><p class="badge pass">PASS — signal screen only</p>
+<p>3.670 s / -17.99 LUFS / -4.82 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>boss briefing</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.boss.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.boss.mp3" data-version="Original" data-gain="-0.26"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Beat the division boss. Give them a reason to stand beside you.&quot;,
+  &quot;beat&quot;: &quot;boss briefing&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.boss.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:09.530Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Beat the division boss. Give them a reason to stand beside you.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 63,
+    &quot;providerCredits&quot;: 63,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 2126,
+    &quot;endFrameExclusive&quot;: 83041,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1627865510033546,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        30121,
+        34331
+      ]
+    ],
+    &quot;fraction&quot;: 0.05202990792807267,
+    &quot;longestInteriorSeconds&quot;: 0.1909297052154195
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="announcer" data-id="announcer.ally" data-direction="announcer.ally" data-label="Announcer / announcer.ally" data-samples="announcer.ally" data-categories="[&quot;Announcer&quot;, &quot;Announcer / ally line&quot;]">
+<h2>announcer.ally</h2><p class="badge pass">PASS — signal screen only</p>
+<p>4.674 s / -18.0 LUFS / -4.8 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>boss turns ally; payout type undecided</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.ally.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.ally.mp3" data-version="Original" data-gain="-3.26"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;A beaten rival. A new ally. Their backing keeps you on the road.&quot;,
+  &quot;beat&quot;: &quot;boss turns ally; payout type undecided&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.ally.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:13.946Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;A beaten rival. A new ally. Their backing keeps you on the road.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 64,
+    &quot;providerCredits&quot;: 64,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1203,
+    &quot;endFrameExclusive&quot;: 104275,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1789625232437853,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        22554,
+        31413
+      ],
+      [
+        50918,
+        62800
+      ]
+    ],
+    &quot;fraction&quot;: 0.20122826761875193,
+    &quot;longestInteriorSeconds&quot;: 0.5388662131519274
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="announcer" data-id="announcer.seizure" data-direction="announcer.seizure" data-label="Announcer / announcer.seizure" data-samples="announcer.seizure" data-categories="[&quot;Announcer&quot;, &quot;Announcer / seizure line&quot;]">
+<h2>announcer.seizure</h2><p class="badge pass">PASS — signal screen only</p>
+<p>3.786 s / -17.98 LUFS / -4.66 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>car seizure</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.seizure.wav" data-version="Edited comparison" data-gain="-8.02"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.seizure.mp3" data-version="Original" data-gain="-1.44"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Marrow has taken your car. The debt was never meant to end.&quot;,
+  &quot;beat&quot;: &quot;car seizure&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.seizure.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;da8dc9d98d0028ffb8516bb30509b2c39f5318bdae057641c28f159311c1ee92&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:25.376Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Marrow has taken your car. The debt was never meant to end.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 59,
+    &quot;providerCredits&quot;: 59,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 933,
+    &quot;endFrameExclusive&quot;: 84404,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1789625232437853,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="announcer" data-id="announcer.duel" data-direction="announcer.duel" data-label="Announcer / announcer.duel" data-samples="announcer.duel" data-categories="[&quot;Announcer&quot;, &quot;Announcer / duel line&quot;]">
+<h2>announcer.duel</h2><p class="badge pass">PASS — signal screen only</p>
+<p>3.880 s / -18.0 LUFS / -4.57 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>death duel rules</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.duel.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.duel.mp3" data-version="Original" data-gain="-2.37"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;No laps. No points. The last car running ends this.&quot;,
+  &quot;beat&quot;: &quot;death duel rules&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.duel.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:30.760Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;No laps. No points. The last car running ends this.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 51,
+    &quot;providerCredits&quot;: 51,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 921,
+    &quot;endFrameExclusive&quot;: 86471,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.2022644346174132,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        35473,
+        41878
+      ]
+    ],
+    &quot;fraction&quot;: 0.07486849795441262,
+    &quot;longestInteriorSeconds&quot;: 0.2904761904761905
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="announcer" data-id="announcer.freedom" data-direction="announcer.freedom" data-label="Announcer / announcer.freedom" data-samples="announcer.freedom" data-categories="[&quot;Announcer&quot;, &quot;Announcer / freedom line&quot;]">
+<h2>announcer.freedom</h2><p class="badge pass">PASS — signal screen only</p>
+<p>3.283 s / -18.01 LUFS / -5.29 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>final victory</p>
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.freedom.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.freedom.mp3" data-version="Original" data-gain="-2.42"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;The ledger is closed. This road belongs to the living.&quot;,
+  &quot;beat&quot;: &quot;final victory&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\announcer.freedom.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:34.637Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;The ledger is closed. This road belongs to the living.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.55,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.3,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 54,
+    &quot;providerCredits&quot;: 54,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1787,
+    &quot;endFrameExclusive&quot;: 74176,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1415633046188454,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        29073,
+        35370
+      ]
+    ],
+    &quot;fraction&quot;: 0.08698835458426003,
+    &quot;longestInteriorSeconds&quot;: 0.285578231292517
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.welcome" data-direction="mechanic.welcome" data-label="Mechanic / mechanic.welcome" data-samples="mechanic.welcome" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / welcome line&quot;]">
+<h2>mechanic.welcome</h2><p class="badge pass">PASS — signal screen only</p>
+<p>5.458 s / -18.0 LUFS / -3.54 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>shop introduction</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.welcome.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.welcome.mp3" data-version="Original" data-gain="-3.25"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;You made it. Good. Let me check that engine before Marrow sends you out again.&quot;,
+  &quot;beat&quot;: &quot;shop introduction&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.welcome.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;5a921b8d02c4429870e0f536fc8efe4b754af700f40f2b11fa4b3c5c842baf52&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:38.341Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;You made it. Good. Let me check that engine before Marrow sends you out again.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 78,
+    &quot;providerCredits&quot;: 78,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 669,
+    &quot;endFrameExclusive&quot;: 121026,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.692388244436418,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        13933,
+        34740
+      ],
+      [
+        42674,
+        62015
+      ]
+    ],
+    &quot;fraction&quot;: 0.33357428317422333,
+    &quot;longestInteriorSeconds&quot;: 0.9436281179138322
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.repair" data-direction="mechanic.repair" data-label="Mechanic / mechanic.repair" data-samples="mechanic.repair" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / repair line&quot;]">
+<h2>mechanic.repair</h2><p class="badge pass">PASS — signal screen only</p>
+<p>4.803 s / -18.0 LUFS / -2.31 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>shop repair</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.repair.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.repair.mp3" data-version="Original" data-gain="-1.34"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Easy. I can hold this together. Just bring it back in one piece, all right?&quot;,
+  &quot;beat&quot;: &quot;shop repair&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.repair.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;573f0cd8926d50182207b10c1be85a9fb4b7037dd0d436fcd15561c59282f3e9&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:42.206Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Easy. I can hold this together. Just bring it back in one piece, all right?&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 75,
+    &quot;providerCredits&quot;: 75,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1052,
+    &quot;endFrameExclusive&quot;: 106965,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 2.160230034774743,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        8972,
+        15881
+      ],
+      [
+        38571,
+        57092
+      ],
+      [
+        90279,
+        93854
+      ]
+    ],
+    &quot;fraction&quot;: 0.2738568447688197,
+    &quot;longestInteriorSeconds&quot;: 0.8399546485260772
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.books" data-direction="mechanic.books" data-label="Mechanic / mechanic.books" data-samples="mechanic.books" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / books line&quot;]">
+<h2>mechanic.books</h2><p class="badge pass">PASS — signal screen only</p>
+<p>4.350 s / -17.99 LUFS / -5.5 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>debt twist; no unsupported money destination</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.books.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.books.mp3" data-version="Original" data-gain="-2.25"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;I checked the receipts. You keep winning, but his numbers never let you go.&quot;,
+  &quot;beat&quot;: &quot;debt twist; no unsupported money destination&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.books.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;7eadfd94dceaf8bf4016f19d60e2f1e442f785595461b99cb64eafb194c5239a&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:52:54.430Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;I checked the receipts. You keep winning, but his numbers never let you go.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 75,
+    &quot;providerCredits&quot;: 75,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1356,
+    &quot;endFrameExclusive&quot;: 97275,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1521260598258072,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        22532,
+        37435
+      ],
+      [
+        53535,
+        65397
+      ]
+    ],
+    &quot;fraction&quot;: 0.2790375212418812,
+    &quot;longestInteriorSeconds&quot;: 0.6758730158730158
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.ally" data-direction="mechanic.ally" data-label="Mechanic / mechanic.ally" data-samples="mechanic.ally" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / ally line&quot;]">
+<h2>mechanic.ally</h2><p class="badge pass">PASS — signal screen only</p>
+<p>5.493 s / -18.01 LUFS / -2.33 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>ally reward types; no choice mechanic assumed</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.ally.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.ally.mp3" data-version="Original" data-gain="-1.92"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;That boss is backing you now. Money, a car, parts. We finally have some help.&quot;,
+  &quot;beat&quot;: &quot;ally reward types; no choice mechanic assumed&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.ally.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:53:07.789Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;That boss is backing you now. Money, a car, parts. We finally have some help.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 77,
+    &quot;providerCredits&quot;: 77,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1833,
+    &quot;endFrameExclusive&quot;: 122951,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 2.0253496068249714,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        32876,
+        38407
+      ],
+      [
+        46152,
+        50273
+      ],
+      [
+        61435,
+        66639
+      ],
+      [
+        77340,
+        94636
+      ]
+    ],
+    &quot;fraction&quot;: 0.26546012979078254,
+    &quot;longestInteriorSeconds&quot;: 0.7843990929705216
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.seizure" data-direction="mechanic.seizure" data-label="Mechanic / mechanic.seizure" data-samples="mechanic.seizure" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / seizure line&quot;]">
+<h2>mechanic.seizure</h2><p class="badge fail">FAIL — signal screen only</p>
+<p>7.047 s / -18.0 LUFS / -5.44 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: silence</p>
+<p>seizure response</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.seizure.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.seizure.mp3" data-version="Original" data-gain="-1.33"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;He took your car? Right. Right... I thought he might. Come round the back.&quot;,
+  &quot;beat&quot;: &quot;seizure response&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.seizure.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;498f4e38be24a2798cdf963da1536469d3829dc9f6f77d02444cdf74d5528be3&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:53:17.977Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;He took your car? Right. Right... I thought he might. Come round the back.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 74,
+    &quot;providerCredits&quot;: 74,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1766,
+    &quot;endFrameExclusive&quot;: 157154,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1428783347897717,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: false,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        18401,
+        39269
+      ],
+      [
+        47553,
+        71219
+      ],
+      [
+        78863,
+        98929
+      ],
+      [
+        114403,
+        136081
+      ]
+    ],
+    &quot;fraction&quot;: 0.5552423610574819,
+    &quot;longestInteriorSeconds&quot;: 1.0732879818594103
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.rig" data-direction="mechanic.rig" data-label="Mechanic / mechanic.rig" data-samples="mechanic.rig" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / rig line&quot;]">
+<h2>mechanic.rig</h2><p class="badge pass">PASS — signal screen only</p>
+<p>5.434 s / -17.99 LUFS / -5.22 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>secret basic car and mine rig</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.rig.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.rig.mp3" data-version="Original" data-gain="-2.63"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.&quot;,
+  &quot;beat&quot;: &quot;secret basic car and mine rig&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.rig.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;e9c51570b40484fc807f4c62d064fb49753867d0107f58f9b2fd5aced1431cf9&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:53:30.491Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 84,
+    &quot;providerCredits&quot;: 84,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1182,
+    &quot;endFrameExclusive&quot;: 121007,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1363182976673103,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        16475,
+        21927
+      ],
+      [
+        31149,
+        38473
+      ],
+      [
+        68294,
+        86469
+      ],
+      [
+        98870,
+        102224
+      ]
+    ],
+    &quot;fraction&quot;: 0.2862925099102858,
+    &quot;longestInteriorSeconds&quot;: 0.8242630385487528
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.duel" data-direction="mechanic.duel" data-label="Mechanic / mechanic.duel" data-samples="mechanic.duel" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / duel line&quot;]">
+<h2>mechanic.duel</h2><p class="badge pass">PASS — signal screen only</p>
+<p>3.711 s / -18.0 LUFS / -3.14 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>duel setup</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.duel.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.duel.mp3" data-version="Original" data-gain="-1.83"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;No finish line this time. You come back. Marrow does not.&quot;,
+  &quot;beat&quot;: &quot;duel setup&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.duel.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;f8d4d74ce8afd5907a54348872462cdf2afa30c2d722c5c7e19d74bed37b031c&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:53:42.961Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;No finish line this time. You come back. Marrow does not.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 57,
+    &quot;providerCredits&quot;: 57,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 449,
+    &quot;endFrameExclusive&quot;: 82274,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.9929665061647177,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        30717,
+        39846
+      ],
+      [
+        55800,
+        61753
+      ]
+    ],
+    &quot;fraction&quot;: 0.18432019553926063,
+    &quot;longestInteriorSeconds&quot;: 0.41401360544217686
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article><article class="card" data-group="mechanic" data-id="mechanic.after" data-direction="mechanic.after" data-label="Mechanic / mechanic.after" data-samples="mechanic.after" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / after line&quot;]">
+<h2>mechanic.after</h2><p class="badge pass">PASS — signal screen only</p>
+<p>4.118 s / -18.01 LUFS / -5.56 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>aftermath without promising seized car return</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.after.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.after.mp3" data-version="Original" data-gain="-1.90"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;You are back. I kept listening for the engine. Thought I had lost you.&quot;,
+  &quot;beat&quot;: &quot;aftermath without promising seized car return&quot;,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\voices\\raw\\mechanic.after.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:53:53.136Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;You are back. I kept listening for the engine. Thought I had lost you.&quot;,
+      &quot;model_id&quot;: &quot;eleven_multilingual_v2&quot;,
+      &quot;voice_settings&quot;: {
+        &quot;stability&quot;: 0.45,
+        &quot;similarity_boost&quot;: 0.75,
+        &quot;style&quot;: 0.25,
+        &quot;use_speaker_boost&quot;: true
+      }
+    },
+    &quot;budgetCharge&quot;: 70,
+    &quot;providerCredits&quot;: 70,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 1164,
+    &quot;endFrameExclusive&quot;: 91971,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1246049739669264,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        14554,
+        20744
+      ],
+      [
+        49513,
+        66277
+      ]
+    ],
+    &quot;fraction&quot;: 0.25277786954750187,
+    &quot;longestInteriorSeconds&quot;: 0.7602721088435375
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+</article></div><section id="category-choices" class="review-section"><h2>Choose category winners</h2>
+<p>Pick a winner, no winner, or a mix with sample IDs in the note. These choices are separate from each sample’s Keep / Maybe / Reject judgement. Families can contain different cues or lines; a family winner is a preferred reference, not a replacement for every cue.</p>
+<div id="winner-fields" class="winner-grid"></div></section>
+<section id="review-export" class="review-section export"><h2>Take your choices with you</h2>
+<p>Paste the Markdown below into <a href="../../OWNER-AUDIO-CHOICE.md">deathride/audio/OWNER-AUDIO-CHOICE.md</a>. This page never edits that file or grants production acceptance. Export before moving folders or changing browsers.</p>
+<div class="report-toolbar"><button id="copy" type="button">Copy Markdown</button><button id="refresh-export" type="button">Preview Markdown</button></div>
+<label for="export">Markdown export — also available for manual copy</label><textarea id="export" readonly></textarea></section></main><script>
+const $=id=>document.getElementById(id),players=[...document.querySelectorAll('audio')],cards=[...document.querySelectorAll('article')];
+function stop(){players.forEach(p=>{p.pause();p.currentTime=0})} $('stop').onclick=stop;
+function filter(){stop();let n=0;cards.forEach(c=>{let show=$('filter').value==='all'||c.dataset.group===$('filter').value;c.classList.toggle('hidden',!show);if(show)n++});$('count').textContent=n+' candidates shown'}$('filter').onchange=filter;filter();
+</script><script src="../../report.js"></script></body></html>

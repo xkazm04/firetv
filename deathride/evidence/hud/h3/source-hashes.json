@@ -1,0 +1,1230 @@
+{
+  "baseCommit": "bfd54472e8f52fcff27d3c78a778046f748f8468",
+  "note": "Exact build working-tree SHA-256 plus Git blob identity after repository filters, so line-ending normalization remains explicit. H3 commit is created after this audit.",
+  "files": {
+    "app/build.gradle.kts": {
+      "workingTreeSha256": "7e7c45cdfddf1dcab4c9c8a192e8c69090a128fc4dfee9bdec1bac764b17b42a",
+      "gitBlob": "d362bf1a86c73ef05fbcd465cf6c424f76c5d3b8"
+    },
+    "app/src/main/AndroidManifest.xml": {
+      "workingTreeSha256": "3987a871dcb2976c76d6cae1ce6e807d3a2125428fb928089511500b01eb633c",
+      "gitBlob": "cd2a39946686a10517dd05f705972ffd618c9901"
+    },
+    "app/src/main/java/dev/deathride/tv/MainActivity.kt": {
+      "workingTreeSha256": "fd8289760e992f54a2a50e0d2abcd13e038f8e246308a230c2fbc6f7f2898d57",
+      "gitBlob": "749584ea879a3c95b8a3ef5cb86bd57adaeb69a8"
+    },
+    "app/src/main/java/dev/deathride/tv/PhoneFonts.kt": {
+      "workingTreeSha256": "1a5ab906543259674e2f4fdffb6bdd8d4b35e7b5c80e8f8edbec4d70cd99036f",
+      "gitBlob": "5fd4109db7f4a9b128d7e45968a2e03629c50a9f"
+    },
+    "app/src/main/res/drawable/banner.xml": {
+      "workingTreeSha256": "77fe1eb464359e90f81f6b5e57529aa9c4deb041473429bf1e6c3a31a517b2b7",
+      "gitBlob": "48b679a180ca8b0397f18c8f99645b07f7a6f28a"
+    },
+    "assets/phase2-hud/autotile-barrier-0.png": {
+      "workingTreeSha256": "d6be1c88abf74e4796acb8ffcfc4fec16331657753f672dee7277ae90e7dd54f",
+      "gitBlob": "f97ec38f70a4ea4dc271bb52e094c89b531e5065"
+    },
+    "assets/phase2-hud/autotile-barrier-rules.json": {
+      "workingTreeSha256": "7a5876d8ca49b912dffc75a241601d54d26c2150dc01b24e9b88516ecc14df2e",
+      "gitBlob": "ec432de7b1a44d6e4675b1e743ad9156ec493b05"
+    },
+    "assets/phase2-hud/autotile-barrier.atlas": {
+      "workingTreeSha256": "a46a774b5443680e68f24ba9be8a6310415dfd4bf796500fd7389c19f3ab1c5f",
+      "gitBlob": "6726c4e93c5114ce74d98a70397ac008f726be0b"
+    },
+    "assets/phase2-hud/autotile-barrier.json": {
+      "workingTreeSha256": "45fddc68830c44ee32bb95b043ae40d48ffae8a28cb8cf581654ba16989b7d85",
+      "gitBlob": "251a111f8a8b6ff536d187dafeb1cdcd3baeade6"
+    },
+    "assets/phase2-hud/autotile-track-edge-0.png": {
+      "workingTreeSha256": "983384e90640093d6032ba722794c0c53c3d26e1df4084a0c8aa6b646a6eab8e",
+      "gitBlob": "44049fadc0fa67508103a20a1de9019edf7e0b6b"
+    },
+    "assets/phase2-hud/autotile-track-edge-rules.json": {
+      "workingTreeSha256": "ee66e721b257f6bcc45923bc3c39e4ae904294cc353f4e174eec8f233857ce6f",
+      "gitBlob": "0ce6041961b82f6041f5e981e8e8df3fda259de6"
+    },
+    "assets/phase2-hud/autotile-track-edge.atlas": {
+      "workingTreeSha256": "bde8540bce0a4bcca2c24a0921c07aec431dd19b7724fdce226a28223a370891",
+      "gitBlob": "b9e04127926f4ae276ff5e51444887aa714d9850"
+    },
+    "assets/phase2-hud/autotile-track-edge.json": {
+      "workingTreeSha256": "8a5d10e7ba29eb949253f2148d4cf49c042eb8ca8db1d7854f343490a93a55de",
+      "gitBlob": "cee3f16f9cb5501a14fb2347f98ca4fec2c3cf86"
+    },
+    "assets/phase2-hud/catalog.json": {
+      "workingTreeSha256": "7826f13f72f63b95205f28543f80bd827417e9d2c0f3510ee34922930d61ca55",
+      "gitBlob": "efee74da549fe30e0dcdfd1767fa738ce9bb6898"
+    },
+    "assets/phase2-hud/course-ribbon.png": {
+      "workingTreeSha256": "e4f5673d88f4828a38a28b8edc76580dcb087e125612aa1e7815aca220ded816",
+      "gitBlob": "56f497ba5648a070cccde7a1274e5c9a05e00401"
+    },
+    "assets/phase2-hud/hud-provenance.json": {
+      "workingTreeSha256": "6a30b1e35cf80fddb4ab05091efb2613ef3d2e288ad653aa76959894f512fa4b",
+      "gitBlob": "43b6bfed396c4aaf6e059a6b3d71774230ef6b30"
+    },
+    "assets/phase2-hud/manifest.json": {
+      "workingTreeSha256": "1585fab06610f54833c03272a01594a5c0e3349cc634a1c9fd196f3ad502e8a9",
+      "gitBlob": "40d39f4129771713f22bf29ab7dc1ce2e0e8739e"
+    },
+    "assets/phase2-hud/provenance.json": {
+      "workingTreeSha256": "736c6ea55ddc72add50939688de8056a8f521ed977283c4864aa458d6a730000",
+      "gitBlob": "ae5fd2ca0a71320d124bcd5b741ac0eb30fabd65"
+    },
+    "assets/phase2-hud/README.md": {
+      "workingTreeSha256": "ea1ec4d1c60211b7b8401a802e04f5c401b70be1292abe776c285ab44fb77ec1",
+      "gitBlob": "05db4f1207ac164a602b4faf967a17708acb268d"
+    },
+    "assets/phase2-hud/ui-0.png": {
+      "workingTreeSha256": "1557b15cc865e9b7db8bb7229eebde5735d5677fee9a8af763baaf0b44911c61",
+      "gitBlob": "28622605b9769a8586fabe3658c459dfa356901d"
+    },
+    "assets/phase2-hud/ui.atlas": {
+      "workingTreeSha256": "49b214c775c9e7c2a385197d95bd7176c3028ad5c5eb1dfd8db2746350a9e2a9",
+      "gitBlob": "38f17d5cc771a4e745162d53bd0e760661e8e3cf"
+    },
+    "assets/phase2-hud/ui.json": {
+      "workingTreeSha256": "a0bb38e6164d947161391930384209a286c512949598d0180c164ccb96da7d11",
+      "gitBlob": "8858aa674c55260d7b2a1eee497c1e49f1832a91"
+    },
+    "assets/phase2-hud/v4-fusion-backdrops-alpine-v1.png": {
+      "workingTreeSha256": "dde9a11e7320ab178dda0a61944c00f8bc4bcfccd5d5aeb77178f54bcd3aea17",
+      "gitBlob": "fe7c71dcc81bdbe99966756dc0296ebfafc38e3c"
+    },
+    "assets/phase2-hud/v4-fusion-backdrops-desert-v1.png": {
+      "workingTreeSha256": "435db62cade82a661ca3f4a80080d98be8986d7bceee9dff7ac20cbc7d5dbe23",
+      "gitBlob": "a761a2be9ac440e19f99670c8564ddc6cf720288"
+    },
+    "assets/phase2-hud/v4-fusion-backdrops-industrial-v1.png": {
+      "workingTreeSha256": "7b6fdbad858478c9cb667de32933e207d84d403df2ab7666035c9528a64e2aec",
+      "gitBlob": "bb185212a3a7491348e6dd18411cf3a22d070fb9"
+    },
+    "assets/phase2-hud/v4-fusion-backdrops-quarry-v1.png": {
+      "workingTreeSha256": "cc24adebe61794c33a00959aebc66e642690c947437461ec2b4f618a7bd1b34a",
+      "gitBlob": "c17be29a43865a3c67f296404ca9eeccf92b9d2c"
+    },
+    "assets/phase2-hud/v4-fusion-backdrops-wetland-v1.png": {
+      "workingTreeSha256": "dcd3a0dc2ea7a41e3f2a81d2943033ec85512ffdf9aed99bbece0536602d1bf5",
+      "gitBlob": "d29db32942b9be0eaecfc2ef9ef370c1ca943499"
+    },
+    "assets/phase2-hud/v4-fusion-ground-dirt-v1.png": {
+      "workingTreeSha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "gitBlob": "dbec2a1f86334f84a58b979c800dc112a7fbc283"
+    },
+    "assets/phase2-hud/v4-fusion-ground-grass-v1.png": {
+      "workingTreeSha256": "22a9cb593ca96c18f468a01794ce0b49ad781cf7f57ec03fa8ef99bb14b0c743",
+      "gitBlob": "c66e75c4d6bd143660198588e64d5e58a16ad33f"
+    },
+    "assets/phase2-hud/v4-fusion-ground-gravel-v1-wrap-v1.png": {
+      "workingTreeSha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "gitBlob": "76675abd4e12464ec82f52674fc7ca7177535ff2"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-asphalt-clean-crop768-v1.png": {
+      "workingTreeSha256": "c7614be2e8b4cde0847f19686b606fd0b3d3f72b6af45f894ad8578f2cb94178",
+      "gitBlob": "50d60239bb22829634b914bfa2691c7174a98a11"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-asphalt-heavy-v1.png": {
+      "workingTreeSha256": "845eab47a1bfa71a1ef67b35f436de48c92b69a01726b6934e14ffb16e78afff",
+      "gitBlob": "8d5d40e9b8400ebe95ffb4ba7e68d74bd28ec585"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-asphalt-worn-v1.png": {
+      "workingTreeSha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "gitBlob": "46b307ba67d74d493da36d6b29ce8b2d77f64142"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-concrete-v1.png": {
+      "workingTreeSha256": "462c79ac455e24088f9b2b4735bc8c48dc4fb4560e2ff23391ae3736663ba911",
+      "gitBlob": "ec69f2801fd4fcff88e17455ea4c577befab4a13"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-ice-crop768-v1.png": {
+      "workingTreeSha256": "cb4bc0511c512e4268da7f194d4b2a24b5c025c7522de5d2c7d2bd6821059a96",
+      "gitBlob": "2e7a49a5c3d007504a70f418eb7ddde7d80039c0"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-kerb-v1.png": {
+      "workingTreeSha256": "c890c349f062f7da6e4d500b55765f7c30328a29fbf35cd16ece0e6d9e1d4166",
+      "gitBlob": "c6cd5420b4bebfcbde6cfd0f431c5aa1d0ce19bc"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-metal-crop768-v1.png": {
+      "workingTreeSha256": "0bfed30b6576db58728d7994cbe1e600b28ca7ed89ea124684062d5690a89dc2",
+      "gitBlob": "bee530d6081b20528d67ad6369617e070b3ba244"
+    },
+    "assets/phase2-hud/v4-fusion-surfaces-oil-v1.png": {
+      "workingTreeSha256": "7569f3871a32d20be84c2e3cf1a7316ab2f2d8043b1fbf8991b07044c50fe309",
+      "gitBlob": "a6405e3fea2afe349f5a54d7dd8a6ef1731e3d0e"
+    },
+    "assets/phase2-hud/world-0.png": {
+      "workingTreeSha256": "76d659798513e6df3c1c9585556fcf1fac1f5b3da360b738707818e621416c24",
+      "gitBlob": "6c86080bc28bc7f34f75e2709a0472c73088a6f5"
+    },
+    "assets/phase2-hud/world.atlas": {
+      "workingTreeSha256": "8c018fcd57fb6ead188c9d9bdc00d6353fd1e2c1d1a5edfd355e661c2b9dd04f",
+      "gitBlob": "0bc80daf08800e373f0cd040fc18ac952daa92ad"
+    },
+    "assets/phase2-hud/world.json": {
+      "workingTreeSha256": "68471720ce5457b06c53349552eef09fac41fa4b42c3e0339a0ec81d67a10cb6",
+      "gitBlob": "f222ec23649787a814c6ec583575085474e41673"
+    },
+    "build.gradle.kts": {
+      "workingTreeSha256": "bf17502666fe249f7ad0e9fb2c5ffd073def565bd1976f2f4963785be3f58bb2",
+      "gitBlob": "2cb711091241ba9df562285381bb9d50605b51a0"
+    },
+    "controller/hud.css": {
+      "workingTreeSha256": "16b999af3753b36310374220003b45c508b0cb31fbc3e42e5a22e9fd1dea28db",
+      "gitBlob": "1d505242d0bd808e91567320258f7b67db2c9a37"
+    },
+    "controller/index.html": {
+      "workingTreeSha256": "4bc54ba464e5ab25db05bc109422b4d59cb284950290d358e92229b17b79187c",
+      "gitBlob": "a4461f580a22cc26e9eb84b0a1c8eec42576ef92"
+    },
+    "controller/manifest.webmanifest": {
+      "workingTreeSha256": "99d6f473a14649a452611e6a5ab37ef240099b806014534eb2738f06172c607b",
+      "gitBlob": "38336e6d562e2ed360324117aadfea3405422197"
+    },
+    "core/build.gradle.kts": {
+      "workingTreeSha256": "68514bd4902719d261cb222140d12fd06913d2107a16e4bd244909819f78a760",
+      "gitBlob": "805ae6a0a1381ab0d324f119b4a5759e3222478b"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Abilities.kt": {
+      "workingTreeSha256": "cddd45988ffe6e74492d73fc6cb26334f7fc1320ab2ec06224a771cb294db2e5",
+      "gitBlob": "78fd4d34d68b650ddf019804677ba6ea699e4d3b"
+    },
+    "core/src/main/kotlin/dev/deathride/core/AshCircuit.kt": {
+      "workingTreeSha256": "03c9a71e5d0eeaf79d97d27945fdbd45af8c41453e9eac15f81d46f50278eb2a",
+      "gitBlob": "b15da824469ca89e177d46df21f5acb455caf40f"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Career.kt": {
+      "workingTreeSha256": "4d5b1c0a1c2e4eb162e1650eb0c6baf64672fc142354c2b053f71fcbb142c5f6",
+      "gitBlob": "7f4f059b1ed9736641add0aa0feb27d1c9dba61e"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Cars.kt": {
+      "workingTreeSha256": "349b6b018c33b1bd4269d1884e4f050d6830f1d56af9edc88f099134abc74633",
+      "gitBlob": "8d125cce5281722a5b2663f874bce71c715e83ae"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Combat.kt": {
+      "workingTreeSha256": "e088ee62b59ffa5c75c2828d84ece15c3573d1b5e9503f79f4646bfbb2dce2a2",
+      "gitBlob": "537c836c9ca83d31b93bd074df0b398ce52d8245"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Commerce.kt": {
+      "workingTreeSha256": "736220fed0afd5169d046e1174cf5e3a30d73e3dc2476a1899b1088b34825281",
+      "gitBlob": "3864bd30fc9457fc1ea0c4c25103e81c4c3d7609"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Content.kt": {
+      "workingTreeSha256": "a93f81e8485556b88cb84cdc908a23318fa6991b6559f99ffe305a97c14f5ff0",
+      "gitBlob": "345156dd0cbc49ff7c1970fd0caf6a36ef655c6b"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Drift.kt": {
+      "workingTreeSha256": "723675903ee526e231a9c6395a3936fbf984d47f90af6230e70aed3a42120eb1",
+      "gitBlob": "6d158cd5cf8a00f4705eca8a2c0c08066d5a708d"
+    },
+    "core/src/main/kotlin/dev/deathride/core/DriftLab.kt": {
+      "workingTreeSha256": "8cfd781b0f66f79a87ef7072d37514324d1ed615ec4b57eec16bbd67500a09c0",
+      "gitBlob": "72f8d0e9dcf36a5fec8ffe21bd94179c26f34ec1"
+    },
+    "core/src/main/kotlin/dev/deathride/core/FeelProfile.kt": {
+      "workingTreeSha256": "906204c747eb1d2a9d45eb68cfba465e0f8d8982e9412a6d38833021b528bfa1",
+      "gitBlob": "e8b5a2e7d060173ae7f33748a6128f2277683c81"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Garage.kt": {
+      "workingTreeSha256": "9c374ffb44f20281f4f931f8f1d989d6183689885a744329f38674e53e355e0f",
+      "gitBlob": "21ac860a8c84c718ce00622b59d193b67f7d972d"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Movement.kt": {
+      "workingTreeSha256": "70b0893643c5d2327ea7c33f259c7245e0e10e17a19cfbe9f6d4ba71a6979de6",
+      "gitBlob": "167735f60b2c0a2ccc6803338e0959742b9bced7"
+    },
+    "core/src/main/kotlin/dev/deathride/core/PowerRating.kt": {
+      "workingTreeSha256": "ced2db8b998e3055d270a085d1b176d09b484bbb530a208748988368f49d73f6",
+      "gitBlob": "e6a463bcbf080ec6aad11b03098ca60839aa008b"
+    },
+    "core/src/main/kotlin/dev/deathride/core/ProfileStore.kt": {
+      "workingTreeSha256": "46201c7c6974d283d5d944d12d61ab2976a1bb12853c78e85342a63e1f7653b7",
+      "gitBlob": "3d164b137700497f4f02bbea9f85adf85c4bd50a"
+    },
+    "core/src/main/kotlin/dev/deathride/core/StrictTrig.kt": {
+      "workingTreeSha256": "13d9cff85dcb09dc54a5ea17e45e5a4c72bbd50a72f6f9b13b7ba2601ae5be10",
+      "gitBlob": "4b17a904b6af2cc02c78d436edb064699c7aba38"
+    },
+    "core/src/main/kotlin/dev/deathride/core/TrackContent.kt": {
+      "workingTreeSha256": "f03df95f065ce05320c0ba1843ff8e9c7e4b450f22071fd05cd7bdd501fb8009",
+      "gitBlob": "45e3ef14a0925963f495631b7595f4856071d0df"
+    },
+    "core/src/main/kotlin/dev/deathride/core/Tracks.kt": {
+      "workingTreeSha256": "5e5ddeb3d4b93d38d6caf8c7814b7679d5bd1316f6172da0f2491ec0f6bd98a0",
+      "gitBlob": "4e745ff313385067193fe8f3841744dbfe01a181"
+    },
+    "core/src/main/kotlin/dev/deathride/core/World.kt": {
+      "workingTreeSha256": "ae45eda167422e901c99a177b7ac13361a2e261df52a16d90265cd82edbfec1d",
+      "gitBlob": "757e5a52210106022a6ade56112b0b09f7e0768a"
+    },
+    "core/src/main/resources/data/abilities.csv": {
+      "workingTreeSha256": "44cc8d9e5f4c82ebc8c4e9f14ff971812948c367b2dfbe79c941cf9c901af87d",
+      "gitBlob": "0cf662c4bd41b76b9fa982e3a799cfd3b6c39f18"
+    },
+    "core/src/main/resources/data/ai-skills.csv": {
+      "workingTreeSha256": "554eccedfdabedfd7fd76db2a9097c39d993faf3f754d24065847d00e0da1531",
+      "gitBlob": "25dfbf28ca664c758aaee1fdd840c99311b9065c"
+    },
+    "core/src/main/resources/data/ash-rules.csv": {
+      "workingTreeSha256": "f462dd4ccff8e703180e552373a1dd25f9d2481e5d4bcc828575617513801c55",
+      "gitBlob": "f5e28f5b7e36d3ba2f37b77970b712b2f5b477ac"
+    },
+    "core/src/main/resources/data/balance-rules.csv": {
+      "workingTreeSha256": "9ea0e7dc1064dc8b5ad0eb43060c24b7d6acc5741b56f4b4fbb863ca25b57b17",
+      "gitBlob": "86ce7b29e7f1734b92407869ab492a01085ce9f6"
+    },
+    "core/src/main/resources/data/balance-scenarios.csv": {
+      "workingTreeSha256": "146bc8922cd846046767781424666274b36fca509b294973f0415295b1032547",
+      "gitBlob": "795250b3d2c01117244ef9ea45f2d646c2353709"
+    },
+    "core/src/main/resources/data/campaign.csv": {
+      "workingTreeSha256": "a079310e375bdde53d69204b76b035e6cab2fb901a4a380ce084dd7b5b790c7c",
+      "gitBlob": "b9505bf97631b0f7791b03342dace277e36e6e87"
+    },
+    "core/src/main/resources/data/car-loadouts.csv": {
+      "workingTreeSha256": "fb2a242fd4a31d3b3c810c33d4890eaf73790f47ba90f284832331ceeaaabe34",
+      "gitBlob": "703d0153424684da5ad805d8fcefc8aaa38efd78"
+    },
+    "core/src/main/resources/data/car-rules.csv": {
+      "workingTreeSha256": "c411ca205a92345287cc7655307d7980795cdbf29daf433f81b7bc833e3a1963",
+      "gitBlob": "81d58d1b09c45cf72c69280f6099c934b8c84914"
+    },
+    "core/src/main/resources/data/car-shapes.csv": {
+      "workingTreeSha256": "e2b41bc6ad41f87fe1276e86794b05782bef040ce5dbafcac5bd43d54e125f5a",
+      "gitBlob": "6799eacf528eba807cedf95c72e77ab24bb1bdb6"
+    },
+    "core/src/main/resources/data/career-curve.csv": {
+      "workingTreeSha256": "6523f6cee8b8445715799ee30f3244fcce37e1ec69b292816d7c42810286c912",
+      "gitBlob": "f8d3efdabfda66a688c2c54818eb5a9dfce9d1ea"
+    },
+    "core/src/main/resources/data/career-points.csv": {
+      "workingTreeSha256": "f5fd6736e28992604e9f21914b50636fa5cfb356335d5ac531a9ee83cfa957cd",
+      "gitBlob": "f7233ebecb33ec1c2628c7e2882487aacd299181"
+    },
+    "core/src/main/resources/data/career-rules.csv": {
+      "workingTreeSha256": "fe3b9c0c8a51b8d894cbfa2165571859d07dcebebeff3e41c3db45f04f2b2b0a",
+      "gitBlob": "6b0dad78fb5c764c327c66aec5fec8dbca48711d"
+    },
+    "core/src/main/resources/data/career-unlocks.csv": {
+      "workingTreeSha256": "957419412f8d2179202388da057b773380575d7cbc02c424e8b6b7e1e792c538",
+      "gitBlob": "15bd6c2f09a50d146336516504c7dd4b7ea9754c"
+    },
+    "core/src/main/resources/data/career-upgrade-bands.csv": {
+      "workingTreeSha256": "28f9675e8d78005025e5821d23343300ca9a45aff195837dd5eea2b499dad4bd",
+      "gitBlob": "1486d578d67f1ed3dd14ba712ffe1c8c2d9b5b4c"
+    },
+    "core/src/main/resources/data/cars/Bastion.csv": {
+      "workingTreeSha256": "7bfe818f2502b289d97a43fb1dfd51e651fed61f378192a468dec9b8659f8d44",
+      "gitBlob": "4871b9051890c2747fb6a8c2de8bba4b7085c90e"
+    },
+    "core/src/main/resources/data/cars/Bulwark.csv": {
+      "workingTreeSha256": "1549e4518d4314dfbe543aa46a87de7c623faa2fdf2a99708aecee8351a1a17f",
+      "gitBlob": "740c50457d4a31991dd42970b2278f17ca71b6b4"
+    },
+    "core/src/main/resources/data/cars/Comet.csv": {
+      "workingTreeSha256": "d9326493376cbcd98eee76be42f36c11a1502d60ce4a6169d80edfd48a132207",
+      "gitBlob": "9c4b2db9a8d72507017750f77708fd566077d498"
+    },
+    "core/src/main/resources/data/cars/Flint.csv": {
+      "workingTreeSha256": "a3eec9516b3b6c86f4630cad1e2f7ed95241010d7854d05aa44c85a41a4b8aae",
+      "gitBlob": "1164ccfb02fc82c40f6fab5bc1657954eee899fd"
+    },
+    "core/src/main/resources/data/cars/Kestrel.csv": {
+      "workingTreeSha256": "7e3f9faae53deedf3f87aa3a712992214237a0e4e11b6a340a987f63c699aedc",
+      "gitBlob": "bfa32ad32190a63b37ddaf921455360f365e86a2"
+    },
+    "core/src/main/resources/data/cars/Line.csv": {
+      "workingTreeSha256": "623c63b9578c4c16d494009a93c9ad9156acc5de94698a07c086bac16e237ede",
+      "gitBlob": "1c8ac9a85213c8831bfb65055c6d30c80d3559da"
+    },
+    "core/src/main/resources/data/cars/Needle.csv": {
+      "workingTreeSha256": "741e6afea73c1e3ce21f40b09fc87eed0e3838eb81ca5ea22555bde82561f977",
+      "gitBlob": "3c99674880d58d4dba89d57097b3096bdbd7b4d9"
+    },
+    "core/src/main/resources/data/cars/Quill.csv": {
+      "workingTreeSha256": "357e26d85ae5d5acfae5ffd1e2b0e9584761e2b824d0daaf34e85a631500518a",
+      "gitBlob": "3e6903efd49ec4ada68a382beb90d1cc8429d6f8"
+    },
+    "core/src/main/resources/data/cars/Trail.csv": {
+      "workingTreeSha256": "f17061a2ba77426c08bd0303a15040cdc7fab2af56234780ad6daf573e7574c0",
+      "gitBlob": "46ed8d77e448c707525115f7ba0c2a6f3dde18a9"
+    },
+    "core/src/main/resources/data/cars/Vandal.csv": {
+      "workingTreeSha256": "b0415efe4f1cd0019fc5d34b9966037313d15f5e1b97f2b4c1d153fecb419863",
+      "gitBlob": "dcf52411997fa912d42cbdd1c3d3e8011c86726d"
+    },
+    "core/src/main/resources/data/cars.csv": {
+      "workingTreeSha256": "f1676ebb5ec0b1b3912d06dc83403672d17dd08589d0279dc6da44d783a107b7",
+      "gitBlob": "87e2d1d50ed6e157e2949e29407ca4cdd0dfa4fd"
+    },
+    "core/src/main/resources/data/championships.csv": {
+      "workingTreeSha256": "7735cac7acb1b7ebb7ec788f64f05977b26945d31443156358ed2019043b5122",
+      "gitBlob": "7c8c04da78b6f9add92f799e56336f09407edb3f"
+    },
+    "core/src/main/resources/data/combat-depth-rules.csv": {
+      "workingTreeSha256": "f623143ffdcab8f30743a9391372fd718edf6472a2ed089511966f8c1927dc26",
+      "gitBlob": "61600baeb20697332428b62ab8be8e17800db01f"
+    },
+    "core/src/main/resources/data/combat-scenarios.csv": {
+      "workingTreeSha256": "6d5bacd2f09d8a594bb29912bf73a57f941db6a6473f2003521ff3ae1cf42396",
+      "gitBlob": "45dfd5a771e066e374d21ed793a940d5eb26f507"
+    },
+    "core/src/main/resources/data/combat.csv": {
+      "workingTreeSha256": "6474cf1403d9a05247274ab6f8cdadc3e3c7ceefd15f20991ffca51712d67d55",
+      "gitBlob": "f797596e57e160a8ee40ac6d5c6aa6e3ea631f4b"
+    },
+    "core/src/main/resources/data/consumables.csv": {
+      "workingTreeSha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be",
+      "gitBlob": "0d2f5526cc163645b286be78c7bcf6cf93b2f770"
+    },
+    "core/src/main/resources/data/contracts.csv": {
+      "workingTreeSha256": "9844545cde10efdafb5f9fc6637aa1d222e70925e6332de3f9c0800bcbcf8afc",
+      "gitBlob": "15219d0c846d541d2cbfa9b3b079c66ea8fd53a6"
+    },
+    "core/src/main/resources/data/controller-layouts.csv": {
+      "workingTreeSha256": "c26808068ea53afe782b83ef925d15a0bc5e5a9e27c58b3437e735257b0c4b90",
+      "gitBlob": "5e4131e298678718bbc508c12a4415c173889dae"
+    },
+    "core/src/main/resources/data/difficulties.csv": {
+      "workingTreeSha256": "6b67b8d5cb24027596358dc7075b04c47ac8fe74269395b6b1cceae9520edc16",
+      "gitBlob": "c8bc0fc7c6279abffe0ee331610dca5fc40e5648"
+    },
+    "core/src/main/resources/data/drift-geometry-fields.csv": {
+      "workingTreeSha256": "e0355b5d42b84bc1435372f40235a5486a2366f4ae53a5bb7017e2f1bc7c21c0",
+      "gitBlob": "d5e3a8af192e69d8add32f6af4d9531bb1d88508"
+    },
+    "core/src/main/resources/data/drift-geometry.csv": {
+      "workingTreeSha256": "4e7cbbd7e61c455828ae82e7e1988201ad2a90ba1f0bd417071120f0460c10af",
+      "gitBlob": "a119e5f1d1de9aa325cf6c04c3845c27e657ce04"
+    },
+    "core/src/main/resources/data/drift-lab.csv": {
+      "workingTreeSha256": "56ebb5d64377008f1ead13cc333ff804d047fbb4fc43bc45c2d1ed0f8b19bbc1",
+      "gitBlob": "57cf329685228ce65126a9883ffea06e5cf9ea35"
+    },
+    "core/src/main/resources/data/drift.csv": {
+      "workingTreeSha256": "35c6f69547d9ea0b4a84cc3738d1d83f80e040d684d289badf4a134c22353c94",
+      "gitBlob": "208406826ee4a98fc7c1eb1927169e62dcb31b23"
+    },
+    "core/src/main/resources/data/economy-model.csv": {
+      "workingTreeSha256": "cc8e5ae595bbe219b2246ac7a027b2b81843f6c4d8bdadb69e661427fc8d9340",
+      "gitBlob": "c5b1bbfd13c93cf9fbdf37da7324a6dab12e6bac"
+    },
+    "core/src/main/resources/data/economy-sweeps.csv": {
+      "workingTreeSha256": "589acc05b6d2387d7a819772f13148f1effc4a17a510dbf208fe1b52a6f11078",
+      "gitBlob": "34c6f9ea4d0cde4ffad54c791e6e6708ce8a6a27"
+    },
+    "core/src/main/resources/data/economy.csv": {
+      "workingTreeSha256": "1462374a011f4151ea9819a40a06628ef714843430875d857770e0c438077bde",
+      "gitBlob": "f6423057b8eae6b803971fd0a6948b7958ca0bf4"
+    },
+    "core/src/main/resources/data/encounters.csv": {
+      "workingTreeSha256": "90b4f17c9e85ef6feaa1db4673e9158e99f93fb3115dbf500e1b3178f711d943",
+      "gitBlob": "74944db6cead9203a5427e6cb12d3a2eaea85c1f"
+    },
+    "core/src/main/resources/data/feel.csv": {
+      "workingTreeSha256": "95e5b2ef47c2c2cf5478c62a940d8c1340a6b96141ebcd06efeb703eb4d63276",
+      "gitBlob": "b31b9afe8d2d57f6cb681933530418e9dbaa9050"
+    },
+    "core/src/main/resources/data/legacy-campaign.csv": {
+      "workingTreeSha256": "582ea4010eac6a276c50c02103dbbf82d7ef0ff2441cedad1e1cf03e5e3a6806",
+      "gitBlob": "c42b5a0e63fe7b9e7f0ad03c8fce1524569b3a1a"
+    },
+    "core/src/main/resources/data/legacy-unlocks.csv": {
+      "workingTreeSha256": "4b0c4cccdb35294e5fe7e8f9bc141586ce4a85a9199c29ee451df170c12dc71c",
+      "gitBlob": "7547cd70ac4c95dd5ea9ba89f19fd75d4eabd578"
+    },
+    "core/src/main/resources/data/market.csv": {
+      "workingTreeSha256": "7b9e1b65cf913efde6126b680afb6b0a1f9d9907da26dabf80be85b87cb77d71",
+      "gitBlob": "e217171cc28f0466d9da7203f6ed47e098502623"
+    },
+    "core/src/main/resources/data/movement.csv": {
+      "workingTreeSha256": "a31c689734d97c29bb9258bcdfe9e3885977e3700ffd1d9d74d3cf437b332950",
+      "gitBlob": "ee86688479cf2c346bf920c516edb06cf88c7753"
+    },
+    "core/src/main/resources/data/part-unlocks.csv": {
+      "workingTreeSha256": "6202f8ce663d3d2aa9244e6ef57a66bd91274ce8f6174a611935817de4fad6ca",
+      "gitBlob": "19858e8a072cd771d2860475d6212b26b5d05082"
+    },
+    "core/src/main/resources/data/parts.csv": {
+      "workingTreeSha256": "26d493e05d9a4da3170ac66d5529604758bf55057722712f4f9ebb360a4081a1",
+      "gitBlob": "786f2aa45870790ad54200ff9618c0d0d16508ca"
+    },
+    "core/src/main/resources/data/physics.csv": {
+      "workingTreeSha256": "5a8e28ed4ab06906ee864570a7e0c83c72227e03995244e39a8087c4d65148fa",
+      "gitBlob": "3daa64ca1d3e402e939e427e4ee724760dd113d3"
+    },
+    "core/src/main/resources/data/pickups.csv": {
+      "workingTreeSha256": "5a4a2842d3bb0880549e4e9e46e7006af8318a659f8cf56236539fa3fae3b7e8",
+      "gitBlob": "62e04813dd860c2b061c5e581d948b7a4206f437"
+    },
+    "core/src/main/resources/data/pr-weights.csv": {
+      "workingTreeSha256": "440c34e34ed1a195cc2972ca26039a8af54f20e42dee17066b31ace62173d3a3",
+      "gitBlob": "0fd4cfbc8dda14459761652dff6ab6d5eba7e6fe"
+    },
+    "core/src/main/resources/data/presentation.csv": {
+      "workingTreeSha256": "e053107ef3a25ed6caf16e63f628161e941158320c4dd7a6d758764656af7a76",
+      "gitBlob": "5aad5ac436d082fbd2a7378dc40bc4156c2fb6cc"
+    },
+    "core/src/main/resources/data/prizes.csv": {
+      "workingTreeSha256": "e309593221140d9fba0aef7e4e620abf312936669d02518c8c134f836adcb7e4",
+      "gitBlob": "b282fd6788c1e8ddd60e3f726415aba682e05e74"
+    },
+    "core/src/main/resources/data/rival-garages.csv": {
+      "workingTreeSha256": "7ab594d5ee70e1266ea4062307a41f73dd78eef3f02166464066845ae4c7e8ec",
+      "gitBlob": "426f4b244da55a4c9ff02eef0a5c743f45709fb4"
+    },
+    "core/src/main/resources/data/rival-stories.csv": {
+      "workingTreeSha256": "6e85b6a7cc5ab9d7cc3122c84e2c0fda9bc786a91e2863536d6e6c209519cf0b",
+      "gitBlob": "c00b16b0938d4cbb372a1fd98db4fb29c287087c"
+    },
+    "core/src/main/resources/data/rivals.csv": {
+      "workingTreeSha256": "13137d7fa7218c0e414fbee3e37f1633c1087c06a1655d0a7e8ad87b3992f174",
+      "gitBlob": "829eaa5de9743a277ade517e58cbc699f4e1682c"
+    },
+    "core/src/main/resources/data/roster-courses.csv": {
+      "workingTreeSha256": "196186dde9d76ed2ccc7be2d1303fd39531a418720294d5b189f0bab145fadac",
+      "gitBlob": "55d9c1c6ba436f65bb0a7de7ddc0815ad6023f6d"
+    },
+    "core/src/main/resources/data/roster-rules.csv": {
+      "workingTreeSha256": "ba8ad4753f77604d73d22766989cf3b5b79e8f6f2d3f020543d586e2598dd4d5",
+      "gitBlob": "acfa0fcf6ccf20604a22e7b80486d52772819dbc"
+    },
+    "core/src/main/resources/data/roster-tiers.csv": {
+      "workingTreeSha256": "c2beb394c1f0abc307d5779affcc7433cd93c5d99e832caf28dcb7997fac4ad7",
+      "gitBlob": "9af4b0ea6d982a4b552d0366d0fc59a839b425e3"
+    },
+    "core/src/main/resources/data/roster-value.csv": {
+      "workingTreeSha256": "9f938785a2d01e20e115d2242336891e6fae16e2db9e84f5351a1c689ab5489c",
+      "gitBlob": "40a82a7ce324fd8a2a699598da1d14d04462f3e7"
+    },
+    "core/src/main/resources/data/stat-mapping.csv": {
+      "workingTreeSha256": "472a312849fbe3c9bb625381996302eb5ab91e89f3f84d7868087668c4a830fd",
+      "gitBlob": "2365a7ae72211639e79d21a900f4f6b2be453281"
+    },
+    "core/src/main/resources/data/story-cards.csv": {
+      "workingTreeSha256": "2a912f9a6fdf5783abd10ef2314a68ef7ea28f481bef5651967f28d92bd887a2",
+      "gitBlob": "b2ba6a58bf61f4ad3bfa349d7c6fb9aa2a466a12"
+    },
+    "core/src/main/resources/data/surfaces.csv": {
+      "workingTreeSha256": "2300f41f53ccc6900b9adb4c91b1be6ab6fe626c6db02cb9db9144220625a902",
+      "gitBlob": "ae789050fe28ff049df55e69ac991b88d4ef442f"
+    },
+    "core/src/main/resources/data/track-content-rules.csv": {
+      "workingTreeSha256": "20c248e2614f722d15dbfcbcfc1f347109fd16d4f44c5814506bcf78a3899083",
+      "gitBlob": "7afe11d1b9537ecc8ebd4112a08d658d5918fa2e"
+    },
+    "core/src/main/resources/data/track-features.csv": {
+      "workingTreeSha256": "965b4227a5a51b642b12b362ebfe8b3126519a518dea698fd59daee060785897",
+      "gitBlob": "ed914ed9c1a3b3834ba545d7f07e180041eaad1d"
+    },
+    "core/src/main/resources/data/track-pools.csv": {
+      "workingTreeSha256": "b0c4f1e4e0485fe39114ba9eac3b389568fecfb2f3413cf4f81c67e9ca261fb2",
+      "gitBlob": "eb1b1033d7ad96765409aa2471a85ad049051337"
+    },
+    "core/src/main/resources/data/track-rules.csv": {
+      "workingTreeSha256": "5ccd696730486085d22733a1fb43411bac6e3e322aa886d1dbf83d1d43fcb6d4",
+      "gitBlob": "d49754a3b8f5fd69e360634058a4bbd508e5a075"
+    },
+    "core/src/main/resources/data/track-themes.csv": {
+      "workingTreeSha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9",
+      "gitBlob": "e7b8bfe1ee96e199b6a023c212b044615c332cef"
+    },
+    "core/src/main/resources/data/tracks/ballast-spots.csv": {
+      "workingTreeSha256": "4df45d52c39214d72f3dbe967ddbc99be1ca7e30428d0ef05d7d9b1ba381db14",
+      "gitBlob": "d0d3c06ca7656a7801a68539650fb0895686cb19"
+    },
+    "core/src/main/resources/data/tracks/ballast.csv": {
+      "workingTreeSha256": "817e6e5178f887409ca2af82d3a335db1802814626b2e8519427ca5f7dfeb159",
+      "gitBlob": "4ba1bb8894c3cf82724c63dc8c6b89f3d3f5ad75"
+    },
+    "core/src/main/resources/data/tracks/crown-spots.csv": {
+      "workingTreeSha256": "9df7b0e5c7a55a55f209b3f7e4b77ab35d8e7ad64c56a2189dfcd36dc2df0dad",
+      "gitBlob": "57b7995c8e22f4f109c6bc97c97a2bef6ff4dc2b"
+    },
+    "core/src/main/resources/data/tracks/crown.csv": {
+      "workingTreeSha256": "7032a3158e2bf78b60c8ec9d5218298558ccd874b0d9ca2766d9c06f1174706c",
+      "gitBlob": "1bc2b39acf07b8b78bd7518dacf5f19f92aaee68"
+    },
+    "core/src/main/resources/data/tracks/crucible-spots.csv": {
+      "workingTreeSha256": "1ed949e2fa73cdb92184183958444918b23aac29528a97f78d4f070640219e5a",
+      "gitBlob": "f16fd62f675ed57538b6ec1d686b4238d6d8492b"
+    },
+    "core/src/main/resources/data/tracks/crucible.csv": {
+      "workingTreeSha256": "0a33ce95b65c01e193fec9b9848346249754135788ec3d3e80b872d6955af9ca",
+      "gitBlob": "be4dd4dec57541fb99bb978aa251a48e02c34518"
+    },
+    "core/src/main/resources/data/tracks/cutface-spots.csv": {
+      "workingTreeSha256": "77c8516da1b4305e8227d89a920b9320268db7d6eb3f210dd6b95d7f3b08490d",
+      "gitBlob": "23dfcd9b4e301d7688fde922b2d8f3246b34c9fd"
+    },
+    "core/src/main/resources/data/tracks/cutface.csv": {
+      "workingTreeSha256": "aa6f9f630f2389ccd5dd6273197694a5d1899dbe444ca272ff128eb7343560f9",
+      "gitBlob": "a93465352e48a84b9c64b71c7be7593b943a9478"
+    },
+    "core/src/main/resources/data/tracks/dustwake-spots.csv": {
+      "workingTreeSha256": "d4471d3d134f13f93e4e2348eac08a7d4f8c409e0fd90f809835274fcb29764e",
+      "gitBlob": "96abb70ced79783be8be6b0eb53eae32edc16c31"
+    },
+    "core/src/main/resources/data/tracks/dustwake.csv": {
+      "workingTreeSha256": "4cbe51c6a81736916d9402ae69413ee9492dee6e73c47a3edc9cdd10e20f2f70",
+      "gitBlob": "896f295d2094b7946a03dc37dde7a32a237236c4"
+    },
+    "core/src/main/resources/data/tracks/foundry-spots.csv": {
+      "workingTreeSha256": "1ed949e2fa73cdb92184183958444918b23aac29528a97f78d4f070640219e5a",
+      "gitBlob": "f16fd62f675ed57538b6ec1d686b4238d6d8492b"
+    },
+    "core/src/main/resources/data/tracks/foundry.csv": {
+      "workingTreeSha256": "f605d39c9f5eb2fc43a283f374315f8db1793c8369a640ce593397fd524ade6a",
+      "gitBlob": "6c4ac04d86e11c606af8f904cf68a9897d4a4071"
+    },
+    "core/src/main/resources/data/tracks/frostline-spots.csv": {
+      "workingTreeSha256": "1c5653ee95f4f96680db8008d6f9a2bb9e362bb05a4f2715de380d3bb039d56e",
+      "gitBlob": "bac3f78c250d1f7ca63acc67dd28f238116f754f"
+    },
+    "core/src/main/resources/data/tracks/frostline.csv": {
+      "workingTreeSha256": "4e1e74c652a81e50984a132121899f57f83b3478fefe53b02aa24e378c0f1e85",
+      "gitBlob": "ab0d1c2e67d860b3a1a07fa47a75851ffca6d4ba"
+    },
+    "core/src/main/resources/data/tracks/furnace-spots.csv": {
+      "workingTreeSha256": "433d2ca69be844f808dc37691b51034915f7f757c076ee71124a94bd0ed603cb",
+      "gitBlob": "e9f1cf6e86adac38acd9ce8a554ba2cf20c5e4ac"
+    },
+    "core/src/main/resources/data/tracks/furnace.csv": {
+      "workingTreeSha256": "7b3dd429818cf90b5abe4dbf61e3f9a8b14d5723d83c589e367f6cdb190b049b",
+      "gitBlob": "bb69d6d3506db99513440a617cea0c09ff354032"
+    },
+    "core/src/main/resources/data/tracks/haulroad-spots.csv": {
+      "workingTreeSha256": "736f60d978dd90454af8bcc2bbabe018d659d633bc9aefce869e22b48d8cd9c9",
+      "gitBlob": "c8eea9ff92016413f9b601c05efd62001e4e339d"
+    },
+    "core/src/main/resources/data/tracks/haulroad.csv": {
+      "workingTreeSha256": "76e2f24b00fb712b90a7899c55a345f1706a5dd3bc2c2124ef687df675d7b06d",
+      "gitBlob": "2ac888f60ff96795af363a79a3e6b7bff092bd68"
+    },
+    "core/src/main/resources/data/tracks/highpass-spots.csv": {
+      "workingTreeSha256": "8a7feeb8f0070bd09950e6d95795b7990a42ae1ac02a7da5933a646b84ad32bc",
+      "gitBlob": "d0b5b57b1b378deeb8e13e71295f31612aed9809"
+    },
+    "core/src/main/resources/data/tracks/highpass.csv": {
+      "workingTreeSha256": "35b376eaec4684d3a81a2b421274e7c87429904c6b19510f2ff0c4e4fbbba9b9",
+      "gitBlob": "2c67fd67a06e2dd54f4f1e11512d11226e4b358e"
+    },
+    "core/src/main/resources/data/tracks/lowwater-spots.csv": {
+      "workingTreeSha256": "7f9e55d60d3919087d66631d4eb0b0dbebda8741dc254af0120bd1cb6970b01e",
+      "gitBlob": "077edb5400a5989601b92314ab806a1f7c89aad0"
+    },
+    "core/src/main/resources/data/tracks/lowwater.csv": {
+      "workingTreeSha256": "05e302a94c9f406267f58e3276ec98fae30493bb0b8380acc6e2ec43e5563e21",
+      "gitBlob": "d398bab1ecef4436018087321f906a5aceb16ecb"
+    },
+    "core/src/main/resources/data/tracks/mirage-spots.csv": {
+      "workingTreeSha256": "3c15209ade28e71fcc853655484993593ce4df7363d14512deba5c4322381fc5",
+      "gitBlob": "69ab4a20b3c0257fdf7afddb4583b0f76097a40c"
+    },
+    "core/src/main/resources/data/tracks/mirage.csv": {
+      "workingTreeSha256": "c129265e401e0f43b401c6e205a909c9d0d6b4c17f79b8e0e044613bab434205",
+      "gitBlob": "ecf336b6dd96c14d39955cda8258b2fde4fcfb27"
+    },
+    "core/src/main/resources/data/tracks/railcut-spots.csv": {
+      "workingTreeSha256": "288d1d8fa91683f7ac600c6736552b2fb853693c2f2c0d32689ab71a16e5cf5d",
+      "gitBlob": "818f4dab5e4240e1c68e5b6e6c7cb8eb217cea56"
+    },
+    "core/src/main/resources/data/tracks/railcut.csv": {
+      "workingTreeSha256": "d0db078e33f3babde6587d04e13c75f793cd66d4cc1ad315406dea6ed79c1682",
+      "gitBlob": "9b2e8ce3d0d1ef5758d87290e17f1a0757659d6d"
+    },
+    "core/src/main/resources/data/tracks/redline-spots.csv": {
+      "workingTreeSha256": "1ed949e2fa73cdb92184183958444918b23aac29528a97f78d4f070640219e5a",
+      "gitBlob": "f16fd62f675ed57538b6ec1d686b4238d6d8492b"
+    },
+    "core/src/main/resources/data/tracks/redline.csv": {
+      "workingTreeSha256": "27ee831ff30477b361cc41a262d9d4303c8fff1208c52f1a59c29674921b3540",
+      "gitBlob": "9830470668a0f4174bce7702b3ddccd501714d62"
+    },
+    "core/src/main/resources/data/tracks/reedcut-spots.csv": {
+      "workingTreeSha256": "bb313ffee735523411f3c664104fb6e5d941e9f30540dd5aaba15f8c6934eecf",
+      "gitBlob": "1383a00fd52766b50f99d0790901d64d0b07aa41"
+    },
+    "core/src/main/resources/data/tracks/reedcut.csv": {
+      "workingTreeSha256": "1f1db4432eb9d2e730ee69f2f6332e3f4e8a5bfd0d5ec256ec8b72dcc011b7c3",
+      "gitBlob": "f034c5aeb0033dc7e3029d099b418b4f86db1064"
+    },
+    "core/src/main/resources/data/tracks/ridge-spots.csv": {
+      "workingTreeSha256": "aae28202019c4cfc037149272f7ea438c4a7b77024a30f6a7fd560c3cf467413",
+      "gitBlob": "93b2478a410a2ce362e6a2bb9cb95c87ff566bbd"
+    },
+    "core/src/main/resources/data/tracks/ridge.csv": {
+      "workingTreeSha256": "7d0dfc9b68a18b291844ae511b16ba87b269125721b502340e35b2b0697a9165",
+      "gitBlob": "7b2ec70dc6cce162eebf2bb2878e7543ad3ef82f"
+    },
+    "core/src/main/resources/data/tracks/runoff-spots.csv": {
+      "workingTreeSha256": "1ed949e2fa73cdb92184183958444918b23aac29528a97f78d4f070640219e5a",
+      "gitBlob": "f16fd62f675ed57538b6ec1d686b4238d6d8492b"
+    },
+    "core/src/main/resources/data/tracks/runoff.csv": {
+      "workingTreeSha256": "9c421226c63723607d0c76c4aac31983148de870ade4cce4037cddb2f89ca977",
+      "gitBlob": "57b19e7817e45a014f05c2156f454c588ca11858"
+    },
+    "core/src/main/resources/data/tracks/saltline-spots.csv": {
+      "workingTreeSha256": "57fe84a09d5025a61191858eddbcbdc64c7e9d3dec5b0a5850a25866e55d2c2f",
+      "gitBlob": "0f18e2feddc590afd9d94e3ed674e252eded4825"
+    },
+    "core/src/main/resources/data/tracks/saltline.csv": {
+      "workingTreeSha256": "7c03b05cb7cb432bcbd710819f3b050eb2820b0626b63d109b9b9898cc552c66",
+      "gitBlob": "e87f04262f81ffc1864e09c9cd8f7a1c5f443f5e"
+    },
+    "core/src/main/resources/data/tracks/scree-spots.csv": {
+      "workingTreeSha256": "7d4716f5b050e43396b47048925940c318cc6f69617dc8064bedd0376d876ff9",
+      "gitBlob": "9f273dd1f676d6e2e283b95bb516d4a10a12ed47"
+    },
+    "core/src/main/resources/data/tracks/scree.csv": {
+      "workingTreeSha256": "38cb988cdde6e6ee715f25f07df609cd1f68ae5fdf5da8a725323e98d4b22b22",
+      "gitBlob": "5177c222bc295d8938d8bdaeef882e24d917a34b"
+    },
+    "core/src/main/resources/data/tracks/slagway-spots.csv": {
+      "workingTreeSha256": "f1ce840c7cfe6b1e89a9df6f7d410937eb1799eef0600d9505be5c36dcc578bc",
+      "gitBlob": "d53cb0597346a929682702b21ff89b25dce79496"
+    },
+    "core/src/main/resources/data/tracks/slagway.csv": {
+      "workingTreeSha256": "21499bac173d57dc9fc429a583f49d3144174972a6dd0ed869dca171bf899e5a",
+      "gitBlob": "3cf16cbc5915c4e5211c132c4e67fe2f958653f8"
+    },
+    "core/src/main/resources/data/tracks/sluice-spots.csv": {
+      "workingTreeSha256": "52167d6225eee809b7973d071132c65667c73b632010001e881f70f49b1b55b2",
+      "gitBlob": "987e9cbef7719c5dbbd34b9818f99f08c0aa70d3"
+    },
+    "core/src/main/resources/data/tracks/sluice.csv": {
+      "workingTreeSha256": "56d9350b8db55481cd4bc928b3a77e3bd18915bfafee38c279ffc2ff2dbf4ac5",
+      "gitBlob": "a5e83741b91c2e06ff085d66fc677775e6246eb8"
+    },
+    "core/src/main/resources/data/tracks/spillway-spots.csv": {
+      "workingTreeSha256": "e5646c60e5264ff8ec8e168293d5c28bc5e44a23d6092616bfe43a6f8d3c56b8",
+      "gitBlob": "dfc83c8e23efde3bca5ecbba0f0ab402f472bc61"
+    },
+    "core/src/main/resources/data/tracks/spillway.csv": {
+      "workingTreeSha256": "e88d9da94b960b59e76dd0242a3227fefb05893744e29e007462331cc19b3137",
+      "gitBlob": "bbbf7dcc15b05e906b8ac7c29881013e1b76dfd1"
+    },
+    "core/src/main/resources/data/tracks/summit-spots.csv": {
+      "workingTreeSha256": "e7fa9b598095c2b97567186d821ecafe181289078912d494fd66af3a427c2f26",
+      "gitBlob": "5ee516487783704e5eb162f76c36a9af93ecc2e9"
+    },
+    "core/src/main/resources/data/tracks/summit.csv": {
+      "workingTreeSha256": "860aff1b5c26b73d70adf93d4f2cd24928f3201b2a8610c9e874cf8709a87f6e",
+      "gitBlob": "e6e82087ccf9bce3f8d7eec9ec9e78882bfa567a"
+    },
+    "core/src/main/resources/data/tracks/sunspike-spots.csv": {
+      "workingTreeSha256": "0fd06afb9e89a4feb56883a695a441d8034438b97af39a9bba009b8c95a554e8",
+      "gitBlob": "923dd12b2340c1f85ed9f4787215d03d8e9cd6c5"
+    },
+    "core/src/main/resources/data/tracks/sunspike.csv": {
+      "workingTreeSha256": "e7068fa03ec735df61f3e9abc419b20d082458fee6ab75f3998060c231cccc19",
+      "gitBlob": "8ab18f25e367149fa267f83384393fab40d1068e"
+    },
+    "core/src/main/resources/data/tracks/switchback-spots.csv": {
+      "workingTreeSha256": "1ed949e2fa73cdb92184183958444918b23aac29528a97f78d4f070640219e5a",
+      "gitBlob": "f16fd62f675ed57538b6ec1d686b4238d6d8492b"
+    },
+    "core/src/main/resources/data/tracks/switchback.csv": {
+      "workingTreeSha256": "16cb7a5dfb349079aff0e0f157d0a5b06c313844788da8e9af77a1222a7bc9a9",
+      "gitBlob": "27f690350e196a9cf0c3d22d1c91bbdb71ccdeae"
+    },
+    "core/src/main/resources/data/tracks.csv": {
+      "workingTreeSha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c",
+      "gitBlob": "4589004e5e30eed818453be476092599fc535959"
+    },
+    "core/src/main/resources/data/utility-rules.csv": {
+      "workingTreeSha256": "e1eda493967ecc227bc1b52a17860604397522b0334b446dc04cae73f2e4ec29",
+      "gitBlob": "8e5cb0f3771da5755d8d5b4186e2f254b3f186e0"
+    },
+    "core/src/main/resources/data/weapons.csv": {
+      "workingTreeSha256": "950e6b88d8ca351ff3d00fc23d26f2dcef68f3e01ecb0ac06593d4fe21f05a50",
+      "gitBlob": "fabe7fb51c59fe6fe4fb7d63e7e4429031122b2e"
+    },
+    "core/src/test/kotlin/dev/deathride/core/AbilitiesTest.kt": {
+      "workingTreeSha256": "f140081a71ba50906790e2b3391d3c4725f4f5e19ecd29929213c0a78273874f",
+      "gitBlob": "ffecd6d9eef7e0c8f7581c5e4454216a1caa377c"
+    },
+    "core/src/test/kotlin/dev/deathride/core/AbilityReport.kt": {
+      "workingTreeSha256": "b4bb9f6417b65df4901c31f60a9bf4e9939dac5d2c3ef7f4bf980eedc459643b",
+      "gitBlob": "f93c8ae81452d37017722ca36c1be07e536085b4"
+    },
+    "core/src/test/kotlin/dev/deathride/core/BalanceReport.kt": {
+      "workingTreeSha256": "8a1dda1c6344e99acebf2fee7b180ba21eb4c458debe0b471d61f90b17dcd49b",
+      "gitBlob": "cfe3dd7a18585369e1b80cc690d0e10e2346ab5f"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CareerTest.kt": {
+      "workingTreeSha256": "6049f5c6bb89978f5d0940cbfdbc65e9dfa5d7786fcea1ad29cf5b514cd67435",
+      "gitBlob": "efb3cf010649fc3efc43e36d8ae941355c8b58fd"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CareerV2Report.kt": {
+      "workingTreeSha256": "e0b5b60f752b34d971568e72df63a552c32898a7292027deb45b2036fdb23025",
+      "gitBlob": "1123eec1d583d4d7ca3e9f84b3de25b03804a5c5"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CareerV2Test.kt": {
+      "workingTreeSha256": "03aebb1c61fc52b12e24f3f657a40060fea1bfe1fd84f4686c897c638d508f11",
+      "gitBlob": "d50c3240f01b34264fe3474cd766fcefd9d048c3"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CarsTest.kt": {
+      "workingTreeSha256": "cac6a1b88c29a8ddff7fc77acea09035a7dd4843a6a70fb689a9e9c67bedbccf",
+      "gitBlob": "4c5287f2637507c58d489181f27b80f2cd65d51b"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CombatDepthReport.kt": {
+      "workingTreeSha256": "c095e4bce255f6a64932ecccd630cca14ced7029f5e972eb6559e1d5e2f6ba4d",
+      "gitBlob": "9a6ba7e85b218eef9649958bd069213a1ed70272"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CombatDepthTest.kt": {
+      "workingTreeSha256": "936132518817397958a15d7c8144224f59f6778f17a9693c911454c7a7a6cde7",
+      "gitBlob": "a6b09bed8f8254d236678411f9aa1bf2fd1c50cd"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CombatTest.kt": {
+      "workingTreeSha256": "8c6e83aa3f452d029d7837deb12e4e23ecc42986091bb1264f077bfc43fa79c1",
+      "gitBlob": "5febf53fb596f92d6f85a78c941328d86f0bb662"
+    },
+    "core/src/test/kotlin/dev/deathride/core/CommerceTest.kt": {
+      "workingTreeSha256": "724459b18e826e24d4aaa9558055ccad29bebcdb41ba7c7c7ca7cad37ed8f2b6",
+      "gitBlob": "76fb1b3f600d33d88617dd3e497f55c87ae285c0"
+    },
+    "core/src/test/kotlin/dev/deathride/core/DriftLabReport.kt": {
+      "workingTreeSha256": "947be2be5a7a8c3408ef3c96dfb5f0310b5628548dcd2d63234c7e449a31dbf0",
+      "gitBlob": "2bb82925f68095aa56fd43f622ba8d8cc85523cc"
+    },
+    "core/src/test/kotlin/dev/deathride/core/DriftLabTest.kt": {
+      "workingTreeSha256": "2ddc7bf8cc88f04174e7375f4b27a90c7d756c741640d2913a6e17db2e0b0e26",
+      "gitBlob": "b3841837a7fc2d1214e8c20e51e12310a2cdf55c"
+    },
+    "core/src/test/kotlin/dev/deathride/core/DriftModelTest.kt": {
+      "workingTreeSha256": "0ba60833dbb7aee58fecbeb18bff55ba6f204424d1df235fec10df79092adae1",
+      "gitBlob": "c73af61f4a6b10bafc49649c5f044f4d2da589ff"
+    },
+    "core/src/test/kotlin/dev/deathride/core/DriftTest.kt": {
+      "workingTreeSha256": "dd252d28821c970f3738425d0034616213eca92ac4537e2b3fee7fe298f4f237",
+      "gitBlob": "b83f75bf9739ae68edbc522e5e172aa157a42a7a"
+    },
+    "core/src/test/kotlin/dev/deathride/core/EndurancePilot.kt": {
+      "workingTreeSha256": "2bcc693adbb02fee491ca4accf02d3f0f5e27f8ad2a6b15c5c501834cdee32d6",
+      "gitBlob": "280deee78af323d4e55a5d4c62a5f99da2326448"
+    },
+    "core/src/test/kotlin/dev/deathride/core/EnduranceTest.kt": {
+      "workingTreeSha256": "03c3a42333ea84f1ddc29d4e6a0e73fa5161f1d0ad9f46e1cae6036e4125e8e9",
+      "gitBlob": "cfbd99ef15c91fba5487ef9132d403825e548d2b"
+    },
+    "core/src/test/kotlin/dev/deathride/core/FeelTest.kt": {
+      "workingTreeSha256": "f589d6d2a57609fa5e0b484ea2106904e59b7972f4e587c36be9fc6b202d6d01",
+      "gitBlob": "b1a370216bc61b5422137a98730a2cb4b2c5b63d"
+    },
+    "core/src/test/kotlin/dev/deathride/core/GarageTest.kt": {
+      "workingTreeSha256": "dafdc996740e271cc97d358981821dd57640a135239f1e31552842bd3073bddc",
+      "gitBlob": "493622c5b8b5c9080094f02b7cf0504ad07c0b67"
+    },
+    "core/src/test/kotlin/dev/deathride/core/MovementTest.kt": {
+      "workingTreeSha256": "3d2b639b1ddb84dfa8d82e381f1f4c6a17b19d003cd5617c91f28bc453b88243",
+      "gitBlob": "ce3106f0b92148c89874a5dc86aded130442c126"
+    },
+    "core/src/test/kotlin/dev/deathride/core/ProgressionRosterTest.kt": {
+      "workingTreeSha256": "9ee4fb759cec340358d81ee1ba4c388c0161e561f332904e544cca89fbf86995",
+      "gitBlob": "bd1aade466d40d6d4711ba7828c8a2900753e4d1"
+    },
+    "core/src/test/kotlin/dev/deathride/core/RenderSnapshotTest.kt": {
+      "workingTreeSha256": "6f4de2874de0f2b2fe89c907fb2699abb4e6e834735e10f3ad70cf4702abc072",
+      "gitBlob": "e94c8875bb6e23a661c142eb0c638991e61e7d3f"
+    },
+    "core/src/test/kotlin/dev/deathride/core/RosterReport.kt": {
+      "workingTreeSha256": "3c12e5427cf0b94c867594cc1bf35da2b6c2fd7c77ad8d0ffcae3b167f888d23",
+      "gitBlob": "75484049263c8a8153c970819ab1edc0a77e7420"
+    },
+    "core/src/test/kotlin/dev/deathride/core/RosterV2Test.kt": {
+      "workingTreeSha256": "8ee7361df171e3a2d8db3e0c1a789ee4c8c3250fa59bc9ffbdf16b9a69dbe9cf",
+      "gitBlob": "31cb35c6fc9695538865bef0632967823dceff41"
+    },
+    "core/src/test/kotlin/dev/deathride/core/SoakTest.kt": {
+      "workingTreeSha256": "f440f4210abd00c6ded8a2b5a19c016593695ae942d4f53fc2b48ee98982ac36",
+      "gitBlob": "7cfe0ec2b54e953f1ad6f34933b116fad8dca2dc"
+    },
+    "core/src/test/kotlin/dev/deathride/core/TrackContentTest.kt": {
+      "workingTreeSha256": "c5cd0d47613703fcdeb7d8a41fb0b9befc37c9b001d81d82111dae1ad561cba1",
+      "gitBlob": "881fcf49d7b8d16e9725c986c3beb24e98c0d4ef"
+    },
+    "core/src/test/kotlin/dev/deathride/core/TracksTest.kt": {
+      "workingTreeSha256": "ae69bbe9f088c6f8a73a447657da3336d5de1b5566921d01c794012bb56e1ee6",
+      "gitBlob": "399da49afb2240063b56af99b609ab6939c98f46"
+    },
+    "core/src/test/kotlin/dev/deathride/core/VergeTest.kt": {
+      "workingTreeSha256": "76a15d14fb806bdc57135a0dcac785ad3b0e624256f37776496cdcb8d748a53c",
+      "gitBlob": "57b6feaaf187b7a7ab28acf1478fb7045dd4d278"
+    },
+    "core/src/test/kotlin/dev/deathride/core/WorldTest.kt": {
+      "workingTreeSha256": "938fac484185c35a6c0e56b4c3f3214d6e7550ba32ef0cddc2df4c818def9368",
+      "gitBlob": "763353db5314bfb19d706302103be56b676e640d"
+    },
+    "core/src/test/resources/legacy/c3-device-profile.sav": {
+      "workingTreeSha256": "e0d63a8b42941fad31ecb170c0f7db3747cbd46b76416d6ba073591bd8210976",
+      "gitBlob": "63adb1f7e45861e8b86458e38b5ab66680430ca7"
+    },
+    "desktop/build.gradle.kts": {
+      "workingTreeSha256": "3675da4e1a3dbf65a8d0d565c4115b6e194bbd4829ed3437cbcd2f607a329277",
+      "gitBlob": "01044fd3d707b0d8f3f14ed51f1af7a327ca513d"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/AllocationAudit.kt": {
+      "workingTreeSha256": "e9827aaf43c3e53b0fe3ea41706c2961a5f0f086e7baffd65516fd0a47bc1b43",
+      "gitBlob": "c0632d5ffdc4ad9a5370731b66ba53536cca58ed"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/AtlasAudit.kt": {
+      "workingTreeSha256": "36e3d3e2a88454287c63ee55d4d01b4ad7be644562607cbdd99baf65767b6f33",
+      "gitBlob": "e9759b76c54cd7982eb30267d3dabe0d8e996297"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/DesktopFonts.kt": {
+      "workingTreeSha256": "005d8271f8d4c1de57ee90168f4369ef81e4ee876eb41948efc2747f49b7f629",
+      "gitBlob": "b15bfd86f5ec6a2f41a6b0a75c646e558878ff7d"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/DriftLabScreen.kt": {
+      "workingTreeSha256": "79ccb2d0516ed9a71379b7b36ef64f6001df4fe095f1ff37477648263a73ee93",
+      "gitBlob": "f907235310ac35cfe3b085f4207c63660b37376c"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/KeyboardAudit.kt": {
+      "workingTreeSha256": "aa8c86d439111889e4316fbd13f08cd65c2b4ea46c815f624e25b0f12b9f4c52",
+      "gitBlob": "fbdd9c9432047d16f459a09e5dc57a242511fb2b"
+    },
+    "desktop/src/main/kotlin/dev/deathride/desktop/Launcher.kt": {
+      "workingTreeSha256": "b2bf321d581342e5fb4d91e96c11c0f3477d2b4ea8bb9e89a0479a104934095e",
+      "gitBlob": "b2f6b40e46341d70cadb9a0687edb11d2bc5bc9a"
+    },
+    "game/build.gradle.kts": {
+      "workingTreeSha256": "ebd4267914907da949f41842978c3f963f5ca375d6a65122faeb60ce22cedb50",
+      "gitBlob": "02dd997da41b20707d0dc46209b3018f33ee4716"
+    },
+    "game/src/main/kotlin/dev/deathride/game/AbilityPainter.kt": {
+      "workingTreeSha256": "23f9b15bba21c3b4a270afdacf92599754fd5c792bbc5126f3395316e5ae35b0",
+      "gitBlob": "0f6a1d3b6bd61d39efbeaae1dce466b4818e1a81"
+    },
+    "game/src/main/kotlin/dev/deathride/game/ArtBindings.kt": {
+      "workingTreeSha256": "d96d9cb3539f6fdf2807c6f85259baeb38a340bc97a64f918bc69df69ec4565b",
+      "gitBlob": "f93082ede7dedb8483c82ce4dcd7cc4fed5463b6"
+    },
+    "game/src/main/kotlin/dev/deathride/game/AtlasArt.kt": {
+      "workingTreeSha256": "63009bd7b804aac4591a5d39b83ea36dee4d9ce37cf82e1efa2fe8a79819d740",
+      "gitBlob": "b414803a750b978ecb8a49fb0733f59d3b051b9f"
+    },
+    "game/src/main/kotlin/dev/deathride/game/AtlasEffects.kt": {
+      "workingTreeSha256": "a778b9de32f0429113298da6a8100e9ebb27d98f761bcf85243cbf34823a7a48",
+      "gitBlob": "01eac0189f08e038da0134685d8631925168d41e"
+    },
+    "game/src/main/kotlin/dev/deathride/game/CombatPainter.kt": {
+      "workingTreeSha256": "91fb3c1ffb3e56d7d8379b498e6e44f8f964cfd3c27fb57161eea73d4f5d653d",
+      "gitBlob": "fcb4d21ec4cc8ac9ecac428907c006cd22bba0b9"
+    },
+    "game/src/main/kotlin/dev/deathride/game/GlyphLayer.kt": {
+      "workingTreeSha256": "ba94c550c08213b2adae1fc531eee6db77b093d75ce4f549a7dca5c7d0a22204",
+      "gitBlob": "ee03320d9b9a15a0186a9709f13d90726c12bfc6"
+    },
+    "game/src/main/kotlin/dev/deathride/game/HandCutFont.kt": {
+      "workingTreeSha256": "687c9da2680f930bc254046361cb563c3483df836463b8e94de4130c044fc84f",
+      "gitBlob": "a0f613e3504f28102b3e783f5b790bc7963e38ca"
+    },
+    "game/src/main/kotlin/dev/deathride/game/HudTheme.kt": {
+      "workingTreeSha256": "5318bdf407516b37a0caba30dae9a40c3fde44eac9fa5bc2149b6edb15ae9e83",
+      "gitBlob": "f7b6e9b404bd77ddc3dcc30b1a49b25c20edafe1"
+    },
+    "game/src/main/kotlin/dev/deathride/game/Presentation.kt": {
+      "workingTreeSha256": "77938ee5ff7db016b1951f15e30524934b7e20a95c19e3acf2e0ea805c1b487e",
+      "gitBlob": "3e0e950ce70d6536316bebf7e88a213fb9136e56"
+    },
+    "game/src/main/kotlin/dev/deathride/game/RaceGame.kt": {
+      "workingTreeSha256": "a5b90542b7465306e09e09bf2ec87355e4b87946949402a29165f7153fedf2e3",
+      "gitBlob": "5029e23c8a2cba22484588ab71ddc5b2741394af"
+    },
+    "game/src/main/kotlin/dev/deathride/game/RuntimeFonts.kt": {
+      "workingTreeSha256": "b9d229011589cd9b3fd8e9c2b0088a4240dc69548f1e253e9073ef2c9bfaa8bd",
+      "gitBlob": "fdd6c76c2bafc38eeacf022c08294c0441a71bdf"
+    },
+    "game/src/main/kotlin/dev/deathride/game/TextureBudget.kt": {
+      "workingTreeSha256": "b8c75a476e4734c30ac69c71e5ef553369ea4b388661267df61c7423c5487af8",
+      "gitBlob": "0bd965de5e382efe49b0385b7f1c8d18b3bb57af"
+    },
+    "game/src/main/kotlin/dev/deathride/game/TrackScene.kt": {
+      "workingTreeSha256": "c28ab7e2f28f3058bdb9f9e159dfa47b937be9c1fd8ab691d820064768389b08",
+      "gitBlob": "8f7227a2ee67d6baa91958704409c2e252fc5b29"
+    },
+    "game/src/test/kotlin/dev/deathride/game/AtlasArtTest.kt": {
+      "workingTreeSha256": "694245f54992211173085b9b62a46c494fee7e9b6337d01c2e468701eb9bc687",
+      "gitBlob": "debd3dd8dec1d3c54167f526488c2563ec1c952e"
+    },
+    "game/src/test/kotlin/dev/deathride/game/HudThemeTest.kt": {
+      "workingTreeSha256": "4e2ff96a678551e24b1e0f4aac141f976193c86adad018497ee33a48d0001933",
+      "gitBlob": "278fc25fb80df9c858b63e1661a60a80489041f6"
+    },
+    "gradle.properties": {
+      "workingTreeSha256": "bc6f3f6e90317dc0a4104469145e31af36ac4c8a3b856f96f338f37ca4bebc08",
+      "gitBlob": "77fd9d6ecaaed8f45bdbfb6d1095057ac08a5a24"
+    },
+    "link/build.gradle.kts": {
+      "workingTreeSha256": "306de8a104a0200c92bc05941a4340f233b6ba3b4e41635b8f0a4ae7c1fb85fe",
+      "gitBlob": "d34a8ce92f0ebd939d46057b8c3b57c86a5c9550"
+    },
+    "link/src/main/kotlin/dev/deathride/link/Metrics.kt": {
+      "workingTreeSha256": "5d137fe08d6639d2426427518fff684c9a132ab1e86c0670072986329ade4661",
+      "gitBlob": "1cb3641641d23439f47b6de52b4c65acf7e88782"
+    },
+    "link/src/main/kotlin/dev/deathride/link/RaceServer.kt": {
+      "workingTreeSha256": "8cd95d2856130001716390e18245f91cd7d58f36eaf5f78afaf4ee12ec5c8490",
+      "gitBlob": "392b78b23250a1573d38867a22468098e1497f00"
+    },
+    "link/src/test/kotlin/dev/deathride/link/LinkTest.kt": {
+      "workingTreeSha256": "a0f74be44f1c52e34c0dc4e2038dd0da7f0575d468e1ef6d1a34c2efdecc99c0",
+      "gitBlob": "7e7410c847f367acdfa6cfa3e82e590e45153089"
+    },
+    "settings.gradle.kts": {
+      "workingTreeSha256": "122b0189404d7cc8b249568a4052589ce7aa8cf259119fac941d720732da3114",
+      "gitBlob": "b339f410e8ae6dfb03fa6b9b817693b0e5e4e7d5"
+    },
+    "tools/ability-controller-check.mjs": {
+      "workingTreeSha256": "b341f7c6309298e6fd73b7efc4775c722c5aedaf52baec82bb589011da06e924",
+      "gitBlob": "ef1a010f5445f8bdbe69c71cbcaa02038c0c734c"
+    },
+    "tools/ability-evidence-manifest.py": {
+      "workingTreeSha256": "9358e4f08af75b6945d026360fc5dc10ca98361aa0da96b579cd0504dc165b4f",
+      "gitBlob": "b6a4193412fa139e598b44ff6a5db168537bbd3b"
+    },
+    "tools/ability-stick-probe.mjs": {
+      "workingTreeSha256": "cdd06f5f8afef1c72399ba200f45321fb7116d3a80fffaf6209f9686103b31eb",
+      "gitBlob": "5b3eafb8cc6953a028f63d6236d051d4775a247c"
+    },
+    "tools/archive-abilities.py": {
+      "workingTreeSha256": "e49865e690aeadd61da88303eb0d10a62cd377c17c742d58d3a614591879dff8",
+      "gitBlob": "5c6ee85e90ff3c4c36b93507043d1d3ae23ff40d"
+    },
+    "tools/atlas-check.mjs": {
+      "workingTreeSha256": "6c490f07a91b659e734b4246d9de75e4a1439a4336bd7cd82472c23907f8623e",
+      "gitBlob": "a30a5b5e54cd32ee3a0be33f0d60e843f36adfd8"
+    },
+    "tools/audit-abilities.py": {
+      "workingTreeSha256": "005f116a77a9287dd2a5f1c507e572e4f8f6ef82a7c4a17823cd87f80c3dc7d1",
+      "gitBlob": "b4455b2ed5b401da6316a72ad57bc0415ac195c7"
+    },
+    "tools/audit-ability-stick.py": {
+      "workingTreeSha256": "ce90222dc588f63e41b19924aeb6e338f683cd9c1e2606d60e147edf21b56b5c",
+      "gitBlob": "36579a9fdf0f32ef8dd32cd18d60800797714792"
+    },
+    "tools/audit-boss-ceilings.py": {
+      "workingTreeSha256": "fb1783fe32957769f995a5aebbc68d2142619286f382bd6a459a09a29190f4d8",
+      "gitBlob": "4908819f7800c07e6f4699aa1e0e2105acfc726a"
+    },
+    "tools/audit-career.py": {
+      "workingTreeSha256": "c58c716e4e9bd5d30dc9a2d21e12880e3a8fcf786c824ca4df011e6de8bf7f6c",
+      "gitBlob": "de10d62666ca71e99b84a9d27db6baf96006c8c7"
+    },
+    "tools/audit-combat-depth.py": {
+      "workingTreeSha256": "95590082445301a1e6c5ef4cffab5a8b75ae4c6a96570819695bce9cce32c787",
+      "gitBlob": "d5cc437a75338ef653221ee093952957069d4331"
+    },
+    "tools/audit-roster.py": {
+      "workingTreeSha256": "ded0e6509962b86f3ec522d3f9346195a7259c89f6750c7756c97aded3681df3",
+      "gitBlob": "1b0afc5e9e3e9b6e985c16daf01f2a5f377da075"
+    },
+    "tools/author-career.py": {
+      "workingTreeSha256": "e55956c1225dcb0806bc4349498d9dde4ae8caa793a9092f99de9f048ec1d5f6",
+      "gitBlob": "3375394e1c5be20b9bbd5f7906478123e69038fc"
+    },
+    "tools/author-tracks.py": {
+      "workingTreeSha256": "44947cb526b451f710802754412f1ffc4baac7d12f4e233fb4edbeca68aacc15",
+      "gitBlob": "b9da1ca8d70ba1519e20069d7dd4b8b46d51fc4d"
+    },
+    "tools/browser-check.mjs": {
+      "workingTreeSha256": "201c46043f251aa496a9c4f2ab8dc5a0009b64b737e9965927ba0eb85d14477a",
+      "gitBlob": "30f18d9d2187a528315a6e7995513f39aed2c6af"
+    },
+    "tools/career-check.mjs": {
+      "workingTreeSha256": "2a1e0a90064a75260e1a23373bb5590b877e477b3a1ba9f16ff6b8c7b22710af",
+      "gitBlob": "23b6883c2a314c4b72499c775d29da5a9390e9d1"
+    },
+    "tools/career-idle-check.mjs": {
+      "workingTreeSha256": "a4f93802f3e4ae132509311b4c28e93fa80a6f48da43913a0fdc6c3fad1852c3",
+      "gitBlob": "f5532a6a130622805f02f2012584f1861217d75b"
+    },
+    "tools/career-v2-check.mjs": {
+      "workingTreeSha256": "28311a0e6f4f738a8d161c412ac76d0b506796f10ed06b659930a12fc6c8546d",
+      "gitBlob": "216ce08b3fcd4c98a8809eb34a476d2330340fb2"
+    },
+    "tools/check-ability-audit.py": {
+      "workingTreeSha256": "965b04438b9a0ea85a0111d04671680b4f99d08a450571b24e6bfe57ea4b5a2a",
+      "gitBlob": "bb8b8179139e8388478fc777fc6e808a8db56730"
+    },
+    "tools/combat-check.mjs": {
+      "workingTreeSha256": "3f048a31f98d453dfc792637039cf370cbeadd6fe670f8057302436dcbc0bfbe",
+      "gitBlob": "2bbefd30e95765b30dc5c9ad746fca18d7501ec9"
+    },
+    "tools/commerce-check.mjs": {
+      "workingTreeSha256": "3a26a275fb6fab105b8db5f38caa0e424883c5a5248a8292c439b10f1b4a549b",
+      "gitBlob": "1dcb1bafd10e910e7e73c40a65640070f90e4f9e"
+    },
+    "tools/compare-mine-radius.py": {
+      "workingTreeSha256": "c8e48c7da540acb73c9fd277bf598783855ee52f75784f0b87847763e3bfa3c8",
+      "gitBlob": "86b514e9cdcfaf179116dcd7ea0f65d5aa985ce1"
+    },
+    "tools/content-check.mjs": {
+      "workingTreeSha256": "f28da835da6049efc36d54ebeaf34e24623d811a42332bee145d24eae025dc31",
+      "gitBlob": "ec49ced4c8c981f457f53d87b7c699eebddc448d"
+    },
+    "tools/drift-probe-report.py": {
+      "workingTreeSha256": "c71afbd83de8e7af13aa49d574b9c8ffeefe429c8a2ed140892acfca34afdf76",
+      "gitBlob": "22eb7c28112a76163a74a145cf7a08d5b18537e6"
+    },
+    "tools/drift-probe.mjs": {
+      "workingTreeSha256": "26c1de727b000e9d13be3b24fe935a7859a3c13afe5b532a541be0e2fb5031d9",
+      "gitBlob": "8a57ab99ba994dfa48568bfb580224b84ea5746d"
+    },
+    "tools/drift-report.py": {
+      "workingTreeSha256": "da5dd87dee4fbadbefbddd4cbd5b844e35bbeca2c2f857d8902b48213b63d944",
+      "gitBlob": "6aa15a47184a06bea57970e6513efdb426c6086d"
+    },
+    "tools/duel-hud-check.mjs": {
+      "workingTreeSha256": "a711e2b7b47dd8cc81bfca58950d2a8590218e20d0c4148cd59195e709320938",
+      "gitBlob": "485a539d1fac18fb3a1c953e2ef614af4285471b"
+    },
+    "tools/economy-structure.py": {
+      "workingTreeSha256": "c2d24cadef6663cb3bc05673292d07cdbc533eb3d1d56c1a2b0993836604474f",
+      "gitBlob": "1c4a8c00d4a6587c028d10542781a6f07e8d66ae"
+    },
+    "tools/garage-check.mjs": {
+      "workingTreeSha256": "eded5461fb0e229f580f75bdd1267f331dd375ebb1e9637a060aaaf3f902646c",
+      "gitBlob": "0916b47185df9cdbc392d8859706af9459285ec3"
+    },
+    "tools/hud-art.py": {
+      "workingTreeSha256": "c276c4a8078f46a59de1c1a66047161f7f7c21e871198515bd71fa90f69b855e",
+      "gitBlob": "370b546bfdf82a716d6c1e2a64f874bf5f053861"
+    },
+    "tools/hud-balance.py": {
+      "workingTreeSha256": "f516cfb27ae8f4b37cfdca1b0922fa75d56a4df301bbd0269b792952302df7db",
+      "gitBlob": "ebe7cab51bfe38258eb453854ee327b258ad2f66"
+    },
+    "tools/hud-browser-check.mjs": {
+      "workingTreeSha256": "aeee16e442321fa5be7043326c2e3ea659df53ffca6ac0b7602d570003bd79b8",
+      "gitBlob": "f6a27fc3a5aa0b095bf147e486e8daf0275f7079"
+    },
+    "tools/hud-browser-suite.py": {
+      "workingTreeSha256": "560a595adc78c3687a517c729032af9b04d0eda4742a8c99a632c33fb72f17da",
+      "gitBlob": "56de6f74310dc12ffb9ceb718326be1e171169b3"
+    },
+    "tools/hud-device-gallery.mjs": {
+      "workingTreeSha256": "4a0dd558891d483f01f65393f7fe0463ccf3cd5982fa7a938fe0ab0781be0cf9",
+      "gitBlob": "1555661fd3f724c60cb59ff04a624719b5df02c9"
+    },
+    "tools/hud-final-audit.py": {
+      "workingTreeSha256": "1a3782faf67722edcebd6c235cfe6a1cc4b8c2f2058ba799a5e00046f5d123fe",
+      "gitBlob": "87c9e664d52077aed6486ffa9609f9d60debf70c"
+    },
+    "tools/hud-header-check.mjs": {
+      "workingTreeSha256": "cf8b4a2ea7bae005e0ed87e9e4e141358357336039ab2b108a3478c83aafdf6e",
+      "gitBlob": "c5a8b093ceab252c86432bc87c85e549289b03c7"
+    },
+    "tools/hud-pack.py": {
+      "workingTreeSha256": "e0c5ee9aa0e645f774a00db2fc45de8697861a3107a8d7cb455f65115e2d414e",
+      "gitBlob": "c40e63d3e8badc07a19506b46df65ae45fc9f4f9"
+    },
+    "tools/hud-stick-check.py": {
+      "workingTreeSha256": "0213109dd5b31c82506a7a20b535f15a838a094d0f0021c24f87334f062343e6",
+      "gitBlob": "f8f6d324ec2ac34e50daee4d208d2c98a238e99c"
+    },
+    "tools/hud-timing-plot.py": {
+      "workingTreeSha256": "739e022332888223a4751f628b6b2f334d041180ea99393f26f7dd7fbac3f462",
+      "gitBlob": "2b92890c284f590ac6fae2cce95d7629a38c6402"
+    },
+    "tools/integration-career-check.mjs": {
+      "workingTreeSha256": "7c5988eefb7f29ab19edebad9c6ad9c67c04ed862cc5de23e3b06464acc0ddb4",
+      "gitBlob": "6bb53658341928a47b76bd46479f48a622b1ebc4"
+    },
+    "tools/integration-soak.mjs": {
+      "workingTreeSha256": "74503d8ed4899ad7487a251028798c47deb31b592bc02c8a78ea281deaf5c452",
+      "gitBlob": "0253bc0110e6a80d54052199622b15fb8621eb9c"
+    },
+    "tools/make_report.py": {
+      "workingTreeSha256": "aa46a263e6a4b39eba4b011bb7076a1eec5d66c0d928727720e1b465093c427d",
+      "gitBlob": "dae8482efe673ec4fdd636ee37d1a88d447ca96d"
+    },
+    "tools/pack-career-evidence.py": {
+      "workingTreeSha256": "a5213ce8cc543a51cbe4a5dd84646a53b41be072cd642087c61489002fee3263",
+      "gitBlob": "fd2b7201ac2393be6591bf448587b83714e97026"
+    },
+    "tools/pack-integration-career.py": {
+      "workingTreeSha256": "d4da6ce6a68f65f0b3986e94a39b9431adc8d1d4f89761ae44edd239e6e772e7",
+      "gitBlob": "79c2f5ef0a6a007c9c0ebbe711148b48cfdd64b8"
+    },
+    "tools/pack-integration-device.py": {
+      "workingTreeSha256": "3b1e47a2227ae99ab9b0c223b88f678203695d823c1165f696447cbb572a69d0",
+      "gitBlob": "7b58e18c47c046cf03fe3abc2a4b575e4c922c35"
+    },
+    "tools/pack-integration-handoff.py": {
+      "workingTreeSha256": "adb052d7691d9a9a5ba5b564984a33faadea0c4c86cde3450dee2dde60f4d8c5",
+      "gitBlob": "e8d5b80cca2bccd51d49b29e1486066bc825af0c"
+    },
+    "tools/package-lock.json": {
+      "workingTreeSha256": "f214163e99c84caecbd39fbb4d379fca5e74a6babe583149199b3b2e3862f53f",
+      "gitBlob": "0135b7171c80dd5aaad05e565cc2903796412095"
+    },
+    "tools/package.json": {
+      "workingTreeSha256": "9200b6f33f7e5baae5d0055cb28c70e19ce59fa0e02d3c844860e0e10b98c4c1",
+      "gitBlob": "8ae6e41cbde88e54e5fc2f50f13be6a0e65452fe"
+    },
+    "tools/pilot-tuning.json": {
+      "workingTreeSha256": "118e55e23181c539a13a9964182fce932f0c12b5851baa2c09b50bd0aed2c4bd",
+      "gitBlob": "334673d38c32f72d47e54a65d4795045c79eab19"
+    },
+    "tools/pilot.mjs": {
+      "workingTreeSha256": "07b0b3b29bdd20a9ed7a8e54a4613ef6a7e282ab9d3c64c3d6df15c42775c184",
+      "gitBlob": "fd60f2b448e15f6189b2b96a73f59e6e2f77be24"
+    },
+    "tools/probe.mjs": {
+      "workingTreeSha256": "628a00c45eb673723db46d3ab44ee15dbbb32cfda493ecd554e4a086b5b85aa4",
+      "gitBlob": "1d14b2f1e1e66ab247c5dc26ec3f9d26d1a1ca41"
+    },
+    "tools/report-check.mjs": {
+      "workingTreeSha256": "87f8d799bb12e51e9ebaee02aaf3354c0b6457688c6a1b4d4e78abe287b7233b",
+      "gitBlob": "5b8f82aede374e4305bfe246e2e1b73633f7284f"
+    },
+    "tools/scan-stick.py": {
+      "workingTreeSha256": "3f9b93bef8afe7221eab6c36d12c96cc38bb7b932e715aca688e019b563130e8",
+      "gitBlob": "ce8940fd6aa7e71191448296beaaa1a7b7ec9aa5"
+    },
+    "tools/scenery-check.mjs": {
+      "workingTreeSha256": "d8faccc33176ac8b3d556c7c63579e0b9eef06ea037df4342619a7158daf90f1",
+      "gitBlob": "45250276c0f0bbaddf521332ce351e7b636f88d6"
+    },
+    "tools/session-check.mjs": {
+      "workingTreeSha256": "463f50c5c067fe4cd96a8a907391d9b76e885ceca81db399a79de8e261433dd3",
+      "gitBlob": "9e8623f1e2a3267917a6758d028f856982eee93f"
+    },
+    "tools/stick-soak.mjs": {
+      "workingTreeSha256": "e3eb2842ac2099a02ce8d2ecd871ec028bfd12468c2b82c1dd16e6671ba3196b",
+      "gitBlob": "028bb920268709e4653e1bff6ecd263f19053871"
+    },
+    "tools/summarize_integration_soak.py": {
+      "workingTreeSha256": "dbdd036bf8a1e9a8ae144fcc0f9caafaf4ca6a8cb0cfb8fa9423f7f5fcb32a1c",
+      "gitBlob": "620a300670df48c86f1fb38fb2e85bcd22050fee"
+    },
+    "tools/summarize_soak.py": {
+      "workingTreeSha256": "7ede61b2e64fefa50a243f503960c1fb0a264a08971fb74e38222034093eb517",
+      "gitBlob": "3ac50f92da3afa670e9543058eeaac3f4d5f4c60"
+    },
+    "tools/summarize_stick_soak.py": {
+      "workingTreeSha256": "0ad57da8646f5bc8783afb510c71f53a3ef1bcc4ddd706f347a9e18a031994d3",
+      "gitBlob": "8205c6cbadaa4bd622e7e9cbd29b2e39d3565cf8"
+    },
+    "tools/track-check.mjs": {
+      "workingTreeSha256": "4e3b74ee092c57da36ee66d7f574afcf3139c93c66e1fe9810df05a7a0c52425",
+      "gitBlob": "572db7cd050783a2639873f5b8ca8dd876277ae9"
+    },
+    "tools/verify_apk.py": {
+      "workingTreeSha256": "c656ef87ab492e16f71938d168787e6c6285ba232f4c4eb213fb0f5704224c4d",
+      "gitBlob": "78abcf1fe18a5dc2e54eb4e846227821f0953f43"
+    },
+    "tools/verify_delivery.py": {
+      "workingTreeSha256": "5e5984b44bb308bc41de44e71e1270c2a46b7d5a66e27ede18ee0f7ffa2dbb57",
+      "gitBlob": "5cf568022f9d36b230c7468d5986ee8ad69075a8"
+    },
+    "tools/wave-check.mjs": {
+      "workingTreeSha256": "17c43a04db7dfbce121951a7de5a68b7df12e24f5edc9c0bbc9129e977daf727",
+      "gitBlob": "3b87d046ee74b52fcdb6a02a4da80b76fad84167"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "70daa0c5-4fbd-4d32-8697-27c6a93d936f",
+  "ts": "2026-10-02T19:25:39.579Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/funk-pickup.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a sprung parts-tray latch snapping and two loose hardware clacks. Dirty close garage foley, springy snap, loose metal, short raw room, dangerous comic punch. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39142,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "9d493a6e0ecdb2eda2ac557bfa6ce824a2d8618a7d89c349ffbfd50bd219059d",
+  "completedAt": "2026-10-02T19:25:44.670Z",
+  "creditsAfter": 39142,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5664
+}

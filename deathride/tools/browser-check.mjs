@@ -1,0 +1,26 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+import {writeFile} from 'node:fs/promises';
+const base=process.argv[2]||'http://127.0.0.1:8765',pin=process.argv[3];
+const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});const errors=[];
+const contexts=await Promise.all([0,1].map(()=>browser.newContext({viewport:{width:896,height:414},isMobile:true,hasTouch:true,deviceScaleFactor:1})));
+const pages=await Promise.all(contexts.map(c=>c.newPage()));
+for(const p of pages)p.on('pageerror',e=>errors.push(e.message));
+for(const p of pages){await p.goto(base+'/?pin='+pin);await p.waitForFunction(()=>document.getElementById('player').textContent.startsWith('PLAYER'))}
+const stats=async()=>await(await fetch(base+'/stats')).json();assert.equal((await stats()).slots.filter(s=>s.connected).length,2);
+const p=pages[0],cdp=await contexts[0].newCDPSession(p);
+await p.screenshot({path:process.env.BROWSER_SCREENSHOT||'../evidence/controller.png'});
+await p.locator('#settings').tap();await p.locator('#feelChoice').selectOption('Loose');await p.waitForTimeout(300);assert.equal((await stats()).feel.id,'Loose');await p.locator('#closeFeel').tap();
+const box=async id=>await p.locator('#'+id).boundingBox();let steer=await box('steer'),gas=await box('gas');
+const steerPoint={x:Math.round(steer.x+steer.width*.75),y:Math.round(steer.y+steer.height*.5),id:1,radiusX:8,radiusY:8};
+const gasPoint={x:Math.round(gas.x+gas.width*.5),y:Math.round(gas.y+gas.height*.5),id:2,radiusX:8,radiusY:8};
+await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{...steerPoint,x:Math.round(steer.x+steer.width*.5)},gasPoint]});await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[steerPoint,gasPoint]});await p.waitForTimeout(350);
+let st=await stats();assert.equal(st.slots[0].effectiveThrottle,1);assert.ok(st.slots[0].effectiveSteer>.3,'steer and throttle together');
+await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[steerPoint]});await p.waitForTimeout(130);st=await stats();assert.equal(st.slots[0].effectiveThrottle,1);assert.equal(st.slots[0].effectiveSteer,0);
+await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await p.waitForTimeout(100);assert.equal((await stats()).slots[0].effectiveThrottle,0);
+const oldToken=await p.evaluate(()=>localStorage.getItem('token'));await p.reload();await p.waitForFunction(()=>document.getElementById('player').textContent==='PLAYER 1');assert.equal(await p.evaluate(()=>localStorage.getItem('token')),oldToken);
+await p.locator('#race').tap();await p.waitForTimeout(3200);assert.equal((await stats()).phase,'race');
+await p.locator('#settings').tap();const before=(await stats()).flashFrames;await p.locator('#flash').dispatchEvent('pointerdown',{pointerId:8});assert.equal(await p.locator('#flashscreen').evaluate(e=>e.classList.contains('on')),true);await p.waitForTimeout(150);assert.equal((await stats()).flashFrames,before+1);await p.locator('#closeFeel').tap();
+await p.locator('#leave').tap();await p.waitForTimeout(150);assert.equal((await stats()).phase,'lobby');assert.deepEqual(errors,[]);
+const result={browser:'Chromium headless, 896 x 414, mobile touch emulation; not a physical phone',checks:['two browser contexts pair','simultaneous steer + throttle via CDP touch','release steer holds gas','release gas clears throttle','reload reclaims original car','start/countdown/race','phone white and one TV flash','lobby command','zero page exceptions'],capabilities:await p.evaluate(()=>({secureContext:isSecureContext,wakeLock:'wakeLock'in navigator,fullscreen:!!document.fullscreenEnabled})),errors};
+await writeFile(process.env.BROWSER_OUTPUT||'../evidence/browser-check.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await browser.close();

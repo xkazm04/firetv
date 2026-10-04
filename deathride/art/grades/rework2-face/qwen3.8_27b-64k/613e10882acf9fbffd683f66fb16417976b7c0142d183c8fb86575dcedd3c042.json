@@ -1,0 +1,115 @@
+{
+  "asset": "rw2-face-ox-v1-a1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "source_sha256": "df4e213de7ad6d27e957c59c263feedadbb395e82128e8a80837ec79e0eee373",
+  "export_sha256": "47ef96a8acf76bf45ecc7cf2a18b50a8eba9fcabb23260862940e9ed86596093",
+  "image_hashes": [
+    "47ef96a8acf76bf45ecc7cf2a18b50a8eba9fcabb23260862940e9ed86596093",
+    "6900049e645ef893d9220626a5d37ce862b44ba46eaa450397f76b52b828a2c2"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 60 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "613e10882acf9fbffd683f66fb16417976b7c0142d183c8fb86575dcedd3c042",
+  "at": "2026-10-03T10:44:47.531192+00:00",
+  "raw_content": "{\n  \"face_box\": [\n    280,\n    180,\n    720,\n    780\n  ],\n  \"eye_centres\": [\n    380,\n    380,\n    620,\n    380\n  ],\n  \"framing\": \"head_shoulders\",\n  \"both_eyes_visible\": true,\n  \"expression_readable_native\": true,\n  \"face_unobscured\": true,\n  \"single_primary_face\": true,\n  \"confidence\": 1,\n  \"defects\": [],\n  \"description\": \"The face is clearly visible and well-framed within the head and shoulders composition. Both eyes are open and distinct, allowing for a readable expression. The image is a single primary face with no obscuring elements or significant defects. The native preview is legible enough to confirm these features.\"\n}",
+  "status": "graded",
+  "answers": {
+    "face_box": [
+      280,
+      180,
+      720,
+      780
+    ],
+    "eye_centres": [
+      380,
+      380,
+      620,
+      380
+    ],
+    "framing": "head_shoulders",
+    "both_eyes_visible": true,
+    "expression_readable_native": true,
+    "face_unobscured": true,
+    "single_primary_face": true,
+    "confidence": 1,
+    "defects": [],
+    "description": "The face is clearly visible and well-framed within the head and shoulders composition. Both eyes are open and distinct, allowing for a readable expression. The image is a single primary face with no obscuring elements or significant defects. The native preview is legible enough to confirm these features."
+  },
+  "elapsed_seconds": 14.484
+}

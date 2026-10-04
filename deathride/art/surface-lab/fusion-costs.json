@@ -1,0 +1,203 @@
+{
+  "at": "2026-10-01T21:29:09.007158+00:00",
+  "status": "pass",
+  "summary": "Stick AFTKM, two runs per variant at 1080p: natural edges 16.69/17.89 ms p50/p95; matched control 16.70/18.11 ms. Full art allocation 31.25 MiB (+0.50 MiB ribbon); cached course vertices 28,800 bytes. Short isolated renderer measurements, not a full-game soak.",
+  "package": "dev.deathride.artlab",
+  "apk_sha256": "d3ddf2d0b21bfdb4944b706c6d36a5b471f235c2feb2e883bb0dd39aab87dc56",
+  "input_manifest_sha256": "99bdec389c05d9ff54f0d3b1e199d3455daa3de6bcb5fbf0293346a70e00dd8c",
+  "costs": [
+    {
+      "mode": "fusion-control",
+      "repeats": 2,
+      "art_mib": 30.75,
+      "cpu_geometry_bytes": 28800,
+      "p50_ms": 16.702539,
+      "p50_ms_range": [
+        16.701539,
+        16.703539
+      ],
+      "p95_ms": 18.106269,
+      "p95_ms_range": [
+        18.081308,
+        18.131230000000002
+      ],
+      "cpu_p50_ms": 2.2278845,
+      "cpu_p50_ms_range": [
+        2.178923,
+        2.276846
+      ],
+      "completion_p50_ms": 15.687422999999999,
+      "completion_p50_ms_range": [
+        15.681,
+        15.693846
+      ],
+      "completion_p95_ms": 16.1885005,
+      "completion_p95_ms_range": [
+        16.161308,
+        16.215693
+      ],
+      "draw_calls": 9.313333333333333,
+      "draw_calls_range": [
+        9.311111111111112,
+        9.315555555555555
+      ],
+      "submitted_pixel_area_ratio": 1.40784235889529,
+      "submitted_pixel_area_ratio_range": [
+        1.40784235889529,
+        1.40784235889529
+      ],
+      "pss_kib": 79247.5,
+      "pss_kib_range": [
+        78489,
+        80006
+      ],
+      "bake_completion_ms": 697.4572304999999,
+      "bake_completion_ms_range": [
+        675.670769,
+        719.243692
+      ]
+    },
+    {
+      "mode": "fusion-natural",
+      "repeats": 2,
+      "art_mib": 31.25,
+      "cpu_geometry_bytes": 28800,
+      "p50_ms": 16.6930385,
+      "p50_ms_range": [
+        16.689846000000003,
+        16.696230999999997
+      ],
+      "p95_ms": 17.890884999999997,
+      "p95_ms_range": [
+        17.878,
+        17.903769999999998
+      ],
+      "cpu_p50_ms": 2.1629614999999998,
+      "cpu_p50_ms_range": [
+        2.146769,
+        2.179154
+      ],
+      "completion_p50_ms": 15.683961499999999,
+      "completion_p50_ms_range": [
+        15.681538,
+        15.686385
+      ],
+      "completion_p95_ms": 16.130769,
+      "completion_p95_ms_range": [
+        16.13023,
+        16.131308
+      ],
+      "draw_calls": 9.313333333333333,
+      "draw_calls_range": [
+        9.311111111111112,
+        9.315555555555555
+      ],
+      "submitted_pixel_area_ratio": 1.4906529682653922,
+      "submitted_pixel_area_ratio_range": [
+        1.4906529682653922,
+        1.4906529682653922
+      ],
+      "pss_kib": 80623.5,
+      "pss_kib_range": [
+        79325,
+        81922
+      ],
+      "bake_completion_ms": 691.204923,
+      "bake_completion_ms_range": [
+        679.701923,
+        702.707923
+      ]
+    }
+  ],
+  "deltas": {
+    "art_mib": 0.5,
+    "p50_ms": -0.009500500000001466,
+    "p95_ms": -0.2153840000000038,
+    "cpu_p50_ms": -0.06492300000000029,
+    "draw_calls": 0.0,
+    "submitted_pixel_area_ratio": 0.0828106093701022
+  },
+  "pictures": {
+    "fusion-control": {
+      "file": "fusion-pictures/fusion-control.webp",
+      "sha256": "959530785846fcd61271e43efbc2d5534c171faa7657be22484529fbd0709ceb",
+      "png_sha256": "a07259ab1aae69d1499a9aa538ec83b816d074ec4367b535c5094490436e768d",
+      "size": [
+        1920,
+        1080
+      ]
+    },
+    "fusion-natural": {
+      "file": "fusion-pictures/fusion-natural.webp",
+      "sha256": "5fb9ee8f837a843df6ced8a79a4a8e8e7d5aee7f8661b4a7fe4541b3a04f731a",
+      "png_sha256": "f1dcef27d4a92c132fd65f8888d9a6650626a8ea78fe57e2e259754254c85a03",
+      "size": [
+        1920,
+        1080
+      ]
+    }
+  },
+  "device_runs": [
+    {
+      "source": "device/v4-stick-a-0-fusion-control/result.json",
+      "result_sha256": "01396094229986379b256965ded7b8f2ad3415a467eb6c18ba1016bc48b0b03b",
+      "mode": "fusion-control",
+      "repeat": "a",
+      "renderer": "PowerVR Rogue GE9215",
+      "p50_ms": 16.703539,
+      "p95_ms": 18.081308,
+      "cpu_p50_ms": 2.178923,
+      "completion_p50_ms": 15.693846,
+      "pss_kib": 80006
+    },
+    {
+      "source": "device/v4-stick-a-0-fusion-natural/result.json",
+      "result_sha256": "aef0de85c958f329f2bf61404cb69e4ed945f50ecad52fe74c8431cd19319dc5",
+      "mode": "fusion-natural",
+      "repeat": "a",
+      "renderer": "PowerVR Rogue GE9215",
+      "p50_ms": 16.696230999999997,
+      "p95_ms": 17.903769999999998,
+      "cpu_p50_ms": 2.146769,
+      "completion_p50_ms": 15.686385,
+      "pss_kib": 79325
+    },
+    {
+      "source": "device/v4-stick-b-0-fusion-natural/result.json",
+      "result_sha256": "7663bd4d75e53c942de50ace5769c48066a8af625934eae2dd8942d6c0135b5b",
+      "mode": "fusion-natural",
+      "repeat": "b",
+      "renderer": "PowerVR Rogue GE9215",
+      "p50_ms": 16.689846000000003,
+      "p95_ms": 17.878,
+      "cpu_p50_ms": 2.179154,
+      "completion_p50_ms": 15.681538,
+      "pss_kib": 81922
+    },
+    {
+      "source": "device/v4-stick-b-0-fusion-control/result.json",
+      "result_sha256": "b837458e87c27f11533efeb0c6c36e6b5d06aa5eb59be51645ee994c01cee317",
+      "mode": "fusion-control",
+      "repeat": "b",
+      "renderer": "PowerVR Rogue GE9215",
+      "p50_ms": 16.701539,
+      "p95_ms": 18.131230000000002,
+      "cpu_p50_ms": 2.276846,
+      "completion_p50_ms": 15.681,
+      "pss_kib": 78489
+    }
+  ],
+  "sessions": [
+    {
+      "source": "device/v4-stick-a-session.json",
+      "sha256": "30db6d4a0222d896d62bc7ebd2feb324c61c768f668be7448a948c7c19a436cf"
+    },
+    {
+      "source": "device/v4-stick-b-session.json",
+      "sha256": "ce51b912c1d89440d3820adef8cc563c277464051f77a40ab05274e34ab5bce8"
+    }
+  ],
+  "statistics": "costs are arithmetic means of the two run percentiles; ranges retain repeat variation; raw 900-sample arrays remain linked",
+  "limitations": "glFinish instrumentation serializes work; completion is CPU/GPU wall time, not GPU timer. PSS sampled once per run before PNG encoding. All atlas/material pages resident but only representative scene regions drawn. No gameplay, collision hook, full-game FBO, or thermal soak.",
+  "scope": "4 clean runs; matched single APK; exact packed bundle + allocated car reserve; dev.deathride.tv installation unchanged and prior activity restored in both sessions"
+}

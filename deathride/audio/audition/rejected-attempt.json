@@ -1,0 +1,29 @@
+{
+  "id": "d02735a7-31dd-424e-b107-69600701bb03",
+  "ts": "2026-10-02T19:14:28.116Z",
+  "session": "x2-2026-10-02",
+  "status": "abandoned-reserved",
+  "kind": "sfx",
+  "out": "audio/audition/raw/dust-engine.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "A battered road coupe engine held at steady low revs. Constant body from the first sample through the last, no ignition, no acceleration, no fade, no isolated backfire. Seamlessly repeating two-second mechanical texture. Timbre: loose exhaust rasp and a thin rattling chassis. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 42061,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "resolvedAt": "2026-10-02T19:20:56.375Z",
+  "httpStatus": 400,
+  "actualCredits": null,
+  "evidence": "audio/audition/request-audit.json",
+  "resolution": "Provider analytics confirms 400 in 5.8 ms; no audio returned. Prompt exceeded documented 450-character limit (likely cause, original error body unavailable). Abandon this attempt, retain full 100 credits against cap; no claim of zero billing. Rebrief all SFX within limit before new requests."
+}

@@ -1,0 +1,35 @@
+{
+  "id": "fc81cde7-2070-4640-9675-fb01c2de4c92",
+  "ts": "2026-10-02T21:53:53.136Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/mechanic.after.mp3",
+  "seconds": null,
+  "request": {
+    "text": "You are back. I kept listening for the engine. Thought I had lost you.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 70,
+  "budgetCharge": 70,
+  "creditsBefore": 23040,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 72351,
+  "providerCredits": 70,
+  "sha256": "d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c",
+  "completedAt": "2026-10-02T21:53:57.763Z",
+  "creditsAfter": 23040,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 6400
+}

@@ -1,0 +1,32 @@
+{
+  "id": "77b0ca02-465a-476e-83e0-5fed1f1a3db7",
+  "ts": "2026-10-02T21:35:05.211Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/mine-arm.mp3",
+  "seconds": 0.6,
+  "request": {
+    "text": "A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 0.6,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24562,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 10493,
+  "providerCredits": 6,
+  "sha256": "988e90f950b13600fd5d6942cee4ba03ec92ae83be2845161b079bf36a2ee3a5",
+  "completedAt": "2026-10-02T21:35:08.250Z",
+  "creditsAfter": 24562,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1100
+}

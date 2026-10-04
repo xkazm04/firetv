@@ -1,0 +1,389 @@
+{
+  "sourceSha256": "a4a1cd2cb8cc60213197a112162228e290e3484c5672e823c47d527869482a8b",
+  "apkSha256": "992e596fbb7bc3b7b3eb7440fcba7a2b7b68a3593ad67b0f15dcbf36f0c53e4b",
+  "durationSeconds": 900.2753325,
+  "functionalPass": false,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:102:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27009,
+      "accepted": 26990,
+      "rejected": 19,
+      "hz": 30.0008219985301
+    },
+    {
+      "slot": 1,
+      "sent": 27009,
+      "accepted": 26987,
+      "rejected": 22,
+      "hz": 30.0008219985301
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 0,
+      "q": 16109,
+      "second": 537.2662463,
+      "rttMs": 296.28739999991376
+    },
+    {
+      "slot": 1,
+      "q": 16109,
+      "second": 537.2714459,
+      "rttMs": 301.4455999999773
+    },
+    {
+      "slot": 0,
+      "q": 16145,
+      "second": 538.4497471000001,
+      "rttMs": 268.85250000003725
+    },
+    {
+      "slot": 1,
+      "q": 16145,
+      "second": 538.7650809,
+      "rttMs": 584.126900000032
+    },
+    {
+      "slot": 0,
+      "q": 16155,
+      "second": 539.1619012000001,
+      "rttMs": 654.6136000000406
+    },
+    {
+      "slot": 0,
+      "q": 16156,
+      "second": 539.1619064000001,
+      "rttMs": 624.722400000086
+    },
+    {
+      "slot": 0,
+      "q": 16157,
+      "second": 539.1619094,
+      "rttMs": 593.8501999999862
+    },
+    {
+      "slot": 0,
+      "q": 16158,
+      "second": 539.1619124,
+      "rttMs": 547.9930999999633
+    },
+    {
+      "slot": 0,
+      "q": 16159,
+      "second": 539.1619142,
+      "rttMs": 516.4231999999611
+    },
+    {
+      "slot": 0,
+      "q": 16160,
+      "second": 539.1619159,
+      "rttMs": 485.33239999995567
+    },
+    {
+      "slot": 0,
+      "q": 16161,
+      "second": 539.1619184000001,
+      "rttMs": 454.46080000000075
+    },
+    {
+      "slot": 0,
+      "q": 16162,
+      "second": 539.1619655000001,
+      "rttMs": 423.7876000000397
+    },
+    {
+      "slot": 0,
+      "q": 16163,
+      "second": 539.1619683,
+      "rttMs": 394.27110000001267
+    },
+    {
+      "slot": 0,
+      "q": 16164,
+      "second": 539.1619899000001,
+      "rttMs": 360.7253999999957
+    },
+    {
+      "slot": 0,
+      "q": 16165,
+      "second": 539.3628161,
+      "rttMs": 515.4716999999946
+    },
+    {
+      "slot": 0,
+      "q": 16166,
+      "second": 539.3628257,
+      "rttMs": 484.7057999999961
+    },
+    {
+      "slot": 1,
+      "q": 16155,
+      "second": 539.6781861000001,
+      "rttMs": 1170.8199999999488
+    },
+    {
+      "slot": 1,
+      "q": 16156,
+      "second": 539.6781908000002,
+      "rttMs": 1140.8868000000948
+    },
+    {
+      "slot": 1,
+      "q": 16157,
+      "second": 539.6781932000001,
+      "rttMs": 1109.9501000000164
+    },
+    {
+      "slot": 1,
+      "q": 16158,
+      "second": 539.6781951,
+      "rttMs": 1064.1638999999268
+    },
+    {
+      "slot": 1,
+      "q": 16159,
+      "second": 539.6781972,
+      "rttMs": 1032.6398000000045
+    },
+    {
+      "slot": 1,
+      "q": 16160,
+      "second": 539.6781991,
+      "rttMs": 1001.5550999999978
+    },
+    {
+      "slot": 1,
+      "q": 16161,
+      "second": 539.6782012,
+      "rttMs": 970.6662999999244
+    },
+    {
+      "slot": 1,
+      "q": 16162,
+      "second": 539.6782031,
+      "rttMs": 939.9133000000147
+    },
+    {
+      "slot": 1,
+      "q": 16163,
+      "second": 539.6782053000001,
+      "rttMs": 910.4357000000309
+    },
+    {
+      "slot": 1,
+      "q": 16164,
+      "second": 539.6782324000001,
+      "rttMs": 876.8633000000846
+    },
+    {
+      "slot": 1,
+      "q": 16165,
+      "second": 539.6875323,
+      "rttMs": 840.047600000049
+    },
+    {
+      "slot": 1,
+      "q": 16166,
+      "second": 539.6875362000001,
+      "rttMs": 809.3093000000808
+    },
+    {
+      "slot": 1,
+      "q": 16172,
+      "second": 539.6984248,
+      "rttMs": 617.3743999999715
+    },
+    {
+      "slot": 1,
+      "q": 16173,
+      "second": 539.6984284000001,
+      "rttMs": 586.1453000000911
+    },
+    {
+      "slot": 1,
+      "q": 25218,
+      "second": 840.8798397,
+      "rttMs": 273.77499999990687
+    },
+    {
+      "slot": 0,
+      "q": 25218,
+      "second": 840.8827540000001,
+      "rttMs": 276.78000000002794
+    },
+    {
+      "slot": 0,
+      "q": 25254,
+      "second": 842.0858391,
+      "rttMs": 274.86410000000615
+    },
+    {
+      "slot": 1,
+      "q": 25254,
+      "second": 842.0858759000001,
+      "rttMs": 274.8314000000246
+    },
+    {
+      "slot": 0,
+      "q": 25264,
+      "second": 842.4010051,
+      "rttMs": 264.8412000000244
+    },
+    {
+      "slot": 1,
+      "q": 25264,
+      "second": 842.4095082,
+      "rttMs": 273.2737999999663
+    },
+    {
+      "slot": 1,
+      "q": 25274,
+      "second": 842.7412755000001,
+      "rttMs": 263.9725000000326
+    },
+    {
+      "slot": 0,
+      "q": 25283,
+      "second": 843.0471643000001,
+      "rttMs": 273.0422999999719
+    },
+    {
+      "slot": 1,
+      "q": 25283,
+      "second": 843.0514759000001,
+      "rttMs": 277.2878000000492
+    },
+    {
+      "slot": 0,
+      "q": 25293,
+      "second": 843.3876631,
+      "rttMs": 287.59109999996144
+    },
+    {
+      "slot": 1,
+      "q": 25293,
+      "second": 843.3878401000001,
+      "rttMs": 287.70230000000447
+    }
+  ],
+  "allWindows": {
+    "count": 784,
+    "worstP95Ms": 33.918231,
+    "maxMs": 309.032154,
+    "p50RangeMs": [
+      16.391692,
+      16.82
+    ],
+    "stepWorstP95Ms": 8.902615
+  },
+  "activeWindows": {
+    "count": 616,
+    "worstP95Ms": 26.197692,
+    "maxMs": 176.26784600000002,
+    "p50RangeMs": [
+      16.391692,
+      16.82
+    ],
+    "stepWorstP95Ms": 3.634769
+  },
+  "sixLiveWindows": {
+    "count": 87,
+    "worstP95Ms": 26.197692,
+    "maxMs": 176.26784600000002,
+    "p50RangeMs": [
+      16.411693000000003,
+      16.71277
+    ],
+    "stepWorstP95Ms": 3.634769
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 22.3,
+    "max": 309.032154,
+    "count": 53251
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 3088
+  },
+  "inputAgeWorstP95Ms": [
+    264.01811299996916,
+    270.8194319999311
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 129
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 19
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 117
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 22
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    94.4306640625,
+    118.294921875
+  ],
+  "warmPssGrowthMiB": -19.47265625,
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 3,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4385,
+    "suppressed": 8792,
+    "stolen": 87,
+    "missing": 33,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0
+  },
+  "classes": {
+    "Needle": 23,
+    "Line": 16,
+    "Bastion": 15,
+    "Comet": 14,
+    "Trail": 10,
+    "Flint": 19,
+    "Quill": 19,
+    "Vandal": 8,
+    "Kestrel": 13,
+    "Bulwark": 5
+  },
+  "rounds": 17,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "gates": {
+    "duration": true,
+    "zeroRejected": false,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "id": "crunch-retry",
+  "cue": "collision.car",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:32.716053+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\crunch-retry.mp3.json",
+    "sourceSha256": "03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff",
+    "generatedAt": "2026-10-02T21:34:07.679Z",
+    "request": {
+      "text": "Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1.5,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 15,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/crunch-retry.mp3",
+    "sha256": "03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff",
+    "bytes": 24703,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence",
+      "clipping"
+    ],
+    "durationSeconds": 1.48,
+    "durationWindowSeconds": [
+      1.35,
+      1.65
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 65268,
+    "decodedBytes": 261072,
+    "integratedLufs": -13.1,
+    "truePeakDbtp": 0.93,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 43,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          33827,
+          65222
+        ]
+      ],
+      "fraction": 0.48101673101673104,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 17014,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.39582206483572246,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/crunch-retry.wav",
+    "sha256": "61717bb9d82afe0f189355e43081447c87ce578dce97250adea6fe61e2674a89",
+    "bytes": 34106,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.7716099773242631,
+    "durationWindowSeconds": [
+      0.7696099773242631,
+      0.7736099773242631
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 17014,
+    "decodedBytes": 34028,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -5.93,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence",
+    "clipping"
+  ]
+}

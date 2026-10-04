@@ -1,0 +1,426 @@
+{
+  "method": "Exhaustive graph of legal useful-part purchases, unlimited replenished funds; shared clamped stats and PR mapping. Ignores fixed NPC target ceilings to give an upper bound, not an attainable earned-career claim. No physics simulation.",
+  "stockPhysicalRowsCrossChecked": 2520,
+  "bosses": [
+    {
+      "event": 7,
+      "player": {
+        "car": "Line",
+        "cleared": 6,
+        "maximumPR": 493.613579874,
+        "parts": [
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ],
+        "reachableConfigurations": 486
+      },
+      "field": [
+        {
+          "rival": "rook",
+          "car": "Trail",
+          "cleared": 7,
+          "maximumPR": 525.11706777,
+          "parts": [
+            2,
+            0,
+            2,
+            2,
+            2,
+            1
+          ],
+          "reachableConfigurations": 162
+        },
+        {
+          "rival": "ox",
+          "car": "Bastion",
+          "cleared": 7,
+          "maximumPR": 576.427504256,
+          "parts": [
+            2,
+            2,
+            2,
+            0,
+            2,
+            0
+          ],
+          "reachableConfigurations": 81
+        },
+        {
+          "rival": "mica",
+          "car": "Trail",
+          "cleared": 7,
+          "maximumPR": 525.11706777,
+          "parts": [
+            2,
+            0,
+            2,
+            2,
+            2,
+            1
+          ],
+          "reachableConfigurations": 162
+        },
+        {
+          "rival": "vex",
+          "car": "Bastion",
+          "cleared": 7,
+          "maximumPR": 576.427504256,
+          "parts": [
+            2,
+            2,
+            2,
+            0,
+            2,
+            0
+          ],
+          "reachableConfigurations": 81
+        },
+        {
+          "rival": "relay",
+          "car": "Trail",
+          "cleared": 7,
+          "maximumPR": 525.11706777,
+          "parts": [
+            2,
+            0,
+            2,
+            2,
+            2,
+            1
+          ],
+          "reachableConfigurations": 162
+        }
+      ],
+      "fieldMeanHardCeilingPR": 545.6412423644,
+      "fundedMaxPlayerToMaxField": 0.9046485887596195
+    },
+    {
+      "event": 14,
+      "player": {
+        "car": "Bastion",
+        "cleared": 13,
+        "maximumPR": 608.21545221,
+        "parts": [
+          3,
+          2,
+          3,
+          0,
+          3,
+          0
+        ],
+        "reachableConfigurations": 256
+      },
+      "field": [
+        {
+          "rival": "rook",
+          "car": "Flint",
+          "cleared": 14,
+          "maximumPR": 627.988826627,
+          "parts": [
+            3,
+            0,
+            2,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 1080
+        },
+        {
+          "rival": "ox",
+          "car": "Comet",
+          "cleared": 14,
+          "maximumPR": 645.769637373,
+          "parts": [
+            3,
+            2,
+            3,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 2048
+        },
+        {
+          "rival": "mica",
+          "car": "Flint",
+          "cleared": 14,
+          "maximumPR": 627.988826627,
+          "parts": [
+            3,
+            0,
+            2,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 1080
+        },
+        {
+          "rival": "vex",
+          "car": "Comet",
+          "cleared": 14,
+          "maximumPR": 645.769637373,
+          "parts": [
+            3,
+            2,
+            3,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 2048
+        },
+        {
+          "rival": "relay",
+          "car": "Flint",
+          "cleared": 14,
+          "maximumPR": 627.988826627,
+          "parts": [
+            3,
+            0,
+            2,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 1080
+        }
+      ],
+      "fieldMeanHardCeilingPR": 635.1011509254,
+      "fundedMaxPlayerToMaxField": 0.9576670603159432
+    },
+    {
+      "event": 21,
+      "player": {
+        "car": "Comet",
+        "cleared": 20,
+        "maximumPR": 645.769637373,
+        "parts": [
+          3,
+          2,
+          3,
+          3,
+          3,
+          1
+        ],
+        "reachableConfigurations": 2048
+      },
+      "field": [
+        {
+          "rival": "rook",
+          "car": "Quill",
+          "cleared": 21,
+          "maximumPR": 646.026013615,
+          "parts": [
+            3,
+            0,
+            0,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 168
+        },
+        {
+          "rival": "ox",
+          "car": "Vandal",
+          "cleared": 21,
+          "maximumPR": 651.2660318019999,
+          "parts": [
+            3,
+            0,
+            3,
+            2,
+            3,
+            0
+          ],
+          "reachableConfigurations": 768
+        },
+        {
+          "rival": "mica",
+          "car": "Quill",
+          "cleared": 21,
+          "maximumPR": 646.026013615,
+          "parts": [
+            3,
+            0,
+            0,
+            3,
+            3,
+            1
+          ],
+          "reachableConfigurations": 168
+        },
+        {
+          "rival": "vex",
+          "car": "Vandal",
+          "cleared": 21,
+          "maximumPR": 651.2660318019999,
+          "parts": [
+            3,
+            0,
+            3,
+            2,
+            3,
+            0
+          ],
+          "reachableConfigurations": 768
+        },
+        {
+          "rival": "relay",
+          "car": "Vandal",
+          "cleared": 21,
+          "maximumPR": 651.2660318019999,
+          "parts": [
+            3,
+            0,
+            3,
+            2,
+            3,
+            0
+          ],
+          "reachableConfigurations": 768
+        }
+      ],
+      "fieldMeanHardCeilingPR": 649.1700245272,
+      "fundedMaxPlayerToMaxField": 0.9947619467539702
+    },
+    {
+      "event": 28,
+      "player": {
+        "car": "Vandal",
+        "cleared": 27,
+        "maximumPR": 651.2660318019999,
+        "parts": [
+          3,
+          0,
+          3,
+          2,
+          3,
+          0
+        ],
+        "reachableConfigurations": 768
+      },
+      "field": [
+        {
+          "rival": "rook",
+          "car": "Kestrel",
+          "cleared": 28,
+          "maximumPR": 651.136491194,
+          "parts": [
+            2,
+            0,
+            0,
+            3,
+            3,
+            0
+          ],
+          "reachableConfigurations": 30
+        },
+        {
+          "rival": "ox",
+          "car": "Bulwark",
+          "cleared": 28,
+          "maximumPR": 671.07714709,
+          "parts": [
+            1,
+            0,
+            3,
+            0,
+            3,
+            0
+          ],
+          "reachableConfigurations": 128
+        },
+        {
+          "rival": "mica",
+          "car": "Kestrel",
+          "cleared": 28,
+          "maximumPR": 651.136491194,
+          "parts": [
+            2,
+            0,
+            0,
+            3,
+            3,
+            0
+          ],
+          "reachableConfigurations": 30
+        },
+        {
+          "rival": "vex",
+          "car": "Bulwark",
+          "cleared": 28,
+          "maximumPR": 671.07714709,
+          "parts": [
+            1,
+            0,
+            3,
+            0,
+            3,
+            0
+          ],
+          "reachableConfigurations": 128
+        },
+        {
+          "rival": "relay",
+          "car": "Kestrel",
+          "cleared": 28,
+          "maximumPR": 651.136491194,
+          "parts": [
+            2,
+            0,
+            0,
+            3,
+            3,
+            0
+          ],
+          "reachableConfigurations": 30
+        }
+      ],
+      "fieldMeanHardCeilingPR": 659.1127535524,
+      "fundedMaxPlayerToMaxField": 0.9880950236388101
+    },
+    {
+      "event": 35,
+      "player": {
+        "car": "Bulwark",
+        "cleared": 34,
+        "maximumPR": 671.07714709,
+        "parts": [
+          1,
+          0,
+          3,
+          0,
+          3,
+          0
+        ],
+        "reachableConfigurations": 128
+      },
+      "field": [
+        {
+          "rival": "marrow",
+          "car": "Bulwark",
+          "cleared": 34,
+          "maximumPR": 671.07714709,
+          "parts": [
+            1,
+            0,
+            3,
+            0,
+            3,
+            0
+          ],
+          "reachableConfigurations": 128
+        }
+      ],
+      "fieldMeanHardCeilingPR": 671.07714709,
+      "fundedMaxPlayerToMaxField": 1.0
+    }
+  ]
+}

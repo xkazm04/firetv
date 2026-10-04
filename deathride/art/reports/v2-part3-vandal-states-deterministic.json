@@ -1,0 +1,386 @@
+[
+  {
+    "id": "v2-part3-vandal-state-intact-v2",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-state-intact-v2\\attempt-01\\1.jpg",
+    "source_sha256": "dac33bc5c956f31b541bcdcbf07d69559c033883e636d667231e914bf76847d0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-state-intact-v2",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY state: Intact ROADWORTHY state with the EXACT ORIGINAL wear, ink texture, rust, scratched pigment and patched plates fully retained. No additional collision damage. All original braces, ribs, spikes and markings stay unchanged. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery. Direct proof review: the word clean stripped too much characteristic Rust and Ink wear from the intact baseline. Flint also lost its rear-bed cross-brace. Preserve the exact original rough ink strokes, worn pigment, rust, bone structural patches and every attachment. Intact means roadworthy, NOT cleaned, repainted, factory-new, smooth plastic or 3D shaded. Keep the full original material texture and structural fittings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2824125289916992,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.03452196053729126,
+      "estimated_key_rgb": [
+        231.0,
+        42.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.197063352257705,
+      "palette_p90_delta_e": 17.254097047114442
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-states\\v2-part3-vandal-state-intact-v2.png",
+    "sha256": "5b27a700d934589ac50db70220edfbe6a33f32b2c71df179469c6ef35f9d4ea9"
+  },
+  {
+    "id": "v2-part3-vandal-state-damaged-1-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "0d840f0910116281124c5a95b5b47c8a87b962ad93a598e71408fcd01c77ba9a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-state-damaged-1-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY state: Add a few small dents and restrained paint chips on the hood; keep chassis silhouette and all wheel positions. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28241825103759766,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        713
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2783251231527095,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11137810885498034,
+      "principal_axis_degrees": 0.008548236537662509,
+      "estimated_key_rgb": [
+        231.0,
+        40.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.895592853177441,
+      "palette_p90_delta_e": 16.43616862489885
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        713
+      ],
+      "source_pivot_px": [
+        512.5,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-states\\v2-part3-vandal-state-damaged-1-v1.png",
+    "sha256": "1342a5ed8cb32d28c4718b263a68d242cd074e515fe658e967477297e90b4a5b"
+  },
+  {
+    "id": "v2-part3-vandal-state-damaged-2-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "c9102d49dde8256d3b18636f5696f252554cf2ca72d4497e22c86e5b6cdadf34",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-state-damaged-2-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY state: Add deeper buckled panels, cracked glass and exposed metal scars, visibly more severe than damaged-1; retain overall chassis footprint and all wheels. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2824125289916992,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.011255845109956223,
+      "estimated_key_rgb": [
+        230.0,
+        41.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.888478276341403,
+      "palette_p90_delta_e": 14.584547898836133
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-states\\v2-part3-vandal-state-damaged-2-v1.png",
+    "sha256": "6422b2fea6c0179876be20f5b8b09ff86889db7747f146d4bc54c7f5081d050e"
+  },
+  {
+    "id": "v2-part3-vandal-state-wreck-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-state-wreck-v1\\attempt-02\\1.jpg",
+    "source_sha256": "9198b96d98c946b73e2a85479515468c07d7c5c2a94a18bfe2f2b2e425448a57",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-state-wreck-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY state: Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass; retain recognizable chassis footprint, no detached parts, no smoke or flames. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2823820114135742,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.016819400749814563,
+      "estimated_key_rgb": [
+        229.0,
+        37.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.283460954935447,
+      "palette_p90_delta_e": 10.88795051921681
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-states\\v2-part3-vandal-state-wreck-v1.png",
+    "sha256": "df58206b5ec93f5eb07e7f302e14c8116d15aa4d501f59a43a49454c108c3986"
+  }
+]

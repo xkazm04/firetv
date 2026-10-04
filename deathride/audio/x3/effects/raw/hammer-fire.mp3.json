@@ -1,0 +1,32 @@
+{
+  "id": "8d418be7-f21f-4971-bcc3-1b3dfcc030e2",
+  "ts": "2026-10-02T21:34:26.819Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/hammer-fire.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24562,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd",
+  "completedAt": "2026-10-02T21:34:36.188Z",
+  "creditsAfter": 24562,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 800
+}

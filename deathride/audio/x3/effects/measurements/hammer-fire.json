@@ -1,0 +1,201 @@
+{
+  "id": "hammer-fire",
+  "cue": "weapon.hammer.fire",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:34.751643+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\hammer-fire.mp3.json",
+    "sourceSha256": "0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd",
+    "generatedAt": "2026-10-02T21:34:26.819Z",
+    "request": {
+      "text": "Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/hammer-fire.mp3",
+    "sha256": "0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": false,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "truePeak"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -18.49,
+    "truePeakDbtp": -0.05,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          31979,
+          44032
+        ]
+      ],
+      "fraction": 0.2733106575963719,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 22050,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.4571357047304205,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/hammer-fire.wav",
+      "sha256": "d3cd7e4a55674a6ad84b67234e71a1b57cb02577e80390a89e330a942ee119eb",
+      "bytes": 44178,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 1.0,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 22050,
+      "decodedBytes": 44100,
+      "integratedLufs": -20.05,
+      "truePeakDbtp": -3.02,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            15990,
+            22050
+          ]
+        ],
+        "fraction": 0.2748299319727891,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 16210,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 1.0057730630017383,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/hammer-fire.wav",
+    "sha256": "80c705a0306785d8ac406daab9fdae7827ddb9d5cebfc7dddef541f5270c5c92",
+    "bytes": 32498,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.7351473922902494,
+    "durationWindowSeconds": [
+      0.7331473922902494,
+      0.7371473922902494
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 16210,
+    "decodedBytes": 32420,
+    "integratedLufs": -19.97,
+    "truePeakDbtp": -2.97,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "truePeak"
+  ]
+}

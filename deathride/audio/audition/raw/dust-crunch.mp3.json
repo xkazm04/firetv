@@ -1,0 +1,32 @@
+{
+  "id": "28153045-3bfc-46ba-8694-2ca30885d55e",
+  "ts": "2026-10-02T19:21:54.385Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/dust-crunch.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: buckled thin steel and a hard chassis knock. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40855,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "3b9bc23bc97a56c9b01651663e0169d7443caedc1d149a2ec1fbcb607cb5e9c3",
+  "completedAt": "2026-10-02T19:21:58.094Z",
+  "creditsAfter": 40855,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1700
+}

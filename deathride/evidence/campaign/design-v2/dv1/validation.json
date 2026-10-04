@@ -1,0 +1,26 @@
+{
+  "tasks": ":core:test :link:test :game:test :app:assembleDebug :desktop:installDist",
+  "tests": {
+    "core": {
+      "tests": 157,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "apkSha256": "10ef3a22179fce1e0388429f01f17d7917d1c6566498e4ad6f061e5007b27a4f",
+  "stick": "pending; not accessed",
+  "desktop": "First suite passes; combat fixed-delay countdown check failed under concurrent simulation load. Retained and retrying."
+}

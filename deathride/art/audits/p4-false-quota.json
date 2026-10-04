@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-01T09:14:14.954337+00:00",
+  "session_id": "805b927b-e9db-40d9-b19c-e702f9bffe0c",
+  "original_stop": {
+    "at": "2026-10-01T09:12:05.003575+00:00",
+    "reason": "p4-props-tyres-v1: 429"
+  },
+  "trigger": "usage.output_tokens == 429, not an HTTP status",
+  "successful_tool_results": [
+    "{\"path\":\"C:\\\\Users\\\\kazda\\\\.grok\\\\sessions\\\\C%3A%5CUsers%5Ckazda%5Ckiro%5Cfiretv-deathride-art%5Cdeathride%5Cart%5Craw%5Cp4-props-tyres-v1%5Cattempt-01\\\\805b927b-e9db-40d9-b19c-e702f9bffe0c\\\\images\\\\1.jpg\",\"filename\":\"1.jpg\",\"session_folder\":\"images\",\"message\":\"Image generated and saved to C:\\\\Users\\\\kazda\\\\.grok\\\\sessions\\\\C%3A%5CUsers%5Ckazda%5Ckiro%5Cfiretv-deathride-art%5Cdeathride%5Cart%5Craw%5Cp4-props-tyres-v1%5Cattempt-01\\\\805b927b-e9db-40d9-b19c-e702f9bffe0c\\\\images\\\\1.jpg. Do not read or re-display it, and do not describe how it appears to the user.\"}"
+  ],
+  "cli_log_sha256": "cbfbbd03796e690cc2473395462d51fa9f808790973539e2eb5658cbac42ba7b",
+  "recovered_image_sha256": "cc7dad1c1a22c23d76553c499937a03bafba328139575ac71e26c5fe6562e4ea",
+  "new_calls": 0,
+  "reviewer": "executing-agent inspected exact-session tool evidence",
+  "detector_fix": "429 requires explicit HTTP/status/error context; regression test excludes usage counters"
+}

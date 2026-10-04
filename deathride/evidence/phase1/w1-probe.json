@@ -1,0 +1,1270 @@
+{
+  "device": "Fire TV Stick 4K AFTKM / armeabi-v7a / 1920x1080 / LAN scripted Windows clients",
+  "durationSeconds": 60,
+  "actualHz": 30.013322857824246,
+  "loadSent": 1816,
+  "idleRttMs": {
+    "n": 25,
+    "p50": 25.60030000000006,
+    "p95": 78.13359999999966,
+    "max": 81.4860000000001
+  },
+  "loadRttMsSlot0": {
+    "n": 1815,
+    "p50": 13.67960000000312,
+    "p95": 64.94290000000183,
+    "max": 107.01499999999942
+  },
+  "loadRttMsSlot1": {
+    "n": 1815,
+    "p50": 14.049299999998766,
+    "p95": 65.89929999999731,
+    "max": 110.78679999998712
+  },
+  "checks": "two slots; HTTP assets; corrected clock; silence hold/drop; stale rejection; order rejection; one flash; reconnect identity and control",
+  "pendingAtEnd": [
+    0,
+    0
+  ],
+  "intentionalRejected": 2,
+  "initial": {
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 20210.53377,
+    "phase": "race",
+    "raceSeconds": 0.35,
+    "paused": false,
+    "frameNumber": 1190,
+    "flashFrames": 0,
+    "heapUsedMB": 10.795204162597656,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.944768999999997,
+        "p95": 21.520153999999998,
+        "max": 25.758461,
+        "count": 599
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 20.8,
+        "max": 153.682077,
+        "count": 1190
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 0.435077,
+        "p95": 0.862769,
+        "max": 3.509385,
+        "count": 420
+      },
+      "sinceStart": {
+        "p50": 0.40700000000000003,
+        "p95": 1.036,
+        "max": 6.400154,
+        "count": 1024
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 58
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 121.62153100000069,
+            "p95": 3284.614485000002,
+            "max": 3555.1189470000027,
+            "count": 328
+          },
+          "sinceStart": {
+            "p50": 121.60000000000001,
+            "p95": 3284.6000000000004,
+            "max": 3555.1189470000027,
+            "count": 328
+          }
+        },
+        "stale": {
+          "last10s": 52,
+          "sinceStart": 52
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "speedMps": 0,
+        "xM": -5.999999999999943,
+        "yM": 36.8
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 348,
+          "sinceStart": 348
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "speedMps": 0,
+        "xM": -5.999999999999943,
+        "yM": 43.2
+      }
+    ]
+  },
+  "windows": [
+    {
+      "second": 10,
+      "rtt": {
+        "n": 298,
+        "p50": 16.777400000000853,
+        "p95": 68.60779999999977,
+        "max": 103.16480000000047
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 30285.987848,
+        "phase": "race",
+        "raceSeconds": 10.416666666666764,
+        "paused": false,
+        "frameNumber": 1795,
+        "flashFrames": 0,
+        "heapUsedMB": 7.5364837646484375,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.624153999999997,
+            "p95": 21.417077,
+            "max": 26.704231,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.900000000000002,
+            "max": 153.682077,
+            "count": 1795
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.473539,
+            "p95": 0.885615,
+            "max": 2.481769,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 0.421,
+            "p95": 0.935,
+            "max": 6.400154,
+            "count": 1629
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 58
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 23.498139000002993,
+                "p95": 42.92348600000332,
+                "max": 57.90136200000052,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 31.900000000000002,
+                "p95": 198.9,
+                "max": 3581.230716000002,
+                "count": 932
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.359572292414089,
+            "speedMps": 17.896140851576458,
+            "xM": 63.44338941081442,
+            "yM": 31.838316612868226
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 24.90481599999839,
+                "p95": 46.0741620000008,
+                "max": 65.45989199999894,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 24.900000000000002,
+                "p95": 46,
+                "max": 65.45989199999894,
+                "count": 602
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": 0.48674448826184286,
+            "speedMps": 15.650851202350744,
+            "xM": 91.7982227970418,
+            "yM": 22.902502352440568
+          }
+        ]
+      }
+    },
+    {
+      "second": 20,
+      "rtt": {
+        "n": 300,
+        "p50": 12.881499999999505,
+        "p95": 65.93020000000251,
+        "max": 86.57229999999981
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 40410.963079,
+        "phase": "race",
+        "raceSeconds": 20.550000000000114,
+        "paused": false,
+        "frameNumber": 2401,
+        "flashFrames": 0,
+        "heapUsedMB": 13.401588439941406,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.868077,
+            "p95": 21.551000000000002,
+            "max": 25.205000000000002,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 21.1,
+            "max": 153.682077,
+            "count": 2401
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.581462,
+            "p95": 0.908308,
+            "max": 2.921539,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 0.445,
+            "p95": 0.926,
+            "max": 6.400154,
+            "count": 2236
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 58
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 19.874263000005158,
+                "p95": 42.6342169999989,
+                "max": 74.31336300000112,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 27,
+                "p95": 182.70000000000002,
+                "max": 3581.230716000002,
+                "count": 1540
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.6296642953941612,
+            "speedMps": 0.5713300040311204,
+            "xM": 106.08452510917584,
+            "yM": 19.88097436665331
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 19.95308600000135,
+                "p95": 42.73750100000325,
+                "max": 73.73852400000033,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 22.400000000000002,
+                "p95": 43.6,
+                "max": 73.73852400000033,
+                "count": 1210
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": 0.026389284920396997,
+            "speedMps": 0.37283141353575955,
+            "xM": 107.10725433880545,
+            "yM": 16.036686210359253
+          }
+        ]
+      }
+    },
+    {
+      "second": 30,
+      "rtt": {
+        "n": 300,
+        "p50": 11.428200000002107,
+        "p95": 60.96510000000126,
+        "max": 85.62380000000121
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 50524.490772,
+        "phase": "race",
+        "raceSeconds": 30.666666666666206,
+        "paused": false,
+        "frameNumber": 3008,
+        "flashFrames": 0,
+        "heapUsedMB": 13.453544616699219,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.803384,
+            "p95": 21.623924,
+            "max": 26.066077,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.7,
+            "p95": 21.3,
+            "max": 153.682077,
+            "count": 3008
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.605077,
+            "p95": 0.942461,
+            "max": 2.552616,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 0.47000000000000003,
+            "p95": 0.932,
+            "max": 6.400154,
+            "count": 2843
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 58
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 21.454140000001644,
+                "p95": 43.27074800000264,
+                "max": 55.25807100000384,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 24.700000000000003,
+                "p95": 161,
+                "max": 3581.230716000002,
+                "count": 2146
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.6010204068323681,
+            "speedMps": 0.25706891774005514,
+            "xM": 106.73369157448168,
+            "yM": 18.474459853804774
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 21.344370999991952,
+                "p95": 42.87967100000242,
+                "max": 54.68677899999602,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 22.1,
+                "p95": 43.400000000000006,
+                "max": 73.73852400000033,
+                "count": 1816
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.44054854342368205,
+            "speedMps": 0.30144871253458017,
+            "xM": 107.75087465636147,
+            "yM": 14.419139021299488
+          }
+        ]
+      }
+    },
+    {
+      "second": 40,
+      "rtt": {
+        "n": 300,
+        "p50": 12.71600000000035,
+        "p95": 66.75250000000233,
+        "max": 105.26340000000346
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 60574.210157,
+        "phase": "race",
+        "raceSeconds": 40.71666666666564,
+        "paused": false,
+        "frameNumber": 3610,
+        "flashFrames": 0,
+        "heapUsedMB": 13.0921630859375,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.907999999999998,
+            "p95": 21.365308,
+            "max": 29.838077000000002,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 16.7,
+            "p95": 21.3,
+            "max": 153.682077,
+            "count": 3610
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.574538,
+            "p95": 0.992769,
+            "max": 4.818308,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 0.47900000000000004,
+            "p95": 0.9440000000000001,
+            "max": 6.400154,
+            "count": 3446
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 58
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.973187000003236,
+                "p95": 38.708887000000686,
+                "max": 67.60854100000142,
+                "count": 599
+              },
+              "sinceStart": {
+                "p50": 23.900000000000002,
+                "p95": 142.3,
+                "max": 3581.230716000002,
+                "count": 2749
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.32844456220122376,
+            "speedMps": 0.20974951014342963,
+            "xM": 107.3618052831085,
+            "yM": 17.61296912355839
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.56057900000451,
+                "p95": 38.15941799999564,
+                "max": 67.05157099999633,
+                "count": 599
+              },
+              "sinceStart": {
+                "p50": 21.700000000000003,
+                "p95": 42.5,
+                "max": 73.73852400000033,
+                "count": 2419
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.6489572487521631,
+            "speedMps": 0.530839259563928,
+            "xM": 108.48614249639574,
+            "yM": 13.168198652054164
+          }
+        ]
+      }
+    },
+    {
+      "second": 50,
+      "rtt": {
+        "n": 300,
+        "p50": 10.715799999998126,
+        "p95": 59.95249999999942,
+        "max": 86.95820000000094
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 70647.802927,
+        "phase": "race",
+        "raceSeconds": 50.7999999999984,
+        "paused": false,
+        "frameNumber": 4214,
+        "flashFrames": 0,
+        "heapUsedMB": 13.401138305664062,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.714077,
+            "p95": 21.596769,
+            "max": 25.578846,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 16.7,
+            "p95": 21.3,
+            "max": 153.682077,
+            "count": 4214
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.603461,
+            "p95": 0.937538,
+            "max": 5.209539,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 0.502,
+            "p95": 0.9430000000000001,
+            "max": 6.400154,
+            "count": 4051
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 58
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 21.13985700000194,
+                "p95": 42.905611000001954,
+                "max": 53.455673000004026,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 23.3,
+                "p95": 120.9,
+                "max": 3581.230716000002,
+                "count": 3354
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.06849151970531406,
+            "speedMps": 0.1947136122459905,
+            "xM": 107.20763092842769,
+            "yM": 16.4680279892523
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 21.055049000002327,
+                "p95": 42.32506399999693,
+                "max": 52.913719000003766,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 21.6,
+                "p95": 42.5,
+                "max": 73.73852400000033,
+                "count": 3024
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.4962183502331183,
+            "speedMps": 0.16926243663749746,
+            "xM": 109.04314050143795,
+            "yM": 12.420985524394617
+          }
+        ]
+      }
+    },
+    {
+      "second": 60,
+      "rtt": {
+        "n": 300,
+        "p50": 10.79939999999624,
+        "p95": 64.05329999999958,
+        "max": 107.01499999999942
+      },
+      "stats": {
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 80725.988159,
+        "phase": "race",
+        "raceSeconds": 60.83333333333116,
+        "paused": false,
+        "frameNumber": 4812,
+        "flashFrames": 0,
+        "heapUsedMB": 11.131080627441406,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.620846,
+            "p95": 21.529154000000002,
+            "max": 141.613462,
+            "count": 593
+          },
+          "sinceStart": {
+            "p50": 16.7,
+            "p95": 21.3,
+            "max": 153.682077,
+            "count": 4812
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 0.418462,
+            "p95": 0.960923,
+            "max": 4.787693,
+            "count": 597
+          },
+          "sinceStart": {
+            "p50": 0.488,
+            "p95": 0.9450000000000001,
+            "max": 6.400154,
+            "count": 4653
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 41,
+          "sinceStart": 99
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.926588000002084,
+                "p95": 41.57698100000562,
+                "max": 63.81331900000805,
+                "count": 597
+              },
+              "sinceStart": {
+                "p50": 22.900000000000002,
+                "p95": 99.4,
+                "max": 3581.230716000002,
+                "count": 3956
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 54
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.4575586243767828,
+            "speedMps": 0.15889019474649674,
+            "xM": 107.99711247949924,
+            "yM": 15.302026206762841
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.766287999998895,
+                "p95": 41.074680999998236,
+                "max": 113.03788799999165,
+                "count": 597
+              },
+              "sinceStart": {
+                "p50": 21.400000000000002,
+                "p95": 42.2,
+                "max": 113.03788799999165,
+                "count": 3626
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 350
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.053027409126538916,
+            "speedMps": 0.1320744056695501,
+            "xM": 109.4608174350092,
+            "yM": 10.837124640542232
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 81844.409466,
+    "phase": "race",
+    "raceSeconds": 61.949999999997765,
+    "paused": false,
+    "frameNumber": 4879,
+    "flashFrames": 1,
+    "heapUsedMB": 13.201416015625,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.620846,
+        "p95": 21.529154000000002,
+        "max": 141.613462,
+        "count": 593
+      },
+      "sinceStart": {
+        "p50": 16.7,
+        "p95": 21.3,
+        "max": 153.682077,
+        "count": 4879
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 0.404077,
+        "p95": 0.956615,
+        "max": 3.389616,
+        "count": 598
+      },
+      "sinceStart": {
+        "p50": 0.485,
+        "p95": 0.9440000000000001,
+        "max": 6.400154,
+        "count": 4720
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 41,
+      "sinceStart": 99
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.80742700000701,
+            "p95": 247.03223500000604,
+            "max": 520.5677730000025,
+            "count": 597
+          },
+          "sinceStart": {
+            "p50": 23.3,
+            "p95": 127,
+            "max": 3581.230716000002,
+            "count": 4023
+          }
+        },
+        "stale": {
+          "last10s": 29,
+          "sinceStart": 83
+        },
+        "dropped": {
+          "last10s": 1,
+          "sinceStart": 1
+        },
+        "outOfOrder": {
+          "last10s": 1,
+          "sinceStart": 1
+        },
+        "effectiveThrottle": 0.4,
+        "effectiveSteer": -0.2,
+        "speedMps": 0.10556272722700423,
+        "xM": 107.9727847694039,
+        "yM": 15.237806014389095
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.8170880000107,
+            "p95": 608.7856189999875,
+            "max": 1090.8376959999878,
+            "count": 597
+          },
+          "sinceStart": {
+            "p50": 21.8,
+            "p95": 45,
+            "max": 1090.8376959999878,
+            "count": 3693
+          }
+        },
+        "stale": {
+          "last10s": 51,
+          "sinceStart": 401
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": -0.03825812637377931,
+        "speedMps": 0.006805399364240193,
+        "xM": 109.46453825973701,
+        "yM": 10.79051603574594
+      }
+    ]
+  }
+}

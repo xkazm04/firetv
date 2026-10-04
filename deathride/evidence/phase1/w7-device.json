@@ -1,0 +1,5391 @@
+{
+  "device": "AFTKM 1080p, Chrome touch menus and scripted pursuit inputs over LAN; not human play",
+  "checks": [
+    "Remote UP opens career and LEFT/RIGHT chooses declared tiers; five named rivals and career car locks visible; guest cannot start/change host tier",
+    "Two scripted LAN controllers race with weapons; host clears round and receives cash; guest receives own cash with no career advancement",
+    "Fresh pairing after app process restart restores independent host/guest careers and garages"
+  ],
+  "errors": [],
+  "windows": [
+    {
+      "combatSummary": {
+        "living": 6,
+        "finished": 0,
+        "shots": 125,
+        "projectiles": 1,
+        "mines": 6,
+        "blasts": 0,
+        "poolExhaustions": 0
+      },
+      "track": {
+        "id": "foundry",
+        "name": "Foundry Ring",
+        "lesson": "Carry speed through the broad bends"
+      },
+      "surface": "Asphalt",
+      "feel": {
+        "id": "Balanced",
+        "deadZone": 0.03,
+        "exponent": 1,
+        "touchTravelPx": 115,
+        "touchTravelFraction": 0.28,
+        "steerRisePerSecond": 6,
+        "steerReturnPerSecond": 10,
+        "lowSpeedAuthority": 1.35,
+        "highSpeedAuthority": 1.05,
+        "speedBlendMps": 30,
+        "yawResponseScale": 0.75,
+        "stabilityScale": 1.1,
+        "throttleRisePerSecond": 3,
+        "throttleExponent": 1.15,
+        "brakeScale": 1,
+        "yawMinRadPerSecond": 0.4,
+        "yawMaxRadPerSecond": 2,
+        "turnInMaxSeconds": 0.8,
+        "recoveryMaxSeconds": 2.5
+      },
+      "units": "ms",
+      "uptimeMs": 31681.819002,
+      "phase": "race",
+      "raceMode": "career",
+      "raceSeconds": 10.066666666666746,
+      "paused": false,
+      "frameNumber": 1837,
+      "flashFrames": 0,
+      "heapUsedMB": 14.627578735351562,
+      "frameTimeMs": {
+        "lifetimeBinMs": 0.1,
+        "lifetimeCapMs": 5000,
+        "last10s": {
+          "p50": 16.735692999999998,
+          "p95": 20.064538,
+          "max": 24.228077,
+          "count": 599
+        },
+        "sinceStart": {
+          "p50": 16.6,
+          "p95": 20,
+          "max": 108.228538,
+          "count": 1837
+        }
+      },
+      "simStepMs": {
+        "lifetimeBinMs": 0.001,
+        "lifetimeCapMs": 50,
+        "last10s": {
+          "p50": 0.99,
+          "p95": 1.980308,
+          "max": 6.009,
+          "count": 599
+        },
+        "sinceStart": {
+          "p50": 1.086,
+          "p95": 2.508,
+          "max": 13.616539,
+          "count": 1334
+        }
+      },
+      "discardedSimulationMs": {
+        "last10s": 0,
+        "sinceStart": 8
+      },
+      "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+      "slots": [
+        {
+          "slot": 0,
+          "connected": true,
+          "reserved": true,
+          "clockSynced": true,
+          "inputAgeMs": {
+            "lifetimeBinMs": 0.1,
+            "lifetimeCapMs": 5000,
+            "last10s": {
+              "p50": 20.86846198211788,
+              "p95": 37.51876898211776,
+              "max": 52.04169298211855,
+              "count": 599
+            },
+            "sinceStart": {
+              "p50": 21.700000000000003,
+              "p95": 42.300000000000004,
+              "max": 61.05069296423608,
+              "count": 664
+            }
+          },
+          "stale": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "dropped": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "outOfOrder": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "effectiveThrottle": 0.12,
+          "effectiveSteer": 0.6444201665569221,
+          "effectiveFire": 1,
+          "effectiveMine": 1,
+          "layout": "Classic",
+          "mirrored": false,
+          "hostCareer": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "career": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "garage": {
+            "profile": "phone-fb53b74339af204c49c5999c660d3ffc",
+            "credits": 40,
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2,
+                "braking": 7
+              }
+            },
+            "races": 0,
+            "wins": 0,
+            "offers": [
+              {
+                "id": "engine",
+                "name": "Engine",
+                "description": "More straight-line speed and launch acceleration",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 190,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  7,
+                  7,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "tires",
+                "name": "Tires",
+                "description": "More tire force and lateral grip",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 160,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "brakes",
+                "name": "Brakes",
+                "description": "Shorter stopping distance without changing steering",
+                "tier": 1,
+                "nextTier": 2,
+                "maxTier": 3,
+                "price": 222,
+                "available": false,
+                "reason": "Clear round 4 for tier 2",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  8
+                ]
+              },
+              {
+                "id": "armor",
+                "name": "Armor",
+                "description": "More protection and mass at the cost of handling",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 180,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  7,
+                  6,
+                  5,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "suspension",
+                "name": "Suspension",
+                "description": "More corner grip and faster steering response",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 170,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  7,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "mounts",
+                "name": "Weapon mounts",
+                "description": "Unlock Hammer or carry more heavy ammunition",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 2,
+                "price": 240,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  3,
+                  7
+                ]
+              }
+            ],
+            "message": "Installed Brakes 1",
+            "saveStatus": "Saved",
+            "receipt": null
+          },
+          "combat": {
+            "armingSeconds": 0,
+            "hp": 60.789255235476844,
+            "maxHp": 100,
+            "wrecked": false,
+            "weapon": 0,
+            "weaponName": "Rivet",
+            "ammo": 177,
+            "mines": 2,
+            "heavyAmmo": 5,
+            "cooldownSeconds": 0.03333333333333338,
+            "mineCooldownSeconds": 1.5333333333333368,
+            "damageEvents": 14,
+            "kills": 0
+          },
+          "drifting": false,
+          "loadTransfer": -0.02752006639982422,
+          "surfaceId": "Asphalt",
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 7
+            }
+          },
+          "lap": 1,
+          "position": 2,
+          "speedMps": 21.312576208663078,
+          "xM": 110.43295590488134,
+          "yM": -7.550604935801693,
+          "heading": -1.6981171435931328,
+          "yaw": -0.7473747900560679,
+          "progressM": 181.91324063019658
+        },
+        {
+          "slot": 1,
+          "connected": true,
+          "reserved": true,
+          "clockSynced": true,
+          "inputAgeMs": {
+            "lifetimeBinMs": 0.1,
+            "lifetimeCapMs": 5000,
+            "last10s": {
+              "p50": 22.057308005958475,
+              "p95": 39.30130804172222,
+              "max": 51.580691994040535,
+              "count": 599
+            },
+            "sinceStart": {
+              "p50": 21.900000000000002,
+              "p95": 39.2,
+              "max": 51.580691994040535,
+              "count": 648
+            }
+          },
+          "stale": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "dropped": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "outOfOrder": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "effectiveThrottle": 0.12,
+          "effectiveSteer": 0.5736811628015586,
+          "effectiveFire": 1,
+          "effectiveMine": 1,
+          "layout": "Classic",
+          "mirrored": false,
+          "hostCareer": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "career": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "garage": {
+            "profile": "phone-94c5493f167154e182ad6f298dd0699c",
+            "credits": 160,
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2,
+                "braking": 6
+              }
+            },
+            "races": 0,
+            "wins": 0,
+            "offers": [
+              {
+                "id": "engine",
+                "name": "Engine",
+                "description": "More straight-line speed and launch acceleration",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 190,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  7,
+                  7,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "tires",
+                "name": "Tires",
+                "description": "More tire force and lateral grip",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 160,
+                "available": true,
+                "reason": "Ready to install",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "brakes",
+                "name": "Brakes",
+                "description": "Shorter stopping distance without changing steering",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 120,
+                "available": true,
+                "reason": "Ready to install",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "armor",
+                "name": "Armor",
+                "description": "More protection and mass at the cost of handling",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 180,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  7,
+                  6,
+                  5,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "suspension",
+                "name": "Suspension",
+                "description": "More corner grip and faster steering response",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 170,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  7,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "mounts",
+                "name": "Weapon mounts",
+                "description": "Unlock Hammer or carry more heavy ammunition",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 2,
+                "price": 240,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  3,
+                  6
+                ]
+              }
+            ],
+            "message": "Parts stay with this car",
+            "saveStatus": "Saved",
+            "receipt": null
+          },
+          "combat": {
+            "armingSeconds": 0,
+            "hp": 65.95652506258995,
+            "maxHp": 100,
+            "wrecked": false,
+            "weapon": 0,
+            "weaponName": "Rivet",
+            "ammo": 150,
+            "mines": 1,
+            "heavyAmmo": 5,
+            "cooldownSeconds": 0.03333333333333338,
+            "mineCooldownSeconds": 1.5333333333333368,
+            "damageEvents": 18,
+            "kills": 0
+          },
+          "drifting": false,
+          "loadTransfer": -0.049679770871526474,
+          "surfaceId": "Asphalt",
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 6
+            }
+          },
+          "lap": 1,
+          "position": 3,
+          "speedMps": 20.79149132553956,
+          "xM": 113.90179407760904,
+          "yM": -1.1473196605723994,
+          "heading": -1.731592008157104,
+          "yaw": -0.6421690166619283,
+          "progressM": 175.24366370604537
+        }
+      ]
+    },
+    {
+      "combatSummary": {
+        "living": 4,
+        "finished": 0,
+        "shots": 263,
+        "projectiles": 0,
+        "mines": 7,
+        "blasts": 0,
+        "poolExhaustions": 0
+      },
+      "track": {
+        "id": "foundry",
+        "name": "Foundry Ring",
+        "lesson": "Carry speed through the broad bends"
+      },
+      "surface": "Asphalt",
+      "feel": {
+        "id": "Balanced",
+        "deadZone": 0.03,
+        "exponent": 1,
+        "touchTravelPx": 115,
+        "touchTravelFraction": 0.28,
+        "steerRisePerSecond": 6,
+        "steerReturnPerSecond": 10,
+        "lowSpeedAuthority": 1.35,
+        "highSpeedAuthority": 1.05,
+        "speedBlendMps": 30,
+        "yawResponseScale": 0.75,
+        "stabilityScale": 1.1,
+        "throttleRisePerSecond": 3,
+        "throttleExponent": 1.15,
+        "brakeScale": 1,
+        "yawMinRadPerSecond": 0.4,
+        "yawMaxRadPerSecond": 2,
+        "turnInMaxSeconds": 0.8,
+        "recoveryMaxSeconds": 2.5
+      },
+      "units": "ms",
+      "uptimeMs": 41807.140233,
+      "phase": "race",
+      "raceMode": "career",
+      "raceSeconds": 20.200000000000134,
+      "paused": false,
+      "frameNumber": 2444,
+      "flashFrames": 0,
+      "heapUsedMB": 16.452186584472656,
+      "frameTimeMs": {
+        "lifetimeBinMs": 0.1,
+        "lifetimeCapMs": 5000,
+        "last10s": {
+          "p50": 16.668077,
+          "p95": 20.520462,
+          "max": 27.495307999999998,
+          "count": 599
+        },
+        "sinceStart": {
+          "p50": 16.6,
+          "p95": 20.200000000000003,
+          "max": 108.228538,
+          "count": 2444
+        }
+      },
+      "simStepMs": {
+        "lifetimeBinMs": 0.001,
+        "lifetimeCapMs": 50,
+        "last10s": {
+          "p50": 1.309154,
+          "p95": 2.163692,
+          "max": 5.343615,
+          "count": 600
+        },
+        "sinceStart": {
+          "p50": 1.12,
+          "p95": 2.321,
+          "max": 13.616539,
+          "count": 1942
+        }
+      },
+      "discardedSimulationMs": {
+        "last10s": 0,
+        "sinceStart": 8
+      },
+      "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+      "slots": [
+        {
+          "slot": 0,
+          "connected": true,
+          "reserved": true,
+          "clockSynced": true,
+          "inputAgeMs": {
+            "lifetimeBinMs": 0.1,
+            "lifetimeCapMs": 5000,
+            "last10s": {
+              "p50": 21.57715399403969,
+              "p95": 41.15330801788514,
+              "max": 50.7857690059609,
+              "count": 600
+            },
+            "sinceStart": {
+              "p50": 21.700000000000003,
+              "p95": 41.900000000000006,
+              "max": 61.05069296423608,
+              "count": 1272
+            }
+          },
+          "stale": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "dropped": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "outOfOrder": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "effectiveThrottle": 0,
+          "effectiveSteer": 0,
+          "effectiveFire": 0,
+          "effectiveMine": 0,
+          "layout": "Classic",
+          "mirrored": false,
+          "hostCareer": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "career": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "garage": {
+            "profile": "phone-fb53b74339af204c49c5999c660d3ffc",
+            "credits": 40,
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2,
+                "braking": 7
+              }
+            },
+            "races": 0,
+            "wins": 0,
+            "offers": [
+              {
+                "id": "engine",
+                "name": "Engine",
+                "description": "More straight-line speed and launch acceleration",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 190,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  7,
+                  7,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "tires",
+                "name": "Tires",
+                "description": "More tire force and lateral grip",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 160,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "brakes",
+                "name": "Brakes",
+                "description": "Shorter stopping distance without changing steering",
+                "tier": 1,
+                "nextTier": 2,
+                "maxTier": 3,
+                "price": 222,
+                "available": false,
+                "reason": "Clear round 4 for tier 2",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  8
+                ]
+              },
+              {
+                "id": "armor",
+                "name": "Armor",
+                "description": "More protection and mass at the cost of handling",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 180,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  7,
+                  6,
+                  5,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "suspension",
+                "name": "Suspension",
+                "description": "More corner grip and faster steering response",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 170,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  7,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "mounts",
+                "name": "Weapon mounts",
+                "description": "Unlock Hammer or carry more heavy ammunition",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 2,
+                "price": 240,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  3,
+                  7
+                ]
+              }
+            ],
+            "message": "Installed Brakes 1",
+            "saveStatus": "Saved",
+            "receipt": null
+          },
+          "combat": {
+            "armingSeconds": 0,
+            "hp": 0,
+            "maxHp": 100,
+            "wrecked": true,
+            "weapon": 0,
+            "weaponName": "Rivet",
+            "ammo": 158,
+            "mines": 1,
+            "heavyAmmo": 5,
+            "cooldownSeconds": 0,
+            "mineCooldownSeconds": 0,
+            "damageEvents": 37,
+            "kills": 1
+          },
+          "drifting": false,
+          "loadTransfer": -0.0317337451372806,
+          "surfaceId": "Asphalt",
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 7
+            }
+          },
+          "lap": 1,
+          "position": 5,
+          "speedMps": 0.0000013562644872422075,
+          "xM": 32.225985247074966,
+          "yM": -43.60406277310918,
+          "heading": -2.8788933592736328,
+          "yaw": -3.2667128656518216e-7,
+          "progressM": 263.0929305360652
+        },
+        {
+          "slot": 1,
+          "connected": true,
+          "reserved": true,
+          "clockSynced": true,
+          "inputAgeMs": {
+            "lifetimeBinMs": 0.1,
+            "lifetimeCapMs": 5000,
+            "last10s": {
+              "p50": 19.85130801192281,
+              "p95": 37.257077023838065,
+              "max": 52.05907699999807,
+              "count": 600
+            },
+            "sinceStart": {
+              "p50": 21.1,
+              "p95": 39,
+              "max": 52.05907699999807,
+              "count": 1256
+            }
+          },
+          "stale": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "dropped": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "outOfOrder": {
+            "last10s": 0,
+            "sinceStart": 0
+          },
+          "effectiveThrottle": 0.12,
+          "effectiveSteer": 0.41008841550706265,
+          "effectiveFire": 1,
+          "effectiveMine": 1,
+          "layout": "Classic",
+          "mirrored": false,
+          "hostCareer": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "career": {
+            "round": 1,
+            "roundCount": 12,
+            "cleared": 0,
+            "season": 1,
+            "event": "Foundry Opener",
+            "course": {
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "lesson": "Carry speed through the broad bends"
+            },
+            "cup": "Yard Cup",
+            "points": 0,
+            "bestTrophy": "No medal",
+            "targets": [
+              6,
+              14,
+              22
+            ],
+            "bonuses": [
+              100,
+              160,
+              240
+            ],
+            "trophies": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "difficulty": {
+              "id": "Rookie",
+              "name": "Rookie",
+              "description": "Patient lines and forward weapons - no rival mines",
+              "rewardScale": 1
+            },
+            "unlocks": [
+              {
+                "kind": "car",
+                "id": "Needle",
+                "name": "Needle",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Line",
+                "name": "Line",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "car",
+                "id": "Trail",
+                "name": "Trail",
+                "afterRounds": 2,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Bastion",
+                "name": "Bastion",
+                "afterRounds": 5,
+                "unlocked": false
+              },
+              {
+                "kind": "car",
+                "id": "Comet",
+                "name": "Comet",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "foundry",
+                "name": "Foundry Ring",
+                "afterRounds": 0,
+                "unlocked": true
+              },
+              {
+                "kind": "track",
+                "id": "switchback",
+                "name": "Switchback",
+                "afterRounds": 1,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "redline",
+                "name": "Redline",
+                "afterRounds": 3,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "runoff",
+                "name": "Runoff",
+                "afterRounds": 6,
+                "unlocked": false
+              },
+              {
+                "kind": "track",
+                "id": "crucible",
+                "name": "Crucible",
+                "afterRounds": 9,
+                "unlocked": false
+              }
+            ],
+            "partUnlocks": [
+              {
+                "name": "Engine 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Engine 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Tires 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Brakes 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Armor 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 2",
+                "afterRounds": 4,
+                "unlocked": false
+              },
+              {
+                "name": "Suspension 3",
+                "afterRounds": 8,
+                "unlocked": false
+              },
+              {
+                "name": "Weapon mounts 2",
+                "afterRounds": 5,
+                "unlocked": false
+              }
+            ],
+            "message": "Player 1 hosts. Player 2 is a guest."
+          },
+          "garage": {
+            "profile": "phone-94c5493f167154e182ad6f298dd0699c",
+            "credits": 160,
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2,
+                "braking": 6
+              }
+            },
+            "races": 0,
+            "wins": 0,
+            "offers": [
+              {
+                "id": "engine",
+                "name": "Engine",
+                "description": "More straight-line speed and launch acceleration",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 190,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  7,
+                  7,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "tires",
+                "name": "Tires",
+                "description": "More tire force and lateral grip",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 160,
+                "available": true,
+                "reason": "Ready to install",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "brakes",
+                "name": "Brakes",
+                "description": "Shorter stopping distance without changing steering",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 120,
+                "available": true,
+                "reason": "Ready to install",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  7
+                ]
+              },
+              {
+                "id": "armor",
+                "name": "Armor",
+                "description": "More protection and mass at the cost of handling",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 180,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  7,
+                  6,
+                  5,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "suspension",
+                "name": "Suspension",
+                "description": "More corner grip and faster steering response",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 3,
+                "price": 170,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  7,
+                  5,
+                  5,
+                  7,
+                  2,
+                  6
+                ]
+              },
+              {
+                "id": "mounts",
+                "name": "Weapon mounts",
+                "description": "Unlock Hammer or carry more heavy ammunition",
+                "tier": 0,
+                "nextTier": 1,
+                "maxTier": 2,
+                "price": 240,
+                "available": false,
+                "reason": "Earn more credits",
+                "before": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  2,
+                  6
+                ],
+                "after": [
+                  6,
+                  6,
+                  6,
+                  5,
+                  5,
+                  6,
+                  3,
+                  6
+                ]
+              }
+            ],
+            "message": "Parts stay with this car",
+            "saveStatus": "Saved",
+            "receipt": null
+          },
+          "combat": {
+            "armingSeconds": 0,
+            "hp": 19.593134049301334,
+            "maxHp": 100,
+            "wrecked": false,
+            "weapon": 0,
+            "weaponName": "Rivet",
+            "ammo": 99,
+            "mines": 0,
+            "heavyAmmo": 5,
+            "cooldownSeconds": 0.1166666666666667,
+            "mineCooldownSeconds": 0,
+            "damageEvents": 40,
+            "kills": 1
+          },
+          "drifting": false,
+          "loadTransfer": -0.11132659973615444,
+          "surfaceId": "Asphalt",
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 6
+            }
+          },
+          "lap": 1,
+          "position": 2,
+          "speedMps": 22.90717627599741,
+          "xM": -83.58042704369444,
+          "yM": -39.340595209041595,
+          "heading": 2.715669897528001,
+          "yaw": -0.40691667202790965,
+          "progressM": 395.0704402106717
+        }
+      ]
+    }
+  ],
+  "result": {
+    "combatSummary": {
+      "living": 2,
+      "finished": 0,
+      "shots": 310,
+      "projectiles": 0,
+      "mines": 5,
+      "blasts": 0,
+      "poolExhaustions": 0
+    },
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 46186.284772,
+    "phase": "results",
+    "raceMode": "career",
+    "raceSeconds": 24.433333333333227,
+    "paused": false,
+    "frameNumber": 2705,
+    "flashFrames": 0,
+    "heapUsedMB": 14.981803894042969,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.709231000000003,
+        "p95": 20.750539,
+        "max": 56.778846,
+        "count": 598
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 20.3,
+        "max": 108.228538,
+        "count": 2705
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.245461,
+        "p95": 1.955077,
+        "max": 5.343615,
+        "count": 591
+      },
+      "sinceStart": {
+        "p50": 1.127,
+        "p95": 2.269,
+        "max": 13.616539,
+        "count": 2196
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 8
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 21.461692970195145,
+            "p95": 41.618538994043774,
+            "max": 50.7857690059609,
+            "count": 591
+          },
+          "sinceStart": {
+            "p50": 21.5,
+            "p95": 41.5,
+            "max": 61.05069296423608,
+            "count": 1526
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Round cleared - 2 cup points"
+        },
+        "career": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Round cleared - 2 cup points"
+        },
+        "garage": {
+          "profile": "phone-fb53b74339af204c49c5999c660d3ffc",
+          "credits": 92,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 7
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 1,
+              "nextTier": 2,
+              "maxTier": 3,
+              "price": 222,
+              "available": false,
+              "reason": "Clear round 4 for tier 2",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                8
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                7
+              ]
+            }
+          ],
+          "message": "Pit service complete - ready to race",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 5,
+            "kills": 1,
+            "gross": 130,
+            "repair": 78,
+            "insurance": 22,
+            "net": 52,
+            "banked": 52,
+            "balance": 92
+          }
+        },
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 0,
+          "maxHp": 100,
+          "wrecked": true,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 158,
+          "mines": 1,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 37,
+          "kills": 1
+        },
+        "drifting": false,
+        "loadTransfer": -0.0317337451372806,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 7
+          }
+        },
+        "lap": 1,
+        "position": 5,
+        "speedMps": 3.0656045041576496e-12,
+        "xM": 32.22598487813973,
+        "yM": -43.604062531735615,
+        "heading": -2.878893465464245,
+        "yaw": -7.38384715439618e-13,
+        "progressM": 263.0929305360652
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 20.75884699999733,
+            "p95": 39.19161598807841,
+            "max": 52.05907699999807,
+            "count": 591
+          },
+          "sinceStart": {
+            "p50": 21.1,
+            "p95": 39,
+            "max": 52.05907699999807,
+            "count": 1510
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 1,
+        "effectiveSteer": 0.43950232175539483,
+        "effectiveFire": 1,
+        "effectiveMine": 1,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Round cleared - 2 cup points"
+        },
+        "career": {
+          "round": 1,
+          "roundCount": 12,
+          "cleared": 0,
+          "season": 1,
+          "event": "Foundry Opener",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends"
+          },
+          "cup": "Yard Cup",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "garage": {
+          "profile": "phone-94c5493f167154e182ad6f298dd0699c",
+          "credits": 245,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 6
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 120,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                6
+              ]
+            }
+          ],
+          "message": "Pit service complete - ready to race",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 3,
+            "kills": 2,
+            "gross": 185,
+            "repair": 100,
+            "insurance": 0,
+            "net": 85,
+            "banked": 85,
+            "balance": 245
+          }
+        },
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 0,
+          "maxHp": 100,
+          "wrecked": true,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 77,
+          "mines": 0,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0.18333333333333335,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 51,
+          "kills": 2
+        },
+        "drifting": false,
+        "loadTransfer": -0.11037078248482879,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 6
+          }
+        },
+        "lap": 1,
+        "position": 3,
+        "speedMps": 21.839763052089868,
+        "xM": -97.38285648417776,
+        "yM": 35.899610023007575,
+        "heading": 0.6920006726854213,
+        "yaw": -0.5356830185997606,
+        "progressM": 487.12074715789174
+      }
+    ]
+  },
+  "restored": {
+    "combatSummary": {
+      "living": 6,
+      "finished": 0,
+      "shots": 0,
+      "projectiles": 0,
+      "mines": 0,
+      "blasts": 0,
+      "poolExhaustions": 0
+    },
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 1303.127615,
+    "phase": "lobby",
+    "raceMode": "practice",
+    "raceSeconds": 0.4833333333333333,
+    "paused": false,
+    "frameNumber": 16,
+    "flashFrames": 0,
+    "heapUsedMB": 14.479087829589844,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 17.671539,
+        "p95": 159.874539,
+        "max": 159.874539,
+        "count": 16
+      },
+      "sinceStart": {
+        "p50": 17.6,
+        "p95": 159.8,
+        "max": 159.874539,
+        "count": 16
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 3.954154,
+        "p95": 13.076461,
+        "max": 19.888923,
+        "count": 29
+      },
+      "sinceStart": {
+        "p50": 3.954,
+        "p95": 13.076,
+        "max": 19.888923,
+        "count": 29
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 90,
+      "sinceStart": 90
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 13.334691988079044,
+            "p95": 31.126614964237206,
+            "max": 37.45200001192097,
+            "count": 30
+          },
+          "sinceStart": {
+            "p50": 13.3,
+            "p95": 31.1,
+            "max": 37.45200001192097,
+            "count": 30
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "career": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "garage": {
+          "profile": "phone-fb53b74339af204c49c5999c660d3ffc",
+          "credits": 92,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 7
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 1,
+              "nextTier": 2,
+              "maxTier": 3,
+              "price": 222,
+              "available": false,
+              "reason": "Clear round 4 for tier 2",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                8
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                7
+              ]
+            }
+          ],
+          "message": "Parts stay with this car",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 5,
+            "kills": 1,
+            "gross": 130,
+            "repair": 78,
+            "insurance": 22,
+            "net": 52,
+            "banked": 52,
+            "balance": 92
+          }
+        },
+        "combat": {
+          "armingSeconds": 3.566666666666667,
+          "hp": 100,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 180,
+          "mines": 4,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 0,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 7
+          }
+        },
+        "lap": 1,
+        "position": 2,
+        "speedMps": 0,
+        "xM": -51.43526156115874,
+        "yM": 45.42258140363993,
+        "heading": -0.0009861586491433899,
+        "yaw": 0,
+        "progressM": -9.845839259014724
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 26.860385023842127,
+            "p95": 37.86515398807933,
+            "max": 42.10130797615818,
+            "count": 24
+          },
+          "sinceStart": {
+            "p50": 26.8,
+            "p95": 37.800000000000004,
+            "max": 42.10130797615818,
+            "count": 24
+          }
+        },
+        "stale": {
+          "last10s": 2,
+          "sinceStart": 2
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "round": 2,
+          "roundCount": 12,
+          "cleared": 1,
+          "season": 1,
+          "event": "Switchback School",
+          "course": {
+            "id": "switchback",
+            "name": "Switchback",
+            "lesson": "Brake early for the eastern hairpin"
+          },
+          "cup": "Yard Cup",
+          "points": 2,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "career": {
+          "round": 1,
+          "roundCount": 12,
+          "cleared": 0,
+          "season": 1,
+          "event": "Foundry Opener",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends"
+          },
+          "cup": "Yard Cup",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            6,
+            14,
+            22
+          ],
+          "bonuses": [
+            100,
+            160,
+            240
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 5,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 6,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 9,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "garage": {
+          "profile": "phone-94c5493f167154e182ad6f298dd0699c",
+          "credits": 245,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 6
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 120,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                6
+              ]
+            }
+          ],
+          "message": "Parts stay with this car",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 3,
+            "kills": 2,
+            "gross": 185,
+            "repair": 100,
+            "insurance": 0,
+            "net": 85,
+            "banked": 85,
+            "balance": 245
+          }
+        },
+        "combat": {
+          "armingSeconds": 3.566666666666667,
+          "hp": 100,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 180,
+          "mines": 4,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 0,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": -0.004843932158244388,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 6
+          }
+        },
+        "lap": 1,
+        "position": 1,
+        "speedMps": 0.7434371168510503,
+        "xM": -51.111744291324435,
+        "yM": 52.02428899866076,
+        "heading": 0.01114119371831963,
+        "yaw": 0.002101880445876306,
+        "progressM": -9.528832476480943
+      }
+    ]
+  }
+}

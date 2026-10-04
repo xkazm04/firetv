@@ -1,0 +1,624 @@
+{
+  "at": "2026-10-02T16:14:41.374713+00:00",
+  "status": "pass",
+  "exact_staged_art_files": 154,
+  "files": [
+    {
+      "path": "deathride/art/ACCEPTANCE.md",
+      "sha256": "373a2afd0d3cbf6b2435d3de2853fc880e88117aa14ecc7ed849fe7dc0ddcf5c"
+    },
+    {
+      "path": "deathride/art/V2-REFERENCE-APPROVAL.md",
+      "sha256": "b91077c2b38c14fb5c3e490f1c92b827d617e302504e5959ca5a869dd64f4e0c"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-approval-checks.json",
+      "sha256": "090402b247044d1479fc273f15eed2004102a61b72fa633920699962f6a63808"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-attempt-extension.json",
+      "sha256": "1530d4523185dc3b76f64ecf479e8a7fcac7f7f93955eb3df8d611d5e7f687b7"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-baseline.json",
+      "sha256": "191b5c90ff5c0540a83ed4184b36231d835611a25c1a51141416e27cb693b949"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-cap-checks.json",
+      "sha256": "1c979be0201cba8bc69a03a61496b68605ef19777d7b1abbcdfd12b8291e7316"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-comet-layout.json",
+      "sha256": "0f30ebfec482d72cc2b678628b1bc30e9ad3344920361cf0ec278cf54bef6d89"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-comet-sibling.json",
+      "sha256": "27985f60fd8dbd820f7d5974169526a4fdf19839d416384f0cb78885a8cdc7f1"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-comet-wide.json",
+      "sha256": "e9c1eb4d36cddcb71b342f0c38631c5829a15f48a13cb6a9fc478f1697b28467"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-direct-review.json",
+      "sha256": "cb3c461f6403254e5540f64d110757c21a373ed63b2ccd0248a570b69099099c"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-electrical.json",
+      "sha256": "952b56196b57ce7cc9e877550536a4b95ed8c13aa8bc1ff9fc0a5d0ffc2919c5"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-readability-extension.json",
+      "sha256": "14fa02bc8c297447f03f0ce7b391e719fd4269aa688a0f02bdb50a5e6df41ef0"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-single.json",
+      "sha256": "08e1657951a048cd6a86b80dd6be9bf4ccb226ce4228131cd6ddf61041498af6"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-structure.json",
+      "sha256": "e266ff003dc0994e6f1d3c892d408a27fb0799ff5da449901ee4c50063f12f5a"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-wheels.json",
+      "sha256": "e73051aff79c430e3478ea9db85c45f31c7cfbd297cba3701c022daa694fa7e1"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-kestrel-wide.json",
+      "sha256": "e1545f9dc665a64282607e5423bb3d99968319ebc908679c477d7dd477f7e9d7"
+    },
+    {
+      "path": "deathride/art/audits/v2-part4-shared-spend.json",
+      "sha256": "dacd0cebdefbc911e0f87a7e3b5a246b3549dec55984ac150608f3240eb9113c"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-comet-framing.csv",
+      "sha256": "104bc7e01cc02357b8b9686236fdb267078f257677d601bd9b292d0da67bc00e"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-comet-layout.csv",
+      "sha256": "e7cb72345b1dbab8015858ec58d56e73a04201c230247156a5c40336c045d95b"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-comet-sibling.csv",
+      "sha256": "062132915d878c5a6959e18ef65b4f9467374623f9e9f19108d5879f911b1dbc"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-comet-wide.csv",
+      "sha256": "09507093f5f505469b0f820a3973ab9ff2c85aa604346d21a287986cc8b024e0"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-derived.csv",
+      "sha256": "2a2c49f33e3f141112ec76a5dc0ca16746d23aa1763fc1b28ca24a96edca1875"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-electrical.csv",
+      "sha256": "1cbd96d88c89daed6af29857d3775a2538e4d122c28c3aaaeffa0e3c2ed9efeb"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-harpoon.csv",
+      "sha256": "6ff3f90bb4bb037123cc799a8099c8150fc25c0c35fa668788721f5dc4fcb0a5"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-single.csv",
+      "sha256": "ab86f19b3c64d8075118552c0014a5fa6460fce03902d2e8df1f6e918b95abb1"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-structure.csv",
+      "sha256": "ea3de7e6d462f50de2ef975d64ef2c6c9a9aa27bd9e9ded431bfc8e84d3a832b"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-wheels.csv",
+      "sha256": "99c501d98d5d8000134b821cc0557cfe14c1f4f207537185d22a14ec1beb0090"
+    },
+    {
+      "path": "deathride/art/briefs/v2-part4-kestrel-wide.csv",
+      "sha256": "c2004ad682db373a239510e18ad9ff98a510028f8353faa6350ef2afc7eda6ee"
+    },
+    {
+      "path": "deathride/art/budget.json",
+      "sha256": "4b536b87c52dcf4cffa7c9eb3024f00e016c9534c9aef954510ea32f0da4099d"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/09ff41d89bc974a24ed370343637a1530ed4b17356e4b0eb824ec81326c176f1.json",
+      "sha256": "ec1fb6cdc811ff21596c1c2ac69577f999db93b23aaf61af5c2dc329fb93c740"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/1e9cd64a55504082978fbbf518f2f5a7ae6865f4b17b20ffacdd6fd794810a29.json",
+      "sha256": "a0ff8429f054492f91688d053efd95b1de2a17ceed0f3ce4c05f10e4039b7103"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/233268511d0c5b3639a0ca3cf6558c47ea1f7477306cacf43b6f82fe8b01f215.json",
+      "sha256": "16856ebee9fdbec793a067dcb71ee771236d07af5af27b74f0cb8da7c34381dc"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/34e6eeadf01131d21bd0c461db1c39c078d368215624029e6b00e28585688487.json",
+      "sha256": "1c526d00b3f8e2420eeab7feb13480809d2c8613ddb92e71af90e3b73f4e530d"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/43e48e83c85aa4f0115756fd2a94fed2c8e0d2787747e32f38d65de20bf67dcb.json",
+      "sha256": "28988a2cb2e8a58217b60a1c65f8d7d3a4ce891b62885803df5ae6d492040509"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/54321eaf31bbd7ea8ac26aebeca833f6b53537899f54ac1435b27f28d2dde6fb.json",
+      "sha256": "9f161b10cd6f531d00c038dfc589f45a2df8c2933198f33680ad88b36bc2af4b"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/65849f6e32631900ca1f24dfa3a2a65cfd8c471593ee19dca9cd958a5c48a03d.json",
+      "sha256": "d4c58506ebde3c5f12e0d9ccdcee311d3478604e69dc3606b35b9db7c65836fd"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/87a81a3331f66568cbd400ed1b8f4a3cefe65612df64d5f78388cbdc910a892b.json",
+      "sha256": "717554459e3453c53a3ae2969e6fadc277045a188e6a5b64a4e4dfe635275ff0"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/8aaa086fdd096ccda88d65477532deb09cbbe7dc069ee0fd28a4217f18801e3a.json",
+      "sha256": "92bc4c3977c4dfc8a785af7a25468f2d0fa85e766d7c29e07dae9f4f73892c2c"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/a899c27db4a1f4aaf37d8537d7c26b145c3509eb547986531029bd5641e9372e.json",
+      "sha256": "b9a58aedb3ec4e8832e3f6725aa0a7136cfd66308a366e635f0481e114b6a0ea"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/c34249143b5c932472a2e7c9d55604d6c69ecc1bbc107876520d21e0f6f0d747.json",
+      "sha256": "68ea2eba9fb8177648e5dbb658e036c6f4c15042eeac102b7ae5be4d5157ae52"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/edd95052414bae7ca20648a505e8e1202939f72dffaeec244c4e5cf38ed62465.json",
+      "sha256": "b27ba99359f87ba3bd4cad6343c15f8f30b64e54a7b9853d46c2e2a208f35bc6"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/f811b84c2e5cd672fdf2fdc698371410241f3291b72f46d27cf05950481975e0.json",
+      "sha256": "08c37df35efdf1564753850a90c3db8ac221e4128bdc0aa3af07da57528373a5"
+    },
+    {
+      "path": "deathride/art/grades/mimo-9b_q8-64k/ff76b37f8616dbf220b5616313ac4e3117820025492b70004c416b06178434fa.json",
+      "sha256": "f2fa6314e81b233ee34782c3d87999878f418cac2d741ad22007098c8d197508"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/002e042f4460608ab9538f03fb9b9ef597d9fdbdd48fdcfee5ff330e367eaa84.json",
+      "sha256": "15e2e8f92e42db40803d33ab86ea8023eb25f3beb5a128c34b81219c7375a8fc"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/2ab569dfbdd24ce8c69b78c8e72abf30052f2e36d99f8bce6fd36e21c851db89.json",
+      "sha256": "a24e4da7e8fbaeef8d720f409143dba5badbd9de1bd30ab809ecf2b08feace9c"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/3617a849f703107ecec85d5a70dd18224a3255e2e1ca68a3d0ea88446b277653.json",
+      "sha256": "9049763a8878b32299d08ab30f34a4d96e8a91f142f3690cc1fa910386bff19d"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/3958f50a5b9c07e197581ccb0312cd185fec8eeadfd2132799c7dbc9317b10f6.json",
+      "sha256": "a25205cf66a10fc67c62fc2f4e45c96e0c3e609727cf3c067c3f891c840dbc1e"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/3d32f15e817bce9ac858cdfdae5920622a4216055eb6caa314f9e97488f99d59.json",
+      "sha256": "1873326ea46e45c432b4585abacca18e90345a8dfcf933d2e80aa4af9ebbccad"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/4f6a18f8afac2111d1726622448f8c4c93c4924841b1a58a56a73a8781efaf32.json",
+      "sha256": "7217c2002dee9f51fb7c52f2e7e307df6c90a277fe5a30e5e14edf05b11c2425"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/5a75430882bc17c9f9b76254322734fbd8fd0c33186bc21633d5dd90ae70bf13.json",
+      "sha256": "f9d1e49e58f62ed6ded3f776ab1ea297d8423f2322c871f8f2560cb71e8ca307"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/6e05d99f3a50f104825965eb4c16481d95c6f69b421d73a9ba48d4a18c63ba69.json",
+      "sha256": "32a511b2e9a3b4607c4bd21f143cbbb04126649de541eeea3d0c83449765ca1f"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/935387703d716d32f3fa0bb2e0fcc3f715d31a4d73af8070a8104afce1e51737.json",
+      "sha256": "5a9cf9c74e68ac5da0a13b72900048cb7c146bfe4297f2024e715b0f599bf183"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/9799c85c288f51b316375865cfba28539debcec67c074c25bd3f7f1b6541874a.json",
+      "sha256": "2d12f1dc91b9c3b72de19fb4b1579cd6e36da9c10adfbaaf3cb5fd01cfc86a77"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/a3a43692fe814f5deebc7fe4e93b8da6fdc583903b8aa2bffaeab699acae305b.json",
+      "sha256": "8e7a92d4752732532b618749d4d9aecd5b5f32a7dd599e96eba1bfd7961a9896"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/bf0fae805a522bcaab6a38ad8828209a40e6d9a9b8114d72abed2ffc706a025c.json",
+      "sha256": "84ef93b8703c138e3456b043d2ad50b6322af5f52701aed26c73862293fcc544"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/cada7436906196f2b75625869c3cf2daf1d63a5cace8786501e75ee7705ae59b.json",
+      "sha256": "97696d34da94d6f3783b562f3baa33beddcf5a43eb77813410de6a17e21ba119"
+    },
+    {
+      "path": "deathride/art/grades/qwen3.8_27b-64k/ebe2a848d3dcdb50d57c9d8bc30337cefd13d6fd03cc4cb5ba1bdf6c70713d98.json",
+      "sha256": "e07304e9df6f3a50b00814ee0b069f07cd0c52802791ec09177e5d59aca95569"
+    },
+    {
+      "path": "deathride/art/history.jsonl",
+      "sha256": "7fc694629d3b5406525dd526549e79f475110ba0d922573a4cdc8b9f3fca928c"
+    },
+    {
+      "path": "deathride/art/owner-choice-binding.json",
+      "sha256": "8a09c41bacd96dc6e31925742449a62ba16eace22006483ba1154531fee4736f"
+    },
+    {
+      "path": "deathride/art/part4-selections.json",
+      "sha256": "8f4fcf0b892a8b2ef2a69f81ab063ddb51d097a97a9bed4490d0edc88b52bfc6"
+    },
+    {
+      "path": "deathride/art/proofs/v2-part4-comet-wide.json",
+      "sha256": "1e8fa20b443445b733d8d89632fef3088fc94dbe60c3c2bd2e5f26b97554fb5e"
+    },
+    {
+      "path": "deathride/art/proofs/v2-part4-kestrel-single.json",
+      "sha256": "8d8f7d3654090a3284f5b64e76235f0b4b8036ba4be108716593e684500ad7ee"
+    },
+    {
+      "path": "deathride/art/proofs/v2-part4-kestrel-wheels.json",
+      "sha256": "9f8cb3485e1b7a434469752ce5a1b4af591da23039de3b935a46e42c7a9d88cc"
+    },
+    {
+      "path": "deathride/art/reference-approvals.json",
+      "sha256": "3afd693e72171d48e9468abfa9bac5bdf7d1d227596b5b2e025cec456a544d71"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-approval-gate.json",
+      "sha256": "21134b09ef49cd29000eb2fcf59993782a055c2bf3979e02273433831e770d55"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-browser-1440.png",
+      "sha256": "3ecabf1d62821ad86dfb65b687db36a111fee8d915f418a7abf407990e9b7e18"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-browser-390.png",
+      "sha256": "527d9753824aec706bf23a72553c8ea61ca6c7705cb16da71eb15c698e464031"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-browser.json",
+      "sha256": "016aa39b2d5308df45a497a7622fa61fbb1da8b0dcc38aa533c22de64b999928"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-build.txt",
+      "sha256": "c9b093bdacb15f5d95b22b84e2e18dc473cc2d4ed6028386336d854d13d3b0ee"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-framing-deterministic.json",
+      "sha256": "a292ac9565c7f7420f04b514e4cf39b7910cb763ab113d65dadbf46335ba82ec"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-framing-graded.json",
+      "sha256": "94d2f1a3f85924984b94d5285462712fdbf331a1ce2566738014e2edb4f4bac8"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-framing-mimo-9b.json",
+      "sha256": "79bb8f369fa93a2e7ad04a9960c9c42f016e690dcef572056f1989d6f5e0ee67"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-framing-qwen3.8.json",
+      "sha256": "1f74327e2c27fc2ea96750bd69367cf081fd93b57c2c93bd7f36394253f83ed5"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-layout-deterministic.json",
+      "sha256": "444bf6edf06e16f631a0e116734b90fd0613db1848b351d4e5a0356fb0d88711"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-layout-graded.json",
+      "sha256": "69c551b7ce81544d4481edac361196cad90a5710e57b98caf121002589f3f051"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-layout-mimo-9b.json",
+      "sha256": "1ab96d77f212f3761fa26c1e9ddade57036f8304c0335e58007673262d5448f1"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-layout-qwen3.8.json",
+      "sha256": "4b256a791b2495bb1e32cb5cf8b61db0db77b727be4f341c568c862bc23a192e"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-sibling-deterministic.json",
+      "sha256": "122ffd47be4562b774c49c78903cf0d25db0d94c19bac5b36258ae2cbbb3834c"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-sibling-graded.json",
+      "sha256": "734a11e8fbc366e9ed5d88d3d99b65074851ccc4625aa0027f42a5f67fb95d52"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-sibling-mimo-9b.json",
+      "sha256": "a47541bb9770a701da0a2f3d7644f9a352fe34d65091efb3028af17e83821b4d"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-sibling-qwen3.8.json",
+      "sha256": "a83b816e2b58b1dd20c1ee9fd77c0b74ec141e4db4aefe9a4f12c8017a341af8"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-wide-deterministic.json",
+      "sha256": "7cf6597fe4055db18b8a56072c5e98a09a6fe01fe73e025997d24e37247b09e7"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-wide-graded.json",
+      "sha256": "81d5fb612d96734dcc0961b19a08c38f45f59fa6e056e89e5c7a11216e5a040b"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-wide-mimo-9b.json",
+      "sha256": "8ab9c7aa94e5a3133b8d526fcea336bf67988669b057dfd11b76e3d6889de8f7"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-comet-wide-qwen3.8.json",
+      "sha256": "affe978b1566cc0bbd085f059bdbc0327a21ab9aa117b6580643d460fa4d9b00"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-features.json",
+      "sha256": "e1c21918117fb0f5638eba16d20a48a31e9e6ec8a97c5d48729fb49e8672db86"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-electrical-deterministic.json",
+      "sha256": "c3624e12caec4685a5aefdcb4ee32a1a1e78694d731b9d1132a7891226b6b4bd"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-electrical-graded.json",
+      "sha256": "65b76a955a081849537817332ad107fca6b140fc22d6cc9416b1921faf898af2"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-electrical-mimo-9b.json",
+      "sha256": "099ea27b8a1d0872d89088fbdc8515fa9910313ec59bee5bff41fb878e91c415"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-electrical-qwen3.8.json",
+      "sha256": "aac09a10ec87c4454cfe2c38610cf5000d4fcd8ebb96896129c4ed246a875937"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-harpoon-deterministic.json",
+      "sha256": "4fb054659fdd1b64db9752cc87f212d726a81732e78db8fa79af7b4fec982190"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-harpoon-graded.json",
+      "sha256": "4fb573921b4622bfbafdc12c704f6dc881b4cba2c5f1cb788bcd2e74be65d2f7"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-harpoon-mimo-9b.json",
+      "sha256": "be306859878771db7879ffc5341d7a6b5c9b1eedbeda37f6613a7318b14ff988"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-harpoon-qwen3.8.json",
+      "sha256": "89435e72c488827bd4eb1f898b9da785421a5899d14335ff08832e179b953efa"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-single-deterministic.json",
+      "sha256": "0fc2fcf656ba78ad4595ab45569176fb3695acf1f5c229ae5dd88692bea87f91"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-single-graded.json",
+      "sha256": "44e3f1415b70ca28d9959c820de77ad381e39b9545908f25045d2ab0a365c3ec"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-single-mimo-9b.json",
+      "sha256": "8a7aaa55fdf94fff25154cc9c9a97930e2151951c47c38dc9f075622b0bf5714"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-single-qwen3.8.json",
+      "sha256": "00bad4dd2b057c435f1789552b06db1a97606401a033da09819116d063857da7"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-structure-deterministic.json",
+      "sha256": "fc79c082f7636bdd925293ead9132bb954f656d53995d426e32ac51e78c6ca92"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-structure-graded.json",
+      "sha256": "53edbd210b0bbf40901a9c63ab4476b967292ebd80f5b035c4b4964687ce015d"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-structure-mimo-9b.json",
+      "sha256": "8cfe20a7c50a6368b751387357d83b6e499128743952f6c977a63e621fc73c1e"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-structure-qwen3.8.json",
+      "sha256": "17500975448b583d70a2cf5a0fa0260fc982c006c70bd3d58886942abd7bd152"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wheels-deterministic.json",
+      "sha256": "4bac64bbd9ae4d3fb2e36332fabb812a025d9f092dcb3d417ea7fd3b9d30970f"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wheels-graded.json",
+      "sha256": "1a13fce511f75562807c5a0dd9d4f976e352bf4cfead7a984e34dc7ebe5e7b36"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wheels-mimo-9b.json",
+      "sha256": "f0961574f97effa409f0ee8966d0dce5cb162e6dd17ea89bb5c6ec8542d090bf"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wheels-qwen3.8.json",
+      "sha256": "8a0128f17dff2f83710a9f736be5aeed6df21897568d25229ad51147cdf4bfbb"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wide-deterministic.json",
+      "sha256": "b0f9a2ee3ba78e6ec77f2e41bd81cead1745d2d12910878b4f68bfe83eb0a486"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wide-graded.json",
+      "sha256": "646f9884594808aa4acf0b974ef06112d4a9c9da34f53a3e3cf48a5db57bcbfe"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wide-mimo-9b.json",
+      "sha256": "f0ff746d1f217f9a857b3c3cf7ecdc75479083e4a6f2a8366598cb23f4b98007"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-kestrel-wide-qwen3.8.json",
+      "sha256": "7a4ee721fb1904298d186651d05a8278bd171913d8933ca03f0b248d7baaaad4"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-pipeline-tests.txt",
+      "sha256": "7c0f7cd50dcde404b1d31f3000235fff2309de214429c2ffa082ce1c86fff3cd"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-portable-index.json",
+      "sha256": "ff523b7ba3218881aaf41327c03058360814cac29737474914cbeb16d0793c40"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-retained-deterministic.json",
+      "sha256": "b87f57dbd97f74e589edaaa13524d16b561efd6882606d7bf49cf680765f574d"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-retained-graded.json",
+      "sha256": "29cf3c07666539468ae7e5f12aab9cc9f3b33fd4a96256a3e682901602f111e2"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-retained-mimo-9b.json",
+      "sha256": "06fd11ca1a7574089ad9df60747cc7c5d7fc5b836174df21e3d2c6d165c6136e"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-retained-qwen3.8.json",
+      "sha256": "38526ee1b8b2ace2e19bcfd4fe58560329c5dd853af5f63853df5b66e5b18745"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-spend.json",
+      "sha256": "d12e20c07bda5a867129755bca33931ae18078c60c70f44273e267cd6419068e"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-validation.json",
+      "sha256": "afe4d2b5216695dc699cb11e03edc5b2fdfb037efbac11bc2779956e95a3ab69"
+    },
+    {
+      "path": "deathride/art/reports/v2-part4-world-bundle-validation.json",
+      "sha256": "87df0c423c1c707854050c349c3ff294cb1455ba6d5354c7558604e15aa95258"
+    },
+    {
+      "path": "deathride/art/review/fusion/index.html",
+      "sha256": "4fa98c0f91482ed41603808c2a9799f5932a0f5941532e561d2abbdae6dbe8bd"
+    },
+    {
+      "path": "deathride/art/review/fusion/part3-index.html",
+      "sha256": "a67485d93e42390bfc57a47761c7a03e5a5449d93850b153d28f635f27688a4e"
+    },
+    {
+      "path": "deathride/art/review/fusion/part3-review.json",
+      "sha256": "8ae1df39bcb6a605e0753e420db16962a25c1245c60484333b3b26ce643e81dd"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-before-after.png",
+      "sha256": "bb21f4641d2eb3b42e578494babed9e8ad195f0daaf40b9742c7a3a719e10dd0"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-cars-96px.png",
+      "sha256": "35c4bf7976dcbaf63a983fa0d11a90643134cd9cc05ffb3bbdf978000f9bf5d2"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-comet-96-colour.png",
+      "sha256": "c11c28ae6dc74473a9680c1b3015e646e5bc15e187cebaa99deea8a27473f662"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-comet-96-silhouette.png",
+      "sha256": "5c6c391a2aa6a20913552641865a3d3921e8a5c543bf59b24cfbbe3fd80877bc"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-kestrel-96-colour.png",
+      "sha256": "f1005208ac64add64c7fec1b1b783f8131333c0da26d1187c2711c2114ae04d5"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-kestrel-96-silhouette.png",
+      "sha256": "d94c4dcbec725d9735fdaf2547b8a1e412732b14e66afa3ce81af3d06af4f4f8"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-needle-96-colour.png",
+      "sha256": "ea325f32b383b880389613793b12bddee37fd841aa8a3cd3bb6f7d0af7a8e2a2"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-needle-96-silhouette.png",
+      "sha256": "805838ee0f02652b2c51c584bb3a912886b69463f3c910005712eaed6b1239a8"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-quill-96-colour.png",
+      "sha256": "7acc460dae92a6e532be2cbc8f61b199bb294c8d6a1aa134b97cba8023a0ecd3"
+    },
+    {
+      "path": "deathride/art/review/fusion/part4-quill-96-silhouette.png",
+      "sha256": "2980f638cc6f8bbbcfafd30891f9baf962389bb3fbb376f21ef7b6b49a22ef61"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-comet-v4.png",
+      "sha256": "06fb4683314fddc1cbb2ed22a3792970f576a185cfe9ba13b7ca3cc2b2a2f818"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-comet-v5.png",
+      "sha256": "5ec00c8bfd0df186e7715d41287821f6f4e3cff6d3ee2486080241b0eb9927ce"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-comet-v6.png",
+      "sha256": "92d2cde5d4bacf445619240ffd435179fc734df12a6756fc7e3c0db5c5e95f1d"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-comet-v7.png",
+      "sha256": "4099a1fd42fe0d52e8a30f06e692686ef09832ea941fb2a6b12178dc6a74a844"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v4.png",
+      "sha256": "684f1785ec7d5a7195c8ee531b6c0f284ed57caa55ee95a7dd78e14047340f20"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v5.png",
+      "sha256": "73e771cba66fc5eb2dcc92a8b748139561b27bce750f315f2f58e9add714ac83"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v6.png",
+      "sha256": "d443bb6dcd3d63719dd44f82f8cef26bebb2dd7a9f935dc566031501a41ab8ec"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v7.png",
+      "sha256": "84d557615e786d2cf453785b2481a98ee2dd3bb49aee419355284b7b711d7608"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v8.png",
+      "sha256": "c6ef1390a7f6110db65cd6a1e55427c61089a5d1f24286582bb35eb977830fd9"
+    },
+    {
+      "path": "deathride/art/review/fusion/pixels/v2-part3-rework-kestrel-v9.png",
+      "sha256": "c19e05c7ad215f0747547b1d77cf07f530839d10f49707509c7c39d3455ecc52"
+    },
+    {
+      "path": "deathride/art/review/fusion/review.json",
+      "sha256": "a6e94b0e2e7974c6b1529ff6c99517d1d56efeb065cb0728093aaed7c7a62bf5"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-comet-v4.jpg",
+      "sha256": "6c0ebd3d159afc47f5e8f0871a0a01c08785c9d455ac3c75cbd47b4e0c3eecf9"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-comet-v5.jpg",
+      "sha256": "d7a4b7fceb2818dd2910edde77f47f8b6a8177e21c8b849c46d4a841927a494c"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-comet-v6.jpg",
+      "sha256": "92f322794b19b765cc5e93053a940429aba3014b2fe97466f3089bc221f49776"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v4.jpg",
+      "sha256": "d9448c4079100cc2263f086855349926d6cce97c171efd9540158d43d0e30748"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v5.jpg",
+      "sha256": "8badd0912bf6353fd6876e6de7a9b077c54236d9300980763f328624927bf0cd"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v6.jpg",
+      "sha256": "06c0d75ac962d8f347129c3007a9296cfc357564f7a7b71618d3a17800c96b01"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v7.jpg",
+      "sha256": "1281a8b0435efaaca61d91e2c65d8aa56bd6f0a3d888cc9d4059ce4b9e906bd2"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v8.jpg",
+      "sha256": "619d579eed5b487d7ff80eb8486ebb13c41393f1ae2a2e3f1a6959b08a0aaf34"
+    },
+    {
+      "path": "deathride/art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "path": "deathride/art/usage.json",
+      "sha256": "94027a5e2f1fb4efc15d6028960e5e2c68bde31e9f1ec2b827a6ac53788fe40c"
+    }
+  ],
+  "scope": "Art files use -text; staged blobs preserve exact source, export, prompt, audit and grade bytes. Shared usage/history include unrelated HUD reservations for ledger consistency."
+}

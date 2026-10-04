@@ -1,0 +1,60 @@
+[
+  {
+    "id": "p1-tile-ice-v3",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-ice-v3\\attempt-01\\1.jpg",
+    "source_sha256": "bac14c2eead09d6099c3ae8e30b48fc83c7a5ba8e4d40a2f8aa6b0c5d48e7125",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-ice-v3",
+      "class": "ice",
+      "prompt_action": "The entire square is ONLY a uniform empty pale cold blue-grey ice material, with very fine randomly scattered ivory frost grains. Perfectly EVEN brightness and colour across the entire square, including every edge. No broad light or dark bands, no bright border, no grid, no cross, no central highlight, no directional lighting, no gradient, no vignette, no cracks. One single unrepeated stochastic texture swatch, not a tiled preview. Seamless continuous material on all four sides. No car, vehicle, object, scene, lettering or symbol.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-ice-final",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.036403441584967326,
+      "edge_y_mean": 0.041913041258169935,
+      "edge_x_peak": 0.6235294117647059,
+      "edge_y_peak": 0.6627450980392158,
+      "autocorrelation_peak": 0.0796542211158922,
+      "autocorrelation_shift_px": [
+        71,
+        59
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.02636335784313727,
+      "edge_y_mean": 0.04224877450980392,
+      "edge_x_peak": 0.32156862745098036,
+      "edge_y_peak": 0.39215686274509803,
+      "autocorrelation_peak": 0.07859063160353107,
+      "autocorrelation_shift_px": [
+        71,
+        59
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-ice-final\\p1-tile-ice-v3-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-ice-final\\p1-tile-ice-v3.png",
+    "sha256": "9ecd09ca3591b5a03f05cd59c759241c318edfc735c03ff235507b0e5daf4e1f"
+  }
+]

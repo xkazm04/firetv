@@ -1,0 +1,7 @@
+# Rejected shared-headroom experiment
+
+These changes are not shipped. Decompress `shared-caps.patch.gz` before applying the experimental cap consumer and TV/phone display changes to the release sources. The cap table allows Elite 12 and Champion 16, equally for players and rivals. `UpgradeHeadroomTest.kt.txt` is the exact experimental test source; the 152-core-test green build logs belong to this version. The release has 150 core tests and the original cap of 10.
+
+To reproduce in an isolated checkout, apply the patch, copy `car-upgrade-caps.csv` to `core/src/main/resources/data/`, and use the desired candidate's archived `career-curve.csv`, `campaign-allies.csv` and `rival-garages.csv`. Copy the test text to `core/src/test/kotlin/dev/deathride/core/UpgradeHeadroomTest.kt`, then run the required build. Candidate `headroom-candidate` uses Marrow 635; `balanced` uses 610. Both use physical namespace 191008209; the latter reuses a proven unchanged prefix. The final 610 duel namespace is -47243376. Use a fresh output directory; replays are not additional independent observations.
+
+The higher caps moved same-seed Champion class winner share by about 20 percentage points and reduced PR-policy completion. Near-target primary PR ratios alone do not justify shipping them. Promotion-tier cars are legal at the boss events, so zero observed Elite wins at Mica does **not** make the campaign unwinnable. The complete 2,000-career cohorts, not that incomplete observation, decide the result.

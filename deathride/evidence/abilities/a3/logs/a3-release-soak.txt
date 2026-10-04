@@ -1,0 +1,33 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted>0&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-abil/deathride/tools/ability-stick-probe.mjs:64:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.1383655,
+  "rounds": 21,
+  "classUses": {
+    "Needle": 15,
+    "Line": 7,
+    "Bastion": 14,
+    "Comet": 16,
+    "Trail": 10,
+    "Flint": 15,
+    "Quill": 16,
+    "Vandal": 12,
+    "Kestrel": 9,
+    "Bulwark": 15
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26927,
+      "accepted": 26924,
+      "rejected": 3,
+      "hz": 29.914289882581393
+    },
+    {
+      "slot": 1,
+      "sent": 26927,
+      "accepted": 26924,
+      "rejected": 3,
+      "hz": 29.914289882581393
+    }
+  ]
+}

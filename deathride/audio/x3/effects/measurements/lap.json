@@ -1,0 +1,207 @@
+{
+  "id": "lap",
+  "cue": "race.lap",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:39.440101+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\lap.mp3.json",
+    "sourceSha256": "d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100",
+    "generatedAt": "2026-10-02T21:36:29.549Z",
+    "request": {
+      "text": "Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 0.8,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 8,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/lap.mp3",
+    "sha256": "d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100",
+    "bytes": 13836,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": true
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence"
+    ],
+    "durationSeconds": 0.8,
+    "durationWindowSeconds": [
+      0.65,
+      0.9500000000000001
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 35280,
+    "decodedBytes": 141120,
+    "integratedLufs": -15.86,
+    "truePeakDbtp": 0.55,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          20821,
+          35149
+        ]
+      ],
+      "fraction": 0.4061224489795918,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 17640,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.6799860450033223,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/lap.wav",
+      "sha256": "8c719c25148e4bb38b81f7f7537003090e6b91e01b9cc6cbdb051136c0a7c10a",
+      "bytes": 35358,
+      "status": "fail",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": false,
+        "clipping": true
+      },
+      "failures": [
+        "silence"
+      ],
+      "durationSeconds": 0.8,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 17640,
+      "decodedBytes": 35280,
+      "integratedLufs": -20.8,
+      "truePeakDbtp": -2.0,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            10242,
+            17640
+          ]
+        ],
+        "fraction": 0.4193877551020408,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 10462,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 0.8759917176331173,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/lap.wav",
+    "sha256": "c43c12abc206e630b968ba15570d8a2d9cfcb5d9764632b270291c96c3ba3027",
+    "bytes": 21002,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.4744671201814059,
+    "durationWindowSeconds": [
+      0.4724671201814059,
+      0.4764671201814059
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 10462,
+    "decodedBytes": 20924,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -3.15,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence"
+  ]
+}

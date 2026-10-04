@@ -1,0 +1,186 @@
+{
+  "baselineCommit": "6efb1ddab68b744cb8cb141ebc34293aef000899",
+  "assignment": "scrap-7-e",
+  "ownerStatus": "applied",
+  "balanceStatus": "flagged",
+  "stableEvents": 35,
+  "playableCourses": 38,
+  "catalogPositionsPreserved": true,
+  "regionAttachmentsPreserved": true,
+  "saveAndPromotionCodeUnchanged": true,
+  "sixCar": {
+    "trials": 72,
+    "cleanTrials": 3,
+    "cleanMedianSeconds": 264.41666666675485,
+    "combatMedianSeconds": 244.16666666675312,
+    "early": {
+      "n": 72,
+      "count": 9,
+      "rate": 0.125,
+      "wilson95": [
+        0.06717708293105555,
+        0.22081262192749168
+      ],
+      "basis": "AI in slot 0; identities rotated; not human feel or human fairness. Trials sharing a seed are correlated; interval is descriptive."
+    },
+    "stalls": 2,
+    "timeouts": 0,
+    "flags": [],
+    "repeatHashMatches": true,
+    "rotationDifferenceSeconds": 0.0
+  },
+  "shape": {
+    "gates": [
+      {
+        "metric": "hullPerimeterRatio",
+        "value": 1.3746595681720994,
+        "min": 1.12,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "hullAreaPacking",
+        "value": 2.1437719007946776,
+        "min": 1.2,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "absoluteTurnDegrees",
+        "value": 1281.119507822543,
+        "min": 540.0,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "signChanges",
+        "value": 8.0,
+        "min": 4.0,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "directionReversals",
+        "value": 1.0,
+        "min": 1.0,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "cornerFamilies",
+        "value": 6.0,
+        "min": 3.0,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "foldbackRatio",
+        "value": 0.1875,
+        "min": 0.03,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "straightBrakePairs",
+        "value": 1.0,
+        "min": 1.0,
+        "max": null,
+        "status": "pass"
+      },
+      {
+        "metric": "undeclaredCrossings",
+        "value": 0.0,
+        "min": 0.0,
+        "max": 0.0,
+        "status": "pass"
+      }
+    ],
+    "distinctRetainedPeers": 36
+  },
+  "boss": [
+    {
+      "skill": 0,
+      "trials": 32,
+      "wins": 4,
+      "beatBoss": 14,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "skill": 1,
+      "trials": 32,
+      "wins": 2,
+      "beatBoss": 4,
+      "early": 0,
+      "unresolved": 0
+    },
+    {
+      "skill": 2,
+      "trials": 32,
+      "wins": 0,
+      "beatBoss": 1,
+      "early": 0,
+      "unresolved": 0
+    }
+  ],
+  "bossAll96RowsMatchHistorical": true,
+  "stressMatchesHistorical": true,
+  "pacing": [
+    {
+      "build": "stock",
+      "trials": 72,
+      "winnerMedianSeconds": 243.46666666675256,
+      "targetSeconds": [
+        240,
+        360
+      ],
+      "pacingPass": true,
+      "unresolvedCars": 1,
+      "early": 0,
+      "oneShots": 0
+    },
+    {
+      "build": "developed",
+      "trials": 72,
+      "winnerMedianSeconds": 211.9666666667275,
+      "targetSeconds": [
+        240,
+        360
+      ],
+      "pacingPass": false,
+      "unresolvedCars": 0,
+      "early": 0,
+      "oneShots": 0
+    }
+  ],
+  "scope": "Changed slot only; the earlier full campaign study used scrap-7-f. No new whole-career balance claim.",
+  "unresolvedPacingRows": [
+    {
+      "event": "scrap-7",
+      "course": "scrap-7-e",
+      "tier": "1",
+      "laps": "3",
+      "build": "stock",
+      "sample": "7",
+      "seed": "20916455",
+      "rotation": "1",
+      "winner": "Trail",
+      "winnerSlot": "1",
+      "winnerSeconds": "243.73333333341944",
+      "seconds": "420.01666666661333",
+      "limitSeconds": "420.0",
+      "unresolved": "1",
+      "earlyLead": "false",
+      "oneShots": "0",
+      "hash": "5758118580606274609",
+      "cars": "0:Bastion:-1.0:NONE:100.0;1:Trail:243.73333333341944:LAPS:84.0;2:Bastion:287.68333333340036:LAPS:100.0;3:Trail:267.58333333341864:LAPS:84.0;4:Bastion:273.9500000000795:LAPS:100.0;5:Trail:282.6500000000716:LAPS:84.0"
+    }
+  ],
+  "sha256": {
+    "boss.csv": "92eb19fdf672a86d9d382ed11236fa1eda5ff6d0b1aff31ab4de57188aaed66a",
+    "pacing.csv": "b38415227160742b55a41b772ee171f0423b7c0f7c97a358327a6cea35bf4207",
+    "shape.json": "b9c2f1605cccc2d55b0b2f8c9344f79ce64dbe97412662b4d85cc8c4b9a8f500",
+    "proof/scrap-7-e.json": "8ae86f8fa7c89738f21e11ccf9f512dc6dd00b2d57f58460cdaa2cffaea3e5a0",
+    "proof/scrap-7-e-trials.ndjson.gz": "370ab13d0c4f9c76d8d9c60c5ea535e8c338c76ef2266a38fe3ace1692331386"
+  }
+}

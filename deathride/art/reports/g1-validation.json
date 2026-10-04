@@ -1,0 +1,27 @@
+{
+  "status": "pass-for-partial-delivery",
+  "g0": "complete",
+  "g1": "partial; provider quota blocks 59 generated assets",
+  "protected_hashes_verified": 157,
+  "candidate_records": 27,
+  "recolours": 16,
+  "kept_prop_memberships": 11,
+  "missing_generated_assets": 59,
+  "local_model_observations": 32,
+  "owner_approvals": 0,
+  "runtime_activations": 0,
+  "new_reservations": 16,
+  "weekly_reservations": 582,
+  "cap": 850,
+  "quota_latch": "set; never cleared",
+  "plan": {
+    "status": "pass",
+    "current_projection_mib": 31.25,
+    "complete_conditional_projection_mib": 30.25,
+    "material_candidates": 16,
+    "sprite_pages": 0,
+    "panels": 0,
+    "actual_runtime_delta_bytes": 0
+  },
+  "device": "not touched; no timing claim"
+}

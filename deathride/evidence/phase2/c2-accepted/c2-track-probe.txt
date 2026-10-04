@@ -1,0 +1,55 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources
+> Task :core:processTestResources NO-SOURCE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CareerTest.kt:62:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CombatTest.kt:108:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/TracksTest.kt:67:68 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:test
+
+TracksTest > authoredCourseStepAllocatesNothing() PASSED
+
+TracksTest > sixCarsFinishEveryCourseAndReplayDeterministically() PASSED
+
+TracksTest > samplingProjectionAndSequentialGatesAgree() PASSED
+
+TracksTest > scaleContractIsPhysicalReadableAndVaried() PASSED
+
+TracksTest > allAuthoredContentPassesGeometryAndPacingLint() FAILED
+    org.opentest4j.AssertionFailedError at TracksTest.kt:30
+
+TracksTest > longCarHasContactThroughItsMiddle() PASSED
+
+TracksTest > linterRejectsNarrowReorderedAndCrossingCourses() PASSED
+.\gradlew.bat :
+At line:7 char:1
++ .\gradlew.bat :core:test --tests '*TracksTest*' *> c2-track-probe.txt
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+7 tests completed, 1 failed
+
+> Task :core:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:test'.
+> There were failing tests. See the report at:
+file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 41s
+5 actionable tasks: 5 executed

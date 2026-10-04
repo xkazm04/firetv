@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-02T19:32:32.671378+00:00",
+  "session": "x2-2026-10-02",
+  "cap": 9000,
+  "reserve": 8000,
+  "before": {
+    "at": "2026-10-02T19:14:16.068Z",
+    "tier": "starter",
+    "used": 47319,
+    "limit": 90000,
+    "remaining": 42681,
+    "resetsAt": "2026-10-04T19:31:41.000Z"
+  },
+  "after": {
+    "at": "2026-10-02T19:29:13.905Z",
+    "tier": "starter",
+    "used": 51855,
+    "limit": 90000,
+    "remaining": 38145,
+    "resetsAt": "2026-10-04T19:31:41.000Z"
+  },
+  "accountDecrease": 4536,
+  "budgetUsed": 7828,
+  "providerReportedCredits": 888,
+  "providerReportedTakes": 28,
+  "unconfirmedTakes": [
+    "audio/audition/raw/dust-race.mp3",
+    "audio/audition/raw/diesel-race.mp3",
+    "audio/audition/raw/funk-race.mp3",
+    "audio/audition/raw/noir-race.mp3"
+  ],
+  "rejectedReservedCredits": 100,
+  "completedTakes": 32,
+  "rawPass": 2,
+  "matchedPass": 6,
+  "notMeasured": "Owner preference, in-game mix/masking/latency, Stick playback/memory, speech fidelity and identity, measured musical grid, long-race fatigue.",
+  "billingCaveat": "Account balances are shared and billing can lag. Per-request headers are authoritative where present; music billing is unconfirmed, not zero. Conservative reservations remain charged against the session cap."
+}

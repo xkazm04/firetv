@@ -1,0 +1,32 @@
+{
+  "id": "04af9439-7d10-4005-973e-119b4fe5a633",
+  "ts": "2026-10-02T21:39:41.088Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-plate-brace.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24293,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "764a0fee7f1a70f62e4d8ae038d9d8d78c05404e1c00629ecb2d594fa19ff07a",
+  "completedAt": "2026-10-02T21:39:46.222Z",
+  "creditsAfter": 24293,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3440
+}

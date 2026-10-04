@@ -1,0 +1,35 @@
+{
+  "id": "2eccd737-ff6e-454e-9617-db5dd0651903",
+  "ts": "2026-10-02T21:52:34.637Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/announcer.freedom.mp3",
+  "seconds": null,
+  "request": {
+    "text": "The ledger is closed. This road belongs to the living.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 54,
+  "budgetCharge": 54,
+  "creditsBefore": 23873,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 60648,
+  "providerCredits": 54,
+  "sha256": "20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5",
+  "completedAt": "2026-10-02T21:52:37.047Z",
+  "creditsAfter": 23608,
+  "observedAccountDelta": 265,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5810
+}

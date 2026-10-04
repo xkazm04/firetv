@@ -1,0 +1,35 @@
+{
+  "id": "79a0c2fc-1877-4290-aa09-8693a20a835a",
+  "ts": "2026-10-02T21:52:30.760Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/announcer.duel.mp3",
+  "seconds": null,
+  "request": {
+    "text": "No laps. No points. The last car running ends this.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 51,
+  "budgetCharge": 51,
+  "creditsBefore": 23873,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 67753,
+  "providerCredits": 51,
+  "sha256": "ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c",
+  "completedAt": "2026-10-02T21:52:33.360Z",
+  "creditsAfter": 23873,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5756
+}

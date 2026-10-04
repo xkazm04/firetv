@@ -1,0 +1,168 @@
+{
+  "scope": "Desktop warm active samples after first 600 active frames; AI proxy, no phone, JFR and phase recorder enabled. Not Stick timing.",
+  "frames": 3679,
+  "phases": {
+    "intervalMs": {
+      "median": 16.673199999999998,
+      "p95": 19.0625,
+      "mean": 17.357906904050015,
+      "max": 299.4715
+    },
+    "workMs": {
+      "median": 0.4906,
+      "p95": 2.5013,
+      "mean": 1.1208078553954879,
+      "max": 178.5296
+    },
+    "cpuMs": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.25907175863006254,
+      "max": 15.625
+    },
+    "requestsMs": {
+      "median": 0.0046,
+      "p95": 0.0181,
+      "mean": 0.00921068225061158,
+      "max": 2.1073
+    },
+    "prepareMs": {
+      "median": 0.0001,
+      "p95": 0.0004,
+      "mean": 0.0003297635226963849,
+      "max": 0.4004
+    },
+    "simulationMs": {
+      "median": 0.0821,
+      "p95": 0.3767,
+      "mean": 0.21122883935852133,
+      "max": 67.7821
+    },
+    "audioMs": {
+      "median": 0.0137,
+      "p95": 0.065,
+      "mean": 0.03534832835009513,
+      "max": 16.9584
+    },
+    "telemetryMs": {
+      "median": 0.0009,
+      "p95": 0.3025,
+      "mean": 0.16029774395216093,
+      "max": 176.0348
+    },
+    "clearMs": {
+      "median": 0.0342,
+      "p95": 0.1085,
+      "mean": 0.06038004892633868,
+      "max": 14.3906
+    },
+    "cameraMs": {
+      "median": 0.002,
+      "p95": 0.0045,
+      "mean": 0.0030338950801848327,
+      "max": 0.3156
+    },
+    "effectsUpdateMs": {
+      "median": 0.002,
+      "p95": 0.008,
+      "mean": 0.004439603153030715,
+      "max": 2.5273
+    },
+    "sceneryDrawMs": {
+      "median": 0.0748,
+      "p95": 0.3,
+      "mean": 0.19856681163359607,
+      "max": 60.0175
+    },
+    "carsEffectsMs": {
+      "median": 0.151,
+      "p95": 0.5998,
+      "mean": 0.31258206034248437,
+      "max": 51.6752
+    },
+    "hudMs": {
+      "median": 0.0555,
+      "p95": 0.2021,
+      "mean": 0.12158673552595814,
+      "max": 25.9934
+    },
+    "captionMs": {
+      "median": 0.0006,
+      "p95": 0.0011,
+      "mean": 0.0007135362870345203,
+      "max": 0.0816
+    },
+    "requestsBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "prepareBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "simulationBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.8480565371024735,
+      "max": 2592.0
+    },
+    "audioBytes": {
+      "median": 440.0,
+      "p95": 824.0,
+      "mean": 532.1272084805654,
+      "max": 3624.0
+    },
+    "telemetryBytes": {
+      "median": 0.0,
+      "p95": 35536.0,
+      "mean": 5762.66594183202,
+      "max": 37072.0
+    },
+    "clearBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "cameraBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "effectsUpdateBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "sceneryDrawBytes": {
+      "median": 120.0,
+      "p95": 120.0,
+      "mean": 120.02609404729546,
+      "max": 216.0
+    },
+    "carsEffectsBytes": {
+      "median": 472.0,
+      "p95": 568.0,
+      "mean": 487.87387877140526,
+      "max": 608.0
+    },
+    "hudBytes": {
+      "median": 64.0,
+      "p95": 64.0,
+      "mean": 64.06306061429737,
+      "max": 296.0
+    },
+    "captionBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    }
+  }
+}

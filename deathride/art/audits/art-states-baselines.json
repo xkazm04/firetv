@@ -1,0 +1,10 @@
+{
+  "v2-part4-needle-state-intact-v1": {
+    "id": "v2-part4-needle-state-intact-reference",
+    "at": "2026-10-02T19:26:53.218065+00:00",
+    "reference_id": "v2-part3-rework-needle-v1",
+    "reason": "Three guarded no-op edits failed exact intact identity: colour drift in attempts 1/3; filled open frame, glare/shadow in attempt 2. Do not exceed the three-call ceiling. The intact action requests no change, so use the exact owner-approved source as its baseline, reprocessed through unchanged gates. No new generated image is claimed; all failed attempts remain visible.",
+    "recipe": "Exact approved source bytes; unchanged deterministic extraction, no recolouring or repair.",
+    "new_paid_calls": 0
+  }
+}

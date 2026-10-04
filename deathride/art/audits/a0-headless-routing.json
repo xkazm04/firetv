@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-04T12:47:53.647006+00:00",
+  "session": "26a6a096-5707-4b59-a547-4d1b2db5f229",
+  "reason": "Executor interrupted exploratory turn to correct overly broad no-delegate instruction. During inspection/interrupt race the provider completed one built-in image-generator call and saved PNG. No second generation authorized. Resume only to verify existing output in same session.",
+  "image_exists": true,
+  "image_sha256": "f96d52674d9add2514f75ffdf40170881fd88ab9872efd9799b586f494c1912e",
+  "reservations": 1,
+  "log_sha256": "c4b9fe4ac1cdf4a44b52c9258abd65d1f88eac940d30c27cd6e2eb358afa382c"
+}

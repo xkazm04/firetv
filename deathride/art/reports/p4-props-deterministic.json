@@ -1,0 +1,690 @@
+[
+  {
+    "id": "p4-props-tyres-v1",
+    "class": "tyres",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-tyres-v1\\attempt-02\\1.jpg",
+    "source_sha256": "6fef5477e96ab95cd4e6ddec869bf96c0cfb032d03cf5814c692eef142a01e52",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-tyres-v1",
+      "class": "tyres",
+      "prompt_action": "One compact stack of three charcoal racing tyres. True overhead plan view: circular opening in the centre and nested circular top rings, no visible vertical stack walls. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4109821319580078,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        109,
+        108,
+        920,
+        913
+      ],
+      "margin_fraction": 0.1015625,
+      "aspect": 1.0074534161490682,
+      "estimated_key_rgb": [
+        240.0,
+        37.0,
+        135.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.174951116644267,
+      "palette_p90_delta_e": 6.031643281447782
+    },
+    "placement": {
+      "source_bounds_px": [
+        109,
+        108,
+        920,
+        913
+      ],
+      "source_pivot_px": [
+        514.5,
+        510.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.14796547472256474,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-tyres-v1.png",
+    "sha256": "4415e8b8761a236263435d5efa9ea0b43615651950cce79a2ce70774bc6354f5"
+  },
+  {
+    "id": "p4-props-crate-v1",
+    "class": "crate",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-crate-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3c653fb0754bb49412696d2449e3927f7b50333e032d5bc2d20f2f5e2e06e288",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-crate-v1",
+      "class": "crate",
+      "prompt_action": "One closed square shipping crate top, weathered ivory wooden slats and dark metal corner brackets in a clear X-brace arrangement, no stencil or symbols. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.5424966812133789,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        127,
+        121,
+        901,
+        899
+      ],
+      "margin_fraction": 0.1181640625,
+      "aspect": 0.9948586118251928,
+      "estimated_key_rgb": [
+        242.0,
+        122.0,
+        231.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.385378812022371,
+      "palette_p90_delta_e": 9.049355858676806
+    },
+    "placement": {
+      "source_bounds_px": [
+        127,
+        121,
+        901,
+        899
+      ],
+      "source_pivot_px": [
+        514.0,
+        510.0
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        119,
+        120
+      ],
+      "scale": 0.15424164524421594,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-crate-v1.png",
+    "sha256": "130e9c4823f505021fdc515fa2aec95fbc3c6ead0418cdc00300c1a6eeb86eab"
+  },
+  {
+    "id": "p4-props-cone-v1",
+    "class": "cone",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-cone-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d7b289c6b51c0ce954a1293d71ff343f533619579745ef023c5e22f2af3fac85",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-cone-v1",
+      "class": "cone",
+      "prompt_action": "One orange traffic cone seen directly from above: small round orange tip at the centre of an orange and ivory ring, on a square charcoal base, no side profile. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4277620315551758,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        174,
+        173,
+        857,
+        851
+      ],
+      "margin_fraction": 0.1630859375,
+      "aspect": 1.0073746312684366,
+      "estimated_key_rgb": [
+        232.0,
+        227.0,
+        208.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.955208947805805,
+      "palette_p90_delta_e": 20.030806029593283
+    },
+    "placement": {
+      "source_bounds_px": [
+        174,
+        173,
+        857,
+        851
+      ],
+      "source_pivot_px": [
+        515.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.17569546120058566,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-cone-v1.png",
+    "sha256": "f84a4f3da978e09c86536905495fa0ecfd2bdf23069a72b197bf49b45dabee64"
+  },
+  {
+    "id": "p4-props-sign-v1",
+    "class": "sign",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-sign-v1\\attempt-01\\1.jpg",
+    "source_sha256": "72a1c05c9d930884360f435d092f44cdc0620375c524e52f9d6af0e1d54f9df8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-sign-v1",
+      "class": "sign",
+      "prompt_action": "One flat rectangular roadside sign board, face visible as a readable icon: a simple bold right arrow in warm ivory on muted blue, no letters or numerals, short grey support extending down. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2943258285522461,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        170,
+        206,
+        855,
+        888
+      ],
+      "margin_fraction": 0.1328125,
+      "aspect": 1.0043988269794721,
+      "estimated_key_rgb": [
+        232.0,
+        233.0,
+        251.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.160690170345013,
+      "palette_p90_delta_e": 8.008709179754137
+    },
+    "placement": {
+      "source_bounds_px": [
+        170,
+        206,
+        855,
+        888
+      ],
+      "source_pivot_px": [
+        512.5,
+        547.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.17518248175182483,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-sign-v1.png",
+    "sha256": "5fbc8e32da66e074cba5ed88d71255a739ed9e81c39dbca7d56b4b9c07be3281"
+  },
+  {
+    "id": "p4-props-drum-v1",
+    "class": "drum",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-drum-v1\\attempt-01\\1.jpg",
+    "source_sha256": "878edf356770284a3b1f1ac28659db38de1e33f7e33842d0e4ba86337171b181",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-drum-v1",
+      "class": "drum",
+      "prompt_action": "One sealed oil drum seen directly from above: round olive lid with concentric rim and two small circular caps, no side wall or label. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4884309768676758,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        106,
+        111,
+        918,
+        914
+      ],
+      "margin_fraction": 0.103515625,
+      "aspect": 1.0112079701120797,
+      "estimated_key_rgb": [
+        216.0,
+        72.0,
+        213.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.544716467892485,
+      "palette_p90_delta_e": 6.13246117939333
+    },
+    "placement": {
+      "source_bounds_px": [
+        106,
+        111,
+        918,
+        914
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.1477832512315271,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-drum-v1.png",
+    "sha256": "2873c49105fead38700a10d9b51de271274f65d00fd62f62bfbbe5ba75424829"
+  },
+  {
+    "id": "p4-props-tyres-scattered-v1",
+    "class": "tyres-scattered",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-tyres-scattered-v1\\attempt-02\\1.jpg",
+    "source_sha256": "e930b0ad5fd82e390104bbe88ed05b57f0ed5ae607e180f92edb79c867f70e1e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-tyres-scattered-v1",
+      "class": "tyres-scattered",
+      "prompt_action": "A compact triangular arrangement of three separate charcoal tyres seen directly overhead, all complete circular rings with dark centres, no shadow. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.30956077575683594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        94,
+        118,
+        936,
+        896
+      ],
+      "margin_fraction": 0.0859375,
+      "aspect": 1.082262210796915,
+      "estimated_key_rgb": [
+        242.0,
+        41.0,
+        148.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.404437001544574,
+      "palette_p90_delta_e": 4.951608247060741
+    },
+    "placement": {
+      "source_bounds_px": [
+        94,
+        118,
+        936,
+        896
+      ],
+      "source_pivot_px": [
+        515.0,
+        507.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        111
+      ],
+      "scale": 0.14251781472684086,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-tyres-scattered-v1.png",
+    "sha256": "222fd141cc2e8d2bd7b6d680ac25819837b062073c4a43f00453545b5e9b7065"
+  },
+  {
+    "id": "p4-props-crate-metal-v1",
+    "class": "crate-metal",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-crate-metal-v1\\attempt-01\\1.jpg",
+    "source_sha256": "2f6ecd1edbe9fdb7841475970c5f3da13684c1dc45dd77edfce6fa6cfebe5a73",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-crate-metal-v1",
+      "class": "crate-metal",
+      "prompt_action": "One closed square blue steel storage box top, two grey straps across the lid and small metal corner pads, no markings. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4559926986694336,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        157,
+        163,
+        867,
+        861
+      ],
+      "margin_fraction": 0.1533203125,
+      "aspect": 1.0171919770773639,
+      "estimated_key_rgb": [
+        232.0,
+        234.0,
+        249.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.67418675689155,
+      "palette_p90_delta_e": 9.145544013371214
+    },
+    "placement": {
+      "source_bounds_px": [
+        157,
+        163,
+        867,
+        861
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.16901408450704225,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-crate-metal-v1.png",
+    "sha256": "2475737f422fd9f51797bfda9979edd7dc636e6bd587ebeda7973c10410e0aa8"
+  },
+  {
+    "id": "p4-props-drum-red-v1",
+    "class": "drum-red",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-props-drum-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f8b11005bc7779f1f5f1404faebdaed0d841992af038f80557e440641af9581c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-props-drum-red-v1",
+      "class": "drum-red",
+      "prompt_action": "One sealed red metal drum seen directly overhead, circular red lid with an ivory band across it and two small caps, no label. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Use only the specified material colours. No purple, decorative badges, arrows, labels or vehicle parts. Empty openings show the same pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-props",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3766908645629883,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        159,
+        158,
+        869,
+        863
+      ],
+      "margin_fraction": 0.1513671875,
+      "aspect": 1.0070921985815602,
+      "estimated_key_rgb": [
+        205.0,
+        71.0,
+        191.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.9854900035874925,
+      "palette_p90_delta_e": 9.6802825797083
+    },
+    "placement": {
+      "source_bounds_px": [
+        159,
+        158,
+        869,
+        863
+      ],
+      "source_pivot_px": [
+        514.0,
+        510.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.16901408450704225,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-props\\p4-props-drum-red-v1.png",
+    "sha256": "73ac1ba4221d2a3ec34d7b900a2f4d9c8207e270b34f296d7d947b2700b0c5c2"
+  }
+]

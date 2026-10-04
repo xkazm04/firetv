@@ -1,0 +1,282 @@
+{
+  "status": "pass",
+  "parts": [
+    "environment",
+    "faces"
+  ],
+  "new_reservations": 56,
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 566,
+    "remaining": 134,
+    "videos": 0,
+    "stop": null
+  },
+  "candidates": 35,
+  "environment_candidates": 19,
+  "assertions": 385,
+  "unchanged_original_world_regions": 61,
+  "owner_approved": 0,
+  "guarded_driver_unchanged": true,
+  "face_candidates": 15,
+  "portrait_candidates": 7,
+  "unique_face_source_candidates": 14,
+  "exact_face_reuses": 1,
+  "story_replacements": 9,
+  "unchanged_original_ui_regions": 37,
+  "negative_face_control_rejected": true,
+  "scope": "Proof chronology, one exact-prompt tool call per reservation, hash-bound screening, unchanged footprint/effect metadata, portable candidate pixels and atlas validation; no owner/device claim.",
+  "part_b_reservations": 21,
+  "part_a_reservations": 35,
+  "art_tests": 51,
+  "jvm_tests": {
+    "core": 150,
+    "link": 8,
+    "game": 35
+  },
+  "apk_sha256": "bffb93a7f319f81ae15eddd99b352d93709eec6375bc2933bebc147e144f0b0e",
+  "gradle_tasks": [
+    ":core:test",
+    ":link:test",
+    ":game:test",
+    ":app:assembleDebug"
+  ],
+  "browser": {
+    "status": "pass",
+    "results": [
+      {
+        "width": 1440,
+        "height": 1000,
+        "candidates": 35,
+        "images": 104,
+        "links": 39,
+        "overflow": false,
+        "errors": [],
+        "markdown": true,
+        "persistence": true,
+        "noAutomaticPicks": true
+      },
+      {
+        "width": 390,
+        "height": 844,
+        "candidates": 35,
+        "images": 104,
+        "links": 39,
+        "overflow": false,
+        "errors": [],
+        "markdown": true,
+        "persistence": true,
+        "noAutomaticPicks": true
+      }
+    ]
+  },
+  "face_gl": {
+    "status": "pass",
+    "portraitCandidates": 7,
+    "storyFacePanels": 8,
+    "ownerApproved": 0,
+    "candidateLookupDenied": true,
+    "sixLegacyPortraitAliasesPreserved": true,
+    "storyCandidatesDisabled": true,
+    "runtimeArtBytes": 19660800,
+    "scope": "Local desktop GL and native pixel review only; no device or owner claim"
+  },
+  "story_loader_gl": {
+    "status": "pass",
+    "realAssetsApproved": 0,
+    "realCandidatesDisabled": true,
+    "syntheticUploadAndDraw": true,
+    "releaseOnSceneChange": true,
+    "missingRejectedChangedMalformedAndBudgetFallback": true,
+    "text": [
+      {
+        "card": "scrap-1",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "scrap-2",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "scrap-3",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "scrap-4",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "scrap-5",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "scrap-6",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "scrap-7",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "foundry-1",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "foundry-2",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "foundry-3",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "foundry-4",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "foundry-5",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "foundry-6",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "foundry-7",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "salt-1",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "salt-2",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "salt-3",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "salt-4",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "salt-5",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "salt-6",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "salt-7",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "switchback-1",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "switchback-2",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "switchback-3",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "switchback-4",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "switchback-5",
+        "width": 548.0,
+        "nextBaseline": 403.0
+      },
+      {
+        "card": "switchback-6",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "switchback-7",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-1",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-2",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-3",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-4",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-5",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-6",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "crown-7",
+        "width": 548.0,
+        "nextBaseline": 378.0
+      },
+      {
+        "card": "campaign-victory",
+        "width": 705.0,
+        "nextBaseline": 278.0
+      }
+    ],
+    "scope": "Desktop GL and actual font metrics only; no Stick, owner or performance claim"
+  },
+  "limitations": [
+    "Owner choices pending; every new asset remains disabled.",
+    "Exact new Mechanic portrait reused for rig card after three rejected scenes.",
+    "Existing dune retained after three rejected environment replacements.",
+    "Agent-labelled face calibration is small, not held-out or human accuracy.",
+    "No Stick, device performance, or push."
+  ]
+}

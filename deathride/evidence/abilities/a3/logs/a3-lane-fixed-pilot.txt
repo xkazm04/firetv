@@ -1,0 +1,27 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar
+> Task :core:compileTestKotlin
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:test
+
+WorldTest > signedSeedsUseTheSameBoundedLaneCycleWithoutIntegerOverflow() PASSED
+
+> Task :core:abilityReport
+roster-rookie-equal-technical-off: 100 races in 2.5633088s
+roster-rookie-equal-technical-on: 500 races in 10.0458336s
+roster-rookie-equal-straight-off: 100 races in 9.2320584s
+roster-rookie-equal-straight-on: 500 races in 46.1001172s
+roster-rookie-equal-loose-off: 100 races in 3.1833848s
+roster-rookie-equal-loose-on: 500 races in 16.078713s
+roster-rookie-skill-technical-off: 100 races in 2.1489706s
+roster-rookie-skill-technical-on: 500 races in 9.5932506s
+
+BUILD SUCCESSFUL in 1m 42s
+7 actionable tasks: 5 executed, 2 up-to-date

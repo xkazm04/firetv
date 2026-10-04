@@ -1,0 +1,47 @@
+{
+  "asset": "story-final-duel-v1",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:51:05.152790+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: illustration-story. One square Soot Pulp narrative panel. An overhead arena tableau with exactly two unoccupied cars: a small patched red mine-dispatcher coupe with rear rack faces a massive six-wheel rust-armoured league carrier with bone roof ribs. Two flat mine discs lie behind the small car. Open industrial road, last two opponents, no flags, finish line, lap counter or spectators. No gore. Flat graphic tableau, large readable shapes, central action in middle 70 percent with quiet soot margins. No speech bubbles, captions, panels within panels, symbols resembling letters, or decorative border.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-final-duel-v1",
+    "class": "final-duel",
+    "prompt_action": "Use case: illustration-story. One square Soot Pulp narrative panel. An overhead arena tableau with exactly two unoccupied cars: a small patched red mine-dispatcher coupe with rear rack faces a massive six-wheel rust-armoured league carrier with bone roof ribs. Two flat mine discs lie behind the small car. Open industrial road, last two opponents, no flags, finish line, lap counter or spectators. No gore. Flat graphic tableau, large readable shapes, central action in middle 70 percent with quiet soot margins. No speech bubbles, captions, panels within panels, symbols resembling letters, or decorative border.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "none",
+    "count": "1",
+    "status": "ready",
+    "kind": "backdrop",
+    "reference": "",
+    "batch": "story-backdrops",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "backdrops",
+    "surface_stack": "",
+    "logical_name": "final-duel"
+  },
+  "input_hash": "5d31e6d7633e90325cbf9596ef05c26cb3cc0d23199ead0b668dbbb8b7b63b76",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-final-duel-v1\\attempt-01\\1.jpg",
+  "session_id": "5810654f-3022-4527-994d-6f871830af70",
+  "image_tool_calls": [
+    {
+      "name": "image_gen",
+      "arguments": {
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: illustration-story. One square Soot Pulp narrative panel. An overhead arena tableau with exactly two unoccupied cars: a small patched red mine-dispatcher coupe with rear rack faces a massive six-wheel rust-armoured league carrier with bone roof ribs. Two flat mine discs lie behind the small car. Open industrial road, last two opponents, no flags, finish line, lap counter or spectators. No gore. Flat graphic tableau, large readable shapes, central action in middle 70 percent with quiet soot margins. No speech bubbles, captions, panels within panels, symbols resembling letters, or decorative border.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "d561e14b742ad1c140be40739b335ca372b21870bab90496b326367a43882c69",
+  "returncode": 0,
+  "elapsed_seconds": 22.781
+}

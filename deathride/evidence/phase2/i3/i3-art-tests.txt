@@ -1,0 +1,15 @@
+python : C:\Users\kazda\kiro\firetv-deathride-int\deathride\tools\art\process.py:9: UserWarning: A NumPy version
+>=1.23.5 and <2.5.0 is required for this version of SciPy (detected version 2.5.3)
+At line:2 char:1
++ python -m unittest discover -s deathride/tools/art -p test_*.py *> de ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\kazda\... version 2.5.3):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  from scipy import ndimage
+..............................
+----------------------------------------------------------------------
+Ran 30 tests in 0.859s
+
+OK
+Native exit code: 0

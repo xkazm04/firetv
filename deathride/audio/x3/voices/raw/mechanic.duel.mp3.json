@@ -1,0 +1,35 @@
+{
+  "id": "c0a5a926-bd15-4168-a9fa-d8e768d63696",
+  "ts": "2026-10-02T21:53:42.961Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/mechanic.duel.mp3",
+  "seconds": null,
+  "request": {
+    "text": "No finish line this time. You come back. Marrow does not.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.75,
+      "style": 0.25,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/SOYHLrjzK2X1ezoPC6cr",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 57,
+  "budgetCharge": 57,
+  "creditsBefore": 23040,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 65663,
+  "providerCredits": 57,
+  "sha256": "f8d4d74ce8afd5907a54348872462cdf2afa30c2d722c5c7e19d74bed37b031c",
+  "completedAt": "2026-10-02T21:53:45.424Z",
+  "creditsAfter": 23040,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 6330
+}

@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-02T16:10:17.533336+00:00",
+  "checks": [
+    {
+      "asset": "comet",
+      "next_revision": 8,
+      "error": "ASSET_ATTEMPT_CAP across revisions: v2-part3-rework-comet"
+    },
+    {
+      "asset": "kestrel",
+      "next_revision": 10,
+      "error": "ASSET_ATTEMPT_CAP across revisions: v2-part3-rework-kestrel"
+    }
+  ],
+  "before": {
+    "usage.json": "94027a5e2f1fb4efc15d6028960e5e2c68bde31e9f1ec2b827a6ac53788fe40c",
+    "history.jsonl": "7fc694629d3b5406525dd526549e79f475110ba0d922573a4cdc8b9f3fca928c"
+  },
+  "after": {
+    "usage.json": "94027a5e2f1fb4efc15d6028960e5e2c68bde31e9f1ec2b827a6ac53788fe40c",
+    "history.jsonl": "7fc694629d3b5406525dd526549e79f475110ba0d922573a4cdc8b9f3fca928c"
+  },
+  "new_images": 0
+}

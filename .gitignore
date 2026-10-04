@@ -38,3 +38,47 @@ prototype/identity/on-air.html
 
 # /perfect vault (Obsidian-openable, not content)
 .perfect/
+
+# Death Ride generation workspace; provenance and selected atlas pages are versioned
+deathride/art/raw/
+deathride/art/processed/
+deathride/art/contact-sheets/
+deathride/art/calibration/images/
+deathride/art/.budget.lock
+deathride/art/.run.lock
+.registry-read-list.txt
+deathride/.art-venv/
+deathride/tools/art/stick-probe/src/main/assets/
+deathride/tools/art/surface-lab/assets/
+deathride/tools/art/surface-lab/desktop/artlab-output/
+deathride/art/surface-lab/desktop/v3-a*/
+deathride/art/surface-lab/desktop/v3-a*.txt
+deathride/art/surface-lab/desktop/smoke*/
+deathride/art/surface-lab/desktop/smoke*.txt
+deathride/art/surface-lab/desktop/v3-cached*/
+deathride/art/surface-lab/desktop/v3-cached*.txt
+deathride/art/surface-lab/desktop/*/scene.png
+deathride/art/surface-lab/device/*/scene.png
+deathride/art/surface-lab/DEVICE-WINDOW.txt
+deathride/art/surface-lab/DEVICE-RELEASED.txt
+deathride/art/surface-lab/DEVICE-WINDOW-*.txt
+deathride/art/surface-lab/DEVICE-RELEASED-*.txt
+deathride/art/reports/p4-draft-location.json
+
+# I2 raw observations are archived byte-for-byte as deterministic gzip.
+/deathride/evidence/phase2/i2-soak.json
+/deathride/evidence/phase2/i2-*/i2-soak.json
+
+# Q4 device rolling observations are archived byte-for-byte as deterministic gzip.
+/deathride/evidence/campaign/q4/boss/result.json
+/deathride/evidence/campaign/q4/boss-fast/result.json
+/deathride/evidence/campaign/q4/finale/result.json
+/deathride/evidence/campaign/q4/finale-retry/result.json
+
+# Performance raw JSON/traces are retained losslessly as gzip alongside summaries.
+/deathride/evidence/perf/**/raw.json
+/deathride/evidence/perf/**/phases.json
+/deathride/evidence/perf/**/allocations.json
+/deathride/evidence/perf/**/*.atrace
+/deathride/evidence/perf/**/simpleperf-callgraph.txt
+/deathride/evidence/perf/**/simpleperf-report.txt

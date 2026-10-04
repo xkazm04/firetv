@@ -1,0 +1,55 @@
+[
+  {
+    "id": "p1-tile-asphalt-v1",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-asphalt-v1\\attempt-03\\1.jpg",
+    "source_sha256": "0fc22fa151cf856d1ad3e64f70dfe14be1e519d808fbd148fb117cf260279edf",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-asphalt-v1",
+      "class": "asphalt",
+      "prompt_action": "Dark charcoal asphalt, fine anonymous aggregate uniformly scattered, barely visible tiny wear, no large cracks, no recognizable motifs or patches. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.018111723856209152,
+      "edge_y_mean": 0.019578482434640523,
+      "edge_x_peak": 0.21568627450980393,
+      "edge_y_peak": 0.3921568627450981,
+      "autocorrelation_peak": 0.038365180520549796,
+      "autocorrelation_shift_px": [
+        40,
+        90
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.010723039215686273,
+      "edge_y_mean": 0.011417483660130718,
+      "edge_x_peak": 0.06666666666666665,
+      "edge_y_peak": 0.054901960784313725,
+      "autocorrelation_peak": 0.04095734435414734,
+      "autocorrelation_shift_px": [
+        110,
+        127
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-asphalt-clean\\p1-tile-asphalt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-asphalt-clean\\p1-tile-asphalt-v1.png",
+    "sha256": "64a7b31d4f28229b58a506fd54ea66a3508d1a3ef543f263ebec735aafb0fa2d"
+  }
+]

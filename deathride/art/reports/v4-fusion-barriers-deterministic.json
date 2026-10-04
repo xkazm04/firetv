@@ -1,0 +1,566 @@
+[
+  {
+    "id": "v4-fusion-barriers-concrete-straight-v1",
+    "class": "concrete-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-concrete-straight-v1\\attempt-01\\1.jpg",
+    "source_sha256": "98d11b33b597eb3283a8a73e3584e5f0a08c6ad37484ad50d6645838885782a6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-concrete-straight-v1",
+      "class": "concrete-straight",
+      "prompt_action": "One straight horizontal concrete safety wall module, rectangular grey top plane with tiny worn chips; same width throughout, squared flush ends. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/concrete-straight"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3549079895019531,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        54,
+        303,
+        978,
+        725
+      ],
+      "margin_fraction": 0.044921875,
+      "aspect": 2.18957345971564,
+      "estimated_key_rgb": [
+        246.0,
+        50.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.010513611686122,
+      "palette_p90_delta_e": 9.98227079682764
+    },
+    "placement": {
+      "source_bounds_px": [
+        54,
+        303,
+        978,
+        725
+      ],
+      "source_pivot_px": [
+        516.0,
+        514.0
+      ],
+      "pivot_px": [
+        64.0,
+        31.5
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        55
+      ],
+      "scale": 0.12987012987012986,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-concrete-straight-v1.png",
+    "sha256": "f4e6dcb3248a83f7c0d0719ba7986d614c31de36616d2b22a8632d441050e809"
+  },
+  {
+    "id": "v4-fusion-barriers-concrete-corner-v1",
+    "class": "concrete-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-concrete-corner-v1\\attempt-01\\1.jpg",
+    "source_sha256": "204ffd45d2b3e7b3cd846c82bf3ef0f0406f38c652ddd421e0bfeb39bf913e73",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-concrete-corner-v1",
+      "class": "concrete-corner",
+      "prompt_action": "One L-shaped concrete safety wall corner, two equal arms of the same width, a clean square ninety-degree bend, squared flush ends. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/concrete-corner"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2492666244506836,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        200,
+        160,
+        892,
+        767
+      ],
+      "margin_fraction": 0.12890625,
+      "aspect": 1.1400329489291599,
+      "estimated_key_rgb": [
+        242.0,
+        60.0,
+        203.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.211824484086284,
+      "palette_p90_delta_e": 11.401763688816434
+    },
+    "placement": {
+      "source_bounds_px": [
+        200,
+        160,
+        892,
+        767
+      ],
+      "source_pivot_px": [
+        546.0,
+        463.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        105
+      ],
+      "scale": 0.17341040462427745,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-concrete-corner-v1.png",
+    "sha256": "74e93e411e69ff5b5b9149fab690716074c2dd41ade927077e5dce49ae45605f"
+  },
+  {
+    "id": "v4-fusion-barriers-metal-straight-v1",
+    "class": "metal-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-metal-straight-v1\\attempt-01\\1.jpg",
+    "source_sha256": "65afed33c48b7230f378b46c79109dd0d439548f5e1b808d452d0a11aee35911",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-metal-straight-v1",
+      "class": "metal-straight",
+      "prompt_action": "One straight horizontal steel guardrail module, a flat grey rectangular top with two thin lengthwise ribs and tiny bolt heads, squared flush ends. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/metal-straight"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2593040466308594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        109,
+        340,
+        915,
+        684
+      ],
+      "margin_fraction": 0.1064453125,
+      "aspect": 2.3430232558139537,
+      "estimated_key_rgb": [
+        230.0,
+        39.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.731509433539869,
+      "palette_p90_delta_e": 11.600930395293098
+    },
+    "placement": {
+      "source_bounds_px": [
+        109,
+        340,
+        915,
+        684
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        31.5
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        51
+      ],
+      "scale": 0.1488833746898263,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-metal-straight-v1.png",
+    "sha256": "942b80eb0a3a8de58befc7f9b19917b8c6f8fe1ac5ee2939ab149198ac2d9bf2"
+  },
+  {
+    "id": "v4-fusion-barriers-metal-corner-v1",
+    "class": "metal-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-metal-corner-v1\\attempt-01\\1.jpg",
+    "source_sha256": "13143a39e2135fd4ce5636c9430568fd3647cd7662e9b07a2390f936ccdfd3f7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-metal-corner-v1",
+      "class": "metal-corner",
+      "prompt_action": "One L-shaped steel guardrail corner, two equal arms of the same width, a clean square ninety-degree bend with two thin ribs, squared flush ends. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/metal-corner"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2007312774658203,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        166,
+        264,
+        858,
+        807
+      ],
+      "margin_fraction": 0.162109375,
+      "aspect": 1.274401473296501,
+      "estimated_key_rgb": [
+        244.0,
+        80.0,
+        190.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.184554328541003,
+      "palette_p90_delta_e": 10.348296113809553
+    },
+    "placement": {
+      "source_bounds_px": [
+        166,
+        264,
+        858,
+        807
+      ],
+      "source_pivot_px": [
+        512.0,
+        535.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        94
+      ],
+      "scale": 0.17341040462427745,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-metal-corner-v1.png",
+    "sha256": "51e9b8b57e1dd27db60594a25186f9965f215ff25a71484463247d6d0b51af3d"
+  },
+  {
+    "id": "v4-fusion-barriers-hazard-straight-v1",
+    "class": "hazard-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-hazard-straight-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3ba58990c14dae949d3b575612ff9e62a537686a967a9608433218ccca04a727",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-hazard-straight-v1",
+      "class": "hazard-straight",
+      "prompt_action": "One horizontal rectangular crash barrier top, alternating muted yellow and charcoal diagonal hazard bands, straight square ends, subtle edge chips. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/hazard-straight"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2588481903076172,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        115,
+        343,
+        915,
+        691
+      ],
+      "margin_fraction": 0.1064453125,
+      "aspect": 2.2988505747126435,
+      "estimated_key_rgb": [
+        214.0,
+        57.0,
+        163.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.595081602627446,
+      "palette_p90_delta_e": 14.961325193757393
+    },
+    "placement": {
+      "source_bounds_px": [
+        115,
+        343,
+        915,
+        691
+      ],
+      "source_pivot_px": [
+        515.0,
+        517.0
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        52
+      ],
+      "scale": 0.15,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-hazard-straight-v1.png",
+    "sha256": "99b98135291f9ff217ea6ca03b98b4ef9aa3bbfe9bc451a0f87a841798e781ca"
+  },
+  {
+    "id": "v4-fusion-barriers-hazard-corner-v1",
+    "class": "hazard-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-barriers-hazard-corner-v1\\attempt-02\\1.jpg",
+    "source_sha256": "eeae030119ec640a0071af6d156f8043907f76c64015e8612af17a3ecee890b5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-barriers-hazard-corner-v1",
+      "class": "hazard-corner",
+      "prompt_action": "One L-shaped crash barrier top, equal-width arms and clean square bend, alternating muted yellow and charcoal diagonal hazard bands, square ends. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-barriers",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "barriers",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "barriers/hazard-corner"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1766185760498047,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        247,
+        236,
+        828,
+        784
+      ],
+      "margin_fraction": 0.19140625,
+      "aspect": 1.0602189781021898,
+      "estimated_key_rgb": [
+        234.0,
+        76.0,
+        164.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.631559329833453,
+      "palette_p90_delta_e": 10.831950714033347
+    },
+    "placement": {
+      "source_bounds_px": [
+        247,
+        236,
+        828,
+        784
+      ],
+      "source_pivot_px": [
+        537.5,
+        510.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        113
+      ],
+      "scale": 0.20654044750430292,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-barriers\\v4-fusion-barriers-hazard-corner-v1.png",
+    "sha256": "43b1e0f4b49accfb5bd31561ecd776c62732e05aebe8e76e269c753d9929c80c"
+  }
+]

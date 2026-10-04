@@ -1,0 +1,194 @@
+{
+  "tests": {
+    "core": {
+      "tests": 136,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "files": [
+    {
+      "path": "baseline/badging.txt",
+      "sha256": "8011399db4638b7fc1ef2ad047820015e77cd537734c11710a306be97c0d379c",
+      "bytes": 5626
+    },
+    {
+      "path": "baseline/install.txt",
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3",
+      "bytes": 38
+    },
+    {
+      "path": "baseline/installed.json",
+      "sha256": "f156dd78148f4c97dc96c182a3101b4c13123db2a5d70dae78a5c5a2280328ea",
+      "bytes": 282
+    },
+    {
+      "path": "baseline/logcat.txt",
+      "sha256": "a1e48c78c19a05d51c73ef40ec4de83798d0f171cf6d1a5b44063c75e8a8deda",
+      "bytes": 176626
+    },
+    {
+      "path": "baseline/probe.log",
+      "sha256": "e38052d24106f26ef25e972b202cd05570b7b1cff01acb52dbacb1a3b2082a7a",
+      "bytes": 2159
+    },
+    {
+      "path": "baseline/raw.json.gz",
+      "sha256": "25b602676c9de9a11dcc2b832b0f26a3839c1a492c95a4a00832d43b07dacad2",
+      "bytes": 851883
+    },
+    {
+      "path": "baseline/summary.json",
+      "sha256": "405a48782a150fd2d0b895a9471e401081949618e400b73790212225e30c421d",
+      "bytes": 8250
+    },
+    {
+      "path": "baseline-build-retry.log",
+      "sha256": "b72651ca5ed6997e8e484b02d3a44cd8dd51dbc0570da7a061a2f45ff21d3993",
+      "bytes": 39006
+    },
+    {
+      "path": "baseline-build.log",
+      "sha256": "e38fb76f38607a67fcbc3af3b2c5097416dc7fd8cf5ac1b80dc6c6d0e0550cc3",
+      "bytes": 3200
+    },
+    {
+      "path": "baseline-surface-latency.txt",
+      "sha256": "64cb3a63aea74edf3c3c4c5976d2135af895ce23bceb2c9f3922ca1a0b4a707f",
+      "bytes": 6616
+    },
+    {
+      "path": "desktop/allocation.jfr",
+      "sha256": "7747218b9bb5d0a6b673d792344f52d8e628c4313cf09689b279ee9b60ad01d9",
+      "bytes": 845125
+    },
+    {
+      "path": "desktop/allocations.json.gz",
+      "sha256": "22b22863c8cbd126e2ed140c4b0936924f2578940ff8d5318f8ab35b023678a4",
+      "bytes": 129957
+    },
+    {
+      "path": "desktop/phases.json.gz",
+      "sha256": "4e859eb0f5a0634e12c40f55d6d5c1b806a5459b97b905f30eeb08ab6b7b5ffe",
+      "bytes": 193851
+    },
+    {
+      "path": "desktop/run-retry.log",
+      "sha256": "1c48fc15d44945d44b94271efe06137209a63c8d0856f264415991d6e432b715",
+      "bytes": 64825
+    },
+    {
+      "path": "desktop/run.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "desktop/summary.json",
+      "sha256": "e2f9f0a69e17ad1f3310ef451754abd50856b1e40087c5cbf1d492e130bded9e",
+      "bytes": 3638
+    },
+    {
+      "path": "device.txt",
+      "sha256": "099785c48abd311fb4a18fc0dbeb39bc9aa1b1705f50915fa8323563e0d27de0",
+      "bytes": 37608
+    },
+    {
+      "path": "native/atrace.txt",
+      "sha256": "05d25c903def8a399eff4cf2519c9b38af943ed6bad25aeaac652c0b60f6b8aa",
+      "bytes": 558
+    },
+    {
+      "path": "native/audio-after.txt",
+      "sha256": "747ecab436dd7a074982ba6d8633e47c32c7a7260ca4c1c43be25eb0483d022b",
+      "bytes": 32012
+    },
+    {
+      "path": "native/audio-before.txt",
+      "sha256": "3a3fd8f28809da86f33ac1f448cc5af990c0cced93c243a2f5944d5929c80ba5",
+      "bytes": 32415
+    },
+    {
+      "path": "native/events.json",
+      "sha256": "56a1dc3aa619e9b25f0ec296911f52f3ec379343fa20b42a712b4a88566107f8",
+      "bytes": 2355
+    },
+    {
+      "path": "native/perf.data.gz",
+      "sha256": "132c7fe98d312a84a66a46ae5a8c2fd3fb7dac458486a5f682e08cc82483cb43",
+      "bytes": 175063
+    },
+    {
+      "path": "native/simpleperf-callgraph.txt.gz",
+      "sha256": "40abb530b9b32046dd03714213e7ae4b2ded384fe4c9ed551434f98ef980bec7",
+      "bytes": 555897
+    },
+    {
+      "path": "native/simpleperf-report.txt.gz",
+      "sha256": "d0b3c1963ca5190823b84853bd81945fe7e9694e2f3e04f1b9c5d6aed0f5da24",
+      "bytes": 18709
+    },
+    {
+      "path": "native/simpleperf.txt",
+      "sha256": "d5c8eb84211eb0022b0d49093d5c8c8f3d33889272c4033b590090347d25b7b3",
+      "bytes": 670
+    },
+    {
+      "path": "native/threads-before.txt",
+      "sha256": "564b83379ee59102eacdcef02faa98ec40bc6ae69fb83d3bf793fefa118d3537",
+      "bytes": 226678
+    },
+    {
+      "path": "native/trace-summary.json",
+      "sha256": "0c9817d12615a3d9f3b5cb514828c680a44e6dd5ac61f35f5332c8b3c157bcff",
+      "bytes": 55185
+    },
+    {
+      "path": "native/trace.txt.gz",
+      "sha256": "333b91d81d51d17d4d040dfaf07eebdac8ddddec986d72c58b1d7414dd326df2",
+      "bytes": 9402935
+    },
+    {
+      "path": "profile-build.log",
+      "sha256": "8021cadf7457fe8e2019b49f08b73f32d5a8be7a96945b31a8e633b645114e0f",
+      "bytes": 8626
+    },
+    {
+      "path": "profile-final-build.log",
+      "sha256": "ef26c07d2dd00986f2f6231714b6e24935700b72af9e2816e132bcda3d59e05f",
+      "bytes": 10982
+    },
+    {
+      "path": "profile-observer.json",
+      "sha256": "260b17adfd31f5b42e24746fd68d2d60c8acbfa1d0d3aac78ea87d8b11ee384a",
+      "bytes": 848
+    },
+    {
+      "path": "profile-snapshot-summary.json",
+      "sha256": "8ae486853588ce8c70c243b1924c732b3b0170df6bea640f7f60a04f9cbd2377",
+      "bytes": 3235
+    },
+    {
+      "path": "profile-snapshot.json.gz",
+      "sha256": "84938069dbca619eb79e4792293d0574c8adf7020fbf829784c32247f1c75d87",
+      "bytes": 357240
+    },
+    {
+      "path": "tv-before.txt",
+      "sha256": "88ebabdec6e0af193058a0e375652ea7d878e5afe80d1786d3fc627e27a98222",
+      "bytes": 15112
+    }
+  ]
+}

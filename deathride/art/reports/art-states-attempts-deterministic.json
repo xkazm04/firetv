@@ -1,0 +1,4813 @@
+[
+  {
+    "id": "v2-part4-needle-state-intact-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3ebe8cb570e9df446cafdaae85917274444c5f3b6e00dc51490c883a9c890181",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-intact-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22964859008789062,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        88,
+        271,
+        983,
+        755
+      ],
+      "margin_fraction": 0.0400390625,
+      "aspect": 1.8491735537190082,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.15946656649135982,
+      "principal_axis_degrees": 0.10127317785711142,
+      "estimated_key_rgb": [
+        223.0,
+        36.0,
+        175.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.150839285647855,
+      "palette_p90_delta_e": 11.241443987373625
+    },
+    "placement": {
+      "source_bounds_px": [
+        88,
+        271,
+        983,
+        755
+      ],
+      "source_pivot_px": [
+        535.5,
+        513.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        85
+      ],
+      "scale": 0.17653631284916202,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-state-intact-v1.png",
+    "sha256": "04b3a553e546a76144e0effc489b912b2b11f8a61fd39939a9fe704c82922f98",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-intact-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-intact-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-intact-v1\\attempt-02\\1.jpg",
+    "source_sha256": "5b9e58c84032fe245ea0039d8d8b435fdf5eeaadab2eab2ede91cf71c5c6bcbd",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-intact-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24917125701904297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.22499671950566213,
+      "estimated_key_rgb": [
+        230.0,
+        51.0,
+        174.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 13.06602295586283,
+      "palette_p90_delta_e": 22.58934481575106
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-state-intact-v1.png",
+    "sha256": "cb359bbd84f4276980a8be87c3563a7f480943417dd84d8c814370e06ccb23d4",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-intact-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-intact-v1-a3",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-intact-v1\\attempt-03\\1.jpg",
+    "source_sha256": "c1c51276c9e875748f9f0f9ed8c56da7d42b4077b3515773a0ade6c7a0e2e97a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-intact-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20589542388916016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.019757073985499057,
+      "estimated_key_rgb": [
+        213.0,
+        50.0,
+        154.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.458981522469505,
+      "palette_p90_delta_e": 13.14174608132517
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-needle-state-intact-v1.png",
+    "sha256": "8377074672aba71eaab78d04eb4ba9936b5844f2557398f5cbc7ed5c7fbdd83f",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-intact-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-intact-reference",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\fusion\\sources\\v2-part3-rework-needle-v1.jpg",
+    "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-intact-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2064361572265625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8734177215189873,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14844649021864198,
+      "principal_axis_degrees": 0.1483519561836891,
+      "estimated_key_rgb": [
+        217.0,
+        51.0,
+        156.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 12.498074572194408,
+      "palette_p90_delta_e": 20.41709604801928
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states-reference-baseline\\v2-part4-needle-state-intact-v1.png",
+    "sha256": "e393ccd8069395f17d859dbe388eb2d7d7d25f0b1d3460741c56cc9e701d8559",
+    "attempt": 0,
+    "derivation": {
+      "id": "v2-part4-needle-state-intact-reference",
+      "at": "2026-10-02T19:26:53.218065+00:00",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reason": "Three guarded no-op edits failed exact intact identity: colour drift in attempts 1/3; filled open frame, glare/shadow in attempt 2. Do not exceed the three-call ceiling. The intact action requests no change, so use the exact owner-approved source as its baseline, reprocessed through unchanged gates. No new generated image is claimed; all failed attempts remain visible.",
+      "recipe": "Exact approved source bytes; unchanged deterministic extraction, no recolouring or repair.",
+      "new_paid_calls": 0
+    }
+  },
+  {
+    "id": "v2-part4-needle-state-damaged-1-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "7766541d02c772f3614b14be28cbbff088de8d14a77fc179a967699498b778cb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-damaged-1-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2060089111328125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.04327128699420019,
+      "estimated_key_rgb": [
+        214.0,
+        51.0,
+        155.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.863059126616979,
+      "palette_p90_delta_e": 11.87791162762805
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-state-damaged-1-v1.png",
+    "sha256": "d4a5c81079bf84ec9eb32d56e4a9d246ccf232140338c8bb8d96f77cf45b921e",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-damaged-1-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-damaged-1-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-damaged-1-v1\\attempt-02\\1.jpg",
+    "source_sha256": "3a287513211169c1f6bae05bb7d6c9edf3da22d6729c3ff920669b0d1d7a34ac",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-damaged-1-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2043018341064453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8773784355179703,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14664616567364974,
+      "principal_axis_degrees": 0.1304815518603301,
+      "estimated_key_rgb": [
+        234.0,
+        59.0,
+        191.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 13.36050942970363,
+      "palette_p90_delta_e": 22.226126761737284
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-state-damaged-1-v1.png",
+    "sha256": "a658122908e5c6538d8fd9c29ee1ec544f896df847de00028a931b7d2b317892",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-damaged-1-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-damaged-2-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e125ff7450d3b0b3b221b8554673d6201cf81c00ac00ab165c8fbea2a0edf979",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-damaged-2-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2128925323486328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.0008440474297600564,
+      "estimated_key_rgb": [
+        212.0,
+        53.0,
+        153.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.532780675866789,
+      "palette_p90_delta_e": 17.987700504091436
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-state-damaged-2-v1.png",
+    "sha256": "28f4ede72447640c4e47fa9a9096781b12709f5d201a495a4c332fd5548aae6e",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-damaged-2-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-02\\1.jpg",
+    "source_sha256": "36e3b1c264ebabd288f8d321d0a251af30b291f1cacc42fea7542448740b830b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-damaged-2-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20677566528320312,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.07576195224283672,
+      "estimated_key_rgb": [
+        211.0,
+        51.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.342327142819763,
+      "palette_p90_delta_e": 12.204302829347316
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-state-damaged-2-v1.png",
+    "sha256": "3f3070764e8028f56f68bd749f210a5cecf8d6a85067ff0aec5477fee9172a74",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-damaged-2-v1-a3",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-03\\1.jpg",
+    "source_sha256": "9a05af8fa74a1059b167b2ba6e8b412edaf12d5c707605ce451e4482a4cccd0d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-damaged-2-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20729541778564453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.04484532569762707,
+      "estimated_key_rgb": [
+        214.0,
+        52.0,
+        155.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 11.631322844457038,
+      "palette_p90_delta_e": 19.8275960352173
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-needle-state-damaged-2-v1.png",
+    "sha256": "f7c6966ea119dc2cfa87c3eae041ec68356b5590e074c04a4cc4d80171854681",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-damaged-2-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-state-wreck-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-state-wreck-v1\\attempt-01\\1.jpg",
+    "source_sha256": "331771542a6cbcf15a151a007a80897e9d4357a43e4c3132975874f087af5111",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-state-wreck-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22900676727294922,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.01911928994813614,
+      "estimated_key_rgb": [
+        210.0,
+        50.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.242270286743528,
+      "palette_p90_delta_e": 10.998038502232964
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-state-wreck-v1.png",
+    "sha256": "055b9e8bf543ee7a88915e92060f13d0fcd491c0594d851a1f9f9486799dd919",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-state-wreck-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-bone-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "4b8cfb87bdae408c9db5d4a1183bb0ea7404be653b1f18170212c0384bccc990",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-bone-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20543861389160156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8773784355179703,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14664616567364974,
+      "principal_axis_degrees": 0.10782511150126438,
+      "estimated_key_rgb": [
+        241.0,
+        40.0,
+        188.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.79697875615025,
+      "palette_p90_delta_e": 15.21989495173944
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-livery-bone-v1.png",
+    "sha256": "7cd8a4fe159d6f096505c94640106f392128f607352e1212e87f80314967a0c7",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-bone-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-02\\1.jpg",
+    "source_sha256": "de7c2137f27d9e154e2963668d118373cdc2b8f031e22e24e08776f627fad9dd",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-bone-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2102985382080078,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8734177215189873,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14844649021864198,
+      "principal_axis_degrees": 0.09852360445213736,
+      "estimated_key_rgb": [
+        238.0,
+        45.0,
+        197.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.947641524644806,
+      "palette_p90_delta_e": 15.634433223111637
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-livery-bone-v1.png",
+    "sha256": "b7c64f047f3af86cfdaa724f39cb159174dfa013e8ec595558c754e7c4d4fd50",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-bone-v1-a3",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-03\\1.jpg",
+    "source_sha256": "a10da15fb920b112332c32a4e201a6252a02eb245f174a1326ba1a3ffa1fe5c0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-bone-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20697402954101562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.00542217183129356,
+      "estimated_key_rgb": [
+        214.0,
+        52.0,
+        154.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.9908109098052025,
+      "palette_p90_delta_e": 12.179589284517327
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-needle-livery-bone-v1.png",
+    "sha256": "f693ddace158b6026de2551624267235a768c6e3bcc3e5f09b9c3548677d12a0",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-bone-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-red-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "0159c24b3e415576045bd415ab65ef2ee05ca6ed10d59db3f93d9d80299a1da4",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-red-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to dried red #6C2427. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20680999755859375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.10533257920556054,
+      "estimated_key_rgb": [
+        208.0,
+        54.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 11.626243761423675,
+      "palette_p90_delta_e": 18.771579662933522
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-livery-red-v1.png",
+    "sha256": "b81ba4ac20d947ec079e9072840dc131bc67287ce9c38f2eda73fdc71972c860",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-red-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-red-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-red-v1\\attempt-02\\1.jpg",
+    "source_sha256": "0eb1c7cc57c5e8411f92179cb66dc89a7ac214b96cf878cf896d6eff4a45d53f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-red-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to dried red #6C2427. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20651912689208984,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        276,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.879492600422833,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14568518162598487,
+      "principal_axis_degrees": 0.03175696395769151,
+      "estimated_key_rgb": [
+        215.0,
+        53.0,
+        155.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 11.127061750329139,
+      "palette_p90_delta_e": 17.901090085107807
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        276,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-livery-red-v1.png",
+    "sha256": "7958d1c3a8ace51a56382660bb4f1ec08a4198f780349e1e3dd00558c4d545af",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-red-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-ochre-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "91bec54d84746f57158a92efea728f464ec5c4e3b4e1cde061008d51d52d3e31",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-ochre-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20659351348876953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.1278550462558559,
+      "estimated_key_rgb": [
+        216.0,
+        52.0,
+        155.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.711337687332849,
+      "palette_p90_delta_e": 13.954799376904287
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-needle-livery-ochre-v1.png",
+    "sha256": "ee983ed9bda131821c38faacb2e066fac634cfa02091ac975a06e7656b48c5bf",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-ochre-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-needle-livery-ochre-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-needle-livery-ochre-v1\\attempt-02\\1.jpg",
+    "source_sha256": "3a1c779819497dc20eaaa3a62ddea707b3428ca49ee2b12e4c180bc8aa9f0358",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-needle-livery-ochre-v1",
+      "class": "Needle",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+      "batch": "v2-part4-needle-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-needle-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20667266845703125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8755274261603376,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14748753356348276,
+      "principal_axis_degrees": 0.14759832070320564,
+      "estimated_key_rgb": [
+        214.0,
+        52.0,
+        154.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.456757989276394,
+      "palette_p90_delta_e": 13.271595538833706
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        535.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17772778402699663,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-needle-livery-ochre-v1.png",
+    "sha256": "e2cb7352b273ec399fa1a3c79ea4e8fe17bd9ee2400cdbf73c62ad36a50e3297",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-needle-livery-ochre-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-state-intact-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "665649d02d4b82084a4ed6bcc92faaf2a8eee7946011deb20530f58122b6e3da",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-state-intact-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22518529647435898,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "margin_fraction": 0.203125,
+      "aspect": 2.2,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1444444444444445,
+      "principal_axis_degrees": 0.06883275434563949,
+      "estimated_key_rgb": [
+        240.0,
+        23.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.848482255949338,
+      "palette_p90_delta_e": 12.126256645383538
+    },
+    "placement": {
+      "source_bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.2394678492239468,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-state-intact-v1.png",
+    "sha256": "75685917ac8dec4a878ee22aa149bb72d72d6ada71c2df7405d37b583a8b74e2",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-state-intact-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-state-damaged-1-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "61dc0d3532c0437654a30a1af78f5b8f7616ca70a89ae4c05f6ae6882f2aa951",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-state-damaged-1-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22744082840236687,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        176,
+        210,
+        1080,
+        621
+      ],
+      "margin_fraction": 0.20192307692307693,
+      "aspect": 2.199513381995134,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1446336847796702,
+      "principal_axis_degrees": 0.03742862483921961,
+      "estimated_key_rgb": [
+        241.0,
+        104.0,
+        170.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.349193299929696,
+      "palette_p90_delta_e": 12.339129065710324
+    },
+    "placement": {
+      "source_bounds_px": [
+        176,
+        210,
+        1080,
+        621
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.23893805309734514,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-state-damaged-1-v1.png",
+    "sha256": "c7ecc271b859f37966bf4f3cc5d72040bcfe4af71b4d8a1b3fbc9be5f0a247c5",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-state-damaged-1-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-state-damaged-2-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3ad41b392e244c90dfd0411d62283469c01b31ba6a89ba480f1515056b0376fe",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-state-damaged-2-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2301933092948718,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        176,
+        210,
+        1080,
+        621
+      ],
+      "margin_fraction": 0.20192307692307693,
+      "aspect": 2.199513381995134,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1446336847796702,
+      "principal_axis_degrees": 0.028253303006543974,
+      "estimated_key_rgb": [
+        242.0,
+        103.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.209900278118656,
+      "palette_p90_delta_e": 11.613612876240758
+    },
+    "placement": {
+      "source_bounds_px": [
+        176,
+        210,
+        1080,
+        621
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.23893805309734514,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-state-damaged-2-v1.png",
+    "sha256": "b56a3d660179fb5b9ef8c4f6a3d77229c5b405e7ddaa46bf077d9a403a683ec0",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-state-damaged-2-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-state-wreck-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-state-wreck-v1\\attempt-01\\1.jpg",
+    "source_sha256": "cfb11798e8b31b09e0ed494a3336e904d8fcb3cd94d01913ec1ae5b90d7a73ec",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-state-wreck-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24610241771449703,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        176,
+        159,
+        1080,
+        621
+      ],
+      "margin_fraction": 0.19110576923076922,
+      "aspect": 1.9567099567099566,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.2390572390572392,
+      "principal_axis_degrees": 0.34967102562698044,
+      "estimated_key_rgb": [
+        238.0,
+        103.0,
+        168.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.448355179978982,
+      "palette_p90_delta_e": 9.195724171012746
+    },
+    "placement": {
+      "source_bounds_px": [
+        176,
+        159,
+        1080,
+        621
+      ],
+      "source_pivot_px": [
+        628.0,
+        390.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        110
+      ],
+      "scale": 0.23893805309734514,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-state-wreck-v1.png",
+    "sha256": "545a6ae7cb82bf69897381ca291ded44576554e3250136b77be02026fd15e575",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-state-wreck-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-state-wreck-v1-a2",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-state-wreck-v1\\attempt-02\\1.jpg",
+    "source_sha256": "1b25c3fcae4f9011a73c10665673e7b43a6a5ca1adf7c9b4c78896221d3147f2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-state-wreck-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22740326830621302,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        176,
+        209,
+        1080,
+        621
+      ],
+      "margin_fraction": 0.20192307692307693,
+      "aspect": 2.1941747572815533,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1467098166127293,
+      "principal_axis_degrees": 0.040194046535136856,
+      "estimated_key_rgb": [
+        241.0,
+        102.0,
+        168.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 3.9911965942597183,
+      "palette_p90_delta_e": 8.161325268018128
+    },
+    "placement": {
+      "source_bounds_px": [
+        176,
+        209,
+        1080,
+        621
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.23893805309734514,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-comet-state-wreck-v1.png",
+    "sha256": "8976a09e8f34217bdaa15913315967307e553acf12c644482c1d80f1cfac66bc",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-state-wreck-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-livery-bone-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a4bbabfbaba0a57463cbc90d353796130d80e26554b2cc1078b72dec378634ad",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-livery-bone-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22526041666666666,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "margin_fraction": 0.203125,
+      "aspect": 2.2,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1444444444444445,
+      "principal_axis_degrees": 0.01287793551664563,
+      "estimated_key_rgb": [
+        234.0,
+        61.0,
+        186.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.860684577341258,
+      "palette_p90_delta_e": 10.473290653037761
+    },
+    "placement": {
+      "source_bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.2394678492239468,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-livery-bone-v1.png",
+    "sha256": "da203a45c57ca4b93de8424b0809a2a94d813cef1f4abbcb2c78c27abf056baa",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-livery-bone-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-livery-red-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "d237942724eb8540effb10c0091addc3253fcb462063d248a820d515d04cf360",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-livery-red-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to dried red #6C2427. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22505335459812623,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "margin_fraction": 0.203125,
+      "aspect": 2.2,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1444444444444445,
+      "principal_axis_degrees": 0.0006280140120119221,
+      "estimated_key_rgb": [
+        247.0,
+        18.0,
+        238.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.505866747116545,
+      "palette_p90_delta_e": 11.311505717303332
+    },
+    "placement": {
+      "source_bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.2394678492239468,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-livery-red-v1.png",
+    "sha256": "435b10370c04b2a8093a510c09ff2a431a3a844b23547ca7af335f71ea6ec637",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-livery-red-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-livery-ochre-v1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "d238ea2571be80e95a624edfe194780bf83aec26bdd8cee800930aeffb3aac1c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-livery-ochre-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22541643552761342,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "margin_fraction": 0.203125,
+      "aspect": 2.2,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1444444444444445,
+      "principal_axis_degrees": 0.024568893779931315,
+      "estimated_key_rgb": [
+        241.0,
+        111.0,
+        217.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.937550924149163,
+      "palette_p90_delta_e": 17.440998031114844
+    },
+    "placement": {
+      "source_bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.2394678492239468,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-comet-livery-ochre-v1.png",
+    "sha256": "84cc912b18952bf17e7d8ac03f3340208db6f999f5152e4c90aa700e6242a0b7",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-livery-ochre-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-comet-livery-ochre-v1-a2",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-comet-livery-ochre-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b2bb6a168e9492830fff53f9d71cf0190f63fd57b7263d0ed0c5b20221288e95",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-comet-livery-ochre-v1",
+      "class": "Comet",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-comet-v7.jpg",
+      "batch": "v2-part4-comet-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-comet-v7",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22547518337031558,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "margin_fraction": 0.203125,
+      "aspect": 2.2,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1444444444444445,
+      "principal_axis_degrees": 0.023809784574242213,
+      "estimated_key_rgb": [
+        245.0,
+        115.0,
+        208.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.893607110787003,
+      "palette_p90_delta_e": 9.983924472150099
+    },
+    "placement": {
+      "source_bounds_px": [
+        177,
+        210,
+        1079,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.2394678492239468,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-comet-livery-ochre-v1.png",
+    "sha256": "abe637c74c87ec02915fb830ba9bcb8998a39fd0611af7f767e3cb6e3c91def6",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-comet-livery-ochre-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-state-intact-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "c193120c4c46e8ca490b99de4bf3d96dade46fdbc10fbb7c75140bca253ec1ef",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-state-intact-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24450969696044922,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9496717724288841,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.06881348182501057,
+      "principal_axis_degrees": 0.08835892378639158,
+      "estimated_key_rgb": [
+        239.0,
+        30.0,
+        225.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.355699944027551,
+      "palette_p90_delta_e": 10.755535829370714
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "source_pivot_px": [
+        523.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-state-intact-v1.png",
+    "sha256": "9d69c43032317b1aeed86ce584e6cf2daea03556da5ebeb8ced196e073530c84",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-state-intact-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-state-damaged-1-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b94dff6a31ce6210f8411e7a05a9918f7a2513ddab72d6418b604d131e49efcc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-state-damaged-1-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2459707260131836,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.945414847161572,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.07084664016163722,
+      "principal_axis_degrees": 0.026455469539474495,
+      "estimated_key_rgb": [
+        219.0,
+        48.0,
+        148.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.385570006322972,
+      "palette_p90_delta_e": 10.923581787989702
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.5,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-state-damaged-1-v1.png",
+    "sha256": "f56fc9d8ef448fdf6ba0117131365b6911fa35a57842ec937406882c92aeb2cf",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-state-damaged-1-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-state-damaged-2-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fc4f51408cf0e15c4b30366e80455b0f97c2ca8478f822443289e4ab95f1ba85",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-state-damaged-2-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24655437469482422,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.945414847161572,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.07084664016163722,
+      "principal_axis_degrees": 0.026800654820161078,
+      "estimated_key_rgb": [
+        193.0,
+        45.0,
+        129.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.373556425043669,
+      "palette_p90_delta_e": 11.015211184062773
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.5,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-state-damaged-2-v1.png",
+    "sha256": "7cd0c7ab53e82d3d22ecdbf5dc8027027fdfcd87981e89e3a94722d24fcce6a0",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-state-damaged-2-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-state-wreck-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-state-wreck-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f940d0a364a218b593b4829f598afb45e54d5bb0549553dc90ea85d9b7944d86",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-state-wreck-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24600505828857422,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9475982532751093,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.0698038193312911,
+      "principal_axis_degrees": 0.05504862116392442,
+      "estimated_key_rgb": [
+        192.0,
+        43.0,
+        129.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.904071715037016,
+      "palette_p90_delta_e": 9.56156307285553
+    },
+    "placement": {
+      "source_bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.0,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.1804932735426009,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-state-wreck-v1.png",
+    "sha256": "16c8034669095249cc09314ade9911b6a0fda428988eb1ab660672396c86a975",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-state-wreck-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-livery-bone-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a9166ce039e95456657f63f0c71d1e44865eac069c2649ac271fe3759d9b851d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-livery-bone-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.246612548828125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.945414847161572,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.07084664016163722,
+      "principal_axis_degrees": 0.022440581942197457,
+      "estimated_key_rgb": [
+        193.0,
+        45.0,
+        129.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.375026097085613,
+      "palette_p90_delta_e": 10.98931040308679
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.5,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-livery-bone-v1.png",
+    "sha256": "ac8c84a1da402be2d7c2ee09aca7fe8f9c29470fcdbb3482080916d2f1c2bb7e",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-livery-bone-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-livery-red-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "8a4f4da0d12814f4f5bc34fe192b566475a8a1003bc2e7e2b498694c53da0585",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-livery-red-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to dried red #6C2427. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24448299407958984,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9496717724288841,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.06881348182501057,
+      "principal_axis_degrees": 0.00797614808790194,
+      "estimated_key_rgb": [
+        241.0,
+        30.0,
+        236.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.41496633121724,
+      "palette_p90_delta_e": 10.656588770898761
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "source_pivot_px": [
+        523.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-livery-red-v1.png",
+    "sha256": "a5c580979855166f8f17f2000d493156cace77759b066ee4c55416545a7941c0",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-livery-red-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-livery-ochre-v1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "8c4b4baaa9c16be01700e96b6ac451e916d6c31c2383b810ef47c3de5946cf99",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-livery-ochre-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24492740631103516,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9496717724288841,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.06881348182501057,
+      "principal_axis_degrees": 0.04244277017532736,
+      "estimated_key_rgb": [
+        231.0,
+        53.0,
+        202.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.39532659432855,
+      "palette_p90_delta_e": 13.783583639013854
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        281,
+        969,
+        738
+      ],
+      "source_pivot_px": [
+        523.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18069584736251404,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-quill-livery-ochre-v1.png",
+    "sha256": "153eb618454bc4e1ee5e77fb20c2d0dc8c2ccbd96d5590a6ce1038ec48219b3e",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-livery-ochre-v1-a2",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-02\\1.jpg",
+    "source_sha256": "ddd0ba10c606a03fe1cfcb45062755476931bc756f13bc3b981806b11c758bb2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-livery-ochre-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24678897857666016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9475982532751093,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.0698038193312911,
+      "principal_axis_degrees": 0.011910524694897015,
+      "estimated_key_rgb": [
+        196.0,
+        46.0,
+        131.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.664309519659093,
+      "palette_p90_delta_e": 10.478434961048531
+    },
+    "placement": {
+      "source_bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.0,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.1804932735426009,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-quill-livery-ochre-v1.png",
+    "sha256": "067b218cb5d8260bcecd942403bc1b331219a1bf62bef26b3df8b6b809017c91",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-quill-livery-ochre-v1-a3",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-03\\1.jpg",
+    "source_sha256": "ec5b2358be058a71fd23031de36ac85267511834fe8599afb0111793b57e1e92",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-quill-livery-ochre-v1",
+      "class": "Quill",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+      "batch": "v2-part4-quill-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-quill-v2",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2469310760498047,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        77,
+        281,
+        970,
+        739
+      ],
+      "margin_fraction": 0.052734375,
+      "aspect": 1.9497816593886463,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.06876099850094508,
+      "principal_axis_degrees": 0.028076066889938325,
+      "estimated_key_rgb": [
+        195.0,
+        45.0,
+        130.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.073043988949519,
+      "palette_p90_delta_e": 10.324083101880367
+    },
+    "placement": {
+      "source_bounds_px": [
+        77,
+        281,
+        970,
+        739
+      ],
+      "source_pivot_px": [
+        523.5,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.18029115341545351,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-quill-livery-ochre-v1.png",
+    "sha256": "8af24ea3a8c2fc9b126666b4dc3d82da65a6b4f87c65b2455113e4bf391c9c37",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-quill-livery-ochre-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-intact-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "dc80a79f8a7629a0e7b11ec169b16116c6030cfb426351ad758c2dc64b31ac7f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-intact-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2085875862919132,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1138,
+        608
+      ],
+      "margin_fraction": 0.13221153846153846,
+      "aspect": 2.464751958224543,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11107306424688623,
+      "principal_axis_degrees": 0.0015888040565193227,
+      "estimated_key_rgb": [
+        240.0,
+        17.0,
+        185.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.552868072449155,
+      "palette_p90_delta_e": 11.74018516583928
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1138,
+        608
+      ],
+      "source_pivot_px": [
+        666.0,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2330508474576271,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-state-intact-v1.png",
+    "sha256": "6db48f44dac98e299628f79118878697bd5c15ed123a93d32e9bc19f51086188",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-intact-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-intact-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-intact-v1\\attempt-02\\1.jpg",
+    "source_sha256": "02b191b06604e20ace58aca64303beabead616f30f356b4d7924d981abe4b036",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-intact-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Keep the intact reference exactly as it is, INCLUDING all existing stylistic rust, scuffs, scratches and chipped paint. No new damage. Do not clean or restore the body. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2095670380300789,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        224,
+        1140,
+        608
+      ],
+      "margin_fraction": 0.12980769230769232,
+      "aspect": 2.4661458333333335,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.1105703551912568,
+      "principal_axis_degrees": 0.01243191726182396,
+      "estimated_key_rgb": [
+        233.0,
+        47.0,
+        147.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.150347414512418,
+      "palette_p90_delta_e": 8.99650743611259
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        224,
+        1140,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.23231256599788808,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-kestrel-state-intact-v1.png",
+    "sha256": "7fc05d1e989607b2c95b23a6dbf61b56197d6d296e07c62e547caa672860d8b9",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-intact-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-1-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-01\\1.jpg",
+    "source_sha256": "c3efafc78ddb26b5bc797e9b420b4c7a18860a09291b2907ec4514d25873d078",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-1-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2092261079265286,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1140,
+        608
+      ],
+      "margin_fraction": 0.12980769230769232,
+      "aspect": 2.4699738903394257,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.1091897444677482,
+      "principal_axis_degrees": 0.019391199210186557,
+      "estimated_key_rgb": [
+        244.0,
+        19.0,
+        158.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.357459331668584,
+      "palette_p90_delta_e": 9.77428582536322
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1140,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.23255813953488372,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-state-damaged-1-v1.png",
+    "sha256": "61e7256b63fafba4d6a9ae1bfa2b80c26460b297d8547a9c6d4e07d724816bfd",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-1-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-02\\1.jpg",
+    "source_sha256": "e230e73aa07a987121f62f514e7c1c9d5374c0e11e6530c011e81248cb4094ef",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-1-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2131496933555227,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.4623376623376623,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11194379391100706,
+      "principal_axis_degrees": 0.017156761413096244,
+      "estimated_key_rgb": [
+        233.0,
+        80.0,
+        136.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.93925220480381,
+      "palette_p90_delta_e": 10.884833263363861
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2320675105485232,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-kestrel-state-damaged-1-v1.png",
+    "sha256": "51fa0bc46b6079c1ff51f4ff814e3101f75917ad59b6303905cce343c3c5346c",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-1-v1-a3",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-03\\1.jpg",
+    "source_sha256": "6e31f7fe2019843438eb4cde48563878ccb950ec9c1c478288442ca7e5fd5f21",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-1-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add a few small dents and restrained paint chips to body panels only. Preserve all existing stylistic wear. Keep every identity attachment, engine fitting and weapon. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20890925480769232,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "margin_fraction": 0.1310096153846154,
+      "aspect": 2.4673629242819843,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11013140435731716,
+      "principal_axis_degrees": 0.0418337939959786,
+      "estimated_key_rgb": [
+        236.0,
+        52.0,
+        199.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.321894499501556,
+      "palette_p90_delta_e": 8.75639519807803
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2328042328042328,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-kestrel-state-damaged-1-v1.png",
+    "sha256": "aef6a2de528070c8c28bd179467a022b0753bc9421dd45b5ef4a485f051fbd97",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-1-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-2-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1e4b7df64fff861cf75afef3770abd20f7f1be7681eaa43550559d239f384c24",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-2-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.21464150332840237,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.4623376623376623,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11194379391100706,
+      "principal_axis_degrees": 0.06673301787919163,
+      "estimated_key_rgb": [
+        233.0,
+        79.0,
+        134.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.730081150653872,
+      "palette_p90_delta_e": 10.86017253242794
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2320675105485232,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-state-damaged-2-v1.png",
+    "sha256": "ab9f039aa7ac556d9c0e6d468f4c87cea9915042f74cf9bced8d317d1aa823fc",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-2-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-02\\1.jpg",
+    "source_sha256": "ce1a104d5b129da2dfc119d624942b0b967e8f14e6c7a68e877d6221bc3a98a3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-2-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2180074657914201,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        192,
+        223,
+        1141,
+        609
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.4585492227979273,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11331011636796073,
+      "principal_axis_degrees": 0.062398714280051344,
+      "estimated_key_rgb": [
+        250.0,
+        125.0,
+        178.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.24755958084708,
+      "palette_p90_delta_e": 12.173406844053346
+    },
+    "placement": {
+      "source_bounds_px": [
+        192,
+        223,
+        1141,
+        609
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.23182297154899895,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-kestrel-state-damaged-2-v1.png",
+    "sha256": "aa720baf7ed6de03b19adc8e6cc06c894d9b2381660f9a9a416c26db9cb21dda",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-damaged-2-v1-a3",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-03\\1.jpg",
+    "source_sha256": "92f433d5c0cc94035b9cb7fc956922d91e5dee162aaef3e75e06a77cc7c2e313",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-damaged-2-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Add deeper buckled panels, cracked cockpit glass and exposed metal scars, clearly more severe than light damage. Retain overall chassis footprint and all wheels, engine, fins and weapons. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.209312785071499,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        224,
+        1140,
+        608
+      ],
+      "margin_fraction": 0.12980769230769232,
+      "aspect": 2.4661458333333335,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.1105703551912568,
+      "principal_axis_degrees": 0.028562436104809946,
+      "estimated_key_rgb": [
+        221.0,
+        63.0,
+        160.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.244403980698796,
+      "palette_p90_delta_e": 9.095744938808213
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        224,
+        1140,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.23231256599788808,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-03\\v2-part4-kestrel-state-damaged-2-v1.png",
+    "sha256": "38013ab538d87cc7d051ba4faa577fe79bb4092374d97b6df7b4ecc7e966740d",
+    "attempt": 3,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-damaged-2-v1\\attempt-03\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-wreck-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-wreck-v1\\attempt-01\\1.jpg",
+    "source_sha256": "0ad9ea44c5cd9b80003c00f86e23a2502ba1ba4ba7ad482de7e54c4ba1b855df",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-wreck-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20893525795118342,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "margin_fraction": 0.1310096153846154,
+      "aspect": 2.4673629242819843,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11013140435731716,
+      "principal_axis_degrees": 0.00014549680990423578,
+      "estimated_key_rgb": [
+        232.0,
+        60.0,
+        175.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.0721176561691514,
+      "palette_p90_delta_e": 8.297842212870334
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2328042328042328,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-state-wreck-v1.png",
+    "sha256": "705cfbe61ca8bc32ab11c1cdc22ff998afec3563f0c10ea44b1d5e47205ae709",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-wreck-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-state-wreck-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-state-wreck-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d42e301654dfcf066bbec15977439ae73b5a7813d34a56d5932fca1640cdd8f5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-state-wreck-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Burnt inert wreck with blackened panels, collapsed roof detail and opaque broken glass. Keep recognizable footprint, all wheels and identity attachments. No detached pieces, smoke or flames. Keep complete car and the reference clear border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-states",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2135724852071006,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        223,
+        1140,
+        608
+      ],
+      "margin_fraction": 0.12980769230769232,
+      "aspect": 2.4597402597402596,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11288056206089003,
+      "principal_axis_degrees": 0.00816843800166793,
+      "estimated_key_rgb": [
+        250.0,
+        105.0,
+        157.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.055886415326469,
+      "palette_p90_delta_e": 9.47333110440276
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        223,
+        1140,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.23231256599788808,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-kestrel-state-wreck-v1.png",
+    "sha256": "745a22268e0f59f24a0f5bf6c04cd74f5e28cb84d88f9a76889fc21493accb0b",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-state-wreck-v1\\attempt-02\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-livery-bone-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ec27114f25b195ea34d9d9a1a8a823b7e7a4135b834c245e2ca96121d288e66d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-livery-bone-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to muted bone #DDD0A6. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2099801990877712,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        224,
+        1141,
+        608
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.46875,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.10963114754098369,
+      "principal_axis_degrees": 0.0037549747262677403,
+      "estimated_key_rgb": [
+        233.0,
+        59.0,
+        141.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.7745763931895695,
+      "palette_p90_delta_e": 11.471651418285278
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        224,
+        1141,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        416.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2320675105485232,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-livery-bone-v1.png",
+    "sha256": "91f9931f1d7823e6f54b8decbf1e634fd7d4f8ae481ea8f8cf3a97966471d825",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-livery-bone-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-livery-red-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "c7c5804ba278f0776ee43d56ba1c490068a07bef8a85c37fac352cee59895836",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-livery-red-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to dried red #6C2427. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20876190366124261,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "margin_fraction": 0.1310096153846154,
+      "aspect": 2.4673629242819843,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11013140435731716,
+      "principal_axis_degrees": 0.010433325983883666,
+      "estimated_key_rgb": [
+        233.0,
+        27.0,
+        247.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.463313039761775,
+      "palette_p90_delta_e": 19.13310959194668
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2328042328042328,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-livery-red-v1.png",
+    "sha256": "4dc2adf0d18bbb715f1ac2a2577c1c76eadd9dc9adb652095628c65f42407e73",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-livery-red-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-livery-ochre-v1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "cc0a8c033ead484598568907a71f146f2b0395fcd01ee4cb2791a18ef48dfb5a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-livery-ochre-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20863285102317555,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "margin_fraction": 0.1310096153846154,
+      "aspect": 2.4673629242819843,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11013140435731716,
+      "principal_axis_degrees": 0.0037158218238626133,
+      "estimated_key_rgb": [
+        234.0,
+        26.0,
+        238.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.412301362687575,
+      "palette_p90_delta_e": 11.214515064167564
+    },
+    "placement": {
+      "source_bounds_px": [
+        194,
+        225,
+        1139,
+        608
+      ],
+      "source_pivot_px": [
+        666.5,
+        416.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2328042328042328,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-01\\v2-part4-kestrel-livery-ochre-v1.png",
+    "sha256": "38a8061d46182abaa774bd59bd75376a3d73f4d89fb4baaccbe047ce379058e2",
+    "attempt": 1,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-livery-ochre-v1\\attempt-01\\sidecar.json"
+  },
+  {
+    "id": "v2-part4-kestrel-livery-ochre-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\v2-part4-kestrel-livery-ochre-v1\\attempt-02\\1.jpg",
+    "source_sha256": "c72f20f73192d8b1bb6944d5421afde397174197a18ca7aa2de0a3a2294b373e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part4-kestrel-livery-ochre-v1",
+      "class": "Kestrel",
+      "prompt_action": "Use the supplied exact owner-approved reference. Freeze body geometry, wheel count and centres, camera, RIGHT heading, framing, cockpit, engine, weapons, fins, all attachment points and material roles. Only the requested state or painted-panel colour may change. Change only painted body panels to sun-baked ochre #A37738. Preserve bare silver steel, ivory weapon parts, rubber, glass, electrical colours and existing contrasting marks. Preserve all wear. No new damage, emblems, text or numbers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v9.jpg",
+      "batch": "v2-part4-kestrel-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-part3-rework-kestrel-v9",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.21391919378698224,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.4623376623376623,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11194379391100706,
+      "principal_axis_degrees": 0.02228034517721849,
+      "estimated_key_rgb": [
+        232.0,
+        79.0,
+        135.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.9140691070106355,
+      "palette_p90_delta_e": 10.607366036589333
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2320675105485232,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\art-states\\attempt-02\\v2-part4-kestrel-livery-ochre-v1.png",
+    "sha256": "e6400c4a7ffd667a76e432b797975a60b8fdfafa6785d38caf2cf8570283d48c",
+    "attempt": 2,
+    "generation_sidecar": "art\\raw\\v2-part4-kestrel-livery-ochre-v1\\attempt-02\\sidecar.json"
+  }
+]

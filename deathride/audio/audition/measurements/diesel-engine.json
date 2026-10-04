@@ -1,0 +1,198 @@
+{
+  "id": "diesel-engine",
+  "measuredAt": "2026-10-02T19:28:25.956839+00:00",
+  "generationSidecar": "raw/diesel-engine.mp3.json",
+  "raw": {
+    "file": "raw/diesel-engine.mp3",
+    "sha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d",
+    "bytes": 37242,
+    "status": "fail",
+    "failures": [
+      "duration",
+      "loudness",
+      "truePeak",
+      "loopSeam"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": false
+    },
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "containerDurationSeconds": 2.298776,
+    "integratedLufs": -10.95,
+    "truePeakDbtp": -0.29,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-10.95",
+      "input_tp": "-0.29",
+      "input_lra": "0.00",
+      "input_thresh": "-21.92",
+      "output_i": "-20.00",
+      "output_tp": "-9.35",
+      "output_lra": "0.00",
+      "output_thresh": "-30.97",
+      "normalization_type": "linear",
+      "target_offset": "-0.00"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -0.2939849917514766,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 0.008513562381267548,
+      "boundaryRmsStepDb": 5.956183779754626,
+      "spectralCosine": 0.9691837372020198,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.008513562381267548,
+        0.008513562381267548
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "matched": {
+    "file": "matched/diesel-engine.mp3",
+    "sha256": "46985880ba942eb427c3813997837933b3a2ce999036d0bca9c5d112143b2589",
+    "bytes": 37241,
+    "status": "fail",
+    "failures": [
+      "duration",
+      "loopSeam"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": false
+    },
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "containerDurationSeconds": 2.298776,
+    "integratedLufs": -20.45,
+    "truePeakDbtp": -9.8,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.45",
+      "input_tp": "-9.80",
+      "input_lra": "0.00",
+      "input_thresh": "-31.42",
+      "output_i": "-20.00",
+      "output_tp": "-9.35",
+      "output_lra": "0.00",
+      "output_thresh": "-30.97",
+      "normalization_type": "linear",
+      "target_offset": "-0.00"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -9.802232441091853,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 0.002082550898194313,
+      "boundaryRmsStepDb": 5.9089194254689525,
+      "spectralCosine": 0.9687897880516798,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.002082550898194313,
+        0.002082550898194313
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-10.95:measured_TP=-0.29:measured_LRA=0.00:measured_thresh=-21.92:offset=-0.00:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "repeat": {
+    "file": "repeats/diesel-engine-three-cycles.ogg",
+    "cycles": 3,
+    "credits": 0,
+    "sourceSha256": "46985880ba942eb427c3813997837933b3a2ce999036d0bca9c5d112143b2589",
+    "sha256": "8550cc556749a2e12eaa1388d66f7ab19deb7569afe81468077b3b3e5fc8b18e",
+    "operation": "three exact decoded cycles concatenated without fades, encoded OGG",
+    "durationSeconds": 6.75,
+    "truePeakDbtp": -9.67,
+    "decodePass": true,
+    "humanListen": "not measured"
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

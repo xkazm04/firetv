@@ -1,0 +1,33 @@
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n4 !== 0\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-abil/deathride/tools/ability-stick-probe.mjs:65:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.6415397,
+  "rounds": 19,
+  "classUses": {
+    "Needle": 15,
+    "Line": 14,
+    "Bastion": 9,
+    "Comet": 17,
+    "Trail": 11,
+    "Flint": 11,
+    "Quill": 21,
+    "Vandal": 7,
+    "Kestrel": 14,
+    "Bulwark": 8
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27000,
+      "accepted": 27000,
+      "rejected": 0,
+      "hz": 29.978630575926566
+    },
+    {
+      "slot": 1,
+      "sent": 27000,
+      "accepted": 27000,
+      "rejected": 0,
+      "hz": 29.978630575926566
+    }
+  ]
+}

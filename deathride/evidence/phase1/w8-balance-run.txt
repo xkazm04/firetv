@@ -1,0 +1,73 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources
+> Task :core:processTestResources NO-SOURCE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride/deathride/core/src/test/kotlin/dev/deathride/core/CareerTest.kt:62:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride/deathride/core/src/test/kotlin/dev/deathride/core/CombatTest.kt:108:39 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:balanceReport
+foundry-stock: 250/2000 races
+foundry-stock: 500/2000 races
+foundry-stock: 750/2000 races
+foundry-stock: 1000/2000 races
+foundry-stock: 1250/2000 races
+foundry-stock: 1500/2000 races
+foundry-stock: 1750/2000 races
+foundry-stock: 2000/2000 races
+foundry-stock: 2000 distinct; mean wrecks 2.9405; unresolved 0
+switchback-stock: 250/2000 races
+switchback-stock: 500/2000 races
+switchback-stock: 750/2000 races
+switchback-stock: 1000/2000 races
+switchback-stock: 1250/2000 races
+switchback-stock: 1500/2000 races
+switchback-stock: 1750/2000 races
+switchback-stock: 2000/2000 races
+switchback-stock: 2000 distinct; mean wrecks 3.1775; unresolved 0
+redline-stock: 250/2000 races
+redline-stock: 500/2000 races
+redline-stock: 750/2000 races
+redline-stock: 1000/2000 races
+redline-stock: 1250/2000 races
+redline-stock: 1500/2000 races
+redline-stock: 1750/2000 races
+redline-stock: 2000/2000 races
+redline-stock: 2000 distinct; mean wrecks 2.7845; unresolved 0
+runoff-stock: 250/2000 races
+runoff-stock: 500/2000 races
+runoff-stock: 750/2000 races
+runoff-stock: 1000/2000 races
+runoff-stock: 1250/2000 races
+runoff-stock: 1500/2000 races
+runoff-stock: 1750/2000 races
+runoff-stock: 2000/2000 races
+runoff-stock: 2000 distinct; mean wrecks 3.126; unresolved 0
+crucible-stock: 250/2000 races
+crucible-stock: 500/2000 races
+crucible-stock: 750/2000 races
+crucible-stock: 1000/2000 races
+crucible-stock: 1250/2000 races
+crucible-stock: 1500/2000 races
+crucible-stock: 1750/2000 races
+crucible-stock: 2000/2000 races
+crucible-stock: 2000 distinct; mean wrecks 3.8745; unresolved 0
+mixed-upgraded: 250/2000 races
+mixed-upgraded: 500/2000 races
+mixed-upgraded: 750/2000 races
+mixed-upgraded: 1000/2000 races
+mixed-upgraded: 1250/2000 races
+mixed-upgraded: 1500/2000 races
+mixed-upgraded: 1750/2000 races
+mixed-upgraded: 2000/2000 races
+mixed-upgraded: 2000 distinct; mean wrecks 2.229; unresolved 0
+
+BUILD SUCCESSFUL in 22m 24s
+5 actionable tasks: 5 executed

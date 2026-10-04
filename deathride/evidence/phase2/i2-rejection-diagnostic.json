@@ -1,0 +1,115 @@
+{
+  "method": "Rejected ack timestamps paired with the next available rolling ten-second window. Coarse correlation, not a synchronized packet trace or causal diagnosis.",
+  "hostPumpStalls": [],
+  "rejections": [
+    {
+      "slot": 0,
+      "second": 414.072272,
+      "rttMs": 258.4112999999779,
+      "followingWindowSecond": 420.14875200000006,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": true,
+      "renderIntervalsMs": {
+        "p50": 16.738769,
+        "p95": 20.495922999999998,
+        "max": 26.859461,
+        "count": 599
+      }
+    },
+    {
+      "slot": 0,
+      "second": 466.0427591,
+      "rttMs": 355.132900000026,
+      "followingWindowSecond": 470.09697880000004,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "renderIntervalsMs": {
+        "p50": 16.673153,
+        "p95": 21.085385000000002,
+        "max": 125.105308,
+        "count": 585
+      }
+    },
+    {
+      "slot": 0,
+      "second": 466.0428241,
+      "rttMs": 336.03549999999814,
+      "followingWindowSecond": 470.09697880000004,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "renderIntervalsMs": {
+        "p50": 16.673153,
+        "p95": 21.085385000000002,
+        "max": 125.105308,
+        "count": 585
+      }
+    },
+    {
+      "slot": 1,
+      "second": 466.0473351,
+      "rttMs": 359.63179999997374,
+      "followingWindowSecond": 470.09697880000004,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "renderIntervalsMs": {
+        "p50": 16.673153,
+        "p95": 21.085385000000002,
+        "max": 125.105308,
+        "count": 585
+      }
+    },
+    {
+      "slot": 1,
+      "second": 466.047339,
+      "rttMs": 340.4857000000193,
+      "followingWindowSecond": 470.09697880000004,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "renderIntervalsMs": {
+        "p50": 16.673153,
+        "p95": 21.085385000000002,
+        "max": 125.105308,
+        "count": 585
+      }
+    },
+    {
+      "slot": 1,
+      "second": 472.1183259,
+      "rttMs": 340.23949999996694,
+      "followingWindowSecond": 480.05182770000005,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": true,
+      "renderIntervalsMs": {
+        "p50": 16.709076,
+        "p95": 20.085154,
+        "max": 27.097539,
+        "count": 599
+      }
+    },
+    {
+      "slot": 0,
+      "second": 472.1248358,
+      "rttMs": 346.8097999999882,
+      "followingWindowSecond": 480.05182770000005,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": true,
+      "renderIntervalsMs": {
+        "p50": 16.709076,
+        "p95": 20.085154,
+        "max": 27.097539,
+        "count": 599
+      }
+    }
+  ],
+  "limits": [
+    "No packet capture or server queue trace; cannot separate LAN and receiver scheduling.",
+    "Do not infer input-to-photon latency or weaken stale-input rejection."
+  ]
+}

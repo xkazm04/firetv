@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "effects": {
+    "muzzle": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        45,
+        45,
+        40,
+        40,
+        45
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "explosion": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        45,
+        55,
+        65,
+        75,
+        90,
+        110
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "smoke": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        90,
+        100,
+        120,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "sparks": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        40,
+        45,
+        55,
+        65,
+        80
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "fire": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "4359ec83-ca13-47e0-9b76-96c9da9e8462",
+  "ts": "2026-10-02T21:38:40.284Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-ground-bite.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24343,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133",
+  "completedAt": "2026-10-02T21:38:45.740Z",
+  "creditsAfter": 24343,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2940
+}

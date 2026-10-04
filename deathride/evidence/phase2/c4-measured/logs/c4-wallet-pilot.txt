@@ -1,0 +1,25 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources
+> Task :core:classes
+> Task :core:jar
+> Task :core:processTestResources UP-TO-DATE
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CareerTest.kt:62:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CareerV2Test.kt:126:84 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CombatTest.kt:108:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/FeelTest.kt:44:43 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/MovementTest.kt:61:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/SoakTest.kt:37:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/TracksTest.kt:67:68 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:careerV2Report
+Ash Circuit: 20160 physical races; 300 seeded careers; policy 4; completed 300; see measured targets in summary.csv
+
+BUILD SUCCESSFUL in 8s
+6 actionable tasks: 4 executed, 2 up-to-date

@@ -1,0 +1,5892 @@
+{
+  "before": {
+    "tag": "owner-before",
+    "physical": {
+      "trials": 11520,
+      "early": 0,
+      "completedLead": 10785,
+      "unfinishedLead": 735,
+      "rounds": 34
+    },
+    "bossPhysical": [
+      {
+        "event": 7,
+        "skill": 0,
+        "trials": 240,
+        "firsts": 3
+      },
+      {
+        "event": 7,
+        "skill": 1,
+        "trials": 240,
+        "firsts": 35
+      },
+      {
+        "event": 7,
+        "skill": 2,
+        "trials": 240,
+        "firsts": 44
+      },
+      {
+        "event": 14,
+        "skill": 0,
+        "trials": 360,
+        "firsts": 2
+      },
+      {
+        "event": 14,
+        "skill": 1,
+        "trials": 360,
+        "firsts": 16
+      },
+      {
+        "event": 14,
+        "skill": 2,
+        "trials": 360,
+        "firsts": 44
+      },
+      {
+        "event": 21,
+        "skill": 0,
+        "trials": 480,
+        "firsts": 1
+      },
+      {
+        "event": 21,
+        "skill": 1,
+        "trials": 480,
+        "firsts": 11
+      },
+      {
+        "event": 21,
+        "skill": 2,
+        "trials": 480,
+        "firsts": 52
+      },
+      {
+        "event": 28,
+        "skill": 0,
+        "trials": 600,
+        "firsts": 9
+      },
+      {
+        "event": 28,
+        "skill": 1,
+        "trials": 600,
+        "firsts": 84
+      },
+      {
+        "event": 28,
+        "skill": 2,
+        "trials": 600,
+        "firsts": 146
+      }
+    ],
+    "bossDifficulty": [
+      {
+        "event": 7,
+        "skill": 0,
+        "trials": 32,
+        "wins": 7,
+        "beatBoss": 10,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 7,
+        "skill": 1,
+        "trials": 32,
+        "wins": 9,
+        "beatBoss": 10,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 7,
+        "skill": 2,
+        "trials": 32,
+        "wins": 15,
+        "beatBoss": 18,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 0,
+        "trials": 32,
+        "wins": 4,
+        "beatBoss": 14,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 1,
+        "trials": 32,
+        "wins": 6,
+        "beatBoss": 20,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 2,
+        "trials": 32,
+        "wins": 4,
+        "beatBoss": 20,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 0,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 11,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 1,
+        "trials": 32,
+        "wins": 2,
+        "beatBoss": 4,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 2,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 6,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 0,
+        "trials": 32,
+        "wins": 12,
+        "beatBoss": 20,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 1,
+        "trials": 32,
+        "wins": 8,
+        "beatBoss": 18,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 2,
+        "trials": 32,
+        "wins": 9,
+        "beatBoss": 16,
+        "early": 0,
+        "unresolved": 0
+      }
+    ],
+    "duels": [
+      {
+        "skill": 0,
+        "trials": 1024,
+        "wins": 150,
+        "draws": 101,
+        "timeouts": 101,
+        "mutualWrecks": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 287.4
+      },
+      {
+        "skill": 1,
+        "trials": 1024,
+        "wins": 187,
+        "draws": 78,
+        "timeouts": 78,
+        "mutualWrecks": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 266.65
+      },
+      {
+        "skill": 2,
+        "trials": 1024,
+        "wins": 151,
+        "draws": 95,
+        "timeouts": 95,
+        "mutualWrecks": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 259.71
+      }
+    ],
+    "careers": {
+      "race": {
+        "status": "complete",
+        "trials": 2000,
+        "completed": 868,
+        "bankrupt": 0,
+        "censoredAt70": 1132,
+        "medianRaces": 70.0,
+        "medianHours": 4.98,
+        "completedMedianHours": 4.26,
+        "bySkill": [
+          {
+            "skill": 0,
+            "trials": 667,
+            "completed": 0,
+            "medianRaces": 70
+          },
+          {
+            "skill": 1,
+            "trials": 667,
+            "completed": 403,
+            "medianRaces": 68
+          },
+          {
+            "skill": 2,
+            "trials": 666,
+            "completed": 465,
+            "medianRaces": 63.0
+          }
+        ]
+      },
+      "pr": {
+        "status": "complete",
+        "trials": 2000,
+        "completed": 905,
+        "bankrupt": 0,
+        "censoredAt70": 1095,
+        "medianRaces": 70.0,
+        "medianHours": 4.99,
+        "completedMedianHours": 4.0,
+        "bySkill": [
+          {
+            "skill": 0,
+            "trials": 667,
+            "completed": 0,
+            "medianRaces": 70
+          },
+          {
+            "skill": 1,
+            "trials": 667,
+            "completed": 282,
+            "medianRaces": 70
+          },
+          {
+            "skill": 2,
+            "trials": 666,
+            "completed": 623,
+            "medianRaces": 57.0
+          }
+        ]
+      }
+    },
+    "exactReplays": "34 event samples reproduced their exact physical-library hashes on the final core."
+  },
+  "after": {
+    "tag": "owner-after",
+    "physical": {
+      "trials": 11520,
+      "early": 0,
+      "completedLead": 11427,
+      "unfinishedLead": 93,
+      "rounds": 34
+    },
+    "bossPhysical": [
+      {
+        "event": 7,
+        "skill": 0,
+        "trials": 240,
+        "firsts": 0
+      },
+      {
+        "event": 7,
+        "skill": 1,
+        "trials": 240,
+        "firsts": 6
+      },
+      {
+        "event": 7,
+        "skill": 2,
+        "trials": 240,
+        "firsts": 11
+      },
+      {
+        "event": 14,
+        "skill": 0,
+        "trials": 360,
+        "firsts": 2
+      },
+      {
+        "event": 14,
+        "skill": 1,
+        "trials": 360,
+        "firsts": 16
+      },
+      {
+        "event": 14,
+        "skill": 2,
+        "trials": 360,
+        "firsts": 26
+      },
+      {
+        "event": 21,
+        "skill": 0,
+        "trials": 480,
+        "firsts": 0
+      },
+      {
+        "event": 21,
+        "skill": 1,
+        "trials": 480,
+        "firsts": 23
+      },
+      {
+        "event": 21,
+        "skill": 2,
+        "trials": 480,
+        "firsts": 70
+      },
+      {
+        "event": 28,
+        "skill": 0,
+        "trials": 600,
+        "firsts": 0
+      },
+      {
+        "event": 28,
+        "skill": 1,
+        "trials": 600,
+        "firsts": 56
+      },
+      {
+        "event": 28,
+        "skill": 2,
+        "trials": 600,
+        "firsts": 129
+      }
+    ],
+    "bossDifficulty": [
+      {
+        "event": 7,
+        "skill": 0,
+        "trials": 32,
+        "wins": 2,
+        "beatBoss": 11,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 7,
+        "skill": 1,
+        "trials": 32,
+        "wins": 2,
+        "beatBoss": 4,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 7,
+        "skill": 2,
+        "trials": 32,
+        "wins": 0,
+        "beatBoss": 0,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 0,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 16,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 1,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 23,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 14,
+        "skill": 2,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 16,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 0,
+        "trials": 32,
+        "wins": 1,
+        "beatBoss": 17,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 1,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 13,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 21,
+        "skill": 2,
+        "trials": 32,
+        "wins": 0,
+        "beatBoss": 12,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 0,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 10,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 1,
+        "trials": 32,
+        "wins": 3,
+        "beatBoss": 6,
+        "early": 0,
+        "unresolved": 0
+      },
+      {
+        "event": 28,
+        "skill": 2,
+        "trials": 32,
+        "wins": 2,
+        "beatBoss": 6,
+        "early": 0,
+        "unresolved": 0
+      }
+    ],
+    "duels": [
+      {
+        "skill": 0,
+        "trials": 1024,
+        "wins": 535,
+        "draws": 2,
+        "timeouts": 0,
+        "mutualWrecks": 2,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 142.38
+      },
+      {
+        "skill": 1,
+        "trials": 1024,
+        "wins": 451,
+        "draws": 0,
+        "timeouts": 0,
+        "mutualWrecks": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 126.23
+      },
+      {
+        "skill": 2,
+        "trials": 1024,
+        "wins": 335,
+        "draws": 0,
+        "timeouts": 0,
+        "mutualWrecks": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 118.89
+      }
+    ],
+    "careers": {
+      "race": {
+        "status": "complete",
+        "trials": 2000,
+        "completed": 1316,
+        "bankrupt": 0,
+        "censoredAt70": 684,
+        "medianRaces": 54.0,
+        "medianHours": 3.29,
+        "completedMedianHours": 2.98,
+        "bySkill": [
+          {
+            "skill": 0,
+            "trials": 667,
+            "completed": 0,
+            "medianRaces": 70
+          },
+          {
+            "skill": 1,
+            "trials": 667,
+            "completed": 654,
+            "medianRaces": 51
+          },
+          {
+            "skill": 2,
+            "trials": 666,
+            "completed": 662,
+            "medianRaces": 48.0
+          }
+        ]
+      },
+      "pr": {
+        "status": "complete",
+        "trials": 2000,
+        "completed": 459,
+        "bankrupt": 0,
+        "censoredAt70": 1541,
+        "medianRaces": 70.0,
+        "medianHours": 4.91,
+        "completedMedianHours": 4.12,
+        "bySkill": [
+          {
+            "skill": 0,
+            "trials": 667,
+            "completed": 0,
+            "medianRaces": 70
+          },
+          {
+            "skill": 1,
+            "trials": 667,
+            "completed": 0,
+            "medianRaces": 70
+          },
+          {
+            "skill": 2,
+            "trials": 666,
+            "completed": 459,
+            "medianRaces": 66.0
+          }
+        ]
+      }
+    },
+    "exactReplays": "34 event samples reproduced their exact physical-library hashes on the final core."
+  },
+  "beforeBalance": {
+    "trials": 4896,
+    "early": 0,
+    "unresolvedCars": 25,
+    "oneShots": 0,
+    "pooled": [
+      {
+        "key": [
+          "0",
+          "stock"
+        ],
+        "trials": 432,
+        "wins": {
+          "Needle": 333,
+          "Line": 99
+        },
+        "dominance": 0.7708,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 165,
+            "Line": 51
+          },
+          {
+            "Line": 48,
+            "Needle": 168
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 212.15
+      },
+      {
+        "key": [
+          "0",
+          "developed"
+        ],
+        "trials": 432,
+        "wins": {
+          "Needle": 388,
+          "Line": 44
+        },
+        "dominance": 0.8981,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 193,
+            "Line": 23
+          },
+          {
+            "Needle": 195,
+            "Line": 21
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 179.49
+      },
+      {
+        "key": [
+          "1",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Trail": 476,
+          "Bastion": 28
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 233,
+            "Bastion": 19
+          },
+          {
+            "Trail": 243,
+            "Bastion": 9
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 25,
+        "winnerMedianSeconds": 208.33
+      },
+      {
+        "key": [
+          "1",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Trail": 410,
+          "Bastion": 94
+        },
+        "dominance": 0.8135,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 207,
+            "Bastion": 45
+          },
+          {
+            "Trail": 203,
+            "Bastion": 49
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 184.48
+      },
+      {
+        "key": [
+          "2",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Comet": 273,
+          "Flint": 231
+        },
+        "dominance": 0.5417,
+        "dominanceFlag": false,
+        "seedHalves": [
+          {
+            "Comet": 134,
+            "Flint": 118
+          },
+          {
+            "Comet": 139,
+            "Flint": 113
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 223.58
+      },
+      {
+        "key": [
+          "2",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Comet": 215,
+          "Flint": 289
+        },
+        "dominance": 0.5734,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 106,
+            "Flint": 146
+          },
+          {
+            "Comet": 109,
+            "Flint": 143
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 202.07
+      },
+      {
+        "key": [
+          "3",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Vandal": 215,
+          "Quill": 289
+        },
+        "dominance": 0.5734,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 108,
+            "Quill": 144
+          },
+          {
+            "Vandal": 107,
+            "Quill": 145
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 233.79
+      },
+      {
+        "key": [
+          "3",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Quill": 287,
+          "Vandal": 217
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 147,
+            "Vandal": 105
+          },
+          {
+            "Vandal": 112,
+            "Quill": 140
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 215.78
+      },
+      {
+        "key": [
+          "4",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Kestrel": 274,
+          "Bulwark": 230
+        },
+        "dominance": 0.5437,
+        "dominanceFlag": false,
+        "seedHalves": [
+          {
+            "Kestrel": 134,
+            "Bulwark": 118
+          },
+          {
+            "Kestrel": 140,
+            "Bulwark": 112
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 225.29
+      },
+      {
+        "key": [
+          "4",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Kestrel": 141,
+          "Bulwark": 363
+        },
+        "dominance": 0.7202,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 74,
+            "Bulwark": 178
+          },
+          {
+            "Bulwark": 185,
+            "Kestrel": 67
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 213.82
+      }
+    ],
+    "events": [
+      {
+        "key": [
+          "scrap-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 63,
+          "Line": 9
+        },
+        "dominance": 0.875,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 32,
+            "Line": 4
+          },
+          {
+            "Line": 5,
+            "Needle": 31
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 146.86
+      },
+      {
+        "key": [
+          "scrap-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 68,
+          "Line": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 34,
+            "Line": 2
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 122.97
+      },
+      {
+        "key": [
+          "scrap-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 67,
+          "Line": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 33,
+            "Line": 3
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 166.19
+      },
+      {
+        "key": [
+          "scrap-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 67,
+          "Line": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 33,
+            "Line": 3
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 139.02
+      },
+      {
+        "key": [
+          "scrap-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 66,
+          "Line": 6
+        },
+        "dominance": 0.9167,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 33,
+            "Line": 3
+          },
+          {
+            "Needle": 33,
+            "Line": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 196.03
+      },
+      {
+        "key": [
+          "scrap-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 64,
+          "Line": 8
+        },
+        "dominance": 0.8889,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 30,
+            "Line": 6
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 162.98
+      },
+      {
+        "key": [
+          "scrap-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 38,
+          "Line": 34
+        },
+        "dominance": 0.5278,
+        "dominanceFlag": false,
+        "seedHalves": [
+          {
+            "Needle": 20,
+            "Line": 16
+          },
+          {
+            "Needle": 18,
+            "Line": 18
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 227.23
+      },
+      {
+        "key": [
+          "scrap-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 57,
+          "Line": 15
+        },
+        "dominance": 0.7917,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 29,
+            "Line": 7
+          },
+          {
+            "Needle": 28,
+            "Line": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 189.75
+      },
+      {
+        "key": [
+          "scrap-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Line": 12,
+          "Needle": 60
+        },
+        "dominance": 0.8333,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Line": 9,
+            "Needle": 27
+          },
+          {
+            "Needle": 33,
+            "Line": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 244.0
+      },
+      {
+        "key": [
+          "scrap-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 71,
+          "Line": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 35,
+            "Line": 1
+          },
+          {
+            "Needle": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 203.1
+      },
+      {
+        "key": [
+          "scrap-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 39,
+          "Line": 33
+        },
+        "dominance": 0.5417,
+        "dominanceFlag": false,
+        "seedHalves": [
+          {
+            "Needle": 20,
+            "Line": 16
+          },
+          {
+            "Line": 17,
+            "Needle": 19
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 280.65
+      },
+      {
+        "key": [
+          "scrap-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 61,
+          "Line": 11
+        },
+        "dominance": 0.8472,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 32,
+            "Line": 4
+          },
+          {
+            "Needle": 29,
+            "Line": 7
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 233.7
+      },
+      {
+        "key": [
+          "scrap-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 68,
+          "Bastion": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 33,
+            "Bastion": 3
+          },
+          {
+            "Trail": 35,
+            "Bastion": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 314.83
+      },
+      {
+        "key": [
+          "scrap-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 58,
+          "Bastion": 14
+        },
+        "dominance": 0.8056,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 30,
+            "Bastion": 6
+          },
+          {
+            "Trail": 28,
+            "Bastion": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 269.69
+      },
+      {
+        "key": [
+          "foundry-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 147.27
+      },
+      {
+        "key": [
+          "foundry-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 70,
+          "Bastion": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 34,
+            "Bastion": 2
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 129.67
+      },
+      {
+        "key": [
+          "foundry-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 147.08
+      },
+      {
+        "key": [
+          "foundry-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 130.45
+      },
+      {
+        "key": [
+          "foundry-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 189.98
+      },
+      {
+        "key": [
+          "foundry-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 168.73
+      },
+      {
+        "key": [
+          "foundry-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 208.33
+      },
+      {
+        "key": [
+          "foundry-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 64,
+          "Bastion": 8
+        },
+        "dominance": 0.8889,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 32,
+            "Bastion": 4
+          },
+          {
+            "Trail": 32,
+            "Bastion": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 184.48
+      },
+      {
+        "key": [
+          "foundry-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 62,
+          "Bastion": 10
+        },
+        "dominance": 0.8611,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 29,
+            "Bastion": 7
+          },
+          {
+            "Bastion": 3,
+            "Trail": 33
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 258.88
+      },
+      {
+        "key": [
+          "foundry-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bastion": 41,
+          "Trail": 31
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bastion": 18,
+            "Trail": 18
+          },
+          {
+            "Bastion": 23,
+            "Trail": 13
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 220.98
+      },
+      {
+        "key": [
+          "foundry-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 58,
+          "Bastion": 14
+        },
+        "dominance": 0.8056,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 27,
+            "Bastion": 9
+          },
+          {
+            "Bastion": 5,
+            "Trail": 31
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 25,
+        "winnerMedianSeconds": 284.69
+      },
+      {
+        "key": [
+          "foundry-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 43,
+          "Bastion": 29
+        },
+        "dominance": 0.5972,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 21,
+            "Bastion": 15
+          },
+          {
+            "Bastion": 14,
+            "Trail": 22
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 242.03
+      },
+      {
+        "key": [
+          "foundry-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 65,
+          "Flint": 7
+        },
+        "dominance": 0.9028,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 33,
+            "Flint": 3
+          },
+          {
+            "Comet": 32,
+            "Flint": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 302.07
+      },
+      {
+        "key": [
+          "foundry-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 42,
+          "Flint": 30
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 20,
+            "Flint": 16
+          },
+          {
+            "Comet": 22,
+            "Flint": 14
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 278.27
+      },
+      {
+        "key": [
+          "salt-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 51,
+          "Comet": 21
+        },
+        "dominance": 0.7083,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 28,
+            "Comet": 8
+          },
+          {
+            "Flint": 23,
+            "Comet": 13
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 164.39
+      },
+      {
+        "key": [
+          "salt-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 47,
+          "Comet": 25
+        },
+        "dominance": 0.6528,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 24,
+            "Comet": 12
+          },
+          {
+            "Flint": 23,
+            "Comet": 13
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 146.0
+      },
+      {
+        "key": [
+          "salt-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 71,
+          "Comet": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 35,
+            "Comet": 1
+          },
+          {
+            "Flint": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 174.2
+      },
+      {
+        "key": [
+          "salt-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 19,
+          "Flint": 53
+        },
+        "dominance": 0.7361,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 13,
+            "Flint": 23
+          },
+          {
+            "Flint": 30,
+            "Comet": 6
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 155.4
+      },
+      {
+        "key": [
+          "salt-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 65,
+          "Comet": 7
+        },
+        "dominance": 0.9028,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 34,
+            "Comet": 2
+          },
+          {
+            "Flint": 31,
+            "Comet": 5
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 197.08
+      },
+      {
+        "key": [
+          "salt-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 55,
+          "Comet": 17
+        },
+        "dominance": 0.7639,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 29,
+            "Comet": 7
+          },
+          {
+            "Flint": 26,
+            "Comet": 10
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 174.85
+      },
+      {
+        "key": [
+          "salt-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 50,
+          "Flint": 22
+        },
+        "dominance": 0.6944,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 25,
+            "Flint": 11
+          },
+          {
+            "Comet": 25,
+            "Flint": 11
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 223.58
+      },
+      {
+        "key": [
+          "salt-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 31,
+          "Flint": 41
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 13,
+            "Flint": 23
+          },
+          {
+            "Comet": 18,
+            "Flint": 18
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 202.07
+      },
+      {
+        "key": [
+          "salt-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 60,
+          "Flint": 12
+        },
+        "dominance": 0.8333,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 31,
+            "Flint": 5
+          },
+          {
+            "Flint": 7,
+            "Comet": 29
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 234.68
+      },
+      {
+        "key": [
+          "salt-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 30,
+          "Comet": 42
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 15,
+            "Comet": 21
+          },
+          {
+            "Flint": 15,
+            "Comet": 21
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 213.53
+      },
+      {
+        "key": [
+          "salt-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 69,
+          "Flint": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 34,
+            "Flint": 2
+          },
+          {
+            "Comet": 35,
+            "Flint": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 260.59
+      },
+      {
+        "key": [
+          "salt-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 33,
+          "Comet": 39
+        },
+        "dominance": 0.5417,
+        "dominanceFlag": false,
+        "seedHalves": [
+          {
+            "Flint": 16,
+            "Comet": 20
+          },
+          {
+            "Flint": 17,
+            "Comet": 19
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 241.82
+      },
+      {
+        "key": [
+          "salt-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 67,
+          "Quill": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 34,
+            "Quill": 2
+          },
+          {
+            "Vandal": 33,
+            "Quill": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 304.77
+      },
+      {
+        "key": [
+          "salt-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 41,
+          "Vandal": 31
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 19,
+            "Vandal": 17
+          },
+          {
+            "Vandal": 14,
+            "Quill": 22
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 288.81
+      },
+      {
+        "key": [
+          "switchback-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 70,
+          "Vandal": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 35,
+            "Vandal": 1
+          },
+          {
+            "Quill": 35,
+            "Vandal": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 149.63
+      },
+      {
+        "key": [
+          "switchback-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 23,
+          "Quill": 49
+        },
+        "dominance": 0.6806,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 12,
+            "Quill": 24
+          },
+          {
+            "Quill": 25,
+            "Vandal": 11
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 137.43
+      },
+      {
+        "key": [
+          "switchback-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 67,
+          "Vandal": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 34,
+            "Vandal": 2
+          },
+          {
+            "Quill": 33,
+            "Vandal": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 162.6
+      },
+      {
+        "key": [
+          "switchback-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 31,
+          "Quill": 41
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 14,
+            "Quill": 22
+          },
+          {
+            "Vandal": 17,
+            "Quill": 19
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 149.28
+      },
+      {
+        "key": [
+          "switchback-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 59,
+          "Vandal": 13
+        },
+        "dominance": 0.8194,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 28,
+            "Vandal": 8
+          },
+          {
+            "Quill": 31,
+            "Vandal": 5
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 198.96
+      },
+      {
+        "key": [
+          "switchback-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 42,
+          "Vandal": 30
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 21,
+            "Vandal": 15
+          },
+          {
+            "Quill": 21,
+            "Vandal": 15
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 180.21
+      },
+      {
+        "key": [
+          "switchback-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 69,
+          "Vandal": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 33,
+            "Vandal": 3
+          },
+          {
+            "Quill": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 233.79
+      },
+      {
+        "key": [
+          "switchback-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 30,
+          "Quill": 42
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 17,
+            "Quill": 19
+          },
+          {
+            "Vandal": 13,
+            "Quill": 23
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 215.78
+      },
+      {
+        "key": [
+          "switchback-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 70,
+          "Quill": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 35,
+            "Quill": 1
+          },
+          {
+            "Vandal": 35,
+            "Quill": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 251.5
+      },
+      {
+        "key": [
+          "switchback-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 32,
+          "Vandal": 40
+        },
+        "dominance": 0.5556,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 17,
+            "Vandal": 19
+          },
+          {
+            "Quill": 15,
+            "Vandal": 21
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 237.18
+      },
+      {
+        "key": [
+          "switchback-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 17,
+          "Vandal": 55
+        },
+        "dominance": 0.7639,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 11,
+            "Vandal": 25
+          },
+          {
+            "Vandal": 30,
+            "Quill": 6
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 268.19
+      },
+      {
+        "key": [
+          "switchback-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 32,
+          "Quill": 40
+        },
+        "dominance": 0.5556,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 11,
+            "Quill": 25
+          },
+          {
+            "Vandal": 21,
+            "Quill": 15
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 250.63
+      },
+      {
+        "key": [
+          "switchback-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 41,
+          "Bulwark": 31
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 21,
+            "Bulwark": 15
+          },
+          {
+            "Kestrel": 20,
+            "Bulwark": 16
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 312.58
+      },
+      {
+        "key": [
+          "switchback-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 21,
+          "Bulwark": 51
+        },
+        "dominance": 0.7083,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 9,
+            "Bulwark": 27
+          },
+          {
+            "Bulwark": 24,
+            "Kestrel": 12
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 295.77
+      },
+      {
+        "key": [
+          "crown-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 21,
+          "Kestrel": 51
+        },
+        "dominance": 0.7083,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 10,
+            "Kestrel": 26
+          },
+          {
+            "Kestrel": 25,
+            "Bulwark": 11
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 164.12
+      },
+      {
+        "key": [
+          "crown-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 45,
+          "Kestrel": 27
+        },
+        "dominance": 0.625,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 17,
+            "Kestrel": 19
+          },
+          {
+            "Bulwark": 28,
+            "Kestrel": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 155.34
+      },
+      {
+        "key": [
+          "crown-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 47,
+          "Bulwark": 25
+        },
+        "dominance": 0.6528,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 21,
+            "Bulwark": 15
+          },
+          {
+            "Kestrel": 26,
+            "Bulwark": 10
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 164.68
+      },
+      {
+        "key": [
+          "crown-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 18,
+          "Bulwark": 54
+        },
+        "dominance": 0.75,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 11,
+            "Bulwark": 25
+          },
+          {
+            "Kestrel": 7,
+            "Bulwark": 29
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 155.07
+      },
+      {
+        "key": [
+          "crown-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 47,
+          "Bulwark": 25
+        },
+        "dominance": 0.6528,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 24,
+            "Bulwark": 12
+          },
+          {
+            "Bulwark": 13,
+            "Kestrel": 23
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 198.03
+      },
+      {
+        "key": [
+          "crown-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 17,
+          "Bulwark": 55
+        },
+        "dominance": 0.7639,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 8,
+            "Bulwark": 28
+          },
+          {
+            "Bulwark": 27,
+            "Kestrel": 9
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 186.63
+      },
+      {
+        "key": [
+          "crown-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 46,
+          "Bulwark": 26
+        },
+        "dominance": 0.6389,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 24,
+            "Bulwark": 12
+          },
+          {
+            "Kestrel": 22,
+            "Bulwark": 14
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 225.29
+      },
+      {
+        "key": [
+          "crown-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 44,
+          "Kestrel": 28
+        },
+        "dominance": 0.6111,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 20,
+            "Kestrel": 16
+          },
+          {
+            "Bulwark": 24,
+            "Kestrel": 12
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 213.82
+      },
+      {
+        "key": [
+          "crown-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 60,
+          "Kestrel": 12
+        },
+        "dominance": 0.8333,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 30,
+            "Kestrel": 6
+          },
+          {
+            "Bulwark": 30,
+            "Kestrel": 6
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 255.84
+      },
+      {
+        "key": [
+          "crown-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 58,
+          "Kestrel": 14
+        },
+        "dominance": 0.8056,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 30,
+            "Kestrel": 6
+          },
+          {
+            "Bulwark": 28,
+            "Kestrel": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 244.82
+      },
+      {
+        "key": [
+          "crown-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 30,
+          "Bulwark": 42
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 12,
+            "Bulwark": 24
+          },
+          {
+            "Kestrel": 18,
+            "Bulwark": 18
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 259.54
+      },
+      {
+        "key": [
+          "crown-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 56,
+          "Kestrel": 16
+        },
+        "dominance": 0.7778,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 31,
+            "Kestrel": 5
+          },
+          {
+            "Bulwark": 25,
+            "Kestrel": 11
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 247.08
+      }
+    ]
+  },
+  "afterBalance": {
+    "trials": 4896,
+    "early": 0,
+    "unresolvedCars": 0,
+    "oneShots": 0,
+    "pooled": [
+      {
+        "key": [
+          "0",
+          "stock"
+        ],
+        "trials": 432,
+        "wins": {
+          "Needle": 374,
+          "Line": 58
+        },
+        "dominance": 0.8657,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 183,
+            "Line": 33
+          },
+          {
+            "Needle": 191,
+            "Line": 25
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 193.86
+      },
+      {
+        "key": [
+          "0",
+          "developed"
+        ],
+        "trials": 432,
+        "wins": {
+          "Needle": 412,
+          "Line": 20
+        },
+        "dominance": 0.9537,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 203,
+            "Line": 13
+          },
+          {
+            "Needle": 209,
+            "Line": 7
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 161.52
+      },
+      {
+        "key": [
+          "1",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Trail": 504
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 252
+          },
+          {
+            "Trail": 252
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 188.08
+      },
+      {
+        "key": [
+          "1",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Trail": 493,
+          "Bastion": 11
+        },
+        "dominance": 0.9782,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 249,
+            "Bastion": 3
+          },
+          {
+            "Trail": 244,
+            "Bastion": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 165.62
+      },
+      {
+        "key": [
+          "2",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Flint": 480,
+          "Comet": 24
+        },
+        "dominance": 0.9524,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 242,
+            "Comet": 10
+          },
+          {
+            "Flint": 238,
+            "Comet": 14
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 194.03
+      },
+      {
+        "key": [
+          "2",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Flint": 405,
+          "Comet": 99
+        },
+        "dominance": 0.8036,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 204,
+            "Comet": 48
+          },
+          {
+            "Flint": 201,
+            "Comet": 51
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 170.58
+      },
+      {
+        "key": [
+          "3",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Vandal": 17,
+          "Quill": 487
+        },
+        "dominance": 0.9663,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 8,
+            "Quill": 244
+          },
+          {
+            "Quill": 243,
+            "Vandal": 9
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 200.58
+      },
+      {
+        "key": [
+          "3",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Quill": 371,
+          "Vandal": 133
+        },
+        "dominance": 0.7361,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 185,
+            "Vandal": 67
+          },
+          {
+            "Vandal": 66,
+            "Quill": 186
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 183.33
+      },
+      {
+        "key": [
+          "4",
+          "stock"
+        ],
+        "trials": 504,
+        "wins": {
+          "Kestrel": 488,
+          "Bulwark": 16
+        },
+        "dominance": 0.9683,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 241,
+            "Bulwark": 11
+          },
+          {
+            "Kestrel": 247,
+            "Bulwark": 5
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 199.84
+      },
+      {
+        "key": [
+          "4",
+          "developed"
+        ],
+        "trials": 504,
+        "wins": {
+          "Kestrel": 317,
+          "Bulwark": 187
+        },
+        "dominance": 0.629,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 154,
+            "Bulwark": 98
+          },
+          {
+            "Kestrel": 163,
+            "Bulwark": 89
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 189.58
+      }
+    ],
+    "events": [
+      {
+        "key": [
+          "scrap-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 36
+          },
+          {
+            "Needle": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 151.68
+      },
+      {
+        "key": [
+          "scrap-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 71,
+          "Line": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 35,
+            "Line": 1
+          },
+          {
+            "Needle": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 127.2
+      },
+      {
+        "key": [
+          "scrap-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 57,
+          "Line": 15
+        },
+        "dominance": 0.7917,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 27,
+            "Line": 9
+          },
+          {
+            "Needle": 30,
+            "Line": 6
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 193.87
+      },
+      {
+        "key": [
+          "scrap-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 69,
+          "Line": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 34,
+            "Line": 2
+          },
+          {
+            "Needle": 35,
+            "Line": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 161.23
+      },
+      {
+        "key": [
+          "scrap-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 61,
+          "Line": 11
+        },
+        "dominance": 0.8472,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 30,
+            "Line": 6
+          },
+          {
+            "Line": 5,
+            "Needle": 31
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 198.35
+      },
+      {
+        "key": [
+          "scrap-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 63,
+          "Line": 9
+        },
+        "dominance": 0.875,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 30,
+            "Line": 6
+          },
+          {
+            "Needle": 33,
+            "Line": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 165.63
+      },
+      {
+        "key": [
+          "scrap-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Line": 19,
+          "Needle": 53
+        },
+        "dominance": 0.7361,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Line": 9,
+            "Needle": 27
+          },
+          {
+            "Needle": 26,
+            "Line": 10
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 186.22
+      },
+      {
+        "key": [
+          "scrap-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 68,
+          "Line": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 34,
+            "Line": 2
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 154.96
+      },
+      {
+        "key": [
+          "scrap-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 67,
+          "Line": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 33,
+            "Line": 3
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 193.86
+      },
+      {
+        "key": [
+          "scrap-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 71,
+          "Line": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 35,
+            "Line": 1
+          },
+          {
+            "Needle": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 162.26
+      },
+      {
+        "key": [
+          "scrap-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 64,
+          "Line": 8
+        },
+        "dominance": 0.8889,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 30,
+            "Line": 6
+          },
+          {
+            "Needle": 34,
+            "Line": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 306.23
+      },
+      {
+        "key": [
+          "scrap-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Needle": 70,
+          "Line": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Needle": 35,
+            "Line": 1
+          },
+          {
+            "Needle": 35,
+            "Line": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 255.24
+      },
+      {
+        "key": [
+          "scrap-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 251.52
+      },
+      {
+        "key": [
+          "scrap-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 70,
+          "Bastion": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 34,
+            "Bastion": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 223.33
+      },
+      {
+        "key": [
+          "foundry-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 131.37
+      },
+      {
+        "key": [
+          "foundry-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 70,
+          "Bastion": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 35,
+            "Bastion": 1
+          },
+          {
+            "Trail": 35,
+            "Bastion": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 116.97
+      },
+      {
+        "key": [
+          "foundry-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 204.27
+      },
+      {
+        "key": [
+          "foundry-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 178.83
+      },
+      {
+        "key": [
+          "foundry-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 165.99
+      },
+      {
+        "key": [
+          "foundry-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 147.39
+      },
+      {
+        "key": [
+          "foundry-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 188.08
+      },
+      {
+        "key": [
+          "foundry-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 69,
+          "Bastion": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 34,
+            "Bastion": 2
+          },
+          {
+            "Trail": 35,
+            "Bastion": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 165.62
+      },
+      {
+        "key": [
+          "foundry-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 157.55
+      },
+      {
+        "key": [
+          "foundry-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 69,
+          "Bastion": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 33,
+            "Bastion": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 140.12
+      },
+      {
+        "key": [
+          "foundry-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 250.11
+      },
+      {
+        "key": [
+          "foundry-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Trail": 71,
+          "Bastion": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Trail": 36
+          },
+          {
+            "Trail": 35,
+            "Bastion": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 217.53
+      },
+      {
+        "key": [
+          "foundry-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 65,
+          "Comet": 7
+        },
+        "dominance": 0.9028,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 33,
+            "Comet": 3
+          },
+          {
+            "Flint": 32,
+            "Comet": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 341.82
+      },
+      {
+        "key": [
+          "foundry-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 58,
+          "Comet": 14
+        },
+        "dominance": 0.8056,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 30,
+            "Comet": 6
+          },
+          {
+            "Flint": 28,
+            "Comet": 8
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 300.63
+      },
+      {
+        "key": [
+          "salt-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 36
+          },
+          {
+            "Flint": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 142.59
+      },
+      {
+        "key": [
+          "salt-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 64,
+          "Comet": 8
+        },
+        "dominance": 0.8889,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 35,
+            "Comet": 1
+          },
+          {
+            "Flint": 29,
+            "Comet": 7
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 128.71
+      },
+      {
+        "key": [
+          "salt-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 36
+          },
+          {
+            "Flint": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 170.78
+      },
+      {
+        "key": [
+          "salt-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 54,
+          "Comet": 18
+        },
+        "dominance": 0.75,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 27,
+            "Comet": 9
+          },
+          {
+            "Flint": 27,
+            "Comet": 9
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 151.63
+      },
+      {
+        "key": [
+          "salt-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 69,
+          "Comet": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 35,
+            "Comet": 1
+          },
+          {
+            "Flint": 34,
+            "Comet": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 209.31
+      },
+      {
+        "key": [
+          "salt-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 52,
+          "Comet": 20
+        },
+        "dominance": 0.7222,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 26,
+            "Comet": 10
+          },
+          {
+            "Flint": 26,
+            "Comet": 10
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 182.67
+      },
+      {
+        "key": [
+          "salt-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 66,
+          "Comet": 6
+        },
+        "dominance": 0.9167,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 34,
+            "Comet": 2
+          },
+          {
+            "Flint": 32,
+            "Comet": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 194.03
+      },
+      {
+        "key": [
+          "salt-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Comet": 17,
+          "Flint": 55
+        },
+        "dominance": 0.7639,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Comet": 10,
+            "Flint": 26
+          },
+          {
+            "Flint": 29,
+            "Comet": 7
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 170.58
+      },
+      {
+        "key": [
+          "salt-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 66,
+          "Comet": 6
+        },
+        "dominance": 0.9167,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 33,
+            "Comet": 3
+          },
+          {
+            "Flint": 33,
+            "Comet": 3
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 183.62
+      },
+      {
+        "key": [
+          "salt-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 65,
+          "Comet": 7
+        },
+        "dominance": 0.9028,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 33,
+            "Comet": 3
+          },
+          {
+            "Flint": 32,
+            "Comet": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 161.38
+      },
+      {
+        "key": [
+          "salt-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 70,
+          "Comet": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 35,
+            "Comet": 1
+          },
+          {
+            "Flint": 35,
+            "Comet": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 317.7
+      },
+      {
+        "key": [
+          "salt-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Flint": 57,
+          "Comet": 15
+        },
+        "dominance": 0.7917,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Flint": 27,
+            "Comet": 9
+          },
+          {
+            "Flint": 30,
+            "Comet": 6
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 280.45
+      },
+      {
+        "key": [
+          "salt-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 4,
+          "Quill": 68
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 2,
+            "Quill": 34
+          },
+          {
+            "Quill": 34,
+            "Vandal": 2
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 299.7
+      },
+      {
+        "key": [
+          "salt-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 48,
+          "Vandal": 24
+        },
+        "dominance": 0.6667,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 23,
+            "Vandal": 13
+          },
+          {
+            "Vandal": 11,
+            "Quill": 25
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 273.62
+      },
+      {
+        "key": [
+          "switchback-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 36
+          },
+          {
+            "Quill": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 148.06
+      },
+      {
+        "key": [
+          "switchback-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 61,
+          "Vandal": 11
+        },
+        "dominance": 0.8472,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 30,
+            "Vandal": 6
+          },
+          {
+            "Quill": 31,
+            "Vandal": 5
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 138.88
+      },
+      {
+        "key": [
+          "switchback-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 71,
+          "Vandal": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 36
+          },
+          {
+            "Quill": 35,
+            "Vandal": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 192.67
+      },
+      {
+        "key": [
+          "switchback-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 59,
+          "Vandal": 13
+        },
+        "dominance": 0.8194,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 31,
+            "Vandal": 5
+          },
+          {
+            "Vandal": 8,
+            "Quill": 28
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 176.27
+      },
+      {
+        "key": [
+          "switchback-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 67,
+          "Vandal": 5
+        },
+        "dominance": 0.9306,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 35,
+            "Vandal": 1
+          },
+          {
+            "Quill": 32,
+            "Vandal": 4
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 200.58
+      },
+      {
+        "key": [
+          "switchback-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 47,
+          "Vandal": 25
+        },
+        "dominance": 0.6528,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 22,
+            "Vandal": 14
+          },
+          {
+            "Quill": 25,
+            "Vandal": 11
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 183.33
+      },
+      {
+        "key": [
+          "switchback-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 69,
+          "Vandal": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 33,
+            "Vandal": 3
+          },
+          {
+            "Quill": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 233.79
+      },
+      {
+        "key": [
+          "switchback-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Vandal": 30,
+          "Quill": 42
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Vandal": 17,
+            "Quill": 19
+          },
+          {
+            "Vandal": 13,
+            "Quill": 23
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 215.78
+      },
+      {
+        "key": [
+          "switchback-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 69,
+          "Vandal": 3
+        },
+        "dominance": 0.9583,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 34,
+            "Vandal": 2
+          },
+          {
+            "Quill": 35,
+            "Vandal": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 189.74
+      },
+      {
+        "key": [
+          "switchback-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 53,
+          "Vandal": 19
+        },
+        "dominance": 0.7361,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 30,
+            "Vandal": 6
+          },
+          {
+            "Quill": 23,
+            "Vandal": 13
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 173.88
+      },
+      {
+        "key": [
+          "switchback-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 71,
+          "Vandal": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 36
+          },
+          {
+            "Quill": 35,
+            "Vandal": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 289.61
+      },
+      {
+        "key": [
+          "switchback-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Quill": 61,
+          "Vandal": 11
+        },
+        "dominance": 0.8472,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Quill": 30,
+            "Vandal": 6
+          },
+          {
+            "Quill": 31,
+            "Vandal": 5
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 268.51
+      },
+      {
+        "key": [
+          "switchback-7",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 71,
+          "Bulwark": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          },
+          {
+            "Kestrel": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 294.38
+      },
+      {
+        "key": [
+          "switchback-7",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 48,
+          "Bulwark": 24
+        },
+        "dominance": 0.6667,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 22,
+            "Bulwark": 14
+          },
+          {
+            "Kestrel": 26,
+            "Bulwark": 10
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 278.93
+      },
+      {
+        "key": [
+          "crown-1",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 71,
+          "Bulwark": 1
+        },
+        "dominance": 0.9861,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          },
+          {
+            "Kestrel": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 151.37
+      },
+      {
+        "key": [
+          "crown-1",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 46,
+          "Bulwark": 26
+        },
+        "dominance": 0.6389,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 23,
+            "Bulwark": 13
+          },
+          {
+            "Kestrel": 23,
+            "Bulwark": 13
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 145.5
+      },
+      {
+        "key": [
+          "crown-2",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 70,
+          "Bulwark": 2
+        },
+        "dominance": 0.9722,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          },
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 203.8
+      },
+      {
+        "key": [
+          "crown-2",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 22,
+          "Kestrel": 50
+        },
+        "dominance": 0.6944,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 12,
+            "Kestrel": 24
+          },
+          {
+            "Bulwark": 10,
+            "Kestrel": 26
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 195.68
+      },
+      {
+        "key": [
+          "crown-3",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 68,
+          "Bulwark": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 33,
+            "Bulwark": 3
+          },
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 196.74
+      },
+      {
+        "key": [
+          "crown-3",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 42,
+          "Bulwark": 30
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 21,
+            "Bulwark": 15
+          },
+          {
+            "Kestrel": 21,
+            "Bulwark": 15
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 186.99
+      },
+      {
+        "key": [
+          "crown-4",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 68,
+          "Bulwark": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 34,
+            "Bulwark": 2
+          },
+          {
+            "Bulwark": 2,
+            "Kestrel": 34
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 196.52
+      },
+      {
+        "key": [
+          "crown-4",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 42,
+          "Bulwark": 30
+        },
+        "dominance": 0.5833,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 23,
+            "Bulwark": 13
+          },
+          {
+            "Bulwark": 17,
+            "Kestrel": 19
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 185.37
+      },
+      {
+        "key": [
+          "crown-5",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 68,
+          "Bulwark": 4
+        },
+        "dominance": 0.9444,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 33,
+            "Bulwark": 3
+          },
+          {
+            "Kestrel": 35,
+            "Bulwark": 1
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 198.23
+      },
+      {
+        "key": [
+          "crown-5",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 31,
+          "Kestrel": 41
+        },
+        "dominance": 0.5694,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 16,
+            "Kestrel": 20
+          },
+          {
+            "Kestrel": 21,
+            "Bulwark": 15
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 188.94
+      },
+      {
+        "key": [
+          "crown-6",
+          "stock"
+        ],
+        "trials": 72,
+        "wins": {
+          "Kestrel": 72
+        },
+        "dominance": 1.0,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Kestrel": 36
+          },
+          {
+            "Kestrel": 36
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 303.57
+      },
+      {
+        "key": [
+          "crown-6",
+          "developed"
+        ],
+        "trials": 72,
+        "wins": {
+          "Bulwark": 24,
+          "Kestrel": 48
+        },
+        "dominance": 0.6667,
+        "dominanceFlag": true,
+        "seedHalves": [
+          {
+            "Bulwark": 15,
+            "Kestrel": 21
+          },
+          {
+            "Kestrel": 27,
+            "Bulwark": 9
+          }
+        ],
+        "early": 0,
+        "unresolvedCars": 0,
+        "winnerMedianSeconds": 292.0
+      }
+    ]
+  },
+  "assignment": [
+    {
+      "event": "scrap-1",
+      "candidate": "scrap-1-c",
+      "course": "scrap-1-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "scrap-2",
+      "candidate": "scrap-2-a",
+      "course": "scrap-2-a",
+      "status": "owner-keep",
+      "alternate": "scrap-2-c"
+    },
+    {
+      "event": "scrap-3",
+      "candidate": "scrap-3-c",
+      "course": "scrap-3-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "scrap-4",
+      "candidate": "scrap-4-c",
+      "course": "scrap-4-c",
+      "status": "owner-keep",
+      "alternate": "scrap-4-b"
+    },
+    {
+      "event": "scrap-5",
+      "candidate": "scrap-5-c",
+      "course": "scrap-5-c",
+      "status": "owner-keep",
+      "alternate": "scrap-5-a"
+    },
+    {
+      "event": "scrap-6",
+      "candidate": "scrap-6-b",
+      "course": "scrap-6-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "scrap-7",
+      "candidate": "scrap-7-f",
+      "course": "scrap-7-f",
+      "status": "provisional-owner-review",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-1",
+      "candidate": "foundry-1-c",
+      "course": "foundry-1-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-2",
+      "candidate": "foundry-2-b",
+      "course": "foundry-2-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-3",
+      "candidate": "foundry-3-b",
+      "course": "foundry-3-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-4",
+      "candidate": "foundry-4-c",
+      "course": "foundry-4-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-5",
+      "candidate": "foundry-5-a",
+      "course": "foundry-5-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-6",
+      "candidate": "foundry-6-b",
+      "course": "foundry-6-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "foundry-7",
+      "candidate": "foundry-7-b",
+      "course": "foundry-7-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-1",
+      "candidate": "salt-1-b",
+      "course": "salt-1-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-2",
+      "candidate": "salt-2-c",
+      "course": "salt-2-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-3",
+      "candidate": "salt-3-a",
+      "course": "salt-3-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-4",
+      "candidate": "salt-4-c",
+      "course": "salt-4-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-5",
+      "candidate": "salt-5-a",
+      "course": "salt-5-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-6",
+      "candidate": "salt-6-a",
+      "course": "salt-6-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "salt-7",
+      "candidate": "salt-7-b",
+      "course": "salt-7-b",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-1",
+      "candidate": "switchback-1-a",
+      "course": "switchback-1-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-2",
+      "candidate": "switchback-2-c",
+      "course": "switchback-2-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-3",
+      "candidate": "switchback-3-c",
+      "course": "switchback-3-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-4",
+      "candidate": "switchback-4-runoff",
+      "course": "runoff",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-5",
+      "candidate": "switchback-5-a",
+      "course": "switchback-5-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-6",
+      "candidate": "switchback-6-c",
+      "course": "switchback-6-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "switchback-7",
+      "candidate": "switchback-7-c",
+      "course": "switchback-7-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-1",
+      "candidate": "crown-1-a",
+      "course": "crown-1-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-2",
+      "candidate": "crown-2-a",
+      "course": "crown-2-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-3",
+      "candidate": "crown-3-a",
+      "course": "crown-3-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-4",
+      "candidate": "crown-4-a",
+      "course": "crown-4-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-5",
+      "candidate": "crown-5-c",
+      "course": "crown-5-c",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-6",
+      "candidate": "crown-6-a",
+      "course": "crown-6-a",
+      "status": "owner-keep",
+      "alternate": ""
+    },
+    {
+      "event": "crown-7",
+      "candidate": "crown-7-a",
+      "course": "crown-7-a",
+      "status": "owner-keep",
+      "alternate": ""
+    }
+  ],
+  "campaignSha256": "2cd01c8aad0fc15118c1c0441f5aa281a1c0b78831b1e2bd8455e39d5a88991c",
+  "shapes": {
+    "beforeCourses": 29,
+    "beforePass": 0,
+    "beforeSimilarPairs": 304,
+    "afterComposerCourses": 39,
+    "afterPass": 39,
+    "afterSimilarPairs": 0,
+    "acceptedException": "Runoff"
+  },
+  "device": {
+    "utc": "2026-10-04T15:43:16.782837+00:00",
+    "subnet": "10.0.0.0/24",
+    "hostsScanned": 254,
+    "port": 5555,
+    "device": "10.0.0.139:5555",
+    "model": "AFTKM",
+    "foreground": "mResumedActivity: ActivityRecord{6bcc04e u0 dev.deathride.perf/dev.deathride.tv.MainActivity t308}",
+    "requestedPackage": "dev.deathride.tracks",
+    "status": "pending-busy",
+    "installed": false,
+    "launched": false,
+    "stoppedOtherApps": false,
+    "apkSha256": "d0c52d5949c63ec8c01766b04750f029364c56fde9b44f696f782f9ebe5d1bfe",
+    "frameTimeDeltaMs": null,
+    "apkPackage": "dev.deathride.tracks",
+    "apkPackageVerified": true
+  },
+  "firstBossChoices": {
+    "fixture": "Matched lead/opponent skill; developed eligible peers; two lead slots; eight shared seeds; 32 cell outcomes per skill, not independent human trials.",
+    "candidates": {
+      "scrap-7-d": [
+        {
+          "skill": 0,
+          "trials": 32,
+          "wins": 3,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 9
+        },
+        {
+          "skill": 1,
+          "trials": 32,
+          "wins": 0,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 3
+        },
+        {
+          "skill": 2,
+          "trials": 32,
+          "wins": 0,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 0
+        }
+      ],
+      "scrap-7-e": [
+        {
+          "skill": 0,
+          "trials": 32,
+          "wins": 4,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 14
+        },
+        {
+          "skill": 1,
+          "trials": 32,
+          "wins": 2,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 4
+        },
+        {
+          "skill": 2,
+          "trials": 32,
+          "wins": 0,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 1
+        }
+      ],
+      "scrap-7-f": [
+        {
+          "skill": 0,
+          "trials": 32,
+          "wins": 2,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 11
+        },
+        {
+          "skill": 1,
+          "trials": 32,
+          "wins": 2,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 4
+        },
+        {
+          "skill": 2,
+          "trials": 32,
+          "wins": 0,
+          "early": 0,
+          "unresolved": 0,
+          "beatBoss": 0
+        }
+      ]
+    },
+    "provisionalReproducesDifficultyHashes": true,
+    "winDefinition": "First place with a surviving lap finish, as required for boss promotion. Merely beating the named boss is reported separately."
+  },
+  "retainedProofComparison": [
+    {
+      "candidate": "scrap-1-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-2-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-2-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-3-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-4-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-4-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-5-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-5-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "scrap-6-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-1-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-2-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-3-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-4-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-5-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-6-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "foundry-7-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-1-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-2-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-3-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-4-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-5-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-6-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "salt-7-b",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-1-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-2-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-3-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-5-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-6-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-7-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-1-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-2-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-3-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-4-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-5-c",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-6-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "crown-7-a",
+      "identicalMeasuredQuality": true
+    },
+    {
+      "candidate": "switchback-4-runoff",
+      "identicalMeasuredQuality": true
+    }
+  ],
+  "pacing": [
+    {
+      "event": "scrap-1",
+      "build": "stock",
+      "target": [
+        120,
+        180
+      ],
+      "before": 146.86,
+      "after": 151.68,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "scrap-1",
+      "build": "developed",
+      "target": [
+        120,
+        180
+      ],
+      "before": 122.97,
+      "after": 127.2,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "scrap-6",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 280.65,
+      "after": 306.23,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "scrap-6",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 233.7,
+      "after": 255.24,
+      "beforePass": false,
+      "afterPass": true
+    },
+    {
+      "event": "scrap-7",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 314.83,
+      "after": 251.52,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "scrap-7",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 269.69,
+      "after": 223.33,
+      "beforePass": true,
+      "afterPass": false
+    },
+    {
+      "event": "foundry-1",
+      "build": "stock",
+      "target": [
+        120,
+        180
+      ],
+      "before": 147.27,
+      "after": 131.37,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "foundry-1",
+      "build": "developed",
+      "target": [
+        120,
+        180
+      ],
+      "before": 129.67,
+      "after": 116.97,
+      "beforePass": true,
+      "afterPass": false
+    },
+    {
+      "event": "foundry-6",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 284.69,
+      "after": 250.11,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "foundry-6",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 242.03,
+      "after": 217.53,
+      "beforePass": true,
+      "afterPass": false
+    },
+    {
+      "event": "foundry-7",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 302.07,
+      "after": 341.82,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "foundry-7",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 278.27,
+      "after": 300.63,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-1",
+      "build": "stock",
+      "target": [
+        120,
+        180
+      ],
+      "before": 164.39,
+      "after": 142.59,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-1",
+      "build": "developed",
+      "target": [
+        120,
+        180
+      ],
+      "before": 146.0,
+      "after": 128.71,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-6",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 260.59,
+      "after": 317.7,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-6",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 241.82,
+      "after": 280.45,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-7",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 304.77,
+      "after": 299.7,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "salt-7",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 288.81,
+      "after": 273.62,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-1",
+      "build": "stock",
+      "target": [
+        120,
+        180
+      ],
+      "before": 149.63,
+      "after": 148.06,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-1",
+      "build": "developed",
+      "target": [
+        120,
+        180
+      ],
+      "before": 137.43,
+      "after": 138.88,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-6",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 268.19,
+      "after": 289.61,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-6",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 250.63,
+      "after": 268.51,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-7",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 312.58,
+      "after": 294.38,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "switchback-7",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 295.77,
+      "after": 278.93,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "crown-1",
+      "build": "stock",
+      "target": [
+        120,
+        180
+      ],
+      "before": 164.12,
+      "after": 151.37,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "crown-1",
+      "build": "developed",
+      "target": [
+        120,
+        180
+      ],
+      "before": 155.34,
+      "after": 145.5,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "crown-6",
+      "build": "stock",
+      "target": [
+        240,
+        360
+      ],
+      "before": 259.54,
+      "after": 303.57,
+      "beforePass": true,
+      "afterPass": true
+    },
+    {
+      "event": "crown-6",
+      "build": "developed",
+      "target": [
+        240,
+        360
+      ],
+      "before": 247.08,
+      "after": 292.0,
+      "beforePass": true,
+      "afterPass": true
+    }
+  ],
+  "quality": [
+    {
+      "event": "scrap-1",
+      "candidate": "scrap-1-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 160.23,
+      "combat": 152.05,
+      "early": 0.125,
+      "target": [
+        120,
+        180
+      ]
+    },
+    {
+      "event": "scrap-2",
+      "candidate": "scrap-2-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 200.13,
+      "combat": 194.48,
+      "early": 0.19444444444444445,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "scrap-3",
+      "candidate": "scrap-3-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 203.25,
+      "combat": 198.87,
+      "early": 0.1388888888888889,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "scrap-4",
+      "candidate": "scrap-4-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 193.08,
+      "combat": 186.83,
+      "early": 0.1388888888888889,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "scrap-5",
+      "candidate": "scrap-5-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 202.82,
+      "combat": 193.8,
+      "early": 0.09722222222222222,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "scrap-6",
+      "candidate": "scrap-6-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 313.03,
+      "combat": 306.75,
+      "early": 0.1111111111111111,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "scrap-7",
+      "candidate": "scrap-7-f",
+      "status": "proved",
+      "flags": [],
+      "clean": 276.8,
+      "combat": 251.88,
+      "early": 0.05555555555555555,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "foundry-1",
+      "candidate": "foundry-1-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 149.05,
+      "combat": 131.58,
+      "early": 0.125,
+      "target": [
+        120,
+        180
+      ]
+    },
+    {
+      "event": "foundry-2",
+      "candidate": "foundry-2-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 223.17,
+      "combat": 204.6,
+      "early": 0.05555555555555555,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "foundry-3",
+      "candidate": "foundry-3-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 184.28,
+      "combat": 166.2,
+      "early": 0.08333333333333333,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "foundry-4",
+      "candidate": "foundry-4-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 205.38,
+      "combat": 188.35,
+      "early": 0.05555555555555555,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "foundry-5",
+      "candidate": "foundry-5-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 174.67,
+      "combat": 158.2,
+      "early": 0.18055555555555555,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "foundry-6",
+      "candidate": "foundry-6-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 273.13,
+      "combat": 250.78,
+      "early": 0.05555555555555555,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "foundry-7",
+      "candidate": "foundry-7-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 347.98,
+      "combat": 342.35,
+      "early": 0.16666666666666666,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "salt-1",
+      "candidate": "salt-1-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 152.77,
+      "combat": 143.12,
+      "early": 0.16666666666666666,
+      "target": [
+        120,
+        180
+      ]
+    },
+    {
+      "event": "salt-2",
+      "candidate": "salt-2-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 180.55,
+      "combat": 170.97,
+      "early": 0.1527777777777778,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "salt-3",
+      "candidate": "salt-3-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 215.27,
+      "combat": 209.47,
+      "early": 0.08333333333333333,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "salt-4",
+      "candidate": "salt-4-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 202.52,
+      "combat": 194.6,
+      "early": 0.1527777777777778,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "salt-5",
+      "candidate": "salt-5-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 187.82,
+      "combat": 183.82,
+      "early": 0.16666666666666666,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "salt-6",
+      "candidate": "salt-6-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 325.4,
+      "combat": 317.83,
+      "early": 0.125,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "salt-7",
+      "candidate": "salt-7-b",
+      "status": "proved",
+      "flags": [],
+      "clean": 302.95,
+      "combat": 299.7,
+      "early": 0.08333333333333333,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "switchback-1",
+      "candidate": "switchback-1-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 155.1,
+      "combat": 148.4,
+      "early": 0.1111111111111111,
+      "target": [
+        120,
+        180
+      ]
+    },
+    {
+      "event": "switchback-2",
+      "candidate": "switchback-2-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 198.6,
+      "combat": 192.68,
+      "early": 0.09722222222222222,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "switchback-3",
+      "candidate": "switchback-3-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 204.68,
+      "combat": 200.97,
+      "early": 0.1111111111111111,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "switchback-4",
+      "candidate": "switchback-4-runoff",
+      "status": "accepted-exception",
+      "flags": [
+        "earlyLeadWreckRate"
+      ],
+      "clean": 239.68,
+      "combat": 235.83,
+      "early": 0.3472222222222222,
+      "target": [
+        null,
+        null
+      ]
+    },
+    {
+      "event": "switchback-5",
+      "candidate": "switchback-5-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 193.87,
+      "combat": 189.65,
+      "early": 0.1388888888888889,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "switchback-6",
+      "candidate": "switchback-6-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 298.22,
+      "combat": 289.88,
+      "early": 0.08333333333333333,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "switchback-7",
+      "candidate": "switchback-7-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 306.52,
+      "combat": 295.03,
+      "early": 0.1111111111111111,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "crown-1",
+      "candidate": "crown-1-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 161.1,
+      "combat": 152.28,
+      "early": 0.09722222222222222,
+      "target": [
+        120,
+        180
+      ]
+    },
+    {
+      "event": "crown-2",
+      "candidate": "crown-2-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 211.87,
+      "combat": 204.13,
+      "early": 0.027777777777777776,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "crown-3",
+      "candidate": "crown-3-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 206.17,
+      "combat": 196.33,
+      "early": 0.125,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "crown-4",
+      "candidate": "crown-4-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 205.02,
+      "combat": 196.92,
+      "early": 0.1388888888888889,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "crown-5",
+      "candidate": "crown-5-c",
+      "status": "proved",
+      "flags": [],
+      "clean": 209.55,
+      "combat": 198.97,
+      "early": 0.1527777777777778,
+      "target": [
+        150,
+        240
+      ]
+    },
+    {
+      "event": "crown-6",
+      "candidate": "crown-6-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 315.63,
+      "combat": 304.17,
+      "early": 0.125,
+      "target": [
+        240,
+        360
+      ]
+    },
+    {
+      "event": "crown-7",
+      "candidate": "crown-7-a",
+      "status": "proved",
+      "flags": [],
+      "clean": 163.4,
+      "combat": 152.82,
+      "early": 0.16666666666666666,
+      "target": [
+        0,
+        360
+      ]
+    }
+  ]
+}

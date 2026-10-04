@@ -1,0 +1,97 @@
+{
+  "completed": true,
+  "checksPassed": true,
+  "memoryBudget": {
+    "method": "dumpsys meminfo --local dev.deathride.tv",
+    "limitMiB": 192,
+    "growthLimitMiB": 8,
+    "minimumMiB": 107.017578125,
+    "maximumMiB": 115.501953125,
+    "firstThreeWarmMedianMiB": 114.03515625,
+    "lastThreeWarmMedianMiB": 113.8798828125,
+    "medianGrowthMiB": -0.1552734375,
+    "warmLinearTrendMiBPerMinute": 0.049926759251222586,
+    "withinLimit": true,
+    "growthWithinLimit": true
+  },
+  "textures": {
+    "artLimitMiB": 32,
+    "ownedLimitMiB": 52,
+    "allWithinLimit": true,
+    "maximumArtMiB": 10.75,
+    "maximumOwnedMiB": 37.9697265625,
+    "final": {
+      "regions": 78,
+      "textureBytes": 11272192,
+      "sceneryBytes": 16777216,
+      "fontBytes": 11534336,
+      "qrBytes": 230400,
+      "ownedTextureBytes": 39814144,
+      "artBudgetBytes": 33554432,
+      "ownedBudgetBytes": 54525952,
+      "budgetOk": true,
+      "failures": 0,
+      "draws": 1041019,
+      "carStrategy": "runtime rotation; procedural for unapproved/missing states"
+    },
+    "drawsDuringLoad": 1040463
+  },
+  "frameTargets": {
+    "activeP50RangeMs": [
+      16.573923,
+      16.812306999999997
+    ],
+    "activeMediansNear16_7": true,
+    "activeMaxWithin33": false,
+    "activeP95WithinOriginal16_7": false,
+    "activeP95WithinG1_21_60": false
+  },
+  "allWindows": {
+    "windows": 90,
+    "frameSamples": 53774,
+    "worstP95": {
+      "second": 610.00765,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": false,
+      "p50": 16.724,
+      "p95": 21.696461,
+      "max": 114.36200000000001,
+      "count": 597
+    },
+    "worstMax": {
+      "second": 10.0928748,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": false,
+      "p50": 16.605616,
+      "p95": 21.118154,
+      "max": 241.274769,
+      "count": 585
+    }
+  },
+  "activeWindows": {
+    "windows": 73,
+    "frameSamples": 43752,
+    "worstP95": {
+      "second": 700.1185512,
+      "phase": "race",
+      "track": "sluice",
+      "fullRace": true,
+      "p50": 16.712462000000002,
+      "p95": 21.644,
+      "max": 31.512230000000002,
+      "count": 600
+    },
+    "worstMax": {
+      "second": 170.064907,
+      "phase": "race",
+      "track": "scree",
+      "fullRace": true,
+      "p50": 16.756,
+      "p95": 20.357384999999997,
+      "max": 34.91977,
+      "count": 600
+    }
+  }
+}

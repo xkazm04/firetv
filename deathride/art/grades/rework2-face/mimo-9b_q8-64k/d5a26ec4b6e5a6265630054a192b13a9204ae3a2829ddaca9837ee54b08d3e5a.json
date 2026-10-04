@@ -1,0 +1,118 @@
+{
+  "asset": "rw2-face-debt-contract-v1-a2",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "source_sha256": "0e3c35786223281c6e9fb508da462f8b3d3d6639b4dbfc6db8b04ab518f053ff",
+  "export_sha256": "c38475951ab9fd2d1a29c51b7285e8282bbb63290c84b92c27ee7c75ee2d68a3",
+  "image_hashes": [
+    "c38475951ab9fd2d1a29c51b7285e8282bbb63290c84b92c27ee7c75ee2d68a3",
+    "ba6961b74eb39e02bb36b14be9934e262b8e771a86ef5f093daf01c474b33bdc"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 112 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "d5a26ec4b6e5a6265630054a192b13a9204ae3a2829ddaca9837ee54b08d3e5a",
+  "at": "2026-10-03T10:29:07.083748+00:00",
+  "raw_content": "{\n  \"both_eyes_visible\": true,\n  \"confidence\": 0.75,\n  \"defects\": [\n    \"small_face\",\n    \"body_dominant_composition\"\n  ],\n  \"description\": \"Single primary face, frontal, both eyes visible, expression readable in preview. Face is small relative to the full frame; shoulders, collar, armour and a document occupy the lower half, making the composition body-dominant.\",\n  \"expression_readable_native\": true,\n  \"eye_centres\": [\n    390,\n    320,\n    510,\n    320\n  ],\n  \"face_box\": [\n    250,\n    170,\n    570,\n    470\n  ],\n  \"face_unobscured\": true,\n  \"framing\": \"head_shoulders\",\n  \"single_primary_face\": true\n}",
+  "status": "graded",
+  "answers": {
+    "both_eyes_visible": true,
+    "confidence": 0.75,
+    "defects": [
+      "small_face",
+      "body_dominant_composition"
+    ],
+    "description": "Single primary face, frontal, both eyes visible, expression readable in preview. Face is small relative to the full frame; shoulders, collar, armour and a document occupy the lower half, making the composition body-dominant.",
+    "expression_readable_native": true,
+    "eye_centres": [
+      390,
+      320,
+      510,
+      320
+    ],
+    "face_box": [
+      250,
+      170,
+      570,
+      470
+    ],
+    "face_unobscured": true,
+    "framing": "head_shoulders",
+    "single_primary_face": true
+  },
+  "elapsed_seconds": 3.688
+}

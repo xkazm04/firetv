@@ -1,0 +1,32 @@
+{
+  "durationSeconds": 150,
+  "durationTolerance": 0.35,
+  "loudnessLufs": -14,
+  "loudnessToleranceLu": 1,
+  "truePeakMaxDbtp": -1,
+  "clippingThreshold": 0.999,
+  "silenceFractionMax": 0.35,
+  "joins": {
+    "sampleJumpMax": 0.02,
+    "rmsStepMaxDb": 6,
+    "windowSeconds": 0.05,
+    "spectralCosine": "reported only: deliberate instrumentation changes; not a steady loop"
+  },
+  "structure": {
+    "requiredSections": [
+      "Intro",
+      "Verse",
+      "Peak",
+      "Break",
+      "Outro"
+    ],
+    "repeatedPcmBarsMax": 0,
+    "peakEventsPerBarMustExceedBreak": true
+  },
+  "notMeasured": [
+    "human musical/style preference",
+    "long-race fatigue",
+    "new provider long-form quality",
+    "physical Stick playback"
+  ]
+}

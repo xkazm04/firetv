@@ -1,0 +1,32 @@
+{
+  "id": "526fe75c-8d02-43c3-9e42-e59ddba7ba03",
+  "ts": "2026-10-02T19:25:04.646Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/funk-rivet.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a snappy stuttering gun mechanism and loose brass clacks. Dirty close garage foley, springy snap, loose metal, short raw room, dangerous comic punch. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39929,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "63949996118ada0c56c2b1d4d6581e73cc133ef084162a985696879efde9c05e",
+  "completedAt": "2026-10-02T19:25:08.365Z",
+  "creditsAfter": 39929,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5364
+}

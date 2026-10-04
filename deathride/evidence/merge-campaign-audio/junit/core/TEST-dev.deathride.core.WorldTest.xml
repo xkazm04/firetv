@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.core.WorldTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-10-03T00:24:10.816Z" hostname="KAZIHO" time="1.833">
+  <properties/>
+  <testcase name="lapCountsOnceAndGateSkippingFails()" classname="dev.deathride.core.WorldTest" time="0.001"/>
+  <testcase name="staleFramesHoldSteeringAndDropThrottle()" classname="dev.deathride.core.WorldTest" time="0.0"/>
+  <testcase name="speedCoastBrakingAndTimeBasis()" classname="dev.deathride.core.WorldTest" time="0.001"/>
+  <testcase name="eliteMineEncounterRecoversWithoutStrandingTheRemainingCars()" classname="dev.deathride.core.WorldTest" time="0.09"/>
+  <testcase name="deterministicSixtySeconds()" classname="dev.deathride.core.WorldTest" time="0.128"/>
+  <testcase name="gapsNonFiniteAndReconnectAreBounded()" classname="dev.deathride.core.WorldTest" time="0.0"/>
+  <testcase name="signedSeedsUseTheSameBoundedLaneCycleWithoutIntegerOverflow()" classname="dev.deathride.core.WorldTest" time="0.0"/>
+  <testcase name="collidingCarsSeparate()" classname="dev.deathride.core.WorldTest" time="0.0"/>
+  <testcase name="wallsContainBothCarCircles()" classname="dev.deathride.core.WorldTest" time="0.0"/>
+  <testcase name="twentySeededSixCarRacesComplete()" classname="dev.deathride.core.WorldTest" time="1.61"/>
+  <system-out><![CDATA[Braking distance: 15 m/s -> 4.536974074091895 m; 25 m/s -> 12.01870009215559 m
+Full-lock slip after 2 s: 23.1528688186324 degrees; coast after 1 s: 24.07556393887442 m/s
+Recovered all six entrants in 51.433333333331696 simulated seconds
+20 seeds / 120 finishers / six cars / 3 laps; race seconds min=70.84999999999727 max=74.59999999999705
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

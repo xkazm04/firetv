@@ -1,0 +1,32 @@
+{
+  "id": "929d25b0-4c61-4644-aa92-c98ce50c45d0",
+  "ts": "2026-10-02T19:22:02.487Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/dust-pickup.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40855,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "b7d169a1039aadd4616553220630f937634576e0276d1f32652be53ed48b42b6",
+  "completedAt": "2026-10-02T19:22:12.164Z",
+  "creditsAfter": 40855,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1800
+}

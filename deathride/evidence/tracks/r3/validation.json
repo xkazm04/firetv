@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-04",
+  "waveStatus": "partial",
+  "build": {
+    "tasks": [":core:test", ":link:test", ":game:test", ":app:assembleDebug"],
+    "result": "BUILD SUCCESSFUL",
+    "log": "../r3-commit-build.log",
+    "tests": {"core": 198, "link": 8, "game": 39},
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "applicationId": "dev.deathride.tracks"
+  },
+  "browserResults": [
+    "legacy-browser-final/result.json",
+    "../r1/browser/result.json",
+    "composer-browser-final/checks.json",
+    "browser/checks.json",
+    "candidate-lab/checks.json"
+  ],
+  "exportContract": "candidate-contract.json",
+  "summary": "final-summary.json",
+  "visualInspection": "visual-inspection.json",
+  "device": "stick-status.json",
+  "remaining": [
+    "Actual two-car finale duels unresolved in 3/12, 2/12 and 6/12 seeds for A/B/C",
+    "Active hunter corner blocking not established: zero qualifying episodes in 288 follow-up trials",
+    "83 temporary combat stall episodes remain visible; clean traversal has zero stalls",
+    "Every final exceeds its theme opening road length, but not every final exceeds the richest opening corner count per lap",
+    "Native candidate races, camera and performance pending because the shared Stick is busy",
+    "Owner Keep/Maybe/Reject and feel remain unmeasured"
+  ],
+  "productionCampaignAndArtUnchanged": true,
+  "stashApplied": false,
+  "paidGeneration": false,
+  "pushed": false
+}

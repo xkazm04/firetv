@@ -1,0 +1,32 @@
+{
+  "id": "dff57eec-813b-469b-a8fe-c7ff8210a436",
+  "ts": "2026-10-02T21:36:38.503Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/victory.mp3",
+  "seconds": 3,
+  "request": {
+    "text": "Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 3,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 120,
+  "budgetCharge": 120,
+  "creditsBefore": 24473,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 48945,
+  "providerCredits": 30,
+  "sha256": "fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9",
+  "completedAt": "2026-10-02T21:36:48.053Z",
+  "creditsAfter": 24473,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1920
+}

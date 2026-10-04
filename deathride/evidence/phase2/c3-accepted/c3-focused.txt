@@ -1,0 +1,56 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources
+> Task :core:processTestResources NO-SOURCE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CareerTest.kt:62:39 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:combatDepthReport
+scrap-rookie: 40 races; early wrecks 0 (0.0); player finishes 40
+scrap-club: 40 races; early wrecks 0 (0.0); player finishes 40
+foundry-club: 40 races; early wrecks 0 (0.0); player finishes 40
+crown-pro: 40 races; early wrecks 10 (0.25); player finishes 5
+
+> Task :core:test
+
+CareerTest > versionOneMigratesAndImpossibleCareerStateIsRejected() PASSED
+
+CombatTest > rayAndSweptProjectileNeverHitShooterAndUseAmmoCooldown() PASSED
+
+CombatTest > seededCombatResolvesAllCoursesAndReplayMatches() PASSED
+
+CombatTest > armorHasOneAuthorityAndWreckRejectsEveryAction() PASSED
+
+CombatTest > staleAndReconnectClearAllAttackHolds() PASSED
+
+CombatTest > mineArmsThenHitsEachCarOnceIncludingOwnerAndPoolReuseIsClean() PASSED
+
+CombatTest > pickupsRespectCapsRespawnAndUnavailableMounts() PASSED
+
+CombatTest > activeCombatAllocatesNothingAcrossRepeatedLiveStarts() PASSED
+
+CombatTest > startProtectionIsVisibleAndDoesNotSpendAmmunition() PASSED
+
+CombatTest > ramsDeduplicatePerPairAndLastSurvivorWins() PASSED
+
+GarageTest > offersChargeOnceStayOnTheirCarAndRejectClassLimits() PASSED
+
+GarageTest > receiptsAreIdempotentInsuredAndBounded() PASSED
+
+GarageTest > seededEconomyAndExtremesHaveNoDebtOrUnboundedPower() PASSED
+
+GarageTest > saveRoundTripRejectsCorruptionAndRecoversPreviousGoodCopy() PASSED
+
+GarageTest > everyPartChangesItsPromisedPhysicalOrCombatConsumer() PASSED
+
+RosterV2Test > fiveCarSavesKeepEveryOwnedPartAndReceipt() PASSED
+
+BUILD SUCCESSFUL in 43s
+6 actionable tasks: 6 executed

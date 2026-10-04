@@ -1,0 +1,188 @@
+{
+  "schema": 1,
+  "published_at": "2026-10-01T10:21:17.006471+00:00",
+  "bundle": "phase2-v1",
+  "truth": "technical assets only; owner quality pending; renderer integration not performed",
+  "pages": [
+    {
+      "file": "world-0.png",
+      "sha256": "d6081aa48fc6d1b1cdc9f5c3ae026b942ad049ed3e7ea35fc1d968342f84dba8",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "ui-0.png",
+      "sha256": "2a4ed51929e4af2b6b0506565c5ac6cb30f8cc6b7efea6d3c5452508c3cfd783",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "autotile-track-edge-0.png",
+      "sha256": "9c3479b5238d8f1c8a1da37cd624a7b284799f5ca0d0453353039ee5c368a0e6",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "autotile-barrier-0.png",
+      "sha256": "f59f72ec1bb3d58d7d33824a04c45e543587c06fa4de41bd20d146715885d9c5",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    }
+  ],
+  "tiles": [
+    {
+      "file": "p4-tiles-asphalt-worn-v1.png",
+      "id": "p4-tiles-asphalt-worn-v1",
+      "sha256": "ea4fe4991958ffad97a6ee6d6a814feb747e79d0992654b365f079ed237862b7",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-tiles-grass-v1.png",
+      "id": "p4-tiles-grass-v1",
+      "sha256": "03ee68b447a7093a205dca1cfe08ea1e8c978b3661445de7958d9b25c0dace0a",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-tiles-dirt-v1.png",
+      "id": "p4-tiles-dirt-v1",
+      "sha256": "334704ec6ea986c0ba3f8f0348d86da7d83b6a46ef4984edb394b5124717a6f9",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-tiles-metal-v1.png",
+      "id": "p4-tiles-metal-v1",
+      "sha256": "8c600f1b6858086de558d7f17cbe14cbffd29cf137260c0b4c7d738678cf06fb",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p1-tile-kerb-v2.png",
+      "id": "p1-tile-kerb-v2",
+      "sha256": "eb40593504deea457371b696cf9affa0ea4e4d4a1eb93a5237d95a5a6176d867",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p1-tile-oil-v3.png",
+      "id": "p1-tile-oil-v3",
+      "sha256": "f0f3e483c0b7d729a4d190ae1ee4e20de8f93756d3149d68383990f9ffb10d4d",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-tiles-asphalt-heavy-v1-wrap-v1.png",
+      "id": "p4-tiles-asphalt-heavy-v1-wrap-v1",
+      "sha256": "3d9acc7efc957d706b2df2105f16c9eb3d7944220d9398343cb750d7bc0bed05",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-tiles-concrete-v1-wrap-v1.png",
+      "id": "p4-tiles-concrete-v1-wrap-v1",
+      "sha256": "738b2d7c01870702281e10aede158efb37e09be42fa2d2ee584a4e6d11a7e190",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p1-tile-asphalt-v1.png",
+      "id": "p1-tile-asphalt-v1",
+      "sha256": "64a7b31d4f28229b58a506fd54ea66a3508d1a3ef543f263ebec735aafb0fa2d",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-gravel-period-v1.png",
+      "id": "p4-gravel-period-v1",
+      "sha256": "77093a5385f84bf481f59306376e83ad523c2317f5e2b5b4fdc51d938b205018",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "p4-ice-centre-768-v1.png",
+      "id": "p4-ice-centre-768-v1",
+      "sha256": "a91b40bb56ab0a3599d120229a42460de0bf2a0ab46543ef3a14d2c7e21e0770",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    }
+  ],
+  "themes": [
+    {
+      "file": "p4-backdrops-industrial-v1.png",
+      "id": "p4-backdrops-industrial-v1",
+      "sha256": "199601cdfe6360ef1241036e654303a24b203d9035f4209b649f290f7c6b47fb",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "p4-backdrops-quarry-v1.png",
+      "id": "p4-backdrops-quarry-v1",
+      "sha256": "a7d7c9fca489be2b099fe39e5f709945508360b4dab76deb4369fa32dce597da",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "p4-backdrops-desert-v1.png",
+      "id": "p4-backdrops-desert-v1",
+      "sha256": "1d5baf12650ba5f055f53783057c04b8c7a8c55b2918647ddea1f310ee753bda",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "p4-backdrops-wetland-v1.png",
+      "id": "p4-backdrops-wetland-v1",
+      "sha256": "533af6f5113e0a569c03ef9f52b08999b4773a033c46fa6f090827310b9206ff",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "p4-backdrops-alpine-v1.png",
+      "id": "p4-backdrops-alpine-v1",
+      "sha256": "5c875b47c1cfb5b0e0e4d18f4b12e3f285baeec629ec0716499cea54ad024f67",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    }
+  ],
+  "resident_rgba_bytes_with_reserved_cars": 32243712,
+  "cars_reserved_rgba_bytes": 8388608,
+  "resident_policy": "all listed atlas/tile pages plus at most one theme; includes two reserved 1024 car pages",
+  "selections_sha256": "1b85dc0073bd9adb7d49ce8b1a50ca7c472f3aa486296a6f1dae8770eb4f8231"
+}

@@ -1,0 +1,36 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:compileTestKotlin
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:abilityReport
+roster-rookie-equal-technical-off: 200 races in 4.5566905s
+
+> Task :core:abilityReport FAILED
+.\gradlew.bat :
+At line:2 char:474
++ ... ities']})"; .\gradlew.bat :core:abilityReport -PabilitySamples=2000 - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:abilityReport'.
+> Process 'command 'C:\Program Files\Zulu\zulu-22\bin\java.exe'' finished with non-zero exit value -1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 41s
+6 actionable tasks: 2 executed, 4 up-to-date

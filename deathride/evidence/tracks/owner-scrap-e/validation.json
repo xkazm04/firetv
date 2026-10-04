@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "6efb1ddab68b744cb8cb141ebc34293aef000899",
+  "tasks": [
+    ":core:test",
+    ":link:test",
+    ":game:test",
+    ":app:assembleDebug"
+  ],
+  "build": "pass",
+  "buildDuration": "9m08s",
+  "buildLogSha256": "ecbff399989f600cfb8b1b51dff136971f8bc455a3da3575af6aae7d6e2d87c4",
+  "tests": {
+    "core": {
+      "tests": 208,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "packages": [
+    {
+      "path": "deathride\\core\\build\\libs\\core.jar",
+      "sha256": "f35028b14f3e539dae238226a97580f6528978d53cbbc2b97bf09b0952a54672",
+      "pickedTrackFiles": [
+        "data/tracks/scrap-7-e-branches.csv",
+        "data/tracks/scrap-7-e-junctions.csv",
+        "data/tracks/scrap-7-e-race.csv",
+        "data/tracks/scrap-7-e-spots.csv",
+        "data/tracks/scrap-7-e.csv"
+      ],
+      "rejectedFiles": 0,
+      "assignmentTablesMatchSource": true
+    },
+    {
+      "path": "deathride\\app\\build\\outputs\\apk\\debug\\app-debug.apk",
+      "sha256": "232b8cbd6b7b055573f151902b66982749a785e591c29a06d33760408f1f731b",
+      "pickedTrackFiles": [
+        "data/tracks/scrap-7-e-branches.csv",
+        "data/tracks/scrap-7-e-junctions.csv",
+        "data/tracks/scrap-7-e-race.csv",
+        "data/tracks/scrap-7-e-spots.csv",
+        "data/tracks/scrap-7-e.csv"
+      ],
+      "rejectedFiles": 0,
+      "assignmentTablesMatchSource": true
+    }
+  ],
+  "browsers": {
+    "final-browser": {
+      "checks": 8,
+      "sha256": "fdaa3739d0cfb9c6a9fd1d0400456f2da7588f42d3d1f2eaf354c4518ca77469",
+      "passAll": true
+    },
+    "scrap-review": {
+      "checks": 2,
+      "sha256": "aeb19f53c852e3dde2ec8f5ca1127c6f7bee50e105a63c5e796a973e523c3883",
+      "passAll": true
+    },
+    "browser": {
+      "checks": 2,
+      "sha256": "50b0a89e542e6e163856dc69543bf687087600c617bdba844d1911d51d102f22",
+      "passAll": true
+    },
+    "candidate-lab": {
+      "checks": 6,
+      "sha256": "44747892ed703a8fb674c8c3ea76f7379e52c4d56f937bff0f99d14f49882a14",
+      "passAll": true
+    },
+    "regions-browser": {
+      "checks": 3,
+      "sha256": "3216e7a084396bb909c4667619d32468876f42201b4082279f7982ab89a95993",
+      "passAll": true
+    }
+  },
+  "archiveWorkingAndStagedHashesVerified": 372,
+  "summarySha256": "3ba6c0b9b4ec4760c858e8b704adbda7020c1cf07d447879f20478fc522728a4",
+  "htmlPages": [
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/atlas/index.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/atlas/final-outline-sheet.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/atlas/scrap-7.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/atlas/owner-triage.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/atlas/candidates.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tracks/lab/index.html",
+    "file:///C:/Users/kazda/kiro/firetv-deathride/deathride/regions/index.html"
+  ],
+  "spend": 0,
+  "stickAccess": false,
+  "pushed": false
+}

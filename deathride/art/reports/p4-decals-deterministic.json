@@ -1,0 +1,432 @@
+[
+  {
+    "id": "p4-decals-skid-v1",
+    "class": "skid",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-decals-skid-v1\\attempt-02\\1.jpg",
+    "source_sha256": "8801331db959b0ca45d8bc7ed2795457f1f7a669ab5f97fc6bf0d0676f352122",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-decals-skid-v1",
+      "class": "skid",
+      "prompt_action": "Two short parallel charcoal tyre skid streaks with uneven broken ends and sparse rubber flecks. Flat overhead ground decal only. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-decals",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1640481948852539,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        280,
+        157,
+        760,
+        878
+      ],
+      "margin_fraction": 0.142578125,
+      "aspect": 0.665742024965326,
+      "estimated_key_rgb": [
+        243.0,
+        60.0,
+        154.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 3,
+      "palette_mean_delta_e": 5.213816406023337,
+      "palette_p90_delta_e": 6.667733919618095
+    },
+    "placement": {
+      "source_bounds_px": [
+        280,
+        157,
+        760,
+        878
+      ],
+      "source_pivot_px": [
+        520.0,
+        517.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        80,
+        120
+      ],
+      "scale": 0.1664355062413315,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-decals\\p4-decals-skid-v1.png",
+    "sha256": "4d58410477c199c9911459307a3170007985cdecfb7fd9078136345e3b4e35be"
+  },
+  {
+    "id": "p4-decals-oil-v1",
+    "class": "oil",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-decals-oil-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b4a1edbcc27d8a308959cbf39f87ceba4befd5fa9c421afa7e7ffe17afd4c73c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-decals-oil-v1",
+      "class": "oil",
+      "prompt_action": "One irregular charcoal oil puddle with sparse muted blue-grey sheen, a flat asymmetrical filled shape with several tiny detached droplets. No outlined container. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-decals",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23198509216308594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        147,
+        154,
+        878,
+        870
+      ],
+      "margin_fraction": 0.142578125,
+      "aspect": 1.020949720670391,
+      "estimated_key_rgb": [
+        241.0,
+        241.0,
+        241.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 12,
+      "palette_mean_delta_e": 5.28849300317631,
+      "palette_p90_delta_e": 6.505197528306135
+    },
+    "placement": {
+      "source_bounds_px": [
+        147,
+        154,
+        878,
+        870
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.16415868673050615,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-decals\\p4-decals-oil-v1.png",
+    "sha256": "dfb104d09103cbb9aa59d448d3f2a519b06bce6ed17ca2f06abf654d3865dae2"
+  },
+  {
+    "id": "p4-decals-scorch-v1",
+    "class": "scorch",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-decals-scorch-v1\\attempt-01\\1.jpg",
+    "source_sha256": "43737c9c0e55c905ab10be0c303f0dd8e4b8049866c7acf762a1bcce8797bffb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-decals-scorch-v1",
+      "class": "scorch",
+      "prompt_action": "One irregular radial charcoal burn mark, dark centre fading through uneven sparse flecks. Flat overhead ground decal only, no flames. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-decals",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4590291976928711,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        107,
+        114,
+        918,
+        911
+      ],
+      "margin_fraction": 0.103515625,
+      "aspect": 1.0175658720200753,
+      "estimated_key_rgb": [
+        246.0,
+        71.0,
+        145.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 2,
+      "palette_mean_delta_e": 5.012391647666274,
+      "palette_p90_delta_e": 6.828641921416342
+    },
+    "placement": {
+      "source_bounds_px": [
+        107,
+        114,
+        918,
+        911
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.14796547472256474,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-decals\\p4-decals-scorch-v1.png",
+    "sha256": "8576695172faf0eda9ac80086ca81669871aebf42ffb575e5a249ede41c339c2"
+  },
+  {
+    "id": "p4-decals-cracks-v2",
+    "class": "cracks",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-decals-cracks-v2\\attempt-01\\1.jpg",
+    "source_sha256": "f07a32d00cbe6f39908e1ddfdfcc43721c00b9f0cc7c8bc8ff2fa4aaf7802834",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-decals-cracks-v2",
+      "class": "cracks",
+      "prompt_action": "One isolated flat decal consisting ONLY of five thin near-black branching cracks and a few tiny cool-grey chips. All empty spaces BETWEEN the thin crack lines are pure magenta, exactly matching the surrounding background. The cracks are bare disconnected ink strokes with no floor, no asphalt slab, no square patch, no filled polygon, no rectangular backing, no scene. A small asymmetrical fracture cluster centred with generous clear magenta margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-decals",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.023309707641601562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        130,
+        133,
+        919,
+        902
+      ],
+      "margin_fraction": 0.1025390625,
+      "aspect": 1.0260078023407022,
+      "estimated_key_rgb": [
+        229.0,
+        41.0,
+        145.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.860503089288537,
+      "palette_p90_delta_e": 11.322181655896369
+    },
+    "placement": {
+      "source_bounds_px": [
+        130,
+        133,
+        919,
+        902
+      ],
+      "source_pivot_px": [
+        524.5,
+        517.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        117
+      ],
+      "scale": 0.1520912547528517,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-decals\\p4-decals-cracks-v2.png",
+    "sha256": "6adda5c8db235474d59f99e38289c77c7c8501b62d00170d6630119c192a86c6"
+  },
+  {
+    "id": "p4-decals-impact-v1",
+    "class": "impact",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-decals-impact-v1\\attempt-02\\1.jpg",
+    "source_sha256": "72809b72b0e4c427a2dd3a26431f39303d7857251f812d3c9319547aea2a5ac4",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-decals-impact-v1",
+      "class": "impact",
+      "prompt_action": "One blood-free metal impact mark: a small dark centre with five short grey radial scrapes and tiny ivory chips, flat overhead decal, no body or gore. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-decals",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.155303955078125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        184,
+        199,
+        848,
+        817
+      ],
+      "margin_fraction": 0.171875,
+      "aspect": 1.0744336569579287,
+      "estimated_key_rgb": [
+        214.0,
+        91.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 11,
+      "palette_mean_delta_e": 4.265012511950408,
+      "palette_p90_delta_e": 5.586749343835913
+    },
+    "placement": {
+      "source_bounds_px": [
+        184,
+        199,
+        848,
+        817
+      ],
+      "source_pivot_px": [
+        516.0,
+        508.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        112
+      ],
+      "scale": 0.18072289156626506,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-decals\\p4-decals-impact-v1.png",
+    "sha256": "107e6d8012404a62a329b2fb4fc4bd90878faaa78bf8faa3030613b247c3c9ed"
+  }
+]

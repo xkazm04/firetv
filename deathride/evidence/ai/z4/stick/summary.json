@@ -1,0 +1,76 @@
+{
+  "applicationId": "dev.deathride.ai",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "apkSha256": "2e9c9c1ca60c615b9ebff84aa299e27272eb16c9a57bbc743166c17ea59cdc63",
+  "functionalPass": true,
+  "cleanupPass": true,
+  "protectedPackagesUnchanged": true,
+  "aiStopped": true,
+  "scope": "Fresh named profile; ordinary paired controller input from a telemetry pilot. No supplied funds or save fixture. Not human driving.",
+  "rawFile": "campaign-resumed/result.json.gz",
+  "rawSha256": "0f136b260447798cc482cc246b5500fe496df90e4bbb63e1cdf33eff5dce88be",
+  "raceSeconds": 168.96666666669327,
+  "observationWallSeconds": 168.24720430000002,
+  "observationStartRaceSeconds": 0.9500000000000013,
+  "laps": 6,
+  "playerPosition": 6,
+  "playerHp": 88.16318885020584,
+  "telemetryWindows": 163,
+  "windowsWithHunt": 75,
+  "sampledHuntDecisions": 81,
+  "firstObservedHunt": {
+    "raceSeconds": 33.81666666666603,
+    "hunterId": 1,
+    "targetId": 3,
+    "targetRank": 1,
+    "targetHuman": false,
+    "visibleMask": 40,
+    "reason": "COMMITTED"
+  },
+  "leaderChanges": 3,
+  "maxAttackers": 2,
+  "leaderDamage": 16.070400000000006,
+  "hunterDamage": 1.3823999999999999,
+  "huntIntentDamage": 1.3823999999999999,
+  "frameTimeMs": {
+    "lifetimeBinMs": 0.1,
+    "lifetimeCapMs": 5000,
+    "last10s": {
+      "p50": 16.682307,
+      "p95": 18.481385,
+      "max": 92.28538499999999,
+      "count": 595
+    },
+    "sinceStart": {
+      "p50": 16.6,
+      "p95": 18.400000000000002,
+      "max": 243.73700000000002,
+      "count": 11541
+    }
+  },
+  "simStepMs": {
+    "lifetimeBinMs": 0.001,
+    "lifetimeCapMs": 50,
+    "last10s": {
+      "p50": 1.737153,
+      "p95": 2.549769,
+      "max": 4.671231,
+      "count": 590
+    },
+    "sinceStart": {
+      "p50": 1.836,
+      "p95": 2.946,
+      "max": 26.786923,
+      "count": 11142
+    }
+  },
+  "rollingRaceP95RangeMs": [
+    18.240615000000002,
+    18.557308000000003
+  ],
+  "discardedSimulationMsDuringObservedRace": 0,
+  "timingScope": "End snapshot last10s is exact and includes the result transition. SinceStart is a process-lifetime histogram, including loading/lobby/captures; not race-only. Rolling windows overlap and are not pooled into a race percentile.",
+  "previousAttempt": "campaign-pro: 154 retained windows; hunt observed; interrupted/timeout after machine pause, no duration or functional pass.",
+  "reviewHtml": "<p class=\"callout\"><strong>PASS \u2014 isolated app dev.deathride.ai.</strong> Fire TV Stick AFTKM at 10.0.0.139:5555, discovered by a fresh /24 port-5555 scan. The installed APK hash was verified; protected TV and tracks package identities are unchanged. The AI app was stopped after returning to the lobby.</p>\n<p>A fresh named campaign profile drove stock Line in \u201cAsh on the key\u201d, six laps on Foundry, with Pro opposition. A browser telemetry pilot supplied ordinary controller inputs; no save fixture, supplied funds or human driver. It finished sixth, alive at 88.16 HP, in <strong>168.97 simulation seconds</strong> (2:49), inside 120\u2013180 s. The observed wall interval was 168.25 s and began at race time 0.95 s, so those clocks have different origins.</p>\n<p>There are 163 retained telemetry windows, 75 with a sampled hunt target. First sampled hunt: 33.82 s, AI 1 targeting visible AI 3 at rank 1. Final cumulative leader-rank changes: 3; maximum intentional claims: 2. Impact-time leader damage: 16.07 HP, of which 1.38 HP came from hunters and 1.38 HP from live hunt intent. The image shows ordinary racing with no hunt cue; the debug telemetry establishes the hunt.</p>\n<div class=\"table-wrap\" tabindex=\"0\" role=\"region\" aria-label=\"Measured Stick timing\"><table id=\"device-timing-table\"><caption>Direct measured timing, milliseconds; no FPS-derived percentiles</caption><thead><tr><th scope=\"col\">Metric / scope</th><th scope=\"col\">p50</th><th scope=\"col\">p95</th><th scope=\"col\">Maximum</th><th scope=\"col\">Samples</th></tr></thead><tbody>\n<tr><td>Frame interval, final exact 10 s (includes result transition)</td><td>16.68</td><td>18.48</td><td>92.29</td><td>595</td></tr>\n<tr><td>Frame interval, process lifetime; 0.1 ms histogram bins</td><td>16.60</td><td>18.40</td><td>243.74</td><td>11541</td></tr>\n<tr><td>Simulation step, final exact 10 s</td><td>1.74</td><td>2.55</td><td>4.67</td><td>590</td></tr>\n<tr><td>Simulation step, process lifetime; 0.001 ms histogram bins</td><td>1.84</td><td>2.95</td><td>26.79</td><td>11142</td></tr>\n</tbody></table></div>\n<p>After the first 10 race seconds, sampled rolling-10-s frame p95 ranges from 18.24 to 18.56 ms. These overlapping windows are not a whole-race percentile. Lifetime statistics include startup, lobby and screenshot captures. Lifetime histogram caps are 5,000 ms for frames and 50 ms for simulation; maxima are exact. Discarded simulation time increased by 0 ms during the observed race (380 ms already present at its first snapshot). This is one scripted run, not an optical-latency or human-feel measurement. Optimisation remains deferred under N3.</p>\n<div class=\"device-images\"><figure><a href=\"../../evidence/ai/z4/stick/campaign-resumed/hunt-observed.png\"><img src=\"../../evidence/ai/z4/stick/campaign-resumed/hunt-observed.png\" alt=\"Stick race capture at an observed hunter decision\" loading=\"lazy\"></a><figcaption>Race capture paired with hunt telemetry; no visible hunt marker.</figcaption></figure><figure><a href=\"../../evidence/ai/z4/stick/campaign-resumed/result.png\"><img src=\"../../evidence/ai/z4/stick/campaign-resumed/result.png\" alt=\"Stick race result after six laps\" loading=\"lazy\"></a><figcaption>Sixth-place finish from ordinary scripted driving.</figcaption></figure></div>\n<p class=\"small\"><a href=\"../../evidence/ai/z4/stick/summary.json\">Summary and timing definitions</a> \u00b7 <a href=\"../../evidence/ai/z4/stick/campaign-resumed/result.json.gz\">Complete successful telemetry</a> \u00b7 <a href=\"../../evidence/ai/z4/stick/scan-resumed.json\">Fresh scan</a> \u00b7 <a href=\"../../evidence/ai/z4/stick/resumed-preflight.json\">Preflight</a> \u00b7 <a href=\"../../evidence/ai/z4/stick/resumed-postflight.json\">Postflight package checks</a></p>\n<p>The earlier campaign-pro attempt retains 154 windows and an observed hunt, but ended with a fetch timeout across the machine pause. It is explicitly interrupted, not a completed race or acceptance pass. The initial pairing-log failure is also retained. <a href=\"../../evidence/ai/z4/stick/README.md\">Device evidence inventory</a>.</p>"
+}

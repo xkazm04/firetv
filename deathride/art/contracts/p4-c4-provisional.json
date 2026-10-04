@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-01T10:13:46.349865+00:00",
+  "status": "read-only uncommitted C4 preview, not claimed as committed authority",
+  "rivals_sha256": "805821d03aa92bac0160f005fc0456beabc5eeee0210f1e8be19959752e40678",
+  "stories_sha256": "6e85b6a7cc5ab9d7cc3122c84e2c0fda9bc786a91e2863536d6e6c209519cf0b",
+  "rival": {
+    "id": "marrow",
+    "name": "Marrow",
+    "car": "Bulwark",
+    "style": "Calculated close-range enforcer",
+    "laneBiasM": "0.4",
+    "passDistanceScale": "0.95",
+    "fireRangeScale": "0.95",
+    "heavyRangeScale": "0.9",
+    "mines": "1"
+  },
+  "story": {
+    "id": "marrow",
+    "portraitKey": "rival-marrow",
+    "biography": "The circuit owner who turned racing debts into a private fleet",
+    "taunt": "Every road here is in my books",
+    "grudgeTaunt": "You have damaged league property"
+  }
+}

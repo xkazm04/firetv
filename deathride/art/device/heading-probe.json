@@ -1,0 +1,45 @@
+{
+  "started_at": "2026-10-01T08:58:31.692064+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "apk_sha256": "cd4ee9e014c8bc83600eb3298e547b1e8bd31b591fc8aabd3f226c818dddfc25",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "scope": "six sprites in isolated GLES2 renderer; no gameplay, no soak, no owner taste",
+  "runs": [
+    {
+      "headings": 1,
+      "samples": 1800,
+      "p50_ms": 16.753385,
+      "p95_ms": 19.534385,
+      "max_ms": 24.411616,
+      "rgba_bytes": 262144,
+      "elapsed_s": 35.006166464,
+      "pss_kib": 36914,
+      "screenshot": "headings-1.png"
+    },
+    {
+      "headings": 16,
+      "samples": 1800,
+      "p50_ms": 16.776154,
+      "p95_ms": 19.418153,
+      "max_ms": 22.566461,
+      "rgba_bytes": 4194304,
+      "elapsed_s": 35.015614771,
+      "pss_kib": 38212,
+      "screenshot": "headings-16.png"
+    },
+    {
+      "headings": 32,
+      "samples": 1800,
+      "p50_ms": 16.758307,
+      "p95_ms": 19.469385,
+      "max_ms": 23.245692,
+      "rgba_bytes": 8388608,
+      "elapsed_s": 35.027466156,
+      "pss_kib": 41776,
+      "screenshot": "headings-32.png"
+    }
+  ],
+  "finished_at": "2026-10-01T09:00:22.125095+00:00",
+  "restored_prior_activity": true
+}

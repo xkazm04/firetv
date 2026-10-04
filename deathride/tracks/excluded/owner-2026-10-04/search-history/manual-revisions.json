@@ -1,0 +1,81 @@
+{
+  "pacing": [
+    {
+      "id": "scrap-7-a",
+      "axis": "y",
+      "scale": 1.35,
+      "reason": "Combat lap winner was below the final target"
+    },
+    {
+      "id": "foundry-5-c",
+      "axis": "y",
+      "scale": 1.3,
+      "reason": "Combat lap winner was below the mid target"
+    },
+    {
+      "id": "scrap-6-c",
+      "axis": "y",
+      "scale": 0.94,
+      "reason": "Clean six-car median exceeded six minutes",
+      "filletCorrection": "Anchor 13 radius 3.8 L retains >=0.3 L tangent gap after shorter vertical straights"
+    },
+    {
+      "id": "foundry-3-a",
+      "axis": "y",
+      "scale": 1.65,
+      "reason": "Measured six-car combat winner below the mid-race band; lengthen road instead of adding laps"
+    },
+    {
+      "id": "foundry-3-b",
+      "operation": "translate anchors right of x=15 L by +15 L",
+      "reason": "Lengthen three main straights while preserving the left chicane fillet angles; affine attempt was rejected by the compiler"
+    }
+  ],
+  "width": [
+    {
+      "id": "scrap-3-a",
+      "minWidthW": 4.15,
+      "reason": "Early lead-slot wreck rate exceeded 0.20; widen technical release and keep passing width 5.15 W"
+    },
+    {
+      "id": "salt-1-b",
+      "minWidthW": 4.15,
+      "reason": "Early lead-slot wreck rate exceeded 0.20; widen technical release and keep passing width 5.15 W"
+    },
+    {
+      "id": "salt-3-a",
+      "minWidthW": 4.15,
+      "reason": "Early lead-slot wreck rate exceeded 0.20; widen technical release and keep passing width 5.15 W"
+    },
+    {
+      "id": "salt-5-a",
+      "minWidthW": 4.15,
+      "reason": "Early lead-slot wreck rate exceeded 0.20; widen technical release and keep passing width 5.15 W"
+    },
+    {
+      "id": "salt-5-b",
+      "minWidthW": 4.15,
+      "reason": "Early lead-slot wreck rate exceeded 0.20; widen technical release and keep passing width 5.15 W"
+    },
+    {
+      "id": "scrap-6-c",
+      "minWidthW": 4.15,
+      "reason": "Release the narrow corners; early lead-slot wreck rate exceeded 0.20"
+    },
+    {
+      "id": "scrap-3-c",
+      "minWidthW": 4.15,
+      "reason": "Reduce measured compression and early lead-slot wrecks without changing combat balance"
+    },
+    {
+      "id": "switchback-5-b",
+      "minWidthW": 4.15,
+      "reason": "Reduce measured compression and early lead-slot wrecks without changing combat balance"
+    },
+    {
+      "id": "salt-2-a",
+      "minWidthW": 4.15,
+      "reason": "Release width and two recovery lanes address measured first-lap compression"
+    }
+  ]
+}

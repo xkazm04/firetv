@@ -1,0 +1,37 @@
+{
+  "result": "pass",
+  "comparedTo": "207bae5",
+  "reports": [
+    {
+      "report": "audition",
+      "sameAudioSources": 0,
+      "sameEmbeddedEvidenceBlocks": 1,
+      "sameProvenanceBlocks": 0
+    },
+    {
+      "report": "x3/effects",
+      "sameAudioSources": 124,
+      "sameEmbeddedEvidenceBlocks": 0,
+      "sameProvenanceBlocks": 40
+    },
+    {
+      "report": "x3/engines",
+      "sameAudioSources": 60,
+      "sameEmbeddedEvidenceBlocks": 0,
+      "sameProvenanceBlocks": 20
+    },
+    {
+      "report": "x3/voices",
+      "sameAudioSources": 28,
+      "sameEmbeddedEvidenceBlocks": 0,
+      "sameProvenanceBlocks": 14
+    },
+    {
+      "report": "x3/music",
+      "sameAudioSources": 3,
+      "sameEmbeddedEvidenceBlocks": 1,
+      "sameProvenanceBlocks": 0
+    }
+  ],
+  "existingAudioAndJsonEvidenceUnchanged": true
+}

@@ -1,0 +1,10 @@
+file:///C:/Users/kazda/kiro/firetv-deathride-hud/deathride/tools/hud-header-check.mjs:15
+ await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('pair timeout')),8000);ws.on('open',()=>ws.send(JSON.stringify({t:'hello',pin,profile:'hud-header-'+randomUUID()})));ws.on('message',data=>{const m=JSON.parse(data);if(m.t==='welcome'){assert.equal(m.slot,0);clearTimeout(timer);resolve()}if(m.t==='error')reject(Error(m.message))})});
+                                                                        ^
+
+Error: pair timeout
+    at Timeout._onTimeout (file:///C:/Users/kazda/kiro/firetv-deathride-hud/deathride/tools/hud-header-check.mjs:15:73)
+    at listOnTimeout (node:internal/timers:605:17)
+    at process.processTimers (node:internal/timers:541:7)
+
+Node.js v24.14.0

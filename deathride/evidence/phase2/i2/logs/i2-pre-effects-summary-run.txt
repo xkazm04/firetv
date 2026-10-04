@@ -1,0 +1,97 @@
+{
+  "completed": false,
+  "checksPassed": false,
+  "memoryBudget": {
+    "method": "dumpsys meminfo --local dev.deathride.tv",
+    "limitMiB": 192,
+    "growthLimitMiB": 8,
+    "minimumMiB": 104.44140625,
+    "maximumMiB": 113.75,
+    "firstThreeWarmMedianMiB": 111.0048828125,
+    "lastThreeWarmMedianMiB": 111.1025390625,
+    "medianGrowthMiB": 0.09765625,
+    "warmLinearTrendMiBPerMinute": -0.08242536841717207,
+    "withinLimit": true,
+    "growthWithinLimit": true
+  },
+  "textures": {
+    "artLimitMiB": 32,
+    "ownedLimitMiB": 52,
+    "allWithinLimit": true,
+    "maximumArtMiB": 10.75,
+    "maximumOwnedMiB": 37.9697265625,
+    "final": {
+      "regions": 78,
+      "textureBytes": 11272192,
+      "sceneryBytes": 16777216,
+      "fontBytes": 11534336,
+      "qrBytes": 230400,
+      "ownedTextureBytes": 39814144,
+      "artBudgetBytes": 33554432,
+      "ownedBudgetBytes": 54525952,
+      "budgetOk": true,
+      "failures": 0,
+      "draws": 1140168,
+      "carStrategy": "runtime rotation; procedural for unapproved/missing states"
+    },
+    "drawsDuringLoad": 1139692
+  },
+  "frameTargets": {
+    "activeP50RangeMs": [
+      16.591307999999998,
+      16.854154
+    ],
+    "activeMediansNear16_7": true,
+    "activeMaxWithin33": false,
+    "activeP95WithinOriginal16_7": false,
+    "activeP95WithinG1_21_60": true
+  },
+  "allWindows": {
+    "windows": 90,
+    "frameSamples": 53761,
+    "worstP95": {
+      "second": 150.1064377,
+      "phase": "race",
+      "track": "saltline",
+      "fullRace": false,
+      "p50": 16.673923,
+      "p95": 21.538,
+      "max": 143.000693,
+      "count": 590
+    },
+    "worstMax": {
+      "second": 10.047642,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": false,
+      "p50": 16.706308,
+      "p95": 21.214,
+      "max": 242.639923,
+      "count": 586
+    }
+  },
+  "activeWindows": {
+    "windows": 73,
+    "frameSamples": 43739,
+    "worstP95": {
+      "second": 440.0195373,
+      "phase": "race",
+      "track": "ridge",
+      "fullRace": true,
+      "p50": 16.663384999999998,
+      "p95": 20.980462,
+      "max": 33.099384,
+      "count": 598
+    },
+    "worstMax": {
+      "second": 80.08060680000001,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": true,
+      "p50": 16.825847000000003,
+      "p95": 20.878769,
+      "max": 35.641539,
+      "count": 599
+    }
+  }
+}

@@ -1,0 +1,1574 @@
+{
+  "device": "AFTKM Fire OS 8 ARMv7 1080p 2442MHz Wi-Fi",
+  "durationSeconds": 60,
+  "actualHz": 30.012753699635258,
+  "loadSent": 1814,
+  "idleRttMs": {
+    "n": 25,
+    "p50": 21.623799999999846,
+    "p95": 79.38410000000022,
+    "max": 83.01999999999998
+  },
+  "loadRttMsSlot0": {
+    "n": 1813,
+    "p50": 11.912700000000768,
+    "p95": 63.37710000000516,
+    "max": 96.67579999999725
+  },
+  "loadRttMsSlot1": {
+    "n": 1813,
+    "p50": 12.528999999998632,
+    "p95": 64.1839,
+    "max": 102.54260000000068
+  },
+  "checks": "two slots; HTTP assets; corrected clock; silence hold/drop; stale rejection; order rejection; one flash; reconnect identity and control",
+  "pendingAtEnd": [
+    0,
+    0
+  ],
+  "intentionalRejected": 2,
+  "initial": {
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 23839.18877,
+    "phase": "race",
+    "raceSeconds": 0.3333333333333333,
+    "paused": false,
+    "frameNumber": 1374,
+    "flashFrames": 0,
+    "heapUsedMB": 13.578498840332031,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.693614999999998,
+        "p95": 20.719462,
+        "max": 23.579231,
+        "count": 599
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 20.3,
+        "max": 112.313692,
+        "count": 1374
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.544385,
+        "p95": 2.164846,
+        "max": 4.972384,
+        "count": 420
+      },
+      "sinceStart": {
+        "p50": 0.968,
+        "p95": 2.217,
+        "max": 12.363154,
+        "count": 1206
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 12
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 146.23731100000077,
+            "p95": 3295.9927730000018,
+            "max": 3579.9995430000017,
+            "count": 328
+          },
+          "sinceStart": {
+            "p50": 146.20000000000002,
+            "p95": 3295.9,
+            "max": 3579.9995430000017,
+            "count": 328
+          }
+        },
+        "stale": {
+          "last10s": 52,
+          "sinceStart": 52
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Needle",
+          "role": "Light and agile",
+          "stats": {
+            "speed": 5,
+            "acceleration": 9,
+            "grip": 7,
+            "armor": 2,
+            "mass": 2,
+            "handling": 9,
+            "slots": 1
+          }
+        },
+        "speedMps": 0,
+        "xM": -51.43526156115874,
+        "yM": 45.42258140363993
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 350,
+          "sinceStart": 350
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2
+          }
+        },
+        "speedMps": 0,
+        "xM": -51.42875291512935,
+        "yM": 52.02257819436088
+      }
+    ]
+  },
+  "windows": [
+    {
+      "second": 10,
+      "rtt": {
+        "n": 300,
+        "p50": 15.962500000001455,
+        "p95": 68.40680000000066,
+        "max": 76.60850000000028
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 33935.621925,
+        "phase": "race",
+        "raceSeconds": 10.450000000000099,
+        "paused": false,
+        "frameNumber": 1980,
+        "flashFrames": 0,
+        "heapUsedMB": 7.4342193603515625,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.625693000000002,
+            "p95": 21.279769,
+            "max": 26.487385,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.5,
+            "max": 112.313692,
+            "count": 1980
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.091,
+            "p95": 1.869,
+            "max": 7.543077,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 0.993,
+            "p95": 2.164,
+            "max": 12.363154,
+            "count": 1813
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 49.628497000001516,
+                "p95": 70.94641200000115,
+                "max": 86.6734269999979,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 56.900000000000006,
+                "p95": 226.3,
+                "max": 3646.5092350000014,
+                "count": 934
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.35407854403733807,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 7.534968074632943,
+            "xM": 30.81516984938502,
+            "yM": 33.92407999522827
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 23.291626999998698,
+                "p95": 43.88945900000181,
+                "max": 62.88437400000112,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 23.200000000000003,
+                "p95": 43.800000000000004,
+                "max": 62.88437400000112,
+                "count": 601
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": 0.4897815411953849,
+            "drifting": false,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 6.74487960827661,
+            "xM": 4.460934373900453,
+            "yM": 55.6325735275672
+          }
+        ]
+      }
+    },
+    {
+      "second": 20,
+      "rtt": {
+        "n": 300,
+        "p50": 11.12960000000021,
+        "p95": 62.556399999997666,
+        "max": 84.48670000000129
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 44028.176387,
+        "phase": "race",
+        "raceSeconds": 20.550000000000114,
+        "paused": false,
+        "frameNumber": 2585,
+        "flashFrames": 0,
+        "heapUsedMB": 13.924430847167969,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.728769,
+            "p95": 21.113924,
+            "max": 27.008999999999997,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.6,
+            "max": 112.313692,
+            "count": 2585
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.382846,
+            "p95": 2.369,
+            "max": 6.171308,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 1.1,
+            "p95": 2.192,
+            "max": 12.363154,
+            "count": 2419
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 47.50955900000554,
+                "p95": 68.88579000000027,
+                "max": 84.71418899999844,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 52.7,
+                "p95": 209.70000000000002,
+                "max": 3646.5092350000014,
+                "count": 1540
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.617595583752065,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 9.38501436596743,
+            "xM": 119.81179569138273,
+            "yM": 12.793441198177499
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.463682000001427,
+                "p95": 41.585336000003736,
+                "max": 57.85306699999637,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 21.8,
+                "p95": 42.800000000000004,
+                "max": 62.88437400000112,
+                "count": 1207
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": 0.042144217116014765,
+            "drifting": false,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Asphalt",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 2.426046642404989,
+            "xM": 80.6822952946715,
+            "yM": 27.260942594692196
+          }
+        ]
+      }
+    },
+    {
+      "second": 30,
+      "rtt": {
+        "n": 300,
+        "p50": 11.036500000001979,
+        "p95": 63.79950000000099,
+        "max": 96.67579999999725
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 54138.368003,
+        "phase": "race",
+        "raceSeconds": 30.64999999999954,
+        "paused": false,
+        "frameNumber": 3191,
+        "flashFrames": 0,
+        "heapUsedMB": 13.746559143066406,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.873615,
+            "p95": 21.155616,
+            "max": 25.050614999999997,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.700000000000003,
+            "max": 112.313692,
+            "count": 3191
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.313,
+            "p95": 2.234846,
+            "max": 5.573385,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 1.129,
+            "p95": 2.196,
+            "max": 12.363154,
+            "count": 3025
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 46.66802900000039,
+                "p95": 65.31318299999839,
+                "max": 80.41991300000518,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 50.7,
+                "p95": 189.4,
+                "max": 3646.5092350000014,
+                "count": 2146
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.609358059069541,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Asphalt",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 0.1695230660337994,
+            "xM": 90.5029352366613,
+            "yM": -47.10048170769273
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 19.906420999999682,
+                "p95": 38.679535999996006,
+                "max": 53.13367500000459,
+                "count": 600
+              },
+              "sinceStart": {
+                "p50": 21.1,
+                "p95": 42.400000000000006,
+                "max": 62.88437400000112,
+                "count": 1813
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.4286421401328286,
+            "drifting": false,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 9.178434348911933,
+            "xM": 88.50764136064184,
+            "yM": 44.291385397693084
+          }
+        ]
+      }
+    },
+    {
+      "second": 40,
+      "rtt": {
+        "n": 300,
+        "p50": 10.742900000004738,
+        "p95": 65.02919999999722,
+        "max": 79.8489999999947
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 64200.065926,
+        "phase": "race",
+        "raceSeconds": 40.71666666666564,
+        "paused": false,
+        "frameNumber": 3794,
+        "flashFrames": 0,
+        "heapUsedMB": 13.49432373046875,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.72423,
+            "p95": 21.299538,
+            "max": 26.552923,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.900000000000002,
+            "max": 112.313692,
+            "count": 3794
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.492231,
+            "p95": 2.266308,
+            "max": 5.692385,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 1.172,
+            "p95": 2.211,
+            "max": 12.363154,
+            "count": 3629
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 47.33117499999935,
+                "p95": 69.27705199999764,
+                "max": 82.26194399999804,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 49.800000000000004,
+                "p95": 167.3,
+                "max": 3646.5092350000014,
+                "count": 2750
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.36231626540261597,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 7.207401048443366,
+            "xM": 87.65842576367737,
+            "yM": -49.87147981904283
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.56540700000187,
+                "p95": 42.02597599999717,
+                "max": 54.96040599999833,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 21,
+                "p95": 42.400000000000006,
+                "max": 62.88437400000112,
+                "count": 2417
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.6467705617001331,
+            "drifting": true,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Asphalt",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 10.012463719852287,
+            "xM": 74.11330804180866,
+            "yM": -51.50124581876185
+          }
+        ]
+      }
+    },
+    {
+      "second": 50,
+      "rtt": {
+        "n": 300,
+        "p50": 10.687700000002224,
+        "p95": 59.25310000000172,
+        "max": 87.08740000000398
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 74269.983158,
+        "phase": "race",
+        "raceSeconds": 50.78333333333173,
+        "paused": false,
+        "frameNumber": 4397,
+        "flashFrames": 0,
+        "heapUsedMB": 13.019149780273438,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.924538,
+            "p95": 21.423769,
+            "max": 23.897154,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 16.6,
+            "p95": 20.900000000000002,
+            "max": 112.313692,
+            "count": 4397
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.568846,
+            "p95": 2.3,
+            "max": 5.480308,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 1.223,
+            "p95": 2.233,
+            "max": 12.363154,
+            "count": 4233
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 47.25331400000141,
+                "p95": 66.30866100001731,
+                "max": 78.90721499999927,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 49.2,
+                "p95": 147.8,
+                "max": 3646.5092350000014,
+                "count": 3355
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": 0.04579446833538512,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 8.024195347877479,
+            "xM": 36.03158097108709,
+            "yM": -35.00974073075755
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 19.933399999994435,
+                "p95": 38.957792000001064,
+                "max": 51.58957599999849,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 20.8,
+                "p95": 41.7,
+                "max": 62.88437400000112,
+                "count": 3022
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.5063705359086939,
+            "drifting": false,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Kerb",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 8.348854459936948,
+            "xM": 28.79417805072606,
+            "yM": -35.725448237154595
+          }
+        ]
+      }
+    },
+    {
+      "second": 60,
+      "rtt": {
+        "n": 300,
+        "p50": 10.3978000000061,
+        "p95": 59.3833999999988,
+        "max": 76.82220000000234
+      },
+      "stats": {
+        "track": {
+          "id": "foundry",
+          "name": "Foundry Ring",
+          "lesson": "Carry speed through the broad bends"
+        },
+        "surface": "Asphalt",
+        "feel": {
+          "id": "Balanced",
+          "deadZone": 0.03,
+          "exponent": 1,
+          "touchTravelPx": 115,
+          "touchTravelFraction": 0.28,
+          "steerRisePerSecond": 6,
+          "steerReturnPerSecond": 10,
+          "lowSpeedAuthority": 1.35,
+          "highSpeedAuthority": 1.05,
+          "speedBlendMps": 30,
+          "yawResponseScale": 0.75,
+          "stabilityScale": 1.1,
+          "throttleRisePerSecond": 3,
+          "throttleExponent": 1.15,
+          "brakeScale": 1,
+          "yawMinRadPerSecond": 0.4,
+          "yawMaxRadPerSecond": 2,
+          "turnInMaxSeconds": 0.8,
+          "recoveryMaxSeconds": 2.5
+        },
+        "units": "ms",
+        "uptimeMs": 84337.066774,
+        "phase": "race",
+        "raceSeconds": 60.84999999999783,
+        "paused": false,
+        "frameNumber": 5001,
+        "flashFrames": 0,
+        "heapUsedMB": 12.854682922363281,
+        "frameTimeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 16.764692,
+            "p95": 21.247539,
+            "max": 26.56077,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 16.7,
+            "p95": 21,
+            "max": 112.313692,
+            "count": 5001
+          }
+        },
+        "simStepMs": {
+          "lifetimeBinMs": 0.001,
+          "lifetimeCapMs": 50,
+          "last10s": {
+            "p50": 1.366153,
+            "p95": 2.264154,
+            "max": 5.529693,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 1.235,
+            "p95": 2.238,
+            "max": 12.363154,
+            "count": 4837
+          }
+        },
+        "discardedSimulationMs": {
+          "last10s": 0,
+          "sinceStart": 12
+        },
+        "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+        "slots": [
+          {
+            "slot": 0,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 47.127046000008704,
+                "p95": 69.17250700001023,
+                "max": 77.30467699999281,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 48.800000000000004,
+                "p95": 127.2,
+                "max": 3646.5092350000014,
+                "count": 3958
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 56
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.7,
+            "effectiveSteer": -0.4260990872558995,
+            "drifting": false,
+            "loadTransfer": -0.07962400018383115,
+            "surfaceId": "Asphalt",
+            "car": {
+              "id": "Needle",
+              "role": "Light and agile",
+              "stats": {
+                "speed": 5,
+                "acceleration": 9,
+                "grip": 7,
+                "armor": 2,
+                "mass": 2,
+                "handling": 9,
+                "slots": 1
+              }
+            },
+            "speedMps": 16.415507643578284,
+            "xM": -21.06932518799214,
+            "yM": -54.54682172650313
+          },
+          {
+            "slot": 1,
+            "connected": true,
+            "reserved": true,
+            "clockSynced": true,
+            "inputAgeMs": {
+              "lifetimeBinMs": 0.1,
+              "lifetimeCapMs": 5000,
+              "last10s": {
+                "p50": 20.284637999997358,
+                "p95": 42.82211500000267,
+                "max": 52.21492299999227,
+                "count": 601
+              },
+              "sinceStart": {
+                "p50": 20.700000000000003,
+                "p95": 41.800000000000004,
+                "max": 62.88437400000112,
+                "count": 3625
+              }
+            },
+            "stale": {
+              "last10s": 0,
+              "sinceStart": 354
+            },
+            "dropped": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "outOfOrder": {
+              "last10s": 0,
+              "sinceStart": 0
+            },
+            "effectiveThrottle": 0.65,
+            "effectiveSteer": -0.08290402820315419,
+            "drifting": false,
+            "loadTransfer": -0.07311922947499289,
+            "surfaceId": "Asphalt",
+            "car": {
+              "id": "Line",
+              "role": "Balanced racer",
+              "stats": {
+                "speed": 6,
+                "acceleration": 6,
+                "grip": 6,
+                "armor": 5,
+                "mass": 5,
+                "handling": 6,
+                "slots": 2
+              }
+            },
+            "speedMps": 2.3642053336241586,
+            "xM": -76.17172519668884,
+            "yM": -51.37121841721627
+          }
+        ]
+      }
+    }
+  ],
+  "final": {
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 85419.590235,
+    "phase": "race",
+    "raceSeconds": 61.91666666666443,
+    "paused": false,
+    "frameNumber": 5066,
+    "flashFrames": 1,
+    "heapUsedMB": 7.638648986816406,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.772308,
+        "p95": 21.163615,
+        "max": 26.56077,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 16.7,
+        "p95": 20.900000000000002,
+        "max": 112.313692,
+        "count": 5066
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.338077,
+        "p95": 2.243923,
+        "max": 5.529693,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 1.235,
+        "p95": 2.238,
+        "max": 12.363154,
+        "count": 4902
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 12
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 48.685384000011254,
+            "p95": 252.51072300001397,
+            "max": 553.5474150000082,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 49.1,
+            "p95": 155.70000000000002,
+            "max": 3646.5092350000014,
+            "count": 4023
+          }
+        },
+        "stale": {
+          "last10s": 31,
+          "sinceStart": 87
+        },
+        "dropped": {
+          "last10s": 1,
+          "sinceStart": 1
+        },
+        "outOfOrder": {
+          "last10s": 1,
+          "sinceStart": 1
+        },
+        "effectiveThrottle": 0.4,
+        "effectiveSteer": -0.2,
+        "drifting": false,
+        "loadTransfer": -0.00301363878854196,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Needle",
+          "role": "Light and agile",
+          "stats": {
+            "speed": 5,
+            "acceleration": 9,
+            "grip": 7,
+            "armor": 2,
+            "mass": 2,
+            "handling": 9,
+            "slots": 1
+          }
+        },
+        "speedMps": 14.650049892489708,
+        "xM": -37.820876891427865,
+        "yM": -53.81930003378792
+      },
+      {
+        "slot": 1,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.082099999985076,
+            "p95": 564.8386389999941,
+            "max": 1067.5437929999898,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 20.900000000000002,
+            "p95": 44,
+            "max": 1067.5437929999898,
+            "count": 3690
+          }
+        },
+        "stale": {
+          "last10s": 50,
+          "sinceStart": 404
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": -0.06807213364930144,
+        "drifting": false,
+        "loadTransfer": -0.0011336298290526554,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2
+          }
+        },
+        "speedMps": 1.2498266429031855,
+        "xM": -77.75092807201912,
+        "yM": -51.60623252806898
+      }
+    ]
+  }
+}

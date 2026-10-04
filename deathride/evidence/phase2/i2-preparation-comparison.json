@@ -1,0 +1,41 @@
+{
+  "method": "Same browser selection-to-two-matching-ready-polls probe; includes network/poll overhead, not isolated GPU timing.",
+  "runs": [
+    {
+      "label": "initial",
+      "courses": 25,
+      "allReady": true,
+      "medianMs": 3188.5963000000047,
+      "minimumMs": 2193.126900000001,
+      "maximumMs": 3375.1414000000004,
+      "source": "i2-baseline/i2-art-courses.json"
+    },
+    {
+      "label": "preparation cut",
+      "courses": 25,
+      "allReady": true,
+      "medianMs": 1022.443299999999,
+      "minimumMs": 296.8749000000007,
+      "maximumMs": 1522.2216999999982,
+      "source": "i2-pre-effects/i2-art-courses.json"
+    },
+    {
+      "label": "effects cut",
+      "courses": 25,
+      "allReady": true,
+      "medianMs": 1012.4115999999958,
+      "minimumMs": 279.3071,
+      "maximumMs": 1518.8819000000003,
+      "source": "i2-full-rate/i2-art-courses.json"
+    },
+    {
+      "label": "guarded final renderer",
+      "courses": 25,
+      "allReady": true,
+      "medianMs": 1180.5471000000034,
+      "minimumMs": 207.69130000000223,
+      "maximumMs": 1642.3977999999988,
+      "source": "i2-art-courses.json"
+    }
+  ]
+}

@@ -1,0 +1,1398 @@
+{
+  "schema": 1,
+  "source_inputs_sha256": "3d57fe26e61702e751dd62a69baec2d151b46e9b6a77ef1a9cff5b93c9ada91b",
+  "apk_sha256": [
+    "2aeceddaee56445f7daa268e3f002c51524f15655108d05f1974701b273b7338",
+    "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+    "db785d5c78570623d16cb7127e7d6de8645c48f0be026392dae706d346499860"
+  ],
+  "primary_apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+  "costs": [
+    {
+      "mode": "baseline",
+      "label": "V1 repeated tile",
+      "control": "baseline",
+      "verdict": "Comparison only",
+      "observation_and_cheaper_swap": "Keep as control; source is the delivered V1 tile.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 14.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.3453417265623473,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-baseline\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-baseline\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.701076999999998,
+      "p50_ms_delta": 0.0,
+      "p50_ms_range": [
+        16.699308,
+        16.702846
+      ],
+      "p95_ms": 17.989154,
+      "p95_ms_delta": 0.0,
+      "p95_ms_range": [
+        17.967923,
+        18.010385
+      ],
+      "max_ms": 23.167308000000002,
+      "max_ms_delta": 0.0,
+      "max_ms_range": [
+        22.427769,
+        23.167308000000002
+      ],
+      "cpu_p50_ms": 2.3927695,
+      "cpu_p50_ms_delta": 0.0,
+      "cpu_p50_ms_range": [
+        2.382616,
+        2.402923
+      ],
+      "completion_p50_ms": 15.699769,
+      "completion_p50_ms_delta": 0.0,
+      "completion_p50_ms_range": [
+        15.694231,
+        15.705307
+      ],
+      "completion_p95_ms": 16.175577,
+      "completion_p95_ms_delta": 0.0,
+      "completion_p95_ms_range": [
+        16.142154,
+        16.209
+      ],
+      "pss_kib": 45734.5,
+      "pss_kib_delta": 0.0,
+      "pss_kib_range": [
+        44906,
+        46563
+      ]
+    },
+    {
+      "mode": "painted",
+      "label": "Painted style proof",
+      "control": "baseline",
+      "verdict": "Source needs revision",
+      "observation_and_cheaper_swap": "Large diagonal crack motifs still repeat. A painted label alone does not remove wallpaper.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 14.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.3453417265623473,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-baseline\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.699692499999998,
+      "p50_ms_delta": -0.0013845000000003438,
+      "p50_ms_range": [
+        16.697153999999998,
+        16.702231
+      ],
+      "p95_ms": 17.966038,
+      "p95_ms_delta": -0.023115999999998138,
+      "p95_ms_range": [
+        17.952307,
+        17.979769
+      ],
+      "max_ms": 22.737769,
+      "max_ms_delta": -0.4295390000000019,
+      "max_ms_range": [
+        21.751922999999998,
+        22.737769
+      ],
+      "cpu_p50_ms": 2.4171155,
+      "cpu_p50_ms_delta": 0.02434599999999998,
+      "cpu_p50_ms_range": [
+        2.395693,
+        2.438538
+      ],
+      "completion_p50_ms": 15.7023845,
+      "completion_p50_ms_delta": 0.002615500000000992,
+      "completion_p50_ms_range": [
+        15.699923,
+        15.704846
+      ],
+      "completion_p95_ms": 16.1414615,
+      "completion_p95_ms_delta": -0.034115500000002186,
+      "completion_p95_ms_range": [
+        16.138154,
+        16.144769
+      ],
+      "pss_kib": 44684.0,
+      "pss_kib_delta": -1050.5,
+      "pss_kib_range": [
+        43846,
+        45522
+      ]
+    },
+    {
+      "mode": "macro",
+      "label": "Low-frequency multiply",
+      "control": "painted",
+      "verdict": "Candidate",
+      "observation_and_cheaper_swap": "Changes broad values with 64 KiB; does not fix seams. Cheaper: vertex tint patches.",
+      "lab_rgba_mib": 1.8125,
+      "texture_delta_mib": 0.0625,
+      "draw_calls": 14.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.3453417265623473,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-macro\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.682077,
+      "p50_ms_delta": -0.017615499999998008,
+      "p50_ms_range": [
+        16.680384999999998,
+        16.683769
+      ],
+      "p95_ms": 17.888115499999998,
+      "p95_ms_delta": -0.07792250000000323,
+      "p95_ms_range": [
+        17.867538,
+        17.908693
+      ],
+      "max_ms": 21.690077,
+      "max_ms_delta": -1.0476920000000014,
+      "max_ms_range": [
+        21.185077,
+        21.690077
+      ],
+      "cpu_p50_ms": 2.3498845,
+      "cpu_p50_ms_delta": -0.06723100000000004,
+      "cpu_p50_ms_range": [
+        2.345846,
+        2.353923
+      ],
+      "completion_p50_ms": 15.662693,
+      "completion_p50_ms_delta": -0.03969149999999999,
+      "completion_p50_ms_range": [
+        15.657693,
+        15.667693
+      ],
+      "completion_p95_ms": 16.0871535,
+      "completion_p95_ms_delta": -0.05430799999999891,
+      "completion_p95_ms_range": [
+        16.060384,
+        16.113923
+      ],
+      "pss_kib": 45210.5,
+      "pss_kib_delta": 526.5,
+      "pss_kib_range": [
+        44723,
+        45698
+      ]
+    },
+    {
+      "mode": "decals",
+      "label": "Seeded decals",
+      "control": "painted",
+      "verdict": "Reduce density",
+      "observation_and_cheaper_swap": "64 marks add clutter. Candidate stack uses 32 smaller, fainter marks. Cheaper: reuse fewer regions.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 15.0,
+      "draw_delta": 1.0,
+      "fill_proxy": 1.4947161617163651,
+      "fill_delta": 0.14937443515401783,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-decals\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.6949995,
+      "p50_ms_delta": -0.004692999999996061,
+      "p50_ms_range": [
+        16.694307,
+        16.695692
+      ],
+      "p95_ms": 17.9548845,
+      "p95_ms_delta": -0.011153500000002481,
+      "p95_ms_range": [
+        17.905692000000002,
+        18.004077
+      ],
+      "max_ms": 23.019461,
+      "max_ms_delta": 0.2816919999999996,
+      "max_ms_range": [
+        21.457308,
+        23.019461
+      ],
+      "cpu_p50_ms": 2.6991535,
+      "cpu_p50_ms_delta": 0.282038,
+      "cpu_p50_ms_range": [
+        2.660692,
+        2.737615
+      ],
+      "completion_p50_ms": 15.6820385,
+      "completion_p50_ms_delta": -0.020345999999999975,
+      "completion_p50_ms_range": [
+        15.681615,
+        15.682462
+      ],
+      "completion_p95_ms": 16.198769499999997,
+      "completion_p95_ms_delta": 0.057307999999999026,
+      "completion_p95_ms_range": [
+        16.180539,
+        16.217
+      ],
+      "pss_kib": 44487.0,
+      "pss_kib_delta": -197.0,
+      "pss_kib_range": [
+        43465,
+        45509
+      ]
+    },
+    {
+      "mode": "ribbon",
+      "label": "Baked course",
+      "control": "ribbon-control",
+      "verdict": "Cut at current budget",
+      "observation_and_cheaper_swap": "4 MiB target exceeds remaining production headroom; 1024 bake softens 1080p edges. Cheaper: live ribbon with shared atlas.",
+      "lab_rgba_mib": 5.75,
+      "texture_delta_mib": 4.0,
+      "draw_calls": 13.0,
+      "draw_delta": -4.0,
+      "fill_proxy": 1.0538483796296296,
+      "fill_delta": -1.4863095473198766,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-ribbon\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-ribbon-control\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 42.514423,
+      "p50_ms": 16.702346499999997,
+      "p50_ms_delta": 0.017538499999997015,
+      "p50_ms_range": [
+        16.699923,
+        16.70477
+      ],
+      "p95_ms": 17.906768999999997,
+      "p95_ms_delta": 0.1625384999999966,
+      "p95_ms_range": [
+        17.901846,
+        17.911692
+      ],
+      "max_ms": 22.528384,
+      "max_ms_delta": 0.6981530000000014,
+      "max_ms_range": [
+        22.479385,
+        22.528384
+      ],
+      "cpu_p50_ms": 2.053731,
+      "cpu_p50_ms_delta": -1.610961,
+      "cpu_p50_ms_range": [
+        2.046616,
+        2.060846
+      ],
+      "completion_p50_ms": 15.670269000000001,
+      "completion_p50_ms_delta": -0.0033079999999987564,
+      "completion_p50_ms_range": [
+        15.651769,
+        15.688769
+      ],
+      "completion_p95_ms": 16.144654,
+      "completion_p95_ms_delta": 0.06542299999999912,
+      "completion_p95_ms_range": [
+        16.143154,
+        16.146154
+      ],
+      "pss_kib": 48818.5,
+      "pss_kib_delta": 4691.0,
+      "pss_kib_range": [
+        47968,
+        49669
+      ]
+    },
+    {
+      "mode": "edges",
+      "label": "Ink edges and shoulders",
+      "control": "painted",
+      "verdict": "Candidate with art revision",
+      "observation_and_cheaper_swap": "Clear boundaries lift the course, but uniform bands feel too geometric. Cheaper: two vertex-colour edge strips.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 16.0,
+      "draw_delta": 2.0,
+      "fill_proxy": 2.3907834917954958,
+      "fill_delta": 1.0454417652331485,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-edges\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.684423000000002,
+      "p50_ms_delta": -0.015269499999995162,
+      "p50_ms_range": [
+        16.682077,
+        16.686769
+      ],
+      "p95_ms": 17.831539,
+      "p95_ms_delta": -0.1344990000000017,
+      "p95_ms_range": [
+        17.825385,
+        17.837693
+      ],
+      "max_ms": 22.815693000000003,
+      "max_ms_delta": 0.07792400000000299,
+      "max_ms_range": [
+        21.572,
+        22.815693000000003
+      ],
+      "cpu_p50_ms": 3.4518465,
+      "cpu_p50_ms_delta": 1.0347309999999998,
+      "cpu_p50_ms_range": [
+        3.45177,
+        3.451923
+      ],
+      "completion_p50_ms": 15.688654,
+      "completion_p50_ms_delta": -0.0137305000000012,
+      "completion_p50_ms_range": [
+        15.679769,
+        15.697539
+      ],
+      "completion_p95_ms": 16.134269,
+      "completion_p95_ms_delta": -0.007192499999998603,
+      "completion_p95_ms_range": [
+        16.108461,
+        16.160077
+      ],
+      "pss_kib": 44768.5,
+      "pss_kib_delta": 84.5,
+      "pss_kib_range": [
+        44049,
+        45488
+      ]
+    },
+    {
+      "mode": "grade-dust",
+      "label": "Warm grade and dust",
+      "control": "painted",
+      "verdict": "Candidate with restraint",
+      "observation_and_cheaper_swap": "One ground shader and 28 alpha quads; no full-screen blur. Cheaper: warm vertex tint, no particles.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 15.0,
+      "draw_delta": 1.0,
+      "fill_proxy": 1.400029226562351,
+      "fill_delta": 0.054687500000003775,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-grade-dust\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.678922999999998,
+      "p50_ms_delta": -0.020769500000000107,
+      "p50_ms_range": [
+        16.676384,
+        16.681462
+      ],
+      "p95_ms": 17.842538,
+      "p95_ms_delta": -0.12349999999999994,
+      "p95_ms_range": [
+        17.822000000000003,
+        17.863076
+      ],
+      "max_ms": 22.404692999999998,
+      "max_ms_delta": -0.3330760000000019,
+      "max_ms_range": [
+        21.558692,
+        22.404692999999998
+      ],
+      "cpu_p50_ms": 3.0421925,
+      "cpu_p50_ms_delta": 0.6250770000000001,
+      "cpu_p50_ms_range": [
+        2.977923,
+        3.106462
+      ],
+      "completion_p50_ms": 15.6585,
+      "completion_p50_ms_delta": -0.04388450000000077,
+      "completion_p50_ms_range": [
+        15.657615,
+        15.659385
+      ],
+      "completion_p95_ms": 16.0903845,
+      "completion_p95_ms_delta": -0.05107699999999937,
+      "completion_p95_ms_range": [
+        16.075308,
+        16.105461
+      ],
+      "pss_kib": 44240.5,
+      "pss_kib_delta": -443.5,
+      "pss_kib_range": [
+        43200,
+        45281
+      ]
+    },
+    {
+      "mode": "depth",
+      "label": "Tall props and shadows",
+      "control": "painted",
+      "verdict": "Hold for chosen kit",
+      "observation_and_cheaper_swap": "Depth reads, but repeated V1 rocks clash with rough cars. Cheaper: sparse existing props and shared shadow mask.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 15.0,
+      "draw_delta": 1.0,
+      "fill_proxy": 1.452911171006799,
+      "fill_delta": 0.10756944444445171,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-depth\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.705346499999997,
+      "p50_ms_delta": 0.005653999999999826,
+      "p50_ms_range": [
+        16.699538999999998,
+        16.711154
+      ],
+      "p95_ms": 17.959231,
+      "p95_ms_delta": -0.006807000000002006,
+      "p95_ms_range": [
+        17.927077,
+        17.991384999999998
+      ],
+      "max_ms": 22.648229999999998,
+      "max_ms_delta": -0.08953900000000203,
+      "max_ms_range": [
+        21.93823,
+        22.648229999999998
+      ],
+      "cpu_p50_ms": 2.760885,
+      "cpu_p50_ms_delta": 0.34376950000000006,
+      "cpu_p50_ms_range": [
+        2.689385,
+        2.832385
+      ],
+      "completion_p50_ms": 15.700769000000001,
+      "completion_p50_ms_delta": -0.00161549999999977,
+      "completion_p50_ms_range": [
+        15.694846,
+        15.706692
+      ],
+      "completion_p95_ms": 16.1609615,
+      "completion_p95_ms_delta": 0.01950000000000074,
+      "completion_p95_ms_range": [
+        16.119,
+        16.202923
+      ],
+      "pss_kib": 44280.0,
+      "pss_kib_delta": -404.0,
+      "pss_kib_range": [
+        43390,
+        45170
+      ]
+    },
+    {
+      "mode": "wear",
+      "label": "Persistent wear buffer",
+      "control": "painted",
+      "verdict": "Cut from default",
+      "observation_and_cheaper_swap": "Dark repeated stamps distract and add a full-screen layer plus 1 MiB. Cheaper: capped live skid sprites.",
+      "lab_rgba_mib": 2.75,
+      "texture_delta_mib": 1.0,
+      "draw_calls": 15.333333333333334,
+      "draw_delta": 1.333333333333334,
+      "fill_proxy": 2.3453892802889533,
+      "fill_delta": 1.000047553726606,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-wear\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.682308,
+      "p50_ms_delta": -0.01738449999999858,
+      "p50_ms_range": [
+        16.678154,
+        16.686462
+      ],
+      "p95_ms": 17.898577000000003,
+      "p95_ms_delta": -0.067460999999998,
+      "p95_ms_range": [
+        17.883538,
+        17.913616
+      ],
+      "max_ms": 22.070846000000003,
+      "max_ms_delta": -0.666922999999997,
+      "max_ms_range": [
+        21.166076999999998,
+        22.070846000000003
+      ],
+      "cpu_p50_ms": 3.195577,
+      "cpu_p50_ms_delta": 0.7784615000000001,
+      "cpu_p50_ms_range": [
+        3.190154,
+        3.201
+      ],
+      "completion_p50_ms": 15.6674235,
+      "completion_p50_ms_delta": -0.03496100000000091,
+      "completion_p50_ms_range": [
+        15.666462,
+        15.668385
+      ],
+      "completion_p95_ms": 16.1271535,
+      "completion_p95_ms_delta": -0.014307999999999765,
+      "completion_p95_ms_range": [
+        16.122769,
+        16.131538
+      ],
+      "pss_kib": 46678.0,
+      "pss_kib_delta": 1994.0,
+      "pss_kib_range": [
+        46572,
+        46784
+      ]
+    },
+    {
+      "mode": "poster-grain",
+      "label": "Poster and grain",
+      "control": "painted",
+      "verdict": "Reject appearance",
+      "observation_and_cheaper_swap": "Quantisation/grain amplifies coarse pattern and shimmer. Cheaper: paint grain into approved tiles.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 14.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.3453417265623473,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-poster-grain\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.6693075,
+      "p50_ms_delta": -0.030384999999998996,
+      "p50_ms_range": [
+        16.662,
+        16.676614999999998
+      ],
+      "p95_ms": 18.0866535,
+      "p95_ms_delta": 0.12061549999999954,
+      "p95_ms_range": [
+        18.062923,
+        18.110384
+      ],
+      "max_ms": 29.601692,
+      "max_ms_delta": 6.863923,
+      "max_ms_range": [
+        28.911231,
+        29.601692
+      ],
+      "cpu_p50_ms": 2.428731,
+      "cpu_p50_ms_delta": 0.0116155,
+      "cpu_p50_ms_range": [
+        2.403308,
+        2.454154
+      ],
+      "completion_p50_ms": 15.609154,
+      "completion_p50_ms_delta": -0.09323050000000066,
+      "completion_p50_ms_range": [
+        15.596308,
+        15.622
+      ],
+      "completion_p95_ms": 16.149385000000002,
+      "completion_p95_ms_delta": 0.007923500000003969,
+      "completion_p95_ms_range": [
+        16.107385,
+        16.191385
+      ],
+      "pss_kib": 51887.5,
+      "pss_kib_delta": 7203.5,
+      "pss_kib_range": [
+        43337,
+        60438
+      ]
+    },
+    {
+      "mode": "contrast",
+      "label": "Ground value separation",
+      "control": "painted",
+      "verdict": "Candidate",
+      "observation_and_cheaper_swap": "Darker desaturated floor separates car accents. Cheaper: a tuned ground tint.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 14.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.3453417265623473,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-contrast\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.685230500000003,
+      "p50_ms_delta": -0.014461999999994646,
+      "p50_ms_range": [
+        16.681615,
+        16.688846
+      ],
+      "p95_ms": 17.917231,
+      "p95_ms_delta": -0.048807000000000045,
+      "p95_ms_range": [
+        17.915385,
+        17.919076999999998
+      ],
+      "max_ms": 21.994616,
+      "max_ms_delta": -0.7431529999999995,
+      "max_ms_range": [
+        21.636077,
+        21.994616
+      ],
+      "cpu_p50_ms": 2.364039,
+      "cpu_p50_ms_delta": -0.05307649999999997,
+      "cpu_p50_ms_range": [
+        2.330462,
+        2.397616
+      ],
+      "completion_p50_ms": 15.664962,
+      "completion_p50_ms_delta": -0.03742250000000169,
+      "completion_p50_ms_range": [
+        15.661385,
+        15.668539
+      ],
+      "completion_p95_ms": 16.100692000000002,
+      "completion_p95_ms_delta": -0.04076949999999613,
+      "completion_p95_ms_range": [
+        16.084077,
+        16.117307
+      ],
+      "pss_kib": 44624.5,
+      "pss_kib_delta": -59.5,
+      "pss_kib_range": [
+        44039,
+        45210
+      ]
+    },
+    {
+      "mode": "combined",
+      "label": "All layers combined",
+      "control": "painted",
+      "verdict": "Reject stack",
+      "observation_and_cheaper_swap": "Too much grain, repeated props and black wear. Combined cost is measured, not a sum of single-feature deltas.",
+      "lab_rgba_mib": 2.8125,
+      "texture_delta_mib": 1.0625,
+      "draw_calls": 20.333333333333332,
+      "draw_delta": 6.333333333333332,
+      "fill_proxy": 3.702462425120502,
+      "fill_delta": 2.3571206985581545,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-combined\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 25.142615499999998,
+      "p50_ms_delta": 8.442923,
+      "p50_ms_range": [
+        25.056385,
+        25.228846
+      ],
+      "p95_ms": 31.145115500000003,
+      "p95_ms_delta": 13.179077500000002,
+      "p95_ms_range": [
+        31.107385,
+        31.182846
+      ],
+      "max_ms": 34.833769000000004,
+      "max_ms_delta": 12.096000000000004,
+      "max_ms_range": [
+        34.483077,
+        34.833769000000004
+      ],
+      "cpu_p50_ms": 6.840923,
+      "cpu_p50_ms_delta": 4.423807500000001,
+      "cpu_p50_ms_range": [
+        6.779154,
+        6.902692
+      ],
+      "completion_p50_ms": 23.460500500000002,
+      "completion_p50_ms_delta": 7.758116000000001,
+      "completion_p50_ms_range": [
+        23.396693,
+        23.524308
+      ],
+      "completion_p95_ms": 29.160192000000002,
+      "completion_p95_ms_delta": 13.018730500000004,
+      "completion_p95_ms_range": [
+        29.069923,
+        29.250461
+      ],
+      "pss_kib": 46787.0,
+      "pss_kib_delta": 2103.0,
+      "pss_kib_range": [
+        46694,
+        46880
+      ]
+    },
+    {
+      "mode": "ribbon-control",
+      "label": "Live edges and decals",
+      "control": "painted",
+      "verdict": "Owner option, not selected",
+      "observation_and_cheaper_swap": "Painted ground + seeded decals + edges; near 16.7 ms cadence. Same content as the bake, with no extra target. Source motifs and decal density still need art review.",
+      "lab_rgba_mib": 1.75,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 17.0,
+      "draw_delta": 3.0,
+      "fill_proxy": 2.5401579269495063,
+      "fill_delta": 1.194816200387159,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-ribbon-control\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.684808,
+      "p50_ms_delta": -0.014884499999997303,
+      "p50_ms_range": [
+        16.684154,
+        16.685462
+      ],
+      "p95_ms": 17.7442305,
+      "p95_ms_delta": -0.2218075000000006,
+      "p95_ms_range": [
+        17.736384,
+        17.752077
+      ],
+      "max_ms": 21.830230999999998,
+      "max_ms_delta": -0.9075380000000024,
+      "max_ms_range": [
+        21.709231,
+        21.830230999999998
+      ],
+      "cpu_p50_ms": 3.664692,
+      "cpu_p50_ms_delta": 1.2475765,
+      "cpu_p50_ms_range": [
+        3.650615,
+        3.678769
+      ],
+      "completion_p50_ms": 15.673577,
+      "completion_p50_ms_delta": -0.028807500000000985,
+      "completion_p50_ms_range": [
+        15.655539,
+        15.691615
+      ],
+      "completion_p95_ms": 16.079231,
+      "completion_p95_ms_delta": -0.0622304999999983,
+      "completion_p95_ms_range": [
+        16.066231,
+        16.092231
+      ],
+      "pss_kib": 44127.5,
+      "pss_kib_delta": -556.5,
+      "pss_kib_range": [
+        44009,
+        44246
+      ]
+    },
+    {
+      "mode": "lean-stack",
+      "label": "Restrained stack",
+      "control": "painted",
+      "verdict": "Cut: frame budget",
+      "observation_and_cheaper_swap": "Macro + 32 decals + filled edges + 28 dust sprites + value separation still misses the nominal 16.7 ms target. Retained as the optimisation control.",
+      "lab_rgba_mib": 1.8125,
+      "texture_delta_mib": 0.0625,
+      "draw_calls": 18.0,
+      "draw_delta": 4.0,
+      "fill_proxy": 2.4793630623950413,
+      "fill_delta": 1.134021335832694,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-c-0-lean-stack\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 17.4639235,
+      "p50_ms_delta": 0.7642310000000023,
+      "p50_ms_range": [
+        17.278077,
+        17.64977
+      ],
+      "p95_ms": 23.6942305,
+      "p95_ms_delta": 5.728192499999999,
+      "p95_ms_range": [
+        23.514692,
+        23.873769
+      ],
+      "max_ms": 30.313231,
+      "max_ms_delta": 7.575461999999998,
+      "max_ms_range": [
+        28.234923,
+        30.313231
+      ],
+      "cpu_p50_ms": 4.6343845,
+      "cpu_p50_ms_delta": 2.2172690000000004,
+      "cpu_p50_ms_range": [
+        4.516384,
+        4.752385
+      ],
+      "completion_p50_ms": 15.980808,
+      "completion_p50_ms_delta": 0.2784234999999988,
+      "completion_p50_ms_range": [
+        15.904693,
+        16.056923
+      ],
+      "completion_p95_ms": 21.9865,
+      "completion_p95_ms_delta": 5.845038500000001,
+      "completion_p95_ms_range": [
+        21.880923,
+        22.092077
+      ],
+      "pss_kib": 45885.5,
+      "pss_kib_delta": 1201.5,
+      "pss_kib_range": [
+        44827,
+        46944
+      ]
+    },
+    {
+      "mode": "efficient-stack",
+      "label": "Narrow-band stack",
+      "control": "lean-stack",
+      "verdict": "Cut: CPU/frame budget",
+      "observation_and_cheaper_swap": "Narrow bands, 16 decals and 8 dust sprites reduce submitted coverage, but rebuilding more geometry raises CPU cost. Paired against restrained on revision 2.",
+      "lab_rgba_mib": 1.8125,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 18.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.4767860724021835,
+      "fill_delta": -1.0025769899928578,
+      "cpu_geometry_mib": 0.0,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-f-0-efficient-stack\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-f-0-lean-stack\\result.json",
+      "apk_sha256": "2aeceddaee56445f7daa268e3f002c51524f15655108d05f1974701b273b7338",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 17.790231499999997,
+      "p50_ms_delta": 0.1208079999999967,
+      "p50_ms_range": [
+        17.726539,
+        17.853924
+      ],
+      "p95_ms": 23.752539,
+      "p95_ms_delta": -0.040230499999999836,
+      "p95_ms_range": [
+        23.532307999999997,
+        23.97277
+      ],
+      "max_ms": 28.922077,
+      "max_ms_delta": -1.3656919999999992,
+      "max_ms_range": [
+        27.042154,
+        28.922077
+      ],
+      "cpu_p50_ms": 5.5450385,
+      "cpu_p50_ms_delta": 0.5721920000000011,
+      "cpu_p50_ms_range": [
+        5.299308,
+        5.790769
+      ],
+      "completion_p50_ms": 16.271692,
+      "completion_p50_ms_delta": 0.021230500000001484,
+      "completion_p50_ms_range": [
+        16.218769,
+        16.324615
+      ],
+      "completion_p95_ms": 22.208077,
+      "completion_p95_ms_delta": 0.12319249999999826,
+      "completion_p95_ms_range": [
+        21.999692,
+        22.416462
+      ],
+      "pss_kib": 49993.0,
+      "pss_kib_delta": 1835.0,
+      "pss_kib_range": [
+        49605,
+        50381
+      ]
+    },
+    {
+      "mode": "cached-stack",
+      "label": "Cached geometry (held)",
+      "control": "efficient-stack",
+      "verdict": "Hold: frame budget",
+      "observation_and_cheaper_swap": "Identical pixels and lower CPU cost with a 0.192 MiB vertex cache, but p50 remains above nominal 16.7 ms. Paired against dynamic geometry on revision 3; no combined default accepted.",
+      "lab_rgba_mib": 1.8125,
+      "texture_delta_mib": 0.0,
+      "draw_calls": 18.0,
+      "draw_delta": 0.0,
+      "fill_proxy": 1.4767860724021835,
+      "fill_delta": 0.0,
+      "cpu_geometry_mib": 0.1922607421875,
+      "measurement": "Stick",
+      "repeats": 2,
+      "source": "surface-lab\\device\\v3-stick-h-0-cached-stack\\result.json",
+      "control_source": "surface-lab\\device\\v3-stick-h-0-efficient-stack\\result.json",
+      "apk_sha256": "db785d5c78570623d16cb7127e7d6de8645c48f0be026392dae706d346499860",
+      "bake_startup_ms": 0.0,
+      "p50_ms": 16.862769,
+      "p50_ms_delta": -0.7670384999999982,
+      "p50_ms_range": [
+        16.852923,
+        16.872615
+      ],
+      "p95_ms": 22.674038,
+      "p95_ms_delta": -1.5119615000000017,
+      "p95_ms_range": [
+        22.505384,
+        22.842692
+      ],
+      "max_ms": 28.559077,
+      "max_ms_delta": -2.0876149999999996,
+      "max_ms_range": [
+        27.787461,
+        28.559077
+      ],
+      "cpu_p50_ms": 3.759077,
+      "cpu_p50_ms_delta": -1.5850385,
+      "cpu_p50_ms_range": [
+        3.748231,
+        3.769923
+      ],
+      "completion_p50_ms": 15.790962,
+      "completion_p50_ms_delta": -0.5007689999999982,
+      "completion_p50_ms_range": [
+        15.783308,
+        15.798616
+      ],
+      "completion_p95_ms": 20.940961,
+      "completion_p95_ms_delta": -1.4166924999999964,
+      "completion_p95_ms_range": [
+        20.887384,
+        20.994538
+      ],
+      "pss_kib": 47121.5,
+      "pss_kib_delta": 1078.5,
+      "pss_kib_range": [
+        46193,
+        48050
+      ]
+    }
+  ],
+  "device_runs": [
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-baseline\\result.json",
+      "result_sha256": "407602aafee70275341d778f8b48f1c37c28554639dc928b73c9dce9eac37c82",
+      "screenshot_sha256": "952d855d7572d7beaf7edfb44b93cfbc41abf415f7d791c811c6a18eddb23699"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-combined\\result.json",
+      "result_sha256": "94d625481b0aa49562fbeb7450a904b4144a3c3f16c54fb497b6ff3b0e89dbb4",
+      "screenshot_sha256": "1009f6b5dc556856a3edc9a31348e25a39ad39faa051dce34d445c76720a8da6"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-contrast\\result.json",
+      "result_sha256": "b77bb4df7ceaab69b8e1589e593fbdded119c3e8e8f94c5fad5a691211b01d14",
+      "screenshot_sha256": "d86544711f9110bb484c93e07bb3729ae7a8f5bb5c135b092a6f41fbbc0626b7"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-decals\\result.json",
+      "result_sha256": "e594b920f677e2e1435597efc294755fb6a1556569c70cf5db42c7686cd494ca",
+      "screenshot_sha256": "7ae789ee77aefd921742c51a84ae9888ff9b20abcc051c2758baf9297fc19a39"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-depth\\result.json",
+      "result_sha256": "e9f76bad284718e2e077903050be72042016a94ba41a90da3a5878be693bf70b",
+      "screenshot_sha256": "de71a6483e1306f70d21aaf81ec62d781a928031a0d45cedbb3a0aefbc770b39"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-edges\\result.json",
+      "result_sha256": "b3848852d84b3699e3c36293eefca97f88ea930dac4dcf7b6c9c043ffe9d8f55",
+      "screenshot_sha256": "fa0c45a08773f2fcb7172f9c705c9580b74acf3677f03af914018c54f599b606"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-grade-dust\\result.json",
+      "result_sha256": "8e01a650c0571fb408f1a794ce3b5672bfe887dd0f33505ec687a8529f848590",
+      "screenshot_sha256": "d9d19d9d8ab23e6b8bbe41ce44fc9b6a55c021b69a9d3a5370eadc5909879947"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-lean-stack\\result.json",
+      "result_sha256": "743b121c6690701552427dce7e00cda196dbc4205895b1cf961d0a77791e52a8",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-macro\\result.json",
+      "result_sha256": "aa6ede7b4ab42a212d0198a056a7c31dc214e229bd1d19301d74b02457fc1341",
+      "screenshot_sha256": "31f27c19a119fefd597adb82506bf2fd7d4b17385f3079d02088591e55b01c08"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-painted\\result.json",
+      "result_sha256": "7650e612b18043692fba4485f9861d5d7585d9aaabda1029966cb16220fe4284",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-poster-grain\\result.json",
+      "result_sha256": "76fe11a9207e6918688057abecb5cfde3ddf37251f7f67d317237175ce2f64d7",
+      "screenshot_sha256": "a41766abd461d3d764cd8bd42ccba70ff0723f683aaa1facaf12019149a3c572"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-ribbon\\result.json",
+      "result_sha256": "b0826435894c139ce7dea62c7379b77d8f2948a4b453bda1b1a586f54b93891f",
+      "screenshot_sha256": "5601ce0b7b473f20103fc8432e71c44bf2777b45e56ce2ac56d6d11272e3c7cf"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-ribbon-control\\result.json",
+      "result_sha256": "178d906c395c819d6aed955dc853def7703e534e58877a0e411616dcc8b26c80",
+      "screenshot_sha256": "610257c8e8e007d2b339c64bb96ebd7e84092da52eabcf044150b3ae2b1697bc"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-c-0-wear\\result.json",
+      "result_sha256": "a0b76768af8b9f2def510f376195470768341d1be643ce821e7b3cf0e6a1179d",
+      "screenshot_sha256": "050d0cbe5a828eddd1dc60191235f1959b1fb9ca973ea5103df854ce5cad734c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-baseline\\result.json",
+      "result_sha256": "4c6386f213a4460e278d32621d282ad8310120bf8afdba2b0646ac6ac91b3476",
+      "screenshot_sha256": "952d855d7572d7beaf7edfb44b93cfbc41abf415f7d791c811c6a18eddb23699"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-combined\\result.json",
+      "result_sha256": "a2bca3c6c339247c3b41a204205374896b070f26b60f43023a3c55a7123a9071",
+      "screenshot_sha256": "1009f6b5dc556856a3edc9a31348e25a39ad39faa051dce34d445c76720a8da6"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-contrast\\result.json",
+      "result_sha256": "b613224ce1ab803664725b91091579299feb97deded9361a1b85977cea93d0f2",
+      "screenshot_sha256": "d86544711f9110bb484c93e07bb3729ae7a8f5bb5c135b092a6f41fbbc0626b7"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-decals\\result.json",
+      "result_sha256": "7753e6826ef8180ae697ed2b30b37c050da7d4f99e109254e10d5b59f4fd63c8",
+      "screenshot_sha256": "7ae789ee77aefd921742c51a84ae9888ff9b20abcc051c2758baf9297fc19a39"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-depth\\result.json",
+      "result_sha256": "4bf32621ea715f1f6a7b43350bd4aae4ba1aea32e469052e1bbd9c6d633caa3a",
+      "screenshot_sha256": "de71a6483e1306f70d21aaf81ec62d781a928031a0d45cedbb3a0aefbc770b39"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-edges\\result.json",
+      "result_sha256": "64c67401f05000563f38a0ebf1f178ad82a856f06e2e9b01c7496da45e0ec5d9",
+      "screenshot_sha256": "fa0c45a08773f2fcb7172f9c705c9580b74acf3677f03af914018c54f599b606"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-grade-dust\\result.json",
+      "result_sha256": "a7e03c3f97115c688e6ded7975aa135a35c478f9b08a56365b4234d32cd5e5b1",
+      "screenshot_sha256": "d9d19d9d8ab23e6b8bbe41ce44fc9b6a55c021b69a9d3a5370eadc5909879947"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-lean-stack\\result.json",
+      "result_sha256": "32e3fe6104825a63d160703caddb586d1ce6050a3a694d6aa43f74702b10ab86",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-macro\\result.json",
+      "result_sha256": "aec8ad0e24ab873a3ea3e410defc68414267d332f6915049ce5b9a8fa00f9a64",
+      "screenshot_sha256": "31f27c19a119fefd597adb82506bf2fd7d4b17385f3079d02088591e55b01c08"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-painted\\result.json",
+      "result_sha256": "5b47ec81f2c830e35b1933181c8e9d013d7dfd2896cafe1d2b28511c1daf15dc",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-poster-grain\\result.json",
+      "result_sha256": "6c502dab7537f2bc3f6a47cf3b5fff02adca4e8e63ce15da6b61a09d16f722d1",
+      "screenshot_sha256": "a41766abd461d3d764cd8bd42ccba70ff0723f683aaa1facaf12019149a3c572"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-ribbon\\result.json",
+      "result_sha256": "ab796fa60e0edebac1ae3fb5a25d9dd7c8eec330138eb7cd7c56d543337624e8",
+      "screenshot_sha256": "5601ce0b7b473f20103fc8432e71c44bf2777b45e56ce2ac56d6d11272e3c7cf"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-ribbon-control\\result.json",
+      "result_sha256": "680b3ad6b2acc40b98663c519cfd12505202ac6a0524bfe895c8355a803222c6",
+      "screenshot_sha256": "610257c8e8e007d2b339c64bb96ebd7e84092da52eabcf044150b3ae2b1697bc"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-d-0-wear\\result.json",
+      "result_sha256": "6064306ccdf05980032f24c466d7160f78966dc53c576686cacdb4418f132e40",
+      "screenshot_sha256": "050d0cbe5a828eddd1dc60191235f1959b1fb9ca973ea5103df854ce5cad734c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-1-combined\\result.json",
+      "result_sha256": "0978b6bfc1b6761b9b1db5ee8b89c8b262b0354a01dd184085c7f4739339b90b",
+      "screenshot_sha256": "52f52399b3c9ef389bd25552c2aee597d544a4ea8c7a3700a212a12a51f5c839"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-1-lean-stack\\result.json",
+      "result_sha256": "c9cf92eaa9c3d80cd1ec0f147778c9a1bc16b79a0bc5dc74a22973dfa3d7cbaf",
+      "screenshot_sha256": "cbce0f29895d7fbe2783ea2cb27154a5254cb7d12f0839013dd3f3eb3b6d78b3"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-1-painted\\result.json",
+      "result_sha256": "d901a1d2159cbd143ab7965e30f04a1662bd3027625800cfb4dee2a24bd3d7ce",
+      "screenshot_sha256": "4f71b1920d92d677bd0776b7835cb77e74a35a4bb31932cd2339db67d0ee1e39"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-2-combined\\result.json",
+      "result_sha256": "4a165e194144efaafff466eab73d5314a8ffc79c38013668dd44268980bb82fe",
+      "screenshot_sha256": "13fd16d644346a6495bddc7c92ad3d2917c8a8a95e30879631e88dfb500612d8"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-2-lean-stack\\result.json",
+      "result_sha256": "891e1c331033aac626b97e63764cb3a74241c797a2b17163caa16f1bb3e6353c",
+      "screenshot_sha256": "5b6cedd1c072772284c2c6f4ba51bf536f5f85918df84c9cf8822e8c2b795e75"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-e-2-painted\\result.json",
+      "result_sha256": "5e6c34cc091683e2aff1008b12847ff101455e33fd45859872947ae078a9d6b7",
+      "screenshot_sha256": "f892fd0721465859fa247d058492c2c6b644d85af7c276ac34ef40af9e2c63ab"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-f-0-efficient-stack\\result.json",
+      "result_sha256": "b309fcf25c26f83514887c5f64c66b51ae1dad672f518b69fa7330d8c7b0a2ac",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-f-0-lean-stack\\result.json",
+      "result_sha256": "f0116048bd811fe9b278ed9a76007f51ace7c72e2e09ef5f0274bf439fb7dbf3",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-f-0-painted\\result.json",
+      "result_sha256": "fe8945d7bacdb80fa94168817a545a77c607a4b3fd743c6fdcd9b58c458166cc",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-g-0-efficient-stack\\result.json",
+      "result_sha256": "5d1507ffd21af5f43adbde0b76070a1940a55f42f909b3194f1ed4734ff51653",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-g-0-lean-stack\\result.json",
+      "result_sha256": "3973be42fdb392a7a0b038e8547600b703d3247e9c855fc18261a1832c9d07b3",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-g-0-painted\\result.json",
+      "result_sha256": "b0409646c7b4ef0c11f8016b384376c1491b2e3690cbaaa55f7dd49051a0c759",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-h-0-cached-stack\\result.json",
+      "result_sha256": "f45d64b2b8ca444562a2ee50ed75ce022c1bd6fb72b78abf2fcf98f3736ed185",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-h-0-efficient-stack\\result.json",
+      "result_sha256": "77383fd9e5f97d75d932e4b53c9959dce3b87afe7074523d82655ca65974a69f",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-i-0-cached-stack\\result.json",
+      "result_sha256": "14bc42bb19c892017c39a415dca93580e37831670c43bd10d00b99724d994511",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "result": "surface-lab\\device\\v3-stick-i-0-efficient-stack\\result.json",
+      "result_sha256": "8cafb485983c12e4565104be2d96bcb0d6c6f8882c4d5c8981a688383b7210e4",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    }
+  ],
+  "excluded_device_runs": [
+    "surface-lab\\device\\v3-stick-a-0-baseline",
+    "surface-lab\\device\\v3-stick-a-0-combined",
+    "surface-lab\\device\\v3-stick-a-0-contrast",
+    "surface-lab\\device\\v3-stick-a-0-decals",
+    "surface-lab\\device\\v3-stick-a-0-depth",
+    "surface-lab\\device\\v3-stick-a-0-edges",
+    "surface-lab\\device\\v3-stick-a-0-grade-dust",
+    "surface-lab\\device\\v3-stick-a-0-macro",
+    "surface-lab\\device\\v3-stick-a-0-painted",
+    "surface-lab\\device\\v3-stick-a-0-poster-grain",
+    "surface-lab\\device\\v3-stick-a-0-ribbon",
+    "surface-lab\\device\\v3-stick-a-0-wear"
+  ],
+  "pictures": {
+    "0:baseline": {
+      "src": "review/0-baseline.webp",
+      "origin": "Stick",
+      "source_sha256": "952d855d7572d7beaf7edfb44b93cfbc41abf415f7d791c811c6a18eddb23699",
+      "export_sha256": "1fd88043f40c56934adfd730573fdadb869460ead4c4b07880512849b24a6ae5"
+    },
+    "0:cached-stack": {
+      "src": "review/0-cached-stack.webp",
+      "origin": "Stick",
+      "source_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c",
+      "export_sha256": "b32efd6d63cc0046108e49dc3c655ed399710aa9abc2ff94c4536d38c2953ed8"
+    },
+    "0:combined": {
+      "src": "review/0-combined.webp",
+      "origin": "Stick",
+      "source_sha256": "1009f6b5dc556856a3edc9a31348e25a39ad39faa051dce34d445c76720a8da6",
+      "export_sha256": "e9ce0612f4bfe6912be81385b53c92b27ed715739d7e38a722c8c81b6e75c5fd"
+    },
+    "0:contrast": {
+      "src": "review/0-contrast.webp",
+      "origin": "Stick",
+      "source_sha256": "d86544711f9110bb484c93e07bb3729ae7a8f5bb5c135b092a6f41fbbc0626b7",
+      "export_sha256": "6b64850d99c2605605d5be95b41d3ec61ae5d56ee36388853d8369beea7ff978"
+    },
+    "0:decals": {
+      "src": "review/0-decals.webp",
+      "origin": "Stick",
+      "source_sha256": "7ae789ee77aefd921742c51a84ae9888ff9b20abcc051c2758baf9297fc19a39",
+      "export_sha256": "2d02fb752959b6356f92679bdc33a6098a94638415aa6da24782a571c2670c1f"
+    },
+    "0:depth": {
+      "src": "review/0-depth.webp",
+      "origin": "Stick",
+      "source_sha256": "de71a6483e1306f70d21aaf81ec62d781a928031a0d45cedbb3a0aefbc770b39",
+      "export_sha256": "5c4774a1e853bdd599adfc2b4a2074f15f7ca57e779caa7289fe4f4a3e0b1859"
+    },
+    "0:edges": {
+      "src": "review/0-edges.webp",
+      "origin": "Stick",
+      "source_sha256": "fa0c45a08773f2fcb7172f9c705c9580b74acf3677f03af914018c54f599b606",
+      "export_sha256": "daff2c228e6e0bbd23ae402020070a529098037a605c73d768b3af24c9592f74"
+    },
+    "0:efficient-stack": {
+      "src": "review/0-efficient-stack.webp",
+      "origin": "Stick",
+      "source_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c",
+      "export_sha256": "b32efd6d63cc0046108e49dc3c655ed399710aa9abc2ff94c4536d38c2953ed8"
+    },
+    "0:grade-dust": {
+      "src": "review/0-grade-dust.webp",
+      "origin": "Stick",
+      "source_sha256": "d9d19d9d8ab23e6b8bbe41ce44fc9b6a55c021b69a9d3a5370eadc5909879947",
+      "export_sha256": "8b7333e95d6d490674509a7f9dfb43a78e1721499362de1cf28a129e8c5e770f"
+    },
+    "0:lean-stack": {
+      "src": "review/0-lean-stack.webp",
+      "origin": "Stick",
+      "source_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874",
+      "export_sha256": "9f83b26869b779dbc2728a1e5ae695cd67e42c1b05ffd14598eaef137aa9771f"
+    },
+    "0:macro": {
+      "src": "review/0-macro.webp",
+      "origin": "Stick",
+      "source_sha256": "31f27c19a119fefd597adb82506bf2fd7d4b17385f3079d02088591e55b01c08",
+      "export_sha256": "712827a08a63ddba8403a917beb59194ec95c9f83b6d21d32bb3af518ef5343b"
+    },
+    "0:painted": {
+      "src": "review/0-painted.webp",
+      "origin": "Stick",
+      "source_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965",
+      "export_sha256": "db43b347e39aa58b59d84c731cdf963297242a6217f8749af9f0d76826e8e349"
+    },
+    "0:poster-grain": {
+      "src": "review/0-poster-grain.webp",
+      "origin": "Stick",
+      "source_sha256": "a41766abd461d3d764cd8bd42ccba70ff0723f683aaa1facaf12019149a3c572",
+      "export_sha256": "fd088ad12350bf5ff9e93270a9c5d5d6b1f282e08afe4dccf659e40a02fd29b9"
+    },
+    "0:ribbon": {
+      "src": "review/0-ribbon.webp",
+      "origin": "Stick",
+      "source_sha256": "5601ce0b7b473f20103fc8432e71c44bf2777b45e56ce2ac56d6d11272e3c7cf",
+      "export_sha256": "187e281e1260448bda393f19683da474bb9e712c44f5ad3d85f8e60103f3f432"
+    },
+    "0:ribbon-control": {
+      "src": "review/0-ribbon-control.webp",
+      "origin": "Stick",
+      "source_sha256": "610257c8e8e007d2b339c64bb96ebd7e84092da52eabcf044150b3ae2b1697bc",
+      "export_sha256": "a37223a9077c269501a6fd3151f8c7fc6c81fe74e43cd46d28f853cb9d0fbf40"
+    },
+    "0:wear": {
+      "src": "review/0-wear.webp",
+      "origin": "Stick",
+      "source_sha256": "050d0cbe5a828eddd1dc60191235f1959b1fb9ca973ea5103df854ce5cad734c",
+      "export_sha256": "2af61a112aaec31ae6b8c63de311d92f108a4af3610ca89fba9e1cc556598cec"
+    },
+    "1:combined": {
+      "src": "review/1-combined.webp",
+      "origin": "Stick",
+      "source_sha256": "52f52399b3c9ef389bd25552c2aee597d544a4ea8c7a3700a212a12a51f5c839",
+      "export_sha256": "418eca79219a2b7e98c080b54fe6d98a5b4371b7219cc5c5938f7a017ee4f89b"
+    },
+    "1:lean-stack": {
+      "src": "review/1-lean-stack.webp",
+      "origin": "Stick",
+      "source_sha256": "cbce0f29895d7fbe2783ea2cb27154a5254cb7d12f0839013dd3f3eb3b6d78b3",
+      "export_sha256": "4bcd9661fa661e46d49fbf1eeb52ae2db28dc0870fa318ded951d919ef51b555"
+    },
+    "1:painted": {
+      "src": "review/1-painted.webp",
+      "origin": "Stick",
+      "source_sha256": "4f71b1920d92d677bd0776b7835cb77e74a35a4bb31932cd2339db67d0ee1e39",
+      "export_sha256": "06a36dadc6cb641e1cea2b383c558291e1e07ddf46a57e185f786263f6eaf0ae"
+    },
+    "2:combined": {
+      "src": "review/2-combined.webp",
+      "origin": "Stick",
+      "source_sha256": "13fd16d644346a6495bddc7c92ad3d2917c8a8a95e30879631e88dfb500612d8",
+      "export_sha256": "7cc926c7fa705eda7fd2f40070ab892af138dd149c2d09a49af5eb2e45179f3f"
+    },
+    "2:lean-stack": {
+      "src": "review/2-lean-stack.webp",
+      "origin": "Stick",
+      "source_sha256": "5b6cedd1c072772284c2c6f4ba51bf536f5f85918df84c9cf8822e8c2b795e75",
+      "export_sha256": "4ec3175ce4156a18652cda71a060b758aacdd6abdf7ee4072430c0d31fc8f867"
+    },
+    "2:painted": {
+      "src": "review/2-painted.webp",
+      "origin": "Stick",
+      "source_sha256": "f892fd0721465859fa247d058492c2c6b644d85af7c276ac34ef40af9e2c63ab",
+      "export_sha256": "2971a8f1862ce1e90a7b5cf157ff6455daa14ff9a473b63d61228557d7a363a7"
+    },
+    "control:efficient-stack": {
+      "src": "review/0-efficient-control.webp",
+      "origin": "Stick, same-revision paired control",
+      "source_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874",
+      "export_sha256": "9f83b26869b779dbc2728a1e5ae695cd67e42c1b05ffd14598eaef137aa9771f"
+    },
+    "control:cached-stack": {
+      "src": "review/0-cached-control.webp",
+      "origin": "Stick, same-revision paired control",
+      "source_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c",
+      "export_sha256": "b32efd6d63cc0046108e49dc3c655ed399710aa9abc2ff94c4536d38c2953ed8"
+    }
+  },
+  "method": "Median of per-run statistics, except max_ms is worst observed across repeats; 240 warmup + 900 samples/run; glFinish each frame. Completion is CPU+GPU wall time, not a GPU timer. PSS one sample per run. Fill is submitted geometry proxy, not fragments. Negative small deltas can be noise.",
+  "production_budget": {
+    "existing_mib": 30.75,
+    "limit_mib": 32,
+    "candidate_new_atlas_mib": 1,
+    "candidate_macro_mib": 0.0625,
+    "conservative_candidate_total_mib": 31.8125,
+    "remaining_mib": 0.1875,
+    "static_edges_decals_total_mib": 31.75,
+    "static_edges_decals_remaining_mib": 0.25,
+    "status": "static edges/decals is an owner option; graded cached design held on frame cost; all proposals require chosen kit repack and integrated measurement"
+  }
+}

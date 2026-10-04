@@ -1,0 +1,105 @@
+{
+  "at": "2026-10-01T14:15:13.767028+00:00",
+  "owner_choice_exists": false,
+  "status": "waiting-not-produced",
+  "scope": "read-only pre-spend gate calls, no generation",
+  "jobs": [
+    {
+      "id": "Needle",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Line",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Bastion",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Comet",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Trail",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Flint",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Quill",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Vandal",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Kestrel",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "Bulwark",
+      "kind": "car",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "rook",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "ox",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "mica",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "vex",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "relay",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "marrow",
+      "kind": "portrait",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    }
+  ],
+  "before": {
+    "usage.json": "cd272e61fc4807b44bb1a24cf7caca98fcf926036afd618ec9f7d18f8b630293",
+    "history.jsonl": "bd42855676a5447007ce7011f8842c91b0cdfe5aa1cda7167b8aee2a55305f3b"
+  },
+  "after": {
+    "usage.json": "cd272e61fc4807b44bb1a24cf7caca98fcf926036afd618ec9f7d18f8b630293",
+    "history.jsonl": "bd42855676a5447007ce7011f8842c91b0cdfe5aa1cda7167b8aee2a55305f3b"
+  },
+  "spend": {
+    "week": "2026-W40",
+    "images_reserved": 198,
+    "remaining": 152,
+    "videos": 0,
+    "stop": null
+  },
+  "content_commit": "2f93f1408ee701a2844dcf6a377d5e210ed55eba",
+  "rivals_csv_sha256": "13137d7fa7218c0e414fbee3e37f1633c1087c06a1655d0a7e8ad87b3992f174"
+}

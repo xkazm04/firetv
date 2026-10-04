@@ -1,0 +1,118 @@
+{
+  "asset": "rw2-face-debt-contract-v2-a1",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "source_sha256": "b8e285afe5b6290daed5e07451f9c7ac921a183da4c8072dbc87d6465a907f67",
+  "export_sha256": "ba939dcae4885f26ba21d3814aefff2617a14b3c54ee30f22911ed2a2ee23e1e",
+  "image_hashes": [
+    "ba939dcae4885f26ba21d3814aefff2617a14b3c54ee30f22911ed2a2ee23e1e",
+    "c37a594d5fa930dc1a824d3402827385930ee1670917f6697e1f5e2438ada7d2"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 112 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "d5c3a347c90b6d3999d03f94020d5d51785ef1043261cf334b9dfc51f78e4884",
+  "at": "2026-10-03T10:29:10.806595+00:00",
+  "raw_content": "{\n  \"both_eyes_visible\": true,\n  \"confidence\": 0.75,\n  \"defects\": [\n    \"small_face\",\n    \"body_dominant_composition\"\n  ],\n  \"description\": \"Single primary face, centered and frontal, with both eyes visible and a readable stern expression in the native preview. Face occupies roughly the central 40% of image 1 width and about 45% of height, with the head and shoulders filling most of the frame.\",\n  \"expression_readable_native\": true,\n  \"eye_centres\": [220, 390, 480, 390],\n  \"face_box\": [150, 200, 550, 620],\n  \"face_unobscured\": true,\n  \"framing\": \"head_shoulders\",\n  \"single_primary_face\": true\n}",
+  "status": "graded",
+  "answers": {
+    "both_eyes_visible": true,
+    "confidence": 0.75,
+    "defects": [
+      "small_face",
+      "body_dominant_composition"
+    ],
+    "description": "Single primary face, centered and frontal, with both eyes visible and a readable stern expression in the native preview. Face occupies roughly the central 40% of image 1 width and about 45% of height, with the head and shoulders filling most of the frame.",
+    "expression_readable_native": true,
+    "eye_centres": [
+      220,
+      390,
+      480,
+      390
+    ],
+    "face_box": [
+      150,
+      200,
+      550,
+      620
+    ],
+    "face_unobscured": true,
+    "framing": "head_shoulders",
+    "single_primary_face": true
+  },
+  "elapsed_seconds": 3.469
+}

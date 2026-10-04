@@ -1,0 +1,49 @@
+{
+  "at": "2026-10-04T13:07:40.382284+00:00",
+  "asset": "agy-foundry-clinker-v1",
+  "budget": {
+    "provider": "agy",
+    "model": "gemini-3.8-flash-high",
+    "images_reserved": 9,
+    "remaining": 111,
+    "cap": 120,
+    "real_allowance": "unknown",
+    "stop": {
+      "at": "2026-10-04T13:06:15.381789+00:00",
+      "reason": "agy-foundry-clinker-v1: failed to generate"
+    }
+  },
+  "evidence": {
+    "calls": [
+      {
+        "session": "ae4869b7-04c5-44de-8b81-d45bdd587d9d",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "1:1",
+          "ImageName": "agy_foundry_clinker_v1",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace. FUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only. ACTION: Entire image is ONLY one empty anonymous painted material field. Dense small porous vitrified cold cinder chips mixed into soot-brown foundry fines. Rust-brown worn aggregate, not ordinary rounded stones, no lava or glow. Fine quiet stochastic texture without a focal motif. Seamless opposite edges, single unrepeated field, no quadrants, mirrored halves, large cracks, large polygons, gradients, lighting, objects, outlines, text, faces or people. No franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating clinker texture",
+          "toolSummary": "Generate clinker material image"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "7506c2b5-5291-4cd9-81eb-fb257b6f0f11",
+        "sha256": "b2c540c626ecc3b1a2dfb7d51d424cdbbcb88dcb9b9092f04b47cda39d69b4af"
+      },
+      {
+        "session": "ae4869b7-04c5-44de-8b81-d45bdd587d9d",
+        "sha256": "c09824d3577034e2eae2249840af034acd2266b72f30d1066807b8170d520fa8"
+      }
+    ],
+    "errors": [
+      "failed to generate"
+    ]
+  },
+  "errors": [
+    "Created At: 2026-10-04T15:05:42+02:00\nCompleted At: 2026-10-04T15:05:51+02:00\nEncountered error in step execution: image failed to generate: no image generated in response"
+  ],
+  "output_exists": false,
+  "disposition": "Required first empty-output stop. No retry, no refund, no latch reset. Finish offline evidence only. All future generation/edit work blocked for this run."
+}

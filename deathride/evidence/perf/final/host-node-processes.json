@@ -1,0 +1,15 @@
+{
+  "observedNodeProcesses": 32,
+  "probe": [
+    {
+      "ProcessId": 50752,
+      "ParentProcessId": 3460,
+      "Priority": 10,
+      "WorkingSetSize": 145895424,
+      "KernelModeTime": 24687500,
+      "UserModeTime": 66875000,
+      "CommandLine": "node tools/ability-stick-probe.mjs http://10.0.0.139:8772 3653 evidence\\perf\\final\\clean\\raw.json 900"
+    }
+  ],
+  "scope": "Other processes left untouched; their command lines are not retained."
+}

@@ -1,0 +1,32 @@
+{
+  "id": "772e95eb-5ad4-4e8a-be01-104af7c4c537",
+  "ts": "2026-10-02T21:38:53.431Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-punch-lance.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24343,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "d8403d0b41b169254150260f909a78a31f3d598558f919db98d3192f2209be5a",
+  "completedAt": "2026-10-02T21:38:56.465Z",
+  "creditsAfter": 24343,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3040
+}

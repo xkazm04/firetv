@@ -1,0 +1,10 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[120,120],"rejected":[0,0],"hostPumpStalls":0}
+{
+  "error": "Error: Command failed: adb -s 10.0.0.139:5555 exec-out screencap -p\n* daemon not running; starting now at tcp:5037\r\ncould not read ok from ADB Server\r\n* failed to start daemon\r\nerror: cannot connect to daemon\r\n\n    at genericNodeError (node:internal/errors:985:15)\n    at wrappedFn (node:internal/errors:539:14)\n    at ChildProcess.exithandler (node:child_process:417:12)\n    at ChildProcess.emit (node:events:508:28)\n    at maybeClose (node:internal/child_process:1100:16)\n    at ChildProcess._handle.onexit (node:internal/child_process:305:5)",
+  "rounds": 2,
+  "classUses": {
+    "Needle": 2,
+    "Line": 7
+  }
+}

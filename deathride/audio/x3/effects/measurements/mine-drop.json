@@ -1,0 +1,205 @@
+{
+  "id": "mine-drop",
+  "cue": "weapon.mine.drop",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:35.938629+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\mine-drop.mp3.json",
+    "sourceSha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+    "generatedAt": "2026-10-02T21:34:52.563Z",
+    "request": {
+      "text": "Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 0.7,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 7,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/mine-drop.mp3",
+    "sha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+    "bytes": 12164,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 0.6802494331065759,
+    "durationWindowSeconds": [
+      0.5499999999999999,
+      0.85
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 29999,
+    "decodedBytes": 119996,
+    "integratedLufs": -16.97,
+    "truePeakDbtp": 0.76,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 11,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          20601,
+          29775
+        ]
+      ],
+      "fraction": 0.30581019367312245,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 15000,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.7336687144183595,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/mine-drop.wav",
+      "sha256": "264751485a1835c6a9235b0267696538f51a548bc3f6ea3a6080cd4c4601e8bb",
+      "bytes": 30078,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 0.6802721088435374,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 15000,
+      "decodedBytes": 30000,
+      "integratedLufs": -20.62,
+      "truePeakDbtp": -2.0,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            10301,
+            14909
+          ]
+        ],
+        "fraction": 0.3072,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 10521,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 0.7897688493998856,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/mine-drop.wav",
+    "sha256": "0f2601e29225183fea49e553627b40c5b4c666a75cb4c046219a93dd7b5a01f6",
+    "bytes": 21120,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.47714285714285715,
+    "durationWindowSeconds": [
+      0.47514285714285714,
+      0.47914285714285715
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 10521,
+    "decodedBytes": 21042,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -4.05,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

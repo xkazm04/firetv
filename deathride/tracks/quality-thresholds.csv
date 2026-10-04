@@ -1,0 +1,19 @@
+metric,min,max,scope,unit,hypothesis
+minWidthW,track:minWidthCarWidths,,geometry,car widths,Full road width allows competition
+minRadiusL,track:minRadiusCarLengths,,geometry,car lengths,Longest car can negotiate the tightest bend
+straightFraction,track:minStraightFraction,track:maxStraightFraction,lap,fraction,Both acceleration and cornering have space
+cornerCount,3,,lap,corners,Lap has meaningful directional punctuation
+radiusEntropy,0.5,,lap,bits,More than one radius family is present
+overtakeZones,2,,lap,zones,Multiple braking and exit passing opportunities
+compressionFraction,,0.35,lap,fraction,Compression is localized
+unreachablePickups,,0,geometry,pickups,Every reward has a clear drivable collection point
+badRiskLines,,0,geometry,features,Inside shortcut has geometric benefit and grip cost
+overtakesPerFieldLap,0.5,,simulation,passes/field lap,Competition persists beyond the launch
+contactsPerCarKm,,20,simulation,episodes/car km,Contact is bounded
+earlyLeadWreckRate,,0.2,simulation,fraction,Lead-slot AI surrogate usually survives lap one
+spinsPerCarLap,,2,simulation,episodes/car lap,Cars maintain orientation
+stuckPerCarLap,,1,simulation,episodes/car lap,Cars recover without excessive stalls
+lineEntropy,0.5,,simulation,bits,Drivers use multiple lateral lanes
+seedCount,12,,evidence,seeds,Results cover independent seeded trials
+rotationCount,6,,evidence,rotations,Every grid slot receives every identity
+distinctTrajectoryFraction,0.9,,evidence,fraction,Seeded runs are observably different

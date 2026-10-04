@@ -1,0 +1,115 @@
+{
+  "asset": "rw2-face-rig-reveal-v1-a1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "source_sha256": "345bb9ee3dc3621c9c81c47a10edbc7875e1ca3cfba388e873ccfeabb86e854a",
+  "export_sha256": "15eaf7f372b5ed7f9003235fffacd88859abd16050606c66151986e466d57311",
+  "image_hashes": [
+    "15eaf7f372b5ed7f9003235fffacd88859abd16050606c66151986e466d57311",
+    "6cbcba4e8821b2475ff159af94708f7a98f861291526783fa2e5500c2aaed586"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 112 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "9f1999d9e8c942755910679ae39a70c21a2349f58739c4116e2e5046744ef836",
+  "at": "2026-10-03T10:45:38.416036+00:00",
+  "raw_content": "{\"face_box\": [220, 380, 720, 890], \"eye_centres\": [380, 570, 580, 570], \"framing\": \"head_shoulders\", \"both_eyes_visible\": true, \"expression_readable_native\": true, \"face_unobscured\": true, \"single_primary_face\": true, \"confidence\": 1, \"defects\": [],\"description\": \"A stylized illustration of a young man with curly hair and a red shirt, smiling gently with a small car in the background.\"}",
+  "status": "graded",
+  "answers": {
+    "face_box": [
+      220,
+      380,
+      720,
+      890
+    ],
+    "eye_centres": [
+      380,
+      570,
+      580,
+      570
+    ],
+    "framing": "head_shoulders",
+    "both_eyes_visible": true,
+    "expression_readable_native": true,
+    "face_unobscured": true,
+    "single_primary_face": true,
+    "confidence": 1,
+    "defects": [],
+    "description": "A stylized illustration of a young man with curly hair and a red shirt, smiling gently with a small car in the background."
+  },
+  "elapsed_seconds": 3.188
+}

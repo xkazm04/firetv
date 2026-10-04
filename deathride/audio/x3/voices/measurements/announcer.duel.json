@@ -1,0 +1,153 @@
+{
+  "id": "announcer.duel",
+  "cue": "voice.announcer.duel",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:38.492881+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\announcer.duel.mp3.json",
+    "sourceSha256": "ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c",
+    "generatedAt": "2026-10-02T21:52:30.760Z",
+    "request": {
+      "text": "No laps. No points. The last car running ends this.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.55,
+        "similarity_boost": 0.75,
+        "style": 0.3,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 51,
+    "providerCredits": 51,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/announcer.duel.mp3",
+    "sha256": "ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c",
+    "bytes": 67753,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 4.179591836734694,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 184320,
+    "decodedBytes": 368640,
+    "integratedLufs": -23.63,
+    "truePeakDbtp": -3.85,
+    "loudnessRangeLu": 2.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          72061,
+          85827
+        ],
+        [
+          172825,
+          184320
+        ]
+      ],
+      "fraction": 0.13704969618055557,
+      "longestInteriorSeconds": 0.31215419501133784
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 921,
+    "endFrameExclusive": 86471,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.2022644346174132,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/announcer.duel.wav",
+    "sha256": "c53454a068397b2f99146640e6bfc187f40fbe9ed5e3eeadd80ac12881ebf8d8",
+    "bytes": 171178,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 3.879818594104308,
+    "durationWindowSeconds": [
+      3.8778185941043084,
+      3.881818594104308
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 85550,
+    "decodedBytes": 171100,
+    "integratedLufs": -18.0,
+    "truePeakDbtp": -4.57,
+    "loudnessRangeLu": 1.3,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          35473,
+          41878
+        ]
+      ],
+      "fraction": 0.07486849795441262,
+      "longestInteriorSeconds": 0.2904761904761905
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

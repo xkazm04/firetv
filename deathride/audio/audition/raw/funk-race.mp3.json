@@ -1,0 +1,30 @@
+{
+  "id": "eb978b21-1d2a-4172-9d79-f1b751cd9ba4",
+  "ts": "2026-10-02T19:24:38.750Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "music",
+  "out": "audio/audition/raw/funk-race.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Original instrumental combat-racing music. Gritty syncopated electric bass riff, raw live drum break, short blunt brass stabs and scratchy wah guitar, dry room, worn tape, crooked comic swagger with real danger. Tight restrained arrangement, punchy and dirty, not glossy disco, no smooth lounge finish. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody.",
+    "music_length_ms": 20000,
+    "force_instrumental": true
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 39929,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 321037,
+  "providerCredits": null,
+  "sha256": "5d673e2cacfda8b2d9311e22b6abaa13ad66e8929b02feefbfbaf6d3b405bdc9",
+  "completedAt": "2026-10-02T19:24:52.128Z",
+  "creditsAfter": 39929,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account delta may include concurrent use or omit delayed billing; conservative estimate retained.",
+  "sessionBudgetUsed": 5164
+}

@@ -1,0 +1,105 @@
+{
+  "at": "2026-10-03T10:27:25.894803+00:00",
+  "inputs": [
+    {
+      "character": "rook",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-rook-v1.jpg",
+      "source_sha256": "b491e401e9fbf8193acd4eeae75407d7647d5391ad55f4cef209a7a628951a3d",
+      "crop_px": [
+        300,
+        90,
+        700,
+        565
+      ],
+      "reference": "art/contracts/rework2-face-inputs/rook.png",
+      "reference_sha256": "32c3c9cb7f1a5ad358efdcad32acf23b4d4fd5ae7a31dec17f41158e4d35d172",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "ox",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-ox-v1.jpg",
+      "source_sha256": "90eed57a771aa23277c970f2d48023a6179c8dc390e4b848ee24ffa482859bfb",
+      "crop_px": [
+        365,
+        150,
+        665,
+        520
+      ],
+      "reference": "art/contracts/rework2-face-inputs/ox.png",
+      "reference_sha256": "3e77ab21aab79be185304eee02efe2d637d0cdd29a39b6469974a4a83ffa22f2",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "vex",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-vex-v1.jpg",
+      "source_sha256": "212484a7338ccaa6f420db397c7da46ff72ebb5ccaa0b2ec1765586737c5b88b",
+      "crop_px": [
+        345,
+        95,
+        710,
+        560
+      ],
+      "reference": "art/contracts/rework2-face-inputs/vex.png",
+      "reference_sha256": "8bfd3ce9e72de1d7783d47f93decd03ae70c8e8fec3817324142e9eb80067f92",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "mica",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-mica-v1.jpg",
+      "source_sha256": "8bf05b77a0445b76b80ee564fa4afe96f0496dbf1836f346dbc20e62be6c252e",
+      "crop_px": [
+        310,
+        65,
+        705,
+        600
+      ],
+      "reference": "art/contracts/rework2-face-inputs/mica.png",
+      "reference_sha256": "6845e0a3fd0de611ed5764caf7e8b8ce4e5d5b3e55b438b6320956bc20e834bc",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "relay",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-relay-v1.jpg",
+      "source_sha256": "6409720aafe6b754547b9ed45a5b2c4d714d588390551b85dbbdd0314d3e202b",
+      "crop_px": [
+        280,
+        55,
+        755,
+        615
+      ],
+      "reference": "art/contracts/rework2-face-inputs/relay.png",
+      "reference_sha256": "78c2589186fe04890ff11343f59432b83c28401ebbc45b573bde5b2a32458476",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "marrow",
+      "source": "art/review/fusion/sources/v2-fusion-portraits-marrow-v1.jpg",
+      "source_sha256": "4c6f10f94631619e7edfd8d71f6aeb9ce19a8e24a5b5bbea3f77fc0388ffebe8",
+      "crop_px": [
+        345,
+        105,
+        685,
+        555
+      ],
+      "reference": "art/contracts/rework2-face-inputs/marrow.png",
+      "reference_sha256": "117c1e40fa4f5606155ef21387d009d7cec37a11e53de8870bf2a5a993c83cef",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    },
+    {
+      "character": "mechanic",
+      "source": "art/review/story/sources/story-mechanic-v2.jpg",
+      "source_sha256": "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689",
+      "crop_px": [
+        430,
+        195,
+        625,
+        435
+      ],
+      "reference": "art/contracts/rework2-face-inputs/mechanic.png",
+      "reference_sha256": "0c956a0cb9b272f187c9405684b60134b288d2dd174e6c425621a72a8070681d",
+      "operation": "unresampled lossless source crop; conditioning input only; no candidate pixels created"
+    }
+  ],
+  "reason": "Full-bust identity references repeatedly pull the generator toward torso framing. Exact face crops constrain input identity; outputs remain newly generated and measured over their complete exported frames.",
+  "paid_job_policy": "Spent Rook brief unchanged. Debt v2 is its third total attempt. Only unspent sibling briefs change inputs. No attempt cap raised."
+}

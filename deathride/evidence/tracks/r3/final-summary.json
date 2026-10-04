@@ -1,0 +1,142 @@
+{
+  "candidates": 102,
+  "slots": 35,
+  "proved": 99,
+  "pending": [],
+  "flagged": [
+    {
+      "id": "crown-7-a",
+      "flags": [
+        "actual duel unresolved: 3/12"
+      ]
+    },
+    {
+      "id": "crown-7-b",
+      "flags": [
+        "actual duel unresolved: 2/12"
+      ]
+    },
+    {
+      "id": "crown-7-c",
+      "flags": [
+        "actual duel unresolved: 6/12"
+      ]
+    }
+  ],
+  "similarPairs": [],
+  "roles": {
+    "opening": {
+      "count": 15,
+      "cleanMedianSeconds": {
+        "min": 141.5333333333381,
+        "max": 177.71666666670023
+      },
+      "winnerMedianSeconds": {
+        "min": 120.6166666666611,
+        "max": 172.38333333336266
+      },
+      "roadLengthM": {
+        "min": 1611.4799766726849,
+        "max": 2460.0576093445998
+      }
+    },
+    "mid": {
+      "count": 57,
+      "cleanMedianSeconds": {
+        "min": 164.26666666668953,
+        "max": 223.1666666667364
+      },
+      "winnerMedianSeconds": {
+        "min": 152.40000000001342,
+        "max": 216.2000000000642
+      },
+      "roadLengthM": {
+        "min": 2077.6911298629625,
+        "max": 3499.9709840913006
+      }
+    },
+    "final": {
+      "count": 15,
+      "cleanMedianSeconds": {
+        "min": 273.1333333334136,
+        "max": 347.9500000000122
+      },
+      "winnerMedianSeconds": {
+        "min": 247.15000000008882,
+        "max": 340.10000000001935
+      },
+      "roadLengthM": {
+        "min": 2252.618944391541,
+        "max": 3310.2138731350856
+      }
+    },
+    "boss": {
+      "count": 12,
+      "cleanMedianSeconds": {
+        "min": 274.0500000000794,
+        "max": 347.9833333333455
+      },
+      "winnerMedianSeconds": {
+        "min": 251.2500000000921,
+        "max": 342.3500000000173
+      },
+      "roadLengthM": {
+        "min": 2294.189307705733,
+        "max": 3345.4849679957833
+      }
+    },
+    "arena": {
+      "count": 3,
+      "cleanMedianSeconds": {
+        "min": 130.06666666666231,
+        "max": 163.40000000002217
+      },
+      "winnerMedianSeconds": {
+        "min": 113.83333333332816,
+        "max": 152.81666666668042
+      },
+      "roadLengthM": {
+        "min": 1689.1286304549626,
+        "max": 2354.9721977133117
+      }
+    }
+  },
+  "widthW": {
+    "min": 3.7,
+    "max": 5.15
+  },
+  "minimumRadiusL": {
+    "min": 2.016593913492523,
+    "max": 2.4795770892438314
+  },
+  "shapeFamilies": [
+    "angled-fan",
+    "crooked-key",
+    "crossed-double-hook",
+    "crossed-hook",
+    "diagonal-courtyard",
+    "diagonal-rally",
+    "double-hook",
+    "fishhook",
+    "harbour-run",
+    "long-cutback",
+    "nested-switchbacks",
+    "offset-ladder",
+    "rally-coast",
+    "ribbon-stair",
+    "split-courtyard",
+    "staggered-bays",
+    "three-prongs",
+    "two-peninsulas"
+  ],
+  "candidateCombatTrials": 7344,
+  "cleanTrials": 306,
+  "contacts": 188476,
+  "overtakes": 75057,
+  "combatStallEpisodes": 83,
+  "unresolvedTrials": 0,
+  "hunterEpisodes": 3,
+  "baselineRunoff": [
+    "earlyLeadWreckRate"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "asset": "story-rig-reveal-v3",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:59:41.370421+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Fix ONE anatomical error in this supplied image. The Mechanic currently has an unwanted THIRD HAND gripping the curtain at the right of his body. REMOVE that curtain-gripping hand completely and paint only plain hanging ochre curtain fabric in its place. Keep exactly TWO HANDS, the existing pair together in front of his apron holding the small bearing. The curtain hangs open from an unseen fixed hook; nobody touches it. Preserve the EXACT face, hair, worried expression, two correct hands, bearing, apron, shirt, car, red body paint, mine rack, composition, scale and soot background. Do not add anything else. No new arms or hands anywhere.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-rig-reveal-v3",
+    "class": "rig-reveal",
+    "prompt_action": "Use case: precise-object-edit. Fix ONE anatomical error in this supplied image. The Mechanic currently has an unwanted THIRD HAND gripping the curtain at the right of his body. REMOVE that curtain-gripping hand completely and paint only plain hanging ochre curtain fabric in its place. Keep exactly TWO HANDS, the existing pair together in front of his apron holding the small bearing. The curtain hangs open from an unseen fixed hook; nobody touches it. Preserve the EXACT face, hair, worried expression, two correct hands, bearing, apron, shirt, car, red body paint, mine rack, composition, scale and soot background. Do not add anything else. No new arms or hands anywhere.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "none",
+    "count": "1",
+    "status": "ready",
+    "kind": "backdrop",
+    "reference": "art/raw/story-rig-reveal-v2/attempt-01/1.jpg",
+    "batch": "story-backdrops",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "backdrops",
+    "surface_stack": "",
+    "logical_name": "rig-reveal"
+  },
+  "input_hash": "02ddb750c16349d113eeee8eef707145b28684c4266c1443cd21cc809309cf94",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-rig-reveal-v3\\attempt-01\\1.jpg",
+  "session_id": "ac4fbf2d-b2d5-4025-8a02-7cac34bb34a8",
+  "reference_sha256": "cd132b72ef35bdf3977bd1f6a4ca8f64cae8d593274512fa3d142f86c80e9b57",
+  "image_tool_calls": [
+    {
+      "name": "image_edit",
+      "arguments": {
+        "image": [
+          "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-rig-reveal-v2\\attempt-01\\1.jpg"
+        ],
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Fix ONE anatomical error in this supplied image. The Mechanic currently has an unwanted THIRD HAND gripping the curtain at the right of his body. REMOVE that curtain-gripping hand completely and paint only plain hanging ochre curtain fabric in its place. Keep exactly TWO HANDS, the existing pair together in front of his apron holding the small bearing. The curtain hangs open from an unseen fixed hook; nobody touches it. Preserve the EXACT face, hair, worried expression, two correct hands, bearing, apron, shirt, car, red body paint, mine rack, composition, scale and soot background. Do not add anything else. No new arms or hands anywhere.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "ef68b198a0700a38b8b4770d1c8ae686b15d5eb45a9a35d34205c84b2e1b8759",
+  "returncode": 0,
+  "elapsed_seconds": 29.0
+}

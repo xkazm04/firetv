@@ -1,0 +1,20 @@
+{
+  "basis": "Scripted LAN controller only; these are probe steering choices, never game physics or human feel settings",
+  "lookAheadM": 17,
+  "lookAheadSeconds": 0.55,
+  "steerGain": 2.0,
+  "yawDamping": 0.18,
+  "slipCompensation": 0.35,
+  "cruiseFraction": 0.78,
+  "cornerGripFraction": 0.6,
+  "cornerErrorSlowdown": 0.4,
+  "maximumErrorSlowdown": 0.55,
+  "brakeOverspeedMps": 2,
+  "brakeAmount": 0.45,
+  "coastThrottle": 0.12,
+  "inputHz": 30,
+  "telemetryHz": 10,
+  "repairSeekHp": 60,
+  "repairSeekRangeM": 45,
+  "repairSeekAngleRadians": 0.8
+}

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "p4-portraits-marrow-v1",
+    "class": "marrow",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-portraits-marrow-v1\\attempt-02\\1.jpg",
+    "source_sha256": "02b0a7bf76079bccf4ff639b1b0cf76e5b0ef630db7a48279b29a513ee95290f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-portraits-marrow-v1",
+      "class": "marrow",
+      "prompt_action": "Fictional older adult circuit owner with medium olive skin, neatly swept-back silver hair, a broad angular face and a stern reserved expression. A charcoal high-collared coat with restrained olive armored shoulders and a plain warm-ivory scarf; no jewellery or insignia. One complete head-and-shoulders bust centred inside the middle three quarters of the square, front-facing flat character illustration. Symmetric neutral light. No weapon, car, badge, lettering, numbers or logos. An original fictional identity, no resemblance to a real person.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "p4-c4-preview",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.31368350982666016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        123,
+        137,
+        902,
+        886
+      ],
+      "margin_fraction": 0.119140625,
+      "aspect": 1.0400534045393859,
+      "estimated_key_rgb": [
+        217.0,
+        59.0,
+        151.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.651784919740996,
+      "palette_p90_delta_e": 22.221434415776333
+    },
+    "placement": {
+      "source_bounds_px": [
+        123,
+        137,
+        902,
+        886
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        238
+      ],
+      "scale": 0.31835686777920413,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-c4-preview\\p4-portraits-marrow-v1.png",
+    "sha256": "5966df5bf53fb475687b5def2663489cf51096f925e3c137fbf42f94c283cdb2"
+  }
+]

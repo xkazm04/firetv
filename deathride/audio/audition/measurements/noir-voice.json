@@ -1,0 +1,166 @@
+{
+  "id": "noir-voice",
+  "measuredAt": "2026-10-02T19:28:52.005239+00:00",
+  "generationSidecar": "raw/noir-voice.mp3.json",
+  "raw": {
+    "file": "raw/noir-voice.mp3",
+    "sha256": "04102e39a020f0d107a3f3c6d4de3dbe85d5e8323147d32747d9d0e0d0cfc1eb",
+    "bytes": 153435,
+    "status": "fail",
+    "failures": [
+      "loudness"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 9.520181405895691,
+    "durationWindowSeconds": [
+      4,
+      15
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 419840,
+    "containerDurationSeconds": 9.560816,
+    "integratedLufs": -24.29,
+    "truePeakDbtp": -4.43,
+    "loudnessRangeLu": 2.4,
+    "loudnormAnalysis": {
+      "input_i": "-24.29",
+      "input_tp": "-4.43",
+      "input_lra": "2.40",
+      "input_thresh": "-34.58",
+      "output_i": "-18.84",
+      "output_tp": "-2.00",
+      "output_lra": "2.20",
+      "output_thresh": "-29.13",
+      "normalization_type": "dynamic",
+      "target_offset": "0.84"
+    },
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -4.442291526105808,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          91703,
+          103821
+        ],
+        [
+          251657,
+          256418
+        ],
+        [
+          259149,
+          279212
+        ],
+        [
+          405066,
+          419840
+        ]
+      ],
+      "fraction": 0.12318025914634147,
+      "longestInteriorSeconds": 0.45494331065759636
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/noir-voice.mp3",
+    "sha256": "4b890ea32742363f5f50aa8c56da1f61a1f998fd1639b3122d6ab310e2d2bea5",
+    "bytes": 153434,
+    "status": "pass",
+    "failures": [],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 9.520181405895691,
+    "durationWindowSeconds": [
+      4,
+      15
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 419840,
+    "containerDurationSeconds": 9.560816,
+    "integratedLufs": -18.81,
+    "truePeakDbtp": -2.36,
+    "loudnessRangeLu": 2.1,
+    "loudnormAnalysis": {
+      "input_i": "-18.81",
+      "input_tp": "-2.36",
+      "input_lra": "2.10",
+      "input_thresh": "-29.10",
+      "output_i": "-18.39",
+      "output_tp": "-2.00",
+      "output_lra": "1.70",
+      "output_thresh": "-28.68",
+      "normalization_type": "dynamic",
+      "target_offset": "0.39"
+    },
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -2.3616837045740016,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          91883,
+          103579
+        ],
+        [
+          259532,
+          279182
+        ],
+        [
+          405609,
+          419840
+        ]
+      ],
+      "fraction": 0.10855802210365853,
+      "longestInteriorSeconds": 0.445578231292517
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "dynamic",
+    "ffmpegFilter": "loudnorm=I=-18:TP=-2:LRA=11:measured_I=-24.29:measured_TP=-4.43:measured_LRA=2.40:measured_thresh=-34.58:offset=0.84:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "04102e39a020f0d107a3f3c6d4de3dbe85d5e8323147d32747d9d0e0d0cfc1eb",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "pass",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "speech transcription/identity/style"
+  ]
+}

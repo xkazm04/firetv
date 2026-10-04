@@ -1,0 +1,215 @@
+{
+  "id": "mine-base",
+  "cue": "weapon.mine.blast",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:29.510053+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\audition\\raw\\diesel-mine.mp3.json",
+    "sourceSha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887",
+    "generatedAt": "2026-10-02T19:23:25.843Z",
+    "request": {
+      "text": "One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.",
+      "duration_seconds": 2,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 20,
+    "session": "x2-2026-10-02",
+    "reused": true
+  },
+  "raw": {
+    "file": "audio/audition/raw/diesel-mine.mp3",
+    "sha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887",
+    "bytes": 33062,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence",
+      "clipping"
+    ],
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 88200,
+    "decodedBytes": 352800,
+    "integratedLufs": -12.94,
+    "truePeakDbtp": 0.31,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 4,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          0,
+          7023
+        ],
+        [
+          53142,
+          59272
+        ],
+        [
+          59336,
+          88200
+        ]
+      ],
+      "fraction": 0.47638321995464855,
+      "longestInteriorSeconds": 0.13900226757369616
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 3320,
+    "endFrameExclusive": 22871,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.5134521775029667,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/mine-base.wav",
+      "sha256": "880c222c96d445b4740d68a046919c59e50742d6c9fd9cec34aedb0289992d20",
+      "bytes": 39180,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 0.8866666666666667,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 19551,
+      "decodedBytes": 39102,
+      "integratedLufs": -20.01,
+      "truePeakDbtp": -5.17,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            17074,
+            19551
+          ]
+        ],
+        "fraction": 0.1266942867372513,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 17294,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 1.0011519555381692,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/mine-base.wav",
+    "sha256": "a69f237913aedfed5bd60041820dd55307962fca3f4b4795e2eb3e0d04d24683",
+    "bytes": 34666,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.7843083900226757,
+    "durationWindowSeconds": [
+      0.7823083900226757,
+      0.7863083900226757
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 17294,
+    "decodedBytes": 34588,
+    "integratedLufs": -20.01,
+    "truePeakDbtp": -5.16,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence",
+    "clipping"
+  ]
+}

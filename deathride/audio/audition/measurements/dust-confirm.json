@@ -1,0 +1,146 @@
+{
+  "id": "dust-confirm",
+  "measuredAt": "2026-10-02T19:28:15.524855+00:00",
+  "generationSidecar": "raw/dust-confirm.mp3.json",
+  "raw": {
+    "file": "raw/dust-confirm.mp3",
+    "sha256": "46f64aa230336ce1927ca9042b314d6e125e13825e797e833158c316e171f055",
+    "bytes": 17180,
+    "status": "fail",
+    "failures": [
+      "loudness"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -25.12,
+    "truePeakDbtp": -7.42,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-25.12",
+      "input_tp": "-7.42",
+      "input_lra": "0.00",
+      "input_thresh": "-36.56",
+      "output_i": "-19.96",
+      "output_tp": "-2.30",
+      "output_lra": "0.00",
+      "output_thresh": "-31.41",
+      "normalization_type": "linear",
+      "target_offset": "-0.04"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -7.764267284302555,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          30535,
+          43978
+        ]
+      ],
+      "fraction": 0.3048299319727891,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/dust-confirm.mp3",
+    "sha256": "85dffe38325a8e648a8466211d6627fc321553aef20599a058c83397f88d2a0f",
+    "bytes": 17179,
+    "status": "pass",
+    "failures": [],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -20.46,
+    "truePeakDbtp": -2.78,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.46",
+      "input_tp": "-2.78",
+      "input_lra": "0.00",
+      "input_thresh": "-31.90",
+      "output_i": "-19.96",
+      "output_tp": "-2.32",
+      "output_lra": "0.00",
+      "output_thresh": "-31.40",
+      "normalization_type": "linear",
+      "target_offset": "-0.04"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -3.1758658992443993,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          32751,
+          43900
+        ]
+      ],
+      "fraction": 0.25281179138321996,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-25.12:measured_TP=-7.42:measured_LRA=0.00:measured_thresh=-36.56:offset=-0.04:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "46f64aa230336ce1927ca9042b314d6e125e13825e797e833158c316e171f055",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "pass",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

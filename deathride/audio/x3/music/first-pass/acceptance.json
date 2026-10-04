@@ -1,0 +1,360 @@
+{
+  "at": "2026-10-02T22:29:13.727045+00:00",
+  "protocol": "x3-local-full-song-v1",
+  "samples": [
+    {
+      "id": "dust-road-proof",
+      "status": "fail",
+      "raw": {
+        "file": "audio/x3/music/first-pass/dust-road-score.flac",
+        "sha256": "a60107ed1ce829e73c450058134eb4e1e5d3e11cb8d070132592a9fe6dd0986e",
+        "bytes": 10350598,
+        "status": "fail",
+        "failures": [
+          "loudness"
+        ],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.0,
+        "integratedLufs": -18.52,
+        "truePeakDbtp": -3.84,
+        "loudnessRangeLu": 15.0,
+        "loudnormAnalysis": {
+          "input_i": "-18.52",
+          "input_tp": "-3.84",
+          "input_lra": "15.00",
+          "input_thresh": "-29.81",
+          "output_i": "-14.26",
+          "output_tp": "-2.00",
+          "output_lra": "10.80",
+          "output_thresh": "-25.10",
+          "normalization_type": "dynamic",
+          "target_offset": "0.26"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -3.8699607319464535,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3131939,
+              3142392
+            ],
+            [
+              3186480,
+              3197517
+            ],
+            [
+              3240872,
+              3252643
+            ],
+            [
+              3295160,
+              3307500
+            ]
+          ],
+          "fraction": 0.013787150415721844,
+          "longestInteriorSeconds": 0.5338321995464853
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot"
+        },
+        "loopBoundary": null
+      },
+      "edited": {
+        "file": "audio/x3/music/first-pass/dust-road-proof.flac",
+        "sha256": "4ea971cd8ac788c11d42d8b9b309930809460d61d8a1df941a20cdf9dbaa3c4e",
+        "bytes": 11168813,
+        "status": "fail",
+        "failures": [
+          "sectionJoins"
+        ],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "sectionJoins": false
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.0,
+        "integratedLufs": -14.17,
+        "truePeakDbtp": -1.97,
+        "loudnessRangeLu": 11.3,
+        "loudnormAnalysis": {
+          "input_i": "-14.17",
+          "input_tp": "-1.97",
+          "input_lra": "11.30",
+          "input_thresh": "-25.05",
+          "output_i": "-14.11",
+          "output_tp": "-2.00",
+          "output_lra": "7.70",
+          "output_thresh": "-24.71",
+          "normalization_type": "dynamic",
+          "target_offset": "0.11"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -1.9744792580905735,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3137053,
+              3142391
+            ],
+            [
+              3191422,
+              3197515
+            ],
+            [
+              3245204,
+              3252641
+            ],
+            [
+              3299387,
+              3307500
+            ]
+          ],
+          "fraction": 0.008157520786092215,
+          "longestInteriorSeconds": 0.33727891156462586
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "Linear song with intro/outro; no end-to-start loop claim"
+        },
+        "loopBoundary": null,
+        "sectionJoins": [
+          {
+            "atSeconds": 20,
+            "into": "Verse",
+            "sampleJumpFullScale": 0.0014438629150390625,
+            "rmsStepDb": 17.990841956069413,
+            "status": "fail"
+          },
+          {
+            "atSeconds": 60,
+            "into": "Peak",
+            "sampleJumpFullScale": 0.0022264719009399414,
+            "rmsStepDb": 14.048118218450439,
+            "status": "fail"
+          },
+          {
+            "atSeconds": 100,
+            "into": "Break",
+            "sampleJumpFullScale": 0.0021300315856933594,
+            "rmsStepDb": 3.849787473025423,
+            "status": "pass"
+          },
+          {
+            "atSeconds": 120,
+            "into": "Outro",
+            "sampleJumpFullScale": 0.000316619873046875,
+            "rmsStepDb": 41.61643757884501,
+            "status": "fail"
+          }
+        ]
+      },
+      "preview": {
+        "file": "audio/x3/music/first-pass/dust-road-proof.mp3",
+        "sha256": "5ccedaa873d6909e5838462db40b68c02553512e37467f11dafd98bcef2d3cdc",
+        "bytes": 2401636,
+        "status": "fail",
+        "failures": [
+          "sectionJoins"
+        ],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "sectionJoins": false
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.073469,
+        "integratedLufs": -14.63,
+        "truePeakDbtp": -2.22,
+        "loudnessRangeLu": 11.3,
+        "loudnormAnalysis": {
+          "input_i": "-14.63",
+          "input_tp": "-2.22",
+          "input_lra": "11.30",
+          "input_thresh": "-25.50",
+          "output_i": "-14.11",
+          "output_tp": "-2.00",
+          "output_lra": "7.70",
+          "output_thresh": "-24.71",
+          "normalization_type": "dynamic",
+          "target_offset": "0.11"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -2.2220517458133666,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3136382,
+              3142279
+            ],
+            [
+              3190838,
+              3197501
+            ],
+            [
+              3244460,
+              3252641
+            ],
+            [
+              3299380,
+              3307500
+            ]
+          ],
+          "fraction": 0.008725925925925925,
+          "longestInteriorSeconds": 0.3710204081632653
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "Linear song with intro/outro; no end-to-start loop claim"
+        },
+        "loopBoundary": null,
+        "sectionJoins": [
+          {
+            "atSeconds": 20,
+            "into": "Verse",
+            "sampleJumpFullScale": 0.0013821274042129517,
+            "rmsStepDb": 17.990588218624968,
+            "status": "fail"
+          },
+          {
+            "atSeconds": 60,
+            "into": "Peak",
+            "sampleJumpFullScale": 0.0020673200488090515,
+            "rmsStepDb": 14.068552907113439,
+            "status": "fail"
+          },
+          {
+            "atSeconds": 100,
+            "into": "Break",
+            "sampleJumpFullScale": 0.0019910037517547607,
+            "rmsStepDb": 3.8504704497682294,
+            "status": "pass"
+          },
+          {
+            "atSeconds": 120,
+            "into": "Outro",
+            "sampleJumpFullScale": 0.0003288764273747802,
+            "rmsStepDb": 41.62746499375881,
+            "status": "fail"
+          }
+        ]
+      }
+    }
+  ],
+  "structure": {
+    "sections": [
+      {
+        "name": "Intro",
+        "start": 0,
+        "bars": 8,
+        "description": "Low toms, open fifths and isolated echo guitar; motif enters gradually.",
+        "end": 20.0,
+        "events": 40,
+        "rmsDbfs": -17.118046173184403
+      },
+      {
+        "name": "Verse",
+        "start": 20,
+        "bars": 16,
+        "description": "Bass pulse and alternating guitar questions; minor progression changes every two bars.",
+        "end": 60.0,
+        "events": 244,
+        "rmsDbfs": -15.578877052013292
+      },
+      {
+        "name": "Peak",
+        "start": 60,
+        "bars": 16,
+        "description": "Double-time percussion, octave guitar answer, ascending fills and broader harmony.",
+        "end": 100.0,
+        "events": 364,
+        "rmsDbfs": -13.636163329627227
+      },
+      {
+        "name": "Break",
+        "start": 100,
+        "bars": 8,
+        "description": "Drum bed drops out; low drone and high sparse plucks leave a deliberate space.",
+        "end": 120.0,
+        "events": 18,
+        "rmsDbfs": -21.383455142902278
+      },
+      {
+        "name": "Outro",
+        "start": 120,
+        "bars": 12,
+        "description": "Half-time return, reduced motif, low final root and a four-second natural fade.",
+        "end": 150.0,
+        "events": 85,
+        "rmsDbfs": -19.82599006887956
+      }
+    ],
+    "identicalPcmBars": 0,
+    "uniqueBars": 60,
+    "peakEventsPerBar": 22.75,
+    "breakEventsPerBar": 2.25,
+    "status": "pass"
+  },
+  "credits": 0,
+  "paidMusicGenerations": 0,
+  "proofTracks": 1,
+  "notMeasured": [
+    "human musical/style preference",
+    "long-race fatigue",
+    "new provider long-form quality",
+    "physical Stick playback"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "v4-hud-instrument-v1": {
+    "note": "Bone/rust open rectangle with quiet opening. Corrected margin passes. Source is compact rather than 4:1; fixed-corner runtime expansion supplies the wide instrument. No text or directional shadow.",
+    "source_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+    "export_sha256": "55a2497b1f33880b0f0b954806b9edc70be9544bbd4c07e28073c4067cac4af7"
+  },
+  "v4-hud-meter-v1": {
+    "note": "Thin bone rim, rust inner edge and ochre end cap. Empty measured opening supports authoritative linear fill. Compact source expands through fixed corners; no generated ticks or numbers.",
+    "source_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+    "export_sha256": "0951f93eb1e2408f5be6833eef893952d34bc494427d71893244dfb83a9b88c8"
+  },
+  "v4-hud-button-v1": {
+    "note": "Broad square bone plates, rust lower edge and dark worn seams; transparent centre stays empty for a live label. Corner wear is sparse enough for a small control.",
+    "source_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+    "export_sha256": "356143094e937ad2a28c8fe54dd6446f9c1ce79624da4a891db92f5f9c06b39a"
+  },
+  "v4-hud-dial-v1": {
+    "note": "Bone square bezel and four hazard-yellow corner anchors. Large empty centre suits the countdown and exact procedural minimap. No numeric gauge baked into art.",
+    "source_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+    "export_sha256": "fe17c0b0d89fff7aa59c3bbc251bb178c3d98d5051a9242209f836dd1cf7dfed"
+  },
+  "v4-hud-steel-flick-v1": {
+    "note": "Sharp silver arrowhead with compact attached ochre fins; clear dash silhouette. Local Qwen calls it aircraft-like and flags forbidden details, but direct inspection finds no lettering/brand or occupant. Retain that disagreement; use only as a labelled HUD dash symbol, not a car sprite.",
+    "source_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+    "export_sha256": "654bc8b91150075c2480f089aae75a4ae181e77ffa5b4a9566148a869c5b8e52"
+  },
+  "v4-hud-flywheel-v1": {
+    "note": "Three-spoke wheel with attached curved forward arrow; recognisable circular silhouette and bone/ochre roles. No lettering or external shadow.",
+    "source_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+    "export_sha256": "4f1bca4d69cebfe66d5e3b3c0317e65c8155bee503f9e836c312122e2242fee9"
+  },
+  "v4-hud-shoulder-v1": {
+    "note": "Chunky plated triangular ram with a broad bone nose and rust shoulder bracing. Repaired margins pass; mass reads distinctly from the thin lance.",
+    "source_sha256": "9f4e7d0cb7f716b848539274fc0a8fd41a04f79d77595d97529cd15909e8f5be",
+    "export_sha256": "0014fc1f1431d21d7c48962ad197e0e5298bcaea42cb0b7b8afac8beaae3d0f2"
+  },
+  "v4-hud-turbine-v1": {
+    "note": "Paired large intake fans with attached exhaust structures, clear twin circular silhouette. Third source restores safe margins; tiny blade detail is decorative. Actual size and prompt compliance remain separate from model confidence.",
+    "source_sha256": "1fb42521b5d64858e8fc514c3471c587972202120294db0fb7a3cbdee52609fa",
+    "export_sha256": "40667faffadc27eebfaa3afa0ab06e486df2f964923afbe22ea346e66fa696c2"
+  },
+  "v4-hud-ground-bite-v1": {
+    "note": "Large treaded tyre, small earth teeth attached below. Dark inner void preserves the tyre read on the soot backing; label explains grip, no colour-only meaning.",
+    "source_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+    "export_sha256": "7ed2fe19757cfbc1956130c164209a32f8c22d7f12982a3436dd79499ed9d45a"
+  },
+  "v4-hud-punch-lance-v1": {
+    "note": "Long narrow pointed mechanical lance with compact rust breech; clean single-line silhouette. Repaired complete margins pass. Label differentiates its ranged role from other arrows.",
+    "source_sha256": "35f61825e203d27c704fa6854b1acae161fd6bcd38e6b8fef3af6c376da842db",
+    "export_sha256": "74e91f34b74f5596325d5d7681d5094132ac28ef9379a91363f8e890c41b4aa7"
+  },
+  "v4-hud-bone-rack-v1": {
+    "note": "Central dark plate with THREE bone spikes on BOTH left and right. Third source corrects clipping while preserving bilateral contact identity. Red X-shaped paint scratches are not lettering; no gore or detached bones.",
+    "source_sha256": "4b1e99a79d248b55da938d65b15013a64365bb47b6b07d9f25ff4b0fc8ca5ddc",
+    "export_sha256": "37f66e5d3a7a1e21262d56fafda35f107bff47f7ca0aa0903da074416aa1bf8b"
+  },
+  "v4-hud-scrambler-v1": {
+    "note": "Squat transmitter puck with two zigzag antenna arms; wider round silhouette distinct from the flywheel. Fine circuitry is decorative; name/state remain live text.",
+    "source_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+    "export_sha256": "c2e4b87e60aa9ba0342ad092cb2be11b84384ebb327a42c828c661a171df2da5"
+  },
+  "v4-hud-arc-harpoon-v1": {
+    "note": "Barbed bone point on a rail with a large circular coiled tether and pale contained energy line. Complete safe margins after correction; no detached lightning or ground glow.",
+    "source_sha256": "ba0570afc0e7948b7a33673a1ff4987460e2b7d580aceb665785b9aec517c094",
+    "export_sha256": "5eb0773f645569c63d5c048829254e1806f2cb05691c383cc2543421b943d9ed"
+  },
+  "v4-hud-plate-brace-v1": {
+    "note": "Three overlapping broad bone armour plates, dark seams and rivets. Bold slab silhouette distinguishes defence from engine icons; hazard band is pigment, no text.",
+    "source_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+    "export_sha256": "c27d1b0224624e9f5ef844d8d1e934c5116aae859f7d6310e5f9f1399c70551f"
+  }
+}

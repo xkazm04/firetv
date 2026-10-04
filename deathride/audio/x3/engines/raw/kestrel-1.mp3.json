@@ -1,0 +1,32 @@
+{
+  "id": "d780af7f-c378-4574-bb93-fcd02906ce61",
+  "ts": "2026-10-02T21:49:31.151Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/kestrel-1.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: electric traction whine with restrained rough arc crackle. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 23953,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "7712b84fe4efac3dfd3c8efee0980057a52b2e8945ed10498ee291298d6ddde5",
+  "completedAt": "2026-10-02T21:49:35.201Z",
+  "creditsAfter": 23953,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5140
+}

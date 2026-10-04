@@ -1,0 +1,8 @@
+{
+  "status": "aborted diagnostic, not candidate evidence",
+  "mode": "single native 60/112px image without enlargement",
+  "model": "mimo-9b:q8-64k",
+  "failure": "JSONDecodeError: Expecting value at line 65 column 1 (char 4466)",
+  "observation": "First portrait observation visibly misplaced the box and listed contradictory crop/eye defects. The next response was invalid JSON. No eligibility decisions use this run.",
+  "raw_retention": "Tool transcript contains first observation and error; this diagnostic script aborted before saving its full response array. Nearest-pixel follow-up is saved separately."
+}

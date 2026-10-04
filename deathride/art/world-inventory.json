@@ -1,0 +1,39 @@
+{
+  "generated_briefs": 63,
+  "batches": {
+    "p4-tiles": 6,
+    "p4-barriers": 6,
+    "p4-props": 8,
+    "p4-pickups": 5,
+    "p4-decals": 5,
+    "p4-effects": 5,
+    "p4-hud": 9,
+    "p4-combat-icons": 3,
+    "p4-portraits": 5,
+    "p4-backdrops": 5,
+    "p4-landmarks": 6
+  },
+  "carry_forward": {
+    "ice": "p1-tile-ice-v2",
+    "oil": "p1-tile-oil-v3",
+    "kerb": "p1-tile-kerb-v2"
+  },
+  "correction": "p1-tile-asphalt-v1 attempt 3",
+  "autotile_families": {
+    "track-edge": 47,
+    "barrier": 47
+  },
+  "status": "technical bundle delivered; owner quality pending",
+  "generation_caps_reached": [
+    "gravel",
+    "ice"
+  ],
+  "local_recoveries": {
+    "gravel": "p4-gravel-period-v1",
+    "ice": "p4-ice-centre-768-v1"
+  },
+  "delivered_logical_assets": 69,
+  "atlas_regions": 172,
+  "provisional_c4_portrait": "p4-portraits-marrow-v1",
+  "authority": "reports/p4-delivery-audit.json and assets/phase2-v1/catalog.json"
+}

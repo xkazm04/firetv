@@ -1,0 +1,6054 @@
+{
+  "protocol": "deathride-x3-screen-v1",
+  "wave": "effects",
+  "at": "2026-10-02T21:40:49.875417+00:00",
+  "sampleRate": 22050,
+  "ffmpegVersion": "ffmpeg version 2025-02-17-git-b92577405b-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "notes": "Original failures retained. Edited duration based on reproducible trim recipe; thresholds fixed in bible before edits. Short-clip meter padding disclosed.",
+  "samples": [
+    {
+      "id": "engine-base",
+      "cue": "engine.base",
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:40:34.677981+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\diesel-engine.mp3.json",
+        "sourceSha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d",
+        "generatedAt": "2026-10-02T19:22:56.188Z",
+        "request": {
+          "text": "Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/diesel-engine.mp3",
+        "sha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -10.95,
+        "truePeakDbtp": -0.29,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.008513562381267548,
+          "boundaryRmsStepDb": 5.956183779754626,
+          "spectralCosine": 0.9691837372020198,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.008513562381267548,
+            0.008513562381267548
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, half-cycle rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.40973210981354147,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/engine-base.wav",
+        "sha256": "e3d76347cf8d3340ae469a028560c09b261bcd6d8ec2e5787043b1fa931e0bb4",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -7.58,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.01812744140625,
+          "boundaryRmsStepDb": 0.047853712493673276,
+          "spectralCosine": 0.9986951731987991,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.01812744140625,
+            0.01812744140625
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/effects/first-pass/repeats/engine-base-three-cycles.ogg",
+        "sha256": "f9b9e99fb22e1f7cf14997f3e4239a713baf2ae25b62f604707a49f3bcf524b6",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "rivet-base",
+      "cue": "weapon.rivet.fire",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:35.121131+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\diesel-rivet.mp3.json",
+        "sourceSha256": "26063c8f24d809569a25a3a77afdd6114d4f198a43c52f876820a92d21097768",
+        "generatedAt": "2026-10-02T19:23:07.917Z",
+        "request": {
+          "text": "One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 1.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 15,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/diesel-rivet.mp3",
+        "sha256": "26063c8f24d809569a25a3a77afdd6114d4f198a43c52f876820a92d21097768",
+        "bytes": 24703,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.35,
+          1.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 65268,
+        "decodedBytes": 261072,
+        "integratedLufs": -8.11,
+        "truePeakDbtp": 2.2,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 240,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              37130,
+              64909
+            ]
+          ],
+          "fraction": 0.4256143899001042,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 3969,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": true
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.3568617492834812,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/rivet-base.wav",
+        "sha256": "ddc01da8bc416070b70eec0c506b8501197e48ea3f4ee171c1e130549c1b5cd0",
+        "bytes": 8016,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.18,
+        "durationWindowSeconds": [
+          0.178,
+          0.182
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 3969,
+        "decodedBytes": 7938,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -7.04,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 4851,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "mine-base",
+      "cue": "weapon.mine.blast",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:35.420481+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\diesel-mine.mp3.json",
+        "sourceSha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887",
+        "generatedAt": "2026-10-02T19:23:25.843Z",
+        "request": {
+          "text": "One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/diesel-mine.mp3",
+        "sha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887",
+        "bytes": 33062,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 88200,
+        "decodedBytes": 352800,
+        "integratedLufs": -12.94,
+        "truePeakDbtp": 0.31,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 4,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              0,
+              7023
+            ],
+            [
+              53142,
+              59272
+            ],
+            [
+              59336,
+              88200
+            ]
+          ],
+          "fraction": 0.47638321995464855,
+          "longestInteriorSeconds": 0.13900226757369616
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 3320,
+        "endFrameExclusive": 22869,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5134521775029667,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/mine-base.wav",
+        "sha256": "8a8fffb055e63c215d704b73d24ec373e981b44d5cf3da4d27e6c5b627e6d35d",
+        "bytes": 39176,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.8865759637188209,
+        "durationWindowSeconds": [
+          0.8845759637188209,
+          0.8885759637188209
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 19549,
+        "decodedBytes": 39098,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -5.17,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              17073,
+              19549
+            ]
+          ],
+          "fraction": 0.1266560949409177,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "crunch-base",
+      "cue": null,
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:35.715503+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\diesel-crunch.mp3.json",
+        "sourceSha256": "079259644686812dbcd23a95661149a3c82c8c524144d8867e40369b43357d1e",
+        "generatedAt": "2026-10-02T19:23:52.563Z",
+        "request": {
+          "text": "One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a dense chassis crush and wrenching heavy steel. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 1.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 15,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/diesel-crunch.mp3",
+        "sha256": "079259644686812dbcd23a95661149a3c82c8c524144d8867e40369b43357d1e",
+        "bytes": 24703,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "silence"
+        ],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.35,
+          1.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 65268,
+        "decodedBytes": 261072,
+        "integratedLufs": -15.59,
+        "truePeakDbtp": -3.6,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30992,
+              65268
+            ]
+          ],
+          "fraction": 0.5251578108720966,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 12517,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6088355457613952,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/crunch-base.wav",
+        "sha256": "e9f2def687c167db141f571bae1ea17f98302f3b24e0cddaef5d41c66895af11",
+        "bytes": 25112,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.5676643990929705,
+        "durationWindowSeconds": [
+          0.5656643990929705,
+          0.5696643990929705
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 12517,
+        "decodedBytes": 25034,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -4.96,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "silence"
+      ]
+    },
+    {
+      "id": "pickup-base",
+      "cue": "pickup.cash",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:36.023252+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\dust-pickup.mp3.json",
+        "sourceSha256": "b7d169a1039aadd4616553220630f937634576e0276d1f32652be53ed48b42b6",
+        "generatedAt": "2026-10-02T19:22:02.487Z",
+        "request": {
+          "text": "One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/dust-pickup.mp3",
+        "sha256": "b7d169a1039aadd4616553220630f937634576e0276d1f32652be53ed48b42b6",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -14.22,
+        "truePeakDbtp": -0.51,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              32775,
+              44100
+            ]
+          ],
+          "fraction": 0.2568027210884354,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 16579,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6187283275532345,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/pickup-base.wav",
+        "sha256": "55cafa23083073223d039b0577222ba38a207888826386bbd552c1ecc7e62fc5",
+        "bytes": 33236,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.7518820861678005,
+        "durationWindowSeconds": [
+          0.7498820861678005,
+          0.7538820861678005
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 16579,
+        "decodedBytes": 33158,
+        "integratedLufs": -20.27,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              10018,
+              12440
+            ]
+          ],
+          "fraction": 0.14608842511611075,
+          "longestInteriorSeconds": 0.10984126984126984
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak"
+      ]
+    },
+    {
+      "id": "confirm-base",
+      "cue": "ui.confirm",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:36.320691+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\audition\\raw\\noir-confirm.mp3.json",
+        "sourceSha256": "81e699d6f8446c734f716cb6dd1ce9cead2952963e4a390201f7aaea3b56921e",
+        "generatedAt": "2026-10-02T19:27:35.418Z",
+        "request": {
+          "text": "One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x2-2026-10-02",
+        "reused": true
+      },
+      "raw": {
+        "file": "audio/audition/raw/noir-confirm.mp3",
+        "sha256": "81e699d6f8446c734f716cb6dd1ce9cead2952963e4a390201f7aaea3b56921e",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "silence"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -24.95,
+        "truePeakDbtp": -3.82,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              28434,
+              44100
+            ]
+          ],
+          "fraction": 0.35523809523809524,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 14201,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 0.9429746114598995,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/confirm-base.wav",
+        "sha256": "521a837dc07d04f40cfaebc70b4415c6504da3b134144799d8adec9bea363e97",
+        "bytes": 28480,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 0.6440362811791384,
+        "durationWindowSeconds": [
+          0.6420362811791384,
+          0.6460362811791384
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 14201,
+        "decodedBytes": 28402,
+        "integratedLufs": -22.75,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "silence"
+      ]
+    },
+    {
+      "id": "tyre",
+      "cue": "movement.tyre",
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:40:36.767768+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\tyre.mp3.json",
+        "sourceSha256": "dd7cca4d058444b3a7a8019d25a1990d6f72269a9c1b996627350a9772d40550",
+        "generatedAt": "2026-10-02T21:33:51.732Z",
+        "request": {
+          "text": "Tyres rolling over rough asphalt. Immediate steady rubber grain and road hiss; constant body, no acceleration or distinct bumps. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/tyre.mp3",
+        "sha256": "dd7cca4d058444b3a7a8019d25a1990d6f72269a9c1b996627350a9772d40550",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -8.97,
+        "truePeakDbtp": 0.45,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 4,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.16464979015290737,
+          "boundaryRmsStepDb": 0.40633997294311724,
+          "spectralCosine": 0.985188154260633,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.16464979015290737,
+            0.16464979015290737
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, half-cycle rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.3660159405580493,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/tyre.wav",
+        "sha256": "d7862c05237f12108156e2363eee6015813078f0ea112cb9ecae85f0e4858c1a",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -7.87,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.01751708984375,
+          "boundaryRmsStepDb": 0.3842415528438506,
+          "spectralCosine": 0.9992013640434423,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.01751708984375,
+            0.01751708984375
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/effects/first-pass/repeats/tyre-three-cycles.ogg",
+        "sha256": "49d2a04600083c335e90b48b207a70716db621459785ba39fd5a8e78c9ab5f16",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "skid",
+      "cue": "movement.skid",
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:40:37.176137+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\skid.mp3.json",
+        "sourceSha256": "ad9bbbc4ea485b8070369f03e00c76f81d39482317411a23a5b345333b5d09cf",
+        "generatedAt": "2026-10-02T21:33:57.078Z",
+        "request": {
+          "text": "Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/skid.mp3",
+        "sha256": "ad9bbbc4ea485b8070369f03e00c76f81d39482317411a23a5b345333b5d09cf",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -11.33,
+        "truePeakDbtp": 0.4,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 17,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.02934299409389496,
+          "boundaryRmsStepDb": 3.142500837934225,
+          "spectralCosine": 0.9654070078384802,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.02934299409389496,
+            0.02934299409389496
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, half-cycle rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.38194427084004656,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/skid.wav",
+        "sha256": "c653cea91180851c0256132c070b0784458d8a155b47215555b83cdf5d723453",
+        "bytes": 88278,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "loopSeam"
+        ],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -7.12,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.063079833984375,
+          "boundaryRmsStepDb": 5.070228666010211,
+          "spectralCosine": 0.9780179696155403,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.063079833984375,
+            0.063079833984375
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/effects/first-pass/repeats/skid-three-cycles.ogg",
+        "sha256": "269994e7db3ad173381f4f622316264f3d673b1dd0f6945ce9d60df8b3bedba1",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "drift",
+      "cue": "movement.drift",
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:40:37.553014+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\drift.mp3.json",
+        "sourceSha256": "eaa6f99589c9b01ca321bb65d3e151ae7e140955d2f76bf01ed2b4bca081920a",
+        "generatedAt": "2026-10-02T21:34:02.367Z",
+        "request": {
+          "text": "Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/drift.mp3",
+        "sha256": "eaa6f99589c9b01ca321bb65d3e151ae7e140955d2f76bf01ed2b4bca081920a",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": true
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -10.42,
+        "truePeakDbtp": 0.12,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 2,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.012084479560144246,
+          "boundaryRmsStepDb": 0.1353599192981668,
+          "spectralCosine": 0.9992335524687205,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.012084479560144246,
+            0.012084479560144246
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, half-cycle rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.35850894827655494,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/drift.wav",
+        "sha256": "a2168eacdafb619856b5bf9f9429166e6671b26be97de9362611b58325e03fae",
+        "bytes": 88278,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "loopSeam"
+        ],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -7.68,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.01141357421875,
+          "boundaryRmsStepDb": 16.06215911137409,
+          "spectralCosine": 0.9983979769647527,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.01141357421875,
+            0.01141357421875
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping"
+      ],
+      "repeat": {
+        "file": "audio/x3/effects/first-pass/repeats/drift-three-cycles.ogg",
+        "sha256": "d2fe3520f0feb6a4f028fced69bc9a39ac919abf7aef89cdaf597382fd1e6f9d",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "crunch-retry",
+      "cue": "collision.car",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:37.969494+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\crunch-retry.mp3.json",
+        "sourceSha256": "03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff",
+        "generatedAt": "2026-10-02T21:34:07.679Z",
+        "request": {
+          "text": "Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 15,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/crunch-retry.mp3",
+        "sha256": "03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff",
+        "bytes": 24703,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.35,
+          1.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 65268,
+        "decodedBytes": 261072,
+        "integratedLufs": -13.1,
+        "truePeakDbtp": 0.93,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 43,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              33827,
+              65222
+            ]
+          ],
+          "fraction": 0.48101673101673104,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 17015,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.39582206483572246,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/crunch-retry.wav",
+        "sha256": "f5819ed0c4124dfe1c60d9655718c5527423c847d84e28707fe69da72406f96b",
+        "bytes": 34108,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.771655328798186,
+        "durationWindowSeconds": [
+          0.769655328798186,
+          0.773655328798186
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 17015,
+        "decodedBytes": 34030,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -5.93,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "wall",
+      "cue": "collision.wall",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:38.292885+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\wall.mp3.json",
+        "sourceSha256": "5111f5f82b162a8f1734704ce8adeb1fcb351e7bd0a44141d5d62577111e375c",
+        "generatedAt": "2026-10-02T21:34:11.931Z",
+        "request": {
+          "text": "Car chassis hits a concrete retaining wall. Hard dull crack, steel dragging on abrasive concrete, crushed grit falls and dies quickly. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 15,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/wall.mp3",
+        "sha256": "5111f5f82b162a8f1734704ce8adeb1fcb351e7bd0a44141d5d62577111e375c",
+        "bytes": 24703,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence"
+        ],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.35,
+          1.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 65268,
+        "decodedBytes": 261072,
+        "integratedLufs": -17.07,
+        "truePeakDbtp": -0.33,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30421,
+              65261
+            ]
+          ],
+          "fraction": 0.5337991052276767,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 15262,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6102390566446633,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/wall.wav",
+        "sha256": "beee11189c3b783f4e7d16f2d0ccc6a86701ae770b3591208ead504fb2db3dc3",
+        "bytes": 30602,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6921541950113379,
+        "durationWindowSeconds": [
+          0.6901541950113379,
+          0.6941541950113379
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 15262,
+        "decodedBytes": 30524,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -3.69,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence"
+      ]
+    },
+    {
+      "id": "barrier",
+      "cue": "collision.barrier",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:38.613335+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\barrier.mp3.json",
+        "sourceSha256": "5bc6ab83670a045c185af5054779924bdda09ceb3a58b2194a8f8d6fa4905330",
+        "generatedAt": "2026-10-02T21:34:16.078Z",
+        "request": {
+          "text": "Car strikes a loose steel road barrier. Immediate hollow rail bang, bolts rattling in a short cascading decay, final metal tick. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 15,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/barrier.mp3",
+        "sha256": "5bc6ab83670a045c185af5054779924bdda09ceb3a58b2194a8f8d6fa4905330",
+        "bytes": 24703,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.35,
+          1.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 65268,
+        "decodedBytes": 261072,
+        "integratedLufs": -15.41,
+        "truePeakDbtp": 0.27,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 12,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              41974,
+              65057
+            ]
+          ],
+          "fraction": 0.3536648893791751,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 32634,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.333521432163324,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/barrier.wav",
+        "sha256": "9909a7521e37070b5c325eb6f0724e6ec50be79e3533cbda1d14ec27ff980706",
+        "bytes": 65346,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 1.48,
+        "durationWindowSeconds": [
+          1.478,
+          1.482
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 32634,
+        "decodedBytes": 65268,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -3.95,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              21638,
+              25177
+            ],
+            [
+              25198,
+              32560
+            ]
+          ],
+          "fraction": 0.3340381197524055,
+          "longestInteriorSeconds": 0.16049886621315193
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "rivet-hit",
+      "cue": "weapon.rivet.hit",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:39.020293+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\rivet-hit.mp3.json",
+        "sourceSha256": "1841ac9a90cf462d53729157e9419e31617624433151325a7147c724183d4854",
+        "generatedAt": "2026-10-02T21:34:20.559Z",
+        "request": {
+          "text": "Single rivet strikes armoured steel: sharp small metal puncture, compact dull body and tiny falling fragment. Fast dry decay. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 5,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/rivet-hit.mp3",
+        "sha256": "1841ac9a90cf462d53729157e9419e31617624433151325a7147c724183d4854",
+        "bytes": 8821,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.35,
+          0.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 21168,
+        "decodedBytes": 84672,
+        "integratedLufs": -16.35,
+        "truePeakDbtp": -0.32,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              6562,
+              21045
+            ]
+          ],
+          "fraction": 0.6841931216931217,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 10584,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6675749009643063,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/rivet-hit.wav",
+        "sha256": "96d5f8c676149d738519b7330dfaee43871bc23bed1880dc51a3ff00ae7bffa0",
+        "bytes": 21246,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "silence"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.478,
+          0.482
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 10584,
+        "decodedBytes": 21168,
+        "integratedLufs": -20.35,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3072,
+              10584
+            ]
+          ],
+          "fraction": 0.7097505668934241,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence"
+      ]
+    },
+    {
+      "id": "hammer-fire",
+      "cue": "weapon.hammer.fire",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:39.311610+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\hammer-fire.mp3.json",
+        "sourceSha256": "0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd",
+        "generatedAt": "2026-10-02T21:34:26.819Z",
+        "request": {
+          "text": "Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/hammer-fire.mp3",
+        "sha256": "0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "truePeak"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -18.49,
+        "truePeakDbtp": -0.05,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              31979,
+              44032
+            ]
+          ],
+          "fraction": 0.2733106575963719,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 22050,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.4571357047304205,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/hammer-fire.wav",
+        "sha256": "1bf8056c2b196210488bb9f81c7e06ec14ae0c8650b6feaf56a6cdc08097cc1f",
+        "bytes": 44178,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.998,
+          1.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 22050,
+        "decodedBytes": 44100,
+        "integratedLufs": -20.05,
+        "truePeakDbtp": -3.02,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              17627,
+              21927
+            ]
+          ],
+          "fraction": 0.19501133786848074,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "truePeak"
+      ]
+    },
+    {
+      "id": "hammer-hit",
+      "cue": "weapon.hammer.hit",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:39.958510+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\hammer-hit.mp3.json",
+        "sourceSha256": "c2ccf3cdb878f1326a59e53e08c08ba8b086e2c2b1c1e02d9e954c2216148f18",
+        "generatedAt": "2026-10-02T21:34:39.780Z",
+        "request": {
+          "text": "Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/hammer-hit.mp3",
+        "sha256": "c2ccf3cdb878f1326a59e53e08c08ba8b086e2c2b1c1e02d9e954c2216148f18",
+        "bytes": 33062,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 88200,
+        "decodedBytes": 352800,
+        "integratedLufs": -13.37,
+        "truePeakDbtp": 1.59,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 20,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              52246,
+              88193
+            ]
+          ],
+          "fraction": 0.407562358276644,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 22898,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.588843655355589,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/hammer-hit.wav",
+        "sha256": "fe857c7162bd9c60b0e5824041fec3fa38f6043fe67bd29fa29826112a3c7a81",
+        "bytes": 45874,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 1.0384580498866214,
+        "durationWindowSeconds": [
+          1.0364580498866214,
+          1.0404580498866214
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 22898,
+        "decodedBytes": 45796,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -3.37,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              18874,
+              22612
+            ]
+          ],
+          "fraction": 0.16324569831426325,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "mine-drop",
+      "cue": "weapon.mine.drop",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:40.559613+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\mine-drop.mp3.json",
+        "sourceSha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+        "generatedAt": "2026-10-02T21:34:52.563Z",
+        "request": {
+          "text": "Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.7,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 7,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/mine-drop.mp3",
+        "sha256": "731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769",
+        "bytes": 12164,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 0.6802494331065759,
+        "durationWindowSeconds": [
+          0.5499999999999999,
+          0.85
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 29999,
+        "decodedBytes": 119996,
+        "integratedLufs": -16.97,
+        "truePeakDbtp": 0.76,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 11,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              20601,
+              29775
+            ]
+          ],
+          "fraction": 0.30581019367312245,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 15000,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.734513868157115,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/mine-drop.wav",
+        "sha256": "32111c138da1e7eb263ac7e7cf1b838f4485d343b00cd415272846fc0c65b3bd",
+        "bytes": 30078,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6802721088435374,
+        "durationWindowSeconds": [
+          0.6782721088435374,
+          0.6822721088435374
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 15000,
+        "decodedBytes": 30000,
+        "integratedLufs": -20.53,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              10300,
+              14909
+            ]
+          ],
+          "fraction": 0.3072666666666667,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "mine-arm",
+      "cue": "weapon.mine.arm",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:40.936968+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\mine-arm.mp3.json",
+        "sourceSha256": "988e90f950b13600fd5d6942cee4ba03ec92ae83be2845161b079bf36a2ee3a5",
+        "generatedAt": "2026-10-02T21:35:05.211Z",
+        "request": {
+          "text": "A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.6,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 6,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/mine-arm.mp3",
+        "sha256": "988e90f950b13600fd5d6942cee4ba03ec92ae83be2845161b079bf36a2ee3a5",
+        "bytes": 10493,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 0.6,
+        "durationWindowSeconds": [
+          0.44999999999999996,
+          0.75
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 26460,
+        "decodedBytes": 105840,
+        "integratedLufs": -14.22,
+        "truePeakDbtp": 0.02,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 1,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              20467,
+              26458
+            ]
+          ],
+          "fraction": 0.2264172335600907,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 9793,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5278372067815768,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/mine-arm.wav",
+        "sha256": "faf3869cc1c6c8760352f66563d70285eec630165c0a3c658119fc08eee49800",
+        "bytes": 19664,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.44412698412698415,
+        "durationWindowSeconds": [
+          0.44212698412698415,
+          0.44612698412698415
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 9793,
+        "decodedBytes": 19586,
+        "integratedLufs": -20.05,
+        "truePeakDbtp": -5.31,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "scatter",
+      "cue": "weapon.scatter.fire",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:41.287373+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\scatter.mp3.json",
+        "sourceSha256": "09847c2da7f8c69048769ecd573f1ca1b56ba36c2ffa27f112ef0f066b884bfd",
+        "generatedAt": "2026-10-02T21:35:15.914Z",
+        "request": {
+          "text": "One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.8,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 8,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/scatter.mp3",
+        "sha256": "09847c2da7f8c69048769ecd573f1ca1b56ba36c2ffa27f112ef0f066b884bfd",
+        "bytes": 13836,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 0.8,
+        "durationWindowSeconds": [
+          0.65,
+          0.9500000000000001
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 35280,
+        "decodedBytes": 141120,
+        "integratedLufs": -12.32,
+        "truePeakDbtp": 1.08,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 31,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              21120,
+              35065
+            ]
+          ],
+          "fraction": 0.39526643990929705,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 17640,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5064073495238509,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/scatter.wav",
+        "sha256": "e932c46236ec11f34ebd7d1b3614db62f77635254e5e360678767da213022838",
+        "bytes": 35358,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "silence"
+        ],
+        "durationSeconds": 0.8,
+        "durationWindowSeconds": [
+          0.798,
+          0.802
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 17640,
+        "decodedBytes": 35280,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -4.9,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              10143,
+              17597
+            ]
+          ],
+          "fraction": 0.422562358276644,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "pickup-ammo",
+      "cue": "pickup.ammo",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:41.706580+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\pickup-ammo.mp3.json",
+        "sourceSha256": "e67c714ca3a1b9037176db728cd4acf8887059b101ed6f0205909c2591387236",
+        "generatedAt": "2026-10-02T21:35:28.920Z",
+        "request": {
+          "text": "One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+          "duration_seconds": 0.6,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 6,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/pickup-ammo.mp3",
+        "sha256": "e67c714ca3a1b9037176db728cd4acf8887059b101ed6f0205909c2591387236",
+        "bytes": 10493,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 0.6,
+        "durationWindowSeconds": [
+          0.44999999999999996,
+          0.75
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 26460,
+        "decodedBytes": 105840,
+        "integratedLufs": -15.65,
+        "truePeakDbtp": 0.56,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 3,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              16238,
+              26460
+            ]
+          ],
+          "fraction": 0.38631897203325777,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 7962,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6645076729077795,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/pickup-ammo.wav",
+        "sha256": "a3847a4bced27f57d4ee3e7b1b81f0a9ae5cf3c6c33820478ead736501cb6e83",
+        "bytes": 16002,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.36108843537414964,
+        "durationWindowSeconds": [
+          0.35908843537414964,
+          0.36308843537414964
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 7962,
+        "decodedBytes": 15924,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -2.07,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 858,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "pickup-repair",
+      "cue": "pickup.repair",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:42.046511+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\pickup-repair.mp3.json",
+        "sourceSha256": "9f1330313af206f5d02a8c99f136c2a57a753f8397fd8624bdc8ac9e2433099d",
+        "generatedAt": "2026-10-02T21:35:40.545Z",
+        "request": {
+          "text": "One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+          "duration_seconds": 0.7,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 7,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/pickup-repair.mp3",
+        "sha256": "9f1330313af206f5d02a8c99f136c2a57a753f8397fd8624bdc8ac9e2433099d",
+        "bytes": 12164,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak"
+        ],
+        "durationSeconds": 0.6802494331065759,
+        "durationWindowSeconds": [
+          0.5499999999999999,
+          0.85
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 29999,
+        "decodedBytes": 119996,
+        "integratedLufs": -15.88,
+        "truePeakDbtp": -0.45,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              23364,
+              29931
+            ]
+          ],
+          "fraction": 0.218907296909897,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 11824,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6760829753919819,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/pickup-repair.wav",
+        "sha256": "3a774df4b3f158436091c07797adc49c96682d7a455569c4406ed6e082a57834",
+        "bytes": 23726,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.5362358276643991,
+        "durationWindowSeconds": [
+          0.5342358276643991,
+          0.5382358276643991
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 11824,
+        "decodedBytes": 23648,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -2.7,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak"
+      ]
+    },
+    {
+      "id": "wreck",
+      "cue": "race.wreck",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:42.371942+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\wreck.mp3.json",
+        "sourceSha256": "4f8d87ebad5b1659bf043ab22d17fcb2102bae9d50e101275c8947b28b988177",
+        "generatedAt": "2026-10-02T21:35:53.289Z",
+        "request": {
+          "text": "Vehicle wreck: violent steel tearing at onset, deep collapsing chassis and engine choke, short debris falling to a dead stop. No voices or long fire. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/wreck.mp3",
+        "sha256": "4f8d87ebad5b1659bf043ab22d17fcb2102bae9d50e101275c8947b28b988177",
+        "bytes": 33062,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "truePeak"
+        ],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 88200,
+        "decodedBytes": 352800,
+        "integratedLufs": -18.03,
+        "truePeakDbtp": -0.38,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 39207,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.1415633046188454,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/wreck.wav",
+        "sha256": "1891089db17a7fa0d84b4bab76734ef0b1b9f598b242a7cabb7d9a43ee11c41b",
+        "bytes": 78492,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 1.7780952380952382,
+        "durationWindowSeconds": [
+          1.7760952380952382,
+          1.7800952380952382
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 39207,
+        "decodedBytes": 78414,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -5.42,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "truePeak"
+      ]
+    },
+    {
+      "id": "countdown",
+      "cue": "race.countdown",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:42.908716+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\countdown.mp3.json",
+        "sourceSha256": "ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60",
+        "generatedAt": "2026-10-02T21:36:04.300Z",
+        "request": {
+          "text": "One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 5,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/countdown.mp3",
+        "sha256": "ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60",
+        "bytes": 8821,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.35,
+          0.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 21168,
+        "decodedBytes": 84672,
+        "integratedLufs": -13.75,
+        "truePeakDbtp": 0.56,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 7,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              14310,
+              20953
+            ]
+          ],
+          "fraction": 0.31382275132275134,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 10584,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.627335695984038,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/countdown.wav",
+        "sha256": "522d9c61e9f988306367a9166570b24cf926fb775388007c3048ab96fe9b8f96",
+        "bytes": 21246,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.478,
+          0.482
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 10584,
+        "decodedBytes": 21168,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -3.38,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              6995,
+              10478
+            ]
+          ],
+          "fraction": 0.32908163265306123,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "start",
+      "cue": "race.start",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:43.246882+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\start.mp3.json",
+        "sourceSha256": "37877203532cb0d42cfdc1d30ae0398b9d0af643b30a6bb7e51f9251499cc057",
+        "generatedAt": "2026-10-02T21:36:18.304Z",
+        "request": {
+          "text": "Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/start.mp3",
+        "sha256": "37877203532cb0d42cfdc1d30ae0398b9d0af643b30a6bb7e51f9251499cc057",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -14.52,
+        "truePeakDbtp": 1.17,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 18,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              29437,
+              44057
+            ]
+          ],
+          "fraction": 0.33151927437641726,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 13399,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.571478636671867,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/start.wav",
+        "sha256": "05ab72206297b95e6e019f461ce0df7fd7edfdb30e40cec07b25be43cc9b3d81",
+        "bytes": 26876,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6076643990929705,
+        "durationWindowSeconds": [
+          0.6056643990929705,
+          0.6096643990929705
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 13399,
+        "decodedBytes": 26798,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -2.86,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "lap",
+      "cue": "race.lap",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:43.542321+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\lap.mp3.json",
+        "sourceSha256": "d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100",
+        "generatedAt": "2026-10-02T21:36:29.549Z",
+        "request": {
+          "text": "Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 0.8,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 8,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/lap.mp3",
+        "sha256": "d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100",
+        "bytes": 13836,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence"
+        ],
+        "durationSeconds": 0.8,
+        "durationWindowSeconds": [
+          0.65,
+          0.9500000000000001
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 35280,
+        "decodedBytes": 141120,
+        "integratedLufs": -15.86,
+        "truePeakDbtp": 0.55,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              20821,
+              35149
+            ]
+          ],
+          "fraction": 0.4061224489795918,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 17640,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6799860450033223,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/lap.wav",
+        "sha256": "a320dd33a813a5042c479eb622faa493979ae0433af61cea234cf93011b462c7",
+        "bytes": 35358,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "silence"
+        ],
+        "durationSeconds": 0.8,
+        "durationWindowSeconds": [
+          0.798,
+          0.802
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 17640,
+        "decodedBytes": 35280,
+        "integratedLufs": -20.8,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              10242,
+              17640
+            ]
+          ],
+          "fraction": 0.4193877551020408,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence"
+      ]
+    },
+    {
+      "id": "victory",
+      "cue": "race.victory",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:43.855572+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\victory.mp3.json",
+        "sourceSha256": "fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9",
+        "generatedAt": "2026-10-02T21:36:38.503Z",
+        "request": {
+          "text": "Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 3,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 120,
+        "providerCredits": 30,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/victory.mp3",
+        "sha256": "fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9",
+        "bytes": 48945,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "truePeak"
+        ],
+        "durationSeconds": 3.0,
+        "durationWindowSeconds": [
+          2.85,
+          3.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 132300,
+        "decodedBytes": 529200,
+        "integratedLufs": -18.52,
+        "truePeakDbtp": -0.27,
+        "loudnessRangeLu": 3.1,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              101794,
+              106520
+            ],
+            [
+              106549,
+              132295
+            ]
+          ],
+          "fraction": 0.23032501889644746,
+          "longestInteriorSeconds": 0.1071655328798186
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 46181,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.7709034690644301,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/victory.wav",
+        "sha256": "00d8c56950e647cae981d004022cf4c5327c5ad9b990a73c7e7c2e8ef536cb51",
+        "bytes": 92440,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 2.09437641723356,
+        "durationWindowSeconds": [
+          2.0923764172335604,
+          2.09637641723356
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 46181,
+        "decodedBytes": 92362,
+        "integratedLufs": -20.24,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "truePeak"
+      ]
+    },
+    {
+      "id": "defeat",
+      "cue": "race.defeat",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:44.213574+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\defeat.mp3.json",
+        "sourceSha256": "e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24",
+        "generatedAt": "2026-10-02T21:36:51.624Z",
+        "request": {
+          "text": "Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 3,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 120,
+        "providerCredits": 30,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/defeat.mp3",
+        "sha256": "e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24",
+        "bytes": 48945,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 3.0,
+        "durationWindowSeconds": [
+          2.85,
+          3.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 132300,
+        "decodedBytes": 529200,
+        "integratedLufs": -17.96,
+        "truePeakDbtp": 0.28,
+        "loudnessRangeLu": 8.6,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 23,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              90793,
+              132103
+            ]
+          ],
+          "fraction": 0.3122448979591837,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 66150,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.345860354055948,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/defeat.wav",
+        "sha256": "b58d5f1d5af751eb1247b1d9ba30261bf7a2b001e932304ccf423be7ad08d626",
+        "bytes": 132378,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.0,
+        "durationWindowSeconds": [
+          2.998,
+          3.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 66150,
+        "decodedBytes": 132300,
+        "integratedLufs": -20.04,
+        "truePeakDbtp": -3.82,
+        "loudnessRangeLu": 5.6,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              51270,
+              66066
+            ]
+          ],
+          "fraction": 0.2236734693877551,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ui-focus",
+      "cue": "ui.focus",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:44.762104+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ui-focus.mp3.json",
+        "sourceSha256": "306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28",
+        "generatedAt": "2026-10-02T21:37:04.514Z",
+        "request": {
+          "text": "One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+          "duration_seconds": 0.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 5,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ui-focus.mp3",
+        "sha256": "306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28",
+        "bytes": 8821,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.35,
+          0.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 21168,
+        "decodedBytes": 84672,
+        "integratedLufs": -22.05,
+        "truePeakDbtp": -0.06,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              2594,
+              21168
+            ]
+          ],
+          "fraction": 0.8774565381708239,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 1513,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.0256519262514077,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ui-focus.wav",
+        "sha256": "a31cffa12a6295222f843b8b346b754458c57acacbceda0a3867fc8c38241bac",
+        "bytes": 3104,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 0.06861678004535147,
+        "durationWindowSeconds": [
+          0.06661678004535147,
+          0.07061678004535148
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 1513,
+        "decodedBytes": 3026,
+        "integratedLufs": -23.85,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 7307,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence"
+      ]
+    },
+    {
+      "id": "ui-back",
+      "cue": "ui.back",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:45.212510+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ui-back.mp3.json",
+        "sourceSha256": "ac2dda86e915003d0665929a784c4ad97972870296d3e379575a825f4b375b1d",
+        "generatedAt": "2026-10-02T21:37:17.200Z",
+        "request": {
+          "text": "One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+          "duration_seconds": 0.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 5,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ui-back.mp3",
+        "sha256": "ac2dda86e915003d0665929a784c4ad97972870296d3e379575a825f4b375b1d",
+        "bytes": 8821,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": false,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "truePeak",
+          "silence"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.35,
+          0.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 21168,
+        "decodedBytes": 84672,
+        "integratedLufs": -21.05,
+        "truePeakDbtp": 0.39,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              11501,
+              21168
+            ]
+          ],
+          "fraction": 0.4566798941798942,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 5781,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.144194879816986,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ui-back.wav",
+        "sha256": "5955e5af2d48623eac41021896d9c4ff4e69da47d934b5fa1b2f5a54b14e8424",
+        "bytes": 11640,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.2621768707482993,
+        "durationWindowSeconds": [
+          0.2601768707482993,
+          0.2641768707482993
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 5781,
+        "decodedBytes": 11562,
+        "integratedLufs": -21.85,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 3039,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "truePeak",
+        "silence"
+      ]
+    },
+    {
+      "id": "ui-denied",
+      "cue": "ui.denied",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:45.674944+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ui-denied.mp3.json",
+        "sourceSha256": "237721667332173a0ce8ee448a39a211473c96f51a734193bb65ba2431fcd466",
+        "generatedAt": "2026-10-02T21:37:29.600Z",
+        "request": {
+          "text": "One jammed latch refuses to close: dry compact knock, brief strained spring rasp, dull stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+          "duration_seconds": 0.5,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 5,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ui-denied.mp3",
+        "sha256": "237721667332173a0ce8ee448a39a211473c96f51a734193bb65ba2431fcd466",
+        "bytes": 8821,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "silence"
+        ],
+        "durationSeconds": 0.48,
+        "durationWindowSeconds": [
+          0.35,
+          0.65
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 21168,
+        "decodedBytes": 84672,
+        "integratedLufs": -23.95,
+        "truePeakDbtp": -2.85,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              5844,
+              21168
+            ]
+          ],
+          "fraction": 0.7239229024943311,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 2937,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 0.9429746114598995,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ui-denied.wav",
+        "sha256": "448ae86bcd9528da5a4395c3936788c2a60477bf4f8a95b7ec544a7758fecb8d",
+        "bytes": 5952,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 0.13319727891156463,
+        "durationWindowSeconds": [
+          0.13119727891156463,
+          0.13519727891156463
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 2937,
+        "decodedBytes": 5874,
+        "integratedLufs": -23.25,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 5883,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "silence"
+      ]
+    },
+    {
+      "id": "ui-purchase",
+      "cue": "ui.purchase",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:46.095796+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ui-purchase.mp3.json",
+        "sourceSha256": "fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42",
+        "generatedAt": "2026-10-02T21:37:42.202Z",
+        "request": {
+          "text": "One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+          "duration_seconds": 0.7,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 7,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ui-purchase.mp3",
+        "sha256": "fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42",
+        "bytes": 12164,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "silence"
+        ],
+        "durationSeconds": 0.6802494331065759,
+        "durationWindowSeconds": [
+          0.5499999999999999,
+          0.85
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 29999,
+        "decodedBytes": 119996,
+        "integratedLufs": -21.09,
+        "truePeakDbtp": -2.06,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              9275,
+              29999
+            ]
+          ],
+          "fraction": 0.6908230274342478,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 4762,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.2516992730317251,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ui-purchase.wav",
+        "sha256": "af0fdbb28aed1652b55dfcf408b12d84a35a75252a7ffd7e41afba570d0f0109",
+        "bytes": 9602,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.21596371882086168,
+        "durationWindowSeconds": [
+          0.21396371882086168,
+          0.21796371882086168
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 4762,
+        "decodedBytes": 9524,
+        "integratedLufs": -20.25,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 4058,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "silence"
+      ]
+    },
+    {
+      "id": "ability-steel-flick",
+      "cue": "ability.steel-flick",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:46.555150+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-steel-flick.mp3.json",
+        "sourceSha256": "95e59e9f32e3791fb96b8c19c95631cbb0f38c9fff51debf71f3b7ad0b232896",
+        "generatedAt": "2026-10-02T21:37:52.713Z",
+        "request": {
+          "text": "Tensioned leaf spring draws and snaps forward into a short exhaust rip. Fast rising mechanical warning, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-steel-flick.mp3",
+        "sha256": "95e59e9f32e3791fb96b8c19c95631cbb0f38c9fff51debf71f3b7ad0b232896",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -25.12,
+        "truePeakDbtp": -5.48,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              32586,
+              44100
+            ]
+          ],
+          "fraction": 0.26108843537414966,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 16483,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "gain": 1.1748975549395295,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-steel-flick.wav",
+        "sha256": "61ee46a16bf7971b0ed0d95c1d9e457e60fde5392a345494ffeb62058b28058d",
+        "bytes": 33044,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.7475283446712018,
+        "durationWindowSeconds": [
+          0.7455283446712018,
+          0.7495283446712018
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 16483,
+        "decodedBytes": 32966,
+        "integratedLufs": -20.18,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "ability-flywheel",
+      "cue": "ability.flywheel",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:47.020725+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-flywheel.mp3.json",
+        "sourceSha256": "0a7951b8efb7b4641602032338772346ddaf3659ca7b0df28cbdeac001210a99",
+        "generatedAt": "2026-10-02T21:38:05.612Z",
+        "request": {
+          "text": "Clutch catches into a rising flywheel whirr, thick spinning iron briefly strains and releases. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-flywheel.mp3",
+        "sha256": "0a7951b8efb7b4641602032338772346ddaf3659ca7b0df28cbdeac001210a99",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -9.19,
+        "truePeakDbtp": 1.34,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 50,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              27375,
+              44100
+            ]
+          ],
+          "fraction": 0.3792517006802721,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 13433,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.48640720569146156,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-flywheel.wav",
+        "sha256": "abac62377fe8ac00de1a7ae127c65f727fe5d894d1310656aa0a0f879b48e999",
+        "bytes": 26944,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6092063492063492,
+        "durationWindowSeconds": [
+          0.6072063492063492,
+          0.6112063492063492
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 13433,
+        "decodedBytes": 26866,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -5.83,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-shoulder",
+      "cue": "ability.shoulder",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:47.403063+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-shoulder.mp3.json",
+        "sourceSha256": "73fd743ed66fdbf3f573f45114463100452fc159a63bc887755d82128ac2f1c2",
+        "generatedAt": "2026-10-02T21:38:16.008Z",
+        "request": {
+          "text": "Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-shoulder.mp3",
+        "sha256": "73fd743ed66fdbf3f573f45114463100452fc159a63bc887755d82128ac2f1c2",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -8.24,
+        "truePeakDbtp": 0.01,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 1,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30902,
+              44100
+            ]
+          ],
+          "fraction": 0.29927437641723353,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 14178,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.25556419010641385,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-shoulder.wav",
+        "sha256": "bcf70a656b7b0c8d44c0d0b1587111ed355f64b7ba148a46a2dc5f98eab6f5fc",
+        "bytes": 28434,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6429931972789116,
+        "durationWindowSeconds": [
+          0.6409931972789116,
+          0.6449931972789116
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 14178,
+        "decodedBytes": 28356,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -10.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-turbine",
+      "cue": "ability.turbine",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:47.860948+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-turbine.mp3.json",
+        "sourceSha256": "f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d",
+        "generatedAt": "2026-10-02T21:38:29.602Z",
+        "request": {
+          "text": "Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-turbine.mp3",
+        "sha256": "f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -4.44,
+        "truePeakDbtp": 2.03,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 94,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 22050,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.17823787674480895,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-turbine.wav",
+        "sha256": "43b684a1d31d37b530b61c15398566060485d395c08bffd91868ae7541c9bae9",
+        "bytes": 44178,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.998,
+          1.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 22050,
+        "decodedBytes": 44100,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -12.63,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              19816,
+              22050
+            ]
+          ],
+          "fraction": 0.10131519274376417,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-ground-bite",
+      "cue": "ability.ground-bite",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:48.327809+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-ground-bite.mp3.json",
+        "sourceSha256": "fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133",
+        "generatedAt": "2026-10-02T21:38:40.284Z",
+        "request": {
+          "text": "Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-ground-bite.mp3",
+        "sha256": "fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -16.65,
+        "truePeakDbtp": 0.07,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 1,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              18330,
+              44100
+            ]
+          ],
+          "fraction": 0.5843537414965987,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 9385,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.6753050539950787,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-ground-bite.wav",
+        "sha256": "208e571c164b007c44a95444da36759e07a57b418f5e284beee7de2a4720e6a7",
+        "bytes": 18848,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.4256235827664399,
+        "durationWindowSeconds": [
+          0.4236235827664399,
+          0.4276235827664399
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 9385,
+        "decodedBytes": 18770,
+        "integratedLufs": -21.05,
+        "truePeakDbtp": -2.0,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-punch-lance",
+      "cue": "ability.punch-lance",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:48.585931+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-punch-lance.mp3.json",
+        "sourceSha256": "d8403d0b41b169254150260f909a78a31f3d598558f919db98d3192f2209be5a",
+        "generatedAt": "2026-10-02T21:38:53.431Z",
+        "request": {
+          "text": "Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-punch-lance.mp3",
+        "sha256": "d8403d0b41b169254150260f909a78a31f3d598558f919db98d3192f2209be5a",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -14.81,
+        "truePeakDbtp": 1.24,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 6,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              37388,
+              44100
+            ]
+          ],
+          "fraction": 0.15219954648526077,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 18914,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5895219770654915,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-punch-lance.wav",
+        "sha256": "4519ccc828a7909d4abfa272f37bd9d2f2562d8b5bbabf82e139be607b72fa89",
+        "bytes": 37906,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.8577777777777778,
+        "durationWindowSeconds": [
+          0.8557777777777777,
+          0.8597777777777778
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 18914,
+        "decodedBytes": 37828,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -2.78,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-bone-rack",
+      "cue": "ability.bone-rack",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:48.848733+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-bone-rack.mp3.json",
+        "sourceSha256": "e1eb1d88b0225ca4a32aca3491a340527eed37051fcdb82807e41fe5da1b3e7d",
+        "generatedAt": "2026-10-02T21:39:04.263Z",
+        "request": {
+          "text": "Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-bone-rack.mp3",
+        "sha256": "e1eb1d88b0225ca4a32aca3491a340527eed37051fcdb82807e41fe5da1b3e7d",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -7.7,
+        "truePeakDbtp": 1.98,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 42,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              27958,
+              44100
+            ]
+          ],
+          "fraction": 0.36603174603174604,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 13323,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.2786121168629771,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-bone-rack.wav",
+        "sha256": "dfe1acb95f5d9b7dedafbad37b579a95bc90daa19cb4f633026358750a82391b",
+        "bytes": 26724,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.6042176870748299,
+        "durationWindowSeconds": [
+          0.6022176870748299,
+          0.6062176870748299
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 13323,
+        "decodedBytes": 26646,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -10.3,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-scrambler",
+      "cue": "ability.scrambler",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:49.088917+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-scrambler.mp3.json",
+        "sourceSha256": "4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f",
+        "generatedAt": "2026-10-02T21:39:14.172Z",
+        "request": {
+          "text": "Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-scrambler.mp3",
+        "sha256": "4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -13.93,
+        "truePeakDbtp": 1.19,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 9,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              36181,
+              44100
+            ]
+          ],
+          "fraction": 0.17956916099773243,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 408,
+        "endFrameExclusive": 18137,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5552646171195635,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-scrambler.wav",
+        "sha256": "6fae6901bd6d5b8342fbfa3873c753ad307900112c6422c328b3ace285ee0490",
+        "bytes": 35536,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.8040362811791383,
+        "durationWindowSeconds": [
+          0.8020362811791383,
+          0.8060362811791383
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 17729,
+        "decodedBytes": 35458,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -2.98,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-arc-harpoon",
+      "cue": "ability.arc-harpoon",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:49.337400+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-arc-harpoon.mp3.json",
+        "sourceSha256": "66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042",
+        "generatedAt": "2026-10-02T21:39:27.685Z",
+        "request": {
+          "text": "Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-arc-harpoon.mp3",
+        "sha256": "66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -15.64,
+        "truePeakDbtp": 0.15,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 2,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              32423,
+              43989
+            ]
+          ],
+          "fraction": 0.2622675736961451,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 16360,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.5841172070928304,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-arc-harpoon.wav",
+        "sha256": "c46882a95dbe7d78f240dd73cc586098a58fcbe9c9496b26475d5f333ddc207f",
+        "bytes": 32798,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.7419501133786848,
+        "durationWindowSeconds": [
+          0.7399501133786848,
+          0.7439501133786848
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 16360,
+        "decodedBytes": 32720,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -3.51,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "clipping"
+      ]
+    },
+    {
+      "id": "ability-plate-brace",
+      "cue": "ability.plate-brace",
+      "category": "sfx",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:40:49.601446+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\effects\\raw\\ability-plate-brace.mp3.json",
+        "sourceSha256": "764a0fee7f1a70f62e4d8ae038d9d8d78c05404e1c00629ecb2d594fa19ff07a",
+        "generatedAt": "2026-10-02T21:39:41.088Z",
+        "request": {
+          "text": "Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 1,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": false
+        },
+        "budgetCharge": 100,
+        "providerCredits": 10,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/effects/raw/ability-plate-brace.mp3",
+        "sha256": "764a0fee7f1a70f62e4d8ae038d9d8d78c05404e1c00629ecb2d594fa19ff07a",
+        "bytes": 17180,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": false,
+          "silence": false,
+          "clipping": false
+        },
+        "failures": [
+          "loudness",
+          "truePeak",
+          "silence",
+          "clipping"
+        ],
+        "durationSeconds": 1.0,
+        "durationWindowSeconds": [
+          0.85,
+          1.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 44100,
+        "decodedBytes": 176400,
+        "integratedLufs": -13.09,
+        "truePeakDbtp": 2.87,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 32,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              24133,
+              44100
+            ]
+          ],
+          "fraction": 0.45276643990929705,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+        "startFrame": 0,
+        "endFrameExclusive": 10296,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "gain": 0.46505037616660627,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/effects/first-pass/edited/ability-plate-brace.wav",
+        "sha256": "b5d983c975e213f54f52e6c0faa30c4803c3c04c0cef7b0903e556b039c93611",
+        "bytes": 20670,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 0.4669387755102041,
+        "durationWindowSeconds": [
+          0.46493877551020407,
+          0.4689387755102041
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 10296,
+        "decodedBytes": 20592,
+        "integratedLufs": -19.95,
+        "truePeakDbtp": -4.75,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness",
+        "truePeak",
+        "silence",
+        "clipping"
+      ]
+    }
+  ]
+}

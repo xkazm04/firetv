@@ -1,0 +1,101 @@
+[
+  {
+    "id": "v2-part3-rework-comet-v3",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v3\\attempt-01\\1.jpg",
+    "source_sha256": "ec110d21608cee971b5854efc34f70e3ef752d8df67ca487823c71a8caab4876",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v3",
+      "class": "Comet",
+      "prompt_action": "A SMALL complete overhead car sprite, centred in a LARGE EMPTY square magenta field. Layout: the entire vehicle fits within a rectangle from x=240 to x=780 and y=402 to y=622 on a 1024 square canvas. Vast blank space surrounds this small car. Draw only ONE car. Original long low rust-orange turbine racer, nose RIGHT, rear LEFT. Length 2.57 times total width. Long pointed narrow nose, narrow dark canopy, FOUR small tucked wheels viewed as rectangular tread tops. At the rear: TWO air-turbine engines with obvious visible fan intakes and LEFT exhaust nozzles, mounted in a substantial thick reinforced plated cradle. The rear structure is massive but NARROW, confined to the wheel track; no wide wing, long wheel outriggers or tyre spikes. Thick rust and bone mounting plates support the turbines. Longitudinal bracing connects engine cradle to chassis. Worn silver metal, rust paint, scratched bone panels, soot joints. Strict orthographic roof-only plan, horizontal +x chassis, neutral flat diffuse material shading. No side walls, cast shadows or ground. Keep at least 200 pixels of blank space on left and right. Small distant diagram, never zoomed to fill the canvas. The whole car, all tips and exhausts fully contained.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-comet-final",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.336181640625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        73,
+        243,
+        1007,
+        771
+      ],
+      "margin_fraction": 0.0166015625,
+      "aspect": 1.768939393939394,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.31207912457912457,
+      "principal_axis_degrees": 0.0596261676711555,
+      "estimated_key_rgb": [
+        242.0,
+        64.0,
+        180.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.216103934783695,
+      "palette_p90_delta_e": 10.441445206597589
+    },
+    "placement": {
+      "source_bounds_px": [
+        73,
+        243,
+        1007,
+        771
+      ],
+      "source_pivot_px": [
+        540.0,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        122
+      ],
+      "scale": 0.23126338329764454,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-comet-final\\v2-part3-rework-comet-v3.png",
+    "sha256": "7927c4d9a82810c7060db5b7df2ced91283f5d8c66d8b663917c71cb9cacce25"
+  }
+]

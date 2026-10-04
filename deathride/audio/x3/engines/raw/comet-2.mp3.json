@@ -1,0 +1,32 @@
+{
+  "id": "e2602bf0-e147-4fbc-93ba-30f6163fdec8",
+  "ts": "2026-10-02T21:47:41.744Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/comet-2.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: hot rising metallic turbine harmonics at steady speed. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24193,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "1fecb1d4ec828c043f4c3fa82949840470b7f0002bf2a00cb92a31d507334937",
+  "completedAt": "2026-10-02T21:47:45.469Z",
+  "creditsAfter": 24193,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 4240
+}

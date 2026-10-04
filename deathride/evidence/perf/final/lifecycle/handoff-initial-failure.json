@@ -1,0 +1,7 @@
+{
+  "attempts": 2,
+  "error": "IndexError: list index out of range while reading pairing PIN after readiness",
+  "stage": "after optional Wi-Fi held/released/resumed assertions passed",
+  "correction": "Poll and retain new-process PIN while waiting for listener/scenery readiness; handoff-only retry passes",
+  "runtimeChange": false
+}

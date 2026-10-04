@@ -1,0 +1,103 @@
+{
+  "passed": true,
+  "rounds": [
+    {
+      "classes": [
+        "Needle",
+        "Line"
+      ],
+      "pulses": [
+        3,
+        2
+      ],
+      "smoke": 54,
+      "skids": 111
+    },
+    {
+      "classes": [
+        "Bastion",
+        "Comet"
+      ],
+      "pulses": [
+        5,
+        4
+      ],
+      "smoke": 98,
+      "skids": 205
+    },
+    {
+      "classes": [
+        "Trail",
+        "Flint"
+      ],
+      "pulses": [
+        3,
+        3
+      ],
+      "smoke": 82,
+      "skids": 173
+    },
+    {
+      "classes": [
+        "Quill",
+        "Vandal"
+      ],
+      "pulses": [
+        2,
+        3
+      ],
+      "smoke": 61,
+      "skids": 117
+    },
+    {
+      "classes": [
+        "Kestrel",
+        "Bulwark"
+      ],
+      "pulses": [
+        3,
+        5
+      ],
+      "smoke": 79,
+      "skids": 154
+    }
+  ],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 4769,
+      "accepted": 4769,
+      "rejected": 0,
+      "rttMs": {
+        "count": 4769,
+        "p50": 14.27610000000277,
+        "p95": 64.22060000000056,
+        "max": 103.14110000000073
+      },
+      "hudSamples": 1563,
+      "driftHudSamples": 163,
+      "spinHudSamples": 61,
+      "peakQuality": 0.572262428294468,
+      "peakSlip": 3.141133545359382,
+      "pulses": 16
+    },
+    {
+      "slot": 1,
+      "sent": 4769,
+      "accepted": 4769,
+      "rejected": 0,
+      "rttMs": {
+        "count": 4769,
+        "p50": 14.478300000002491,
+        "p95": 64.5630000000001,
+        "max": 103.10689999999886
+      },
+      "hudSamples": 1563,
+      "driftHudSamples": 202,
+      "spinHudSamples": 24,
+      "peakQuality": 0.5120105307463163,
+      "peakSlip": 2.3035449471825418,
+      "pulses": 17
+    }
+  ]
+}

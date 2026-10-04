@@ -1,0 +1,420 @@
+{
+  "session": "x2-2026-10-02",
+  "cap": 9000,
+  "reserve": 8000,
+  "line": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story.",
+  "lineCharacters": 132,
+  "directions": [
+    {
+      "id": "dust",
+      "name": "Dust and drums",
+      "tag": "Space / grit / horizon",
+      "voice": "callum",
+      "philosophy": "The road is bigger than the driver. Sparse drums make room for exposed machinery; distant guitar carries the horizon. Violence arrives as a dry interruption.",
+      "listenFor": "Does the empty space feel dangerous, or does the race lose momentum? Can the dry impacts stay legible against the drums?",
+      "music": "Sparse huge skin war drums with dry attacks, low toms and rim knocks, distant tape-echo baritone guitar fragments, dust-dry bass, broad empty space between hits. An exposed outdoor wasteland, raw analog grain, tense forward motion without a busy rock arrangement.",
+      "material": "Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen.",
+      "colours": [
+        "loose exhaust rasp and a thin rattling chassis",
+        "dry bolt chatter and small brass ticks",
+        "earthy low thump with gravel and a short dusty debris hiss",
+        "buckled thin steel and a hard chassis knock",
+        "a scavenged ammunition tin latch and a brief loose metal jingle",
+        "a heavy weathered lever locking into a leather-damped notch"
+      ]
+    },
+    {
+      "id": "diesel",
+      "name": "Diesel brutalism",
+      "tag": "Pressure / machine / mass",
+      "voice": "harry",
+      "philosophy": "The engine is the centre of the score. Repeating machine rhythm and low pressure turn the race into a working foundry; impacts are dense, clipped punctuation.",
+      "listenFor": "Does the weight remain readable on small speakers? Does relentless machinery become fatiguing or bury the driver feedback?",
+      "music": "Heavy industrial metal-on-metal percussion, piston rhythms, low distorted bass drones, abrasive resonant steel, nearly no melody. Dense but separated transients, engine-forward mechanical insistence, threatening close physical pressure, deliberately unpolished analog saturation.",
+      "material": "Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian.",
+      "colours": [
+        "heavy uneven diesel piston knocks and vibrating steel casing",
+        "a hard pneumatic rivet mechanism and rattling steel bolt",
+        "a compressed concussive steel drum thud with torn plate debris",
+        "a dense chassis crush and wrenching heavy steel",
+        "a power relay slamming into an iron latch with a pressure release",
+        "a massive industrial toggle closing with a hard spring snap"
+      ]
+    },
+    {
+      "id": "funk",
+      "name": "Grindhouse funk",
+      "tag": "Swagger / break / punch",
+      "voice": "adam",
+      "philosophy": "Danger has swagger. A dirty bass groove and raw breaks give the race comic momentum; mechanical gestures bounce against the rhythm and the voice sells the spectacle.",
+      "listenFor": "Does the groove fit Hot Ink without making combat harmless? Are brass and wah leaving space for weapons and speech?",
+      "music": "Gritty syncopated electric bass riff, raw live drum break, short blunt brass stabs and scratchy wah guitar, dry room, worn tape, crooked comic swagger with real danger. Tight restrained arrangement, punchy and dirty, not glossy disco, no smooth lounge finish.",
+      "material": "Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch.",
+      "colours": [
+        "a throaty coupe idle with a loose spring rattle",
+        "a snappy stuttering gun mechanism and loose brass clacks",
+        "a punchy low blast followed by a loose spring-metal debris rattle",
+        "a blunt car panel crunch followed by a quick loose bumper twang",
+        "a sprung parts-tray latch snapping and two loose hardware clacks",
+        "a chunky mechanical pushbutton with a short spring bounce"
+      ]
+    },
+    {
+      "id": "noir",
+      "name": "Soot noir",
+      "tag": "Restraint / threat / shadow",
+      "voice": "callum",
+      "philosophy": "Threat comes from what is withheld. Low strings and sub pulses keep tension under the wheels; intimate, damped details and quiet menace make each collision matter.",
+      "listenFor": "Does restraint feel tense or merely slow? Can the intimate detail survive the engine, and does the sub pulse translate beyond headphones?",
+      "music": "Dark low bowed strings, restrained dry sub-bass pulses, sparse brushed metal ticks, uneasy short low-string motif, smoky tense cinema atmosphere. Close intimate detail, rough bow texture, long gaps, no lush swelling orchestra, no sentimental melody.",
+      "material": "Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint.",
+      "colours": [
+        "a low muffled motor throb with subtle strained bearing grit",
+        "a tight damped bolt crack and dark hollow shell tick",
+        "a low compact concussive thud and brief dark fractured-metal tail",
+        "a deep restrained chassis groan with one sharp panel crease",
+        "a small cold steel catch closing with one low hollow resonance",
+        "a dry worn ratchet tooth seating into a felt-damped latch"
+      ]
+    }
+  ],
+  "voices": {
+    "callum": {
+      "id": "N2lVS1w4EtoT3dr4eOWO",
+      "name": "Callum",
+      "reason": "Account description: deceptively gravelly, unsettling edge. Close rival menace."
+    },
+    "harry": {
+      "id": "SOYHLrjzK2X1ezoPC6cr",
+      "name": "Harry",
+      "reason": "Account description: rough, fierce warrior. Aggressive machine-yard challenge."
+    },
+    "adam": {
+      "id": "pNInz6obpgDQGcFmaJgB",
+      "name": "Adam",
+      "reason": "Account description: dominant, firm, brash and slightly aggressive. Spectacle announcer."
+    }
+  },
+  "samples": [
+    {
+      "id": "dust-race",
+      "direction": "dust",
+      "category": "music",
+      "label": "Race · Hunt intensity",
+      "seconds": 20,
+      "loop": true,
+      "prompt": "Original instrumental combat-racing music. Sparse huge skin war drums with dry attacks, low toms and rim knocks, distant tape-echo baritone guitar fragments, dust-dry bass, broad empty space between hits. An exposed outdoor wasteland, raw analog grain, tense forward motion without a busy rock arrangement. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody."
+    },
+    {
+      "id": "dust-engine",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "engine",
+      "label": "Engine · low rev",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "A battered road coupe engine held at steady low revs. Constant body from the first sample through the last, no ignition, no acceleration, no fade, no isolated backfire. Seamlessly repeating two-second mechanical texture. Timbre: loose exhaust rasp and a thin rattling chassis. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-rivet",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "rivet",
+      "label": "Rivet · gun burst",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One short burst from a crude vehicle-mounted fictional rivet gun. Immediate sharp attack, three quick mechanical cracks in the first 0.6 seconds, a short metal body, then decay to silence by the end. No reload, no distant battle. Timbre: dry bolt chatter and small brass ticks. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-mine",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "mine",
+      "label": "Mine · blast",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "One compact road-mine explosion. Immediate hard attack, a short low concussive body, torn metal and grit scattering into a rapidly fading tail. Local and close, not an enormous sustained cinematic fireball. Timbre: earthy low thump with gravel and a short dusty debris hiss. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-crunch",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "crunch",
+      "label": "Car-to-car · crunch",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One side collision between two battered cars. Sharp initial steel contact, a short buckling and grinding body, loose debris settling in the tail. One collision only, no engine bed, no tyre squeal. Timbre: buckled thin steel and a hard chassis knock. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-pickup",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "pickup",
+      "label": "Pickup · collect",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One tactile mechanical collection confirmation. A crisp small latch attack, a satisfying short body, and a quickly decaying tail. Recognizable without a melody. No coin sound, no electronic bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-confirm",
+      "direction": "dust",
+      "category": "sfx",
+      "cue": "confirm",
+      "label": "Menu · confirm",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One physical menu confirmation gesture. Immediate quiet decisive click-clunk, a tiny mechanical body and a short dry release ending in silence. Small and readable, no digital beep, no musical chime. Timbre: a heavy weathered lever locking into a leather-damped notch. Dust-dry outdoor mechanical foley, exposed natural metal and leather, close transient with a small distant air tail, raw tape grain. Sparse, no polished studio sheen. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "dust-voice",
+      "direction": "dust",
+      "category": "tts",
+      "label": "Rival / announcer · Callum",
+      "seconds": null,
+      "loop": false,
+      "voice": "callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "prompt": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story."
+    },
+    {
+      "id": "diesel-race",
+      "direction": "diesel",
+      "category": "music",
+      "label": "Race · Hunt intensity",
+      "seconds": 20,
+      "loop": true,
+      "prompt": "Original instrumental combat-racing music. Heavy industrial metal-on-metal percussion, piston rhythms, low distorted bass drones, abrasive resonant steel, nearly no melody. Dense but separated transients, engine-forward mechanical insistence, threatening close physical pressure, deliberately unpolished analog saturation. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody."
+    },
+    {
+      "id": "diesel-engine",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "engine",
+      "label": "Engine · low rev",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "A battered road coupe engine held at steady low revs. Constant body from the first sample through the last, no ignition, no acceleration, no fade, no isolated backfire. Seamlessly repeating two-second mechanical texture. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-rivet",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "rivet",
+      "label": "Rivet · gun burst",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One short burst from a crude vehicle-mounted fictional rivet gun. Immediate sharp attack, three quick mechanical cracks in the first 0.6 seconds, a short metal body, then decay to silence by the end. No reload, no distant battle. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-mine",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "mine",
+      "label": "Mine · blast",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "One compact road-mine explosion. Immediate hard attack, a short low concussive body, torn metal and grit scattering into a rapidly fading tail. Local and close, not an enormous sustained cinematic fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-crunch",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "crunch",
+      "label": "Car-to-car · crunch",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One side collision between two battered cars. Sharp initial steel contact, a short buckling and grinding body, loose debris settling in the tail. One collision only, no engine bed, no tyre squeal. Timbre: a dense chassis crush and wrenching heavy steel. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-pickup",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "pickup",
+      "label": "Pickup · collect",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One tactile mechanical collection confirmation. A crisp small latch attack, a satisfying short body, and a quickly decaying tail. Recognizable without a melody. No coin sound, no electronic bleep. Timbre: a power relay slamming into an iron latch with a pressure release. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-confirm",
+      "direction": "diesel",
+      "category": "sfx",
+      "cue": "confirm",
+      "label": "Menu · confirm",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One physical menu confirmation gesture. Immediate quiet decisive click-clunk, a tiny mechanical body and a short dry release ending in silence. Small and readable, no digital beep, no musical chime. Timbre: a massive industrial toggle closing with a hard spring snap. Close foundry machinery, heavy steel, blunt low-mid weight, gritty analog saturation without digital clipping, very short concrete reflection. Severe and utilitarian. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "diesel-voice",
+      "direction": "diesel",
+      "category": "tts",
+      "label": "Rival / announcer · Harry",
+      "seconds": null,
+      "loop": false,
+      "voice": "harry",
+      "voiceId": "SOYHLrjzK2X1ezoPC6cr",
+      "prompt": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story."
+    },
+    {
+      "id": "funk-race",
+      "direction": "funk",
+      "category": "music",
+      "label": "Race · Hunt intensity",
+      "seconds": 20,
+      "loop": true,
+      "prompt": "Original instrumental combat-racing music. Gritty syncopated electric bass riff, raw live drum break, short blunt brass stabs and scratchy wah guitar, dry room, worn tape, crooked comic swagger with real danger. Tight restrained arrangement, punchy and dirty, not glossy disco, no smooth lounge finish. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody."
+    },
+    {
+      "id": "funk-engine",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "engine",
+      "label": "Engine · low rev",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "A battered road coupe engine held at steady low revs. Constant body from the first sample through the last, no ignition, no acceleration, no fade, no isolated backfire. Seamlessly repeating two-second mechanical texture. Timbre: a throaty coupe idle with a loose spring rattle. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-rivet",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "rivet",
+      "label": "Rivet · gun burst",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One short burst from a crude vehicle-mounted fictional rivet gun. Immediate sharp attack, three quick mechanical cracks in the first 0.6 seconds, a short metal body, then decay to silence by the end. No reload, no distant battle. Timbre: a snappy stuttering gun mechanism and loose brass clacks. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-mine",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "mine",
+      "label": "Mine · blast",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "One compact road-mine explosion. Immediate hard attack, a short low concussive body, torn metal and grit scattering into a rapidly fading tail. Local and close, not an enormous sustained cinematic fireball. Timbre: a punchy low blast followed by a loose spring-metal debris rattle. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-crunch",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "crunch",
+      "label": "Car-to-car · crunch",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One side collision between two battered cars. Sharp initial steel contact, a short buckling and grinding body, loose debris settling in the tail. One collision only, no engine bed, no tyre squeal. Timbre: a blunt car panel crunch followed by a quick loose bumper twang. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-pickup",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "pickup",
+      "label": "Pickup · collect",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One tactile mechanical collection confirmation. A crisp small latch attack, a satisfying short body, and a quickly decaying tail. Recognizable without a melody. No coin sound, no electronic bleep. Timbre: a sprung parts-tray latch snapping and two loose hardware clacks. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-confirm",
+      "direction": "funk",
+      "category": "sfx",
+      "cue": "confirm",
+      "label": "Menu · confirm",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One physical menu confirmation gesture. Immediate quiet decisive click-clunk, a tiny mechanical body and a short dry release ending in silence. Small and readable, no digital beep, no musical chime. Timbre: a chunky mechanical pushbutton with a short spring bounce. Dirty close garage foley, springy mechanical snap, loose resonant metal, raw short room sound, lively syncopated gesture but no pitched musical phrase. Dangerous comic punch. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "funk-voice",
+      "direction": "funk",
+      "category": "tts",
+      "label": "Rival / announcer · Adam",
+      "seconds": null,
+      "loop": false,
+      "voice": "adam",
+      "voiceId": "pNInz6obpgDQGcFmaJgB",
+      "prompt": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story."
+    },
+    {
+      "id": "noir-race",
+      "direction": "noir",
+      "category": "music",
+      "label": "Race · Hunt intensity",
+      "seconds": 20,
+      "loop": true,
+      "prompt": "Original instrumental combat-racing music. Dark low bowed strings, restrained dry sub-bass pulses, sparse brushed metal ticks, uneasy short low-string motif, smoky tense cinema atmosphere. Close intimate detail, rough bow texture, long gaps, no lush swelling orchestra, no sentimental melody. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody."
+    },
+    {
+      "id": "noir-engine",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "engine",
+      "label": "Engine · low rev",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "A battered road coupe engine held at steady low revs. Constant body from the first sample through the last, no ignition, no acceleration, no fade, no isolated backfire. Seamlessly repeating two-second mechanical texture. Timbre: a low muffled motor throb with subtle strained bearing grit. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-rivet",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "rivet",
+      "label": "Rivet · gun burst",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One short burst from a crude vehicle-mounted fictional rivet gun. Immediate sharp attack, three quick mechanical cracks in the first 0.6 seconds, a short metal body, then decay to silence by the end. No reload, no distant battle. Timbre: a tight damped bolt crack and dark hollow shell tick. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-mine",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "mine",
+      "label": "Mine · blast",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "One compact road-mine explosion. Immediate hard attack, a short low concussive body, torn metal and grit scattering into a rapidly fading tail. Local and close, not an enormous sustained cinematic fireball. Timbre: a low compact concussive thud and brief dark fractured-metal tail. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 2 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-crunch",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "crunch",
+      "label": "Car-to-car · crunch",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "One side collision between two battered cars. Sharp initial steel contact, a short buckling and grinding body, loose debris settling in the tail. One collision only, no engine bed, no tyre squeal. Timbre: a deep restrained chassis groan with one sharp panel crease. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 1.5 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-pickup",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "pickup",
+      "label": "Pickup · collect",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One tactile mechanical collection confirmation. A crisp small latch attack, a satisfying short body, and a quickly decaying tail. Recognizable without a melody. No coin sound, no electronic bleep. Timbre: a small cold steel catch closing with one low hollow resonance. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-confirm",
+      "direction": "noir",
+      "category": "sfx",
+      "cue": "confirm",
+      "label": "Menu · confirm",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "One physical menu confirmation gesture. Immediate quiet decisive click-clunk, a tiny mechanical body and a short dry release ending in silence. Small and readable, no digital beep, no musical chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Smoky intimate close-miked mechanical foley, damped heavy metal and low gritty resonance, extremely restrained high end, tiny dry enclosed reflection. Threatening through restraint. Duration 1 seconds. Isolated sound effect, no music, no voice, no background score. Original sound."
+    },
+    {
+      "id": "noir-voice",
+      "direction": "noir",
+      "category": "tts",
+      "label": "Rival / announcer · Callum",
+      "seconds": null,
+      "loop": false,
+      "voice": "callum",
+      "voiceId": "N2lVS1w4EtoT3dr4eOWO",
+      "prompt": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story."
+    }
+  ]
+}

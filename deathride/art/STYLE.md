@@ -1,0 +1,34 @@
+# Death Ride art direction v2: family fusion selected
+
+## Part 2 executable choice
+
+Current approval update, 2026-10-02: OWNER-CHOICE.md section E and the canonical ledger now approve the four reworked exact references, completing all ten car reference approvals. ART STATES derives their families using the unchanged fusion style bytes. Historical checkpoint statements below about blocked references describe earlier stages.
+
+The owner chose the family fusion in `OWNER-CHOICE.md`. `style-fusion.json` and `FUSION-BRIDGE.md` implement it; `owner-choice-binding.json` binds the unchanged owner prose and exact fusion bytes. Each prompt resolves one parent direction plus the same bridge verbatim. Cars/ground/surfaces use Rust and Ink; portraits/barriers use Soot Pulp; icons/effects use Hot Ink. Host assignments: props/landmarks/decals use Rust and Ink, backdrops use Soot Pulp, pickups/HUD frames use Hot Ink. Source cards remain immutable. Bleached Poster and Scrap Collage remain historical comparisons only.
+
+The selected stack is `seeded-decals-tall-props-baked-natural-bands`: deterministic marks, sparse tall silhouettes with separate renderer shadows, and irregular material edges baked once per course. No drawn road outlines. Natural obstacles carry footprint and drag/solid/none metadata for a later core hook; this art run does not alter physics. Part 3 records exact owner reference approvals for Line, Bastion, Trail, Flint, Vandal and Bulwark from the 2026-10-02 Section C review. Only their source-bound damage/livery jobs may pass the reference gate; Needle, Comet, Quill and Kestrel remain blocked pending approval of their reworks. The following choice-stage text describes the preserved earlier experiment, not a remaining prerequisite.
+
+
+The digital hand-drawn contract remains. The mood is raw, improvised and sun-scorched: welded scrap, rust bloom, patched armour, chipped panels, soot and dirt in seams. Every manufactured asset carries wear. No clean primaries or factory-new finish. Designs are original; prompts never name existing franchises, characters, vehicles, brands or logos.
+
+`style.json` defines the shared v2 constraints, **not an approved direction**. Five `style-<slug>.json` cards offer different line, shading, density, proportions and mood:
+
+| Direction | Drawing language | Main tradeoff |
+|---|---|---|
+| Rust and Ink | ragged dry brush, flat fill, scratch hatching, broad fortress and narrow skeleton | small scratches may disappear |
+| Bleached Poster | six ink screen print, carved negative space, hard shapes, sparse halftone | can become an emblem instead of a car |
+| Hot Ink | tapered comic contours, cel shadows, spatter, forward wedges | detached marks and visual noise |
+| Scrap Collage | torn panels, dark seams, coarse fibres, tape and rivets | detail density at small scale |
+| Soot Pulp | pooled black masses, bone cutouts, sparse scratches, skeletal voids | dark sprites need value separation |
+
+Each direction gets exactly the same seven action briefs: heavy, light, rival portrait, ground, barrier, repair HUD icon and a still spark effect. Only the style block differs. Corrections append explicit measured rejection evidence and remain in history. These are style explorations, not production damage states or liveries. The first heavy is checked before siblings. The complete style block is compiled verbatim first in every generation/edit, followed by action, camera and exclusions.
+
+Cars remain true orthographic overhead, front toward screen +x, neutral diffuse light and no baked cast shadow. Roof, wheels, windshield and ram explain heading without text. Each class must read at 96 px: heavy broad and fortified, light narrow and skeletal, racer thrusting and asymmetric, gunship turret-laden. Cluster detail at ram, weapons and cage. Exaggeration stays inside authoritative metre/aspect bands; never stretch a sprite to pass. Damage will eventually use crumpling, missing panels and burnt readable husks, only after exact owner reference approval.
+
+Palette roles are sun-baked ochre, rust orange, dried-blood red, bleached bone and soot black with one hazard-yellow accent in this fair comparison. Neutral light applies even to the dark pulp card: value contrast comes from paint, not a directional lamp. Final faction accents wait for owner selection.
+
+`style_for` resolves each proof's versioned style file for generation and grading. Legacy briefs resolve immutable `style-v1.json`; `STYLE-v1.md` and `review-v1.html` preserve comparison context. Historical gate numbers and the delivered `phase2-v1` bundle remain unchanged. Scale authority is captured C1/W6 geometry; 24 authoring pixels/metre is not camera density. Sprites keep art-derived pivots, aspect, transparent margins and RGB extrusion. Tiles repeat on separate 256-square pages, with seam/repetition checks and real 2x2 previews. Sampling stays linear, no mipmaps.
+
+`OWNER-CHOICE.md` is owner-authored, never generated by the agent. The production gate reads line fields: `owner_choice: approved`, `style_file: style-<slug>.json`, `style_sha256: <exact file hash>` and `owner_evidence: <owner decision record>`. V4 additionally requires `surface_stack: <chosen stack ID>` matching its briefs. A fused style needs its own reviewed versioned card. This choice does not grant reference approval: `reference-approvals.json` separately blocks all 40 damage states and 30 liveries until exact source bytes are approved.
+
+Machine gates reject or route; they cannot certify taste, human calibration, Stick feel or G2. Proofs remain review material and never silently enter production atlases. The weekly cap comes only from `budget.json`; every paid call reserves first, logs exact prompt/session/tool provenance, respects the three-attempt ceiling and stops on the first real quota/rate-limit signal. Unknown spend stays charged.

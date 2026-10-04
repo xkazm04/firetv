@@ -1,0 +1,51 @@
+{
+  "asset": "story-ally-ox-v2",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:54:26.902980+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Preserve the EXACT face, hair, skin, clothing, shoulders, hands, blank papers and story gesture of this supplied narrative panel. Change ONLY the exterior pale paper border: replace ALL white/cream canvas perimeter with uninterrupted SOOT BLACK #171513 extending fully to every canvas edge. The entire canvas must have the same dark soot background behind the existing figure. No light paper border, no frame, no outline, no new objects, no text. Keep the central blank bone-colour papers unchanged and keep all character features and colours unchanged. Flat neutral Soot Pulp illustration, no cast shadow.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-ally-ox-v2",
+    "class": "ally-ox",
+    "prompt_action": "Use case: precise-object-edit. Preserve the EXACT face, hair, skin, clothing, shoulders, hands, blank papers and story gesture of this supplied narrative panel. Change ONLY the exterior pale paper border: replace ALL white/cream canvas perimeter with uninterrupted SOOT BLACK #171513 extending fully to every canvas edge. The entire canvas must have the same dark soot background behind the existing figure. No light paper border, no frame, no outline, no new objects, no text. Keep the central blank bone-colour papers unchanged and keep all character features and colours unchanged. Flat neutral Soot Pulp illustration, no cast shadow.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "none",
+    "count": "1",
+    "status": "ready",
+    "kind": "backdrop",
+    "reference": "art/raw/story-ally-ox-v1/attempt-01/1.jpg",
+    "batch": "story-backdrops",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "backdrops",
+    "surface_stack": "",
+    "logical_name": "ally-ox"
+  },
+  "input_hash": "63c6ad9b09b1c1480b015a0b4bd099260a04a07d516f0a57b4eb26bfc438eff0",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-ally-ox-v2\\attempt-01\\1.jpg",
+  "session_id": "74f75108-502d-4e1b-9036-fe53c64da4fc",
+  "reference_sha256": "30e7d3bcc82fa1531b1ad7d6074b15e486d88aa9a94662e8e33fe4fdb7b276e0",
+  "image_tool_calls": [
+    {
+      "name": "image_edit",
+      "arguments": {
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Preserve the EXACT face, hair, skin, clothing, shoulders, hands, blank papers and story gesture of this supplied narrative panel. Change ONLY the exterior pale paper border: replace ALL white/cream canvas perimeter with uninterrupted SOOT BLACK #171513 extending fully to every canvas edge. The entire canvas must have the same dark soot background behind the existing figure. No light paper border, no frame, no outline, no new objects, no text. Keep the central blank bone-colour papers unchanged and keep all character features and colours unchanged. Flat neutral Soot Pulp illustration, no cast shadow.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "image": [
+          "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-ally-ox-v1\\attempt-01\\1.jpg"
+        ],
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "ac431e0fec5c0869f763fd89cffa4ee2dc0f6afd7ef36507b2c459ee391b6083",
+  "returncode": 0,
+  "elapsed_seconds": 27.313
+}

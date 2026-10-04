@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-02T22:41:00.501Z",
+  "session": "x3-2026-10-02",
+  "startingBalance": 24672,
+  "endingBalance": 22913,
+  "accountDelta": 1759,
+  "accountDeltaIsInvoice": false,
+  "reserve": 8000,
+  "reserveIntact": true,
+  "runCap": 9000,
+  "conservativeCharge": 6400,
+  "remainingRunAllowance": 2600,
+  "providerHeaderConfirmed": 1759,
+  "allHeadersPresent": true,
+  "generatedTakes": 68,
+  "unresolved": [],
+  "waves": {
+    "effects": {
+      "newTakes": 34,
+      "reused": 6,
+      "conservativeCharge": 3440
+    },
+    "engines": {
+      "newTakes": 20,
+      "conservativeCharge": 2000
+    },
+    "voices": {
+      "newTakes": 14,
+      "conservativeCharge": 960
+    },
+    "music": {
+      "paidTakes": 0,
+      "localProofSongs": 1,
+      "conservativeCharge": 0
+    }
+  },
+  "finalAccount": {
+    "at": "2026-10-02T22:41:00.501Z",
+    "tier": "starter",
+    "used": 67087,
+    "limit": 90000,
+    "remaining": 22913,
+    "resetsAt": "2026-10-04T19:31:41.000Z"
+  },
+  "resetUtc": "2026-10-04T19:31:41.000Z",
+  "caveat": "Shared account deltas can include Garden VR or delayed billing. Header-confirmed cost and conservative session charge are distinct. No paid music generation, future job or push."
+}

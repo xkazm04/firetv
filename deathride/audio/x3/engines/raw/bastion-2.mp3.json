@@ -1,0 +1,32 @@
+{
+  "id": "c519bb1a-9405-4e58-b357-35569351d1a7",
+  "ts": "2026-10-02T21:47:31.285Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/bastion-2.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: dense tractor diesel chug with loaded bearing growl. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24193,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "35f3e6630aeeb958296cff29d0686669f2a6a0aeb833b4ca5b423751b3001996",
+  "completedAt": "2026-10-02T21:47:35.026Z",
+  "creditsAfter": 24193,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 4040
+}

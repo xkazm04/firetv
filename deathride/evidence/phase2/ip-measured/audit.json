@@ -1,0 +1,132 @@
+{
+  "physicalRaces": 15120,
+  "replayedCells": 3780,
+  "monetarySettlementsIndependentlyRecomputed": 215895,
+  "milestoneComparisonDecimalPlaces": 2,
+  "sampledCareers": 6000,
+  "sampledRaceOutcomes": 215895,
+  "settings": [
+    {
+      "difficulty": "Rookie",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "35.0",
+      "meanHours": "5.8498703263867275",
+      "firstUpgrade": "1.2495",
+      "club": "7.0",
+      "pro": "14.0",
+      "elite": "21.002",
+      "champion": "28.003",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.05837698519193557",
+      "followingTierIntervals": [
+        7.0,
+        7.001999999999999,
+        7.001000000000001
+      ],
+      "firstUpgradeTarget": false,
+      "clubTarget": true,
+      "followingTiersTarget": true,
+      "durationTarget": true,
+      "earlyTarget": true
+    },
+    {
+      "difficulty": "Club",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "35.7055",
+      "meanHours": "6.102265974534725",
+      "firstUpgrade": "1.5025",
+      "club": "7.013",
+      "pro": "14.4295",
+      "elite": "22.53",
+      "champion": "31.074",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.05770193312807459",
+      "followingTierIntervals": [
+        7.416500000000001,
+        8.1005,
+        8.544
+      ],
+      "firstUpgradeTarget": false,
+      "clubTarget": true,
+      "followingTiersTarget": true,
+      "durationTarget": true,
+      "earlyTarget": true
+    },
+    {
+      "difficulty": "Pro",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "37.242",
+      "meanHours": "6.535294958330777",
+      "firstUpgrade": "2.0",
+      "club": "7.094",
+      "pro": "15.187",
+      "elite": "23.408",
+      "champion": "32.397",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.054426492540514015",
+      "followingTierIntervals": [
+        8.093,
+        8.221000000000002,
+        8.988999999999997
+      ],
+      "firstUpgradeTarget": true,
+      "clubTarget": true,
+      "followingTiersTarget": true,
+      "durationTarget": true,
+      "earlyTarget": true
+    }
+  ],
+  "targetFindings": [
+    "Rookie: firstUpgradeTarget missed",
+    "Club: firstUpgradeTarget missed",
+    "Club event 7: measured PR ratio 0.9279 outside proposed [0.85, 0.9]",
+    "Club event 14: measured PR ratio 0.9428 outside proposed [0.85, 0.9]",
+    "Club event 21: measured PR ratio 0.9311 outside proposed [0.85, 0.9]",
+    "Club event 28: measured PR ratio 0.9625 outside proposed [0.85, 0.9]"
+  ],
+  "tierJoins": [
+    {
+      "event": 8,
+      "playerPrChange": 0.0647845014167896,
+      "fieldPrChange": 3.897669985342134e-05,
+      "nextCarRaces": 4.128088362671126
+    },
+    {
+      "event": 15,
+      "playerPrChange": -0.04931927974164951,
+      "fieldPrChange": 0.02023878898144771,
+      "nextCarRaces": 3.6755422789326984
+    },
+    {
+      "event": 22,
+      "playerPrChange": -0.008632211084812602,
+      "fieldPrChange": 0.006047885343289927,
+      "nextCarRaces": 2.549842596929307
+    },
+    {
+      "event": 29,
+      "playerPrChange": -0.0004926777357971979,
+      "fieldPrChange": -0.004127357383696961,
+      "nextCarRaces": 2.8040052943258282
+    }
+  ],
+  "racesOutsideRatioEnvelope": 6432,
+  "walletCapDiscardedCredits": 489008,
+  "largestRatioGap": 0.05837698519193557,
+  "ratioGapP95": 0.05110175869336375,
+  "limits": [
+    "Club-skill AI lead is a driving proxy; no human feel claim.",
+    "Nearest PR-ratio upgrade band; 4 seeds per physical cell; Monte Carlo resamples those outcomes.",
+    "One evolving reference rival economy supplies physical fields; career rival economies settle actual sampled results, so field configurations differ.",
+    "Seven legal spending caps compared, not proof of globally optimal play.",
+    "Baseline omits optional player loans, contracts, reserves and manual repairs; C3 tests cover those separately.",
+    "Hours measure active racing only; menus, reading and human retries are not invented.",
+    "First-visit curves; milestone means omit unreached milestones, with completion counts reported."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "preflight": [
+    {
+      "worktree": "C:\\Users\\kazda\\kiro\\firetv-deathride-perf",
+      "branch": "deathride/perf",
+      "head": "2e5fea47d172626d382cdf4545285f466896c30c",
+      "fullyMerged": true,
+      "clean": true,
+      "archiveAndCurrentIgnoredFilesReverified": true,
+      "files": 2612
+    },
+    {
+      "worktree": "C:\\Users\\kazda\\kiro\\firetv-deathride-gameplay",
+      "branch": "deathride/gameplay",
+      "head": "434ccdf9a2086ab4e99189ed74ed1ef9c133fa19",
+      "fullyMerged": true,
+      "clean": true,
+      "archiveAndCurrentIgnoredFilesReverified": true,
+      "files": 7363
+    }
+  ],
+  "removal": [
+    {
+      "branch": "deathride/perf",
+      "worktreeRemoved": true,
+      "directoryAbsent": true,
+      "mergedBranchDeleted": true
+    },
+    {
+      "branch": "deathride/gameplay",
+      "worktreeRemoved": true,
+      "directoryAbsent": true,
+      "mergedBranchDeleted": true
+    }
+  ],
+  "archivesRetained": true,
+  "pushed": false
+}

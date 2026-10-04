@@ -1,0 +1,30 @@
+{
+  "qualification": "final/delivery",
+  "verdict": "PARTIAL - input and memory pass; frame p95 and maximum remain above target",
+  "outcome": "Delivery: 900.189 seconds, all 27,006 inputs accepted per controller, no host stalls. Active-window p95/max 22.433/54.923 ms; six-live p95/max 22.433/37.580 ms. PSS peaks at 140.192 MiB. Native resolution, all effects, HUD and audio are preserved.",
+  "truth": {
+    "Exists": "Audio mailboxes, negotiated HUD deltas, exact-pixel road-mark cache, allocation cleanup and bounded diagnostics are present in source and APK.",
+    "Valid": "136 core, 8 link and 27 game tests pass; debug APK assembly passes. Core determinism/steady allocation and audio no-escape-analysis checks remain green.",
+    "Wired": "Matching installed/frozen delivery APK on AFTKM, no intent extras; six live cars, 168 regions without failures, abilities/HUD/audio and actual browser reconnect/Home behavior observed.",
+    "Behaves": "Delivery passes full-rate zero-rejection, functional and memory gates. Frame p95/max fail. Actual device Home/reconnect/audio-stop checks pass; intermittent pre-handler receive gaps in other runs remain unresolved.",
+    "Felt": "Pending owner check: physical-phone control feel, optical latency, listening, sofa readability and art acceptance are not inferred from scripted runs."
+  },
+  "findings": [
+    "Baseline native audio slept on the render thread. The worker plus monitor-free mailboxes removes the measured dependency; native audio CPU p95 is 0.375 ms in the repeated trace.",
+    "HUD metadata deltas reduce roughly 25K characters per message to about 1.6K, with unchanged dynamic data and full refresh/reconnect behavior.",
+    "Static road marks match all 196,608 audited RGBA pixels and reduce mean render CPU by 1.335 ms in the matched-APK experiment.",
+    "Steady audio render allocation falls to zero in the targeted changing-engine test; onsets and other rendering still allocate. Android per-thread allocation is unavailable, so desktop JFR is explicitly a proxy.",
+    "Rejected packets cross the unchanged 250 ms age cutoff after shared receive gaps; sequence ordering and ordinary handler/ack-enqueue work do not explain the long delay.",
+    "Active texture uploads are zero; 720p did not improve p95. Native image quality and every effect are preserved.",
+    "A rejection-triggered native ring captures full 285 ms gaps with 17 render entries, no overlapping app GC and maximum app lock wait 0.047 ms. Kernel packet-arrival timestamps remain unavailable."
+  ],
+  "limits": [
+    "Worst overlapping ten-second active-window percentiles are reported separately from unique diagnostic frame percentiles. No pooling or optical/presentation claim.",
+    "P0 baseline includes a one-second sampler check. P3 continuous/display, P7 profile and P8 native captures are intrusive. P5 includes an extra full-ring export with measured observer cost.",
+    "P6 low-latency Wi-Fi has zero rejects but a 13.629-second host stall and fails qualification. A subsequent lock arm still rejected four packets per seat.",
+    "The first final-default run has a 495.470 ms host pump stall. No quiet interval is removed, and all stale-input ages remain visible.",
+    "Async audio preserves frame progress but native onset/parameter delays and dropped stale onsets remain visible; listening is still required.",
+    "No tested art reduction or pacing slot reaches the original frame targets. Kernel packet-arrival/selector evidence and presentation-level work remain; no unmeasured trade-off is promised as sufficient.",
+    "Final audio: three stale onsets discarded, onset completion max 128.616 ms and parameter queue max 179.498 ms; native playback stops on Home. No listening or optical-latency pass."
+  ]
+}

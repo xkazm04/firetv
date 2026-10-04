@@ -1,0 +1,794 @@
+[
+  {
+    "id": "p4-hud-frame-health-v1",
+    "class": "frame-health",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-frame-health-v1\\attempt-01\\1.jpg",
+    "source_sha256": "7b4038a64b00975f68c93bfc9a4f1f29175e7608260125ca4df243ac615dcdba",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-frame-health-v1",
+      "class": "frame-health",
+      "prompt_action": "One empty wide horizontal HUD health-bar frame, cool grey chamfered metal border with charcoal inner rim and a small red end-cap, completely empty magenta centre opening, no fill, letters or ticks. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.15040302276611328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        78,
+        351,
+        947,
+        673
+      ],
+      "margin_fraction": 0.0751953125,
+      "aspect": 2.698757763975155,
+      "estimated_key_rgb": [
+        244.0,
+        148.0,
+        238.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 3.9436825297841125,
+      "palette_p90_delta_e": 6.769255648043716
+    },
+    "placement": {
+      "source_bounds_px": [
+        78,
+        351,
+        947,
+        673
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        248,
+        92
+      ],
+      "scale": 0.285385500575374,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      33,
+      44,
+      221,
+      83
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-frame-health-v1.png",
+    "sha256": "734992d2371199945cc905479a85a54bac6e5fc7973682dae4b592da8f41957c"
+  },
+  {
+    "id": "p4-hud-frame-turbo-v1",
+    "class": "frame-turbo",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-frame-turbo-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e0d2da710ab50001a22e1aa18b97f1f04f448a084582b6d99d289b161b354895",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-frame-turbo-v1",
+      "class": "frame-turbo",
+      "prompt_action": "One empty wide horizontal HUD boost-bar frame, cool grey chamfered metal border with charcoal inner rim and an orange end-cap, completely empty magenta centre opening, no fill, letters or ticks. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.11010169982910156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        102,
+        386,
+        922,
+        638
+      ],
+      "margin_fraction": 0.099609375,
+      "aspect": 3.253968253968254,
+      "estimated_key_rgb": [
+        226.0,
+        149.0,
+        252.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.548814969212471,
+      "palette_p90_delta_e": 11.376769817647148
+    },
+    "placement": {
+      "source_bounds_px": [
+        102,
+        386,
+        922,
+        638
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        248,
+        76
+      ],
+      "scale": 0.3024390243902439,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      36,
+      47,
+      206,
+      81
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-frame-turbo-v1.png",
+    "sha256": "960c454467c7fb354031d6dbda019db9cff9df4911f8760f9e10248e1a1e793d"
+  },
+  {
+    "id": "p4-hud-frame-panel-v1",
+    "class": "frame-panel",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-frame-panel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "110469ec855e0fdf2436d902e10f3325faec94a0579eda507efc7506b7d0c876",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-frame-panel-v1",
+      "class": "frame-panel",
+      "prompt_action": "One empty broad rectangular HUD equipment panel, cool grey clipped-corner metal border with a charcoal inner rim, completely empty magenta centre opening, no contents, letters or ticks. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.22413921356201172,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        118,
+        203,
+        916,
+        830
+      ],
+      "margin_fraction": 0.10546875,
+      "aspect": 1.2727272727272727,
+      "estimated_key_rgb": [
+        221.0,
+        132.0,
+        200.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.866219791358534,
+      "palette_p90_delta_e": 6.6545173088929435
+    },
+    "placement": {
+      "source_bounds_px": [
+        118,
+        203,
+        916,
+        830
+      ],
+      "source_pivot_px": [
+        517.0,
+        516.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        195
+      ],
+      "scale": 0.3107769423558897,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "hud_interior_px": [
+      38,
+      63,
+      217,
+      190
+    ],
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-frame-panel-v1.png",
+    "sha256": "af568fd86e138e87ab27c5e1a81d9b9792ce3a1b54130b7f787cd14a2ec63e35"
+  },
+  {
+    "id": "p4-hud-icon-armour-v1",
+    "class": "icon-armour",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-armour-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ccbc33f69fe5abe14f974e2ef0bc658d8c88b09cd49a5b802c9d1856b376f198",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-armour-v1",
+      "class": "icon-armour",
+      "prompt_action": "One bold simple ivory shield icon with a cool-grey border and an olive central plate, no lettering. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33792686462402344,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        200,
+        138,
+        825,
+        887
+      ],
+      "margin_fraction": 0.1337890625,
+      "aspect": 0.8344459279038718,
+      "estimated_key_rgb": [
+        242.0,
+        233.0,
+        204.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.325172532573817,
+      "palette_p90_delta_e": 9.179966067402813
+    },
+    "placement": {
+      "source_bounds_px": [
+        200,
+        138,
+        825,
+        887
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        100,
+        120
+      ],
+      "scale": 0.1602136181575434,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-armour-v1.png",
+    "sha256": "2d643f0e14a94a5d0bdc7f3a57bd205d150bec266a6f4feeb436d63e08400c7a"
+  },
+  {
+    "id": "p4-hud-icon-engine-v1",
+    "class": "icon-engine",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-engine-v1\\attempt-01\\1.jpg",
+    "source_sha256": "674f8052d2951f48dec3972e2ea8faccf353e81a4e0cba049b773ffec2f43d1d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-engine-v1",
+      "class": "icon-engine",
+      "prompt_action": "One bold simplified engine block icon, cool-grey mechanical block with four orange cylinders and a dark base, no lettering. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.32279300689697266,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        183,
+        225,
+        842,
+        800
+      ],
+      "margin_fraction": 0.177734375,
+      "aspect": 1.146086956521739,
+      "estimated_key_rgb": [
+        211.0,
+        211.0,
+        211.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.567330976014527,
+      "palette_p90_delta_e": 13.334027603255684
+    },
+    "placement": {
+      "source_bounds_px": [
+        183,
+        225,
+        842,
+        800
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        105
+      ],
+      "scale": 0.18209408194233687,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-engine-v1.png",
+    "sha256": "a5b303c1e6e74b9ac184519fb120461083a72fdea9897b387446dd040ebadec2"
+  },
+  {
+    "id": "p4-hud-icon-handling-v1",
+    "class": "icon-handling",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-handling-v1\\attempt-01\\1.jpg",
+    "source_sha256": "8986498b8058ce359ed083f5542ad8d8cb08d00dbac93c9096625127721dd470",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-handling-v1",
+      "class": "icon-handling",
+      "prompt_action": "One bold warm ivory steering wheel icon with three spokes and a charcoal central hub, no lettering. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.34044361114501953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        174,
+        176,
+        851,
+        849
+      ],
+      "margin_fraction": 0.1689453125,
+      "aspect": 1.0059435364041605,
+      "estimated_key_rgb": [
+        229.0,
+        220.0,
+        192.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.389087052564155,
+      "palette_p90_delta_e": 9.923846261239234
+    },
+    "placement": {
+      "source_bounds_px": [
+        174,
+        176,
+        851,
+        849
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.17725258493353027,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-handling-v1.png",
+    "sha256": "92cc0631d76df780c768aeb8ff1c03dea117d62ac881a775398c37bb2207337d"
+  },
+  {
+    "id": "p4-hud-icon-light-gun-v1",
+    "class": "icon-light-gun",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-light-gun-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1fabf469b18f1d4a5f6c6632cdaa26dceb6147df60ac443c0256dda0a275d3d7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-light-gun-v1",
+      "class": "icon-light-gun",
+      "prompt_action": "One bold simplified twin light-gun icon, two short grey parallel barrels pointing RIGHT on an olive mount, no bullets or lettering. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23290061950683594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        189,
+        279,
+        855,
+        768
+      ],
+      "margin_fraction": 0.1650390625,
+      "aspect": 1.361963190184049,
+      "estimated_key_rgb": [
+        240.0,
+        238.0,
+        249.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.434264315013673,
+      "palette_p90_delta_e": 9.089777420882836
+    },
+    "placement": {
+      "source_bounds_px": [
+        189,
+        279,
+        855,
+        768
+      ],
+      "source_pivot_px": [
+        522.0,
+        523.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        88
+      ],
+      "scale": 0.18018018018018017,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-light-gun-v1.png",
+    "sha256": "87fcdfefcbf2a589e574a16ee96832856977e6281ec148838c183273bdf7a4a9"
+  },
+  {
+    "id": "p4-hud-icon-heavy-gun-v1",
+    "class": "icon-heavy-gun",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-heavy-gun-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ca73589080849e02c8529faccbbc724724355bdc1f097f69b21247eb965a4727",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-heavy-gun-v1",
+      "class": "icon-heavy-gun",
+      "prompt_action": "One bold simplified heavy cannon icon, one thick long grey barrel pointing RIGHT on an orange mount, no bullets or lettering. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.21631336212158203,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        168,
+        300,
+        895,
+        723
+      ],
+      "margin_fraction": 0.1259765625,
+      "aspect": 1.718676122931442,
+      "estimated_key_rgb": [
+        240.0,
+        240.0,
+        250.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.546842386562583,
+      "palette_p90_delta_e": 12.544260613542864
+    },
+    "placement": {
+      "source_bounds_px": [
+        168,
+        300,
+        895,
+        723
+      ],
+      "source_pivot_px": [
+        531.5,
+        511.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        70
+      ],
+      "scale": 0.16506189821182943,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-heavy-gun-v1.png",
+    "sha256": "747abcbfed600ce96ed3f16e9708fe4f7f60f33e28f9cc9721276adddba511ac"
+  },
+  {
+    "id": "p4-hud-icon-fuel-v1",
+    "class": "icon-fuel",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-hud-icon-fuel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e8b3db8f6ffeddb27052db61ad6ab4568f36efe8b05c9bf23f6f593133544a1c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-hud-icon-fuel-v1",
+      "class": "icon-fuel",
+      "prompt_action": "One compact red fuel can icon with a grey cap, simple ivory droplet on its face, no letters or numerals. One isolated front-facing flat graphic only, centred with generous margin, bold enough to read at 64 pixels, no scene, no vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-hud",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.31771087646484375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        237,
+        186,
+        803,
+        835
+      ],
+      "margin_fraction": 0.181640625,
+      "aspect": 0.8721109399075501,
+      "estimated_key_rgb": [
+        239.0,
+        240.0,
+        242.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.410662464927654,
+      "palette_p90_delta_e": 8.198037452127938
+    },
+    "placement": {
+      "source_bounds_px": [
+        237,
+        186,
+        803,
+        835
+      ],
+      "source_pivot_px": [
+        520.0,
+        510.5
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        105,
+        120
+      ],
+      "scale": 0.18489984591679506,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-hud\\p4-hud-icon-fuel-v1.png",
+    "sha256": "00fa4ddb44b69179d92c82cea748245bcc305e657c2bc6c17e3b255c420d9d02"
+  }
+]

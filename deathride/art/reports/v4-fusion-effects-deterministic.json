@@ -1,0 +1,1558 @@
+[
+  {
+    "id": "v4-fusion-effects-muzzle-v1",
+    "class": "muzzle",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-muzzle-v1\\attempt-03\\1.jpg",
+    "source_sha256": "f55abe1d1871381f9c30ca7dc87e8b6c374f8fcdd9aec7addad1e8dbeb737387",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-effects-muzzle-v1",
+      "class": "muzzle",
+      "prompt_action": "Exactly SIX separate frames in THREE columns and TWO rows, equal square cells, no visible separators. A short rightward muzzle flash, from tiny ivory ignition to rust-orange pointed burst, widest three-pronged flare, shorter yellow flare, two small sparks, then a tiny rust-orange ember. No gun. One phase per cell in reading order. Centre every frame in its own cell at fixed camera and scale. Leave broad uniform magenta space between frames and at the sheet border. No objects, letters, numbers or labels. All six frames contain visible effect pixels.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "v4-fusion-effects",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "effects/muzzle"
+    },
+    "verdict": "reject",
+    "codes": [
+      "FRAME_BOUNDARY"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-0.png",
+        "sha256": "afdd557d4bf1986b1fefcc990336501b63ecd9871de56e57f27db8e67307b750",
+        "duration_ms": 35,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.025298982771260997,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0739524776639443,
+          0.13548085698720846
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-1.png",
+        "sha256": "848f6dc29d8c27ec541928d3b052e350d2dc49d82aa4808b1985ed5849b975f9",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.16011056286549707,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.05369120237222147,
+          0.1350093824680768
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.024527204768498498,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-2.png",
+        "sha256": "b8e93e9292befdfe8fad93445641314bd7d5bb5962ab1c6aaac7e472df68ebd5",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.26155264846041054,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.09298522036519302,
+          0.1325625265178474
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.03421679387134756,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-3.png",
+        "sha256": "1764e45b20276badf770fe340a70907f67d1509738fb4cf8beecf4eb0692f5dd",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.196899056085044,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.12501248661021647,
+          -0.024562292512072037
+        ],
+        "boundary_occupancy": 0.027159046502540054,
+        "previous_mean_pixel_delta": 0.06109385950816193,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-4.png",
+        "sha256": "cd78afe06a9bb05e41aebe9cdb73d6469dfee69c6b2068d735fa4a9c1f05a5c0",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.06718864217836257,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0066913458742479115,
+          -0.033772461352528704
+        ],
+        "boundary_occupancy": 0.024785323965651834,
+        "previous_mean_pixel_delta": 0.024614142359609282,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1-frame-5.png",
+        "sha256": "f61ceb2e632eb24408a59b3f4bfa45525e7e76a49b0cd1341a172330c44b556d",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.025854563782991204,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.08640112156770008,
+          -0.011757691349136012
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.008723406412197232,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        226.0,
+        35.0,
+        112.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 14,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              226.0,
+              35.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              226.0,
+              35.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              227.0,
+              36.0,
+              113.0
+            ]
+          ],
+          [
+            [
+              226.0,
+              35.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              226.0,
+              35.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              226.0,
+              35.0,
+              112.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 0,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        45,
+        45,
+        40,
+        40,
+        45
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-muzzle-v1.png",
+    "sha256": "c42cdc03742aa891d1e38ab63f0563e50d56acdcb4b813dd52669ae326ddddc9"
+  },
+  {
+    "id": "v4-fusion-effects-explosion-v1",
+    "class": "explosion",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-explosion-v1\\attempt-02\\1.jpg",
+    "source_sha256": "0efd5598a44aebb0b3a15e693b68e54ca8bdf7feb99b2aac708753c26cfb7651",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-effects-explosion-v1",
+      "class": "explosion",
+      "prompt_action": "Exactly SIX separate frames in THREE columns and TWO rows, equal square cells, no visible separators. An overhead explosion, from compact ivory ignition to small rust-orange starburst, large yellow-rust-orange radial blast, widest rust-orange fireball, dark rust-orange and grey breaking cloud, then a small dissipating charcoal puff. No debris objects. One phase per cell in reading order. Centre every frame in its own cell at fixed camera and scale. Leave broad uniform magenta space between frames and at the sheet border. No objects, letters, numbers or labels. All six frames contain visible effect pixels.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "v4-fusion-effects",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "effects/explosion"
+    },
+    "verdict": "reject",
+    "codes": [
+      "FRAME_BOUNDARY",
+      "FRAME_CENTRE_DRIFT"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-0.png",
+        "sha256": "7107d699593dbc52a117854e78e499e1ab401a54577841df73b677c77eb80bb9",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.1844299853372434,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.23849438079452112,
+          0.18511166779891308
+        ],
+        "boundary_occupancy": 0.19558421258304026,
+        "previous_mean_pixel_delta": null,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-1.png",
+        "sha256": "b6d6e71f24add543fa84cb887fec4a88ef348ca8332b6cdfd89b9ef9e99f73b2",
+        "duration_ms": 55,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.08700543676900585,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.048569967200026154,
+          0.343971721672957
+        ],
+        "boundary_occupancy": 0.26736924277907886,
+        "previous_mean_pixel_delta": 0.05842713833771867,
+        "codes": [
+          "FRAME_BOUNDARY",
+          "FRAME_CENTRE_DRIFT"
+        ]
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-2.png",
+        "sha256": "429caa331090175c6e987abd33d3515112f7c58fbf7ecb5438aa2e70914754ac",
+        "duration_ms": 65,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.31130865102639294,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.18520298227606385,
+          0.14146184823005592
+        ],
+        "boundary_occupancy": 0.26533802266510353,
+        "previous_mean_pixel_delta": 0.05222329571508955,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-3.png",
+        "sha256": "d6b98ec6f908f5a69c62fdface01adce38c0d5aa82a87251dc42447bbf8afe36",
+        "duration_ms": 75,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.39571114369501464,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.19404416348939657,
+          0.01714734514315075
+        ],
+        "boundary_occupancy": 0.33274716686205547,
+        "previous_mean_pixel_delta": 0.11076614726006824,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-4.png",
+        "sha256": "4c04a62e55dee7684826a42e22fd5c46ed3eb831e87597621c91b328d254b7fb",
+        "duration_ms": 90,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.2092185215643275,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.16570367390657165,
+          -0.057795199902756944
+        ],
+        "boundary_occupancy": 0.3590944574551132,
+        "previous_mean_pixel_delta": 0.08522743124389258,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1-frame-5.png",
+        "sha256": "d18a9e1fc2b318ad13de7f4bd87671dd7b097f7fcc960f7b0c406f9afa9c8f84",
+        "duration_ms": 110,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.1768924120234604,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.1409916816725228,
+          -0.37383883797030826
+        ],
+        "boundary_occupancy": 0.23681125439624853,
+        "previous_mean_pixel_delta": 0.05119028363490003,
+        "codes": [
+          "FRAME_BOUNDARY",
+          "FRAME_CENTRE_DRIFT"
+        ]
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        188.0,
+        46.0,
+        111.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 23,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              186.0,
+              42.0,
+              111.0
+            ]
+          ],
+          [
+            [
+              186.0,
+              43.0,
+              109.0
+            ]
+          ],
+          [
+            [
+              118.0,
+              44.0,
+              70.0
+            ],
+            [
+              185.0,
+              42.0,
+              108.0
+            ]
+          ],
+          [
+            [
+              186.0,
+              42.0,
+              111.0
+            ],
+            [
+              171.0,
+              42.0,
+              101.0
+            ]
+          ],
+          [
+            [
+              176.0,
+              46.0,
+              106.0
+            ],
+            [
+              185.0,
+              42.0,
+              108.0
+            ],
+            [
+              153.0,
+              42.0,
+              97.0
+            ]
+          ],
+          [
+            [
+              186.0,
+              42.0,
+              111.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 8,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        45,
+        55,
+        65,
+        75,
+        90,
+        110
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-explosion-v1.png",
+    "sha256": "421943459ed041daaa1ce4e92ac5b7932e47fc05763829ffc78eee25269caf5a"
+  },
+  {
+    "id": "v4-fusion-effects-smoke-v2",
+    "class": "smoke",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-smoke-v2\\attempt-01\\1.jpg",
+    "source_sha256": "235d7db69f8ac2656a3c6fee7f0ab6631f61af040224deb37a9a2fb420d0213a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-effects-smoke-v2",
+      "class": "smoke",
+      "prompt_action": "Edit the supplied effect sheet into six HARD-EDGED opaque GREY cloud silhouettes: small dark puff, medium three-lobed cloud, large pale billow, thinner cloud, two curled wisps, one small visible wisp. No pink tint or translucent glow. Each cloud is flat painted grey with only two tonal values. Arrange exactly THREE COLUMNS and TWO ROWS. The layout has three images across the TOP row, three across the BOTTOM row. Every image occupies only the central THIRD of its invisible equal cell, with wide empty space. Background is one continuous pure saturated MAGENTA #FF00FF. Absolutely no grid, panels, border, decoration, physical object, scene or lettering. No image crosses a cell boundary. Keep the six visible phases centred and isolated.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-smoke-v1\\attempt-02\\1.jpg",
+      "batch": "v4-fusion-effects",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "effects/smoke"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-0.png",
+        "sha256": "5b8384920d15b62f11899ddb623cc47bfafe65e142fb21bf73c5039a55b7301e",
+        "duration_ms": 90,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.05991110703812317,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.01563139568135563,
+          -0.026041915630975132
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-1.png",
+        "sha256": "6a50a80de369aa96cfed8ad7a663a7cd3507e2ed4155253a51d0b681e8cf0192",
+        "duration_ms": 100,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.26423154239766083,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.009717160180934159,
+          -0.01963239306864356
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.059224737280533145,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-2.png",
+        "sha256": "231a3118f903682e05a456ab6fce3d4bec55e8b8d1ea702df403b9dc3664f506",
+        "duration_ms": 120,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.33819991752199413,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0437528094697861,
+          -0.021090472023345797
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.05414290652433359,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-3.png",
+        "sha256": "8d407cb2ee369d0d4533a8ee79885e8948f3ab133943029ee839ca309ad6b296",
+        "duration_ms": 140,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.18717925219941348,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.036191075280781915,
+          0.051098543164779686
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07823382827267959,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-4.png",
+        "sha256": "b63b8fe5501977bf59bb3347424a922d034a4dc0a6ae8d864d5c47a24b7030fa",
+        "duration_ms": 160,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.06408762792397661,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.07793796854757928,
+          0.07082088336526471
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.04465893401376073,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2-frame-5.png",
+        "sha256": "f0bef25fc9d08f5b1fc7af5b3fc39973031f0b6457314b1fcdabff552636877e",
+        "duration_ms": 180,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.04469276942815249,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.02156137405607217,
+          0.0744869511325772
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.022365741429077757,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        202.0,
+        38.0,
+        133.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 9,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              202.0,
+              37.0,
+              131.0
+            ]
+          ],
+          [
+            [
+              200.0,
+              36.0,
+              131.0
+            ]
+          ],
+          [
+            [
+              201.0,
+              37.0,
+              132.0
+            ]
+          ],
+          [
+            [
+              201.0,
+              36.0,
+              131.0
+            ]
+          ],
+          [
+            [
+              201.0,
+              35.0,
+              133.0
+            ],
+            [
+              174.0,
+              41.0,
+              115.0
+            ]
+          ],
+          [
+            [
+              200.0,
+              36.0,
+              131.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 13,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        90,
+        100,
+        120,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-smoke-v2.png",
+    "sha256": "586b02a2b3f01a64a720bd7ef2892536dc451783769886db925f0e6d6702dc0c"
+  },
+  {
+    "id": "v4-fusion-effects-sparks-v2",
+    "class": "sparks",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-sparks-v2\\attempt-01\\1.jpg",
+    "source_sha256": "8faeeff1fc144949a22668c33fc8ada12b56b0fe6f973e476003cf18b95e4580",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-effects-sparks-v2",
+      "class": "sparks",
+      "prompt_action": "Edit the supplied effect sheet into six HARD-EDGED spark sprays ONLY: small ivory dot, three short orange strokes, six longer rust-orange rays, widest sparse yellow spray, three short red rays, one small orange dash. No smoke clouds or pink glow. Arrange exactly THREE COLUMNS and TWO ROWS. The layout has three images across the TOP row, three across the BOTTOM row. Every image occupies only the central THIRD of its invisible equal cell, with wide empty space. Background is one continuous pure saturated MAGENTA #FF00FF. Absolutely no grid, panels, border, decoration, physical object, scene or lettering. No image crosses a cell boundary. Keep the six visible phases centred and isolated.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-sparks-v1\\attempt-02\\1.jpg",
+      "batch": "v4-fusion-effects",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "effects/sparks"
+    },
+    "verdict": "reject",
+    "codes": [
+      "FRAME_BOUNDARY"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-0.png",
+        "sha256": "f917e89e3266b3b61d3d7f7bbd10268a83fffc88451371decbf8cd86609081d4",
+        "duration_ms": 35,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.020630956744868034,
+        "key_residue_fraction": 0.00138811771238201,
+        "centroid_offset_fraction": [
+          0.065283053891533,
+          0.04970220537201553
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-1.png",
+        "sha256": "a7c9154ff43693a876a52f1f10a179a7246aa301c7e3de2218fdf10abe162dee",
+        "duration_ms": 40,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.04244905884502924,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.021872784791702515,
+          0.043199062668168975
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.013559060317345892,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-2.png",
+        "sha256": "0996c1133c8a587990af941c9b59c934da91aace718bacddde819a53e6d4d973",
+        "duration_ms": 45,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.10986757697947214,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.04007804848815072,
+          0.018976428911218868
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.01643662662547658,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-3.png",
+        "sha256": "f7b3959b62c21a4b3f710d3ced9b2d543772eb40930b41cd352fc0a3d61ea465",
+        "duration_ms": 55,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.14182207661290322,
+        "key_residue_fraction": 0.0014538992770889705,
+        "centroid_offset_fraction": [
+          0.09386153918854279,
+          -0.060872606177557465
+        ],
+        "boundary_occupancy": 0.022469714732317313,
+        "previous_mean_pixel_delta": 0.04284879475942747,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-4.png",
+        "sha256": "a981f6497de524c947dd39f06a8f11dd833203b4037f1fbd63c247bcc0c0a044",
+        "duration_ms": 65,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.06371070906432749,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.043077283563875635,
+          -0.04697636781776621
+        ],
+        "boundary_occupancy": 0.01795472287275566,
+        "previous_mean_pixel_delta": 0.03790579031602429,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2-frame-5.png",
+        "sha256": "f5e33ea837287bce2ca980c401e76a6ebe1f38b135c0caea64d84d43d7e445fa",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.014622663123167155,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.002484570507010897,
+          -0.045388926630434756
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.009126900185625722,
+        "codes": []
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        184.0,
+        49.0,
+        112.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 16,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              184.0,
+              48.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              184.0,
+              48.0,
+              112.0
+            ]
+          ],
+          [
+            [
+              181.0,
+              47.0,
+              110.0
+            ],
+            [
+              158.0,
+              54.0,
+              97.0
+            ]
+          ],
+          [
+            [
+              183.0,
+              47.0,
+              111.0
+            ],
+            [
+              178.0,
+              56.0,
+              98.0
+            ]
+          ],
+          [
+            [
+              184.0,
+              48.0,
+              110.0
+            ]
+          ],
+          [
+            [
+              184.0,
+              48.0,
+              112.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 155,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        35,
+        40,
+        45,
+        55,
+        65,
+        80
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-sparks-v2.png",
+    "sha256": "97352e9254fb700cd06a626638662687dd1bdfce6a39d03a9c54aea45465d790"
+  },
+  {
+    "id": "v4-fusion-effects-fire-v2",
+    "class": "fire",
+    "kind": "sheet",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-fire-v2\\attempt-01\\1.jpg",
+    "source_sha256": "45914e1743f1c93b094432096c25d1969ba90083d41511b496fff04fc4f8e5a5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-effects-fire-v2",
+      "class": "fire",
+      "prompt_action": "Edit the supplied effect sheet into six DIFFERENT overhead radial orange fire pools: compact three-point star, four-point curled star, wide six-point orange ring, compact off-centre curl, broad clockwise radial swirl, compact three-point star again. Flames spread OUTWARDS on the ground plane in ALL directions, never an upright candle flame, side-view flame tongue or burning object. Arrange exactly THREE COLUMNS and TWO ROWS. The layout has three images across the TOP row, three across the BOTTOM row. Every image occupies only the central THIRD of its invisible equal cell, with wide empty space. Background is one continuous pure saturated MAGENTA #FF00FF. Absolutely no grid, panels, border, decoration, physical object, scene or lettering. No image crosses a cell boundary. Keep the six visible phases centred and isolated.",
+      "size": "1024x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-effects-fire-v1\\attempt-02\\1.jpg",
+      "batch": "v4-fusion-effects",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "effects/fire"
+    },
+    "verdict": "reject",
+    "codes": [
+      "FRAME_BOUNDARY"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765",
+      "animation.py": "f9b8326349103af0af65f3ad6547e25911cd5d72370b7ca613139b1ea2cff1f0"
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-0.png",
+        "sha256": "f7d706f36a15488de2805794e86b05f78d460c13f713c51abf2c55a8c8d8b75c",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          341,
+          512
+        ],
+        "occupancy": 0.21962060117302054,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.053816416046617355,
+          0.08224136476697785
+        ],
+        "boundary_occupancy": 0.0005861664712778429,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-1.png",
+        "sha256": "3645bef5902e2f813505c39d8a0755e68c87ba7640c25545f10ac941ffd124f2",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          0,
+          683,
+          512
+        ],
+        "occupancy": 0.23709909539473684,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.0038202838631451463,
+          0.06355122129940749
+        ],
+        "boundary_occupancy": 0.009953161592505855,
+        "previous_mean_pixel_delta": 0.05144157670727605,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-2.png",
+        "sha256": "3aad596efa1dd93762fb501b2b4a7bd08079d5b57db74efe5f14d5c09da06c97",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          0,
+          1024,
+          512
+        ],
+        "occupancy": 0.28173684934017595,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.022792748229657434,
+          0.06321235518230706
+        ],
+        "boundary_occupancy": 0.01406799531066823,
+        "previous_mean_pixel_delta": 0.06041752677505848,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-3.png",
+        "sha256": "d08ff73a0806c1d1dcc5d67d06cd7df1bbf7f76b1e95478cdfa4b0f821dcbd43",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          0,
+          512,
+          341,
+          1024
+        ],
+        "occupancy": 0.23211831011730205,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.05057048203224368,
+          -0.005945980281177543
+        ],
+        "boundary_occupancy": 0.03028526768268855,
+        "previous_mean_pixel_delta": 0.05579911171985134,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-4.png",
+        "sha256": "1dfac5920d4b2bdac1b1ab616149cdb27145db74d471a4967849a8b32cb6ea9f",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          341,
+          512,
+          683,
+          1024
+        ],
+        "occupancy": 0.6200657894736842,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.029364776207637666,
+          -0.026003746799476868
+        ],
+        "boundary_occupancy": 0.1592505854800937,
+        "previous_mean_pixel_delta": 0.07451415859184768,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2-frame-5.png",
+        "sha256": "f6aefe17f2bc7b5fc93cbb58ed35b19e06097e90a732ac10b858374605e7e412",
+        "duration_ms": 80,
+        "pivot_px": [
+          64.0,
+          64.0
+        ],
+        "cell_px": [
+          128,
+          128
+        ],
+        "source_cell_px": [
+          683,
+          512,
+          1024,
+          1024
+        ],
+        "occupancy": 0.23455255681818182,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.006436775057179767,
+          -0.012696504854887547
+        ],
+        "boundary_occupancy": 0.09808518952715904,
+        "previous_mean_pixel_delta": 0.08690219275388873,
+        "codes": [
+          "FRAME_BOUNDARY"
+        ]
+      }
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        226.0,
+        31.0,
+        160.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 6,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              225.0,
+              28.0,
+              159.0
+            ]
+          ],
+          [
+            [
+              225.0,
+              29.0,
+              159.0
+            ]
+          ],
+          [
+            [
+              227.0,
+              30.0,
+              162.0
+            ]
+          ],
+          [
+            [
+              225.0,
+              30.0,
+              160.0
+            ]
+          ],
+          [
+            [
+              225.0,
+              30.0,
+              158.0
+            ]
+          ],
+          [
+            [
+              225.0,
+              30.0,
+              160.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 0,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      },
+      "frame_count": 6,
+      "source_size_px": [
+        1024,
+        1024
+      ]
+    },
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-effects\\v4-fusion-effects-fire-v2.png",
+    "sha256": "24d8b3c9ee9fb95fa55504005c6b80a94e4a80405354fe93bc3e9d3ad33671aa"
+  }
+]

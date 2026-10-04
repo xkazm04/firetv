@@ -1,0 +1,156 @@
+Activity Resolver Table:
+  Non-Data Actions:
+      android.intent.action.MAIN:
+        4202b64 dev.deathride.tv/.MainActivity filter 24321cd
+          Action: "android.intent.action.MAIN"
+          Category: "android.intent.category.LAUNCHER"
+          Category: "android.intent.category.LEANBACK_LAUNCHER"
+
+Receiver Resolver Table:
+  Non-Data Actions:
+      androidx.profileinstaller.action.SAVE_PROFILE:
+        c700a82 dev.deathride.tv/androidx.profileinstaller.ProfileInstallReceiver filter b6d0dc9
+          Action: "androidx.profileinstaller.action.SAVE_PROFILE"
+      androidx.profileinstaller.action.INSTALL_PROFILE:
+        c700a82 dev.deathride.tv/androidx.profileinstaller.ProfileInstallReceiver filter 1744593
+          Action: "androidx.profileinstaller.action.INSTALL_PROFILE"
+      androidx.profileinstaller.action.SKIP_FILE:
+        c700a82 dev.deathride.tv/androidx.profileinstaller.ProfileInstallReceiver filter e6699d0
+          Action: "androidx.profileinstaller.action.SKIP_FILE"
+      androidx.profileinstaller.action.BENCHMARK_OPERATION:
+        c700a82 dev.deathride.tv/androidx.profileinstaller.ProfileInstallReceiver filter a184cce
+          Action: "androidx.profileinstaller.action.BENCHMARK_OPERATION"
+
+Permissions:
+  Permission [dev.deathride.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION] (f2a2a5a):
+    sourcePackage=dev.deathride.tv
+    uid=10272 gids=null type=0 prot=signature
+    perm=Permission{2164f8 dev.deathride.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}
+
+Registered ContentProviders:
+  dev.deathride.tv/androidx.startup.InitializationProvider:
+    Provider{acbbdd1 dev.deathride.tv/androidx.startup.InitializationProvider}
+
+ContentProvider Authorities:
+  [dev.deathride.tv.androidx-startup]:
+    Provider{acbbdd1 dev.deathride.tv/androidx.startup.InitializationProvider}
+      applicationInfo=ApplicationInfo{c2cfafc dev.deathride.tv}
+
+Key Set Manager:
+  [dev.deathride.tv]
+      Signing KeySets: 13
+
+Packages:
+  Package [dev.deathride.tv] (739fe67):
+    userId=10272
+    pkg=Package{1deab37 dev.deathride.tv}
+    codePath=/data/app/~~GObLkDshOEpb5XzQByWGZg==/dev.deathride.tv-yh2QjZWw59xIs65l_ChKJA==
+    resourcePath=/data/app/~~GObLkDshOEpb5XzQByWGZg==/dev.deathride.tv-yh2QjZWw59xIs65l_ChKJA==
+    legacyNativeLibraryDir=/data/app/~~GObLkDshOEpb5XzQByWGZg==/dev.deathride.tv-yh2QjZWw59xIs65l_ChKJA==/lib
+    primaryCpuAbi=armeabi-v7a
+    secondaryCpuAbi=null
+    versionCode=1 minSdk=28 targetSdk=34
+    versionName=0.1-spike
+    splits=[base]
+    apkSigningVersion=2
+    applicationInfo=ApplicationInfo{1deab37 dev.deathride.tv}
+    flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    privateFlags=[ PRIVATE_FLAG_ACTIVITIES_RESIZE_MODE_RESIZEABLE_VIA_SDK_VERSION ALLOW_AUDIO_PLAYBACK_CAPTURE PRIVATE_FLAG_ALLOW_NATIVE_HEAP_POINTER_TAGGING ]
+    forceQueryable=false
+    queriesPackages=[]
+    dataDir=/data/user/0/dev.deathride.tv
+    supportsScreens=[small, medium, large, xlarge, resizeable, anyDensity]
+    timeStamp=2026-10-01 16:29:13
+    firstInstallTime=2026-09-30 16:41:42
+    lastUpdateTime=2026-10-01 16:29:13
+    signatures=PackageSignatures{a8a6095 version:2, signatures:[39514cca], past signatures:[]}
+    installPermissionsFixed=true
+    pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ]
+    declared permissions:
+      dev.deathride.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: prot=signature, INSTALLED
+    requested permissions:
+      android.permission.INTERNET
+      android.permission.ACCESS_NETWORK_STATE
+      android.permission.ACCESS_WIFI_STATE
+      dev.deathride.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+    install permissions:
+      android.permission.INTERNET: granted=true
+      dev.deathride.tv.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION: granted=true
+      android.permission.ACCESS_NETWORK_STATE: granted=true
+      android.permission.ACCESS_WIFI_STATE: granted=true
+    User 0: ceDataInode=254862 installed=true hidden=false suspended=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false
+      gids=[3003]
+      runtime permissions:
+
+Queries:
+  system apps queryable: false
+  queries via package name:
+  queries via intent:
+    com.amazon.aca:
+      dev.deathride.tv
+    com.amazon.device.lowstoragemanager:
+      dev.deathride.tv
+    com.amazon.venezia:
+      dev.deathride.tv
+  queryable via interaction:
+    User 0:
+      [com.amazon.providers.contentsupport,com.amazon.media.recommendations,com.amazon.platform.fdra,com.android.location.fused,com.amazon.neodelegate,com.amazon.fireos.cirruscloud,com.amazon.device.logmanager,com.android.dynsystem,android.amazon.perm,com.amazon.connectivitydiag,amazon.fireos,com.android.wallpaperbackup,com.android.keychain,com.amazon.tv.settings.core,com.android.providers.settings,com.android.localtransport,com.amazon.android.marketplace,com.amazon.tv.ooberesource,com.amazon.tv.mattercohost,com.amazon.cast.sink,com.ivona.tts.oem,com.amazon.tifobserver,android,com.amazon.kindleautomatictimezone]:
+        dev.deathride.tv
+      com.amazon.tv.ime:
+        dev.deathride.tv
+
+Package Changes:
+  Sequence number=1830
+  User 0:
+    seq=29, package=com.amazon.tv.parentalcontrols
+    seq=30, package=com.amazon.aca
+    seq=34, package=com.amazon.device.logmanager
+    seq=38, package=com.amazon.tv.legal.notices
+    seq=39, package=com.amazon.d3
+    seq=40, package=com.amazon.bueller.photos
+    seq=43, package=com.amazon.tv.parentalcontrols.overlay.localisation.common
+    seq=45, package=com.amazon.tv.legal.notices.overlay.localisation.common
+    seq=49, package=com.amazon.tv.oobe
+    seq=52, package=com.amazon.smarthomemapviewapp
+    seq=63, package=com.amazon.shoptv.client
+    seq=81, package=com.amazon.shoptv.firetv.client
+    seq=89, package=com.amazon.gamehub
+    seq=140, package=com.amazon.spiderpork
+    seq=154, package=com.amazon.ftv.screensaver
+    seq=230, package=dev.telestrator.tv
+    seq=592, package=com.amazon.alexa.datastore.app
+    seq=593, package=com.amazon.ods.kindleconnect
+    seq=597, package=com.amazon.aiondec
+    seq=598, package=com.amazon.alexamediaplayer.runtime.ftv
+    seq=610, package=com.amazon.hedwig
+    seq=652, package=com.amazon.tahoe
+    seq=801, package=com.amazon.webview.chromium
+    seq=840, package=com.netflix.ninja
+    seq=845, package=com.amazon.tv.settings.v2.overlay.localisation.common
+    seq=937, package=com.amazon.firebat
+    seq=938, package=com.amazon.cloud9
+    seq=963, package=com.amazon.tv.launcher
+    seq=964, package=com.amazon.bueller.music
+    seq=1157, package=dev.deathride.a1
+    seq=1158, package=dev.deathride.a2
+    seq=1160, package=dev.deathride.b1
+    seq=1163, package=dev.deathride.b2
+    seq=1166, package=dev.deathride.c1
+    seq=1169, package=dev.deathride.c2
+    seq=1605, package=com.amazon.tcomm
+    seq=1631, package=dev.deathride.artprobe
+    seq=1806, package=dev.deathride.tv
+    seq=1824, package=com.amazon.ceviche
+    seq=1827, package=com.amazon.tv.settings.v2
+    seq=1829, package=dev.deathride.artlab
+
+
+Dexopt state:
+  [dev.deathride.tv]
+    path: /data/app/~~GObLkDshOEpb5XzQByWGZg==/dev.deathride.tv-yh2QjZWw59xIs65l_ChKJA==/base.apk
+      arm: [status=run-from-apk] [reason=unknown]
+
+
+Compiler stats:
+  [dev.deathride.tv]
+     base.apk - 2200

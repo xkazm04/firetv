@@ -1,0 +1,32 @@
+{
+  "id": "1d012ce2-58c7-472e-8ab2-dd492584815b",
+  "ts": "2026-10-02T21:34:02.367Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/drift.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24672,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "eaa6f99589c9b01ca321bb65d3e151ae7e140955d2f76bf01ed2b4bca081920a",
+  "completedAt": "2026-10-02T21:34:06.139Z",
+  "creditsAfter": 24672,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 300
+}

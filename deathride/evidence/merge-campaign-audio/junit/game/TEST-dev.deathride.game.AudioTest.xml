@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.game.AudioTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-03T00:23:56.376Z" hostname="KAZIHO" time="0.461">
+  <properties/>
+  <testcase name="movingLoopsSlewPitchExpireWhenUntouchedAndRespectSpatialCutoff()" classname="dev.deathride.game.AudioTest" time="0.03"/>
+  <testcase name="pitchedOneShotsRetainTheirSlotUntilTheirActualDuration()" classname="dev.deathride.game.AudioTest" time="0.001"/>
+  <testcase name="actualDeathDuelDispatchReachesAudioWithoutLapCuesOrChangingReplay()" classname="dev.deathride.game.AudioTest" time="0.346"/>
+  <testcase name="deliveredManifestMatchesHashesBudgetsAndAllActualSignatures()" classname="dev.deathride.game.AudioTest" time="0.052"/>
+  <testcase name="speechDucksMusicAndEngineAndRecoversWithoutRestart()" classname="dev.deathride.game.AudioTest" time="0.001"/>
+  <testcase name="identitiesCooldownAndGroupCapsSuppressWithoutAQueue()" classname="dev.deathride.game.AudioTest" time="0.001"/>
+  <testcase name="committedBossAndFinaleResultsReachNarrationButLossesAndDuplicateReceiptsDoNot()" classname="dev.deathride.game.AudioTest" time="0.01"/>
+  <testcase name="directorConsumesOnceFreezesCountdownAndDoesNotCallSpectatorsLosers()" classname="dev.deathride.game.AudioTest" time="0.001"/>
+  <testcase name="campaignSeizureSequenceKeepsHeldCaptionAndCancelsOnSkipPauseOrExit()" classname="dev.deathride.game.AudioTest" time="0.009"/>
+  <testcase name="eightVoicesIncludesMusicAndStealsBeforeStarting()" classname="dev.deathride.game.AudioTest" time="0.002"/>
+  <testcase name="missingCueCannotStealAndMutedNarrationStillHasText()" classname="dev.deathride.game.AudioTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

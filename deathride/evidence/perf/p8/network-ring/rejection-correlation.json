@@ -1,0 +1,1111 @@
+{
+  "appPid": 11844,
+  "traceStart": 2236593.44762,
+  "traceEnd": 2236630.877503,
+  "capturedRejectedGaps": [
+    {
+      "input": {
+        "receiveNs": 2236630515558541,
+        "slot": 0,
+        "q": 17860,
+        "ageMs": 255.7526760000037,
+        "parseMs": 0.734846,
+        "offerMs": 0.333,
+        "ackEnqueueMs": 0.295769,
+        "reason": 1,
+        "receiveGapMs": 285.062693
+      },
+      "gapStartSeconds": 2236630.2304958478,
+      "gapEndSeconds": 2236630.515558541,
+      "fullGapCaptured": true,
+      "renderEntries": 17,
+      "maxRenderIntervalMs": 19.830769,
+      "cpuByThread": [
+        {
+          "tid": 11921,
+          "pid": "11844",
+          "name": "GLThread 42597",
+          "cpuMs": 123.83200088515878
+        },
+        {
+          "tid": 424,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 37.97099879011512
+        },
+        {
+          "tid": 3549,
+          "pid": "388",
+          "name": "MS12OutputThrea",
+          "cpuMs": 25.17899964004755
+        },
+        {
+          "tid": 1691,
+          "pid": "424",
+          "name": "Binder:424_5",
+          "cpuMs": 13.8960019685328
+        },
+        {
+          "tid": 366,
+          "pid": "366",
+          "name": "composer@2.1-se",
+          "cpuMs": 12.68000015988946
+        },
+        {
+          "tid": 3551,
+          "pid": "388",
+          "name": "ms12proc",
+          "cpuMs": 10.32699877396226
+        },
+        {
+          "tid": 11844,
+          "pid": "11844",
+          "name": ".deathride.perf",
+          "cpuMs": 9.412999264895916
+        },
+        {
+          "tid": 12081,
+          "pid": "11844",
+          "name": "GLThread 42597",
+          "cpuMs": 9.174000471830368
+        },
+        {
+          "tid": 12163,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 8.387693669646978
+        },
+        {
+          "tid": 683,
+          "pid": "421",
+          "name": "AudioOut_D",
+          "cpuMs": 8.211998268961906
+        },
+        {
+          "tid": 783,
+          "pid": "388",
+          "name": "writer",
+          "cpuMs": 7.174998987466097
+        },
+        {
+          "tid": 497,
+          "pid": "424",
+          "name": "app",
+          "cpuMs": 5.993998143821955
+        },
+        {
+          "tid": 6395,
+          "pid": "6395",
+          "name": "kworker/u8:3",
+          "cpuMs": 5.116996821016073
+        },
+        {
+          "tid": 495,
+          "pid": "424",
+          "name": "TimerDispatch",
+          "cpuMs": 4.913000855594873
+        },
+        {
+          "tid": 41,
+          "pid": "41",
+          "name": "ksmd_seeker",
+          "cpuMs": 3.862000536173582
+        },
+        {
+          "tid": 12155,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 3.781540784984827
+        },
+        {
+          "tid": 498,
+          "pid": "424",
+          "name": "sf",
+          "cpuMs": 3.7329993210732937
+        },
+        {
+          "tid": 168,
+          "pid": "168",
+          "name": "pvr_defer_free",
+          "cpuMs": 3.6929980851709843
+        },
+        {
+          "tid": 10719,
+          "pid": "10719",
+          "name": "kworker/u8:0",
+          "cpuMs": 3.449000883847475
+        },
+        {
+          "tid": 13740,
+          "pid": "13740",
+          "name": "kworker/u8:1",
+          "cpuMs": 2.9980000108480453
+        },
+        {
+          "tid": 627,
+          "pid": "421",
+          "name": "ApmOutput",
+          "cpuMs": 2.9810001142323017
+        },
+        {
+          "tid": 12140,
+          "pid": "11844",
+          "name": "HWC release",
+          "cpuMs": 2.805996686220169
+        },
+        {
+          "tid": 1382,
+          "pid": "1382",
+          "name": "m.amazon.tv.ime",
+          "cpuMs": 2.6670005172491074
+        },
+        {
+          "tid": 27761,
+          "pid": "27761",
+          "name": "kworker/u9:2",
+          "cpuMs": 2.5760000571608543
+        },
+        {
+          "tid": 470,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 2.444001380354166
+        },
+        {
+          "tid": 12142,
+          "pid": "11844",
+          "name": "GPU completion",
+          "cpuMs": 2.3890002630650997
+        },
+        {
+          "tid": 182,
+          "pid": "182",
+          "name": "disp_osd2_confi",
+          "cpuMs": 2.2170012816786766
+        },
+        {
+          "tid": 759,
+          "pid": "424",
+          "name": "Binder:424_3",
+          "cpuMs": 2.1730000153183937
+        },
+        {
+          "tid": 1099,
+          "pid": "1099",
+          "name": "hif_thread",
+          "cpuMs": 2.0000007934868336
+        },
+        {
+          "tid": 11945,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 1.9366927444934845
+        },
+        {
+          "tid": 12168,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 1.8699998036026955
+        },
+        {
+          "tid": 40,
+          "pid": "40",
+          "name": "ksmd",
+          "cpuMs": 1.8690000288188457
+        },
+        {
+          "tid": 12164,
+          "pid": "11844",
+          "name": "DeathRideAudio",
+          "cpuMs": 1.7580003477633
+        },
+        {
+          "tid": 27107,
+          "pid": "26698",
+          "name": "Thread-27",
+          "cpuMs": 1.6369996592402458
+        },
+        {
+          "tid": 8880,
+          "pid": "695",
+          "name": "Binder:695_17",
+          "cpuMs": 1.516999676823616
+        },
+        {
+          "tid": 1098,
+          "pid": "1098",
+          "name": "main_thread",
+          "cpuMs": 1.3789995573461056
+        },
+        {
+          "tid": 12004,
+          "pid": "11844",
+          "name": "DefaultExecutor",
+          "cpuMs": 1.2429994530975819
+        },
+        {
+          "tid": 11373,
+          "pid": "2154",
+          "name": "Thread-13513",
+          "cpuMs": 1.2059998698532581
+        },
+        {
+          "tid": 12,
+          "pid": "12",
+          "name": "rcu_preempt",
+          "cpuMs": 1.1970018967986107
+        },
+        {
+          "tid": 13105,
+          "pid": "13105",
+          "name": "kworker/0:2",
+          "cpuMs": 1.1039990931749344
+        },
+        {
+          "tid": 152,
+          "pid": "152",
+          "name": "hdmi_timer_kthr",
+          "cpuMs": 1.0080011561512947
+        },
+        {
+          "tid": 245,
+          "pid": "236",
+          "name": "logd.writer",
+          "cpuMs": 0.9760004468262196
+        },
+        {
+          "tid": 17220,
+          "pid": "17220",
+          "name": "kworker/2:1",
+          "cpuMs": 0.8560009300708771
+        },
+        {
+          "tid": 12162,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.8319998160004616
+        },
+        {
+          "tid": 1100,
+          "pid": "1100",
+          "name": "rx_thread",
+          "cpuMs": 0.7530003786087036
+        },
+        {
+          "tid": 312,
+          "pid": "236",
+          "name": "logd.LOG_DUMPER",
+          "cpuMs": 0.6800005212426186
+        },
+        {
+          "tid": 500,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 0.6599994376301765
+        },
+        {
+          "tid": 9959,
+          "pid": "695",
+          "name": "Binder:695_19",
+          "cpuMs": 0.6269998848438263
+        },
+        {
+          "tid": 184,
+          "pid": "184",
+          "name": "disp_osd2_irq_k",
+          "cpuMs": 0.5460008978843689
+        },
+        {
+          "tid": 183,
+          "pid": "183",
+          "name": "disp_osd1_irq_k",
+          "cpuMs": 0.5249995738267899
+        },
+        {
+          "tid": 12143,
+          "pid": "12143",
+          "name": "kworker/1:2",
+          "cpuMs": 0.49200141802430153
+        },
+        {
+          "tid": 264,
+          "pid": "264",
+          "name": "suspend@1.0-ser",
+          "cpuMs": 0.4770001396536827
+        },
+        {
+          "tid": 436,
+          "pid": "388",
+          "name": "HwBinder:388_1",
+          "cpuMs": 0.44999970123171806
+        },
+        {
+          "tid": 187,
+          "pid": "187",
+          "name": "video_disp0",
+          "cpuMs": 0.40499959141016006
+        },
+        {
+          "tid": 26835,
+          "pid": "26698",
+          "name": "IgniteThread",
+          "cpuMs": 0.3909999504685402
+        },
+        {
+          "tid": 188,
+          "pid": "188",
+          "name": "video_disp1",
+          "cpuMs": 0.3560003824532032
+        },
+        {
+          "tid": 7045,
+          "pid": "7045",
+          "name": "kworker/3:2",
+          "cpuMs": 0.3560003824532032
+        },
+        {
+          "tid": 740,
+          "pid": "695",
+          "name": "android.bg",
+          "cpuMs": 0.3470005467534065
+        },
+        {
+          "tid": 708,
+          "pid": "331",
+          "name": "statsd.writer",
+          "cpuMs": 0.3450000658631325
+        },
+        {
+          "tid": 3547,
+          "pid": "388",
+          "name": "AudioTunnelStre",
+          "cpuMs": 0.34299958497285843
+        },
+        {
+          "tid": 17306,
+          "pid": "584",
+          "name": "Binder:584_D",
+          "cpuMs": 0.31800009310245514
+        },
+        {
+          "tid": 12137,
+          "pid": "236",
+          "name": "logd.reader.per",
+          "cpuMs": 0.26700040325522423
+        },
+        {
+          "tid": 314,
+          "pid": "236",
+          "name": "logd.SPAM_DETEC",
+          "cpuMs": 0.23899925872683525
+        },
+        {
+          "tid": 153,
+          "pid": "153",
+          "name": "cec_timer_kthre",
+          "cpuMs": 0.21900003775954247
+        },
+        {
+          "tid": 14024,
+          "pid": "11844",
+          "name": "SoundPool_19",
+          "cpuMs": 0.1700003631412983
+        },
+        {
+          "tid": 583,
+          "pid": "571",
+          "name": "traced",
+          "cpuMs": 0.15800027176737785
+        },
+        {
+          "tid": 499,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 0.1409999094903469
+        },
+        {
+          "tid": 1707,
+          "pid": "356",
+          "name": "bt_vendor_tx",
+          "cpuMs": 0.13200007379055023
+        },
+        {
+          "tid": 2660,
+          "pid": "2179",
+          "name": "Civetweb Listen",
+          "cpuMs": 0.13100029900670052
+        },
+        {
+          "tid": 2008,
+          "pid": "1986",
+          "name": "zon.dialservice",
+          "cpuMs": 0.11599995195865631
+        },
+        {
+          "tid": 338,
+          "pid": "331",
+          "name": "Binder:331_2",
+          "cpuMs": 0.11100014671683311
+        },
+        {
+          "tid": 1708,
+          "pid": "356",
+          "name": "bt_vendor_rx",
+          "cpuMs": 0.10999990627169609
+        },
+        {
+          "tid": 11943,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.09969295933842659
+        },
+        {
+          "tid": 4158,
+          "pid": "421",
+          "name": "Binder:421_6",
+          "cpuMs": 0.08600018918514252
+        },
+        {
+          "tid": 18855,
+          "pid": "1986",
+          "name": "zon.dialservice",
+          "cpuMs": 0.08299993351101875
+        },
+        {
+          "tid": 12108,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.08215242996811867
+        },
+        {
+          "tid": 23790,
+          "pid": "23790",
+          "name": "kworker/u8:5",
+          "cpuMs": 0.07999921217560768
+        },
+        {
+          "tid": 14005,
+          "pid": "11844",
+          "name": "SoundPool_18",
+          "cpuMs": 0.07300032302737236
+        },
+        {
+          "tid": 14029,
+          "pid": "11844",
+          "name": "AudioTrack",
+          "cpuMs": 0.06600003689527512
+        },
+        {
+          "tid": 12169,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.055999960750341415
+        },
+        {
+          "tid": 11944,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.045999884605407715
+        },
+        {
+          "tid": 11191,
+          "pid": "11191",
+          "name": "kworker/0:1",
+          "cpuMs": 0.022999942302703857
+        }
+      ],
+      "nonIdleCpuMs": 356.9887699559331,
+      "appCpuMs": 168.0157701484859,
+      "overlappingAppGcOrContention": [
+        {
+          "tid": 11945,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.230452,
+          "end": 2236630.230499,
+          "wallMs": 0.04699965938925743
+        },
+        {
+          "tid": 12168,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.514612,
+          "end": 2236630.514627,
+          "wallMs": 0.014999881386756897
+        },
+        {
+          "tid": 12163,
+          "name": "Lock contention on thread list lock (owner tid: 12155)",
+          "start": 2236630.515373,
+          "end": 2236630.515387,
+          "wallMs": 0.01400010660290718
+        },
+        {
+          "tid": 11945,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.515423,
+          "end": 2236630.515435,
+          "wallMs": 0.01200009137392044
+        },
+        {
+          "tid": 12163,
+          "name": "Lock contention on thread list lock (owner tid: 11943)",
+          "start": 2236630.51552,
+          "end": 2236630.515528,
+          "wallMs": 0.00800006091594696
+        },
+        {
+          "tid": 12155,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.515508,
+          "end": 2236630.515532,
+          "wallMs": 0.02400018274784088
+        }
+      ]
+    },
+    {
+      "input": {
+        "receiveNs": 2236630515928771,
+        "slot": 1,
+        "q": 17860,
+        "ageMs": 256.43194399995264,
+        "parseMs": 0.583077,
+        "offerMs": 0.948923,
+        "ackEnqueueMs": 0.087385,
+        "reason": 1,
+        "receiveGapMs": 285.146077
+      },
+      "gapStartSeconds": 2236630.2307826937,
+      "gapEndSeconds": 2236630.515928771,
+      "fullGapCaptured": true,
+      "renderEntries": 17,
+      "maxRenderIntervalMs": 19.830769,
+      "cpuByThread": [
+        {
+          "tid": 11921,
+          "pid": "11844",
+          "name": "GLThread 42597",
+          "cpuMs": 123.83200088515878
+        },
+        {
+          "tid": 424,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 37.97099879011512
+        },
+        {
+          "tid": 3549,
+          "pid": "388",
+          "name": "MS12OutputThrea",
+          "cpuMs": 25.17899964004755
+        },
+        {
+          "tid": 1691,
+          "pid": "424",
+          "name": "Binder:424_5",
+          "cpuMs": 13.8960019685328
+        },
+        {
+          "tid": 366,
+          "pid": "366",
+          "name": "composer@2.1-se",
+          "cpuMs": 12.68000015988946
+        },
+        {
+          "tid": 3551,
+          "pid": "388",
+          "name": "ms12proc",
+          "cpuMs": 10.32699877396226
+        },
+        {
+          "tid": 11844,
+          "pid": "11844",
+          "name": ".deathride.perf",
+          "cpuMs": 9.412999264895916
+        },
+        {
+          "tid": 12081,
+          "pid": "11844",
+          "name": "GLThread 42597",
+          "cpuMs": 9.174000471830368
+        },
+        {
+          "tid": 683,
+          "pid": "421",
+          "name": "AudioOut_D",
+          "cpuMs": 8.211998268961906
+        },
+        {
+          "tid": 12163,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 8.120306767523289
+        },
+        {
+          "tid": 783,
+          "pid": "388",
+          "name": "writer",
+          "cpuMs": 7.174998987466097
+        },
+        {
+          "tid": 497,
+          "pid": "424",
+          "name": "app",
+          "cpuMs": 5.993998143821955
+        },
+        {
+          "tid": 6395,
+          "pid": "6395",
+          "name": "kworker/u8:3",
+          "cpuMs": 5.116996821016073
+        },
+        {
+          "tid": 495,
+          "pid": "424",
+          "name": "TimerDispatch",
+          "cpuMs": 4.913000855594873
+        },
+        {
+          "tid": 12155,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 4.082771018147469
+        },
+        {
+          "tid": 41,
+          "pid": "41",
+          "name": "ksmd_seeker",
+          "cpuMs": 3.862000536173582
+        },
+        {
+          "tid": 498,
+          "pid": "424",
+          "name": "sf",
+          "cpuMs": 3.7329993210732937
+        },
+        {
+          "tid": 168,
+          "pid": "168",
+          "name": "pvr_defer_free",
+          "cpuMs": 3.6929980851709843
+        },
+        {
+          "tid": 10719,
+          "pid": "10719",
+          "name": "kworker/u8:0",
+          "cpuMs": 3.449000883847475
+        },
+        {
+          "tid": 13740,
+          "pid": "13740",
+          "name": "kworker/u8:1",
+          "cpuMs": 2.9980000108480453
+        },
+        {
+          "tid": 627,
+          "pid": "421",
+          "name": "ApmOutput",
+          "cpuMs": 2.9810001142323017
+        },
+        {
+          "tid": 12140,
+          "pid": "11844",
+          "name": "HWC release",
+          "cpuMs": 2.805996686220169
+        },
+        {
+          "tid": 1382,
+          "pid": "1382",
+          "name": "m.amazon.tv.ime",
+          "cpuMs": 2.6670005172491074
+        },
+        {
+          "tid": 27761,
+          "pid": "27761",
+          "name": "kworker/u9:2",
+          "cpuMs": 2.5760000571608543
+        },
+        {
+          "tid": 470,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 2.444001380354166
+        },
+        {
+          "tid": 12142,
+          "pid": "11844",
+          "name": "GPU completion",
+          "cpuMs": 2.3890002630650997
+        },
+        {
+          "tid": 182,
+          "pid": "182",
+          "name": "disp_osd2_confi",
+          "cpuMs": 2.2170012816786766
+        },
+        {
+          "tid": 759,
+          "pid": "424",
+          "name": "Binder:424_3",
+          "cpuMs": 2.1730000153183937
+        },
+        {
+          "tid": 11945,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 2.020076848566532
+        },
+        {
+          "tid": 1099,
+          "pid": "1099",
+          "name": "hif_thread",
+          "cpuMs": 2.0000007934868336
+        },
+        {
+          "tid": 12168,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 1.8699998036026955
+        },
+        {
+          "tid": 40,
+          "pid": "40",
+          "name": "ksmd",
+          "cpuMs": 1.8690000288188457
+        },
+        {
+          "tid": 12164,
+          "pid": "11844",
+          "name": "DeathRideAudio",
+          "cpuMs": 1.7580003477633
+        },
+        {
+          "tid": 27107,
+          "pid": "26698",
+          "name": "Thread-27",
+          "cpuMs": 1.6369996592402458
+        },
+        {
+          "tid": 8880,
+          "pid": "695",
+          "name": "Binder:695_17",
+          "cpuMs": 1.516999676823616
+        },
+        {
+          "tid": 1098,
+          "pid": "1098",
+          "name": "main_thread",
+          "cpuMs": 1.3789995573461056
+        },
+        {
+          "tid": 12004,
+          "pid": "11844",
+          "name": "DefaultExecutor",
+          "cpuMs": 1.2429994530975819
+        },
+        {
+          "tid": 11373,
+          "pid": "2154",
+          "name": "Thread-13513",
+          "cpuMs": 1.2059998698532581
+        },
+        {
+          "tid": 12,
+          "pid": "12",
+          "name": "rcu_preempt",
+          "cpuMs": 1.1970018967986107
+        },
+        {
+          "tid": 13105,
+          "pid": "13105",
+          "name": "kworker/0:2",
+          "cpuMs": 1.1039990931749344
+        },
+        {
+          "tid": 152,
+          "pid": "152",
+          "name": "hdmi_timer_kthr",
+          "cpuMs": 1.0080011561512947
+        },
+        {
+          "tid": 245,
+          "pid": "236",
+          "name": "logd.writer",
+          "cpuMs": 0.9760004468262196
+        },
+        {
+          "tid": 17220,
+          "pid": "17220",
+          "name": "kworker/2:1",
+          "cpuMs": 0.8560009300708771
+        },
+        {
+          "tid": 12162,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.7883058860898018
+        },
+        {
+          "tid": 1100,
+          "pid": "1100",
+          "name": "rx_thread",
+          "cpuMs": 0.7530003786087036
+        },
+        {
+          "tid": 312,
+          "pid": "236",
+          "name": "logd.LOG_DUMPER",
+          "cpuMs": 0.6800005212426186
+        },
+        {
+          "tid": 500,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 0.6599994376301765
+        },
+        {
+          "tid": 9959,
+          "pid": "695",
+          "name": "Binder:695_19",
+          "cpuMs": 0.6269998848438263
+        },
+        {
+          "tid": 184,
+          "pid": "184",
+          "name": "disp_osd2_irq_k",
+          "cpuMs": 0.5460008978843689
+        },
+        {
+          "tid": 183,
+          "pid": "183",
+          "name": "disp_osd1_irq_k",
+          "cpuMs": 0.5249995738267899
+        },
+        {
+          "tid": 12143,
+          "pid": "12143",
+          "name": "kworker/1:2",
+          "cpuMs": 0.49200141802430153
+        },
+        {
+          "tid": 264,
+          "pid": "264",
+          "name": "suspend@1.0-ser",
+          "cpuMs": 0.4770001396536827
+        },
+        {
+          "tid": 11943,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.4617706872522831
+        },
+        {
+          "tid": 436,
+          "pid": "388",
+          "name": "HwBinder:388_1",
+          "cpuMs": 0.44999970123171806
+        },
+        {
+          "tid": 187,
+          "pid": "187",
+          "name": "video_disp0",
+          "cpuMs": 0.40499959141016006
+        },
+        {
+          "tid": 26835,
+          "pid": "26698",
+          "name": "IgniteThread",
+          "cpuMs": 0.3909999504685402
+        },
+        {
+          "tid": 188,
+          "pid": "188",
+          "name": "video_disp1",
+          "cpuMs": 0.3560003824532032
+        },
+        {
+          "tid": 7045,
+          "pid": "7045",
+          "name": "kworker/3:2",
+          "cpuMs": 0.3560003824532032
+        },
+        {
+          "tid": 12109,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.3507710061967373
+        },
+        {
+          "tid": 740,
+          "pid": "695",
+          "name": "android.bg",
+          "cpuMs": 0.3470005467534065
+        },
+        {
+          "tid": 708,
+          "pid": "331",
+          "name": "statsd.writer",
+          "cpuMs": 0.3450000658631325
+        },
+        {
+          "tid": 3547,
+          "pid": "388",
+          "name": "AudioTunnelStre",
+          "cpuMs": 0.34299958497285843
+        },
+        {
+          "tid": 17306,
+          "pid": "584",
+          "name": "Binder:584_D",
+          "cpuMs": 0.31800009310245514
+        },
+        {
+          "tid": 12137,
+          "pid": "236",
+          "name": "logd.reader.per",
+          "cpuMs": 0.26700040325522423
+        },
+        {
+          "tid": 314,
+          "pid": "236",
+          "name": "logd.SPAM_DETEC",
+          "cpuMs": 0.23899925872683525
+        },
+        {
+          "tid": 153,
+          "pid": "153",
+          "name": "cec_timer_kthre",
+          "cpuMs": 0.21900003775954247
+        },
+        {
+          "tid": 14024,
+          "pid": "11844",
+          "name": "SoundPool_19",
+          "cpuMs": 0.1700003631412983
+        },
+        {
+          "tid": 583,
+          "pid": "571",
+          "name": "traced",
+          "cpuMs": 0.15800027176737785
+        },
+        {
+          "tid": 499,
+          "pid": "424",
+          "name": "surfaceflinger",
+          "cpuMs": 0.1409999094903469
+        },
+        {
+          "tid": 1707,
+          "pid": "356",
+          "name": "bt_vendor_tx",
+          "cpuMs": 0.13200007379055023
+        },
+        {
+          "tid": 2660,
+          "pid": "2179",
+          "name": "Civetweb Listen",
+          "cpuMs": 0.13100029900670052
+        },
+        {
+          "tid": 2008,
+          "pid": "1986",
+          "name": "zon.dialservice",
+          "cpuMs": 0.11599995195865631
+        },
+        {
+          "tid": 338,
+          "pid": "331",
+          "name": "Binder:331_2",
+          "cpuMs": 0.11100014671683311
+        },
+        {
+          "tid": 1708,
+          "pid": "356",
+          "name": "bt_vendor_rx",
+          "cpuMs": 0.10999990627169609
+        },
+        {
+          "tid": 4158,
+          "pid": "421",
+          "name": "Binder:421_6",
+          "cpuMs": 0.08600018918514252
+        },
+        {
+          "tid": 18855,
+          "pid": "1986",
+          "name": "zon.dialservice",
+          "cpuMs": 0.08299993351101875
+        },
+        {
+          "tid": 23790,
+          "pid": "23790",
+          "name": "kworker/u8:5",
+          "cpuMs": 0.07999921217560768
+        },
+        {
+          "tid": 14005,
+          "pid": "11844",
+          "name": "SoundPool_18",
+          "cpuMs": 0.07300032302737236
+        },
+        {
+          "tid": 12108,
+          "pid": "11844",
+          "name": "DefaultDispatch",
+          "cpuMs": 0.06700027734041214
+        },
+        {
+          "tid": 14029,
+          "pid": "11844",
+          "name": "AudioTrack",
+          "cpuMs": 0.06600003689527512
+        },
+        {
+          "tid": 11191,
+          "pid": "11191",
+          "name": "kworker/0:1",
+          "cpuMs": 0.022999942302703857
+        }
+      ],
+      "nonIdleCpuMs": 357.6580001972616,
+      "appCpuMs": 168.68500038981438,
+      "overlappingAppGcOrContention": [
+        {
+          "tid": 12168,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.514612,
+          "end": 2236630.514627,
+          "wallMs": 0.014999881386756897
+        },
+        {
+          "tid": 12163,
+          "name": "Lock contention on thread list lock (owner tid: 12155)",
+          "start": 2236630.515373,
+          "end": 2236630.515387,
+          "wallMs": 0.01400010660290718
+        },
+        {
+          "tid": 11945,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.515423,
+          "end": 2236630.515435,
+          "wallMs": 0.01200009137392044
+        },
+        {
+          "tid": 12163,
+          "name": "Lock contention on thread list lock (owner tid: 11943)",
+          "start": 2236630.51552,
+          "end": 2236630.515528,
+          "wallMs": 0.00800006091594696
+        },
+        {
+          "tid": 12155,
+          "name": "Lock contention on thread list lock (owner tid: 12163)",
+          "start": 2236630.515508,
+          "end": 2236630.515532,
+          "wallMs": 0.02400018274784088
+        }
+      ]
+    }
+  ],
+  "limit": "Overlapping GC duration is not a stop-the-world pause. Worker names alone do not identify the socket selector. No kernel packet-arrival timestamps are present; causality is not established by overlap."
+}

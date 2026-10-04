@@ -1,0 +1,2033 @@
+[
+  {
+    "id": "test-car-bastion",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_bastion.png",
+    "source_sha256": "dd567efbceec4c0b26691597ac23285848272253fecf7c30ad3fd95aef171404",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-bastion",
+      "class": "Bastion",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Bastion car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.48169803619384766,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        24,
+        222,
+        1008,
+        802
+      ],
+      "margin_fraction": 0.015625,
+      "aspect": 1.696551724137931,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.15172413793103445,
+      "principal_axis_degrees": 0.07785256983684387,
+      "estimated_key_rgb": [
+        247.0,
+        94.0,
+        175.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.133981395109696,
+      "palette_p90_delta_e": 11.395167641388625
+    },
+    "placement": {
+      "source_bounds_px": [
+        24,
+        222,
+        1008,
+        802
+      ],
+      "source_pivot_px": [
+        516.0,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        131
+      ],
+      "scale": 0.2266260162601626,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-bastion.png",
+    "sha256": "1e6ea30b434fcdcc30b21a7257c6d6844306cf6bd33e5ac82cfd6fd15ebcb235"
+  },
+  {
+    "id": "test-car-comet",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_comet.png",
+    "source_sha256": "82c349382e9fd1b1496078fd2a8f1ce3653c9085810d55c4193cb7fbc36077c6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-comet",
+      "class": "Comet",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Comet car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.2819795608520508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        59,
+        310,
+        991,
+        707
+      ],
+      "margin_fraction": 0.0322265625,
+      "aspect": 2.347607052896725,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.08704170165127356,
+      "principal_axis_degrees": 0.20411024471078795,
+      "estimated_key_rgb": [
+        229.0,
+        39.0,
+        230.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 9.82247985758413,
+      "palette_p90_delta_e": 19.03956854096133
+    },
+    "placement": {
+      "source_bounds_px": [
+        59,
+        310,
+        991,
+        707
+      ],
+      "source_pivot_px": [
+        525.0,
+        508.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        92
+      ],
+      "scale": 0.2317596566523605,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-comet.png",
+    "sha256": "1ba5df7dcdc3c7ad83eec316da4d305757aaf79f07bb2969da6d302d168f0043"
+  },
+  {
+    "id": "test-car-line",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_line.png",
+    "source_sha256": "9ef64eae55a3a5f380ddd69da1a8a249feb2131cfa6d27a3b8386ffd6c608fe8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-line",
+      "class": "Line",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Line car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3238706588745117,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.103448275862069,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.011273209549071517,
+      "principal_axis_degrees": 0.0479689265593092,
+      "estimated_key_rgb": [
+        244.0,
+        25.0,
+        237.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.3992095923337935,
+      "palette_p90_delta_e": 12.395460324847766
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "source_pivot_px": [
+        517.5,
+        510.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        89
+      ],
+      "scale": 0.20437158469945355,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-line.png",
+    "sha256": "c788601771bb25d0f866e50ea36345372827e71beeff6a7acf8c2fc6775b4fd0"
+  },
+  {
+    "id": "test-car-needle",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_needle.png",
+    "source_sha256": "dcb9c8979c0101c325131b2de53a985978bbb878285154527761aea006a8fa94",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-needle",
+      "class": "Needle",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Needle car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.24503612518310547,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        125,
+        257,
+        912,
+        750
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 1.5963488843813387,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.2743868707357551,
+      "principal_axis_degrees": 0.4268028778960518,
+      "estimated_key_rgb": [
+        240.0,
+        49.0,
+        249.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 6.33585818316478,
+      "palette_p90_delta_e": 9.4160902274211
+    },
+    "placement": {
+      "source_bounds_px": [
+        125,
+        257,
+        912,
+        750
+      ],
+      "source_pivot_px": [
+        518.5,
+        503.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        99
+      ],
+      "scale": 0.20076238881829733,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-needle.png",
+    "sha256": "8969408d81c752b9c591aac06de16fbb8825907518b50f1fd0f6f1d83ecdfd4d"
+  },
+  {
+    "id": "test-car-trail",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_trail.png",
+    "source_sha256": "05bc558ec3134b3d737a9064b416647366eb6b44d6ee409de1ced96e3a94f6d2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-trail",
+      "class": "Trail",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Trail car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "AXIS_NOT_X"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.3618907928466797,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        168,
+        982,
+        828
+      ],
+      "margin_fraction": 0.041015625,
+      "aspect": 1.4015151515151516,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.20783926218708826,
+      "principal_axis_degrees": 21.740724206123232,
+      "estimated_key_rgb": [
+        243.0,
+        70.0,
+        216.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 8.176508689629918,
+      "palette_p90_delta_e": 14.10106995973525
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        168,
+        982,
+        828
+      ],
+      "source_pivot_px": [
+        519.5,
+        498.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        118
+      ],
+      "scale": 0.17945945945945946,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-trail.png",
+    "sha256": "c46f10457302b9b708ea8da045bac7c3e4aed19b245b7e6ea6e2ccaa2fec56fc"
+  },
+  {
+    "id": "test-scene-mock",
+    "class": "mock",
+    "kind": "scene",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\scene\\scene_mock.png",
+    "source_sha256": "221144f194a7577161c81ce1e83382fda7fe2c771ce30c7a1d5f1fb88f38e2e4",
+    "path": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\scene\\scene_mock.png",
+    "brief": {
+      "id": "test-scene-mock",
+      "class": "mock",
+      "kind": "scene",
+      "prompt_action": "Combat-racing scene mood reference",
+      "background_key": "none"
+    },
+    "codes": [],
+    "verdict": "owner-review"
+  },
+  {
+    "id": "test-tile-asphalt",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_asphalt.png",
+    "source_sha256": "ffd3d580de21eb853da64ba0568f8f5d42e8dc3979a61aecaa0108eb8ee6121d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-asphalt",
+      "class": "asphalt",
+      "kind": "tile",
+      "prompt_action": "Full-bleed asphalt ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.056442759395424834,
+      "edge_y_mean": 0.0766110089869281,
+      "edge_x_peak": 0.5019607843137255,
+      "edge_y_peak": 0.6196078431372548,
+      "autocorrelation_peak": 0.9560017512751549,
+      "autocorrelation_shift_px": [
+        0,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.039261642156862744,
+      "edge_y_mean": 0.052951388888888895,
+      "edge_x_peak": 0.30980392156862746,
+      "edge_y_peak": 0.3686274509803922,
+      "autocorrelation_peak": 0.9556873215484107,
+      "autocorrelation_shift_px": [
+        0,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-asphalt-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-asphalt.png",
+    "sha256": "9259975b646828142e816782b5d48b485ecce0012680e7679a219c7c06d1a81c"
+  },
+  {
+    "id": "test-tile-gravel",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_gravel.png",
+    "source_sha256": "dbc3c5305d9ffff084d05e3a290fa5d226ff125a3ecbeae38c631e3eb69f8882",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-gravel",
+      "class": "gravel",
+      "kind": "tile",
+      "prompt_action": "Full-bleed gravel ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.07031505310457516,
+      "edge_y_mean": 0.10437091503267974,
+      "edge_x_peak": 0.4666666666666666,
+      "edge_y_peak": 0.5529411764705883,
+      "autocorrelation_peak": 0.9252153553317684,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.047972834967320264,
+      "edge_y_mean": 0.05725081699346405,
+      "edge_x_peak": 0.2823529411764706,
+      "edge_y_peak": 0.28235294117647064,
+      "autocorrelation_peak": 0.9309651893897328,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-gravel-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-gravel.png",
+    "sha256": "b26d1dfe41f3ba8f3f2602d9ebcd35f8b1ed38fec6e1f149dedcb0c6c1c975af"
+  },
+  {
+    "id": "test-tile-ice",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_ice.png",
+    "source_sha256": "de55e413d1b33fdbaae5c6454fb6a521eb63364e6fc9e26a632b194c48151e61",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-ice",
+      "class": "ice",
+      "kind": "tile",
+      "prompt_action": "Full-bleed ice ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05720358455882354,
+      "edge_y_mean": 0.05676955678104575,
+      "edge_x_peak": 0.7686274509803922,
+      "edge_y_peak": 0.5764705882352941,
+      "autocorrelation_peak": 0.10739439709967476,
+      "autocorrelation_shift_px": [
+        9,
+        22
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.040400326797385616,
+      "edge_y_mean": 0.03580984477124183,
+      "edge_x_peak": 0.44705882352941173,
+      "edge_y_peak": 0.2666666666666666,
+      "autocorrelation_peak": 0.10103496248468218,
+      "autocorrelation_shift_px": [
+        9,
+        22
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-ice-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-ice.png",
+    "sha256": "b09a8424f2bd288366a432ed6425cd0246f8d3cd8f8f785fdc9e2b4b7f3defb4"
+  },
+  {
+    "id": "test-tile-kerb",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_kerb.png",
+    "source_sha256": "0a4a04ad9cc5d358fd289019948c10560438c5fc77d6ad9127f24cea8e8b297a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-kerb",
+      "class": "kerb",
+      "kind": "tile",
+      "prompt_action": "Full-bleed kerb ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05651296977124184,
+      "edge_y_mean": 0.07645909926470588,
+      "edge_x_peak": 0.596078431372549,
+      "edge_y_peak": 0.2823529411764706,
+      "autocorrelation_peak": 0.9892246152182362,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03740298202614379,
+      "edge_y_mean": 0.2145578022875817,
+      "edge_x_peak": 0.3372549019607843,
+      "edge_y_peak": 0.403921568627451,
+      "autocorrelation_peak": 0.9887100283961693,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-kerb-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-kerb.png",
+    "sha256": "d12a92d3e9d158339b9d1d21a6722679f3d888d9d18c5facb1fe4e55136513e4"
+  },
+  {
+    "id": "test-tile-oil",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_oil.png",
+    "source_sha256": "fb50887bd8357e77fb2bff39bb698c9d0d6384f9388545a3bab3eb4b51b5495d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-oil",
+      "class": "oil",
+      "kind": "tile",
+      "prompt_action": "Full-bleed oil ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.09663628472222223,
+      "edge_y_mean": 0.1506421058006536,
+      "edge_x_peak": 0.6745098039215686,
+      "edge_y_peak": 0.7411764705882353,
+      "autocorrelation_peak": 0.42014395470145566,
+      "autocorrelation_shift_px": [
+        112,
+        13
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.08702001633986928,
+      "edge_y_mean": 0.1393331290849673,
+      "edge_x_peak": 0.6313725490196078,
+      "edge_y_peak": 0.6627450980392157,
+      "autocorrelation_peak": 0.41248154769037687,
+      "autocorrelation_shift_px": [
+        112,
+        13
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-oil-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-oil.png",
+    "sha256": "23242f286083c1a496e6a9ace2dc0ef8490325156a43df4b4020e91aae2a4e6b"
+  },
+  {
+    "id": "test-icon-ammo",
+    "class": "ammo",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\ui\\icon_ammo.png",
+    "source_sha256": "5a9359627dd629a76c82e36e38c3cc488b153ea3c4e687acc63f4acd4e71485e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-icon-ammo",
+      "class": "ammo",
+      "kind": "icon",
+      "prompt_action": "One ammunition crate icon, olive metal box with straps and no text",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3983774185180664,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        115,
+        161,
+        926,
+        877
+      ],
+      "margin_fraction": 0.095703125,
+      "aspect": 1.1326815642458101,
+      "estimated_key_rgb": [
+        244.0,
+        61.0,
+        172.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.94123332366754,
+      "palette_p90_delta_e": 11.870860441021675
+    },
+    "placement": {
+      "source_bounds_px": [
+        115,
+        161,
+        926,
+        877
+      ],
+      "source_pivot_px": [
+        520.5,
+        519.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        106
+      ],
+      "scale": 0.14796547472256474,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-icon-ammo.png",
+    "sha256": "6479b19551512af44f4dbd7ca0c25ef6833b9ada1461a4f6ddb65d08f58ceef7"
+  },
+  {
+    "id": "test-icon-hammer",
+    "class": "hammer",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\ui\\icon_hammer.png",
+    "source_sha256": "e3ca3342a825cf9505c033703ce0b16e35ce4a103b54a424b9302b81d0389a47",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-icon-hammer",
+      "class": "hammer",
+      "kind": "icon",
+      "prompt_action": "One heavy cannon shell icon, olive projectile with brass base and no text",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.2669258117675781,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        294,
+        124,
+        731,
+        900
+      ],
+      "margin_fraction": 0.12109375,
+      "aspect": 0.5631443298969072,
+      "estimated_key_rgb": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 8.968603780842146,
+      "palette_p90_delta_e": 17.515894429976502
+    },
+    "placement": {
+      "source_bounds_px": [
+        294,
+        124,
+        731,
+        900
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        68,
+        120
+      ],
+      "scale": 0.15463917525773196,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-icon-hammer.png",
+    "sha256": "f8b52776b61e17a90e824f908e35f5a62b841105485a61a862612afba3f6ff37"
+  },
+  {
+    "id": "test-icon-mine",
+    "class": "mine",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\ui\\icon_mine.png",
+    "source_sha256": "b82a306b63210a10e6ca69ca303dada9362655d018c3e5012e5dd3b0ceed2c95",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-icon-mine",
+      "class": "mine",
+      "kind": "icon",
+      "prompt_action": "One spiked round mine icon, no text",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3407011032104492,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        107,
+        104,
+        933,
+        917
+      ],
+      "margin_fraction": 0.0888671875,
+      "aspect": 1.015990159901599,
+      "estimated_key_rgb": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 5.381925646478418,
+      "palette_p90_delta_e": 9.102997765784924
+    },
+    "placement": {
+      "source_bounds_px": [
+        107,
+        104,
+        933,
+        917
+      ],
+      "source_pivot_px": [
+        520.0,
+        510.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.14527845036319612,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-icon-mine.png",
+    "sha256": "e43e64dcb0e3183470b6ee300524400141328601ab9da2a37b22b7c8a67b3b84"
+  },
+  {
+    "id": "test-icon-repair",
+    "class": "repair",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\ui\\icon_repair.png",
+    "source_sha256": "81141694a6d4824db56fecc6479b4dfe85578f5ef5d4d232a32a9e52ec682f24",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-icon-repair",
+      "class": "repair",
+      "kind": "icon",
+      "prompt_action": "One repair icon with green cross and orange wrench, no text",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "PALETTE_DRIFT"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.23189735412597656,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        147,
+        126,
+        910,
+        899
+      ],
+      "margin_fraction": 0.111328125,
+      "aspect": 0.9870633893919794,
+      "estimated_key_rgb": [
+        222.0,
+        63.0,
+        155.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 15.58081357728752,
+      "palette_p90_delta_e": 38.86605543472425
+    },
+    "placement": {
+      "source_bounds_px": [
+        147,
+        126,
+        910,
+        899
+      ],
+      "source_pivot_px": [
+        528.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        118,
+        120
+      ],
+      "scale": 0.15523932729624837,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-icon-repair.png",
+    "sha256": "eaaf2bbd838a741fde0bf774ea0db9bbda427f4a2225d2c1d7a20d0f0af94b49"
+  },
+  {
+    "id": "test-icon-rivet",
+    "class": "rivet",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\ui\\icon_rivet.png",
+    "source_sha256": "690cf60569f3b4cd4a8a51d4b9a3594b0adb8ecaecf44baee27e1d0c63878fe1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-icon-rivet",
+      "class": "rivet",
+      "kind": "icon",
+      "prompt_action": "One twin machine-gun icon with ammunition belt, no text",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.18848609924316406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        131,
+        120,
+        896,
+        874
+      ],
+      "margin_fraction": 0.1171875,
+      "aspect": 1.0145888594164456,
+      "estimated_key_rgb": [
+        255.0,
+        0.0,
+        255.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 8.387259490376165,
+      "palette_p90_delta_e": 17.426978467333864
+    },
+    "placement": {
+      "source_bounds_px": [
+        131,
+        120,
+        896,
+        874
+      ],
+      "source_pivot_px": [
+        513.5,
+        497.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.1568627450980392,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-icon-rivet.png",
+    "sha256": "d97ead6d561ac8fdffc634670a988420aeb25aad0427e3115677ab2987c5be48"
+  },
+  {
+    "id": "p1-car-needle-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-needle-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-car-needle-v1",
+      "class": "Needle",
+      "prompt_action": "One narrow yellow dune buggy, exposed four black tyres, slender open roll cage without an occupant, short tapering nose on the RIGHT and engine at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.2982940673828125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        84,
+        257,
+        944,
+        762
+      ],
+      "margin_fraction": 0.078125,
+      "aspect": 1.702970297029703,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.22592259225922584,
+      "principal_axis_degrees": 0.0027709004665176086,
+      "estimated_key_rgb": [
+        245.0,
+        27.0,
+        146.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 4.79262860346717,
+      "palette_p90_delta_e": 9.007090115374382
+    },
+    "placement": {
+      "source_bounds_px": [
+        84,
+        257,
+        944,
+        762
+      ],
+      "source_pivot_px": [
+        514.0,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        93
+      ],
+      "scale": 0.18372093023255814,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-needle-v1.png",
+    "sha256": "e6cd44a3023ec63818231dd8dfb038187b945e369b60b15755ff9ad4c2287b1a"
+  },
+  {
+    "id": "p1-car-line-v2",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-line-v2\\attempt-01\\1.jpg",
+    "source_sha256": "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-car-line-v2",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, ivory central racing stripe without symbols, rounded nose on the RIGHT, broad dark windshield, black wheels and small rear spoiler at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.23682022094726562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "margin_fraction": 0.0869140625,
+      "aspect": 2.4322766570605188,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.16936377743294173,
+      "principal_axis_degrees": 0.021321083314613447,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.587571702289897,
+      "palette_p90_delta_e": 8.299504729506282
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "source_pivot_px": [
+        513.0,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        77
+      ],
+      "scale": 0.22156398104265404,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-line-v2.png",
+    "sha256": "12837ebd4e53f8139b1e06643ec4b7d2853fb160ee785190f35d7aeb56512be0"
+  },
+  {
+    "id": "p1-car-bastion-v2",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-bastion-v2\\attempt-01\\1.jpg",
+    "source_sha256": "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-car-bastion-v2",
+      "class": "Bastion",
+      "prompt_action": "One broad olive armored wagon, blunt nose on the RIGHT, thick squared fenders, riveted roof plates, heavy black tyres, short roof-mounted mechanical gun facing right. The entire vehicle including tyres fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.38039684295654297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        46,
+        232,
+        983,
+        760
+      ],
+      "margin_fraction": 0.0400390625,
+      "aspect": 1.7746212121212122,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.11268939393939392,
+      "principal_axis_degrees": 0.21253194279221657,
+      "estimated_key_rgb": [
+        240.0,
+        229.0,
+        246.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 3.7569137032472586,
+      "palette_p90_delta_e": 7.48357406240614
+    },
+    "placement": {
+      "source_bounds_px": [
+        46,
+        232,
+        983,
+        760
+      ],
+      "source_pivot_px": [
+        514.5,
+        496.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        126
+      ],
+      "scale": 0.23799359658484526,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-bastion-v2.png",
+    "sha256": "833e6a17b99645233ca2f9801666b1df69112fb19c49f05fb16ed3c1853a574c"
+  },
+  {
+    "id": "p1-car-comet-v2",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-comet-v2\\attempt-01\\1.jpg",
+    "source_sha256": "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-car-comet-v2",
+      "class": "Comet",
+      "prompt_action": "One long orange wedge racer, pointed triangular nose on the RIGHT, rear wing at LEFT, long black canopy, narrow wheels. Wing is completely blank. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.27024269104003906,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        68,
+        316,
+        957,
+        706
+      ],
+      "margin_fraction": 0.0654296875,
+      "aspect": 2.2794871794871794,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.11353276353276365,
+      "principal_axis_degrees": 0.040016381137247294,
+      "estimated_key_rgb": [
+        239.0,
+        238.0,
+        243.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.406092164382457,
+      "palette_p90_delta_e": 15.810192072557884
+    },
+    "placement": {
+      "source_bounds_px": [
+        68,
+        316,
+        957,
+        706
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        95
+      ],
+      "scale": 0.24296962879640044,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-comet-v2.png",
+    "sha256": "59919b30566f7122de29a63e94fe71296f0aa625a8775e262ee4f20d7670ca9e"
+  },
+  {
+    "id": "p1-car-trail-v2",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-trail-v2\\attempt-01\\1.jpg",
+    "source_sha256": "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-car-trail-v2",
+      "class": "Trail",
+      "prompt_action": "One short blue rally hatchback, stubby nose on the RIGHT, compact rectangular roof, wide wheel arches and blank small spoiler at LEFT. Roof-only plan view with no side doors or front grille visible. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.33696842193603516,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        64,
+        277,
+        962,
+        737
+      ],
+      "margin_fraction": 0.060546875,
+      "aspect": 1.9521739130434783,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.10340264650283548,
+      "principal_axis_degrees": 0.350134503665671,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.743018473028055,
+      "palette_p90_delta_e": 10.433907516312992
+    },
+    "placement": {
+      "source_bounds_px": [
+        64,
+        277,
+        962,
+        737
+      ],
+      "source_pivot_px": [
+        513.0,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        85
+      ],
+      "scale": 0.18485523385300667,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-trail-v2.png",
+    "sha256": "5b2b38bbe2249e92e1e26af021f8436dc530f83161e2603722b0d2af40a8b388"
+  },
+  {
+    "id": "p1-tile-asphalt-v1",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-asphalt-v1\\attempt-02\\1.jpg",
+    "source_sha256": "53b74f0242eb998a09dcbef1cb569f9f40ee523fa846ab8636f0e5a60db26089",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-asphalt-v1",
+      "class": "asphalt",
+      "prompt_action": "Dark charcoal asphalt, fine anonymous aggregate uniformly scattered, barely visible tiny wear, no large cracks, no recognizable motifs or patches. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.014012714460784314,
+      "edge_y_mean": 0.013421670751633986,
+      "edge_x_peak": 0.16470588235294117,
+      "edge_y_peak": 0.1019607843137255,
+      "autocorrelation_peak": 0.04102549539330067,
+      "autocorrelation_shift_px": [
+        2,
+        60
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.008343545751633987,
+      "edge_y_mean": 0.010380923202614379,
+      "edge_x_peak": 0.0392156862745098,
+      "edge_y_peak": 0.054901960784313725,
+      "autocorrelation_peak": 0.039875228278821125,
+      "autocorrelation_shift_px": [
+        126,
+        21
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-asphalt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-asphalt-v1.png",
+    "sha256": "7352d424de566c58291165db4c1825c0a572ff22b0db2bf30dcfe38141874474"
+  },
+  {
+    "id": "p1-tile-gravel-v1",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-gravel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "273f0ccc4c4269a19b9ff35cc7a33826bfbdf525db03c50ef54c2613f99c660c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-gravel-v1",
+      "class": "gravel",
+      "prompt_action": "Warm grey and muted ochre small gravel, even stochastic stone distribution with no large clusters. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05365732230392156,
+      "edge_y_mean": 0.05295394199346406,
+      "edge_x_peak": 0.2941176470588235,
+      "edge_y_peak": 0.34901960784313724,
+      "autocorrelation_peak": 0.4596818112950185,
+      "autocorrelation_shift_px": [
+        127,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03504391339869281,
+      "edge_y_mean": 0.03235804738562092,
+      "edge_x_peak": 0.1725490196078432,
+      "edge_y_peak": 0.17647058823529416,
+      "autocorrelation_peak": 0.4567462497972807,
+      "autocorrelation_shift_px": [
+        127,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-gravel-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-gravel-v1.png",
+    "sha256": "ceab2f13cd8f13326677450dbc89c450b8143eed8e78ce51336915df47215ee3"
+  },
+  {
+    "id": "p1-tile-ice-v1",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-ice-v1\\attempt-01\\1.jpg",
+    "source_sha256": "13b31dd1caa9b8c6baa6bbe60a593fb2809a9f5a4326e1340ea35ea233992fa1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-ice-v1",
+      "class": "ice",
+      "prompt_action": "Pale cold blue ice, fine uniform granular frost with faint dispersed micro scratches; no long cracks or unique bright shapes. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.01930274714052287,
+      "edge_y_mean": 0.015843290441176466,
+      "edge_x_peak": 0.11372549019607847,
+      "edge_y_peak": 0.08235294117647063,
+      "autocorrelation_peak": 0.46465043260389916,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.015854779411764698,
+      "edge_y_mean": 0.012964665032679732,
+      "edge_x_peak": 0.0862745098039216,
+      "edge_y_peak": 0.0745098039215687,
+      "autocorrelation_peak": 0.4620416987495139,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-ice-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-ice-v1.png",
+    "sha256": "a1de2dda1c53c5eb047085982993246a5af4e880d551abcf9b39204e284ca296"
+  },
+  {
+    "id": "p1-tile-oil-v1",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-oil-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f191bfc605818bef032371ed6d7a7b0a3156ca9578f26619d7a80758d06c991d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-oil-v1",
+      "class": "oil",
+      "prompt_action": "Charcoal road with a uniform fine dark oily sheen, extremely subtle blue-green tint across the entire surface, no puddle, no rainbow streaks or large motifs. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.014104626225490196,
+      "edge_y_mean": 0.015372242647058824,
+      "edge_x_peak": 0.06274509803921569,
+      "edge_y_peak": 0.07058823529411766,
+      "autocorrelation_peak": 0.3613536453742699,
+      "autocorrelation_shift_px": [
+        127,
+        56
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.009553717320261439,
+      "edge_y_mean": 0.010748570261437907,
+      "edge_x_peak": 0.0431372549019608,
+      "edge_y_peak": 0.043137254901960784,
+      "autocorrelation_peak": 0.3532044768821074,
+      "autocorrelation_shift_px": [
+        127,
+        56
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-oil-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-oil-v1.png",
+    "sha256": "8819a628e5e61ab66138d5dee3ee5ca0ad17885668e43562a584fbbfc728a8c1"
+  },
+  {
+    "id": "p1-tile-kerb-v1",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-kerb-v1\\attempt-01\\1.jpg",
+    "source_sha256": "578638d4a348b2e5cdb8e29eb0f2f5ebf835badfe0918505b9445820a22fd3f1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-kerb-v1",
+      "class": "kerb",
+      "prompt_action": "Red and ivory kerb bands of equal width, straight and parallel, crossing the entire surface without gaps; an even repeat period and consistent flat wear. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.06097834967320261,
+      "edge_y_mean": 0.04716222426470588,
+      "edge_x_peak": 0.6980392156862746,
+      "edge_y_peak": 0.5333333333333333,
+      "autocorrelation_peak": 0.8626685367973529,
+      "autocorrelation_shift_px": [
+        62,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.04800857843137255,
+      "edge_y_mean": 0.02707312091503268,
+      "edge_x_peak": 0.4,
+      "edge_y_peak": 0.4901960784313726,
+      "autocorrelation_peak": 0.8636189892304911,
+      "autocorrelation_shift_px": [
+        61,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-kerb-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-kerb-v1.png",
+    "sha256": "79e5aefeb22be680435fc91039113106c6c5886d16b3d191875b85679c0b9cc3"
+  },
+  {
+    "id": "old-p1-car-needle-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-needle-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e3952fe1d39edf7526b8672f9151b8533b7a23b83f5e4d649aebbfba76037d4f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "old-p1-car-needle-v1",
+      "class": "Needle",
+      "prompt_action": "One narrow yellow dune buggy, exposed four black tyres, slender open roll cage without an occupant, short tapering nose on the RIGHT and engine at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.27545833587646484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        82,
+        286,
+        948,
+        733
+      ],
+      "margin_fraction": 0.07421875,
+      "aspect": 1.9373601789709172,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.11938173683140119,
+      "principal_axis_degrees": 0.05277358657616851,
+      "estimated_key_rgb": [
+        240.0,
+        240.0,
+        240.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.733512932500594,
+      "palette_p90_delta_e": 12.837109965789816
+    },
+    "placement": {
+      "source_bounds_px": [
+        82,
+        286,
+        948,
+        733
+      ],
+      "source_pivot_px": [
+        515.0,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        82
+      ],
+      "scale": 0.18244803695150116,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\diagnostic\\old-p1-car-needle-v1.png",
+    "sha256": "fb92efddc66ef0360cceb5f56caf9435a5f6ae632b710783b5bf8dfc2f896fdf"
+  },
+  {
+    "id": "old-p1-tile-asphalt-v1",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-asphalt-v1\\attempt-01\\1.jpg",
+    "source_sha256": "bf4c2e84c6b6e7e7ba485268476f936cde0cd417cf15f473c207dd26a69de9fe",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "old-p1-tile-asphalt-v1",
+      "class": "asphalt",
+      "prompt_action": "Dark charcoal asphalt, fine anonymous aggregate uniformly scattered, barely visible tiny wear, no large cracks, no recognizable motifs or patches. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.01589307598039216,
+      "edge_y_mean": 0.01937295751633987,
+      "edge_x_peak": 0.09019607843137256,
+      "edge_y_peak": 0.08627450980392158,
+      "autocorrelation_peak": 0.24650257923601687,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.0075010212418300665,
+      "edge_y_mean": 0.010626021241830068,
+      "edge_x_peak": 0.03529411764705884,
+      "edge_y_peak": 0.0392156862745098,
+      "autocorrelation_peak": 0.244462539500402,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\diagnostic\\old-p1-tile-asphalt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\diagnostic\\old-p1-tile-asphalt-v1.png",
+    "sha256": "89ffbf897521fa2392c2fd39dda8c85de4bdf37c1b751e2b233a9574a2f85fb6"
+  },
+  {
+    "id": "mutant-line-text",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\calibration\\images\\text.png",
+    "source_sha256": "d404bf47a1065896312a526a7798b66a3537bef5a36bfd3556300794a9bd6ac0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "mutant-line-text",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, ivory central racing stripe without symbols, rounded nose on the RIGHT, broad dark windshield, black wheels and small rear spoiler at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.23682022094726562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "margin_fraction": 0.0869140625,
+      "aspect": 2.4322766570605188,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.16936377743294173,
+      "principal_axis_degrees": 0.021321083314613447,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.58990985023814,
+      "palette_p90_delta_e": 8.272834118075098
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "source_pivot_px": [
+        513.0,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        77
+      ],
+      "scale": 0.22156398104265404,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\diagnostic\\mutant-line-text.png",
+    "sha256": "55fe361dc514296162581895daa71cb4a99060619a332700315e4ba3f8cb1c8c",
+    "mutation": "text"
+  },
+  {
+    "id": "mutant-line-vertical",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\calibration\\images\\vertical.png",
+    "source_sha256": "efbf53e4822e70bf7492b874d52d8c85948061031b717ec4ddb625613500eedf",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "mutant-line-vertical",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, ivory central racing stripe without symbols, rounded nose on the RIGHT, broad dark windshield, black wheels and small rear spoiler at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND",
+      "AXIS_NOT_X"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.23682022094726562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        338,
+        89,
+        685,
+        933
+      ],
+      "margin_fraction": 0.0869140625,
+      "aspect": 0.41113744075829384,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.8023377688662049,
+      "principal_axis_degrees": 89.99089444726634,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.593028399807449,
+      "palette_p90_delta_e": 8.4163917607571
+    },
+    "placement": {
+      "source_bounds_px": [
+        338,
+        89,
+        685,
+        933
+      ],
+      "source_pivot_px": [
+        511.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        255.5
+      ],
+      "cell_px": [
+        256,
+        512
+      ],
+      "subject_px": [
+        187,
+        455
+      ],
+      "scale": 0.5389048991354467,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\diagnostic\\mutant-line-vertical.png",
+    "sha256": "109cf3adecf7dd002345613704ec63685c55463fb2c47162ee4bce7ff93647c9",
+    "mutation": "vertical"
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "id": "459cd476-94f5-4af7-9d8c-3497476466bb",
+  "ts": "2026-10-02T21:35:15.914Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/scatter.mp3",
+  "seconds": 0.8,
+  "request": {
+    "text": "One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 0.8,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24562,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 13836,
+  "providerCredits": 8,
+  "sha256": "09847c2da7f8c69048769ecd573f1ca1b56ba36c2ffa27f112ef0f066b884bfd",
+  "completedAt": "2026-10-02T21:35:21.347Z",
+  "creditsAfter": 24562,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1200
+}

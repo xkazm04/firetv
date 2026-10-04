@@ -1,0 +1,32 @@
+{
+  "id": "5dc5ef1f-b535-4f13-84ea-d739c3a6364f",
+  "ts": "2026-10-02T21:38:29.602Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-turbine.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24343,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d",
+  "completedAt": "2026-10-02T21:38:32.577Z",
+  "creditsAfter": 24343,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2840
+}
