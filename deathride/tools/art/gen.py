@@ -112,7 +112,7 @@ class Budget:
                     raise RuntimeError('SESSION_BUDGET_CAP: ' + name)
             bucket['images_reserved'] += 1
             write_json(self.art / 'usage.json', usage)
-            append_json(self.art / 'history.jsonl', {'event':'reserved', 'asset':asset, 'attempt':attempt, 'week':week, 'at':now(), 'images':1, 'origin':'grok-cli'})
+            append_json(self.art / 'history.jsonl', {'event':'reserved', 'asset':asset, 'attempt':attempt, 'week':week, 'at':now(), 'images':1, 'origin':'grok-cli', 'provider':'grok', 'model':'grok-4.7'})
             return week
 
     def record(self, event):
@@ -155,6 +155,9 @@ def reference_gate(row,art=ART):
         raise ValueError('OWNER_REFERENCE_APPROVAL_REQUIRED: '+requirement)
 
 def generate(row, style, budget, refine=False):
+    if getattr(budget, 'provider', 'grok') == 'agy':
+        from agy_provider import generate as agy_generate
+        return agy_generate(row, style, budget, refine)
     reference_gate(row)
     old = [read_json(p) for p in candidates(row)]
     prompt = compile_prompt(row, style)
@@ -189,7 +192,7 @@ def generate(row, style, budget, refine=False):
     exe = shutil.which('grok')
     if not exe: raise RuntimeError('grok CLI unavailable before spend')
     folder = ART / 'raw' / row['id'] / f'attempt-{attempt:02}'
-    sidecar = {'asset':row['id'],'origin':'grok-cli','model':'grok-4.7','seed':None,'timestamp':now(),'attempt':attempt,'prompt':prompt,'brief':row,'input_hash':signature,'status':'reserved','image':None}
+    sidecar = {'asset':row['id'],'origin':'grok-cli','provider':'grok','model':'grok-4.7','seed':None,'timestamp':now(),'attempt':attempt,'prompt':prompt,'brief':row,'input_hash':signature,'status':'reserved','image':None}
     if folder.exists(): raise RuntimeError('existing attempt folder requires inspection: '+str(folder))
     try: budget.reserve(row['id'], attempt)
     except RuntimeError as exc:
@@ -273,6 +276,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--briefs',default=str(ART/'briefs/p1-current.csv'))
     p.add_argument('--batch')
+    p.add_argument('--provider',choices=['grok','agy'],default='grok')
     p.add_argument('--mode',choices=['proof','run','approve-proof','reject-proof','dry-run'],default='run')
     p.add_argument('--review-note')
     p.add_argument('--refine',action='store_true',help='one deliberate content refinement, with recorded rejection; no error retries')
@@ -281,7 +285,10 @@ def main():
     rows=briefs(args.briefs)
     rows=[r for r in rows if r['status']=='ready' and (not args.batch or r['batch']==args.batch)]
     if not rows: raise ValueError('no ready briefs')
-    budget=Budget()
+    if args.provider=='agy':
+        from agy_provider import AgyBudget
+        budget=AgyBudget()
+    else: budget=Budget()
     if args.mode=='dry-run':
         print(json.dumps({'images':len(rows),'batches':sorted({r['batch'] for r in rows}),'budget':budget.summary()},indent=2)); return
     with file_lock(ART/'.run.lock',timeout=1):
@@ -310,7 +317,7 @@ def main():
                 print('PROOF_REVIEW_REQUIRED',batch,flush=True)
             else:
                 if args.mode=='proof': continue
-                count=max(1,min(args.parallel,int(os.getenv('GROK_MAX_PARALLEL_IMAGES','4')),4))
+                count=1 if args.provider=='agy' else max(1,min(args.parallel,int(os.getenv('GROK_MAX_PARALLEL_IMAGES','4')),4))
                 # Scheduling is bounded; each worker re-checks the durable stop latch before spending.
                 with concurrent.futures.ThreadPoolExecutor(max_workers=count) as pool:
                     results=list(pool.map(lambda row:generate(row,style,budget),group))

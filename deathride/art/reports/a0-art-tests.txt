@@ -1,0 +1,16 @@
+.........test-v1 generation-error Provider stop latched: {'at': '2026-10-04T12:54:51.613210+00:00', 'reason': 'test-v1: HTTP 401'}
+..test-v1 generation-error EMPTY_OUTPUT: expected PNG does not exist
+..test-v1 generated 
+..test-v1 generation-error cannot identify image file 'C:\\Users\\kazda\\AppData\\Local\\Temp\\tmpd8476bly\\raw\\test-v1\\attempt-01\\image.png'
+.test-v1 generation-error EMPTY_OUTPUT: expected PNG does not exist
+..test-v1 generation-error Provider stop latched: {'at': '2026-10-04T12:54:55.175094+00:00', 'reason': 'test-v1: HTTP 429'}
+.test-v1 generated 
+.........................{"stop": {"reason": "402 Payment Required"}}
+..PROOF_REVIEW_REQUIRED a
+{"stop": null}
+GENERATION_FAILURE_REQUIRES_INSPECTION; no further groups dispatched
+......................
+----------------------------------------------------------------------
+Ran 68 tests in 6.680s
+
+OK

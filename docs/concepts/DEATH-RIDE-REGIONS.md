@@ -42,3 +42,6 @@ Original work only; one design note, status row, session-log entry and one commi
 | G1 | Region assets, owner review page (art stage, main worktree) | partial; provider quota latched; 16 recolours + 11 kept-prop memberships reviewed locally, five owner pages, inactive atlas plan; all 59 generated assets remain gaps; see deathride/G1-region-assets.md |
 | G2 | Engine and data: region.csv, renderer, assignment (after the track restart) | gated |
 | G3 | Owner review and Stick evidence | gated |
+| A0 | Agy second image provider | implemented; independent 120-image cap, Grok remains latched; live generate/edit smoke and fake CLI tests; see deathride/A0-agy-provider.md |
+| A1 | Agy region completion and kept-prop variants | pending technical proofs; see deathride/AGY-SESSION.md |
+| A2 | Kept-design restoration and edit repair proof | pending owner comparisons; see deathride/AGY-SESSION.md |

@@ -71,5 +71,14 @@
     }
   },
   "owner_raise_3": "2026-10-03 host raised 550 to 700 for the campaign portrait, story card and environment prop rework (owner art feedback N4); the owner asked for mass use of Grok",
-  "owner_raise_4": "2026-10-04 host raised 700 to 850 for the region art (a different wasteland per campaign level: props, ground variants, backdrops, atmosphere); the owner asked for region variation and had asked for heavy Grok use"
+  "owner_raise_4": "2026-10-04 host raised 700 to 850 for the region art (a different wasteland per campaign level: props, ground variants, backdrops, atmosphere); the owner asked for region variation and had asked for heavy Grok use",
+  "providers": {
+    "agy": {
+      "run_id": "agy-regions-2026-10-04",
+      "run_image_cap": 120,
+      "model": "gemini-3.8-flash-high",
+      "real_allowance": "unknown",
+      "authorization": "2026-10-04 owner AGY IMAGE PROVIDER A0-A2: separate local cap 120 images; first auth/quota/rate/empty stop; no error retries"
+    }
+  }
 }
