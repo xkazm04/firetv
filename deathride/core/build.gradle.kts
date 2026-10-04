@@ -100,3 +100,12 @@ tasks.register<JavaExec>("trackLab") {
     systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
     args(providers.gradleProperty("trackLabPort").getOrElse("8794"))
 }
+
+tasks.register<JavaExec>("trackShapeReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackShapeReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+}

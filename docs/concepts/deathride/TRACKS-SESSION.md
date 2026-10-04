@@ -1,5 +1,13 @@
 # Track design session
 
+## R1 — 2026-10-04 — Shape rejection instruments
+
+Added equal-arc baked geometry analysis: convex hull length/area ratios, signed turning profile, corner histogram and sequence, direction reversals, nonlocal proximity and antiparallel fold-back share, straight/brake pairs, crossings and normalized pairwise shape/turning distance. Thresholds are data. All 29 merged outlines fail; 81 pairs trigger similarity. Fifteen actual planted geometry/pair witnesses pass, including circle, oval, rounded rectangle, explicit plus blob, illegal crossing and transformed copies. Fixed the circle-as-hairpin detector error exposed by the witness. R2 owns complex positive controls.
+
+Added `tracks/atlas/shapes.html`, raw geometry/pair evidence and browser-rendered overview. Personally inspected the resulting sheet: all merged tracks still show the rejected perimeter-loop grammar. Runoff remains the sole named accepted exception. Existing atlas is explicitly labeled archived/rejected; its pre-merge simulations are not reused as candidate proof. All owner controls retain the audio report pattern.
+
+Validation: 189 core + 8 link + 37 game tests, zero failures/errors/skips; isolated `:app:assembleDebug` passed. Existing atlas/Lab browser suite and new 1440/390 shape-page tests pass, including persistence, escaping, no overflow/errors/network, and actual outline raster export. The updated explicit plus-blob fixture was additionally compiled/executed in the shape-report gate proof after the full suite. Evidence in `deathride/evidence/tracks/r1`; notes in `R1-shape-instruments.md`. No gameplay/art/event edits, stash application, device use, spend or push.
+
 ## R0 — 2026-10-04 — Restart research
 
 Read the complete restart master, T0/T1 and rejected outline sheet. The halted oval redesign stash remains untouched. The merged branch has 29 course rows and 35 stable campaign events. Wrote `R0-track-craft-research.md` before implementation, with primary developer/operator/manual sources, actual visual inspection of Suzuka, Tsukuba, Brands Hatch, Mario Kart DS and Rock N Roll Racing, measured published circuit comparisons, original archetype envelopes, corner library, width/camera arithmetic and explicit gates to prove in R1. No original game layouts copied. Unsupported graph/bridge semantics must be disclosed rather than faked.
