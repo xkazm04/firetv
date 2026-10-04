@@ -1,0 +1,195 @@
+[
+  {
+    "id": "agy-restore-scrap-pile-v1-a1",
+    "class": "scrap-pile",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-restore-scrap-pile-v1\\attempt-01\\image.png",
+    "source_sha256": "f109efaccfc24d9fedd677b3a29dccc352656f0b4e8859445a512cfff8088ab1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "agy-restore-scrap-pile-v1",
+      "class": "scrap-pile",
+      "prompt_action": "Use case: precise-object-edit. Restore clear full-resolution detail in the supplied original source. Preserve the exact design, silhouette, proportions, pose, camera, palette and every major part. Clean compression, muddy edges and degraded fine marks only. No redesign, added parts, changed expression or identity. Preserve original background and framing. Intended output is a faithful high-resolution restoration for before/after comparison, not a new design. Original subject: Collapsed stack of salvaged corrugated panels, axle housings and bent wheel rims from a burnt-out motor yard. Jagged welded scrap, recognisable machine parts, no generic storage box. Original Rust and Ink game prop. Strict directly overhead plan view with readable top surfaces, flat material shading. One complete isolated subject centered in the middle 60 percent of a square with at least 15 percent empty margin on every side. Bold main forms readable in a 64px atlas cell. No separate fragments near canvas edges, cast shadows or decorative backdrop.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2-source.jpg",
+      "batch": "agy-restore-environment",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "environment/scrap-pile",
+      "face_subject": "",
+      "before_path": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.39844799041748047,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        77,
+        154,
+        944,
+        894
+      ],
+      "margin_fraction": 0.0751953125,
+      "aspect": 1.1716216216216215,
+      "estimated_key_rgb": [
+        228.0,
+        86.0,
+        187.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.181106738794752,
+      "palette_p90_delta_e": 11.008571812781197
+    },
+    "placement": {
+      "source_bounds_px": [
+        77,
+        154,
+        944,
+        894
+      ],
+      "source_pivot_px": [
+        510.5,
+        524.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        102
+      ],
+      "scale": 0.1384083044982699,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\agy-restoration\\agy-restore-scrap-pile-v1\\agy-restore-scrap-pile-v1.png",
+    "sha256": "3ebe97de0d0105e14fd122697432523ef42ed035a955ec20eab1968eec66b78a",
+    "before_source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2-source.jpg",
+    "before_export": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2.png",
+    "origin": "edit-restoration",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "generation": {
+      "asset": "agy-restore-scrap-pile-v1",
+      "provider": "agy",
+      "origin": "agy-cli",
+      "model": "gemini-3.8-flash-high",
+      "image_model": "Nano Banana 2 (provider built-in image tool)",
+      "timestamp": "2026-10-04T12:50:48.597929+00:00",
+      "attempt": 1,
+      "brief": {
+        "id": "agy-restore-scrap-pile-v1",
+        "class": "scrap-pile",
+        "prompt_action": "Use case: precise-object-edit. Restore clear full-resolution detail in the supplied original source. Preserve the exact design, silhouette, proportions, pose, camera, palette and every major part. Clean compression, muddy edges and degraded fine marks only. No redesign, added parts, changed expression or identity. Preserve original background and framing. Intended output is a faithful high-resolution restoration for before/after comparison, not a new design. Original subject: Collapsed stack of salvaged corrugated panels, axle housings and bent wheel rims from a burnt-out motor yard. Jagged welded scrap, recognisable machine parts, no generic storage box. Original Rust and Ink game prop. Strict directly overhead plan view with readable top surfaces, flat material shading. One complete isolated subject centered in the middle 60 percent of a square with at least 15 percent empty margin on every side. Bold main forms readable in a 64px atlas cell. No separate fragments near canvas edges, cast shadows or decorative backdrop.",
+        "size": "1024x1024",
+        "frame": "single",
+        "background_key": "#FF00FF",
+        "count": "1",
+        "status": "ready",
+        "kind": "sprite",
+        "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2-source.jpg",
+        "batch": "agy-restore-environment",
+        "approval": "pending",
+        "requires_approval": "",
+        "cell_limit": "128",
+        "style_file": "style-fusion.json",
+        "wave": "V4",
+        "asset_family": "props",
+        "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+        "logical_name": "environment/scrap-pile",
+        "face_subject": "",
+        "before_path": ""
+      },
+      "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Restore clear full-resolution detail in the supplied original source. Preserve the exact design, silhouette, proportions, pose, camera, palette and every major part. Clean compression, muddy edges and degraded fine marks only. No redesign, added parts, changed expression or identity. Preserve original background and framing. Intended output is a faithful high-resolution restoration for before/after comparison, not a new design. Original subject: Collapsed stack of salvaged corrugated panels, axle housings and bent wheel rims from a burnt-out motor yard. Jagged welded scrap, recognisable machine parts, no generic storage box. Original Rust and Ink game prop. Strict directly overhead plan view with readable top surfaces, flat material shading. One complete isolated subject centered in the middle 60 percent of a square with at least 15 percent empty margin on every side. Bold main forms readable in a 64px atlas cell. No separate fragments near canvas edges, cast shadows or decorative backdrop.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+      "input_hash": "f22d17a2181578f0a067841d60bb30bf85d0ddbeedf520135a2ff7bdebc7433d",
+      "status": "generated",
+      "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-restore-scrap-pile-v1\\attempt-01\\image.png",
+      "mode": "edit",
+      "references": [
+        {
+          "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2-source.jpg",
+          "sha256": "f507b82f8a10612f3d6b0d15796a0b1b865db4ab7086e50a1d16a8f33da10c85"
+        }
+      ],
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "returncode": 0,
+      "session_id": "c717c264-da73-46c8-9097-7e88c303624a",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "image_tool_evidence": {
+        "calls": [
+          {
+            "session": "cb9e67e8-e881-49ac-9917-4f90c4d44258",
+            "name": "generate_image",
+            "args": {
+              "AspectRatio": "1:1",
+              "ImageName": "image",
+              "ImagePaths": [
+                "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\review\\rework2\\images\\rw2-env-scrap-pile-v1-a2-source.jpg"
+              ],
+              "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Restore clear full-resolution detail in the supplied original source. Preserve the exact design, silhouette, proportions, pose, camera, palette and every major part. Clean compression, muddy edges and degraded fine marks only. No redesign, added parts, changed expression or identity. Preserve original background and framing. Intended output is a faithful high-resolution restoration for before/after comparison, not a new design. Original subject: Collapsed stack of salvaged corrugated panels, axle housings and bent wheel rims from a burnt-out motor yard. Jagged welded scrap, recognisable machine parts, no generic storage box. Original Rust and Ink game prop. Strict directly overhead plan view with readable top surfaces, flat material shading. One complete isolated subject centered in the middle 60 percent of a square with at least 15 percent empty margin on every side. Bold main forms readable in a 64px atlas cell. No separate fragments near canvas edges, cast shadows or decorative backdrop.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+              "toolAction": "Restoring scrap pile image",
+              "toolSummary": "Generate restored scrap pile"
+            }
+          }
+        ],
+        "logs": [
+          {
+            "session": "c717c264-da73-46c8-9097-7e88c303624a",
+            "sha256": "a547e9709ebec3019eeadde1e8d4340bd86cd86c4399334f172a1624f95a0af1"
+          },
+          {
+            "session": "cb9e67e8-e881-49ac-9917-4f90c4d44258",
+            "sha256": "da19b905b4e58af171bb903e30bcfebe67c6dbd8f294585a12a93cebfb530468"
+          }
+        ],
+        "errors": []
+      },
+      "sha256": "f109efaccfc24d9fedd677b3a29dccc352656f0b4e8859445a512cfff8088ab1",
+      "continuation_verified": true,
+      "prompt_verbatim_verified": true,
+      "prompt_verification": "Exact tool parameters from this session and explicitly linked image-generator children",
+      "elapsed_seconds": 150.172
+    },
+    "direct_review": {
+      "source_sha256": "f109efaccfc24d9fedd677b3a29dccc352656f0b4e8859445a512cfff8088ab1",
+      "export_sha256": "3ebe97de0d0105e14fd122697432523ef42ed035a955ec20eab1968eec66b78a",
+      "technical_eligible": false,
+      "at": "2026-10-04T12:54:35.373818+00:00",
+      "note": "Original corrugated sheets, axle and wheel arrangement preserved closely. Fine marks softened/repainted; output remains 1024 square despite 2K request. No demonstrated resolution increase. Owner comparison pending; no replacement."
+    }
+  }
+]

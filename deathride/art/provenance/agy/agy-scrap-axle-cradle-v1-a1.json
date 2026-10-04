@@ -1,0 +1,75 @@
+{
+  "asset": "agy-scrap-axle-cradle-v1",
+  "provider": "agy",
+  "origin": "agy-cli",
+  "model": "gemini-3.8-flash-high",
+  "image_model": "Nano Banana 2 (provider built-in image tool)",
+  "timestamp": "2026-10-04T12:43:35.357176+00:00",
+  "attempt": 1,
+  "brief": {
+    "id": "agy-scrap-axle-cradle-v1",
+    "class": "axle-cradle",
+    "prompt_action": "axle cradle: two salvaged axles in a low sorting jig. Belongs to Ash Yards: Dry soot fall, cool overcast, brittle dust and sorted salvage. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "sprite",
+    "reference": "",
+    "batch": "agy-scrap-props",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V4",
+    "asset_family": "props",
+    "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+    "logical_name": "regions/scrap/props/axle-cradle",
+    "region": "scrap"
+  },
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: axle cradle: two salvaged axles in a low sorting jig. Belongs to Ash Yards: Dry soot fall, cool overcast, brittle dust and sorted salvage. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "input_hash": "222741fc8f02b5a0004135b16e90c472e4062ec0bb21036cb8b428a9b7f7d99c",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-scrap-axle-cradle-v1\\attempt-01\\image.png",
+  "mode": "generate",
+  "references": [],
+  "owner_approved": false,
+  "runtime_enabled": false,
+  "source_size": [
+    1024,
+    1024
+  ],
+  "session_id": "26a6a096-5707-4b59-a547-4d1b2db5f229",
+  "returncode": 0,
+  "routing_audit": "audits/a0-headless-routing.json",
+  "sha256": "f96d52674d9add2514f75ffdf40170881fd88ab9872efd9799b586f494c1912e",
+  "continuation_verified": true,
+  "prompt_verbatim_verified": true,
+  "image_tool_evidence": {
+    "calls": [
+      {
+        "session": "aa6c7339-e8d2-4b2a-adbc-cb266dbd9054",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "1:1",
+          "ImageName": "scrap_axle_cradle",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: axle cradle: two salvaged axles in a low sorting jig. Belongs to Ash Yards: Dry soot fall, cool overcast, brittle dust and sorted salvage. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating scrap axle cradle image",
+          "toolSummary": "Scrap axle cradle generation"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "26a6a096-5707-4b59-a547-4d1b2db5f229",
+        "sha256": "64c8e9e35042e39b8e7765841f6828d83dcb28dd567121446f1de516093efbd6"
+      },
+      {
+        "session": "aa6c7339-e8d2-4b2a-adbc-cb266dbd9054",
+        "sha256": "4d4a590bf5d46575022be22be3c638acc2cc5f39f882aae275fcdb0509cfdf57"
+      }
+    ],
+    "errors": []
+  }
+}

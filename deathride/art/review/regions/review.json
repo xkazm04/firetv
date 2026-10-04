@@ -1,0 +1,791 @@
+{
+  "schema": 1,
+  "at": "2026-10-04T12:23:53.006704+00:00",
+  "owner_approved_count": 0,
+  "runtime_enabled_count": 0,
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 582,
+    "remaining": 268,
+    "videos": 0,
+    "stop": {
+      "at": "2026-10-04T12:13:05.093970+00:00",
+      "reason": "g1-scrap-axle-cradle-v1: HTTP 402 Payment Required; Grok Build usage balance exhausted. Existing detector missed provider wording; manual first-error latch after inspection; no further paid calls."
+    }
+  },
+  "new_reservations": 16,
+  "generated_images": 0,
+  "region_pages": [
+    {
+      "region": "scrap",
+      "file": "scrap.html",
+      "cards": 17,
+      "candidates": 6,
+      "missing": 11
+    },
+    {
+      "region": "foundry",
+      "file": "foundry.html",
+      "cards": 17,
+      "candidates": 5,
+      "missing": 12
+    },
+    {
+      "region": "salt",
+      "file": "salt.html",
+      "cards": 18,
+      "candidates": 5,
+      "missing": 13
+    },
+    {
+      "region": "switchback",
+      "file": "switchback.html",
+      "cards": 18,
+      "candidates": 6,
+      "missing": 12
+    },
+    {
+      "region": "crown",
+      "file": "crown.html",
+      "cards": 16,
+      "candidates": 5,
+      "missing": 11
+    }
+  ],
+  "records": [
+    {
+      "id": "g1-scrap-reuse-scrap-pile",
+      "region": "scrap",
+      "label": "regions/scrap/reuse/scrap-pile",
+      "path": "images/g1-scrap-reuse-scrap-pile.png",
+      "source": "images/g1-scrap-reuse-scrap-pile-source.png",
+      "sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+      "source_sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+      "native": "images/g1-scrap-reuse-scrap-pile-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-scrap-reuse-oil-drums",
+      "region": "scrap",
+      "label": "regions/scrap/reuse/oil-drums",
+      "path": "images/g1-scrap-reuse-oil-drums.png",
+      "source": "images/g1-scrap-reuse-oil-drums-source.png",
+      "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "native": "images/g1-scrap-reuse-oil-drums-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-scrap-reuse-rust-pylon",
+      "region": "scrap",
+      "label": "regions/scrap/reuse/rust-pylon",
+      "path": "images/g1-scrap-reuse-rust-pylon.png",
+      "source": "images/g1-scrap-reuse-rust-pylon-source.png",
+      "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "native": "images/g1-scrap-reuse-rust-pylon-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-scrap-asphalt-tint-v1",
+      "region": "scrap",
+      "label": "regions/scrap/ground/asphalt-tint",
+      "path": "images/g1-scrap-asphalt-tint-v1.png",
+      "source": "images/g1-scrap-asphalt-tint-v1-source.png",
+      "sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+      "source_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "native": "images/g1-scrap-asphalt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-scrap-dirt-tint-v1",
+      "region": "scrap",
+      "label": "regions/scrap/ground/dirt-tint",
+      "path": "images/g1-scrap-dirt-tint-v1.png",
+      "source": "images/g1-scrap-dirt-tint-v1-source.png",
+      "sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+      "source_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "native": "images/g1-scrap-dirt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-scrap-gravel-tint-v1",
+      "region": "scrap",
+      "label": "regions/scrap/ground/gravel-tint",
+      "path": "images/g1-scrap-gravel-tint-v1.png",
+      "source": "images/g1-scrap-gravel-tint-v1-source.png",
+      "sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+      "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "native": "images/g1-scrap-gravel-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-foundry-reuse-oil-drums",
+      "region": "foundry",
+      "label": "regions/foundry/reuse/oil-drums",
+      "path": "images/g1-foundry-reuse-oil-drums.png",
+      "source": "images/g1-foundry-reuse-oil-drums-source.png",
+      "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "native": "images/g1-foundry-reuse-oil-drums-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-foundry-reuse-rust-pylon",
+      "region": "foundry",
+      "label": "regions/foundry/reuse/rust-pylon",
+      "path": "images/g1-foundry-reuse-rust-pylon.png",
+      "source": "images/g1-foundry-reuse-rust-pylon-source.png",
+      "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "native": "images/g1-foundry-reuse-rust-pylon-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-foundry-asphalt-tint-v1",
+      "region": "foundry",
+      "label": "regions/foundry/ground/asphalt-tint",
+      "path": "images/g1-foundry-asphalt-tint-v1.png",
+      "source": "images/g1-foundry-asphalt-tint-v1-source.png",
+      "sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+      "source_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "native": "images/g1-foundry-asphalt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-foundry-dirt-tint-v1",
+      "region": "foundry",
+      "label": "regions/foundry/ground/dirt-tint",
+      "path": "images/g1-foundry-dirt-tint-v1.png",
+      "source": "images/g1-foundry-dirt-tint-v1-source.png",
+      "sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+      "source_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "native": "images/g1-foundry-dirt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-foundry-gravel-tint-v1",
+      "region": "foundry",
+      "label": "regions/foundry/ground/gravel-tint",
+      "path": "images/g1-foundry-gravel-tint-v1.png",
+      "source": "images/g1-foundry-gravel-tint-v1-source.png",
+      "sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+      "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "native": "images/g1-foundry-gravel-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-salt-reuse-rust-pylon",
+      "region": "salt",
+      "label": "regions/salt/reuse/rust-pylon",
+      "path": "images/g1-salt-reuse-rust-pylon.png",
+      "source": "images/g1-salt-reuse-rust-pylon-source.png",
+      "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "native": "images/g1-salt-reuse-rust-pylon-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-salt-reuse-oil-drums",
+      "region": "salt",
+      "label": "regions/salt/reuse/oil-drums",
+      "path": "images/g1-salt-reuse-oil-drums.png",
+      "source": "images/g1-salt-reuse-oil-drums-source.png",
+      "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "native": "images/g1-salt-reuse-oil-drums-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-salt-asphalt-tint-v1",
+      "region": "salt",
+      "label": "regions/salt/ground/asphalt-tint",
+      "path": "images/g1-salt-asphalt-tint-v1.png",
+      "source": "images/g1-salt-asphalt-tint-v1-source.png",
+      "sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+      "source_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "native": "images/g1-salt-asphalt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-salt-dirt-tint-v1",
+      "region": "salt",
+      "label": "regions/salt/ground/dirt-tint",
+      "path": "images/g1-salt-dirt-tint-v1.png",
+      "source": "images/g1-salt-dirt-tint-v1-source.png",
+      "sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+      "source_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "native": "images/g1-salt-dirt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-salt-gravel-tint-v1",
+      "region": "salt",
+      "label": "regions/salt/ground/gravel-tint",
+      "path": "images/g1-salt-gravel-tint-v1.png",
+      "source": "images/g1-salt-gravel-tint-v1-source.png",
+      "sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+      "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "native": "images/g1-salt-gravel-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-reuse-rust-pylon",
+      "region": "switchback",
+      "label": "regions/switchback/reuse/rust-pylon",
+      "path": "images/g1-switchback-reuse-rust-pylon.png",
+      "source": "images/g1-switchback-reuse-rust-pylon-source.png",
+      "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "native": "images/g1-switchback-reuse-rust-pylon-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-reuse-oil-drums",
+      "region": "switchback",
+      "label": "regions/switchback/reuse/oil-drums",
+      "path": "images/g1-switchback-reuse-oil-drums.png",
+      "source": "images/g1-switchback-reuse-oil-drums-source.png",
+      "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "native": "images/g1-switchback-reuse-oil-drums-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-asphalt-tint-v1",
+      "region": "switchback",
+      "label": "regions/switchback/ground/asphalt-tint",
+      "path": "images/g1-switchback-asphalt-tint-v1.png",
+      "source": "images/g1-switchback-asphalt-tint-v1-source.png",
+      "sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+      "source_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "native": "images/g1-switchback-asphalt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-dirt-tint-v1",
+      "region": "switchback",
+      "label": "regions/switchback/ground/dirt-tint",
+      "path": "images/g1-switchback-dirt-tint-v1.png",
+      "source": "images/g1-switchback-dirt-tint-v1-source.png",
+      "sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+      "source_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "native": "images/g1-switchback-dirt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-gravel-tint-v1",
+      "region": "switchback",
+      "label": "regions/switchback/ground/gravel-tint",
+      "path": "images/g1-switchback-gravel-tint-v1.png",
+      "source": "images/g1-switchback-gravel-tint-v1-source.png",
+      "sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+      "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "native": "images/g1-switchback-gravel-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-switchback-ice-tint-v1",
+      "region": "switchback",
+      "label": "regions/switchback/ground/ice-tint",
+      "path": "images/g1-switchback-ice-tint-v1.png",
+      "source": "images/g1-switchback-ice-tint-v1-source.png",
+      "sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+      "source_sha256": "cb4bc0511c512e4268da7f194d4b2a24b5c025c7522de5d2c7d2bd6821059a96",
+      "native": "images/g1-switchback-ice-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-crown-reuse-league-gantry",
+      "region": "crown",
+      "label": "regions/crown/reuse/league-gantry",
+      "path": "images/g1-crown-reuse-league-gantry.png",
+      "source": "images/g1-crown-reuse-league-gantry-source.png",
+      "sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+      "source_sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+      "native": "images/g1-crown-reuse-league-gantry-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-crown-reuse-oil-drums",
+      "region": "crown",
+      "label": "regions/crown/reuse/oil-drums",
+      "path": "images/g1-crown-reuse-oil-drums.png",
+      "source": "images/g1-crown-reuse-oil-drums-source.png",
+      "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "native": "images/g1-crown-reuse-oil-drums-native.png",
+      "origin": "reuse",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-crown-asphalt-tint-v1",
+      "region": "crown",
+      "label": "regions/crown/ground/asphalt-tint",
+      "path": "images/g1-crown-asphalt-tint-v1.png",
+      "source": "images/g1-crown-asphalt-tint-v1-source.png",
+      "sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+      "source_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "native": "images/g1-crown-asphalt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-crown-dirt-tint-v1",
+      "region": "crown",
+      "label": "regions/crown/ground/dirt-tint",
+      "path": "images/g1-crown-dirt-tint-v1.png",
+      "source": "images/g1-crown-dirt-tint-v1-source.png",
+      "sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+      "source_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "native": "images/g1-crown-dirt-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    },
+    {
+      "id": "g1-crown-gravel-tint-v1",
+      "region": "crown",
+      "label": "regions/crown/ground/gravel-tint",
+      "path": "images/g1-crown-gravel-tint-v1.png",
+      "source": "images/g1-crown-gravel-tint-v1-source.png",
+      "sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+      "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "native": "images/g1-crown-gravel-tint-v1-native.png",
+      "origin": "recolour",
+      "technical_eligible": true,
+      "owner_approved": false,
+      "runtime_enabled": false
+    }
+  ],
+  "gaps": [
+    {
+      "id": "g1-scrap-axle-cradle-v1",
+      "region": "scrap",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-baled-sheet-steel-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-magnet-yoke-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-cable-reel-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-sorting-rack-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-filter-sacks-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-scale-plate-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-culvert-mouth-cap-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-backdrop-v1",
+      "region": "scrap",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-horizon-v1",
+      "region": "scrap",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-scrap-ash-v1",
+      "region": "scrap",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-casting-ladle-v1",
+      "region": "foundry",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-ingot-mould-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-refractory-brick-skid-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-cooling-manifold-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-roller-cassette-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-quench-basket-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-furnace-door-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-cinder-spill-tray-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-backdrop-v1",
+      "region": "foundry",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-horizon-v1",
+      "region": "foundry",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-embers-v1",
+      "region": "foundry",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-foundry-clinker-v1",
+      "region": "foundry",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-brine-pump-skid-v1",
+      "region": "salt",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-evaporation-rake-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-core-sample-rack-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-drill-collar-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-salt-sacks-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-conveyor-hopper-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-survey-cairn-ring-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-mineral-screen-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-backdrop-v1",
+      "region": "salt",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-horizon-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-salt-glints-v1",
+      "region": "salt",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-dust-v1",
+      "region": "salt",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-salt-salt-crust-v1",
+      "region": "salt",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-avalanche-anchor-v1",
+      "region": "switchback",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-snow-fence-bundle-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-grit-bin-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-cable-saddle-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-drain-cage-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-scree-gabion-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-ice-grit-berm-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-rescue-sledge-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-backdrop-v1",
+      "region": "switchback",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-horizon-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-sleet-v1",
+      "region": "switchback",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-switchback-snow-v1",
+      "region": "switchback",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-timing-cabinet-v1",
+      "region": "crown",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-floodlight-bank-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-seat-bank-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-pit-jack-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-flag-base-cluster-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-cable-protector-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-podium-plinth-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-ticket-turnstile-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-backdrop-v1",
+      "region": "crown",
+      "state": "Proof failed: provider balance exhausted",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-horizon-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    },
+    {
+      "id": "g1-crown-fog-v1",
+      "region": "crown",
+      "state": "Not called: proof/quota gate closed",
+      "owner_approved": false
+    }
+  ]
+}
