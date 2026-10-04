@@ -1,5 +1,11 @@
 # Track design session
 
+## R0 — 2026-10-04 — Restart research
+
+Read the complete restart master, T0/T1 and rejected outline sheet. The halted oval redesign stash remains untouched. The merged branch has 29 course rows and 35 stable campaign events. Wrote `R0-track-craft-research.md` before implementation, with primary developer/operator/manual sources, actual visual inspection of Suzuka, Tsukuba, Brands Hatch, Mario Kart DS and Rock N Roll Racing, measured published circuit comparisons, original archetype envelopes, corner library, width/camera arithmetic and explicit gates to prove in R1. No original game layouts copied. Unsupported graph/bridge semantics must be disclosed rather than faked.
+
+Validation: 185 core + 8 link + 37 game tests, zero failures/errors/skips; `:app:assembleDebug` with `dev.deathride.tracks`; full existing atlas/Lab browser suite passed at 1440/390 including seeded race and export. Evidence: `deathride/evidence/tracks/r0`. Gameplay/course/campaign/art data unchanged. No device use, paid generation or push. Sources are research evidence only.
+
 Branch `deathride/tracks`; worktree `C:/Users/kazda/kiro/firetv-deathride-tracks`. No pushes, paid generation or device use. T2/T3 remain gated until the AI/pacing merge and later owner review.
 
 ## T0 — 2026-10-04 — Research and design language

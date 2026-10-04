@@ -61,7 +61,7 @@ Host diagnosis (measured on 2026-10-04; `deathride/tracks/atlas/library-v1-outli
 
 | Id | Wave | Status |
 |---|---|---|
-| R0 | Research that finds the real craft | not started |
+| R0 | Research that finds the real craft | complete — expanded primary-source research and visual circuit study; car-unit library, route archetypes and explicit shape contracts in `deathride/R0-track-craft-research.md`; 230 tests, build and atlas/Lab browser green |
 | R1 | Shape instruments and gates | not started |
 | R2 | Composer for real layouts | not started |
 | R3 | Library as owner choices | not started |
