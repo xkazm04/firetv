@@ -29,3 +29,14 @@ G2 final build log: `commit-build.log`, followed by `final-ui-build.log` after t
 
 G2 incorporates concurrent owner decision commit `f88f41be`: all delivered G1 regions approved and R3 triage recorded. Final comparison uses kept `scrap-1-c`; the separate apply run owns production track selection/repair.
 
+G2 committed locally as `8f7f7de0`.
+
+## Owner comparison continuation ? G3
+
+2026-10-04. Delivered a generated offline same-course comparison with five blank region choice cards and 45 actual desktop GL captures across three views/material modes, individual approved material links, palettes, exact kept props, weather caps, backdrop/plot and actual campaign banners. Reused the audio report CSS/interaction/export format with region-specific truth disclaimer and export destination. Approved material/fallback and desktop/device truth are explicit; no owner picks inferred. The source/capture freshness check and 1440/390 light/dark browser checks pass, including all views, links/images, three picks, clear, persistence, escaped Markdown, clipboard fallback and denied storage. Required Gradle tasks green; 253 tests pass/up-to-date.
+
+| Wave | Result | Evidence |
+|---|---|---|
+| G3 | Owner comparison delivered and browser/build gates pass; Stick screenshots and frame-time delta pending-busy, owner feel unmeasured. | [Design/results](G3-region-owner-review.md), `deathride/evidence/regions/g3/`, `deathride/regions/` |
+
+Final /24 TCP/5555 scan at 14:03:56 UTC found `10.0.0.139` still running `dev.deathride.perf`; did not install or launch `dev.deathride.regions`, stop another application, or touch `dev.deathride.tv`. Timing delta remains null. Remaining: when free, collect per-region Stick screenshots and identical off/on warm-up/trace runs, report actual percentiles and delta, then obtain owner region/individual-art/sofa decisions. Existing G1 art gaps and three R3 arena failures stay separately pending. No image/audio provider spend, push or question.

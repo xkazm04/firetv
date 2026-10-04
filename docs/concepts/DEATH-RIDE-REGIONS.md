@@ -41,7 +41,7 @@ Original work only; one design note, status row, session-log entry and one commi
 | G0 | Region bible | complete design; required build, 52 art tests and both bundles pass; see deathride/G0-region-bible.md |
 | G1 | Region assets, owner review page (art stage, main worktree) | partial; provider quota latched; 16 recolours + 11 kept-prop memberships reviewed locally, five owner pages, inactive atlas plan; all 59 generated assets remain gaps; see deathride/G1-region-assets.md |
 | G2 | Engine and data: region.csv, renderer, assignment (after the track restart) | implemented; 253 tests/build/content/browser checks pass, 45 GL renders and five menus; Stick frame-time delta pending-busy; see deathride/G2-region-engine.md |
-| G3 | Owner review and Stick evidence | gated |
+| G3 | Owner review and Stick evidence | review delivered; five regions/45 matched GL captures, audio-format choices/export and desktop/mobile browser checks pass; Stick screenshots/timing and owner feel pending; see deathride/G3-region-owner-review.md |
 | A0 | Agy second image provider | implemented; independent 120-image cap, Grok remains latched; live generate/edit smoke and fake CLI tests; see deathride/A0-agy-provider.md |
 | A1 | Agy region completion and kept-prop variants | pending technical proofs; see deathride/AGY-SESSION.md |
 | A2 | Kept-design restoration and edit repair proof | pending owner comparisons; see deathride/AGY-SESSION.md |
