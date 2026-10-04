@@ -78,7 +78,7 @@ fun main(args: Array<String>) {
                         val displaced=w.cars[slot].rivalIndex
                         Garage.apply(profile.rivalProfiles[displaced],w.cars[0]);w.cars[0].rivalIndex=displaced;w.cars[0].aiStyle=RivalEconomy.style(profile,displaced);w.cars[0].aiSkill=Career.difficulties[difficulty].skill
                     }
-                    Garage.apply(lead,w.cars[slot]);w.cars[slot].rivalIndex=-1;w.cars[slot].aiStyle=null;w.cars[slot].aiSkill=Career.difficulties[leadSkill].skill;w.reset()
+                    Garage.apply(lead,w.cars[slot]);w.cars[slot].rivalIndex=-1;w.cars[slot].aiStyle=null;w.cars[slot].aiSkill=Career.difficulties[leadSkill].skill;w.aiLeadSlot=slot;w.reset()
                 }
                 val w=make();run(w)
                 if(sample==0){val replay=make();run(replay);check(w.stateHash()==replay.stateHash())}

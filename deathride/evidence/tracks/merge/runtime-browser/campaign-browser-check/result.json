@@ -1,0 +1,168 @@
+{
+  "fixture": "Explicit core-generated promotion fixture; actual phone transactions; not an earned browser career",
+  "checks": [
+    "Mechanic and ledger",
+    "guest cannot claim host reward",
+    "cash promotion reaches Mechanic audio cue",
+    "car promotion",
+    "legal part promotion",
+    "ledger conservation",
+    "reload retains claimed and pending choices",
+    "live phone meters use the shared late-tier upgrade caps"
+  ],
+  "campaign": {
+    "profile": "campaign-probe-q1",
+    "car": "Line",
+    "revision": 60,
+    "debt": 0,
+    "initial": 1200,
+    "interest": 84,
+    "paid": 1352,
+    "diverted": 331,
+    "recovered": 263,
+    "restitutionPaid": 68,
+    "restitutionDue": 0,
+    "voided": 0,
+    "lastPayment": 0,
+    "lastCredited": 0,
+    "lastDiverted": 0,
+    "lastInterest": 0,
+    "exposed": true,
+    "loanDebt": 0,
+    "allies": [
+      {
+        "id": "rook",
+        "state": 2,
+        "line": "My name opens the crew account. Your choice is money or a missing car or a useful part.",
+        "offers": [
+          {
+            "id": "rook:money",
+            "label": "350 CR (up to 350)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "rook:car",
+            "label": "Stock Trail / value 1112 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "rook:part",
+            "label": "Tires 1 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "ox",
+        "state": 3,
+        "line": "The crew stands with you. Every stolen credit will return even after the debt is paid.",
+        "offers": [
+          {
+            "id": "ox:money",
+            "label": "650 CR (up to 650)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "ox:car",
+            "label": "Stock Comet / value 1858 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "ox:part",
+            "label": "Armor 1 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "vex",
+        "state": 4,
+        "line": "The north road stays open. My couriers carry your name and the unedited recording.",
+        "offers": [
+          {
+            "id": "vex:money",
+            "label": "1000 CR (up to 1000)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "vex:car",
+            "label": "Stock Quill / value 2850 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "vex:part",
+            "label": "Engine 2 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "mica",
+        "state": 1,
+        "line": "Every crew holds a copy. My endorsement opens the Crown gates for all of us.",
+        "offers": [
+          {
+            "id": "mica:money",
+            "label": "1400 CR (up to 1400)",
+            "available": true,
+            "reason": ""
+          },
+          {
+            "id": "mica:car",
+            "label": "Stock Kestrel / value 4037 CR",
+            "available": true,
+            "reason": ""
+          },
+          {
+            "id": "mica:part",
+            "label": "Suspension 1 on Line",
+            "available": true,
+            "reason": ""
+          }
+        ]
+      }
+    ],
+    "mechanic": "He can take a car. He cannot take what we built together.",
+    "tutorial": "The final fight has no lap victory. Keep moving until Marrow is wrecked.",
+    "hub": "The Crown pits",
+    "finale": 0,
+    "seizedCar": ""
+  },
+  "rewardAudio": {
+    "active": 2,
+    "highWater": 2,
+    "cap": 8,
+    "played": 5,
+    "suppressed": 0,
+    "stolen": 0,
+    "missing": 0,
+    "intentionalSilence": 3,
+    "musicMode": "none",
+    "decodedBytes": 4881926,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "voice.mechanic.ally",
+    "lastNarrationPlayed": true,
+    "narrationCount": 3,
+    "backend": {}
+  },
+  "capChecks": [
+    {
+      "car": "Quill",
+      "cap": 10
+    },
+    {
+      "car": "Kestrel",
+      "cap": 10
+    }
+  ],
+  "errors": []
+}

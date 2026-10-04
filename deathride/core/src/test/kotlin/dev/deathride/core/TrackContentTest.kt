@@ -56,14 +56,14 @@ class TrackContentTest {
         assertTrue(errors(f.copy(kind="acceleration")).any{it.contains("bend too sharp")})
     }
     @Test fun competitivePoolsFinishReplayAndPublishPacing() {
-        val input=Array(6){InputFrame()};val csv=StringBuilder("course,theme,seed,eligibleCars,lengthM,seconds,finished,hash\n")
+        val input=Array(6){InputFrame()};val csv=StringBuilder("course,theme,seed,eligibleCars,lengthM,seconds,finished,hash,laps\n")
         for(course in Courses.all)repeat(8){seed->
             fun make()=World(seed*7919+113,track=Track(course=course)).also{w->course.pool.populate(w);for(c in w.cars)c.aiSkill=Career.difficulties[1].skill;w.reset()}
             val w=make();assertTrue(w.cars.all{course.pool.allows(it.carClass!!)})
             while(w.finished<6 && w.seconds<180)w.step(input)
             assertEquals(6,w.finished,"${course.id}/$seed")
             if(seed==0){val replay=make();repeat(w.steps){replay.step(input)};assertEquals(w.stateHash(),replay.stateHash())}
-            csv.append("${course.id},${course.theme},$seed,${course.pool.eligible().size},${course.lengthM},${w.seconds},${w.finished},${w.stateHash()}\n")
+            csv.append("${course.id},${course.theme},$seed,${course.pool.eligible().size},${course.lengthM},${w.seconds},${w.finished},${w.stateHash()},${w.raceLaps}\n")
         }
         File("build/reports/content/c2-pools.csv").apply{parentFile.mkdirs();writeText(csv.toString())}
     }

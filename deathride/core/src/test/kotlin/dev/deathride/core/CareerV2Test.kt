@@ -16,7 +16,7 @@ class CareerV2Test {
         assertEquals(Career.rivals.map{it.id}.toSet(),AshStory.rivals.keys)
         assertEquals(Career.rivals.map{it.id},RivalEconomy.plans.map{it.id})
         assertTrue(Career.difficulties.all{it.rewardScale==1.0})
-        assertTrue(Career.events.all{if(it.elimination)it.laps==0 else it.laps in 3..30})
+        assertTrue(Career.events.all{if(it.elimination)it.laps==0 else it.laps in 2..6})
         assertTrue(CareerCurve.all.all{it.fieldTier in it.act..minOf(4,it.act+1)})
         for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.cupIndex && Courses.all[e.courseIndex].pool.maxTier>=e.cupIndex)}
     }

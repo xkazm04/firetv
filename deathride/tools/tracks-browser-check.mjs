@@ -116,7 +116,7 @@ try {
     await page.locator('#spot-lane').fill('100'); await page.locator('#add-spot').click(); await page.waitForFunction(() => document.getElementById('lint').textContent.includes('spot outside road'));
     await page.locator('#undo').click(); await page.waitForFunction(() => !document.getElementById('race').disabled);
     // Drag a real control point and check the core's digest changes.
-    const coords = await page.locator('#map').evaluate(canvas => { const p = canvas.trackTransform.xy(-85, 45), rect = canvas.getBoundingClientRect(); return [rect.x + p[0], rect.y + p[1]]; });
+    const coords = await page.locator('#map').evaluate((canvas, node) => { const p = canvas.trackTransform.xy(node[0], node[1]), rect = canvas.getBoundingClientRect(); return [rect.x + p[0], rect.y + p[1]]; }, baseline.course.nodes[0]);
     await page.mouse.move(...coords); await page.mouse.down(); await page.mouse.move(coords[0] - 6, coords[1] + 4, {steps: 4}); await page.mouse.up();
     await page.waitForFunction(() => !document.getElementById('export-bundle').disabled);
     assert.notEqual(await page.locator('#draft-digest').textContent(), originalDigest);
@@ -126,7 +126,7 @@ try {
     const downloadEvent = page.waitForEvent('download'); await page.locator('#export-bundle').click(); const download = await downloadEvent;
     const path = resolve(output, `foundry-${width}-draft.zip`); await download.saveAs(path); const contents = zipEntries(await readFile(path));
     const firstExported = contents['tracks/foundry.csv'].trim().split('\n')[1].split(',');
-    assert.deepEqual(firstExported.map((v, i) => i === 3 ? v : Number(v)), [-84, 45, 12, 'Asphalt', 0]); assert.ok(contents['README.txt'].includes('ONLY rows'));
+    assert.deepEqual(firstExported.map((v, i) => i === 3 ? v : Number(v)), [-84, ...baseline.course.nodes[0].slice(1)]); assert.ok(contents['README.txt'].includes('ONLY rows'));
     const csvLines = contents['tracks/foundry.csv'].trim().split('\n'); assert.equal(csvLines[1], csvLines.at(-1));
     await page.locator('#reset').click(); await page.waitForFunction(() => !document.getElementById('race').disabled);
     if (width === 1440) {
@@ -144,7 +144,8 @@ try {
   }
   // HTTP served entry and validation failures use the same core.
   const page = await browser.newPage(); await page.goto('http://127.0.0.1:8794/tracks/lab/index.html'); await page.waitForFunction(() => window.labReady); await page.close();
-  const bad = await fetch('http://127.0.0.1:8794/api/analyze', {method: 'POST', body: new URLSearchParams({id: 'foundry', ...baseline.csv, nodes: baseline.csv.nodes.replace('-85.0', 'NaN')})}); assert.equal(bad.status, 400);
+  const badNodes = baseline.csv.nodes.split('\n'); badNodes[1] = badNodes[1].replace(/^[^,]+/, 'NaN');
+  const bad = await fetch('http://127.0.0.1:8794/api/analyze', {method: 'POST', body: new URLSearchParams({id: 'foundry', ...baseline.csv, nodes: badNodes.join('\n')})}); assert.equal(bad.status, 400);
   const still = (await (await fetch('http://127.0.0.1:8794/api/catalog')).json()).courses.find(c => c.course.id === 'foundry'); assert.deepEqual(still, baseline);
   await writeFile(resolve(output, 'result.json'), JSON.stringify({pass: true, results, catalogUnchanged: true, malformedDraftRejected: true}, null, 2) + '\n');
   console.log('Track atlas and Track Lab browser checks PASS');

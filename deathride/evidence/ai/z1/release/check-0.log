@@ -1,0 +1,535 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+> Task :desktop:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:processResources NO-SOURCE
+> Task :link:processResources NO-SOURCE
+> Task :link:processTestResources NO-SOURCE
+> Task :game:processTestResources NO-SOURCE
+> Task :app:extractNatives UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :desktop:processResources UP-TO-DATE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :core:processResources
+> Task :core:classes
+> Task :core:jar
+> Task :core:compileTestKotlin UP-TO-DATE
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:testClasses UP-TO-DATE
+> Task :link:compileKotlin UP-TO-DATE
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :game:compileKotlin UP-TO-DATE
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :link:compileTestKotlin UP-TO-DATE
+> Task :link:compileTestJava NO-SOURCE
+> Task :link:testClasses UP-TO-DATE
+> Task :app:mergeLibDexDebug UP-TO-DATE
+> Task :game:jar UP-TO-DATE
+> Task :game:compileTestKotlin UP-TO-DATE
+> Task :app:compileDebugKotlin UP-TO-DATE
+> Task :game:compileTestJava NO-SOURCE
+> Task :game:testClasses UP-TO-DATE
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :desktop:compileKotlin UP-TO-DATE
+> Task :desktop:compileJava NO-SOURCE
+> Task :desktop:classes UP-TO-DATE
+> Task :desktop:jar UP-TO-DATE
+> Task :desktop:startScripts
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
+> Task :desktop:installDist
+
+> Task :core:test
+
+AbilitiesTest > continuouslyRequestedPlateBraceCannotMakeTheHeavyUntouchable() PASSED
+
+AbilitiesTest > abilityMailboxRejectsNonfiniteAndOldInputsAndClearsStaleReconnect() PASSED
+
+AbilitiesTest > wreckFinishAndAbsentCarsCannotEmitAQueuedAbility() PASSED
+
+AbilitiesTest > patchArmsEscapesHitsItsOwnerOnceAndCanHitAgainOnANewActivation() PASSED
+
+AbilitiesTest > aiNeedsLocalVisibleTargetsAndSnapshotKeepsTheActualCommittedRegion() PASSED
+
+AbilitiesTest > movementSignaturesChangeTheCommonSolverAndExpireWithoutMutatingSpecs() PASSED
+
+AbilitiesTest > raysFreezeTheirTellCanMissRespectRoadAndDeduplicate() PASSED
+
+AbilitiesTest > protectionCooldownEnergyWeaponLockAndResetHaveActualConsumersForEveryClass() PASSED
+
+AbilitiesTest > definitionsHaveBudgetedCostsEscapableRegionsAndSurvivableDamage() PASSED
+
+AbilitiesTest > frontChargeAndFrontRearSpikesRequireActualDirectionalContact() PASSED
+
+AbilitiesTest > guardReducesOneHpAuthorityAndShockExpiresWithoutStackingOrDisablingSteering() PASSED
+
+> Task :game:test
+
+> Task :link:test
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() STANDARD_ERROR
+    SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    SLF4J: Defaulting to no-operation (NOP) logger implementation
+    SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() PASSED
+
+LinkTest > statsWindowAndLifetimeHaveIndependentCounts() PASSED
+
+LinkTest > occupiedPortReportsFailureWithoutKillingTheHost() PASSED
+
+CompactLinkTest > compactHudReconnectionAndFreshnessUseActualSockets() PASSED
+
+HudMetadataTest > deltasRefreshChangesPhasesAndPeriodicSnapshots() PASSED
+
+HudMetadataTest > legacyClientsStillGetEveryMetadataFieldEveryTime() PASSED
+
+PerfTraceTest > wrapAndCursorRetainChronologicalRawRows() PASSED
+
+PerfTraceTest > appendAllocatesNothingAfterWarmup() PASSED
+
+> Task :core:test
+
+AbilitiesTest > allSignaturesReplayAndAllocateZeroBytesWhileActivating() PASSED
+
+BalanceSmokeTest > scenarioCastAndDamageTimingAreValidAndReplay() PASSED
+
+CampaignBalanceTest > allFourRebalancedCashChoicesUseExactOnceCappedTransactions() PASSED
+
+CampaignBalanceTest > curveRejectsPrizeCliffsAndConflictingFinaleMeaning() PASSED
+
+CampaignClassLimitsTest > fixedMissionRigKeepsItsDeclaredBodyAndDoesNotBecomeAnOwnedUpgrade() PASSED
+
+CampaignClassLimitsTest > legalShopsPreserveClassWeaknessesInsideTheGlobalEnvelope() PASSED
+
+CampaignClassLimitsTest > savedInstalledPartsStayOwnedAndBothPlayerAndRivalDeriveTheSharedLimits() PASSED
+
+CampaignClassLimitsTest > fractionalHeadroomIsDisplayedPricedAndInstalledWithoutRoundingThePhysicalResult() PASSED
+
+CampaignContentTest > qualifierLicencesOpenBeforeTheBossWithoutGivingAwayTheCar() PASSED
+
+CampaignContentTest > plotDataCoversEveryEventAndOnlyLegalPromotionAssets() PASSED
+
+CampaignDesignInstrumentTest > longSyntheticRosterCoursesRejectThePlayableRaceWatchdog() PASSED
+
+CampaignDesignV2Test > ownerPromotionRequiresFirstPlaceAndASurvivingFinish() PASSED
+
+CampaignDesignV2Test > rhythmIsVariedAndThePhysicalClassEnvelopeIsStillShared() PASSED
+
+CampaignDesignV2Test > actualV5FixtureKeepsAssetsAndAcquiresOnlyUnreturnedRestitution() PASSED
+
+CampaignDesignV2Test > stolenMoneySurvivesDebtPayoffWalletCapAndRestart() PASSED
+
+CampaignDesignV2Test > realGuestGridFindsTheBossByRivalIdentityAndNeverTheGuestSlot() PASSED
+
+CampaignDesignV2Test > promotionChoiceNamesTheMissingPeerAndAUsefulFallbackPart() PASSED
+
+CampaignDesignV2Test > repeatedLossesNeverChargeEntryOrRemoveTheRoadworthyRetry() PASSED
+
+CampaignReuseTest > onlyAnUnchangedPhysicalPrefixAndInactiveMarrowCanBeReused() PASSED
+
+CampaignReuseTest > narrowLineReuseRejectsOtherPhysicalChangesAndWrongCeilings() PASSED
+
+CampaignSamplingTest > streamingSupplementRejectsPartialDuplicateAndMalformedInput() PASSED
+
+CampaignTest > versionFourKeepsEveryOldAssetAndAddsNeitherDebtNorRetroactiveGrants() PASSED
+
+CampaignTest > leagueReceiptConservesMoneyAndNeverSpendsTheProtectedIncomeTwice() PASSED
+
+CampaignTest > eachRewardUsesRealOwnershipOrPartCapsAndSurvivesRestartWithoutDuplication() PASSED
+
+CampaignTest > browserFixtureUsesActualPromotionSettlements() PASSED
+
+CampaignTest > losingBossCannotPromoteAndOxRecoversTheStolenMoneyExactlyOnce() PASSED
+
+CareerTest > orderedContentUnlocksCupTargetsAndDuplicateSettlement() PASSED
+
+CareerTest > versionOneMigratesAndImpossibleCareerStateIsRejected() PASSED
+
+CareerTest > tiersChangeDecisionsWithoutChangingPower() PASSED
+
+CareerTest > campaignCombatReplaysAndAllocatesNothing() PASSED
+
+CareerV2Test > allFiveActsUseEveryCourseAndOriginalStoryCardsWithoutPowerDifficulty() PASSED
+
+CareerV2Test > finalDuelHasTwoPhysicalEntrantsAndRequiresVictory() PASSED
+
+CareerV2Test > nominalLedgerUsesRealShopsAndFixedFieldSchedule() PASSED
+
+CareerV2Test > resultsFundRivalsAndGrudgesOnlyAlterDecisions() PASSED
+
+CareerV2Test > rivalSettlementIsIdempotentAndDuelSteppingAllocatesNothing() PASSED
+
+CareerV2Test > everyLegacyDivisionCanFundEligibleRivalsAndRepeatSeasonsKeepAnEntryCar() PASSED
+
+CareerV2Test > actualVersionThreeSaveMigratesWithoutLosingPropertyOrAddingDebt() PASSED
+
+CareerV2Test > guestReplacesARegularRivalAndPreservesTheNamedBoss() PASSED
+
+CareerV2Test > fixedCupAndContractCreditsAreNotMultipliedAgainByDivisionPrizes() PASSED
+
+CareerV2Test > versionTwoRetainsCarsEarnedUnderTheOldUnlockSchedule() PASSED
+
+CarsTest > lapAndPairedRaceMatrix() PASSED
+
+CarsTest > catalogHasTenClassesAndEveryMappingIsConsumed() PASSED
+
+CombatDepthTest > scatterDeduplicatesBodyCirclesAndRaysAndCostsAmmo() PASSED
+
+CombatDepthTest > reservesChangeAccelerationWithoutRaisingTheSpeedCap() PASSED
+
+CombatDepthTest > fullLoadoutReplaysAndNewStepPathsAllocateNothing() PASSED
+
+CombatDepthTest > cashPickupIsBoundedAndHullRepairUsesTheClassMaximum() PASSED
+
+CombatDepthTest > spikesUseTheRamCooldownAndSabotageIsDeclaredAndNonCumulative() PASSED
+
+CombatTest > rayAndSweptProjectileNeverHitShooterAndUseAmmoCooldown() PASSED
+
+CombatTest > seededCombatResolvesAllCoursesAndReplayMatches() PASSED
+
+CombatTest > armorHasOneAuthorityAndWreckRejectsEveryAction() PASSED
+
+CombatTest > staleAndReconnectClearAllAttackHolds() PASSED
+
+CombatTest > mineArmsThenHitsEachCarOnceIncludingOwnerAndPoolReuseIsClean() PASSED
+
+CombatTest > pickupsRespectCapsRespawnAndUnavailableMounts() PASSED
+
+CombatTest > activeCombatAllocatesNothingAcrossRepeatedLiveStarts() PASSED
+
+CombatTest > startProtectionIsVisibleAndDoesNotSpendAmmunition() PASSED
+
+CombatTest > smallMineTriggersOnlyAtItsDamageBoundaryAndAiUsesThatRadius() PASSED
+
+CombatTest > ramsDeduplicatePerPairAndLastSurvivorWins() PASSED
+
+CommerceTest > versionTwoMigratesOwnershipPartsAndConditionWithoutAddingDebt() PASSED
+
+CommerceTest > twoThousandEconomicPathsAndTornadoKeepInsuredIncomePositive() PASSED
+
+CommerceTest > marketIsAtomicOnRejectAndCannotMintMoneyOrSellTheLastCar() PASSED
+
+CommerceTest > itemsArePaidBoundedConsumedAtStartAndSurviveReload() PASSED
+
+CommerceTest > contentHasEightAttackOrUtilityChoicesWithCompleteConsumers() PASSED
+
+CommerceTest > contractsBonusesCashAndResultsPayOnlyOnce() PASSED
+
+CommerceTest > loanRepaymentInsuranceAndManualRepairCannotCreateADeadEnd() PASSED
+
+DeathDuelTest > realDispatchReplaysAndAllocatesZeroBytesInTheStep() PASSED
+
+DeathDuelTest > automaticDispatcherPaysEnergyAndUsesOneOrdinaryMinePerTelegraphedActivation() PASSED
+
+DeathDuelTest > lapCountsAndTimeoutLeaderNeverWinAnElimination() PASSED
+
+DeathDuelTest > bossPerceptionHasARealRangeAndWallGateWithoutSpecChanges() PASSED
+
+DeathDuelTest > seizureRetryAndRestitutionKeepCollateralAndPackedItemsIntact() PASSED
+
+DriftLabTest > fullDriftExperimentReplaysAndAllocatesNothingWhileInputsVary() PASSED
+
+DriftLabTest > timingIsASkillAndEveryClassHasARecoverableUsefulSlide() PASSED
+
+DriftLabTest > heavyRotatesLaterAndAnEqualAngleSlideHasMoreMomentumAndLongerRecovery() PASSED
+
+DriftLabTest > importedTuningValidatesTheFinalPairAndRejectsInvalidDataAtomically() PASSED
+
+DriftLabTest > sizeAndInertiaPerturbationsChangeRotationWithoutRetuningStats() PASSED
+
+DriftLabTest > allFiveProfilesStillDriveAtOrdinaryGripInputsAndBaselineDeltasAreExplicit() PASSED
+
+DriftLabTest > aSpinHittingTheWallLosesSpeedAndHullInTheNormalWorldStep() PASSED
+
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() STANDARD_OUT
+    Same geometry and input; mass-only slide 0.5s: 16.863031207185013 vs 17.215702416058086 m/s
+
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() PASSED
+
+DriftModelTest > scaledGeometryAndUpgradedMassChangeInertiaWithoutDuplicateShapeNumbers() PASSED
+
+DriftModelTest > aSpinIsReportedUntilSettledAndResetClearsIt() PASSED
+
+DriftModelTest > reverseMomentumIsNotDeletedAndBrakingDoesNotCreateReverse() PASSED
+
+DriftModelTest > qualityUsesRetentionDurationAndSmoothnessAndSnapshotIsCoherent() PASSED
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() STANDARD_OUT
+    class,scenario,peakSlipDeg,retainedAtRelease,recoverySeconds,spins,exitSpeedMps
+    Needle,0,9.405250311221478,0.9200587838065398,0.16666666666666666,0,13.908518712618477
+    Needle,1,97.85464469094377,0.8290781405972264,1.6,1,8.807519102571439
+    Needle,2,180.0,0.8290781405972264,4.016666666666667,1,5.0768391490640035
+    Needle,3,180.0,0.8290781405972264,2.05,1,7.625547347317309
+    Line,0,1.938597423440423,0.9094526106499775,0.16666666666666666,0,10.497572444617113
+    Line,1,29.112409956668508,0.7835416491067441,0.6833333333333333,0,9.456630256540828
+    Line,2,180.0,0.7835416491067441,4.366666666666666,1,2.322551578645865
+    Line,3,28.968369328699264,0.7835416491067441,0.6166666666666667,0,9.21867260944647
+    Bastion,0,2.6198753793941427,0.9238178856634672,0.16666666666666666,0,10.574661126451153
+    Bastion,1,20.148705582745105,0.8001097295576737,0.4,0,9.733652526613772
+    Bastion,2,162.39007622888988,0.8001097295576737,2.3166666666666664,1,4.392372774877854
+    Bastion,3,20.080866956940906,0.8001097295576737,0.4,0,9.660059662884786
+    Comet,0,2.191503457887397,1.0174253203429167,0.13333333333333333,0,14.489098839329866
+    Comet,1,24.378981065994196,0.888397629523978,0.4666666666666667,0,13.589530170907047
+    Comet,2,180.0,0.888397629523978,3.2,1,6.265192976554461
+    Comet,3,24.36090080360592,0.888397629523978,0.4166666666666667,0,13.484464592987155
+    Trail,0,2.579188252555025,0.9033673497577069,0.18333333333333332,0,13.062554230258197
+    Trail,1,68.33931416071243,0.6999051205779294,1.5333333333333332,1,8.974865175748429
+    Trail,2,180.0,0.6999051205779294,3.1666666666666665,1,5.638998269911199
+    Trail,3,104.23215484845413,0.6999051205779294,1.2833333333333332,1,8.15853661582042
+    Flint,0,8.362841048507589,0.9570304240501234,0.15,0,15.80838619228196
+    Flint,1,70.09519396230705,0.8425843113021071,1.6666666666666667,1,11.873757534285184
+    Flint,2,180.0,0.8425843113021071,3.433333333333333,1,7.238688221826619
+    Flint,3,107.95577703425796,0.8425843113021071,1.5333333333333332,1,10.363976624825996
+    Quill,0,7.624887638862207,0.9497819012748615,0.11666666666666667,0,15.789180671971934
+    Quill,1,92.75374555909521,0.8244080756249321,1.4333333333333333,1,11.062822445259815
+    Quill,2,180.0,0.8244080756249321,3.4499999999999997,1,7.2039957882300545
+    Quill,3,179.99998778328663,0.8244080756249321,1.5833333333333333,1,9.68331148941384
+    Vandal,0,2.145631355022311,0.9462624044819161,0.15,0,13.251850014075483
+    Vandal,1,30.88575889366869,0.8151426884240663,0.7666666666666666,0,12.19328883793585
+    Vandal,2,180.0,0.8151426884240663,3.683333333333333,1,4.969484570552111
+    Vandal,3,30.710691647022472,0.8151426884240663,0.65,0,11.820508203821527
+    Kestrel,0,4.418514108260818,1.0531036842173316,0.13333333333333333,0,17.277747345774944
+    Kestrel,1,24.599571482584153,0.8356087607403574,0.3333333333333333,0,15.900754224517641
+    Kestrel,2,86.30565696062361,0.8356087607403574,1.8833333333333333,1,11.132299055963008
+    Kestrel,3,24.599571482584153,0.8356087607403574,0.26666666666666666,0,15.829113900653761
+    Bulwark,0,2.4016177027198724,1.027316687224362,0.15,0,16.240833371199997
+    Bulwark,1,26.014262680776184,0.900474211350678,0.5833333333333334,0,15.31352771013746
+    Bulwark,2,180.0,0.900474211350678,3.183333333333333,1,7.6216447339805615
+    Bulwark,3,25.93598099738355,0.900474211350678,0.5,0,15.128631888568822
+
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() PASSED
+
+DriftModelTest > axleCirclesAndContinuousCurveHaveRealConsumers() PASSED
+
+DriftModelTest > activeDriftAndSpinAllocateZeroAndReplay() PASSED
+
+DriftTest > hysteresisRetainsBothHistoriesInsideTheBand() PASSED
+
+DriftTest > brakingUnloadsLateralGrip() PASSED
+
+DriftTest > countersteeringCatchesTheSlide() STANDARD_OUT
+    Countersteer: slip 21.85452018530294 to 9.603135582092992 degrees in 0.2 simulated seconds
+
+DriftTest > countersteeringCatchesTheSlide() PASSED
+
+EnduranceTest > lapTargetIsConsumedWithoutEndingCareerAtThreeLapsAndPracticeStaysShort() PASSED
+
+EnduranceTest > promotionFieldsKeepLegalPurchasesAcrossJoinsAndIgnorePlayerPower() PASSED
+
+FeelTest > humanProfilesAllocateNothingAfterWarmup() PASSED
+
+FeelTest > strictKernelsMatchAcrossTrackAngleRange() PASSED
+
+FeelTest > shapingAndDeterminismAndImmediatePropulsionRelease() PASSED
+
+FeelTest > tracesAndDeclaredBands() PASSED
+
+GarageTest > offersChargeOnceStayOnTheirCarAndRejectClassLimits() PASSED
+
+GarageTest > receiptsAreIdempotentInsuredAndBounded() PASSED
+
+GarageTest > seededEconomyAndExtremesHaveNoDebtOrUnboundedPower() PASSED
+
+GarageTest > saveRoundTripRejectsCorruptionAndRecoversPreviousGoodCopy() PASSED
+
+GarageTest > everyPartChangesItsPromisedPhysicalOrCombatConsumer() PASSED
+
+MovementTest > transferDriftSurfaceOrderingAndStaleSafety() PASSED
+
+MovementTest > everySurfaceCompletesSeededAiRacesDeterministically() PASSED
+
+MovementTest > glancingRetainsTangentButHeadOnLosesSpeed() PASSED
+
+MovementTest > massContactsConserveLinearMomentumAndFavorHeavyCar() PASSED
+
+MovementTest > advancedMovementAllocatesNothing() PASSED
+
+ObstacleInstrumentTest > rotationCrossIsCompleteAndEveryAlarmCanFire() PASSED
+
+ObstaclesTest > placementIsSeededAtLoadAndRaceResetDoesNotMoveIt() PASSED
+
+ObstaclesTest > visibilityAndWeaponsUseSolidFootprintsButNotBrushOrShadows() PASSED
+
+ObstaclesTest > minePlacementInsideSolidRefusesWithoutSpendingAmmo() PASSED
+
+ObstaclesTest > activeContactDragPerceptionAndWholeStepAllocateNothingAndReplay() PASSED
+
+ObstaclesTest > authoredPlacementsPassAndEveryNewLintRuleRejectsItsMutation() PASSED
+
+ObstaclesTest > dragUsesSecondsAndStrongestPatchAndDecorationDoesNothing() PASSED
+
+ObstaclesTest > retainedStressSeedsDoNotLeaveSurvivorsStuck() PASSED
+
+ObstaclesTest > solidStopsBothMassesAndCentreOverlapWithoutNonFiniteState() PASSED
+
+ObstaclesTest > liveGunsProjectilesAndHarpoonStopAtSolidButCrossBrush() PASSED
+
+PresentationEventsTest > onlySuccessfulShotsEmitAndMineArmingAndWreckAreEdges() PASSED
+
+PresentationEventsTest > eventObservationCannotChangeSimulation() PASSED
+
+PresentationEventsTest > actualBoundaryContactsCarryTheRenderedMaterialOncePerStep() PASSED
+
+PresentationEventsTest > boundedRingKeepsNewestEventsAndNeverReusesAnIdentityAcrossReset() PASSED
+
+ProgressionRosterTest > heavyPaysForSpeedWithLaunchSteeringResponseAndBrakingAndCanBeKilled() PASSED
+
+ProgressionRosterTest > budgetIdentityAndDerivedUpgradeRatingRejectBadContent() PASSED
+
+RacePacingTest > stableEventsHaveMeasuredDerivedLapsAndOwnerTimeEnvelopes() PASSED
+
+RacePacingTest > practiceUsesTimeDerivedLapsAndRetainsTheExistingWatchdog() PASSED
+
+RacePacingTest > finalRoadsAddDistanceCornersSurfaceDecisionsAndPhysicalScenery() PASSED
+
+RacePacingTest > independentLapEditAndInvalidLowerBoundCannotSilentlyShip() PASSED
+
+RenderSnapshotTest > readOnlyCombatSnapshotUsesActualHullAndRetainsPreviousState() PASSED
+
+RosterV2Test > fiveCarSavesKeepEveryOwnedPartAndReceipt() PASSED
+
+RosterV2Test > stockCourseMatrixCompletesAndReplays() STANDARD_OUT
+    C1 fastest classes across courses: [Kestrel]; within tiers: {rookie=[Needle], club=[Trail], pro=[Flint, Comet], elite=[Quill, Vandal], champion=[Kestrel]}
+
+RosterV2Test > stockCourseMatrixCompletesAndReplays() PASSED
+
+RosterV2Test > rosterPricesPeersDimensionsAndAmmunitionHaveConsumers() PASSED
+
+SoakTest > fixedStepHasNoSteadyStateAllocations() STANDARD_OUT
+    World.step allocated 0 bytes over 10,000 warmed steps on this JVM
+
+SoakTest > fixedStepHasNoSteadyStateAllocations() PASSED
+
+SoakTest > wallRecoveryDoesNotNeedReverseOrTeleport() PASSED
+
+SoakTest > fifteenSimulatedMinutesStayFiniteAndBounded() STANDARD_OUT
+    900 simulated seconds, 12 full six-car races; not a real-time/device soak
+
+SoakTest > fifteenSimulatedMinutesStayFiniteAndBounded() PASSED
+
+SoakTest > finishedHumanDoesNotHandSteeringToAi() PASSED
+
+TrackContentTest > remainingFeatureVocabularyLengthGridAndRecoveryRulesHaveMutants() PASSED
+
+TrackContentTest > shortcutsSaveDistanceAtARealGripCostAndHaveAnAiConsumer() PASSED
+
+TrackContentTest > newFeatureCourseRetainsAllocationGuarantee() PASSED
+
+TrackContentTest > pacingLinterRejectsUnwarnedOutsideAndNonRiskyFeatures() PASSED
+
+TrackContentTest > storedPlansThemesAndPoolsAreCompleteAndDistinct() PASSED
+
+TrackContentTest > competitivePoolsFinishReplayAndPublishPacing() PASSED
+
+TracksTest > authoredCourseStepAllocatesNothing() PASSED
+
+TracksTest > sixCarsFinishEveryCourseAndReplayDeterministically() PASSED
+
+TracksTest > samplingProjectionAndSequentialGatesAgree() PASSED
+
+TracksTest > scaleContractIsPhysicalReadableAndVaried() PASSED
+
+TracksTest > remainingSixGeometryAndPacingRulesRejectTheirNamedMutants() PASSED
+
+TracksTest > allAuthoredContentPassesGeometryAndPacingLint() PASSED
+
+TracksTest > longCarHasContactThroughItsMiddle() PASSED
+
+TracksTest > linterRejectsNarrowReorderedAndCrossingCourses() PASSED
+
+VergeTest > everyCarCanReachVergeSlowdownWhileContainedByEitherWall() PASSED
+
+WorldTest > lapCountsOnceAndGateSkippingFails() PASSED
+
+WorldTest > staleFramesHoldSteeringAndDropThrottle() PASSED
+
+WorldTest > speedCoastBrakingAndTimeBasis() STANDARD_OUT
+    Braking distance: 15 m/s -> 4.536974074091895 m; 25 m/s -> 12.01870009215559 m
+    Full-lock slip after 2 s: 23.1528688186324 degrees; coast after 1 s: 24.07556393887442 m/s
+
+WorldTest > speedCoastBrakingAndTimeBasis() PASSED
+
+WorldTest > eliteMineEncounterRecoversWithoutStrandingTheRemainingCars() STANDARD_OUT
+    Recovered all six entrants in 51.433333333331696 simulated seconds
+
+WorldTest > eliteMineEncounterRecoversWithoutStrandingTheRemainingCars() PASSED
+
+WorldTest > deterministicSixtySeconds() PASSED
+
+WorldTest > gapsNonFiniteAndReconnectAreBounded() PASSED
+
+WorldTest > signedSeedsUseTheSameBoundedLaneCycleWithoutIntegerOverflow() PASSED
+
+WorldTest > collidingCarsSeparate() PASSED
+
+WorldTest > wallsContainBothCarCircles() PASSED
+
+WorldTest > twentySeededSixCarRacesComplete() STANDARD_OUT
+    20 seeds / 120 finishers / six cars / 3 laps; race seconds min=70.84999999999727 max=74.59999999999705
+
+WorldTest > twentySeededSixCarRacesComplete() PASSED
+
+> Task :core:reportClasspath
+
+BUILD SUCCESSFUL in 6m 18s
+56 actionable tasks: 10 executed, 46 up-to-date
