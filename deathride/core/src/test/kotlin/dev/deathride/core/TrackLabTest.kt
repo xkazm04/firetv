@@ -23,7 +23,9 @@ class TrackLabTest {
         ZipInputStream(ByteArrayInputStream(TrackLabCodec.zip(changed))).use { zip ->
             while (true) { val entry = zip.nextEntry ?: break; contents[entry.name] = zip.readBytes().toString(Charsets.UTF_8) }
         }
-        assertEquals(7, contents.size)
+        assertEquals(9, contents.size)
+        assertEquals("first,second,warningM\n\n",contents["tracks/${original.id}-junctions.csv"])
+        assertEquals("start,end,altStart,altEnd,nodeFile\n\n",contents["tracks/${original.id}-branches.csv"])
         val imported = TrackLabCodec.course(mapOf("id" to original.id, "nodes" to contents.getValue("tracks/${original.id}.csv"),
             "spots" to contents.getValue("tracks/${original.id}-spots.csv"), "features" to contents.getValue("track-features.csv"), "obstacles" to contents.getValue("track-obstacles.csv")))
         assertEquals(changed.nodes, imported.nodes); assertEquals(imported.nodes.first(), imported.nodes.last())

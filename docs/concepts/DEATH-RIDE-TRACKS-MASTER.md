@@ -63,5 +63,5 @@ Host diagnosis (measured on 2026-10-04; `deathride/tracks/atlas/library-v1-outli
 |---|---|---|
 | R0 | Research that finds the real craft | complete — expanded primary-source research and visual circuit study; car-unit library, route archetypes and explicit shape contracts in `deathride/R0-track-craft-research.md`; 230 tests, build and atlas/Lab browser green |
 | R1 | Shape instruments and gates | complete — 29/29 merged outlines rejected, 81 similar pairs, 15 actual geometry/pair witnesses; shape atlas and signed-turn profiles; full tests/build/browser green; see `deathride/R1-shape-instruments.md` |
-| R2 | Composer for real layouts | not started |
+| R2 | Composer for real layouts | complete — primitive/anchor compiler, variable-width roads, real at-grade junction and split/rejoin runtime, Lab recipe editor and route CSV export; folded and route controls visually inspected; 238 tests, build and browser checks green; see `deathride/R2-layout-composer.md` |
 | R3 | Library as owner choices | not started |

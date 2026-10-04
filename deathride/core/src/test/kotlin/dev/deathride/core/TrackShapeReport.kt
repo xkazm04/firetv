@@ -85,7 +85,7 @@ fun trackShape(c: Course): TrackShape {
     }
     val metrics=linkedMapOf("lengthM" to c.lengthM,"hullPerimeterM" to perimeter,"hullAreaM2" to area,"hullPerimeterRatio" to c.lengthM/perimeter,"hullAreaPacking" to c.lengthM*c.lengthM/(4*PI*area),
         "absoluteTurnDegrees" to turns.sumOf { abs(it) }*180/PI,"signedTurnDegrees" to turns.sum()*180/PI,"signChanges" to changes.toDouble(),"directionReversals" to corners.count { abs(it.degrees) in 135.0..220.0 }.toDouble(),
-        "cornerFamilies" to histogram.count { it.value>0 }.toDouble(),"proximityRatio" to near.toDouble()/n,"foldbackRatio" to folded.toDouble()/n,"crossings" to crossingPoints.size.toDouble(),"straightBrakePairs" to brake.toDouble())
+        "cornerFamilies" to histogram.count { it.value>0 }.toDouble(),"proximityRatio" to near.toDouble()/n,"foldbackRatio" to folded.toDouble()/n,"crossings" to crossingPoints.size.toDouble(),"declaredJunctions" to c.junctions.size.toDouble(),"undeclaredCrossings" to max(0,crossingPoints.size-c.junctions.size).toDouble(),"straightBrakePairs" to brake.toDouble())
     return TrackShape(points,turns,corners,histogram,metrics)
 }
 /** Procrustes RMS / RMS radius, minimized over start, direction, reflection and rotation. */
@@ -115,8 +115,8 @@ fun shapeFixtures(): Map<String,Course> {
 fun shapeProof(): List<Map<String,Any?>> {
     val fixtures=shapeFixtures();val circle=trackShape(fixtures.getValue("circle"));val oval=trackShape(fixtures.getValue("oval"))
     val proof=mutableListOf<Map<String,Any?>>()
-    for(row in shapeGates(circle.metrics))if(row["metric"]!="crossings")proof+=mapOf("name" to "circle rejects ${row["metric"]}","kind" to "planted geometry","fired" to (row["status"]=="flag"),"measurement" to row)
-    val crossing=shapeGates(trackShape(fixtures.getValue("illegal-crossing")).metrics).single { it["metric"]=="crossings" }
+    for(row in shapeGates(circle.metrics))if(row["metric"]!="undeclaredCrossings")proof+=mapOf("name" to "circle rejects ${row["metric"]}","kind" to "planted geometry","fired" to (row["status"]=="flag"),"measurement" to row)
+    val crossing=shapeGates(trackShape(fixtures.getValue("illegal-crossing")).metrics).single { it["metric"]=="undeclaredCrossings" }
     proof+=mapOf("name" to "undeclared figure-eight crossing","kind" to "planted geometry","fired" to (crossing["status"]=="flag"),"measurement" to crossing)
     for((name,c) in fixtures.filterKeys { it!="illegal-crossing" }) { val gates=shapeGates(trackShape(c).metrics);proof+=mapOf("name" to "$name is not a mastered road course","kind" to "planted geometry","fired" to gates.any { it["status"]=="flag" }) }
     val c=fixtures.getValue("oval");val moved=qualityClone(c,c.nodes.map { it.copy(x=-it.y*1.7+133,y=it.x*1.7-41) });val mirror=qualityClone(c,c.nodes.map { it.copy(x=-it.x) })

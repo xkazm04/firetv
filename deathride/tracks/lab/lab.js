@@ -1,9 +1,9 @@
 (() => {
   'use strict';
-  const $ = id => document.getElementById(id), keys = ['nodes', 'spots', 'features', 'obstacles'];
+  const $ = id => document.getElementById(id), keys = ['nodes', 'spots', 'features', 'obstacles', 'junctions', 'branches'];
   const base = location.protocol === 'file:' ? 'http://127.0.0.1:8794' : location.origin;
   let catalog = null, original = null, draft = null, baked = null, simulation = null, trial = null, selected = 0;
-  let revision = 0, validatedRevision = -1, timer = null, busy = false, drag = null, history = [], future = [], playing = false, lastFrame = 0;
+  let revision = 0, validatedRevision = -1, timer = null, busy = false, recipeDirty = false, drag = null, history = [], future = [], playing = false, lastFrame = 0;
   const make = (tag, text, attrs = {}) => { const el = document.createElement(tag); if (text != null) el.textContent = text; for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); return el; };
   const copy = x => JSON.parse(JSON.stringify(x)), number = x => Number.isFinite(x) ? x.toFixed(2) : 'unmeasured';
   function setStatus(text, error = false) { $('backend-status').textContent = text; $('backend-status').classList.toggle('notice', error); }
@@ -21,7 +21,7 @@
   }
   function writeNodes(rows) { draft.nodes = 'xM,yM,halfWidthM,surface,aiLaneM\n' + rows.map(r => r.join(',')).join('\n') + '\n'; $('nodes-csv').value = draft.nodes; }
   function remember() { history.push(copy(draft)); if (history.length > 80) history.shift(); future = []; }
-  function buttons() { $('undo').disabled = !history.length || busy; $('redo').disabled = !future.length || busy; $('reset').disabled = !original || busy; $('race').disabled = busy || !baked || validatedRevision !== revision || baked.geometry.lint.length > 0; $('export-bundle').disabled = busy || !baked || validatedRevision !== revision; $('editor').disabled = !catalog || busy; $('course').disabled = !catalog || busy; }
+  function buttons() { $('undo').disabled = !history.length || busy; $('redo').disabled = !future.length || busy; $('reset').disabled = !original || busy; $('race').disabled = busy || recipeDirty || !baked || validatedRevision !== revision || baked.geometry.lint.length > 0; $('export-bundle').disabled = busy || recipeDirty || !baked || validatedRevision !== revision; $('editor').disabled = !catalog || busy; $('course').disabled = !catalog || busy; }
   function draw() {
     if (!baked) return;
     const course = copy(baked.course); try { course.nodes = nodeRows(); } catch {}
@@ -46,13 +46,14 @@
       $('lint-status').textContent = result.geometry.lint.length ? `${result.geometry.lint.length} structural lint errors. Fix them before racing.` : 'Structural lint clear. Authored quality flags remain visible below.';
       $('lint-status').className = result.geometry.lint.length ? 'fail' : 'pass'; $('lint').replaceChildren(...result.geometry.lint.map(s => make('li', s)));
       const m = result.geometry.metrics; $('metrics').replaceChildren(...[[number(m.lengthM), 'metres'], [number(m.minWidthW), 'minimum car widths'], [m.cornerCount, 'corners'], [m.overtakeZones, 'passing zones']].map(([v, label]) => { const n = make('div'); n.append(make('strong', v), make('span', label)); return n; }));
-      $('gates').replaceChildren(...result.gates.map(g => make('p', `${g.status.toUpperCase()} · ${g.metric}: ${number(g.value)} ${g.unit} (${g.min ?? '—'} … ${g.max ?? '—'})`, {class: g.status === 'pass' ? 'small' : 'notice small'})));
+      $('gates').replaceChildren(...[...result.gates,...(result.shape?.gates||[])].map(g => make('p', `${g.status.toUpperCase()} · ${g.metric}: ${number(g.value)} ${g.unit||''} (${g.min ?? '—'} … ${g.max ?? '—'})`, {class: g.status === 'pass' ? 'small' : 'notice small'})));
       $('draft-digest').textContent = 'Draft SHA-256: ' + result.digest; setStatus('Connected · actual core bake and linter · drafts stay in memory'); draw(); buttons(); window.labValidatedRevision = validatedRevision;
     } catch (e) { if (requested === revision) { $('lint-status').textContent = e.message; $('lint-status').className = 'fail'; $('lint').replaceChildren(); setStatus('Draft could not be baked: ' + e.message, true); buttons(); } }
   }
   function load(id) {
+    recipeDirty=false;$('recipe').value='';$('primitives').textContent='';
     original = catalog.courses.find(c => c.course.id === id); draft = copy(original.csv); baked = {course: original.course, geometry: {lint: []}}; selected = 0; history = []; future = [];
-    editorTexts(); nodePanel(); invalidate();
+    draft.startFraction=original.course.startFraction; editorTexts(); nodePanel(); invalidate();
     const theme = catalog.themes.find(t => t.id === original.course.theme); $('theme-vocabulary').textContent = `Theme ${theme.id}: surfaces ${theme.surfaces.join(', ')}; landmarks ${theme.landmarks.join(', ')}.`;
     analyze();
   }
@@ -64,6 +65,14 @@
     $('connect').disabled = false;
   }
   $('connect').addEventListener('click', connect); $('course').addEventListener('change', () => load($('course').value)); $('node').addEventListener('change', () => { selected = Number($('node').value); nodePanel(); draw(); });
+  $('load-recipe').addEventListener('click',()=>{if(catalog){$('recipe').value=catalog.composerExample;recipeDirty=true;if(draft)invalidate();$('composer-status').textContent='Example loaded. Compile to replace the draft.';}});
+  $('recipe').addEventListener('input',()=>{recipeDirty=true;if(draft)invalidate();$('composer-status').textContent='Uncompiled recipe changes. Compile before racing or exporting.';});
+  $('compose').addEventListener('click',async()=>{
+    if(!original||busy)return;const requested=revision;busy=true;buttons();$('compose').disabled=true;$('composer-status').textContent='Compiling design primitives in the core…';
+    try {const result=await(await request('/api/compose',{id:original.course.id,recipe:$('recipe').value})).json();if(revision!==requested)return;
+      remember();recipeDirty=false;draft={...copy(result.csv),startFraction:result.course.startFraction,recipe:result.recipe};selected=0;baked=result;editorTexts();nodePanel();invalidate();$('primitives').textContent=result.primitives;$('composer-status').textContent=`Compiled ${result.spans.length} design spans. ${result.geometry.lint.length} structural errors. Shape gates appear below.`;
+    }catch(e){$('composer-status').textContent=e.message;}finally{busy=false;buttons();$('compose').disabled=false;await analyze();}
+  });
   for (const id of ['node-x', 'node-y', 'node-width', 'node-surface', 'node-lane']) $(id).addEventListener('change', () => {
     try { const rows = nodeRows(); const r = [Number($('node-x').value), Number($('node-y').value), Number($('node-width').value), $('node-surface').value, Number($('node-lane').value)]; if (JSON.stringify(rows[selected]) === JSON.stringify(r)) return; remember(); rows[selected] = r; if (selected === 0) rows[rows.length - 1] = [...r]; writeNodes(rows); invalidate(); draw(); schedule(); } catch (e) { setStatus(e.message, true); }
   });

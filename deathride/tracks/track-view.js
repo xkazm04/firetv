@@ -14,7 +14,8 @@
     const ratio = window.devicePixelRatio || 1, width = Math.max(240, canvas.clientWidth || 640), height = Math.max(200, canvas.clientHeight || 360);
     canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
     const ctx = canvas.getContext('2d'); ctx.scale(ratio, ratio);
-    const xs = course.ribbon.map(p => p[0]), ys = course.ribbon.map(p => p[1]);
+    const allPoints=[...course.ribbon,...(course.branches||[]).flatMap(b=>b.ribbon)];
+    const xs = allPoints.map(p => p[0]), ys = allPoints.map(p => p[1]);
     const padding = Math.max(...course.ribbon.map(p => p[2])) + 18;
     const bounds = [Math.min(...xs) - padding, Math.min(...ys) - padding, Math.max(...xs) + padding, Math.max(...ys) + padding];
     const scale = Math.min(width / (bounds[2] - bounds[0]), height / (bounds[3] - bounds[1]));
@@ -46,8 +47,12 @@
       ctx.strokeStyle = border ? (dark ? '#ded5bf' : '#5e6057') : values ? (values[bin] === null ? '#939393' : heatColor(maximum ? values[bin] / maximum : 0)) : roadColor;
       ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
     }
+    for(const branch of course.branches||[])for(let i=0;i<branch.ribbon.length-1;i++) {
+      const a=branch.ribbon[i],b=branch.ribbon[i+1];ctx.strokeStyle='#697c88';ctx.lineWidth=(a[2]+b[2])*scale;ctx.beginPath();ctx.moveTo(...xy(a[0],a[1]));ctx.lineTo(...xy(b[0],b[1]));ctx.stroke();
+    }
     // Surface bands, hazard and pickup silhouettes remain visible on the map layer.
     if (layer === 'map') {
+      for(const junction of course.junctions||[]) { const p=point(course,junction[0]),[x,y]=xy(p[0],p[1]);ctx.strokeStyle='#ffd36a';ctx.lineWidth=2;ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#ffd36a';ctx.font='bold 12px system-ui';ctx.fillText('J',x+11,y-9); }
       for (const f of course.features) {
         const n = Math.max(8, Math.ceil((f[2] - f[1]) * 150)); ctx.strokeStyle = f[0] === 'shortcut' ? '#be9955' : '#63b8a1'; ctx.lineWidth = Math.max(2, f[4] * scale);
         ctx.beginPath(); for (let i = 0; i <= n; i++) { const p = point(course, f[1] + (f[2] - f[1]) * i / n, f[3]); const s = xy(p[0], p[1]); if (i) ctx.lineTo(...s); else ctx.moveTo(...s); } ctx.stroke();
@@ -72,7 +77,7 @@
     if (nodes) course.nodes.slice(0, -1).forEach((p, i) => { const [x, y] = xy(p[0], p[1]); ctx.fillStyle = i === selected ? '#ffe77d' : '#fff'; ctx.strokeStyle = '#171b1e'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(x, y, i === selected ? 7 : 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.font = '12px system-ui'; ctx.fillStyle = dark ? '#fff' : '#111'; ctx.fillText(i, x + 8, y - 7); });
     if (cars) cars.forEach((car, i) => { const [x, y] = xy(car[0], car[1]); ctx.save(); ctx.translate(x, y); ctx.rotate(-car[2]); ctx.fillStyle = car[3] ? '#3a2524' : colors[i]; ctx.strokeStyle = '#fff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(7, 0); ctx.lineTo(-5, -3); ctx.lineTo(-5, 3); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); });
     canvas.setAttribute('aria-label', `${course.name}. ${layer} map. ${unit || 'Road, start, obstacles and pickups'}.`);
-    return values ? `Blue 0 → red ${maximum.toFixed(2)} ${unit}. Gray: unmeasured.` : layer === 'lines' ? unit : 'White: start · teal: repair · yellow: ammo · orange: solid · ochre: drag · tan: gravel · pale blue: ice';
+    return values ? `Blue 0 → red ${maximum.toFixed(2)} ${unit}. Gray: unmeasured.` : layer === 'lines' ? unit : 'White: start · teal: repair · yellow: ammo · orange: solid · ochre: drag · tan: gravel · pale blue: ice · slate: alternate passage overlay';
   }
   window.TrackView = {draw, point};
 })();

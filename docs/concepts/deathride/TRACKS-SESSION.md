@@ -1,3 +1,10 @@
+## R2 — 2026-10-04 — Primitive composer and real route semantics
+
+Added a tool-only primitive/anchor compiler with tangent fillets, smooth approach widths, theme surfaces, existing obstacles, pickups and a six-car launch straight. The actual baked positive control measures 1,495 m, three reversals, six sign changes, five corner families, hull-perimeter ratio 1.36, 42% fold-back proximity and minimum radius 2.23 L. Added explicit at-grade junction passage identity and optional split/rejoin routes with canonical checkpoint progress, route-aware AI/containment, game/minimap rendering and CSV sidecars. Bridges are explicitly unsupported; the requested junction alternative is real.
+
+Lab recipe editing, expanded primitives, physical/shape gates, preview, invalidation and ZIP provenance pass desktop/mobile browser checks. Both six-car crossing and branch controls complete two laps; all cars cover both split alternatives. Personally viewed the folded, alternate-route and crossing raster controls. These are instrument controls, not campaign-duration approvals. The first full run caught an obsolete seven-file export assertion; it now checks nine files and the sidecar schemas. Grid relocation also revalidates obstacles.
+
+Final validation: 193 core + 8 link + 37 game tests, zero failures/errors; all required build tasks green, including a final incremental renderer build. All three browser suites pass; R1 still rejects 29/29 old outlines with all 15 witnesses firing. Evidence: deathride/evidence/tracks/r2, r2-final-build.log and r2-render-build.log. Note: R2-layout-composer.md. No production course/campaign/art changes, stash application, device use, spend or push.
 # Track design session
 
 ## R1 — 2026-10-04 — Shape rejection instruments

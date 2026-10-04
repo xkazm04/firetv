@@ -109,3 +109,13 @@ tasks.register<JavaExec>("trackShapeReport") {
     maxHeapSize="2g"
     systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
 }
+
+tasks.register<JavaExec>("trackComposerReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackComposerReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    providers.gradleProperty("trackRecipe").orNull?.let { args(it) }
+}

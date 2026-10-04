@@ -548,6 +548,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.color=bg;shape.rect(1044f,394f,200f,150f)
         shape.color=muted
         for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
+        for(line in scene.branchCenters)for(i in 0 until line.size/2-1)shape.rectLine(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f)
         for(car in world.cars)if(car.entered) {shape.color=colors[car.id];val x=ox+car.x.toFloat()*scale;val y=oy+car.y.toFloat()*scale;if(car.human)shape.rect(x-5,y-5,10f,10f) else shape.circle(x,y,3f,10)}
     }
     private fun rebuildUi() {

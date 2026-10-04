@@ -160,7 +160,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
         val offensive=d.kind==AbilityKind.CHARGE || d.kind==AbilityKind.LANCE || d.kind==AbilityKind.HARPOON || d.kind==AbilityKind.SPIKES || d.kind==AbilityKind.PATCH
         val skill=c.aiSkill?:AiSkills.legacy[(c.id+world.seed).mod(AiSkills.legacy.size)]
         val look=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]+c.speedMps*skill.lookAheadSeconds
-        world.track.project(c.x,c.y,projection);world.track.sample(projection.s+look,0.0,point)
+        world.track.project(c.x,c.y,projection,world.track.startM+c.lap.progressM,c.trackRoute);world.track.sample(projection.s+look,0.0,point,c.trackRoute)
         val straight=abs(point.curvature)<=d.aiMaxCurvature
         var front=false;var rear=false;var near=false
         val cx=cos(c.heading);val cy=sin(c.heading)

@@ -165,7 +165,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         val dx=ex-x;val dy=ey-y;val checks=ceil(sqrt(dx*dx+dy*dy)/spacingM).toInt().coerceAtLeast(1)
         for(i in 1..checks) {
             val t=i.toDouble()/checks;world.track.project(x+dx*t,y+dy*t,projection)
-            if(abs(projection.distance)>world.track.widthAt(projection.s))return min(barrier,(i-1).toDouble()/checks)
+            if(abs(projection.distance)>world.track.widthAt(projection.s,projection.route))return min(barrier,(i-1).toDouble()/checks)
         }
         return barrier
     }
@@ -189,7 +189,7 @@ class Combat(private val world: World,val enabled: Boolean) {
                 var target=-1;var time=1.0
                 for(o in world.cars)if(o.id!=id && canAct(o.id)) { val t=cast(x,y,ex,ey,o,w.radiusM);if(t<time){target=o.id;time=t} }
                 val checks=ceil(w.rangeM/c.spec.circleRadiusM).toInt()
-                for(i in 1..checks) { val t=i.toDouble()/checks;if(t>=time)break;world.track.project(x+(ex-x)*t,y+(ey-y)*t,projection);if(abs(projection.distance)>world.track.widthAt(projection.s)){time=t;target=-1;break} }
+                for(i in 1..checks) { val t=i.toDouble()/checks;if(t>=time)break;world.track.project(x+(ex-x)*t,y+(ey-y)*t,projection);if(abs(projection.distance)>world.track.widthAt(projection.s,projection.route)){time=t;target=-1;break} }
                 val barrier=world.obstacles.solidFraction(x,y,ex,ey)
                 if(barrier<time){time=barrier;target=-1}
                 if(target>=0 && hitMask and (1 shl target)==0){hitMask=hitMask or (1 shl target);damage(target,w.damage*c.weaponDamageScale,id,if(weapon==Weapons.SCATTER)DamageKind.SCATTER else DamageKind.RIVET)}
@@ -259,7 +259,7 @@ class Combat(private val world: World,val enabled: Boolean) {
             val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
             if(ahead>c.spec.circleOffsetM+c.spec.circleRadiusM && dx*dx+dy*dy<closest*closest) {
                 world.track.project(p.x,p.y,projection)
-                if(abs(projection.distance)<=world.track.widthAt(projection.s)*Career["repairSeekLaneLimitFraction"]) { closest=sqrt(dx*dx+dy*dy);chosen=projection.distance;c.aiPickupTarget=i }
+                if(abs(projection.distance)<=world.track.widthAt(projection.s,projection.route)*Career["repairSeekLaneLimitFraction"]) { closest=sqrt(dx*dx+dy*dy);chosen=projection.distance;c.aiPickupTarget=i }
             }
         }
         return chosen
@@ -310,7 +310,7 @@ class Combat(private val world: World,val enabled: Boolean) {
             if(target>=0){p.hitMask=p.hitMask or (1 shl target);damage(target,hammer.damage*world.cars[p.owner].weaponDamageScale,p.owner,DamageKind.HAMMER);p.active=false}
             p.x=nx;p.y=ny;p.remainingM-=distance;p.remainingSeconds-=dt
             world.track.project(nx,ny,projection)
-            if(p.remainingM<=0 || p.remainingSeconds<=0 || abs(projection.distance)>world.track.widthAt(projection.s))p.active=false
+            if(p.remainingM<=0 || p.remainingSeconds<=0 || abs(projection.distance)>world.track.widthAt(projection.s,projection.route))p.active=false
         }
         val mine=Weapons.all[Weapons.MINE]
         for(m in mines)if(m.active) {

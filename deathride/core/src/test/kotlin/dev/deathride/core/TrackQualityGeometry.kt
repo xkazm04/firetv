@@ -177,6 +177,9 @@ fun qualityGeometry(c: Course): QualityGeometry {
 }
 
 fun qualityCourseData(c: Course): Map<String, Any?> = mapOf("id" to c.id, "name" to c.name, "lesson" to c.lesson, "theme" to c.theme, "startFraction" to c.startFraction,
+    "junctions" to c.junctions.map { listOf(it.first,it.second,it.warningM) },
+    "branches" to c.branches.map { b -> mapOf("start" to b.start,"end" to b.end,"altStart" to b.altStart,"altEnd" to b.altEnd,"mainLengthM" to (b.end-b.start)*c.lengthM,"branchLengthM" to (b.altEnd-b.altStart)*b.alternative.lengthM,
+        "ribbon" to (0..128).map { n -> val s=(b.altStart+(b.altEnd-b.altStart)*n/128)*b.alternative.lengthM;val p=TrackPoint();b.alternative.sample(s,0.0,p);listOf(p.x,p.y,b.alternative.widthAt(s),s) }) },
     "nodes" to c.nodes.map { listOf(it.x, it.y, it.width, it.surface.id, it.lane) }, "spots" to c.spots.map { listOf(it.kind, it.fraction, it.laneM) },
     "features" to c.features.map { listOf(it.kind, it.start, it.end, it.laneM, it.widthM, it.surface.id, it.landmark, it.warningM) },
     "obstacles" to c.obstaclePlacements.map { listOf(it.definition, it.fraction, it.lane, it.heading, it.seed) },

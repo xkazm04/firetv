@@ -7,7 +7,7 @@ import kotlin.math.*
 
 fun qualityClone(c: Course, nodes: List<TrackNode> = c.nodes, spots: List<TrackSpot> = c.spots,
                  features: List<TrackFeature> = c.features, obstacles: List<ObstaclePlacement> = c.obstaclePlacements) =
-    Course(c.id, c.name, c.lesson, c.startFraction, c.theme, nodes, spots, features, obstacles)
+    Course(c.id, c.name, c.lesson, c.startFraction, c.theme, nodes, spots, features, obstacles,c.junctions,c.branches)
 
 fun qualityMutantEvidence(): List<Map<String, Any?>> {
     val c = Courses.all.first()

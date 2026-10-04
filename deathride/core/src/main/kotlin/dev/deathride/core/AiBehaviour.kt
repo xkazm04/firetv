@@ -130,16 +130,16 @@ class AiBehaviour(private val world: World) {
     private fun perceive(c: Car,s: AiDecision) {
         s.visible=0;s.candidates=0
         val range=c.spec.lengthM*s.plan!!.perception;val cx=cos(c.heading);val cy=sin(c.heading)
-        world.track.project(c.x,c.y,projection)
+        world.track.project(c.x,c.y,projection,world.track.startM+c.lap.progressM,c.trackRoute)
         val skill=c.aiSkill?:AiSkills.legacy[(c.id+world.seed).mod(AiSkills.legacy.size)]
-        world.track.sample(projection.s+c.spec.lengthM*TrackRules["aiLookCarLengths"]+c.speedMps*skill.lookAheadSeconds,0.0,point)
+        world.track.sample(projection.s+c.spec.lengthM*TrackRules["aiLookCarLengths"]+c.speedMps*skill.lookAheadSeconds,0.0,point,c.trackRoute)
         s.corner=abs(point.curvature)>TrackRules["straightCurvature"]
         for(o in world.cars)if(o!==c && world.combat.canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y;val d2=dx*dx+dy*dy
             if(d2>range*range || world.combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)<1.0)continue
             val i=o.id;s.visible=s.visible or (1 shl i);s.distance[i]=sqrt(d2);s.along[i]=dx*cx+dy*cy;s.side[i]=abs(-dx*cy+dy*cx)
             s.health[i]=world.combat.health(i)/world.combat.maxHealth(i)
-            world.track.project(o.x,o.y,projection);s.lane[i]=projection.distance
+            world.track.project(o.x,o.y,projection,world.track.startM+o.lap.progressM,o.trackRoute);s.lane[i]=projection.distance
         }
     }
     private fun phase(c: Car): Int {
