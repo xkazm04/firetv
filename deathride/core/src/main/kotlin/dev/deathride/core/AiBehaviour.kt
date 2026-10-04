@@ -226,7 +226,9 @@ class AiBehaviour(private val world: World) {
     fun abilityCadence(c: Car): Boolean { val s=states[c.id];return s.temperament?.let{(s.decisions-1)%it.abilityEvery==0}?:true }
     fun lane(c: Car,ordinary: Double): Double {
         val s=states[c.id];val t=s.temperament?:return ordinary
-        if(c.aiMode==AiMode.RECOVER || s.target<0 || world.combat.lastTarget[c.id]!=s.target || s.phase==0)return ordinary
+        // The duel's visible-target waiting manoeuvre must leave its authored passing lane open.
+        // Closing that gap defeats the rig's mine-layer encounter rather than adding a useful tactic.
+        if(c.aiMode==AiMode.RECOVER || c.aiDuelWait || s.target<0 || world.combat.lastTarget[c.id]!=s.target || s.phase==0)return ordinary
         val length=c.spec.lengthM;var contact=t.contact;var block=t.block+if(s.corner)t.cornerBlock else 0.0
         if(s.tactic==AiTactic.RAM_HAMMER || s.tactic==AiTactic.RAM_MINES || s.tactic==AiTactic.CORNER_PUSH && s.corner)contact+=AiControls["weaknessContactBonus"]
         if(s.tactic==AiTactic.BRAKE_CHECK || s.tactic==AiTactic.CORNER_BLOCK && s.corner)block+=AiControls["weaknessBlockBonus"]
@@ -237,7 +239,7 @@ class AiBehaviour(private val world: World) {
     }
     fun speedFraction(c: Car): Double {
         val s=states[c.id];val t=s.temperament?:return 1.0
-        if(s.phase==0 || s.target<0 || c.aiMode==AiMode.RECOVER || world.combat.lastTarget[c.id]!=s.target || s.targetAlong>=0 || s.targetDistance>c.spec.lengthM*AiControls["blockReachCarLengths"])return 1.0
+        if(s.phase==0 || s.target<0 || c.aiMode==AiMode.RECOVER || c.aiDuelWait || world.combat.lastTarget[c.id]!=s.target || s.targetAlong>=0 || s.targetDistance>c.spec.lengthM*AiControls["blockReachCarLengths"])return 1.0
         if(s.tactic==AiTactic.BRAKE_CHECK)return AiControls["brakeCheckSpeedFraction"]
         return if(s.corner && (t.block+t.cornerBlock>=AiControls["blockThreshold"] || s.tactic==AiTactic.CORNER_BLOCK))AiControls["cornerBlockSpeedFraction"] else 1.0
     }
@@ -256,7 +258,8 @@ class AiBehaviour(private val world: World) {
             if(s.hunting && s.target==target)huntIntentDamage+=dealt
         }
         if(s.temperament!=null) {
-            s.recoverUntil=world.seconds+s.plan!!.recovery;release(source)
+            val recovery=s.plan!!.recovery*(if(world.eventType==EventType.ELIMINATION)AiControls["duelHitRecoveryScale"] else 1.0)
+            s.recoverUntil=world.seconds+recovery;release(source)
         }
     }
     fun afterStep() {

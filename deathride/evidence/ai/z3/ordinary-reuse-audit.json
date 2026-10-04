@@ -1,0 +1,31 @@
+{
+  "changed": [
+    "4/dev/deathride/core/AiBehaviour.class",
+    "4/dev/deathride/core/AiCatalog.class",
+    "4/dev/deathride/core/AiControls.class",
+    "4/dev/deathride/core/RacePhase.class",
+    "5/data/ai-bosses.csv",
+    "5/data/ai-control-rules.csv"
+  ],
+  "allowlistPass": true,
+  "bytecode": [
+    {
+      "className": "dev.deathride.core.AiBehaviour",
+      "codeUnchangedOutsideEliminationRecovery": true
+    },
+    {
+      "className": "dev.deathride.core.AiCatalog",
+      "codeUnchangedOutsideEliminationRecovery": true
+    },
+    {
+      "className": "dev.deathride.core.AiControls",
+      "codeUnchangedOutsideEliminationRecovery": true
+    },
+    {
+      "className": "dev.deathride.core.RacePhase",
+      "codeUnchangedOutsideEliminationRecovery": true
+    }
+  ],
+  "scope": "Ordinary campaign events 1\u201334 and unnamed stock/developed roster studies only. Their recovery multiplier remains exactly 1.0; no ordinary event makes Marrow a boss. Duels are freshly run on balanced bytes.",
+  "replayRequirement": "Final-core campaign replay must match 34 event hashes; two-seed full roster/rotation-case replay must match every selected full-study row. Replays are not additional samples."
+}

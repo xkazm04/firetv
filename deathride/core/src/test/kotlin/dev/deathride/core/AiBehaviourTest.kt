@@ -78,6 +78,8 @@ class AiBehaviourTest {
         w.ai.states[3].decisionStep=-1;w.ai.states[3].commitmentUntil=w.seconds;w.combat.think(w.cars[3]);assertEquals(2,w.ai.attackers(0))
         w.ai.states[2].leaseUntil=w.seconds;w.ai.beforeStep();assertEquals(-1,w.combat.lastTarget[2])
         w.cars[0].finishSeconds=w.seconds;w.ai.beforeStep();assertEquals(0,w.ai.attackers(0))
+        w.eventType=EventType.ELIMINATION;w.combat.damage(2,1.0,3,DamageKind.RIVET)
+        assertEquals(w.ai.states[3].plan!!.recovery*AiControls["duelHitRecoveryScale"],w.ai.states[3].recoverUntil-w.seconds,1e-9)
     }
     @Test fun commitmentRetainsVisibleTargetUntilMarginAndDecisionCadenceAreSatisfied() {
         val w=fixture("Rookie");pose(w,1,-30.0);pose(w,0,-10.0);pose(w,2,-9.0)
@@ -111,6 +113,10 @@ class AiBehaviourTest {
         assertEquals(AiControls["brakeCheckSpeedFraction"],w.ai.speedFraction(w.cars[1]))
         s.tactic=AiTactic.CORNER_BLOCK;s.corner=true
         assertEquals(AiControls["cornerBlockSpeedFraction"],w.ai.speedFraction(w.cars[1]))
+        w.cars[1].aiDuelWait=true
+        assertEquals(DeathDuel.waitLaneM,w.ai.lane(w.cars[1],DeathDuel.waitLaneM))
+        assertEquals(1.0,w.ai.speedFraction(w.cars[1]))
+        w.cars[1].aiDuelWait=false
         for(tactic in listOf(AiTactic.RAM_HAMMER,AiTactic.CORNER_PUSH,AiTactic.RAM_MINES)) {
             s.targetAlong=3.0;s.tactic=tactic;s.temperament=s.temperament!!.copy(contact=.4)
             assertTrue(w.ai.lane(w.cars[1],0.0)>0,tactic.name)
@@ -125,9 +131,9 @@ class AiBehaviourTest {
         assertEquals(Weapons.HAMMER,ranged.cars[1].aiInput.weapon)
     }
     @Test fun bossHealthHasOneAuthorityResetsIdempotentlyAndSettlesInOriginalUnits() {
-        for(round in listOf(6,13,20,27,34)) {
+        for(round in listOf(6,13,20,27,34))for(difficulty in Career.difficulties.indices) {
             val p=Profile("ai-boss-$round");p.careerRound=round;p.careerCleared=round;p.credits=50000;p.rivalProfiles.forEach{it.credits=50000}
-            val w=World(combatEnabled=true);Garage.apply(p,w.cars[0]);RivalEconomy.apply(p,w,1);w.reset()
+            val w=World(combatEnabled=true);Garage.apply(p,w.cars[0]);RivalEconomy.apply(p,w,difficulty);w.reset()
             val c=w.cars.single{it.rivalIndex==Career.bossIndex(round)}
             assertEquals(AiRole.BOSS,w.ai.states[c.id].role)
             assertTrue(c.aiBossHealthScale>1)

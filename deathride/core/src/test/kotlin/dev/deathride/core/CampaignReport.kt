@@ -183,7 +183,19 @@ private fun campaignDuel(dir:File,samples:Int,namespace:Int) {
             w.eventType=EventType.ELIMINATION;w.raceLaps=0;w.duelRigSlot=rotation;w.aiLeadSlot=rotation
             for(c in w.cars)c.entered=c.id<2
             Garage.apply(boss,w.cars[1-rotation]);w.cars[1-rotation].aiStyle=DeathDuel.boss;w.cars[1-rotation].aiSkill=Career.difficulties[1].skill;w.cars[1-rotation].rivalIndex=bossIndex
-            w.cars[rotation].aiSkill=campaignSkills[skill];Encounters.apply(w,"death-duel");w.reset()
+            w.cars[rotation].aiSkill=campaignSkills[skill];Encounters.apply(w,"death-duel");w.ai.enabled=System.getProperty("aiControl")!="off";w.reset()
+            val recoveryStudy=System.getProperty("duelRecoveryScale")?.toDouble()
+            val healthStudy=System.getProperty("duelBossHealth")?.toDouble()
+            if(recoveryStudy!=null || healthStudy!=null) {
+                check(dir.name.contains("pilot")){"Exploratory duel overrides cannot write acceptance evidence"}
+                if(recoveryStudy!=null)for(s in w.ai.states)if(s.plan!=null) {
+                    val row=Content.table("ai-plans").single{it.getValue("id")==s.plan!!.id}
+                    s.plan=RacePlan(row+mapOf("hitRecoverySeconds" to (s.plan!!.recovery*recoveryStudy).toString()))
+                }
+                if(healthStudy!=null) {
+                    val c=w.cars[1-rotation];c.maxHp=c.maxHp/c.aiBossHealthScale*healthStudy;c.aiBossHealthScale=healthStudy;w.combat.reset()
+                }
+            }
             if(System.getProperty("dispatcherControl")=="off"){w.cars[rotation].ability.definition=null;w.cars[rotation].ability.reset()}
         }
         val w=make();val frames=Array(6){InputFrame()};val lead=rotation
