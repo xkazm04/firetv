@@ -44,4 +44,4 @@ Original work only; one design note, status row, session-log entry and one commi
 | G3 | Owner review and Stick evidence | gated |
 | A0 | Agy second image provider | implemented; independent 120-image cap, Grok remains latched; live generate/edit smoke and fake CLI tests; see deathride/A0-agy-provider.md |
 | A1 | Agy region completion and kept-prop variants | partial: empty-output stop at 9/120 total; seven region image records, one technical panel, 53 original region images and 11 variants still missing; see deathride/A1-agy-regions.md |
-| A2 | Kept-design restoration and edit repair proof | pending owner comparisons; see deathride/AGY-SESSION.md |
+| A2 | Kept-design restoration and edit repair proof | partial: scrap-pile edit/control comparison delivered; seven restorations and margin repair unattempted because agy returned empty output; see deathride/A2-agy-restoration.md |

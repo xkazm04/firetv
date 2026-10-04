@@ -34,10 +34,13 @@ def card(r):
         kept=next(x for x in read_json(ART/'review/rework2/review.json')['records'] if x['id']==r['prior_owner_evidence']['asset_id'])
         source_path=ART/'review/rework2'/kept['source']
         assert sha(source_path)==r['prior_owner_evidence']['source_sha256']
-    source=figure(source_path,id+'-source'+source_path.suffix,'Original full-resolution source; click for original pixels')
+    source_caption=('Previously kept original full-resolution source' if r.get('origin')=='reuse' else
+                    'Deterministic region recolour source' if r.get('origin')=='recolour' else 'Generated full-resolution candidate source')
+    source=figure(source_path,id+'-source'+source_path.suffix,source_caption+'; click for original pixels')
     path=figure(r['path'],id+'.png','Actual gated export')
     before_export=r.get('before_export') or r['brief'].get('before_export')
     if before_export:figure(before_export,id+'-before-export.png','Before: kept export at its original resolution')
+    if r.get('original_control'):figure(r['original_control'],id+'-original-control.png','Control: unedited original re-exported at the candidate size')
     if r.get('repeat_path'):figure(r['repeat_path'],id+'-repeat.png','Actual 2 by 2 ground repeat')
     if r.get('frames_preview'):figure(r['frames_preview'],id+'-frames.png','Actual exported animation cells')
     if r.get('animation_preview'):figure(r['animation_preview'],id+'.gif','Animation preview of actual cells')

@@ -1,0 +1,111 @@
+{
+  "at": "2026-10-04T13:21:09.193219+00:00",
+  "status": "pass-for-partial-evidence; restoration set and edit repair incomplete",
+  "budget": {
+    "provider": "agy",
+    "model": "gemini-3.8-flash-high",
+    "images_reserved": 9,
+    "remaining": 111,
+    "cap": 120,
+    "real_allowance": "unknown",
+    "stop": {
+      "at": "2026-10-04T13:06:15.381789+00:00",
+      "reason": "agy-foundry-clinker-v1: failed to generate"
+    }
+  },
+  "inventory": [
+    {
+      "id": "agy-restore-scrap-pile-v1",
+      "logical_name": "environment/scrap-pile",
+      "source_sha256": "f507b82f8a10612f3d6b0d15796a0b1b865db4ab7086e50a1d16a8f33da10c85",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "status": "edit candidate; owner-unapproved",
+      "output_size": [
+        1024,
+        1024
+      ],
+      "resolution_increased": false,
+      "export_sha256": "3ebe97de0d0105e14fd122697432523ef42ed035a955ec20eab1968eec66b78a"
+    },
+    {
+      "id": "agy-restore-oil-drums-v1",
+      "logical_name": "environment/oil-drums",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-rust-pylon-v1",
+      "logical_name": "environment/rust-pylon",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-league-gantry-v1",
+      "logical_name": "environment/league-gantry",
+      "source_sha256": "db55b5c7fc40d8747060eb10769d51f8c85252f0d946961572ed17c0da814980",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-rook-v1",
+      "logical_name": "portraits/rook",
+      "source_sha256": "24b732cd26528ab145eea46ab204af39c7590a35c13e16c7a5c67a7d263594a8",
+      "source_size": [
+        1024,
+        1024
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-vex-v1",
+      "logical_name": "portraits/vex",
+      "source_sha256": "3bb11eb14015e230317e6f140802723d317291546f74d176dbe562e0572d1bb9",
+      "source_size": [
+        896,
+        1152
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-mica-v1",
+      "logical_name": "portraits/mica",
+      "source_sha256": "84b732b325fcb07c309491dcf8b6767ae6b03f6302ba8ecc6142b270a9491106",
+      "source_size": [
+        864,
+        1184
+      ],
+      "status": "not-attempted; empty-output stop"
+    },
+    {
+      "id": "agy-restore-mechanic-v1",
+      "logical_name": "portraits/mechanic",
+      "source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "source_size": [
+        912,
+        1136
+      ],
+      "status": "not-attempted; empty-output stop"
+    }
+  ],
+  "generated_edits": 1,
+  "unattempted_restorations": 7,
+  "margin_repair": "not-attempted; first source fails CROPPED_OR_MARGIN",
+  "local_model_observations": 2,
+  "owner_approvals": 0,
+  "runtime_activations": 0,
+  "no_calls_after_required_stop": true
+}
