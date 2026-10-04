@@ -38,7 +38,7 @@ Original work only; one design note, status row, session-log entry and one commi
 
 | Id | Wave | Status |
 |---|---|---|
-| G0 | Region bible | not started |
+| G0 | Region bible | complete design; required build, 52 art tests and both bundles pass; see deathride/G0-region-bible.md |
 | G1 | Region assets, owner review page (art stage, main worktree) | not started |
 | G2 | Engine and data: region.csv, renderer, assignment (after the track restart) | gated |
 | G3 | Owner review and Stick evidence | gated |
