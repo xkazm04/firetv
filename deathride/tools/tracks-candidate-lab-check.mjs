@@ -5,7 +5,7 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const output=resolve(process.env.TRACK_EVIDENCE||'evidence/tracks/owner-apply','candidate-lab');await mkdir(output,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
-try{for(const [id,width,race]of [['scrap-1-c',1440,true],['scrap-1-c',390,false],['scrap-6-b',1440,true],['crown-7-a',1440,true],['scrap-7-d',1440,true],['scrap-7-e',1440,true],['scrap-7-f',1440,true],['scrap-7-f',390,false]]){
+try{for(const [id,width,race]of [['scrap-1-c',1440,true],['scrap-1-c',390,false],['scrap-6-b',1440,true],['crown-7-a',1440,true],['scrap-7-e',1440,true],['scrap-7-e',390,false]]){
  const d=JSON.parse(await readFile(`tracks/candidates/drafts/${id}.json`,'utf8')),page=await browser.newPage({viewport:{width,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  const url=new URL(pathToFileURL(resolve('tracks/lab/index.html')));url.searchParams.set('candidate',id);await page.goto(url.href);await page.waitForFunction(()=>window.labReady&&!document.querySelector('#race').disabled,null,{timeout:120000});
  // HTML textareas normalize CRLF to LF; compare identical CSV content after that mandated conversion.

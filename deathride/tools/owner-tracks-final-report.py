@@ -80,22 +80,24 @@ def page(title, body):
     return '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+title+'</title><link rel="stylesheet" href="../../audio/report.css"><link rel="stylesheet" href="../tracks.css"><style>body{overflow-wrap:anywhere}.matrix td,.matrix th{padding:.55rem}.table-wrap{overflow:auto}main{max-width:1400px}.outlines{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px}.outline{border:1px solid #789;padding:12px;background:#fff;color:#15272d}.outline svg{width:100%;height:190px}pre{white-space:pre-wrap}</style><body><main><h1>'+title+'</h1><nav><a href="index.html">Campaign atlas</a> &middot; <a href="owner-triage.html">Before/after report</a> · <a href="scrap-7.html">Scrap-7 owner review</a> · <a href="candidates.html">Full retained library</a> · <a href="../lab/index.html">Track Lab</a> · <a href="../../regions/index.html">Regions</a></nav>'+body+'</main></body></html>'
 
 def write_outlines(selected,events,regions):
-    sheet='<p>Final campaign assignment in event order. Scrap-7-f is provisional. Geometry shown at individual fit scale; labels retain lap counts and regions.</p><div class="outlines">'
+    sheet='<p>Final campaign assignment in event order. Scrap-7-e is the recorded owner Keep. Geometry shown at individual fit scale; labels retain lap counts and regions.</p><p><strong>Scrap-7 balance flag:</strong> Rookie 4/32, Club 2/32, Pro 0/32 first-place wins in the matched diagnostic. First place remains required for promotion. Shape and pacing passes do not clear this concern.</p><div class="outlines">'
     for c in selected:
         ps=c['shape']['outline'];xs=[p[0] for p in ps];ys=[p[1] for p in ps];w=max(xs)-min(xs);h=max(ys)-min(ys);pad=max(w,h)*.07
         coords=' '.join(f'{x:.4f},{y:.4f}' for x,y in ps+[ps[0]])
-        label=html.escape(c['id']+(' — PROVISIONAL' if c.get('provisional') else ''))
+        label=html.escape(c['id']+(' — OWNER KEEP' if c['id']=='scrap-7-e' else ''))
         event=events[c['slot']]; duration='Elimination' if event['type']=='ELIMINATION' else event['laps']+' laps'
         region=regions[event['cup']]['name']
         labQuery='course=runoff' if c.get('accepted') else 'candidate='+c['id']
         sheet+=f'<article class="outline"><strong>{label}</strong><svg viewBox="{min(xs)-pad} {min(ys)-pad} {w+2*pad} {h+2*pad}" role="img" aria-label="{label}"><g transform="translate(0,{min(ys)+max(ys)}) scale(1,-1)"><polyline points="{coords}" fill="none" stroke="#17697b" stroke-width="{max(w,h)*.009}"/></g></svg><p>{duration} · {html.escape(region)}</p><p><a href="../lab/index.html?{labQuery}">Open in Lab</a></p></article>'
     (ROOT/'tracks/atlas/final-outline-sheet.html').write_text(page('Final campaign outline sheet',sheet+'</div>'),encoding='utf-8')
-    atlas='<p>35 campaign events, one assigned course each. Scrap-7-f remains provisional; three duplicate owner Keeps are available as practice alternates. <a href="scrap-7.html">Review the three new boss roads</a>.</p><p><a href="owner-triage.html">Measured before/after report</a> &middot; <a href="final-outline-sheet.html">Standalone outline sheet</a> &middot; <a href="legacy.html">Archived T1 atlas</a></p>'+sheet+'</div>'
+    atlas='<p>35 campaign events, one assigned course each. Scrap-7-e is assigned by owner decision; three duplicate owner Keeps are available as practice alternates. <a href="scrap-7.html">Recorded boss-road decision</a>.</p><p><a href="owner-triage.html">Measured before/after report</a> &middot; <a href="final-outline-sheet.html">Standalone outline sheet</a> &middot; <a href="legacy.html">Archived T1 atlas</a></p>'+sheet+'</div>'
     (ROOT/'tracks/atlas/index.html').write_text(page('Campaign track atlas',atlas),encoding='utf-8')
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
     owner=json.loads((ROOT/'tracks/candidates/owner-decisions.json').read_text())
+    if owner['assignment'].get('scrap-7')=='scrap-7-e' and '--outlines-only' not in sys.argv:
+        raise SystemExit('The part-4 full campaign study used f. Use --outlines-only for current assignments and owner-scrap-report.py for the fresh e evidence; preserve the historical comparison.')
     library=json.loads((ROOT/'tracks/atlas/candidates.json').read_text())
     assignment=rows(ROOT/'tracks/candidates/owner-assignment.csv')
     selected=[next(c for c in library['candidates'] if c['id']==a['candidate']) for a in assignment]

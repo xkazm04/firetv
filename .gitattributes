@@ -15,6 +15,8 @@ gradlew text eol=lf
 # Keep their original bytes when moving or checking them out.
 deathride/tracks/candidates/recipes/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 deathride/tracks/excluded/owner-2026-10-04/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Installed rejected CSVs retain their original empty-table trailing lines and byte hashes.
+deathride/tracks/excluded/owner-2026-10-04/rejected/runtime/tracks/*.csv -whitespace
 
 # Art provenance records hash exact bytes, including their original line endings.
 # Preserve those bytes across checkout; CRLF at line ends is intentional evidence.

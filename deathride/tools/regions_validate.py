@@ -57,7 +57,7 @@ def main():
             with Image.open(path) as image:
                 assert image.size == (256, 256) and image.mode == "RGBA"
     # Owner track application changes courses and hunter decisions, while region art and saves stay fixed.
-    baseline = "f7a080af"
+    baseline = os.environ.get("REGIONS_BASELINE", "f7a080af")
     protected = ["art/budget.json", "art/history.jsonl", "art/owner-approvals-2026-10-03.json", "assets/regions",
                  "core/src/main/kotlin/dev/deathride/core/ProfileStore.kt", "core/src/main/kotlin/dev/deathride/core/ProfileCodec.kt"]
     changed = subprocess.check_output(["git", "diff", "--name-only", baseline, "--", *["deathride/" + p for p in protected]], cwd=ROOT.parent, text=True).splitlines()
@@ -76,7 +76,7 @@ def main():
                   candidateFiles=16, ownerApprovedGroundVariants=16, exactKeptPropMemberships=11, additionalTextureBytes=0,
                   declaredArtMiBWithCarReserve=31.25, sharedMotionSlots=160, vehicleSlots=136, weatherSlots=24,
                   combatSpriteSlots=64, newFramebuffers=0, sourceAuthoritySha256=data["authoritySha256"],
-                  noRejectedAssets=True, regionArtSavesOwnerDecisionsAndPaidLedgerUnchanged=True,
+                  noRejectedAssets=True, regionArtSavesAndPaidLedgerUnchanged=True, baselineCommit=baseline,
                   explicitCourseAndDraftMemberships=True,
                   deviceFrameTimeDeltaMs=None, deviceFrameTimeStatus="pending-busy; see ../owner-part5/stick-status.json")
     path = ROOT / os.environ.get("TRACK_EVIDENCE", "evidence/tracks/owner-part4") / "regions-content.json"

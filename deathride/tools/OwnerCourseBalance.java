@@ -32,11 +32,11 @@ public final class OwnerCourseBalance {
         Path out=Path.of(args[0]);int seeds=Integer.parseInt(args[1]);
         if(Files.exists(out))throw new IllegalStateException("Refuse to overwrite "+out);
         Files.createDirectories(out.getParent());
-        List<CareerEvent> events=Career.INSTANCE.getEvents().stream().filter(e->!e.getElimination()).toList();
+        List<CareerEvent> events=Career.INSTANCE.getEvents().stream().filter(e->!e.getElimination() && (args.length<3 || e.getId().equals(args[2]))).toList();
         int count=events.size()*2*seeds*6;String[] rows=new String[count];AtomicInteger done=new AtomicInteger();
         IntStream.range(0,count).parallel().forEach(i->{
             int rotation=i%6,n=i/6,sample=n%seeds;n/=seeds;int build=n%2,round=n/2;
-            CareerEvent e=events.get(round);int seed=20261004+round*100003+sample*7919;
+            CareerEvent e=events.get(round);int seed=20261004+Career.INSTANCE.getEvents().indexOf(e)*100003+sample*7919;
             World w=make(e,seed,rotation,build==1);run(w);
             if(sample==0&&rotation==0){World replay=make(e,seed,rotation,build==1);run(replay);if(w.stateHash()!=replay.stateHash())throw new IllegalStateException("Replay "+e.getId());}
             Car winner=Arrays.stream(w.getCars()).filter(c->c.getPosition()==1&&c.getFinishSeconds()>=0).findFirst().orElse(null);

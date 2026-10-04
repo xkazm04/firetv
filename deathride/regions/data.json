@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "authority": "core/src/main/resources/data/region.csv",
-  "authoritySha256": "cac5b3e363f99095d97c993bc13c78cdc203e7a241244260fdeeee8094bbfdff",
+  "authoritySha256": "adfc762a51cfd22aa19c976a63144a684839302a70477c1c0eca5d9f2d11f2ae",
   "regions": [
     {
       "id": "scrap",
@@ -23,7 +23,7 @@
         "scrap-5-a",
         "scrap-5-c",
         "scrap-6-b",
-        "scrap-7-f"
+        "scrap-7-e"
       ],
       "defaultTheme": "industrial",
       "accent": "#B4A044",
@@ -499,9 +499,7 @@
     "salt-2-c": "salt",
     "salt-3-a": "salt",
     "switchback-4-runoff": "switchback",
-    "scrap-7-d": "scrap",
-    "scrap-7-e": "scrap",
-    "scrap-7-f": "scrap"
+    "scrap-7-e": "scrap"
   },
   "truth": "Presentation candidates; geometry and owner track choices unchanged. Weather never affects physics."
 }

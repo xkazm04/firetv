@@ -8,7 +8,7 @@ fun main(args:Array<String>) {
     val out=File(args.firstOrNull()?:"evidence/tracks/owner-part4/scrap-boss-choices.csv")
     check(!out.exists());out.parentFile.mkdirs()
     val slot=CandidateAuthor.slots.single{it.id=="scrap-7"}
-    val ids=listOf("scrap-7-d","scrap-7-e","scrap-7-f")
+    val ids=(args.getOrNull(1)?:Courses.all[Career.events.single{it.id=="scrap-7"}.courseIndex].id).split(',')
     val courses=ids.map { id->
         Courses.all.singleOrNull{it.id==id}?:CandidateAuthor.compose(slot,File(CandidateAuthor.folder,"recipes/$id.csv").readText(),id).course
     }

@@ -36,7 +36,8 @@
     "crown-5-c",
     "crown-6-a",
     "crown-7-a",
-    "switchback-4-runoff"
+    "switchback-4-runoff",
+    "scrap-7-e"
   ],
   "unreviewed": [
     "foundry-7-a",
@@ -83,10 +84,23 @@
     "crown-6": "crown-6-a",
     "crown-7": "crown-7-a",
     "switchback-4": "switchback-4-runoff",
-    "scrap-7": "scrap-7-f"
+    "scrap-7": "scrap-7-e"
   },
   "pending": [],
   "rule": "Pass gates; minimize early lead-slot wrecks, stalls, then distance from 195 s combat median.",
-  "provisional": "scrap-7-f",
-  "provisionalRule": "Pass gates; minimize early lead-slot wrecks, stalls, then distance from 300 s combat median."
+  "rejectedAfterReview": [
+    "scrap-7-d",
+    "scrap-7-f"
+  ],
+  "scrap7Decision": {
+    "date": "2026-10-04",
+    "status": "applied",
+    "keep": "scrap-7-e",
+    "reject": [
+      "scrap-7-d",
+      "scrap-7-f"
+    ],
+    "source": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-04.md#4",
+    "balanceStatus": "flagged: first-place promotion diagnostic; no rule change"
+  }
 }

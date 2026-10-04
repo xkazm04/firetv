@@ -32,25 +32,25 @@
         "skill": 0,
         "trials": 32,
         "wins": 4,
+        "beatBoss": 14,
         "early": 0,
-        "unresolved": 0,
-        "beatBoss": 14
+        "unresolved": 0
       },
       {
         "skill": 1,
         "trials": 32,
         "wins": 2,
+        "beatBoss": 4,
         "early": 0,
-        "unresolved": 0,
-        "beatBoss": 4
+        "unresolved": 0
       },
       {
         "skill": 2,
         "trials": 32,
         "wins": 0,
+        "beatBoss": 1,
         "early": 0,
-        "unresolved": 0,
-        "beatBoss": 1
+        "unresolved": 0
       }
     ],
     "scrap-7-f": [
@@ -81,5 +81,12 @@
     ]
   },
   "provisionalReproducesDifficultyHashes": true,
-  "winDefinition": "First place with a surviving lap finish, as required for boss promotion. Merely beating the named boss is reported separately."
+  "winDefinition": "First place with a surviving lap finish, as required for boss promotion. Merely beating the named boss is reported separately.",
+  "ownerDecision": "scrap-7-e Keep; scrap-7-d and scrap-7-f Reject and archived",
+  "selectedCourseRerun": {
+    "source": "evidence/tracks/owner-scrap-e/boss.csv",
+    "sha256": "92eb19fdf672a86d9d382ed11236fa1eda5ff6d0b1aff31ab4de57188aaed66a",
+    "trials": 96,
+    "allRowsMatchHistorical": true
+  }
 }

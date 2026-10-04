@@ -13,6 +13,7 @@
   theme(); $('theme').addEventListener('change', () => { state.theme = $('theme').value; theme(); save(); });
   const make = (tag, text, attributes = {}) => { const el = document.createElement(tag); if (text) el.textContent = text; for (const [k, v] of Object.entries(attributes)) el.setAttribute(k, v); return el; };
   cards.forEach((card, index) => {
+    if(card.dataset.decisionFinal==='true') { card.append(make('p','Recorded decision: '+card.dataset.recordedPick+'. Owner supplied no notes.',{class:'pass'}));return; }
     if(card.dataset.ownerAccepted==='true') { card.append(make('p','Existing owner Keep — preserved unchanged.',{class:'pass'}));return; }
     const id = card.dataset.direction, controls = make('div', '', {class: 'review-controls'}), field = make('fieldset'), picks = make('div', '', {class: 'picks'});
     field.append(make('legend', 'Course choice'));
@@ -28,14 +29,15 @@
   });
   const cell = x => String(x ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('\\', '&#92;').replaceAll('|', '&#124;').replace(/\r\n|\r|\n/g, '<br>');
   const preview = () => { $('export').value = [`## Death Ride — ${document.body.dataset.pageTitle} — ${new Date().toISOString().slice(0, 10)}`, '',
-    'Owner track review draft. Keep expresses preference; technical failures and production gates remain unchanged.', '',
+    cards.some(card=>card.dataset.decisionFinal==='true')?'Recorded owner decision of 2026-10-04. First-place promotion and technical flags remain unchanged.':'Owner track review draft. Keep expresses preference; technical failures and production gates remain unchanged.', '',
     '| Category / direction | Pick | Samples | Owner note |', '|---|---|---|---|',
-    ...cards.map(card => { const saved=choice(card.dataset.direction);const c = card.dataset.ownerAccepted==='true'?{pick:'Keep',note:'Existing owner acceptance; course unchanged.'}:saved.pick?saved:card.dataset.recordedPick?{...saved,pick:card.dataset.recordedPick,note:saved.note||'Recorded owner Keep 2026-10-04.'}:saved; return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
+    ...cards.map(card => { const saved=choice(card.dataset.direction);const c = card.dataset.decisionFinal==='true'?{pick:card.dataset.recordedPick,note:'Recorded owner decision 2026-10-04; no notes supplied.'}:card.dataset.ownerAccepted==='true'?{pick:'Keep',note:'Existing owner acceptance; course unchanged.'}:saved.pick?saved:card.dataset.recordedPick?{...saved,pick:card.dataset.recordedPick,note:saved.note||'Recorded owner Keep 2026-10-04.'}:saved; return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
   $('refresh-export').addEventListener('click', preview);
   $('copy').addEventListener('click', async () => { preview(); $('export').focus(); $('export').select(); let copied = false;
     try { if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText($('export').value); copied = true; } } catch {}
     if (!copied) try { copied = document.execCommand('copy'); } catch {}
     message(copied ? 'Markdown copied. Paste it into your track review notes.' : 'Markdown selected below. Press Ctrl+C or use your browser copy command.');
   });
+  if(cards.some(card=>card.dataset.decisionFinal==='true')) { preview();message('Recorded owner decision. First-place promotion and technical flags remain unchanged.');return; }
   message(storageOk ? 'Choices stay in this browser. No owner choices are inferred.' : 'Browser storage unavailable or unreadable. Copy Markdown before closing.');
 })();

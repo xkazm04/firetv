@@ -15,7 +15,7 @@ for(const row of manifest) {
  if(d.role==='arena')d.broadDuel=broadDuel;
  d.technicalFlags=[...(d.proof?.flags||[]),...d.shape.gates.filter(g=>g.status!=='pass').map(g=>`shape: ${g.metric}`)];if(d.role==='arena'&&(!d.duelProof||d.duelProof.timeouts))d.technicalFlags.push(d.duelProof?`actual duel unresolved: ${d.duelProof.timeouts}/${d.duelProof.trials.length}`:'actual duel proof pending');
  d.technicalStatus=d.proof?.seeds===12?(d.technicalFlags.length?'flagged':'proved'):'pending';
- d.ownerKeep=owner.keeps.includes(d.id);d.provisional=owner.provisional===d.id;d.assignment=owner.assignment[d.slot]===d.id?(d.provisional?'Provisional campaign':'Campaign'):owner.alternates.includes(d.id)?'Practice alternate':'Owner review';d.bossBalance=bossBalance?.candidates[d.id]||null;courses.push(d);
+ d.ownerKeep=owner.keeps.includes(d.id);d.assignment=owner.assignment[d.slot]===d.id?'Campaign':owner.alternates.includes(d.id)?'Practice alternate':'Owner review';d.bossBalance=bossBalance?.candidates[d.id]||null;courses.push(d);
 }
 const legacy=JSON.parse(await readFile('tracks/atlas/shapes.json','utf8')),runoff=legacy.courses.find(c=>c.id==='runoff');
 courses.push({id:'switchback-4-runoff',slot:'switchback-4',role:'accepted',tier:3,laps:6,oldLaps:6,family:'Owner accepted original',course:runoff.course,before:runoff.course,shape:runoff.shape,gates:[],geometry:{lint:[]},accepted:true});
@@ -40,5 +40,18 @@ const result={version:'owner-applied-v2',freshFinalProof:finalProof,generated:ne
  truth:'Recorded owner Keeps are installed; three duplicate Keeps remain practice alternates. Rejected and unreviewed proposals are archived outside the active library. Scrap-7 replacement and finale repair status are recorded in the apply notes. Runoff remains unchanged, including its measured baseline flag. Human feel and Stick evidence remain separate from simulation.'};
 await writeFile('tracks/atlas/candidates.json',JSON.stringify(result));await writeFile('tracks/atlas/candidates-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(result)};\n`);
 await writeFile(`${folder}/outline-pairs.json`,JSON.stringify(pairs));
-const boss=courses.filter(c=>c.slot==='scrap-7');if(boss.length===3){const review={...result,candidates:boss,expectedCandidates:3,expectedSlots:1,pendingSlots:[],pairs:pairs.filter(p=>boss.some(c=>c.id===p.a)&&boss.some(c=>c.id===p.b)),hunterEvidence:null,activeHunterEvidence:null,truth:'Three NEW tier-1 boss layouts, three laps. No owner choice is inferred. The marked provisional assignment is reversible; Keep, Maybe or Reject each with notes and Copy Markdown.'};await writeFile('tracks/atlas/scrap-7-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(review)};\n`);}
+// The decision review retains rejected outlines and links to their archived bytes.
+const archive='../excluded/owner-2026-10-04/rejected';
+const archivedReview=await readFile('tracks/excluded/owner-2026-10-04/scrap-7-review-before.js','utf8');
+const prior=JSON.parse(archivedReview.slice(archivedReview.indexOf('=')+1).trim().replace(/;$/, ''));
+const boss=['scrap-7-d','scrap-7-e','scrap-7-f'].map(id=>{
+ const c=structuredClone(courses.find(c=>c.id===id)||prior.candidates.find(c=>c.id===id));
+ delete c.provisional;
+ c.ownerDecision=owner.keeps.includes(id)?'Keep':'Reject';c.decisionFinal=true;
+ if(c.ownerDecision==='Reject'){c.archived=true;c.archiveBase=archive;c.assignment='Archived owner Reject';c.ownerKeep=false;c.proofFile=`${archive}/proof-final/${id}.json`;}
+ return c;
+});
+const review={...result,candidates:boss,expectedCandidates:3,expectedSlots:1,pendingSlots:[],pairs:prior.pairs,hunterEvidence:null,activeHunterEvidence:null,
+ truth:'Owner decision recorded 2026-10-04: scrap-7-e (staggered-bays) Keep and assigned; scrap-7-d and scrap-7-f Reject and archived. Three laps, tier 1, Ash Yards. First place remains required for boss promotion. Boss balance is flagged: Rookie 4/32, Club 2/32, Pro 0/32 first-place wins. The archived alternatives retain their historical measurements.'};
+await writeFile('tracks/atlas/scrap-7-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(review)};\n`);
 console.log(JSON.stringify({candidates:manifest.length,slots:new Set(courses.map(c=>c.slot)).size,similar:pairs.filter(p=>p.similar).length,proved:courses.filter(c=>c.technicalStatus==='proved').length}));

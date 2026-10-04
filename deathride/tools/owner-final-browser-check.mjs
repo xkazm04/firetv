@@ -24,7 +24,7 @@ try{
    const runoff=page.locator('article.outline').filter({hasText:'switchback-4-runoff'});
    assert.match(await runoff.textContent(),/6 laps.*Thin Air/);
    assert.match(await page.locator('article.outline').filter({hasText:'crown-7-a'}).textContent(),/Elimination.*The Crown/);
-   assert.match(await page.locator('article.outline').filter({hasText:'scrap-7-f'}).textContent(),/PROVISIONAL/);
+   assert.match(await page.locator('article.outline').filter({hasText:'scrap-7-e'}).textContent(),/OWNER KEEP/);
   }else{
    assert.ok(await page.locator('table').count()>=6);
    assert.ok(!(await page.locator('body').textContent()).includes('measurements running'));
@@ -36,7 +36,8 @@ try{
  }
  const catalog=await(await fetch('http://127.0.0.1:8794/api/catalog')).json();
  assert.equal(catalog.playable.length,38);assert.equal(new Set(catalog.playable).size,38);
- const expected=data.assignment.flatMap(r=>[r.course,...r.alternate.split(';').filter(Boolean)]);
+ const currentAssignment=(await readFile('tracks/candidates/owner-assignment.csv','utf8')).trim().split(/\r?\n/).slice(1).map(l=>{const [event,candidate,course,status,alternate]=l.split(',');return {event,candidate,course,status,alternate}});
+ const expected=currentAssignment.flatMap(r=>[r.course,...r.alternate.split(';').filter(Boolean)]);
  assert.deepEqual([...catalog.playable].sort(),[...expected].sort());
  for(const width of [1440,390]){
   const page=await browser.newPage({viewport:{width,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
