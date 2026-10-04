@@ -6,7 +6,7 @@ Branch deathride/tracks; no push, paid providers, art generation or owner questi
 |---|---|---|
 | 1 | Complete; required build/tests and browser checks green. 33 composer campaign assignments plus unchanged Runoff; three practice alternates. Scrap-7 explicitly pending part 2. 63 Rejects and three unreviewed candidates archived. | OWNER-TRACKS-1-SELECTION.md |
 | 2 | Complete; three new distinct 72-trial-proved layouts, scrap-7-f provisional, owner review and native Lab browser green; required build/tests green. | OWNER-TRACKS-2-SCRAP-BOSS.md |
-| 3 | Pending: approved crown-7-a encounter repair and duel proof. | Pending |
+| 3 | Complete; original unresolved duels 3/12 ? 0/12, held-out 0/128; approved layout/content unchanged; 258 tests/build/browser green. | OWNER-TRACKS-3-FINALE.md |
 | 4 | Before studies running from frozen original bytes; final full evidence and pages pending. | Pending |
 | 5 | Pending: /24 TCP/5555 scan and isolated Stick check. | Pending |
 
@@ -20,3 +20,8 @@ Integration checks exposed missing new unlocks, obsolete legacy-library-only ass
 ## Part 2
 
 Generated three new composer designs using the owner-retained grammars. Preserved failed pilot evidence, then proved all three with 216 six-car trials, clean traversal, exact replay, rotation and shape gates. Selected scrap-7-f by the predeclared lower-early-wreck rule (4/72 versus 9/72 and 10/72), preserving stable event/tier/three laps and Ash Yards region. It is explicitly provisional; d/e remain owner-review drafts. Inspected the three-outline sheet directly. Review page has blank initial owner choices, notes and escaped Copy Markdown. Desktop/mobile review, all three native Lab simulations, retained atlas, composer and regions browser checks pass. Required tasks :core:test :link:test :game:test :app:assembleDebug passed in 8m51s, 257 tests total, zero failures/errors/skips. Evidence: owner-part2-build.log and evidence/tracks/owner-part2. Finale flag remains explicitly 3/12 pending part 3. No push, provider or art changes.
+
+
+## Part 3
+
+Reproduced the approved arena's three unresolved original seeds. Supply-only pilots did not reliably solve them and showed full ammo during timeouts. Shipped a named-hunter search pace through shared throttle/brake inputs plus hinted target projection at the junction; retained approved geometry, grid, original eight ammo sites, no repairs and the 600-second watchdog. Original 12 resolved 12/12 (rig wins 4), held-out Pro seeds 12?139 resolved 128/128 (rig wins 53; maximum 329.48 s; zero one-shot kills). Raw failures remain in evidence. Added actual-equipment regressions for all three prior failing seeds; existing draw/non-advancement/save/allocation tests remain green. Native evidence checks approved installed CSV equivalence and exact repeated state hash. Updated atlas clears the actual-duel flag; candidate contract, atlas/region review and native Lab/composer browser checks pass. Required build passed in 11m55s with 207 core + 8 link + 43 game tests, zero failures/errors/skips. Cross-difficulty 3,072-duel and full final-library studies continue as part 4, with any newly observed failures to be reported explicitly. No provider, art or device mutation.

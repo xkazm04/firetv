@@ -443,7 +443,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 val dx=o.x-c.x;val dy=o.y-c.y;val distance=dx*dx+dy*dy
                 if(distance<nearest && combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)>=1.0) {
                     nearest=distance;c.aiDuelTarget=o.id
-                    track.project(o.x,o.y,duelProjection);lane=duelProjection.distance
+                    track.project(o.x,o.y,duelProjection,track.startM+o.lap.progressM,o.trackRoute);lane=duelProjection.distance
                     c.aiDuelWait=dx*cos(c.heading)+dy*sin(c.heading)<0
                     // Leave a passing lane while waiting for the visible car behind.
                     // Matching its lane here merely parks a shield in front of its guns.
@@ -460,7 +460,10 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
         val target=if(c.carClass==null) { if(point.curvature>0) 23.0-ai.cornerMargin(c,skill) else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM,c.trackRoute),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-ai.cornerMargin(c,skill) else c.spec.maxSpeedMps*c.abilitySpeedScale)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
-        val cornerTarget=min(obstacles.speedLimit[c.id],target*ai.speedFraction(c)*surfaceLimit*(1.0-min(.55,abs(error)*.4))*(if(c.aiDuelWait)DeathDuel.chaseFraction else 1.0))
+        // Patrol slowly after losing visual contact so the slower mission rig can catch up.
+        // This depends only on the existing perception result; no unseen opponent position is read.
+        val duelPace=if(c.aiDuelWait)DeathDuel.chaseFraction else if(eventType==EventType.ELIMINATION && c.aiStyle===DeathDuel.boss && c.aiDuelTarget<0 && seconds>=CampaignRules["duelOpeningSeconds"])DeathDuel.searchFraction else 1.0
+        val cornerTarget=min(obstacles.speedLimit[c.id],target*ai.speedFraction(c)*surfaceLimit*(1.0-min(.55,abs(error)*.4))*duelPace)
         var a=if(c.speedMps<cornerTarget) 1.0 else .12
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
