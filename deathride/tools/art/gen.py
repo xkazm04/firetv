@@ -15,8 +15,9 @@ import uuid
 from datetime import datetime, timezone
 from common import ART, ROOT, append_json, briefs, compile_prompt, digest, file_lock, make_contact_sheet, now, read_json, sha, write_json, style_for
 
-# A bare number can be a token count or a dimension. Require error context for 429.
-QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b(?:HTTP(?:/\d(?:\.\d)?)?\s*|status(?:_code| code)?[\"\s:=]*|error[\"\s:=]*)429\b|\b429\s+(?:too many|rate limit)|usage limit.{0,40}(exceed|reach)|insufficient.{0,15}credits)')
+# A bare number can be a token count or a dimension. Require error context.
+# Grok Build also reports exhausted image access as HTTP 402, not just 429.
+QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b(?:HTTP(?:/\d(?:\.\d)?)?\s*|status(?:_code| code)?[\"\s:=]*|error[\"\s:=]*)(?:429|402)\b|\b429\s+(?:too many|rate limit)|\b402\s+Payment Required|usage limit.{0,40}(exceed|reach)|usage balance.{0,40}exhaust|insufficient.{0,15}credits)')
 
 def quota_evidence(output):
     match=QUOTA.search(output)
@@ -26,7 +27,7 @@ def quota_evidence(output):
             context=error_context or value.get('type')=='error'
             for key,item in value.items():
                 name=key.lower()
-                if item==429 and (name in ('status','status_code','statuscode','http_status') or (context and name=='code')):return 'structured HTTP status 429'
+                if item in (429,402) and (name in ('status','status_code','statuscode','http_status') or (context and name=='code')):return 'structured HTTP status '+str(item)
                 found=inspect(item,context or name in ('error','errors','exception'))
                 if found:return found
         elif isinstance(value,list):
@@ -34,7 +35,7 @@ def quota_evidence(output):
                 found=inspect(item,error_context)
                 if found:return found
         elif isinstance(value,str):
-            if error_context and value.strip()=='429':return 'structured error 429'
+            if error_context and value.strip() in ('429','402'):return 'structured error '+value.strip()
             if value.startswith('{'):
                 try:return inspect(json.loads(value),error_context)
                 except json.JSONDecodeError:pass
@@ -285,6 +286,9 @@ def main():
         print(json.dumps({'images':len(rows),'batches':sorted({r['batch'] for r in rows}),'budget':budget.summary()},indent=2)); return
     with file_lock(ART/'.run.lock',timeout=1):
         for batch in dict.fromkeys(r['batch'] for r in rows):
+            if budget.summary()['stop']:
+                print(json.dumps(budget.summary()),flush=True)
+                break
             group=[r for r in rows if r['batch']==batch]
             style=style_for(group[0])
             if any(style_for(r)!=style for r in group):
@@ -313,6 +317,11 @@ def main():
             make_contact_sheet([{'id':r['asset'],'path':r.get('image'),'verdict':r['status']} for r in results],ART/'contact-sheets'/f'{batch}-raw.png',batch+' | RAW / owner review pending')
             print(json.dumps(budget.summary()),flush=True)
             if budget.summary()['stop']: break
+            # Unknown provider failures must be inspected before another group.
+            # An unrecognised quota message must not drain the entire proof queue.
+            if any(r['status']!='generated' for r in results):
+                print('GENERATION_FAILURE_REQUIRES_INSPECTION; no further groups dispatched',flush=True)
+                break
 
 if __name__=='__main__':
     main()

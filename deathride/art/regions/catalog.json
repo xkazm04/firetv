@@ -1,0 +1,1998 @@
+{
+  "schema": 1,
+  "scope": "art-only; not runtime region.csv",
+  "source": "docs\\concepts\\deathride\\G0-region-bible.md",
+  "source_sha256": "94fb7bc7eee7c203d95be0c9078bc5658d32e3e63770ae22ac6c143c26a71c73",
+  "regions": [
+    {
+      "id": "scrap",
+      "name": "Ash Yards",
+      "division": "scrap",
+      "boss": "Rook",
+      "ally": "Rook",
+      "climate": "Dry soot fall, cool overcast, brittle dust and sorted salvage.",
+      "palette": {
+        "asphalt": "#39302A",
+        "dirt": "#65513D",
+        "gravel": "#756047",
+        "sand": "#8C704B",
+        "salt": "#ACA080",
+        "ice": "#8C8879",
+        "snow": "#B8AE91",
+        "oil": "#171513",
+        "kerb": "#A69A78"
+      },
+      "props": [
+        {
+          "id": "scrap-pile",
+          "name": "scrap pile",
+          "reason": "kept salvage vocabulary",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.9,
+              1.4
+            ]
+          },
+          "placement_extent_m": [
+            3.8,
+            2.8
+          ],
+          "visual_extent_m": [
+            3.8,
+            2.8
+          ],
+          "height_m": 1.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "garage waste collection",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "broken yard power grid",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "axle-cradle",
+          "name": "axle cradle",
+          "reason": "two salvaged axles in a low sorting jig",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "baled-sheet-steel",
+          "name": "baled sheet steel",
+          "reason": "crushed corrugated metal bundle",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.1,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.2,
+            1.8
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "magnet-yoke",
+          "name": "magnet yoke",
+          "reason": "detached salvage magnet and lifting eyes",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.6,
+            2.2
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-reel",
+          "name": "cable reel",
+          "reason": "exposed rust spool with dull cable",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.1,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.2,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.2,
+            2.2
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "sorting-rack",
+          "name": "sorting rack",
+          "reason": "bent open rack for reusable panels",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.5
+          ],
+          "height_m": 1.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "filter-sacks",
+          "name": "filter sacks",
+          "reason": "torn soot-catcher sacks in a shallow pile",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.0
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "scale-plate",
+          "name": "scale plate",
+          "reason": "worn flush vehicle-weighing deck fragment",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            3.4,
+            2.4
+          ],
+          "visual_extent_m": [
+            3.4,
+            2.4
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "culvert-mouth-cap",
+          "name": "culvert mouth cap",
+          "reason": "collapsed circular drainage grate",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.4,
+            2.1
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.1
+          ],
+          "height_m": 0.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "backdrop": "Roofless sorting sheds, cropped rail sidings and distant suspended conveyor structures surrounding a quiet empty central apron.",
+      "horizon": "Uneven low stacks of dismantled corrugated sheet and skeletal broken power grid across a quiet soot sky.",
+      "atmosphere": [
+        {
+          "id": "ash",
+          "brief": "Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow.",
+          "max_live": 12,
+          "spawn_per_second": 3,
+          "lifetime_seconds": 4,
+          "max_screen_px": 12
+        }
+      ],
+      "weather_cap": 12,
+      "owner_approved": false,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.98,
+          0.95,
+          0.9
+        ],
+        "vignette_alpha_max": 0.06,
+        "fog_alpha_max": 0.04,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "ambience_hooks": [
+        "region.scrap.wind-wire",
+        "region.scrap.sheet-creak",
+        "region.scrap.sorting-clank"
+      ],
+      "ambience_status": "later audio task; no audio generated",
+      "plot": "Burned vehicle sorting yards outside the workshops. Marrow owns the debt; Rook controls the gate and becomes the first ally after defeat. Scrap 1's ash on the key and scrap 6's numbers under soot are literal environmental clues: useful metal is sorted, tagged only later with game typography, and hauled toward the foundry. The Mechanic's improvised garage belongs here.",
+      "source_section": "Ash Yards — division `scrap`, boss/ally Rook\n\nBurned vehicle sorting yards outside the workshops. Marrow owns the debt; Rook controls the gate and becomes the first ally after defeat. Scrap 1's ash on the key and scrap 6's numbers under soot are literal environmental clues: useful metal is sorted, tagged only later with game typography, and hauled toward the foundry. The Mechanic's improvised garage belongs here.\n\nClimate/flavour: dry soot fall after old yard fires, cool flat overcast, brittle dust in sheltered lanes. Thin ash over brown aggregate; dense salvage forms, empty sky. Accent: faded hazard ochre `#B4A044` on sorting equipment.\n\n| Asphalt | Dirt | Gravel | Sand/fines | Salt | Ice | Snow | Oil | Kerb paint |\n|---|---|---|---|---|---|---|---|---|\n| #39302A | #65513D | #756047 | #8C704B | #ACA080 | #8C8879 | #B8AE91 | #171513 | #A69A78 |\n\nGround: recolour existing worn asphalt, dirt and gravel; heavy asphalt near compactors. No new ash tile unless these fail visual/repetition gates. Salt/ice/snow colours are continuity values for inherited material slots, not permission to add those hazards. Reuse exact oil. Small seeded soot marks carry variation.\n\n| Prop | Reason it belongs | W × H | Ht | Effect | Source |\n|---|---|---:|---:|---|---|\n| scrap pile | kept salvage vocabulary | 3.8 × 2.8 | 1.5 | solid | kept exact export |\n| oil drums | garage waste collection | 1.8 × 1.5 | 1.0 | solid | kept exact export |\n| rust pylon | broken yard power grid | 2.8 × 2.2 | 5.0 | solid | kept exact export |\n| axle cradle | two salvaged axles in a low sorting jig | 2.8 × 1.8 | 0.6 | solid | new |\n| baled sheet steel | crushed corrugated metal bundle | 2.2 × 1.8 | 1.0 | solid | new |\n| magnet yoke | detached salvage magnet and lifting eyes | 2.6 × 2.2 | 0.5 | solid | new |\n| cable reel | exposed rust spool with dull cable | 2.2 × 2.2 | 1.2 | solid | new |\n| sorting rack | bent open rack for reusable panels | 3.2 × 1.5 | 1.6 | solid | new |\n| filter sacks | torn soot-catcher sacks in a shallow pile | 2.8 × 2.0 | 0.3 | drag | new |\n| scale plate | worn flush vehicle-weighing deck fragment | 3.4 × 2.4 | 0.1 | none | new |\n| culvert mouth cap | collapsed circular drainage grate | 2.4 × 2.1 | 0.2 | none | new |\n\nBackdrop: roofless sorting sheds, cropped rail sidings and distant hanging conveyor silhouettes; quiet central apron. Horizon: uneven stacks of dismantled sheet and the skeletal grid, no generic desert mountains. Atmosphere: ash sheet, 12 visible flakes maximum, 3 spawns/s, 4 s life, each ≤12 px at 1080p. Grade [0.98,0.95,0.90], vignette alpha ≤0.06, optional fog alpha ≤0.04. Ambience hooks only: `region.scrap.wind-wire`, `region.scrap.sheet-creak`, distant sorting clank; sparse events, duck beneath engines and warnings. No audio generation.\n"
+    },
+    {
+      "id": "foundry",
+      "name": "Cinder Row",
+      "division": "foundry",
+      "boss": "Ox",
+      "ally": "Ox",
+      "climate": "Dry furnace dust, cold clinker and intermittent ember specks.",
+      "palette": {
+        "asphalt": "#302925",
+        "dirt": "#624536",
+        "gravel": "#76523C",
+        "sand": "#93643E",
+        "salt": "#B9A57C",
+        "ice": "#8C8270",
+        "snow": "#B8AC8C",
+        "oil": "#171513",
+        "kerb": "#AB7D45"
+      },
+      "props": [
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept maintenance stock",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept power distribution",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "casting-ladle",
+          "name": "casting ladle",
+          "reason": "cold empty crucible with heavy trunnions",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.25
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.5
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.5
+          ],
+          "height_m": 1.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ingot-mould",
+          "name": "ingot mould",
+          "reason": "paired hollow casting channels",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "refractory-brick-skid",
+          "name": "refractory brick skid",
+          "reason": "irregular pale heat-damaged blocks",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.8,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cooling-manifold",
+          "name": "cooling manifold",
+          "reason": "ring of capped coolant pipes",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.2
+          ],
+          "height_m": 0.7,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "roller-cassette",
+          "name": "roller cassette",
+          "reason": "detached steel rollers in a short frame",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.7,
+              0.85
+            ]
+          },
+          "placement_extent_m": [
+            3.4,
+            1.7
+          ],
+          "visual_extent_m": [
+            3.4,
+            1.7
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "quench-basket",
+          "name": "quench basket",
+          "reason": "open perforated metal basket, empty",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.0
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "furnace-door",
+          "name": "furnace door",
+          "reason": "detached round insulated hatch",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.6,
+            2.2
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cinder-spill-tray",
+          "name": "cinder spill tray",
+          "reason": "shallow tray overflowing with cold fines",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.0,
+            2.2
+          ],
+          "height_m": 0.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "backdrop": "Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron.",
+      "horizon": "Broken inclined lifts and squat exhaust housings, industrial black masses against quiet earth sky.",
+      "atmosphere": [
+        {
+          "id": "embers",
+          "brief": "Six animation phases of ONE compact ember fragment, from dull rust chip to tiny broken rust-orange spark, no large flame.",
+          "max_live": 10,
+          "spawn_per_second": 4,
+          "lifetime_seconds": 2.5,
+          "max_screen_px": 10
+        }
+      ],
+      "weather_cap": 10,
+      "owner_approved": false,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          1.02,
+          0.96,
+          0.9
+        ],
+        "vignette_alpha_max": 0.07,
+        "fog_alpha_max": 0.03,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "ambience_hooks": [
+        "region.foundry.furnace-breath",
+        "region.foundry.cooling-ticks",
+        "region.foundry.press-cycle"
+      ],
+      "ambience_status": "later audio task; no audio generated",
+      "plot": "The league's working foundry belt melts the salvage into its own fleet. Ox holds the crew account and duplicate receipts: foundry 7's victory exposes stolen payments and stops the diversion. Infrastructure reads as a chain of material handling, not random factory rubble.",
+      "source_section": "Cinder Row — division `foundry`, boss/ally Ox\n\nThe league's working foundry belt melts the salvage into its own fleet. Ox holds the crew account and duplicate receipts: foundry 7's victory exposes stolen payments and stops the diversion. Infrastructure reads as a chain of material handling, not random factory rubble.\n\nClimate/flavour: dry furnace dust, suspended grit and intermittent ember specks. Heat is conveyed by separate sparse particles and rust values, never a baked glow on neutral props. Accent: rust-orange `#B4512D` in refractory residue.\n\n| Asphalt | Dirt | Gravel | Sand/fines | Salt | Ice | Snow | Oil | Kerb paint |\n|---|---|---|---|---|---|---|---|---|\n| #302925 | #624536 | #76523C | #93643E | #B9A57C | #8C8270 | #B8AC8C | #171513 | #AB7D45 |\n\nGround: recolour heavy asphalt and dirt; **new cold clinker aggregate** replaces the gravel slot because vitrified porous fragments must differ structurally from ordinary stones. No lava field or glowing roadway. Concrete and metal retain their existing patterns with restrained tint.\n\n| Prop | Reason it belongs | W × H | Ht | Effect | Source |\n|---|---|---:|---:|---|---|\n| oil drums | kept maintenance stock | 1.8 × 1.5 | 1.0 | solid | kept exact export |\n| rust pylon | kept power distribution | 2.8 × 2.2 | 5.0 | solid | kept exact export |\n| casting ladle | cold empty crucible with heavy trunnions | 2.8 × 2.5 | 1.6 | solid | new |\n| ingot mould | paired hollow casting channels | 3.0 × 1.8 | 0.5 | solid | new |\n| refractory brick skid | irregular pale heat-damaged blocks | 2.4 × 1.8 | 0.8 | solid | new |\n| cooling manifold | ring of capped coolant pipes | 2.8 × 2.2 | 0.7 | solid | new |\n| roller cassette | detached steel rollers in a short frame | 3.4 × 1.7 | 0.6 | solid | new |\n| quench basket | open perforated metal basket, empty | 2.4 × 2.0 | 1.2 | solid | new |\n| furnace door | detached round insulated hatch | 2.6 × 2.2 | 0.3 | solid | new |\n| cinder spill tray | shallow tray overflowing with cold fines | 3.0 × 2.2 | 0.2 | drag | new |\n\nBackdrop: connected cast halls, bunker mouths and hoist frames; centre kept broad and dark. Horizon: broken inclined lifts and squat exhaust housings rather than the rejected smelter-stack sprite. Atmosphere: six-frame ember sheet, maximum 10 sprites, 4/s, 2.5 s life, ≤10 px; no bloom pass or heat-refraction render target. Grade [1.02,0.96,0.90], vignette ≤0.07, fog alpha ≤0.03. Ambience tags: `region.foundry.furnace-breath`, `region.foundry.cooling-ticks`, distant press cycles; no music or speech substitute.\n"
+    },
+    {
+      "id": "salt",
+      "name": "Salt Cut",
+      "division": "salt",
+      "boss": "Vex",
+      "ally": "Vex",
+      "climate": "Desiccating wind; white mineral flats meet ochre extraction terraces.",
+      "palette": {
+        "asphalt": "#655C4B",
+        "dirt": "#987546",
+        "gravel": "#AA8F60",
+        "sand": "#BEA271",
+        "salt": "#CFC29C",
+        "ice": "#A79F88",
+        "snow": "#CFC6AA",
+        "oil": "#2A2520",
+        "kerb": "#DDD0A6"
+      },
+      "props": [
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept abandoned basin power link",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept haulage service stock",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "brine-pump-skid",
+          "name": "brine pump skid",
+          "reason": "seized low pump, pipe loop and filter pot",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              1.05
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            2.1
+          ],
+          "visual_extent_m": [
+            3.0,
+            2.1
+          ],
+          "height_m": 0.9,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "evaporation-rake",
+          "name": "evaporation rake",
+          "reason": "folded scraper teeth on a short frame",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "core-sample-rack",
+          "name": "core sample rack",
+          "reason": "empty stone-drilling sample trays",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.5
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "drill-collar",
+          "name": "drill collar",
+          "reason": "heavy segmented drilling ring lying flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.15,
+              1.15
+            ]
+          },
+          "placement_extent_m": [
+            2.3,
+            2.3
+          ],
+          "visual_extent_m": [
+            2.3,
+            2.3
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "salt-sacks",
+          "name": "salt sacks",
+          "reason": "split mineral sacks spilling coarse grains",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.0
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "conveyor-hopper",
+          "name": "conveyor hopper",
+          "reason": "detached shallow receiving hopper",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.25
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "survey-cairn-ring",
+          "name": "survey cairn ring",
+          "reason": "low angular survey-stone cluster",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "mineral-screen",
+          "name": "mineral screen",
+          "reason": "flat ripped sieve panel and trapped pebbles",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.8,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.8
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "backdrop": "A broad quiet pale mineral basin, ochre stepped extraction terraces confined to the edges and tiny distant mineral handling machinery.",
+      "horizon": "Low stratified ochre quarry ridge adjoining a white salt basin, an interrupted thin conveyor silhouette against quiet bone sky.",
+      "atmosphere": [
+        {
+          "id": "salt-glints",
+          "brief": "Six distinct tiny irregular mineral glints made from two or three angular bone flecks, no star symbols or cross shapes.",
+          "max_live": 8,
+          "spawn_per_second": 4,
+          "lifetime_seconds": 2,
+          "max_screen_px": 6
+        },
+        {
+          "id": "dust",
+          "brief": "Six expanding and dispersing phases of ONE small ochre dust puff, broken soft perimeter, broad translucent-looking flat pigment masses.",
+          "max_live": 4,
+          "spawn_per_second": 1,
+          "lifetime_seconds": 4,
+          "max_screen_px": 64
+        }
+      ],
+      "weather_cap": 12,
+      "owner_approved": false,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette_alpha_max": 0.03,
+        "fog_alpha_max": 0.04,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "ambience_hooks": [
+        "region.salt.dry-gust",
+        "region.salt.sieve-rattle",
+        "region.salt.distant-hauler"
+      ],
+      "ambience_status": "later audio task; no audio generated",
+      "plot": "A drained mineral basin whose white flats run into ochre extraction cuts. Marrow owns the haul contracts; Vex knows the shipping routes and becomes an ally. Salt 3's crate switch, salt 5's missing lap and Relay at dusk fit a place where loads and records can disappear. Quarry and salt are two faces of the same act.",
+      "source_section": "Salt Cut — division `salt`, boss/ally Vex\n\nA drained mineral basin whose white flats run into ochre extraction cuts. Marrow owns the haul contracts; Vex knows the shipping routes and becomes an ally. Salt 3's crate switch, salt 5's missing lap and Relay at dusk fit a place where loads and records can disappear. Quarry and salt are two faces of the same act.\n\nClimate/flavour: desiccating wind, bleaching dust, hard mineral crust and sheltered ochre gullies. Glare is a bright material value with controlled contrast, not an overexposure filter. Accent: ochre `#A37738` on mineral-handling hardware.\n\n| Asphalt | Dirt | Gravel | Sand/fines | Salt | Ice | Snow | Oil | Kerb paint |\n|---|---|---|---|---|---|---|---|---|\n| #655C4B | #987546 | #AA8F60 | #BEA271 | #CFC29C | #A79F88 | #CFC6AA | #2A2520 | #DDD0A6 |\n\nGround: **new fine salt-crust field** replaces the dirt slot on flats; recolour gravel to quarry spoil and worn asphalt to bleached mineral-dusted road. Quarry routes use ochre dirt derivative in the same replaceable slot. Salt's irregular fine crystalline structure cannot be supplied by recolouring grass or sand. No new geometry, mirage shader or physics material.\n\n| Prop | Reason it belongs | W × H | Ht | Effect | Source |\n|---|---|---:|---:|---|---|---|\n| rust pylon | kept abandoned basin power link | 2.8 × 2.2 | 5.0 | solid | kept exact export |\n| oil drums | kept haulage service stock | 1.8 × 1.5 | 1.0 | solid | kept exact export |\n| brine pump skid | seized low pump, pipe loop and filter pot | 3.0 × 2.1 | 0.9 | solid | new |\n| evaporation rake | folded scraper teeth on a short frame | 3.2 × 1.8 | 0.5 | solid | new |\n| core sample rack | empty stone-drilling sample trays | 2.8 × 1.5 | 0.5 | solid | new |\n| drill collar | heavy segmented drilling ring lying flat | 2.3 × 2.3 | 0.4 | solid | new |\n| salt sacks | split mineral sacks spilling coarse grains | 2.8 × 2.0 | 0.4 | drag | new |\n| conveyor hopper | detached shallow receiving hopper | 3.2 × 2.5 | 1.0 | solid | new |\n| survey cairn ring | low angular survey-stone cluster | 2.0 × 1.8 | 0.6 | solid | new |\n| mineral screen | flat ripped sieve panel and trapped pebbles | 2.8 × 1.8 | 0.1 | none | new |\n\nBackdrop: white basin occupying quiet centre, stepped extraction terraces confined to edges, distant tiny haul machinery. Horizon: low stratified cut ridge and interrupted conveyor line. Atmosphere: salt-glint sheet (8 maximum, 4/s, 2 s, ≤6 px), dust-puff sheet (4 maximum, 1/s, 4 s, ≤64 px); combined cap 12, projected alpha coverage ≤4%. No generic glitter over cars. Grade [1.02,1.00,0.94], vignette ≤0.03, fog ≤0.04. Ambience: `region.salt.dry-gust`, `region.salt.sieve-rattle`, `region.salt.distant-hauler`.\n"
+    },
+    {
+      "id": "switchback",
+      "name": "Thin Air",
+      "division": "switchback",
+      "boss": "Mica",
+      "ally": "Mica",
+      "climate": "Exposed sleet and dirty snow pockets among scoured grey-bone rock.",
+      "palette": {
+        "asphalt": "#514D43",
+        "dirt": "#716957",
+        "gravel": "#8E8570",
+        "sand": "#A3987C",
+        "salt": "#BDB294",
+        "ice": "#A9A58F",
+        "snow": "#D4CCAE",
+        "oil": "#25231F",
+        "kerb": "#C3B99C"
+      },
+      "props": [
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept exposed mountain utility",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept road crew supplies",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "avalanche-anchor",
+          "name": "avalanche anchor",
+          "reason": "paired steel pins in a rock-bound foot",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "snow-fence-bundle",
+          "name": "snow fence bundle",
+          "reason": "collapsed slatted windbreak tied flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.7,
+              0.85
+            ]
+          },
+          "placement_extent_m": [
+            3.4,
+            1.7
+          ],
+          "visual_extent_m": [
+            3.4,
+            1.7
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "grit-bin",
+          "name": "grit bin",
+          "reason": "open segmented service hopper of dull grit",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.8
+          ],
+          "height_m": 1.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-saddle",
+          "name": "cable saddle",
+          "reason": "torn cableway guide wheel and bracket",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.0
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "drain-cage",
+          "name": "drain cage",
+          "reason": "ice-scoured open drain screen",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.4,
+            1.6
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.6
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "scree-gabion",
+          "name": "scree gabion",
+          "reason": "bent wire basket full of small angular stone",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.8
+          ],
+          "height_m": 0.8,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ice-grit-berm",
+          "name": "ice grit berm",
+          "reason": "low irregular dirty granular snow remnant",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.0
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.0
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rescue-sledge",
+          "name": "rescue sledge",
+          "reason": "abandoned empty short service sled",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              0.65
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            1.3
+          ],
+          "visual_extent_m": [
+            2.6,
+            1.3
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "backdrop": "Bare jagged mountain rock crowns around an open middle pass, tiny anchored road service structures and patchy dirty snow at the edges.",
+      "horizon": "Layered bare wind-scoured ridges with narrow dirty-bone snow cuts, sparse anchored cableway silhouettes, quiet desaturated sky.",
+      "atmosphere": [
+        {
+          "id": "sleet",
+          "brief": "Six distinct short tapered sleet strokes, slanted consistently rightward, bone-grey ice fragments, one compact stroke per cell.",
+          "max_live": 14,
+          "spawn_per_second": 7,
+          "lifetime_seconds": 2,
+          "max_screen_px": 14
+        },
+        {
+          "id": "snow",
+          "brief": "Six distinct small irregular torn granular snow clumps, dirty bone shapes, no decorative snowflake symbols.",
+          "max_live": 6,
+          "spawn_per_second": 2,
+          "lifetime_seconds": 3,
+          "max_screen_px": 10
+        }
+      ],
+      "weather_cap": 20,
+      "owner_approved": false,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.96,
+          0.97,
+          0.94
+        ],
+        "vignette_alpha_max": 0.05,
+        "fog_alpha_max": 0.06,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "ambience_hooks": [
+        "region.switchback.crosswind",
+        "region.switchback.cable-hum",
+        "region.switchback.grit-ticks"
+      ],
+      "ambience_status": "later audio task; no audio generated",
+      "plot": "The only service road above the basin. Mica controls the passage; the books and a voice on the line reveal the sibling's survival while the coalition refuses a private deal. The road is held together by anchors, grit stores and patched utilities. Mica joins after the act's win.",
+      "source_section": "Thin Air — division `switchback`, boss/ally Mica\n\nThe only service road above the basin. Mica controls the passage; the books and a voice on the line reveal the sibling's survival while the coalition refuses a private deal. The road is held together by anchors, grit stores and patched utilities. Mica joins after the act's win.\n\nClimate/flavour: exposed sleet, dirty snow pockets and grey-bone ice between scoured rock. The cold comes from desaturation and granular frost, with earth still visible. Accent: bleached bone `#DDD0A6` on battered snow-service gear. No neon blue ice or evergreen wilderness.\n\n| Asphalt | Dirt | Gravel | Sand/fines | Salt | Ice | Snow | Oil | Kerb paint |\n|---|---|---|---|---|---|---|---|---|\n| #514D43 | #716957 | #8E8570 | #A3987C | #BDB294 | #A9A58F | #D4CCAE | #25231F | #C3B99C |\n\nGround: recolour existing accepted fine-frost ice, gravel, dirt and worn asphalt. Frost texture already carries fine crystallisation; generation is unnecessary if seam/repetition and actual 2×2 inspection pass. Snow is a bone-tinted dirt/frost variant limited to existing off-road presentation; no new slippery zones.\n\n| Prop | Reason it belongs | W × H | Ht | Effect | Source |\n|---|---|---:|---:|---|---|---|\n| rust pylon | kept exposed mountain utility | 2.8 × 2.2 | 5.0 | solid | kept exact export |\n| oil drums | kept road crew supplies | 1.8 × 1.5 | 1.0 | solid | kept exact export |\n| avalanche anchor | paired steel pins in a rock-bound foot | 2.4 × 1.8 | 0.5 | solid | new |\n| snow fence bundle | collapsed slatted windbreak tied flat | 3.4 × 1.7 | 0.4 | solid | new |\n| grit bin | open segmented service hopper of dull grit | 2.0 × 1.8 | 1.1 | solid | new |\n| cable saddle | torn cableway guide wheel and bracket | 2.4 × 2.0 | 0.6 | solid | new |\n| drain cage | ice-scoured open drain screen | 2.4 × 1.6 | 0.1 | none | new |\n| scree gabion | bent wire basket full of small angular stone | 3.0 × 1.8 | 0.8 | solid | new |\n| ice grit berm | low irregular dirty granular snow remnant | 3.2 × 2.0 | 0.3 | drag | new |\n| rescue sledge | abandoned empty short service sled | 2.6 × 1.3 | 0.4 | solid | new |\n\nBackdrop: jagged rock crowns and tiny anchored service structures with an open middle pass. Horizon: layered bare ridge silhouettes and sparse snow cuts. Atmosphere: sleet (14 maximum, 7/s, 2 s, ≤14 px), snow (6 maximum, 2/s, 3 s, ≤10 px); combined cap 20; motion follows a presentation wind vector, never pushes a car. Grade [0.96,0.97,0.94], vignette ≤0.05, fog ≤0.06. Ambience: `region.pass.crosswind`, `region.pass.cable-hum`, `region.pass.grit-ticks`.\n"
+    },
+    {
+      "id": "crown",
+      "name": "The Crown",
+      "division": "crown",
+      "boss": "Marrow",
+      "ally": "Rook, Ox, Vex, Mica; Marrow never joins",
+      "climate": "Hollow decayed spectacle, stagnant low mist and empty grandstands.",
+      "palette": {
+        "asphalt": "#302B27",
+        "dirt": "#594936",
+        "gravel": "#75654C",
+        "sand": "#92774F",
+        "salt": "#B6A884",
+        "ice": "#938B78",
+        "snow": "#C2B89A",
+        "oil": "#171513",
+        "kerb": "#6C2427"
+      },
+      "props": [
+        {
+          "id": "league-gantry",
+          "name": "league gantry",
+          "reason": "kept start/finish authority",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            6.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            8.1,
+            2.43
+          ],
+          "height_m": 4.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept neglected pit maintenance",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "timing-cabinet",
+          "name": "timing cabinet",
+          "reason": "battered open relay timing enclosure",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.5
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.5
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "floodlight-bank",
+          "name": "floodlight bank",
+          "reason": "detached empty-lens lamp cluster laid flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "seat-bank",
+          "name": "seat bank",
+          "reason": "detached row of three broken stadium seats",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.5
+          ],
+          "height_m": 0.9,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "pit-jack",
+          "name": "pit jack",
+          "reason": "collapsed low trolley lifting jack",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.7
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.4
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.4
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "flag-base-cluster",
+          "name": "flag base cluster",
+          "reason": "bare snapped poles in heavy footplates",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-protector",
+          "name": "cable protector",
+          "reason": "worn low race-control cable bridge",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            3.0,
+            1.3
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.3
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "podium-plinth",
+          "name": "podium plinth",
+          "reason": "chipped shallow ceremonial platform",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.2
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.4
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.4
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ticket-turnstile",
+          "name": "ticket turnstile",
+          "reason": "fallen short gate mechanism, blank plates",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.7,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "backdrop": "Broken stadium seating tiers and shuttered pit buildings around a wide empty service apron, worn dried-red fixtures and bone trim.",
+      "horizon": "Uneven skeletal floodlight frames, empty grandstand crowns and torn unmarked pennants, blank display boards against dark earth sky.",
+      "atmosphere": [
+        {
+          "id": "fog",
+          "brief": "Six slowly spreading and dispersing phases of ONE small low fog bank, horizontally elongated dirty-bone wisps with broken edges, no scenery.",
+          "max_live": 3,
+          "spawn_per_second": 0.5,
+          "lifetime_seconds": 6,
+          "max_screen_px": 128,
+          "max_alpha": 0.1
+        }
+      ],
+      "weather_cap": 3,
+      "owner_approved": false,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.96,
+          0.93,
+          0.9
+        ],
+        "vignette_alpha_max": 0.08,
+        "fog_alpha_max": 0.1,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "ambience_hooks": [
+        "region.crown.empty-stands",
+        "region.crown.fixture-rattle",
+        "region.crown.vent-drone"
+      ],
+      "ambience_status": "later audio task; no audio generated",
+      "plot": "The league's decayed speedway and maintenance compound. Grandstands, floodlight frames and blank display machinery celebrate a system whose accounts are now public. The final seized-car beat and the Mechanic's supplied rig belong here. Rook, Ox, Vex and Mica are allies; Marrow is defeated, never recruited.",
+      "source_section": "The Crown — division `crown`, boss Marrow, coalition allied\n\nThe league's decayed speedway and maintenance compound. Grandstands, floodlight frames and blank display machinery celebrate a system whose accounts are now public. The final seized-car beat and the Mechanic's supplied rig belong here. Rook, Ox, Vex and Mica are allies; Marrow is defeated, never recruited.\n\nClimate/flavour: stagnant basin nightfall suggested by dark paint values, thin ground mist and bone fixtures, a hollow spectacle. No spotlights baked into overhead objects. Accent: dried red `#6C2427` on ceremonial equipment and worn paint, subordinate to readable cars.\n\n| Asphalt | Dirt | Gravel | Sand/fines | Salt | Ice | Snow | Oil | Kerb paint |\n|---|---|---|---|---|---|---|---|---|\n| #302B27 | #594936 | #75654C | #92774F | #B6A884 | #938B78 | #C2B89A | #171513 | #6C2427 |\n\nGround: recolour worn asphalt, compact dirt and gravel; retain existing concrete/oil; muted red/bone kerb pattern only where existing kerbs exist. Rubber and seeded wear provide age. No new asphalt generation merely to darken it.\n\n| Prop | Reason it belongs | W × H | Ht | Effect | Source |\n|---|---|---:|---:|---|---|---|\n| league gantry | kept start/finish authority | 6.0 × 1.8 | 4.0 | none | kept exact export |\n| oil drums | kept neglected pit maintenance | 1.8 × 1.5 | 1.0 | solid | kept exact export |\n| timing cabinet | battered open relay timing enclosure | 2.0 × 1.5 | 1.2 | solid | new |\n| floodlight bank | detached empty-lens lamp cluster laid flat | 3.2 × 1.8 | 0.6 | solid | new |\n| seat bank | detached row of three broken stadium seats | 3.2 × 1.5 | 0.9 | solid | new |\n| pit jack | collapsed low trolley lifting jack | 2.4 × 1.4 | 0.4 | solid | new |\n| flag base cluster | bare snapped poles in heavy footplates | 2.4 × 1.8 | 1.0 | solid | new |\n| cable protector | worn low race-control cable bridge | 3.0 × 1.3 | 0.1 | none | new |\n| podium plinth | chipped shallow ceremonial platform | 3.2 × 2.4 | 0.4 | solid | new |\n| ticket turnstile | fallen short gate mechanism, blank plates | 2.4 × 1.8 | 0.7 | solid | new |\n\nBackdrop: broken seating tiers and shuttered pits around a wide empty apron. Horizon: uneven floodlight silhouettes, torn unmarked pennants, blank scoreboards with no generated text. Atmosphere: low fog-bank six-frame sheet, 3 visible banks maximum, 0.5/s, 6 s life, ≤128 px, alpha ≤0.10; total projected alpha coverage ≤4%. Grade [0.96,0.93,0.90], vignette ≤0.08. Lighting cues remain optional sprite values; no extra full-screen lighting pass. Ambience: `region.crown.empty-stands`, `region.crown.fixture-rattle`, `region.crown.vent-drone`; no crowd faces, new dialogue or music.\n"
+    }
+  ]
+}

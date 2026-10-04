@@ -1,0 +1,120 @@
+{
+  "asset": "g1-foundry-dirt-tint-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "4944391e3adee0b92591478592dd3cdc2e6844188861e4597824c135a5088562",
+  "image_hashes": [
+    "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+    "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1"
+  ],
+  "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: tile. Brief: Existing dirt recoloured for Cinder Row to #624536; preserve fine material structure. No new objects.",
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "face_free": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "no_letters_or_logos": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "top_down_prop": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "subject_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "neutral_lighting": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "export_clean": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "six_cells_valid": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ]
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "face_free",
+      "no_letters_or_logos",
+      "top_down_prop",
+      "subject_matches",
+      "neutral_lighting",
+      "export_clean",
+      "six_cells_valid",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-04T12:15:42.668037+00:00",
+  "scope": "region source + actual export; advisory, not owner approval",
+  "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"yes\",\n  \"six_cells_valid\": \"not_applicable\",\n  \"confidence\": 0.75,\n  \"description\": \"A uniform, flat texture of brown dirt or soil with a matte finish and subtle surface grain, matching the requested material color and structure without any distinct objects, lighting effects, or artifacts.\"\n}",
+  "status": "graded",
+  "answers": {
+    "face_free": "yes",
+    "no_letters_or_logos": "yes",
+    "top_down_prop": "not_applicable",
+    "subject_matches": "yes",
+    "neutral_lighting": "yes",
+    "export_clean": "yes",
+    "six_cells_valid": "not_applicable",
+    "confidence": 0.75,
+    "description": "A uniform, flat texture of brown dirt or soil with a matte finish and subtle surface grain, matching the requested material color and structure without any distinct objects, lighting effects, or artifacts."
+  },
+  "elapsed_seconds": 2.469
+}

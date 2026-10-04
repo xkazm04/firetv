@@ -48,6 +48,27 @@ class GenerationContracts(unittest.TestCase):
         self.assertEqual(quota_evidence('{"error":{"code":429}}'),'structured HTTP status 429')
         self.assertEqual(quota_evidence('{"type":"error","code":429}'),'structured HTTP status 429')
 
+    def test_exhausted_grok_build_balance_is_quota_not_generic_failure(self):
+        cases = [
+            'API error (status 402 Payment Required): Grok Build usage balance exhausted',
+            '{"type":"error","message":"Internal error: {\\n  \\"message\\": \\"API error (status 402 Payment Required): Grok Build usage balance exhausted\\",\\n  \\"http_status\\": 402\\n}"}',
+            '{"error":{"http_status":402}}',
+            '{"type":"error","code":402}',
+            '{"error":"402"}',
+            'Grok Build usage balance exhausted',
+        ]
+        for message in cases:
+            self.assertIsNotNone(quota_evidence(message),message)
+        for message in ['{"type":"usage","output_tokens":402}', 'image size 402 x 429', '{"code":402}', 'balance available: 402']:
+            self.assertIsNone(quota_evidence(message),message)
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);write_json(root/'budget.json',{'weekly_image_cap':850})
+            budget=Budget(root);budget.reserve('proof-v1',1)
+            budget.stop(quota_evidence(cases[0]))
+            with self.assertRaisesRegex(RuntimeError,'SPEND_STOP'):
+                Budget(root).reserve('sibling-v1',1)
+            self.assertEqual(Budget(root).summary()['images_reserved'],1)
+
     def test_ten_original_briefs_and_exact_style_prefix(self):
         rows=briefs(ART/'briefs/p1.csv')
         self.assertEqual(len(rows),10)
