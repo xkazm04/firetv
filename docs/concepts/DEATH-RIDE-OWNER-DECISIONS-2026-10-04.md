@@ -32,3 +32,8 @@ Host reading of the pattern (to guide any new layouts): Keep families are angled
 - **The finale arena crown-7-a is Keep but has a technical flag: its actual two-car duel is unresolved in 3 of 12 trials.** Technical failures remain unchanged by owner preference: fix them (arena supplies, hunter behaviour, start positions, timeout handling) without redesigning what the owner approved; re-prove with the duel simulation.
 - Rejected candidates are archived (not deleted) and excluded from the build; no replacements are generated except for scrap-7 and the arena fix.
 - All other kept candidates must pass the shape gates, the six-car quality gates and the pacing targets as recorded; re-verify after any assignment change.
+
+## 4. Scrap-7 boss road (owner, 2026-10-04, after the apply run)
+
+Owner export of the three new scrap-7 boss candidates: **scrap-7-e (staggered-bays) Keep**; **scrap-7-d (angled-fan) Reject**; **scrap-7-f (nested-switchbacks) Reject** (f had been provisionally assigned). The owner gave no notes.
+Instruction to apply: assign scrap-7-e to the scrap-7 event, archive scrap-7-d and scrap-7-f (not delete), re-run the shape, six-car, pacing and boss-race checks for the changed slot. Technical flag the owner decision does not waive: the run's matched boss diagnostic showed scrap-7-e at Rookie 4/32, Club 2/32, Pro 0/32 first-place wins (first place is required for boss promotion); that is a balance problem to tune with boss health, ally payouts and difficulty, not a reason to change the owner's rule or this pick.
