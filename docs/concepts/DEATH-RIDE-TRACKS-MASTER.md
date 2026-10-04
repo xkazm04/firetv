@@ -65,3 +65,11 @@ Host diagnosis (measured on 2026-10-04; `deathride/tracks/atlas/library-v1-outli
 | R1 | Shape instruments and gates | complete — 29/29 merged outlines rejected, 81 similar pairs, 15 actual geometry/pair witnesses; shape atlas and signed-turn profiles; full tests/build/browser green; see `deathride/R1-shape-instruments.md` |
 | R2 | Composer for real layouts | complete — primitive/anchor compiler, variable-width roads, real at-grade junction and split/rejoin runtime, Lab recipe editor and route CSV export; folded and route controls visually inspected; 238 tests, build and browser checks green; see `deathride/R2-layout-composer.md` |
 | R3 | Library as owner choices | partial — 102 visually inspected choices across 34 redesigned slots plus unchanged Runoff; 99 race choices pass shape/quality/pacing, zero similar outline pairs; 7,344 six-car combat and 306 clean trials. Three finale arenas pass traversal but still fail actual duel resolution; active hunter blocking unproved; Stick pending/busy. Owner review, exports, 245 tests, required build and browser checks green. See `deathride/R3-candidate-library.md` for measured limits and remaining work. |
+
+## Apply owner triage (2026-10-04)
+
+Authority: DEATH-RIDE-OWNER-DECISIONS-2026-10-04.md. Per-part details and remaining work: deathride/OWNER-TRACKS-SESSION.md.
+
+| Id | Part | Status |
+|---|---|---|
+| A1 | Owner selections, alternates and excluded archive | complete ? 37 Keeps retained, 34 assigned events and three practice alternates; 63 Rejects plus three unreviewed archived; 256 tests/build/browser green; scrap-7 pending A2 |

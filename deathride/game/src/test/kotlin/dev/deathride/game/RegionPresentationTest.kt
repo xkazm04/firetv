@@ -43,7 +43,7 @@ class RegionPresentationTest {
         pool.select(null);pool.update(1000.0);assertEquals(0,pool.activeCount)
     }
     @Test fun nativeCandidateRegionComesFromEventEvenWhenOriginalCourseBelongsElsewhere() {
-        for(id in listOf("scrap-1-a","foundry-1-a","salt-1-a","switchback-1-a","crown-1-a")) {
+        for(id in listOf("scrap-1-c","foundry-1-c","salt-1-b","switchback-1-a","crown-1-a")) {
             val p=TrackPreview.read(File("../tracks/candidates/drafts/$id.json").readText())
             assertEquals(id.substringBefore('-'),p.course.region.division)
         }

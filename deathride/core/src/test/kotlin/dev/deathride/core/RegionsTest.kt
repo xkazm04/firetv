@@ -13,8 +13,7 @@ class RegionsTest {
             assertEquals(Career.cups[e.cupIndex].id,e.region.division)
             assertTrue(Courses.all[e.courseIndex].json(e.region).contains("\"region\":\"${e.region.id}\""))
         }
-        val reused=Career.events.filter{Courses.all[it.courseIndex].id=="frostline-final"}
-        assertEquals(setOf("switchback","crown"),reused.map{it.region.id}.toSet())
+        for(e in Career.events.filter{it.id!="scrap-7"})assertEquals(e.region.id,Courses.all[e.courseIndex].region.id)
         assertEquals("switchback",Courses.all.single{it.id=="runoff"}.region.id)
     }
     @Test fun authoredPalettesAndBudgetsAreNotPlaceholders() {

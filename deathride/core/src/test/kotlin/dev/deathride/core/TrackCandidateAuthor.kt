@@ -32,7 +32,11 @@ object CandidateAuthor {
         LayoutFamily("harbour-run",points("0 0;50 0;62 6;60 19;36 17;23 31;42 48;38 59;16 46;5 29;-14 35;-27 20;-18 5;-5 12")),
         LayoutFamily("canyon-shuttle",points("0 0;42 -12;55 1;41 14;22 7;8 22;23 38;43 27;54 40;34 59;12 51;-3 34;-20 42;-31 28;-16 12"))
     )
-    val slots=Content.table("campaign").map { row ->
+    // Stable authoring provenance: installing a choice must not change its source template.
+    val sourceCampaign=File(TrackQuality.root,"tracks/excluded/owner-2026-10-04/campaign-before.csv").let {
+        if(it.exists())TrackQuality.csv(it.readText()) else Content.table("campaign")
+    }
+    val slots=sourceCampaign.map { row ->
         val id=row.getValue("id");val visit=id.substringAfterLast('-').toInt();val old=row.getValue("course")
         val base=when(id){"foundry-1","foundry-6"->"ballast";"crown-1","crown-6"->"lowwater";"scrap-7"->"crucible";"foundry-7"->"cutface";"salt-7"->"sunspike";"switchback-7"->"summit";else->old}
         val role=when { id=="switchback-4"->"accepted";row.getValue("type")=="ELIMINATION"->"arena";visit==7->"boss";visit==6->"final";visit==1->"opening";else->"mid" }
@@ -148,7 +152,8 @@ object CandidateAuthor {
         return composed.copy(course=Course(c.id,c.name,lesson(slot),c.startFraction,c.theme,nodes+nodes.first(),spots,c.features,c.obstaclePlacements,c.junctions,c.branches,TrackRaceProfile(slot.laps,slot.tier,budget),Regions.forDivision(slot.id.substringBefore('-'))))
     }
     fun reviewCourse(c:Course):Map<String,Any?> = qualityCourseData(c)+("ribbon" to (0..512).map { i->val s=i*c.lengthM/512;val p=TrackPoint();c.sample(s,0.0,p);listOf(p.x,p.y,c.widthAt(s),s) })
-    fun design(limit:Int=102) {
+    fun design(limit:Int=slots.count{it.role!="accepted"}*3) {
+        check(!File(folder,"owner-decisions.json").exists()) { "Owner triage is applied; whole-library generation is closed. Only explicitly scoped scrap-7 replacement authoring is authorized." }
         val manifest=File(folder,"manifest.csv");val header="candidate,slot,base,role,tier,laps,minSeconds,maxSeconds,family,seed,scale,referenceSeconds\n"
         val rows=if(manifest.exists())TrackQuality.csv(manifest.readText()).toMutableList()else mutableListOf()
         val shapes=rows.map { row-> val slot=slots.single{it.id==row.getValue("slot")};try {trackShape(TrackComposer.compile(Courses.all.single{it.id==slot.base},File(folder,"recipes/${row.getValue("candidate")}.csv").readText(),false).course)}catch(e:Exception){error("${row["candidate"]}: ${e.message}")} }.toMutableList()
@@ -201,4 +206,4 @@ object CandidateAuthor {
         save()
     }
 }
-fun main(args:Array<String>){CandidateAuthor.design(args.firstOrNull()?.toInt()?:102)}
+fun main(args:Array<String>){if(args.isEmpty())CandidateAuthor.design()else CandidateAuthor.design(args.first().toInt())}

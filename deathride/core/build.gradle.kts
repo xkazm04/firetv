@@ -127,7 +127,7 @@ tasks.register<JavaExec>("trackCandidateAuthor") {
     mainClass.set("dev.deathride.core.TrackCandidateAuthorKt")
     maxHeapSize="3g"
     systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
-    args(providers.gradleProperty("candidateLimit").getOrElse("102"))
+    providers.gradleProperty("candidateLimit").orNull?.let { args(it) }
 }
 
 tasks.register<JavaExec>("trackCandidateProof") {

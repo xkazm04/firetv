@@ -4,13 +4,14 @@ const limits=Object.fromEntries((await readFile('tracks/outline-thresholds.csv',
 const text=await readFile(`${folder}/manifest.csv`,'utf8'),lines=text.trim().split(/\r?\n/),keys=lines.shift().split(',');
 const manifest=lines.map(l=>Object.fromEntries(l.split(',').map((v,i)=>[keys[i],v])));
 const courses=[];
+const owner=JSON.parse(await readFile(`${folder}/owner-decisions.json`,'utf8'));
 for(const row of manifest) {
  const d=JSON.parse(await readFile(`${folder}/drafts/${row.candidate}.json`,'utf8'));delete d.csv;delete d.recipe;d.manifest=row;
  for(const count of [12,1])try{const proofFolder=`proof-${count}${d.role==='arena'?'-traversal':''}`,proof=JSON.parse(await readFile(`${folder}/${proofFolder}/${row.candidate}.json`,'utf8'));if(d.proofDigest&&proof.digest!==d.proofDigest)continue;d.proof=proof;d.proofFile=`../candidates/${proofFolder}/${row.candidate}.json`;break}catch{}
  if(d.role==='arena')try{const duel=JSON.parse(await readFile(`${folder}/${d.id}-duel.json`,'utf8'));if(duel.digest===d.proofDigest)d.duelProof=duel}catch{}
  d.technicalFlags=[...(d.proof?.flags||[]),...d.shape.gates.filter(g=>g.status!=='pass').map(g=>`shape: ${g.metric}`)];if(d.role==='arena'&&(!d.duelProof||d.duelProof.timeouts))d.technicalFlags.push(d.duelProof?`actual duel unresolved: ${d.duelProof.timeouts}/${d.duelProof.trials.length}`:'actual duel proof pending');
  d.technicalStatus=d.proof?.seeds===12?(d.technicalFlags.length?'flagged':'proved'):'pending';
- courses.push(d);
+ d.ownerKeep=owner.keeps.includes(d.id);d.assignment=owner.assignment[d.slot]===d.id?'Campaign':owner.alternates.includes(d.id)?'Practice alternate':'Owner review';courses.push(d);
 }
 const legacy=JSON.parse(await readFile('tracks/atlas/shapes.json','utf8')),runoff=legacy.courses.find(c=>c.id==='runoff');
 courses.push({id:'switchback-4-runoff',slot:'switchback-4',role:'accepted',tier:3,laps:6,oldLaps:6,family:'Owner accepted original',course:runoff.course,before:runoff.course,shape:runoff.shape,gates:[],geometry:{lint:[]},accepted:true});
@@ -31,8 +32,8 @@ for(let ai=0;ai<prepared.length;ai++)for(let bi=ai+1;bi<prepared.length;bi++) {
 for(const c of courses)if(!c.accepted)c.nearest=pairs.filter(p=>p.a===c.id||p.b===c.id).sort((a,b)=>a.outlineDistance-b.outlineDistance)[0]||null;
 let hunterEvidence=null;try{hunterEvidence=JSON.parse(await readFile(`${folder}/hunter-evidence.json`,'utf8'));hunterEvidence.episodes=hunterEvidence.episodes.filter(e=>courses.some(c=>c.id===e.candidate&&c.proofDigest===e.digest))}catch{}
 let activeHunterEvidence=null;try{activeHunterEvidence=JSON.parse(await readFile(`${folder}/hunter-active-evidence.json`,'utf8'));const log=await readFile('evidence/tracks/r3-hunter-active.log','utf8');activeHunterEvidence.checkedTrials=[...log.matchAll(/HUNTER \S+ \d+ episodes in (\d+) six-car trials/g)].reduce((n,m)=>n+Number(m[1]),0)}catch{}
-const result={version:'R3-choice-library-v1',generated:new Date().toISOString(),expectedCandidates:102,expectedSlots:35,candidates:courses,pairs,outlineThresholds:limits,hunterEvidence,activeHunterEvidence,
- truth:'R3 is partial: three finale arenas still fail actual duel resolution, active hunter blocking is unproved, and the shared Stick is busy. These are composer proposals with measured geometry and simulation coverage per candidate. Only Runoff has an existing owner Keep. New Keep/Maybe/Reject choices are yours. Production campaign data remains unchanged.'};
+const result={version:'owner-applied-v1',generated:new Date().toISOString(),expectedCandidates:manifest.length,expectedSlots:35,pendingSlots:owner.pending,candidates:courses,pairs,outlineThresholds:limits,hunterEvidence,activeHunterEvidence,
+ truth:'Recorded owner Keeps are installed; three duplicate Keeps remain practice alternates. Rejected and unreviewed proposals are archived outside the active library. Scrap-7 replacement and finale repair status are recorded in the apply notes. Runoff remains unchanged, including its measured baseline flag. Human feel and Stick evidence remain separate from simulation.'};
 await writeFile('tracks/atlas/candidates.json',JSON.stringify(result));await writeFile('tracks/atlas/candidates-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(result)};\n`);
 await writeFile(`${folder}/outline-pairs.json`,JSON.stringify(pairs));
 console.log(JSON.stringify({candidates:manifest.length,slots:new Set(courses.map(c=>c.slot)).size,similar:pairs.filter(p=>p.similar).length,proved:courses.filter(c=>c.technicalStatus==='proved').length}));

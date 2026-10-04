@@ -23,7 +23,7 @@ fun main(args:Array<String>) {
         val imported=TrackDraft.course(csv+mapOf("id" to c.id,"startFraction" to c.startFraction.toString()))
         check(TrackLabCodec.csv(imported)==csv){"$id native/Lab import differs from the proved CSV"}
         val fields=linkedMapOf("tracks/$id.csv" to csv.getValue("nodes"),"tracks/$id-spots.csv" to csv.getValue("spots"),"tracks/$id-junctions.csv" to csv.getValue("junctions"),"tracks/$id-race.csv" to csv.getValue("race"),
-            "track-features-row.csv" to csv.getValue("features").replace("${c.id},","$id,"),"track-obstacles-row.csv" to csv.getValue("obstacles").replace("${c.id},","$id,"),
+            "track-features-row.csv" to csv.getValue("features").replace(Regex("(?m)^${Regex.escape(c.id)},"),"$id,"),"track-obstacles-row.csv" to csv.getValue("obstacles").replace(Regex("(?m)^${Regex.escape(c.id)},"),"$id,"),
             "tracks-row.csv" to "id,name,lesson,startFraction,theme\n$id,R3 $id,${c.lesson.replace(',',';')},${c.startFraction},${c.theme}\n",
             "track-pools-row.csv" to "course,minTier,maxTier\n$id,${slot.tier},${slot.tier}\n",
             "design-recipe.csv" to recipe,

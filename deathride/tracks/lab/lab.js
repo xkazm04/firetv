@@ -72,7 +72,7 @@
   $('compose').addEventListener('click',async()=>{
     if(!original||busy)return;const requested=revision;busy=true;buttons();$('compose').disabled=true;$('composer-status').textContent='Compiling design primitives in the core…';
     try {const result=await(await request('/api/compose',{id:original.course.id,recipe:$('recipe').value})).json();if(revision!==requested)return;
-      remember();recipeDirty=false;draft={...copy(result.csv),previewName:result.id,region:result.region||result.id.replace(/-[1-7]-[abc]$/,''),startFraction:result.course.startFraction,recipe:result.recipe};selected=0;baked=result;editorTexts();nodePanel();invalidate();$('primitives').textContent=result.primitives;$('composer-status').textContent=`Compiled ${result.spans.length} design spans. ${result.geometry.lint.length} structural errors. Shape gates appear below.`;
+      remember();recipeDirty=false;draft={...copy(result.csv),region:result.course.region,startFraction:result.course.startFraction,recipe:result.recipe};selected=0;baked=result;editorTexts();nodePanel();invalidate();$('primitives').textContent=result.primitives;$('composer-status').textContent=`Compiled ${result.spans.length} design spans. ${result.geometry.lint.length} structural errors. Shape gates appear below.`;
     }catch(e){$('composer-status').textContent=e.message;}finally{busy=false;buttons();$('compose').disabled=false;await analyze();}
   });
   for (const id of ['node-x', 'node-y', 'node-width', 'node-surface', 'node-lane']) $(id).addEventListener('change', () => {

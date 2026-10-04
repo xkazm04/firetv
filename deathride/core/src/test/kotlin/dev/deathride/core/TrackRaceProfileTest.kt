@@ -27,7 +27,7 @@ class TrackRaceProfileTest {
         val base=Courses.all.first();val fields=TrackLabCodec.csv(base)+("id" to base.id)
         for(row in listOf("0,2,420","3,5,420","3,2,NaN","3,2,119","3.5,2,420","3,2,420\n3,2,420"))
             assertThrows(IllegalArgumentException::class.java){TrackDraft.course(fields+("race" to "laps,tier,budgetSeconds\n$row\n"))}
-        assertTrue(Courses.all.all{it.raceProfile==null},"Owner proposals must not silently replace production content")
+        assertTrue(Career.events.filter{it.id !in setOf("scrap-7","switchback-4")}.all{Courses.all[it.courseIndex].raceProfile!=null},"Installed Keeps retain their proved race profiles")
     }
     @Test fun recoveryChoicesRespectTheActualCarCapsuleAndPickupTrigger() {
         val w=World(combatEnabled=true);val car=w.cars[0]
@@ -40,7 +40,8 @@ class TrackRaceProfileTest {
         assertTrue(w.combat.inRadius(car,0.0,5.2,radius));assertFalse(w.combat.inRadius(car,0.0,-5.2,radius))
     }
     @Test fun shallowSplitCannotLeaveAiSteeringTowardTheOtherPhysicalRibbon() {
-        val recipe=java.io.File(TrackQuality.root,"tracks/candidates/recipes/crown-7-b.csv").readText()
+        // Historical rejected layout remains an excluded regression fixture, never a playable course.
+        val recipe=java.io.File(TrackQuality.root,"tracks/excluded/owner-2026-10-04/rejected/recipes/crown-7-b.csv").readText()
         val slot=CandidateAuthor.slots.single{it.id=="crown-7"}
         val course=CandidateAuthor.compose(slot,recipe,"crown-7-b").course
         assertEquals(1,course.branches.size)

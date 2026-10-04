@@ -57,13 +57,14 @@ class TracksTest {
         for(course in Courses.all) {
             val t=Track(course=course);val lap=LapCounter(t.lengthM,t.startM,course.checkpoints)
             lap.reset(t.startM-1)
-            for(i in 0..(t.lengthM*4).toInt()) { val s=t.startM-1+i*.5;t.sample(s,2.0,p);t.project(p.x,p.y,projection);assertEquals(2.0,projection.distance,.2);lap.update(projection.s) }
+            for(i in 0..(t.lengthM*4).toInt()) { val s=t.startM-1+i*.5;t.sample(s,2.0,p);t.project(p.x,p.y,projection,s);assertEquals(2.0,projection.distance,.2);lap.update(projection.s) }
             assertEquals(1,lap.laps,course.id)
         }
     }
     @Test fun sixCarsFinishEveryCourseAndReplayDeterministically() {
         val csv=StringBuilder("track,seed,finished,seconds,contactSteps,hash,laps\n");val input=Array(6){InputFrame()}
-        for(c in Courses.all)repeat(4) { seed ->
+        // Legacy mixed-class control; installed courses are measured at their declared tier and full duration.
+        for(c in Courses.all.filter{it.raceProfile==null})repeat(4) { seed ->
             val a=World(seed,track=Track(course=c));val b=World(seed,track=Track(course=c))
             for(w in arrayOf(a,b)) { for(car in w.cars)CarCatalog.apply(car,car.id%5);w.reset() }
             var contacts=0

@@ -7,7 +7,10 @@ import kotlin.math.abs
 class TrackShapeTest {
     @Test fun everyShapeGateHasAnActualPlantedGeometryWitness() { shapeProof().forEach { assertEquals(true,it["fired"],it.toString()) } }
     @Test fun oldLibraryCannotPassAsMastered() {
-        for(c in Courses.all) assertTrue(shapeGates(trackShape(c).metrics).any { it["status"]=="flag" },c.id)
+        for(c in Courses.all.filter{it.raceProfile==null}) assertTrue(shapeGates(trackShape(c).metrics).any { it["status"]=="flag" },c.id)
+    }
+    @Test fun installedComposerCoursesPassTheShapeContract() {
+        for(c in Courses.all.filter{it.raceProfile!=null})assertTrue(shapeGates(trackShape(c).metrics).all{it["status"]=="pass"},c.id)
     }
     @Test fun circleHullAndTurningHaveKnownAnswers() {
         val s=trackShape(shapeFixtures().getValue("circle"))

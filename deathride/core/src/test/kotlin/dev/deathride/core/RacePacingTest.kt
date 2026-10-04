@@ -9,8 +9,8 @@ class RacePacingTest {
         val counts=mutableSetOf<Int>()
         for(course in Courses.all) {
             val w=World(track=Track(course=course))
-            assertEquals(RacePacing.practiceLaps(course.id,course.pool.minTier),w.raceLaps)
-            assertEquals(180.0,w.raceLimitSeconds)
+            assertEquals(course.raceProfile?.laps?:RacePacing.practiceLaps(course.id,course.pool.minTier),w.raceLaps)
+            assertEquals(course.raceProfile?.budgetSeconds?:180.0,w.raceLimitSeconds)
             assertTrue(w.raceLaps in 2..3);counts.add(w.raceLaps)
         }
         assertEquals(setOf(2,3),counts)

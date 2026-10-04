@@ -8,7 +8,7 @@ import java.util.zip.CRC32
 class CareerV2Test {
     @Test fun allFiveActsUseEveryCourseAndOriginalStoryCardsWithoutPowerDifficulty() {
         assertEquals(35,Career.events.size);assertEquals(5,Career.cups.size);assertEquals(6,Career.rivals.size)
-        assertEquals(Courses.all.indices.toSet(),Career.events.map{it.courseIndex}.toSet())
+        assertEquals(35,Career.events.map{it.courseIndex}.toSet().size,"One course per stable event; practice alternates and save-compatible legacy courses are separate")
         assertEquals(Career.events.map{it.id},CareerCurve.all.map{it.event})
         assertTrue(Career.cups.indices.all{act->Career.events.count{it.cupIndex==act}==7})
         assertEquals(1,Career.events.count{it.duel});assertTrue(Career.events.last().duel)
@@ -18,7 +18,7 @@ class CareerV2Test {
         assertTrue(Career.difficulties.all{it.rewardScale==1.0})
         assertTrue(Career.events.all{if(it.elimination)it.laps==0 else it.laps in 2..6})
         assertTrue(CareerCurve.all.all{it.fieldTier in it.act..minOf(4,it.act+1)})
-        for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.cupIndex && Courses.all[e.courseIndex].pool.maxTier>=e.cupIndex)}
+        for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.playerTier && Courses.all[e.courseIndex].pool.maxTier>=e.playerTier)}
     }
     @Test fun nominalLedgerUsesRealShopsAndFixedFieldSchedule() {
         val p=Profile("nominal-ledger");val out=StringBuilder("event,playerCar,playerPR,fieldPR,ratio,cash,debt,npcParts,npcDebt\n")

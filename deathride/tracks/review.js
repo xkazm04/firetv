@@ -30,7 +30,7 @@
   const preview = () => { $('export').value = [`## Death Ride — ${document.body.dataset.pageTitle} — ${new Date().toISOString().slice(0, 10)}`, '',
     'Owner track review draft. Keep expresses preference; technical failures and production gates remain unchanged.', '',
     '| Category / direction | Pick | Samples | Owner note |', '|---|---|---|---|',
-    ...cards.map(card => { const c = card.dataset.ownerAccepted==='true'?{pick:'Keep',note:'Existing owner acceptance; course unchanged.'}:choice(card.dataset.direction); return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
+    ...cards.map(card => { const saved=choice(card.dataset.direction);const c = card.dataset.ownerAccepted==='true'?{pick:'Keep',note:'Existing owner acceptance; course unchanged.'}:saved.pick?saved:card.dataset.recordedPick?{...saved,pick:card.dataset.recordedPick,note:saved.note||'Recorded owner Keep 2026-10-04.'}:saved; return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
   $('refresh-export').addEventListener('click', preview);
   $('copy').addEventListener('click', async () => { preview(); $('export').focus(); $('export').select(); let copied = false;
     try { if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText($('export').value); copied = true; } } catch {}
