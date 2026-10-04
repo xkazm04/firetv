@@ -89,6 +89,10 @@ fun trackShape(c: Course): TrackShape {
     return TrackShape(points,turns,corners,histogram,metrics)
 }
 /** Procrustes RMS / RMS radius, minimized over start, direction, reflection and rotation. */
+object OutlineRules {
+    val values=TrackQuality.csv(File(TrackQuality.root,"tracks/outline-thresholds.csv").readText()).associate{it.getValue("metric") to it.number("min")}
+    fun similar(s:Map<String,Double>)=s.any{(metric,value)->value<values.getValue(metric)}
+}
 fun shapeSimilarity(a: TrackShape,b: TrackShape): Map<String,Double> {
     fun normalized(ps: List<ShapePoint>): List<ShapePoint> { val x=ps.map { it.x }.average();val y=ps.map { it.y }.average();val r=sqrt(ps.sumOf { (it.x-x).pow(2)+(it.y-y).pow(2) }/ps.size);return ps.map { ShapePoint((it.x-x)/r,(it.y-y)/r) } }
     val ap=normalized(a.points.filterIndexed { i,_ -> i%4==0 });val bp=normalized(b.points.filterIndexed { i,_ -> i%4==0 });val n=ap.size
@@ -120,13 +124,13 @@ fun shapeProof(): List<Map<String,Any?>> {
     proof+=mapOf("name" to "undeclared figure-eight crossing","kind" to "planted geometry","fired" to (crossing["status"]=="flag"),"measurement" to crossing)
     for((name,c) in fixtures.filterKeys { it!="illegal-crossing" }) { val gates=shapeGates(trackShape(c).metrics);proof+=mapOf("name" to "$name is not a mastered road course","kind" to "planted geometry","fired" to gates.any { it["status"]=="flag" }) }
     val c=fixtures.getValue("oval");val moved=qualityClone(c,c.nodes.map { it.copy(x=-it.y*1.7+133,y=it.x*1.7-41) });val mirror=qualityClone(c,c.nodes.map { it.copy(x=-it.x) })
-    for((name,s) in listOf("scaled-rotated-translated duplicate" to trackShape(moved),"reflected duplicate" to trackShape(mirror))) { val sim=shapeSimilarity(oval,s);proof+=mapOf("name" to name,"kind" to "planted pair","fired" to (sim.getValue("outlineDistance")<.055),"measurement" to sim) }
+    for((name,s) in listOf("scaled-rotated-translated duplicate" to trackShape(moved),"reflected duplicate" to trackShape(mirror))) { val sim=shapeSimilarity(oval,s);proof+=mapOf("name" to name,"kind" to "planted pair","fired" to OutlineRules.similar(sim),"measurement" to sim) }
     return proof
 }
 fun main() {
     val out=File(TrackQuality.root,"tracks/atlas");val proof=shapeProof();check(proof.all { it["fired"]==true }) { proof.filter { it["fired"]!=true }.toString() }
     val shapes=Courses.all.associate { it.id to trackShape(it) }
-    val pairs=Courses.all.indices.flatMap { i -> (i+1 until Courses.all.size).map { j -> val a=Courses.all[i];val b=Courses.all[j];val s=shapeSimilarity(shapes.getValue(a.id),shapes.getValue(b.id));mapOf("a" to a.id,"b" to b.id,"metrics" to s,"similar" to (s.getValue("outlineDistance")<.055 || s.getValue("turningDistance")<.06)) } }
+    val pairs=Courses.all.indices.flatMap { i -> (i+1 until Courses.all.size).map { j -> val a=Courses.all[i];val b=Courses.all[j];val s=shapeSimilarity(shapes.getValue(a.id),shapes.getValue(b.id));mapOf("a" to a.id,"b" to b.id,"metrics" to s,"similar" to OutlineRules.similar(s)) } }
     val result=mapOf("version" to "R1-shape-v1","truth" to "Baked geometry; authored design gates. Legacy simulation remains in T1 atlas and is not post-merge candidate proof.","proof" to proof,"pairs" to pairs,
         "courses" to Courses.all.map { c -> mapOf("id" to c.id,"name" to c.name,"theme" to c.theme,"acceptedException" to (c.id=="runoff"),"shape" to shapes.getValue(c.id).data(),"course" to qualityCourseData(c),"lint" to TrackLinter.errors(c)) })
     val json=TrackQuality.json(result);File(out,"shapes.json").writeText(json);File(out,"shapes-data.js").writeText("window.TRACK_SHAPES=$json;\n")

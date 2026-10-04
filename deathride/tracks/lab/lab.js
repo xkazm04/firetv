@@ -60,7 +60,9 @@
   async function connect() {
     $('connect').disabled = true;
     try { catalog = await (await request('/api/catalog')).json(); $('course').replaceChildren(...catalog.courses.map(c => make('option', c.course.name, {value: c.course.id}))); $('node-surface').replaceChildren(...catalog.surfaces.map(s => make('option', s, {value: s}))); $('obstacle-definition').replaceChildren(...catalog.obstacles.map(o => make('option', `${o.id} (${o.effect})`, {value: o.id})));
-      const requested = new URLSearchParams(location.search).get('course'); $('course').value = catalog.courses.some(c => c.course.id === requested) ? requested : catalog.courses[0].course.id; $('startup').open = false; load($('course').value); window.labReady = true;
+      const params=new URLSearchParams(location.search),requested=params.get('course'); $('course').value = catalog.courses.some(c => c.course.id === requested) ? requested : catalog.courses[0].course.id; $('startup').open = false; load($('course').value);
+      const candidate=params.get('candidate');if(candidate){if(!/^[a-z]+-[1-7]-[abc]$/.test(candidate))throw Error('Invalid candidate ID');const result=await(await request(`/tracks/candidates/drafts/${candidate}.json`)).json();$('course').value=result.course.id;load(result.course.id);draft={...copy(result.csv),startFraction:result.course.startFraction,recipe:result.recipe,tier:result.tier,laps:result.laps};baked={course:result.course,geometry:result.geometry};$('arena').checked=false;$('recipe').value=result.recipe;$('composer-status').textContent=`${result.id}: ${result.family}; tier ${result.tier}; ${result.laps} laps. Imported measured candidate draft.`;editorTexts();nodePanel();invalidate();await analyze()}
+      window.labReady = true;
     } catch (e) { setStatus('Local core is offline. Start :core:trackLab, then press Connect. ' + e.message, true); $('startup').open = true; }
     $('connect').disabled = false;
   }

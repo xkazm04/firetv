@@ -14,7 +14,8 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null) : ApplicationAdapter() {
+    private val courseCatalog=if(trackPreview==null)Courses.all else Courses.all+trackPreview.course
     private val profiler=profilePlatform?.let{FrameProfiler(it)}
     private var profileGl: ProfileGl?=null
     private lateinit var shape: ShapeRenderer
@@ -32,7 +33,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var campaignAudio: CampaignAudioDirector
     private lateinit var captions: GlyphLayer
     private var drawnCaption=""
-    private var world=World(track=Track(course=Courses.all[0]),combatEnabled=true)
+    private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[0]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
     private lateinit var art: AtlasArt
@@ -45,7 +46,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val combatPainter=CombatPainter()
     private val obstaclePainter=ObstaclePainter()
     private val abilityPainter=AbilityPainter()
-    private var selectedTrack=0
+    private var selectedTrack=if(trackPreview==null)0 else courseCatalog.lastIndex
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
     private val view=FitViewport(1280f,720f)
@@ -159,15 +160,19 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val changed=selectedTrack!=courseIndex;selectedTrack=courseIndex
         // Publish invalidation before the new track ID; an HTTP reader must not see new-track/old-ready.
         if(changed)server.sceneryReady=false
-        world=World(seed,track=Track(course=Courses.all[courseIndex]),combatEnabled=true)
-        for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i])
-        if(career)Career.prepareRivals(world,raceDifficulty,profiles[0],server.slots[1].claimed)
-        if(career)Encounters.apply(world,if(Career.events[raceRound].elimination)"death-duel" else listOf("scrap","foundry","salt","switchback","crown")[Career.events[raceRound].cupIndex])
-        for(i in profiles.indices)if(activeSeat(i) && (i==0 || !career || server.slots[i].claimed)){Garage.apply(profiles[i],world.cars[i]);world.cars[i].rivalIndex=-1;world.cars[i].aiStyle=null}
-        for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
-        world.reset();effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();server.trackJson=Courses.all[courseIndex].json;server.surface=Surfaces.asphalt
+        if(!career && trackPreview!=null && courseIndex==courseCatalog.lastIndex) {
+            world=trackPreview.world(seed);server.raceMode="track-preview"
+        } else {
+            world=World(seed,track=Track(course=courseCatalog[courseIndex]),combatEnabled=true)
+            for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i])
+            if(career)Career.prepareRivals(world,raceDifficulty,profiles[0],server.slots[1].claimed)
+            if(career)Encounters.apply(world,if(Career.events[raceRound].elimination)"death-duel" else listOf("scrap","foundry","salt","switchback","crown")[Career.events[raceRound].cupIndex])
+            for(i in profiles.indices)if(activeSeat(i) && (i==0 || !career || server.slots[i].claimed)){Garage.apply(profiles[i],world.cars[i]);world.cars[i].rivalIndex=-1;world.cars[i].aiStyle=null}
+            for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
+        }
+        world.reset();effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();server.trackJson=courseCatalog[courseIndex].json;server.surface=Surfaces.asphalt
         if(::raceAudio.isInitialized)raceAudio.bind(world)
-        if(changed)scene=TrackScene(Courses.all[courseIndex],sceneryCanvas,art,small)
+        if(changed)scene=TrackScene(courseCatalog[courseIndex],sceneryCanvas,art,small)
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
     private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else c.aiStyle?.name?.uppercase()?:"RIVAL ${c.id+1}"
@@ -179,7 +184,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(editProfile(i){
                 if(campaignRace && i==0)RivalEconomy.settle(it,raceTickets[i],world,raceRound)
                 if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0,Career.bossPosition(world,raceRound))?.message?:"Result already saved"
-                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),rewardScale=if(campaignRace)CareerCurve.all[raceRound].rewardScale else 1.0,cash=world.combat.cashCollected[i],course=Courses.all[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
+                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),rewardScale=if(campaignRace)CareerCurve.all[raceRound].rewardScale else 1.0,cash=world.combat.cashCollected[i],course=courseCatalog[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
             }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
         }
@@ -212,7 +217,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
-        atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art,small);effects.clear()
+        atlasEffects=AtlasEffects(art);scene=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
@@ -239,6 +244,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 if(keycode==Input.Keys.W || keycode==Input.Keys.A || keycode==Input.Keys.D || keycode==Input.Keys.S)keyboard=true
                 return false
             }
+        }
+        if(trackPreview!=null) {
+            world=trackPreview.world();for(i in selectedCars.indices)selectedCars[i]=CarCatalog.all.indexOf(world.cars[i].carClass)
+            raceAudio.bind(world);server.trackJson=trackPreview.course.json;server.raceMode="track-preview";phase="countdown";countdown=3.0;server.phase=phase
+            logger("trackPreview id=${trackPreview.id} tier=${trackPreview.tier} laps=${world.raceLaps} budget=${world.raceLimitSeconds} sixAI=true")
         }
         previousNanos=System.nanoTime()
         rebuildUi()
@@ -269,7 +279,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun lobby() { raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi() }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
     override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); accumulator=0.0 }
-    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art,small);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
+    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         profiler?.begin(nanos,actual);profileGl?.reset()
@@ -384,7 +394,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
     private fun drawWorld(dt: Double) {
-        val course=Courses.all[selectedTrack]
+        val course=courseCatalog[selectedTrack]
         val alpha=(accumulator/Tuning.STEP_SECONDS).coerceIn(0.0,1.0)
         val following=phase=="race" || phase=="countdown"
         var pixelsPerM=min(1180.0/(course.maxX-course.minX),490.0/(course.maxY-course.minY))
@@ -543,7 +553,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         text.draw(batch);headline.draw(batch);detail.draw(batch);batch.end()
     }
     private fun drawMinimap() {
-        val c=Courses.all[selectedTrack];val scale=min(166/(c.maxX-c.minX),112/(c.maxY-c.minY)).toFloat()
+        val c=courseCatalog[selectedTrack];val scale=min(166/(c.maxX-c.minX),112/(c.maxY-c.minY)).toFloat()
         val ox=1144f-((c.minX+c.maxX)*.5).toFloat()*scale;val oy=469f-((c.minY+c.maxY)*.5).toFloat()*scale
         shape.color=bg;shape.rect(1044f,394f,200f,150f)
         shape.color=muted
@@ -574,7 +584,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         fun title(value: String,x: Float,y: Float) {headline.addText(value.uppercase(),x,y)}
         if(phase!="race") {
             title("DEATH RIDE",42f,699f)
-            label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${Courses.all[selectedTrack].name} / ${world.raceLaps} LAPS"},42f,644f)
+            label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${courseCatalog[selectedTrack].name} / ${world.raceLaps} LAPS"},42f,644f)
             label("BACK: LOBBY   /   ${server.feel.id}",810f,691f)
             label(if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(scene.ready)muted else accent)
         }
@@ -607,7 +617,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 }
                 val ability=AbilityCatalog.byCar[car.id]
                 if(ability!=null)label("SIGNATURE / ${ability.name}",477f,236f,accent)
-                detail.setColor(muted);detail.wrapped(Courses.all[selectedTrack].lesson,477f,204f,730f,25f)
+                detail.setColor(muted);detail.wrapped(courseCatalog[selectedTrack].lesson,477f,204f,730f,25f)
                 label("DOWN Car / MENU Circuit / LEFT-RIGHT Feel",477f,133f)
             }
             "garage" -> {
@@ -683,7 +693,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 }
                 if(stateTime<1.2)title("GO",599f,390f)
                 for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / LINK QUIET / COASTING",365f,529f,warning);break}
-                label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${Courses.all[selectedTrack].name}",363f,109f)
+                label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${courseCatalog[selectedTrack].name}",363f,109f)
             }
             "results" -> {
                 title("THE FINISH",286f,575f)

@@ -37,7 +37,8 @@ data class QualityTrial(val seed: Int, val rotation: Int, val seconds: Double, v
     val firstWreckSeconds: Double?, val leadEarlyWreck: Boolean, val leadFirstLapSeconds: Double?, val finished: Int,
     val assignments: List<Map<String, Any?>>, val results: List<Map<String, Any?>>, val pickupCollections: IntArray,
     val heat: QualityHeat, val pressure: List<List<Number>>, val replay: List<List<Any>>,
-    val maxHp: Double, val damageByKind: Map<String, Double>, val deathsByKind: Map<String, Int>, val shotsByWeapon: Map<String, Int>, val solidSolverContacts: Long) {
+    val maxHp: Double, val damageByKind: Map<String, Double>, val deathsByKind: Map<String, Int>, val shotsByWeapon: Map<String, Int>, val solidSolverContacts: Long,
+    val hunter: Map<String,Number> = emptyMap(),val configuration: Map<String,Any?> = emptyMap()) {
     fun data(includeHeat: Boolean = false): Map<String, Any?> = linkedMapOf<String, Any?>("seed" to seed, "rotation" to rotation,
         "seconds" to seconds, "stoppingReason" to stoppingReason, "stateHash" to hash, "trajectoryHash" to trajectoryHash,
         "carLaps" to carLaps, "distanceM" to distanceM, "positionChanges" to positionChanges, "overtakes" to overtakes,
@@ -45,7 +46,7 @@ data class QualityTrial(val seed: Int, val rotation: Int, val seconds: Double, v
         "firstWreckSeconds" to firstWreckSeconds, "leadEarlyWreck" to leadEarlyWreck, "leadFirstLapSeconds" to leadFirstLapSeconds,
         "finished" to finished, "assignments" to assignments, "results" to results, "pickupCollections" to pickupCollections,
         "pressure" to pressure, "replay" to replay, "maxHp" to maxHp, "damageByKind" to damageByKind, "deathsByKind" to deathsByKind,
-        "shotsByWeapon" to shotsByWeapon, "solidSolverContacts" to solidSolverContacts).also { if (includeHeat) it["heat"] = heat.data() }
+        "shotsByWeapon" to shotsByWeapon, "solidSolverContacts" to solidSolverContacts,"hunter" to hunter,"configuration" to configuration).also { if (includeHeat) it["heat"] = heat.data() }
 }
 
 /** Debounced pair order; rejects launch jitter and order changes caused solely by death or finishing. */
@@ -67,9 +68,9 @@ class QualityPassCounter(private val margin: Double, private val hold: Double) {
     }
 }
 
-fun qualityWorld(c: Course, seed: Int, rotation: Int, arena: Boolean = false): World {
-    val w = World(seed, track = Track(course = c), combatEnabled = true)
-    val eligible = c.pool.eligible()
+fun qualityWorld(c: Course, seed: Int, rotation: Int, arena: Boolean = false,tier: Int? = null,laps: Int? = null,combatEnabled: Boolean = true): World {
+    val w = World(seed, track = Track(course = c), combatEnabled = combatEnabled)
+    val eligible = if(tier==null)c.pool.eligible() else CarCatalog.all.indices.filter { CarCatalog.all[it].tierRank==tier }
     for (car in w.cars) {
         val identity = (car.id + rotation) % Tuning.CAR_COUNT
         CarCatalog.apply(car, eligible[(identity + seed.mod(eligible.size)) % eligible.size])
@@ -77,7 +78,7 @@ fun qualityWorld(c: Course, seed: Int, rotation: Int, arena: Boolean = false): W
         car.aiStyle = Career.rivals[identity % Career.rivals.size]
         car.human = false
     }
-    w.raceLaps = TrackQuality["raceLaps"].toInt()
+    w.raceLaps = laps?:TrackQuality["raceLaps"].toInt()
     if (arena) w.eventType = EventType.ELIMINATION
     // World.reset applies the actual elimination rig. That fact is included in assignments below.
     w.reset(); w.presentationEvents.enabled = true
@@ -86,8 +87,9 @@ fun qualityWorld(c: Course, seed: Int, rotation: Int, arena: Boolean = false): W
 }
 
 fun qualityTrial(c: Course, seed: Int, rotation: Int, arena: Boolean = false, captureReplay: Boolean = false,
-                 limitSeconds: Double = TrackQuality[if (arena) "arenaLimitSeconds" else "raceLimitSeconds"]): QualityTrial {
-    val w = qualityWorld(c, seed, rotation, arena); val input = Array(6) { InputFrame() }; val heat = QualityHeat()
+                 limitSeconds: Double = TrackQuality[if (arena) "arenaLimitSeconds" else "raceLimitSeconds"],tier: Int?=null,laps: Int?=null,combatEnabled: Boolean=true): QualityTrial {
+    val w = qualityWorld(c, seed, rotation, arena,tier,laps,combatEnabled); val input = Array(6) { InputFrame() }; val heat = QualityHeat()
+    val effectiveLimit=min(limitSeconds,w.raceLimitSeconds)
     val q = Projection(); val active = BooleanArray(6); val lastSpin = IntArray(6); val lowSeconds = DoubleArray(6)
     val stuckNow = BooleanArray(6); val positions = IntArray(6) { it + 1 }; val lastHp = DoubleArray(6) { w.combat.health(it) }
     val lastContact = HashMap<String, Double>(); val passCounter = QualityPassCounter(TrackQuality["passMarginL"] * TrackQuality.longest, TrackQuality["passHoldSeconds"])
@@ -100,7 +102,7 @@ fun qualityTrial(c: Course, seed: Int, rotation: Int, arena: Boolean = false, ca
     fun section(x: Double, y: Double): Int { c.project(x, y, q); return (q.s / c.lengthM * heat.sections).toInt().coerceIn(0, heat.sections - 1) }
     val assignments = w.cars.map { mapOf("slot" to it.id, "identity" to (it.id + rotation) % 6, "car" to it.carClass!!.id,
         "tier" to it.carClass!!.tierRank, "style" to it.aiStyle!!.id, "skill" to it.aiSkill!!.id, "human" to it.human) }
-    while (w.resolved < w.entrantCount && w.seconds + 1e-9 < limitSeconds) {
+    while (w.resolved < w.entrantCount && w.seconds + 1e-9 < effectiveLimit) {
         for (car in w.cars) active[car.id] = !w.combat.wrecked(car.id) && car.finishSeconds < 0
         w.step(input)
         for (car in w.cars) {
@@ -181,16 +183,18 @@ fun qualityTrial(c: Course, seed: Int, rotation: Int, arena: Boolean = false, ca
         assignments, w.cars.map { mapOf("slot" to it.id, "laps" to it.lap.laps, "finishSeconds" to it.finishSeconds.takeIf { s -> s >= 0 },
             "finishKind" to it.finishKind.name, "wreckSeconds" to w.combat.wreckSeconds[it.id].takeIf { s -> s >= 0 }, "health" to w.combat.health(it.id), "position" to it.position) },
         pickupCollections, heat, pressure, replay, w.cars[0].maxHp, DamageKind.entries.associate { it.name to w.combat.damageByKind[it.ordinal] },
-        DamageKind.entries.associate { it.name to w.combat.deaths[it.ordinal] }, Weapons.all.indices.associate { Weapons.all[it].id to w.combat.shots[it] }, w.obstacles.solidContacts)
+        DamageKind.entries.associate { it.name to w.combat.deaths[it.ordinal] }, Weapons.all.indices.associate { Weapons.all[it].id to w.combat.shots[it] }, w.obstacles.solidContacts,
+        mapOf("huntDecisions" to w.ai.huntDecisions,"huntIntentDamage" to w.ai.huntIntentDamage,"hunterRoleDamage" to w.ai.hunterRoleDamage,"leaderDamage" to w.ai.leaderDamage,"maximumAttackers" to w.ai.maximumAttackers),
+        mapOf("tier" to tier,"laps" to w.raceLaps,"combat" to combatEnabled,"arena" to arena,"limitSeconds" to effectiveLimit))
 }
 
 /** Reference is an actual stock car driven by Pro AI with five non-entered cars and combat off. */
-fun qualityReference(c: Course, tier: Int, seed: Int = TrackQuality["seedBase"].toInt()): Map<String, Any?> {
+fun qualityReference(c: Course, tier: Int, seed: Int = TrackQuality["seedBase"].toInt(),limitSeconds: Double = TrackQuality["referenceLimitSeconds"]): Map<String, Any?> {
     val index = CarCatalog.all.indices.first { CarCatalog.all[it].tierRank == tier }
     val w = World(seed, track = Track(course = c), combatEnabled = false)
     for (car in w.cars) { car.entered = car.id == 0; car.human = false; CarCatalog.apply(car, index); car.aiSkill = AiSkills.all.single { it.id == "Pro" } }
     w.raceLaps = 2; w.reset(); val input = Array(6) { InputFrame() }; var first: Double? = null
-    while (w.cars[0].finishSeconds < 0 && w.seconds < TrackQuality["referenceLimitSeconds"]) {
+    while (w.cars[0].finishSeconds < 0 && w.seconds < limitSeconds) {
         w.step(input); if (first == null && w.cars[0].lap.laps >= 1) first = w.seconds
     }
     return mapOf("tier" to tier, "car" to CarCatalog.all[index].id, "eligible" to c.pool.allows(CarCatalog.all[index]), "skill" to "Pro", "seed" to seed,

@@ -1,0 +1,13 @@
+{
+  "status": "pending-busy",
+  "utc": "2026-10-04T12:59:00Z",
+  "subnet": "10.0.0.0/24",
+  "device": "10.0.0.139:5555",
+  "foreground": "dev.deathride.perf/dev.deathride.tv.MainActivity",
+  "requestedPackage": "dev.deathride.tracks",
+  "actions": ["254-host TCP 5555 scan repeated at end", "ADB connect", "read-only foreground inspection; other development app still active"],
+  "installed": false,
+  "launched": false,
+  "stoppedOtherApps": false,
+  "reason": "Shared Stick has another Death Ride development run in the foreground. Native candidate races and sofa/camera inspection remain pending."
+}

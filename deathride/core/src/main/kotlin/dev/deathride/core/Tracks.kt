@@ -30,7 +30,8 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
              val nodes: List<TrackNode>,val spots: List<TrackSpot>,val features: List<TrackFeature> = TrackContent.features[id]?:emptyList(),
              val obstaclePlacements: List<ObstaclePlacement> = ObstacleContent.placements[id]?:emptyList(),
              val junctions: List<TrackJunction> = TrackJunctions.load(id),
-             val branches: List<TrackBranch> = TrackBranches.load(id,theme)) {
+             val branches: List<TrackBranch> = TrackBranches.load(id,theme),
+             val raceProfile: TrackRaceProfile? = TrackRaceProfile.load(id)) {
     val obstacles: Array<TrackObstacle>
     private val oil=Surfaces.practice.first { it.id=="Oil" }
     /** Shared by the rendered boundary and its contact presentation. */
@@ -183,6 +184,10 @@ object TrackLinter {
             for(j in i+1 until c.count) {
                 val arcGap=min(c.arc[j]-c.arc[i],c.lengthM-c.arc[j]+c.arc[i])
                 val clearance=c.width[i]+c.width[j]
+                // Exact broad-phase rejection. Dense composer bakes otherwise pay four hypot calls
+                // for millions of segment pairs whose axis bounds are already farther apart.
+                if(min(c.x[i],c.x[i+1])-max(c.x[j],c.x[j+1])>=clearance || min(c.x[j],c.x[j+1])-max(c.x[i],c.x[i+1])>=clearance ||
+                    min(c.y[i],c.y[i+1])-max(c.y[j],c.y[j+1])>=clearance || min(c.y[j],c.y[j+1])-max(c.y[i],c.y[i+1])>=clearance)continue
                 if(arcGap>clearance*2 && segmentDistance(c.x[i],c.y[i],c.x[i+1],c.y[i+1],c.x[j],c.y[j],c.x[j+1],c.y[j+1])<clearance && !TrackJunctions.permits(c,c.arc[i],c.arc[j])) {
                     errors.add("${c.id}: ribbon overlap at segments $i/$j");return errors
                 }

@@ -232,6 +232,10 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             val s=fraction*course.lengthM-junction.warningM;course.sample(s,course.widthAt(s)+5,point)
             canvas.sprite(art,TrackContent.themes.single { it.id==course.theme }.props.last(),point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
         }
+        if(course.raceProfile!=null)for(i in 0 until course.count)if(course.surfaces[i].id!="Asphalt" && course.surfaces[i]!==course.surfaces[(i+course.count-1)%course.count]) {
+            val s=course.arc[i]-45;course.sample(s,course.widthAt(s)+5,point)
+            canvas.sprite(art,TrackContent.themes.single { it.id==course.theme }.props.last(),point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
+        }
         yield(Unit)
         // Recognizable infield landmarks, placed only well clear of the road.
         val projection=Projection()

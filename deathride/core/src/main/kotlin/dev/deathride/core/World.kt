@@ -284,12 +284,12 @@ class Snapshot(private val combat: Combat?=null) {
     fun blastRadius(i: Int)=blastState[i*5+3];fun blastActivation(i: Int)=blastState[i*5+4].toInt()
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false,abilitiesEnabled: Boolean=combatEnabled) {
-    var raceLaps=track.course?.let{RacePacing.practiceLaps(it.id,it.pool.minTier)}?:Tuning.RACE_LAPS; internal set
+    var raceLaps=track.course?.raceProfile?.laps?:track.course?.let{RacePacing.practiceLaps(it.id,it.pool.minTier)}?:Tuning.RACE_LAPS; internal set
     var eventType=EventType.LAPS; internal set
     var duelRigSlot=0; internal set
     var aiLeadSlot=0; internal set
     var aiBossRival=-1; internal set
-    val raceLimitSeconds get()=if(eventType==EventType.ELIMINATION)CampaignRules["duelLimitSeconds"] else TrackRules["maxRaceSeconds"]*max(Tuning.RACE_LAPS,raceLaps)/Tuning.RACE_LAPS
+    val raceLimitSeconds get()=track.course?.raceProfile?.budgetSeconds?:if(eventType==EventType.ELIMINATION)CampaignRules["duelLimitSeconds"] else TrackRules["maxRaceSeconds"]*max(Tuning.RACE_LAPS,raceLaps)/Tuning.RACE_LAPS
     val duelDraw get()=eventType==EventType.ELIMINATION && finished==0 && (combat.wreckCount==entrantCount || seconds>=raceLimitSeconds)
     private val driftRules=(handling as? SlipHandling)?.driftParameters?:DriftParameters.defaults
     var damageScale=1.0
@@ -346,7 +346,11 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars) {
             if(!c.entered)continue
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
-            c.wallImpactMps=0.0; track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute);if(c.human)c.trackRoute=projection.route;c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM,projection.route)
+            c.wallImpactMps=0.0; track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute)
+            // A shove or a shallow fork can put an AI on the other real ribbon. Its steering
+            // must follow the same passage as physical containment, rather than aim through the gap.
+            c.trackRoute=projection.route
+            c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM,projection.route)
             if(combat.wrecked(c.id)) {
                 val drag=exp(-CombatRules["wreckDragPerSecond"]*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
                 c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)

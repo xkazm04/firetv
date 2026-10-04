@@ -119,3 +119,32 @@ tasks.register<JavaExec>("trackComposerReport") {
     systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
     providers.gradleProperty("trackRecipe").orNull?.let { args(it) }
 }
+
+tasks.register<JavaExec>("trackCandidateAuthor") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidateAuthorKt")
+    maxHeapSize="3g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("candidateLimit").getOrElse("102"))
+}
+
+tasks.register<JavaExec>("trackCandidateProof") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidateProofKt")
+    maxHeapSize="3g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("candidateSeeds").getOrElse("12"),providers.gradleProperty("candidateFilter").getOrElse(""),providers.gradleProperty("candidateThreads").getOrElse("4"))
+}
+
+tasks.register<JavaExec>("trackCandidatePack") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidatePackKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+}

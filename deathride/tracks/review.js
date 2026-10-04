@@ -13,6 +13,7 @@
   theme(); $('theme').addEventListener('change', () => { state.theme = $('theme').value; theme(); save(); });
   const make = (tag, text, attributes = {}) => { const el = document.createElement(tag); if (text) el.textContent = text; for (const [k, v] of Object.entries(attributes)) el.setAttribute(k, v); return el; };
   cards.forEach((card, index) => {
+    if(card.dataset.ownerAccepted==='true') { card.append(make('p','Existing owner Keep — preserved unchanged.',{class:'pass'}));return; }
     const id = card.dataset.direction, controls = make('div', '', {class: 'review-controls'}), field = make('fieldset'), picks = make('div', '', {class: 'picks'});
     field.append(make('legend', 'Course choice'));
     for (const pick of ['Keep', 'Maybe', 'Reject']) {
@@ -29,7 +30,7 @@
   const preview = () => { $('export').value = [`## Death Ride — ${document.body.dataset.pageTitle} — ${new Date().toISOString().slice(0, 10)}`, '',
     'Owner track review draft. Keep expresses preference; technical failures and production gates remain unchanged.', '',
     '| Category / direction | Pick | Samples | Owner note |', '|---|---|---|---|',
-    ...cards.map(card => { const c = choice(card.dataset.direction); return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
+    ...cards.map(card => { const c = card.dataset.ownerAccepted==='true'?{pick:'Keep',note:'Existing owner acceptance; course unchanged.'}:choice(card.dataset.direction); return `| ${cell(card.dataset.label)} | ${cell(['Keep', 'Maybe', 'Reject'].includes(c.pick) ? c.pick : 'Not reviewed')} | ${cell(card.dataset.samples)} | ${cell(c.note)} |`; }), ''].join('\n'); };
   $('refresh-export').addEventListener('click', preview);
   $('copy').addEventListener('click', async () => { preview(); $('export').focus(); $('export').select(); let copied = false;
     try { if (navigator.clipboard?.writeText) { await navigator.clipboard.writeText($('export').value); copied = true; } } catch {}

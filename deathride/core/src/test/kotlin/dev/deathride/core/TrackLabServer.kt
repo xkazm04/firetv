@@ -17,44 +17,15 @@ object TrackLabCodec {
         val pair = it.split('=', limit = 2)
         URLDecoder.decode(pair[0], StandardCharsets.UTF_8) to URLDecoder.decode(pair.getOrElse(1) { "" }, StandardCharsets.UTF_8)
     }
-    fun course(fields: Map<String, String>): Course {
-        val original = Courses.all.singleOrNull { it.id == fields["id"] } ?: error("Choose a known course")
-        fun rows(key: String, maximum: Int) = TrackQuality.csv(fields.getValue(key)).also { require(it.size <= maximum) { "$key: too many rows" } }
-        fun surface(id: String) = Surfaces.all.singleOrNull { it.id == id } ?: error("Unknown surface: $id")
-        val nodes = rows("nodes", 601).map { TrackNode(it.number("xM"), it.number("yM"), it.number("halfWidthM"), surface(it.getValue("surface")), it.number("aiLaneM")) }
-        require(nodes.size >= 5 && nodes.first() == nodes.last()) { "At least four nodes and an identical closing row are required" }
-        require(nodes.all { it.x in -2000.0..2000.0 && it.y in -2000.0..2000.0 && it.width in 0.1..100.0 && kotlin.math.abs(it.lane) <= 100 }) { "Editor bounds: coordinates ±2000 m; half-width 0.1–100 m; lane ±100 m" }
-        require(nodes.maxOf { it.x } - nodes.minOf { it.x } <= 2000 && nodes.maxOf { it.y } - nodes.minOf { it.y } <= 2000) { "Candidate extent must be at most 2000 m per axis" }
-        require(nodes.zipWithNext().all { (a, b) -> kotlin.math.hypot(a.x - b.x, a.y - b.y) >= .1 }) { "Adjacent points must be separated by at least 0.1 m" }
-        val spots = rows("spots", 256).map { TrackSpot(it.getValue("kind"), it.number("fraction"), it.number("laneM")) }
-        val features = rows("features", 128).map {
-            require(it.getValue("course") == original.id) { "Feature course id must match selection" }
-            TrackFeature(it.getValue("kind"), it.number("start"), it.number("end"), it.number("laneM"), it.number("widthM"), surface(it.getValue("surface")), it.getValue("landmark"), it.number("warningM"))
-        }
-        val obstacles = rows("obstacles", 128).map {
-            require(it.getValue("course") == original.id) { "Obstacle course id must match selection" }
-            require(it.getValue("definition") in ObstacleContent.definitions) { "Unknown obstacle definition" }
-            ObstaclePlacement(it.getValue("definition"), it.number("fraction"), it.number("lane"), it.number("heading"), it.getValue("seed").toLong())
-        }
-        val start=fields["startFraction"]?.toDoubleOrNull()?:original.startFraction
-        require(start.isFinite() && start in 0.0..<1.0)
-        val junctions=fields["junctions"]?.let { text -> TrackQuality.csv(text).map { TrackJunction(it.number("first"),it.number("second"),it.number("warningM")) } }?:original.junctions
-        val branches=fields["branches"]?.let { text -> TrackQuality.csv(text).map { row ->
-            val key=row.getValue("nodeKey");require(key.matches(Regex("branchNodes[0-9]+")))
-            val branchNodes=rows(key,601).map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),surface(it.getValue("surface")),it.number("aiLaneM")) }
-            require(branchNodes.all { it.x in -2000.0..2000.0 && it.y in -2000.0..2000.0 && it.width in .1..100.0 })
-            val alternative=Course(original.id,original.name,original.lesson,0.0,original.theme,branchNodes,emptyList(),emptyList(),emptyList(),emptyList(),emptyList())
-            TrackBranch(row.number("start"),row.number("end"),alternative,row.number("altStart"),row.number("altEnd"))
-        } }?:original.branches
-        return Course(original.id,original.name,original.lesson,start,original.theme,nodes,spots,features,obstacles,junctions,branches)
-    }
+    fun course(fields: Map<String,String>): Course = TrackDraft.course(fields)
     fun csv(c: Course): Map<String, String> = linkedMapOf(
         "nodes" to ("xM,yM,halfWidthM,surface,aiLaneM\n" + c.nodes.joinToString("\n", postfix = "\n") { "${it.x},${it.y},${it.width},${it.surface.id},${it.lane}" }),
         "spots" to ("kind,fraction,laneM\n" + c.spots.joinToString("\n", postfix = "\n") { "${it.kind},${it.fraction},${it.laneM}" }),
         "features" to ("course,kind,start,end,laneM,widthM,surface,landmark,warningM\n" + c.features.joinToString("\n", postfix = "\n") { "${c.id},${it.kind},${it.start},${it.end},${it.laneM},${it.widthM},${it.surface.id},${it.landmark},${it.warningM}" }),
         "obstacles" to ("course,definition,fraction,lane,heading,seed\n" + c.obstaclePlacements.joinToString("\n", postfix = "\n") { "${c.id},${it.definition},${it.fraction},${it.lane},${it.heading},${it.seed}" }),
         "junctions" to ("first,second,warningM\n"+c.junctions.joinToString("\n",postfix="\n") { "${it.first},${it.second},${it.warningM}" }),
-        "branches" to ("start,end,altStart,altEnd,nodeKey\n"+c.branches.mapIndexed { i,b -> "${b.start},${b.end},${b.altStart},${b.altEnd},branchNodes$i" }.joinToString("\n",postfix="\n")))+
+        "branches" to ("start,end,altStart,altEnd,nodeKey\n"+c.branches.mapIndexed { i,b -> "${b.start},${b.end},${b.altStart},${b.altEnd},branchNodes$i" }.joinToString("\n",postfix="\n")),
+        "race" to ("laps,tier,budgetSeconds\n"+(c.raceProfile?.let{"${it.laps},${it.tier},${it.budgetSeconds}\n"}?:"")))+
         c.branches.mapIndexed { i,b -> "branchNodes$i" to ("xM,yM,halfWidthM,surface,aiLaneM\n"+b.alternative.nodes.joinToString("\n",postfix="\n") { "${it.x},${it.y},${it.width},${it.surface.id},${it.lane}" }) }.toMap()
     fun candidate(c: Course): Map<String, Any?> {
         val geometry = qualityGeometry(c)
@@ -72,6 +43,7 @@ object TrackLabCodec {
             if(recipe!=null) { files["design-recipe.csv"]=recipe;files["recipe-note.txt"]="Recipe provenance. If the control points were edited after compilation, the exported node/spot/feature/obstacle CSVs are the current draft authority. Recompile the recipe to regenerate its original result.\n" }
             files["tracks/${c.id}-branches.csv"]="start,end,altStart,altEnd,nodeFile\n"+c.branches.mapIndexed { i,b -> "${b.start},${b.end},${b.altStart},${b.altEnd},${c.id}-branch-$i" }.joinToString("\n",postfix="\n")
             c.branches.indices.forEach { i -> files["tracks/${c.id}-branch-$i.csv"]=csv.getValue("branchNodes$i") }
+            if(c.raceProfile!=null)files["tracks/${c.id}-race.csv"]=csv.getValue("race")
             for ((name, contents) in files) { zip.putNextEntry(ZipEntry(name).also { it.time = 0 }); zip.write(contents.toByteArray()); zip.closeEntry() }
         }
         return bytes.toByteArray()
@@ -123,9 +95,10 @@ fun main(args: Array<String>) {
                     if (path == "/api/race") {
                         require(TrackLinter.errors(c).isEmpty()) { "Fix structural lint before starting a race" }
                         val seed = fields["seed"]?.toIntOrNull() ?: 7319
-                        val trial = qualityTrial(c, seed, 0, fields["arena"] == "true", captureReplay = true)
+                        val tier=fields["tier"]?.toInt()?.also { require(it in 0..4) };val laps=fields["laps"]?.toInt()?.also { require(it in 1..12) };val arena=fields["arena"]=="true"
+                        val trial = qualityTrial(c, seed, 0, arena, captureReplay = true,limitSeconds=if(tier!=null || laps!=null)if(arena)360.0 else 600.0 else TrackQuality[if(arena)"arenaLimitSeconds" else "raceLimitSeconds"],tier=tier,laps=laps)
                         candidate["simulation"] = qualityAggregate(listOf(trial)); candidate["trial"] = trial.data()
-                        candidate["referenceLap"] = qualityReference(c, c.pool.minTier)
+                        candidate["referenceLap"] = qualityReference(c, tier?:c.pool.minTier,limitSeconds=600.0)
                     }
                     send(x, 200, "application/json", TrackQuality.json(candidate).toByteArray())
                 }
@@ -139,7 +112,7 @@ fun main(args: Array<String>) {
                     "/tracks/atlas/gate-proof.json" to "tracks/atlas/gate-proof.json", "/tracks/atlas/trials.ndjson.gz" to "tracks/atlas/trials.ndjson.gz", "/tracks/review.js" to "tracks/review.js",
                     "/docs/concepts/deathride/T0-track-design-research.md" to "../docs/concepts/deathride/T0-track-design-research.md",
                     "/docs/concepts/deathride/T1-track-instruments.md" to "../docs/concepts/deathride/T1-track-instruments.md")
-                val relative = allowed[path]
+                val relative = allowed[path]?:if(path.matches(Regex("/tracks/candidates/drafts/[a-z]+-[1-7]-[abc]\\.json")))path.drop(1)else null
                 val file = relative?.let { File(TrackQuality.root, it) }
                 if (file == null || !file.isFile) send(x, 404, "text/plain", "Not found".toByteArray())
                 else send(x, 200, when (file.extension) { "html" -> "text/html; charset=utf-8"; "js" -> "text/javascript; charset=utf-8"; "css" -> "text/css; charset=utf-8"; "json" -> "application/json"; "gz" -> "application/gzip"; else -> "text/plain; charset=utf-8" }, file.readBytes())
