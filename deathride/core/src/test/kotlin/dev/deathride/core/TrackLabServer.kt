@@ -38,6 +38,7 @@ object TrackLabCodec {
             val files = linkedMapOf("tracks/${c.id}.csv" to csv.getValue("nodes"), "tracks/${c.id}-spots.csv" to csv.getValue("spots"),
                 "track-features.csv" to csv.getValue("features"), "track-obstacles.csv" to csv.getValue("obstacles"),"tracks/${c.id}-junctions.csv" to csv.getValue("junctions"),
                 "tracks-row.csv" to "id,name,lesson,startFraction,theme\n${c.id},${c.name},${c.lesson},${c.startFraction},${c.theme}\n",
+                "region-membership.csv" to "course,division,region\n${c.id},${c.region.division},${c.region.id}\n",
                 "README.txt" to "Track Lab draft only. Existing CSV format. The features and obstacles tables contain ONLY rows for ${c.id}; replace that course's rows when later authorized, never overwrite the full shared tables. Node and spot files are complete for the selected course. No game data was written by this tool.\n",
                 "validation.json" to TrackQuality.json(candidate(c)))
             if(recipe!=null) { files["design-recipe.csv"]=recipe;files["recipe-note.txt"]="Recipe provenance. If the control points were edited after compilation, the exported node/spot/feature/obstacle CSVs are the current draft authority. Recompile the recipe to regenerate its original result.\n" }

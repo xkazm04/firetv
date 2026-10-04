@@ -145,7 +145,7 @@ object CandidateAuthor {
         }
         val stride=c.count/(c.nodes.size-1);val nodes=c.nodes.dropLast(1).mapIndexed{i,node->val s=c.arc[i*stride];node.copy(surface=zones.firstOrNull{s in it.first..it.second}?.third?:node.surface)}
         val budget=File(folder,"race-overrides.csv").takeIf{it.exists()}?.let{TrackQuality.csv(it.readText()).singleOrNull{row->row["candidate"]==id}?.number("budgetSeconds")}?:if(slot.role=="arena")360.0 else slot.max+60
-        return composed.copy(course=Course(c.id,c.name,lesson(slot),c.startFraction,c.theme,nodes+nodes.first(),spots,c.features,c.obstaclePlacements,c.junctions,c.branches,TrackRaceProfile(slot.laps,slot.tier,budget)))
+        return composed.copy(course=Course(c.id,c.name,lesson(slot),c.startFraction,c.theme,nodes+nodes.first(),spots,c.features,c.obstaclePlacements,c.junctions,c.branches,TrackRaceProfile(slot.laps,slot.tier,budget),Regions.forDivision(slot.id.substringBefore('-'))))
     }
     fun reviewCourse(c:Course):Map<String,Any?> = qualityCourseData(c)+("ribbon" to (0..512).map { i->val s=i*c.lengthM/512;val p=TrackPoint();c.sample(s,0.0,p);listOf(p.x,p.y,c.widthAt(s),s) })
     fun design(limit:Int=102) {

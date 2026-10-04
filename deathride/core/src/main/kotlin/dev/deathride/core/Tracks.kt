@@ -31,7 +31,8 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
              val obstaclePlacements: List<ObstaclePlacement> = ObstacleContent.placements[id]?:emptyList(),
              val junctions: List<TrackJunction> = TrackJunctions.load(id),
              val branches: List<TrackBranch> = TrackBranches.load(id,theme),
-             val raceProfile: TrackRaceProfile? = TrackRaceProfile.load(id)) {
+             val raceProfile: TrackRaceProfile? = TrackRaceProfile.load(id),
+             val region: RegionDefinition = Regions.forCourse(id,theme)) {
     val obstacles: Array<TrackObstacle>
     private val oil=Surfaces.practice.first { it.id=="Oil" }
     /** Shared by the rendered boundary and its contact presentation. */
@@ -49,7 +50,8 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     private val cell=TrackRules["projectionCellM"]
     private val columns: Int; private val rows: Int; private val candidates: Array<IntArray>
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
-    val json get()="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
+    val json get()=json(region)
+    fun json(region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
     init {
         require(nodes.size>=5 && nodes.first()==nodes.last()) { "$id: centerline must explicitly close" }
         val n=nodes.size-1

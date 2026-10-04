@@ -52,11 +52,13 @@ class MainActivity : AndroidApplication() {
         finalSpinNs=((intent.getStringExtra("frameSpinUs")?.toIntOrNull()?:200).coerceIn(0,500))*1000L
         if(intent.getStringExtra("wifiLatency")=="low")foregroundWifi=ForegroundWifi(this)
         if(intent.getStringExtra("resolution")=="720")config.resolutionStrategy=com.badlogic.gdx.backends.android.surfaceview.FixedResolutionStrategy(1280,720)
-        val preview=if(applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.tracks")intent.getStringExtra("trackPreview")?.let { id ->
+        val preview=if(applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName in setOf("dev.deathride.tracks","dev.deathride.regions"))intent.getStringExtra("trackPreview")?.let { id ->
             require(id.matches(Regex("[a-z]+-[1-7]-[abc]")))
             TrackPreview.read(java.io.File(filesDir,"track-previews/$id.json").readText())
         }else null
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview), config)
+        val regionDebug=applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.regions"
+        val region=if(regionDebug)intent.getStringExtra("region")?.let(dev.deathride.core.Regions::named) else null
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off"), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
         if(paced)graphics.isContinuousRendering=false

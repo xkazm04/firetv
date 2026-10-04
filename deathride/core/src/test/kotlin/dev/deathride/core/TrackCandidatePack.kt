@@ -17,7 +17,7 @@ fun main(args:Array<String>) {
         val references=(0..4).map{qualityReference(c,it,limitSeconds=600.0)};check(references.none{it["timeout"]==true}){"$id reference timeout"}
         val reference=references[slot.tier];val duration=(reference.getValue("standingLapSeconds") as Double)+(slot.laps-1)*(reference.getValue("flyingLapSeconds") as Double)
         val digest=candidateProofDigest(c,slot.tier,slot.laps)
-        val data=mapOf("id" to id,"slot" to slot.id,"role" to slot.role,"tier" to slot.tier,"laps" to slot.laps,"oldLaps" to slot.oldLaps,"minSeconds" to slot.min,"maxSeconds" to slot.max,"family" to row.getValue("family"),"reference" to reference,"references" to references,"referenceSeconds" to duration,"proofDigest" to digest,
+        val data=mapOf("id" to id,"slot" to slot.id,"region" to c.region.id,"role" to slot.role,"tier" to slot.tier,"laps" to slot.laps,"oldLaps" to slot.oldLaps,"minSeconds" to slot.min,"maxSeconds" to slot.max,"family" to row.getValue("family"),"reference" to reference,"references" to references,"referenceSeconds" to duration,"proofDigest" to digest,
             "course" to CandidateAuthor.reviewCourse(c),"before" to CandidateAuthor.reviewCourse(Courses.all.single{it.id==slot.oldCourse}),"shape" to shape.data(),"geometry" to geometry.detail,"gates" to TrackQuality.gates(geometry.values,setOf("geometry","lap")),"recipe" to recipe,"csv" to TrackLabCodec.csv(c),"spans" to composed.spans)
         File(folder,"drafts/$id.json").writeText(TrackQuality.json(data));val csv=TrackLabCodec.csv(c)
         val imported=TrackDraft.course(csv+mapOf("id" to c.id,"startFraction" to c.startFraction.toString()))
@@ -27,6 +27,7 @@ fun main(args:Array<String>) {
             "tracks-row.csv" to "id,name,lesson,startFraction,theme\n$id,R3 $id,${c.lesson.replace(',',';')},${c.startFraction},${c.theme}\n",
             "track-pools-row.csv" to "course,minTier,maxTier\n$id,${slot.tier},${slot.tier}\n",
             "design-recipe.csv" to recipe,
+            "region-membership.csv" to "course,division,region\n$id,${c.region.division},${c.region.id}\n",
             "tracks/$id-branches.csv" to ("start,end,altStart,altEnd,nodeFile\n"+c.branches.mapIndexed{i,b->"${b.start},${b.end},${b.altStart},${b.altEnd},$id-branch-$i"}.joinToString("\n",postfix="\n")))
         c.branches.indices.forEach{i->fields["tracks/$id-branch-$i.csv"]=csv.getValue("branchNodes$i")}
         val event=campaign.single{it.getValue("id")==slot.id}.toMutableMap();event["course"]=id;event["laps"]=if(slot.role=="arena")"0" else "${slot.laps}"

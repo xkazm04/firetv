@@ -16,6 +16,8 @@ object TrackDraft {
     }
     fun course(fields: Map<String, String>): Course {
         val original = Courses.all.singleOrNull { it.id == fields["id"] } ?: error("Choose a known course")
+        val previewName=fields["previewName"]?.also { require(it.matches(Regex("[a-z]+-[1-7]-[abc]"))) }
+        val region=fields["region"]?.let(Regions::named)?:previewName?.let{Regions.forDivision(it.substringBefore('-'))}?:original.region
         fun rows(key: String, maximum: Int) = csv(fields.getValue(key)).also { require(it.size <= maximum) { "$key: too many rows" } }
         fun surface(id: String) = Surfaces.all.singleOrNull { it.id == id } ?: error("Unknown surface: $id")
         val nodes = rows("nodes", 601).map { TrackNode(it.number("xM"), it.number("yM"), it.number("halfWidthM"), surface(it.getValue("surface")), it.number("aiLaneM")) }
@@ -40,14 +42,13 @@ object TrackDraft {
             val key=row.getValue("nodeKey");require(key.matches(Regex("branchNodes[0-9]+")))
             val branchNodes=rows(key,601).map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),surface(it.getValue("surface")),it.number("aiLaneM")) }
             require(branchNodes.all { it.x in -2000.0..2000.0 && it.y in -2000.0..2000.0 && it.width in .1..100.0 })
-            val alternative=Course(original.id,original.name,original.lesson,0.0,original.theme,branchNodes,emptyList(),emptyList(),emptyList(),emptyList(),emptyList())
+            val alternative=Course(original.id,original.name,original.lesson,0.0,original.theme,branchNodes,emptyList(),emptyList(),emptyList(),emptyList(),emptyList(),region=region)
             TrackBranch(row.number("start"),row.number("end"),alternative,row.number("altStart"),row.number("altEnd"))
         } }?:original.branches
         val profile=fields["race"]?.let { text->
             val rows=csv(text);require(rows.size<=1){"One race profile is permitted"}
             rows.singleOrNull()?.let { r->TrackRaceProfile(r.getValue("laps").toInt(),r.getValue("tier").toInt(),r.number("budgetSeconds")) }
         }?:original.raceProfile
-        val previewName=fields["previewName"]?.also { require(it.matches(Regex("[a-z]+-[1-7]-[abc]"))) }
-        return Course(original.id,previewName?.let { "R3 $it" }?:original.name,original.lesson,start,original.theme,nodes,spots,features,obstacles,junctions,branches,profile)
+        return Course(original.id,previewName?.let { "R3 $it" }?:original.name,original.lesson,start,original.theme,nodes,spots,features,obstacles,junctions,branches,profile,region)
     }
 }
