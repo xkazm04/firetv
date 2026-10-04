@@ -1,14 +1,17 @@
 {
   "schema": 1,
-  "at": "2026-10-04T12:54:35.996456+00:00",
+  "at": "2026-10-04T13:12:54.584935+00:00",
   "budget": {
     "provider": "agy",
     "model": "gemini-3.8-flash-high",
-    "images_reserved": 2,
-    "remaining": 118,
+    "images_reserved": 9,
+    "remaining": 111,
     "cap": 120,
     "real_allowance": "unknown",
-    "stop": null
+    "stop": {
+      "at": "2026-10-04T13:06:15.381789+00:00",
+      "reason": "agy-foundry-clinker-v1: failed to generate"
+    }
   },
   "owner_approved_count": 0,
   "runtime_enabled_count": 0,
@@ -16,32 +19,32 @@
     {
       "region": "scrap",
       "file": "scrap.html",
-      "cards": 17
+      "cards": 21
     },
     {
       "region": "foundry",
       "file": "foundry.html",
-      "cards": 17
+      "cards": 19
     },
     {
       "region": "salt",
       "file": "salt.html",
-      "cards": 18
+      "cards": 20
     },
     {
       "region": "switchback",
       "file": "switchback.html",
-      "cards": 18
+      "cards": 20
     },
     {
       "region": "crown",
       "file": "crown.html",
-      "cards": 16
+      "cards": 18
     },
     {
       "region": "restoration",
       "file": "restoration.html",
-      "cards": 1
+      "cards": 9
     }
   ],
   "records": [
@@ -57,11 +60,22 @@
       "region": "scrap"
     },
     {
+      "id": "agy-scrap-backdrop-v1-a1",
+      "source": "images/agy-scrap-backdrop-v1-a1-source.png",
+      "path": "images/agy-scrap-backdrop-v1-a1.png",
+      "sha256": "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181",
+      "source_sha256": "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": true,
+      "region": "scrap"
+    },
+    {
       "id": "g1-scrap-reuse-scrap-pile",
-      "source": "images/g1-scrap-reuse-scrap-pile-source.png",
+      "source": "images/g1-scrap-reuse-scrap-pile-source.jpg",
       "path": "images/g1-scrap-reuse-scrap-pile.png",
       "sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
-      "source_sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+      "source_sha256": "f507b82f8a10612f3d6b0d15796a0b1b865db4ab7086e50a1d16a8f33da10c85",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -69,10 +83,10 @@
     },
     {
       "id": "g1-scrap-reuse-oil-drums",
-      "source": "images/g1-scrap-reuse-oil-drums-source.png",
+      "source": "images/g1-scrap-reuse-oil-drums-source.jpg",
       "path": "images/g1-scrap-reuse-oil-drums.png",
       "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
-      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -80,10 +94,10 @@
     },
     {
       "id": "g1-scrap-reuse-rust-pylon",
-      "source": "images/g1-scrap-reuse-rust-pylon-source.png",
+      "source": "images/g1-scrap-reuse-rust-pylon-source.jpg",
       "path": "images/g1-scrap-reuse-rust-pylon.png",
       "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
-      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -123,11 +137,66 @@
       "region": "scrap"
     },
     {
+      "id": "agy-scrap-ash-first-output",
+      "source": "images/agy-scrap-ash-first-output-source.jpg",
+      "path": "images/agy-scrap-ash-first-output.png",
+      "sha256": "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+      "source_sha256": "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": false,
+      "region": "scrap"
+    },
+    {
+      "id": "agy-scrap-ash-unrequested-edit",
+      "source": "images/agy-scrap-ash-unrequested-edit-source.jpg",
+      "path": "images/agy-scrap-ash-unrequested-edit.png",
+      "sha256": "fbae4a97b9552ca28a0f86833ff8a9672397e45db4538fb694174773d198973a",
+      "source_sha256": "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": false,
+      "region": "scrap"
+    },
+    {
+      "id": "agy-foundry-casting-ladle-v1-a1",
+      "source": "images/agy-foundry-casting-ladle-v1-a1-source.png",
+      "path": "images/agy-foundry-casting-ladle-v1-a1.png",
+      "sha256": "73d82818e1f1005cda3134121c55f5ebde9dc2898c491544a0a1da17e19861e4",
+      "source_sha256": "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": false,
+      "region": "foundry"
+    },
+    {
+      "id": "agy-foundry-backdrop-v1-a1",
+      "source": "images/agy-foundry-backdrop-v1-a1-source.png",
+      "path": "images/agy-foundry-backdrop-v1-a1.png",
+      "sha256": "6cb5c4d650000fd94023cc7ade51837d884bb8c389942c06caf3846ae1345db1",
+      "source_sha256": "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": false,
+      "region": "foundry"
+    },
+    {
+      "id": "agy-foundry-embers-v1-a1",
+      "source": "images/agy-foundry-embers-v1-a1-source.png",
+      "path": "images/agy-foundry-embers-v1-a1.png",
+      "sha256": "2fa13e15d40b1775e2067154914f71fda291508ad4f8dc6bc040cb2972993f59",
+      "source_sha256": "3e638833615e82754df285c0bf15c3e8b1ee42acaa41e415da9c4a833e2ac927",
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "technical_eligible": false,
+      "region": "foundry"
+    },
+    {
       "id": "g1-foundry-reuse-oil-drums",
-      "source": "images/g1-foundry-reuse-oil-drums-source.png",
+      "source": "images/g1-foundry-reuse-oil-drums-source.jpg",
       "path": "images/g1-foundry-reuse-oil-drums.png",
       "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
-      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -135,10 +204,10 @@
     },
     {
       "id": "g1-foundry-reuse-rust-pylon",
-      "source": "images/g1-foundry-reuse-rust-pylon-source.png",
+      "source": "images/g1-foundry-reuse-rust-pylon-source.jpg",
       "path": "images/g1-foundry-reuse-rust-pylon.png",
       "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
-      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -179,10 +248,10 @@
     },
     {
       "id": "g1-salt-reuse-rust-pylon",
-      "source": "images/g1-salt-reuse-rust-pylon-source.png",
+      "source": "images/g1-salt-reuse-rust-pylon-source.jpg",
       "path": "images/g1-salt-reuse-rust-pylon.png",
       "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
-      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -190,10 +259,10 @@
     },
     {
       "id": "g1-salt-reuse-oil-drums",
-      "source": "images/g1-salt-reuse-oil-drums-source.png",
+      "source": "images/g1-salt-reuse-oil-drums-source.jpg",
       "path": "images/g1-salt-reuse-oil-drums.png",
       "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
-      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -234,10 +303,10 @@
     },
     {
       "id": "g1-switchback-reuse-rust-pylon",
-      "source": "images/g1-switchback-reuse-rust-pylon-source.png",
+      "source": "images/g1-switchback-reuse-rust-pylon-source.jpg",
       "path": "images/g1-switchback-reuse-rust-pylon.png",
       "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
-      "source_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -245,10 +314,10 @@
     },
     {
       "id": "g1-switchback-reuse-oil-drums",
-      "source": "images/g1-switchback-reuse-oil-drums-source.png",
+      "source": "images/g1-switchback-reuse-oil-drums-source.jpg",
       "path": "images/g1-switchback-reuse-oil-drums.png",
       "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
-      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -300,10 +369,10 @@
     },
     {
       "id": "g1-crown-reuse-league-gantry",
-      "source": "images/g1-crown-reuse-league-gantry-source.png",
+      "source": "images/g1-crown-reuse-league-gantry-source.jpg",
       "path": "images/g1-crown-reuse-league-gantry.png",
       "sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
-      "source_sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+      "source_sha256": "db55b5c7fc40d8747060eb10769d51f8c85252f0d946961572ed17c0da814980",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -311,10 +380,10 @@
     },
     {
       "id": "g1-crown-reuse-oil-drums",
-      "source": "images/g1-crown-reuse-oil-drums-source.png",
+      "source": "images/g1-crown-reuse-oil-drums-source.jpg",
       "path": "images/g1-crown-reuse-oil-drums.png",
       "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
-      "source_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
       "owner_approved": false,
       "runtime_enabled": false,
       "technical_eligible": true,
@@ -395,20 +464,20 @@
       "region": "scrap"
     },
     {
-      "id": "agy-scrap-backdrop-v1",
-      "region": "scrap"
-    },
-    {
       "id": "agy-scrap-horizon-v1",
       "region": "scrap"
     },
     {
-      "id": "agy-scrap-ash-v1",
+      "id": "agy-scrap-variant-scrap-pile-v1",
       "region": "scrap"
     },
     {
-      "id": "agy-foundry-casting-ladle-v1",
-      "region": "foundry"
+      "id": "agy-scrap-variant-oil-drums-v1",
+      "region": "scrap"
+    },
+    {
+      "id": "agy-scrap-variant-rust-pylon-v1",
+      "region": "scrap"
     },
     {
       "id": "agy-foundry-ingot-mould-v1",
@@ -439,19 +508,19 @@
       "region": "foundry"
     },
     {
-      "id": "agy-foundry-backdrop-v1",
-      "region": "foundry"
-    },
-    {
       "id": "agy-foundry-horizon-v1",
       "region": "foundry"
     },
     {
-      "id": "agy-foundry-embers-v1",
+      "id": "agy-foundry-clinker-v1",
       "region": "foundry"
     },
     {
-      "id": "agy-foundry-clinker-v1",
+      "id": "agy-foundry-variant-oil-drums-v1",
+      "region": "foundry"
+    },
+    {
+      "id": "agy-foundry-variant-rust-pylon-v1",
       "region": "foundry"
     },
     {
@@ -507,6 +576,14 @@
       "region": "salt"
     },
     {
+      "id": "agy-salt-variant-rust-pylon-v1",
+      "region": "salt"
+    },
+    {
+      "id": "agy-salt-variant-oil-drums-v1",
+      "region": "salt"
+    },
+    {
       "id": "agy-switchback-avalanche-anchor-v1",
       "region": "switchback"
     },
@@ -555,6 +632,14 @@
       "region": "switchback"
     },
     {
+      "id": "agy-switchback-variant-rust-pylon-v1",
+      "region": "switchback"
+    },
+    {
+      "id": "agy-switchback-variant-oil-drums-v1",
+      "region": "switchback"
+    },
+    {
       "id": "agy-crown-timing-cabinet-v1",
       "region": "crown"
     },
@@ -597,6 +682,72 @@
     {
       "id": "agy-crown-fog-v1",
       "region": "crown"
+    },
+    {
+      "id": "agy-crown-variant-league-gantry-v1",
+      "region": "crown"
+    },
+    {
+      "id": "agy-crown-variant-oil-drums-v1",
+      "region": "crown"
+    }
+  ],
+  "restoration_gaps": [
+    {
+      "id": "agy-restore-oil-drums-v1",
+      "source": "images/agy-restore-oil-drums-v1-before.jpg",
+      "before_export": "images/agy-restore-oil-drums-v1-kept-export.png",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-rust-pylon-v1",
+      "source": "images/agy-restore-rust-pylon-v1-before.jpg",
+      "before_export": "images/agy-restore-rust-pylon-v1-kept-export.png",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-league-gantry-v1",
+      "source": "images/agy-restore-league-gantry-v1-before.jpg",
+      "before_export": "images/agy-restore-league-gantry-v1-kept-export.png",
+      "source_sha256": "db55b5c7fc40d8747060eb10769d51f8c85252f0d946961572ed17c0da814980",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-rook-v1",
+      "source": "images/agy-restore-rook-v1-before.jpg",
+      "before_export": "images/agy-restore-rook-v1-kept-export.png",
+      "source_sha256": "24b732cd26528ab145eea46ab204af39c7590a35c13e16c7a5c67a7d263594a8",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-vex-v1",
+      "source": "images/agy-restore-vex-v1-before.jpg",
+      "before_export": "images/agy-restore-vex-v1-kept-export.png",
+      "source_sha256": "3bb11eb14015e230317e6f140802723d317291546f74d176dbe562e0572d1bb9",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-mica-v1",
+      "source": "images/agy-restore-mica-v1-before.jpg",
+      "before_export": "images/agy-restore-mica-v1-kept-export.png",
+      "source_sha256": "84b732b325fcb07c309491dcf8b6767ae6b03f6302ba8ecc6142b270a9491106",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-restore-mechanic-v1",
+      "source": "images/agy-restore-mechanic-v1-before.jpg",
+      "before_export": "images/agy-restore-mechanic-v1-kept-export.png",
+      "source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "status": "not-attempted; provider stopped"
+    },
+    {
+      "id": "agy-casting-ladle-margin-repair",
+      "source": "images/agy-casting-ladle-margin-repair-before.png",
+      "before_export": "images/agy-casting-ladle-margin-repair-before-export.png",
+      "source_sha256": "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+      "status": "not-attempted; provider stopped"
     }
   ]
 }

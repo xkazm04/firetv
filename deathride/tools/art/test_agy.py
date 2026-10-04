@@ -87,4 +87,21 @@ class AgyContracts(unittest.TestCase):
         self.assertTrue(agy.verify_prompt(e,'exact'));self.assertFalse(agy.verify_prompt(e,'changed'))
         self.assertEqual(len(e['calls']),1)
 
+    def test_image_tool_empty_error_is_detected_in_child_result(self):
+        brain=self.art/'brain';path=brain/'test/.system_generated/logs/transcript_full.jsonl';path.parent.mkdir(parents=True)
+        events=[dict(tool_calls=[dict(name='generate_image',args=dict(Prompt='exact'))]),
+                dict(type='GENERIC',content='Encountered error in step execution: image failed to generate: no image generated in response')]
+        path.write_text('\n'.join(map(json.dumps,events)))
+        self.assertEqual(agy.image_evidence('test',brain)['errors'],['failed to generate'])
+
+    def test_duplicate_image_call_is_not_a_valid_prompt_proof(self):
+        e=dict(calls=[dict(args=dict(Prompt='exact')),dict(args=dict(Prompt='repair'))])
+        self.assertFalse(agy.verify_prompt(e,'exact'))
+
+    def test_history_prevents_respend_when_ignored_raw_folder_is_missing(self):
+        self.run_fake()
+        raw=self.art/'raw'/'test-v1';raw.rename(self.art/'archived-test-v1')
+        self.assertEqual(self.run_fake()['status'],'artifact-invalid')
+        self.assertEqual(self.budget.summary()['images_reserved'],1)
+
 if __name__=='__main__':unittest.main()

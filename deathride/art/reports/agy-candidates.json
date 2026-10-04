@@ -353,6 +353,1549 @@
     }
   },
   {
+    "id": "agy-scrap-backdrop-v1-a1",
+    "class": "backdrop",
+    "kind": "backdrop",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-scrap-backdrop-v1\\attempt-01\\image.png",
+    "source_sha256": "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "agy-scrap-backdrop-v1",
+      "class": "backdrop",
+      "prompt_action": "Roofless sorting sheds, cropped rail sidings and distant suspended conveyor structures surrounding a quiet empty central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "backdrop",
+      "reference": "",
+      "batch": "agy-scrap-panels",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "512",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "backdrops",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/scrap/panels/backdrop",
+      "region": "scrap"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "export_size_px": [
+        512,
+        512
+      ],
+      "aspect_fit_px": [
+        512,
+        512
+      ],
+      "offset_px": [
+        0,
+        0
+      ]
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-backdrop-v1-a1\\agy-scrap-backdrop-v1.png",
+    "sha256": "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181",
+    "recipe": "Complete original aspect fit, no source crop/stretch; unused pixels dark-earth matte",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "scrap",
+    "generation_sidecar": "art\\raw\\agy-scrap-backdrop-v1\\attempt-01\\sidecar.json",
+    "attempt": 1,
+    "recipe_hash": "07058448fe98b60c7ba5f95a75aa00f0caef79475bb99e1065ca333018a5b38c",
+    "origin": "generated",
+    "fallback": "procedural/existing material; G2 activation gated",
+    "grades": [
+      {
+        "asset": "agy-scrap-backdrop-v1-a1",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "8db96097df60e56e9be818df76cf8fef6f72a7b7703b8e694267e315ad1fd515",
+        "image_hashes": [
+          "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+          "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: backdrop. Brief: Roofless sorting sheds, cropped rail sidings and distant suspended conveyor structures surrounding a quiet empty central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T12:59:04.856537+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"Roofless sorting sheds with cropped rail sidings and distant suspended conveyor structures around a quiet empty central apron; flat graphic Soot Pulp environment panel with large quiet masses and sparse perimeter detail.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"not_applicable\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Roofless sorting sheds with cropped rail sidings and distant suspended conveyor structures around a quiet empty central apron; flat graphic Soot Pulp environment panel with large quiet masses and sparse perimeter detail.",
+          "export_clean": "yes",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "not_applicable",
+          "subject_matches": "yes",
+          "top_down_prop": "not_applicable"
+        },
+        "elapsed_seconds": 12.0
+      },
+      {
+        "asset": "agy-scrap-backdrop-v1-a1",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "492ef7c008624fbe1d817f51a436e2935b390f8a798331aee6b705f185ad9583",
+        "image_hashes": [
+          "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+          "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: backdrop. Brief: Roofless sorting sheds, cropped rail sidings and distant suspended conveyor structures surrounding a quiet empty central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T12:59:17.004166+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"yes\",\n  \"six_cells_valid\": \"not_applicable\",\n  \"confidence\": 0.75,\n  \"description\": \"A flat graphic, soot-pulp style environment panel depicting a derelind industrial site with roofless sorting sheds, rail sidings, and suspended conveyor structures surrounding a central apron.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "not_applicable",
+          "subject_matches": "yes",
+          "neutral_lighting": "yes",
+          "export_clean": "yes",
+          "six_cells_valid": "not_applicable",
+          "confidence": 0.75,
+          "description": "A flat graphic, soot-pulp style environment panel depicting a derelind industrial site with roofless sorting sheds, rail sidings, and suspended conveyor structures surrounding a central apron."
+        },
+        "elapsed_seconds": 19.937
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+      "export_sha256": "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181",
+      "note": "Full source and 512px export inspected: recognisable skeletal sorting sheds and broken conveyors frame a quiet empty apron. Palette and broad soot masses agree with panel brief; no people, legible lettering or baked fog. Both local models report no semantic defect, with 0.75 confidence retained. Panel screening only, not owner acceptance.",
+      "technical_eligible": true,
+      "at": "2026-10-04T13:02:21.121836+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
+    "id": "agy-foundry-casting-ladle-v1-a1",
+    "class": "casting-ladle",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-foundry-casting-ladle-v1\\attempt-01\\image.png",
+    "source_sha256": "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "agy-foundry-casting-ladle-v1",
+      "class": "casting-ladle",
+      "prompt_action": "casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "agy-foundry-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/foundry/props/casting-ladle",
+      "region": "foundry"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.40011024475097656,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        22,
+        104,
+        1002,
+        865
+      ],
+      "margin_fraction": 0.021484375,
+      "aspect": 1.2877792378449409,
+      "estimated_key_rgb": [
+        253.0,
+        27.0,
+        255.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.09919525099569,
+      "palette_p90_delta_e": 11.278270162407892
+    },
+    "placement": {
+      "source_bounds_px": [
+        22,
+        104,
+        1002,
+        865
+      ],
+      "source_pivot_px": [
+        512.0,
+        484.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        93
+      ],
+      "scale": 0.12244897959183673,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-casting-ladle-v1-a1\\agy-foundry-casting-ladle-v1.png",
+    "sha256": "73d82818e1f1005cda3134121c55f5ebde9dc2898c491544a0a1da17e19861e4",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "foundry",
+    "generation_sidecar": "art\\raw\\agy-foundry-casting-ladle-v1\\attempt-01\\sidecar.json",
+    "attempt": 1,
+    "recipe_hash": "07058448fe98b60c7ba5f95a75aa00f0caef79475bb99e1065ca333018a5b38c",
+    "origin": "generated",
+    "fallback": "procedural/existing material; G2 activation gated",
+    "grades": [
+      {
+        "asset": "agy-foundry-casting-ladle-v1-a1",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "c2f3d132be9b72cc478fe843407d5c80b0ccff9f989f57c7558c2a0bc3d5a7d7",
+        "image_hashes": [
+          "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+          "73d82818e1f1005cda3134121c55f5ebde9dc2898c491544a0a1da17e19861e4"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sprite. Brief: casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:03:24.685402+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"A top-down orthographic plan view of a cold, empty crucible casting ladle with heavy trunnions, centered in the middle half of the canvas. The object shows a circular crucible body with a dark interior, a rusted and chipped rim, and two side handles with hooks. The background is a flat gray, with no visible ground, panels, or weather. The object is rendered in a stylized, illustrative manner with visible wear and texture, and no cast shadow is present. The composition is clean and centered, with the object occupying the central portion of the frame.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"not_applicable\",\"subject_matches\":\"yes\",\"top_down_prop\":\"yes\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "A top-down orthographic plan view of a cold, empty crucible casting ladle with heavy trunnions, centered in the middle half of the canvas. The object shows a circular crucible body with a dark interior, a rusted and chipped rim, and two side handles with hooks. The background is a flat gray, with no visible ground, panels, or weather. The object is rendered in a stylized, illustrative manner with visible wear and texture, and no cast shadow is present. The composition is clean and centered, with the object occupying the central portion of the frame.",
+          "export_clean": "yes",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "not_applicable",
+          "subject_matches": "yes",
+          "top_down_prop": "yes"
+        },
+        "elapsed_seconds": 14.141
+      },
+      {
+        "asset": "agy-foundry-casting-ladle-v1-a1",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "168608c6ce1ecf972a1512aea88df5238859efbdc19475567c24f85264616dd4",
+        "image_hashes": [
+          "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+          "73d82818e1f1005cda3134121c55f5ebde9dc2898c491544a0a1da17e19861e4"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sprite. Brief: casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:03:39.021113+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"yes\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"no\",\n  \"six_cells_valid\": \"not_applicable\",\n  \"confidence\": 0.75,\n  \"description\": \"A top-down orthographic view of a cold, empty casting ladle or crucible with heavy trunnions and a handle, featuring a rusted metal texture with ember specks, centered on a solid magenta background.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "yes",
+          "subject_matches": "yes",
+          "neutral_lighting": "yes",
+          "export_clean": "no",
+          "six_cells_valid": "not_applicable",
+          "confidence": 0.75,
+          "description": "A top-down orthographic view of a cold, empty casting ladle or crucible with heavy trunnions and a handle, featuring a rusted metal texture with ember specks, centered on a solid magenta background."
+        },
+        "elapsed_seconds": 20.172
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+      "export_sha256": "73d82818e1f1005cda3134121c55f5ebde9dc2898c491544a0a1da17e19861e4",
+      "note": "Top view and circular foundry-ladle identity read clearly; hook tips approach the side edges and fail the unchanged margin gate. Hold for a framing-only edit using this full-resolution source. This will also be the A2 cropped-margin repair comparison.",
+      "technical_eligible": false,
+      "at": "2026-10-04T13:04:56.475531+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
+    "id": "agy-foundry-backdrop-v1-a1",
+    "class": "backdrop",
+    "kind": "backdrop",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-foundry-backdrop-v1\\attempt-01\\image.png",
+    "source_sha256": "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "agy-foundry-backdrop-v1",
+      "class": "backdrop",
+      "prompt_action": "Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "backdrop",
+      "reference": "",
+      "batch": "agy-foundry-panels",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "512",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "backdrops",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/foundry/panels/backdrop",
+      "region": "foundry"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "export_size_px": [
+        512,
+        512
+      ],
+      "aspect_fit_px": [
+        512,
+        512
+      ],
+      "offset_px": [
+        0,
+        0
+      ]
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-backdrop-v1-a1\\agy-foundry-backdrop-v1.png",
+    "sha256": "6cb5c4d650000fd94023cc7ade51837d884bb8c389942c06caf3846ae1345db1",
+    "recipe": "Complete original aspect fit, no source crop/stretch; unused pixels dark-earth matte",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "foundry",
+    "generation_sidecar": "art\\raw\\agy-foundry-backdrop-v1\\attempt-01\\sidecar.json",
+    "attempt": 1,
+    "recipe_hash": "07058448fe98b60c7ba5f95a75aa00f0caef79475bb99e1065ca333018a5b38c",
+    "origin": "generated",
+    "fallback": "procedural/existing material; G2 activation gated",
+    "grades": [
+      {
+        "asset": "agy-foundry-backdrop-v1-a1",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "1d3b4b712c511c7945a5984e426f18ce0ade609d64acd91c0cdbf0fb6ca4eb80",
+        "image_hashes": [
+          "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+          "6cb5c4d650000fd94023cc7ade51837d884bb8c389942c06caf3846ae1345db1"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: backdrop. Brief: Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:06:37.520604+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"A flat graphic Soot Pulp environment panel showing connected cast halls, material bunkers and inclined hoist frames around a broad empty dark central apron, with no perspective grid, photorealism, cast shadow, fog, sun disc, faces, people, cars, logos or lettering.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"not_applicable\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "A flat graphic Soot Pulp environment panel showing connected cast halls, material bunkers and inclined hoist frames around a broad empty dark central apron, with no perspective grid, photorealism, cast shadow, fog, sun disc, faces, people, cars, logos or lettering.",
+          "export_clean": "yes",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "not_applicable",
+          "subject_matches": "yes",
+          "top_down_prop": "not_applicable"
+        },
+        "elapsed_seconds": 13.235
+      },
+      {
+        "asset": "agy-foundry-backdrop-v1-a1",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "e99fd2df3e89861dade00db5d9d6db0b442926d3f477328624e6c0fd4888de88",
+        "image_hashes": [
+          "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+          "6cb5c4d650000fd94023cc7ade51837d884bb8c389942c06caf3846ae1345db1"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: backdrop. Brief: Connected cast halls, material bunkers and inclined hoist frames surrounding a broad empty dark central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:06:58.553055+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"no\",\n  \"export_clean\": \"yes\",\n  \"six_cells_valid\": \"not_applicable\",\n  \"confidence\": 0.75,\n  \"description\": \"A flat graphic environment panel depicting a dark, central void surrounded by abstract, blocky structures in muted earth tones, consistent with a Soot Pulp aesthetic.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "not_applicable",
+          "subject_matches": "yes",
+          "neutral_lighting": "no",
+          "export_clean": "yes",
+          "six_cells_valid": "not_applicable",
+          "confidence": 0.75,
+          "description": "A flat graphic environment panel depicting a dark, central void surrounded by abstract, blocky structures in muted earth tones, consistent with a Soot Pulp aesthetic."
+        },
+        "elapsed_seconds": 20.031
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "b69f4ff8620d02a79f47224b83f8552df4a5bc265c07ee2395376ff3655073f2",
+      "export_sha256": "6cb5c4d650000fd94023cc7ade51837d884bb8c389942c06caf3846ae1345db1",
+      "note": "Quiet central apron and foundry structures are readable, but large black projected shapes around the perimeter look like baked directional shadows. Hold under the unchanged neutral-light/no-cast-shadow contract; local graders disagree at 0.75 confidence.",
+      "technical_eligible": false,
+      "at": "2026-10-04T13:08:40.293922+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
+    "id": "agy-foundry-embers-v1-a1",
+    "class": "embers",
+    "kind": "sheet",
+    "brief": {
+      "id": "agy-foundry-embers-v1",
+      "class": "embers",
+      "prompt_action": "Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six animation phases of ONE compact ember fragment, from dull rust chip to tiny broken rust-orange spark, no large flame. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+      "size": "1536x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "agy-foundry-atmosphere",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "64",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/foundry/atmosphere/embers",
+      "region": "foundry"
+    },
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-foundry-embers-v1\\attempt-01\\image.png",
+    "source_sha256": "3e638833615e82754df285c0bf15c3e8b1ee42acaa41e415da9c4a833e2ac927",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1.png",
+    "sha256": "2fa13e15d40b1775e2067154914f71fda291508ad4f8dc6bc040cb2972993f59",
+    "codes": [],
+    "metrics": {
+      "estimated_key_rgb": [
+        249.5,
+        23.0,
+        241.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 16,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              255.0,
+              61.0,
+              253.0
+            ]
+          ],
+          [
+            [
+              181.0,
+              94.0,
+              126.0
+            ]
+          ],
+          [
+            [
+              247.0,
+              86.0,
+              226.0
+            ]
+          ],
+          [
+            [
+              254.0,
+              6.0,
+              252.0
+            ],
+            [
+              166.0,
+              14.0,
+              163.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              5.0,
+              251.0
+            ]
+          ],
+          [
+            [
+              254.0,
+              4.0,
+              250.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 2,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      }
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-0.png",
+        "sha256": "1137c000b556408d49faef7a7da3646eeb49fb8781ca696ab882b479e60c816b",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          421,
+          424
+        ],
+        "occupancy": 0.15539707793662888,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.004279627566734001,
+          0.011122418405528078
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-1.png",
+        "sha256": "044afda4fbd325169fccb83017d821f8373dd30d99b27d8bbff83000096dfae9",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          0,
+          843,
+          424
+        ],
+        "occupancy": 0.22148014843959582,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.006397996632032221,
+          -0.0159402693472524
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.02484203791810842,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-2.png",
+        "sha256": "7c0eb24646dfeb0c4a9906cfe5cb1a689e4e254a61c21184f95b60a4236c4ef2",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          0,
+          1264,
+          424
+        ],
+        "occupancy": 0.2155693990050643,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0007515394985704305,
+          -0.011404539971756944
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.025784836861623733,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-3.png",
+        "sha256": "1f38c89cf4c568673aac04d818e8d517b6b5f89fc571cdfba59dbdc126929414",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          424,
+          421,
+          848
+        ],
+        "occupancy": 0.2514341415318424,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0002572065191586148,
+          -0.026144867926209847
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.037561444716775604,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-4.png",
+        "sha256": "786006072427b20871feb9e7c3e42f37ceca1044cb5e6b43a43fb2f1d7a0f68a",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          424,
+          843,
+          848
+        ],
+        "occupancy": 0.08220066171868014,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0019765495000947375,
+          0.0026851322088864427
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.037746994094819304,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frame-5.png",
+        "sha256": "763ae3f181196edb099b1174142775bfd2f3530c33c5345a2f5fdb0282d0c4b2",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          424,
+          1264,
+          848
+        ],
+        "occupancy": 0.03624008425581499,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0031313235533325656,
+          -0.008304664918610372
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.009328627360870818,
+        "codes": []
+      }
+    ],
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 64
+    },
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "verdict": "owner-review",
+    "frames_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1-frames.png",
+    "frames_preview_sha256": "95476dfdbab412b697ccb98e77822eb1eac6c8f88fe00b3da29ad88dddf914a5",
+    "animation_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-foundry-embers-v1-a1\\agy-foundry-embers-v1-a1.gif",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "foundry",
+    "generation_sidecar": "art\\raw\\agy-foundry-embers-v1\\attempt-01\\sidecar.json",
+    "attempt": 1,
+    "recipe_hash": "07058448fe98b60c7ba5f95a75aa00f0caef79475bb99e1065ca333018a5b38c",
+    "origin": "generated",
+    "fallback": "procedural/existing material; G2 activation gated",
+    "grades": [
+      {
+        "asset": "agy-foundry-embers-v1-a1",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "6ac179138699b33bd733879b25c675d5c4b779bc4d698029cbdd0f7d508ac1d5",
+        "image_hashes": [
+          "3e638833615e82754df285c0bf15c3e8b1ee42acaa41e415da9c4a833e2ac927",
+          "2fa13e15d40b1775e2067154914f71fda291508ad4f8dc6bc040cb2972993f59",
+          "95476dfdbab412b697ccb98e77822eb1eac6c8f88fe00b3da29ad88dddf914a5"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six animation phases of ONE compact ember fragment, from dull rust chip to tiny broken rust-orange spark, no large flame. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:06:50.761917+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"Six-frame ember fragment animation sheet: rust chip, rusted metal shard, orange ember shard, broken ember shard, ember shard fragments, and ember shard fragments. Flat magenta background, no cast shadow, no letters, no logos, no faces, no skulls, no objects, no separators, no drawn boxes, no labels, no watermarks.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"yes\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Six-frame ember fragment animation sheet: rust chip, rusted metal shard, orange ember shard, broken ember shard, ember shard fragments, and ember shard fragments. Flat magenta background, no cast shadow, no letters, no logos, no faces, no skulls, no objects, no separators, no drawn boxes, no labels, no watermarks.",
+          "export_clean": "yes",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "yes",
+          "subject_matches": "yes",
+          "top_down_prop": "not_applicable"
+        },
+        "elapsed_seconds": 2.797
+      },
+      {
+        "asset": "agy-foundry-embers-v1-a1",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "eb44083a4358ded6e6bb32b4634e35136cf350e8bce063a5db15838a1a6a2d09",
+        "image_hashes": [
+          "3e638833615e82754df285c0bf15c3e8b1ee42acaa41e415da9c4a833e2ac927",
+          "2fa13e15d40b1775e2067154914f71fda291508ad4f8dc6bc040cb2972993f59",
+          "95476dfdbab412b697ccb98e77822eb1eac6c8f88fe00b3da29ad88dddf914a5"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six animation phases of ONE compact ember fragment, from dull rust chip to tiny broken rust-orange spark, no large flame. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:07:18.604182+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"no\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"yes\",\n  \"six_cells_valid\": \"no\",\n  \"confidence\": 0.75,\n  \"description\": \"The image consists of a 2x3 grid of panels. The content depicts a sequence of a mechanical object, resembling a gun or thruster, transitioning from a solid state to disintegration. This does not match the brief's requirement for a single compact ember fragment or rust chip. The background is a solid magenta color, which is consistent with the brief, but the subject matter is incorrect.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "not_applicable",
+          "subject_matches": "no",
+          "neutral_lighting": "yes",
+          "export_clean": "yes",
+          "six_cells_valid": "no",
+          "confidence": 0.75,
+          "description": "The image consists of a 2x3 grid of panels. The content depicts a sequence of a mechanical object, resembling a gun or thruster, transitioning from a solid state to disintegration. This does not match the brief's requirement for a single compact ember fragment or rust chip. The background is a solid magenta color, which is consistent with the brief, but the subject matter is incorrect."
+        },
+        "elapsed_seconds": 4.016
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "3e638833615e82754df285c0bf15c3e8b1ee42acaa41e415da9c4a833e2ac927",
+      "export_sha256": "2fa13e15d40b1775e2067154914f71fda291508ad4f8dc6bc040cb2972993f59",
+      "note": "Full sheet and actual 64px cells inspected: frames depict a manufactured nozzle/thruster breaking apart rather than one ember. Thin rectangular borders survive in exports. Pixel arithmetic passes, but semantic content and frame cleanup do not; hold. No automatic repair or further call.",
+      "technical_eligible": false,
+      "at": "2026-10-04T13:08:40.308096+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
     "id": "g1-scrap-reuse-scrap-pile",
     "region": "scrap",
     "origin": "reuse",
@@ -5496,6 +7039,1104 @@
       "note": "Inspected actual 2x2 export: granular stones and clustered wear continue across edges; the inherited texture remains recognisable at repeated scale. Foundry tint is ordinary gravel fallback, NOT a substitute for missing porous clinker.",
       "technical_eligible": true,
       "at": "2026-10-04T12:19:35.187048+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
+    "id": "agy-scrap-ash-first-output",
+    "class": "ash",
+    "kind": "sheet",
+    "brief": {
+      "id": "agy-scrap-ash-v1",
+      "class": "ash",
+      "prompt_action": "Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+      "size": "1536x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "agy-scrap-atmosphere",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "64",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/scrap/atmosphere/ash/first-output",
+      "region": "scrap"
+    },
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\audits\\agy-extra-call\\agy_scrap_ash_v1_1791118680868.jpg",
+    "source_sha256": "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output.png",
+    "sha256": "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+    "codes": [
+      "PROVIDER_CONTRACT_HOLD"
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        252.0,
+        11.5,
+        250.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 12,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              253.0,
+              0.0,
+              251.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              0.0,
+              253.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              0.0,
+              253.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              0.0,
+              253.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              0.0,
+              253.0
+            ]
+          ],
+          [
+            [
+              253.0,
+              0.0,
+              251.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 0,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      }
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-0.png",
+        "sha256": "3776795e5ed178cdd4f643d179a3f38fdc862680dfbdbc836b8e21b53e4fb6ec",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          421,
+          424
+        ],
+        "occupancy": 0.27602742795679647,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.0024320375450406218,
+          0.04816208907351416
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-1.png",
+        "sha256": "f258875537d76015b91420aca4402f2eb1dc4bdaa5a41b62cda2c1edbedd1c82",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          0,
+          843,
+          424
+        ],
+        "occupancy": 0.2891889475096128,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.026933177407111097,
+          0.0436367246298176
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.05594394033144303,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-2.png",
+        "sha256": "1212168ef266ab4b74a74007c2704b5754c55df1afee07fba9ea760902e4b763",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          0,
+          1264,
+          424
+        ],
+        "occupancy": 0.283702325998297,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.038844092212288794,
+          0.009956917332395454
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.06288229236751891,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-3.png",
+        "sha256": "a091725382e14d5d84778665b69cd5c9a742d14cfd98b313ae0c2db92f796813",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          424,
+          421,
+          848
+        ],
+        "occupancy": 0.2523360821046027,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.028618417565943688,
+          0.03847725276350189
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07883416859901642,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-4.png",
+        "sha256": "f0333ee0780725ce5b74be391c5098b4d47f0a1d21a0551b997aa8b5a375bf07",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          424,
+          843,
+          848
+        ],
+        "occupancy": 0.324840159170169,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.020769057904902244,
+          -0.006410344328342088
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.06448374473359605,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frame-5.png",
+        "sha256": "c984296dffa3a9aaa2220a26537ab377802d6e410d256863f484389955804889",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          424,
+          1264,
+          848
+        ],
+        "occupancy": 0.2636131403217855,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.018309563538182805,
+          0.018465804292597143
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07148522353181469,
+        "codes": []
+      }
+    ],
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 64
+    },
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "verdict": "technical-hold",
+    "origin": "contract-quarantine",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "scrap",
+    "fallback": "weather disabled; owner/provider contract review pending",
+    "audit": "audits/a1-extra-call.json",
+    "frames_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output-frames.png",
+    "frames_preview_sha256": "faa1300b507682c04871d36409c42ecff95f2a0bc3300d9483285e76d70e2a18",
+    "animation_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-first-output\\agy-scrap-ash-first-output.gif",
+    "grades": [
+      {
+        "asset": "agy-scrap-ash-first-output",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "9f35dca111d2ae331a18074ae306dd26c4987d2f17fb4f495a0a8cb48ddd4923",
+        "image_hashes": [
+          "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+          "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+          "faa1300b507682c04871d36409c42ecff95f2a0bc3300d9483285e76d70e2a18"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:06:53.732777+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"Six ash-flake frames in a 3x2 grid; magenta source replaced with grey, black key outlines remain, and each frame is centred with roughly 20% empty margin.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"yes\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Six ash-flake frames in a 3x2 grid; magenta source replaced with grey, black key outlines remain, and each frame is centred with roughly 20% empty margin.",
+          "export_clean": "yes",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "yes",
+          "subject_matches": "yes",
+          "top_down_prop": "not_applicable"
+        },
+        "elapsed_seconds": 2.391
+      },
+      {
+        "asset": "agy-scrap-ash-first-output",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "d3cdddfd73693a9959481210fb103e53d776eb0b20777972c853e3e443d2c806",
+        "image_hashes": [
+          "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+          "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+          "faa1300b507682c04871d36409c42ecff95f2a0bc3300d9483285e76d70e2a18"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:07:22.788597+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"no\",\n  \"six_cells_valid\": \"no\",\n  \"confidence\": 0.75,\n  \"description\": \"The image contains six frames arranged in a 2x3 grid, each depicting a different irregular, jagged shape resembling a falling ash flake or torn fragment. The shapes have a mix of dark soot-like areas and lighter bone or rust-colored sections, with some yellow highlights. The background is a solid magenta color in the first image, which is not neutral. The shapes are centered in their respective cells, but the presence of the magenta background and the specific style of the shapes (which look more like stylized art than a neutral prop) affects the assessment. The export is not clean due to the specific background color and the stylized nature of the shapes.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "not_applicable",
+          "subject_matches": "yes",
+          "neutral_lighting": "yes",
+          "export_clean": "no",
+          "six_cells_valid": "no",
+          "confidence": 0.75,
+          "description": "The image contains six frames arranged in a 2x3 grid, each depicting a different irregular, jagged shape resembling a falling ash flake or torn fragment. The shapes have a mix of dark soot-like areas and lighter bone or rust-colored sections, with some yellow highlights. The background is a solid magenta color in the first image, which is not neutral. The shapes are centered in their respective cells, but the presence of the magenta background and the specific style of the shapes (which look more like stylized art than a neutral prop) affects the assessment. The export is not clean due to the specific background color and the stylized nature of the shapes."
+        },
+        "elapsed_seconds": 4.75
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+      "export_sha256": "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+      "note": "First provider output contains drawn rectangular cell borders; these survive the actual frame exports. Shapes are broad flame-like scraps rather than small quiet flakes. Both this output and the unsolicited edit are quarantined by the one-call contract audit.",
+      "technical_eligible": false,
+      "at": "2026-10-04T13:08:40.318443+00:00",
+      "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
+    }
+  },
+  {
+    "id": "agy-scrap-ash-unrequested-edit",
+    "class": "ash",
+    "kind": "sheet",
+    "brief": {
+      "id": "agy-scrap-ash-v1",
+      "class": "ash",
+      "prompt_action": "Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+      "size": "1536x1024",
+      "frame": "3x2:6",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sheet",
+      "reference": "",
+      "batch": "agy-scrap-atmosphere",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "64",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "effects",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "regions/scrap/atmosphere/ash/unrequested-edit",
+      "region": "scrap"
+    },
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\audits\\agy-extra-call\\agy_scrap_ash_v1_noboxes_1791118703063.jpg",
+    "source_sha256": "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit.png",
+    "sha256": "fbae4a97b9552ca28a0f86833ff8a9672397e45db4538fb694174773d198973a",
+    "codes": [
+      "PROVIDER_CONTRACT_HOLD"
+    ],
+    "metrics": {
+      "estimated_key_rgb": [
+        250.0,
+        11.0,
+        246.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 6,
+      "secondary_cell_keys_rgb": {
+        "colours_by_cell": [
+          [
+            [
+              250.0,
+              0.0,
+              247.0
+            ]
+          ],
+          [
+            [
+              249.0,
+              1.0,
+              247.0
+            ]
+          ],
+          [
+            [
+              249.0,
+              1.0,
+              247.0
+            ]
+          ],
+          [
+            [
+              249.0,
+              1.0,
+              247.0
+            ]
+          ],
+          [
+            [
+              248.0,
+              0.0,
+              246.0
+            ]
+          ],
+          [
+            [
+              248.0,
+              0.0,
+              246.0
+            ]
+          ]
+        ],
+        "new_edge_despill_pixels": 5,
+        "maximum_despill_distance_px": 3,
+        "long_white_separator_pixels_removed": 0
+      }
+    },
+    "frames": [
+      {
+        "index": 0,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-0.png",
+        "sha256": "47e8b8810b84dbb7c06bb89c7229275dce11f068f9360b80c1677d03391c2d6a",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          0,
+          421,
+          424
+        ],
+        "occupancy": 0.24211782369022544,
+        "key_residue_fraction": 2.313797172539855e-05,
+        "centroid_offset_fraction": [
+          0.0035718762954997096,
+          0.052731846842343555
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": null,
+        "codes": []
+      },
+      {
+        "index": 1,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-1.png",
+        "sha256": "c184612c13519361597a09ee847cdd38b783d21ad267d87129cbc22de17c59f1",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          0,
+          843,
+          424
+        ],
+        "occupancy": 0.25426428507556115,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.032880260265046535,
+          0.046351947238655655
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.054075458257240805,
+        "codes": []
+      },
+      {
+        "index": 2,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-2.png",
+        "sha256": "d8db13019d08f3cc18f647091029b44a61b2177304b419c8eaeb11f4063f69f6",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          0,
+          1264,
+          424
+        ],
+        "occupancy": 0.24761349885716846,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.047957567094076836,
+          0.009232583454281573
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.06191004886942522,
+        "codes": []
+      },
+      {
+        "index": 3,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-3.png",
+        "sha256": "24fb3d944bd7cc1921439c68d9610f5bd68a3694f70e295a626b214180cde5b7",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          0,
+          424,
+          421,
+          848
+        ],
+        "occupancy": 0.21939564379509702,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          -0.03203900283260963,
+          0.04778338742912425
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07621333166130013,
+        "codes": []
+      },
+      {
+        "index": 4,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-4.png",
+        "sha256": "a30d01e2155e7a5b024896402b9fcd1af344801e09c04be67ec35b3a000ecfbb",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          421,
+          424,
+          843,
+          848
+        ],
+        "occupancy": 0.2890827595457391,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.02314690568743283,
+          -0.0050828720464721755
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.062489579829072155,
+        "codes": []
+      },
+      {
+        "index": 5,
+        "path": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frame-5.png",
+        "sha256": "95e1f7a42600b094d9b694209a7b2cedfd113a66be737d744d2fb43a7e5d44f7",
+        "duration_ms": 160,
+        "pivot_px": [
+          32.0,
+          32.0
+        ],
+        "cell_px": [
+          64,
+          64
+        ],
+        "source_cell_px": [
+          843,
+          424,
+          1264,
+          848
+        ],
+        "occupancy": 0.22947384932550532,
+        "key_residue_fraction": 0.0,
+        "centroid_offset_fraction": [
+          0.022793792659461576,
+          0.025944432621859415
+        ],
+        "boundary_occupancy": 0.0,
+        "previous_mean_pixel_delta": 0.07049801808999744,
+        "codes": []
+      }
+    ],
+    "animation": {
+      "columns": 3,
+      "rows": 2,
+      "frames": 6,
+      "durations_ms": [
+        160,
+        160,
+        160,
+        160,
+        160,
+        160
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre",
+      "frame_cell_px": 64
+    },
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "verdict": "technical-hold",
+    "origin": "contract-quarantine",
+    "owner_approved": false,
+    "runtime_enabled": false,
+    "region": "scrap",
+    "fallback": "weather disabled; owner/provider contract review pending",
+    "audit": "audits/a1-extra-call.json",
+    "frames_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit-frames.png",
+    "frames_preview_sha256": "967dd6869f8439c54f55095abab70aa168dbba7614fe23a38ec1b579bcea100c",
+    "animation_preview": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\processed\\regions\\agy-scrap-ash-unrequested-edit\\agy-scrap-ash-unrequested-edit.gif",
+    "grades": [
+      {
+        "asset": "agy-scrap-ash-unrequested-edit",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "d7c6f6d594128b6db29250c38a42503def70d79faae0b0c5329700aaf1b9ff20",
+        "image_hashes": [
+          "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b",
+          "fbae4a97b9552ca28a0f86833ff8a9672397e45db4538fb694174773d198973a",
+          "967dd6869f8439c54f55095abab70aa168dbba7614fe23a38ec1b579bcea100c"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:06:56.127116+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\"confidence\":0.75,\"description\":\"Six ash-flake silhouettes on grey, but the exported sheet is 1024x768 with unequal cells and no magenta margin.\",\"export_clean\":\"no\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"no\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Six ash-flake silhouettes on grey, but the exported sheet is 1024x768 with unequal cells and no magenta margin.",
+          "export_clean": "no",
+          "face_free": "yes",
+          "neutral_lighting": "yes",
+          "no_letters_or_logos": "yes",
+          "six_cells_valid": "no",
+          "subject_matches": "yes",
+          "top_down_prop": "not_applicable"
+        },
+        "elapsed_seconds": 2.375
+      },
+      {
+        "asset": "agy-scrap-ash-unrequested-edit",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "05342d7f12eefaf7c5abd81b8a398e943509ebfd4581ca8123aa6ddb5926d237",
+        "image_hashes": [
+          "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b",
+          "fbae4a97b9552ca28a0f86833ff8a9672397e45db4538fb694174773d198973a",
+          "967dd6869f8439c54f55095abab70aa168dbba7614fe23a38ec1b579bcea100c"
+        ],
+        "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "face_free": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "no_letters_or_logos": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "top_down_prop": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "subject_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "neutral_lighting": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "export_clean": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "six_cells_valid": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ]
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "face_free",
+            "no_letters_or_logos",
+            "top_down_prop",
+            "subject_matches",
+            "neutral_lighting",
+            "export_clean",
+            "six_cells_valid",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-04T13:07:27.570673+00:00",
+        "scope": "region source + actual export; advisory, not owner approval",
+        "raw_content": "{\n  \"face_free\": \"yes\",\n  \"no_letters_or_logos\": \"yes\",\n  \"top_down_prop\": \"not_applicable\",\n  \"subject_matches\": \"yes\",\n  \"neutral_lighting\": \"yes\",\n  \"export_clean\": \"no\",\n  \"six_cells_valid\": \"no\",\n  \"confidence\": 0.75,\n  \"description\": \"The image displays six distinct irregular shapes resembling ash flakes or torn bone fragments arranged in a 2x3 grid. The background is a solid, vibrant magenta color. The shapes are rendered in a sketchy, painterly style with colors ranging from dark charcoal and black to rust orange, tan, and off-white, with small accents of bright yellow. The edges of the shapes are jagged and uneven, consistent with the description of 'broad torn soot-bone shapes'. There are no visible faces, letters, logos, or other objects. The lighting appears flat with no distinct cast shadows, fitting the 'neutral_lighting' and 'flat pigment values' criteria. However, the 'export_clean' field is marked 'no' because the prompt specifically mentions checking for 'key-colour fringes', and while the magenta background is solid, the edges of the shapes have a slightly rough, textured appearance that could be interpreted as minor fringing or artifacting in a strict digital export context, although it looks more like a stylistic choice. More importantly, 'six_cells_valid' is 'no' because the prompt defines this as applying *only* to weather sheets, and this is a sheet of ash flakes, not weather. The 'subject_matches' is 'yes' as the objects match the description of ash flakes. The 'top_down_prop' is 'not_applicable' as these are not props shown from overhead in a 3D sense, but 2D illustrations.\"\n}",
+        "status": "graded",
+        "answers": {
+          "face_free": "yes",
+          "no_letters_or_logos": "yes",
+          "top_down_prop": "not_applicable",
+          "subject_matches": "yes",
+          "neutral_lighting": "yes",
+          "export_clean": "no",
+          "six_cells_valid": "no",
+          "confidence": 0.75,
+          "description": "The image displays six distinct irregular shapes resembling ash flakes or torn bone fragments arranged in a 2x3 grid. The background is a solid, vibrant magenta color. The shapes are rendered in a sketchy, painterly style with colors ranging from dark charcoal and black to rust orange, tan, and off-white, with small accents of bright yellow. The edges of the shapes are jagged and uneven, consistent with the description of 'broad torn soot-bone shapes'. There are no visible faces, letters, logos, or other objects. The lighting appears flat with no distinct cast shadows, fitting the 'neutral_lighting' and 'flat pigment values' criteria. However, the 'export_clean' field is marked 'no' because the prompt specifically mentions checking for 'key-colour fringes', and while the magenta background is solid, the edges of the shapes have a slightly rough, textured appearance that could be interpreted as minor fringing or artifacting in a strict digital export context, although it looks more like a stylistic choice. More importantly, 'six_cells_valid' is 'no' because the prompt defines this as applying *only* to weather sheets, and this is a sheet of ash flakes, not weather. The 'subject_matches' is 'yes' as the objects match the description of ash flakes. The 'top_down_prop' is 'not_applicable' as these are not props shown from overhead in a 3D sense, but 2D illustrations."
+        },
+        "elapsed_seconds": 6.781
+      }
+    ],
+    "direct_review": {
+      "source_sha256": "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b",
+      "export_sha256": "fbae4a97b9552ca28a0f86833ff8a9672397e45db4538fb694174773d198973a",
+      "note": "Unrequested second image-tool call removed some grid strokes but still left vertical magenta/grey residue and changed framing. Both local graders flag export cleanliness and cell validity. Quarantine; this is not an authorized repair proof or replacement.",
+      "technical_eligible": false,
+      "at": "2026-10-04T13:08:40.327007+00:00",
       "reviewer": "executing agent direct pixel inspection; NOT owner acceptance"
     }
   }

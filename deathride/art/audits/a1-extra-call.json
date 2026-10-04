@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-04T13:01:11.143817+00:00",
+  "previous_stop": {
+    "at": "2026-10-04T12:59:11.952676+00:00",
+    "reason": "agy-scrap-ash-v1: Multiple image calls; accounting audit required"
+  },
+  "actual_calls": 2,
+  "previously_reserved": 1,
+  "additional_charge": 1,
+  "images": [
+    {
+      "path": "art\\audits\\agy-extra-call\\agy_scrap_ash_v1_1791118680868.jpg",
+      "sha256": "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866"
+    },
+    {
+      "path": "art\\audits\\agy-extra-call\\agy_scrap_ash_v1_noboxes_1791118703063.jpg",
+      "sha256": "c69fa98738683f635a0fbc9449901ae7707db9813f080e000d05ce3a963da16b"
+    }
+  ],
+  "evidence": {
+    "calls": [
+      {
+        "session": "a8aa0e27-0e6d-4567-85b0-2ccbdcb8def2",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "3:2",
+          "ImageName": "agy_scrap_ash_v1",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Hand-inked action-comic drawing: thick tapered swooping outer contour, sharp thin interior nib strokes, two hard cel-shadow shapes, limited spatter clustered at stressed corners. Long thrusting wedges, exaggerated forward rams and swept fins. Medium mechanical detail density, hot rust-orange and dried-blood-red paint against soot, small hazard-yellow accents. Frenetic insolent mood, visible brush energy.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating scrap ash frames",
+          "toolSummary": "Scrap ash image generation"
+        }
+      },
+      {
+        "session": "a8aa0e27-0e6d-4567-85b0-2ccbdcb8def2",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "3:2",
+          "ImageName": "agy_scrap_ash_v1_noboxes",
+          "ImagePaths": [
+            "C:\\Users\\kazda\\.gemini\\antigravity-cli\\brain\\965cd075-baaa-4216-8823-d98d4416eea7\\agy_scrap_ash_v1_1791118680868.jpg"
+          ],
+          "Prompt": "Remove all black grid lines, rectangular borders, and drawn boxes around the frames. The background should be a completely uniform flat solid magenta #FF00FF with zero black border lines or grid separators. Keep all six ash flake illustrations intact and isolated on the seamless magenta background.",
+          "toolAction": "Removing grid line borders",
+          "toolSummary": "Grid removal edit"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "965cd075-baaa-4216-8823-d98d4416eea7",
+        "sha256": "e459e3baa725a5b826737ad9ecb9567ef7b4d930ebf892bb52833d0ec1520b6c"
+      },
+      {
+        "session": "a8aa0e27-0e6d-4567-85b0-2ccbdcb8def2",
+        "sha256": "ce9905b0433e58f0a231811f9f0218f39e59e37be43c833355a293c80c6d3175"
+      }
+    ],
+    "errors": []
+  },
+  "disposition": "Both outputs quarantined. Original and unrequested grid-removal edit retained; neither accepted. No auth/quota/rate-limit/empty-output error occurred. All actual calls accounted. Corrective instruction forwards one-call/no-inspection/no-repair limit into the image-generator component. This is a one-time executor recovery of an accounting hold, not a provider-error retry or quota-latch reset. A repeat contract violation ends generation for this run."
+}

@@ -1,0 +1,120 @@
+{
+  "asset": "agy-scrap-backdrop-v1-a1",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "input_hash": "8db96097df60e56e9be818df76cf8fef6f72a7b7703b8e694267e315ad1fd515",
+  "image_hashes": [
+    "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+    "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181"
+  ],
+  "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: backdrop. Brief: Roofless sorting sheds, cropped rail sidings and distant suspended conveyor structures surrounding a quiet empty central apron. Flat graphic Soot Pulp environment panel, large quiet masses and sparse perimeter detail. No perspective grid, photorealism, cast shadow, fog baked into art, sun disc, faces, people, cars, logos or lettering. This is a graphic environment panel, not an isolated overhead prop.",
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "face_free": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "no_letters_or_logos": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "top_down_prop": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "subject_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "neutral_lighting": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "export_clean": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "six_cells_valid": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ]
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "face_free",
+      "no_letters_or_logos",
+      "top_down_prop",
+      "subject_matches",
+      "neutral_lighting",
+      "export_clean",
+      "six_cells_valid",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-04T12:59:04.856537+00:00",
+  "scope": "region source + actual export; advisory, not owner approval",
+  "raw_content": "{\"confidence\":0.75,\"description\":\"Roofless sorting sheds with cropped rail sidings and distant suspended conveyor structures around a quiet empty central apron; flat graphic Soot Pulp environment panel with large quiet masses and sparse perimeter detail.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"not_applicable\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+  "status": "graded",
+  "answers": {
+    "confidence": 0.75,
+    "description": "Roofless sorting sheds with cropped rail sidings and distant suspended conveyor structures around a quiet empty central apron; flat graphic Soot Pulp environment panel with large quiet masses and sparse perimeter detail.",
+    "export_clean": "yes",
+    "face_free": "yes",
+    "neutral_lighting": "yes",
+    "no_letters_or_logos": "yes",
+    "six_cells_valid": "not_applicable",
+    "subject_matches": "yes",
+    "top_down_prop": "not_applicable"
+  },
+  "elapsed_seconds": 12.0
+}

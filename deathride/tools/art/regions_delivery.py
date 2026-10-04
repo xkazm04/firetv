@@ -36,8 +36,10 @@ def audit():
       resumption='Blocked by a real provider quota latch. No automatic resume/retry or latch reset. Missing items remain gaps. A later authorised recovery must inspect provider state and retain this incident.')
     write_json(ART/'audits/g1-quota-incident.json',data);return data
 
-def pack():
-    PACK.mkdir(parents=True,exist_ok=True);rs=records();region_plans=[];alltiles=[];pages=[];panels=[]
+def pack(pack_root=PACK,plan_path=ART/'regions/atlas-plan.json',candidate_records=None,candidate_rows=None):
+    PACK=Path(pack_root)
+    PACK.mkdir(parents=True,exist_ok=True);rs=records() if candidate_records is None else candidate_records;region_plans=[];alltiles=[];pages=[];panels=[]
+    requested=rows() if candidate_rows is None else candidate_rows
     for reg in read_json(CATALOG)['regions']:
         rid=reg['id'];folder=PACK/rid;folder.mkdir(exist_ok=True)
         selected=[r for r in rs if r['region']==rid and eligible(r) and r['origin']!='reuse']
@@ -58,7 +60,7 @@ def pack():
           regional_placement_approved=False,additional_resident_bytes=0) for r in rs if r['region']==rid and r['origin']=='reuse']
         missing=[dict(id=row['id'],logical_name=row['logical_name'],kind=row['kind'],reason='provider quota; no candidate image',
           fallback='existing procedural prop/material/backdrop; weather disabled',runtime_enabled=False,owner_approved=False)
-          for row in rows() if row['region']==rid and not any(r['brief']['id']==row['id'] and eligible(r) for r in rs)]
+          for row in requested if row['region']==rid and not any(r['brief']['id']==row['id'] and eligible(r) for r in rs)]
         alltiles+=tiles;panels+=local_panels
         region_plans.append(dict(region=rid,pages=[{**p,'file':rid+'/'+p['file']} for p in local_pages],tiles=tiles,panels=local_panels,reuse_aliases=aliases,
           missing=missing,proposed_prop_metadata=reg['props'],weather_cap=reg['weather_cap'],atmosphere_budget=reg['atmosphere_budget'],
@@ -73,7 +75,7 @@ def pack():
           'Loader replaces material slots, excludes old track-edge autotile and old backdrop allocation','Prior region unloaded before loading next','Stick delta measured in G2/G3']),
       budget_warning='Full-kit 30.25 MiB projection requires all listed replacements. Current ground-only candidate swaps retain 31.25 MiB. No new runtime allocation is made in G1.',
       fallback_policy='Missing/rejected/stale/unapproved candidate uses current procedural/existing art; weather disabled; no geometry or physics change')
-    write_json(ART/'regions/atlas-plan.json',data);print('Staged',len(alltiles),'material candidates,',len(pages),'new sprite pages; no runtime activation.',flush=True);return data
+    write_json(plan_path,data);print('Staged',len(alltiles),'material candidates,',len(pages),'new sprite pages; no runtime activation.',flush=True);return data
 
 def copy_image(source,name):
     target=REVIEW/'images'/name;target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target);return 'images/'+name

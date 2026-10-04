@@ -4,7 +4,11 @@ from common import ART, briefs, read_json, write_json
 import regions_pipeline as pipeline
 
 pipeline.REPORT=ART/'reports/agy-candidates.json'
-pipeline.rows=lambda: briefs(ART/'briefs/agy-regions.csv')
+def rows():
+    rows=briefs(ART/'briefs/agy-regions.csv')
+    if (ART/'briefs/agy-variants.csv').exists():rows+=briefs(ART/'briefs/agy-variants.csv')
+    return rows
+pipeline.rows=rows
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('mode',choices=['measure','grade','direct','proof','init']);p.add_argument('--region');p.add_argument('--batch');p.add_argument('--ids',nargs='+');p.add_argument('--note');p.add_argument('--reject',action='store_true');a=p.parse_args()

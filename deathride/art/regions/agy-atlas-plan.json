@@ -1,0 +1,3188 @@
+{
+  "schema": 1,
+  "at": "2026-10-04T13:08:40.791711+00:00",
+  "status": "Agy technical candidates only; owner-unapproved and inactive",
+  "baseline_bundle": "assets/phase2-states",
+  "baseline_manifest_sha256": "26b49c7288797f1fc6eebc0914119b3c73f61d3cb5a2867fac429c79fb6a2065",
+  "pages": [],
+  "tiles": [
+    {
+      "id": "g1-scrap-asphalt-tint-v1",
+      "file": "scrap/g1-scrap-asphalt-tint-v1.png",
+      "sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+      "kind": "tile",
+      "fallback": "existing untinted asphalt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/asphalt-worn"
+    },
+    {
+      "id": "g1-scrap-dirt-tint-v1",
+      "file": "scrap/g1-scrap-dirt-tint-v1.png",
+      "sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+      "kind": "tile",
+      "fallback": "existing untinted dirt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/dirt"
+    },
+    {
+      "id": "g1-scrap-gravel-tint-v1",
+      "file": "scrap/g1-scrap-gravel-tint-v1.png",
+      "sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+      "kind": "tile",
+      "fallback": "existing untinted gravel",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/gravel"
+    },
+    {
+      "id": "g1-foundry-asphalt-tint-v1",
+      "file": "foundry/g1-foundry-asphalt-tint-v1.png",
+      "sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+      "kind": "tile",
+      "fallback": "existing untinted asphalt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/asphalt-worn"
+    },
+    {
+      "id": "g1-foundry-dirt-tint-v1",
+      "file": "foundry/g1-foundry-dirt-tint-v1.png",
+      "sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+      "kind": "tile",
+      "fallback": "existing untinted dirt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/dirt"
+    },
+    {
+      "id": "g1-foundry-gravel-tint-v1",
+      "file": "foundry/g1-foundry-gravel-tint-v1.png",
+      "sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+      "kind": "tile",
+      "fallback": "existing untinted gravel",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/gravel"
+    },
+    {
+      "id": "g1-salt-asphalt-tint-v1",
+      "file": "salt/g1-salt-asphalt-tint-v1.png",
+      "sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+      "kind": "tile",
+      "fallback": "existing untinted asphalt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/asphalt-worn"
+    },
+    {
+      "id": "g1-salt-dirt-tint-v1",
+      "file": "salt/g1-salt-dirt-tint-v1.png",
+      "sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+      "kind": "tile",
+      "fallback": "existing untinted dirt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/dirt"
+    },
+    {
+      "id": "g1-salt-gravel-tint-v1",
+      "file": "salt/g1-salt-gravel-tint-v1.png",
+      "sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+      "kind": "tile",
+      "fallback": "existing untinted gravel",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/gravel"
+    },
+    {
+      "id": "g1-switchback-asphalt-tint-v1",
+      "file": "switchback/g1-switchback-asphalt-tint-v1.png",
+      "sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+      "kind": "tile",
+      "fallback": "existing untinted asphalt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/asphalt-worn"
+    },
+    {
+      "id": "g1-switchback-dirt-tint-v1",
+      "file": "switchback/g1-switchback-dirt-tint-v1.png",
+      "sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+      "kind": "tile",
+      "fallback": "existing untinted dirt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/dirt"
+    },
+    {
+      "id": "g1-switchback-gravel-tint-v1",
+      "file": "switchback/g1-switchback-gravel-tint-v1.png",
+      "sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+      "kind": "tile",
+      "fallback": "existing untinted gravel",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/gravel"
+    },
+    {
+      "id": "g1-switchback-ice-tint-v1",
+      "file": "switchback/g1-switchback-ice-tint-v1.png",
+      "sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+      "kind": "tile",
+      "fallback": "existing untinted ice",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/ice"
+    },
+    {
+      "id": "g1-crown-asphalt-tint-v1",
+      "file": "crown/g1-crown-asphalt-tint-v1.png",
+      "sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+      "kind": "tile",
+      "fallback": "existing untinted asphalt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/asphalt-worn"
+    },
+    {
+      "id": "g1-crown-dirt-tint-v1",
+      "file": "crown/g1-crown-dirt-tint-v1.png",
+      "sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+      "kind": "tile",
+      "fallback": "existing untinted dirt",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/dirt"
+    },
+    {
+      "id": "g1-crown-gravel-tint-v1",
+      "file": "crown/g1-crown-gravel-tint-v1.png",
+      "sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+      "kind": "tile",
+      "fallback": "existing untinted gravel",
+      "wrap": "Repeat",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "tiles/gravel"
+    }
+  ],
+  "panels": [
+    {
+      "id": "agy-scrap-backdrop-v1-a1",
+      "file": "scrap/agy-scrap-backdrop-v1-a1.png",
+      "sha256": "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181",
+      "width": 512,
+      "height": 512,
+      "rgba_bytes": 1048576,
+      "owner_approved": false,
+      "runtime_enabled": false,
+      "source_sha256": "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+      "kind": "backdrop",
+      "fallback": "procedural/existing material; G2 activation gated",
+      "wrap": "ClampToEdge",
+      "mipmaps": false,
+      "filter": "Linear",
+      "replacement_slot": "active-region-backdrop"
+    }
+  ],
+  "regions": [
+    {
+      "region": "scrap",
+      "pages": [],
+      "tiles": [
+        {
+          "id": "g1-scrap-asphalt-tint-v1",
+          "file": "scrap/g1-scrap-asphalt-tint-v1.png",
+          "sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+          "kind": "tile",
+          "fallback": "existing untinted asphalt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/asphalt-worn"
+        },
+        {
+          "id": "g1-scrap-dirt-tint-v1",
+          "file": "scrap/g1-scrap-dirt-tint-v1.png",
+          "sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+          "kind": "tile",
+          "fallback": "existing untinted dirt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/dirt"
+        },
+        {
+          "id": "g1-scrap-gravel-tint-v1",
+          "file": "scrap/g1-scrap-gravel-tint-v1.png",
+          "sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+          "kind": "tile",
+          "fallback": "existing untinted gravel",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/gravel"
+        }
+      ],
+      "panels": [
+        {
+          "id": "agy-scrap-backdrop-v1-a1",
+          "file": "scrap/agy-scrap-backdrop-v1-a1.png",
+          "sha256": "5bf76ad637969ab01e855fdcfd6cacc18c59aefdfe9202bafdcc5fdd2ba0c181",
+          "width": 512,
+          "height": 512,
+          "rgba_bytes": 1048576,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "b9cae63685e97f4dd214deca72bab0a489a71e5d65987928ccbc07206afb62b2",
+          "kind": "backdrop",
+          "fallback": "procedural/existing material; G2 activation gated",
+          "wrap": "ClampToEdge",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "active-region-backdrop"
+        }
+      ],
+      "reuse_aliases": [
+        {
+          "id": "g1-scrap-reuse-scrap-pile",
+          "existing_asset_id": "rw2-env-scrap-pile-v1-a2",
+          "source": "art/review/rework2/images/rw2-env-scrap-pile-v1-a2.png",
+          "sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-scrap-reuse-oil-drums",
+          "existing_asset_id": "rw2-env-oil-drums-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+          "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-scrap-reuse-rust-pylon",
+          "existing_asset_id": "rw2-env-rust-pylon-v1-a2",
+          "source": "art/review/rework2/images/rw2-env-rust-pylon-v1-a2.png",
+          "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        }
+      ],
+      "missing": [
+        {
+          "id": "agy-scrap-axle-cradle-v1",
+          "logical_name": "regions/scrap/props/axle-cradle",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-baled-sheet-steel-v1",
+          "logical_name": "regions/scrap/props/baled-sheet-steel",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-magnet-yoke-v1",
+          "logical_name": "regions/scrap/props/magnet-yoke",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-cable-reel-v1",
+          "logical_name": "regions/scrap/props/cable-reel",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-sorting-rack-v1",
+          "logical_name": "regions/scrap/props/sorting-rack",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-filter-sacks-v1",
+          "logical_name": "regions/scrap/props/filter-sacks",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-scale-plate-v1",
+          "logical_name": "regions/scrap/props/scale-plate",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-culvert-mouth-cap-v1",
+          "logical_name": "regions/scrap/props/culvert-mouth-cap",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-horizon-v1",
+          "logical_name": "regions/scrap/panels/horizon",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-ash-v1",
+          "logical_name": "regions/scrap/atmosphere/ash",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-variant-scrap-pile-v1",
+          "logical_name": "regions/scrap/kept-edit/scrap-pile",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-variant-oil-drums-v1",
+          "logical_name": "regions/scrap/kept-edit/oil-drums",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-scrap-variant-rust-pylon-v1",
+          "logical_name": "regions/scrap/kept-edit/rust-pylon",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        }
+      ],
+      "proposed_prop_metadata": [
+        {
+          "id": "scrap-pile",
+          "name": "scrap pile",
+          "reason": "kept salvage vocabulary",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.9,
+              1.4
+            ]
+          },
+          "placement_extent_m": [
+            3.8,
+            2.8
+          ],
+          "visual_extent_m": [
+            3.8,
+            2.8
+          ],
+          "height_m": 1.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "garage waste collection",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "broken yard power grid",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "axle-cradle",
+          "name": "axle cradle",
+          "reason": "two salvaged axles in a low sorting jig",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "baled-sheet-steel",
+          "name": "baled sheet steel",
+          "reason": "crushed corrugated metal bundle",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.1,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.2,
+            1.8
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "magnet-yoke",
+          "name": "magnet yoke",
+          "reason": "detached salvage magnet and lifting eyes",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.6,
+            2.2
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-reel",
+          "name": "cable reel",
+          "reason": "exposed rust spool with dull cable",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.1,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.2,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.2,
+            2.2
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "sorting-rack",
+          "name": "sorting rack",
+          "reason": "bent open rack for reusable panels",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.5
+          ],
+          "height_m": 1.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "filter-sacks",
+          "name": "filter sacks",
+          "reason": "torn soot-catcher sacks in a shallow pile",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.0
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "scale-plate",
+          "name": "scale plate",
+          "reason": "worn flush vehicle-weighing deck fragment",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            3.4,
+            2.4
+          ],
+          "visual_extent_m": [
+            3.4,
+            2.4
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "culvert-mouth-cap",
+          "name": "culvert mouth cap",
+          "reason": "collapsed circular drainage grate",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.4,
+            2.1
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.1
+          ],
+          "height_m": 0.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "weather_cap": 12,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.98,
+          0.95,
+          0.9
+        ],
+        "vignette_alpha_max": 0.06,
+        "fog_alpha_max": 0.04,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "candidate_bytes_on_disk": 1835008,
+      "resident_policy": "Only active division; replace matching slots; unload prior region first"
+    },
+    {
+      "region": "foundry",
+      "pages": [],
+      "tiles": [
+        {
+          "id": "g1-foundry-asphalt-tint-v1",
+          "file": "foundry/g1-foundry-asphalt-tint-v1.png",
+          "sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+          "kind": "tile",
+          "fallback": "existing untinted asphalt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/asphalt-worn"
+        },
+        {
+          "id": "g1-foundry-dirt-tint-v1",
+          "file": "foundry/g1-foundry-dirt-tint-v1.png",
+          "sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+          "kind": "tile",
+          "fallback": "existing untinted dirt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/dirt"
+        },
+        {
+          "id": "g1-foundry-gravel-tint-v1",
+          "file": "foundry/g1-foundry-gravel-tint-v1.png",
+          "sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+          "kind": "tile",
+          "fallback": "existing untinted gravel",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/gravel"
+        }
+      ],
+      "panels": [],
+      "reuse_aliases": [
+        {
+          "id": "g1-foundry-reuse-oil-drums",
+          "existing_asset_id": "rw2-env-oil-drums-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+          "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-foundry-reuse-rust-pylon",
+          "existing_asset_id": "rw2-env-rust-pylon-v1-a2",
+          "source": "art/review/rework2/images/rw2-env-rust-pylon-v1-a2.png",
+          "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        }
+      ],
+      "missing": [
+        {
+          "id": "agy-foundry-casting-ladle-v1",
+          "logical_name": "regions/foundry/props/casting-ladle",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-ingot-mould-v1",
+          "logical_name": "regions/foundry/props/ingot-mould",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-refractory-brick-skid-v1",
+          "logical_name": "regions/foundry/props/refractory-brick-skid",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-cooling-manifold-v1",
+          "logical_name": "regions/foundry/props/cooling-manifold",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-roller-cassette-v1",
+          "logical_name": "regions/foundry/props/roller-cassette",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-quench-basket-v1",
+          "logical_name": "regions/foundry/props/quench-basket",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-furnace-door-v1",
+          "logical_name": "regions/foundry/props/furnace-door",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-cinder-spill-tray-v1",
+          "logical_name": "regions/foundry/props/cinder-spill-tray",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-backdrop-v1",
+          "logical_name": "regions/foundry/panels/backdrop",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-horizon-v1",
+          "logical_name": "regions/foundry/panels/horizon",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-embers-v1",
+          "logical_name": "regions/foundry/atmosphere/embers",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-clinker-v1",
+          "logical_name": "regions/foundry/ground/clinker",
+          "kind": "tile",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-variant-oil-drums-v1",
+          "logical_name": "regions/foundry/kept-edit/oil-drums",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-foundry-variant-rust-pylon-v1",
+          "logical_name": "regions/foundry/kept-edit/rust-pylon",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        }
+      ],
+      "proposed_prop_metadata": [
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept maintenance stock",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept power distribution",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "casting-ladle",
+          "name": "casting ladle",
+          "reason": "cold empty crucible with heavy trunnions",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.25
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.5
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.5
+          ],
+          "height_m": 1.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ingot-mould",
+          "name": "ingot mould",
+          "reason": "paired hollow casting channels",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "refractory-brick-skid",
+          "name": "refractory brick skid",
+          "reason": "irregular pale heat-damaged blocks",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.8,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cooling-manifold",
+          "name": "cooling manifold",
+          "reason": "ring of capped coolant pipes",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.2
+          ],
+          "height_m": 0.7,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "roller-cassette",
+          "name": "roller cassette",
+          "reason": "detached steel rollers in a short frame",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.7,
+              0.85
+            ]
+          },
+          "placement_extent_m": [
+            3.4,
+            1.7
+          ],
+          "visual_extent_m": [
+            3.4,
+            1.7
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "quench-basket",
+          "name": "quench basket",
+          "reason": "open perforated metal basket, empty",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.0
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "furnace-door",
+          "name": "furnace door",
+          "reason": "detached round insulated hatch",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            2.2
+          ],
+          "visual_extent_m": [
+            2.6,
+            2.2
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cinder-spill-tray",
+          "name": "cinder spill tray",
+          "reason": "shallow tray overflowing with cold fines",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.0,
+            2.2
+          ],
+          "height_m": 0.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "weather_cap": 10,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          1.02,
+          0.96,
+          0.9
+        ],
+        "vignette_alpha_max": 0.07,
+        "fog_alpha_max": 0.03,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "candidate_bytes_on_disk": 786432,
+      "resident_policy": "Only active division; replace matching slots; unload prior region first"
+    },
+    {
+      "region": "salt",
+      "pages": [],
+      "tiles": [
+        {
+          "id": "g1-salt-asphalt-tint-v1",
+          "file": "salt/g1-salt-asphalt-tint-v1.png",
+          "sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+          "kind": "tile",
+          "fallback": "existing untinted asphalt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/asphalt-worn"
+        },
+        {
+          "id": "g1-salt-dirt-tint-v1",
+          "file": "salt/g1-salt-dirt-tint-v1.png",
+          "sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+          "kind": "tile",
+          "fallback": "existing untinted dirt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/dirt"
+        },
+        {
+          "id": "g1-salt-gravel-tint-v1",
+          "file": "salt/g1-salt-gravel-tint-v1.png",
+          "sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+          "kind": "tile",
+          "fallback": "existing untinted gravel",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/gravel"
+        }
+      ],
+      "panels": [],
+      "reuse_aliases": [
+        {
+          "id": "g1-salt-reuse-rust-pylon",
+          "existing_asset_id": "rw2-env-rust-pylon-v1-a2",
+          "source": "art/review/rework2/images/rw2-env-rust-pylon-v1-a2.png",
+          "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-salt-reuse-oil-drums",
+          "existing_asset_id": "rw2-env-oil-drums-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+          "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        }
+      ],
+      "missing": [
+        {
+          "id": "agy-salt-brine-pump-skid-v1",
+          "logical_name": "regions/salt/props/brine-pump-skid",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-evaporation-rake-v1",
+          "logical_name": "regions/salt/props/evaporation-rake",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-core-sample-rack-v1",
+          "logical_name": "regions/salt/props/core-sample-rack",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-drill-collar-v1",
+          "logical_name": "regions/salt/props/drill-collar",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-salt-sacks-v1",
+          "logical_name": "regions/salt/props/salt-sacks",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-conveyor-hopper-v1",
+          "logical_name": "regions/salt/props/conveyor-hopper",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-survey-cairn-ring-v1",
+          "logical_name": "regions/salt/props/survey-cairn-ring",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-mineral-screen-v1",
+          "logical_name": "regions/salt/props/mineral-screen",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-backdrop-v1",
+          "logical_name": "regions/salt/panels/backdrop",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-horizon-v1",
+          "logical_name": "regions/salt/panels/horizon",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-salt-glints-v1",
+          "logical_name": "regions/salt/atmosphere/salt-glints",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-dust-v1",
+          "logical_name": "regions/salt/atmosphere/dust",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-salt-crust-v1",
+          "logical_name": "regions/salt/ground/salt-crust",
+          "kind": "tile",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-variant-rust-pylon-v1",
+          "logical_name": "regions/salt/kept-edit/rust-pylon",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-salt-variant-oil-drums-v1",
+          "logical_name": "regions/salt/kept-edit/oil-drums",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        }
+      ],
+      "proposed_prop_metadata": [
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept abandoned basin power link",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept haulage service stock",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "brine-pump-skid",
+          "name": "brine pump skid",
+          "reason": "seized low pump, pipe loop and filter pot",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              1.05
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            2.1
+          ],
+          "visual_extent_m": [
+            3.0,
+            2.1
+          ],
+          "height_m": 0.9,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "evaporation-rake",
+          "name": "evaporation rake",
+          "reason": "folded scraper teeth on a short frame",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "core-sample-rack",
+          "name": "core sample rack",
+          "reason": "empty stone-drilling sample trays",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.5
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "drill-collar",
+          "name": "drill collar",
+          "reason": "heavy segmented drilling ring lying flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.15,
+              1.15
+            ]
+          },
+          "placement_extent_m": [
+            2.3,
+            2.3
+          ],
+          "visual_extent_m": [
+            2.3,
+            2.3
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "salt-sacks",
+          "name": "salt sacks",
+          "reason": "split mineral sacks spilling coarse grains",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.8,
+            2.0
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "conveyor-hopper",
+          "name": "conveyor hopper",
+          "reason": "detached shallow receiving hopper",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.25
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "survey-cairn-ring",
+          "name": "survey cairn ring",
+          "reason": "low angular survey-stone cluster",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "mineral-screen",
+          "name": "mineral screen",
+          "reason": "flat ripped sieve panel and trapped pebbles",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.8,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.8,
+            1.8
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "weather_cap": 12,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          1.02,
+          1.0,
+          0.94
+        ],
+        "vignette_alpha_max": 0.03,
+        "fog_alpha_max": 0.04,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "candidate_bytes_on_disk": 786432,
+      "resident_policy": "Only active division; replace matching slots; unload prior region first"
+    },
+    {
+      "region": "switchback",
+      "pages": [],
+      "tiles": [
+        {
+          "id": "g1-switchback-asphalt-tint-v1",
+          "file": "switchback/g1-switchback-asphalt-tint-v1.png",
+          "sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+          "kind": "tile",
+          "fallback": "existing untinted asphalt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/asphalt-worn"
+        },
+        {
+          "id": "g1-switchback-dirt-tint-v1",
+          "file": "switchback/g1-switchback-dirt-tint-v1.png",
+          "sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+          "kind": "tile",
+          "fallback": "existing untinted dirt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/dirt"
+        },
+        {
+          "id": "g1-switchback-gravel-tint-v1",
+          "file": "switchback/g1-switchback-gravel-tint-v1.png",
+          "sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+          "kind": "tile",
+          "fallback": "existing untinted gravel",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/gravel"
+        },
+        {
+          "id": "g1-switchback-ice-tint-v1",
+          "file": "switchback/g1-switchback-ice-tint-v1.png",
+          "sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+          "kind": "tile",
+          "fallback": "existing untinted ice",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/ice"
+        }
+      ],
+      "panels": [],
+      "reuse_aliases": [
+        {
+          "id": "g1-switchback-reuse-rust-pylon",
+          "existing_asset_id": "rw2-env-rust-pylon-v1-a2",
+          "source": "art/review/rework2/images/rw2-env-rust-pylon-v1-a2.png",
+          "sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-switchback-reuse-oil-drums",
+          "existing_asset_id": "rw2-env-oil-drums-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+          "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        }
+      ],
+      "missing": [
+        {
+          "id": "agy-switchback-avalanche-anchor-v1",
+          "logical_name": "regions/switchback/props/avalanche-anchor",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-snow-fence-bundle-v1",
+          "logical_name": "regions/switchback/props/snow-fence-bundle",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-grit-bin-v1",
+          "logical_name": "regions/switchback/props/grit-bin",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-cable-saddle-v1",
+          "logical_name": "regions/switchback/props/cable-saddle",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-drain-cage-v1",
+          "logical_name": "regions/switchback/props/drain-cage",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-scree-gabion-v1",
+          "logical_name": "regions/switchback/props/scree-gabion",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-ice-grit-berm-v1",
+          "logical_name": "regions/switchback/props/ice-grit-berm",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-rescue-sledge-v1",
+          "logical_name": "regions/switchback/props/rescue-sledge",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-backdrop-v1",
+          "logical_name": "regions/switchback/panels/backdrop",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-horizon-v1",
+          "logical_name": "regions/switchback/panels/horizon",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-sleet-v1",
+          "logical_name": "regions/switchback/atmosphere/sleet",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-snow-v1",
+          "logical_name": "regions/switchback/atmosphere/snow",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-variant-rust-pylon-v1",
+          "logical_name": "regions/switchback/kept-edit/rust-pylon",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-switchback-variant-oil-drums-v1",
+          "logical_name": "regions/switchback/kept-edit/oil-drums",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        }
+      ],
+      "proposed_prop_metadata": [
+        {
+          "id": "rust-pylon",
+          "name": "rust pylon",
+          "reason": "kept exposed mountain utility",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.4,
+              1.1
+            ]
+          },
+          "placement_extent_m": [
+            2.8,
+            2.2
+          ],
+          "visual_extent_m": [
+            3.78,
+            2.97
+          ],
+          "height_m": 5.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept road crew supplies",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "avalanche-anchor",
+          "name": "avalanche anchor",
+          "reason": "paired steel pins in a rock-bound foot",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.5,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "snow-fence-bundle",
+          "name": "snow fence bundle",
+          "reason": "collapsed slatted windbreak tied flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.7,
+              0.85
+            ]
+          },
+          "placement_extent_m": [
+            3.4,
+            1.7
+          ],
+          "visual_extent_m": [
+            3.4,
+            1.7
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "grit-bin",
+          "name": "grit bin",
+          "reason": "open segmented service hopper of dull grit",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.8
+          ],
+          "height_m": 1.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-saddle",
+          "name": "cable saddle",
+          "reason": "torn cableway guide wheel and bracket",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            2.0
+          ],
+          "visual_extent_m": [
+            2.4,
+            2.0
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "drain-cage",
+          "name": "drain cage",
+          "reason": "ice-scoured open drain screen",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            2.4,
+            1.6
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.6
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "scree-gabion",
+          "name": "scree gabion",
+          "reason": "bent wire basket full of small angular stone",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.5,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.8
+          ],
+          "height_m": 0.8,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ice-grit-berm",
+          "name": "ice grit berm",
+          "reason": "low irregular dirty granular snow remnant",
+          "effect_class": "drag",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.0
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.0
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.0
+          ],
+          "height_m": 0.3,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "rescue-sledge",
+          "name": "rescue sledge",
+          "reason": "abandoned empty short service sled",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.3,
+              0.65
+            ]
+          },
+          "placement_extent_m": [
+            2.6,
+            1.3
+          ],
+          "visual_extent_m": [
+            2.6,
+            1.3
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "weather_cap": 20,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.96,
+          0.97,
+          0.94
+        ],
+        "vignette_alpha_max": 0.05,
+        "fog_alpha_max": 0.06,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "candidate_bytes_on_disk": 1048576,
+      "resident_policy": "Only active division; replace matching slots; unload prior region first"
+    },
+    {
+      "region": "crown",
+      "pages": [],
+      "tiles": [
+        {
+          "id": "g1-crown-asphalt-tint-v1",
+          "file": "crown/g1-crown-asphalt-tint-v1.png",
+          "sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+          "kind": "tile",
+          "fallback": "existing untinted asphalt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/asphalt-worn"
+        },
+        {
+          "id": "g1-crown-dirt-tint-v1",
+          "file": "crown/g1-crown-dirt-tint-v1.png",
+          "sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+          "kind": "tile",
+          "fallback": "existing untinted dirt",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/dirt"
+        },
+        {
+          "id": "g1-crown-gravel-tint-v1",
+          "file": "crown/g1-crown-gravel-tint-v1.png",
+          "sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+          "width": 256,
+          "height": 256,
+          "rgba_bytes": 262144,
+          "owner_approved": false,
+          "runtime_enabled": false,
+          "source_sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+          "kind": "tile",
+          "fallback": "existing untinted gravel",
+          "wrap": "Repeat",
+          "mipmaps": false,
+          "filter": "Linear",
+          "replacement_slot": "tiles/gravel"
+        }
+      ],
+      "panels": [],
+      "reuse_aliases": [
+        {
+          "id": "g1-crown-reuse-league-gantry",
+          "existing_asset_id": "rw2-env-league-gantry-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-league-gantry-v1-a1.png",
+          "sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        },
+        {
+          "id": "g1-crown-reuse-oil-drums",
+          "existing_asset_id": "rw2-env-oil-drums-v1-a1",
+          "source": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+          "sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+          "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+          "new_owner_approval": false,
+          "regional_placement_approved": false,
+          "additional_resident_bytes": 0
+        }
+      ],
+      "missing": [
+        {
+          "id": "agy-crown-timing-cabinet-v1",
+          "logical_name": "regions/crown/props/timing-cabinet",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-floodlight-bank-v1",
+          "logical_name": "regions/crown/props/floodlight-bank",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-seat-bank-v1",
+          "logical_name": "regions/crown/props/seat-bank",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-pit-jack-v1",
+          "logical_name": "regions/crown/props/pit-jack",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-flag-base-cluster-v1",
+          "logical_name": "regions/crown/props/flag-base-cluster",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-cable-protector-v1",
+          "logical_name": "regions/crown/props/cable-protector",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-podium-plinth-v1",
+          "logical_name": "regions/crown/props/podium-plinth",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-ticket-turnstile-v1",
+          "logical_name": "regions/crown/props/ticket-turnstile",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-backdrop-v1",
+          "logical_name": "regions/crown/panels/backdrop",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-horizon-v1",
+          "logical_name": "regions/crown/panels/horizon",
+          "kind": "backdrop",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-fog-v1",
+          "logical_name": "regions/crown/atmosphere/fog",
+          "kind": "sheet",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-variant-league-gantry-v1",
+          "logical_name": "regions/crown/kept-edit/league-gantry",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        },
+        {
+          "id": "agy-crown-variant-oil-drums-v1",
+          "logical_name": "regions/crown/kept-edit/oil-drums",
+          "kind": "sprite",
+          "reason": "Missing or held by technical screening; see owner review evidence",
+          "fallback": "existing procedural prop/material/backdrop; weather disabled",
+          "runtime_enabled": false,
+          "owner_approved": false
+        }
+      ],
+      "proposed_prop_metadata": [
+        {
+          "id": "league-gantry",
+          "name": "league gantry",
+          "reason": "kept start/finish authority",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            6.0,
+            1.8
+          ],
+          "visual_extent_m": [
+            8.1,
+            2.43
+          ],
+          "height_m": 4.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "oil-drums",
+          "name": "oil drums",
+          "reason": "kept neglected pit maintenance",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              0.9,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            1.8,
+            1.5
+          ],
+          "visual_extent_m": [
+            1.8,
+            1.5
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "reuse",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "timing-cabinet",
+          "name": "timing cabinet",
+          "reason": "battered open relay timing enclosure",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.0,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            2.0,
+            1.5
+          ],
+          "visual_extent_m": [
+            2.0,
+            1.5
+          ],
+          "height_m": 1.2,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "floodlight-bank",
+          "name": "floodlight bank",
+          "reason": "detached empty-lens lamp cluster laid flat",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.8
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.8
+          ],
+          "height_m": 0.6,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "seat-bank",
+          "name": "seat bank",
+          "reason": "detached row of three broken stadium seats",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              0.75
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            1.5
+          ],
+          "visual_extent_m": [
+            3.2,
+            1.5
+          ],
+          "height_m": 0.9,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "pit-jack",
+          "name": "pit jack",
+          "reason": "collapsed low trolley lifting jack",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.7
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.4
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.4
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "flag-base-cluster",
+          "name": "flag base cluster",
+          "reason": "bare snapped poles in heavy footplates",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 1.0,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "cable-protector",
+          "name": "cable protector",
+          "reason": "worn low race-control cable bridge",
+          "effect_class": "none",
+          "collision_footprint": null,
+          "placement_extent_m": [
+            3.0,
+            1.3
+          ],
+          "visual_extent_m": [
+            3.0,
+            1.3
+          ],
+          "height_m": 0.1,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "podium-plinth",
+          "name": "podium plinth",
+          "reason": "chipped shallow ceremonial platform",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.6,
+              1.2
+            ]
+          },
+          "placement_extent_m": [
+            3.2,
+            2.4
+          ],
+          "visual_extent_m": [
+            3.2,
+            2.4
+          ],
+          "height_m": 0.4,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        },
+        {
+          "id": "ticket-turnstile",
+          "name": "ticket turnstile",
+          "reason": "fallen short gate mechanism, blank plates",
+          "effect_class": "solid",
+          "collision_footprint": {
+            "shape": "ellipse",
+            "space": "local-metres",
+            "centre": [
+              0,
+              0
+            ],
+            "radii": [
+              1.2,
+              0.9
+            ]
+          },
+          "placement_extent_m": [
+            2.4,
+            1.8
+          ],
+          "visual_extent_m": [
+            2.4,
+            1.8
+          ],
+          "height_m": 0.7,
+          "shadow": {
+            "renderer_generated": true
+          },
+          "origin": "new",
+          "owner_approved": false,
+          "activation": "G2+owner decision required; proposal only",
+          "fallback": "procedural existing obstacle; no new collision until G2"
+        }
+      ],
+      "weather_cap": 3,
+      "atmosphere_budget": {
+        "shared_pool": 96,
+        "combat_reserved": 72,
+        "regional_max": 24,
+        "active_families_max": 2,
+        "projected_alpha_coverage_max": 0.04,
+        "additional_texture_runs_max": 2,
+        "new_framebuffers": 0,
+        "grade_rgb": [
+          0.96,
+          0.93,
+          0.9
+        ],
+        "vignette_alpha_max": 0.08,
+        "fog_alpha_max": 0.1,
+        "physics_effect": "none; presentation only",
+        "measured": false
+      },
+      "candidate_bytes_on_disk": 786432,
+      "resident_policy": "Only active division; replace matching slots; unload prior region first"
+    }
+  ],
+  "residency": {
+    "baseline_mib": 31.25,
+    "current_runtime_mib": 31.25,
+    "current_runtime_delta_bytes": 0,
+    "current_candidate_swap_projection_mib": 31.25,
+    "complete_kit_projection_mib": 30.25,
+    "car_pages_or_reserve_mib": 8,
+    "unused_track_edge_replaced_mib": 4,
+    "regional_page_max_mib": 4,
+    "old_backdrop_replaced_mib": 4,
+    "new_panels_max_mib": 3,
+    "active_regions_max": 1,
+    "new_material_slots": 0,
+    "material_slot_bytes": 262144,
+    "mipmaps": false,
+    "activation_prerequisites": [
+      "Exact owner Keep decisions",
+      "All technical gates and proof chronology pass",
+      "G2 track restart complete",
+      "Loader replaces material slots, excludes old track-edge autotile and old backdrop allocation",
+      "Prior region unloaded before loading next",
+      "Stick delta measured in G2/G3"
+    ]
+  },
+  "budget_warning": "Full-kit 30.25 MiB projection requires all listed replacements. Current ground-only candidate swaps retain 31.25 MiB. No new runtime allocation is made in G1.",
+  "fallback_policy": "Missing/rejected/stale/unapproved candidate uses current procedural/existing art; weather disabled; no geometry or physics change"
+}

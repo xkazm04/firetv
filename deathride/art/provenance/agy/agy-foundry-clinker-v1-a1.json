@@ -1,0 +1,71 @@
+{
+  "asset": "agy-foundry-clinker-v1",
+  "provider": "agy",
+  "origin": "agy-cli",
+  "model": "gemini-3.8-flash-high",
+  "image_model": "Nano Banana 2 (provider built-in image tool)",
+  "timestamp": "2026-10-04T13:05:23.484584+00:00",
+  "attempt": 1,
+  "brief": {
+    "id": "agy-foundry-clinker-v1",
+    "class": "clinker",
+    "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Dense small porous vitrified cold cinder chips mixed into soot-brown foundry fines. Rust-brown worn aggregate, not ordinary rounded stones, no lava or glow. Fine quiet stochastic texture without a focal motif. Seamless opposite edges, single unrepeated field, no quadrants, mirrored halves, large cracks, large polygons, gradients, lighting, objects, outlines, text, faces or people.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "none",
+    "count": "1",
+    "status": "ready",
+    "kind": "tile",
+    "reference": "",
+    "batch": "agy-foundry-ground",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "256",
+    "style_file": "style-fusion.json",
+    "wave": "V4",
+    "asset_family": "ground",
+    "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+    "logical_name": "regions/foundry/ground/clinker",
+    "region": "foundry"
+  },
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Entire image is ONLY one empty anonymous painted material field. Dense small porous vitrified cold cinder chips mixed into soot-brown foundry fines. Rust-brown worn aggregate, not ordinary rounded stones, no lava or glow. Fine quiet stochastic texture without a focal motif. Seamless opposite edges, single unrepeated field, no quadrants, mirrored halves, large cracks, large polygons, gradients, lighting, objects, outlines, text, faces or people.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "input_hash": "9641892d526a21261016c426469aa1ef7f3e4cce308f694296b6ada2782cf2f2",
+  "status": "generation-error",
+  "image": null,
+  "mode": "generate",
+  "references": [],
+  "owner_approved": false,
+  "runtime_enabled": false,
+  "returncode": 1,
+  "session_id": "7506c2b5-5291-4cd9-81eb-fb257b6f0f11",
+  "error": "Provider stop latched: {'at': '2026-10-04T13:06:15.381789+00:00', 'reason': 'agy-foundry-clinker-v1: failed to generate'}",
+  "elapsed_seconds": 52.125,
+  "image_tool_evidence": {
+    "calls": [
+      {
+        "session": "ae4869b7-04c5-44de-8b81-d45bdd587d9d",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "1:1",
+          "ImageName": "agy_foundry_clinker_v1",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace. FUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only. ACTION: Entire image is ONLY one empty anonymous painted material field. Dense small porous vitrified cold cinder chips mixed into soot-brown foundry fines. Rust-brown worn aggregate, not ordinary rounded stones, no lava or glow. Fine quiet stochastic texture without a focal motif. Seamless opposite edges, single unrepeated field, no quadrants, mirrored halves, large cracks, large polygons, gradients, lighting, objects, outlines, text, faces or people. No franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating clinker texture",
+          "toolSummary": "Generate clinker material image"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "7506c2b5-5291-4cd9-81eb-fb257b6f0f11",
+        "sha256": "b2c540c626ecc3b1a2dfb7d51d424cdbbcb88dcb9b9092f04b47cda39d69b4af"
+      },
+      {
+        "session": "ae4869b7-04c5-44de-8b81-d45bdd587d9d",
+        "sha256": "c09824d3577034e2eae2249840af034acd2266b72f30d1066807b8170d520fa8"
+      }
+    ],
+    "errors": [
+      "failed to generate"
+    ]
+  }
+}

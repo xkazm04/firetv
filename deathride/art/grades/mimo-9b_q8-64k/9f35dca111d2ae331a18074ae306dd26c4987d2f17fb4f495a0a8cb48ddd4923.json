@@ -1,0 +1,121 @@
+{
+  "asset": "agy-scrap-ash-first-output",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "input_hash": "9f35dca111d2ae331a18074ae306dd26c4987d2f17fb4f495a0a8cb48ddd4923",
+  "image_hashes": [
+    "bf5e31470c5c3b92948bc321def091e0fed27256ce13fa2cc639ec65abc00866",
+    "ae23fa6327e05646fc842892caff349e0f5a7005ee1abdf39659626c45d5886e",
+    "faa1300b507682c04871d36409c42ecff95f2a0bc3300d9483285e76d70e2a18"
+  ],
+  "prompt": "Inspect actual pixels, not the claimed compliance. Image 1 is source; image 2 is exported art; image 3 if supplied is actual six exported frames. Return only required JSON. face_free=yes only if NO people, heads, faces, skulls or occupants. no_letters_or_logos=yes if no lettering, numbers, logos or watermark. top_down_prop=yes only for a prop shown directly overhead with no visible vertical side faces; not_applicable for ground, panels or weather. subject_matches requires the requested object/material; neutral_lighting means no baked cast shadow or directional lamp; material value differences are allowed. export_clean=no for key-colour fringes, lost foreground or visibly cut-off art. six_cells_valid applies only to weather sheets: six separate nonempty centred different frames without border collisions or key panels. Use uncertain when you cannot judge. Confidence is fractional, never percentage. Technical observation only, never acceptance. Kind: sheet. Brief: Exactly SIX separate frames in THREE columns and TWO rows of equal square cells. Six different silhouettes of ONE small irregular falling ash flake, broad torn soot-bone shapes, not sparks or snow. Each frame occupies the middle HALF of its cell with at least 20 percent empty magenta margin on all four sides. Fixed origin, scale and camera; reading order. No separators, drawn boxes, labels, faces, skulls, objects or letters. Flat pigment values, no cast shadow. All six cells contain visible different effect shapes.",
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "face_free": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "no_letters_or_logos": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "top_down_prop": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "subject_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "neutral_lighting": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "export_clean": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "six_cells_valid": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ]
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "face_free",
+      "no_letters_or_logos",
+      "top_down_prop",
+      "subject_matches",
+      "neutral_lighting",
+      "export_clean",
+      "six_cells_valid",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-04T13:06:53.732777+00:00",
+  "scope": "region source + actual export; advisory, not owner approval",
+  "raw_content": "{\"confidence\":0.75,\"description\":\"Six ash-flake frames in a 3x2 grid; magenta source replaced with grey, black key outlines remain, and each frame is centred with roughly 20% empty margin.\",\"export_clean\":\"yes\",\"face_free\":\"yes\",\"neutral_lighting\":\"yes\",\"no_letters_or_logos\":\"yes\",\"six_cells_valid\":\"yes\",\"subject_matches\":\"yes\",\"top_down_prop\":\"not_applicable\"}",
+  "status": "graded",
+  "answers": {
+    "confidence": 0.75,
+    "description": "Six ash-flake frames in a 3x2 grid; magenta source replaced with grey, black key outlines remain, and each frame is centred with roughly 20% empty margin.",
+    "export_clean": "yes",
+    "face_free": "yes",
+    "neutral_lighting": "yes",
+    "no_letters_or_logos": "yes",
+    "six_cells_valid": "yes",
+    "subject_matches": "yes",
+    "top_down_prop": "not_applicable"
+  },
+  "elapsed_seconds": 2.391
+}

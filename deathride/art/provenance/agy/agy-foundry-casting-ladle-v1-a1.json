@@ -1,0 +1,76 @@
+{
+  "asset": "agy-foundry-casting-ladle-v1",
+  "provider": "agy",
+  "origin": "agy-cli",
+  "model": "gemini-3.8-flash-high",
+  "image_model": "Nano Banana 2 (provider built-in image tool)",
+  "timestamp": "2026-10-04T13:01:32.396877+00:00",
+  "attempt": 1,
+  "brief": {
+    "id": "agy-foundry-casting-ladle-v1",
+    "class": "casting-ladle",
+    "prompt_action": "casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "sprite",
+    "reference": "",
+    "batch": "agy-foundry-props",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V4",
+    "asset_family": "props",
+    "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+    "logical_name": "regions/foundry/props/casting-ladle",
+    "region": "foundry"
+  },
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "input_hash": "a038c63b1ffc6fdf07c351f91a5ad9d673d46226c6223529b27e0219b495bdf0",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\agy-foundry-casting-ladle-v1\\attempt-01\\image.png",
+  "mode": "generate",
+  "references": [],
+  "owner_approved": false,
+  "runtime_enabled": false,
+  "returncode": 0,
+  "session_id": "25f97de6-cc5f-4b08-9afd-8549160daa25",
+  "source_size": [
+    1024,
+    1024
+  ],
+  "image_tool_evidence": {
+    "calls": [
+      {
+        "session": "951d5970-75ce-4567-a335-d50aea12a201",
+        "name": "generate_image",
+        "args": {
+          "AspectRatio": "1:1",
+          "ImageName": "agy_foundry_casting_ladle",
+          "Prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: casting ladle: cold empty crucible with heavy trunnions. Belongs to Cinder Row: Dry furnace dust, cold clinker and intermittent ember specks. Strict directly overhead orthographic plan view: ONLY top surfaces, no visible vertical side faces, no isometric projection. One complete object centered in the middle HALF of the canvas. Leave at least 20 percent clear magenta margin on every side. Broad connected forms readable at 96 pixels. No decorative ground, human, face, skull, occupant or face-like arrangement. No cast shadow.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+          "toolAction": "Generating casting ladle image",
+          "toolSummary": "Image generation"
+        }
+      }
+    ],
+    "logs": [
+      {
+        "session": "25f97de6-cc5f-4b08-9afd-8549160daa25",
+        "sha256": "690c312a51b3f52c034510b4dfd51bd5919acb178d0aac4ca1cd40503d96968b"
+      },
+      {
+        "session": "951d5970-75ce-4567-a335-d50aea12a201",
+        "sha256": "db2f7bb21fef1e82edd3c6ac14a360433fc48e05268ddbdf6466c7e0e12d0701"
+      }
+    ],
+    "errors": []
+  },
+  "sha256": "77cdbdc860f6a283b276f6bf760cd39462590602c233bd569bd5b09ca3020d92",
+  "continuation_verified": true,
+  "prompt_verbatim_verified": true,
+  "prompt_verification": "Exact tool parameters from this session and explicitly linked image-generator children",
+  "elapsed_seconds": 74.328
+}

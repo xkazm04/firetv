@@ -101,18 +101,21 @@ def image_evidence(session, brain=None):
         path=brain/sid/'.system_generated/logs/transcript_full.jsonl'
         if not path.is_file():continue
         logs.append(dict(session=sid,sha256=sha(path)))
+        image_result_pending=False
         for line in path.read_text(encoding='utf-8').splitlines():
             try:event=json.loads(line)
             except json.JSONDecodeError:continue
             for call in event.get('tool_calls',[]):
-                if call.get('name')=='generate_image':calls.append(dict(session=sid,**call))
+                if call.get('name')=='generate_image':
+                    calls.append(dict(session=sid,**call));image_result_pending=True
             content=event.get('content','')
             if event.get('type')=='GENERIC' and 'Created the following subagents:' in content:
                 queue+=re.findall(r'"conversationId"\s*:\s*"([a-f0-9-]+)"',content)
             # Actual image tool responses, not copied historical logs or the prompt.
-            if event.get('type')=='GENERATE_IMAGE' or event.get('type')=='ERROR':
+            if (image_result_pending and event.get('type')=='GENERIC') or event.get('type')=='ERROR':
                 error=failure_evidence(content)
                 if error:errors.append(error)
+                image_result_pending=False
     return dict(calls=calls,logs=logs,errors=errors)
 
 def verify_prompt(evidence,prompt):
@@ -126,7 +129,13 @@ def run_turn(exe, instruction, folder, budget, asset, name, session=None):
     with log.open('w',encoding='utf-8') as output:
         process=subprocess.Popen(command,cwd=folder,stdout=output,stderr=subprocess.STDOUT)
         while process.poll() is None:
-            evidence=failure_evidence(log.read_text(encoding='utf-8',errors='replace'))
+            current=log.read_text(encoding='utf-8',errors='replace')
+            evidence=failure_evidence(current)
+            sid=session or conversation_id(current)
+            if sid:
+                audit=image_evidence(sid)
+                if len(audit['calls'])>1:evidence='Multiple image calls; accounting audit required'
+                elif audit['errors']:evidence='Image tool error: '+str(audit['errors'])
             timeout=time.monotonic()-started>600
             if evidence or timeout:
                 budget.stop(asset+': '+(evidence or '600 second timeout; outcome unknown'))
@@ -144,6 +153,11 @@ def generate(row,style,budget,refine=False):
     reference_gate(row)
     folder_base=budget.art/'raw'/row['id']
     old=[read_json(p) for p in sorted(folder_base.glob('attempt-*/sidecar.json'))]
+    if not old and (budget.art/'history.jsonl').exists():
+        # Raw payloads are ignored by git. Losing them must not silently buy
+        # another image on a fresh checkout or after local cleanup.
+        old=[e for e in map(json.loads,(budget.art/'history.jsonl').read_text(encoding='utf-8').splitlines())
+             if e.get('provider')=='agy' and e.get('event')=='result' and e.get('asset')==row['id']]
     signature=digest(dict(row=row,style=style,provider='agy',model=budget.model))
     for previous in old:
         if previous['input_hash']!=signature:raise ValueError('Immutable ID changed; mint new id: '+row['id'])
@@ -160,7 +174,7 @@ def generate(row,style,budget,refine=False):
         correction=rejection['note']
     references=row.get('style_references',[])
     if isinstance(references,str):references=json.loads(references) if references else []
-    source=row.get('reference','')
+    source=old[-1]['image'] if refine else row.get('reference','')
     paths=[Path(p) if Path(p).is_absolute() else ROOT/p for p in ([source] if source else [])+references]
     if len(paths)>14:raise ValueError('At most 14 total image inputs')
     for path in paths:
@@ -188,9 +202,13 @@ def generate(row,style,budget,refine=False):
         f"Use 2K resolution, aspect ratio matching {row['size']}. Save the resulting PNG to {target}. "
         'Use the IMAGE PROMPT below verbatim as the image tool prompt. Do not paraphrase. '
         'Use your built-in image-generator component if that is how the image tool is exposed. '
+        'CRITICAL: pass this constraint verbatim at both the START and END of the image-generator task: '
+        'STRICT TOOL BUDGET = ONE generate_image call TOTAL. Return the FIRST output even if defective. '
+        'Do NOT inspect, improve, repair, remove grids, regenerate, or make an edit after that one call. '
+        'Only the caller may judge or request a separate correction. This applies to all child components too. '
         'Do not generate variants, retry any image call, use web, launch coding agents, or modify any other project files. '
         'You may read input images and copy the single image tool result to the requested output. '
-        'Finish only after the file exists; reply with its saved absolute path.\n')
+        'Do not inspect or judge the image yourself. Finish only after copying the first output; reply with its saved absolute path.\n')
     if source:instruction+='EDIT TARGET (full resolution, preserve identity/design): '+str(paths[0].resolve())+'\n'
     for i,path in enumerate(paths[1:] if source else paths):instruction+=f'STYLE REFERENCE {i+1}: {path.resolve()}\n'
     instruction+='\nIMAGE PROMPT:\n'+prompt

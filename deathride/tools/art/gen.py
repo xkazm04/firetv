@@ -117,7 +117,7 @@ class Budget:
 
     def record(self, event):
         with file_lock(self.art / '.budget.lock'):
-            append_json(self.art / 'history.jsonl', event)
+            append_json(self.art / 'history.jsonl', {'provider':'grok','model':'grok-4.7',**event})
 
     def stop(self, reason):
         with file_lock(self.art / '.budget.lock'):
@@ -125,7 +125,7 @@ class Budget:
             if not usage['stop']:
                 usage['stop'] = {'at':now(), 'reason':reason}
                 write_json(self.art / 'usage.json', usage)
-                append_json(self.art / 'history.jsonl', {'event':'spend-stop', **usage['stop']})
+                append_json(self.art / 'history.jsonl', {'event':'spend-stop', 'provider':'grok','model':'grok-4.7', **usage['stop']})
 
     def summary(self):
         usage = self._load()
