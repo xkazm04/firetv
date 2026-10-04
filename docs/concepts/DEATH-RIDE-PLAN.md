@@ -4,6 +4,8 @@ Written 2026-09-30 on `main` (6f953de). No product code was changed to write it.
 `docs/POC-FINDINGS.md`, `docs/PLATFORM-RISK.md`, `tv-app/build.gradle.kts`, `settings.gradle.kts` and `scripts/dev.ps1`, read
 on 2026-09-30. Nothing here was run. "Proposed" marks a number nobody has measured yet. Sizes S/M/L are relative, not measured.
 
+> **Current status: see `DEATH-RIDE-STATUS.md` (start there; this file is the original plan).**
+>
 > **2026-09-30 update.** The spike is done: it ran as a contest and slice C/2 "Slipstream" won (see `DEATH-RIDE-PHASE1.md` section a). Phase 1 is now
 > organised as waves W1-W8 in `DEATH-RIDE-PHASE1.md`, which supersedes slices M1-M7 here. The reference Stick has 1.7 GB RAM, not 2 GB. S3 and S5 are partial: idle
 > frame time was measured on the Stick, input age under play and the optical flash test were not.
