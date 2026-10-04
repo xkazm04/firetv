@@ -1,0 +1,171 @@
+{
+  "requiredTasks": [
+    ":core:test",
+    ":link:test",
+    ":game:test",
+    ":app:assembleDebug"
+  ],
+  "build": "pass; 7 seconds; all 50 tasks up-to-date",
+  "tests": {
+    "core": {
+      "tests": 208,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 43,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "browserResults": {
+    "browser": [
+      {
+        "width": 1440,
+        "cards": 40,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "width": 390,
+        "cards": 40,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      }
+    ],
+    "final-browser": [
+      {
+        "name": "index.html",
+        "width": 1440,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "final-outline-sheet.html",
+        "width": 1440,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "owner-triage.html",
+        "width": 1440,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "index.html",
+        "width": 390,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "final-outline-sheet.html",
+        "width": 390,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "owner-triage.html",
+        "width": 390,
+        "pass": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "name": "Track Lab final library",
+        "width": 1440,
+        "courses": 38,
+        "pass": true,
+        "errors": []
+      },
+      {
+        "name": "Track Lab final library",
+        "width": 390,
+        "courses": 38,
+        "pass": true,
+        "errors": []
+      }
+    ],
+    "regions-browser": [
+      {
+        "width": 1440,
+        "regions": 5,
+        "captures": 45,
+        "menuImages": 5,
+        "props": 11,
+        "blankInitialChoices": true,
+        "allPicks": true,
+        "persistence": true,
+        "escapedMarkdown": true,
+        "clipboardFallback": true,
+        "overflow": false,
+        "errors": [],
+        "remote": [],
+        "status": "pass"
+      },
+      {
+        "width": 390,
+        "regions": 5,
+        "captures": 45,
+        "menuImages": 5,
+        "props": 11,
+        "blankInitialChoices": true,
+        "allPicks": true,
+        "persistence": true,
+        "escapedMarkdown": true,
+        "clipboardFallback": true,
+        "overflow": false,
+        "errors": [],
+        "remote": [],
+        "status": "pass"
+      },
+      {
+        "storageDenied": true,
+        "inMemoryExport": true,
+        "status": "pass"
+      }
+    ],
+    "scrap-review": [
+      {
+        "width": 1440,
+        "cards": 3,
+        "provisional": 1,
+        "blankInitialChoices": true,
+        "persistence": true,
+        "escapedMarkdown": true,
+        "clipboardFallback": true,
+        "errors": [],
+        "remote": []
+      },
+      {
+        "width": 390,
+        "cards": 3,
+        "provisional": 1,
+        "blankInitialChoices": true,
+        "persistence": true,
+        "escapedMarkdown": true,
+        "clipboardFallback": true,
+        "errors": [],
+        "remote": []
+      }
+    ]
+  },
+  "apkPackage": "dev.deathride.tracks",
+  "apkSha256": "d0c52d5949c63ec8c01766b04750f029364c56fde9b44f696f782f9ebe5d1bfe",
+  "device": "pending-busy"
+}

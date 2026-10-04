@@ -8,7 +8,7 @@ Branch deathride/tracks; no push, paid providers, art generation or owner questi
 | 2 | Complete; three new distinct 72-trial-proved layouts, scrap-7-f provisional, owner review and native Lab browser green; required build/tests green. | OWNER-TRACKS-2-SCRAP-BOSS.md |
 | 3 | Complete; original unresolved duels 3/12 -> 0/12, held-out 0/128; approved layout/content unchanged; 258 tests/build/browser green. | OWNER-TRACKS-3-FINALE.md |
 | 4 | Evidence complete; 35 assignments, 38 playable courses, fresh proofs and paired studies. Class/boss balance and PR-policy regression flagged; 259 tests/build/browser green. | OWNER-TRACKS-4-PROOF.md |
-| 5 | Pending: /24 TCP/5555 scan and isolated Stick check. | Pending |
+| 5 | Scan/check complete; device validation pending/busy. APK verified as dev.deathride.tracks; no device mutation; final build and browser checks green. | OWNER-TRACKS-5-STICK.md |
 
 ## Part 1
 
@@ -33,3 +33,9 @@ Completed paired frozen-runtime studies: per side 11,520 physical lap trials, 1,
 Measured improvements: physical lead finishes 10,785 -> 11,427, equal-peer unresolved cars 25 -> 0, actual-duel timeouts 274/3,072 -> 0/3,072 (two legitimate mutual-wreck draws after). All stock opening/final pacing medians meet bands. Findings remain: all ten class pools exceed 55% dominance (eight before), three upgraded pacing medians are below stock bands, all three new boss choices have 0/32 matched-Pro first-place wins, PR-priority career completions fall 905 -> 459/2,000 while race-priority improves 868 -> 1,316, and no Rookie career completes within the cap. Corrected an intermediate report that counted beatBoss instead of first-place promotion wins; the raw columns and final report preserve the distinction. No thresholds, course laps or classes were changed to hide failures.
 
 All 106 campaign/difficulty raw files retained with compressed-source hashes, class/boss trial CSV and before/after JSON. Required serialized build passed in 9m28s with 259 tests, zero failures/errors/skips. Desktop/mobile final atlas, full library, owner review and escaped export, outline sheet, report, default Lab, native previews, archived atlas, composer and region browser checks all pass. Evidence: deathride/evidence/tracks/owner-part4 and owner-part4-green-build.log. No push, paid services or art changes. Part 5 retains the separate busy-device outcome.
+
+## Part 5
+
+Scanned every host in Wi-Fi 10.0.0.0/24 on TCP/5555 (254 hosts), finding the AFTKM at 10.0.0.139. Read-only ADB foreground inspection found dev.deathride.perf running. Honored the busy fallback: no install, launch or app stop; device frame time, sustained racing and sofa readability remain pending. Verified the actual final APK package as dev.deathride.tracks with aapt, isolated port 8774, and SHA-256 d0c52d5949c63ec8c01766b04750f029364c56fde9b44f696f782f9ebe5d1bfe. No action targeted dev.deathride.tv.
+
+Re-ran :core:test :link:test :game:test :app:assembleDebug after part 4: green in seven seconds, all 50 tasks up-to-date; retained results total 259 tests, zero failures/errors/skips. Fresh desktop/mobile browser checks passed for the final atlas/report/sheet, 38-course default Lab, 40-item retained library, three-choice owner review with notes/export, and five-region review including denied-storage fallback. Evidence and final-checks.json are under deathride/evidence/tracks/owner-part5. Parts 1-5 each have a design note, status row, log entry and local commit. No push, Grok, agy, ElevenLabs or art changes. Remaining work is owner choice for scrap-7, reported class/boss/progression balance follow-up and device validation when free.
