@@ -7,7 +7,7 @@ schemaVersion: 0.1.0
 
 # Paths an agent must NEVER hand-edit (generated, vendored, lockfiles). Keep in sync with the
 # manifest's boundaries.neverTouch. Example: [dist/, vendor/, "*.lock", src/generated/]
-neverTouch: []
+neverTouch: [desk/data/]
 
 secrets:
   # DOCTOR-ENFORCED: if git tracks a file matching any of these, the conformance gate HARD FAILS.
@@ -15,7 +15,7 @@ secrets:
   # file, e.g. .env.example, turns the gate into noise).
   neverCommit: [.env, .env.local, "*.pem", "*.p12", "*.pfx", id_rsa, id_dsa]
   # Where secrets legitimately come from: a vault/keyring NAME, never a secret.
-  from: "TODO: the vault/keyring this repo reads secrets from"
+  from: "process environment; locally the gitignored desk/.env.local (no vault)"
 
 # Change discipline. These are the non-negotiables of agent-driven development in this repo.
 review:

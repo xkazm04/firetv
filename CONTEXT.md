@@ -1,24 +1,41 @@
-# CONTEXT: <module path>
+# CONTEXT: . (repository root)
 
-> Co-located, agent-readable context for this module. Keep it short and TRUE. When the code here
-> changes materially, update this file in the same change (the doctor flags it as stale otherwise).
+> Co-located, agent-readable context for the root of the repo. Keep it short and TRUE. The full
+> guidance is [AGENTS.md](AGENTS.md); this file is the module card the `.ai` context index points at.
 
 ## Owns
-What this module is responsible for, in one or two sentences.
+The three TV products in this repository and the glue between them:
+- the Telestrator PoC (`core/`, `tv-app/`, `companion/`)
+- the Study Desk prototype (`desk/`, with its rules suites in `tools/` and UAT in `uat/`)
+- the standalone Death Ride build (`deathride/`)
+
+It also owns the root Gradle build (`settings.gradle.kts`: `:core`, `:tv-app`; versions in
+`gradle/libs.versions.toml`) and the agent contract in `.ai/`.
 
 ## Public contract
-The surface other code/agents depend on (exports, routes, events, schema). Changing these is a
-breaking change: call it out.
+- The wire protocol in `core/` that the companion PWA and the TV both speak. A change there is a change on both sides of the socket.
+- The capability commands in `.ai/manifest.yaml`. Agents and CI call them by name.
+- `desk/package.json` `test:rules`, the desk gate's list of suites. New suites are appended at the end.
 
 ## Invariants: never break
-- <e.g. "all DB access goes through repo.ts; never raw SQL here">
-- <e.g. "no secrets read directly; use the vault capability">
+- `core/` stays free of Android imports.
+- `companion/` is the single source of the phone page. The APK copies it at build time.
+- No live model call runs in any gate.
+- `desk/data/` and `desk/.env.local` are never committed or rewritten by a test.
+- `deathride/` is not included in the root Gradle build.
 
 ## Key files
-- `<file>`: <what it does>
+- `AGENTS.md`: canonical agent guidance (commands, map, constraints).
+- `settings.gradle.kts`, `gradle/libs.versions.toml`: the root build and its dependency versions (Ktor, Media3, Compose).
+- `desk/package.json`: the Study Desk gate (`npm test`).
+- `tools/gradlew.cjs`: the cross-platform Gradle entry the manifest and docs use.
+- `scripts/dev.ps1`: the full telestrator cycle, from unit tests to the live UI test on an emulator.
 
 ## Data flow
-How data enters, moves through, and leaves this module.
+- Telestrator: phone PWA → WebSocket (LAN listen or relay dial-out) → `core` pen conversation → `tv-app` overlay on the paused frame.
+- Study Desk: phone and TV browsers → `desk/src/proxy.ts` → API routes → the session store → SSE back to the TV.
+- Death Ride: phone controller → the game's own server on port 8765 → `deathride/core` simulation.
 
 ## Decisions & memory
-Links to ADRs / `.ai/memory` entries that explain *why* this module is the way it is.
+- `.ai/memory/` (0002 onwards) records the repo-level decisions: the sports direction is closed, desk is a prototype, there are two transports, deathride is standalone, and the gate rules.
+- `docs/README.md` indexes the product docs and the owner decision records.

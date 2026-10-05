@@ -1,8 +1,26 @@
-# Fire TV Telestrator — feasibility PoC
+# firetv — TV products you drive from a phone
 
-A vertical slice of the [design doc](../../Downloads/firetv-telestrator-design-doc.md), built to answer one
-question before committing to the full scope: **can the whole toolchain run on this Windows machine,
-and can we get a hands-off development cycle that ends in a real UI test?**
+## Products in this repository
+
+| Product | Where | Start here | Run / verify |
+|---|---|---|---|
+| **Telestrator** — draw on a paused video from the phone (the original PoC, this page) | `core/`, `tv-app/`, `companion/` | below | `./scripts/dev.ps1`, or `node tools/gradlew.cjs :core:test` |
+| **Study Desk** — homework on the TV: Linga (English), Math Buddy, Essay Master | `desk/`, rules suites in `tools/`, UAT in `uat/` | [desk/README.md](desk/README.md) | `npm --prefix desk test`; `npm --prefix desk run dev` |
+| **Death Ride** — a libGDX combat racer for Fire TV, its own Gradle build | `deathride/` | [deathride/README.md](deathride/README.md), [status](docs/concepts/DEATH-RIDE-STATUS.md) | from `deathride/`: `.\gradlew.bat :core:test :link:test` |
+
+They share an idea (the TV shows, the phone is the input) and the docs. Each has its own build
+and its own gate.
+- Commands, the architecture map and the rules every change follows: [AGENTS.md](AGENTS.md).
+- How a change is accepted (gates, Definition of Done, verifying an APK): [CONTRIBUTING.md](CONTRIBUTING.md).
+- All design docs and decision records, by product: [docs/README.md](docs/README.md).
+
+## The Telestrator PoC
+
+A vertical slice of the original telestrator design doc. That doc is kept outside this repository;
+the scope it set is summarised in "What is actually working" and "What this PoC deliberately does not
+cover" below. The slice was built to answer one question before committing to the full scope: **can
+the whole toolchain run on this Windows machine, and can we get a hands-off development cycle that
+ends in a real UI test?**
 
 Answer: yes. See [docs/POC-FINDINGS.md](docs/POC-FINDINGS.md) for the numbers and the caveats.
 
