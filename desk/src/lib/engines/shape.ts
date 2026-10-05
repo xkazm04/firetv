@@ -7,7 +7,8 @@
  * boolean, array), properties, required, additionalProperties: false, enum, minLength/maxLength (counted in
  * characters), minItems/maxItems, items. Any other keyword is not checked.
  */
-import { EngineError, type EngineResult, type JSONSchema, type Provider } from "./types";
+import { call } from "./call";
+import { EngineError, type EngineKind, type EngineResult, type JSONSchema, type Provider } from "./types";
 
 // ---- schema builders, shared by the callers that write their schemas inline
 
@@ -93,10 +94,10 @@ export const onlyTooLong = (broken: Array<[string, string]>) => broken.length > 
  * overrun named; the second answer is held to the same schema, and if it fails too the first rejection
  * stands. No limit moves and nothing is cut here: the model rewrites its own strings or the call fails.
  */
-export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean }, T>(p: Provider<Req, unknown>, req: Req): Promise<EngineResult<T>> {
+export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
   const started = Date.now();
-  const a = await p.run(req);
-  const name = a.provider ?? p.name, s = req.accept ?? req.schema;
+  const { answer: a, provider: name } = await call(kind, p, req);
+  const s = req.accept ?? req.schema;
   const value = parse(a.raw, s, name);
   const broken = s ? validate(value, s) : [];
   if (!broken.length) return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit };
@@ -105,8 +106,7 @@ export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSch
   const named = broken.map(([path, why]) => `${path || "(answer)"} is ${why}`).join("; ");
   console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
   try {
-    const b = await p.run({ ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` });
-    const again = b.provider ?? p.name;
+    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` });
     return { json: conform<T>(b.raw, s, again), provider: again, ms: Date.now() - started, raw: b.audit };
   } catch {
     throw first;

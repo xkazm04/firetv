@@ -36,7 +36,7 @@ export function childEnv(req: Pick<TextRequest, "thinking">): NodeJS.ProcessEnv 
 /** The Claude CLI. It only produces the answer; text() parses and checks it, as for every provider. */
 export const claudeCli: Provider<TextRequest, unknown> = {
   name: "claude-cli",
-  async run(req) {
+  async run(req, ctx) {
     const reported = `claude-cli/${MODELS[req.model ?? "fast"]}`;
     // Measured on 2026-09-07: `--bare` never reaches the API (exit 1, 0 ms, no message), while an
     // inline --system-prompt with --tools "" costs ~1.2k input tokens against ~18k for the default
@@ -56,13 +56,15 @@ export const claudeCli: Provider<TextRequest, unknown> = {
       // claude is a real executable on PATH (claude.exe on Windows), so no shell: the JSON schema
       // arrives as one argv entry intact, and the prompt goes in on stdin.
       const child = spawn(BIN, args, { cwd: dir, windowsHide: true, env: childEnv(req) });
-      const timeout = setTimeout(() => { child.kill(); reject(new EngineError("timeout", reported, "The text engine took too long. Please retry.")); }, req.timeoutMs ?? 90000);
+      // The deadline is the call core's (call.ts); on its abort the child is killed and the call ends as a timeout.
+      const stop = () => child.kill();
+      ctx?.signal.addEventListener("abort", stop, { once: true });
       let stdout = "", stderr = "";
       child.stdout.on("data", (d) => (stdout += d));
       child.stderr.on("data", (d) => (stderr += d));
-      child.on("error", (e) => { clearTimeout(timeout); reject(new EngineError("unreachable", reported, `claude could not start: ${e.message}`)); });
-      child.on("close", (code) => { clearTimeout(timeout); code === 0 ? resolve(stdout) : reject(new EngineError("exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`)); });
-      child.stdin.on("error", (e) => { clearTimeout(timeout); reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
+      child.on("error", (e) => { reject(new EngineError("unreachable", reported, `claude could not start: ${e.message}`)); });
+      child.on("close", (code) => { ctx?.signal.removeEventListener("abort", stop); code === 0 ? resolve(stdout) : reject(new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`)); });
+      child.stdin.on("error", (e) => { reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
       child.stdin.end(req.prompt);
     }).finally(() => rm(dir, { recursive: true, force: true }).catch(() => {}));
 

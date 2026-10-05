@@ -18,15 +18,15 @@ const MODEL = process.env.OLLAMA_VISION_MODEL || "qwen3.8:27b";
 /** Qwen on Ollama. It only produces the answer; vision() parses and checks it. */
 export const ollamaVision: Provider<VisionRequest, unknown> = {
   name: "ollama",
-  async run(req) {
+  async run(req, ctx) {
     const reported = `ollama/${MODEL}`;
     const body: Record<string, unknown> = {
       model: MODEL, stream: false, options: { temperature: 0, num_ctx: 16384 },
       messages: [{ role: "user", content: req.prompt, images: [req.imageBase64] }],
     };
     if (req.schema) body.format = req.schema;
-    const post = (b: Record<string, unknown>) => fetch(`${HOST}/api/chat`, { method: "POST", body: JSON.stringify(b) })
-      .catch((e: Error) => { throw new EngineError("unreachable", reported, `ollama is not reachable: ${e.message}`); });
+    const post = (b: Record<string, unknown>) => fetch(`${HOST}/api/chat`, { method: "POST", body: JSON.stringify(b), signal: ctx?.signal })
+      .catch((e: Error) => { throw new EngineError(e.name === "AbortError" ? "timeout" : "unreachable", reported, `ollama is not reachable: ${e.message}`); });
     let res = await post({ ...body, think: false });
     if (!res.ok) res = await post(body);
     if (!res.ok) throw new EngineError("exit", reported, `ollama ${res.status}: ${(await res.text()).slice(0, 300)}`);
@@ -39,5 +39,5 @@ export const ollamaVision: Provider<VisionRequest, unknown> = {
 register("vision", [ollamaVision], () => "ollama");
 
 export async function vision<T = unknown>(req: VisionRequest): Promise<EngineResult<T>> {
-  return answer<VisionRequest, T>(provider("vision"), req);
+  return answer<VisionRequest, T>(provider("vision"), req, "vision");
 }

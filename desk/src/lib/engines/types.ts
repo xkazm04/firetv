@@ -10,10 +10,10 @@ export type JSONSchema = Record<string, unknown>;
 
 /** `schema` is what the model is asked for; `accept`, when set, is the looser shape the caller holds the answer to (optional parts it checks and drops itself); `shorten` allows one re-ask when the answer only runs strings past their maxLength (shape.ts); `thinking: false` asks the provider to answer without hidden reasoning, for a short call where speed is the product (a provider without that switch ignores it). */
 export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; }
-export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; }
-export interface SpeakRequest { text: string; voice?: string; }
-export interface EmbedRequest { texts: string[]; }
-export interface ListenRequest { audio: Blob; filename: string; }
+export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; }
+export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; }
+export interface EmbedRequest { texts: string[]; timeoutMs?: number; }
+export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; }
 export interface Heard { text: string; language?: string; }
 
 export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; }
@@ -23,7 +23,10 @@ export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: 
  * string to report (defaults to the provider's name) and, optionally, an audit excerpt kept as EngineResult.raw.
  */
 export interface ProviderAnswer<R> { raw: R; provider?: string; audit?: string; }
-export interface Provider<Req, R> { name: string; run(req: Req): Promise<ProviderAnswer<R>>; }
+/** What the call core hands a provider besides the request: a signal that aborts when the deadline passes (call.ts). A provider that can stop its work (kill a child, abort a fetch) listens; one that cannot is still cut off by the core. */
+export interface CallContext { signal: AbortSignal; }
+/** `deadlineMs`, when set, is a floor under every deadline for this provider (codex starts an agent session per call). */
+export interface Provider<Req, R> { name: string; deadlineMs?: number; run(req: Req, ctx?: CallContext): Promise<ProviderAnswer<R>>; }
 
 export interface Providers {
   text: Provider<TextRequest, unknown>;

@@ -21,6 +21,7 @@ import { spawn } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { call } from "./call";
 import { provider, register } from "./registry";
 import { EngineError, type EngineResult, type Provider, type SpeakRequest } from "./types";
 
@@ -38,16 +39,23 @@ const voiceName = (p: string) => path.basename(p).replace(/\.onnx$/i, "");
 export function voiceConfigured() { return piperReady() || Boolean(KEY); }
 
 /** Piper writes a WAV to a file; it takes the text on stdin. Nothing leaves the machine. */
-async function piperSpeak(text: string): Promise<Buffer> {
+async function piperSpeak(text: string, signal?: AbortSignal): Promise<Buffer> {
   const dir = mkdtempSync(path.join(tmpdir(), "desk-say-"));
   const out = path.join(dir, "say.wav");
   try {
     await new Promise<void>((resolve, reject) => {
+      const reported = `piper/${voiceName(PIPER_VOICE)}`;
       const p = spawn(PIPER, ["-m", PIPER_VOICE, "-f", out], { windowsHide: true });
+      const stop = () => p.kill();
+      signal?.addEventListener("abort", stop, { once: true });
       let err = "";
       p.stderr.on("data", (d: Buffer) => { err += d.toString(); });
-      p.on("error", reject);
-      p.on("close", (code) => (code === 0 ? resolve() : reject(new Error(`piper exited ${code}: ${err.slice(-300)}`))));
+      p.on("error", (e) => reject(new EngineError("unreachable", reported, `piper could not start: ${e.message}`)));
+      p.on("close", (code) => {
+        signal?.removeEventListener("abort", stop);
+        code === 0 ? resolve() : reject(new EngineError(signal?.aborted ? "timeout" : "exit", reported, `piper exited ${code}: ${err.slice(-300)}`));
+      });
+      p.stdin.on("error", () => {});
       p.stdin.write(text); p.stdin.end();
     });
     return readFileSync(out);
@@ -56,19 +64,20 @@ async function piperSpeak(text: string): Promise<Buffer> {
 
 export const piper: Provider<SpeakRequest, Buffer> = {
   name: "piper",
-  async run(req) { return { raw: await piperSpeak(req.text), provider: `piper/${voiceName(PIPER_VOICE)}` }; },
+  async run(req, ctx) { return { raw: await piperSpeak(req.text, ctx?.signal), provider: `piper/${voiceName(PIPER_VOICE)}` }; },
 };
 
 export const elevenlabs: Provider<SpeakRequest, Buffer> = {
   name: "elevenlabs",
-  async run(req) {
+  async run(req, ctx) {
     const reported = "elevenlabs/turbo-v2.5";
     if (!KEY) throw new EngineError("unreachable", reported, "no voice engine: set PIPER_BIN and PIPER_VOICE, or ELEVENLABS_API_KEY");
     const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${req.voice || VOICE}?output_format=mp3_44100_64`, {
       method: "POST",
       headers: { "xi-api-key": KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
       body: JSON.stringify({ text: req.text, model_id: "eleven_v4_turbo", voice_settings: { stability: 0.5, similarity_boost: 0.7 } }),
-    }).catch((e: Error) => { throw new EngineError("unreachable", reported, `elevenlabs is not reachable: ${e.message}`); });
+      signal: ctx?.signal,
+    }).catch((e: Error) => { throw new EngineError(e.name === "AbortError" ? "timeout" : "unreachable", reported, `elevenlabs is not reachable: ${e.message}`); });
     if (!res.ok) throw new EngineError("exit", reported, `elevenlabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
     return { raw: Buffer.from(await res.arrayBuffer()), provider: reported };
   },
@@ -78,7 +87,6 @@ export const elevenlabs: Provider<SpeakRequest, Buffer> = {
 register("speak", [piper, elevenlabs], () => (piperReady() ? "piper" : "elevenlabs"));
 
 export async function speak(req: SpeakRequest): Promise<EngineResult<Buffer>> {
-  const started = Date.now(), p = provider("speak");
-  const a = await p.run(req);
-  return { json: a.raw, provider: a.provider ?? p.name, ms: Date.now() - started };
+  const { answer: a, provider: name, ms } = await call("speak", provider("speak"), req);
+  return { json: a.raw, provider: name, ms };
 }

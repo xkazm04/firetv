@@ -36,7 +36,9 @@ type CodexRequest = TextRequest & { effort?: string };
 /** codex exec. It only produces the answer; text() and codexText() parse and check it, as for every provider. */
 export const codexCli: Provider<CodexRequest, unknown> = {
   name: "codex",
-  async run(req) {
+  // codex starts an agent session per call; a tutor timeout tuned for the Claude CLI is too tight for it
+  deadlineMs: 240000,
+  async run(req, ctx) {
     const model = MODEL(), reported = `codex-cli/${model}`;
     const dir = await mkdtemp(path.join(tmpdir(), "desk-codex-"));
     try {
@@ -49,14 +51,14 @@ export const codexCli: Provider<CodexRequest, unknown> = {
       const { cmd, pre } = launcher();
       await new Promise<void>((resolve, reject) => {
         const child = spawn(cmd, [...pre, ...args], { cwd: dir, windowsHide: true });
-        // codex starts an agent session per call; a tutor timeout tuned for the Claude CLI is too tight for it
-        const timeout = setTimeout(() => { child.kill(); reject(new EngineError("timeout", reported, "The text engine took too long. Please retry.")); }, Math.max(req.timeoutMs ?? 90000, 240000));
+        const stop = () => child.kill();
+        ctx?.signal.addEventListener("abort", stop, { once: true });
         let stderr = "";
         child.stdout.on("data", () => {});
         child.stderr.on("data", d => (stderr += d));
-        child.on("error", e => { clearTimeout(timeout); reject(new EngineError("unreachable", reported, `codex could not start: ${e.message}`)); });
-        child.on("close", code => { clearTimeout(timeout); code === 0 ? resolve() : reject(new EngineError("exit", reported, `codex exited ${code}: ${stderr.slice(-400)}`)); });
-        child.stdin.on("error", e => { clearTimeout(timeout); reject(new EngineError("exit", reported, `codex closed its input: ${e.message}`)); });
+        child.on("error", e => { reject(new EngineError("unreachable", reported, `codex could not start: ${e.message}`)); });
+        child.on("close", code => { ctx?.signal.removeEventListener("abort", stop); code === 0 ? resolve() : reject(new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `codex exited ${code}: ${stderr.slice(-400)}`)); });
+        child.stdin.on("error", e => { reject(new EngineError("exit", reported, `codex closed its input: ${e.message}`)); });
         child.stdin.end(message);
       });
       const raw = (await readFile(last, "utf8")).trim();
