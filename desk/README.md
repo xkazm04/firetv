@@ -27,7 +27,10 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
 - **/tv?module=english** — Linga's conversation entrance. Choose a situation, respond on the
   phone's Linga tab, ask for a cue or coaching, replay the moment, and finish with saved progress.
 - **/english/print** — the current learner's printable English learning map.
-- **/api/smoke** — one call per engine, so a broken engine is found here and not on the TV.
+- **/api/smoke** — the engine check, so a broken engine is found here and not on the TV. Five rows (text, vision, embed, speak, listen),
+  each with the provider that would run, whether it answers and what to fix (`ollama pull qwen3.8:27b`, `ollama serve`, a missing key),
+  in about two seconds and with no model call. Add `?live=1` to run text, vision (needs `data/sample.jpg`), embed and speak for real,
+  side by side. The TV may ask; a paired phone gets 403.
 
 ## Linga conversations
 
