@@ -9,7 +9,6 @@ import type { PracticeItem, Session, Subject } from "@/lib/session/store";
 import { topicIn } from "@/lib/library/paths";
 import { lingaView, type ArtKey, type HomeState } from "@/lib/english/view";
 import { BAND_NAME } from "@/lib/english/placement";
-import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { onModules } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
@@ -139,9 +138,8 @@ export function essayWaiting(s: Session): EssayWaiting {
   const read = standings.filter((x) => x.lastAt).sort((a, b) => (b.lastAt ?? 0) - (a.lastAt ?? 0));
   const last = read[0] ?? null;
   const entry = (s.history ?? []).filter((h) => h.kind === "writing").at(-1) ?? null;
-  // the paragraph in the session is this learner's only when their own history holds a reading through its lens
-  const a = s.essay, lensOf = (id: string) => ESSAY_TYPES.find((t) => t.id === id)?.name ?? id;
-  const own = a && (s.history ?? []).some((h) => h.kind === "writing" && h.label === lensOf(a.type)) ? a : null;
+  // the paragraph in the session is the seated learner's: it travels with them (store.ts MathsSlot), so nothing is guessed
+  const own = s.essay;
   const faulty = new Set(own?.verdicts.filter((v) => v.verdict === "faulty").map((v) => v.n) ?? []);
   const rail = own?.sentences.length ? own.sentences.map((x) => ({ n: x.n, against: faulty.has(x.n) })) : null;
   if (!last) return { app: "essay", kind: "none", at: null, lens: null, lensName: null, estimate: 0, rail: null, read: 0, secure: 0,

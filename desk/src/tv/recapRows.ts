@@ -7,7 +7,6 @@
  * filesystem-backed session modules.
  */
 import type { Session, Subject, Task } from "@/lib/session/store";
-import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { landingModules } from "@/tv/landingRows";
 import { BRAND } from "@/tv/profileRows";
 
@@ -142,11 +141,7 @@ export type RecapStop = Subject | "desk";
 export function recapStops(s: Session): RecapStop[] { return [...landingModules(s), "desk"]; }
 
 /**
- * The paragraph in the session, when it is this learner's: their own history holds a reading through its lens
- * (the same test the landing's Essay Master card makes). Select on the essay tile opens it; else the lens home.
+ * The paragraph in the session is the seated learner's (it travels with them, store.ts MathsSlot): when it has
+ * sentences, Select on the essay tile opens it; else the lens home.
  */
-export function ownReading(s: Session): boolean {
-  const a = s.essay; if (!a?.sentences?.length) return false;
-  const name = ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? a.type;
-  return (s.history ?? []).some((h) => h.kind === "writing" && h.label === name);
-}
+export function ownReading(s: Session): boolean { return !!s.essay?.sentences?.length; }
