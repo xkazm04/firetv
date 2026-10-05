@@ -13,6 +13,7 @@ and its own gate.
 - Commands, the architecture map and the rules every change follows: [AGENTS.md](AGENTS.md).
 - How a change is accepted (gates, Definition of Done, verifying an APK): [CONTRIBUTING.md](CONTRIBUTING.md).
 - All design docs and decision records, by product: [docs/README.md](docs/README.md).
+- What changed in each product, newest first: [CHANGELOG.md](CHANGELOG.md).
 
 ## The Telestrator PoC
 

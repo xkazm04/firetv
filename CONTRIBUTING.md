@@ -45,6 +45,7 @@ A change is done when **all** of these hold:
 - [ ] Nothing in a gate calls a live model. Nothing reads or writes `desk/data/`. No secret, `.env*` or keystore is staged.
 - [ ] A change to a TV surface either has a screenshot, or the PR names the capture that is still owed (device or Playwright) so it is not lost.
 - [ ] Docs that describe the changed behaviour are updated in the same change (`AGENTS.md`, a product README, or `docs/`).
+- [ ] A change a user or the owner would notice (a screen, a flow, a rule, a decision, a gate) adds one line under its product's `### Unreleased` in [CHANGELOG.md](CHANGELOG.md). `tools/changelog-test.cjs` checks the file's shape and links.
 - [ ] A decision someone would otherwise reopen is recorded as a new `.ai/memory/NNNN-*.md` entry (append-only; use `supersedes` to replace an older one).
 - [ ] Commits are pathspec-scoped and the history is honest: AI-written commits carry a `Co-Authored-By` trailer.
 

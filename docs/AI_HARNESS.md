@@ -54,6 +54,24 @@ owner's decision. They are never part of a gate.
 - **Live probes:** `tools/*-live.cjs` (maths Calculus, school topics, essay files, Linga cert and
   school, the TV landing) and `tools/linga-ui-test.cjs`. Each one exercises the real engine end to end.
 
+### Drift: live quality, recorded weekly and watched by CI
+
+A provider update can make the hints, the page read or the lesson pick worse without a single deterministic suite
+going red. The drift watch leaves a trace of that
+([../uat/drift/README.md](../uat/drift/README.md), [../.ai/memory/0014-model-drift-watched-weekly.md](../.ai/memory/0014-model-drift-watched-weekly.md)).
+
+- **Live, on the operator's machine, weekly.** `scripts/model-drift.ps1` runs the step below, and `-Register` schedules
+  it weekly.
+  - It runs `MODEL_DRIFT_ALLOW_LIVE=1 node tools/model-drift.cjs --live`, which is the lab bench (`tools/lab-bench.cjs`)
+    on the real engines.
+  - It writes a counts-only record to `uat/drift/` and compares it with the previous one.
+  - It exits 1 when a threshold is crossed. The hint writer's first-ask leaks and re-asks are watched first.
+- **Watched in CI, no model.** `.github/workflows/model-drift.yml` runs every Monday:
+  `node tools/model-drift.cjs --status --max-age 21`. It goes red when no live record exists, when the newest one
+  alerted, or when it is older than 21 days.
+- **Proven on every PR.** The same workflow runs `tools/model-drift-test.cjs`: the thresholds, `--status` and the
+  refusals, on the bench's replay.
+
 ## Prompt and agent library
 
 - **Prompts are code.** They live next to the pipeline that uses them, behind the engine seam, so a
@@ -100,5 +118,7 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   - `quality.yml` runs the desk gate (including the evals above) and `:core:test` on every PR.
   - `ai-conformance.yml` runs the agent-contract doctor on every PR.
   - `capabilities.yml` proves the manifest commands every week.
+  - `model-drift.yml` watches the committed live-quality records every week and runs the drift suite on every PR.
+  - `changelog.yml` keeps `CHANGELOG.md`'s shape and links on every PR.
   - `supply-chain.yml` builds and attests the APK on main.
 - A human approves every merge (`.ai/guardrails.yaml`).

@@ -16,7 +16,7 @@ One repository, three products for a TV in the living room, sharing a phone-as-i
 | **Death Ride** | `deathride/` | A standalone Kotlin/libGDX combat racer for Fire TV. It is a **separate Gradle build** with its own wrapper and settings. |
 
 Product docs live in `docs/` (index: [docs/README.md](docs/README.md)). Durable decisions live in
-`.ai/memory/`.
+`.ai/memory/`. What changed in each product, by date, is in [CHANGELOG.md](CHANGELOG.md).
 
 ## Commands
 
@@ -35,6 +35,8 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. |
+| Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. See `uat/drift/README.md`. |
+| Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
 | Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | |
 | Pin workflow actions | `node scripts/pin-actions.mjs` (`--check` works offline) | Needs network and a GitHub token. Never type a SHA (`.ai/memory/0013`). |
 
@@ -124,6 +126,8 @@ design pages that `prototype/build.py` builds.
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
   - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
+  - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
+  - `changelog.yml` checks `CHANGELOG.md`'s shape and links on every PR and push to main (`.ai/memory/0015`).
 - `.github/dependabot.yml` keeps Gradle, npm and the Actions current.
 
 ## Example of a good change

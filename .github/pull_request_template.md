@@ -20,6 +20,7 @@
 - [ ] No live model call in a gate; nothing under `desk/data/`; no secret, `.env*` or keystore staged
 - [ ] TV surface: screenshot attached, **or** the owed capture is named here: <!-- device / Playwright, which screen -->
 - [ ] Docs describing the changed behaviour are updated in this PR
+- [ ] A noticeable change has its line under the product's `### Unreleased` in `CHANGELOG.md` (or: not noticeable)
 - [ ] A settled decision is recorded in `.ai/memory/` (or: none this time)
 - [ ] Commits are pathspec-scoped; AI-written commits carry a `Co-Authored-By` trailer
 

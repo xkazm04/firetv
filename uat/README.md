@@ -37,6 +37,7 @@ uat/
   runs/<id>/             findings.json, report.md, SUMMARY.md, run.json, per-Character transcripts and voices
   runs/<id>/recert-<k>/  a rerun of <id>'s open pairs; recertify.md (then recertify-<k>.md) sits beside <id>'s findings
   runs/OPEN.md           derived by --status (and after a ledger recertify): what is open now across every run
+  drift/                 not LT: the weekly live lab-bench records (tools/model-drift.cjs), counts per model role over time; see drift/README.md
 ```
 
 ## Run
