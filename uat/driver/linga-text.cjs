@@ -29,7 +29,7 @@
  */
 const fs = require('node:fs'), path = require('node:path'), { spawn } = require('node:child_process');
 const uat = path.resolve(__dirname, '..'), desk = path.resolve(uat, '../desk');
-const V = require('./verdict.cjs');
+const V = require('./verdict.cjs'), M = require('./metrics.cjs');
 const BANDS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const MODEL = process.env.UAT_CODEX_MODEL || 'gpt-6-astra';
 
@@ -73,13 +73,8 @@ function judgeSchema(priorIds = [], doneIds = []) {
     verdict: { type: 'string', enum: ['pass', 'conditional', 'fail', 'not-reached'] },
     criteria: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['id', 'result', 'evidence'], properties: { id: { type: 'string' }, result: { type: 'string', enum: ['pass', 'fail', 'n-a'] }, evidence: { type: 'string', maxLength: 500 } } } },
     ...(doneIds.length ? { done: { type: 'array', minItems: doneIds.length, maxItems: doneIds.length, items: { type: 'object', additionalProperties: false, required: ['id', 'result', 'evidence'], properties: { id: { type: 'string', enum: doneIds }, result: { type: 'string', enum: V.RESULTS }, evidence: { type: 'string', maxLength: 500 } } } } } : {}),
-    metrics: { type: 'object', additionalProperties: false, required: ['judgeAgreement', 'topicFit', 'pitch', 'moments', 'boundaries'], properties: {
-      judgeAgreement: { type: 'object', additionalProperties: false, required: ['agree', 'total', 'disagreements'], properties: { agree: n3, total: n3, disagreements: { type: 'string', maxLength: 800 } } },
-      topicFit: { type: 'object', additionalProperties: false, required: ['fit', 'safe', 'total'], properties: { fit: n3, safe: n3, total: n3 } },
-      pitch: { type: 'object', additionalProperties: false, required: ['at', 'below', 'above'], properties: { at: n3, below: n3, above: n3 } },
-      moments: { type: 'object', additionalProperties: false, required: ['correctUseful', 'total', 'learnerTurnsWithClearErrors', 'missedClearErrors'], properties: { correctUseful: n3, total: n3, learnerTurnsWithClearErrors: n3, missedClearErrors: n3 } },
-      boundaries: { type: 'object', additionalProperties: false, required: ['breaches', 'notes'], properties: { breaches: n3, notes: { type: 'string', maxLength: 600 } } },
-    } },
+    // the metric groups and their counters: declared once, in metrics.cjs
+    metrics: { type: 'object', additionalProperties: false, ...M.judgeMetrics() },
     findings: { type: 'array', maxItems: 8, items: { type: 'object', additionalProperties: false, required: ['type', 'dimension', 'title', 'expected', 'got', 'evidence', 'frequency', 'reachability', 'trust_erosion', 'boundary', 'suggested_acceptance', 'code_hint'], properties: {
       type: { type: 'string', enum: ['missing-feature', 'quality-gap', 'broken-flow', 'confusion', 'trust', 'strength'] },
       dimension: { type: 'string', enum: ['completion', 'effort', 'clarity', 'trust', 'missing', 'time-saved', 'senior-quality'] },
@@ -143,8 +138,10 @@ const RUNS_DIR = path.join(uat, 'runs');
 /**
  * The command line. A word after --recertify that is neither a flag nor a Character id is a run (today's per-run
  * recertify); nothing, a flag or a Character id after it is the ledger recertify of every run. --status wins over both.
+ * Any other mode also checks that every journey's gates name a registered metric (metrics.cjs) and throws if one does not,
+ * so the run stops here, before a Character process is spawned or a model is called.
  */
-function parseArgs(args, { runs = RUNS_DIR, characters: ids = null } = {}) {
+function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts = null } = {}) {
   const out = { only: [], runs, journeys: null, run: null, recertify: null };
   let status = false, ledger = false;
   const known = () => ids ?? (ids = characters().map(c => c.sim.id));
@@ -159,6 +156,10 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null } = {}) {
       if (next !== undefined && !next.startsWith('--') && !known().includes(next)) out.recertify = args[++i];
       else ledger = true;
     } else out.only.push(a);
+  }
+  if (!status) {
+    const bad = (journeyTexts ?? Object.values(journeys()).map(j => j.text)).flatMap(V.unknownGates);
+    if (bad.length) throw new Error(`unknown metric in a journey's gates: ${bad.map(g => `${g.journey} gates ${g.metric}`).join('; ')}. Known: ${M.series().map(s => s.id).join(', ')}`);
   }
   return { mode: status ? 'status' : out.recertify ? 'recertify' : ledger ? 'ledger' : 'run', ...out };
 }
@@ -243,7 +244,6 @@ function severity(f) {
   const rank = (LEVEL[f.frequency] ?? 1) * (LEVEL[f.reachability] ?? 1) * (LEVEL[f.trust_erosion] ?? 1);
   return { rank, severity: f.boundary ? 'blocker' : rank >= 18 ? 'blocker' : rank >= 8 ? 'major' : rank >= 3 ? 'minor' : 'polish' };
 }
-const ratio = (a, b) => b ? `${a}/${b} (${Math.round(100 * a / b)}%)` : 'n/a';
 
 /**
  * How faithfully the driver read the screens: controls rendered with no Linga action (0 is the target), view actions
@@ -310,12 +310,7 @@ async function synthesize(dir, id, results, cast, ms) {
     ...rows.map(r => `| ${r.who} | ${r.j} | ${r.cell} | ${r.judgeVerdict} | ${r.criteria} | ${r.placement} | ${r.pitch} | ${r.moments} | ${r.breaches} | ${r.steps} | ${r.minutes} | ${r.ended} |`),
     ...results.filter(r => r.crashed).map(r => `| ${r.character} | — | crashed (exit ${r.exit}) | | | | | | | | | |`), '',
     '## Metrics (units in uat/rubric.md)', '',
-    `- **placement:** exact ${roll.placement.exact} · near ${roll.placement.near} · miss ${roll.placement.miss}${roll.placement.none ? ` · no placement ${roll.placement.none}` : ''}`,
-    `- **judge agreement:** ${ratio(roll.agree[0], roll.agree[1])}`,
-    `- **topic fit:** fit ${ratio(roll.fit[0], roll.fit[2])} · safe ${ratio(roll.fit[1], roll.fit[2])}`,
-    `- **pitch:** at band ${ratio(roll.pitch[0], roll.pitch[0] + roll.pitch[1] + roll.pitch[2])} · below ${roll.pitch[1]} · above ${roll.pitch[2]}`,
-    `- **moment precision:** ${ratio(roll.moments[0], roll.moments[1])}`,
-    `- **boundaries:** ${roll.breaches} breach(es)`,
+    ...M.series().filter(s => s.bullet).map(s => `- **${s.bullet.name}:** ${s.bullet.text(roll)}`),
     `- **reliability:** ${calls}`,
     `- **driver coverage:** ${cov}`, '',
     '## Findings by impact', '',
@@ -538,7 +533,7 @@ function characterReport(r, character) {
     if (jd) {
       out.push('| Criterion | Result | Evidence |', '|---|---|---|', ...jd.criteria.map(c => `| ${c.id} | ${c.result} | ${c.evidence.replace(/\|/g, '/')} |`), ...(Array.isArray(jd.done) ? jd.done.map(d => `| ${d?.id} | ${d?.result} | ${String(d?.evidence ?? '').replace(/\|/g, '/')} |`) : []), '');
       const m = jd.metrics;
-      out.push(`Metrics: judge agreement ${m.judgeAgreement.agree}/${m.judgeAgreement.total} · topic fit ${m.topicFit.fit}/${m.topicFit.total}, safe ${m.topicFit.safe}/${m.topicFit.total} · pitch at ${m.pitch.at}, below ${m.pitch.below}, above ${m.pitch.above} · moments ${m.moments.correctUseful}/${m.moments.total} · breaches ${m.boundaries.breaches}${m.judgeAgreement.disagreements ? `\n\nDisagreements: ${m.judgeAgreement.disagreements}` : ''}`, '');
+      out.push(`Metrics: ${M.series().filter(s => s.brief).map(s => s.brief(m)).join(' · ')}${m.judgeAgreement.disagreements ? `\n\nDisagreements: ${m.judgeAgreement.disagreements}` : ''}`, '');
       out.push('### Findings', '', ...(jd.findings.length ? jd.findings.map(f => `- **${f.type}** (${f.dimension}, ${f.frequency}/${f.reachability}/${f.trust_erosion}) ${f.title} — got: ${f.got} · evidence: ${f.evidence}`) : ['None.']), '');
       out.push('### Voice (LT)', '', `> ${jd.voice.replace(/\n+/g, '\n> ')}`, '', `Time saved: ${jd.timeSaved.minutes} min · ${jd.timeSaved.confidence}`, '');
     }
