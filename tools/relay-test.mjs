@@ -32,6 +32,8 @@ const PORT = Number(args.port ?? 9787);
 const RELAY_HOST = args['relay-host'] ?? hostAddressForDevice();
 const OUT = path.resolve(args.out ?? '../artifacts');
 const PKG = 'dev.telestrator.tv';
+// How long the phone waits after the TV dials before it opens the page.
+const LATE_PHONE_MS = 12_000;
 mkdirSync(OUT, { recursive: true });
 
 const adbBin = makeAdb();
@@ -181,6 +183,11 @@ const run = async () => {
   check('the TV is no longer serving anything on the LAN port', !lanAnswered);
 
   // ---- 4. the phone meets the TV at the relay -------------------------------
+  // Late on purpose: past the 5 s the TV once gave a phone before it hung up on its own socket, and
+  // inside what used to be a backoff gap. The TV stays dialled, so a viewer who scans the QR a
+  // while after the app opened still pairs.
+  await sleep(LATE_PHONE_MS);
+  check('the TV is still dialled in after the phone window that used to close', (await relayHealth()).tvConnected);
   const browser = await chromium.launch();
   const context = await browser.newContext({
     viewport: { width: 412, height: 915 },
@@ -194,7 +201,7 @@ const run = async () => {
 
   await page.goto(`http://127.0.0.1:${PORT}/?pin=${pin}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 20000 });
-  check('the phone loads the companion page from the relay and pairs through it', true);
+  check('the phone loads the companion page from the relay and pairs through it, 12 s late', true);
 
   // ---- 5. drive the TV over the relay ---------------------------------------
   await waitFor('first state from the TV', async () => typeof (await relayHealth()).paused === 'boolean');
@@ -237,6 +244,18 @@ const run = async () => {
   check('and is rendered in the TV framebuffer', inkAfter > inkBefore + 1500, `ink px ${inkBefore} -> ${inkAfter}`);
 
   check('no uncaught errors on the phone page', consoleErrors.length === 0, consoleErrors.join('; '));
+
+  // ---- 5b. a second phone, on the same TV socket, with the first tab closed ---
+  // The relay never tells the TV a phone left, so this is a second hello into a conversation that
+  // is still paired. It must be PIN-checked and welcomed like the first.
+  await page.close();
+  const second = await context.newPage();
+  await second.goto(`http://127.0.0.1:${PORT}/?pin=${pin}`, { waitUntil: 'domcontentloaded' });
+  const secondPaired = await second
+    .waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 20000 })
+    .then(() => true, () => false);
+  check('a second phone with the right PIN pairs on the same TV socket', secondPaired);
+  await second.close();
 
   // ---- 6. what the portable path costs --------------------------------------
   await browser.close();

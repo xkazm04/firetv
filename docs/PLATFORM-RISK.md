@@ -79,6 +79,16 @@ What survives a Vega port unchanged, and it is most of the code:
    sends) are a sans-IO state machine - text and ticks in, effects out - with JUnit cases in
    `:core:test`, so the part that ports is now the part that holds the protocol.
    `PenSessionHost` is only the coroutine driver, logging and the thumbnailer.
+   **2026-10-05:** the relay's pairing followed the pen instead of the socket. A relay channel is
+   the TV's own outbound socket, which exists before any phone and outlives each one, so its
+   conversation is *shared* (`PairingDesk.open(shared = true)`, `PenChannel.carriesOnePen = false`):
+   no hello deadline and no hang-up (the old 5 s deadline closed the TV's own socket, left it deaf
+   for 10 s of every 15 s once the backoff capped, and a phone's single hello was lost in the gaps),
+   and every hello is a (re)pairing, so a late phone pairs, a second phone is PIN-checked, and a
+   reconnecting phone gets its Welcome. A wrong PIN unpairs the current pen without closing; because
+   nothing hangs up, guessing is limited instead (5 wrong PINs in a row refuse every hello for
+   30 s). The LAN conversation is the dedicated default and is unchanged. Roll back by reverting
+   the host change alone (LAN is untouched) or the whole series.
 4. **Do not build anything else that depends on the TV being a server.** Discovery, multi-pen and
    the watch-party experiment should all be expressible over a relay.
 
