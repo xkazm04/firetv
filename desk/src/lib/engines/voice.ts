@@ -18,12 +18,12 @@
  * Later: Amazon Polly, same request shape.
  */
 import { spawn } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { call } from "./call";
 import { provider, register } from "./registry";
-import { EngineError, type EngineResult, type Provider, type SpeakRequest } from "./types";
+import { EngineError, findBinary, type EngineResult, type Provider, type SpeakRequest } from "./types";
 
 const KEY = process.env.ELEVENLABS_API_KEY || "";
 // A calm, clear voice; overridable. Voice ids are ElevenLabs' public library ids.
@@ -65,6 +65,12 @@ async function piperSpeak(text: string, signal?: AbortSignal): Promise<Buffer> {
 export const piper: Provider<SpeakRequest, Buffer> = {
   name: "piper",
   async run(req, ctx) { return { raw: await piperSpeak(req.text, ctx?.signal), provider: `piper/${voiceName(PIPER_VOICE)}` }; },
+  async probe() {
+    if (!piperReady()) return { ok: false, say: "piper needs both PIPER_BIN and PIPER_VOICE." };
+    if (!findBinary(PIPER)) return { ok: false, say: `PIPER_BIN is not an executable file: ${PIPER}` };
+    if (!existsSync(PIPER_VOICE)) return { ok: false, say: `PIPER_VOICE is not a file: ${PIPER_VOICE}` };
+    return { ok: true, say: `piper is ready with ${voiceName(PIPER_VOICE)}.` };
+  },
 };
 
 export const elevenlabs: Provider<SpeakRequest, Buffer> = {
@@ -80,6 +86,12 @@ export const elevenlabs: Provider<SpeakRequest, Buffer> = {
     }).catch((e: Error) => { throw new EngineError(e.name === "AbortError" ? "timeout" : "unreachable", reported, `elevenlabs is not reachable: ${e.message}`); });
     if (!res.ok) throw new EngineError("exit", reported, `elevenlabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
     return { raw: Buffer.from(await res.arrayBuffer()), provider: reported };
+  },
+  /** The key is looked for, not used: a probe never calls ElevenLabs. */
+  async probe() {
+    return KEY
+      ? { ok: true, say: "ELEVENLABS_API_KEY is set (not tried: the live check speaks a line)." }
+      : { ok: false, say: "no voice engine, so the TV uses the browser's voice: set PIPER_BIN and PIPER_VOICE, or ELEVENLABS_API_KEY." };
   },
 };
 

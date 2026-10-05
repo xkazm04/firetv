@@ -7,6 +7,7 @@
  */
 import { call } from "./call";
 import { provider, register } from "./registry";
+import { ollamaProbe } from "./vision";
 import { EngineError, type EmbedRequest, type EngineResult, type Provider } from "./types";
 
 const HOST = (process.env.OLLAMA_HOST || "http://127.0.0.1:11434").replace(/\/$/, "");
@@ -22,6 +23,7 @@ export const ollamaEmbed: Provider<EmbedRequest, unknown> = {
     const data = await res.json();
     return { raw: data.embeddings, provider: reported };
   },
+  probe: () => ollamaProbe(HOST, MODEL),
 };
 
 register("embed", [ollamaEmbed], () => "ollama");

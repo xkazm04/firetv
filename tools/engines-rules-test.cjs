@@ -227,6 +227,8 @@ test('GUARD case 18: a stub that answers at once resolves with its provider and 
 
 // The engine check (engines/health.ts, GET /api/smoke): which provider would run, whether it answers, what to fix.
 const health=()=>load('engines/health.ts');
+// the route reads the caller's role through pairing.ts, which loads the session store and its ticker
+after(()=>{if(globalThis.__desk&&globalThis.__desk.ticker)clearInterval(globalThis.__desk.ticker);});
 const nap=(ms)=>new Promise((r)=>setTimeout(r,ms));
 const LIVE={text:{ok:'yes'},vision:{title:'t'},embed:[[1]],speak:Buffer.from('x'),listen:{text:'hi'}};
 /** A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it). */

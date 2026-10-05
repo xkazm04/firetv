@@ -19,7 +19,7 @@ import path from "node:path";
 import { codexCli } from "./codex";
 import { provider, register } from "./registry";
 import { answer } from "./shape";
-import { EngineError, type EngineResult, type Provider, type TextRequest } from "./types";
+import { EngineError, findBinary, type EngineResult, type Provider, type TextRequest } from "./types";
 
 const BIN = process.env.CLAUDE_BIN || "claude";
 const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
@@ -72,6 +72,11 @@ export const claudeCli: Provider<TextRequest, unknown> = {
     try { envelope = JSON.parse(out); } catch { throw new EngineError("exit", reported, `claude answered without its JSON envelope: ${out.slice(0, 200)}`); }
     // With --json-schema the CLI has already parsed the answer; otherwise it is the model's text.
     return { raw: envelope.structured_output ?? envelope.result, provider: reported, audit: out.slice(0, 2000) };
+  },
+  async probe() {
+    return findBinary(BIN)
+      ? { ok: true, say: `${BIN} is installed (fast ${MODELS.fast}, best ${MODELS.best}).` }
+      : { ok: false, say: `${BIN} is not on PATH: install the Claude CLI, or set CLAUDE_BIN to its path.` };
   },
 };
 

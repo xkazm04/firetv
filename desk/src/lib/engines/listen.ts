@@ -22,6 +22,9 @@ const headers = (): Record<string, string> => {
   return key ? { "xi-api-key": key } : {};
 };
 
+/** STT_URL without a path or credentials, for a line that names where we looked. */
+const origin = () => { try { return new URL(base()).origin; } catch { return "STT_URL"; } };
+
 export interface ListenStatus { reachable: boolean; provider: string; local: boolean; }
 
 /** Whether a recording sent now would reach a transcriber. Two seconds, never longer. */
@@ -46,6 +49,11 @@ const scribe = (name: string): Provider<ListenRequest, Heard> => ({
     if (!r.ok) throw new EngineError("exit", reported(), `Speech-to-text answered ${r.status}: ${(await r.text()).slice(0, 200)}`);
     const j = (await r.json()) as { text?: unknown; language_code?: unknown };
     return { raw: { text: typeof j.text === "string" ? j.text.trim() : "", language: typeof j.language_code === "string" ? j.language_code : undefined }, provider: reported() };
+  },
+  async probe() {
+    const s = await listenStatus();
+    if (s.reachable) return { ok: true, say: s.local ? `${s.provider} answers on this machine.` : `${s.provider} answers.` };
+    return { ok: false, say: s.local ? `no transcriber answers at ${origin()}: start gravitone, or set STT_URL.` : "Scribe is not answering: check ELEVENLABS_API_KEY and the network." };
   },
 });
 

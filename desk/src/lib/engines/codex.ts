@@ -15,7 +15,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { answer } from "./shape";
-import { EngineError, type EngineResult, type Provider, type TextRequest } from "./types";
+import { EngineError, findBinary, type EngineResult, type Provider, type TextRequest } from "./types";
 
 const MODEL = () => process.env.UAT_CODEX_MODEL || "gpt-6-astra";
 
@@ -66,6 +66,12 @@ export const codexCli: Provider<CodexRequest, unknown> = {
     } finally {
       await rm(dir, { recursive: true, force: true }).catch(() => {});
     }
+  },
+  async probe() {
+    const { cmd, pre } = launcher();
+    return pre.length || findBinary(cmd)
+      ? { ok: true, say: `codex is installed (model ${MODEL()}).` }
+      : { ok: false, say: "codex is not installed: npm install -g @openai/codex, or set CODEX_JS to its bin/codex.js." };
   },
 };
 
