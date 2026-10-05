@@ -392,8 +392,14 @@ test('cert 14: the list names each certificate by band and date in words, one do
  }
  const menu=V.lingaView({...base,screen:'linga'},{menu:true});
  assert(menu.actions.some(a=>a.id==='my-certificate'&&a.run.command.action==='cert-open'),'the menu reaches it');
- const none=V.lingaView({...base,screen:'linga',englishLearning:{...got.learning,certificates:[]}},{menu:true});
- assert(!none.actions.some(a=>a.id==='my-certificate'),'and says nothing before there is one');
+ // REVISED on purpose (linga-B, owner-approved): it used to pin "says nothing before there is one". The door now
+ // opens for any learner with a record of checks, and runs a nav to the outline of the certificate when none is held;
+ // a learner with no record of a check still has no door.
+ const held0={...got.learning,certificates:[]};
+ const none=V.lingaView({...base,screen:'linga',englishLearning:{...held0,placements:[]}},{menu:true});
+ assert(!none.actions.some(a=>a.id==='my-certificate'),'no record of a check, no door');
+ const outline=V.lingaView({...base,screen:'linga',englishLearning:held0},{menu:true}).actions.find(a=>a.id==='my-certificate');
+ assert(outline&&outline.run.nav&&outline.run.nav.screen==='linga-cert'&&!outline.run.command,'a record of checks and no certificate: the door goes to the outline');
  assert.equal(V.lingaView({...base,screen:'linga-cert'},{cert:'older'}).title,'A1 First words','an earlier one opens by id');
 });
 test('cert 15: the phone\'s My map says the certificate in words (band, topics, skills with spoken or written, one quote) with no count',()=>{
@@ -409,4 +415,91 @@ test('cert 15: the phone\'s My map says the certificate in words (band, topics, 
  assert.match(phone,/certWords\(latest\)/,'the phone reads the same words');
  const part=phone.slice(phone.indexOf('function CertificateWords'),phone.indexOf('/** Finding the level'));
  assert.doesNotMatch(part,/\.length\}|\{held\.length|of \{/,'the phone prints no count of certificates');
+});
+
+
+
+// ================================================================== linga-B: the certificate shows what it still needs
+const {recommendScene,planScenes,ENGLISH_SCENES}=require(src('lib/english/curriculum.ts'));
+/** the next scene as the desk now picks it; before linga-B this is the plain recommendation (so the GUARD case is green before) */
+const nextScene=(p,l)=>C.recommendFor?C.recommendFor(p,l):recommendScene(p,l);
+const PLACED=(band,confidence='medium',source='check')=>({at:5000,band,selfBand:null,confidence,source,summary:'',focus:'',tasks:[]});
+const sessionsFor=(topics)=>topics.map((t,i)=>({id:`s${i}`,sceneId:t.id,title:t.title,at:20000+i,turns:5}));
+/** B1, a medium-confidence check, a six-topic plan over contact, request, describe, narrate, describe, request (all started), those four skills on their own */
+function gapLearner({started=6,band='B1',confidence='medium',source='check'}={}){
+ const plan=['contact','request','describe','narrate','describe','request'];
+ const l=earned({band,plan,placements:[{at:5000,band,confidence,source,summary:'You get by.'}],ev:evidenceFor(['contact','request','describe','narrate'])});
+ return {...l,placement:PLACED(band,confidence,source),sessions:sessionsFor(l.plan.topics.slice(0,started))};
+}
+const wordCount=(text)=>text.split(/\s+/).filter(Boolean).length;
+const oneSentence=(text)=>text.split(/[.!?](?:\s|$)/).filter(x=>x.trim()).length===1;
+const certScreen=(l,extra={})=>V.lingaView({...getSession(),screen:'linga-cert',focus:0,conversation:null,check:null,englishLearning:l,...extra});
+
+test('cert 16: certGap of a B1 learner who has shown four of the six skills names the band, the four shown and the two open',()=>{
+ assert.equal(typeof C.certGap,'function','certGap exists');
+ assert.deepEqual(C.certGap(gapLearner()),{band:'B1',blocker:null,shown:['contact','request','describe','narrate'],open:['repair','negotiate']});
+});
+test('cert 17: certGap blockers: a hand-picked band is "self", a low-confidence check "low", no record "no-check"; a held certificate leaves nothing open',()=>{
+ assert.equal(typeof C.certGap,'function','certGap exists');
+ const own=['contact','repair','request','describe','narrate','negotiate'];
+ assert.equal(C.certGap(gapLearner({source:'self',confidence:'low'})).blocker,'self');
+ assert.equal(C.certGap(gapLearner({confidence:'low'})).blocker,'low');
+ assert.equal(C.certGap({...gapLearner(),placements:[],placement:null}).blocker,'no-check');
+ const blocked=C.certGap(gapLearner({source:'self',confidence:'low'}));
+ assert.deepEqual([blocked.band,blocked.shown,blocked.open],['B1',[],[]],'a blocker leaves no slots to fill');
+ const got=C.withCertificate(earned({band:'B1',plan:['describe'],ev:evidenceFor(own)}),Date.UTC(2026,8,30));
+ assert(got.cert,'a B1 certificate');
+ const held=C.certGap(got.learning);
+ assert.deepEqual([held.blocker,held.open],[null,[]],'already held for that band and requirement: nothing open');
+});
+test('cert 18: the next scene for that learner practises a skill the certificate still needs, not plan topic one again',()=>{
+ const l=gapLearner();
+ assert.equal(recommendScene(undefined,l).id,'p0','the plain recommendation is the first topic again');
+ const next=nextScene(undefined,l);
+ assert(['repair','negotiate'].includes(next.skill),`got ${next.id} (${next.skill})`);
+ assert(ENGLISH_SCENES.some(x=>x.id===next.id)||planScenes(l).some(x=>x.id===next.id),'a scene the desk can start');
+});
+test('cert 19 GUARD: an unstarted plan topic still leads whatever the gap, and a learner with no check gets the plain recommendation',()=>{
+ const l=gapLearner({started:5});
+ assert.equal(nextScene(undefined,l).id,'p5','the unstarted topic first');
+ const none={...gapLearner(),placements:[],placement:null};
+ assert.deepEqual(nextScene(undefined,none),recommendScene(undefined,none),'no check, today\'s recommendation');
+ const self=gapLearner({source:'self',confidence:'low'});
+ assert.deepEqual(nextScene(undefined,self),recommendScene(undefined,self),'a blocked certificate steers nothing');
+});
+test('cert 20: the certificate screen with none held draws the plate in outline: the shown skills with how, the open ones as empty slots, one sentence, one focused action, no figure but the band',()=>{
+ const v=certScreen(gapLearner());
+ assert.equal(v.hero.kind,'cert');assert.equal(v.title,'B1 Getting by');
+ assert.deepEqual(v.hero.open,['Understand and repair','Make a plan']);
+ assert.deepEqual(v.hero.skills.map(x=>x.name),['Make contact','Get something done','Share your world','Tell what happened']);
+ assert(v.hero.skills.every(x=>['spoken','written'].includes(x.mode)));
+ assert(v.hero.quote===null,'no quote on an outline: nothing is issued');
+ assert(wordCount(v.caption)<=25&&oneSentence(v.caption),`one sentence of at most 25 words: ${v.caption}`);
+ const text=plateText(v)+'\n'+V.viewText(v);
+ assert.doesNotMatch(withoutBand(text,'B1'),/\d/,`no digit but the band's:\n${text}`);
+ assert.doesNotMatch(text,FORBIDDEN);assert.doesNotMatch(text,/—/);assert.doesNotMatch(text,/\bcount/i);
+ assert.equal(v.actions.filter((a,i)=>i===0&&!a.disabled).length,1,'one focused action');
+ for(const a of V.offeredActions(v))assert(V.VIEW_ACTION_IDS.includes(a.id),a.id);
+});
+test('cert 21: a hand-picked band gets the plate with no slots, one sentence that a certificate rests on a level check taken with Linga, and Find my level; the menu door opens for it',()=>{
+ const l=gapLearner({source:'self',confidence:'low'});
+ const v=certScreen(l);
+ assert.equal(v.hero.kind,'cert');assert.deepEqual([v.hero.open,v.hero.skills],[[],[]]);
+ assert(wordCount(v.caption)<=25&&oneSentence(v.caption)&&/certificate rests on a level check/.test(v.caption)&&/Linga/.test(v.caption),v.caption);
+ assert.equal(v.actions[0].id,'find-level');assert.equal(v.actions[0].run.command.action,'check-start');
+ assert.doesNotMatch(withoutBand(plateText(v),'B1'),/\d/);assert.doesNotMatch(plateText(v),FORBIDDEN);
+ for(const learner of [l,gapLearner()]){
+  const menu=V.lingaView({...getSession(),screen:'linga',focus:0,conversation:null,check:null,englishLearning:learner},{menu:true});
+  const door=menu.actions.find(a=>a.id==='my-certificate');
+  assert(door&&door.run.nav&&door.run.nav.screen==='linga-cert','the menu door runs a nav to the certificate screen');
+ }
+});
+test('cert 22: the plan-done home\'s "Talk again" starts a scene for an open skill, and the caption is that scene\'s goal',()=>{
+ const l=gapLearner();
+ const v=V.lingaView({...getSession(),screen:'linga',focus:1,conversation:null,check:null,englishLearning:l});
+ assert.equal(v.home,'plan-done');
+ const again=v.actions.find(a=>a.id==='talk-again');
+ const scene=[...planScenes(l),...ENGLISH_SCENES].find(x=>x.id===again.run.command.extra.sceneId);
+ assert(scene&&C.certGap&&C.certGap(l).open.includes(scene.skill),`talk again starts ${scene&&scene.id}`);
+ assert.equal(v.caption,scene.goal);
 });
