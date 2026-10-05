@@ -861,3 +861,127 @@ test('a skill practised more than three days ago is due, and the same wait is wr
  assert.equal(src.join('\n').match(/86400000/g).length,1,'the three-day wait is written once');
  assert.match(src[0],/oldestDue\(/);assert.match(src[1],/oldestDue\(/);
 });
+
+// ---- who holds the desk: one owner for the phone, and one table for the level check (lib/english/activity.ts)
+const activity=()=>require(path.join(root,'src/lib/english/activity.ts'));
+/** A stub engine that answers the level check's steps and a conversation's calls. */
+function stubAll(){answer=async req=>{let p={};try{p=JSON.parse(req.prompt);}catch{}return p.step?{json:checkAnswer(req),provider:'test',ms:1}:{json:{title:'T',goal:'G',opening:'Hi?',reply:'Ok. And then?',observations:[]},provider:'test',ms:1};};}
+/** A check left at the topic question, then a scene started: the state the card's probe walks. */
+async function leftAtGoalThenScene(){
+ fresh();stubAll();
+ await command('level-self',{band:'A2'});await command('plan-propose');
+ const k=getSession().check;assert.equal(k.askGoal,true,'no goal is known, so the topic question is asked');
+ await command('check-leave',{checkId:k.id});
+ await command('start',{sceneId:'booking',replace:true});
+ return getSession();
+}
+test('owner case 1: a check left at the topic question gives the phone to the scene that starts after it',async()=>{
+ const V=view(),s=await leftAtGoalThenScene();
+ assert.equal(V.phonePanel(s),'talk');
+ const a=V.lingaView(s).answer;
+ assert.deepEqual(a&&{action:a.action,lastTurnId:a.lastTurnId},{action:'turn',lastTurnId:s.conversation.turns.at(-1).id});
+});
+test('owner case 2: the phone\'s reply to the partner lands in the conversation and is never saved as the learner\'s goal',async()=>{
+ const V=view(),s=await leftAtGoalThenScene(),a=V.lingaView(s).answer;
+ await englishCommand({action:a.action,learnerId:s.learner.id,episodeId:s.conversation.id,commandId:`owner-${++counter}`,text:'Could you check my room, please?',mode:'text',lastTurnId:a.lastTurnId});
+ assert.equal(getSession().conversation.turns.length,3,'the reply and the partner\'s answer are in the conversation');
+ assert.equal(getLearner('ema').english.preferences.goal,'');
+});
+test('owner case 3: Find my level pauses a live scene, and resuming the scene parks the check and hands the phone back',async()=>{
+ const V=view();fresh();stubAll();
+ await command('start',{sceneId:'booking',replace:true});
+ await command('check-start');
+ let s=getSession();assert.equal(s.conversation.paused,true,'the scene pauses when a check opens');assert.equal(V.phonePanel(s),'check');
+ await command('resume');s=getSession();
+ assert.equal(s.check.parked,true);assert.equal(V.phonePanel(s),'talk');assert.equal(V.lingaView(s).answer.action,'turn');
+});
+test('owner case 4: over every three commands, an unparked check and a live scene never hold the desk together, and the phone follows the TV',async()=>{
+ const V=view(),names=['start','resume','check-start','check-resume','plan-propose','check-leave','leave'];
+ const onCheck=['linga-check','linga-verdict','linga-plan'];
+ let sequences=0,commands=0;
+ const step=async name=>{
+  const s=getSession(),k=s.check,c=s.conversation;
+  const extra={start:{sceneId:'booking',replace:true},'check-resume':{checkId:k?.id},'check-leave':{checkId:k?.id}}[name]??{};
+  try{await englishCommand({action:name,learnerId:s.learner.id,episodeId:c?.id,commandId:`seq-${++counter}`,...extra});}
+  catch(e){if(e.status===409)return;throw e;}
+  commands++;
+  const now=getSession(),liveCheck=!!now.check&&!now.check.parked,liveScene=!!now.conversation&&now.conversation.phase!=='finished'&&!now.conversation.paused;
+  assert(!(liveCheck&&liveScene),`after ${name}: an unparked check and a live scene both hold the desk`);
+  const panel=V.phonePanel(now);
+  if(now.check&&onCheck.includes(now.screen))assert.equal(panel,'check',`after ${name}: the TV is on ${now.screen}`);
+  if(now.conversation&&['linga-talk','linga-coach'].includes(now.screen))assert.equal(panel,'talk',`after ${name}: the TV is on ${now.screen}`);
+  if(now.conversation&&now.screen==='linga-moment')assert.equal(panel,'moment',`after ${name}: the TV is on the moment`);
+ };
+ for(const a of names)for(const b of names)for(const c of names){
+  fresh();stubAll();sequences++;
+  for(const name of [a,b,c])await step(name).catch(e=>{e.message=`${a} > ${b} > ${c}: ${e.message}`;throw e;});
+ }
+ assert.equal(sequences,343);assert(commands>400,`ran ${commands} accepted commands`);
+});
+
+const CHECK_COMMANDS=['check-leave','check-resume','check-repeat','check-retry','check-reveal','check-answer','check-task','plan-goal','plan-swap','plan-add','plan-renew','plan-agree'];
+const listenTask={id:'t2',band:'A2',kind:'listen',prompt:'Where was the bag?',line:'I left my bag on the bus.',options:[],revealed:false};
+const sayTask={id:'t3',band:'A2',kind:'say',prompt:'Tell Linga about your day.',line:'',options:[],revealed:false};
+/** One level check per state the table names: what the learner is looking at. */
+const CHECK_STATES={
+ 'about preparing':checkOf({turns:[]}),
+ 'about asked':checkOf(),
+ reading:checkOf({pending:'held'}),
+ 'tasks between':checkOf({stage:'tasks',turns:[]}),
+ say:checkOf({stage:'tasks',turns:[],task:sayTask}),
+ listen:checkOf({stage:'tasks',turns:[],task:listenTask}),
+ choose:checkOf({stage:'tasks',turns:[],task:chooseTask}),
+ verdict:checkOf({stage:'verdict',turns:[],placement:placed()}),
+ 'plan asking goal':checkOf({stage:'plan',turns:[],askGoal:true}),
+ 'plan topics':checkOf({stage:'plan',turns:[],topics:planned('p-a','p-b').topics}),
+ 'plan empty':checkOf({stage:'plan',turns:[]}),
+};
+const checkScreen=k=>k.stage==='verdict'?'linga-verdict':k.stage==='plan'?'linga-plan':'linga-check';
+const checkExtra=(action,k)=>({checkId:k.id,...(action==='check-answer'?{text:'I play games.',mode:'text',lastTurnId:k.turns.at(-1)?.id}
+ :action==='check-task'?{taskId:k.task?.id,text:'I think it was the bus.',mode:'text',option:0}:action==='plan-goal'?{text:'A job interview'}
+ :action==='plan-swap'?{topicId:k.topics[0]?.id}:action==='plan-add'?{text:'football talk'}:{})});
+async function sendCheck(action,k){
+ const s=install(fixture(checkScreen(k),{placement:placed(),check:k}));stubAll();
+ try{await englishCommand({action,learnerId:s.learner.id,commandId:`check-table-${++counter}`,...checkExtra(action,k)});return 'accepted';}
+ catch(e){return e.status===409?'refused':'accepted';}
+}
+test('owner case 5: the server refuses 409 exactly what the check table refuses, in every state',async()=>{
+ // named first, so the red before the table is not only a missing module: these three answered 200 and did nothing, or added a topic under a screen that never shows it
+ assert.equal(await sendCheck('plan-renew',CHECK_STATES['plan asking goal']),'refused','plan-renew while the goal is asked');
+ assert.equal(await sendCheck('plan-add',CHECK_STATES['plan asking goal']),'refused','plan-add while the goal is asked');
+ assert.equal(await sendCheck('check-retry',CHECK_STATES.verdict),'refused','check-retry on the verdict');
+ const A=activity(),wrong=[];
+ assert.deepEqual([...A.CHECK_COMMANDS].sort(),[...CHECK_COMMANDS].sort());
+ for(const [name,k] of Object.entries(CHECK_STATES))for(const action of CHECK_COMMANDS){
+  const want=A.checkAccepts(k,action)?'accepted':'refused',got=await sendCheck(action,k);
+  if(got!==want)wrong.push(`${name} · ${action}: table ${want}, server ${got}`);
+ }
+ assert.deepEqual(wrong,[]);
+});
+test('owner case 6: in every check state and in the menu, an enabled check action the view offers is one the table accepts',()=>{
+ const V=view(),A=activity();let checked=0;
+ for(const [name,k] of Object.entries(CHECK_STATES))for(const ui of [{},{menu:true}]){
+  const v=V.lingaView(sessionOf(fixture(checkScreen(k),{placement:placed(),check:k})),ui);
+  const all=[...offeredBy(v),...(v.answer?[{id:'answer',run:{command:{action:v.answer.action}}}]:[])];
+  for(const a of all){
+   const action=a.run.command?.action;
+   if(a.disabled||!action||!CHECK_COMMANDS.includes(action))continue;
+   assert(A.checkAccepts(k,action),`${name}${ui.menu?' (menu)':''} · ${a.id} (${action}) is offered enabled but the table refuses it`);
+   checked++;
+  }
+ }
+ assert(checked>25,`checked ${checked} offered check actions`);
+});
+test('owner case 7 GUARD: with the TV on Linga home and a check left part-way, the phone still holds the check',()=>{
+ const V=view(),s=sessionOf(fixture('linga',{check:checkOf()}));
+ assert.equal(V.lingaHome(s),'check-part-way');assert.equal(V.phonePanel(s),'check');
+ const a=V.lingaView(s).answer;assert.equal(a.action,'check-answer');assert.equal(a.lastTurnId,'q1');
+});
+test('owner case 8 GUARD: leaving the check keeps it, and carrying on resumes the same question',async()=>{
+ fresh();stubAll();await command('check-start');await answerAbout(1);
+ const k=getSession().check,asked=k.turns.at(-1).id;
+ await command('check-leave',{checkId:k.id});
+ assert.equal(getSession().screen,'linga');assert.equal(getSession().check.id,k.id);assert.equal(getSession().check.turns.length,k.turns.length);
+ await command('check-resume',{checkId:k.id});
+ assert.equal(getSession().screen,'linga-check');assert.equal(getSession().check.turns.at(-1).id,asked);assert.equal(!!getSession().check.parked,false);
+});
