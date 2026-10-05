@@ -20,7 +20,7 @@
  */
 const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
 const RUNS = path.resolve(__dirname, '../runs'), UAT = path.resolve(__dirname, '..');
-const V = require('./verdict.cjs');
+const V = require('./verdict.cjs'), M = require('./metrics.cjs');
 
 const dirOf = run => path.isAbsolute(run) ? run : path.join(RUNS, run);
 /** A run's id: its directory name, or `<originating>/recert-<k>` for a rerun. */
@@ -48,33 +48,16 @@ function openFindings(run, character, journey) {
 }
 
 // ---------------------------------------------------------------- metrics
-const ratio = (a, b) => b ? `${a}/${b} (${Math.round(100 * a / b)}%)` : 'n/a';
-/** The rubric metrics over a run's per-Character results, as report.md counts them. `keep(result, journey)` filters. */
+const { ratio } = M;
+/**
+ * The rubric metrics over a run's per-Character results, as report.md counts them: one counter bag per registry
+ * metric (metrics.cjs blankRoll/addRecord), placement as class counts. `keep(result, journey)` filters.
+ */
 function rollUp(rs, keep = () => true) {
-  const roll = { placement: { exact: 0, near: 0, miss: 0, none: 0 }, agree: [0, 0], fit: [0, 0, 0], pitch: [0, 0, 0], moments: [0, 0], breaches: 0 };
-  for (const r of rs) for (const j of r.journeys ?? []) {
-    if (!keep(r, j)) continue;
-    const m = j.judge?.metrics;
-    if (j.id === 'J1') { const cls = j.facts?.placement?.class ?? 'none'; roll.placement[cls]++; }
-    if (!m) continue;
-    roll.agree[0] += m.judgeAgreement.agree; roll.agree[1] += m.judgeAgreement.total;
-    roll.fit[0] += m.topicFit.fit; roll.fit[1] += m.topicFit.safe; roll.fit[2] += m.topicFit.total;
-    roll.pitch[0] += m.pitch.at; roll.pitch[1] += m.pitch.below; roll.pitch[2] += m.pitch.above;
-    roll.moments[0] += m.moments.correctUseful; roll.moments[1] += m.moments.total;
-    roll.breaches += m.boundaries.breaches;
-  }
+  const roll = M.blankRoll();
+  for (const r of rs) for (const j of r.journeys ?? []) if (keep(r, j)) M.addRecord(roll, j);
   return roll;
 }
-/** Each metric as a numerator over a denominator (breaches is a count: its denominator is null). */
-const METRICS = [
-  { key: 'placement', label: 'placement exact', of: r => [r.placement.exact, r.placement.exact + r.placement.near + r.placement.miss] },
-  { key: 'agreement', label: 'judge agreement', of: r => [r.agree[0], r.agree[1]] },
-  { key: 'topicFit', label: 'topic fit', of: r => [r.fit[0], r.fit[2]] },
-  { key: 'topicSafe', label: 'topic safe', of: r => [r.fit[1], r.fit[2]] },
-  { key: 'pitch', label: 'pitch at band', of: r => [r.pitch[0], r.pitch[0] + r.pitch[1] + r.pitch[2]] },
-  { key: 'moments', label: 'moment precision', of: r => [r.moments[0], r.moments[1]] },
-  { key: 'breaches', label: 'boundary breaches', of: r => [r.breaches, null] },
-];
 const pairKey = (c, j) => `${c}|${j}`;
 const pairsOf = rs => new Set(rs.flatMap(r => r.journeys.map(j => pairKey(r.character, j.id))));
 /**
@@ -88,13 +71,13 @@ function metricDelta(before, after, { samePairs = false } = {}) {
   const rb = rollUp(B, inAfter), ra = rollUp(A);
   const ids = [...new Set([...A, ...B].flatMap(r => r.journeys.map(j => j.id)))].sort((a, b) => jn(a) - jn(b));
   const out = {};
-  for (const m of METRICS) {
-    const from = m.of(rb), to = m.of(ra);
-    const feeds = ids.filter(jid => [rollUp(B, (r, j) => j.id === jid && inAfter(r, j)), rollUp(A, (r, j) => j.id === jid)].some(x => { const [n, d] = m.of(x); return d === null ? n > 0 : d > 0; }));
+  for (const m of M.series()) {
+    const from = M.pair(rb, m), to = M.pair(ra, m);
+    const feeds = ids.filter(jid => [rollUp(B, (r, j) => j.id === jid && inAfter(r, j)), rollUp(A, (r, j) => j.id === jid)].some(x => { const [n, d] = M.pair(x, m); return d === null ? n > 0 : d > 0; }));
     const text = ([n, d]) => d === null ? String(n) : ratio(n, d);
     const share = ([n, d]) => d ? 100 * n / d : null;
-    const change = m.of(rb)[1] === null ? to[0] - from[0] : share(from) === null || share(to) === null ? null : Math.round(share(to) - share(from));
-    out[m.key] = { label: m.label, before: text(from), after: text(to), from, to, change, journeys: feeds };
+    const change = from[1] === null ? to[0] - from[0] : share(from) === null || share(to) === null ? null : Math.round(share(to) - share(from));
+    out[m.id] = { label: m.label, before: text(from), after: text(to), from, to, change, journeys: feeds };
   }
   return out;
 }
@@ -228,6 +211,7 @@ function renderRecertify(prior, rerun) {
     else regressed.push(`| ${ids || '(no finding filed)'} | ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} | ${pair} |`);
   }
   for (const [key, d] of Object.entries(delta)) {
+    if (M.seriesOf(key)?.informative) continue;
     const fell = key === 'breaches' ? d.change > 0 : d.change !== null && d.change <= -10;
     if (!fell || confounded.has(key)) continue;
     const ids = A.flatMap(r => freshOf(r.character, d.journeys)), weak = d.from[1] !== null && d.from[1] < SMALL_BASE ? ` (a base of ${d.from[1]}: weak evidence)` : '';
@@ -320,7 +304,7 @@ function instrumentOf({ model, judgeScreenCap }) {
   return {
     model, judgeScreenCap,
     efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
-    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs'].map(f => [f, sha(f)])),
+    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs', 'metrics.cjs'].map(f => [f, sha(f)])),
   };
 }
 

@@ -4,6 +4,7 @@
  *
  *   doneChecks(journey)         -> [{ id: 'D1', text }, …] the journey's '## Definition of done' bullets, in order
  *   gatesOf(journey)            -> the metric gates in the journey's sim block (`gates`)
+ *   unknownGates(journey)       -> [{ journey, metric }] for each gate naming a series metrics.cjs does not register
  *   contextOf(character, jid)   -> { character: sim, journey: text } read from uat/characters and uat/journeys
  *   doneStatuses(ids, rows)     -> per D id: the judge's row when answered exactly once with pass|fail|n-a, else not-evaluable
  *   verdictOf(record, ctx)      -> { verdict, why[], notes[], judgeVerdict, agrees }
@@ -17,6 +18,7 @@
  * file) is read without them, with the note 'no definition-of-done rows'. Pure: reads files, calls no model.
  */
 const fs = require('node:fs'), path = require('node:path');
+const M = require('./metrics.cjs');
 const UAT = path.resolve(__dirname, '..');
 const RESULTS = ['pass', 'fail', 'n-a'];
 const NOT_REACHED = new Set(['setup-failed', 'character-model-failure']);
@@ -38,6 +40,8 @@ function doneChecks(journey) {
 }
 /** The metric gates the journey's definition of done states, from its sim block. */
 const gatesOf = journey => { const g = simOf(textOf(journey))?.gates; return Array.isArray(g) ? g : []; };
+/** The gates of one journey that name no registered series: found from the file, before a run pays for a model call. */
+const unknownGates = journey => gatesOf(journey).filter(g => !M.seriesOf(g?.metric)).map(g => ({ journey: String(simOf(textOf(journey))?.id ?? '?'), metric: String(g?.metric) }));
 
 function readSims(dir) {
   try { return fs.readdirSync(path.join(UAT, dir)).filter(f => f.endsWith('.md')).map(f => { const text = fs.readFileSync(path.join(UAT, dir, f), 'utf8'); return { text, sim: simOf(text) }; }).filter(x => x.sim); }
@@ -67,15 +71,7 @@ function doneStatuses(ids, rows) {
 
 // ---------------------------------------------------------------- metric gates
 const num = x => typeof x === 'number' && Number.isFinite(x) ? x : NaN;
-/** Each gateable metric: a label and [numerator, denominator] from the judge's metrics (placement: the driver's class). */
-const METRICS = {
-  placement: { label: 'placement' },
-  topicFit: { label: 'topic fit', of: m => [num(m?.topicFit?.fit), num(m?.topicFit?.total)] },
-  topicSafe: { label: 'topic safe', of: m => [num(m?.topicFit?.safe), num(m?.topicFit?.total)] },
-  pitch: { label: 'pitch', of: m => [num(m?.pitch?.at), num(m?.pitch?.at) + num(m?.pitch?.below) + num(m?.pitch?.above)] },
-  moments: { label: 'moments', of: m => [num(m?.moments?.correctUseful), num(m?.moments?.total)] },
-  breaches: { label: 'breaches', of: m => [num(m?.boundaries?.breaches), null] },
-};
+// every series metrics.cjs registers is gateable by its id; the gate reads [numerator, denominator] from the judge's metrics
 const pct = (n, d) => `${Math.round(100 * n / d)}%`;
 /**
  * One gate: { metric, in: [...] } (placement class), { metric, min: 0.8 | [4, 6] } (a ratio at least), { metric, all:
@@ -83,20 +79,21 @@ const pct = (n, d) => `${Math.round(100 * n / d)}%`;
  * shown is not an imprecise moment); otherwise nothing counted is not-evaluable. Returns a reason, or null when met.
  */
 function gateReason(g, record) {
-  const M = METRICS[g.metric], id = g.metric, reason = (level, text) => ({ kind: 'gate', id, level, text });
-  if (!M) return reason('conditional', `gate ${id}: no such metric`);
+  const S = M.seriesOf(g.metric), id = g.metric, reason = (level, text) => ({ kind: 'gate', id, level, text });
+  if (!S) return reason('conditional', `gate ${id}: no such metric`);
+  const label = S.gateLabel ?? S.label;
   if (g.metric === 'placement') {
     const p = record.facts?.placement, cls = p?.class;
     if (!cls) return reason('conditional', 'placement not recorded');
     return (g.in ?? []).includes(cls) ? null : reason('fail', `placement ${cls} (${p.band} vs ${p.trueBand}), not ${(g.in ?? []).join(' or ')}`);
   }
-  const [n, d] = M.of(record.judge?.metrics);
-  if (Number.isNaN(n) || Number.isNaN(d)) return reason('conditional', `${M.label} not counted`);
-  if (d === null) return typeof g.max === 'number' && n > g.max ? reason('fail', `${M.label} ${n}, more than ${g.max}`) : null;
-  if (d === 0) return g.none === 'pass' ? null : reason('conditional', `${M.label}: nothing counted`);
-  if (g.all) return n < d ? reason('fail', `${M.label} ${n}/${d}, not all`) : null;
-  if (Array.isArray(g.min)) return n * g.min[1] < g.min[0] * d ? reason('fail', `${M.label} ${n}/${d} (${pct(n, d)}) under ${g.min[0]} of ${g.min[1]}`) : null;
-  if (typeof g.min === 'number') return n / d < g.min - 1e-9 ? reason('fail', `${M.label} ${n}/${d} (${pct(n, d)}) under ${Math.round(100 * g.min)}%`) : null;
+  const [n, d] = S.of(record.judge?.metrics ?? {});
+  if (Number.isNaN(n) || Number.isNaN(d)) return reason('conditional', `${label} not counted`);
+  if (d === null) return typeof g.max === 'number' && n > g.max ? reason('fail', `${label} ${n}, more than ${g.max}`) : null;
+  if (d === 0) return g.none === 'pass' ? null : reason('conditional', `${label}: nothing counted`);
+  if (g.all) return n < d ? reason('fail', `${label} ${n}/${d}, not all`) : null;
+  if (Array.isArray(g.min)) return n * g.min[1] < g.min[0] * d ? reason('fail', `${label} ${n}/${d} (${pct(n, d)}) under ${g.min[0]} of ${g.min[1]}`) : null;
+  if (typeof g.min === 'number') return n / d < g.min - 1e-9 ? reason('fail', `${label} ${n}/${d} (${pct(n, d)}) under ${Math.round(100 * g.min)}%`) : null;
   return null;
 }
 
@@ -149,4 +146,4 @@ const clip = (s, n) => s.length > n ? `${s.slice(0, n - 1)}…` : s;
 /** The scorecard cell: 'fail - D2 failed: #6 …; pitch 1/4 (25%) under 80%', a pass with its notes in brackets. */
 const verdictCell = v => `${v.verdict}${v.why.length ? ` - ${v.why.map(w => clip(String(w.text), 90)).join('; ')}` : ''}${v.notes.length ? ` (${v.notes.join('; ')})` : ''}`.replace(/\|/g, '/').replace(/\s*\n\s*/g, ' ');
 
-module.exports = { doneChecks, gatesOf, contextOf, doneStatuses, verdictOf, verdictCell, RESULTS };
+module.exports = { doneChecks, gatesOf, unknownGates, contextOf, doneStatuses, verdictOf, verdictCell, RESULTS };
