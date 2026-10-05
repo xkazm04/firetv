@@ -6,7 +6,8 @@
  *   plan(run)                  -> { character: [journey, …] } with open non-strength findings
  *   openFindings(run, c, j)    -> the prior rows the judge is shown for one pair
  *   metricDelta(before, after) -> the rubric metrics of both runs, recomputed from the per-Character JSON
- *   confounds(before, after)   -> { confounds, notes }: a changed journey start, a new journey, a changed instrument
+ *   confounds(before, after)   -> { confounds, notes, product }: a changed journey start, a new journey, a changed
+ *                                 instrument, a product that did not move (a verdict change is then run-to-run noise)
  *   priorStatuses(ids, rows)   -> the judge's answer per prior id; an id it left out is not-evaluable
  *   writeBack(prior, id, st)   -> stamps the originating findings.json (not-seen -> fixed, recurs -> recurrence + 1)
  *   renderRecertify(prior, r)  -> recertify.md beside the originating run; Regressed compares the code verdicts
@@ -99,11 +100,26 @@ const SOURCE = { placed: 'J1', planned: 'J2' };
 const fixtureLabel = s => s.replace(/^fixture:\s*/, '').replace(/ to [A-C][12] /, ' ');
 const flatten = (o, pre = '') => Object.entries(o ?? {}).flatMap(([k, v]) => v && typeof v === 'object' ? flatten(v, `${pre}${k}.`) : [[`${pre}${k}`, v]]);
 /**
- * What makes a before/after difference unreadable as a product change: a journey that started from a fixture in one
- * run and after a real earlier journey in the other, a journey the earlier run never ran, or a different instrument.
- * A run with no run.json has no recorded instrument: that is a note, since nothing proves it changed.
+ * Whether the product moved between two runs (product.cjs): each side is its run.json `product` stamp, or, for a side
+ * without one, what git says it saw over the other side's files. { state: 'same' | 'changed', changed, total }, or
+ * { state: 'unknown' } when either side has neither (no stamp on either side asks git nothing).
  */
-function confounds(before, after) {
+function productBetween(before, after, { repo, git } = {}) {
+  const PR = require('./product.cjs'), stamped = run => runJson(run)?.product?.files;
+  const files = Object.keys(stamped(before) ?? stamped(after) ?? {});
+  if (!files.length) return { state: 'unknown' };
+  const opts = { repo: repo ?? PR.REPO, git, files }, b = PR.seenOf({ dir: dirOf(before) }, opts), a = PR.seenOf({ dir: dirOf(after) }, opts);
+  if (!b || !a) return { state: 'unknown' };
+  const d = PR.changedBetween(b.files, a.files);
+  return { state: d.changed.length ? 'changed' : 'same', ...d };
+}
+/**
+ * What makes a before/after difference unreadable as a product change: a journey that started from a fixture in one
+ * run and after a real earlier journey in the other, a journey the earlier run never ran, a different instrument, or
+ * a product that did not move at all (then the difference is run-to-run noise: the product block of the result says
+ * which). A run with no run.json has no recorded instrument or product: that is a note, since nothing proves it changed.
+ */
+function confounds(before, after, opts) {
   const A = results(after), B = results(before), ran = pairsOf(A), delta = metricDelta(before, after, { samePairs: true }), starts = journeyStarts();
   const cs = [], notes = [], name = { before: runId(before), after: runId(after) };
   const recs = (rs, jid, keep = () => true) => rs.flatMap(r => r.journeys.filter(j => j.id === jid && keep(r, j)));
@@ -127,7 +143,10 @@ function confounds(before, after) {
     const diff = [...new Set([...Object.keys(fb), ...Object.keys(fa)])].sort().filter(k => fb[k] !== fa[k]).map(k => `${k} ${fb[k] ?? '(none)'} -> ${fa[k] ?? '(none)'}`);
     if (diff.length) cs.push({ kind: 'instrument', metrics: Object.keys(delta), text: `the instrument changed: ${diff.join('; ')}` });
   }
-  return { confounds: cs, notes };
+  const product = productBetween(before, after, opts);
+  if (product.state === 'same') cs.push({ kind: 'product', metrics: Object.keys(delta), text: `product unchanged in ${product.total} files: run-to-run noise` });
+  else if (product.state === 'unknown') notes.push({ kind: 'product', text: `product not recorded (no stamp, and no git history to read one from, for ${name.before} or ${name.after}): a product change cannot be ruled out` });
+  return { confounds: cs, notes, product };
 }
 
 // ---------------------------------------------------------------- write-back
@@ -190,7 +209,9 @@ function renderRecertify(prior, rerun) {
   const A = results(rerun), B = results(prior), delta = metricDelta(prior, rerun, { samePairs: true }), cf = confounds(prior, rerun);
   const confounded = new Set(cf.confounds.flatMap(c => c.metrics ?? []));
   // a journey whose start moved, or any journey when the instrument changed, cannot show a regression either
-  const whyNot = jid => cf.confounds.find(c => c.journey === jid || c.kind === 'instrument');
+  const whyNot = jid => cf.confounds.find(c => c.journey === jid || c.kind === 'instrument' || c.kind === 'product');
+  // a product that moved is named on every row it could explain, so the drain can start from the files
+  const moved = cf.product.state === 'changed' ? `; product changed in ${cf.product.changed.length} of ${cf.product.total} files: ${cite(cf.product.changed, 6)}` : '';
   const table = (head, rows) => rows.length ? [head, head.replace(/[^|]+/g, '---'), ...rows] : ['None.'];
   const fixed = stamped.filter(f => f.recertify_status === 'not-seen'), still = stamped.filter(f => f.recertify_status !== 'not-seen');
   const freshOf = (c, jids) => fresh.filter(f => f.type !== 'strength' && f.character === c && jids.includes(f.journey)).map(f => q(f.id));
@@ -207,15 +228,15 @@ function renderRecertify(prior, rerun) {
     const before = new Set(vb.why.map(w => `${w.kind}:${w.id}:${w.level}`)), turned = va.why.filter(w => !before.has(`${w.kind}:${w.id}:${w.level}`));
     const because = cell((turned.length ? turned : va.why).map(w => w.text).join('; '));
     const ids = cite(freshOf(r.character, [j.id])) || stamped.filter(f => f.character === r.character && f.journey === j.id).map(f => f.id).join(', '), c = whyNot(j.id);
-    if (c) masked.push(`| ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} (${ids}) | ${c.kind === 'instrument' ? 'instrument changed' : `${c.journey} ${c.kind}`} | ${pair} |`);
-    else regressed.push(`| ${ids || '(no finding filed)'} | ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} | ${pair} |`);
+    if (c) masked.push(`| ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} (${ids}) | ${c.kind === 'instrument' ? 'instrument changed' : c.kind === 'product' ? 'product unchanged: run-to-run noise' : `${c.journey} ${c.kind}`} | ${pair} |`);
+    else regressed.push(`| ${ids || '(no finding filed)'} | ${r.character} ${j.id} verdict ${b} -> ${a}: ${because}${moved} | ${pair} |`);
   }
   for (const [key, d] of Object.entries(delta)) {
     if (M.seriesOf(key)?.informative) continue;
     const fell = key === 'breaches' ? d.change > 0 : d.change !== null && d.change <= -10;
     if (!fell || confounded.has(key)) continue;
     const ids = A.flatMap(r => freshOf(r.character, d.journeys)), weak = d.from[1] !== null && d.from[1] < SMALL_BASE ? ` (a base of ${d.from[1]}: weak evidence)` : '';
-    regressed.push(`| ${cite(ids) || '(no finding filed)'} | ${d.label} ${key === 'breaches' ? 'rose' : 'fell'} ${d.before} -> ${d.after}${weak} | ${pair} |`);
+    regressed.push(`| ${cite(ids) || '(no finding filed)'} | ${d.label} ${key === 'breaches' ? 'rose' : 'fell'} ${d.before} -> ${d.after}${weak}${moved} | ${pair} |`);
   }
   const md = [
     `# Recertify — LT run ${P}`, '',
@@ -304,7 +325,7 @@ function instrumentOf({ model, judgeScreenCap }) {
   return {
     model, judgeScreenCap,
     efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
-    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs', 'metrics.cjs'].map(f => [f, sha(f)])),
+    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs', 'metrics.cjs', 'product.cjs'].map(f => [f, sha(f)])),
   };
 }
 
