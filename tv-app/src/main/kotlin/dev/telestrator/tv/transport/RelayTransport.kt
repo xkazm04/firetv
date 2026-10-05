@@ -51,9 +51,11 @@ class RelayTransport(
                     Log.i(TAG, "dialling $relayWsUrl")
                     client.webSocket(relayWsUrl) {
                         Log.i(TAG, "relay connected")
-                        // One outbound socket carries one pen at a time. Multi-pen would need the
-                        // relay to fan in, which is a relay concern, not a TV one.
-                        onPen(KtorPenChannel(this, "relay"))
+                        // One outbound socket carries one pen at a time, but it is not a pen: it
+                        // exists before any phone and outlives each one, so its conversation is
+                        // shared (no hello deadline, every hello a pairing). Multi-pen would need
+                        // the relay to fan in, which is a relay concern, not a TV one.
+                        onPen(KtorPenChannel(this, "relay", carriesOnePen = false))
                     }
                 }.onFailure { Log.w(TAG, "relay connection failed: ${it.message}") }
 

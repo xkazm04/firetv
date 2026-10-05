@@ -21,6 +21,15 @@ import kotlinx.coroutines.CancellationException
  */
 interface PenChannel {
     val remoteName: String
+
+    /**
+     * Whether this channel is one pen's connection (LAN: the phone connected in) or outlives each
+     * pen (relay: the TV's own outbound socket, which exists before any phone and carries each in
+     * turn). A channel that does not carry one pen has a shared conversation: no hello deadline, no
+     * hang-up, every hello a (re)pairing.
+     */
+    val carriesOnePen: Boolean get() = true
+
     suspend fun send(text: String)
 
     /** Suspends until the pen goes away, invoking [onMessage] for each text frame. */
@@ -76,6 +85,7 @@ private val NoFailure: StateFlow<String?> = MutableStateFlow(null)
 class KtorPenChannel(
     private val session: DefaultWebSocketSession,
     override val remoteName: String,
+    override val carriesOnePen: Boolean = true,
 ) : PenChannel {
 
     override suspend fun send(text: String) = session.send(text)
