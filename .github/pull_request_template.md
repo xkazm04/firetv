@@ -22,7 +22,7 @@
 - [ ] Docs describing the changed behaviour are updated in this PR
 - [ ] A noticeable change has its line under the product's `### Unreleased` in `CHANGELOG.md` (or: not noticeable)
 - [ ] A settled decision is recorded in `.ai/memory/` (or: none this time)
-- [ ] Commits are pathspec-scoped; AI-written commits carry a `Co-Authored-By` trailer
+- [ ] Commits are pathspec-scoped; AI-written commits carry a `Co-Authored-By` trailer (and `Agent-Lane:` when a loop lane made them)
 
 ## AI involvement
 

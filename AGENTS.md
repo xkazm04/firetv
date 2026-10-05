@@ -1,8 +1,10 @@
 # firetv: agent guidance
 
 This file is the **canonical** guidance for the whole repository (`guidance.canonical` in
-`.ai/manifest.yaml`). `desk/AGENTS.md` (read through `desk/CLAUDE.md`) adds only what is specific to
-the Next.js app and defers to this file. The `.claude/<skill>/config.md` overlays add per-skill
+`.ai/manifest.yaml`). Each separate build has an overlay that adds only what is specific to it and
+defers to this file: `desk/AGENTS.md` for the Next.js app and `deathride/AGENTS.md` for the Death Ride
+build (each read through its own `CLAUDE.md`). `tools/guidance-overlay-test.cjs` fails when a separate
+build has no overlay. The `.claude/<skill>/config.md` overlays add per-skill
 procedure on top. They never override the constraints below.
 
 ## What this repository is
@@ -34,7 +36,10 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Compile: tv-app | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` | Needs `local.properties` (SDK path) and the generated `tv-app/src/main/res/raw/fixture_clip.mp4` (see `fixtures/README.md`). |
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
-| Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. |
+| Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. Read `deathride/AGENTS.md` first (app id, gate, owner checks). |
+| Desk layering | `node tools/desk-boundaries.cjs` | Fails when `desk/src/` breaks its layering: engines are a leaf behind their entry modules, rules load no engine or Node built-in, only engines spawn, only the session writes (`.ai/memory/0018`). Its suite is `node tools/desk-boundaries-test.cjs`. |
+| Guidance overlays | `node tools/guidance-overlay-test.cjs` | Every separate build (`desk/`, `deathride/`) has an `AGENTS.md` + `CLAUDE.md` that defers to this file. |
+| Commit provenance | `node tools/commit-provenance.cjs [<range>]` | The per-lane, per-agent authorship report, read from `Agent-Lane:` and `Co-Authored-By:` trailers. `--check <base>..<head>` lists AI commits that lack them (`.ai/memory/0019`). Its suite is `node tools/commit-provenance-test.cjs`. |
 | Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. The pre-merge check is `node tools/model-drift-pr.cjs --base origin/main`, and its suite is `node tools/model-drift-pr-test.cjs`. See `uat/drift/README.md`. |
 | Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
 | Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | The doctor exits 1 on the waived `control.prepush` fail. The verdict is `node .ai/doctor.mjs --json > doctor.out` then `node scripts/doctor-gate.mjs doctor.out`. Its suite is `node tools/doctor-gate-test.cjs`. |
@@ -51,12 +56,14 @@ There is no linter or formatter wired yet. Match the surrounding style. Kotlin f
 | You touched | Run before proposing |
 |---|---|
 | anything under `desk/`, or a `tools/*-test.cjs` | `npm --prefix desk test` |
+| a module under `desk/src/` that changes what it imports or whether it writes a file | the desk gate, plus `node tools/desk-boundaries-test.cjs` |
 | `core/` | `node tools/gradlew.cjs :core:test` |
 | `tv-app/` or `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the desk gate, plus a Playwright capture against a second dev server (`next dev --webpack`, its own seeded `DESK_DATA_DIR`) |
 | `uat/driver` | `node --check uat/driver/linga-text.cjs` (a live LT run spends codex calls and is the operator's call) |
 | a file on the live surface (`node tools/model-drift-pr.cjs --surface`: the hint, read and pick pipelines, the rules they import, `desk/src/lib/engines/`, the lab bench) | the desk gate, plus a live drift record the operator takes on the branch (`scripts/model-drift.ps1`) and commits in the PR. Ask for it; never run it yourself (`.ai/memory/0017`). |
-| `deathride/` | that build's `:core:test :link:test` from `deathride/` |
+| `deathride/` | that build's `:core:test :link:test` from `deathride/`, plus `:app:assembleDebug` when `app/` changed (`deathride/AGENTS.md`) |
+| a build root's guidance (`AGENTS.md`, `CLAUDE.md`, a new top-level build) | `node tools/guidance-overlay-test.cjs` |
 
 ## Architecture map
 
@@ -97,6 +104,7 @@ design pages that `prototype/build.py` builds.
   - Decisions stay in code (`desk/src/lib/rules/`). The model explains; it does not decide.
   - Engines stay behind `desk/src/lib/engines/`.
   - The session is the only state.
+  - `tools/desk-boundaries.cjs` checks these three in `repo-guardrails.yml` (`.ai/memory/0018`).
   - Withholding is the product: nothing puts the answer on screen.
   - On Air (`docs/DESIGN-ON-AIR.md`) is law for every TV surface.
 - **No live model calls in a gate.** The rules suites run with no Claude CLI, codex, Ollama or ElevenLabs. Stub at the `provider` seam.
@@ -112,7 +120,7 @@ design pages that `prototype/build.py` builds.
 - Run the gate for what you touched (table above) and report its exit code. Never propose a diff with a red gate.
 - Keep changes small and focused. Match the surrounding code's conventions. Use pathspec-scoped commits.
 - Work in a worktree per wave when other sessions may share the checkout.
-- AI-assisted commits carry a `Co-Authored-By` trailer. A human approves every merge.
+- AI-assisted commits carry a `Co-Authored-By` trailer that names the agent. A commit made by an unattended loop lane also carries `Agent-Lane: <lane branch>` (`.ai/memory/0019`). A human approves every merge.
 - The full Definition of Done and the PR checklist are in [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Tooling in use
@@ -133,6 +141,7 @@ design pages that `prototype/build.py` builds.
   - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
   - `model-drift-pr.yml` runs on every PR. A PR that touches the live surface goes red unless it adds a live record that measured its code and does not alert against the base branch's newest one (`.ai/memory/0017`).
   - `changelog.yml` checks `CHANGELOG.md`'s shape and links on every PR and push to main (`.ai/memory/0015`).
+  - `repo-guardrails.yml` runs on every PR and push to main. It goes red when `desk/src/` breaks its layering or a separate build loses its guidance overlay. On a PR it also annotates every AI commit whose agent or lane is not in a trailer. That step warns until the operator adds `--strict` (`.ai/memory/0018`, `0019`).
 - `.github/dependabot.yml` keeps Gradle, npm and the Actions current.
 
 ## Example of a good change

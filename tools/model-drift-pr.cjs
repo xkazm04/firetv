@@ -29,6 +29,8 @@
  */
 const fs = require("node:fs"), path = require("node:path"), { execFileSync } = require("node:child_process");
 const { compare } = require("./model-drift.cjs");
+// The import scanner is shared with tools/desk-boundaries.cjs; this file still exports it for its suite.
+const { importsOf, resolveSpec, closureOf } = require("./import-graph.cjs");
 
 const REPO = path.resolve(__dirname, "..");
 const LIB = "desk/src/lib/";
@@ -41,40 +43,6 @@ const USAGE = "usage: node tools/model-drift-pr.cjs --base <ref> [--head <ref>] 
 /** The desk modules the bench loads: every load("<f>") in tools/lab-bench.cjs's source, as repo paths. */
 function benchEntries(src) {
   return [...src.matchAll(/\bload\(\s*["']([^"'\s]+)["']\s*\)/g)].map((m) => LIB + m[1]);
-}
-
-/** The module specifiers a TypeScript or CommonJS source loads at run time. `import type` and `export type` are skipped. */
-function importsOf(src) {
-  const out = [];
-  for (const m of src.matchAll(/(?:^|;)[ \t]*(?:import|export)\s+(type\s+)?(?:[^"';]*?\s+from\s+)?["']([^"'\s]+)["']/gm)) if (!m[1]) out.push(m[2]);
-  for (const m of src.matchAll(/\b(?:import|require)\(\s*["']([^"'\s]+)["']\s*\)/g)) out.push(m[1]);
-  return out;
-}
-
-/** A specifier as the repo file it names (`@/` is desk/src/), or null for a package or a file that does not exist. */
-function resolveSpec(from, spec, isFile) {
-  let base;
-  if (spec.startsWith("@/")) base = "desk/src/" + spec.slice(2);
-  else if (spec.startsWith("./") || spec.startsWith("../")) base = path.posix.join(path.posix.dirname(from), spec);
-  else return null;
-  for (const f of [base, base + ".ts", base + ".tsx", base + "/index.ts"]) if (isFile(f)) return f;
-  return null;
-}
-
-/** Every file reachable from `entries` through runtime imports, sorted. `read` and `isFile` take repo paths. */
-function closureOf(entries, { read, isFile }) {
-  const seen = new Set(), queue = entries.filter(isFile);
-  while (queue.length) {
-    const f = queue.shift();
-    if (seen.has(f)) continue;
-    seen.add(f);
-    if (!/\.(ts|tsx|cjs|mjs|js)$/.test(f)) continue;
-    for (const spec of importsOf(read(f))) {
-      const r = resolveSpec(f, spec, isFile);
-      if (r && !seen.has(r)) queue.push(r);
-    }
-  }
-  return [...seen].sort();
 }
 
 /** Whether a repo path is on the surface: equal to a listed file, or under a listed directory (ending in /). */

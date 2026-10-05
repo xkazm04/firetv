@@ -16,5 +16,12 @@ written by `next dev`. Edit only below it.
 
 - Gate: `npm test` here (`tsc --noEmit`, then every rules suite in `test:rules`). A new suite is appended at the end of `test:rules`.
 - Decisions stay in `src/lib/rules/`. Engines stay behind `src/lib/engines/`. `src/lib/session/store.ts` is the only state.
+  `node ../tools/desk-boundaries.cjs` holds all three:
+  - an engine loads nothing else in the desk, and callers load only its entry modules (text, vision, embed, voice, listen, health, shape, types);
+  - a rule reaches no engine or Node built-in through any import chain;
+  - only `src/lib/engines/` spawns a process;
+  - only `src/lib/session/` and the engines write files.
+
+  A failure names the module and the import chain to fix (`.ai/memory/0018`).
 - No live model calls in the gate. Never touch `data/`: tests set `DESK_DATA_DIR` to a temp directory.
 - In a worktree, run a second dev server with `next dev --webpack`. Turbopack rejects the junctioned `node_modules`.

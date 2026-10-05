@@ -92,7 +92,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Unreleased
 
-- Nothing yet.
+- An agent guidance overlay of its own ([deathride/AGENTS.md](deathride/AGENTS.md)): its own wrapper and gate, which app id a build installs as, the pure-JVM modules, and owner-only checks.
 
 ### 2026-10-04: Status entry point, regions approved, track library triaged
 
@@ -131,6 +131,10 @@ The agent contract, CI and the evals that cover every product.
 - Every same-repo PR now proves the manifest capabilities and holds committed `verified` flags to that run (`capabilities-pr.yml`). The agent-contract verdict now fails only outside documented waivers (`conformance-gate.yml`, `scripts/doctor-gate.mjs`) ([0016](.ai/memory/0016-capabilities-proven-per-pr.md)).
 - A PR that changes a prompt, an engine or a rule the lab bench runs now carries a live drift record, held to the base's newest one before merge (`model-drift-pr.yml`, `tools/model-drift-pr.cjs`) ([0017](.ai/memory/0017-prompt-prs-carry-a-live-record.md)).
 - An agent-task issue form: acceptance criteria and the gates per surface are required fields ([agent-task.yml](.github/ISSUE_TEMPLATE/agent-task.yml), [CONTRIBUTING.md](CONTRIBUTING.md)).
+- `repo-guardrails.yml`, a new workflow:
+  - The desk's layering is a failing check (`tools/desk-boundaries.cjs`): engines are a leaf behind their entry modules, rules reach no engine or Node built-in, only engines spawn, only the session writes ([0018](.ai/memory/0018-desk-import-boundaries.md)). It shares one import scanner with the model-drift check (`tools/import-graph.cjs`).
+  - Every separate build has a guidance overlay (`tools/guidance-overlay-test.cjs`).
+  - Agent authorship is read from `Co-Authored-By:` and `Agent-Lane:` trailers (`tools/commit-provenance.cjs`). PR commits that record it only in prose are annotated ([0019](.ai/memory/0019-commit-provenance-trailers.md)).
 
 ### 2026-10-05: The AI-native standard
 

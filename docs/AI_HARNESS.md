@@ -121,7 +121,8 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
 - **Definition of Done:** [../CONTRIBUTING.md](../CONTRIBUTING.md#definition-of-done). The gate for
   every touched surface exits 0 after the last edit, a behaviour change comes with a failing-first
   test, there are no live model calls and nothing touches `desk/data/`, docs are updated, and
-  AI-written commits carry the trailer.
+  AI-written commits carry the `Co-Authored-By` trailer. Commits from a loop lane also carry
+  `Agent-Lane:` (0019).
 - **PR template:** [../.github/pull_request_template.md](../.github/pull_request_template.md) asks
   for the gate commands, their exit codes and the DoD.
 - **CI:**
@@ -132,5 +133,11 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   - `model-drift.yml` watches the committed live-quality records every week and runs the drift suite on every PR.
   - `model-drift-pr.yml` holds a PR that changes the live surface to a fresh live record, compared with the base's newest one.
   - `changelog.yml` keeps `CHANGELOG.md`'s shape and links on every PR.
+  - `repo-guardrails.yml` holds the shape agents are told to keep. Every PR and push to main runs:
+    - the desk's layering (`tools/desk-boundaries.cjs`, 0018);
+    - the guidance overlay of every separate build (`tools/guidance-overlay-test.cjs`).
+
+    On a PR it also annotates every AI commit whose agent or lane is not in a trailer (`tools/commit-provenance.cjs`,
+    0019). That step warns until the operator adds `--strict`.
   - `supply-chain.yml` builds and attests the APK on main.
 - A human approves every merge (`.ai/guardrails.yaml`).

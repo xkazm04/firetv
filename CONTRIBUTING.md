@@ -64,7 +64,7 @@ A change is done when **all** of these hold:
 - [ ] Docs that describe the changed behaviour are updated in the same change (`AGENTS.md`, a product README, or `docs/`).
 - [ ] A change a user or the owner would notice (a screen, a flow, a rule, a decision, a gate) adds one line under its product's `### Unreleased` in [CHANGELOG.md](CHANGELOG.md). `tools/changelog-test.cjs` checks the file's shape and links.
 - [ ] A decision someone would otherwise reopen is recorded as a new `.ai/memory/NNNN-*.md` entry (append-only; use `supersedes` to replace an older one).
-- [ ] Commits are pathspec-scoped and the history is honest: AI-written commits carry a `Co-Authored-By` trailer.
+- [ ] Commits are pathspec-scoped and the history is honest. AI-written commits carry a `Co-Authored-By` trailer naming the agent. Commits from an unattended loop lane also carry `Agent-Lane: <lane branch>`. `node tools/commit-provenance.cjs --check origin/main..HEAD` lists any commit that names either one only in prose ([.ai/memory/0019](.ai/memory/0019-commit-provenance-trailers.md)).
 
 The pull request template (`.github/pull_request_template.md`) asks for each of these.
 
