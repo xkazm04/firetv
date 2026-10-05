@@ -3,7 +3,8 @@
  * Mia has earned A2 (a level check at A2 with high confidence, a plan of six topics in varied skills, and her own spoken
  * and typed replies for every required skill), with an earlier A1 certificate already opened and the A2 one issued by
  * the desk's own rules (lib/english/cert.ts issue) and not opened yet; Leo has the same check and plan but one required
- * skill only with help, so he holds no certificate. At 1920 x 1080 and 1280 x 720 it photographs Mia's Linga home (the
+ * skill only with help, so he holds no certificate and his plate is an outline with one open slot; Ana has two required
+ * skills only with help (two open slots, linga-B: the certificate shows what it still needs); Sam picked his band by hand. At 1920 x 1080 and 1280 x 720 it photographs Mia's Linga home (the
  * "Your certificate" door lit first), the plate, the list of certificates and an earlier one; Leo's home and menu (no
  * door, no "My certificate"); and the phone's My map for Mia at 390 x 844.
  *
@@ -36,7 +37,7 @@ const C = require(path.join(root, 'src/lib/english/cert.ts'));
 const { emptyEnglish } = require(path.join(root, 'src/lib/english/types.ts'));
 
 const PROFILE = (id, name) => ({ id, name, type: 'elementary', age: 12, system: 'uk', modules: ['maths', 'english', 'essay'] });
-const MIA = PROFILE('cert-mia', 'Mia'), LEO = PROFILE('cert-leo', 'Leo');
+const MIA = PROFILE('cert-mia', 'Mia'), LEO = PROFILE('cert-leo', 'Leo'), ANA = PROFILE('cert-ana', 'Ana'), SAM = PROFILE('cert-sam', 'Sam');
 const day = (month, d, h = 18) => new Date(2026, month, d, h).getTime();
 const topic = (id, skill, title) => ({ id, title, goal: 'Talk it through.', why: 'You chose it.', skill, audience: 'all', partner: 'Sam · Friend', premise: 'A friendly chat at school.', cue: 'Try: I think…', quiz: { question: 'Which fits?', options: ['I think so.', 'Yesterday.'], correct: 0 } });
 const PLAN = { at: day(8, 14), band: 'A2', topics: [topic('p1', 'describe', 'My favourite games'), topic('p2', 'negotiate', 'Planning a class trip'), topic('p3', 'narrate', 'The day the bus broke down'), topic('p4', 'request', 'Asking at the library'), topic('p5', 'relate', 'A friend who likes other music'), topic('p6', 'repair', 'When the teacher talks fast')] };
@@ -63,11 +64,27 @@ function leo() {
   assert.equal(C.issue(l, Date.now()), null, 'narrate only with help: no certificate');
   return l;
 }
+/** Ana: the same check and plan as Leo, but narrate and negotiate only with help, so two slots are open. */
+function ana() {
+  const skills = Object.keys(LINES);
+  const l = mergeEvidence({ ...emptyEnglish(), preferences: PREFS, placement: PLACEMENT, plan: PLAN, placements: [CHECK] }, skills.flatMap((s, i) => own(s, i, s === 'narrate' || s === 'negotiate')));
+  assert.equal(C.issue(l, Date.now()), null, 'two skills only with help: no certificate');
+  assert.deepEqual(C.certGap(l).open, ['narrate', 'negotiate']);
+  return l;
+}
+/** Sam: his level was picked by hand, so no certificate can rest on it. */
+function sam() {
+  const l = { ...leo(), placements: [{ at: CHECK.at, band: 'A2', confidence: 'low', source: 'self' }], placement: { ...PLACEMENT, source: 'self', confidence: 'low' } };
+  assert.equal(C.certGap(l).blocker, 'self');
+  return l;
+}
 function seed(seen = false) {
   const file = path.join(data, 'learners.json');
   const book = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8') || '{}') : {};
   book[MIA.id] = { id: MIA.id, english: mia(seen), skills: {}, writing: {}, memory: [], history: [], digest: [] };
   book[LEO.id] = { id: LEO.id, english: leo(), skills: {}, writing: {}, memory: [], history: [], digest: [] };
+  book[ANA.id] = { id: ANA.id, english: ana(), skills: {}, writing: {}, memory: [], history: [], digest: [] };
+  book[SAM.id] = { id: SAM.id, english: sam(), skills: {}, writing: {}, memory: [], history: [], digest: [] };
   fs.mkdirSync(data, { recursive: true }); fs.writeFileSync(file, JSON.stringify(book));
 }
 
@@ -121,7 +138,7 @@ async function measure(page) {
   seed(false);
   await asTheTV();
   await event({ type: 'reset' });
-  for (const p of [MIA, LEO]) { await event({ type: 'profile.draft', patch: p }); await event({ type: 'profile.save' }); }
+  for (const p of [MIA, LEO, ANA, SAM]) { await event({ type: 'profile.draft', patch: p }); await event({ type: 'profile.save' }); }
   await event({ type: 'join' });
   const browser = await chromium.launch({ headless: true });
   const errors = [], report = [];
@@ -161,7 +178,7 @@ async function measure(page) {
       m = await measure(page); await shot('06-mia-home-after');
       assert.ok(!m.actions[0].startsWith('Your certificate'), `${W}: opened, the door is gone`);
       check(`${W} mia home after`, m);
-      // Leo: the same check and plan, one required skill only with help: no door, and nothing in the menu
+      // Leo: the same check and plan, one required skill only with help: no door on home; the menu door (linga-B) opens the outline
       await event({ type: 'learner.set', id: LEO.id }); await event({ type: 'subject', subject: 'english' }); await event({ type: 'nav', screen: 'linga', focus: 0 });
       await page.waitForFunction(() => document.querySelector('.lo-learner')?.textContent.includes('Leo'), null, { timeout: 15000 }); await page.waitForTimeout(800);
       m = await measure(page); await shot('07-leo-home');
@@ -169,8 +186,29 @@ async function measure(page) {
       check(`${W} leo home`, m);
       await page.keyboard.press('m'); await page.waitForTimeout(600);
       m = await measure(page); await shot('08-leo-menu');
-      assert.ok(!m.actions.some((a) => /certificate/i.test(a)), `${W}: Leo's menu has no certificate entry`);
+      assert.ok(m.actions.some((a) => /my certificate/i.test(a)), `${W}: Leo's menu opens the certificate outline (${m.actions.join(' | ')})`);
+      check(`${W} leo menu`, m);
       await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+      // Ana: two open slots. Menu, My certificate: the plate in outline, the open skills as dashed slots, no number
+      await event({ type: 'learner.set', id: ANA.id }); await event({ type: 'subject', subject: 'english' }); await event({ type: 'nav', screen: 'linga', focus: 0 });
+      await page.waitForFunction(() => document.querySelector('.lo-learner')?.textContent.includes('Ana'), null, { timeout: 15000 }); await page.waitForTimeout(800);
+      await page.keyboard.press('m'); await page.waitForTimeout(600);
+      for (let i = 0; i < 9 && !(await measure(page)).focused.some((f) => /my certificate/i.test(f)); i++) { await page.keyboard.press('ArrowDown'); await page.waitForTimeout(350); }
+      m = await measure(page); await shot('10-ana-menu-door'); check(`${W} ana menu`, m);
+      await page.keyboard.press('Enter'); await at('linga-cert');
+      m = await measure(page); await shot('11-ana-outline');
+      assert.match(m.title, /^A2 Everyday basics$/);
+      assert.equal(await page.locator('.lo-plate-slot').count(), 2, `${W}: two open slots`);
+      assert.equal(await page.locator('.lo-plate-quote').count(), 0, `${W}: no quote on an outline`);
+      check(`${W} ana outline`, m, { plate: true });
+      await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+      // Sam: a band picked by hand, so the plate has no slots, one sentence, and Find my level
+      await event({ type: 'learner.set', id: SAM.id }); await event({ type: 'subject', subject: 'english' }); await event({ type: 'nav', screen: 'linga-cert', focus: 0 });
+      await page.waitForFunction(() => document.querySelector('.lo-learner')?.textContent.includes('Sam'), null, { timeout: 15000 }); await page.waitForTimeout(800);
+      await at('linga-cert'); m = await measure(page); await shot('12-sam-find-level');
+      assert.equal(await page.locator('.lo-plate-slot').count(), 0, `${W}: no slots for a hand-picked band`);
+      assert.ok(m.actions[0].startsWith('Find my level'), `${W}: Find my level first (${m.actions.join(' | ')})`);
+      check(`${W} sam`, m, { plate: true });
       await ctx.close();
     }
     // the phone: Mia's My map at 390 x 844

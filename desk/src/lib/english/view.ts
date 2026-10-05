@@ -353,7 +353,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (!cert && gap.band) {
       // The plate in outline (linga-B): what is shown so far, and what is still to have as empty slots; no number. A band picked by hand, or a check read with low confidence, has no slots: a certificate rests on a level check.
       const open = gap.open.map(skillName);
-      title = `${gap.band} ${BAND_NAME[gap.band]}`;
+      title = `${gap.band} ${BAND_NAME[gap.band]}`; captionTag = "What it needs";
       caption = gap.blocker === "self" ? "A certificate rests on a level check you take with Linga." : gap.blocker === "low" ? "Your last check was a mixed read, so take it again another day for a firmer one." : open.length ? "Each empty slot is a conversation still to have." : "Linga issues it when you next finish a conversation.";
       hero = { kind: "cert", kicker: "Certificate", title, band: gap.band, issued: gap.blocker ? "" : "Not issued yet", topics: [], skills: shownSkills(l, gap).map(({ name, mode }) => ({ name, mode })), quote: null, open };
       actions = [...(gap.blocker ? [act("find-level", "Find my level", caption, cmd("check-start"))] : []), back(caption)];
