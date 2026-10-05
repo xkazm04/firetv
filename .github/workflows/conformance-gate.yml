@@ -1,0 +1,27 @@
+# Conformance gate: the agent contract judged on every pull request, with an exit code that means one thing.
+#  - `node .ai/doctor.mjs` exits 1 on every PR, because of the deliberate, human-owned control.prepush finding (no
+#    local hook runner yet, .ai/memory/0011). That red says nothing about the change.
+#  - This job runs the doctor with --json and lets scripts/doctor-gate.mjs judge it: red when any finding fails
+#    outside the waivers (each waiver names the memory that owns it), green otherwise. A waiver with nothing left to
+#    excuse raises a warning so it gets deleted (.ai/memory/0016).
+#  - tools/doctor-gate-test.cjs proves the gate first. No install, no model, no secret, no network.
+name: conformance-gate
+on:
+  pull_request:
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Doctor-gate suite
+        run: node tools/doctor-gate-test.cjs
+      - name: Run the doctor (its own exit code carries the waived control.prepush fail)
+        run: node .ai/doctor.mjs --json > doctor.out || true
+      - name: Judge the agent contract (fails on any unwaived fail)
+        run: node scripts/doctor-gate.mjs doctor.out

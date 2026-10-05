@@ -37,7 +37,7 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. |
 | Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. See `uat/drift/README.md`. |
 | Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
-| Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | |
+| Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | The doctor exits 1 on the waived `control.prepush` fail. The verdict is `node .ai/doctor.mjs --json > doctor.out` then `node scripts/doctor-gate.mjs doctor.out`. Its suite is `node tools/doctor-gate-test.cjs`. |
 | Pin workflow actions | `node scripts/pin-actions.mjs` (`--check` works offline) | Needs network and a GitHub token. Never type a SHA (`.ai/memory/0013`). |
 
 `gradle.properties` pins `org.gradle.java.home` to the operator's Android Studio JBR. On any
@@ -122,7 +122,9 @@ design pages that `prototype/build.py` builds.
   - `/cx`, `/spark`, `/contest`, `/perfect`, `/leonardo`
 - They are registered under `agents:` in `.ai/manifest.yaml`.
 - CI (`.github/workflows/`):
-  - `ai-conformance.yml` runs `.ai/doctor.mjs` (the agent contract check) on every PR.
+  - `ai-conformance.yml` runs `.ai/doctor.mjs` (the agent contract check) on every PR. Its exit code is red by design because of the human-owned `control.prepush` finding (`.ai/memory/0011`).
+  - `conformance-gate.yml` is the contract verdict to read on a PR. `scripts/doctor-gate.mjs` fails on any doctor fail except the waivers it lists, each owned by a memory entry (`.ai/memory/0016`).
+  - `capabilities-pr.yml` runs every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` on each same-repo PR. It goes red when a capability fails, or when a committed `verified: true` did not hold. To set a flag, commit the write-back of a local `node .ai/doctor.mjs --run`; never hand-flip one (`.ai/memory/0016`).
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
   - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).

@@ -36,9 +36,11 @@ stubbed at the `provider` seam (`desk/src/lib/engines/`), and data goes to a tem
 **Where they run.** They are part of `npm --prefix desk test`, the desk gate, which
 `.github/workflows/quality.yml` runs on every pull request. A red suite blocks the merge. To run
 only these, use the `evals` capability in `.ai/manifest.yaml`, which calls the same files from the
-repo root. `.github/workflows/capabilities.yml` runs every manifest capability, including `evals`,
-through `node .ai/doctor.mjs --run` once a week. See
-[../.ai/memory/0012-capabilities-proven-weekly.md](../.ai/memory/0012-capabilities-proven-weekly.md).
+repo root. `.github/workflows/capabilities-pr.yml` runs every manifest capability, including `evals`,
+through `node .ai/doctor.mjs --run` on each same-repo pull request, and `capabilities.yml` repeats it
+once a week. On a PR, `scripts/doctor-gate.mjs --claims` also holds every committed `verified: true`
+to that run. See
+[../.ai/memory/0016-capabilities-proven-per-pr.md](../.ai/memory/0016-capabilities-proven-per-pr.md).
 
 ### Live: opt-in, these spend real calls
 
@@ -116,8 +118,9 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   for the gate commands, their exit codes and the DoD.
 - **CI:**
   - `quality.yml` runs the desk gate (including the evals above) and `:core:test` on every PR.
-  - `ai-conformance.yml` runs the agent-contract doctor on every PR.
-  - `capabilities.yml` proves the manifest commands every week.
+  - `ai-conformance.yml` runs the agent-contract doctor on every PR. It is red by design on `control.prepush` (0011).
+  - `conformance-gate.yml` judges the same doctor through `scripts/doctor-gate.mjs` on every PR. It goes red on any fail outside the waivers, each of which is owned by a memory entry.
+  - `capabilities-pr.yml` proves the manifest commands on every same-repo PR and checks the committed `verified` flags against that run. `capabilities.yml` repeats the proof every week.
   - `model-drift.yml` watches the committed live-quality records every week and runs the drift suite on every PR.
   - `changelog.yml` keeps `CHANGELOG.md`'s shape and links on every PR.
   - `supply-chain.yml` builds and attests the APK on main.

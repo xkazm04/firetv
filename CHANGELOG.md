@@ -128,6 +128,7 @@ The agent contract, CI and the evals that cover every product.
   - `scripts/model-drift.ps1` runs it weekly on the operator's machine.
   - `.github/workflows/model-drift.yml` goes red when the newest record drifted or is older than 21 days ([0014](.ai/memory/0014-model-drift-watched-weekly.md)).
 - This changelog ([0015](.ai/memory/0015-one-changelog-dated-milestones.md)).
+- Every same-repo PR now proves the manifest capabilities and holds committed `verified` flags to that run (`capabilities-pr.yml`). The agent-contract verdict now fails only outside documented waivers (`conformance-gate.yml`, `scripts/doctor-gate.mjs`) ([0016](.ai/memory/0016-capabilities-proven-per-pr.md)).
 
 ### 2026-10-05: The AI-native standard
 

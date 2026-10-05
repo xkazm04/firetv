@@ -34,7 +34,12 @@ Run the gate for every surface you touched and record its exit code. The table i
 | `deathride/` | `:core:test :link:test` from `deathride/` |
 
 `node .ai/doctor.mjs` checks the agent contract (`.ai/manifest.yaml`, memory, guidance). It runs on
-every pull request in `.github/workflows/ai-conformance.yml`.
+every pull request in `.github/workflows/ai-conformance.yml`, and its exit code is red by design on the
+human-owned `control.prepush` finding. The verdict to read is `.github/workflows/conformance-gate.yml`
+(`scripts/doctor-gate.mjs`), which fails only outside the documented waivers.
+`.github/workflows/capabilities-pr.yml` runs every manifest capability on each same-repo PR. If you
+commit a `verified: true`, it must come from the write-back of a local `node .ai/doctor.mjs --run`,
+and that PR's run must pass it ([0016](.ai/memory/0016-capabilities-proven-per-pr.md)).
 
 ### Definition of Done
 
