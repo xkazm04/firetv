@@ -343,12 +343,48 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
   assert.deepEqual(tvKey(at(f),'select',LOCAL).events,[{type:'subject',subject:sub},{type:'nav',screen:home,focus:0}],sub);
  assert.deepEqual(tvKey(at(3),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card hands the desk to someone else');
  const rest=desk({focus:-1,history:[readIt]});
- assert.deepEqual(tvKey(rest,'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:0}],'at rest Select opens the CONTINUE object');
+ assert.deepEqual(tvKey(rest,'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:1}],'at rest Select opens the CONTINUE object, the lamp on the lens last read (Argument)');
  assert.equal(focusAfter(rest,tvKey(rest,'left',LOCAL)),1,'at rest the arrows move from the CONTINUE object');
  assert.equal(focusAfter(at(3,{history:[readIt]}),tvKey(at(3,{history:[readIt]}),'back',LOCAL)),2,'Back brings the lamp home to the CONTINUE object');
  const j=(f)=>desk({focus:f,learner:{id:'jakub',name:'Jakub'}});
  assert.equal(focusAfter(j(1),tvKey(j(1),'right',LOCAL)),1,'Jakub has two apps');assert.equal(focusAfter(j(2),tvKey(j(2),'up',LOCAL)),0);
  assert.deepEqual(tvKey(j(0),'select',LOCAL).events,[{type:'subject',subject:'english'},{type:'nav',screen:'linga',focus:0}]);
+});
+
+// ---- landing-B: Select opens what is waiting, through one helper Tonight's continue card and the recap share ----
+const paper={topic:'linear-two-step',items:[{n:1,question:'2x + 3 = 11'},{n:2,question:'5x - 4 = 21'}]};
+const snapped={id:'p1',subject:'maths',title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
+const ownParagraph={type:'argument',text:'p',sentences:[{n:1,text:'Cats sleep.'},{n:2,text:'Dogs bark.'}],verdicts:[{n:1,verdict:'supports'},{n:2,verdict:'faulty'}],stats:{},summary:'It argues one way.'};
+const MATHS_STATES=[
+ ['a marked set',{practice:marked},[{type:'subject',subject:'maths'},{type:'nav',screen:'sheet',focus:1}]],
+ ['a set on paper',{practice:paper},[{type:'subject',subject:'maths'},{type:'nav',screen:'practice',focus:0}]],
+ ['a snapped page',{pages:[snapped]},[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0},{type:'nav',screen:'page',focus:0}]],
+];
+test('landing-B 1-3: Select on Math Buddy opens the marked sheet, the set on paper or the snapped page, not Tonight',()=>{
+ const {tvKey}=keys();
+ for(const [name,patch,want] of MATHS_STATES)assert.deepEqual(tvKey(desk({focus:0,...patch}),'select',LOCAL).events,want,name);
+ assert.equal(require(path.join(root,'src/tv/sheetRows.ts')).firstToLook(marked.items),1,'the marked set opens on the first slip to look at');
+});
+test('landing-B 4-5: Select on Essay Master opens the learner\'s paragraph, else the lens home on the lens last read',()=>{
+ const {tvKey,LENS_STOPS}=keys();
+ assert.deepEqual(tvKey(desk({focus:2,essay:ownParagraph,history:[readIt]}),'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'essay.at',n:null},{type:'nav',screen:'forensic',focus:0}],'the paragraph is on the desk: its forensic page');
+ const lens=LENS_STOPS.findIndex(t=>t.id==='argument');assert.equal(lens,1);
+ assert.deepEqual(tvKey(desk({focus:2,history:[readIt]}),'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:lens}],'only the history line: the lamp on Argument, so a second Select starts the lens that was read');
+});
+test('landing-B 6: the landing and Tonight\'s continue card open the same screen on the same focus',()=>{
+ const {tvKey}=keys();
+ for(const [name,patch] of MATHS_STATES){
+  const land=tvKey(desk({focus:0,...patch}),'select',LOCAL).events.filter(e=>e.type!=='subject');
+  const tonight=tvKey(desk({screen:'tonight',focus:0,...patch}),'select',LOCAL).events.filter(e=>e.type!=='subject');
+  assert.deepEqual(land,tonight,name);
+ }
+});
+test('GUARD landing-B 7: nothing waiting, a Linga conversation left part way, no learner: Select opens the front door as before',()=>{
+ const {tvKey}=keys();
+ assert.deepEqual(tvKey(desk({focus:0}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'tonight',focus:0}]);
+ assert.deepEqual(tvKey(desk({focus:0,learner:{id:'jakub',name:'Jakub'},conversation:talk}),'select',LOCAL).events,[{type:'subject',subject:'english'},{type:'nav',screen:'linga',focus:0}]);
+ assert.deepEqual(tvKey(desk({focus:0,learner:null,practice:marked}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}]);
+ assert.deepEqual(tvKey(desk({focus:2}),'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:0}],'no reading anywhere: the first lens');
 });
 
 test('landing 4: Back from each app, the switcher and the pairing screen lands on the object it came from',()=>{

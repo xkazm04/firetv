@@ -162,6 +162,21 @@ test('case 5: on the recap Left/Right walk the tiles then the desk, and Select o
  assert.deepEqual(tvKey(j,'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'essay.at',n:null},{type:'nav',screen:'forensic',focus:0}]);
 });
 
+test('landing-B 6: the recap tile and the landing open the same screen on the same focus, for every app that has something waiting',()=>{
+ const {tvKey}=keys();
+ const paper={topic:'linear-two-step',items:[{n:1,question:'2x + 3 = 11'}]};
+ const snapped={id:'p1',subject:'maths',title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
+ const read=[{at:TODAY(19),kind:'writing',label:'Argument',detail:'1 of 3 sentences to fix'}];
+ const states=[['maths',0,{practice:marked}],['maths',0,{practice:paper}],['maths',0,{practice:null,pages:[snapped]}],['essay',2,{essay:reading}],['essay',2,{essay:null,history:read}]];
+ for(const [app,focus,patch] of states){
+  const base={practice:null,essay:null,history:[],...patch};
+  const land=tvKey(session({...base,screen:'landing',focus}),'select',LOCAL).events;
+  const tile=tvKey(session({...base,screen:'recap',focus}),'select',LOCAL).events;
+  assert.deepEqual(tile,land,`${app} ${JSON.stringify(Object.keys(patch))}`);
+  assert.equal(land[0].subject,app);
+ }
+});
+
 test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema and Jakub - and no key claims a send',()=>{
  const {tvKey}=keys(),{reduce,fresh}=store();
  const home=[{type:'nav',screen:'landing'}];

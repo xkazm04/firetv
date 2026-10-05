@@ -145,6 +145,25 @@ async function frame(page, label) {
       await press(page, 'ArrowLeft'); await page.keyboard.press('Enter');
       await page.waitForSelector('[data-role="desk-zoom"][data-app="place"]', { timeout: 500 });
       await waitScreen(page, (s) => s.screen === 'learner');
+
+      // ---- landing-B: a marked set waiting - one Select plays the hand-off, then opens the sheet, not Tonight
+      await desk();
+      const items = [{ n: 1, question: '2x + 3 = 11' }, { n: 2, question: '5x - 4 = 21' }, { n: 3, question: '3x + 7 = 1' }];
+      await event({ type: 'practice.set', practice: { topic: 'linear-two-step', items, marked: false } });
+      await event({ type: 'practice.marked', items: items.map((i, k) => ({ ...i, studentAnswer: 'x = 4', verdict: k === 1 ? 'wrong' : 'right' })) });
+      await event({ type: 'nav', screen: 'landing', focus: -1 }); await open();
+      assert.equal(await lit(page), 'maths', 'the light rests on the marked set');
+      const w0 = Date.now(); await page.keyboard.press('Enter');
+      await page.waitForSelector('[data-role="desk-zoom"]', { timeout: 500 });
+      const onSheet = await waitScreen(page, (s) => s.screen !== 'landing');
+      const w1 = Date.now() - w0;
+      assert.ok(w1 >= 450 && w1 < 1800, `the hand-off plays before the sheet opens (${w1}ms)`);
+      assert.equal(onSheet.s.screen, 'sheet', 'one Select lands on the marked sheet');
+      await page.waitForTimeout(400); await page.keyboard.press('Backspace');
+      await waitScreen(page, (s) => s.screen !== 'sheet'); assert.equal((await current()).screen, 'tonight', 'Back from the sheet is Tonight');
+      await page.waitForTimeout(400); await page.keyboard.press('Backspace');
+      await waitScreen(page, (s) => s.screen === 'landing'); await page.waitForTimeout(400);
+      assert.equal(await lit(page), 'maths', 'and Back again is the desk, the light on Math Buddy');
       await ctx.close();
     }
 
