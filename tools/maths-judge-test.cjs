@@ -1,0 +1,127 @@
+/**
+ * Math Buddy: one item kind, one judge. The marker, the explainer and the hint read the same registry (rules/kinds), and
+ * a single answer can be judged with no set (judgeItem). Run with npm test in desk/ (directly: node tools/maths-judge-test.cjs).
+ * No model is called - the vision and text engines are stubbed at the provider seam (the module export, as
+ * maths-rules-test.cjs does); a disposable data directory under the OS temp dir, never desk/data.
+ *
+ * Cases 1-8 are the card's acceptance (math-buddy-A). Case 6 is a GUARD: green before the change by design.
+ */
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
+const {test,after}=require('node:test');
+const root=path.resolve(__dirname,'../desk');
+let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
+const resolve=Module._resolveFilename;
+Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
+require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-maths-judge-'));
+const src=(f)=>path.join(root,'src',f);
+const engine=require(src('lib/engines/text.ts')),eye=require(src('lib/engines/vision.ts'));
+let seenText=[],seenVision=[];
+let answerText=()=>{throw new Error('text: no model in this case');};
+let looked=()=>{throw new Error('vision: no model in this case');};
+engine.text=(req)=>{seenText.push(req);return answerText(req);};
+eye.vision=(req)=>{seenVision.push(req);return looked(req);};
+const {markSet,markTyped}=require(src('lib/desk/mark.ts'));
+const {hint}=require(src('lib/desk/hint.ts'));
+const {getLearner}=require(src('lib/session/learners.ts'));
+const {withheldLine}=require(src('lib/rules/maths.ts'));
+const {voiceOf}=require(src('lib/rules/voice.ts'));
+let K=null;try{K=require(src('lib/rules/kinds.ts'));}catch{}
+const kinds=()=>{assert.ok(K,'rules/kinds.ts exists');return K;};
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
+const reply=(json)=>async()=>({json,provider:'test',ms:1});
+const throwing=(what)=>()=>{throw new Error(`${what}: a typed mark must not call a model`);};
+
+// ------------------------------------------------------------------ a mixed sheet: school, Calculus, linear with no spec
+const TOPIC='frac-add-sub';
+const mixed=()=>({topic:TOPIC,marked:false,items:[
+ {n:1,question:'Work out 3/4 + 1/6',spec:{shape:'compute',expr:'3/4 + 1/6'}},
+ {n:2,question:'Find the derivative of x^2',spec:{shape:'derivative',f:'x^2'}},
+ {n:3,question:'x+3=7'},
+]});
+const STRINGS=['11/12','3x','4'];
+const view=(r)=>r.items.map((i)=>({n:i.n,verdict:i.verdict,slip:i.slip,said:i.said}));
+const counts=(id)=>{const s=getLearner(id).skills[TOPIC];return s?{seen:s.seen,right:s.right}:{seen:0,right:0};};
+
+test('1: a photographed sheet of three kinds is judged item by item: right, wrong, right, three attempts on the record',async()=>{
+ looked=reply({items:STRINGS.map((a,i)=>({n:i+1,studentAnswer:a,studentWorking:''}))});
+ const r=await markSet('img',mixed(),'judge-photo');
+ assert.deepEqual(r.items.map((i)=>i.verdict),['right','wrong','right'],'each item by its own kind, not the whole sheet by the school marker');
+ assert.equal(r.unsure,0);assert.equal(r.landed,true);
+ assert.deepEqual(counts('judge-photo'),{seen:3,right:2});
+});
+
+test('2: the same three strings typed are judged as the photo judges them, with no model',async()=>{
+ looked=reply({items:STRINGS.map((a,i)=>({n:i+1,studentAnswer:a,studentWorking:''}))});
+ const photo=await markSet('img',mixed(),'judge-same-photo');
+ looked=throwing('vision');answerText=throwing('text');
+ const typed=markTyped(STRINGS,mixed(),'judge-same-typed');
+ assert.deepEqual(view(typed),view(photo),'verdict, slip and said agree');
+ assert.deepEqual(counts('judge-same-typed'),counts('judge-same-photo'),'the same seen and right per topic on the record');
+ assert.deepEqual(counts('judge-same-typed'),{seen:3,right:2});
+});
+
+test('3: kindOfSpec, kindOfQuestion and kindOfTopic are the one place the kind is decided',()=>{
+ const k=kinds();
+ assert.equal(k.kindOfSpec({shape:'compute',expr:'1/2+1/3'}),'school');
+ assert.equal(k.kindOfSpec({shape:'derivative',f:'x^2'}),'calc');
+ assert.equal(k.kindOfSpec(undefined),'linear');assert.equal(k.kindOfSpec({shape:'nope'}),'linear');
+ assert.equal(k.kindOfQuestion('Work out 3/4 - 1/6'),'school');
+ assert.equal(k.kindOfQuestion('Find the derivative of x^2'),'calc');
+ assert.equal(k.kindOfQuestion('Solve for x: 2x + 3 = 11'),'linear');
+ // by topic: the two inline pathOfTopic tests of items.ts
+ assert.equal(k.kindOfTopic('frac-add-sub'),'school');assert.equal(k.kindOfTopic('linear-two-step'),'linear');
+ assert.equal(k.kindOfTopic('no-such-topic'),'linear');
+ const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
+ assert.equal(k.kindOfTopic(CALC1_SPINE[0].id),'calc');
+});
+
+const ask=(q,opts)=>{seenText=[];answerText=reply({hint:'Look at the first term.',what_to_try_next:'Write the question on your paper.'});return hint('maths',q,opts).then((r)=>({r,system:seenText[0].system}));};
+
+test('4: a school-path learner\'s derivative question gets the Calculus stance, not the linear-equations one',async()=>{
+ const {system}=await ask('Find the derivative of x^2 + 3x',{path:'school',age:13});
+ assert.match(system,/Calculus I/);assert.doesNotMatch(system,/factoring and linear-equations unit/);
+ assert.ok(system.includes(voiceOf('maths',13).manner),'the voice stays the learner\'s');
+});
+
+test('5: a Calculus-path learner\'s fractions task gets the unit stance, in the teen voice of the path',async()=>{
+ const {system}=await ask('Work out 3/4 - 1/6',{path:'calc1'});
+ assert.match(system,/Add and subtract fractions/);assert.doesNotMatch(system,/Calculus I/);
+ assert.ok(system.includes(voiceOf('maths',undefined).who),'the calc1 learner\'s teen voice');
+});
+
+test('6: GUARD - a linear task takes the path\'s stance, and a double leak still gives the withheld line and an empty next',async()=>{
+ const {system}=await ask('Solve for x: 2x + 3 = 11',{path:'calc1'});
+ assert.match(system,/Calculus I/);
+ const school=await ask('Solve for x: 2x + 3 = 11',{path:'school',age:13});
+ assert.match(school.system,/factoring and linear-equations unit/);
+ seenText=[];answerText=reply({hint:'The answer is x = 4.',what_to_try_next:'Write x = 4.'});
+ const r=await hint('maths','Solve for x: 2x + 3 = 11',{path:'calc1'});
+ assert.equal(seenText.length,2,'one re-ask');assert.equal(r.hint,withheldLine('Solve for x: 2x + 3 = 11'));assert.equal(r.next,'');
+});
+
+test('7: judgeItem judges one answer with no set, no engine and no learner record',()=>{
+ const k=kinds();
+ looked=throwing('vision');answerText=throwing('text');
+ const before=fs.existsSync(path.join(process.env.DESK_DATA_DIR,'learners.json'))?fs.readFileSync(path.join(process.env.DESK_DATA_DIR,'learners.json'),'utf8'):null;
+ const ctx={topic:'frac-add-sub',system:'uk'};
+ const school={n:1,question:'Work out 3/4 + 1/6',spec:{shape:'compute',expr:'3/4 + 1/6'}};
+ assert.equal(k.judgeItem(school,{studentAnswer:'11/12'},ctx).verdict,'right');
+ assert.equal(k.judgeItem(school,{studentAnswer:'5/10'},ctx).verdict,'wrong');
+ assert.equal(k.judgeItem(school,{studentAnswer:''},ctx),null,'a blank asks');
+ const calc={n:2,question:'Find the derivative of x^2',spec:{shape:'derivative',f:'x^2'}};
+ assert.equal(k.judgeItem(calc,{studentAnswer:'3x'},{topic:'calc1-derivative'}).verdict,'wrong');
+ assert.equal(k.judgeItem(calc,{studentAnswer:'2x'},{topic:'calc1-derivative'}).verdict,'right');
+ assert.equal(k.judgeItem({n:3,question:'x+3=7'},{studentAnswer:'4'},{topic:'linear-one-step'}).verdict,'right');
+ assert.equal(k.judgeItem({n:3,question:'x+3=7'},{studentAnswer:'x = 5'},{topic:'linear-one-step'}).verdict,'wrong');
+ assert.equal(k.judgeItem({n:3,question:'x+3=7'},{studentAnswer:'five'},{topic:'linear-one-step'}),null);
+ const after=fs.existsSync(path.join(process.env.DESK_DATA_DIR,'learners.json'))?fs.readFileSync(path.join(process.env.DESK_DATA_DIR,'learners.json'),'utf8'):null;
+ assert.equal(after,before,'learners.json untouched');
+});
+
+test('8: mark.ts lands from one place, builds no byN map and counts no unsure by hand',()=>{
+ const text=fs.readFileSync(src('lib/desk/mark.ts'),'utf8').split('\n').filter((l)=>!/^\s*(\/\/|\*|\/\*)/.test(l)).join('\n');
+ assert.equal((text.match(/\bland\(/g)||[]).length,2,'the definition and one call');
+ assert.equal((text.match(/\bbyN\b/g)||[]).length,0);
+ assert.equal((text.match(/unsure\+\+/g)||[]).length,0);
+});
