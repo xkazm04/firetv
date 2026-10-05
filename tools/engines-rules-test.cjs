@@ -146,3 +146,81 @@ test('case 12: thinking:false gives the claude child MAX_THINKING_TOKENS=0; any 
   assert.equal(childEnv({thinking:false}).PATH??childEnv({thinking:false}).Path,process.env.PATH??process.env.Path,'the rest of the environment is kept');
  }finally{if(prior!==undefined)process.env.MAX_THINKING_TOKENS=prior;}
 });
+
+// One call core (engines/call.ts): a deadline, an abort signal and a typed error for every provider.
+const KINDS=['text','vision','embed','speak','listen'];
+const ASK={
+ text:(o)=>load('engines/text.ts').text({system:'s',prompt:'p',...o}),
+ vision:(o)=>load('engines/vision.ts').vision({imageBase64:'aGk=',prompt:'p',...o}),
+ embed:(o)=>load('engines/embed.ts').embed({texts:['a'],...o}),
+ speak:(o)=>load('engines/voice.ts').speak({text:'hello',...o}),
+ listen:(o)=>load('engines/listen.ts').listen(new Blob(['x']),'a.webm',o),
+};
+const ANSWER={text:{hint:'x'},vision:{items:[]},embed:[[1]],speak:Buffer.from('x'),listen:{text:'hi'}};
+const sentinel=(ms)=>new Promise((_,rej)=>setTimeout(()=>rej(new Error(`still pending after ${ms} ms: the call hung`)),ms).unref());
+const within=(p,ms=1000)=>Promise.race([p,sentinel(ms)]);
+
+test('case 13: a provider that never settles ends in an EngineError timeout within the deadline, for all five kinds',async()=>{
+ for(const k of KINDS){
+  reg().useProvider(k,{name:'stub',run:()=>new Promise(()=>{})});
+  const t0=Date.now();
+  await assert.rejects(within(ASK[k]({timeoutMs:25})),(e)=>{assert(e instanceof engineError(),`${k}: an EngineError, got ${e&&e.message}`);assert.equal(e.kind,'timeout',k);assert.equal(e.provider,'stub',k);return true;});
+  assert(Date.now()-t0<1000,`${k} rejected promptly`);
+  reg().resetProviders(k);
+ }
+});
+
+test('case 14: the provider is handed { signal }: aborted after a timeout, not after a fast success',async()=>{
+ for(const k of KINDS){
+  let seen;
+  reg().useProvider(k,{name:'stub',run:(req,ctx)=>{seen=ctx&&ctx.signal;return new Promise(()=>{});}});
+  await assert.rejects(within(ASK[k]({timeoutMs:25})),()=>true);
+  assert(seen&&typeof seen.aborted==='boolean',`${k}: run received a signal`);
+  assert.equal(seen.aborted,true,`${k}: aborted on the deadline`);
+  let fast;
+  reg().useProvider(k,{name:'stub',run:async(req,ctx)=>{fast=ctx&&ctx.signal;return {raw:ANSWER[k]};}});
+  await within(ASK[k]({timeoutMs:5000}));
+  assert(fast&&typeof fast.aborted==='boolean',`${k}: run received a signal on success`);
+  assert.equal(fast.aborted,false,`${k}: not aborted after success`);
+  reg().resetProviders(k);
+ }
+});
+
+test('case 15: a provider that throws a plain Error is an EngineError exit with the first line; an EngineError passes through untouched',async()=>{
+ for(const k of KINDS){
+  reg().useProvider(k,{name:'stub',run:async()=>{throw new Error('spawn piper ENOENT\n  at x');}});
+  await assert.rejects(within(ASK[k]({})),(e)=>{assert(e instanceof engineError(),`${k}: an EngineError, got ${e&&e.constructor&&e.constructor.name}`);assert.equal(e.kind,'exit',k);assert.equal(e.provider,'stub',k);assert.equal(e.message,'spawn piper ENOENT',k);return true;});
+  const typed=new (engineError())('unreachable','stub','x');
+  reg().useProvider(k,{name:'stub',run:async()=>{throw typed;}});
+  await assert.rejects(within(ASK[k]({})),(e)=>{assert.equal(e,typed,`${k}: the same object`);assert.equal(e.kind,'unreachable',k);return true;});
+  reg().resetProviders(k);
+ }
+});
+
+test('case 16: deadlineFor takes the request, else the kind\'s default, floored by the provider\'s own',()=>{
+ const {DEADLINE_MS,deadlineFor}=load('engines/call.ts');
+ for(const k of KINDS)assert(Number.isFinite(DEADLINE_MS[k])&&DEADLINE_MS[k]>0,`${k} has a deadline`);
+ assert.equal(deadlineFor('text',{name:'p'},{}),DEADLINE_MS.text);
+ assert.equal(deadlineFor('text',{name:'p',deadlineMs:240000},{timeoutMs:90000}),240000);
+ assert.equal(deadlineFor('vision',{name:'p'},{timeoutMs:5000}),5000);
+ assert.equal(load('engines/codex.ts').codexCli.deadlineMs,240000);
+ assert.equal(load('engines/text.ts').claudeCli.deadlineMs,undefined);
+ assert.equal(deadlineFor('text',load('engines/codex.ts').codexCli,{timeoutMs:90000}),240000,'codex floor survives the move');
+});
+
+test('case 17: a shorten re-ask that never settles ends in the first shape rejection, after exactly two provider calls',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1)return {raw:{topics:[{why:'x'.repeat(25),skill:'ask'}]}};return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ await assert.rejects(within(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true,timeoutMs:30})),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ assert.equal(calls,2);
+});
+
+test('GUARD case 18: a stub that answers at once resolves with its provider and ms for all five kinds',async()=>{
+ for(const k of KINDS){
+  reg().useProvider(k,{name:'stub',run:async()=>({raw:ANSWER[k]})});
+  const r=await within(ASK[k]({}));
+  assert.equal(r.provider,'stub',k);assert.equal(typeof r.ms,'number',k);
+  reg().resetProviders(k);
+ }
+});
