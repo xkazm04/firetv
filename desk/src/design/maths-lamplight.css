@@ -100,6 +100,9 @@
 .maths-tv .mb-tm[data-v="wrong"] svg path { stroke: rgba(217, 116, 26, .6); stroke-width: 3.5; }
 .maths-tv .mb-tm[data-v="unsure"] svg path { stroke: rgba(143, 184, 255, .7); stroke-width: 3; stroke-dasharray: 6 6; }
 .maths-tv .mb-tm[data-v="right"] span { transform: translateX(-9px); }
+.maths-tv .mb-tm[data-second="right"] svg + svg path { stroke: var(--mb-amber-2); stroke-width: 4.5; }
+.maths-tv .mb-tm[data-second="wrong"] svg + svg { transform: rotate(21deg) scale(1.12); transform-origin: 50% 50%; }
+.maths-tv .mb-tm[data-second="wrong"] svg + svg path { stroke: rgba(169, 83, 14, .8); stroke-width: 3; }
 .maths-tv .mb-tm[data-cur="true"] { color: var(--mb-cream-hi); transform: scale(1.18); }
 .maths-tv .mb-tm[data-cur="true"] svg path { stroke: var(--mb-amber-2); stroke-width: 4.5; }
 
@@ -148,6 +151,12 @@
 .maths-tv .mb-item .num .nr { position: absolute; left: 50%; top: 50%; width: 64px; height: 62px; margin: -31px 0 0 -32px; overflow: visible; }
 .maths-tv .mb-item .num .nr path { fill: none; stroke: var(--mb-pen); stroke-width: 4; stroke-linecap: round; }
 .maths-tv .mb-item[data-v="wrong"] .num { color: rgba(39, 48, 74, .8); }
+/* the second go (challenge-2026-10-05 math-buddy-B): the ring is the record of where it broke and stays; a second go that held
+   wears the earned tick beside it, one that missed a second stroke of the pen round the number. A picture, no words. */
+.maths-tv .mb-item .num[data-second="right"] .tick.second { position: absolute; left: 50%; top: 50%; width: 40px; height: 32px; margin: -38px 0 0 16px; }
+.maths-tv .mb-item .num[data-second="right"] .tick.second path { stroke: var(--mb-amber-2); stroke-width: 6; }
+.maths-tv .mb-item .num[data-second="wrong"] .nr.n2 { transform: rotate(21deg) scale(1.14); }
+.maths-tv .mb-item .num[data-second="wrong"] .nr.n2 path { stroke: var(--mb-pen-d); stroke-width: 3.5; }
 /* a right item folds to its question: the print a step smaller and lighter, so the wrong ones lead (the winner's .item.right rule) */
 .maths-tv .mb-item[data-v="right"] .num { color: rgba(39, 48, 74, .42); }
 .maths-tv .mb-item[data-v="right"] .mb-row.q .rin { font-size: 40px; }

@@ -76,6 +76,8 @@ export default function Phone() {
   const [micOk, setMicOk] = useState(true);
   /** The desk's answer to "how did you get there", in text — the TV speaks its own line. */
   const [reply, setReply] = useState("");
+  /** The ringed item's one typed second go (route /api/second): what is typed. The desk never says on the phone how it went. */
+  const [again, setAgain] = useState("");
   /** What the desk noticed tonight, read once on the way out. */
   const [memory, setMemory] = useState<string[] | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
@@ -280,7 +282,7 @@ export default function Phone() {
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
   // a new item on the walk is a new question: last time's transcript and answer do not belong to it
-  useEffect(() => { setHeard(""); setReply(""); }, [s?.walkIx]);
+  useEffect(() => { setHeard(""); setReply(""); setAgain(""); }, [s?.walkIx]);
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
@@ -293,6 +295,17 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
+    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+  };
+  /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
+  const sendSecond = async () => {
+    const it = s?.practice?.items[s.walkIx], a = again.trim(); if (!it || !a || busy) return;
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    setBusy(true); setMsg("");
+    try {
+      const r = await call("/api/second", { n: it.n, answer: a });
+      const j = await r.json().catch(() => ({} as { error?: string }));
+      if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
     } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /** Memory is written on the way out — and is never allowed to hold the door shut. */
@@ -460,6 +473,18 @@ export default function Phone() {
           return <div className="pscreen"><h3>Practice</h3>
             <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
             <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
+            {item?.verdict === "wrong" && (item.second
+              ? <p data-role="second-sent">Your second go is on the TV.</p>
+              : <div className="ptalk" data-role="second-go">
+                  <b>Try it again</b>
+                  <p>Work it on paper again, then type just your answer. You get one go.</p>
+                  <div className="field">
+                    <input type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="send"
+                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${item.n}`}
+                      onChange={(e) => setAgain(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void sendSecond(); } }} />
+                    <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
+                  </div>
+                </div>)}
             {asking && <div className="ptalk">
               <b>How did you get there?</b>
               {reply ? <><p className="said">{reply}</p><p>The TV has it.</p></> : null}

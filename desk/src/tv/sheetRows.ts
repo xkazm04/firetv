@@ -49,7 +49,7 @@ export function firstToLook(items: readonly PracticeItem[]): number {
  */
 export function secondLine(it: Pick<PracticeItem, "verdict" | "second">): string | null {
   if (it.verdict !== "wrong" || !it.second) return null;
-  return it.second === "right" ? "That one holds now. The ring stays, so you can see where it broke." : "Not yet. Say on the phone how you got there.";
+  return it.second === "right" ? "That one holds now. The ring stays." : "Not yet. Tell the desk how you got there.";
 }
 
 /** The tile index a stop names, or null for an action. */

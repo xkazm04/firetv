@@ -19,7 +19,7 @@ import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, 
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
-import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
+import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
@@ -230,7 +230,7 @@ function fitRows(paper: HTMLElement): Array<{ h: number; min: number; px: number
 }
 
 /** The ring every teacher draws round an item number. */
-const NumRing = () => <svg className="nr" viewBox="0 0 64 62" aria-hidden="true"><path d="M14 16 C 22 4, 48 4, 55 18 C 62 34, 50 54, 32 55 C 14 56, 4 42, 8 26 C 10 20, 14 16, 22 13" /></svg>;
+const NumRing = ({ again }: { again?: boolean }) => <svg className={again ? "nr n2" : "nr"} viewBox="0 0 64 62" aria-hidden="true"><path d="M14 16 C 22 4, 48 4, 55 18 C 62 34, 50 54, 32 55 C 14 56, 4 42, 8 26 C 10 20, 14 16, 22 13" /></svg>;
 const MarginArrow = () => <svg className="marrow" viewBox="0 0 110 40" aria-hidden="true"><path d="M12 16 C 36 8, 62 26, 92 20 M76 5 L93 20 L76 34" /></svg>;
 
 /** One line of the learner's working on the paper: whole squares tall, the pen inside it, a tick after it. */
@@ -473,7 +473,7 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
   const head = (ex: string) => <div className="mb-shead"><span className="ex">{ex}</span><span className="who">{s.learner?.name}</span></div>;
   if (cont.go === "sheet" && p) {
     const name = topicName(p.topic);
-    const first = p.items.findIndex((it) => it.verdict !== "right");
+    const first = firstToLook(p.items);
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(name)}
         <div className="mb-boxes">{p.items.slice(0, 6).map((it, i) => {
@@ -703,7 +703,7 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
   return (
     <div className="mb-tally" aria-label="the set">
       {items.map((it, i) => { const v = it.verdict ?? "unsure"; return (
-        <div key={it.n} className="mb-tm" data-v={v} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}<span>{it.n}</span></div>
+        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{it.n}</span></div>
       ); })}
     </div>
   );
@@ -715,7 +715,7 @@ function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?
   const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
   const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
   const said = it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one.");
-  const next = v === "wrong" ? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
+  const next = v === "wrong" ? secondLine(it) ?? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
       <div className="mb-khead"><div className="mb-kick">{KIND_ICON[kind]}{word}</div></div>
@@ -753,7 +753,7 @@ function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem
   }
   return (
     <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined}>
-      <div className="num">{it.n}{v !== "right" && <NumRing />}</div>
+      <div className="num" data-second={it.second}>{it.n}{v !== "right" && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
       <PrintRow text={it.question} tick={v === "right" && !open} />
       {rows}
       {focused && okLabel && <div className="ok"><b>OK</b><span className="mb-lab">{okLabel}</span></div>}
@@ -772,9 +772,10 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
   const pan = usePaper(`${ix}|${p?.items.length}`);
   if (!p || !p.marked) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No marked set on the desk" /></h1></>;
   const name = topicName(p.topic);
-  const right = tiles.filter((x) => x.verdict === "right").length, look = tiles.length - right;
+  // the record is the first attempt: "right" is what marking said; a fixed item (a held second go) is counted out of "to look at" only
+  const right = tiles.filter((x) => x.verdict === "right").length, fixed = tiles.filter((x) => x.second === "right").length, look = lookCount(p.items);
   const tile = ix === null ? undefined : tiles[ix];
-  const curIx = ix ?? Math.min(tiles.length - 1, Math.max(0, p.items.findIndex((x) => x.verdict !== "right")));
+  const curIx = ix ?? Math.min(tiles.length - 1, Math.max(0, firstToLook(p.items)));
   return (<>
     <Top s={s} crumb={name} right={<div className="mb-status"><Tally items={p.items} cur={ix} /><Chips s={s} phone={false} clock={false} /></div>} />
     <div className="mb-win">
@@ -797,7 +798,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-acts">
       <Act icon={ICON.six} label="Six more" focused={at === "more"} primary />
       <Act icon={ICON.away} label="Put the sheet away" focused={at === "away"} />
-      <div className="mb-updn"><span>{right} right · {look} to look at</span></div>
+      <div className="mb-updn"><span>{right} right · {fixed ? `${fixed} fixed · ` : ""}{look} to look at</span></div>
     </div>
   </>);
 }
