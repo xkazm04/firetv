@@ -286,3 +286,20 @@ test('case 7b: a duplicated recurs row cannot carry one prior finding forward tw
   assert.equal(fresh.length, 2);
   assert.equal(fresh.filter(f => f.recurs).length, 0, 'P-1 answered twice is not-evaluable, so neither fresh finding restates it');
 });
+
+// ---- case 9
+test('case 9: report.md\'s Metrics section holds one bullet per registry metric, and moment recall is reported', async () => {
+  const dir = path.join(tmp, `recall-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
+  const moments = { correctUseful: 1, total: 2, learnerTurnsWithClearErrors: 8, missedClearErrors: 6 };
+  const result = { ...committed, journeys: [{ ...j, judge: { ...j.judge, metrics: { ...j.judge.metrics, moments } } }], calls: {} };
+  await D().synthesize(dir, 'recall', [result], [], 0);
+  const md = fs.readFileSync(path.join(dir, 'report.md'), 'utf8'), section = md.slice(md.indexOf('## Metrics'), md.indexOf('## Findings by impact'));
+  const bullets = section.split('\n').filter(l => l.startsWith('- **')).map(l => l.match(/^- \*\*([^:]+):\*\*/)[1]);
+  const M = require(path.resolve(__dirname, '../uat/driver/metrics.cjs'));
+  const registry = M.series().filter(s => s.bullet).map(s => s.bullet.name);
+  assert.deepEqual(registry, ['placement', 'judge agreement', 'topic fit', 'pitch', 'moment precision', 'moment recall', 'boundaries']);
+  assert.deepEqual(bullets, [...registry, 'reliability', 'driver coverage'], 'one bullet per registry metric, then the two the driver measures');
+  assert.ok(section.includes('- **moment recall:** 2/8 (25%)'), section);
+  assert.ok(section.includes('- **moment precision:** 1/2 (50%)'), section);
+});
