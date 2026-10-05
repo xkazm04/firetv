@@ -15,7 +15,7 @@ import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
-import { LANDING_REST, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
+import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { prepareStops } from "@/tv/prepareRows";
 
@@ -200,6 +200,21 @@ export function practiceFailed(s: Session, topicId: string | undefined): string 
 }
 /** Where a shared screen (a page, the units) goes home to: Essay Master's lenses for essay work, else Tonight (Linga's, under english). */
 const homeOf = (s: Session, sub: Subject) => sub === "essay" ? { screen: "essaytype" as Screen, focus: readingLens(s) } : { screen: "tonight" as Screen, focus: 0 };
+/**
+ * What resuming an app means, once, for the landing's Select, Tonight's continue card and the recap's tile: open what
+ * the app has waiting. Math Buddy through its continue card (the marked sheet, the set on paper, the snapped page);
+ * Essay Master to the forensic page when the learner's paragraph is on the desk, else the lens home with the lamp on the
+ * lens last read; everything else (nothing waiting, Linga, whose home leads with its own Carry on) to the home.
+ * The caller says which app is open (the subject event); this only says where.
+ */
+function openWaiting(s: Session, app: Subject, o: Out) {
+  const cont = app === "maths" ? continueCard(s) : null;
+  if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
+  else if (cont) o.nav(cont.go, cont.focus);
+  else if (app === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+  else if (app === "essay") o.nav(MODULE_HOME.essay, Math.max(0, LENS_STOPS.findIndex((t) => t.id === essayWaiting(s).lens)));
+  else o.nav(MODULE_HOME[app]);
+}
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
@@ -223,7 +238,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "up") to(stops.indexOf("phone"));
       if (k === "down") to(stops.indexOf("place"));
       // an app opened at a desk no one has sat down at asks who first: its work is somebody's (store.ts NEEDS_LEARNER)
-      if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); o.nav(MODULE_HOME[at]); }
+      if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); openWaiting(s, at, o); }
     }
   },
   pair: (s, k, _, o) => { if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); } },
@@ -239,11 +254,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu") { o.ev({ type: "subject", subject: "maths" }); o.nav("units", unitsFocus(s)); return; }
     if (k !== "select") return;
     o.ev({ type: "subject", subject: "maths" });
-    const cont = at === "continue" ? continueCard(s) : null;
-    if (cont) {
-      if (cont.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
-      else o.nav(cont.go, cont.focus);
-    } else if (at === "teach") o.nav("topics", topicsFocus(s));
+    if (at === "continue" && continueCard(s)) openWaiting(s, "maths", o);
+    else if (at === "teach") o.nav("topics", topicsFocus(s));
     // Get ready for school opens on its list, the question closed
     else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", 0); }
     else { const pi = s.pages.findIndex((p) => p.subject === "maths");
@@ -416,13 +428,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back" || (k === "select" && (at === "desk" || !at))) { o.ev({ type: "nav", screen: "landing" }); return; }
     if (k !== "select" || !at || at === "desk") return;
     o.ev({ type: "subject", subject: at });
-    if (at === "maths") {
-      const cont = continueCard(s);
-      if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
-      else if (cont) o.nav(cont.go, cont.focus);
-      else o.nav(MODULE_HOME.maths);
-    } else if (at === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
-    else o.nav(MODULE_HOME[at]);
+    openWaiting(s, at, o);
   },
 };
 

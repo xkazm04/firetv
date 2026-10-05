@@ -106,8 +106,10 @@ a blueprint look kept and locked off until product splits the landing by age.
 switcher or pairing (light on the object it came from); `joined`'s Select or Back and the recap's desk (light at rest).
 *D-pad:* Left/Right along the shelf of apps; Up to the phone (top right) while it is unpaired; Down to Someone else
 (bottom right), and from there Up back to the app above it (Down or Left from the phone goes back to the last app);
-Select on an app plays the hand-off into its colours, then opens its home (`tonight` for Math Buddy, `linga`,
-`essaytype`) after a `subject` event; Select on Someone else → `learner`, on the unpaired phone → `pair` (both with
+Select on an app plays the hand-off into its colours, then opens what the app has waiting (`openWaiting` in
+`desk/src/tv/keys.ts`, the one opener Tonight's continue card and the recap share: Math Buddy's continue card - the marked
+sheet, the set on paper, the snapped page; Essay Master's `forensic` when the paragraph is the learner's, else `essaytype`
+with the light on the lens last read), else its home (`tonight` for Math Buddy, `linga`, `essaytype`), after a `subject` event; Select on Someone else → `learner`, on the unpaired phone → `pair` (both with
 `from: landing`); the *Continue as ...* button is not a stop, it names what Select does; Back brings the light home to
 the CONTINUE app (the phone while none is paired and nothing waits); **Menu ends tonight** wherever the light is -
 `session.end` → `recap`, and the memory is written (`/api/memory`), as the phone's End session does.
@@ -148,8 +150,8 @@ Math Buddy's marked sets as ticks and rings (a dashed ring where the desk was no
 (second hints ringed); Linga's conversations as marks sized by their replies; Essay Master's readings as arrows,
 the ones to fix reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
 Left/Right walk the tiles, then **"Back to the desk"**. Select on a tile opens what that app still has on the desk
-(Math Buddy's continue card, else `tonight`; Essay Master's reading → `forensic` when it is this learner's, else
-`essaytype`; Linga → `linga`); the desk (and Back) is the landing at rest. The parent's copy is the phone's Recap
+(the same `openWaiting` as the landing's Select: Math Buddy's continue card, else `tonight`; Essay Master's reading →
+`forensic` when it is this learner's, else `essaytype` on the lens last read; Linga → `linga`); the desk (and Back) is the landing at rest. The parent's copy is the phone's Recap
 tab, shown as a chip, not a button.
 *Feeds:* history, englishLearning.sessions, session log (`desk/src/tv/recapRows.ts`). Tests: `tools/tv-recap-test.cjs`.
 
