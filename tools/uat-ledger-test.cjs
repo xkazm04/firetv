@@ -257,3 +257,132 @@ test('case 7 (guard): the per-run plan is unchanged - 7 pairs for the beginners 
   assert.equal(pairCount(R().plan(BEGINNERS)), 7);
   assert.equal(pairCount(R().plan(RECERT)), 26);
 });
+
+// ================================================================ the product each run saw (uat/driver/product.cjs)
+// The ledger says whether the product a finding was seen on has changed: from the run's own stamp (run.json
+// `product`), else from the git commit that first added its findings.json. Never a model call; temp git repos only.
+const REPO = path.resolve(__dirname, '..'), PRODUCT = path.join(UAT, 'driver/product.cjs');
+const P = () => require(PRODUCT);
+const { execFileSync } = require('node:child_process');
+const git = (cwd, ...args) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@t', '-c', 'core.autocrlf=false', '-c', 'commit.gpgsign=false', ...args], { cwd, encoding: 'utf8' }).trim();
+function tempRepo() {
+  const dir = fs.mkdtempSync(path.join(tmp, 'repo-'));
+  git(dir, 'init', '-q');
+  return dir;
+}
+const put = (repo, rel, text) => { const p = path.join(repo, rel); fs.mkdirSync(path.dirname(p), { recursive: true }); fs.writeFileSync(p, text); };
+const commitAll = (repo, msg) => { git(repo, 'add', '-A'); git(repo, 'commit', '-q', '-m', msg); return git(repo, 'rev-parse', 'HEAD'); };
+const finding = patch => ({ id: 'F-1', type: 'quality-gap', character: 'tomas-9', journey: 'J3', severity: 'major', rank: 12, title: 'a gap', resolution: 'open', recurrence: 1, ...patch });
+const writeRun = (runsDir, name, rows, runJson) => {
+  const d = path.join(runsDir, name); fs.mkdirSync(d, { recursive: true });
+  fs.writeFileSync(path.join(d, 'findings.json'), JSON.stringify(rows));
+  if (runJson) fs.writeFileSync(path.join(d, 'run.json'), JSON.stringify(runJson));
+};
+const STUBS = ['desk/src/a.ts', 'desk/src/b.ts', 'desk/src/c.ts'];
+
+test('product case 1: surface() lists the desk/src files the driver loads, sorted and repo-relative, the same on a second call', () => {
+  const files = P().surface();
+  assert.ok(files.length >= 40, `${files.length} files`);
+  for (const f of ['desk/src/lib/english/view.ts', 'desk/src/english/LingaPhone.tsx', 'desk/src/lib/english/placement.ts']) assert.ok(files.includes(f), f);
+  assert.deepEqual(files, [...files].sort());
+  assert.ok(files.every(f => f.startsWith('desk/src/') && !f.includes('\\')), 'repo-relative with forward slashes');
+  assert.ok(files.every(f => !f.includes('node_modules') && !f.startsWith('desk/data')));
+  assert.ok(files.every(f => fs.existsSync(path.join(REPO, f))));
+  assert.deepEqual(P().surface(), files);
+});
+
+test('product case 2: stampOf() gives the HEAD commit and the git blob of every file; an edit makes it dirty and moves exactly that blob', () => {
+  const repo = tempRepo();
+  STUBS.forEach((f, i) => put(repo, f, `export const v${i} = ${i};\n`));
+  const c1 = commitAll(repo, 'c1');
+  const s1 = P().stampOf(repo, STUBS);
+  assert.equal(s1.commit, c1);
+  assert.equal(s1.dirty, false);
+  assert.deepEqual(Object.keys(s1.files), STUBS);
+  for (const f of STUBS) assert.equal(s1.files[f], git(repo, 'hash-object', f), f);
+  put(repo, STUBS[1], 'export const v1 = 100;\n');
+  const s2 = P().stampOf(repo, STUBS);
+  assert.equal(s2.commit, c1);
+  assert.equal(s2.dirty, true);
+  assert.deepEqual(STUBS.filter(f => s2.files[f] !== s1.files[f]), [STUBS[1]]);
+  assert.equal(s2.files[STUBS[1]], git(repo, 'hash-object', STUBS[1]));
+});
+
+test('product case 4: a run with no stamp is seen at the commit that first added its findings.json; changed lists the files edited since', () => {
+  const repo = tempRepo(), runs = path.join(repo, 'uat/runs');
+  STUBS.forEach((f, i) => put(repo, f, `export const v${i} = ${i};\n`));
+  writeRun(runs, 'R', [finding()]);
+  const c1 = commitAll(repo, 'c1');
+  put(repo, STUBS[0], 'export const v0 = 10;\n'); put(repo, STUBS[2], 'export const v2 = 20;\n');
+  const c2 = commitAll(repo, 'c2');
+  const led = L().ledger(runs, { repo, files: STUBS });
+  assert.equal(led.open.length, 1);
+  assert.deepEqual(led.open[0].seen, { commit: c1, source: 'git' });
+  assert.deepEqual([...led.open[0].changed].sort(), [STUBS[0], STUBS[2]]);
+  assert.equal(led.open[0].productState, 'aged');
+  assert.deepEqual(led.product.counts, { current: 0, aged: 1, unknown: 0 });
+  // a gap whose newest row sits in a run stamped at HEAD is seen on the current product
+  writeRun(runs, 'S', [finding({ id: 'F-2', journey: 'J4', title: 'a newer gap' })], { started: '2999-01-01T00:00:00.000Z', product: P().stampOf(repo, STUBS) });
+  const led2 = L().ledger(runs, { repo, files: STUBS });
+  const fresh = led2.open.find(g => g.title === 'a newer gap');
+  assert.deepEqual(fresh.changed, []);
+  assert.equal(fresh.productState, 'current');
+  assert.equal(fresh.seen.commit, c2);
+  assert.deepEqual(led2.product.counts, { current: 1, aged: 1, unknown: 0 });
+});
+
+test('product case 5: a stamped run is read without git; a run with no stamp and no history is unknown, never current', () => {
+  const dir = path.join(tmp, `five-${crypto.randomUUID().slice(0, 8)}`), runs = path.join(dir, 'uat/runs');
+  const current = { commit: 'beef', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/b.ts': 'x2' } };
+  writeRun(runs, 'A-stamped', [finding()], { started: '2026-10-01T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/b.ts': 'old' } } });
+  writeRun(runs, 'B-bare', [finding({ id: 'F-2', journey: 'J4', title: 'no record' })]);
+  const asked = [];
+  const stub = args => { asked.push(args[0]); if (args[0] === 'log') return ''; throw new Error(`git ${args[0]} must not be called`); };
+  const led = L().ledger(runs, { repo: dir, git: stub, files: Object.keys(current.files), current });
+  const a = led.open.find(g => g.title === 'a gap'), b = led.open.find(g => g.title === 'no record');
+  assert.deepEqual(a.seen, { commit: 'c0ffee', source: 'run.json' });
+  assert.deepEqual(a.changed, ['desk/src/b.ts']);
+  assert.equal(b.seen, null);
+  assert.equal(b.changed, null);
+  assert.equal(b.productState, 'unknown');
+  assert.deepEqual(asked, ['log'], 'only the unstamped run asked git, and only for its history');
+  assert.deepEqual(led.product.counts, { current: 0, aged: 1, unknown: 1 });
+  const md = L().statusOf(led);
+  assert.ok(md.split('\n').includes('2 open: 0 seen on the current product, 1 seen before a product change, 1 unknown'), md.slice(0, 600));
+  assert.ok(md.split('\n').find(l => l.includes('no record')).endsWith('product: unknown'));
+});
+
+test('product case 6: OPEN.md leads with the split and every aged row ends with how many of the files changed since; a stamped-at-HEAD row is current and carries no suffix', () => {
+  const files = P().surface(), N = files.length;
+  const current = { commit: 'c'.repeat(40), dirty: false, files: Object.fromEntries(files.map((f, i) => [f, `${String(i).padStart(40, '0')}`])) };
+  const SAME = 3; // three files are byte-identical to the 15 Sep ones
+  const old = f => files.indexOf(f) < SAME ? current.files[f] : `old${files.indexOf(f)}`.padEnd(40, '0');
+  const asked = [];
+  const stub = args => {
+    asked.push(args[0]);
+    if (args[0] === 'log') return 'a'.repeat(40);
+    if (args[0] === 'ls-tree') return files.map(f => `100644 blob ${old(f)}\t${f}`).join('\n');
+    throw new Error(`git ${args[0]}`);
+  };
+  const opts = { repo: REPO, git: stub, files, current };
+  const runs = copyRuns();
+  const led = L().ledger(runs, opts), md = L().statusOf(led);
+  const lines = md.split('\n');
+  assert.ok(lines.includes('186 open in 36 pairs across 5 runs'), 'the existing header stays');
+  assert.ok(lines.includes('186 open: 0 seen on the current product, 186 seen before a product change'), md.slice(0, 600));
+  const rows = lines.filter(l => l.startsWith('- `'));
+  assert.equal(rows.length, 186);
+  for (const r of rows) assert.ok(r.endsWith(`product: ${N - SAME} of ${N} files changed since`), r);
+  assert.ok(N >= 40);
+  // a run stamped at HEAD: counted current, no suffix
+  writeRun(runs, 'zz-now', [finding({ id: 'LT-now-J3-1', character: 'tomas-9', journey: 'J3', title: 'seen just now' })], { started: '2999-01-01T00:00:00.000Z', product: current });
+  const md2 = L().statusOf(L().ledger(runs, opts)), lines2 = md2.split('\n');
+  assert.ok(lines2.includes('187 open: 1 seen on the current product, 186 seen before a product change'), md2.slice(0, 600));
+  const now = lines2.find(l => l.includes('seen just now'));
+  assert.ok(now && !now.includes('product:'), now);
+  // --status: files only, no model call, OPEN.md written beside the runs and carrying the split
+  const n = calls.codex, out = D().statusCommand({ runs, product: opts });
+  assert.equal(calls.codex, n, 'no model call');
+  assert.equal(fs.readFileSync(out.file, 'utf8'), md2);
+  assert.ok(asked.every(a => a === 'log' || a === 'ls-tree'));
+});

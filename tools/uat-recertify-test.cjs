@@ -303,3 +303,55 @@ test('case 9: report.md\'s Metrics section holds one bullet per registry metric,
   assert.ok(section.includes('- **moment recall:** 2/8 (25%)'), section);
   assert.ok(section.includes('- **moment precision:** 1/2 (50%)'), section);
 });
+
+// ================================================================ the product between the two runs (uat/driver/product.cjs)
+const runDir = (name, record, run) => {
+  const d = path.join(tmp, `${name}-${crypto.randomUUID().slice(0, 8)}`);
+  fs.mkdirSync(d, { recursive: true });
+  fs.writeFileSync(path.join(d, 'findings.json'), '[]');
+  fs.writeFileSync(path.join(d, 'tomas-9.json'), JSON.stringify({ character: 'tomas-9', name: 'Tomas', trueBand: 'A1', engine: 'stub', journeys: [record], calls: {} }));
+  if (run) fs.writeFileSync(path.join(d, 'run.json'), JSON.stringify(run));
+  return d;
+};
+const J4 = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')).journeys.find(j => j.id === 'J4');
+const fileMap = (n, moved = []) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`desk/src/f${i}.ts`, moved.includes(i) ? `moved${i}` : `blob${i}`]));
+const INSTRUMENT = { model: 'gpt-6-astra', efforts: { tutor: 'medium', character: 'medium', judge: 'high' }, judgeScreenCap: 900, driver: { 'linga-text.cjs': 'x' } };
+const stamp = (n, moved) => ({ commit: 'c1', dirty: false, files: fileMap(n, moved) });
+/** A before run, and an after run whose tomas-9 J4 stalled: the code verdict drops conditional -> fail. */
+function droppedPair(before, after) {
+  const prior = runDir('before', J4, before && { instrument: INSTRUMENT, product: before });
+  const rerun = path.join(prior, 'recert-1'); fs.mkdirSync(rerun);
+  fs.writeFileSync(path.join(rerun, 'findings.json'), '[]');
+  fs.writeFileSync(path.join(rerun, 'tomas-9.json'), JSON.stringify({ character: 'tomas-9', name: 'Tomas', trueBand: 'A1', engine: 'stub', journeys: [{ ...J4, endedBy: 'budget' }], calls: {} }));
+  if (after) fs.writeFileSync(path.join(rerun, 'run.json'), JSON.stringify({ instrument: INSTRUMENT, product: after }));
+  return { prior, rerun };
+}
+const sectionOf = (md, s) => { const i = md.indexOf(`## ${s}\n`), j = md.indexOf('\n## ', i + 1); return md.slice(i, j < 0 ? undefined : j); };
+
+test('product case 3 (guard): the product lives beside the instrument, so a product change is never an instrument confound', () => {
+  const a = runDir('a', J4, { instrument: INSTRUMENT, product: stamp(63) }), b = runDir('b', J4, { instrument: INSTRUMENT, product: stamp(63, [1, 2]) });
+  assert.equal(R().confounds(a, b).confounds.filter(c => c.kind === 'instrument').length, 0);
+  assert.equal(R().instrumentOf({ model: 'm', judgeScreenCap: 1 }).product, undefined, 'instrumentOf records the instrument only');
+});
+
+test('product case 7: a verdict drop on an unchanged product is confounded as noise; the same drop on a changed one is Regressed and names the files', () => {
+  // identical stamps: noise
+  const same = droppedPair(stamp(63), stamp(63));
+  const md = fs.readFileSync(R().renderRecertify(same.prior, same.rerun), 'utf8');
+  assert.match(sectionOf(md, 'Regressed'), /None\./);
+  const conf = sectionOf(md, 'Confounded - do not read as a regression');
+  assert.ok(conf.includes('product unchanged in 63 files: run-to-run noise'), conf);
+  assert.ok(/tomas-9 J4 verdict conditional -> fail/.test(conf), conf);
+  // two files changed: the drop is Regressed and the row names them
+  const moved = droppedPair(stamp(63), stamp(63, [4, 9]));
+  const md2 = fs.readFileSync(R().renderRecertify(moved.prior, moved.rerun), 'utf8');
+  const reg = sectionOf(md2, 'Regressed');
+  assert.ok(/tomas-9 J4 verdict conditional -> fail/.test(reg), reg);
+  assert.ok(reg.includes('desk/src/f4.ts') && reg.includes('desk/src/f9.ts') && /product changed in 2 of 63 files/.test(reg), reg);
+  assert.equal(sectionOf(md2, 'Confounded - do not read as a regression').includes('run-to-run noise'), false);
+  // no stamp and no git history on either side: the note says the product was not recorded
+  const bare = droppedPair(null, null);
+  const md3 = fs.readFileSync(R().renderRecertify(bare.prior, bare.rerun), 'utf8');
+  assert.ok(sectionOf(md3, 'Confounded - do not read as a regression').includes('product not recorded'), sectionOf(md3, 'Confounded - do not read as a regression'));
+  assert.ok(/tomas-9 J4 verdict conditional -> fail/.test(sectionOf(md3, 'Regressed')), 'an unknown product does not excuse a drop');
+});
