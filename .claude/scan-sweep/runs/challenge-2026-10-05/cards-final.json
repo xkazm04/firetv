@@ -1,0 +1,738 @@
+[
+ {
+  "context": "math-buddy",
+  "host": "math-buddy",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "Fix the ringed one: one typed second go, and the ring wears a tick",
+  "size": "M",
+  "effort": 7,
+  "impact": 8,
+  "risk": 6,
+  "write_set": [
+   "desk/src/lib/session/store.ts",
+   "desk/src/lib/rules/maths.ts",
+   "desk/src/lib/desk/mark.ts",
+   "desk/src/app/api/session/route.ts",
+   "desk/src/tv/sheetRows.ts",
+   "desk/src/maths/MathsTV.tsx",
+   "desk/src/design/maths-lamplight.css",
+   "desk/src/app/phone/page.tsx",
+   "tools/tv-sheet-test.cjs",
+   "tools/maths-tv-test.cjs",
+   "desk/package.json"
+  ],
+  "new_files": [
+   "desk/src/app/api/second/route.ts",
+   "tools/maths-second-test.cjs"
+  ],
+  "shared_surfaces": [
+   "desk/src/lib/session/store.ts (hot: PracticeItem, shown(), Event, reducer, NEEDS_LEARNER; the edit is one field, one event, one case)",
+   "desk/package.json (test:rules gains maths-second-test, appended at the end)"
+  ],
+  "acceptance": [
+   "case 1 (tools/maths-second-test.cjs, rules): secondProblem(item) in rules/maths.ts -> null for an item with verdict 'wrong' and no second; a plain desk sentence for verdict 'right', for verdict 'unsure', and for a wrong item that already has a second (one go, so it can never be guess-and-check)",
+   "case 2 (tools/tv-sheet-test.cjs, reducer): reduce(markedSession, {type:'practice.second', n:2, verdict:'right'}) -> item 2 gains second:'right' while verdict stays 'wrong' and slip, said and slipAt are unchanged; screen, focus and walkIx unchanged; replaying the event with verdict 'wrong' leaves second 'right'; the event for a right item or an unknown n changes nothing; shown() drops a second that is neither 'right' nor 'wrong' (a hand-edited session.json)",
+   "case 3 (maths-second-test, route handler, vision and text engines stubbed to throw): POST /api/second {n:2, answer:'7'} on a marked linear-one-step set whose item 2 ('x-5=2') is wrong -> 200 with body {ok:true} and no verdict word in it; the session then holds second:'right'; the same post with '5' gives second:'wrong'; learners.json (skills, history, digest) is byte-identical before and after",
+   "case 4 (maths-second-test): refusals each give 400 or 409 with a plain desk sentence and change nothing - a blank answer, 'seven' (unreadable), an answer over TYPED_ANSWER_MAX characters, no marked set, an item that is right, an item that already had its go; and an unreadable answer does not spend the go: 'seven' then '7' lands second:'right'",
+   "case 5 (maths-second-test): POST /api/session {type:'practice.second', n:2, verdict:'right'} -> 403 (SERVER_ONLY): a screen can never post a verdict, only the route that checked the answer can",
+   "case 6 (tools/tv-sheet-test.cjs, rows): sheetTiles carries second; firstToLook([right, wrong with second right, wrong]) is 2 and skips the fixed item; with every item right or fixed it is items.length (the Six more stop); lookCount counts a fixed item out, so sheetHead says 'One to look at' when one of two wrong items is fixed",
+   "case 7 (tools/maths-tv-test.cjs, server render of Sheet and Walk): item 2 wrong with second right -> its tally mark and number carry data-second='right', a tick (data-role='maths-tick') and the ring (.nr) are both drawn, and the taped card is at most 25 words; with second wrong -> data-second='wrong', no tick, and the card sends the learner to say how they got there; the stylesheet additions keep the 28 px floor test green",
+   "GUARD case 8 (maths-second-test and tv-sheet-test): with item 2 fixed, continueCard (Tonight's Marked hero), rightLine and mathsEntry still read the first attempt (the same '3 of 6 right', the same digest entry), and a second go never calls recordAttempt (skills[topic].seen unchanged)"
+  ],
+  "premise": [
+   "desk/src/lib/desk/explain.ts:173-181,206 - an explanation on a WRONG item may only rename its slip; 'Its verdict, its pen (slipAt) and the learner record are left as they were'",
+   "desk/src/lib/session/store.ts:525-528 - practice.settle applies a verdict only when the item is 'unsure'; nothing in the reducer or any route lets a wrong item be answered again",
+   "desk/src/maths/MathsTV.tsx:718 and desk/src/maths/working.ts:58-62 - the whole 'next' of a wrong item on the Walk is lookAt(), the sentence 'Look where the pen is.': a pointer, not an action",
+   "desk/src/app/phone/page.tsx:455-470 - on a marked set the phone offers only 'How did you get there?' by voice for a wrong or unsure item, which can rename a slip but never settle a wrong one; the only other road is Six more (a new set, sheet 'more' stop), so the same question never comes back",
+   "desk/src/lib/desk/mark.ts:327-334 - typedSettle(item, answer, topic, system) already judges ONE typed answer for every item kind in code, with no model; it is private, and a wrong item's pen is dropped for a typed answer by design",
+   "desk/src/lib/rules/maths.ts:96-97,104-112 - TYPED_ANSWER_MAX (40) and typedAnswersProblem already bound a typed answer; desk/src/app/api/mark/route.ts:45 refuses a second mark of a set (ALREADY_MARKED)",
+   "desk/src/lib/session/store.ts:158-174 - shown() is a whitelist, so a new item field must be added there or it is dropped on every event; desk/src/app/api/session/route.ts:12-20 lists the events only the desk may raise (a verdict event must be added or a phone could post one)",
+   "desk/src/tv/sheetRows.ts:31-34 plus MathsTV.tsx:476,775-777 - 'first to look at' and 'right / to look at' are derived from verdict !== 'right' in four places, the TV-side tally this card must teach about a fixed item",
+   "precedent: desk/src/lib/desk/essay.ts reviseSentence and EssayTV.tsx:299-303 (the 'was' ghost under a rewritten sentence's arrow) - Essay Master lets a learner fix a flagged sentence and see it hold; Math Buddy's Walk has no equivalent (challenge-2026-09-25 desk-pipelines B built it for essays only)"
+  ],
+  "rollback": "Three commits: test(math-buddy) adds the red cases; feat(math-buddy) adds PracticeItem.second, the event, secondProblem, /api/second and the SERVER_ONLY line (additive: an item without second renders and counts as today); feat(math-buddy) adds the sheet rows, the Lamplight drawing and the phone box. Reverting the last commit hides the second go on screen while the route stays harmless; reverting the series removes it. A session.json written with second on an item loads on an older build because shown() whitelists fields (the field is dropped, the verdict stays).",
+  "gate": "direction",
+  "runner_up": "Check my answer on a homework page: a typed answer on the phone gets a tick or a ring on the paper, decided by code (hint.ts already holds the oracle through its two spec readers and equationOf); bigger reach but it opens guess-and-check on every homework item and the model rules say 'never say whether they are right' (explain.ts:43), so traded for the bounded second go on an already-marked set.",
+  "body": "## Summary\nOn Math Buddy's Walk, a ringed item is a dead end: the pen shows where it broke and the learner can do nothing with that on the desk. Give a wrong item ONE typed second go on the phone; code judges it, the TV draws the result as a picture (the ring now wears a tick) and the record keeps the honest first attempt.\n\n## Description\nToday the loop after a slip is: look where the pen is, rework on paper, then either press Six more (a brand new set; the same question never returns) or describe it by voice, which can only rename the slip. The desk never learns that the learner fixed it, and the learner never learns whether the fix holds. Essay Master already closes this loop for sentences (rewrite in place, the move inks, a ghost arrow shows the before and after); Math Buddy, whose whole pitch is that the pen shows the line, does not.\n\nThe data and the judge are already there. `typedSettle` judges one typed answer for every item kind with no model call; the item carries its slip and pen position; the Lamplight vocabulary already has the ring and the earned tick. The move: a wrong item with no second go may take one typed answer from the phone (`POST /api/second`, `{n, answer}`); code decides (`typedSettle`), an unreadable answer is refused in a desk sentence and does not spend the go; the route raises one server-only event `practice.second {n, verdict}`, which carries a verdict and never the typed answer; the reducer sets `second: 'right' | 'wrong'` once and leaves verdict, slip, pen, history, digest and the learner record exactly as marking wrote them (a second go is practice, not evidence, the same ruling `reviseSentence` makes for essays).\n\nOn the TV nothing asks for typing and nothing new is said: on the Sheet and the Walk a fixed item keeps its ring and pen (the record of where it broke) and gains the earned orange tick on its number and its tally mark; a second go that missed draws a second ring stroke. The taped card carries one short sentence in the same slot. 'To look at' counts and the first-to-look focus skip a fixed item; Tonight's hero, the landing and the recap keep reading the first attempt, so the record and every summary agree.\n\n## Flow\n- Walk on a ringed item: phone shows 'Try it again' (one box, one Send) under the voice prompt, only for a wrong item with no second go.\n- Send -> `/api/second` -> `secondProblem(item)` -> `typedSettle` -> `practice.second` -> the TV redraws: ring plus tick, or a double ring.\n- Back to the sheet: the head reads 'One to look at' instead of 'Two'; focus lands on the next unfixed item.\n- Six more still works as before.\n\n## Expected impact\nThe single most common thing a child does after a marked set (go back to the line and fix it) becomes visible: 4 steps and a lost question become 1 typed answer and one picture, inside the same Walk. It adds the missing half of the pen's promise without a point, a streak or a percentage, never puts an answer or a verdict word on the phone, and the one-go limit keeps it from becoming guess-and-check.\n\n## Evaluation\nClaim: a wrong item takes one code-judged typed second go, drawn as a picture, with the record untouched.\nBefore: 0 of 7 behaviour cases pass (case 8 is a declared GUARD, green before by design); a wrong item has no road to be answered again (store.ts:525-528, explain.ts:177-181).\nAfter: 7 of 7 behaviour cases pass and the guard stays green; the existing tv-sheet, maths-tv, maths-rules, school-marking and phone-panel suites unchanged and green.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: direction (the map's description names the marked sheet and its walk, not a second go; it falls inside STUDY-DESK-SCOPE.md's Check my work, overturned 2026-09-08). Contract consumers of the new item field and event: store.ts (type, shown, reducer, NEEDS_LEARNER), api/session/route.ts (SERVER_ONLY), tv/sheetRows.ts, maths/MathsTV.tsx, app/phone/page.tsx; not touched by design: memory.ts, rules/digest.ts, tv/landingRows.ts, tv/screens.tsx recap (they read the first attempt).",
+  "evidence": "store.ts:525-528 reducer: `shown(e.verdict && it.verdict === \"unsure\" ? {...} : !e.verdict && e.slip && it.verdict === \"wrong\" && slipsFor(topic).some(...) ? { ...it, slip, said, reply } : { ...it, reply })` - a wrong item can take a slip name or a reply, never a verdict. explain.ts:177-181 comment: 'renamed is set only when the item was already wrong ... Its verdict, its pen (slipAt) and the learner record are left as they were.' working.ts:58-62 lookAt returns 'Look where the pen is.' for a slipAt-placed wrong item. phone/page.tsx:459 `asking = !!item && (item.verdict === \"wrong\" || item.verdict === \"unsure\" || !!reply)` gates only the voice box. Steps today to learn whether a correction holds: finish the Walk, Back to the sheet, Down to Six more, Select, wait for a new set (school units are code-written, linear sets are a model call), work six NEW questions, snap or type, wait for marking = 6+ steps and the corrected question is gone; after: type one answer on the phone, read one picture. Four TV-side derivations of the same tally: sheetRows.ts:32, MathsTV.tsx:476, 775, 777. probe context: `typedSettle` is the proven single-item judge (maths school-marking-test.cjs test 11 pins typed == photo for school sets); mark.ts:332 already drops the pen for a typed answer, which is why the second go keeps the first attempt's pen. Never-re-propose check: challenge-2026-09-25 desk-pipelines B ('Rewrite one sentence in place') is Essay only; challenge-2026-09-25 desk-pipelines A moved pen location into rules/maths and did not add an answer-again road; no finding in the prior findings.jsonl titles mentions a second go. Hot files: store.ts is in the write set (one field, one event, one case); tv/keys.ts, tv/screens.tsx and uat/driver/linga-text.cjs are not (no new key: the TV never asks for typing). Wave note: card A rewrites mark.ts and rules go through kinds.ts; run A first, then B imports judgeItem instead of exporting typedSettle (B's mark.ts hunk is one export line and disappears).",
+  "critic": {
+   "verdict": "build",
+   "ambition": 5,
+   "grounding": 5,
+   "falsifiability": 5,
+   "deck_line": "Approve as direction: a ringed item gets one typed second go judged in code and wears a tick when it holds; the first attempt stays the record, no answer shown."
+  },
+  "id": "math-buddy-B",
+  "rank": 40
+ },
+ {
+  "context": "linga",
+  "host": "linga",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "One owner for the phone, and one table for the level check",
+  "size": "M",
+  "effort": 6,
+  "impact": 8,
+  "risk": 6,
+  "write_set": [
+   "desk/src/lib/english/types.ts",
+   "desk/src/lib/english/check.ts",
+   "desk/src/lib/english/conversation.ts",
+   "desk/src/lib/english/view.ts",
+   "desk/src/english/LingaTV.tsx",
+   "desk/src/english/LingaPhone.tsx",
+   "tools/linga-rules-test.cjs"
+  ],
+  "new_files": [
+   "desk/src/lib/english/activity.ts"
+  ],
+  "shared_surfaces": [],
+  "acceptance": [
+   "case 1: level-self A2, plan-propose for a learner with no known goal, check-leave, then start 'booking' -> phonePanel(session) is 'talk' and lingaView(session).answer is {action:'turn', lastTurnId: the partner's line id}; today it is 'check' and {action:'plan-goal'} (tools/linga-rules-test.cjs, stub engine at the text() seam)",
+   "case 2: the state of case 1, then the phone sends the view's answer as a typed reply -> the conversation holds the reply and the partner's answer (3 turns) and preferences.goal is still ''; today the reply is saved as the learner's goal and the conversation stays at 1 turn (tools/linga-rules-test.cjs)",
+   "case 3: start 'booking' (a live scene), then check-start -> the conversation is paused and the check is the phone's panel; then resume -> the check is parked (check.parked true), phonePanel is 'talk' and answer.action is 'turn'; today after resume phonePanel is still 'check' and answer.action is 'check-answer' (tools/linga-rules-test.cjs)",
+   "case 4: over every 3-command sequence from {start, resume, check-start, check-resume, plan-propose, check-leave, leave} with a stub engine, after each command at most one of 'an unparked check' and 'an unpaused unfinished conversation' holds, and phonePanel names the same one the TV screen belongs to; a command the server refuses with 409 is skipped, not failed (tools/linga-rules-test.cjs, about 340 sequences)",
+   "case 5: for each of 10 check states (about asked, about preparing, reading, tasks between, say, listen, choose, verdict, plan asking goal, plan topics, plan empty) and each of 12 check commands, the server refuses with 409 exactly what checkAccepts refuses; today plan-renew while the goal is asked, plan-add while the goal is asked and check-retry on the verdict all answer 200 and either do nothing or add a topic under a screen that never shows it (tools/linga-rules-test.cjs, same shape as 'turn case 5')",
+   "case 6: in every one of those states and in the menu, every ENABLED check action the view offers (TV row, footer, phone list, answer) is accepted by checkAccepts (tools/linga-rules-test.cjs, same shape as 'turn case 4')",
+   "case 7 GUARD: with the TV on Linga home and a check left part-way and no scene started since, phonePanel stays 'check', the phone still answers the check's question, and home is 'check-part-way' (the owner's 2026-09-25 decision at view.ts:457-466); green before by design (tools/linga-rules-test.cjs)",
+   "case 8 GUARD: check-leave keeps the check and check-resume carries on from the same question, with the existing level-check tests (linga-rules-test.cjs 'the level check places the learner', 'a failed step mid-check', 'a judge that misquotes') green and unchanged (tools/linga-rules-test.cjs)"
+  ],
+  "premise": [
+   "desk/src/lib/english/view.ts:186-189 - phonePanel returns 'check' whenever activeCheck(s) is non-null, before it looks at the conversation: a check beats a scene unconditionally",
+   "desk/src/lib/english/view.ts:196-203 - answerOf offers the check's reply box (check-answer, check-task, plan-goal) first when the panel is 'check'; the conversation's 'turn' answer is reachable only when no check exists",
+   "desk/src/lib/english/conversation.ts:128-148 - the 'start' branch reads s.conversation (lines 132-134) and never s.check; grep for s.check in conversation.ts finds only a comment (line 189), so starting or resuming a scene (line 160) leaves any check as it was",
+   "desk/src/lib/english/check.ts:231 - check-leave commits {...k, pending:null}: the check is kept. It is cleared only by level-self (check.ts:214), plan-agree (check.ts:341-342) and a learner change (desk/src/lib/session/store.ts:451). So a check abandoned at about, tasks, verdict or plan outlives every scene the learner starts afterwards",
+   "desk/src/lib/english/check.ts:316 - plan-goal saves the text it is sent as preferences.goal. With the phone showing the check's goal question over a live rehearsal, the learner's reply to the partner becomes their stored goal (probe: goal '' -> 'Could you check my room, please?', conversation turns still 1)",
+   "Reachable from the TV with no direct API call: Linga home in state no-plan offers 'Choose a situation' (view.ts:271), and the menu offers it on every screen (view.ts:431); the UAT run of 2026-09-15 recorded that 5 of 10 Characters chose a situation instead of the level check (uat/runs/2026-09-15-lt/SUMMARY.md line 13)",
+   "desk/src/lib/english/turn.ts:43-61 - the conversation already has its table (TURN_STATES, ACCEPTS, accepts, refusal) and tools/linga-rules-test.cjs:518-550 prove it against the view and the server; the level check has none: its refusals are 8 ad hoc guards (check.ts:201 pending, 229 check id, 236 reveal needs a listening task, 241 stage about, 267 stage tasks, 310 askGoal, 323 stage plan, 339 plan needs topics) and three commands have no guard at all (check-retry check.ts:234, plan-renew check.ts:324, plan-add check.ts:331-335)",
+   "Seven places decide who owns the desk by hand: view.ts lingaHome (170-178), phonePanel (186-189), answerOf (196-208), progressDots (531-535), LingaTV.tsx:26 and its Escape chain (47-55), LingaPhone.tsx:22 and panelOf (62-64)",
+   "Probe, scratch data dir, stub engine: after 'level-self A2, plan-propose, check-leave, start booking' -> screen linga-talk, phonePanel 'check', answer plan-goal; after 'start booking, check-start, resume' -> screen linga-talk, phonePanel 'check', answer check-answer; with the goal asked, plan-renew answers 200 with no change and plan-add adds a topic while askGoal stays true"
+  ],
+  "rollback": "Four commits: test(linga) the 8 cases red, feat(linga) activity.ts with the table and ownerOf (no caller yet, green), refactor(linga) check.ts, conversation.ts, view.ts and LingaTV.tsx read it, test(linga) the sweeps. LevelCheck.parked is optional and absent on every saved session (store.ts load spreads j.check), so a revert of the series needs no data change and a session file written under the new code loads under the old one with the field ignored.",
+  "gate": "architecture",
+  "runner_up": "LingaPhone.tsx:103-236 re-draws the check, verdict and start panels by hand (about 130 lines of JSX with their own labels) beside the view's actions; render them from view.phone and view.actions so the phone has no copy of its own.",
+  "body": "## Summary\nThe phone and the TV can be in two different Linga activities at once, and the phone obeys the wrong one. A level check that was left (stop, Not now, Esc, or just choosing a situation from the menu) is kept forever, and while it is kept the phone shows the check instead of the rehearsal the TV is running. The learner speaks to Jamie and the phone sends it to the level check; on the topic question that reply becomes their stored goal. The conversation got a turn table in the last challenge; the level check, which has the same shape of loose fields, did not, and nothing decides which of the two owns the desk.\n\n## Description\nTwo session slots, s.conversation and s.check, both persist and both can be live. Seven places pick the owner by hand and every one of them picks the check first (view.ts:170-178, 186-189, 196-208, 531-535; LingaTV.tsx:26, 47-55; LingaPhone.tsx:22, 62-64). Only three commands ever clear a check (level-self, plan-agree, a learner change), so a check abandoned at any stage outlives every scene started after it. Starting a scene never looks at the check (conversation.ts:128-148) and resuming one never does (conversation.ts:160). The result, shown by a probe against the real modules: with the TV on a rehearsal, the phone's answer is plan-goal (the reply is saved as preferences.goal and lost to the conversation) or check-answer (the reply is judged as a level-check answer).\n\nThe move is one small module, activity.ts, with two parts, both pure and imported by the server, the view, the TV and the phone exactly as turn.ts is. First, ownerOf(session): which of check, conversation or neither holds the phone now, decided once. A check is parked (a new optional LevelCheck.parked) when a scene starts or resumes, and a live conversation is paused when a check opens, resumes or restarts, so at most one is live; a parked check is not lost: home offers it as 'Carry on' (the existing check-part-way state) once the scene is finished or left. The 2026-09-25 owner decision is kept: with the TV on Linga home and a check left part-way, the phone still holds the check. Second, a check table in the shape of turn.ts: CHECK_STATES (about asked, reading, tasks between, say, listen, choose, verdict, plan asking the goal, plan topics, plan empty), ACCEPTS per state, checkAccepts and a refusal sentence. checkCommand asks the table once instead of its 8 stage guards, so plan-renew while the goal is asked, plan-add while the goal is asked and check-retry on the verdict are refused (409) instead of silently doing nothing or adding a topic no screen shows, and the view disables, from the same table, whatever the server would refuse.\n\n## Flow\n- Learner leaves the topic question, picks Booking from the menu: the check is parked, the phone shows Reply to Robin, the reply lands in the conversation.\n- Learner finishes the rehearsal: home reads 'Find your level, you stopped part way: Carry on', and Carry on unparks the check where it was.\n- Learner presses Find my level mid-scene: the scene pauses, the phone shows the check; Resume parks the check and the phone returns to the scene.\n- Any client sending a check command the state does not take gets 409 and a sentence, and the view never drew that button enabled.\n\n## Expected impact\nCloses a path on which a reply is silently misfiled (a rehearsal reply stored as a goal, or scored as a level answer) and which the UAT run shows half the Characters can reach. Replaces 8 ad hoc guards and 3 unguarded commands with one table the server, the view and both devices share, so the next check feature (a second task kind, a plan-review step) is one row, as the next turn feature now is. The phone and the TV can no longer disagree about which activity is live.\n\n## Evaluation\nClaim: one ownerOf and one check table make the phone and TV agree on the live activity and make the server refuse exactly what the table refuses.\nBefore: 0 of 8 acceptance cases pass (cases 1-6 red; 7 and 8 are guards, green by design, so 0 of 6 behaviour cases)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first in tools/linga-rules-test.cjs, then npm test in desk/\nResult: better\nGate: architecture",
+  "evidence": "Probe output (stub engine at the text() seam, scratch DESK_DATA_DIR, nothing under desk/data):\n[A] level-self A2; plan-propose -> askGoal true, screen linga-plan, phonePanel check; check-leave -> check kept true, screen linga; start booking -> screen linga-talk, conversation turns 1, check stage plan, phonePanel check, answer {\"action\":\"plan-goal\",\"label\":\"Say what to practise\"}; goal before '' , after the phone sends the view's answer 'Could you check my room, please?' -> preferences.goal 'Could you check my room, please?', conversation turns 1.\n[B] start booking; check-start -> conversation paused false, check stage about, screen linga-check, phonePanel check; resume -> screen linga-talk, phonePanel check, check still true, answer check-answer.\n[C] with askGoal true: plan-renew -> 200, no change, commands kept 0; plan-add 'football talk' -> topics 1, askGoal true.\nGrep: s.check in desk/src/lib/english/conversation.ts -> 0 code hits (one comment, line 189). Clearing a check: check.ts:214, check.ts:341-342, store.ts:451 only. Guards in check.ts: lines 61, 201, 229, 236, 241, 243, 267, 310, 323, 327, 331, 339 (stage or state guards: 201, 229, 236, 241, 267, 310, 323, 339 = 8).",
+  "critic": {
+   "verdict": "build",
+   "ambition": 5,
+   "grounding": 5,
+   "falsifiability": 5,
+   "deck_line": "Approve (architecture): a scene and a level check can no longer fight over the phone, and every control Linga offers the check is one the server accepts."
+  },
+  "id": "linga-A",
+  "rank": 40
+ },
+ {
+  "context": "engines",
+  "host": "engines",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "One engine call core: a deadline and a typed error for every provider",
+  "size": "M",
+  "effort": 6,
+  "impact": 8,
+  "risk": 5,
+  "write_set": [
+   "desk/src/lib/engines/types.ts",
+   "desk/src/lib/engines/shape.ts",
+   "desk/src/lib/engines/text.ts",
+   "desk/src/lib/engines/codex.ts",
+   "desk/src/lib/engines/vision.ts",
+   "desk/src/lib/engines/embed.ts",
+   "desk/src/lib/engines/listen.ts",
+   "desk/src/lib/engines/voice.ts",
+   "tools/engines-rules-test.cjs"
+  ],
+  "new_files": [
+   "desk/src/lib/engines/call.ts"
+  ],
+  "shared_surfaces": [],
+  "acceptance": [
+   "case 13: for each of text, vision, embed, speak, listen, a stub provider whose run never settles, called with timeoutMs 25 -> the engine function rejects within 1000 ms with an EngineError of kind 'timeout' and provider 'stub' (5 of 5 kinds; the test races a 1 s sentinel so a hang fails the case instead of stalling the suite) (tools/engines-rules-test.cjs)",
+   "case 14: the stub's run receives a second argument { signal }; after the timeout signal.aborted is true, after a fast success it is false (tools/engines-rules-test.cjs)",
+   "case 15: for each of the five kinds a stub that throws new Error('spawn piper ENOENT\\n  at x') -> an EngineError of kind 'exit', provider 'stub', message the first line only; a stub that throws EngineError('unreachable','stub','x') -> that same object, kind still 'unreachable' (tools/engines-rules-test.cjs)",
+   "case 16: deadlineFor('text', provider without deadlineMs, {}) -> DEADLINE_MS.text; deadlineFor('text', provider with deadlineMs 240000, {timeoutMs: 90000}) -> 240000; deadlineFor('vision', p, {timeoutMs: 5000}) -> 5000; DEADLINE_MS has a finite positive number for all five kinds (tools/engines-rules-test.cjs)",
+   "case 17: a shorten re-ask whose second provider call never settles (timeoutMs 30) -> text() rejects with the FIRST shape EngineError (path 'topics[0].why'), after exactly 2 provider calls (tools/engines-rules-test.cjs)",
+   "GUARD case 18: codexCli.deadlineMs is 240000 and claudeCli.deadlineMs is undefined, so codex.ts:53's floor (Math.max(timeoutMs, 240000)) survives the move; a stub that answers at once resolves with its provider name and a numeric ms, for all five kinds; cases 1-12 stay green unchanged (tools/engines-rules-test.cjs)"
+  ],
+  "premise": [
+   "desk/src/lib/engines/types.ts:12-16 - TextRequest declares timeoutMs; VisionRequest, SpeakRequest, EmbedRequest and ListenRequest declare none (1 of 5 request types can be given a deadline)",
+   "desk/src/lib/engines/text.ts:59, codex.ts:53, listen.ts:43 - three deadline styles: a setTimeout that kills the child (claude, default 90000), a setTimeout with a 240000 floor (codex), AbortSignal.timeout(120000) (listen)",
+   "desk/src/lib/engines/vision.ts:28-31, embed.ts:18, voice.ts:46, voice.ts:67 - four provider paths with no deadline at all: two Ollama fetches and the ElevenLabs fetch pass no signal, the Piper spawn has no timer (4 of 7 provider run() paths; the fetch ones rest on the runtime's own default, the Piper one on nothing)",
+   "desk/src/lib/engines/types.ts:6-7 - the contract says every answer 'either resolves with that shape or rejects with an EngineError'; 7 lines throw something else: voice.ts:49 (p.on('error', reject) hands up the raw spawn Error), voice.ts:50 (new Error('piper exited ...')), voice.ts:53 (readFileSync), vision.ts:33 (res.json()), embed.ts:21 (res.json()), listen.ts:46 (r.json()), codex.ts:62 (readFile of last.txt); plus the temp-dir creations at voice.ts:42 and codex.ts:41",
+   "desk/src/lib/engines/shape.ts:96-102, embed.ts:30-35, listen.ts:55-57, voice.ts:81-83 - the same envelope written four times: started = Date.now(), provider(kind), await run(req), name = a.provider ?? p.name, ms (text and vision share the one in answer(); embed, listen and speak each hand-roll a copy)",
+   "desk/src/lib/desk/job.ts:76 - runJob refuses a second run of a kind while its job is 'running' (409 BUSY); desk/src/app/api/hint/route.ts:28 and desk/src/tv/keys.ts:195 refuse the same way; desk/src/app/api/session/retry/route.ts:28 only retries a 'failed' job; desk/src/lib/session/store.ts:202 settles a running job only when a SAVED session is loaded, i.e. on restart. So an engine call that never returns leaves its job 'running' and its screen waiting (desk/src/essay/EssayTV.tsx:139 captions 'Reading' while running) until the desk is reset or restarted",
+   "desk/src/lib/desk/job.ts:66 - jobError words the failure by EngineError.kind and falls back to a bare 'Try again.' for anything else, so the 7 raw throws above lose the desk's reason",
+   "tools/*.cjs - 22 files stub providers with run(req) (grep -l useProvider tools = 22); tools/lab-bench.cjs:121 and tools/calc-model-yield.cjs:137 wrap run(req) and drop any second argument, so the new argument must be optional and the core must enforce the deadline itself, not rely on a provider honouring the signal"
+  ],
+  "rollback": "Three commits: test(engines) adds cases 13-18 red, refactor(engines) adds call.ts and moves answer(), embed(), listen(), speak() onto it, feat(engines) gives the Ollama, ElevenLabs, Piper and listen providers their abort handling and adds timeoutMs to the four request types. Every new parameter is optional and the old provider shape still type-checks, so reverting the last two commits restores today's behaviour and leaves the tests.",
+  "gate": "contract",
+  "runner_up": "Cache synthesised speech by (provider, voice, text) so a repeated line (Linga's Hear it again, fixed first questions, 'Time for a break.') is not paid for twice: a new capability, gate direction, and it does not close a hang.",
+  "body": "## Summary\nEvery engine call goes through one core that owns the deadline, the abort signal, the typed error and the provider/ms envelope. Today only text has a deadline you can set, five of the seven providers fail in ways the contract says they cannot, and the envelope is written four times.\n\n## Description\nThe registry (registry.ts) and the shape rule (shape.ts) already made the engines one seam for WHICH provider runs and WHAT an answer must look like. They stopped short of HOW a call ends. A call ends one of three ways, and the engines implement each differently per provider:\n\n- Deadline: claude kills its child on a timer (text.ts:59), codex does the same with a 240 s floor that overrides the caller (codex.ts:53), listen aborts a fetch (listen.ts:43), and four paths have none (vision.ts:28-31, embed.ts:18, voice.ts:46 Piper, voice.ts:67 ElevenLabs). Only TextRequest can carry timeoutMs (types.ts:12), so even a caller that wanted a vision or speech deadline could not say so.\n- Failure: types.ts:6-7 promises a typed EngineError, but seven lines throw a plain Error or SyntaxError (voice.ts:49, 50, 53; vision.ts:33; embed.ts:21; listen.ts:46; codex.ts:62). job.ts:66 words a failure from EngineError.kind and drops to 'Try again.' for these, so the operator and the learner lose the reason.\n- Success: the started/provider/run/name/ms envelope is written in answer() (shape.ts:96-102) and again, by hand, in embed(), listen() and speak().\n\nWhy this is the structural move and not tidying: a hung engine call is not a slow request, it is a stuck desk. runJob refuses a second run while the job is running (job.ts:76), the hint route and the TV key rule refuse the same way (hint/route.ts:28, keys.ts:195), retry only accepts a failed job (retry/route.ts:28), and a running job is settled only on restart (store.ts:202). So one vision stall in `read` leaves the page 'Reading' with no retry. The deadline belongs to the engine seam, once.\n\nThe move: a new call.ts exports `DEADLINE_MS` (per kind: text 90000, vision 180000, embed 60000, speak 30000, listen 120000), `deadlineFor(kind, provider, req)` (req.timeoutMs, else the kind's default, floored by an optional `Provider.deadlineMs` so codex keeps its 240000) and `call(kind, provider, req)`, which runs the provider with an AbortSignal, races it against the deadline, passes an EngineError through untouched, turns anything else into an EngineError of kind 'exit' with the first line of its message, and returns `{answer, provider, ms}`. answer() (text, vision, codexText), embed(), listen() and speak() each become a call to it. Providers drop their private timers and honour `ctx.signal`: the claude and codex children are killed on abort, the Ollama and ElevenLabs fetches get the signal, Piper's child is killed. VisionRequest, EmbedRequest, SpeakRequest and ListenRequest gain an optional timeoutMs.\n\nContract note (gate `contract`): `Provider.run(req, ctx?)` gains an optional second parameter and `Provider.deadlineMs?` is new; both are optional, so the 22 test files that stub run(req) are unaffected. Consumers of the changed behaviour: lib/desk/read.ts and mark.ts (vision), lib/library/lessons.ts (embed), api/speak and api/listen (routes keep their fixed 502 bodies), api/smoke, lib/desk/job.ts (kind -> sentence), tools/lab-bench.cjs and tools/calc-model-yield.cjs (wrappers that drop the second argument; the core still enforces the deadline).\n\n## Flow\n- A route or pipeline calls text(), vision(), embed(), speak() or listen() exactly as today.\n- The engine function hands its provider and request to call(); the deadline is the request's timeoutMs, else the kind's default, floored by the provider's own.\n- The provider runs with a signal. On the deadline the core aborts the signal and rejects with EngineError('timeout', providerName, ...); on a plain throw it rejects with EngineError('exit', ...) carrying the first line only.\n- answer() still parses and validates; a shorten re-ask is a second call() with its own deadline, and if it hangs the first shape rejection stands.\n- runJob receives a typed error in every case, so the job ends 'failed' with the desk's reason and the existing Try again path works.\n\n## Expected impact\nThe desk can no longer be left waiting on a hung engine: every call ends in a typed result within a stated time, and the one place that states the times is a table in call.ts instead of three styles and four gaps. Piper, which has no timer at all today, stops being able to hold /api/speak and a child process forever. A new provider (Bedrock, Polly, named in four file headers as 'later') gets deadline, abort and error mapping by implementing run(), not by remembering to.\n\n## Evaluation\nClaim: every engine kind ends a call within its deadline with a typed EngineError, and the call envelope exists once.\nBefore: 0 of 5 acceptance cases pass (case 13 hangs for 5 of 5 kinds, case 15 fails for 5 of 5, plus the 4-of-7 and 7-site counts above)\nAfter: 5 of 5 pass, plus 1 declared guard\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+  "evidence": "types.ts:12 `export interface TextRequest { ...; timeoutMs?: number; ...}`; types.ts:13-16 VisionRequest, SpeakRequest, EmbedRequest, ListenRequest have no timeoutMs. grep -n 'timeoutMs' desk/src/lib/engines -> text.ts:59, codex.ts:53, types.ts:12 only. Deadlines: text.ts:59 `setTimeout(() => { child.kill(); reject(new EngineError('timeout', ...)) }, req.timeoutMs ?? 90000)`; codex.ts:53 `Math.max(req.timeoutMs ?? 90000, 240000)`; listen.ts:43 `signal: AbortSignal.timeout(120000)`; none at vision.ts:28 `fetch(`${HOST}/api/chat`, { method: 'POST', body: JSON.stringify(b) })`, embed.ts:18 `fetch(`${HOST}/api/embed`, ...)`, voice.ts:46 `spawn(PIPER, ['-m', PIPER_VOICE, '-f', out], { windowsHide: true })` with no timer, voice.ts:67 elevenlabs `fetch(...)`. Raw throws: voice.ts:49 `p.on('error', reject)`, voice.ts:50 `reject(new Error(`piper exited ${code}...`))`, voice.ts:53 `readFileSync(out)`, vision.ts:33 `await res.json()`, embed.ts:21 `await res.json()`, listen.ts:46 `(await r.json())`, codex.ts:62 `await readFile(last, 'utf8')`. Envelope copies: shape.ts:97-102, embed.ts:30-35, listen.ts:55-57, voice.ts:81-83 = 4. Stuck-job chain: job.ts:76 `if (now?.phase === 'running' && !opts.supersedes) return { ok: false, status: 409, error: BUSY }`; retry/route.ts:28 `job.phase !== 'failed'` -> 409 NOTHING; store.ts:202 settles running -> failed only inside load() of a saved session. Stubs: grep -l useProvider tools/*.cjs = 22 files; lab-bench.cjs:121 `async run(req) { const out = await inner.run(req);` and calc-model-yield.cjs:137 `run:async(req)=>{... inner.run(...)`. Earlier cards: challenge-2026-09-23 engines A (schema and registry, landed fe94a305) and B (jobs, landed) did not touch deadlines: shape.ts, registry.ts and job.ts say nothing of timeouts for vision, embed, speak or listen.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 5,
+   "falsifiability": 5,
+   "deck_line": "Approve: no engine call can hang a job forever, and every provider failure arrives as a typed EngineError with the desk's own reason sentence."
+  },
+  "id": "engines-A",
+  "rank": 37.3
+ },
+ {
+  "context": "uat",
+  "host": "uat",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "Stamp the product each run saw, so the open ledger says what is still true",
+  "size": "M",
+  "effort": 6,
+  "impact": 8,
+  "risk": 5,
+  "write_set": [
+   "uat/driver/product.cjs",
+   "uat/driver/ledger.cjs",
+   "uat/driver/recertify.cjs",
+   "uat/driver/linga-text.cjs",
+   "tools/uat-ledger-test.cjs",
+   "tools/uat-recertify-test.cjs",
+   "uat/env.md",
+   "uat/README.md"
+  ],
+  "new_files": [
+   "uat/driver/product.cjs"
+  ],
+  "shared_surfaces": [],
+  "acceptance": [
+   "case 1: product.surface() -> a sorted, repo-relative list of the desk/src files the driver loads (the entry modules of linga-text.cjs/surface.cjs read back from require.cache after one surfaceOf render): includes desk/src/lib/english/view.ts, desk/src/english/LingaPhone.tsx, desk/src/lib/english/placement.ts; excludes anything under node_modules and desk/data; identical on a second call; at least 40 files (tools/uat-ledger-test.cjs, node:test; the module does not exist yet)",
+   "case 2: product.stampOf(repo, files) on a temp git repo -> { commit: <HEAD sha>, dirty: false, files: { <path>: <git blob sha> } } with every blob equal to `git hash-object <path>`; after editing one file without committing -> dirty true and exactly that file's blob changes (tools/uat-ledger-test.cjs, temp repo under os.tmpdir())",
+   "case 3 (GUARD, green before by design): two run.json files with the same instrument and different product stamps -> confounds() lists 0 confounds of kind 'instrument'; the product lives beside instrument in run.json, never inside it, so a product change is never read as an instrument change (tools/uat-recertify-test.cjs)",
+   "case 4: a temp git repo with desk/src stubs committed at C1 together with uat/runs/R/findings.json (no run.json), then 2 of 3 stubs edited at C2 -> ledger(runsDir, { repo }).open[0].seen is { commit: C1, source: 'git' } and .changed lists exactly the 2 edited paths of 3; a gap whose newest row sits in a run stamped at HEAD has changed [] and counts as seen on the current product (tools/uat-ledger-test.cjs)",
+   "case 5: a run whose run.json carries product.files -> the ledger reads the stamp and makes no git call (the injected git runner throws if called); a run with neither stamp nor git history is seen null and is counted separately as 'unknown', never as current (tools/uat-ledger-test.cjs)",
+   "case 6: statusOf() on the committed five runs with a stubbed git whose ls-tree returns the 15 Sep blobs -> OPEN.md's header reads '186 open: 0 seen on the current product, 186 seen before a product change', and every row ends with 'product: N of 63 files changed since' for its own run; a stamped-at-HEAD fixture row is counted current and carries no suffix (tools/uat-ledger-test.cjs; --status still makes zero model calls)",
+   "case 7: renderRecertify() for a before and an after run whose product.files are identical, with a code-verdict drop on one pair -> that pair is listed under 'Confounded - do not read as a regression' with 'product unchanged in 63 files: run-to-run noise' and not under Regressed; the same drop with 2 files changed lists the pair under Regressed and the row names the 2 files; with no stamp on either side and no git history the Confounded table carries the note 'product not recorded' (tools/uat-recertify-test.cjs)",
+   "case 8 (GUARD): `--status` and `--recertify` still never call a model for the plan, write only OPEN.md and the rerun's own files, and the committed tree under uat/runs/ is byte-identical at the end of the suite (the existing digest assertions in tools/uat-ledger-test.cjs and tools/uat-recertify-test.cjs)"
+  ],
+  "premise": [
+   "uat/driver/recertify.cjs:318-325 - instrumentOf() records the model, three efforts, the judge screen cap and a hash of the five DRIVER files; nothing records the product the run exercised (desk/src)",
+   "uat/driver/linga-text.cjs:211 - run.json is written before the children start and holds the instrument, cast and pairs; no commit, no hash of any desk file",
+   "uat/driver/recertify.cjs:123-147 - confounds() explains a before/after difference only by a changed journey start, a new journey or a changed instrument; it has no way to say the product moved, and no way to say it did not, so a verdict that flips on identical code reads as a regression or as nothing",
+   "uat/driver/ledger.cjs:94-99 - a gap's age is counted in later runs of its pair that did not ask about it (unasked), never in product change; uat/driver/ledger.cjs:122 prints the open total as '186 open in 36 pairs' with no hint of whether the product it came from still exists",
+   "uat/runs/ - none of the 5 committed runs has a run.json (Object.keys read through ledger.runs: all null); all five were committed on 2026-09-15 (0fa0af05, e4bfcfe9, f3542b5a), so every one of the 186 open rows describes the product as of that day",
+   "measured on HEAD: loading the driver's entry modules (surface.cjs install + view.ts, conversation.ts, store.ts, curriculum.ts, placement.ts, LingaTV.tsx, LingaPhone.tsx, one surfaceOf render) leaves 63 files of desk/src in require.cache; comparing their blobs at f3542b5a (the newest run's commit) with the working tree, 60 of 63 differ and 0 are new; git log --since=2026-09-16 over those files lists 135 commits (192 touch desk/src, 38 touch desk/src/lib/english and desk/src/english)",
+   "uat/driver/surface.cjs:38-47 - install() is the one place every desk TS file is loaded for the driver, so the load set is derived, not a hand-kept path list; uat/env.md:44 puts one pair at 30-50 model calls, and uat/env.md:32 puts the ledger rerun at 36 pairs, which is what an operator spends to find out",
+   "uat/runs/OPEN.md is derived by statusOf() (ledger.cjs:110-129): the operator's entry to a drain, so it is the surface that has to say which rows are old"
+  ],
+  "rollback": "Three commits: test(uat) cases first, feat(uat) product.cjs plus the run.json stamp and the ledger and OPEN.md columns, feat(uat) the recertify confound. product sits beside instrument in run.json, runs without it stay readable (seen is derived from git or null), and no finding or committed run file is rewritten, so git revert of the series removes the columns and the stamp with nothing to migrate.",
+  "gate": "direction",
+  "runner_up": "Give the ledger recertify (the 36-pair command) its recertify report: Fixed, Still open, Regressed, Metric deltas, Confounded, New findings, with each pair's before taken from the latest earlier run of that pair; today finishLedger() writes only OPEN.md.",
+  "body": "## Summary\nOPEN.md says '186 open'. Every one of those rows was seen on a product in which 60 of the 63 files the driver loads have since changed, and the operator is not told. Stamp the product into every run, derive the same stamp from git for the old ones, and let OPEN.md and recertify.md say what is still seen on the current product, what is only old, and when a rerun's verdict change cannot be the product.\n\n## Description\nThe overlay already records what instrument produced a run (model, efforts, screen cap, driver hashes) so that a driver change cannot pass for a product change. It never records the other half: which product the run exercised. The consequence is on the operator's screen today. uat/runs/OPEN.md reports 186 open rows in 36 pairs, drained 0 of 5, as if they were one backlog; the rows come from five runs committed on 15 Sep, and 135 commits to the files those runs loaded (60 of 63 changed) have landed since. Nothing separates a gap still present from one a later commit probably removed, and the only way to find out is the 36-pair recertify (about 30-50 model calls a pair). In the other direction, a recertify whose verdict drops on byte-identical product code is a measurement of judge and Character noise, but recertify.md has no way to say so and files it under Regressed.\n\nThe move: uat/driver/product.cjs derives the load set (the desk/src files in require.cache after the driver's entry modules load and one surface renders; no hand-kept list), stamps { commit, dirty, files: { path: blob sha } } into run.json beside instrument (never inside it, or a product change would read as an instrument confound), and answers seenOf(run) for a run without a stamp from git: the commit that first added the run's findings.json, with git ls-tree blobs compared to the working tree. The ledger gives each gap seen and changed; OPEN.md leads with the split and ends each row with 'product: N of 63 files changed since'. renderRecertify compares the two product stamps: identical means a verdict change is noise and is listed as confounded; different means it can be read as a product change and names the files. A run with neither stamp nor history is 'unknown', never current.\n\nIt asks for no new typing and no new run: it changes what the operator KNOWS from files and git already there. It is deliberately not a gap-to-file mapping (finding code_hint is empty on all 186 rows); it states a fact the repo can prove, product changed or not, and leaves attribution to the drain.\n\n## Flow\n- Operator runs `node uat/driver/linga-text.cjs --status`: OPEN.md opens with '186 open: 0 seen on the current product, 186 seen before a product change', each row ends with its own changed-file count.\n- Operator runs any new run: run.json carries product; the next --status counts those rows as current until the product moves again.\n- Operator runs a recertify: recertify.md says whether the product moved between the two runs; a drop on an unmoved product is shown as noise, a drop on a moved one as Regressed with the changed files named.\n\n## Expected impact\nThe drain starts from an honest number: 186 rows become '0 current, 186 aged' instead of a flat backlog, and the first live run since 25 Sep (none exists on the verdict and instrument code) will be the first to give a current figure. Every future recertify becomes either a fix check or a free noise measurement, which the single-sample verdicts have lacked. Counted: 1 recorded fact added per run, 3 operator surfaces change (OPEN.md header, row suffix, recertify.md Confounded), 0 model calls added.\n\n## Evaluation\nClaim: the ledger and the recertify report state, from files and git alone, whether the product a finding was seen on has changed, and a verdict change on an unchanged product is reported as noise.\nBefore: 0 of 6 acceptance cases pass (cases 1, 2, 4, 5, 6, 7; cases 3 and 8 are guards, green before by design)\nAfter: 6 of 6, guards still green\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+  "evidence": "Run on HEAD fa6eb067 with a throwaway script: require surface.cjs install(), the nine entry modules of linga-text.cjs loadDesk()/child(), one surfaceOf(getSession()) -> 63 files of desk/src in require.cache. `git rev-parse f3542b5a:<file>` against `git hash-object <file>` over those 63: files 63, changed 60, new 0. `git log --since=2026-09-16 --oneline -- <63 files>` -> 135 commits; `-- desk/src` -> 192; `-- desk/src/lib/english desk/src/english` -> 38. ledger.ledger() over uat/runs: runs 5, rows 360, open 186, open rows with evidence[1] (code_hint) 0 of 186; run.json keys per run all null. First-add commits of findings.json: 0fa0af05 (lt, j1b), e4bfcfe9 (recert), f3542b5a (recert2-beginners, recert2-goal), all dated 2026-09-15. recertify.cjs:318-325 instrumentOf has no product field; recertify.cjs:143-145 flattens instrument, so a product map placed inside instrument would be reported as 'the instrument changed' and mask real regressions (renderRecertify whyNot(), :210).",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 5,
+   "falsifiability": 5,
+   "deck_line": "Approve: OPEN.md says how many of its 186 rows were seen on the current product, and a recertify drop on unchanged code is called noise, not a regression."
+  },
+  "gate_scout": "none",
+  "id": "uat-B",
+  "rank": 37.3
+ },
+ {
+  "context": "landing",
+  "host": "landing",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "The essay paragraph sits with its learner: no more guessing whose it is",
+  "size": "M",
+  "effort": 6,
+  "impact": 8,
+  "risk": 6,
+  "write_set": [
+   "desk/src/lib/session/store.ts",
+   "desk/src/tv/landingRows.ts",
+   "desk/src/tv/recapRows.ts",
+   "desk/src/app/api/analyse/route.ts",
+   "tools/tv-recap-test.cjs",
+   "tools/tv-landing-test.cjs",
+   "tools/essay-rules-test.cjs",
+   "docs/STUDY-DESK-SCREENS.md",
+   "desk/package.json"
+  ],
+  "new_files": [
+   "tools/essay-seat-test.cjs"
+  ],
+  "shared_surfaces": [
+   "desk/package.json (test:rules gains essay-seat-test)",
+   "desk/src/lib/session/store.ts is a hot file: the change is confined to MathsSlot, emptySlot, slotOf, emptyOf, awayShown and the essay.set / essay.type cases",
+   "tv/keys.ts is NOT in the write set: lensStops and readingLens become correct by themselves once s.essay is the seated learner's"
+  ],
+  "acceptance": [
+   "case 1: Ema seated, essay.set(a1), then learner.set jakub -> state.essay === null, essayType === null, essayAt === null, and keys.lensStops(state) has no \"last\" stop (tools/essay-seat-test.cjs, store.reduce over store.fresh(), scratch DESK_DATA_DIR)",
+   "case 2: the same, then learner.set ema -> state.essay deep-equals a1 and essayType/essayAt are Ema's again; away.jakub is deleted when his slot is empty (tools/essay-seat-test.cjs)",
+   "case 3: a session whose away.ema slot was saved by the old build (no essay, essayType, essayAt keys) -> seating Ema gives essay === null (not undefined), nothing throws, and the load() sanitiser round-trips a slot that has them (tools/essay-seat-test.cjs, JSON.parse of a persisted-shape session through reduce)",
+   "case 4: Ema seated, switch to Jakub, then {type:'essay.set', analysis:a2, owner:'ema'} -> state.essay === null, state.screen stays 'landing' (the TV is not pulled onto Ema's forensic page), away.ema.essay === a2 (tools/essay-seat-test.cjs)",
+   "case 5: GUARD: essay.set with no owner, or owner equal to the seated learner -> screen 'forensic', essay set, essayAt null, exactly as today; every existing essay.* case in tools/essay-rules-test.cjs stays green",
+   "case 6: POST /api/analyse kind essay as Ema with the stub provider held open, learner.set jakub while it is pending, release it -> Jakub's session.essay is null and away.ema.essay holds the reading; Ema's history line is unchanged (tools/essay-rules-test.cjs, in-process route call, provider stubbed, no model)",
+   "case 7: Jakub's own history holds an 'Argument' reading while Ema's argument paragraph was on the desk, learner.set jakub -> landingRows.essayWaiting(s).rail === null and its caption names Jakub's last reading, not Ema's sentences. Before the change the label match in essayWaiting says the paragraph is his and draws Ema's sentences (tools/essay-seat-test.cjs over the store; the view-model suite keeps its no-store guard)",
+   "case 8: ownReading(s) with s.essay holding sentences and an empty history -> true; with s.essay null -> false, whatever the history says (tools/tv-recap-test.cjs; the label-matching test goes away)"
+  ],
+  "premise": [
+   "desk/src/lib/session/store.ts:305-310 - MathsSlot holds pages, practice, hint, lesson, topic, log, tasks and nothing of Essay Master: no essay, essayType or essayAt",
+   "desk/src/lib/session/store.ts:312 - slotOf copies those fields out for the learner who leaves; seat() at :318-325 is the only thing that swaps them",
+   "desk/src/lib/session/store.ts:451 - learner.set clears conversation, check and english when the learner changes, but not essay, essayType or essayAt",
+   "desk/src/lib/session/store.ts:230 and :417 - essay, essayType and essayAt are plain session fields, so one learner's paragraph is the next learner's",
+   "desk/src/tv/keys.ts:110 - lensStops adds the \"last\" card whenever s.essay is set, with no owner test; desk/src/essay/EssayTV.tsx:112-114,141 draws it as 'Last verdict' from s.essay",
+   "desk/src/tv/landingRows.ts:143-146 - essayWaiting decides the paragraph is the seated learner's by finding a history line whose label equals the lens name: a heuristic, and it passes when the second learner has read the same lens",
+   "desk/src/tv/recapRows.ts:148-152 - ownReading is a second copy of that heuristic, with a different condition (it also demands sentences); keys.ts:424 acts on it",
+   "desk/src/app/api/analyse/route.ts:54-56 - essay.type and essay.set are dispatched with no owner after an awaited model call, so a reading that lands after the learner switched shows on the new learner's desk; hint.stage, practice.marked and page.read already carry owner and go to toAway (store.ts:327, :475, :479, :521)",
+   "docs/STUDY-DESK-SCREENS.md:239 - the lens home is documented as showing the last paragraph's card 'once one is read' and the recap tile as 'no reading of this learner's': the guards exist because the leak does"
+  ],
+  "rollback": "Three commits: (1) the failing tests; (2) the slot gains essay, essayType, essayAt and the two events gain an optional owner; (3) landingRows and recapRows read s.essay directly and drop the label match. Reverting 3 then 2 restores the shared field; the new keys in a saved session file are optional and ignored by the old reader (load spreads over fresh()), so no data migration either way.",
+  "gate": "contract",
+  "runner_up": "The Select hand-off as one pure plan: page.tsx:126 decides that a zoom plays by sniffing for a nav event, LandingTV.tsx:30 rewrites the stop for an unseated desk, and Paper.tsx:193 / Blueprint.tsx:131 each keep their own label table, which says 'Someone else' for a desk nobody sits at where model.ts:143 says 'Choose who'; the only test of any of it is the manual Playwright script.",
+  "body": "## Summary\nOne learner's Essay Master paragraph is on the next learner's TV. The landing and the recap each try to hide this with a guess. Make the paragraph travel with its learner, as Math Buddy's work already does, and both guesses go.\n\n## Description\nMath Buddy's work is seat-scoped: MathsSlot (store.ts:305) is swapped by seat() when a learner sits down, and late results go to the learner they belong to (toAway). Essay Master's paragraph, its chosen lens and the sentence it is on are not in the slot, and learner.set (store.ts:451) clears the conversation, the level check and the sentence analysis but not them. Reproduced: Ema's essay.set, then learner.set jakub, leaves state.essay set, and keys.lensStops then offers Jakub the 'last' card, which EssayTV draws as 'Last verdict' with Ema's summary.\n\nThe desk papered over it in two places with two different heuristics: landingRows.essayWaiting decides a paragraph is the learner's if their history holds a reading through a lens of that name, and recapRows.ownReading does the same with an extra condition. Both pass when the second learner has read the same lens, so the very case they exist for is the one they miss. A reading that finishes after a switch has the same flaw in the other direction: analyse/route.ts dispatches essay.set with no owner.\n\nThe move: essay, essayType and essayAt join the slot, so seating a learner swaps them like a practice set; essay.type and essay.set take an optional owner, the route stamps it from the learner who asked, and an owner who is no longer at the desk gets the reading in away[owner] without the TV being sent to their forensic page. The two heuristics then read s.essay and nothing else.\n\n## Flow\n- Ema reads a paragraph through the Argument lens; the TV goes to her forensic page.\n- She picks Someone else and chooses Jakub: the paragraph goes into away.ema, Jakub's Essay Master home has four lenses and no 'last' card, and the landing's Essay Master card is his own reading or two words.\n- Ema comes back: her paragraph, lens and sentence are where she left them.\n- Ema asks for a reading, the desk is handed to Jakub while it thinks: the reading lands in away.ema, the TV stays on the landing, nothing of hers appears for him.\n\n## Expected impact\nA shared family desk (Family Phase 1 puts two learners on one TV) stops showing one child's essay verdict to another, on the lens home, the landing card and the recap. Two copies of an ownership heuristic become none, so the next screen that reads the paragraph (the phone, a week digest) cannot get it wrong. The persisted session gains three optional keys per away slot and nothing else.\n\n## Evaluation\nClaim: Essay Master's paragraph is seat-scoped like Math Buddy's work, and no consumer needs a heuristic to know whose it is.\nBefore: 0 of 8 acceptance cases pass for the cases that are not GUARDs (cases 1-4, 6-8 fail; case 5 is a GUARD, green by design)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+  "evidence": "Reproduction run in-process with the repo's own loader (store.fresh(), learner ema, reduce essay.set, reduce learner.set jakub, DESK_DATA_DIR in the OS temp dir): output `learner jakub essay kept: true essayType null lensStops last: true`. Sites that decide ownership of s.essay: landingRows.ts:143-146 (label match), recapRows.ts:148-152 (label match plus sentences), keys.ts:110 and EssayTV.tsx:112-114 (no test at all) = 4 sites, 3 behaviours. Fields outside the seat swap: store.ts:230 essay, essayType; essayAt (3 fields) against 13 in MathsSlot. Events that write the paragraph with no owner: essay.type, essay.set (store.ts:496-498) from one route call (analyse/route.ts:54-56) that awaits a model call between them; events that already carry owner for the same reason: hint.stage, practice.marked, page.read, hint.set, lesson.set (5). The essay-master rider scout may reach the lens-home half of this; the landing half (two guards that retire) is why it is filed here.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 4,
+   "falsifiability": 5,
+   "deck_line": "Approve: one learner's paragraph can no longer appear on the next learner's Essay Master or landing, and the history-label guess goes away."
+  },
+  "id": "landing-A",
+  "rank": 34.7
+ },
+ {
+  "context": "pen-core",
+  "host": "tv-app",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "A relay socket is not a pen: the pen conversation follows the pen, not the channel",
+  "size": "M",
+  "effort": 7,
+  "impact": 8,
+  "risk": 6,
+  "write_set": [
+   "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+   "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt",
+   "tools/relay-test.mjs",
+   "docs/PLATFORM-RISK.md"
+  ],
+  "new_files": [],
+  "shared_surfaces": [
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card B also edits it: land A first)"
+  ],
+  "acceptance": [
+   "case 1: a SHARED conversation (desk.open(openedAtMs = 0, shared = true)) that never receives a hello, onTick(60_000) -> emptyList(): no refusal, no Close, the TV keeps its relay socket (JUnit, core PenConversationTest)",
+   "case 2: a shared conversation, hello with the right PIN at 60 s after open -> [Send(Welcome(s-1, accepted)), Paired(pen-a, 1)], so a phone that arrives late pairs (JUnit, core PenConversationTest)",
+   "case 3: a shared conversation paired as pen-a, a second hello with the right PIN as pen-b -> [Send(Welcome(s-2, accepted)), Paired(pen-b, 2, replaced = true)], and the next {type:undo} -> [Deliver(Undo)]. Today the hello is Deliver(Hello) and no Welcome is ever sent (JUnit, core PenConversationTest)",
+   "case 4: a shared conversation paired as pen-a, the same clientId says hello again (phone reconnected through the relay) -> Welcome(accepted) plus Paired(pen-a, 3, replaced = true), so the phone gets its video aspect back (JUnit, core PenConversationTest)",
+   "case 5: a shared conversation paired as pen-a, a hello with a WRONG PIN -> [Send(Welcome('', accepted = false, 'wrong PIN')), Unpaired(pen-a)] and NO Close; isPaired is false; a following {type:clear} -> emptyList() (dropped, nobody is paired); a later right-PIN hello pairs again at generation 3 (JUnit, core PenConversationTest)",
+   "case 6 GUARD: a DEDICATED conversation (the LAN default) behaves exactly as today: no hello by 5_000 ms -> Welcome(refused 'no pairing message') + Close; wrong PIN -> refused + Close; a second hello after pairing -> [Deliver(Hello)] (JUnit, the existing PenConversationTest cases 1-3 stay green unedited)",
+   "case 7: on the real device, relay transport, the phone page is opened 12 s AFTER the TV dials out (past the old 5 s window and inside a backoff gap) -> window.__pen.isConnected() turns true within 20 s, then a second page paired with the right PIN also turns true while the first tab is closed (operator-run: tools/relay-test.mjs on a Fire TV or emulator, not part of the JVM gate)",
+   "CRITIC REVISE: Add case 5b and a rollback line: on a shared conversation, N (say 5) wrong-PIN hellos in a row make further hellos, right PIN included, refused with no Deliver until a cooldown tick; the dropped Close otherwise lets a 4-digit PIN (Session.kt pin 1000..9999) be guessed without friction over the relay, and note that case 5's Unpaired(pen-a) on a stranger's wrong PIN needs the same cooldown to avoid kicking the current drawer."
+  ],
+  "premise": [
+   "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt:52-57 - one client.webSocket(...) per TV dial-in, and onPen(KtorPenChannel(this, 'relay')) runs once for the life of that socket; the phone is not part of the socket's lifetime",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:111 - the LAN path calls onPen once per PHONE connection, so there a channel and a pen are the same thing; the relay path is the only place they differ (2 onPen call sites in tv-app, 1 of them wrong for its rule)",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:40 - desk.open(openedAtMs = now()) is taken when host() starts, i.e. when the TV's socket opens, before any phone exists",
+   "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:68 and :115-119 - the hello deadline is openedAtMs + 5_000 and onTick then calls reject(); reject (:121-127) emits Welcome(accepted=false) and PenEffect.Close",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:61-65 and :48-51 - the watchdog delays HELLO_TIMEOUT_MS then carries out that Close; channel.close() (PenTransport.kt:83-85) closes the TV's OWN outbound relay socket 5 s after it connected if no phone has said hello",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt:63-67 and :81-83 - a connection counts as healthy only after HEALTHY_MS = 10_000, so a socket the TV closes itself at 5 s is never healthy and the backoff doubles 500 -> 1000 -> 2000 -> 4000 -> 8000 -> 10_000 (cap): the TV is on the relay during [0,5] [6,11] [13,18] [22,27] [35,40] [50,55] [65,70] s ..., i.e. deaf for 10 s of every 15 s once the cap is reached",
+   "tools/relay-stub.mjs:102-103 - the relay forwards a frame only if the other side is open and otherwise drops it silently (if (other && other.readyState === other.OPEN)); companion/index.html:173-176 sends hello exactly once, in ws.onopen, and never retries on a socket that stays open. A phone whose hello lands in a gap stays unpaired with no signal",
+   "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:93-111 - once hello != null, a later Hello skips the pairing branch and reaches :111 Deliver(msg); PenEngine.kt:111 then ignores it (is PenMessage.Hello -> Unit) and Session.kt:62-77 still bumps the revision. On a socket shared by successive pens the second phone is never PIN-checked, never gets a Welcome (so its dot stays red, companion/index.html:202-204) and its strokes are accepted",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:52-56 and :76-78 - Paired calls session.penConnected() and starts a ticker each time, but the disconnect runs once in finally; a second Paired on one conversation would double-count and run two heartbeats",
+   "docs/PLATFORM-RISK.md:59 and :82 - the doc names the relay as mandatory on Vega and says everything after 'Do not build anything else that depends on the TV being a server' should be expressible over a relay; the relay path is the portability hedge, and this is its pairing"
+  ],
+  "rollback": "Four commits: (1) core: PenConversation gains `shared` plus Unpaired and Paired.replaced with all new cases red-first, (2) PenChannel.carriesOnePen with LAN default true and relay false, (3) PenSessionHost handles Unpaired and a replaced Paired, (4) relay-test late-pair journey and the PLATFORM-RISK note. The default is dedicated, so reverting (2)-(3) alone leaves LAN untouched and reverting (1) removes the new cases with it. | critic revise applied: guess limit with cooldown is part of the card.",
+  "gate": "contract",
+  "runner_up": "Single-writer discipline for Session/PenEngine: PenEngine has no lock and is written from the Ktor thread (Session.accept from the receive loop) and Main (onKeyDown, LaunchedEffect) while publishIfDirty and heartbeatInput read it from both - not chosen because a data race cannot be written as a deterministic failing test.",
+  "body": "## Summary\nOver the relay the TV closes its own socket 5 seconds after it dials, a phone's single hello is lost whenever it lands in the resulting gap, and a second phone is never PIN-checked at all. All three come from one assumption: that a channel carries exactly one pen. LAN does; the relay does not.\n\n## Description\nThe pen conversation (PenConversation) is created once per channel and its hello timeout is armed when the channel opens. On the LAN transport a channel is a phone, so that is right. On the relay transport a channel is the TV's single outbound socket, which exists before any phone and outlives each one. Three things follow, none of which a test sees because relay-test.mjs pairs inside the first window:\n\n1. The hello deadline fires on an empty socket. PenSessionHost.kt:61-65 carries out PenConversation's reject, and channel.close() hangs up on the relay. RelayTransport then backs off because a 5 s connection is never healthy (HEALTHY_MS is 10 s): 1, 2, 4, 8, 10 s gaps. The TV is deaf for 10 of every 15 s in steady state, and the companion sends hello once (index.html:175), so a phone that arrives in a gap never pairs and is told nothing.\n2. A later phone (or the same phone after a drop) sends a second Hello into an already-paired conversation. PenConversation.kt:107-111 delivers it as input and PenEngine ignores it: no PIN check, no Welcome, strokes accepted. The PIN, which the relay design says is the only guard because the relay stays dumb (RelayTransport.kt:28-29), stops guarding after the first pairing.\n3. The bookkeeping that a Paired effect triggers (count, heartbeat ticker) assumes one Paired per conversation.\n\nThe move is to make 'does this channel carry one pen' a property the conversation knows. PenChannel gets `carriesOnePen` (LAN true, relay false). PenConversation, opened as shared, has no hello deadline and treats every Hello as a (re)pairing: right PIN -> Welcome + Paired(replaced = true) at a new generation; wrong PIN -> Welcome(refused), an Unpaired effect, and input dropped until a right hello, with no Close because closing would hang up on the relay. Dedicated conversations (LAN) are byte-for-byte what they are today, pinned by the existing cases. PenSessionHost cancels the previous ticker on a replaced Paired (a fresh Heartbeat is exactly what a new phone needs to receive the document and thumbnail again) and counts one pen per conversation. The wire shape does not change; a Welcome may now arrive mid-stream, which companion/index.html:192-207 already handles.\n\n## Flow\n- TV dials the relay; nothing happens for a minute; the socket stays open (today it is closed at 5 s)\n- viewer scans the QR 40 s later; hello arrives; Welcome + Paired; heartbeat starts\n- phone 1 leaves, phone 2 loads the page with the PIN; hello is re-evaluated; right PIN pairs, wrong PIN is refused and the phone shows its PIN box\n- an intruder's wrong-PIN hello unpairs the current pen instead of riding on its pairing\n\n## Expected impact\nThe relay, which docs/PLATFORM-RISK.md calls mandatory on a Vega port, becomes pairable at any time instead of one second in three, a reconnecting phone gets its Welcome, and the PIN guards every pen rather than the first. LAN behaviour is pinned unchanged.\n\n## Evaluation\nClaim: a shared (relay) conversation pairs at any time, re-pairs every hello, refuses a wrong PIN without hanging up, and a dedicated (LAN) conversation is unchanged\nBefore: 0 of 6 non-guard acceptance cases pass (the `shared` parameter and Unpaired do not exist; the observable defects are counted in the premise: 1 deadline armed at socket open, 10 s of every 15 s deaf, 0 Welcomes to a second hello)\nAfter: 7 of 7 (6 JUnit, 1 operator-run device case)\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+  "evidence": "grep -rn 'onPen(' tv-app -> LanTransport.kt:111 (per phone connection) and RelayTransport.kt:56 (per TV socket): 2 sites, different lifetimes, one conversation model. grep -n 'desk.open' -> PenSessionHost.kt:40 (inside host(), so at channel open). grep -n 'HELLO_TIMEOUT_MS' -> PenConversation.kt:50, PenSessionHost.kt:62. RelayTransport.kt:81-83: INITIAL_BACKOFF_MS = 500, MAX_BACKOFF_MS = 10_000, HEALTHY_MS = 10_000; a 5 s socket takes the `else` branch at :65-66, so gaps are 1,2,4,8,10,10 s and the TV's open windows are 0-5, 6-11, 13-18, 22-27, 35-40, 50-55, 65-70 s (5 s open per 15 s at the cap). PenConversation.kt:93 `if (hello == null) {` is the only place PIN is compared (:95); lines :107-111 are the path a second Hello takes; PenEngine.kt:111 `is PenMessage.Hello, is PenMessage.Transport, is PenMessage.Ping -> Unit`. tools/relay-stub.mjs:103 `if (other && other.readyState === other.OPEN) other.send(text);` (no else). companion/index.html:173-176 `ws.onopen = () => { connected = true; send({ type: 'hello', pin, clientId }); };` is the only hello site. tools/relay-test.mjs:157-196 dials, reads logcat, launches chromium, and expects pairing inside one run with no case for a late or second phone.",
+  "critic": {
+   "verdict": "revise",
+   "ambition": 4,
+   "grounding": 5,
+   "falsifiability": 4,
+   "deck_line": "Approve after the revise: the TV stays dialled and a late or second phone pairs over the relay, with a guess limit replacing the wrong-PIN hang-up."
+  },
+  "id": "tv-app-A",
+  "rank": 34.7
+ },
+ {
+  "context": "linga",
+  "host": "linga",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "The certificate shows what it still needs, and the next scene steers toward it",
+  "size": "M",
+  "effort": 6,
+  "impact": 8,
+  "risk": 7,
+  "write_set": [
+   "desk/src/lib/english/cert.ts",
+   "desk/src/lib/english/curriculum.ts",
+   "desk/src/lib/english/view.ts",
+   "desk/src/lib/english/conversation.ts",
+   "desk/src/english/OpenDoor.tsx",
+   "desk/src/english/LingaTV.tsx",
+   "desk/src/english/LingaPhone.tsx",
+   "desk/src/app/english/print/page.tsx",
+   "desk/src/design/linga.css",
+   "tools/cert-rules-test.cjs",
+   "tools/linga-cert-live.cjs"
+  ],
+  "new_files": [],
+  "shared_surfaces": [],
+  "acceptance": [
+   "case 1: a B1 learner (latest check medium confidence, a six-topic plan over contact, request, describe, narrate, describe, request, all six started, those four skills 'on your own') -> certGap(learning) is {band:'B1', blocker:null, shown:['contact','request','describe','narrate'], open:['repair','negotiate']}; there is no certGap today (tools/cert-rules-test.cjs)",
+   "case 2: certGap blockers -> latest record a hand-picked band gives blocker 'self'; a low-confidence check gives 'low'; no record gives 'no-check'; a learner who already holds the certificate for that band and requirement gives open [] (tools/cert-rules-test.cjs)",
+   "case 3: recommendScene for the learner of case 1 -> a scene whose skill is 'repair' or 'negotiate'; today it returns plan topic 'plan-0' (skill contact), because curriculum.ts never mentions the certificate (tools/cert-rules-test.cjs)",
+   "case 4 GUARD: a learner with an unstarted plan topic still gets that topic first, whatever the gap; and a learner with no check gets today's recommendation unchanged (tools/cert-rules-test.cjs)",
+   "case 5: lingaView on screen 'linga-cert' for the learner of case 1 with no certificate -> hero.kind 'cert', title 'B1 Getting by', hero.open ['Understand and repair','Make a plan'], hero.skills the four shown with spoken or written, one caption sentence of at most 25 words, one focused action, no digit anywhere but the band's, no forbidden game word, no count; today the screen is hero 'plain' titled 'No certificate yet' (tools/cert-rules-test.cjs, the helpers of 'cert 13')",
+   "case 6: the same screen for a learner whose latest record is a hand-picked band -> a plate with no open slots, a caption of at most 25 words saying a certificate rests on a level check taken with Linga, and an action id 'find-level' running check-start; the menu offers 'my-certificate' to this learner and to the learner of case 1 (it runs a nav to linga-cert when none is held); this REVISES the row of 'cert 14' that pins 'says nothing before there is one' on purpose, as W10 revised the D4 row (tools/cert-rules-test.cjs)",
+   "case 7: plan-done home for the learner of case 1 -> the 'talk-again' action runs start with a sceneId whose skill is in certGap.open, and the caption is that scene's goal (tools/cert-rules-test.cjs)",
+   "case 8: the Playwright capture at 1920x1080 and 1280x720 of a learner with two open slots (tools/linga-cert-live.cjs, against a second dev server with its own DESK_DATA_DIR): every text inside the 96 / 54 px safe zone, nothing under 28 px except uppercase labels, exactly one focused action, no digit on the plate but the band's (Playwright, operator-run, not in npm test)"
+  ],
+  "premise": [
+   "desk/src/lib/english/cert.ts:35-52 - BASE_SKILLS: a B1 certificate needs six skills (contact, repair, request, describe, narrate, negotiate), widened by the skill of every topic in the agreed plan (cert.ts:76-80, requirementFor)",
+   "desk/src/lib/english/check.ts:159 - the plan is asked to 'spread them over at least four different skills', so a six-topic plan is not required to cover the six a B1 certificate asks for",
+   "desk/src/lib/english/conversation.ts:218 - a scene records evidence only for [focusSkill, reviewSkill, 'repair'], so a skill is shown only in a scene that practises it",
+   "desk/src/lib/english/curriculum.ts:83-110 - recommendScene leads with the unstarted plan topics, then the topic whose skill is due, then the next in the plan; grep for 'cert' in curriculum.ts finds nothing. Nothing in the code connects the next scene to what a certificate lacks",
+   "desk/src/lib/english/view.ts:277 - when every topic is talked through, home says 'Every topic talked through' with 'Talk again', which starts recommended.id; with the plan above that is plan-0 again (skill contact), and there is no certificate and no word about why (probe)",
+   "desk/src/lib/english/view.ts:350-352 - with no certificate the TV screen is a plain page titled 'No certificate yet'; view.ts:433 offers the menu door 'My certificate' only when certificates.length > 0; tools/cert-rules-test.cjs:395-396 pins 'says nothing before there is one' and tools/linga-cert-live.cjs:8 pins Leo's home and menu with no door",
+   "desk/src/lib/english/cert.ts:66-69 and conversation.ts:108-110 - a band picked by hand, including by changing Your level in Set up, makes the latest record source 'self', and certBand is then null: the learner can practise indefinitely toward a certificate that cannot be issued, and no screen says so (probe: certBand null after a hand pick)",
+   "desk/src/lib/english/cert.ts:24 imports curriculum.ts, and recommendScene lives in curriculum.ts: a direct import back is a cycle, so the gap is passed in (a defaulted argument) or the recommendation wrapper lives in cert.ts; callers are view.ts:215, LingaPhone.tsx:187, conversation.ts:130 and app/english/print/page.tsx",
+   "docs/FAMILY-PHASE-1-PLAN.md:26,215-230 - W10's intent is a dry certificate whose requirement the learner's topic choice widens; :40 and :270 forbid a count and any score by another name. A picture of named empty slots with no number is inside the first and must be held to the second",
+   "Probe (scratch data, no engine): B1 learner, six topics over contact, request, describe, narrate, describe, request, all started, four skills independent -> requirementFor contact,repair,request,describe,narrate,negotiate; achievements repair and negotiate not-tried; issue() null; planDone true; recommendScene -> skill contact, plan-0"
+  ],
+  "rollback": "Four commits: test(cert) the failing cases, feat(cert) certGap pure with no caller (green), feat(linga) recommendScene steering, the cert screen, the menu door and the plate's open row, test(live) the capture. No stored shape changes: certGap is derived at read time from placements, plan, evidence and achievements, so reverting the series leaves every learner file as it was. The one deliberate revision of a pinned row (cert 14) reverts with its commit.",
+  "gate": "direction",
+  "runner_up": "The record of checks (EnglishLearning.placements, kept since W10) is read by no screen: draw the earlier checks as ghost flags on My level's ladder, so a learner sees where they stood in September (grep: cert.ts, check.ts, conversation.ts and rules.ts are its only readers).",
+  "body": "## Summary\nA Linga learner works toward a certificate the desk never shows them. They finish a whole plan, home says 'Every topic talked through', and no certificate arrives, because two of the six skills a B1 certificate asks for were never in any topic. Nothing on any screen says what is missing, and 'Talk again' starts the first topic over. A learner who picked their level by hand can never be issued one at all and is never told. The desk already holds everything needed: what the band requires, what has been shown, what has not.\n\n## Description\nThe certificate (W10) is issued by code when every required skill is 'on your own' and the latest record is a level check with medium or high confidence. The requirement is the band's base skills (cert.ts:35-52) widened by the skills of the agreed plan's topics (cert.ts:76-80). Three things leave the learner blind. One: a plan is only asked to span four skills (check.ts:159) while B1 needs six, and a scene records evidence only for its own focus skill, its review skill and repair (conversation.ts:218), so a certificate is reachable only if the plan or the learner's own situation choice happens to cover the rest. Two: recommendScene (curriculum.ts:83-110) never reads the requirement, so the 'next topic' and 'Talk again' ignore it. Three: the certificate surface does not exist until one is issued (view.ts:350-352 and 433), and a hand-picked band, which never certifies (cert.ts:68), says nothing.\n\nThe move has one pure function and three places that read it. certGap(learning) in cert.ts returns the band, which required skills are shown (with spoken or written, from the same evidence the plate uses), which are open, and the blocker when none can be issued (a hand-picked band, a low-confidence check, no check). Then: (1) recommendScene prefers, once the unstarted plan topics are done, a plan topic or built-in situation that practises an open skill, so 'Talk again' and the phone's Next topic lead somewhere; unstarted plan topics still lead first. (2) The TV's certificate screen, which today is a 'No certificate yet' page, becomes the plate in outline: the band and its name, the skills already shown as on the issued plate, and the open ones as dashed empty slots, in the Open Door's own dashed-path grammar (the Stones), with no number anywhere. A hand-picked band shows the plate without slots and one caption sentence, with Find my level as its action. (3) The menu door 'My certificate' appears for any learner with a record of checks, not only after one is issued. The picture is the verdict; the caption is one sentence of under 25 words. The TV never asks for typing and puts no answer on screen: it names skills, never a quote or a phrase to say.\n\n## Flow\n- Learner finishes the last plan topic. Home: 'Every topic talked through'; Talk again now starts Understand and repair, the first open skill, not the first topic.\n- Menu, My certificate: the B1 plate in outline, four skills filled (spoken, written), two dashed slots; caption 'Each empty slot is a conversation still to have.'\n- Learner whose level was picked by hand opens it: the plate with no slots, 'A certificate rests on a level check you take with Linga', and Find my level.\n- The certificate issues as today when the last slot fills; the outline becomes the plate with its quote.\n\n## Expected impact\nTurns the reward from a surprise that may never come into a path the learner can see and walk, with no score and no count. Makes the end of a plan lead to the skills a certificate lacks instead of repeating the first topic, and tells a hand-picked learner the truth once instead of never. The data (placements, plan, evidence, achievements) is already on the record; no stored shape changes.\n\n## Evaluation\nClaim: certGap derives what a certificate still needs; recommendScene, the certificate screen and the menu act on it, and the plate stays free of digits, counts and game words.\nBefore: 0 of 8 acceptance cases pass (cases 1-3 and 5-7 red; case 4 is a guard and case 8 is the operator capture)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first in tools/cert-rules-test.cjs, then npm test in desk/, then the Playwright capture\nResult: better\nGate: direction",
+  "evidence": "Probe (scratch data dir, no engine; B1 learner, check medium confidence, plan topics over contact, request, describe, narrate, describe, request, all six started, eight independent typed pieces over those four skills):\nrequired contact,repair,request,describe,narrate,negotiate\nprogress {contact:independent, repair:not-tried, request:independent, describe:independent, narrate:independent, negotiate:not-tried, relate:not-tried, resolve:not-tried}\nissue null\nplanDone true\nrecommended next skill contact plan-0\ngrep 'cert' in desk/src/lib/english/curriculum.ts -> false\nafter a hand-picked B1 appended to the record -> certBand null\nLines: cert.ts:35-52 (BASE_SKILLS), 66-69 (certBand), 76-80 (requirementFor), 114-130 (issue); check.ts:159 ('at least four different skills'); conversation.ts:218 (skills observed per turn); curriculum.ts:83-110; view.ts:277, 350-352, 433; cert-rules-test.cjs:395-396; linga-cert-live.cjs:8. The record of checks: grep placements in desk/src -> cert.ts, check.ts, conversation.ts, rules.ts, types.ts, placement.ts only; no view, no TV or phone component.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 5,
+   "falsifiability": 4,
+   "deck_line": "Approve as direction: the certificate names what is missing (no count) and Talk again picks it; revises the pinned 'no door before one is held' row on purpose."
+  },
+  "id": "linga-B",
+  "rank": 34.7
+ },
+ {
+  "context": "tv-app",
+  "host": "tv-app",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "The pairing card knows whether a pen is holding it, and gives the picture back",
+  "size": "M",
+  "effort": 6,
+  "impact": 7,
+  "risk": 4,
+  "write_set": [
+   "core/src/main/kotlin/dev/telestrator/core/LinkState.kt",
+   "core/src/test/kotlin/dev/telestrator/core/LinkStateTest.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PairingCard.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+   "tv-app/src/main/res/values/strings.xml"
+  ],
+  "new_files": [
+   "core/src/main/kotlin/dev/telestrator/core/LinkState.kt",
+   "core/src/test/kotlin/dev/telestrator/core/LinkStateTest.kt",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PairingCard.kt"
+  ],
+  "shared_surfaces": [
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card A also edits it: land A first, then B consumes Paired, Unpaired and Close)",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt"
+  ],
+  "acceptance": [
+   "case 1 GUARD: a fresh LinkState() at t = 0 -> view(0) == Connecting: the card is on screen from launch, as MainActivity.kt:226 shows 'connecting…' today (JUnit, core LinkStateTest)",
+   "case 2: Ready(url, pin = '4821') at t = 0 -> view(0) == Invite(url, '4821'): the PIN reaches the screen as its own value for large digits, not only inside the URL text (JUnit, core LinkStateTest)",
+   "case 3: Invite, then PenPaired('pen-a') at t = 1_000 -> view(1_000) == Chip: the card is gone and the corner of the picture is free (JUnit, core LinkStateTest)",
+   "case 4: Paired, PenGone('pen-a') at t = 60_000 -> view(62_999) == Chip and view(63_000) == Lost(url, pin); PenPaired('pen-a') at 61_000 -> the Lost view never appears (a Wi-Fi blink does not flash a QR over the play) (JUnit, core LinkStateTest)",
+   "case 5: PenPaired(a), PenPaired(b), then a late PenGone(a) -> still Chip with b current: a superseded pen's close does not blank or re-open anything (JUnit, core LinkStateTest)",
+   "case 6: Invite, PenRefused('wrong PIN') at t -> Refused('wrong PIN', pin) for 5_000 ms, then Invite; while Paired the same event leaves the view at Chip (a neighbour's guess does not cover the picture of the person drawing) (JUnit, core LinkStateTest)",
+   "case 7: Failed('port 8765 is in use by something else') -> view == Failed(message) whatever the pen state; a later Ready clears it (JUnit, core LinkStateTest)",
+   "case 8: Chip, Peek at t = 100_000 -> view == Invite(url, pin) until 107_999 and Chip at 108_000: Menu on the remote brings the card (and the status line) back for 8 s so a second phone can pair (JUnit, core LinkStateTest; the key itself is checked by :tv-app:compileDebugKotlin plus an emulator capture before and after, operator-run)"
+  ],
+  "premise": [
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:225-230 - PairingCard is composed unconditionally, last in the Box, so it paints over the overlay (:219-223): ink drawn in that corner is hidden behind a permanent 92%-white card for as long as the app runs",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:259 and :264 - the card is 180.dp wide with a 150.dp QR; tools/live-ui-test.mjs:53-54 already carves out `x > width * 0.74 && y < height * 0.44` from its ink count because the card covers it: 0.26 x 0.44 = 11.4% of the screen",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt:43-44 and :55-57 - the number of connected pens is an AtomicInteger with no Flow; grep penConnected/connectedPens finds one reader outside PenSessionHost, Health.kt:21 (the harness). Nothing on screen can learn that a phone paired or left",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:48-51 - a refused pen (wrong PIN, no hello) is a Log.i line only; the person at the TV never sees that a phone tried and failed",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:266-269 - URL 11sp, 'via lan' 10sp, the red transport failure 10sp: the only text that says why no pen can connect (the open Lane-B item 'The TV pairing card's URL, transport and failure line are 10-11sp on a ten-foot screen', .personas/memory-outbox.jsonl, which this card adopts)",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:148 and :164-174, :221, :234 - tMs is written every 33 ms and read in the screen body, so TelestratorScreen recomposes at ~30 Hz and `transport.pairingUrl()` at :226 runs each time; LanTransport.kt:143-151 enumerates NetworkInterface on every call, so the QR follows the network only by that accident and costs a poll per frame",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:233-243 - the machine-readable status line is also permanent, bottom-left, 16sp; grep over tools/ shows no script reads it (the harness reads /health and logcat)",
+   "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:123-138 - the remote handles Center, Enter, Play/Pause, FF, Rewind, DPAD up/down/left/right and nothing else: Menu is free, so a way back to the card costs no existing key"
+  ],
+  "rollback": "Three commits: (1) core LinkState plus LinkStateTest, no caller, (2) tv-app: Session exposes the link flow, PenSessionHost feeds events, PairingCard.kt renders it, MainActivity swaps the composable, (3) Menu key and status-line visibility. Reverting (2)-(3) restores the always-on card; (1) is an unused pure file.",
+  "gate": "none",
+  "runner_up": "Review mode on the D-pad: Media Next/Previous jump between drawn moments and Step keys step frames, so the remote has the vocabulary the phone has (the jump plan already exists in TransportPlan); smaller leap because the viewer holds the phone.",
+  "body": "## Summary\nThe TV's only interface is a white card parked on the picture forever that cannot tell a waiting TV from a paired one. Make the card follow the pen: invite while no pen is here, a dot once one is, the QR back when it is lost, and the reason when it is refused.\n\n## Description\nA telestrator exists to put ink on a picture, and today 11% of that picture belongs to the pairing card for the whole session (the harness itself excludes the region, live-ui-test.mjs:53-54). The TV already holds every fact that would let the card step aside: Paired and close happen in PenSessionHost, a refusal is a PenEffect.Close, the transport reports its failure. None of it reaches the screen, because the pen count is an AtomicInteger nothing observes.\n\nThe move is a small sans-IO state in core, LinkState, with a reducer over events (Ready, Failed, PenPaired, PenGone, PenRefused, Peek) and a view(nowMs) that returns what the corner should show: Connecting, Invite (QR plus the PIN as large digits), Chip (a dot, nothing else), Lost (QR back after a 3 s grace), Refused (two words, 5 s), Failed (the reason, large). It is JVM-tested on a clock the test passes in, exactly like PenConversation. tv-app only feeds it events and renders it: PenSessionHost forwards Paired, close and refusals, Session exposes a StateFlow, and a new PairingCard.kt draws each view with strings from strings.xml. The URL is stored in the state on Ready instead of being polled at 30 Hz from a composable. A stale close from a superseded pen is ignored by client id, which is also the correct 'who is current' fact the open /health pens item is missing. Menu on the remote peeks the card (and the status line) for 8 s, so a second phone can still be paired; the remote already has no use for that key.\n\nThe QR carries the PIN, so the TV never asks for typing. The PIN is shown as digits only in Invite and Refused, which is the one moment a viewer has to type it on the phone after a refusal (the phone page already says 'type the PIN from the TV').\n\n## Flow\n- launch: card in the corner, QR and four large PIN digits\n- scan: the card collapses to a dot within a frame; the picture is clean\n- phone drops out of Wi-Fi: after 3 s the card returns with 'Pen lost' and the same QR; re-pair and it collapses again\n- a neighbour guesses a wrong PIN while someone is drawing: nothing covers the picture\n- no pen yet and a wrong PIN: the card says 'Wrong PIN' in two words, then goes back to inviting\n- Menu: card and status line for 8 s, then gone\n\n## Expected impact\nThe viewer gets the full picture while drawing, the person at the TV knows whether the phone is holding the pen, a failed pairing says why in a size that reads from a sofa, and a poll per frame leaves the draw path. No wire, no engine, no overlay change.\n\n## Evaluation\nClaim: the corner of the picture is occupied only when a pen is needed or lost, and every state is decided in code, not in a composable\nBefore: 0 of 7 non-guard acceptance cases pass (LinkState does not exist); 1 view (always-on card) for 6 situations; 3 text lines at 10-11sp; 1 pairingUrl() poll per frame\nAfter: 8 of 8 (8 JUnit; compile gate plus an emulator capture operator-run)\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+  "evidence": "MainActivity.kt:225-230 `PairingCard(url = transport.pairingUrl() ?: \"connecting…\", transport = transport.name, failure = transportFailure, modifier = Modifier.align(Alignment.TopEnd).padding(24.dp))` with no condition around it. grep -rn 'connectedPens\\|penConnected\\|penDisconnected' tv-app core -> Health.kt:21, PenSessionHost.kt:54, :77, Session.kt:44, :55, :57: the count never reaches Compose. tools/live-ui-test.mjs:54 `if (x > width * 0.74 && y < height * 0.44) continue;` is the card's footprint, 11.4% of the screen. MainActivity.kt:266 `fontSize = 11.sp`, :267 `fontSize = 10.sp`, :269 `fontSize = 10.sp` (the red failure line). MainActivity.kt:164-174 loop writes tMs every delay(33); :234 reads it in the body, so the scope recomposes and :226 re-evaluates pairingUrl(), which LanTransport.kt:143-146 answers with NetworkInterface.getNetworkInterfaces() each time. PenSessionHost.kt:48-51 `is PenEffect.Close -> { Log.i(TAG, \"pen rejected via ${channel.remoteName}: ${effect.reason}\") ...`. MainActivity.kt:124-132: 9 key codes handled, KEYCODE_MENU not among them.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 5,
+   "falsifiability": 5,
+   "deck_line": "Approve: the QR card leaves the picture once a phone pairs, returns on Menu or after a real disconnect, and the PIN is large; land after tv-app A."
+  },
+  "id": "tv-app-B",
+  "rank": 32.7
+ },
+ {
+  "context": "math-buddy",
+  "host": "math-buddy",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "One item kind: the marker, the explainer and the hint read the same registry",
+  "size": "L",
+  "effort": 8,
+  "impact": 8,
+  "risk": 6,
+  "write_set": [
+   "desk/src/lib/desk/mark.ts",
+   "desk/src/lib/desk/explain.ts",
+   "desk/src/lib/desk/hint.ts",
+   "desk/src/lib/desk/items.ts",
+   "desk/src/app/api/hint/route.ts",
+   "desk/package.json"
+  ],
+  "new_files": [
+   "desk/src/lib/rules/kinds.ts",
+   "tools/maths-judge-test.cjs"
+  ],
+  "shared_surfaces": [
+   "desk/package.json (test:rules gains maths-judge-test, appended at the end of the list)"
+  ],
+  "acceptance": [
+   "case 1 (tools/maths-judge-test.cjs, vision stub at the engines provider seam as in maths-rules-test.cjs:16): a photographed sheet of three kinds - school compute '3/4 + 1/6' (spec), Calculus derivative of x^2 (spec), linear 'x+3=7' (no spec) - with the stub reading 11/12, 3x and 4 -> markSet verdicts right, wrong, right and three attempts on the learner record; today it returns right, wrong, unsure because markSet sends the whole sheet to the school marker (mark.ts:158)",
+   "case 2 (maths-judge-test): the same three strings through markTyped -> deepEqual to case 1 on verdict, slip and said, and the same seen/right counts per topic on the learner record; the vision and text stubs throw (no model) -> red today because case 1 differs",
+   "case 3 (maths-judge-test): kindOfSpec({shape:'compute',expr:'1/2+1/3'}) is 'school', kindOfSpec({shape:'derivative',f:'x^2'}) is 'calc', kindOfSpec(undefined) and kindOfSpec({shape:'nope'}) are 'linear'; kindOfQuestion('Work out 3/4 - 1/6') is 'school', kindOfQuestion('Find the derivative of x^2') is 'calc', kindOfQuestion('Solve for x: 2x + 3 = 11') is 'linear' -> module absent today",
+   "case 4 (maths-judge-test, engines/text stub records the request): hint('maths','Find the derivative of x^2 + 3x',{path:'school',age:13}) -> the system prompt names Calculus I and does not contain 'factoring and linear-equations unit'; today it is exactly that linear-equations stance while the leak check already reads the item as Calculus (hint.ts:57-58 against :77)",
+   "case 5 (maths-judge-test, same stub): hint('maths','Work out 3/4 - 1/6',{path:'calc1'}) -> the system prompt names the unit 'Add and subtract fractions' and not 'Calculus I', the voice paragraph stays the calc1 learner's (teen band, hint.ts:76); today it is the Calculus I stance for a fractions task",
+   "GUARD case 6 (maths-judge-test): hint('maths','Solve for x: 2x + 3 = 11',{path:'calc1'}) -> still the Calculus I stance (neither reader reads the text, so the learner's path decides, as today), and a double leak still returns withheldLine(problem) with an empty next",
+   "case 7 (maths-judge-test): judgeItem is exported and needs no set - judgeItem(item with spec compute 3/4 + 1/6, {studentAnswer:'11/12'}, {topic:'frac-add-sub', system:'uk'}) -> verdict right; studentAnswer '' -> null (ask); a Calculus item with '3x' for x^2 -> wrong; no engine call and learners.json untouched (the Phase 2 placement staircase judges single items with no set, mathsRows.ts:55)",
+   "case 8 (maths-judge-test, source guard in the repo's existing style): mark.ts calls land( from one place, builds no byN map and contains no 'unsure++' (today 4, 3 and 4 sites)"
+  ],
+  "premise": [
+   "desk/src/lib/desk/mark.ts:182-210, 230-244, 264-276, 309-319 - four marking loops (markSet, markCalc, markSchool, markTyped) with the same shape: a byN lookup, an unsure branch returning ASK, attempts.push({right, slip, ...setOf(item)}), then land()",
+   "desk/src/lib/desk/mark.ts:177,225,259 (byN) / 197,238,271,314 (unsure++) / 206,241,274,317 (attempts.push) / 212,246,278,320 (return land) - 3, 4, 4 and 4 copies; the 5-field return type literal appears 5 times",
+   "desk/src/lib/desk/mark.ts:158-159 - the photo path picks ONE marker for the whole sheet with items.some(isSchoolSpec) / some(isCalcSpec)",
+   "desk/src/lib/desk/mark.ts:328 - the typed path picks per ITEM with item.spec !== undefined: two granularities for one rule",
+   "desk/src/lib/desk/explain.ts:196,200-201,209 - a third detection (isCalcSpec/isSchoolSpec on the item) picking engine, settle rule and leak rule",
+   "desk/src/lib/desk/hint.ts:57-58,76 - the hint's stance is chosen by the learner's PATH; hint.ts:65,77,79,106 - its leak check, unit name and withheld line are chosen by the question's TEXT (two spec readers); api/hint/route.ts:51 does the text read again for the lesson library",
+   "desk/src/lib/desk/items.ts:123-124 and desk/src/lib/rules/maths.ts:78 - a fourth detection, by topic id (pathOfTopic, isCalcTopic); desk/src/lib/rules/maths.ts:142,147 and desk/src/lib/session/store.ts:143,148 detect by spec shape again",
+   "15 lines in 7 files (items, rules/maths, hint, api/hint, mark, explain, store) decide the kind, by three mechanisms: topic id, item.spec shape, printed text",
+   "desk/src/tv/mathsRows.ts:55-57 and docs/FAMILY-PHASE-1-PLAN.md:27 - the Math placement staircase is Phase 2: a placement is a mixed-kind sheet by definition, and judging one answer outside a practice set has no entry point today (typedSettle at mark.ts:327 is private)",
+   "tools/school-marking-test.cjs:391 pins typed == photo for school sets only; no test pins it for linear or Calculus, or for a mixed sheet"
+  ],
+  "rollback": "Three commits: test(math-buddy) adds tools/maths-judge-test.cjs red; refactor(math-buddy) adds rules/kinds.ts and moves mark.ts onto it (the existing school-marking, calc-marking and maths-rules suites are the safety net and must stay green at this commit); feat(math-buddy) moves hint.ts, explain.ts, items.ts and the hint route onto kindOf* (the stance fix). Reverting the last commit restores today's hint stance alone; reverting the series restores today's files; nothing persisted changes shape.",
+  "gate": "architecture",
+  "runner_up": "Tally once: the right/wrong/unsure count is re-derived at 8 sites (api/mark/route.ts:66, phone/page.tsx:455, lib/desk/memory.ts:36, rules/digest.ts:66, rules/maths.ts:176, tv/landingRows.ts:98, tv/mathsRows.ts:104, MathsTV.tsx:775) with two different meanings of 'not sure' (memory.ts:38 counts only 'unsure', digest.ts:67 and maths.ts:175 count anything not right or wrong); smaller and a tidy-up, so traded for the judge, but card B folds its TV half in.",
+  "body": "## Summary\nMath Buddy decides what KIND of item it is looking at (a linear equation the model wrote, a Calculus spec, a school unit's spec) by three different mechanisms at 15 lines in 7 files, and four marking loops carry the same scaffold. One registry (`rules/kinds.ts`) and one pure judge replace them: a sheet is read by the model, judged per item in code, and recorded once.\n\n## Description\nThe decision that is the product (is this answer right, which slip, what may the desk say) is made by whichever file asks, in its own way. The photo path chooses a marker for the whole sheet (`mark.ts:158-159`), the typed path chooses per item (`mark.ts:328`), the explainer re-detects from the item (`explain.ts:196`), the hint chooses its stance from the learner's path (`hint.ts:57-58`) but its leak check and fallback line from the question's text (`hint.ts:65,77,106`), the generator from the topic (`items.ts:123-124`).\n\nThe cost is visible two ways. First, behaviour: probed on the current tree, the same three strings on the same mixed sheet are marked right, wrong, right when typed and right, wrong, unsure when photographed; a school-path learner's derivative question gets the linear-equations stance ('factoring and linear-equations unit; prefer the unit's methods over heavier ones') while its leak check already reads it as Calculus; a Calculus-path learner's fractions task gets the Calculus I stance. Second, change cost: a fourth kind (or the Phase 2 placement staircase, which judges single items of many kinds with no practice set, `mathsRows.ts:55`) means editing 7 files, copying a fifth marking loop and re-deciding the kind by a fourth mechanism.\n\nThe move: `rules/kinds.ts` holds `kindOfSpec(spec)`, `kindOfQuestion(text)` and `kindOfTopic(topicId)` (all pure, built on the existing `isCalcSpec`, `isSchoolSpec`, the two `specFromQuestion` readers and `pathOfTopic`), and `judgeItem(item, read, ctx)` / `judgeSet(practice, reads, ctx)`, the one decision. `mark.ts` keeps the model half (three reading prompts and schemas, unchanged) and returns `Read[]`; `judgeSet` settles each item by ITS kind; `markTyped` builds its reads from the typed strings; `land()` is called once. A linear read that carries the model's own solution keeps today's rule (the solution must hold, else the desk asks); a linear read with no solution field is judged by the code's own root (`rootOf`, not degenerate), which is exactly what typed marking does today. The explainer's spoken-value settle (`settle`) stays as it is; only its kind detection and leak dispatch move onto the registry. The hint's stance follows the item's kind where the text reads, and falls back to the learner's path only where it does not; the voice stays the learner's.\n\n## Flow\n- Phone photographs or types -> `/api/mark` -> `markSet` (reader by sheet kind, unchanged prompts) or `markTyped` -> `judgeSet` -> `land` -> `practice.marked`: nothing the TV or the phone sees changes shape.\n- Homework hint -> `kindOfQuestion(item.text)` picks stance, leak rule, unit name and withheld line from one answer; `api/hint` asks the same function for the lesson library.\n- `makeItems` -> `kindOfTopic` replaces the two inline `pathOfTopic` tests.\n- Future: a placement item is `judgeItem` with a spec and an answer, no sheet.\n\n## Expected impact\nFour marking loops become one judge plus three readers (mark.ts 372 lines to roughly 240); the kind is decided by one module instead of 15 lines in 7 files; typed and photographed marking of the same strings cannot disagree for any mix of kinds, which today is pinned for school sets only; two real prompt mismatches in the hint close; and the Phase 2 placement staircase and card B's second go get a single-item entry point instead of a private function.\n\n## Evaluation\nClaim: one registry and one pure judge make marking, explaining and hinting agree on an item's kind, closing a typed-versus-photo disagreement and a hint-stance mismatch that probes show today, without changing any screen or stored shape.\nBefore: 0 of 7 behaviour cases pass (case 6 is a declared GUARD, green before by design); probe: typed marks a mixed sheet right, wrong, right and photo marks it right, wrong, unsure; mark.ts has 4 loops, 4 land() calls, 3 byN maps, 4 unsure++ sites.\nAfter: 7 of 7 behaviour cases pass and the guard stays green; school-marking, calc-marking, calc-hint, maths-rules, school-stretch suites unchanged and green; 1 land() call in mark.ts.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: architecture",
+  "evidence": "probe (scratch node script on HEAD fa6eb067, desk's own typescript, vision stub): mixed practice [{n:1 school compute 3/4 + 1/6 spec}, {n:2 calc derivative f x^2 spec}, {n:3 'x+3=7' no spec}], answers 11/12, 3x, 4 -> markTyped(...).items = [1 right],[2 wrong],[3 right]; markSet('img', ...) with the stub reading the same strings = [1 right],[2 wrong],[3 unsure]. probe 2 (engines/text stub, hint('maths', q, {path, age:13}).system): path school + 'Find the derivative of x^2 + 3x' -> 'You are a maths tutor for a learner aged 11 to 13. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.'; path calc1 + 'Work out 3/4 - 1/6' -> 'You are a maths tutor for a first-year university student in Calculus I. Use the course's methods ...'; path school + 'Work out 3/4 - 1/6' -> 'This sheet is the unit \"Add and subtract fractions\"' (so the unit stance exists and is suppressed only by the learner's path). probe 3: of 960 school-generated questions (every unit with a generator, seeds 1-40, tiers 1-2) calc.specFromQuestion reads 0 and school.specFromQuestion reads 960 (the readers do not overlap, so kind-by-text is safe). grep: mark.ts byN at 177,225,259; unsure++ at 197,238,271,314; attempts.push at 206,241,274,317; return land( at 212,246,278,320; the return-type literal 'items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean' 5 times. Kind-deciding lines: items.ts:123,124; rules/maths.ts:78,142,147; hint.ts:58,76,77; api/hint/route.ts:51; mark.ts:158,159,328; explain.ts:196; store.ts:143,148 = 15 lines in 7 files. Never-re-propose check: challenge-2026-09-25 desk-pipelines A moved slip location into rules/maths (locate) and challenge-2026-09-23 desk-pipelines A built the job runner; neither unified the kind. Shared hot files avoided: store.ts, tv/keys.ts, tv/screens.tsx, uat/driver/linga-text.cjs are not in the write set.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 4,
+   "grounding": 4,
+   "falsifiability": 4,
+   "deck_line": "Approve (architecture): one place decides what kind of item this is, the hint stops using the linear-equations stance for calculus, and one answer can be judged with no set."
+  },
+  "id": "math-buddy-A",
+  "rank": 32
+ },
+ {
+  "context": "engines",
+  "host": "engines",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "Engine check answers in seconds: what would run, whether it answers, what to fix",
+  "size": "M",
+  "effort": 6,
+  "impact": 7,
+  "risk": 4,
+  "write_set": [
+   "desk/src/lib/engines/types.ts",
+   "desk/src/lib/engines/text.ts",
+   "desk/src/lib/engines/codex.ts",
+   "desk/src/lib/engines/vision.ts",
+   "desk/src/lib/engines/embed.ts",
+   "desk/src/lib/engines/voice.ts",
+   "desk/src/lib/engines/listen.ts",
+   "desk/src/app/api/smoke/route.ts",
+   "desk/README.md",
+   "tools/engines-rules-test.cjs"
+  ],
+  "new_files": [
+   "desk/src/lib/engines/health.ts"
+  ],
+  "shared_surfaces": [],
+  "acceptance": [
+   "case 19: stubs for all five kinds, each with a probe and a run that counts its calls -> engineStatus() returns 5 rows in the order text, vision, embed, speak, listen, each { kind, provider: 'stub', ok, say, ms }, and no run() was called (tools/engines-rules-test.cjs)",
+   "case 20: a stub probe that never answers, with budgetMs 30 -> that row is { ok: false, say: /did not answer/ } while the other four rows are unaffected, and the whole call returns in under 500 ms (probes run in parallel, not one after another) (tools/engines-rules-test.cjs)",
+   "case 21: a stub with no probe -> its row is ok: null and say names the way to find out ('add ?live=1'); it is never reported ok: true on no evidence (tools/engines-rules-test.cjs)",
+   "case 22: globalThis.fetch stubbed to answer /api/tags with models [{name:'nomic-embed-text:latest'}] -> the real ollama vision row is ok:false with say containing 'ollama pull qwen3.8:27b', the embed row is ok:true; with fetch rejecting -> both rows ok:false and say contains the host (http://127.0.0.1:11434) and 'ollama serve' (tools/engines-rules-test.cjs)",
+   "case 23: engineCheck({ live: true, sample }) with stubs that each take 40 ms -> text, vision, embed and speak all run, the call returns in under 120 ms (parallel, the serial sum is 160 ms), each row carries the provider and ms the engine reported, and listen is a probe row, not a run; a stub that throws EngineError('timeout','stub','sk-live-123 ...') -> that row is { ok: false, error: { kind: 'timeout', say } } and JSON.stringify of the whole result does not contain 'sk-live-123' (the detail goes to console.error) (tools/engines-rules-test.cjs)",
+   "case 24: GET /api/smoke through the route module -> 200 with 5 engine rows and no run() call; the same request with header x-desk-role: phone -> 403 and no probe called; with x-desk-role: tv and ?live=1 -> 200 and the live rows (tools/engines-rules-test.cjs, route required the way tools/linga-rules-test.cjs:790 requires the speak route)"
+  ],
+  "premise": [
+   "desk/src/app/api/smoke/route.ts:14-20 - three live calls awaited one after another (text, then embed, then vision), each only as fast as its engine; text may take 90 s (text.ts:59) and the 17 GB vision model ~45 s to load on first use (desk/README.md Engines section), so the page that exists to answer 'is it broken' answers after the slowest sum of them, as raw JSON",
+   "desk/src/app/api/smoke/route.ts:12 - speech is `voice: voiceConfigured() ? 'key present' : 'no key'`; voiceConfigured() is piperReady() || Boolean(KEY) (voice.ts:38), so a Piper-only desk is reported as 'key present'; listen is not reported at all (listenStatus, listen.ts:27, is reached only by api/listen GET, route.ts:5). 3 of 5 engines are exercised, 1 is mislabelled, 1 is absent",
+   "desk/src/lib/engines/registry.ts:35-42 - activeProvider(kind) is documented 'Starts nothing' and exists to say what a call would use now; desk/src has 0 callers outside registry.ts (the other users are tools/engines-rules-test.cjs:86-89 and tools/lab-bench.cjs:185), so the check never says WHICH provider is configured, e.g. whether DESK_TEXT_ENGINE=codex is in force (text.ts:76)",
+   "desk/src/app/api/smoke/route.ts:13 - a failure prints `String(e).slice(0, 300)`: the engine's own message, which commit 4772d195 (fix(linga): keep engine errors out of the speech responses) found can carry an upstream reply or key fragment, and which can be read by a paired phone as well as the TV (desk/src/proxy.ts:29 lets any non-guest role through)",
+   "desk/src/proxy.ts:29 and tools/desk-pairing-test.cjs:110-114 - every API route but the session's own answers a guest 401 and passes tv and phone alike, so a paired child's phone can start the 3 model calls above by loading /api/smoke; the route never reads the role (lib/session/pairing.ts:82 roleFrom)",
+   "desk/src/lib/engines/vision.ts:16 and embed.ts:12 - the two Ollama engines name their models (qwen3.8:27b, nomic-embed-text); a missing pull surfaces only as a later 404 inside a page read ('ollama 404: ...' truncated, vision.ts:32) rather than as a line the operator can act on",
+   "grep -rn 'smoke' tools uat desk/src -> only app/api/smoke/route.ts and app/page.tsx:16 (the 'Engine check' link): the one operator-facing health surface has 0 tests, and desk/README.md:30 describes it as 'one call per engine'"
+  ],
+  "rollback": "Two commits after the red tests: feat(engines) adds optional Provider.probe, health.ts and the per-provider probes, then feat(smoke) swaps the route onto health.ts and updates the README line. Probes are optional and additive; reverting the second commit restores the old route unchanged, reverting both removes the probes and leaves the tests.",
+  "gate": "direction",
+  "runner_up": "Read engine env once through one lazy config (text.ts:24-25, embed.ts:11-12, vision.ts:15-16 and voice.ts:27-32 read process.env at import; listen.ts:16-22 and codex.ts:20 read per call; the Ollama host line is written twice) so a test can flip Piper or the host and the check can print the effective config.",
+  "body": "## Summary\nThe Engine check link on the desk landing page (app/page.tsx:16) becomes a status the operator can read at a glance. It lists all five engines with the provider that would run, whether it answers and what to do when it does not, in about two seconds and with no model call. A `?live=1` run does the real calls in parallel.\n\n## Description\nThe route's own comment says its job: 'a broken engine is found here and not on the TV' (smoke/route.ts:1). It does that job slowly and partially. It runs the text, embed and vision calls in series (route.ts:14-20), so the answer arrives after the sum of the slowest three. It covers 3 of the 5 engines, mislabels a Piper-only desk as 'key present' (route.ts:12), omits listen although listenStatus() exists (listen.ts:27), never says which provider is active although activeProvider() was written for exactly that (registry.ts:36) and nothing in desk/src calls it, and on failure prints the engine's own message (route.ts:13), the class of leak 4772d195 closed on the speech routes. A paired phone, not only the TV, can start the three model calls, because the route never reads the role.\n\nThe operator's real questions are cheap to answer from facts the desk already holds: which provider would run, is its binary or host reachable, is the model pulled, is the key or the voice file there. Those need a probe, not a model call.\n\nThe move: an optional `Provider.probe(): Promise<{ ok: boolean; say: string }>` (types.ts) implemented by each provider in one or two lines of real checking: claude-cli resolves its binary, codex resolves its launcher (codex.ts launcher()), the two Ollama engines GET /api/tags and look for their model (so a missing model says 'ollama pull qwen3.8:27b' and an unreachable host says 'ollama serve' with the host), Piper checks its two paths, ElevenLabs checks the key is set without calling it, listen reuses listenStatus(). A new `health.ts` exports `engineStatus(budgetMs)`, which asks each kind's ACTIVE provider (activeProvider) for its probe in parallel under a budget and returns rows `{ kind, provider, ok: boolean | null, say, ms }` (null when a provider has no probe, never a guess), and `engineCheck({ live, sample })`, which for `live` also runs text, vision (when a sample page exists), embed and speak in parallel and reports the engine's own provider and ms, with failures as `{ kind, say }` from the EngineError kind and the detail sent to console.error as job.ts does. The route returns those rows, runs live only on `?live=1`, and answers a phone 403 (the TV, or an in-process caller with no role header, may ask).\n\nContract note (gate `contract`): the route's response shape changes. Its consumers: app/page.tsx:16 (a plain link, no parse), desk/README.md:30 (prose, updated here), no script or test reads it today (grep above). The 403 for a paired phone tightens who may start model calls; it does not open any route to a guest, so the pairing rule in proxy.ts is untouched.\n\n## Flow\n- The operator opens Engine check from the TV's browser: five rows appear at once, e.g. text claude-cli ok, vision ollama NOT ok 'ollama pull qwen3.8:27b', embed ollama ok, speak piper ok, listen gravitone ok.\n- A row that is not ok says what to do in one line.\n- To prove a path end to end, the operator adds ?live=1: the real calls run side by side and each row reports its provider and milliseconds.\n- A paired phone that loads the same address gets 403 and no engine is touched.\n\n## Expected impact\nThe first thing an operator does when a page read or a hint fails is open this check; today that is a wait of up to a couple of minutes for a JSON dump that skips listen, mislabels Piper and names no provider. After the change the same question takes two seconds, covers all five engines, and the commonest failures (Ollama down, model not pulled, no CLI, no key, STT not running) each read as an instruction. A child's phone can no longer spend model calls by loading a URL.\n\n## Evaluation\nClaim: the engine check reports all five engines with their active provider and a fix line in one parallel round, without a model call, and a phone cannot start the live run.\nBefore: 0 of 6 acceptance cases pass (the route runs 3 live calls in series, covers 3 of 5 engines, has no probe, no role check and no test)\nAfter: 6 of 6\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+  "evidence": "smoke/route.ts:12 `const out = { voice: voiceConfigured() ? 'key present' : 'no key' };` route.ts:13 `out[name] = { error: String(e).slice(0, 300) }`; route.ts:14 `await t('text', ...)`, :15 `await t('embed', ...)`, :16 `await t('vision', ...)` - three awaits in series; nothing for listen. voice.ts:38 `export function voiceConfigured() { return piperReady() || Boolean(KEY); }`. registry.ts:36 `export function activeProvider(kind: EngineKind): string` ('Starts nothing', :35); grep -rn activeProvider desk/src -> registry.ts:36 and :48 only; tools: engines-rules-test.cjs:86-89, lab-bench.cjs:185. listen.ts:27 `export async function listenStatus()` reached only from api/listen/route.ts:5. proxy.ts:29 `if (role === 'guest' && !OPEN[...]?.includes(req.method)) return 401` - tv and phone both pass; smoke route has no role read (pairing.ts:82 roleFrom is unused there). grep -rln 'api/smoke' tools uat desk/src -> app/api/smoke/route.ts, app/page.tsx only (0 tests). Commit 4772d195 message: 'both speech routes echoed the engine's own error, which can carry a key fragment'. vision.ts:16 `qwen3.8:27b`, :32 `ollama ${res.status}: ${(await res.text()).slice(0, 300)}`; embed.ts:12 `nomic-embed-text`. Prior cards: no challenge card or finding in challenge-2026-09-23/25, backlog, followup or optimize-2026-09-30 runs touches /api/smoke or engine health (findings titles listed and checked).",
+  "critic": {
+   "verdict": "build",
+   "ambition": 3,
+   "grounding": 5,
+   "falsifiability": 4,
+   "deck_line": "Approve as direction: one command says which engine is configured, which model to pull, answers in parallel, and no longer leaks upstream text or lets a phone spend calls."
+  },
+  "gate_scout": "contract",
+  "id": "engines-B",
+  "rank": 28
+ },
+ {
+  "context": "landing",
+  "host": "landing",
+  "slot": "B",
+  "lens": "ux-elevation",
+  "title": "Continue as Ema continues: Select opens what is waiting, not the app's home",
+  "size": "M",
+  "effort": 5,
+  "impact": 7,
+  "risk": 4,
+  "write_set": [
+   "desk/src/tv/keys.ts",
+   "tools/tv-keys-test.cjs",
+   "tools/tv-recap-test.cjs",
+   "tools/tv-landing-live.cjs",
+   "docs/STUDY-DESK-SCREENS.md"
+  ],
+  "new_files": [],
+  "shared_surfaces": [
+   "desk/src/tv/keys.ts (hot shared file): the change is the landing handler's select branch, a new openWaiting helper, and the two existing copies of it (tonight's continue, recap's select) rewritten to call it",
+   "landingRows.ts, model.ts, LandingTV.tsx, both themes and page.tsx are NOT touched: the hand-off plays exactly as today because the step still carries a nav event; run after the essay-seat card or before it, either order works because the essay branch calls ownReading()"
+  ],
+  "acceptance": [
+   "case 1: landing, focus on maths, practice marked (the existing `marked` fixture) -> Select events are [{subject:'maths'},{nav 'sheet', focus: firstToLook(items)}]; today they are [{subject:'maths'},{nav 'tonight', focus:0}] (tools/tv-keys-test.cjs)",
+   "case 2: landing, focus on maths, a set on paper not yet marked -> [{subject:'maths'},{nav 'practice', focus:0}] (tools/tv-keys-test.cjs)",
+   "case 3: landing, focus on maths, a snapped page with problems -> [{subject:'maths'},{page.select pageIx},{nav 'page', focus:0}] (tools/tv-keys-test.cjs)",
+   "case 4: landing, focus on essay, s.essay holds a paragraph and the learner's history holds its reading -> [{subject:'essay'},{essay.at null},{nav 'forensic'}] (tools/tv-keys-test.cjs)",
+   "case 5: landing, resting on essay with only the history line (label 'Argument', no paragraph in the session) -> nav 'essaytype' with focus === index of 'argument' in LENS_STOPS (1); today focus 0, which is Structure, so a second Select would start the wrong lens (tools/tv-keys-test.cjs, replaces the assertion at line 349)",
+   "case 6: the three openers agree: for each of the maths states in cases 1-3 and the essay state in case 4, landing Select, Tonight's Select on the continue card, and recap Select on that app's tile emit the same nav (screen and focus) (tools/tv-keys-test.cjs + tools/tv-recap-test.cjs)",
+   "case 7: GUARD: nothing waiting for maths, a Linga conversation left mid-way, a desk with no learner, the place card and the unpaired phone -> exactly today's events ([subject, nav tonight 0], [subject, nav linga 0], [nav learner from landing], [nav learner], [nav pair]) (tools/tv-keys-test.cjs, the existing landing 3 and landing 6 assertions unchanged)",
+   "case 8: journey, a real /tv page with a marked set seeded through practice.set and practice.marked: one Enter on Math Buddy -> the hand-off plays for 450-1800 ms, then session.screen === 'sheet', and Back goes to Tonight then the landing with the lamp on Math Buddy (tools/tv-landing-live.cjs, isolated next dev --webpack server, as its header describes)"
+  ],
+  "premise": [
+   "desk/src/tv/keys.ts:226 - landing Select on an app emits [subject, nav MODULE_HOME[at]] whatever the app has waiting; nav with no focus is 0",
+   "desk/src/tv/keys.ts:77 - MODULE_HOME is maths:'tonight', english:'linga', essay:'essaytype'",
+   "desk/src/landing/model.ts:118-121,142 - the big action reads 'Continue as <name>' whenever the app in the light has something waiting (kind other than none)",
+   "desk/src/tv/keys.ts:241-246 - Tonight's own Select on its continue card does the real open: page.select + nav page, or nav cont.go cont.focus; so today the resume costs two Selects and passes through a screen whose first stop is the card just named",
+   "desk/src/tv/keys.ts:413-425 - recap's Select already opens what an app has waiting: maths through continueCard, essay through ownReading to forensic; this is a second copy of Tonight's branch, and the landing is a third place that does not use either",
+   "desk/src/tv/mathsRows.ts:96-117 - continueCard names the screen and focus for a set on paper (practice), a marked set (sheet, first item to look at) or a snapped page (page)",
+   "desk/src/tv/landingRows.ts:151 - the essay waiting row carries lens (the id of the lens last read), and keys.ts:112 readingLens already maps the paragraph's lens to a focus: the data to land on the right lens is there",
+   "tools/tv-keys-test.cjs:349 - the suite asserts that at rest with an essay reading Select opens essaytype focus 0, i.e. the Structure lens when Argument was the one read (readIt, line 291)",
+   "desk/src/app/tv/page.tsx:126-131 - the hand-off zooms whenever the step carries a nav event, so a step that goes straight to a deeper screen still plays it with no change"
+  ],
+  "rollback": "Two commits: failing tests plus the openWaiting helper wired into the landing handler (revert restores MODULE_HOME for Select); then Tonight and recap rewritten to call the helper (revert restores their inline copies, which the case-6 test pins). No session, route or persisted shape changes.",
+  "gate": "none",
+  "runner_up": "Put who has something waiting on the Someone else card: session.away already holds each absent learner's open set and marked sheet (store.ts:256), so a disc with a dot per learner could say who left work behind before the switcher opens; it reaches into the learner screen the owner's cx walk has not finished, so it is not filed.",
+  "body": "## Summary\nThe landing says 'Continue as Ema' and then opens Math Buddy's front door. Make Select open the thing that is waiting: the marked sheet, the set on paper, the snapped page, the paragraph Ema was reading.\n\n## Description\nThe desk already knows what each app has waiting (landingRows.deskWaiting) and the caption already names it ('Two-step equations, 3 of 4 right. The marked set is still on the desk.'). Select ignores that and opens MODULE_HOME: Math Buddy's Tonight, where the first stop is a continue card for the same set and a second Select opens it; Essay Master's lens home with the lamp on the first lens, not the lens Ema read. Recap's Select and Tonight's continue card both already know how to open the waiting thing, in two copies of the same branch; the landing is the one place that has the answer on screen and does not use it.\n\nThe move is one helper in keys.ts, openWaiting(s, app), that returns the events for an app's waiting thing: Math Buddy through continueCard (sheet, practice or page), Essay Master to the forensic page when the paragraph on the desk is the learner's, otherwise to the lens home with the lamp on the lens last read, and everything else (nothing waiting, Linga, whose home leads with its own Carry on) to the home as today. The landing, Tonight's continue card and the recap all call it, so there is one place that says what resuming means. No new words on the TV: the caption already carries the sentence.\n\n## Flow\n- Ema comes back to a marked set. The lamp rests on Math Buddy; the caption says it is still on the desk. Select: the hand-off plays and the sheet opens on the first slip. Back is Tonight, then the desk.\n- Ema was reading the Argument lens. Select on Essay Master opens her paragraph's forensic page, or, with no paragraph in the session, the lens home with the lamp on Argument.\n- Nothing is waiting, or the app is Linga: Select opens the front door exactly as before.\n\n## Expected impact\nThe most common return path (the landing to the thing you left) loses one screen and one press for Math Buddy, and Essay Master stops dropping the learner on the wrong lens. The label 'Continue as Ema' becomes true. Three copies of 'open what an app has waiting' become one with a test that pins them equal, so a later change to Tonight's continue card cannot make the landing and the recap disagree.\n\n## Evaluation\nClaim: Select on the app in the light opens what the caption says is waiting, through one helper that Tonight and the recap share.\nBefore: 0 of 8 acceptance cases pass for the non-GUARD cases (cases 1-6 and 8 fail; case 7 is a GUARD, green by design)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first, plus one live journey\nResult: better\nGate: none",
+  "evidence": "keys.ts:226 `o.ev({ type: \"subject\", subject: at }); o.nav(MODULE_HOME[at]);` against keys.ts:241-246 and keys.ts:413-425 (two copies of the real open: `if (cont?.go === \"page\") { o.ev({ type: \"page.select\", ... }); o.nav(\"page\"); } else if (cont) o.nav(cont.go, cont.focus);`) = 3 handlers, 1 that does not use the data. Presses from the landing to the marked sheet today: 2 Selects across 2 screens (landing, tonight, sheet); after: 1. tv-keys-test.cjs:349 pins `{type:'nav',screen:'essaytype',focus:0}` for a desk whose only waiting item is an Argument reading (readIt, line 291; ESSAY_TYPES order structure, argument, evidence, language puts Argument at index 1). The map description (context-map.json landing) names 'continue' and the lamp resting on what was left, so the card is inside the context's scope; the session event shapes, routes and persisted JSON are unchanged, hence gate none.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 3,
+   "grounding": 4,
+   "falsifiability": 4,
+   "deck_line": "Approve: 'Continue as Ema' actually continues, landing on the marked sheet or the lens last read, with Tonight and recap sharing one opener."
+  },
+  "id": "landing-B",
+  "rank": 25.7
+ },
+ {
+  "context": "uat",
+  "host": "uat",
+  "slot": "A",
+  "lens": "architecture-challenger",
+  "title": "One metric registry that the judge schema, gates, roll-up and report all read",
+  "size": "M",
+  "effort": 7,
+  "impact": 7,
+  "risk": 5,
+  "write_set": [
+   "uat/driver/metrics.cjs",
+   "uat/driver/linga-text.cjs",
+   "uat/driver/verdict.cjs",
+   "uat/driver/recertify.cjs",
+   "uat/rubric.md",
+   "tools/uat-metrics-test.cjs",
+   "tools/uat-verdict-test.cjs",
+   "tools/uat-recertify-test.cjs",
+   "desk/package.json"
+  ],
+  "new_files": [
+   "uat/driver/metrics.cjs",
+   "tools/uat-metrics-test.cjs"
+  ],
+  "shared_surfaces": [
+   "desk/package.json (append tools/uat-metrics-test.cjs at the END of test:rules)"
+  ],
+  "acceptance": [
+   "case 1 (GUARD, green before by design): judgeSchema([], []) and judgeSchema(['x'], ['D1','D2']) deep-equal JSON snapshots captured from the pre-change code and pasted into the test, so the derived schema is proven identical to the hand-kept one (tools/uat-metrics-test.cjs, node:test, desk's typescript loader as in tools/uat-verdict-test.cjs)",
+   "case 2: register a synthetic metric { key: 'hint', schema: { asked, withheld }, series: [{ id: 'hintFirst', label: 'hint withheld', of: m => [m.hint.withheld, m.hint.asked] }] } -> judgeRequest(record, ctx).schema.properties.metrics.required contains 'hint' and its properties.hint equals the registered schema; after unregister() the schema is the snapshot of case 1 again (tools/uat-metrics-test.cjs)",
+   "case 3: a journey sim block with gates [{ metric: 'hintFirst', min: 0.8 }] and a judge answer with hint { asked: 4, withheld: 1 } -> verdictOf() returns fail with one why row { kind: 'gate', id: 'hintFirst' } whose text reads 'hint withheld 1/4 (25%) under 80%'; with withheld 4 it returns pass (tools/uat-metrics-test.cjs; today the gate is 'no such metric', a conditional)",
+   "case 4: rollUp() over two per-Character results carrying hint {1,4} and {2,4}, and metricDelta(before, after) -> delta.hintFirst has before '1/4 (25%)', after '3/4 (75%)', change +50 and journeys ['J3']; the existing seven keys are unchanged (tools/uat-metrics-test.cjs against recertify.cjs)",
+   "case 5: synthesize() on stubbed results, the real registry, a judge whose moments are { total: 2, correctUseful: 1, learnerTurnsWithClearErrors: 8, missedClearErrors: 6 } -> report.md's Metrics section holds one bullet per registry metric (6 today: placement, judge agreement, topic fit with safe, pitch, moment precision, boundaries; 7 with the new moment recall) and the new bullet reads 'moment recall: 2/8 (25%)'; recall is recorded by every judge today and read by no consumer (tools/uat-recertify-test.cjs stubs codexText, reuse its harness)",
+   "case 6: a journey file whose gate names a metric the registry does not know ('pich') -> unknownGates(journeyText) returns [{ journey: 'J3', metric: 'pich' }] and the run's argument check throws before any Character process is spawned; the five committed journeys return [] (tools/uat-metrics-test.cjs; today the typo is found at verdict time as a conditional, after the model calls were paid for)",
+   "case 7: every metric row of uat/rubric.md's Linga metrics table maps to a registry metric or to the named driver-measured list { check length, reliability } -> a rubric row with neither fails the test naming the row (tools/uat-metrics-test.cjs reading uat/rubric.md)",
+   "case 8 (GUARD): tools/uat-verdict-test.cjs case 6 (42 of the 84 committed judged journeys agree with the code verdict, every other names its reasons) and tools/uat-recertify-test.cjs case 2 (metricDelta matches both committed reports) pass unchanged after the refactor, ZERO fixtures in both files now built from the registry"
+  ],
+  "premise": [
+   "uat/driver/linga-text.cjs:76-82 - the judge schema spells the metric set by hand: five groups (judgeAgreement, topicFit, pitch, moments, boundaries) and twelve counters",
+   "uat/driver/verdict.cjs:71-78 - METRICS lists the gateable metrics a second time: placement, topicFit, topicSafe, pitch, moments, breaches (six ids; judgeAgreement is absent, so a gate on it cannot be written)",
+   "uat/driver/recertify.cjs:53-67 and :69-77 - rollUp() accumulates the metrics a third time and METRICS (seven entries) lists them a fourth time for the before/after delta",
+   "uat/driver/linga-text.cjs:279, :308-310, :313-318, :541 - the report spells them a fifth time: scorecard columns, six Metrics bullets, and the per-Character metrics line",
+   "uat/driver/linga-text.cjs:80 - moment recall (learnerTurnsWithClearErrors, missedClearErrors) is asked of every judge and stored in every journey record; grep over uat/driver finds it nowhere else (0 consumers), though uat/rubric.md:33 defines it as 'informative, not gated'",
+   "uat/rubric.md:29 and uat/journeys/J1-find-level.md:21 - 'check length' is a named rubric metric and a J1 'LT measures' item; grep over uat/driver and tools/uat-*.cjs finds no code for it",
+   "uat/driver/verdict.cjs:87 - a gate naming an unknown metric becomes a conditional verdict row at verdict time, after the run is paid for; gatesOf() (verdict.cjs:40) validates nothing",
+   "uat/driver/linga-text.cjs:97 and :335 - the judge and synthesis prompts, and uat/driver/ledger.cjs:120, name Linga in their text: any other module's metric needs the same five edits, which is why Math Buddy and Essay Master have twelve bespoke tools/*-live.cjs scripts and no LT run"
+  ],
+  "rollback": "Land as test(uat) with the schema snapshot first (green before, by design), then refactor(uat) in two commits: metrics.cjs plus the verdict and recertify consumers, then the judge schema and report consumers. Each commit keeps uat-verdict-test and uat-recertify-test green, so git revert of the series restores the hand-kept lists; no committed run file or finding schema changes, only report.md gains a moment-recall line.",
+  "gate": "none",
+  "runner_up": "One recertify engine: per-run and ledger recertify are two parallel implementations (plan/planLedger, finish/finishLedger, prior/ledgerPrior in parent() and child()), and the ledger rerun, the one that costs 36 pairs, writes none of recertify.md's six sections.",
+  "body": "## Summary\nThe set of metrics a Linga journey is judged on is written out five times in uat/driver, and the copies already disagree. Make one registry the only place a metric is declared; the judge schema, the gates, the roll-up, the before/after delta and the report are derived from it.\n\n## Description\nThe verdict, ledger and recertify work moved the decision into code, and in doing so each module re-listed the metrics it needs. The judge is asked for five metric groups (linga-text.cjs:76-82). verdict.cjs can gate six series (:71-78) and cannot gate judge agreement. recertify.cjs rolls up and deltas seven (:53-77). The report prints six bullets (:313-318). Moment recall is asked, stored, and read by nothing. Check length is in the rubric and in J1's measures list and exists nowhere in code. A gate with a typo is found only after the run.\n\nThe move is a new uat/driver/metrics.cjs: each entry declares its judge key, the JSON schema of that key, and its series (id, label, an of(record) that returns [numerator, denominator], and how a gate reads it). placement stays special only in that its of() reads record.facts.placement.class. linga-text.cjs builds the metrics half of judgeSchema from the registry; verdict.cjs gateReason() reads series by id; recertify.cjs rollUp() and metricDelta() fold over series; synthesize() and characterReport() print one line per series. A journey's gates are validated against the registry when the runner starts. The judge schema stays byte-identical for the existing metrics (case 1 pins it), so no prompt, finding or committed run changes; the one visible change is that moment recall is finally reported.\n\nA second module's metric (Math Buddy's hint withholding, marking agreement) then becomes one registry entry instead of five edits across three files.\n\n## Flow\n- Operator adds a metric: one entry in metrics.cjs and, if it should gate, one line in a journey's gates.\n- Run start: unknownGates() checks every journey file; a typo stops the run before any model call.\n- Judge answers, verdictOf() gates it, rollUp()/metricDelta() track it across reruns, report.md prints it. No other edit.\n\n## Expected impact\nOperators: a verdict, a delta and a report row can no longer disagree about what a metric is, and a metric the rubric promises (recall) shows up. Builders: the next module's UAT is a registry entry, not a five-file hunt. Counted: 5 hand-kept lists collapse to 1, 1 asked-but-unread metric becomes read, 1 rubric metric with no code is named as driver-measured instead of silently absent.\n\n## Evaluation\nClaim: the metric set is declared once, and the schema, gates, roll-up, delta and report are derived from it without changing any existing output.\nBefore: 0 of 6 acceptance cases pass (cases 2-7; cases 1 and 8 are guards, green before by design)\nAfter: 6 of 6, guards still green\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+  "evidence": "Counts from the tree at HEAD fa6eb067: metric set spelled in linga-text.cjs:76-82 (schema, 5 groups), verdict.cjs:71-78 (6 ids), recertify.cjs:53-67 (rollUp) and :69-77 (7 entries), linga-text.cjs:308-318 and :541 (report) = 5 sites. grep -n 'missedClearErrors\\|learnerTurnsWithClearErrors' uat/driver uat/*.md tools/uat-*.cjs -> linga-text.cjs:80 (schema) plus two test fixtures (tools/uat-recertify-test.cjs:133, tools/uat-verdict-test.cjs:61); no reader. grep -n 'check length' uat/driver tools/uat-*.cjs -> no hit; uat/rubric.md:29 and uat/journeys/J1-find-level.md:21 name it. grep -n 'judgeAgreement' uat/driver -> report and roll-up only, no gate; uat/rubric.md:30 sets 'Good: >= 0.8'. verdict.cjs:87 'gate ${id}: no such metric' is the only gate-name check. Guards that already exist: tools/uat-verdict-test.cjs case 6 (42 of 84), tools/uat-recertify-test.cjs case 2.",
+  "critic": {
+   "verdict": "build",
+   "ambition": 3,
+   "grounding": 4,
+   "falsifiability": 4,
+   "deck_line": "Approve: add an LT metric in one place instead of five, a typo in a gate fails before the paid run, and moment recall finally appears in the report."
+  },
+  "id": "uat-A",
+  "rank": 25.7
+ }
+]

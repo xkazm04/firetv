@@ -1,0 +1,162 @@
+{
+  "host": "math-buddy",
+  "riders": [
+    {
+      "name": "essay-master",
+      "checked": "Read EssayTV.tsx, essay-specimen.css, essay/fonts.ts, rules/essay.ts, lib/desk/essay.ts, api/analyse/route.ts, the essay blocks of tv/keys.ts (108-137, 321-355) and the titles of all 60 tests in tools/essay-rules-test.cjs. Traced: rewrite-in-place (lib/desk/essay.ts reviseSentence, rewriteState, the ghost arrow at EssayTV.tsx:303) was built in challenge-2026-09-25 (desk-pipelines B), the hand-kept x-ray paragraph (EssayTV.tsx:465-470) is guarded by the test at essay-rules-test.cjs:579, and the one open idea (a rewrite that holds moves the lens, or the paragraph is re-read whole after several rewrites) needs an owner ruling on whether a model's 'holds' may move a record (decisions stay in code, lib/desk/essay.ts:89-97 says a rewrite is not another reading). No card went to Essay Master; card B takes its rewrite-and-see-it-hold precedent to Math Buddy's Walk."
+    }
+  ],
+  "files_read": [
+    "desk/src/maths/MathsTV.tsx",
+    "desk/src/maths/MathText.tsx",
+    "desk/src/maths/prose.ts",
+    "desk/src/maths/typeset.ts",
+    "desk/src/maths/working.ts",
+    "desk/src/maths/fonts.ts",
+    "desk/src/tv/mathsRows.ts",
+    "desk/src/tv/sheetRows.ts",
+    "desk/src/design/maths-lamplight.css (selectors for ring, tick, tally, boxes; full file skimmed)",
+    "desk/src/lib/rules/maths.ts",
+    "desk/src/lib/desk/mark.ts",
+    "desk/src/lib/desk/explain.ts",
+    "desk/src/lib/desk/hint.ts",
+    "desk/src/lib/desk/items.ts (1-200)",
+    "desk/src/lib/desk/job.ts",
+    "desk/src/lib/session/store.ts (1-335, 410-535, 596-647)",
+    "desk/src/lib/session/pairing.ts (view)",
+    "desk/src/lib/library/paths.ts",
+    "desk/src/app/api/mark/route.ts",
+    "desk/src/app/api/explain/route.ts",
+    "desk/src/app/api/practice/route.ts",
+    "desk/src/app/api/hint/route.ts",
+    "desk/src/app/api/session/route.ts",
+    "desk/src/app/phone/page.tsx (395-470)",
+    "desk/src/tv/keys.ts (essay and walk blocks)",
+    "tools/maths-rules-test.cjs (1-60, loader and stubs)",
+    "tools/tv-sheet-test.cjs (1-60)",
+    "tools/school-marking-test.cjs (test 11)",
+    "tools/maths-type-test.cjs (1-80)",
+    "tools/maths-tv-test.cjs, maths-ruler-test.cjs, maths-paths-test.cjs, maths-course-test.cjs, maths-calculus-test.cjs (test titles)",
+    "desk/src/essay/EssayTV.tsx",
+    "desk/src/essay/fonts.ts",
+    "desk/src/design/essay-specimen.css",
+    "desk/src/lib/rules/essay.ts",
+    "desk/src/lib/desk/essay.ts",
+    "desk/src/app/api/analyse/route.ts",
+    "tools/essay-rules-test.cjs (titles)",
+    "docs/DESIGN-MATH-BUDDY.md (1-80), docs/STUDY-DESK-SCOPE.md (40-75), docs/FAMILY-PHASE-1-PLAN.md (placement lines), scan-sweep challenge.md and lenses.md, the prior decks and findings titles"
+  ],
+  "cards": [
+    {
+      "context": "math-buddy",
+      "host": "math-buddy",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "One item kind: the marker, the explainer and the hint read the same registry",
+      "size": "L",
+      "effort": 8,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "desk/src/lib/desk/mark.ts",
+        "desk/src/lib/desk/explain.ts",
+        "desk/src/lib/desk/hint.ts",
+        "desk/src/lib/desk/items.ts",
+        "desk/src/app/api/hint/route.ts",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "desk/src/lib/rules/kinds.ts",
+        "tools/maths-judge-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json (test:rules gains maths-judge-test, appended at the end of the list)"
+      ],
+      "acceptance": [
+        "case 1 (tools/maths-judge-test.cjs, vision stub at the engines provider seam as in maths-rules-test.cjs:16): a photographed sheet of three kinds - school compute '3/4 + 1/6' (spec), Calculus derivative of x^2 (spec), linear 'x+3=7' (no spec) - with the stub reading 11/12, 3x and 4 -> markSet verdicts right, wrong, right and three attempts on the learner record; today it returns right, wrong, unsure because markSet sends the whole sheet to the school marker (mark.ts:158)",
+        "case 2 (maths-judge-test): the same three strings through markTyped -> deepEqual to case 1 on verdict, slip and said, and the same seen/right counts per topic on the learner record; the vision and text stubs throw (no model) -> red today because case 1 differs",
+        "case 3 (maths-judge-test): kindOfSpec({shape:'compute',expr:'1/2+1/3'}) is 'school', kindOfSpec({shape:'derivative',f:'x^2'}) is 'calc', kindOfSpec(undefined) and kindOfSpec({shape:'nope'}) are 'linear'; kindOfQuestion('Work out 3/4 - 1/6') is 'school', kindOfQuestion('Find the derivative of x^2') is 'calc', kindOfQuestion('Solve for x: 2x + 3 = 11') is 'linear' -> module absent today",
+        "case 4 (maths-judge-test, engines/text stub records the request): hint('maths','Find the derivative of x^2 + 3x',{path:'school',age:13}) -> the system prompt names Calculus I and does not contain 'factoring and linear-equations unit'; today it is exactly that linear-equations stance while the leak check already reads the item as Calculus (hint.ts:57-58 against :77)",
+        "case 5 (maths-judge-test, same stub): hint('maths','Work out 3/4 - 1/6',{path:'calc1'}) -> the system prompt names the unit 'Add and subtract fractions' and not 'Calculus I', the voice paragraph stays the calc1 learner's (teen band, hint.ts:76); today it is the Calculus I stance for a fractions task",
+        "GUARD case 6 (maths-judge-test): hint('maths','Solve for x: 2x + 3 = 11',{path:'calc1'}) -> still the Calculus I stance (neither reader reads the text, so the learner's path decides, as today), and a double leak still returns withheldLine(problem) with an empty next",
+        "case 7 (maths-judge-test): judgeItem is exported and needs no set - judgeItem(item with spec compute 3/4 + 1/6, {studentAnswer:'11/12'}, {topic:'frac-add-sub', system:'uk'}) -> verdict right; studentAnswer '' -> null (ask); a Calculus item with '3x' for x^2 -> wrong; no engine call and learners.json untouched (the Phase 2 placement staircase judges single items with no set, mathsRows.ts:55)",
+        "case 8 (maths-judge-test, source guard in the repo's existing style): mark.ts calls land( from one place, builds no byN map and contains no 'unsure++' (today 4, 3 and 4 sites)"
+      ],
+      "premise": [
+        "desk/src/lib/desk/mark.ts:182-210, 230-244, 264-276, 309-319 - four marking loops (markSet, markCalc, markSchool, markTyped) with the same shape: a byN lookup, an unsure branch returning ASK, attempts.push({right, slip, ...setOf(item)}), then land()",
+        "desk/src/lib/desk/mark.ts:177,225,259 (byN) / 197,238,271,314 (unsure++) / 206,241,274,317 (attempts.push) / 212,246,278,320 (return land) - 3, 4, 4 and 4 copies; the 5-field return type literal appears 5 times",
+        "desk/src/lib/desk/mark.ts:158-159 - the photo path picks ONE marker for the whole sheet with items.some(isSchoolSpec) / some(isCalcSpec)",
+        "desk/src/lib/desk/mark.ts:328 - the typed path picks per ITEM with item.spec !== undefined: two granularities for one rule",
+        "desk/src/lib/desk/explain.ts:196,200-201,209 - a third detection (isCalcSpec/isSchoolSpec on the item) picking engine, settle rule and leak rule",
+        "desk/src/lib/desk/hint.ts:57-58,76 - the hint's stance is chosen by the learner's PATH; hint.ts:65,77,79,106 - its leak check, unit name and withheld line are chosen by the question's TEXT (two spec readers); api/hint/route.ts:51 does the text read again for the lesson library",
+        "desk/src/lib/desk/items.ts:123-124 and desk/src/lib/rules/maths.ts:78 - a fourth detection, by topic id (pathOfTopic, isCalcTopic); desk/src/lib/rules/maths.ts:142,147 and desk/src/lib/session/store.ts:143,148 detect by spec shape again",
+        "15 lines in 7 files (items, rules/maths, hint, api/hint, mark, explain, store) decide the kind, by three mechanisms: topic id, item.spec shape, printed text",
+        "desk/src/tv/mathsRows.ts:55-57 and docs/FAMILY-PHASE-1-PLAN.md:27 - the Math placement staircase is Phase 2: a placement is a mixed-kind sheet by definition, and judging one answer outside a practice set has no entry point today (typedSettle at mark.ts:327 is private)",
+        "tools/school-marking-test.cjs:391 pins typed == photo for school sets only; no test pins it for linear or Calculus, or for a mixed sheet"
+      ],
+      "rollback": "Three commits: test(math-buddy) adds tools/maths-judge-test.cjs red; refactor(math-buddy) adds rules/kinds.ts and moves mark.ts onto it (the existing school-marking, calc-marking and maths-rules suites are the safety net and must stay green at this commit); feat(math-buddy) moves hint.ts, explain.ts, items.ts and the hint route onto kindOf* (the stance fix). Reverting the last commit restores today's hint stance alone; reverting the series restores today's files; nothing persisted changes shape.",
+      "gate": "architecture",
+      "runner_up": "Tally once: the right/wrong/unsure count is re-derived at 8 sites (api/mark/route.ts:66, phone/page.tsx:455, lib/desk/memory.ts:36, rules/digest.ts:66, rules/maths.ts:176, tv/landingRows.ts:98, tv/mathsRows.ts:104, MathsTV.tsx:775) with two different meanings of 'not sure' (memory.ts:38 counts only 'unsure', digest.ts:67 and maths.ts:175 count anything not right or wrong); smaller and a tidy-up, so traded for the judge, but card B folds its TV half in.",
+      "body": "## Summary\nMath Buddy decides what KIND of item it is looking at (a linear equation the model wrote, a Calculus spec, a school unit's spec) by three different mechanisms at 15 lines in 7 files, and four marking loops carry the same scaffold. One registry (`rules/kinds.ts`) and one pure judge replace them: a sheet is read by the model, judged per item in code, and recorded once.\n\n## Description\nThe decision that is the product (is this answer right, which slip, what may the desk say) is made by whichever file asks, in its own way. The photo path chooses a marker for the whole sheet (`mark.ts:158-159`), the typed path chooses per item (`mark.ts:328`), the explainer re-detects from the item (`explain.ts:196`), the hint chooses its stance from the learner's path (`hint.ts:57-58`) but its leak check and fallback line from the question's text (`hint.ts:65,77,106`), the generator from the topic (`items.ts:123-124`).\n\nThe cost is visible two ways. First, behaviour: probed on the current tree, the same three strings on the same mixed sheet are marked right, wrong, right when typed and right, wrong, unsure when photographed; a school-path learner's derivative question gets the linear-equations stance ('factoring and linear-equations unit; prefer the unit's methods over heavier ones') while its leak check already reads it as Calculus; a Calculus-path learner's fractions task gets the Calculus I stance. Second, change cost: a fourth kind (or the Phase 2 placement staircase, which judges single items of many kinds with no practice set, `mathsRows.ts:55`) means editing 7 files, copying a fifth marking loop and re-deciding the kind by a fourth mechanism.\n\nThe move: `rules/kinds.ts` holds `kindOfSpec(spec)`, `kindOfQuestion(text)` and `kindOfTopic(topicId)` (all pure, built on the existing `isCalcSpec`, `isSchoolSpec`, the two `specFromQuestion` readers and `pathOfTopic`), and `judgeItem(item, read, ctx)` / `judgeSet(practice, reads, ctx)`, the one decision. `mark.ts` keeps the model half (three reading prompts and schemas, unchanged) and returns `Read[]`; `judgeSet` settles each item by ITS kind; `markTyped` builds its reads from the typed strings; `land()` is called once. A linear read that carries the model's own solution keeps today's rule (the solution must hold, else the desk asks); a linear read with no solution field is judged by the code's own root (`rootOf`, not degenerate), which is exactly what typed marking does today. The explainer's spoken-value settle (`settle`) stays as it is; only its kind detection and leak dispatch move onto the registry. The hint's stance follows the item's kind where the text reads, and falls back to the learner's path only where it does not; the voice stays the learner's.\n\n## Flow\n- Phone photographs or types -> `/api/mark` -> `markSet` (reader by sheet kind, unchanged prompts) or `markTyped` -> `judgeSet` -> `land` -> `practice.marked`: nothing the TV or the phone sees changes shape.\n- Homework hint -> `kindOfQuestion(item.text)` picks stance, leak rule, unit name and withheld line from one answer; `api/hint` asks the same function for the lesson library.\n- `makeItems` -> `kindOfTopic` replaces the two inline `pathOfTopic` tests.\n- Future: a placement item is `judgeItem` with a spec and an answer, no sheet.\n\n## Expected impact\nFour marking loops become one judge plus three readers (mark.ts 372 lines to roughly 240); the kind is decided by one module instead of 15 lines in 7 files; typed and photographed marking of the same strings cannot disagree for any mix of kinds, which today is pinned for school sets only; two real prompt mismatches in the hint close; and the Phase 2 placement staircase and card B's second go get a single-item entry point instead of a private function.\n\n## Evaluation\nClaim: one registry and one pure judge make marking, explaining and hinting agree on an item's kind, closing a typed-versus-photo disagreement and a hint-stance mismatch that probes show today, without changing any screen or stored shape.\nBefore: 0 of 7 behaviour cases pass (case 6 is a declared GUARD, green before by design); probe: typed marks a mixed sheet right, wrong, right and photo marks it right, wrong, unsure; mark.ts has 4 loops, 4 land() calls, 3 byN maps, 4 unsure++ sites.\nAfter: 7 of 7 behaviour cases pass and the guard stays green; school-marking, calc-marking, calc-hint, maths-rules, school-stretch suites unchanged and green; 1 land() call in mark.ts.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: architecture",
+      "evidence": "probe (scratch node script on HEAD fa6eb067, desk's own typescript, vision stub): mixed practice [{n:1 school compute 3/4 + 1/6 spec}, {n:2 calc derivative f x^2 spec}, {n:3 'x+3=7' no spec}], answers 11/12, 3x, 4 -> markTyped(...).items = [1 right],[2 wrong],[3 right]; markSet('img', ...) with the stub reading the same strings = [1 right],[2 wrong],[3 unsure]. probe 2 (engines/text stub, hint('maths', q, {path, age:13}).system): path school + 'Find the derivative of x^2 + 3x' -> 'You are a maths tutor for a learner aged 11 to 13. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.'; path calc1 + 'Work out 3/4 - 1/6' -> 'You are a maths tutor for a first-year university student in Calculus I. Use the course's methods ...'; path school + 'Work out 3/4 - 1/6' -> 'This sheet is the unit \"Add and subtract fractions\"' (so the unit stance exists and is suppressed only by the learner's path). probe 3: of 960 school-generated questions (every unit with a generator, seeds 1-40, tiers 1-2) calc.specFromQuestion reads 0 and school.specFromQuestion reads 960 (the readers do not overlap, so kind-by-text is safe). grep: mark.ts byN at 177,225,259; unsure++ at 197,238,271,314; attempts.push at 206,241,274,317; return land( at 212,246,278,320; the return-type literal 'items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean' 5 times. Kind-deciding lines: items.ts:123,124; rules/maths.ts:78,142,147; hint.ts:58,76,77; api/hint/route.ts:51; mark.ts:158,159,328; explain.ts:196; store.ts:143,148 = 15 lines in 7 files. Never-re-propose check: challenge-2026-09-25 desk-pipelines A moved slip location into rules/maths (locate) and challenge-2026-09-23 desk-pipelines A built the job runner; neither unified the kind. Shared hot files avoided: store.ts, tv/keys.ts, tv/screens.tsx, uat/driver/linga-text.cjs are not in the write set."
+    },
+    {
+      "context": "math-buddy",
+      "host": "math-buddy",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "Fix the ringed one: one typed second go, and the ring wears a tick",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "desk/src/lib/session/store.ts",
+        "desk/src/lib/rules/maths.ts",
+        "desk/src/lib/desk/mark.ts",
+        "desk/src/app/api/session/route.ts",
+        "desk/src/tv/sheetRows.ts",
+        "desk/src/maths/MathsTV.tsx",
+        "desk/src/design/maths-lamplight.css",
+        "desk/src/app/phone/page.tsx",
+        "tools/tv-sheet-test.cjs",
+        "tools/maths-tv-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "desk/src/app/api/second/route.ts",
+        "tools/maths-second-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/src/lib/session/store.ts (hot: PracticeItem, shown(), Event, reducer, NEEDS_LEARNER; the edit is one field, one event, one case)",
+        "desk/package.json (test:rules gains maths-second-test, appended at the end)"
+      ],
+      "acceptance": [
+        "case 1 (tools/maths-second-test.cjs, rules): secondProblem(item) in rules/maths.ts -> null for an item with verdict 'wrong' and no second; a plain desk sentence for verdict 'right', for verdict 'unsure', and for a wrong item that already has a second (one go, so it can never be guess-and-check)",
+        "case 2 (tools/tv-sheet-test.cjs, reducer): reduce(markedSession, {type:'practice.second', n:2, verdict:'right'}) -> item 2 gains second:'right' while verdict stays 'wrong' and slip, said and slipAt are unchanged; screen, focus and walkIx unchanged; replaying the event with verdict 'wrong' leaves second 'right'; the event for a right item or an unknown n changes nothing; shown() drops a second that is neither 'right' nor 'wrong' (a hand-edited session.json)",
+        "case 3 (maths-second-test, route handler, vision and text engines stubbed to throw): POST /api/second {n:2, answer:'7'} on a marked linear-one-step set whose item 2 ('x-5=2') is wrong -> 200 with body {ok:true} and no verdict word in it; the session then holds second:'right'; the same post with '5' gives second:'wrong'; learners.json (skills, history, digest) is byte-identical before and after",
+        "case 4 (maths-second-test): refusals each give 400 or 409 with a plain desk sentence and change nothing - a blank answer, 'seven' (unreadable), an answer over TYPED_ANSWER_MAX characters, no marked set, an item that is right, an item that already had its go; and an unreadable answer does not spend the go: 'seven' then '7' lands second:'right'",
+        "case 5 (maths-second-test): POST /api/session {type:'practice.second', n:2, verdict:'right'} -> 403 (SERVER_ONLY): a screen can never post a verdict, only the route that checked the answer can",
+        "case 6 (tools/tv-sheet-test.cjs, rows): sheetTiles carries second; firstToLook([right, wrong with second right, wrong]) is 2 and skips the fixed item; with every item right or fixed it is items.length (the Six more stop); lookCount counts a fixed item out, so sheetHead says 'One to look at' when one of two wrong items is fixed",
+        "case 7 (tools/maths-tv-test.cjs, server render of Sheet and Walk): item 2 wrong with second right -> its tally mark and number carry data-second='right', a tick (data-role='maths-tick') and the ring (.nr) are both drawn, and the taped card is at most 25 words; with second wrong -> data-second='wrong', no tick, and the card sends the learner to say how they got there; the stylesheet additions keep the 28 px floor test green",
+        "GUARD case 8 (maths-second-test and tv-sheet-test): with item 2 fixed, continueCard (Tonight's Marked hero), rightLine and mathsEntry still read the first attempt (the same '3 of 6 right', the same digest entry), and a second go never calls recordAttempt (skills[topic].seen unchanged)"
+      ],
+      "premise": [
+        "desk/src/lib/desk/explain.ts:173-181,206 - an explanation on a WRONG item may only rename its slip; 'Its verdict, its pen (slipAt) and the learner record are left as they were'",
+        "desk/src/lib/session/store.ts:525-528 - practice.settle applies a verdict only when the item is 'unsure'; nothing in the reducer or any route lets a wrong item be answered again",
+        "desk/src/maths/MathsTV.tsx:718 and desk/src/maths/working.ts:58-62 - the whole 'next' of a wrong item on the Walk is lookAt(), the sentence 'Look where the pen is.': a pointer, not an action",
+        "desk/src/app/phone/page.tsx:455-470 - on a marked set the phone offers only 'How did you get there?' by voice for a wrong or unsure item, which can rename a slip but never settle a wrong one; the only other road is Six more (a new set, sheet 'more' stop), so the same question never comes back",
+        "desk/src/lib/desk/mark.ts:327-334 - typedSettle(item, answer, topic, system) already judges ONE typed answer for every item kind in code, with no model; it is private, and a wrong item's pen is dropped for a typed answer by design",
+        "desk/src/lib/rules/maths.ts:96-97,104-112 - TYPED_ANSWER_MAX (40) and typedAnswersProblem already bound a typed answer; desk/src/app/api/mark/route.ts:45 refuses a second mark of a set (ALREADY_MARKED)",
+        "desk/src/lib/session/store.ts:158-174 - shown() is a whitelist, so a new item field must be added there or it is dropped on every event; desk/src/app/api/session/route.ts:12-20 lists the events only the desk may raise (a verdict event must be added or a phone could post one)",
+        "desk/src/tv/sheetRows.ts:31-34 plus MathsTV.tsx:476,775-777 - 'first to look at' and 'right / to look at' are derived from verdict !== 'right' in four places, the TV-side tally this card must teach about a fixed item",
+        "precedent: desk/src/lib/desk/essay.ts reviseSentence and EssayTV.tsx:299-303 (the 'was' ghost under a rewritten sentence's arrow) - Essay Master lets a learner fix a flagged sentence and see it hold; Math Buddy's Walk has no equivalent (challenge-2026-09-25 desk-pipelines B built it for essays only)"
+      ],
+      "rollback": "Three commits: test(math-buddy) adds the red cases; feat(math-buddy) adds PracticeItem.second, the event, secondProblem, /api/second and the SERVER_ONLY line (additive: an item without second renders and counts as today); feat(math-buddy) adds the sheet rows, the Lamplight drawing and the phone box. Reverting the last commit hides the second go on screen while the route stays harmless; reverting the series removes it. A session.json written with second on an item loads on an older build because shown() whitelists fields (the field is dropped, the verdict stays).",
+      "gate": "direction",
+      "runner_up": "Check my answer on a homework page: a typed answer on the phone gets a tick or a ring on the paper, decided by code (hint.ts already holds the oracle through its two spec readers and equationOf); bigger reach but it opens guess-and-check on every homework item and the model rules say 'never say whether they are right' (explain.ts:43), so traded for the bounded second go on an already-marked set.",
+      "body": "## Summary\nOn Math Buddy's Walk, a ringed item is a dead end: the pen shows where it broke and the learner can do nothing with that on the desk. Give a wrong item ONE typed second go on the phone; code judges it, the TV draws the result as a picture (the ring now wears a tick) and the record keeps the honest first attempt.\n\n## Description\nToday the loop after a slip is: look where the pen is, rework on paper, then either press Six more (a brand new set; the same question never returns) or describe it by voice, which can only rename the slip. The desk never learns that the learner fixed it, and the learner never learns whether the fix holds. Essay Master already closes this loop for sentences (rewrite in place, the move inks, a ghost arrow shows the before and after); Math Buddy, whose whole pitch is that the pen shows the line, does not.\n\nThe data and the judge are already there. `typedSettle` judges one typed answer for every item kind with no model call; the item carries its slip and pen position; the Lamplight vocabulary already has the ring and the earned tick. The move: a wrong item with no second go may take one typed answer from the phone (`POST /api/second`, `{n, answer}`); code decides (`typedSettle`), an unreadable answer is refused in a desk sentence and does not spend the go; the route raises one server-only event `practice.second {n, verdict}`, which carries a verdict and never the typed answer; the reducer sets `second: 'right' | 'wrong'` once and leaves verdict, slip, pen, history, digest and the learner record exactly as marking wrote them (a second go is practice, not evidence, the same ruling `reviseSentence` makes for essays).\n\nOn the TV nothing asks for typing and nothing new is said: on the Sheet and the Walk a fixed item keeps its ring and pen (the record of where it broke) and gains the earned orange tick on its number and its tally mark; a second go that missed draws a second ring stroke. The taped card carries one short sentence in the same slot. 'To look at' counts and the first-to-look focus skip a fixed item; Tonight's hero, the landing and the recap keep reading the first attempt, so the record and every summary agree.\n\n## Flow\n- Walk on a ringed item: phone shows 'Try it again' (one box, one Send) under the voice prompt, only for a wrong item with no second go.\n- Send -> `/api/second` -> `secondProblem(item)` -> `typedSettle` -> `practice.second` -> the TV redraws: ring plus tick, or a double ring.\n- Back to the sheet: the head reads 'One to look at' instead of 'Two'; focus lands on the next unfixed item.\n- Six more still works as before.\n\n## Expected impact\nThe single most common thing a child does after a marked set (go back to the line and fix it) becomes visible: 4 steps and a lost question become 1 typed answer and one picture, inside the same Walk. It adds the missing half of the pen's promise without a point, a streak or a percentage, never puts an answer or a verdict word on the phone, and the one-go limit keeps it from becoming guess-and-check.\n\n## Evaluation\nClaim: a wrong item takes one code-judged typed second go, drawn as a picture, with the record untouched.\nBefore: 0 of 7 behaviour cases pass (case 8 is a declared GUARD, green before by design); a wrong item has no road to be answered again (store.ts:525-528, explain.ts:177-181).\nAfter: 7 of 7 behaviour cases pass and the guard stays green; the existing tv-sheet, maths-tv, maths-rules, school-marking and phone-panel suites unchanged and green.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: direction (the map's description names the marked sheet and its walk, not a second go; it falls inside STUDY-DESK-SCOPE.md's Check my work, overturned 2026-09-08). Contract consumers of the new item field and event: store.ts (type, shown, reducer, NEEDS_LEARNER), api/session/route.ts (SERVER_ONLY), tv/sheetRows.ts, maths/MathsTV.tsx, app/phone/page.tsx; not touched by design: memory.ts, rules/digest.ts, tv/landingRows.ts, tv/screens.tsx recap (they read the first attempt).",
+      "evidence": "store.ts:525-528 reducer: `shown(e.verdict && it.verdict === \"unsure\" ? {...} : !e.verdict && e.slip && it.verdict === \"wrong\" && slipsFor(topic).some(...) ? { ...it, slip, said, reply } : { ...it, reply })` - a wrong item can take a slip name or a reply, never a verdict. explain.ts:177-181 comment: 'renamed is set only when the item was already wrong ... Its verdict, its pen (slipAt) and the learner record are left as they were.' working.ts:58-62 lookAt returns 'Look where the pen is.' for a slipAt-placed wrong item. phone/page.tsx:459 `asking = !!item && (item.verdict === \"wrong\" || item.verdict === \"unsure\" || !!reply)` gates only the voice box. Steps today to learn whether a correction holds: finish the Walk, Back to the sheet, Down to Six more, Select, wait for a new set (school units are code-written, linear sets are a model call), work six NEW questions, snap or type, wait for marking = 6+ steps and the corrected question is gone; after: type one answer on the phone, read one picture. Four TV-side derivations of the same tally: sheetRows.ts:32, MathsTV.tsx:476, 775, 777. probe context: `typedSettle` is the proven single-item judge (maths school-marking-test.cjs test 11 pins typed == photo for school sets); mark.ts:332 already drops the pen for a typed answer, which is why the second go keeps the first attempt's pen. Never-re-propose check: challenge-2026-09-25 desk-pipelines B ('Rewrite one sentence in place') is Essay only; challenge-2026-09-25 desk-pipelines A moved pen location into rules/maths and did not add an answer-again road; no finding in the prior findings.jsonl titles mentions a second go. Hot files: store.ts is in the write set (one field, one event, one case); tv/keys.ts, tv/screens.tsx and uat/driver/linga-text.cjs are not (no new key: the TV never asks for typing). Wave note: card A rewrites mark.ts and rules go through kinds.ts; run A first, then B imports judgeItem instead of exporting typedSettle (B's mark.ts hunk is one export line and disappears)."
+    }
+  ]
+}

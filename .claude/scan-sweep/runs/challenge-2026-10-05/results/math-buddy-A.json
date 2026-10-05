@@ -1,0 +1,15 @@
+{
+  "card": "math-buddy-A",
+  "status": "landed",
+  "shas": ["b037e178", "fd48fc0e", "cc6a0d92", "11b3e61f"],
+  "tests_added": 8,
+  "cases_total": 8,
+  "cases_red_before": 7,
+  "cases_guard": 1,
+  "cases_green_after": 8,
+  "gates": { "desk npm test (tsc --noEmit + every rules suite, maths-judge-test wired last)": 0 },
+  "files_changed": 8,
+  "lines_changed": 548,
+  "deviations_from_card": "None to the write set. Commit series is test (red, not yet wired into test:rules so the repo gate stayed green on it), refactor (rules/kinds + mark.ts), feat (hint, explain, items, hint route), then a lock-guarded test:rules wiring commit appended at the end of the chain (a fourth commit; the card named three). judgeItem signature is judgeItem(item, read, ctx:{topic, system?}) returning Settled | null (null = ask); judgeSet(practice, reads, ctx) returns {items, attempts, unsure} and kinds.ts also exports readQuestion, kindOfSheet and Read/Attempt/Judged types. markSet/markTyped keep their signatures; mark.ts lost the five-fold return literal (alias MarkResult) and is 254 lines (card estimated ~240).",
+  "notes": "User-visible behaviour changes: (1) a photographed mixed sheet is now judged per item by kind (was: the whole sheet by the school marker, so a no-spec linear item came back unsure); (2) a school-path learner's Calculus question gets the Calculus I hint stance, and a Calculus-path learner's fractions task gets the unit stance (the voice stays the path's/age's); (3) typed and photo marking of the same strings now agree for every kind mix. Choices I made where the card left room: the linear reader (pure linear sheets) still always carries the model's own solution field ('' when the model omits it), so a pure-linear photo with no solution still asks exactly as today; only a linear item read by the school or Calculus reader (mixed sheet) has no solution and is judged by the code root, as typed marking does. A solution or verdict a non-linear reader volunteers is dropped, and a school reading never carries a slip. A linear photo item's stored studentAnswer is still cleaned ('x = 4' to '4') and a typed one is kept as typed, as before (judgeSet ctx.typed). The hint route's noLibrary test is deliberately still 'path is calc1 or the text reads as a school unit' (kindOfQuestion === 'school'), so a school-path learner's derivative question still gets a lesson-library pick as today; making it 'kind !== linear' would be a separate visible change that the card did not list. markSet now guards json.items with Array.isArray (maths-rules-test pins a non-array reading). No disagreement with the scout's design. No TV screen touched, so no TV capture ran. Gate for desk only (no Kotlin touched). Hot files store.ts, keys.ts, screens.tsx untouched; desk/package.json edited under the lock and committed alone."
+}

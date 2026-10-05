@@ -1,0 +1,149 @@
+{
+  "host": "tv-app",
+  "riders": [],
+  "files_read": [
+    "tv-app/build.gradle.kts",
+    "tv-app/src/main/AndroidManifest.xml",
+    "tv-app/src/main/res/values/strings.xml",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Health.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Qr.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/RenderStats.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Thumbnailer.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt",
+    "core/build.gradle.kts",
+    "core/src/main/kotlin/dev/telestrator/core/Annotation.kt",
+    "core/src/main/kotlin/dev/telestrator/core/ContentRect.kt",
+    "core/src/main/kotlin/dev/telestrator/core/HealthBody.kt",
+    "core/src/main/kotlin/dev/telestrator/core/History.kt",
+    "core/src/main/kotlin/dev/telestrator/core/HitTest.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Metric.kt",
+    "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+    "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Protocol.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Timeline.kt",
+    "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt",
+    "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
+    "core/src/test/kotlin/dev/telestrator/core/ReviewModeTest.kt",
+    "companion/index.html",
+    "tools/relay-stub.mjs",
+    "tools/relay-test.mjs (lines 130-199)",
+    "tools/live-ui-test.mjs (lines 30-70)",
+    "docs/PLATFORM-RISK.md",
+    ".personas/memory-outbox.jsonl (tv-app findings)",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md (Repo law)"
+  ],
+  "cards": [
+    {
+      "context": "pen-core",
+      "host": "tv-app",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "A relay socket is not a pen: the pen conversation follows the pen, not the channel",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+        "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt",
+        "tools/relay-test.mjs",
+        "docs/PLATFORM-RISK.md"
+      ],
+      "new_files": [],
+      "shared_surfaces": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card B also edits it: land A first)"
+      ],
+      "acceptance": [
+        "case 1: a SHARED conversation (desk.open(openedAtMs = 0, shared = true)) that never receives a hello, onTick(60_000) -> emptyList(): no refusal, no Close, the TV keeps its relay socket (JUnit, core PenConversationTest)",
+        "case 2: a shared conversation, hello with the right PIN at 60 s after open -> [Send(Welcome(s-1, accepted)), Paired(pen-a, 1)], so a phone that arrives late pairs (JUnit, core PenConversationTest)",
+        "case 3: a shared conversation paired as pen-a, a second hello with the right PIN as pen-b -> [Send(Welcome(s-2, accepted)), Paired(pen-b, 2, replaced = true)], and the next {type:undo} -> [Deliver(Undo)]. Today the hello is Deliver(Hello) and no Welcome is ever sent (JUnit, core PenConversationTest)",
+        "case 4: a shared conversation paired as pen-a, the same clientId says hello again (phone reconnected through the relay) -> Welcome(accepted) plus Paired(pen-a, 3, replaced = true), so the phone gets its video aspect back (JUnit, core PenConversationTest)",
+        "case 5: a shared conversation paired as pen-a, a hello with a WRONG PIN -> [Send(Welcome('', accepted = false, 'wrong PIN')), Unpaired(pen-a)] and NO Close; isPaired is false; a following {type:clear} -> emptyList() (dropped, nobody is paired); a later right-PIN hello pairs again at generation 3 (JUnit, core PenConversationTest)",
+        "case 6 GUARD: a DEDICATED conversation (the LAN default) behaves exactly as today: no hello by 5_000 ms -> Welcome(refused 'no pairing message') + Close; wrong PIN -> refused + Close; a second hello after pairing -> [Deliver(Hello)] (JUnit, the existing PenConversationTest cases 1-3 stay green unedited)",
+        "case 7: on the real device, relay transport, the phone page is opened 12 s AFTER the TV dials out (past the old 5 s window and inside a backoff gap) -> window.__pen.isConnected() turns true within 20 s, then a second page paired with the right PIN also turns true while the first tab is closed (operator-run: tools/relay-test.mjs on a Fire TV or emulator, not part of the JVM gate)"
+      ],
+      "premise": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt:52-57 - one client.webSocket(...) per TV dial-in, and onPen(KtorPenChannel(this, 'relay')) runs once for the life of that socket; the phone is not part of the socket's lifetime",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt:111 - the LAN path calls onPen once per PHONE connection, so there a channel and a pen are the same thing; the relay path is the only place they differ (2 onPen call sites in tv-app, 1 of them wrong for its rule)",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:40 - desk.open(openedAtMs = now()) is taken when host() starts, i.e. when the TV's socket opens, before any phone exists",
+        "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:68 and :115-119 - the hello deadline is openedAtMs + 5_000 and onTick then calls reject(); reject (:121-127) emits Welcome(accepted=false) and PenEffect.Close",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:61-65 and :48-51 - the watchdog delays HELLO_TIMEOUT_MS then carries out that Close; channel.close() (PenTransport.kt:83-85) closes the TV's OWN outbound relay socket 5 s after it connected if no phone has said hello",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt:63-67 and :81-83 - a connection counts as healthy only after HEALTHY_MS = 10_000, so a socket the TV closes itself at 5 s is never healthy and the backoff doubles 500 -> 1000 -> 2000 -> 4000 -> 8000 -> 10_000 (cap): the TV is on the relay during [0,5] [6,11] [13,18] [22,27] [35,40] [50,55] [65,70] s ..., i.e. deaf for 10 s of every 15 s once the cap is reached",
+        "tools/relay-stub.mjs:102-103 - the relay forwards a frame only if the other side is open and otherwise drops it silently (if (other && other.readyState === other.OPEN)); companion/index.html:173-176 sends hello exactly once, in ws.onopen, and never retries on a socket that stays open. A phone whose hello lands in a gap stays unpaired with no signal",
+        "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt:93-111 - once hello != null, a later Hello skips the pairing branch and reaches :111 Deliver(msg); PenEngine.kt:111 then ignores it (is PenMessage.Hello -> Unit) and Session.kt:62-77 still bumps the revision. On a socket shared by successive pens the second phone is never PIN-checked, never gets a Welcome (so its dot stays red, companion/index.html:202-204) and its strokes are accepted",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:52-56 and :76-78 - Paired calls session.penConnected() and starts a ticker each time, but the disconnect runs once in finally; a second Paired on one conversation would double-count and run two heartbeats",
+        "docs/PLATFORM-RISK.md:59 and :82 - the doc names the relay as mandatory on Vega and says everything after 'Do not build anything else that depends on the TV being a server' should be expressible over a relay; the relay path is the portability hedge, and this is its pairing"
+      ],
+      "rollback": "Four commits: (1) core: PenConversation gains `shared` plus Unpaired and Paired.replaced with all new cases red-first, (2) PenChannel.carriesOnePen with LAN default true and relay false, (3) PenSessionHost handles Unpaired and a replaced Paired, (4) relay-test late-pair journey and the PLATFORM-RISK note. The default is dedicated, so reverting (2)-(3) alone leaves LAN untouched and reverting (1) removes the new cases with it.",
+      "gate": "contract",
+      "runner_up": "Single-writer discipline for Session/PenEngine: PenEngine has no lock and is written from the Ktor thread (Session.accept from the receive loop) and Main (onKeyDown, LaunchedEffect) while publishIfDirty and heartbeatInput read it from both - not chosen because a data race cannot be written as a deterministic failing test.",
+      "body": "## Summary\nOver the relay the TV closes its own socket 5 seconds after it dials, a phone's single hello is lost whenever it lands in the resulting gap, and a second phone is never PIN-checked at all. All three come from one assumption: that a channel carries exactly one pen. LAN does; the relay does not.\n\n## Description\nThe pen conversation (PenConversation) is created once per channel and its hello timeout is armed when the channel opens. On the LAN transport a channel is a phone, so that is right. On the relay transport a channel is the TV's single outbound socket, which exists before any phone and outlives each one. Three things follow, none of which a test sees because relay-test.mjs pairs inside the first window:\n\n1. The hello deadline fires on an empty socket. PenSessionHost.kt:61-65 carries out PenConversation's reject, and channel.close() hangs up on the relay. RelayTransport then backs off because a 5 s connection is never healthy (HEALTHY_MS is 10 s): 1, 2, 4, 8, 10 s gaps. The TV is deaf for 10 of every 15 s in steady state, and the companion sends hello once (index.html:175), so a phone that arrives in a gap never pairs and is told nothing.\n2. A later phone (or the same phone after a drop) sends a second Hello into an already-paired conversation. PenConversation.kt:107-111 delivers it as input and PenEngine ignores it: no PIN check, no Welcome, strokes accepted. The PIN, which the relay design says is the only guard because the relay stays dumb (RelayTransport.kt:28-29), stops guarding after the first pairing.\n3. The bookkeeping that a Paired effect triggers (count, heartbeat ticker) assumes one Paired per conversation.\n\nThe move is to make 'does this channel carry one pen' a property the conversation knows. PenChannel gets `carriesOnePen` (LAN true, relay false). PenConversation, opened as shared, has no hello deadline and treats every Hello as a (re)pairing: right PIN -> Welcome + Paired(replaced = true) at a new generation; wrong PIN -> Welcome(refused), an Unpaired effect, and input dropped until a right hello, with no Close because closing would hang up on the relay. Dedicated conversations (LAN) are byte-for-byte what they are today, pinned by the existing cases. PenSessionHost cancels the previous ticker on a replaced Paired (a fresh Heartbeat is exactly what a new phone needs to receive the document and thumbnail again) and counts one pen per conversation. The wire shape does not change; a Welcome may now arrive mid-stream, which companion/index.html:192-207 already handles.\n\n## Flow\n- TV dials the relay; nothing happens for a minute; the socket stays open (today it is closed at 5 s)\n- viewer scans the QR 40 s later; hello arrives; Welcome + Paired; heartbeat starts\n- phone 1 leaves, phone 2 loads the page with the PIN; hello is re-evaluated; right PIN pairs, wrong PIN is refused and the phone shows its PIN box\n- an intruder's wrong-PIN hello unpairs the current pen instead of riding on its pairing\n\n## Expected impact\nThe relay, which docs/PLATFORM-RISK.md calls mandatory on a Vega port, becomes pairable at any time instead of one second in three, a reconnecting phone gets its Welcome, and the PIN guards every pen rather than the first. LAN behaviour is pinned unchanged.\n\n## Evaluation\nClaim: a shared (relay) conversation pairs at any time, re-pairs every hello, refuses a wrong PIN without hanging up, and a dedicated (LAN) conversation is unchanged\nBefore: 0 of 6 non-guard acceptance cases pass (the `shared` parameter and Unpaired do not exist; the observable defects are counted in the premise: 1 deadline armed at socket open, 10 s of every 15 s deaf, 0 Welcomes to a second hello)\nAfter: 7 of 7 (6 JUnit, 1 operator-run device case)\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+      "evidence": "grep -rn 'onPen(' tv-app -> LanTransport.kt:111 (per phone connection) and RelayTransport.kt:56 (per TV socket): 2 sites, different lifetimes, one conversation model. grep -n 'desk.open' -> PenSessionHost.kt:40 (inside host(), so at channel open). grep -n 'HELLO_TIMEOUT_MS' -> PenConversation.kt:50, PenSessionHost.kt:62. RelayTransport.kt:81-83: INITIAL_BACKOFF_MS = 500, MAX_BACKOFF_MS = 10_000, HEALTHY_MS = 10_000; a 5 s socket takes the `else` branch at :65-66, so gaps are 1,2,4,8,10,10 s and the TV's open windows are 0-5, 6-11, 13-18, 22-27, 35-40, 50-55, 65-70 s (5 s open per 15 s at the cap). PenConversation.kt:93 `if (hello == null) {` is the only place PIN is compared (:95); lines :107-111 are the path a second Hello takes; PenEngine.kt:111 `is PenMessage.Hello, is PenMessage.Transport, is PenMessage.Ping -> Unit`. tools/relay-stub.mjs:103 `if (other && other.readyState === other.OPEN) other.send(text);` (no else). companion/index.html:173-176 `ws.onopen = () => { connected = true; send({ type: 'hello', pin, clientId }); };` is the only hello site. tools/relay-test.mjs:157-196 dials, reads logcat, launches chromium, and expects pairing inside one run with no case for a late or second phone."
+    },
+    {
+      "context": "tv-app",
+      "host": "tv-app",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "The pairing card knows whether a pen is holding it, and gives the picture back",
+      "size": "M",
+      "effort": 6,
+      "impact": 7,
+      "risk": 4,
+      "write_set": [
+        "core/src/main/kotlin/dev/telestrator/core/LinkState.kt",
+        "core/src/test/kotlin/dev/telestrator/core/LinkStateTest.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PairingCard.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+        "tv-app/src/main/res/values/strings.xml"
+      ],
+      "new_files": [
+        "core/src/main/kotlin/dev/telestrator/core/LinkState.kt",
+        "core/src/test/kotlin/dev/telestrator/core/LinkStateTest.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PairingCard.kt"
+      ],
+      "shared_surfaces": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card A also edits it: land A first, then B consumes Paired, Unpaired and Close)",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt"
+      ],
+      "acceptance": [
+        "case 1 GUARD: a fresh LinkState() at t = 0 -> view(0) == Connecting: the card is on screen from launch, as MainActivity.kt:226 shows 'connecting…' today (JUnit, core LinkStateTest)",
+        "case 2: Ready(url, pin = '4821') at t = 0 -> view(0) == Invite(url, '4821'): the PIN reaches the screen as its own value for large digits, not only inside the URL text (JUnit, core LinkStateTest)",
+        "case 3: Invite, then PenPaired('pen-a') at t = 1_000 -> view(1_000) == Chip: the card is gone and the corner of the picture is free (JUnit, core LinkStateTest)",
+        "case 4: Paired, PenGone('pen-a') at t = 60_000 -> view(62_999) == Chip and view(63_000) == Lost(url, pin); PenPaired('pen-a') at 61_000 -> the Lost view never appears (a Wi-Fi blink does not flash a QR over the play) (JUnit, core LinkStateTest)",
+        "case 5: PenPaired(a), PenPaired(b), then a late PenGone(a) -> still Chip with b current: a superseded pen's close does not blank or re-open anything (JUnit, core LinkStateTest)",
+        "case 6: Invite, PenRefused('wrong PIN') at t -> Refused('wrong PIN', pin) for 5_000 ms, then Invite; while Paired the same event leaves the view at Chip (a neighbour's guess does not cover the picture of the person drawing) (JUnit, core LinkStateTest)",
+        "case 7: Failed('port 8765 is in use by something else') -> view == Failed(message) whatever the pen state; a later Ready clears it (JUnit, core LinkStateTest)",
+        "case 8: Chip, Peek at t = 100_000 -> view == Invite(url, pin) until 107_999 and Chip at 108_000: Menu on the remote brings the card (and the status line) back for 8 s so a second phone can pair (JUnit, core LinkStateTest; the key itself is checked by :tv-app:compileDebugKotlin plus an emulator capture before and after, operator-run)"
+      ],
+      "premise": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:225-230 - PairingCard is composed unconditionally, last in the Box, so it paints over the overlay (:219-223): ink drawn in that corner is hidden behind a permanent 92%-white card for as long as the app runs",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:259 and :264 - the card is 180.dp wide with a 150.dp QR; tools/live-ui-test.mjs:53-54 already carves out `x > width * 0.74 && y < height * 0.44` from its ink count because the card covers it: 0.26 x 0.44 = 11.4% of the screen",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt:43-44 and :55-57 - the number of connected pens is an AtomicInteger with no Flow; grep penConnected/connectedPens finds one reader outside PenSessionHost, Health.kt:21 (the harness). Nothing on screen can learn that a phone paired or left",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:48-51 - a refused pen (wrong PIN, no hello) is a Log.i line only; the person at the TV never sees that a phone tried and failed",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:266-269 - URL 11sp, 'via lan' 10sp, the red transport failure 10sp: the only text that says why no pen can connect (the open Lane-B item 'The TV pairing card's URL, transport and failure line are 10-11sp on a ten-foot screen', .personas/memory-outbox.jsonl, which this card adopts)",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:148 and :164-174, :221, :234 - tMs is written every 33 ms and read in the screen body, so TelestratorScreen recomposes at ~30 Hz and `transport.pairingUrl()` at :226 runs each time; LanTransport.kt:143-151 enumerates NetworkInterface on every call, so the QR follows the network only by that accident and costs a poll per frame",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:233-243 - the machine-readable status line is also permanent, bottom-left, 16sp; grep over tools/ shows no script reads it (the harness reads /health and logcat)",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:123-138 - the remote handles Center, Enter, Play/Pause, FF, Rewind, DPAD up/down/left/right and nothing else: Menu is free, so a way back to the card costs no existing key"
+      ],
+      "rollback": "Three commits: (1) core LinkState plus LinkStateTest, no caller, (2) tv-app: Session exposes the link flow, PenSessionHost feeds events, PairingCard.kt renders it, MainActivity swaps the composable, (3) Menu key and status-line visibility. Reverting (2)-(3) restores the always-on card; (1) is an unused pure file.",
+      "gate": "none",
+      "runner_up": "Review mode on the D-pad: Media Next/Previous jump between drawn moments and Step keys step frames, so the remote has the vocabulary the phone has (the jump plan already exists in TransportPlan); smaller leap because the viewer holds the phone.",
+      "body": "## Summary\nThe TV's only interface is a white card parked on the picture forever that cannot tell a waiting TV from a paired one. Make the card follow the pen: invite while no pen is here, a dot once one is, the QR back when it is lost, and the reason when it is refused.\n\n## Description\nA telestrator exists to put ink on a picture, and today 11% of that picture belongs to the pairing card for the whole session (the harness itself excludes the region, live-ui-test.mjs:53-54). The TV already holds every fact that would let the card step aside: Paired and close happen in PenSessionHost, a refusal is a PenEffect.Close, the transport reports its failure. None of it reaches the screen, because the pen count is an AtomicInteger nothing observes.\n\nThe move is a small sans-IO state in core, LinkState, with a reducer over events (Ready, Failed, PenPaired, PenGone, PenRefused, Peek) and a view(nowMs) that returns what the corner should show: Connecting, Invite (QR plus the PIN as large digits), Chip (a dot, nothing else), Lost (QR back after a 3 s grace), Refused (two words, 5 s), Failed (the reason, large). It is JVM-tested on a clock the test passes in, exactly like PenConversation. tv-app only feeds it events and renders it: PenSessionHost forwards Paired, close and refusals, Session exposes a StateFlow, and a new PairingCard.kt draws each view with strings from strings.xml. The URL is stored in the state on Ready instead of being polled at 30 Hz from a composable. A stale close from a superseded pen is ignored by client id, which is also the correct 'who is current' fact the open /health pens item is missing. Menu on the remote peeks the card (and the status line) for 8 s, so a second phone can still be paired; the remote already has no use for that key.\n\nThe QR carries the PIN, so the TV never asks for typing. The PIN is shown as digits only in Invite and Refused, which is the one moment a viewer has to type it on the phone after a refusal (the phone page already says 'type the PIN from the TV').\n\n## Flow\n- launch: card in the corner, QR and four large PIN digits\n- scan: the card collapses to a dot within a frame; the picture is clean\n- phone drops out of Wi-Fi: after 3 s the card returns with 'Pen lost' and the same QR; re-pair and it collapses again\n- a neighbour guesses a wrong PIN while someone is drawing: nothing covers the picture\n- no pen yet and a wrong PIN: the card says 'Wrong PIN' in two words, then goes back to inviting\n- Menu: card and status line for 8 s, then gone\n\n## Expected impact\nThe viewer gets the full picture while drawing, the person at the TV knows whether the phone is holding the pen, a failed pairing says why in a size that reads from a sofa, and a poll per frame leaves the draw path. No wire, no engine, no overlay change.\n\n## Evaluation\nClaim: the corner of the picture is occupied only when a pen is needed or lost, and every state is decided in code, not in a composable\nBefore: 0 of 7 non-guard acceptance cases pass (LinkState does not exist); 1 view (always-on card) for 6 situations; 3 text lines at 10-11sp; 1 pairingUrl() poll per frame\nAfter: 8 of 8 (8 JUnit; compile gate plus an emulator capture operator-run)\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+      "evidence": "MainActivity.kt:225-230 `PairingCard(url = transport.pairingUrl() ?: \"connecting…\", transport = transport.name, failure = transportFailure, modifier = Modifier.align(Alignment.TopEnd).padding(24.dp))` with no condition around it. grep -rn 'connectedPens\\|penConnected\\|penDisconnected' tv-app core -> Health.kt:21, PenSessionHost.kt:54, :77, Session.kt:44, :55, :57: the count never reaches Compose. tools/live-ui-test.mjs:54 `if (x > width * 0.74 && y < height * 0.44) continue;` is the card's footprint, 11.4% of the screen. MainActivity.kt:266 `fontSize = 11.sp`, :267 `fontSize = 10.sp`, :269 `fontSize = 10.sp` (the red failure line). MainActivity.kt:164-174 loop writes tMs every delay(33); :234 reads it in the body, so the scope recomposes and :226 re-evaluates pairingUrl(), which LanTransport.kt:143-146 answers with NetworkInterface.getNetworkInterfaces() each time. PenSessionHost.kt:48-51 `is PenEffect.Close -> { Log.i(TAG, \"pen rejected via ${channel.remoteName}: ${effect.reason}\") ...`. MainActivity.kt:124-132: 9 key codes handled, KEYCODE_MENU not among them."
+    }
+  ]
+}

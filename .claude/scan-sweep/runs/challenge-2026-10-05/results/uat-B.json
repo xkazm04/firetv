@@ -1,0 +1,20 @@
+{
+  "card": "uat-B",
+  "status": "landed",
+  "shas": ["db32db4e", "22c16cdf", "31ba670f"],
+  "tests_added": 7,
+  "cases_total": 8,
+  "cases_red_before": 6,
+  "cases_guard": 2,
+  "cases_green_after": 8,
+  "gates": {
+    "desk tsc --noEmit": 0,
+    "desk test:rules, every suite run singly (engines-rules-test included on a re-run)": 0,
+    "tools/uat-ledger-test.cjs": 0,
+    "tools/uat-recertify-test.cjs": 0
+  },
+  "files_changed": 8,
+  "lines_changed": 413,
+  "deviations_from_card": "ledger() takes { repo, files, git, current } and case 4 passes the stub files explicitly (the default file list is product.surface(), which a temp repo cannot supply); case 6 asserts N-3 of N files against the real surface() length (65 today, not the literal 63) with a synthetic current stamp and a stubbed git; case 5 also injects `current` so the stamped run needs no git call at all. product.cjs is added to the recorded driver hashes in instrumentOf. The case-6 suite statusCommand() takes an optional `product` option (test injection). No package.json change: both suites were already wired in test:rules. Cases 3 and 8 are the guards: case 3 is a new test, case 8 is the existing digest and no-model assertions of both suites, which stayed green.",
+  "notes": "Premise re-verified on the tree after uat-A: instrumentOf records model, efforts, screen cap and driver hashes (six files after metrics.cjs) and no product; the five committed runs have no run.json; the load set is now 65 desk/src files (63 at scouting; sibling engines-B added health.ts and others), 62 of 65 changed since the 15 Sep runs by the git-derived read on the real repo. User-visible changes beyond the card: (1) OPEN.md keeps its '186 open in 36 pairs across 5 runs' line and gains a second line with the split, plus ', N unknown' only when N > 0; a row seen on the current product carries no suffix and an unknown row ends 'product: unknown'. (2) --status (and a ledger recertify's OPEN.md rewrite) now spawns one child node process to measure the load set (about 1 s) and runs git log/ls-tree/hash-object; runs dirs outside the repo (--runs <tmp>) get no product columns at all, so the existing temp-copy tests and OPEN.md are unchanged. (3) Every new run writes run.json `product`; if git or the child fails it logs 'product not stamped in run.json' to stderr and the run proceeds without it. (4) A product-unchanged confound also masks metric falls (it covers every metric, as an instrument change does), by design: on byte-identical product code a fall is run-to-run noise. (5) recertify Regressed rows gain '; product changed in N of M files: <up to 6 paths>' when stamps differ. (6) The product-unknown note ('product not recorded ...') now appears in every Confounded table where neither side is stamped, including recertify.md for the committed runs. (7) The 'dirty' flag is about the load-set files only, not the whole tree. The product measurement runs on a scratch DESK_DATA_DIR in a child process, so desk/data is never read or written. Disagreement with the scout: none on design; the gap's 'seen' run is the newest sighting (lastSeen, which includes a recertify that restated it), not strictly the head row's run. No TV screen touched, no capture needed. The first suite run of npm test was red on a sibling's in-flight engines-B file (health.ts tsc error) and engines-rules-test hung once while another builder was mid-edit; after the sibling finished, tsc exited 0 and engines-rules-test exited 0 on its own. The suites were then run singly rather than as one npm test chain; the red commit is db32db4e (test only, 6 of 8 red because product.cjs did not exist)."
+}

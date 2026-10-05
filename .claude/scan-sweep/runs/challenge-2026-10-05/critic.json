@@ -1,0 +1,251 @@
+{
+ "critic_model": "claude-sonnet-5-5",
+ "cards": [
+  {
+   "host": "engines", "slot": "A", "title": "One engine call core: a deadline and a typed error for every provider",
+   "premise_checked": [
+    "desk/src/lib/engines/types.ts:12-16 - true - only TextRequest declares timeoutMs",
+    "text.ts:59, codex.ts:53, listen.ts:43 - true - three deadline styles (setTimeout 90000, setTimeout max(.,240000), AbortSignal.timeout(120000))",
+    "vision.ts:28-31, embed.ts:18, voice.ts:46/67 - true - two Ollama fetches and the ElevenLabs fetch carry no signal, Piper spawn has no timer",
+    "voice.ts:49-53, vision.ts:33, embed.ts:21, listen.ts:46, codex.ts:62 - true - raw Error / res.json() / readFile throws escape the EngineError contract",
+    "shape.ts:96-102, embed.ts:30-35, listen.ts:55-57, voice.ts:81-83 - true - the started/name/ms envelope is written four times",
+    "job.ts:76, store.ts settled() - true - a never-returning engine call leaves its job running until restart; jobError falls back to 'Try again.' for non-EngineError",
+    "tools: 22 files call useProvider; lab-bench.cjs:121 and calc-model-yield.cjs:137 wrap run(req) and drop a second argument - true (22 counted)"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 4, "why": "Closes a whole class (a hung provider freezes a job and its screen) with one core rather than five patches; the cost is that fetch already has a runtime default, so the hang is rarer than the card implies."},
+   "grounding": {"score": 5, "why": "Every cited line says what the card says, the 22-stub and wrapper consumers are listed, and the core-enforces-the-deadline design survives the wrappers that drop the signal."},
+   "falsifiability": {"score": 5, "why": "Never-settling stubs raced against a 1 s sentinel fail a stub implementation, and case 17 (re-ask hang returns the first shape error after exactly 2 calls) pins the subtle path."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: no engine call can hang a job forever, and every provider failure arrives as a typed EngineError with the desk's own reason sentence."
+  },
+  {
+   "host": "engines", "slot": "B", "title": "Engine check answers in seconds: what would run, whether it answers, what to fix",
+   "premise_checked": [
+    "api/smoke/route.ts:14-20 - true - text, embed, vision awaited one after another, raw JSON out",
+    "api/smoke/route.ts:12 - true - voiceConfigured() is piperReady() || KEY, so Piper-only reads 'key present'; listenStatus is reached only by api/listen GET",
+    "registry.ts:35-42 - true - activeProvider has no caller in desk/src outside registry.ts",
+    "api/smoke/route.ts:13 - true - String(e).slice(0,300) prints the engine message",
+    "proxy.ts:29 + pairing.ts roleFrom - true - any non-guest role (phone included) reaches the route; the route never reads the role",
+    "desk/README.md:30 and app/page.tsx:16 - true - 'one call per engine' and the Engine check link; no test mentions smoke"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": false, "gate_should_be": "direction",
+   "ambition": {"score": 3, "why": "A health surface that tells the operator what to fix is useful but it is an operator JSON page, closer to a good tool than a structural move."},
+   "grounding": {"score": 5, "why": "All seven claims hold on the tree, including the Piper mislabel and the unreachable listen status."},
+   "falsifiability": {"score": 4, "why": "Parallel-timing, no-run() and secret-not-in-JSON cases would catch a stub; the ollama /api/tags case depends on the builder's probe shape."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve as direction: one command says which engine is configured, which model to pull, answers in parallel, and no longer leaks upstream text or lets a phone spend calls."
+  },
+  {
+   "host": "landing", "slot": "A", "title": "The essay paragraph sits with its learner: no more guessing whose it is",
+   "premise_checked": [
+    "store.ts:306-311 MathsSlot (no essay fields), :313 slotOf, seat() - true - line numbers off by one",
+    "store.ts learner.set (~:451) - true - clears conversation, check, english but not essay, essayType, essayAt",
+    "tv/keys.ts:110 lensStops - true - adds the last card whenever s.essay is set, no owner test",
+    "tv/landingRows.ts:143-146 - true - label-match heuristic; recapRows.ts:148-152 ownReading is the second copy",
+    "api/analyse/route.ts:54-56 - partly true - essay.set is dispatched after the awaited call with no owner, but essay.type is dispatched BEFORE the await (line 54), so only one of the two events is post-await",
+    "toAway used by hint.stage, practice.marked, page.read - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 4, "why": "Replaces two heuristics with the missing owner field and closes a real cross-learner leak on a shared desk; it is a state-model fix, not a rewrite."},
+   "grounding": {"score": 4, "why": "Everything stands except the claim that essay.type lands after the model call, which is a small misdescription of route.ts:54."},
+   "falsifiability": {"score": 5, "why": "Case 1-4 seat Ema and Jakub through the reducer, case 6 races the route against learner.set, case 7 reproduces the label-collision; a stub cannot pass them."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: one learner's paragraph can no longer appear on the next learner's Essay Master or landing, and the history-label guess goes away."
+  },
+  {
+   "host": "landing", "slot": "B", "title": "Continue as Ema continues: Select opens what is waiting, not the app's home",
+   "premise_checked": [
+    "tv/keys.ts:226 - true - landing Select emits [subject, nav MODULE_HOME[at]]",
+    "tv/keys.ts:77 MODULE_HOME - true",
+    "landing/model.ts:118-121,142 - true - 'Continue as <name>' whenever something is waiting",
+    "tv/keys.ts:241-246 Tonight select and :413-425 recap select - true - two copies of the opener",
+    "tv/mathsRows.ts:96-117 continueCard - true",
+    "tools/tv-keys-test.cjs:349 - line is 346 - the assertion exists (at rest Select opens essaytype focus 0, Argument read)",
+    "LENS_STOPS order structure, argument - true, argument is index 1",
+    "app/tv/page.tsx:126-131 - true - the zoom plays whenever the step carries a nav"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 3, "why": "A sound UX leap (one Select instead of two, wrong lens fixed) but mostly a helper that three call sites share; it sits at the M floor and extends the 2026-09-25 recap-tile move to one more screen."},
+   "grounding": {"score": 4, "why": "Premises hold; one test line is cited three lines off."},
+   "falsifiability": {"score": 4, "why": "Cases 1-5 assert exact event lists, case 6 forces the three openers to agree, case 7 guards today's events; case 8 is operator-run."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: 'Continue as Ema' actually continues, landing on the marked sheet or the lens last read, with Tonight and recap sharing one opener."
+  },
+  {
+   "host": "linga", "slot": "A", "title": "One owner for the phone, and one table for the level check",
+   "premise_checked": [
+    "view.ts:186-189 phonePanel - true - activeCheck wins before the conversation",
+    "view.ts:196-203 answerOf - true - check reply box first when panel is check",
+    "conversation.ts:128-148 start branch - true - never reads s.check; commit() dispatches linga.changed with only the conversation",
+    "check.ts:231 check-leave keeps the check; cleared only by level-self, plan-agree, learner change - true",
+    "check.ts:316 plan-goal saves the typed text as preferences.goal - true",
+    "view.ts:271, :431, SUMMARY.md:13 - true",
+    "turn.ts:43-61 table exists; check.ts has no table, check-retry (:234), plan-renew (:324), plan-add (:331-335) have no askGoal/verdict guard - true",
+    "seven hand decisions of ownership (view.ts, LingaTV.tsx:26/47-55, LingaPhone.tsx:22/62-64) - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 5, "why": "Applies the turn-table pattern the 2026-09-25 card proved to the one half of Linga that still has hand-written guards, and fixes a live bug where a reply to the partner is saved as the learner's goal."},
+   "grounding": {"score": 5, "why": "The bug reproduces from the code as read and every unguarded command is where the card says."},
+   "falsifiability": {"score": 5, "why": "Exhaustive command sweeps (about 340 sequences, 10 states x 12 commands) against the view and the server cannot be passed by a stub; cases 7-8 guard the owner's 2026-09-25 decision."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve (architecture): a scene and a level check can no longer fight over the phone, and every control Linga offers the check is one the server accepts."
+  },
+  {
+   "host": "linga", "slot": "B", "title": "The certificate shows what it still needs, and the next scene steers toward it",
+   "premise_checked": [
+    "cert.ts:35-52 BASE_SKILLS and requirementFor :76-80 - true",
+    "check.ts:159 'at least four different skills' - true",
+    "conversation.ts:218 evidence for [focusSkill, reviewSkill, repair] - true",
+    "curriculum.ts:83-110 recommendScene leads with unstarted plan topics; no 'cert' in the file - true",
+    "view.ts:277 plan-done 'Talk again' starts recommended.id - true",
+    "view.ts:350-352 and :433 and cert-rules-test.cjs:395-396, linga-cert-live.cjs:8 - true",
+    "cert.ts:66-69 certBand null after a hand pick; conversation.ts:108-110 - true",
+    "recommendScene consumers view.ts:215, LingaPhone.tsx:187, conversation.ts:130, print/page.tsx - true, complete",
+    "scenes with skill repair (rover) and negotiate (team) exist - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 4, "why": "Turns a dry plate into a destination the next scene is chosen toward, decided in code; the largest write set of the run and close to the 800-line ceiling."},
+   "grounding": {"score": 5, "why": "All eleven citations hold and the import-cycle remark about cert.ts and curriculum.ts is correct."},
+   "falsifiability": {"score": 4, "why": "certGap and recommendScene are pure and well cased; case 5 (hero) leans on the existing plate helpers and case 8 is a screenshot."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve as direction: the certificate names what is missing (no count) and Talk again picks it; revises the pinned 'no door before one is held' row on purpose."
+  },
+  {
+   "host": "math-buddy", "slot": "A", "title": "One item kind: the marker, the explainer and the hint read the same registry",
+   "premise_checked": [
+    "mark.ts byN 177/225/259, unsure++ 197/238/271/314, attempts.push 206/241/274/317, return land 212/246/278/320 - true, counts 3/4/4/4 exact",
+    "mark.ts:158-159 sheet-wide isSchoolSpec/isCalcSpec pick; :328 per-item spec !== undefined - true",
+    "explain.ts:196-209 third detection - true",
+    "hint.ts:57-58,76 path picks the stance; :65,77,79,106 text picks leak check and unit; STANCE.maths names the linear-equations unit - true",
+    "items.ts:123-124, rules/maths.ts:78,142,147, store.ts:143,148 - true",
+    "mathsRows.ts:55-57 - true - no Math placement exists in Phase 1; a mixed-kind sheet has no producer today, so case 1 is a Phase 2 shape",
+    "school-marking-test.cjs:391 typed == photo - true, school sets only"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 4, "why": "Collapses four marking loops and four kind detectors into one registry and exposes judgeItem for the Phase 2 staircase, plus a real hint-stance fix; the mixed-sheet payoff is future."},
+   "grounding": {"score": 4, "why": "The duplicate counts are exact, but the mixed photographed sheet of case 1 cannot occur today and '15 lines in 7 files' is only partly in the write set (rules/maths.ts, store.ts stay)."},
+   "falsifiability": {"score": 4, "why": "Cases 1-7 are behavioural and fail today; case 8 is a source guard on the implementation's own shape and is weak."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve (architecture): one place decides what kind of item this is, the hint stops using the linear-equations stance for calculus, and one answer can be judged with no set."
+  },
+  {
+   "host": "math-buddy", "slot": "B", "title": "Fix the ringed one: one typed second go, and the ring wears a tick",
+   "premise_checked": [
+    "explain.ts:173-181,206 - true - an explanation on a wrong item only renames its slip",
+    "store.ts:525-528 - true - settle applies a verdict only to an unsure item",
+    "MathsTV.tsx:718, working.ts:58-62 lookAt - true - a pointer, not an action",
+    "phone/page.tsx:455-470 - true - only 'How did you get there?' by voice for a wrong item",
+    "mark.ts:327-334 typedSettle private; rules/maths.ts:96-97,104-112; api/mark/route.ts:45 - true",
+    "store.ts:158-174 shown() whitelist; api/session/route.ts:12-20 SERVER_ONLY - true",
+    "sheetRows.ts:31-34, MathsTV.tsx:476,775-777 verdict !== 'right' in four places - true",
+    "essay.ts reviseSentence precedent and 2026-09-25 desk-pipelines B built for essays only - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 5, "why": "Closes the loop the product has left open (a ringed item you can never fix), bounded to one code-judged go so it is not guess-and-check, with the first attempt still the record."},
+   "grounding": {"score": 5, "why": "Every line the card cites says what it claims, including the shown() whitelist and SERVER_ONLY traps a builder would otherwise hit."},
+   "falsifiability": {"score": 5, "why": "Byte-identical learners.json, 403 on a posted verdict, unreadable-answer-does-not-spend-the-go and the first-attempt guard case would each catch a wrong build."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve as direction: a ringed item gets one typed second go judged in code and wears a tick when it holds; the first attempt stays the record, no answer shown."
+  },
+  {
+   "host": "tv-app", "slot": "A", "title": "A relay socket is not a pen: the pen conversation follows the pen, not the channel",
+   "premise_checked": [
+    "RelayTransport.kt:52-57 one webSocket per dial, onPen once per socket - true",
+    "LanTransport.kt:111 onPen per phone connection - true",
+    "PenSessionHost.kt:40 desk.open(openedAtMs = now()) at socket open - true",
+    "PenConversation.kt:68, :115-119, :121-127 5 s deadline then reject emits Welcome(false) and Close - true",
+    "PenSessionHost.kt:48-51, :61-65 and PenTransport.kt:83-85 - true - Close closes the TV's own relay socket",
+    "RelayTransport.kt:63-67, :81-83 backoff 500 to 10000 with HEALTHY_MS 10000 - true, so the socket is never healthy",
+    "relay-stub.mjs:102-103 drops frames silently; companion/index.html:173-176 hello once in onopen - true",
+    "PenConversation.kt:93-111 later Hello is Deliver and ignored by PenEngine - true",
+    "PLATFORM-RISK.md:59, :82 - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": false, "gate_should_be": "contract",
+   "ambition": {"score": 4, "why": "Finds a real protocol bug (the TV is deaf for 10 s of every 15 on the relay) and fixes it in the sans-IO core with JVM cases; relay is the portability hedge, not the shipped default."},
+   "grounding": {"score": 5, "why": "The whole causal chain from 5 s watchdog to backoff arithmetic to the silent drop checks out line by line."},
+   "falsifiability": {"score": 4, "why": "Cases 1-6 are deterministic JUnit; case 7 is a device journey, and no case bounds PIN guessing on the shared path."},
+   "verdict": "revise",
+   "revise": "Add case 5b and a rollback line: on a shared conversation, N (say 5) wrong-PIN hellos in a row make further hellos, right PIN included, refused with no Deliver until a cooldown tick; the dropped Close otherwise lets a 4-digit PIN (Session.kt pin 1000..9999) be guessed without friction over the relay, and note that case 5's Unpaired(pen-a) on a stranger's wrong PIN needs the same cooldown to avoid kicking the current drawer.",
+   "void_reason": null,
+   "deck_line": "Approve after the revise: the TV stays dialled and a late or second phone pairs over the relay, with a guess limit replacing the wrong-PIN hang-up."
+  },
+  {
+   "host": "tv-app", "slot": "B", "title": "The pairing card knows whether a pen is holding it, and gives the picture back",
+   "premise_checked": [
+    "MainActivity.kt:225-230 PairingCard last in the Box, unconditional; :259/:264 180.dp and 150.dp - true (card is a private composable in MainActivity today)",
+    "tools/live-ui-test.mjs:53-54 carve-out x > 0.74w, y < 0.44h - true",
+    "Session.kt:43-44, :55-57 AtomicInteger pens, no Flow - true",
+    "PenSessionHost.kt:48-51 refused pen is a Log.i only - true",
+    "MainActivity.kt:266-269 11sp / 10sp - true; outbox line 149 holds that finding, an open item (not one of the four undrained), so adoption is allowed",
+    "MainActivity.kt tMs every 33 ms and LanTransport.kt:143-151 lanAddress enumerates NetworkInterface per call - true",
+    "MainActivity.kt:233-243 status line testTag - true, no tools script reads it",
+    "MainActivity.kt:123-138 key set has no Menu - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 4, "why": "Turns a permanent QR slab covering 11% of the picture into a state-driven card with a pure LinkState; pairing feedback and the recomposition-poll fix come with it."},
+   "grounding": {"score": 5, "why": "Every Compose line, the AtomicInteger and the network-enumeration-per-frame claim stand on the tree."},
+   "falsifiability": {"score": 5, "why": "Timed JUnit cases on a pure LinkState (grace window, superseded pen, refusal while paired, peek expiry) are not passable by a stub."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: the QR card leaves the picture once a phone pairs, returns on Menu or after a real disconnect, and the PIN is large; land after tv-app A."
+  },
+  {
+   "host": "uat", "slot": "A", "title": "One metric registry that the judge schema, gates, roll-up and report all read",
+   "premise_checked": [
+    "linga-text.cjs:76-82 judge schema spelled by hand, five groups - true",
+    "verdict.cjs:71-78 METRICS six ids, judgeAgreement absent - true",
+    "recertify.cjs:53-67 rollUp and :69-77 METRICS (seven entries) - true",
+    "linga-text.cjs:279, :308-310, :313-318, :541 - true",
+    "linga-text.cjs:80 moment recall asked, no consumer; rubric.md:33 'informative, not gated' - true",
+    "rubric.md:29 and J1-find-level.md:21 check length, no code - true",
+    "verdict.cjs:87 gate on an unknown metric is a conditional at verdict time - true",
+    "judgeSchema is not exported (exports: judgeRequest, judgePayload, ...) - case 1 calls it directly; write_set holds linga-text.cjs so exporting it is in scope",
+    "uat-verdict-test.cjs case 6 (84 judged, 42 agree) - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": true, "gate_should_be": null,
+   "ambition": {"score": 3, "why": "A principled single registry, yet it serves one module's operator tooling and mostly removes duplication; the Math Buddy and Essay Master LT it gestures at is not delivered."},
+   "grounding": {"score": 4, "why": "The five hand-kept lists are exactly where the card says; one test entry point (judgeSchema) is not exported yet."},
+   "falsifiability": {"score": 4, "why": "The snapshot guard, synthetic-metric and unknown-gate cases are real; case 7 tests the docs table against the registry, which is partly the implementation's own list."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: add an LT metric in one place instead of five, a typo in a gate fails before the paid run, and moment recall finally appears in the report."
+  },
+  {
+   "host": "uat", "slot": "B", "title": "Stamp the product each run saw, so the open ledger says what is still true",
+   "premise_checked": [
+    "recertify.cjs:318-325 instrumentOf records model, efforts, five driver hashes, no product - true",
+    "linga-text.cjs:211 run.json written before the children start, no commit - true",
+    "recertify.cjs:123-147 confounds knows journey start, new journey, instrument only - true",
+    "ledger.cjs:94-99 age counted in unasked runs; :122 prints '186 open in 36 pairs' style header - true",
+    "uat/runs: none of the 5 committed runs has run.json - true",
+    "git log --since=2026-09-16: 192 commits touch desk/src, 38 touch lib/english and english - true, exact; f3542b5a is 15 Sep 18:27",
+    "surface.cjs:38-47 install() is the one load hook; uat-ledger-test.cjs:82 pins 186 open - true"
+   ],
+   "premise_false": false, "floors_ok": true, "gate_ok": false, "gate_should_be": "direction",
+   "ambition": {"score": 4, "why": "Answers the question a drain operator actually has (is this row still true on today's product) and stops run-to-run noise reading as regression; derived from git so nothing is migrated."},
+   "grounding": {"score": 5, "why": "The measured figures (192 and 38 commits, five runs with no run.json, 186 open) all reproduce."},
+   "falsifiability": {"score": 5, "why": "Temp git repos with real blobs, an injected git runner that throws, and a confound reclassification case cannot be satisfied by a stub; guards pin zero model calls."},
+   "verdict": "build", "revise": null, "void_reason": null,
+   "deck_line": "Approve: OPEN.md says how many of its 186 rows were seen on the current product, and a recertify drop on unchanged code is called noise, not a regression."
+  }
+ ],
+ "means": {"ambition": 3.92, "grounding": 4.67, "falsifiability": 4.5},
+ "overlaps": [
+  "engines A and engines B: types.ts, text.ts, codex.ts, vision.ts, embed.ts, listen.ts, voice.ts, tools/engines-rules-test.cjs (all eight shared; A first)",
+  "landing A and landing B: tools/tv-recap-test.cjs, docs/STUDY-DESK-SCREENS.md (B calls ownReading, whose meaning A changes)",
+  "landing A and math-buddy B: desk/src/lib/session/store.ts (hot file, different regions)",
+  "math-buddy A and math-buddy B: desk/src/lib/desk/mark.ts (B needs typedSettle, which A turns into judgeItem; A first)",
+  "linga A and linga B: view.ts, conversation.ts, LingaTV.tsx, LingaPhone.tsx",
+  "tv-app A and tv-app B: PenSessionHost.kt (A first, B consumes Paired, Unpaired, Close)",
+  "uat A and uat B: uat/driver/linga-text.cjs, uat/driver/recertify.cjs, tools/uat-recertify-test.cjs",
+  "desk/package.json test:rules append: landing A, math-buddy A, math-buddy B, uat A (additive, under the shared-surface lock)",
+  "no pair of cards across hosts proposes the same move"
+ ],
+ "signature_changes": [
+  "engines A: Provider.run gains an optional second argument; request types gain timeoutMs; all five engine functions reject with EngineError (22 tools stubs and lab-bench / calc-model-yield wrappers call run) - run alone in its wave, first",
+  "math-buddy A: typedSettle becomes the exported judgeItem and hint stance follows the question kind - runs before math-buddy B, which calls it",
+  "tv-app A: PenConversation gains shared, PenEffect gains Unpaired, Paired gains replaced, PenChannel gains carriesOnePen - runs before tv-app B",
+  "landing A: essay.set and essay.type events gain an optional owner and ownReading changes meaning (landing B calls it)",
+  "linga B: recommendScene gains a defaulted gap argument (four callers listed on the card)",
+  "uat A: judgeSchema and the metric lists move behind metrics.cjs; uat B edits the same drivers - run A first"
+ ]
+}

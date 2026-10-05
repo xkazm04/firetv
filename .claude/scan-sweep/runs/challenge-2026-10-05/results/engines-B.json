@@ -1,0 +1,15 @@
+{
+  "card": "engines-B",
+  "status": "landed",
+  "shas": ["f6938b1f", "b426e7b8", "ace2a38c"],
+  "tests_added": 6,
+  "cases_total": 6,
+  "cases_red_before": 6,
+  "cases_guard": 0,
+  "cases_green_after": 6,
+  "gates": { "desk npm test (tsc + every rules suite)": 0, "engines-rules-test alone (24 of 24)": 0 },
+  "files_changed": 11,
+  "lines_changed": 330,
+  "deviations_from_card": "Write set kept. One addition inside the cases: engines-rules-test.cjs also clears the session store's ticker in an after() hook, because the route now imports pairing.ts (roleFrom), which loads the store and its setInterval; without it the suite never exits (same pattern as linga-rules-test and desk-pairing-test). findBinary() (PATH search for the probes) lives in types.ts and ollamaProbe() in vision.ts (embed imports it), to avoid an import cycle with health.ts and a new file beyond health.ts.",
+  "notes": "Premise re-verified on the tree after engines-A (route still three serial awaits, voice mislabelled, no role read, activeProvider uncalled). Commit order accident: the route commit b426e7b8 landed before the engines commit ace2a38c (health.ts was untracked and my first pathspec commit failed), so b426e7b8 alone does not typecheck; HEAD and ace2a38c are green. Not rewritten because a sibling's commit sits between them. The red-tests commit f6938b1f was red only for the engines suite (npm test red on it). User-visible changes beyond the card: /api/smoke response shape is now { live, engines: [{kind, provider, ok, say, ms, error?}] } instead of { voice, text, embed, vision }; the sample page is read from DESK_DATA_DIR when set (else cwd/data, as before); a guest or phone gets 403 on the whole route, with or without ?live=1; the live speak call now speaks a short line (it was not exercised before); a failed live row says 'The <kind> call failed.' plus a typed error.say, with the engine message in console.error only. Probe wording: claude-cli (binary on PATH), codex (launcher or exe), ollama vision/embed (GET /api/tags, 'ollama pull <model>' / 'ollama serve' with host), piper (both paths), elevenlabs (key set, never called), listen (listenStatus). Real status run on this machine: 95 ms for all five, no model call. No live model call in any test (stubs at the provider seam, fetch stubbed for the ollama probes). No TV screen touched, no capture needed. desk/data untouched (tests use DESK_DATA_DIR in the OS temp dir). Not disagreed with the scout's design."
+}

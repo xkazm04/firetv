@@ -1,0 +1,122 @@
+{
+ "host": "landing",
+ "riders": [],
+ "files_read": [
+  "desk/src/landing/LandingTV.tsx", "desk/src/landing/model.ts", "desk/src/landing/fonts.ts",
+  "desk/src/landing/themes/index.ts", "desk/src/landing/themes/types.ts",
+  "desk/src/landing/themes/paper/Paper.tsx", "desk/src/landing/themes/blueprint/Blueprint.tsx (hand-off, stop and zoom lines)",
+  "desk/src/tv/landingRows.ts", "desk/src/tv/recapRows.ts", "desk/src/tv/mathsRows.ts (continueCard)",
+  "desk/src/tv/keys.ts (landing, tonight, learner, essaytype, forensic, recap handlers; stop lists)",
+  "desk/src/app/tv/page.tsx (D-pad executor and hand-off)", "desk/src/app/api/analyse/route.ts",
+  "desk/src/lib/session/store.ts (MathsSlot, seat, toAway, settleOwners, learner.set, essay.* events, load)",
+  "desk/src/design/desk-landing.css (header only, not touched by either card)",
+  "tools/tv-landing-test.cjs", "tools/tv-landing-live.cjs", "tools/tv-keys-test.cjs (landing 1-6, nav 6)", "tools/tv-recap-test.cjs (fixtures, openRecap)",
+  "tools/essay-rules-test.cjs (learner.set / essay.set cases)",
+  "context-map.json (landing entry, stale)", "run findings.jsonl titles of the seven prior runs", "challenge-2026-09-23 and 09-25 deck.md"
+ ],
+ "cards": [
+  {
+   "context": "landing",
+   "host": "landing",
+   "slot": "A",
+   "lens": "architecture-challenger",
+   "title": "The essay paragraph sits with its learner: no more guessing whose it is",
+   "size": "M",
+   "effort": 6,
+   "impact": 8,
+   "risk": 6,
+   "write_set": [
+    "desk/src/lib/session/store.ts",
+    "desk/src/tv/landingRows.ts",
+    "desk/src/tv/recapRows.ts",
+    "desk/src/app/api/analyse/route.ts",
+    "tools/tv-recap-test.cjs",
+    "tools/tv-landing-test.cjs",
+    "tools/essay-rules-test.cjs",
+    "docs/STUDY-DESK-SCREENS.md",
+    "desk/package.json"
+   ],
+   "new_files": ["tools/essay-seat-test.cjs"],
+   "shared_surfaces": [
+    "desk/package.json (test:rules gains essay-seat-test)",
+    "desk/src/lib/session/store.ts is a hot file: the change is confined to MathsSlot, emptySlot, slotOf, emptyOf, awayShown and the essay.set / essay.type cases",
+    "tv/keys.ts is NOT in the write set: lensStops and readingLens become correct by themselves once s.essay is the seated learner's"
+   ],
+   "acceptance": [
+    "case 1: Ema seated, essay.set(a1), then learner.set jakub -> state.essay === null, essayType === null, essayAt === null, and keys.lensStops(state) has no \"last\" stop (tools/essay-seat-test.cjs, store.reduce over store.fresh(), scratch DESK_DATA_DIR)",
+    "case 2: the same, then learner.set ema -> state.essay deep-equals a1 and essayType/essayAt are Ema's again; away.jakub is deleted when his slot is empty (tools/essay-seat-test.cjs)",
+    "case 3: a session whose away.ema slot was saved by the old build (no essay, essayType, essayAt keys) -> seating Ema gives essay === null (not undefined), nothing throws, and the load() sanitiser round-trips a slot that has them (tools/essay-seat-test.cjs, JSON.parse of a persisted-shape session through reduce)",
+    "case 4: Ema seated, switch to Jakub, then {type:'essay.set', analysis:a2, owner:'ema'} -> state.essay === null, state.screen stays 'landing' (the TV is not pulled onto Ema's forensic page), away.ema.essay === a2 (tools/essay-seat-test.cjs)",
+    "case 5: GUARD: essay.set with no owner, or owner equal to the seated learner -> screen 'forensic', essay set, essayAt null, exactly as today; every existing essay.* case in tools/essay-rules-test.cjs stays green",
+    "case 6: POST /api/analyse kind essay as Ema with the stub provider held open, learner.set jakub while it is pending, release it -> Jakub's session.essay is null and away.ema.essay holds the reading; Ema's history line is unchanged (tools/essay-rules-test.cjs, in-process route call, provider stubbed, no model)",
+    "case 7: Jakub's own history holds an 'Argument' reading while Ema's argument paragraph was on the desk, learner.set jakub -> landingRows.essayWaiting(s).rail === null and its caption names Jakub's last reading, not Ema's sentences. Before the change the label match in essayWaiting says the paragraph is his and draws Ema's sentences (tools/essay-seat-test.cjs over the store; the view-model suite keeps its no-store guard)",
+    "case 8: ownReading(s) with s.essay holding sentences and an empty history -> true; with s.essay null -> false, whatever the history says (tools/tv-recap-test.cjs; the label-matching test goes away)"
+   ],
+   "premise": [
+    "desk/src/lib/session/store.ts:305-310 - MathsSlot holds pages, practice, hint, lesson, topic, log, tasks and nothing of Essay Master: no essay, essayType or essayAt",
+    "desk/src/lib/session/store.ts:312 - slotOf copies those fields out for the learner who leaves; seat() at :318-325 is the only thing that swaps them",
+    "desk/src/lib/session/store.ts:451 - learner.set clears conversation, check and english when the learner changes, but not essay, essayType or essayAt",
+    "desk/src/lib/session/store.ts:230 and :417 - essay, essayType and essayAt are plain session fields, so one learner's paragraph is the next learner's",
+    "desk/src/tv/keys.ts:110 - lensStops adds the \"last\" card whenever s.essay is set, with no owner test; desk/src/essay/EssayTV.tsx:112-114,141 draws it as 'Last verdict' from s.essay",
+    "desk/src/tv/landingRows.ts:143-146 - essayWaiting decides the paragraph is the seated learner's by finding a history line whose label equals the lens name: a heuristic, and it passes when the second learner has read the same lens",
+    "desk/src/tv/recapRows.ts:148-152 - ownReading is a second copy of that heuristic, with a different condition (it also demands sentences); keys.ts:424 acts on it",
+    "desk/src/app/api/analyse/route.ts:54-56 - essay.type and essay.set are dispatched with no owner after an awaited model call, so a reading that lands after the learner switched shows on the new learner's desk; hint.stage, practice.marked and page.read already carry owner and go to toAway (store.ts:327, :475, :479, :521)",
+    "docs/STUDY-DESK-SCREENS.md:239 - the lens home is documented as showing the last paragraph's card 'once one is read' and the recap tile as 'no reading of this learner's': the guards exist because the leak does"
+   ],
+   "rollback": "Three commits: (1) the failing tests; (2) the slot gains essay, essayType, essayAt and the two events gain an optional owner; (3) landingRows and recapRows read s.essay directly and drop the label match. Reverting 3 then 2 restores the shared field; the new keys in a saved session file are optional and ignored by the old reader (load spreads over fresh()), so no data migration either way.",
+   "gate": "contract",
+   "runner_up": "The Select hand-off as one pure plan: page.tsx:126 decides that a zoom plays by sniffing for a nav event, LandingTV.tsx:30 rewrites the stop for an unseated desk, and Paper.tsx:193 / Blueprint.tsx:131 each keep their own label table, which says 'Someone else' for a desk nobody sits at where model.ts:143 says 'Choose who'; the only test of any of it is the manual Playwright script.",
+   "body": "## Summary\nOne learner's Essay Master paragraph is on the next learner's TV. The landing and the recap each try to hide this with a guess. Make the paragraph travel with its learner, as Math Buddy's work already does, and both guesses go.\n\n## Description\nMath Buddy's work is seat-scoped: MathsSlot (store.ts:305) is swapped by seat() when a learner sits down, and late results go to the learner they belong to (toAway). Essay Master's paragraph, its chosen lens and the sentence it is on are not in the slot, and learner.set (store.ts:451) clears the conversation, the level check and the sentence analysis but not them. Reproduced: Ema's essay.set, then learner.set jakub, leaves state.essay set, and keys.lensStops then offers Jakub the 'last' card, which EssayTV draws as 'Last verdict' with Ema's summary.\n\nThe desk papered over it in two places with two different heuristics: landingRows.essayWaiting decides a paragraph is the learner's if their history holds a reading through a lens of that name, and recapRows.ownReading does the same with an extra condition. Both pass when the second learner has read the same lens, so the very case they exist for is the one they miss. A reading that finishes after a switch has the same flaw in the other direction: analyse/route.ts dispatches essay.set with no owner.\n\nThe move: essay, essayType and essayAt join the slot, so seating a learner swaps them like a practice set; essay.type and essay.set take an optional owner, the route stamps it from the learner who asked, and an owner who is no longer at the desk gets the reading in away[owner] without the TV being sent to their forensic page. The two heuristics then read s.essay and nothing else.\n\n## Flow\n- Ema reads a paragraph through the Argument lens; the TV goes to her forensic page.\n- She picks Someone else and chooses Jakub: the paragraph goes into away.ema, Jakub's Essay Master home has four lenses and no 'last' card, and the landing's Essay Master card is his own reading or two words.\n- Ema comes back: her paragraph, lens and sentence are where she left them.\n- Ema asks for a reading, the desk is handed to Jakub while it thinks: the reading lands in away.ema, the TV stays on the landing, nothing of hers appears for him.\n\n## Expected impact\nA shared family desk (Family Phase 1 puts two learners on one TV) stops showing one child's essay verdict to another, on the lens home, the landing card and the recap. Two copies of an ownership heuristic become none, so the next screen that reads the paragraph (the phone, a week digest) cannot get it wrong. The persisted session gains three optional keys per away slot and nothing else.\n\n## Evaluation\nClaim: Essay Master's paragraph is seat-scoped like Math Buddy's work, and no consumer needs a heuristic to know whose it is.\nBefore: 0 of 8 acceptance cases pass for the cases that are not GUARDs (cases 1-4, 6-8 fail; case 5 is a GUARD, green by design)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract",
+   "evidence": "Reproduction run in-process with the repo's own loader (store.fresh(), learner ema, reduce essay.set, reduce learner.set jakub, DESK_DATA_DIR in the OS temp dir): output `learner jakub essay kept: true essayType null lensStops last: true`. Sites that decide ownership of s.essay: landingRows.ts:143-146 (label match), recapRows.ts:148-152 (label match plus sentences), keys.ts:110 and EssayTV.tsx:112-114 (no test at all) = 4 sites, 3 behaviours. Fields outside the seat swap: store.ts:230 essay, essayType; essayAt (3 fields) against 13 in MathsSlot. Events that write the paragraph with no owner: essay.type, essay.set (store.ts:496-498) from one route call (analyse/route.ts:54-56) that awaits a model call between them; events that already carry owner for the same reason: hint.stage, practice.marked, page.read, hint.set, lesson.set (5). The essay-master rider scout may reach the lens-home half of this; the landing half (two guards that retire) is why it is filed here."
+  },
+  {
+   "context": "landing",
+   "host": "landing",
+   "slot": "B",
+   "lens": "ux-elevation",
+   "title": "Continue as Ema continues: Select opens what is waiting, not the app's home",
+   "size": "M",
+   "effort": 5,
+   "impact": 7,
+   "risk": 4,
+   "write_set": [
+    "desk/src/tv/keys.ts",
+    "tools/tv-keys-test.cjs",
+    "tools/tv-recap-test.cjs",
+    "tools/tv-landing-live.cjs",
+    "docs/STUDY-DESK-SCREENS.md"
+   ],
+   "new_files": [],
+   "shared_surfaces": [
+    "desk/src/tv/keys.ts (hot shared file): the change is the landing handler's select branch, a new openWaiting helper, and the two existing copies of it (tonight's continue, recap's select) rewritten to call it",
+    "landingRows.ts, model.ts, LandingTV.tsx, both themes and page.tsx are NOT touched: the hand-off plays exactly as today because the step still carries a nav event; run after the essay-seat card or before it, either order works because the essay branch calls ownReading()"
+   ],
+   "acceptance": [
+    "case 1: landing, focus on maths, practice marked (the existing `marked` fixture) -> Select events are [{subject:'maths'},{nav 'sheet', focus: firstToLook(items)}]; today they are [{subject:'maths'},{nav 'tonight', focus:0}] (tools/tv-keys-test.cjs)",
+    "case 2: landing, focus on maths, a set on paper not yet marked -> [{subject:'maths'},{nav 'practice', focus:0}] (tools/tv-keys-test.cjs)",
+    "case 3: landing, focus on maths, a snapped page with problems -> [{subject:'maths'},{page.select pageIx},{nav 'page', focus:0}] (tools/tv-keys-test.cjs)",
+    "case 4: landing, focus on essay, s.essay holds a paragraph and the learner's history holds its reading -> [{subject:'essay'},{essay.at null},{nav 'forensic'}] (tools/tv-keys-test.cjs)",
+    "case 5: landing, resting on essay with only the history line (label 'Argument', no paragraph in the session) -> nav 'essaytype' with focus === index of 'argument' in LENS_STOPS (1); today focus 0, which is Structure, so a second Select would start the wrong lens (tools/tv-keys-test.cjs, replaces the assertion at line 349)",
+    "case 6: the three openers agree: for each of the maths states in cases 1-3 and the essay state in case 4, landing Select, Tonight's Select on the continue card, and recap Select on that app's tile emit the same nav (screen and focus) (tools/tv-keys-test.cjs + tools/tv-recap-test.cjs)",
+    "case 7: GUARD: nothing waiting for maths, a Linga conversation left mid-way, a desk with no learner, the place card and the unpaired phone -> exactly today's events ([subject, nav tonight 0], [subject, nav linga 0], [nav learner from landing], [nav learner], [nav pair]) (tools/tv-keys-test.cjs, the existing landing 3 and landing 6 assertions unchanged)",
+    "case 8: journey, a real /tv page with a marked set seeded through practice.set and practice.marked: one Enter on Math Buddy -> the hand-off plays for 450-1800 ms, then session.screen === 'sheet', and Back goes to Tonight then the landing with the lamp on Math Buddy (tools/tv-landing-live.cjs, isolated next dev --webpack server, as its header describes)"
+   ],
+   "premise": [
+    "desk/src/tv/keys.ts:226 - landing Select on an app emits [subject, nav MODULE_HOME[at]] whatever the app has waiting; nav with no focus is 0",
+    "desk/src/tv/keys.ts:77 - MODULE_HOME is maths:'tonight', english:'linga', essay:'essaytype'",
+    "desk/src/landing/model.ts:118-121,142 - the big action reads 'Continue as <name>' whenever the app in the light has something waiting (kind other than none)",
+    "desk/src/tv/keys.ts:241-246 - Tonight's own Select on its continue card does the real open: page.select + nav page, or nav cont.go cont.focus; so today the resume costs two Selects and passes through a screen whose first stop is the card just named",
+    "desk/src/tv/keys.ts:413-425 - recap's Select already opens what an app has waiting: maths through continueCard, essay through ownReading to forensic; this is a second copy of Tonight's branch, and the landing is a third place that does not use either",
+    "desk/src/tv/mathsRows.ts:96-117 - continueCard names the screen and focus for a set on paper (practice), a marked set (sheet, first item to look at) or a snapped page (page)",
+    "desk/src/tv/landingRows.ts:151 - the essay waiting row carries lens (the id of the lens last read), and keys.ts:112 readingLens already maps the paragraph's lens to a focus: the data to land on the right lens is there",
+    "tools/tv-keys-test.cjs:349 - the suite asserts that at rest with an essay reading Select opens essaytype focus 0, i.e. the Structure lens when Argument was the one read (readIt, line 291)",
+    "desk/src/app/tv/page.tsx:126-131 - the hand-off zooms whenever the step carries a nav event, so a step that goes straight to a deeper screen still plays it with no change"
+   ],
+   "rollback": "Two commits: failing tests plus the openWaiting helper wired into the landing handler (revert restores MODULE_HOME for Select); then Tonight and recap rewritten to call the helper (revert restores their inline copies, which the case-6 test pins). No session, route or persisted shape changes.",
+   "gate": "none",
+   "runner_up": "Put who has something waiting on the Someone else card: session.away already holds each absent learner's open set and marked sheet (store.ts:256), so a disc with a dot per learner could say who left work behind before the switcher opens; it reaches into the learner screen the owner's cx walk has not finished, so it is not filed.",
+   "body": "## Summary\nThe landing says 'Continue as Ema' and then opens Math Buddy's front door. Make Select open the thing that is waiting: the marked sheet, the set on paper, the snapped page, the paragraph Ema was reading.\n\n## Description\nThe desk already knows what each app has waiting (landingRows.deskWaiting) and the caption already names it ('Two-step equations, 3 of 4 right. The marked set is still on the desk.'). Select ignores that and opens MODULE_HOME: Math Buddy's Tonight, where the first stop is a continue card for the same set and a second Select opens it; Essay Master's lens home with the lamp on the first lens, not the lens Ema read. Recap's Select and Tonight's continue card both already know how to open the waiting thing, in two copies of the same branch; the landing is the one place that has the answer on screen and does not use it.\n\nThe move is one helper in keys.ts, openWaiting(s, app), that returns the events for an app's waiting thing: Math Buddy through continueCard (sheet, practice or page), Essay Master to the forensic page when the paragraph on the desk is the learner's, otherwise to the lens home with the lamp on the lens last read, and everything else (nothing waiting, Linga, whose home leads with its own Carry on) to the home as today. The landing, Tonight's continue card and the recap all call it, so there is one place that says what resuming means. No new words on the TV: the caption already carries the sentence.\n\n## Flow\n- Ema comes back to a marked set. The lamp rests on Math Buddy; the caption says it is still on the desk. Select: the hand-off plays and the sheet opens on the first slip. Back is Tonight, then the desk.\n- Ema was reading the Argument lens. Select on Essay Master opens her paragraph's forensic page, or, with no paragraph in the session, the lens home with the lamp on Argument.\n- Nothing is waiting, or the app is Linga: Select opens the front door exactly as before.\n\n## Expected impact\nThe most common return path (the landing to the thing you left) loses one screen and one press for Math Buddy, and Essay Master stops dropping the learner on the wrong lens. The label 'Continue as Ema' becomes true. Three copies of 'open what an app has waiting' become one with a test that pins them equal, so a later change to Tonight's continue card cannot make the landing and the recap disagree.\n\n## Evaluation\nClaim: Select on the app in the light opens what the caption says is waiting, through one helper that Tonight and the recap share.\nBefore: 0 of 8 acceptance cases pass for the non-GUARD cases (cases 1-6 and 8 fail; case 7 is a GUARD, green by design)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first, plus one live journey\nResult: better\nGate: none",
+   "evidence": "keys.ts:226 `o.ev({ type: \"subject\", subject: at }); o.nav(MODULE_HOME[at]);` against keys.ts:241-246 and keys.ts:413-425 (two copies of the real open: `if (cont?.go === \"page\") { o.ev({ type: \"page.select\", ... }); o.nav(\"page\"); } else if (cont) o.nav(cont.go, cont.focus);`) = 3 handlers, 1 that does not use the data. Presses from the landing to the marked sheet today: 2 Selects across 2 screens (landing, tonight, sheet); after: 1. tv-keys-test.cjs:349 pins `{type:'nav',screen:'essaytype',focus:0}` for a desk whose only waiting item is an Argument reading (readIt, line 291; ESSAY_TYPES order structure, argument, evidence, language puts Argument at index 1). The map description (context-map.json landing) names 'continue' and the lamp resting on what was left, so the card is inside the context's scope; the session event shapes, routes and persisted JSON are unchanged, hence gate none."
+  }
+ ]
+}

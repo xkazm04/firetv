@@ -1,0 +1,17 @@
+{
+  "card": "tv-app-A",
+  "status": "landed",
+  "shas": ["e0d70d92", "1f7d2004", "9c03d82a", "31113f21", "3b2ac640"],
+  "tests_added": 8,
+  "cases_total": 9,
+  "cases_red_before": 7,
+  "cases_guard": 1,
+  "cases_green_after": 8,
+  "gates": {
+    "gradlew :core:test :tv-app:compileDebugKotlin (--rerun-tasks)": 0
+  },
+  "files_changed": 7,
+  "lines_changed": 342,
+  "deviations_from_card": "(1) The red commit e0d70d92 carries an API-shape stub in PenConversation.kt (open(shared), PenEffect.Unpaired, Paired.replaced, MAX_WRONG_PINS, COOLDOWN_MS) so the new cases compile and fail on behaviour (7 red, 1 guard green) instead of failing at compile time; the repo gate was green on it. (2) The critic's case 5b is covered by 5b (lock after 5 wrong PINs, right PIN refused until the cooldown tick, count restarts) plus an extra 5c (a right PIN between wrong ones restarts the count); cases_total counts card cases 1-6 plus 5b and 5c = 8 JVM cases (+ case 7, the operator-run device case, counted in cases_total as 9 but not run). (3) Case 7 is realised in tools/relay-test.mjs as a 12 s late first phone plus a second phone paired on the same TV socket after the first tab closes; it was not run (no device or emulator here).",
+  "notes": "User-visible behaviour not itemised in the card: (a) the cooldown lock is 30 s (COOLDOWN_MS) and the refused Welcome carries reason 'too many wrong PINs'; the phone shows whatever it shows for any refused Welcome. (b) The lock clock is the latest onTick (a frame carries no time), so the host ticks a shared conversation every 1 s (SHARED_TICK_MS) and a lock can be up to 1 s shorter than 30 s. (c) Unpairing on a wrong PIN also consumes a desk generation (that is what makes case 5's 'generation 3'); on the relay there is only one conversation so nothing else stands down. (d) A stranger's single wrong-PIN hello still unpairs the current drawer (case 5 as specified); the cooldown limits guessing, not that nuisance; the drawer's phone must re-send a hello (its Welcome refusal shows the PIN box). (e) The relay stub never tells the TV a phone left, so after the first tab closes the conversation stays paired until the next hello or socket close; unchanged. (f) Host: a replaced Paired restarts the heartbeat (fresh Heartbeat resends doc and thumbnail); penConnected is counted once per conversation and Unpaired calls penDisconnected, the finally block's isPaired check prevents a double decrement. I did not disagree with the scout's design. PenConversation.kt, PenTransport.kt and PLATFORM-RISK.md have CRLF working copies against LF in the index (autocrlf); I preserved each file's working-copy endings where I edited with a script, and PenConversation.kt was normalised to LF in the working copy (the committed content is unaffected). No TV screen touched; no TV capture. desk untouched, so desk npm test not run. relay-test.mjs only syntax-checked (node --check). A sibling's uncommitted desk/src/lib/desk/mark.ts and tools/*-test.cjs files were left alone."
+}
