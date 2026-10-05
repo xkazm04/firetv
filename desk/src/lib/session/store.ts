@@ -274,7 +274,7 @@ export type Event =
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
@@ -307,11 +307,14 @@ export interface MathsSlot {
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   topic: string | null; practice: Practice | null; walkIx: number; log: { problems: string[]; hints: number; hard: string[] };
   tasks: Task[];
+  /** Essay Master's: the paragraph on the desk, the lens chosen for it, and the sentence the forensic page is on. Optional so a slot saved before they existed still loads. */
+  essay?: EssayAnalysis | null; essayType?: string | null; essayAt?: number | null;
 }
-const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [] });
+const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null });
 const slotOf = (s: Session): MathsSlot => ({ pages: s.pages, pageIx: s.pageIx, itemIx: s.itemIx, reading: s.reading, hint: s.hint, lesson: s.lesson, noLesson: s.noLesson, lessonPaused: s.lessonPaused,
-  topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [] });
-const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length;
+  topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [],
+  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null });
+const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType;
 /** A slot onto the session's fields; the log keeps the desk's clock (minutes, started), which is the evening's, not a learner's. */
 function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
@@ -321,7 +324,7 @@ function seat(s: Session, n: Session, id: string): void {
   const away = { ...(s.away ?? {}) };
   // an empty chair leaves nothing behind: the reducer writes no work while no one is at the desk
   if (was) { const left = slotOf(s); if (emptyOf(left)) delete away[was]; else away[was] = left; }
-  withSlot(n, away[id] ?? emptySlot()); delete away[id]; n.away = away;
+  withSlot(n, { ...emptySlot(), ...away[id] }); delete away[id]; n.away = away;
 }
 /** A result that lands after its learner left the desk goes to their work in `away`, never onto the seated learner's. */
 function toAway(s: Session, n: Session, owner: string, f: (x: MathsSlot) => MathsSlot | null): void {
@@ -493,9 +496,12 @@ export function reduce(s: Session, e: Event): Session {
       break; }
     case "lesson.pause": n.lessonPaused = e.paused; break;
     case "english.set": n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
-    case "essay.type": n.essayType = e.essayType; break;
+    // a paragraph (and its lens) is the learner's who asked: a reading that lands after they left goes to their slot, and the TV stays put
+    case "essay.type": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essayType: e.essayType })); break; }
+      n.essayType = e.essayType; break;
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
-    case "essay.set": n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    case "essay.set": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis, essayAt: null })); break; }
+      n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
     // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page;
     // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";

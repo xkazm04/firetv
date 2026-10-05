@@ -51,9 +51,9 @@ export async function POST(req: Request) {
   const tooLong = essayTooLong(body.text);
   if (tooLong) return NextResponse.json({ error: tooLong }, { status: 400 });
   const r = await runJob("analyse", async () => {
-    dispatch({ type: "essay.type", essayType: body.type });
+    dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
     const a = await analyseEssay(body.text, body.type, who.id, age);
-    dispatch({ type: "essay.set", analysis: a });
+    dispatch({ type: "essay.set", analysis: a, owner: who.id });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
   return r.ok ? NextResponse.json(r.value) : refused(r);
