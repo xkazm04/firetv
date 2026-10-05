@@ -3,7 +3,7 @@
  * path is read here and handed to hint(); on the Calculus path a maths item has no lesson library to pick from, so
  * the lesson job ends as 'no lesson' without asking the picker (which would offer a school algebra video). The seated
  * profile's age is read here too, for the tutor's voice (rules/voice). A maths task that reads as a school unit with no
- * lesson in the library (rules/school specFromQuestion: add and subtract fractions, Family W5b) ends the same way, so
+ * lesson in the library (rules/kinds kindOfQuestion: add and subtract fractions, Family W5b) ends the same way, so
  * the hint screen says "No lesson for this" instead of offering a linear-equations video.
  */
 import { NextResponse } from "next/server";
@@ -14,7 +14,7 @@ import { BUSY, refused, runJob } from "@/lib/desk/job";
 import { resolveEnglish } from "@/lib/rules/english";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
-import { specFromQuestion as schoolSpecFromQuestion } from "@/lib/rules/school";
+import { kindOfQuestion } from "@/lib/rules/kinds";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
   if (!r.ok) return refused(r);
   // the lesson behind the hint, keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
   void runJob("lesson", async (run) => {
-    const noLibrary = page.subject === "maths" && (path === "calc1" || schoolSpecFromQuestion(item.text) !== null);
+    const noLibrary = page.subject === "maths" && (path === "calc1" || kindOfQuestion(item.text) === "school");
     const l = noLibrary ? null : await pickLesson(page.subject, item.text);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
     return l;

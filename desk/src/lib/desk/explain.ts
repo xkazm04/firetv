@@ -24,9 +24,10 @@
  * wrong item is never renamed from the conversation), and the reply is checked with leaksSchool(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, isCalcSpec, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
-import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec, leaksSchool } from "../rules/school";
+import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
+import { kindOfSpec } from "../rules/kinds";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, topicIn } from "../library/paths";
@@ -192,8 +193,8 @@ export async function explainItem(
   /** The seated profile's school system, for reading a school item's answer (the route reads it); UK when not given. */
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): Promise<Explained> {
-  // the spec's shape says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
-  const calc = isCalcSpec(item.spec), school = isSchoolSpec(item.spec);
+  // the item's kind (rules/kinds) says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
+  const kind = kindOfSpec(item.spec), calc = kind === "calc", school = kind === "school";
   const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age) : await explain(item.question, transcript, topicId, learnerId, calc, age);
   // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
   const verdict = !stillUnsure() ? null

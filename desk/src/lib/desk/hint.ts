@@ -10,7 +10,9 @@
  *
  * A Calculus item is read from its printed text into a spec (rules/calc specFromQuestion, null when unsure); when it
  * reads, each field also passes the shape-aware leaksCalc, and the fallback is the shape's fixed sentence from
- * rules/calc. The stance follows the learner's Math path, which the route reads from the session and passes in.
+ * rules/calc. The stance follows the item's KIND where its text reads (rules/kinds readQuestion: a derivative question gets the
+ * Calculus stance on any path, a fractions task its unit's); where the text reads as neither - a linear equation - it follows
+ * the learner's Math path, which the route reads from the session and passes in. The voice is always the learner's.
  *
  * A school task (Family W5b) is read the same way by rules/school specFromQuestion ('3/4 + 1/6', 'Work out 3/4 - 1/6',
  * 'Add 3/4 and 1/6', a practice item's printed question; null when unsure): when it reads, each field also passes
@@ -21,8 +23,9 @@
 import { text } from "../engines/text";
 import { cardText, type RuleCard } from "../rules/english";
 import { leaks, withheldLine } from "../rules/maths";
-import { leaksCalc, specFromQuestion, withheldCalc, type CalcSpec } from "../rules/calc";
-import { leaksSchool, specFromQuestion as schoolSpecFromQuestion, unitOf, withheldSchool, type SchoolSpec } from "../rules/school";
+import { leaksCalc, withheldCalc } from "../rules/calc";
+import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
+import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
 import { topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import type { Subject } from "../session/store";
@@ -54,11 +57,15 @@ const CALC_STANCE =
 /** The maths stance on a school task that reads as a unit's (Family W5b): the sheet is that unit, named, never the linear-equations sheet. */
 const unitStance = (v: Voice, unit: string) => `a maths tutor for ${v.who}. This sheet is the unit "${unit}"; prefer the unit's methods over heavier ones.`;
 
-const stanceOf = (subject: Subject, voice: Voice, path?: MathPath, unit?: string) =>
-  subject === "maths" && path === "calc1" ? CALC_STANCE : subject === "maths" && unit ? unitStance(voice, unit) : STANCE[subject](voice);
+/** The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither. */
+const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, path?: MathPath, unit?: string) =>
+  subject !== "maths" ? STANCE[subject](voice)
+    : kind === "calc" ? CALC_STANCE
+    : kind === "school" && unit ? unitStance(voice, unit)
+    : path === "calc1" ? CALC_STANCE : STANCE.maths(voice);
 
-/** The specs a maths task reads as: a Calculus one (rules/calc) and a school one (rules/school); either may be null, and at most one reads. */
-type Specs = { calc: CalcSpec | null; school: SchoolSpec | null };
+/** The specs a maths task reads as (rules/kinds readQuestion): a Calculus one and a school one; either may be null, and at most one reads. */
+type Specs = Pick<Question, "calc" | "school">;
 
 /** Does this line give the item's answer away: the one leak rule, and each reader's own check when the item reads as its spec. */
 const leaksLine = (problem: string, spec: Specs, line: string) =>
@@ -74,11 +81,12 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   // The voice names the learner and adds one manner paragraph; the rules below are shared by every band. A Calculus
   // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
   const voice = voiceOf(subject, subject === "maths" && opts.path === "calc1" ? undefined : opts.age);
-  const spec: Specs = { calc: subject === "maths" ? specFromQuestion(problem) : null, school: subject === "maths" ? schoolSpecFromQuestion(problem) : null };
+  const read = subject === "maths" ? readQuestion(problem) : null;
+  const spec: Specs = { calc: read?.calc ?? null, school: read?.school ?? null };
   // the unit a school task belongs to, by its path's name for it: the stance names it
   const unit = spec.school ? topicIn(unitOf(spec.school) ?? "")?.name : undefined;
   const system = withManner(
-    `You are ${stanceOf(subject, voice, opts.path, unit)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
+    `You are ${stanceOf(subject, voice, read?.kind ?? "linear", opts.path, unit)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
     `Never refer to the learner in the third person and never write instructions for a teacher, parent or tutor. ` +

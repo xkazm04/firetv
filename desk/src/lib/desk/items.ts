@@ -29,7 +29,8 @@ import { getLearner } from "../session/learners";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
-import { pathOfTopic, topicIn } from "../library/paths";
+import { topicIn } from "../library/paths";
+import { kindOfTopic } from "../rules/kinds";
 import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import { generatorFor, leaksSchool, question as schoolQuestion, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
@@ -120,8 +121,9 @@ export async function makeItems(
   // a step up on a road with no tiers is asked for as usual and only marked as a step up (see the file header)
   const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
     stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
-  if (pathOfTopic(topicId) === "calc1") return flag(await makeCalcItems(topicId, learnerId, n));
-  if (pathOfTopic(topicId) === "school" && generatorFor(topicId)) return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch);
+  const kind = kindOfTopic(topicId);
+  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n));
+  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch);
   return flag(await makeLinearItems(topicId, learnerId, n));
 }
 
