@@ -13,7 +13,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "linga.changed": "Use the English conversation endpoint.",
   "job.start": "Runs are started by the desk.", "job.done": "Runs are finished by the desk.", "job.failed": "Runs are finished by the desk.",
   "practice.set": "Ask for a set on /api/practice.", "practice.marked": "Send the working to /api/mark.",
-  "practice.settle": "Explain it on /api/explain.",
+  "practice.settle": "Explain it on /api/explain.", "practice.second": "Type your second go on /api/second.",
   "page.reading": "Send the page to /api/read.", "page.read": "Send the page to /api/read.",
   "hint.set": "Ask for a hint on /api/hint.", "hint.stage": "Ask for a hint on /api/hint.",
   "english.set": "Send the sentence to /api/analyse.", "essay.set": "Send the essay to /api/analyse.",

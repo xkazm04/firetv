@@ -33,6 +33,7 @@ const markedSet=(patch={})=>({topic:TOPIC,marked:true,items:Q.map((question,ix)=
  return {n:ix+1,question,studentAnswer:wrong?'5':String(ix+2),studentWorking:'x = '+(wrong?'5':String(ix+2)),verdict:wrong?'wrong':'right',...(wrong?{slip:'sign-lost-moving'}:{}),said:`Number ${ix+1}.`,...(patch[ix+1]??{})};
 })});
 const seat=(practice,extra={})=>{
+ store();
  globalThis.__desk.session={...store().fresh(),learner:{id:ID,name:'Ema'},profiles:[{id:ID,name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']}],
   screen:'walk',walkIx:1,subject:'maths',joined:true,practice,topic:practice?practice.topic:null,...extra};
 };

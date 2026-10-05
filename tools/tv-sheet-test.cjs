@@ -311,7 +311,7 @@ test('case 6 (second go): sheetTiles carries second; firstToLook and lookCount s
  // the marked set lands, and the key for Up from the actions, on the first unfixed item
  const {tvKey}=keys();
  const sheet=session({screen:'sheet',focus:6,practice:p});
- assert.deepEqual(tvKey(sheet,'up',LOCAL).events,[{type:'nav',screen:'sheet',focus:2}],'Up from the actions lands on the next unfixed item');
+ assert.deepEqual(tvKey(sheet,'up',LOCAL).events,[{type:'focus',focus:2}],'Up from the actions lands on the next unfixed item');
  const card=maths().continueCard(session({screen:'tonight',topic:'linear-one-step',practice:withSecond(['right','wrong','right','wrong','right','right'],[null,'right'])}));
  assert.equal(card.focus,3,"Tonight's Enter goes to the first item still to look at");
 });

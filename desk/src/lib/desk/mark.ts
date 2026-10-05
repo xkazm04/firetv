@@ -37,7 +37,7 @@
 import { vision } from "../engines/vision";
 import { rightLine, slipVocabulary } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
-import { judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
+import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
 import { addDigest, addHistory, recordAttempt } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
@@ -209,6 +209,15 @@ export function markTyped(
   // what was typed, on one line: a stray newline or run of spaces is the keyboard's, not the child's
   const reads = practice.items.map((item, i): Read => ({ n: item.n, studentAnswer: typeof answers[i] === "string" ? oneLine(answers[i]) : "" }));
   return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system, typed: true }, { provider: "code", ms: 0 });
+}
+
+/**
+ * The ONE typed second go of a ringed item (route /api/second): the typed answer judged by the same judge marking uses
+ * (rules/kinds judgeItem), in code and with no model, to a verdict - or null when the answer cannot be read (blank, or not
+ * a value the desk can compare), so the go is not spent. Records nothing: a second go is practice, not evidence.
+ */
+export function secondGo(item: PracticeItem, answer: string, topic: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): "right" | "wrong" | null {
+  return judgeItem(item, { studentAnswer: oneLine(answer) }, { topic, system })?.verdict ?? null;
 }
 
 /** What was typed, on one line: a control character (a newline, a tab) or a run of spaces is the keyboard's, not the child's. */

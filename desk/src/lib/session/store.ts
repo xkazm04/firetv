@@ -93,6 +93,12 @@ export interface PracticeItem {
    */
   slipAt?: SlipAt;
   /**
+   * The ONE typed second go a ringed item may take (route /api/second, judged in code by rules/kinds): 'right' wears a tick
+   * on its ring, 'wrong' a second ring stroke. Only on a wrong item, set once; the verdict, slip, pen and the learner record
+   * stay as marking wrote them - a second go is practice, not evidence. Never the answer typed, never a value.
+   */
+  second?: "right" | "wrong";
+  /**
    * A Calculus item's spec (rules/calc.ts), or a school item's (rules/school.ts, Family W5b): its shape and the parameters
    * its question prints, so marking can judge the learner's answer by recomputing the truth. It holds nothing the
    * question does not already print - no result. Which engine reads it is decided by `spec.shape` alone: a Calculus
@@ -155,7 +161,7 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
   return out as unknown as CalcSpec;
 }
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec, tier, stretch }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -165,6 +171,8 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (reply !== undefined) item.reply = reply;
   const at = slipAtOf(slipAt);
   if (at && verdict === "wrong") item.slipAt = at;
+  // a second go is a ringed item's alone, and only ever one of its two words (a hand-edited session.json stops here)
+  if (verdict === "wrong" && (second === "right" || second === "wrong")) item.second = second;
   const sp = specShown(spec);
   if (sp) item.spec = sp;
   if (sp && (tier === 1 || tier === 2)) item.tier = tier;
@@ -282,6 +290,7 @@ export type Event =
   | { type: "topic.open"; topic: string; stay?: boolean }
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[]; owner?: string }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
+  | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
@@ -428,7 +437,7 @@ export function fresh(): Session {
  * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
-  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle",
+  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
   "walk", "practice.clear", "session.end"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
@@ -532,6 +541,10 @@ export function reduce(s: Session, e: Event): Session {
       : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt }
         : !e.verdict && e.slip && it.verdict === "wrong" && slipsFor(topic).some((x) => x.id === e.slip) ? { ...it, slip: e.slip, said: e.said ?? it.said, reply: e.reply }
         : { ...it, reply: e.reply })) }; } break;
+    // the one typed second go of a wrong item, judged by the route that checked the answer: set once, and nothing else on the item moves
+    case "practice.second": { const it = s.practice?.items.find((x) => x.n === e.n);
+      if (!s.practice || !it || it.verdict !== "wrong" || it.second || (e.verdict !== "right" && e.verdict !== "wrong")) return s;
+      n.practice = { ...s.practice, items: s.practice.items.map((x) => (x.n === e.n ? shown({ ...x, second: e.verdict }) : x)) }; break; }
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
