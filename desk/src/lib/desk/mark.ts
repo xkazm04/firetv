@@ -29,15 +29,18 @@
  * An item of a set asked for as "a step up" (`stretch`, Family W8) is marked exactly as any other; only its attempt goes to
  * the learner's step-up record instead of the usual one (land -> recordAttempt). The history line is the same line.
  *
+ * The decision itself - which kind an item is and whether the answer is right - is rules/kinds (judgeItem, judgeSet), shared
+ * with the typed path: this file is the model's half (three reading prompts and schemas) and the one place a set lands.
+ *
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, isCalcSpec, locate, rightLine, rootOf, settle, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
-import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec } from "../rules/school";
+import { rightLine, slipVocabulary } from "../rules/maths";
+import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
+import { judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
 import { addDigest, addHistory, recordAttempt } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
-import { degenerate, substitute, verify } from "./verify";
 import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
@@ -62,11 +65,6 @@ const SCHEMA = {
   required: ["items"],
 };
 
-interface Marked {
-  n: number; studentAnswer: string; studentWorking: string;
-  verdict: "right" | "wrong"; solution: string; slip: string;
-}
-
 /** A Calculus page, read: what is written, and a slip pick. No verdict and no solution is asked for. */
 const CALC_SCHEMA = {
   type: "object",
@@ -87,9 +85,6 @@ const CALC_SCHEMA = {
   },
   required: ["items"],
 };
-
-/** Only the fields the desk reads from a Calculus page: a `verdict` or `solution` the model adds is not among them. */
-interface Read { n: number; studentAnswer: string; studentWorking: string; slip: string; }
 
 function calcPrompt(practice: Practice, vocab: string): string {
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
@@ -140,10 +135,27 @@ export function schoolPrompt(practice: Practice): string {
     `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`;
 }
 
+/** The linear reading prompt: the model's own value of x is asked for, as the trust gate in rules/kinds judgeItem needs it. */
+function linearPrompt(practice: Practice, vocab: string): string {
+  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
+  return `This is a photo of a student's handwritten working on these ${practice.items.length} equations:\n${sheet}\n\n` +
+    `For each numbered item, report:\n` +
+    `- n: the item number.\n` +
+    `- studentAnswer: the final value of x the student wrote, as a plain number or simple fraction. Empty string if they wrote none.\n` +
+    `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n` +
+    `- verdict: "right" if you believe their final value is correct, "wrong" otherwise.\n` +
+    `- solution: YOUR OWN value of x for that equation, worked out yourself, as a plain number or simple fraction.\n` +
+    `- slip: the id of the mistake you think they made, chosen from this list, or the word "unclear" if you cannot tell:\n${vocab}\n\n` +
+    `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`;
+}
+
 /**
  * `stillSame` is asked after the model answers, as explainItem asks `stillUnsure`: is this set still the one on the
  * desk, unmarked? When it is not (another set landed, the desk was reset), the verdicts are returned with
  * `landed: false` and nothing reaches the learner record - no attempt, no history line.
+ *
+ * The sheet is READ by one prompt, chosen by the kinds on it (rules/kinds kindOfSheet: school, then Calculus, else linear),
+ * and JUDGED item by item by each item's own kind (rules/kinds judgeSet): a mixed sheet is marked as its typed answers are.
  */
 export async function markSet(
   imageBase64: string,
@@ -152,149 +164,39 @@ export async function markSet(
   stillSame: () => boolean = () => true,
   /** The seated learner's school system, for reading a school item's answer (rules/school readNumber). UK when not given. */
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
-): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
-  const vocab = slipVocabulary(practice.topic);
-  // a set that carries specs is read by the model and marked by code; the spec's shape says which engine and which prompt
-  if (practice.items.some((i) => isSchoolSpec(i.spec))) return markSchool(imageBase64, practice, learnerId, stillSame, system);
-  if (practice.items.some((i) => isCalcSpec(i.spec))) return markCalc(imageBase64, practice, learnerId, stillSame, vocab);
-  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
+): Promise<MarkResult> {
+  const kind = kindOfSheet(practice.items);
+  const reading = kind === "school" ? { prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA }
+    : kind === "calc" ? { prompt: calcPrompt(practice, slipVocabulary(practice.topic)), schema: CALC_SCHEMA }
+    : { prompt: linearPrompt(practice, slipVocabulary(practice.topic)), schema: SCHEMA };
+  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading });
 
-  const { json, provider, ms } = await vision<{ items: Marked[] }>({
-    imageBase64,
-    prompt:
-      `This is a photo of a student's handwritten working on these ${practice.items.length} equations:\n${sheet}\n\n` +
-      `For each numbered item, report:\n` +
-      `- n: the item number.\n` +
-      `- studentAnswer: the final value of x the student wrote, as a plain number or simple fraction. Empty string if they wrote none.\n` +
-      `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n` +
-      `- verdict: "right" if you believe their final value is correct, "wrong" otherwise.\n` +
-      `- solution: YOUR OWN value of x for that equation, worked out yourself, as a plain number or simple fraction.\n` +
-      `- slip: the id of the mistake you think they made, chosen from this list, or the word "unclear" if you cannot tell:\n${vocab}\n\n` +
-      `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`,
-    schema: SCHEMA,
-  });
-
-  const byN = new Map<number, Marked>();
-  for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
-
-  let unsure = 0;
-  const attempts: Attempt[] = [];
-  const items: PracticeItem[] = practice.items.map((item) => {
-    const m = byN.get(item.n);
-    const studentAnswer = clean(m?.studentAnswer);
-    const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
-    const solution = clean(m?.solution);
-
-    // 1 — the desk substitutes the model's own solution: can the model solve this item at all? An item any answer
-    // satisfies (an identity, no x) is not one the arithmetic can settle, so it asks too.
-    const truth = solution && !degenerate(item.question) ? verify(item.question, solution) : false;
-    // 2 — and the student's answer: true or false when it substitutes cleanly, null when it cannot be substituted.
-    const student = studentAnswer ? substitute(item.question, studentAnswer) : null;
-
-    // 3 — the model cannot solve its own question, so its read of the page is worth nothing here.
-    // 4 — no answer, or one that does not read as a number: there is nothing to substitute, and the desk does not guess.
-    if (!truth || student === null) {
-      unsure++;
-      return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
-    }
-
-    // 5 — both substitute, so the arithmetic decides; a model verdict that disagrees is overruled. 6 & 7 — rules/maths
-    // settles it (the same rule an explanation uses): a slip only on a wrong item and only from this topic's vocabulary,
-    // never a value.
-    const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
-
-    attempts.push({ right: verdict === "right", slip, ...setOf(item) });
-    // 8 - where the working broke: rules/maths locates it from the learner's own lines and a root found in code
-    const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ ...item, studentWorking, studentAnswer })) : undefined;
-    return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
-  });
-
-  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
-}
-
-/** A Calculus set: the model reads the page, checkAnswer marks each item from its spec. */
-async function markCalc(
-  imageBase64: string,
-  practice: Practice,
-  learnerId: string,
-  stillSame: () => boolean,
-  vocab: string,
-): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
-  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, prompt: calcPrompt(practice, vocab), schema: CALC_SCHEMA });
-
-  const byN = new Map<number, Read>();
-  for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
-
-  let unsure = 0;
-  const attempts: Attempt[] = [];
-  const items: PracticeItem[] = practice.items.map((item) => {
-    const m = byN.get(item.n);
-    // only what is written on the page is read: never a verdict, never a solution
-    const studentAnswer = typeof m?.studentAnswer === "string" ? m.studentAnswer.trim() : "";
-    const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
-    // checkAnswer decides from the spec; unsure (blank, unreadable, not comparable, or no spec) asks and records nothing
-    const s = settleSpec(item.n, item.spec, studentAnswer, m?.slip, practice.topic);
-    if (!s) {
-      unsure++;
-      return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
-    }
-    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
-    // no pen position on a Calculus item: the Walk falls back to the answer line
-    return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
-  });
-
-  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
-}
-
-/** A school set: the model reads the page with the school prompt, rules/school check marks each item from its spec. */
-async function markSchool(
-  imageBase64: string,
-  practice: Practice,
-  learnerId: string,
-  stillSame: () => boolean,
-  system: SchoolSystem,
-): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
-  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA });
-
-  const byN = new Map<number, Read>();
-  for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
-
-  let unsure = 0;
-  const attempts: Attempt[] = [];
-  const items: PracticeItem[] = practice.items.map((item) => {
-    const m = byN.get(item.n);
-    // only the answer string it transcribed reaches the check: never a verdict, a solution or a slip the model adds
-    const studentAnswer = typeof m?.studentAnswer === "string" ? m.studentAnswer.trim() : "";
-    const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
-    const s = settleSpec(item.n, item.spec, studentAnswer, undefined, practice.topic, system);
-    if (!s) {
-      unsure++;
-      return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
-    }
-    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
-    return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
-  });
-
-  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
+  // only what each reader asks for is read: never a verdict, and a solution only from the linear reading (the trust gate)
+  const reads = (Array.isArray(json?.items) ? json.items : []).filter((m) => m && typeof m.n === "number").map((m): Read => ({
+    n: m.n, studentAnswer: m.studentAnswer, studentWorking: m.studentWorking,
+    ...(kind !== "school" ? { slip: m.slip } : {}),
+    ...(kind === "linear" ? { solution: typeof m.solution === "string" ? m.solution : "" } : {}),
+  }));
+  return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
 }
 
 /**
  * A set answered by typing (Family W6): the phone sends one string per question, in item order, and CODE marks each one
- * at once - no photo, no vision call, no model call of any kind (a test makes the
- * vision and text engines throw). The verdicts are the ones a photographed sheet's transcribed strings would get,
- * because they come from the same checkers:
- *   - an item with a `spec` (school or Calculus) is settled by `settleSpec(n, spec, answer, undefined, topic, system)`,
- *     `system` being the seated learner's (the route reads it): a school answer by rules/school check, a Calculus one by
- *     checkAnswer, the slip being code's own where it names one, never a model's pick;
+ * at once - no photo, no vision call, no model call of any kind (a test makes the vision and text engines throw). The
+ * verdicts are the ones a photographed sheet's transcribed strings would get, because they come from the same judge
+ * (rules/kinds judgeItem), item by item, whatever mix of kinds the set carries:
+ *   - an item with a `spec` (school or Calculus) is settled by `settleSpec`, `system` being the seated learner's (the route
+ *     reads it): a school answer by rules/school check, a Calculus one by checkAnswer, the slip being code's own where it
+ *     names one, never a model's pick;
  *   - an item WITHOUT a spec (a linear equation the model wrote) is settled by `settle`, the substitution rule marking
  *     uses, from the typed value ("x = 4" and "4" are the same value; a value in x is not accepted). A photographed
  *     linear item needs the model's own solution to hold before its read of the page is trusted; a typed one has no model
  *     to trust, so the desk asks the same of the equation itself: it must be one the desk can solve in code (a single
  *     linear root, `rootOf`) and not an identity, else it is "not sure", never a guess.
  * A BLANK answer is unsure - "not sure", no verdict, never wrong, no attempt - exactly as the photo path treats an
- * answer the model read as empty (checkAnswer and substitute both settle nothing on ''). Junk that does not read is unsure
- * the same way. The typed string is the item's `studentAnswer`; there is no working and no pen position (`slipAt` is
- * never set, so the sheet draws the answer line, as it does for any item with an answer and no located slip).
+ * answer the model read as empty. Junk that does not read is unsure the same way. The typed string is the item's
+ * `studentAnswer`; there is no working and no pen position (`slipAt` is never set, so the sheet draws the answer line,
+ * as it does for any item with an answer and no located slip).
  * Then the SAME `land`: one attempt per settled item, one history line, only while the set is still the one on the desk.
  */
 export function markTyped(
@@ -303,54 +205,34 @@ export function markTyped(
   learnerId: string,
   stillSame: () => boolean = () => true,
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
-): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
-  let unsure = 0;
-  const attempts: Attempt[] = [];
-  const items: PracticeItem[] = practice.items.map((item, i) => {
-    // what was typed, on one line: a stray newline or run of spaces is the keyboard's, not the child's
-    const studentAnswer = typeof answers[i] === "string" ? oneLine(answers[i]) : "";
-    const s = studentAnswer ? typedSettle(item, studentAnswer, practice.topic, system) : null;
-    if (!s) {
-      unsure++;
-      return { ...item, studentAnswer, studentWorking: "", verdict: "unsure" as const, said: ASK(item.n) };
-    }
-    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
-    return { ...item, studentAnswer, studentWorking: "", verdict: s.verdict, slip: s.slip, said: s.said };
-  });
-  return land(practice, learnerId, stillSame, items, attempts, { provider: "code", ms: 0, unsure });
+): MarkResult {
+  // what was typed, on one line: a stray newline or run of spaces is the keyboard's, not the child's
+  const reads = practice.items.map((item, i): Read => ({ n: item.n, studentAnswer: typeof answers[i] === "string" ? oneLine(answers[i]) : "" }));
+  return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system, typed: true }, { provider: "code", ms: 0 });
 }
 
 /** What was typed, on one line: a control character (a newline, a tab) or a run of spaces is the keyboard's, not the child's. */
 const oneLine = (t: string) => Array.from(t, (c) => (c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127 ? " " : c)).join("").split(" ").filter(Boolean).join(" ");
 
-/** One typed answer settled by the item's own kind of truth (see markTyped); null asks. Never sets a pen position. */
-function typedSettle(item: PracticeItem, answer: string, topic: string, system: SchoolSystem) {
-  if (item.spec !== undefined) return settleSpec(item.n, item.spec, answer, undefined, topic, system);
-  if (degenerate(item.question) || rootOf(item.question) === null) return null;
-  const s = settle({ n: item.n, question: item.question, studentAnswer: answer, studentWorking: "" }, answer, undefined, topic);
-  if (!s) return null;
-  const { slipAt: _pen, ...rest } = s; // no working was written, so there is no line to put the pen on
-  return rest;
+/** The one way a set is marked: its reads judged item by item (rules/kinds), then landed once. */
+function markReads(practice: Practice, learnerId: string, stillSame: () => boolean, reads: readonly Read[], ctx: JudgeCtx & { typed?: boolean }, run: { provider: string; ms: number }): MarkResult {
+  return land(practice, learnerId, stillSame, judgeSet(practice, reads, ctx), run);
 }
 
-/** One settled item's attempt, and how its item was set: a step-up item (Family W8) and its code-set tier. */
-interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2 }
-/** How an item was set, as its attempt carries it: the step-up flag and the tier, both code's own (absent is a usual item). */
-const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 } => ({
-  ...(item.stretch === true ? { stretch: true } : {}), ...(item.tier === 1 || item.tier === 2 ? { tier: item.tier } : {}),
-});
+/** What a marked set comes back as: the items, which engine read it and how long, how many it asked about, and whether it reached the record. */
+export type MarkResult = { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean };
 
 /** Record a marked set once, and only while it is still the set on the desk. */
 function land(
   practice: Practice,
   learnerId: string,
   stillSame: () => boolean,
-  items: PracticeItem[],
-  attempts: Attempt[],
-  run: { provider: string; ms: number; unsure: number },
-): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
+  judged: Judged,
+  run: { provider: string; ms: number },
+): MarkResult {
+  const { items, attempts, unsure } = judged;
   // 9 - the desk has moved on while the model read the page: the verdicts are not this set's to record
-  if (!stillSame()) return { items, ...run, landed: false };
+  if (!stillSame()) return { items, ...run, unsure, landed: false };
 
   // only settled items reach the record, each once, and only for the set still on the desk
   // a step-up item's attempt goes to the step-up record only (learners.ts recordAttempt, Family W8)
@@ -368,5 +250,5 @@ function land(
   // restates it in place (session/store restateMarked), as it restates the history line.
   addDigest(learnerId, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
 
-  return { items, ...run, landed: true };
+  return { items, ...run, unsure, landed: true };
 }
