@@ -2,7 +2,8 @@
 
 Every design doc in this folder, grouped by product, then the decision records. For how the
 products fit together and the commands, start at [../README.md](../README.md) and
-[../AGENTS.md](../AGENTS.md).
+[../AGENTS.md](../AGENTS.md). For the agent harness (evals, prompts, runbooks, review gate), see
+[AI_HARNESS.md](AI_HARNESS.md).
 
 ## Telestrator (core/, tv-app/, companion/)
 

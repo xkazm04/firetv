@@ -30,11 +30,13 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Test: telestrator core | `node tools/gradlew.cjs :core:test` | Pure JVM, seconds, no device. |
 | Test: Study Desk | `npm --prefix desk test` | `tsc --noEmit`, then every rules suite in `desk/package.json` `test:rules`. |
 | Typecheck: Study Desk | `npm --prefix desk run test:types` | |
+| Evals (AI output, deterministic) | the `evals` command in `.ai/manifest.yaml` | A subset of the desk gate: the maths judge and marking, withholding, and the UAT verdict, metrics, ledger and surface suites. Model roles are stubbed. See `docs/AI_HARNESS.md`. |
 | Compile: tv-app | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` | Needs `local.properties` (SDK path) and the generated `tv-app/src/main/res/raw/fixture_clip.mp4` (see `fixtures/README.md`). |
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. |
 | Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | |
+| Pin workflow actions | `node scripts/pin-actions.mjs` (`--check` works offline) | Needs network and a GitHub token. Never type a SHA (`.ai/memory/0013`). |
 
 `gradle.properties` pins `org.gradle.java.home` to the operator's Android Studio JBR. On any
 other machine, pass `-Dorg.gradle.java.home=<a JDK 17>` or remove that line locally.
@@ -111,6 +113,7 @@ design pages that `prototype/build.py` builds.
 
 ## Tooling in use
 
+- The harness index is [docs/AI_HARNESS.md](docs/AI_HARNESS.md). It lists the evals (which ones gate and which are live), where prompts live, the runbooks and the review gate.
 - Skills, with their overlays in `.claude/<skill>/config.md`:
   - `/scan-sweep` (quality sweeps and challenge runs)
   - `/uat` (Linga acceptance; LT runs on codex)
@@ -120,6 +123,7 @@ design pages that `prototype/build.py` builds.
   - `ai-conformance.yml` runs `.ai/doctor.mjs` (the agent contract check) on every PR.
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
   - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
+  - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
 - `.github/dependabot.yml` keeps Gradle, npm and the Actions current.
 
 ## Example of a good change

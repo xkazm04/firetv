@@ -21,11 +21,15 @@ repo:
 # operator's machine, gradle.properties' org.gradle.java.home must be overridden (see AGENTS.md).
 # The tv-app build needs local.properties and the generated fixture clip (fixtures/README.md).
 # deathride/ is a separate Gradle build and is gated from its own directory.
+# evals is the deterministic AI-output subset of test-desk (model roles stubbed, no live call; see
+# docs/AI_HARNESS.md). It needs desk/node_modules. .github/workflows/capabilities.yml runs every
+# capability here through doctor --run weekly; CI never commits the verified flags it computes.
 capabilities:
   build: { command: "node tools/gradlew.cjs :tv-app:assembleDebug", verified: false }
   test: { command: "node tools/gradlew.cjs :core:test", verified: false }
   test-desk: { command: "npm --prefix desk test", verified: false }
   typecheck: { command: "npm --prefix desk run test:types", verified: false }
+  evals: { command: "node tools/maths-judge-test.cjs && node tools/calc-marking-test.cjs && node tools/withhold-rules-test.cjs && node tools/uat-verdict-test.cjs && node tools/uat-metrics-test.cjs && node tools/uat-recertify-test.cjs && node tools/uat-ledger-test.cjs && node tools/uat-surface-test.cjs", verified: false }
 
 # Pointers: these subsystems can change format underneath without breaking this contract. Every
 # path DECLARED here must exist (the doctor checks it); a pointer you don't declare is not a finding.
@@ -35,6 +39,8 @@ paths:
   contextIndex: .ai/context-index.json
   memory: .ai/memory/
   guardrails: .ai/guardrails.yaml
+  evals: uat/
+  harness: docs/AI_HARNESS.md
 
 context:
   rule: "every module directory over 12 files has a CONTEXT.md"
