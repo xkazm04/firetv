@@ -262,3 +262,63 @@ test('extra: a located slip keeps which occurrence of its span it means only as 
  const v=reduce(u,{type:'practice.settle',n:1,reply:'I see.',verdict:'wrong',slipAt:{line:0,...span,nth:2}}).practice.items[0];
  assert.deepEqual(v.slipAt,{line:0,span:'- 1',kind:'sign',nth:2});
 });
+
+// ---- challenge-2026-10-05 math-buddy-B: the second go. A ringed item that holds on a typed second go wears a tick; the record is the first attempt.
+const withSecond=(verdicts,seconds)=>{const p=marked(verdicts);p.items=p.items.map((it,ix)=>seconds[ix]?{...it,second:seconds[ix]}:it);return p;};
+
+test('case 2 (second go): practice.second sets second once and touches nothing else; a right item or an unknown n changes nothing; shown() drops junk',()=>{
+ const {reduce}=store();
+ const s=session({screen:'walk',focus:0,walkIx:1,topic:'linear-one-step',practice:marked(['right','wrong','right','wrong','right','right'])});
+ const was=s.practice.items[1];
+ const n=reduce(s,{type:'practice.second',n:2,verdict:'right'});
+ const it=n.practice.items[1];
+ assert.equal(it.second,'right');assert.equal(it.verdict,'wrong');
+ for(const k of ['slip','said','slipAt','studentAnswer','studentWorking','reply'])assert.equal(it[k],was[k],`${k} is as marking left it`);
+ assert.equal(n.screen,'walk');assert.equal(n.focus,0);assert.equal(n.walkIx,1);
+ assert.deepEqual(n.practice.items.filter((x)=>x.n!==2),s.practice.items.filter((x)=>x.n!==2),'every other item is untouched');
+ // one go: a replay with the other verdict leaves the first
+ assert.equal(reduce(n,{type:'practice.second',n:2,verdict:'wrong'}).practice.items[1].second,'right');
+ assert.equal(reduce(reduce(s,{type:'practice.second',n:2,verdict:'wrong'}),{type:'practice.second',n:2,verdict:'right'}).practice.items[1].second,'wrong');
+ // a right item and an unknown n are not the event's to change
+ assert.deepEqual(reduce(s,{type:'practice.second',n:1,verdict:'right'}).practice.items,s.practice.items);
+ assert.deepEqual(reduce(s,{type:'practice.second',n:9,verdict:'right'}).practice.items,s.practice.items);
+ assert.equal(reduce(session({practice:null}),{type:'practice.second',n:2,verdict:'right'}).practice,null);
+ // a hand-edited session.json: a second that is neither 'right' nor 'wrong' never reaches a screen
+ const edited=marked(['right','wrong','wrong','wrong','right','right']);
+ edited.items[1].second='right';edited.items[2].second='maybe';edited.items[3].second=true;edited.items[0].second='right';
+ const m=reduce(session({screen:'practice',practice:unmarked()}),{type:'practice.marked',items:edited.items}).practice.items;
+ assert.equal(m[1].second,'right');assert.equal(m[2].second,undefined);assert.equal(m[3].second,undefined);
+ assert.equal(m[0].second,undefined,'a right item never carries one');
+});
+
+test('case 6 (second go): sheetTiles carries second; firstToLook and lookCount skip a fixed item; the head counts it out',()=>{
+ const {sheetTiles,firstToLook,lookCount}=rows(),{sheetHead}=maths();
+ const p=withSecond(['right','wrong','wrong','right','right','right'],[null,'right',null]);
+ const tiles=sheetTiles(p);
+ assert.deepEqual(tiles[1],{n:2,verdict:'wrong',slip:'sign-lost-moving',second:'right'});
+ assert.deepEqual(tiles[2],{n:3,verdict:'wrong',slip:'sign-lost-moving'},'a tile with no second go carries no second key');
+ assert.equal(firstToLook(p.items),2,'the fixed item is skipped, the next ringed one is first');
+ assert.equal(firstToLook(withSecond(['right','wrong','wrong','right','right','right'],[null,'right']).items.map((it)=>it)),2);
+ assert.equal(firstToLook(withSecond(['right','wrong','right','right','right','right'],[null,'right']).items),6,'every item right or fixed: the Six more stop');
+ assert.equal(firstToLook(withSecond(['right','wrong','right','right','right','right'],[null,'wrong']).items),1,'a second go that missed is still to look at');
+ assert.equal(firstToLook(marked(['right','right','right','right','right','right']).items),6);
+ const two=withSecond(['wrong','wrong','right','right','right','right'],[]);
+ assert.equal(lookCount(two.items),2);assert.equal(sheetHead(lookCount(two.items),6),'Two to look at');
+ const one=withSecond(['wrong','wrong','right','right','right','right'],['right']);
+ assert.equal(lookCount(one.items),1);assert.equal(sheetHead(lookCount(one.items),6),'One to look at');
+ assert.equal(lookCount(withSecond(['wrong','right','right','right','right','right'],['wrong']).items),1,'a missed go still counts');
+ assert.equal(lookCount(marked(['right','unsure','wrong',undefined,'right','right']).items),3,'unsure and unmarked count as before');
+ // the marked set lands, and the key for Up from the actions, on the first unfixed item
+ const {tvKey}=keys();
+ const sheet=session({screen:'sheet',focus:6,practice:p});
+ assert.deepEqual(tvKey(sheet,'up',LOCAL).events,[{type:'nav',screen:'sheet',focus:2}],'Up from the actions lands on the next unfixed item');
+ const card=maths().continueCard(session({screen:'tonight',topic:'linear-one-step',practice:withSecond(['right','wrong','right','wrong','right','right'],[null,'right'])}));
+ assert.equal(card.focus,3,"Tonight's Enter goes to the first item still to look at");
+});
+
+test('GUARD case 8 (second go): with item 2 fixed, Tonight\'s Marked hero still reads the first attempt',()=>{
+ const {continueCard}=maths();
+ const p=withSecond(['right','wrong','right','wrong','right','right'],[null,'right']);
+ const card=continueCard(session({screen:'tonight',topic:'linear-one-step',practice:p}));
+ assert.match(card.d,/4 of 6 right/,'the same count a first-attempt reading gives');
+});

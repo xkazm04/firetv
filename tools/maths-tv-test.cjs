@@ -613,3 +613,76 @@ test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topic
  const strip=(m)=>m.segments.map(({stretch,stretchShare,...rest})=>rest);
  assert.deepEqual(strip(up),strip(plain),'the bars, their ink, labels and the needle are the usual record\'s alone');assert.deepEqual(up.needle,plain.needle);
 });
+
+// ---------------------------------------------------------------- 8. the second go (challenge-2026-10-05 math-buddy-B): the ring wears a tick, drawn as a picture
+
+require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+// next/font runs only under Next: the face module answers with its class names
+for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+const SECOND_Q=['x+3=7','x-5=2','3x=18','x/2=4','x+1=10','5x=35'];
+/** The marked sheet as the TV is given it: items 2 and 4 are ringed; `second` is item 2's second go (or none). */
+function secondSession(second,screen='sheet',extra={}){
+ const items=SECOND_Q.map((question,ix)=>{const wrong=ix===1||ix===3;return {n:ix+1,question,studentAnswer:wrong?'5':String(ix+2),studentWorking:'x = '+(wrong?'5':String(ix+2)),verdict:wrong?'wrong':'right',...(wrong?{slip:'sign-lost-moving',said:`Number ${ix+1}.`}:{said:`Number ${ix+1}.`}),...(ix===1&&second?{second}:{})};});
+ return {subject:'maths',screen,focus:1,view:'band',joined:true,pin:'1234',phoneUrl:'',awaiting:null,learner:{id:'ema',name:'Ema'},profiles:[],draft:null,
+  timer:{running:false,left:1500,phase:'work'},pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,lessonPaused:false,noLesson:false,english:null,essay:null,
+  practice:{topic:'linear-one-step',marked:true,items},topic:'linear-one-step',walkIx:1,skills:{},history:[],jobs:{},status:'',log:{started:null,minutes:0,problems:[],hard:[],hints:0},...extra};
+}
+function drawMaths(name,s){
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ return renderToStaticMarkup(createElement(M[name],{s,focus:s.focus}));
+}
+const tags=(html,cls)=>html.match(new RegExp(`<div class="${cls}"[^>]*>`,'g'))??[];
+const words=(html)=>html.replace(/<[^>]*>/g,' ').split(/\s+/).filter(Boolean);
+/** The number element of item `n` and what it holds (the ring is `.nr`, the tick `maths-tick`). */
+const numOf=(html,n)=>{const m=new RegExp(`<div class="num"[^>]*>${n}(.*?)</div>`).exec(html);return m?{tag:/<div class="num"[^>]*>/.exec(m[0])[0],inner:m[1]}:null;};
+const ticks=(html)=>(html.match(/data-role="maths-tick"/g)??[]).length;
+const cardOf=(html)=>{const i=html.indexOf('data-role="maths-hint"');return html.slice(i,html.indexOf('</aside>',i));};
+
+test('second 1: a second go that held - the number and the tally mark carry data-second="right", the ring stays and a tick is drawn, the card is at most 25 words',()=>{
+ for(const screen of ['sheet','walk']){
+  const html=drawMaths(screen==='sheet'?'Sheet':'Walk',secondSession('right',screen));
+  const mark=tags(html,'mb-tm')[1];assert.ok(mark&&/data-second="right"/.test(mark),`${screen}: tally mark 2 carries data-second: ${mark}`);
+  assert.ok(!/data-second/.test(tags(html,'mb-tm')[3]),`${screen}: the other ringed item is unmarked`);
+  const num=numOf(html,2);assert.ok(num&&/data-second="right"/.test(num.tag),`${screen}: number 2 carries data-second`);
+  assert.ok(/class="nr"/.test(num.inner),`${screen}: the ring is still drawn`);
+  assert.ok(/data-role="maths-tick"/.test(num.inner),`${screen}: and wears a tick`);
+  const plainHtml=drawMaths(screen==='sheet'?'Sheet':'Walk',secondSession(null,screen));
+  assert.equal(ticks(html),ticks(plainHtml)+1,`${screen}: one tick more than the same set with no second go`);
+  assert.ok(!/data-role="maths-tick"/.test(numOf(html,4).inner),`${screen}: the unfixed ringed item wears none`);
+  assert.ok(words(cardOf(html)).length<=25,`${screen}: the taped card is ${words(cardOf(html)).length} words`);
+ }
+ const walk=drawMaths('Walk',secondSession('right','walk'));
+ assert.ok(/holds/i.test(words(cardOf(walk)).join(' ')),'the card says it holds now');
+ assert.ok(!/\b(x\s*=\s*7|7)\b/.test(cardOf(walk).replace(/Number 2/g,'')),'the card never says the value');
+});
+
+test('second 2: a second go that missed - data-second="wrong", no tick, and the card sends the learner to say how they got there',()=>{
+ const walk=drawMaths('Walk',secondSession('wrong','walk')),sheet=drawMaths('Sheet',secondSession('wrong','sheet'));
+ for(const html of [walk,sheet]){
+  assert.ok(/data-second="wrong"/.test(tags(html,'mb-tm')[1]));assert.ok(/data-second="wrong"/.test(numOf(html,2).tag));
+  assert.equal(ticks(html),ticks(drawMaths(html===walk?'Walk':'Sheet',secondSession(null,html===walk?'walk':'sheet'))),'no tick more than the same set with no second go');
+  assert.ok(!/data-role="maths-tick"/.test(numOf(html,2).inner),'no tick on the number');
+  assert.ok(/class="nr"/.test(numOf(html,2).inner),'the ring stays');
+ }
+ const card=words(cardOf(walk)).join(' ');
+ assert.match(card,/how you got there/i);assert.ok(words(cardOf(walk)).length<=25);
+});
+
+test('second 3: no second go draws as before; with one fixed the sheet head counts it out and the line keeps the first attempt',()=>{
+ const plain=drawMaths('Sheet',secondSession(null,'sheet'));
+ assert.ok(!/data-second/.test(plain),'no second go, no new mark');assert.ok(!/maths-tick/.test(numOf(plain,2).inner));
+ assert.match(plain,/Two to look at/);
+ const fixed=drawMaths('Sheet',secondSession('right','sheet'));
+ assert.match(fixed,/One to look at/);
+ assert.match(words(fixed).join(' '),/4 right/,'the line under the actions keeps the first attempt');
+ assert.match(words(fixed).join(' '),/1 fixed/);
+});
+
+test('second 4: the stylesheet draws the tick and the second ring, and adds no text under the 28 px floor',()=>{
+ const css=cssSrc();
+ assert.match(css,/\[data-second="right"\]/);assert.match(css,/\[data-second="wrong"\]/);
+ for(const rule of css.match(/[^{}]*\[data-second[^{}]*\{[^}]*\}/g)??[]){
+  const m=/font-size:\s*(\d+)px/.exec(rule);assert.ok(!m||Number(m[1])>=28,`a second-go rule sets text under the floor: ${rule.trim()}`);
+ }
+});
