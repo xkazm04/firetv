@@ -224,3 +224,110 @@ test('GUARD case 18: a stub that answers at once resolves with its provider and 
   reg().resetProviders(k);
  }
 });
+
+// The engine check (engines/health.ts, GET /api/smoke): which provider would run, whether it answers, what to fix.
+const health=()=>load('engines/health.ts');
+const nap=(ms)=>new Promise((r)=>setTimeout(r,ms));
+const LIVE={text:{ok:'yes'},vision:{title:'t'},embed:[[1]],speak:Buffer.from('x'),listen:{text:'hi'}};
+/** A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it). */
+const stubAll=(over={},delay=0)=>{
+ const n={run:{},probe:{}};
+ for(const k of KINDS){
+  n.run[k]=0;n.probe[k]=0;
+  const p={name:'stub',run:async()=>{n.run[k]++;if(delay)await nap(delay);return {raw:LIVE[k]};},probe:async()=>{n.probe[k]++;return {ok:true,say:'fine'};},...(over[k]||{})};
+  if(over[k]&&over[k].probe===null)delete p.probe;
+  reg().useProvider(k,p);
+ }
+ return n;
+};
+
+test('case 19: the status asks each kind\'s active provider for its probe: five rows in order, no run()',async()=>{
+ const n=stubAll();
+ const rows=await health().engineStatus();
+ assert.deepEqual(rows.map(r=>r.kind),['text','vision','embed','speak','listen']);
+ for(const r of rows){assert.equal(r.provider,'stub',r.kind);assert.equal(r.ok,true,r.kind);assert.equal(r.say,'fine',r.kind);assert.equal(typeof r.ms,'number',r.kind);}
+ for(const k of KINDS){assert.equal(n.run[k],0,`${k}: no run() call`);assert.equal(n.probe[k],1,`${k}: one probe`);}
+});
+
+test('case 20: a probe that never answers is one not-ok row at the budget; the others are unaffected and the round is parallel',async()=>{
+ stubAll({listen:{probe:()=>new Promise(()=>{})}});
+ const t0=Date.now();
+ const rows=await health().engineStatus(30);
+ assert(Date.now()-t0<500,`returned in ${Date.now()-t0} ms`);
+ const listen=rows.find(r=>r.kind==='listen');
+ assert.equal(listen.ok,false);assert.match(listen.say,/did not answer/);
+ for(const r of rows.filter(r=>r.kind!=='listen'))assert.equal(r.ok,true,r.kind);
+});
+
+test('case 21: a provider with no probe is ok:null and says how to find out; never ok:true on no evidence',async()=>{
+ stubAll({embed:{probe:null}});
+ const rows=await health().engineStatus();
+ const embedRow=rows.find(r=>r.kind==='embed');
+ assert.equal(embedRow.ok,null);assert.match(embedRow.say,/\?live=1/);
+ assert.equal(embedRow.provider,'stub');
+});
+
+test('case 22: the real ollama probes read /api/tags: a missing model says what to pull, an unreachable host says what to start',async()=>{
+ const real=globalThis.fetch,host=(process.env.OLLAMA_HOST||'http://127.0.0.1:11434').replace(/\/$/,'');
+ try{
+  globalThis.fetch=async(url)=>{
+   if(String(url).endsWith('/api/tags'))return new Response(JSON.stringify({models:[{name:'nomic-embed-text:latest'}]}),{status:200});
+   throw new Error('connect ECONNREFUSED');
+  };
+  let rows=await health().engineStatus(1500);
+  const by=(k)=>rows.find(r=>r.kind===k);
+  assert.equal(by('vision').provider,'ollama');assert.equal(by('vision').ok,false);assert.match(by('vision').say,/ollama pull qwen3\.8:27b/);
+  assert.equal(by('embed').ok,true);
+  globalThis.fetch=async()=>{throw new Error('connect ECONNREFUSED');};
+  rows=await health().engineStatus(1500);
+  for(const k of ['vision','embed']){assert.equal(by(k).ok,false,k);assert(by(k).say.includes(host),`${k}: names the host`);assert.match(by(k).say,/ollama serve/,k);}
+ }finally{globalThis.fetch=real;}
+});
+
+test('case 23: a live check runs text, vision, embed and speak side by side, listen as a probe; a failure is a typed row with no engine text',async()=>{
+ const n=stubAll({},40);
+ const t0=Date.now();
+ const r=await health().engineCheck({live:true,sample:'aGk='});
+ const took=Date.now()-t0;
+ assert(took<120,`parallel: ${took} ms (the serial sum is 160)`);
+ assert.deepEqual(r.map(x=>x.kind),['text','vision','embed','speak','listen']);
+ for(const k of ['text','vision','embed','speak']){assert.equal(n.run[k],1,`${k} ran`);const row=r.find(x=>x.kind===k);assert.equal(row.ok,true,k);assert.equal(row.provider,'stub',k);assert(row.ms>=30,`${k} reports the engine's ms (${row.ms})`);}
+ assert.equal(n.run.listen,0,'listen is not run');assert.equal(n.probe.listen,1);
+ assert.equal(r.find(x=>x.kind==='listen').say,'fine');
+ // a failing engine: the row names the kind of failure, the detail goes to the log
+ reg().resetProviders();
+ const EE=engineError();
+ stubAll({text:{run:async()=>{throw new EE('timeout','stub','sk-live-123 upstream said no');}}});
+ const logged=[],orig=console.error;console.error=(...a)=>logged.push(a.map(String).join(' '));
+ let bad;try{bad=await health().engineCheck({live:true,sample:'aGk='});}finally{console.error=orig;}
+ const row=bad.find(x=>x.kind==='text');
+ assert.equal(row.ok,false);assert.equal(row.error.kind,'timeout');assert.equal(typeof row.error.say,'string');assert(row.error.say.length>0);
+ assert.equal(JSON.stringify(bad).includes('sk-live-123'),false,'no engine text in the result');
+ assert(logged.some(l=>l.includes('sk-live-123')),'the detail is in the server log');
+ assert.equal(bad.filter(x=>x.ok===true).length,4,'the other rows are unaffected');
+});
+
+test('case 24: GET /api/smoke is a probe round for the TV and in-process callers, a 403 for a phone, a live run only on ?live=1',async()=>{
+ fs.writeFileSync(path.join(data,'sample.jpg'),'x');
+ const route=require(path.join(root,'src/app/api/smoke/route.ts'));
+ const ask=(q,role)=>route.GET(new Request(`http://desk/api/smoke${q}`,{headers:role?{'x-desk-role':role}:{}}));
+ let n=stubAll();
+ let r=await ask('');
+ assert.equal(r.status,200);let body=await r.json();
+ assert.equal(body.engines.length,5);assert.equal(body.live,false);
+ for(const k of KINDS){assert.equal(n.run[k],0,`${k}: no run()`);}
+ const probed=KINDS.reduce((s,k)=>s+n.probe[k],0);assert.equal(probed,5);
+ for(const role of ['phone','guest']){
+  for(const q of ['','?live=1']){
+   r=await ask(q,role);assert.equal(r.status,403,`${role}${q}`);
+  }
+ }
+ assert.equal(KINDS.reduce((s,k)=>s+n.probe[k],0),5,'a refused phone touched no probe');
+ assert.equal(KINDS.reduce((s,k)=>s+n.run[k],0),0,'a refused phone ran nothing');
+ r=await ask('',  'tv');assert.equal(r.status,200);
+ reg().resetProviders();n=stubAll();
+ r=await ask('?live=1','tv');assert.equal(r.status,200);body=await r.json();
+ assert.equal(body.live,true);assert.equal(body.engines.length,5);
+ for(const k of ['text','vision','embed','speak'])assert.equal(n.run[k],1,`${k} ran live`);
+ assert.equal(n.run.listen,0);
+});
