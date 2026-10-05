@@ -88,4 +88,34 @@ class LinkStateTest {
         val moved = "http://10.0.0.7:8765/?pin=4821"
         assertEquals(LinkView.Invite(moved, pin), ready().on(LinkEvent.Ready(moved, pin), 9_000).view(9_000))
     }
+
+    @Test
+    fun `a peek reports how long it has left, for the status line`() {
+        val s = paired().on(LinkEvent.Peek, 100_000)
+        assertEquals(0L, s.peekLeftMs(99_999))
+        assertEquals(8_000L, s.peekLeftMs(100_000))
+        assertEquals(1L, s.peekLeftMs(107_999))
+        assertEquals(0L, s.peekLeftMs(108_000))
+        assertEquals(0L, paired().peekLeftMs(1_000))
+    }
+
+    @Test
+    fun `the refusals the card shows are the reasons the conversation gives`() {
+        fun refusalOf(effects: List<PenEffect>) =
+            effects.filterIsInstance<PenEffect.Send>().map { it.message }.filterIsInstance<TvMessage.Welcome>()
+                .single { !it.accepted }.reason
+        val hello = """{"type":"hello","pin":"0000","clientId":"pen-x"}"""
+
+        val dedicated = PairingDesk(pin, 16.0 / 9.0).open(openedAtMs = 0)
+        assertEquals(true, refusalOf(dedicated.onText(hello)) in LinkState.PIN_REFUSALS)
+
+        val shared = PairingDesk(pin, 16.0 / 9.0).open(openedAtMs = 0, shared = true)
+        var last = ""
+        repeat(PenConversation.MAX_WRONG_PINS + 1) { last = refusalOf(shared.onText(hello)).orEmpty() }
+        assertEquals(true, last in LinkState.PIN_REFUSALS)
+        assertEquals(LinkState.PIN_REFUSALS, setOf("wrong PIN", last))
+
+        val silent = PairingDesk(pin, 16.0 / 9.0).open(openedAtMs = 0)
+        assertEquals(false, refusalOf(silent.onTick(5_000)) in LinkState.PIN_REFUSALS)
+    }
 }

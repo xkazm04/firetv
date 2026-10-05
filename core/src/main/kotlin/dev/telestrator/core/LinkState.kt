@@ -69,7 +69,20 @@ data class LinkState(
         return if (nowMs - gone < LOST_GRACE_MS) LinkView.Chip else LinkView.Lost(url, pin)
     }
 
+    /** How much longer a Menu peek holds the card (and the status line) up; 0 when none does. */
+    fun peekLeftMs(nowMs: Long): Long {
+        val at = peekedAtMs ?: return 0
+        return if (nowMs in at until at + PEEK_MS) at + PEEK_MS - nowMs else 0
+    }
+
     companion object {
+        /**
+         * The refusals worth putting on a TV: someone tried to pair and got the PIN wrong. These are
+         * the reasons [PenConversation] gives; a connection that merely never said hello is not a
+         * phone that tried, and the shell does not report it.
+         */
+        val PIN_REFUSALS: Set<String> = setOf("wrong PIN", "too many wrong PINs")
+
         /** How long a pen may be gone before the card comes back with 'Pen lost'. */
         const val LOST_GRACE_MS = 3_000L
 
