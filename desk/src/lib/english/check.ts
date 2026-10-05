@@ -11,6 +11,7 @@ import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError } from "./errors";
 import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
@@ -52,8 +53,10 @@ const KIND_TASK: Record<TaskKind, string> = {
 };
 
 function stageScreen(k: LevelCheck): Screen { return k.stage === "verdict" ? "linga-verdict" : k.stage === "plan" ? "linga-plan" : "linga-check"; }
+/** An unparked check holds the desk, so a live scene yields it (activity.ts); a parked check never moves the TV. */
 function commit(k: LevelCheck | null, screen?: Screen) {
-  dispatch({ type: "linga.changed", check: k, screen, focus: screen === "linga-check" && k?.task?.kind === "choose" && !k.pending ? 0 : undefined });
+  const c = getSession().conversation, held = k && !k.parked && liveScene(c) ? heldScene(c) : undefined;
+  dispatch({ type: "linga.changed", check: k, screen: k?.parked ? undefined : screen, focus: screen === "linga-check" && k?.task?.kind === "choose" && !k.pending ? 0 : undefined, ...(held ? { conversation: held } : {}) });
 }
 /** The check a slow model call started for must still be the one on the desk, waiting on that call. */
 function current(k: LevelCheck, token?: string): LevelCheck {
@@ -198,6 +201,7 @@ export async function checkCommand(action: string, input: Record<string, unknown
   const ctx: Ctx = { profile, learning, adult: isAdult(profile, prefs), commandId };
   const open = s.check?.learnerId === learnerId ? s.check : null;
   if (open?.commands.includes(commandId)) return true;
+  // the table's "reading" row, for every command: the ones that open a check (check-start, plan-propose) are not in the table
   if (open?.pending && !["check-leave", "check-repeat"].includes(action)) throw new ConversationError("Linga is still thinking. You can stop for now and come back.", 409);
 
   if (action === "check-start") {
@@ -219,7 +223,7 @@ export async function checkCommand(action: string, input: Record<string, unknown
     const reuse = action === "plan-open" && learning.plan?.topics.length;
     // Topics cut with no goal and no interest come out generic (second UAT run: fit fell to a third). Ask first, once.
     const known = !!(prefs.goal || prefs.interest || base.goal || base.interest);
-    const k: LevelCheck = { ...base, stage: "plan", topics: reuse ? learning.plan!.topics : [], error: "", askGoal: !reuse && !known };
+    const k: LevelCheck = { ...base, stage: "plan", topics: reuse ? learning.plan!.topics : [], error: "", askGoal: !reuse && !known, parked: false };
     commit(k, "linga-plan");
     if (!reuse && known) await advance(k, ctx, commandId);
     return true;
@@ -227,18 +231,16 @@ export async function checkCommand(action: string, input: Record<string, unknown
   if (!action.startsWith("check-") && !action.startsWith("plan-")) return false;
 
   if (!open || input.checkId !== open.id) throw new ConversationError("The level check has changed. Return to the current step.", 409);
+  // one guard for the whole check (activity.ts): the table the view and both devices read decides what this state takes
+  if (isCheckCommand(action) && !checkAccepts(open, action)) throw new ConversationError(checkRefusal(open, action), 409);
   const k = open;
   if (action === "check-leave") { commit({ ...k, pending: null }, "linga"); return true; }
-  if (action === "check-resume") { commit({ ...k, pending: null, error: "" }, stageScreen(k)); return true; }
+  if (action === "check-resume") { commit({ ...k, pending: null, error: "", parked: false }, stageScreen(k)); return true; }
   if (action === "check-repeat") { commit({ ...k, audioNonce: k.audioNonce + 1 }); return true; }
   if (action === "check-retry") { await advance({ ...k, error: "" }, ctx, commandId); return true; }
-  if (action === "check-reveal") {
-    if (k.task?.kind !== "listen") throw new ConversationError("Only a listening task has words to show.");
-    commit({ ...k, task: { ...k.task, revealed: true } }); return true;
-  }
+  if (action === "check-reveal") { commit({ ...k, task: { ...k.task!, revealed: true } }); return true; }
 
   if (action === "check-answer") {
-    if (k.stage !== "about") throw new ConversationError("The questions are done. Carry on with the tasks.", 409);
     const last = k.turns.at(-1);
     if (!last || last.role !== "tutor" || input.lastTurnId !== last.id) throw new ConversationError("A new question arrived. Read it before answering.", 409);
     const answer = required(input.text, "answer", 1200);
@@ -264,7 +266,7 @@ Then your read of everything so far. selfBand: your best estimate of their band 
 
   if (action === "check-task") {
     const task = k.task;
-    if (k.stage !== "tasks" || !task || input.taskId !== task.id) throw new ConversationError("This task has changed. Answer the one on the TV.", 409);
+    if (!task || input.taskId !== task.id) throw new ConversationError("This task has changed. Answer the one on the TV.", 409);
     const judged = (verdict: PlacementTask["verdict"], response: string, mode: EvidenceMode, quote: string, note: string): PlacementTask =>
       ({ id: task.id, band: task.band, kind: task.kind, prompt: task.prompt, line: task.line, options: task.options, response, mode, verdict, quote, note, at: Date.now() });
     const settle = async (t: PlacementTask, token: string) => {
@@ -307,7 +309,6 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
   }
 
   if (action === "plan-goal") {
-    if (k.stage !== "plan" || !k.askGoal) throw new ConversationError("Linga already knows what to plan for.", 409);
     const said = input.skip === true ? "" : typeof input.text === "string" ? input.text.trim() : "";
     if (input.skip !== true && !said) throw new ConversationError("Say what you would like to practise, or let Linga pick.");
     if (said.length > TOPIC_ASK_MAX) throw new ConversationError(`Say it in up to ${TOPIC_ASK_MAX} characters.`);
@@ -320,7 +321,6 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     return true;
   }
   if (action === "plan-swap" || action === "plan-add" || action === "plan-renew") {
-    if (k.stage !== "plan") throw new ConversationError("Find your level before choosing topics.", 409);
     if (action === "plan-renew") { await advance({ ...k, topics: [] }, ctx, commandId); return true; }
     if (action === "plan-swap") {
       const id = required(input.topicId, "topic", 100);
@@ -336,7 +336,6 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     return true;
   }
   if (action === "plan-agree") {
-    if (k.stage !== "plan" || !k.topics.length) throw new ConversationError("There are no topics to agree to yet.", 409);
     const allowed = allowedAudiences(ctx), topics = k.topics.filter(t => allowed.includes(t.audience));
     saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: learning.placement?.band ?? prefs.level, topics } });
     commit(null, "linga");

@@ -2,6 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
 import { ENGLISH_SCENES } from "@/lib/english/curriculum";
+import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
@@ -23,7 +24,7 @@ const FIT_CEILING=160,FIT_STEPS=3;
 export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;voice:boolean}){
   const {run,busy,error}=useEnglish(s),[ui,setUi]=useState<LingaUi>(NO_UI);
   const v=lingaView(s,{...ui,busy,error});
-  const {menu,picking}=ui,c=s.conversation,lc=activeCheck(s),home=v.home!==null,onCheck=CHECK_SCREENS.includes(s.screen);
+  const {menu,picking}=ui,c=s.conversation,lc=ownerOf(s)==="check"?activeCheck(s):null,home=v.home!==null,onCheck=CHECK_SCREENS.includes(s.screen);
   const audioStatus=useEnglishAudio(v.spoken,voice,v.audible);
   useEffect(()=>{setUi(NO_UI);},[s.learner?.id]);
   const patch=(p:Partial<LingaUi>)=>setUi(u=>({...u,...p}));

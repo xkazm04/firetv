@@ -4,6 +4,7 @@ import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
 import { addDigest, getLearner, saveEnglish } from "../session/learners";
 import { markSeen, withCertificate } from "./cert";
+import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction } from "./check";
 import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, oldestDue, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
@@ -12,7 +13,7 @@ import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } 
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, usedLine } from "./review";
 import { accepts, isTurnAction, refusal } from "./turn";
-import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
+import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId } from "./types";
 
 export { ConversationError };
 // The engine already holds each answer to its schema; these second checks fit a line to the screen.
@@ -36,7 +37,9 @@ const replaySchema=schema({reply:str(230),help:helpSchema}),replayAccept=loose({
 // The level check, plan, hints and marking keep the model's own thinking.
 
 function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-recap":c.moment?"linga-moment":c.phase==="coaching"?"linga-coach":"linga-talk";}
-function commit(c:Conversation,screen?:Screen){dispatch({type:"linga.changed",conversation:c,screen});}
+/** `check` is the level check a scene that starts or resumes parks (activity.ts): at most one of the two is live. */
+function commit(c:Conversation,screen?:Screen,check?:LevelCheck){dispatch({type:"linga.changed",conversation:c,screen,...(check?{check}:{})});}
+function parkCheck(){const k=checkAt(getSession());return k?parked(k):undefined;}
 /** The scene contract this conversation runs: its own copy, or a built-in one for a conversation saved before copies. */
 function sceneOf(c:Conversation):EnglishScene|undefined{return c.scene??ENGLISH_SCENES.find(s=>s.id===c.sceneId);}
 function checkCurrent(c:Conversation,token?:string):Conversation{
@@ -136,7 +139,7 @@ export async function englishCommand(raw:unknown){
     // One taught item comes back (review.ts): code picks it, the partner makes room for it without saying it.
     const id=randomUUID(),taught=dueTaught(learning.taught,id);
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};
-    dispatch({type:"timer.pause"});commit(c,"linga-talk");
+    dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
     try{
       const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."}),schema:openingSchema,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
       checkCurrent(c,commandId);
@@ -157,10 +160,10 @@ export async function englishCommand(raw:unknown){
   // One guard for the whole turn (turn.ts): the table the view and both devices read decides what this state takes.
   if(!accepts(c,action))throw new ConversationError(refusal(c,action),409);
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
-  if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c));return getSession();}
+  if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
   if(action==="moment-done") {commit({...c,moment:null},"linga-talk");return getSession();}
   if(action==="capture") {commit({...c,capture:true,captureAt:Date.now()});return getSession();}
-  if(action==="pause") {commit({...c,paused:!c.paused,capture:false});return getSession();}
+  if(action==="pause") {commit({...c,paused:!c.paused,capture:false},undefined,c.paused?parkCheck():undefined);return getSession();}
   if(action==="repeat") {commit({...c,audioNonce:c.audioNonce+1,capture:false});return getSession();}
   if(action==="cue"){
     // The next rung of the line on screen, or the scene's cue when that line has no ladder. No model call. The

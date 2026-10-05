@@ -7,7 +7,7 @@ import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPI
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { accepts, turnState } from "@/lib/english/turn";
-import { helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
+import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -19,7 +19,7 @@ const skillName=(id:string)=>ENGLISH_SKILLS.find(x=>x.id===id)?.name??"";
 export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promise<void>;onSentence:()=>void}){
   const {run,busy,error}=useEnglish(s),c=s.conversation;
   const profile=s.profiles.find(p=>p.id===s.learner?.id),learning=s.englishLearning;
-  const lc=s.check&&s.check.learnerId===s.learner?.id?s.check:null;
+  const lc=activeCheck(s);
   const [panel,setPanel]=useState<"talk"|"settings"|"map">("talk");
   const [prefs,setPrefs]=useState<EnglishPreferences>(learning.preferences??defaultPreferences(profile));
   const [notes,setNotes]=useState(learning.notes.join("\n"));

@@ -8,6 +8,7 @@
  * of the TV's own local state (the menu, the level picker, the situation and chapter browsers).
  */
 import type { Screen, Session } from "../session/store";
+import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { dayMonth, plateOf, unseenCertificate } from "./cert";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL, recommendScene } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
@@ -165,7 +166,7 @@ export function helpOf(c: Conversation): { label: string; help: string; tag: str
 }
 
 /** The level check of the learner at the desk, if one is under way. */
-export function activeCheck(s: Session): LevelCheck | null { return s.check && s.check.learnerId === s.learner?.id ? s.check : null; }
+export const activeCheck = (s: Session): LevelCheck | null => checkAt(s);
 
 export function lingaHome(s: Session): HomeState {
   const c = s.conversation, lc = activeCheck(s), l = s.englishLearning;
@@ -185,7 +186,7 @@ export function lingaHome(s: Session): HomeState {
 export type PhonePanel = "check" | "moment" | "start" | "talk";
 export function phonePanel(s: Session): PhonePanel {
   const st = s.conversation ? turnState(s.conversation) : null;
-  return activeCheck(s) ? "check" : st === "moment" ? "moment" : !st || st === "finished" ? "start" : "talk";
+  return ownerOf(s) === "check" ? "check" : st === "moment" ? "moment" : !st || st === "finished" ? "start" : "talk";
 }
 
 /**
@@ -519,7 +520,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })));
   }
 
-  return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions, footer, phone, answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details };
+  // a check action the table (activity.ts) would refuse is drawn disabled, wherever it is offered
+  const tabled = (a: ViewAction): ViewAction => { const x = a.run.command?.action; return lc && !a.disabled && x && isCheckCommand(x) && !checkAccepts(lc, x) ? { ...a, disabled: true } : a; };
+  return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions: actions.map(tabled), footer: footer.map(tabled), phone: phone.map(tabled), answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details };
 }
 
 /**
