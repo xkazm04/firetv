@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
-import { certWords, monthOf } from "@/lib/english/cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
+import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
+import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
@@ -184,7 +184,7 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
 /** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
 function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean}){
   const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
-  const next=recommendScene(profile,learning),placement=learning.placement,home=lingaHome(s);
+  const next=recommendFor(profile,learning),placement=learning.placement,home=lingaHome(s);
   const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
   const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;

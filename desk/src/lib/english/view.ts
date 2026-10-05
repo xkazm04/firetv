@@ -9,8 +9,8 @@
  */
 import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
-import { dayMonth, plateOf, unseenCertificate } from "./cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL, recommendScene } from "./curriculum";
+import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
+import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
 import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
@@ -100,9 +100,10 @@ export type Hero =
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
-  /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote */
+  /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote.
+   * With none held it is the plate in outline (cert.ts certGap): the skills shown so far, and `open`, the skills still to show, as empty slots. */
   | { kind: "cert"; kicker: string; title: string; band: Band; issued: string; topics: string[];
-      skills: Array<{ name: string; mode: "spoken" | "written" }>; quote: { skill: string; text: string } | null }
+      skills: Array<{ name: string; mode: "spoken" | "written" }>; quote: { skill: string; text: string } | null; open?: string[] }
   /** every certificate held, newest first, one door each */
   | { kind: "certs"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
@@ -213,7 +214,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const { menu, picking, sceneIndex, chapter } = ui;
   const p = s.profiles.find(p => p.id === s.learner?.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
   const level: Band = l.placement?.band ?? (isBand(prefs.level) ? prefs.level : "A1");
-  const scenes = eligibleScenes(p, prefs, l), recommended = recommendScene(p, l), c = s.conversation;
+  const scenes = eligibleScenes(p, prefs, l), recommended = recommendFor(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;
   const isHome = s.screen === "linga" || s.screen === "tonight", onCheck = CHECK_SCREENS.includes(s.screen);
   const last = c?.turns.at(-1), asked = lc?.turns.at(-1);
@@ -348,7 +349,15 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const held = l.certificates ?? [], cert = held.find(x => x.id === ui.cert) ?? held.at(-1);
     const back = (help: string) => act("certificate-back", "Back to Linga", help, go("linga"));
     tag = "Your certificate"; captionTag = "How it was issued";
-    if (!cert) {
+    const gap = certGap(l);
+    if (!cert && gap.band) {
+      // The plate in outline (linga-B): what is shown so far, and what is still to have as empty slots; no number. A band picked by hand, or a check read with low confidence, has no slots: a certificate rests on a level check.
+      const open = gap.open.map(skillName);
+      title = `${gap.band} ${BAND_NAME[gap.band]}`;
+      caption = gap.blocker === "self" ? "A certificate rests on a level check you take with Linga." : gap.blocker === "low" ? "Your last check was a mixed read, so take it again another day for a firmer one." : open.length ? "Each empty slot is a conversation still to have." : "Linga issues it when you next finish a conversation.";
+      hero = { kind: "cert", kicker: "Certificate", title, band: gap.band, issued: gap.blocker ? "" : "Not issued yet", topics: [], skills: shownSkills(l, gap).map(({ name, mode }) => ({ name, mode })), quote: null, open };
+      actions = [...(gap.blocker ? [act("find-level", "Find my level", caption, cmd("check-start"))] : []), back(caption)];
+    } else if (!cert) {
       title = "No certificate yet"; caption = "Linga issues one from your own words after a level check."; hero = { kind: "plain", title }; actions = [back(caption)];
     } else {
       const p = plateOf(cert);
@@ -431,7 +440,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${level} · ${BAND_NAME[level]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
-      ...(l.certificates?.length ? [act("my-certificate", "My certificate", "See your newest certificate, issued by Linga from your own words.", { ...cmd("cert-open"), ui: { ...close, cert: null } })] : []),
+      // the door opens for any learner with a record of checks: a held certificate opens by command, none held is the outline
+      ...(l.certificates?.length ? [act("my-certificate", "My certificate", "See your newest certificate, issued by Linga from your own words.", { ...cmd("cert-open"), ui: { ...close, cert: null } })]
+        : l.placements?.length ? [act("my-certificate", "My certificate", "See what a certificate still needs from you.", { ...go("linga-cert"), ui: { ...close, cert: null } })] : []),
       act("my-topics", "My topics", "See the conversations in your plan, swap them or ask for new ones.", { ...cmd(l.plan ? "plan-open" : "plan-propose"), ui: close }),
       act("phone-setup", "Phone setup", "Open Linga on the phone to set your interests, goals and learning preferences.", { nav: { screen: "pair", from: s.screen } }),
       act("sentence-help", "Sentence help", "Open Say it on the phone for help with a particular sentence.", go("sentence")),
@@ -563,7 +574,7 @@ export function viewText(v: LingaView): string {
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
-    case "cert": out.push(h.kicker, `${h.issued}.`, ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), `Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`, ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
+    case "cert": out.push(h.kicker, ...(h.issued ? [`${h.issued}.`] : []), ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), ...(h.skills.length ? [`Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`] : []), ...(h.open?.length ? [`Still to show, empty slots: ${h.open.join(", ")}`] : []), ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
     case "certs": out.push(`${h.kicker} · ${h.title}`); break;
     case "plain": out.push(h.title); break;
   }

@@ -496,6 +496,9 @@
 .linga-tv .lo-plate-skills + .lo-plate-skills { margin-top: 8px; }
 .linga-tv :is(.lo-plate-topic, .lo-plate-skill) { white-space: nowrap; }
 .linga-tv .lo-plate-dot { margin: 0 4px; color: var(--lo-quote); font-weight: 400; }
+/* an open slot: a dashed outline in the Stones' dashed line, 28 px like every word a learner reads; it never breaks across a line */
+.linga-tv .lo-plate-open { line-height: 1.9; }
+.linga-tv .lo-plate-slot { display: inline-block; margin: 0 10px 0 0; padding: 0 16px; border: 3px dashed #b9a28d; border-radius: 10px; color: var(--lo-ink); font-size: 28px; font-weight: 700; line-height: 1.3; white-space: nowrap; }
 .linga-tv .lo-plate-quote { color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 34px; line-height: 1.2; }
 .linga-tv[data-hero="cert"] .lo-caption > div { max-width: 752px; }
 /* two doors side by side: Back, and the earlier certificates; the row saves a door's height for the plate */

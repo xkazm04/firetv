@@ -89,11 +89,14 @@ export function Stones({ progress }: { progress: Progress }) {
  * A certificate's plate (Family W10): a dry card. The topics the learner chose in Georgia; the skills shown on their
  * own, under SPOKEN ON YOUR OWN or WRITTEN ON YOUR OWN as each was shown; one of their own lines in quotation marks
  * under the skill it shows. No count, no score, no percent: the band in the title is the only figure on the screen.
+ * With no certificate held it is the plate in outline: `open` are the skills still to show, each an empty slot in a dashed line
+ * (the Stones' dashed path), never a number.
  */
-export function Plate({ topics, skills, quote }: { topics: string[]; skills: Array<{ name: string; mode: string }>; quote: { skill: string; text: string } | null }) {
+export function Plate({ topics, skills, quote, open = [] }: { topics: string[]; skills: Array<{ name: string; mode: string }>; quote: { skill: string; text: string } | null; open?: string[] }) {
   return <div className="lo-plate" data-role="linga-plate">
     {topics.length > 0 && <p className="lo-plate-row lo-plate-topics"><span className="lo-plate-label">Your topics</span> {topics.map((t, i) => <Fragment key={t}>{i > 0 && <Dot/>}<span className="lo-plate-topic">{t}</span></Fragment>)}</p>}
     {(["spoken", "written"] as const).map(mode => { const shown = skills.filter(s => s.mode === mode); return shown.length > 0 && <p key={mode} className="lo-plate-row lo-plate-skills" data-mode={mode}><span className="lo-plate-label">{mode} on your own</span> {shown.map((s, i) => <Fragment key={s.name}>{i > 0 && <Dot/>}<span className="lo-plate-skill">{s.name}</span></Fragment>)}</p>; })}
+    {open.length > 0 && <p className="lo-plate-row lo-plate-open" data-role="linga-plate-open"><span className="lo-plate-label">Still to show</span> {open.map(name => <span key={name} className="lo-plate-slot">{name}</span>)}</p>}
     {quote && <div className="lo-plate-row"><div className="lo-plate-label">In your own words · {quote.skill}</div><div className="lo-plate-quote" data-role="linga-plate-quote">“{quote.text}”</div></div>}
   </div>;
 }

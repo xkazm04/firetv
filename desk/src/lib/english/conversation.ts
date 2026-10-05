@@ -3,10 +3,10 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
 import { addDigest, getLearner, saveEnglish } from "../session/learners";
-import { markSeen, withCertificate } from "./cert";
+import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction } from "./check";
-import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, oldestDue, recommendScene } from "./curriculum";
+import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, oldestDue } from "./curriculum";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
@@ -130,7 +130,7 @@ export async function englishCommand(raw:unknown){
   if(isCheckAction(action)){await checkCommand(action,input,profile,commandId);return getSession();}
   if(action==="start"){
     const prefs=learning.preferences??defaultPreferences(profile),allowed=eligibleScenes(profile,prefs,learning);
-    const scene=input.sceneId?allowed.find(x=>x.id===input.sceneId):recommendScene(profile,learning);
+    const scene=input.sceneId?allowed.find(x=>x.id===input.sceneId):recommendFor(profile,learning);
     if(!scene||!allowed.some(x=>x.id===scene.id))throw new ConversationError("This situation is not available for this learner.",403);
     if(s.conversation?.commands.includes(commandId))return getSession();
     if(s.conversation?.pending)throw new ConversationError("A scene is already being prepared. You can cancel it.",409);

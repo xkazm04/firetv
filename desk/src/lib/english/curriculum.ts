@@ -80,7 +80,17 @@ export const DUE_MS = 3 * 86400000;
 export function oldestDue<T extends { success: boolean; skill: string; at: number }>(evidence: T[], except?: string): T | undefined {
   return evidence.filter(e => e.success && e.skill !== except && Date.now() - e.at > DUE_MS).sort((a, b) => a.at - b.at)[0];
 }
-export function recommendScene(p: Profile | undefined, learning: EnglishLearning): EnglishScene {
+/** The first scene for a still-open skill, in the order of the skills; a plan topic before a built-in situation, and not the one just played unless it is the only one. */
+function forOpenSkill(open: SkillId[], plan: EnglishScene[], builtIn: EnglishScene[], lastId?: string): EnglishScene | undefined {
+  const found = open.flatMap(skill => [...plan, ...builtIn.filter(x => !plan.some(t => t.id === x.id))].filter(x => x.skill === skill));
+  return found.find(x => x.id !== lastId) ?? found[0];
+}
+/**
+ * The next scene. `open` is the skills a certificate still needs (cert.ts certGap, via recommendFor): once every plan
+ * topic has been talked through, a situation that practises one of them leads, a plan topic before a built-in one.
+ * No open skill, no change.
+ */
+export function recommendScene(p: Profile | undefined, learning: EnglishLearning, open: SkillId[] = []): EnglishScene {
   const prefs = learning.preferences ?? defaultPreferences(p);
   // An agreed plan leads: the next topic not yet talked through, then the one whose skill is due.
   const plan = planScenes(learning).filter(x => audienceAllowed(p, prefs, x.audience));
@@ -89,6 +99,8 @@ export function recommendScene(p: Profile | undefined, learning: EnglishLearning
     const unstarted = plan.find(x => !started.has(x.id));
     if (unstarted) return unstarted;
     const lastId = learning.sessions.at(-1)?.sceneId;
+    const needed = forOpenSkill(open, plan, eligibleScenes(p, prefs).filter(x => x.id !== "date"), lastId);
+    if (needed) return needed;
     const due = oldestDue(learning.evidence);
     return plan.find(x => due && x.skill === due.skill && x.id !== lastId) ?? plan[(plan.findIndex(x => x.id === lastId) + 1) % plan.length];
   }

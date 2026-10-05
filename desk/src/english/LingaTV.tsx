@@ -172,7 +172,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       <SentenceCard label={h.after.kicker} text={h.after.quote}/>
     </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;
     // the certificate: the band and its name, the caption's one sentence, then the plate (OpenDoor Plate)
-    case "cert":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}<Plate topics={h.topics} skills={h.skills} quote={h.quote}/></>;
+    case "cert":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}{(h.topics.length>0||h.skills.length>0||(h.open?.length??0)>0||h.quote)&&<Plate topics={h.topics} skills={h.skills} quote={h.quote} open={h.open}/>}</>;
     case "plain":return <><Title text={h.title}/>{caption}</>;
     default:return null;
   }

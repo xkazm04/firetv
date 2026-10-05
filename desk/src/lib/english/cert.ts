@@ -21,10 +21,11 @@
  * Nothing on it is a count, a score, a percent or a streak, and it carries no digit a screen would print except the
  * band's own (a date is kept as a number and printed as a month word on the plate).
  */
-import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
+import type { Profile } from "../session/store";
+import { ENGLISH_SKILLS, PROGRESS_ORDER, recommendScene } from "./curriculum";
 import { BAND_NAME, isBand } from "./placement";
 import { COUNTING_MODES, evidenceProgress } from "./rules";
-import { type Band, type Certificate, type CertSkill, type EnglishEvidence, type EnglishLearning, type SkillId } from "./types";
+import { type Band, type Certificate, type CertSkill, type EnglishEvidence, type EnglishLearning, type EnglishScene, type SkillId } from "./types";
 
 /**
  * The skills a learner at each band shows on their own to hold that band's certificate. AUTHORED, from the CEFR
@@ -133,6 +134,45 @@ export function withCertificate(l: EnglishLearning, now: number, words: Record<s
   const cert = issue(l, now, words);
   return cert ? { learning: { ...l, certificates: [...(l.certificates ?? []), cert].slice(-CERT_CAP) }, cert } : { learning: l, cert: null };
 }
+
+// ---- what a certificate still needs (linga-B): derived at read time, stored nowhere
+/** Why no certificate can be issued on this record: a band picked by hand, a check read with low confidence, or no check at all. */
+export type CertBlocker = "self" | "low" | "no-check";
+export interface CertGap {
+  /** the band the record names now (the latest entry's), null with no record of a check */
+  band: Band | null;
+  blocker: CertBlocker | null;
+  /** required skills already shown on the learner's own, in the order of the eight */
+  shown: SkillId[];
+  /** required skills still to show; empty when a blocker stands or the certificate for this band and requirement is already held */
+  open: SkillId[];
+}
+/**
+ * What the certificate still needs, from the record, the plan and the evidence: the same rules issue() holds a
+ * certificate to, read without issuing. A blocker leaves nothing to fill (the learner cannot earn a slot toward a
+ * certificate that cannot be issued), a held certificate leaves nothing open. A skill counts as shown only when issue()
+ * could take its quote, so a shown skill is never one the plate could not print.
+ */
+export function certGap(l: EnglishLearning): CertGap {
+  const last = (l.placements ?? []).at(-1), band = last && isBand(last.band) ? last.band : null;
+  if (!last) return { band, blocker: "no-check", shown: [], open: [] };
+  if (last.source !== "check") return { band, blocker: "self", shown: [], open: [] };
+  if (!certBand(l)) return { band, blocker: "low", shown: [], open: [] };
+  const required = requirementFor(l, band);
+  if ((l.certificates ?? []).some(c => c.band === band && sameSet(c.skills.map(s => s.skill), required))) return { band, blocker: null, shown: required, open: [] };
+  const shown = required.filter(skill => { const p = progressOf(l, skill); return (p === "independent" || p === "transfer") && !!evidenceFor(l, skill, {}); });
+  return { band, blocker: null, shown, open: required.filter(s => !shown.includes(s)) };
+}
+/** The shown skills of a gap, named, with how each was shown (the mode of the evidence the plate would print). */
+export function shownSkills(l: EnglishLearning, gap: CertGap = certGap(l)): Array<{ skill: SkillId; name: string; mode: CertSkill["mode"] }> {
+  return gap.shown.flatMap(skill => { const e = evidenceFor(l, skill, {}); return e ? [{ skill, name: skillName(skill), mode: e.mode === "speech" ? "spoken" as const : "written" as const }] : []; });
+}
+/**
+ * The next scene with the certificate in mind: curriculum.ts recommendScene, given the skills the certificate still
+ * needs. It lives here because cert.ts reads curriculum.ts and a call back would be a cycle. Every caller that picks
+ * the learner's next scene (home, the phone, the print page, a start with no scene named) asks this one.
+ */
+export function recommendFor(p: Profile | undefined, l: EnglishLearning): EnglishScene { return recommendScene(p, l, certGap(l).open); }
 
 /** The newest certificate not yet opened, if any: home offers it once, as its first door. */
 export function unseenCertificate(l: EnglishLearning): Certificate | null {
