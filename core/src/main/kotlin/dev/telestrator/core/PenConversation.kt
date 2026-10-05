@@ -43,12 +43,15 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
     /**
      * A new connection arrived at [openedAtMs] (any monotonic clock, as long as ticks use the same
      * one). [onUndecodable] hears about frames that did not decode, so the shell can log them.
+     *
+     * [shared] says the connection is not one pen but a channel that outlives each pen (the TV's one
+     * outbound relay socket): see [PenConversation].
      */
     fun open(
         openedAtMs: Long,
         shared: Boolean = false,
         onUndecodable: (text: String, error: Throwable) -> Unit = { _, _ -> },
-    ): PenConversation = PenConversation(this, openedAtMs, onUndecodable)
+    ): PenConversation = PenConversation(this, openedAtMs, onUndecodable, shared)
 
     companion object {
         const val HELLO_TIMEOUT_MS = 5_000L
@@ -58,21 +61,38 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
 /**
  * One pen connection, from the first frame to the hang-up.
  *
- * There is exactly one pass over the incoming stream: the first message must pair, everything
- * after it is pen input. [onText] and [onTick] may be called from different threads, so both are
- * serialised on this instance.
+ * A **dedicated** conversation (the LAN default, where a connection is a phone) makes exactly one
+ * pass over the incoming stream: the first message must pair, everything after it is pen input, and
+ * a connection that does not pair in time or pairs with a wrong PIN is refused and hung up on.
+ *
+ * A **shared** conversation (the relay, where the connection is the TV's own outbound socket and the
+ * phone is not part of its lifetime) has no hello deadline and no hang-up, since closing would hang
+ * up on the relay rather than on a pen. Every hello is a (re)pairing: the right PIN pairs, or
+ * replaces the current pen, at a new generation; a wrong PIN is refused, unpairs the current pen
+ * ([PenEffect.Unpaired]) and input is dropped until a right hello. Because nothing closes, guessing
+ * is limited instead: [MAX_WRONG_PINS] wrong PINs in a row refuse every hello, the right one
+ * included, until [COOLDOWN_MS] has passed on the ticks.
+ *
+ * [onText] and [onTick] may be called from different threads, so both are serialised on this instance.
  */
 class PenConversation(
     private val desk: PairingDesk,
     openedAtMs: Long,
     /** Told about a frame that did not decode, so the shell can log it. The frame is dropped. */
     private val onUndecodable: (text: String, error: Throwable) -> Unit = { _, _ -> },
+    private val shared: Boolean = false,
 ) {
-    /** A connection that has not paired by this time is refused. */
-    val helloDeadlineMs: Long = openedAtMs + PairingDesk.HELLO_TIMEOUT_MS
+    /** A dedicated connection that has not paired by this time is refused; a shared one never is. */
+    val helloDeadlineMs: Long = if (shared) Long.MAX_VALUE else openedAtMs + PairingDesk.HELLO_TIMEOUT_MS
 
     private var hello: PenMessage.Hello? = null
     private var closed = false
+
+    // Shared conversations only: the guess limit. The clock is the latest tick, since a frame
+    // carries no time of its own.
+    private var nowMs = openedAtMs
+    private var wrongPins = 0
+    private var lockedUntilMs: Long? = null
 
     /** The generation this pen paired as, or -1 before pairing. */
     var generation: Long = -1
@@ -94,18 +114,11 @@ class PenConversation(
             return emptyList()
         }
 
+        if (shared && msg is PenMessage.Hello) return sharedHello(msg)
         if (hello == null) {
             if (msg !is PenMessage.Hello) return emptyList()
             if (msg.pin != desk.pin) return reject("wrong PIN")
-
-            // Newest pen wins rather than being locked out: a phone that dropped off Wi-Fi and
-            // came back should just work, and the alternative strands the viewer with a dead pen.
-            hello = msg
-            generation = desk.nextGeneration()
-            return listOf(
-                PenEffect.Send(TvMessage.Welcome(sessionId = "s-$generation", videoAspect = desk.videoAspect, accepted = true)),
-                PenEffect.Paired(msg.clientId, generation),
-            )
+            return pair(msg, replaced = false)
         }
 
         if (desk.generation != generation) return emptyList()
@@ -115,12 +128,58 @@ class PenConversation(
         return listOf(PenEffect.Deliver(msg))
     }
 
-    /** A connection that never says hello holds a slot open for nothing. */
+    /**
+     * A dedicated connection that never says hello holds a slot open for nothing. A shared one is
+     * never refused; its ticks only carry the clock that ends a guess-limit cooldown.
+     */
     @Synchronized
     fun onTick(nowMs: Long): List<PenEffect> {
+        if (nowMs > this.nowMs) this.nowMs = nowMs
+        if (shared) {
+            val until = lockedUntilMs
+            if (until != null && nowMs >= until) {
+                lockedUntilMs = null
+                wrongPins = 0
+            }
+            return emptyList()
+        }
         if (closed || hello != null || nowMs < helloDeadlineMs) return emptyList()
         return reject("no pairing message")
     }
+
+    // Newest pen wins rather than being locked out: a phone that dropped off Wi-Fi and came back
+    // should just work, and the alternative strands the viewer with a dead pen.
+    private fun pair(msg: PenMessage.Hello, replaced: Boolean): List<PenEffect> {
+        hello = msg
+        generation = desk.nextGeneration()
+        return listOf(
+            PenEffect.Send(TvMessage.Welcome(sessionId = "s-$generation", videoAspect = desk.videoAspect, accepted = true)),
+            PenEffect.Paired(msg.clientId, generation, replaced),
+        )
+    }
+
+    private fun sharedHello(msg: PenMessage.Hello): List<PenEffect> {
+        if (lockedUntilMs != null) return listOf(refusal("too many wrong PINs"))
+        if (msg.pin == desk.pin) {
+            wrongPins = 0
+            return pair(msg, replaced = hello != null)
+        }
+
+        val effects = mutableListOf<PenEffect>(refusal("wrong PIN"))
+        val current = hello
+        if (current != null) {
+            // The pen that was paired no longer is. Taking a generation as well means nothing that
+            // read the old one can still be current.
+            hello = null
+            generation = desk.nextGeneration()
+            effects += PenEffect.Unpaired(current.clientId)
+        }
+        if (++wrongPins >= MAX_WRONG_PINS) lockedUntilMs = nowMs + COOLDOWN_MS
+        return effects
+    }
+
+    private fun refusal(reason: String) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason))
 
     companion object {
         /** Wrong PINs in a row, on a shared conversation, before hellos are refused for a while. */
@@ -132,10 +191,7 @@ class PenConversation(
 
     private fun reject(reason: String): List<PenEffect> {
         closed = true
-        return listOf(
-            PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason)),
-            PenEffect.Close(reason),
-        )
+        return listOf(refusal(reason), PenEffect.Close(reason))
     }
 }
 
