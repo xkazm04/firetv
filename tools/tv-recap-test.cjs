@@ -152,7 +152,12 @@ test('case 5: on the recap Left/Right walk the tiles then the desk, and Select o
  assert.deepEqual(tvKey(at(1),'select',LOCAL).events,[{type:'subject',subject:'english'},{type:'nav',screen:'linga',focus:0}]);
  // nothing waiting: the app's home, never a reading that is someone else's
  assert.deepEqual(tvKey(at(0,{practice:null}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'tonight',focus:0}]);
- assert.deepEqual(tvKey(at(2,{essay:reading,history:[]}),'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:0}],'a reading not in this learner\'s history is not theirs');
+ // the paragraph is the seated learner's by construction (store.ts MathsSlot), so no history is consulted: ownReading reads s.essay alone
+ const {ownReading}=recap();
+ assert.equal(ownReading(session({essay:reading,history:[]})),true,'sentences on the desk, an empty history: it is theirs');
+ assert.equal(ownReading(session({essay:null,history:[{at:TODAY(19),kind:'writing',label:'Argument',detail:'1 of 3 sentences to fix'}]})),false,'no paragraph: nothing to open, whatever the history says');
+ assert.equal(ownReading(session({essay:{...reading,sentences:[]}})),false,'a paragraph with no sentences is not opened');
+ assert.deepEqual(tvKey(at(2,{essay:null,history:[]}),'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'nav',screen:'essaytype',focus:0}],'nothing on the desk: the lens home');
  const j=jakub({screen:'recap',focus:1,essay:reading,history:[{at:TODAY(19),kind:'writing',label:'Argument',detail:'1 of 3 sentences to fix'}]});
  assert.deepEqual(tvKey(j,'select',LOCAL).events,[{type:'subject',subject:'essay'},{type:'essay.at',n:null},{type:'nav',screen:'forensic',focus:0}]);
 });

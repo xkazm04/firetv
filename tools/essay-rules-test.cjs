@@ -712,3 +712,27 @@ test('the phone page: no essay in the capture picker, no essay sample, the file 
  assert.match(src,/essayFileProblem\(f\)/);assert.match(src,/paragraphsOf\(/);assert.match(src,/essayTooLong\(/);
  assert.doesNotMatch(src,/FormData|\/api\/upload/,'a picked file is read in the browser, never uploaded');
 });
+
+test('seat case 6: a reading that finishes after the desk was handed to another learner lands in the asker\'s slot, not on the new learner\'s desk',async()=>{
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const before=getLearner('ema').history.length;
+ let release;
+ answer=()=>new Promise((r)=>{release=()=>r({json:{verdicts:[{n:1,verdict:'strong',note:'ok'},{n:2,verdict:'faulty',note:'x'},{n:3,verdict:'neutral',note:'ok'}],summary:'Ema\'s reading.'},provider:'test',ms:1});});
+ const pending=analyse({kind:'essay',text:THREE,type:'evidence'});
+ while(!release)await new Promise((r)=>setTimeout(r,5));
+ dispatch({type:'learner.set',id:'jakub'});
+ release();
+ const res=await pending;
+ assert.equal(res.status,200);
+ const s=getSession();
+ assert.equal(s.learner.id,'jakub');
+ assert.equal(s.essay,null,'nothing of Ema\'s on Jakub\'s desk');
+ assert.equal(s.essayType,null);
+ assert.equal(s.screen,'landing','the TV stays on the landing');
+ assert.equal(s.away.ema.essay.summary,'Ema\'s reading.');
+ assert.equal(s.away.ema.essayType,'evidence');
+ assert.equal(getLearner('ema').history.length,before+1,'her history holds the one reading');
+ dispatch({type:'learner.set',id:'ema'});
+ assert.equal(getSession().essay.summary,'Ema\'s reading.');
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
