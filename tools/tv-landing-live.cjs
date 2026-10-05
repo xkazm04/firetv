@@ -8,6 +8,7 @@
  *
  * The desk is built through the session's own events (a fresh desk, one learner, a phone paired or not), so what it
  * asserts does not depend on what a learner has waiting: focus, the hand-off and the frame are the landing's own.
+ * LANDING_B_SEEDED=1 runs only the marked-sheet journey, on a server started over a seeded session.json (see markedSheetJourney).
  * It writes screenshots to artifacts/tv-landing/ (git-ignored). Playwright is resolved from tools/node_modules (or NODE_PATH).
  */
 const { chromium } = require('playwright'), assert = require('node:assert/strict'), fs = require('node:fs'), path = require('node:path');
@@ -68,9 +69,40 @@ async function frame(page, label) {
   assert.ok(r.words <= 25, `${label}: the caption is about 25 words or fewer (${r.words})`);
 }
 
+/**
+ * landing-B: a marked set is waiting - one Select plays the hand-off, then opens the sheet, not Tonight; Back is Tonight,
+ * then the desk with the light on Math Buddy. A screen cannot post practice.set / practice.marked (the route refuses
+ * them), so the server is started on a session.json that already holds Ema seated with a marked set, a paired phone and
+ * the desk at rest, and this runs ALONE (the other journeys reset the desk): LANDING_B_SEEDED=1.
+ */
+async function markedSheetJourney(browser) {
+  const ctx = await browser.newContext({ viewport: { width: 1920, height: 1210 } }), page = await ctx.newPage(), errs = [];
+  page.on('pageerror', (e) => errs.push(e.message));
+  const s0 = await current();
+  assert.ok(s0.practice?.marked, 'the seeded session holds a marked set');
+  await event({ type: 'nav', screen: 'landing', focus: -1 });
+  await page.goto(base + '/tv?key=' + encodeURIComponent(key)); await page.waitForSelector('[data-role="desk-scene"]'); await page.waitForTimeout(2600);
+  await page.locator('.stage').click({ position: { x: 4, y: 4 } });
+  assert.equal(await lit(page), 'maths', 'the light rests on the marked set');
+  const w0 = Date.now(); await page.keyboard.press('Enter');
+  await page.waitForSelector('[data-role="desk-zoom"]', { timeout: 500 });
+  const onSheet = await waitScreen(page, (s) => s.screen !== 'landing');
+  const w1 = Date.now() - w0;
+  assert.ok(w1 >= 450 && w1 < 1800, `the hand-off plays before the sheet opens (${w1}ms)`);
+  assert.equal(onSheet.s.screen, 'sheet', 'one Select lands on the marked sheet');
+  await page.waitForTimeout(500); await page.keyboard.press('Backspace');
+  await waitScreen(page, (s) => s.screen !== 'sheet'); assert.equal((await current()).screen, 'tonight', 'Back from the sheet is Tonight');
+  await page.waitForTimeout(500); await page.keyboard.press('Backspace');
+  await waitScreen(page, (s) => s.screen === 'landing'); await page.waitForTimeout(500);
+  assert.equal(await lit(page), 'maths', 'and Back again is the desk, the light on Math Buddy');
+  assert.deepEqual(errs, [], 'no page errors');
+  await ctx.close();
+}
+
 (async () => {
   await asTheTV();
   const browser = await chromium.launch({ headless: true });
+  if (process.env.LANDING_B_SEEDED === '1') { try { await markedSheetJourney(browser); } finally { await browser.close(); } console.log('tv-landing-live (marked sheet): ok'); return; }
   const errors = [];
   try {
     for (const [W, H] of [[1920, 1080], [1280, 720]]) {
@@ -146,24 +178,6 @@ async function frame(page, label) {
       await page.waitForSelector('[data-role="desk-zoom"][data-app="place"]', { timeout: 500 });
       await waitScreen(page, (s) => s.screen === 'learner');
 
-      // ---- landing-B: a marked set waiting - one Select plays the hand-off, then opens the sheet, not Tonight
-      await desk();
-      const items = [{ n: 1, question: '2x + 3 = 11' }, { n: 2, question: '5x - 4 = 21' }, { n: 3, question: '3x + 7 = 1' }];
-      await event({ type: 'practice.set', practice: { topic: 'linear-two-step', items, marked: false } });
-      await event({ type: 'practice.marked', items: items.map((i, k) => ({ ...i, studentAnswer: 'x = 4', verdict: k === 1 ? 'wrong' : 'right' })) });
-      await event({ type: 'nav', screen: 'landing', focus: -1 }); await open();
-      assert.equal(await lit(page), 'maths', 'the light rests on the marked set');
-      const w0 = Date.now(); await page.keyboard.press('Enter');
-      await page.waitForSelector('[data-role="desk-zoom"]', { timeout: 500 });
-      const onSheet = await waitScreen(page, (s) => s.screen !== 'landing');
-      const w1 = Date.now() - w0;
-      assert.ok(w1 >= 450 && w1 < 1800, `the hand-off plays before the sheet opens (${w1}ms)`);
-      assert.equal(onSheet.s.screen, 'sheet', 'one Select lands on the marked sheet');
-      await page.waitForTimeout(400); await page.keyboard.press('Backspace');
-      await waitScreen(page, (s) => s.screen !== 'sheet'); assert.equal((await current()).screen, 'tonight', 'Back from the sheet is Tonight');
-      await page.waitForTimeout(400); await page.keyboard.press('Backspace');
-      await waitScreen(page, (s) => s.screen === 'landing'); await page.waitForTimeout(400);
-      assert.equal(await lit(page), 'maths', 'and Back again is the desk, the light on Math Buddy');
       await ctx.close();
     }
 
