@@ -92,6 +92,150 @@ class PenConversationTest {
     }
 }
 
+/**
+ * A relay socket is not a pen: the TV's one outbound socket exists before any phone and outlives each
+ * one, so a SHARED conversation has no hello deadline and treats every hello as a (re)pairing.
+ * The dedicated (LAN) conversation is pinned unchanged by [PenConversationTest] and the guard below.
+ */
+class SharedPenConversationTest {
+
+    private val aspect = 16.0 / 9.0
+    private fun desk() = PairingDesk(pin = "4821", videoAspect = aspect)
+    private fun hello(pin: String, clientId: String = "pen-a") =
+        """{"type":"hello","pin":"$pin","clientId":"$clientId"}"""
+    private fun refused(reason: String) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason))
+    private fun accepted(session: String) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = session, videoAspect = aspect, accepted = true))
+
+    @Test
+    fun `case 1 - a shared conversation that never hears a hello is never refused and never closed`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+
+        assertEquals(emptyList<PenEffect>(), pen.onTick(60_000))
+        assertEquals(emptyList<PenEffect>(), pen.onTick(3_600_000))
+        assertFalse(pen.isPaired)
+    }
+
+    @Test
+    fun `case 2 - a phone that arrives late pairs on a shared conversation`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+        pen.onTick(60_000)
+
+        assertEquals(
+            listOf(accepted("s-1"), PenEffect.Paired("pen-a", 1)),
+            pen.onText(hello("4821", "pen-a")),
+        )
+        assertTrue(pen.isPaired)
+    }
+
+    @Test
+    fun `case 3 - a second phone with the right PIN replaces the first and its input is delivered`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+        pen.onText(hello("4821", "pen-a"))
+
+        assertEquals(
+            listOf(accepted("s-2"), PenEffect.Paired("pen-b", 2, replaced = true)),
+            pen.onText(hello("4821", "pen-b")),
+        )
+        assertEquals(listOf(PenEffect.Deliver(PenMessage.Undo)), pen.onText("""{"type":"undo"}"""))
+        assertEquals("pen-b", pen.clientId)
+    }
+
+    @Test
+    fun `case 4 - the same phone saying hello again (reconnected through the relay) gets its welcome back`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+        pen.onText(hello("4821", "pen-a"))
+        pen.onText(hello("4821", "pen-b"))
+
+        assertEquals(
+            listOf(accepted("s-3"), PenEffect.Paired("pen-b", 3, replaced = true)),
+            pen.onText(hello("4821", "pen-b")),
+        )
+    }
+
+    @Test
+    fun `case 5 - a wrong PIN unpairs without hanging up, drops input, and a right PIN pairs again`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+        pen.onText(hello("4821", "pen-a"))
+
+        assertEquals(
+            listOf(refused("wrong PIN"), PenEffect.Unpaired("pen-a")),
+            pen.onText(hello("0000", "pen-x")),
+        )
+        assertFalse(pen.isPaired)
+        assertFalse(pen.isCurrent)
+        assertEquals(emptyList<PenEffect>(), pen.onText("""{"type":"clear"}"""))
+        assertEquals(emptyList<PenEffect>(), pen.onTick(10_000))
+
+        assertEquals(
+            listOf(accepted("s-3"), PenEffect.Paired("pen-a", 3)),
+            pen.onText(hello("4821", "pen-a")),
+        )
+        assertTrue(pen.isCurrent)
+    }
+
+    @Test
+    fun `case 5b - five wrong PINs in a row lock hellos, the right PIN included, until the cooldown tick`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+        pen.onTick(1_000)
+
+        repeat(PenConversation.MAX_WRONG_PINS) {
+            assertEquals(listOf(refused("wrong PIN")), pen.onText(hello("0000", "pen-x")))
+        }
+
+        // Locked: the right PIN is refused, nothing is delivered, nobody is paired.
+        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+        assertFalse(pen.isPaired)
+        assertEquals(emptyList<PenEffect>(), pen.onText("""{"type":"undo"}"""))
+        assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS - 1))
+        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+
+        // The cooldown tick lifts it, and the count starts again.
+        assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS))
+        assertEquals(listOf(refused("wrong PIN")), pen.onText(hello("0000", "pen-x")))
+        assertEquals(
+            listOf(accepted("s-1"), PenEffect.Paired("pen-a", 1)),
+            pen.onText(hello("4821", "pen-a")),
+        )
+    }
+
+    @Test
+    fun `case 5c - a right PIN between wrong ones restarts the count`() {
+        val pen = desk().open(openedAtMs = 0, shared = true)
+
+        repeat(PenConversation.MAX_WRONG_PINS - 1) { pen.onText(hello("0000", "pen-x")) }
+        assertEquals(PenEffect.Paired("pen-a", 1), pen.onText(hello("4821", "pen-a")).last())
+        repeat(PenConversation.MAX_WRONG_PINS - 1) { pen.onText(hello("0000", "pen-x")) }
+
+        assertEquals(PenEffect.Paired("pen-a", 3), pen.onText(hello("4821", "pen-a")).last())
+    }
+
+    @Test
+    fun `case 6 GUARD - a dedicated conversation behaves exactly as before`() {
+        val late = desk().open(openedAtMs = 0, shared = false)
+        assertEquals(
+            listOf(refused("no pairing message"), PenEffect.Close("no pairing message")),
+            late.onTick(5_000),
+        )
+
+        val wrong = desk().open(openedAtMs = 0, shared = false)
+        assertEquals(
+            listOf(refused("wrong PIN"), PenEffect.Close("wrong PIN")),
+            wrong.onText(hello("0000")),
+        )
+
+        val pen = desk().open(openedAtMs = 0)
+        pen.onText(hello("4821", "pen-a"))
+        assertEquals(
+            listOf(PenEffect.Deliver(PenMessage.Hello(pin = "4821", clientId = "pen-b"))),
+            pen.onText(hello("4821", "pen-b")),
+        )
+        assertEquals("pen-a", pen.clientId)
+        assertEquals(emptyList<PenEffect>(), pen.onTick(60_000))
+    }
+}
+
 class HeartbeatTest {
 
     private val d1 = AnnotationDoc(clipId = "clip")

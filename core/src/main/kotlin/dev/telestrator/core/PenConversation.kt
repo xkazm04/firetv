@@ -19,7 +19,10 @@ sealed interface PenEffect {
     data class Deliver(val message: PenMessage) : PenEffect
 
     /** The pen paired: count it as connected and start its heartbeat. */
-    data class Paired(val clientId: String, val generation: Long) : PenEffect
+    data class Paired(val clientId: String, val generation: Long, val replaced: Boolean = false) : PenEffect
+
+    /** The pen that was paired no longer is (a wrong PIN was offered on a shared conversation). */
+    data class Unpaired(val clientId: String) : PenEffect
 }
 
 /**
@@ -43,6 +46,7 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
      */
     fun open(
         openedAtMs: Long,
+        shared: Boolean = false,
         onUndecodable: (text: String, error: Throwable) -> Unit = { _, _ -> },
     ): PenConversation = PenConversation(this, openedAtMs, onUndecodable)
 
@@ -116,6 +120,14 @@ class PenConversation(
     fun onTick(nowMs: Long): List<PenEffect> {
         if (closed || hello != null || nowMs < helloDeadlineMs) return emptyList()
         return reject("no pairing message")
+    }
+
+    companion object {
+        /** Wrong PINs in a row, on a shared conversation, before hellos are refused for a while. */
+        const val MAX_WRONG_PINS = 5
+
+        /** How long a shared conversation refuses every hello after [MAX_WRONG_PINS] wrong ones. */
+        const val COOLDOWN_MS = 30_000L
     }
 
     private fun reject(reason: String): List<PenEffect> {
