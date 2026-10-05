@@ -3,6 +3,8 @@ package dev.telestrator.tv
 import android.os.SystemClock
 import android.util.Log
 import dev.telestrator.core.Heartbeat
+import dev.telestrator.core.LinkEvent
+import dev.telestrator.core.LinkState
 import dev.telestrator.core.PairingDesk
 import dev.telestrator.core.PenConversation
 import dev.telestrator.core.PenEffect
@@ -48,7 +50,16 @@ class PenSessionHost(
 
         suspend fun carryOut(effects: List<PenEffect>) {
             for (effect in effects) when (effect) {
-                is PenEffect.Send -> channel.send(effect.message.encode())
+                is PenEffect.Send -> {
+                    // Someone tried to pair and was turned away: the TV says so while no pen is
+                    // here, and says nothing over the picture of a pen that is drawing.
+                    val welcome = effect.message as? TvMessage.Welcome
+                    val reason = welcome?.reason
+                    if (welcome != null && !welcome.accepted && reason in LinkState.PIN_REFUSALS) {
+                        session.linkEvent(LinkEvent.PenRefused(reason.orEmpty()))
+                    }
+                    channel.send(effect.message.encode())
+                }
                 is PenEffect.Deliver -> session.accept(effect.message)
                 is PenEffect.Close -> {
                     Log.i(TAG, "pen rejected via ${channel.remoteName}: ${effect.reason}")
@@ -60,6 +71,7 @@ class PenSessionHost(
                     if (!shared) watchdog?.cancel()
                     // One pen is counted per conversation, however many times it re-pairs.
                     if (!effect.replaced) session.penConnected()
+                    session.linkEvent(LinkEvent.PenPaired(effect.clientId))
                     Log.i(TAG, "pen ${effect.clientId} paired via ${channel.remoteName} (gen ${effect.generation}, replaced ${effect.replaced})")
                     // A fresh heartbeat is what a new phone needs to receive the document and the
                     // thumbnail again; the old one would be a second ticker on one channel.
@@ -70,6 +82,7 @@ class PenSessionHost(
                     ticker?.cancel()
                     ticker = null
                     session.penDisconnected()
+                    session.linkEvent(LinkEvent.PenGone(effect.clientId))
                     Log.i(TAG, "pen ${effect.clientId} unpaired via ${channel.remoteName}")
                 }
             }
@@ -100,6 +113,8 @@ class PenSessionHost(
             ticker?.cancel()
             if (pen.isPaired) {
                 session.penDisconnected()
+                // A pen that was superseded leaves quietly: the one that replaced it holds the link.
+                if (pen.isCurrent) pen.clientId?.let { session.linkEvent(LinkEvent.PenGone(it)) }
                 Log.i(TAG, "pen ${pen.clientId} disconnected")
             }
         }

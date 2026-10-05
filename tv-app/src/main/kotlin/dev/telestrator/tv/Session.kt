@@ -3,11 +3,15 @@ package dev.telestrator.tv
 import dev.telestrator.core.AnnotationDoc
 import dev.telestrator.core.AnnotationTimeline
 import dev.telestrator.core.HeartbeatInput
+import dev.telestrator.core.LinkEvent
+import dev.telestrator.core.LinkState
 import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.asTransport
+import android.os.SystemClock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -42,6 +46,19 @@ class Session(clipId: String, videoAspect: Double) {
 
     private val pens = AtomicInteger(0)
     val connectedPens: Int get() = pens.get()
+
+    private val _link = MutableStateFlow(LinkState())
+
+    /** Whether a pen is holding the link; what the pairing card shows is [LinkState.view] of this. */
+    val link: StateFlow<LinkState> = _link
+
+    /** The clock [link] is read against. */
+    fun linkClockMs(): Long = SystemClock.elapsedRealtime()
+
+    fun linkEvent(event: LinkEvent) {
+        val at = linkClockMs()
+        _link.update { it.on(event, at) }
+    }
 
     /** Bumped on every accepted message, so the phone mirror only ships when there is news. */
     private val revisionCounter = AtomicInteger(0)

@@ -6,15 +6,10 @@ import android.view.KeyEvent
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -41,6 +36,7 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.Text
 import androidx.lifecycle.lifecycleScope
+import dev.telestrator.core.LinkEvent
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.PlayerAction
 import dev.telestrator.core.TransportPlan
@@ -48,10 +44,12 @@ import dev.telestrator.tv.transport.LanTransport
 import dev.telestrator.tv.transport.PenTransport
 import dev.telestrator.tv.transport.RelayTransport
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** 10.0.2.2 is the development host as seen from inside the Android emulator. */
 private const val DEFAULT_RELAY_WS = "ws://10.0.2.2:9787/tv"
 private const val DEFAULT_RELAY_PHONE = "http://10.0.2.2:9787/"
+private const val LINK_POLL_MS = 1_000L
 
 @UnstableApi
 class MainActivity : ComponentActivity() {
@@ -80,6 +78,19 @@ class MainActivity : ComponentActivity() {
         // The viewer reads this off the QR card; the test harness reads it out of logcat, which
         // is the closest a script gets to looking at the television.
         android.util.Log.i("Telestrator", "transport=${transport.name} pairing=${transport.pairingUrl()}")
+
+        // The transport knows where a phone should point and whether it could start; the link
+        // state decides what that means for the screen. The address is read here once a second,
+        // not by the screen every frame, and a changed network address reaches the QR this way.
+        lifecycleScope.launch {
+            while (true) {
+                val failure = transport.failure.value
+                val url = transport.pairingUrl()
+                if (failure != null) session.linkEvent(LinkEvent.Failed(failure))
+                else if (url != null) session.linkEvent(LinkEvent.Ready(url, session.pin))
+                delay(LINK_POLL_MS)
+            }
+        }
 
         setContent { TelestratorScreen(session, transport, clipUri) }
     }
@@ -121,6 +132,11 @@ class MainActivity : ComponentActivity() {
      * and the only way to drive playback from an instrumented test via `adb shell input keyevent`.
      */
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            // The card steps aside once a pen is paired; Menu is how a second phone gets it back.
+            session.linkEvent(LinkEvent.Peek)
+            return true
+        }
         val cmd = when (keyCode) {
             KeyEvent.KEYCODE_DPAD_CENTER, KeyEvent.KEYCODE_ENTER,
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
@@ -144,7 +160,7 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
     val context = LocalContext.current
     val doc by session.doc.collectAsState()
     val command by session.transport.collectAsState()
-    val transportFailure by transport.failure.collectAsState()
+    val peeking by peekingState(session)
     var tMs by remember { mutableLongStateOf(0L) }
     var paused by remember { mutableStateOf(false) }
     var rate by remember { mutableStateOf(1.0f) }
@@ -223,50 +239,25 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
         )
 
         PairingCard(
-            url = transport.pairingUrl() ?: "connecting…",
+            session = session,
             transport = transport.name,
-            failure = transportFailure,
-            modifier = Modifier.align(Alignment.TopEnd).padding(24.dp),
+            modifier = Modifier.align(Alignment.TopEnd),
         )
 
-        // Machine-readable status line: the live UI test reads this instead of guessing.
-        Text(
-            text = "t=" + tMs + "ms " + (if (paused) "PAUSED" else "PLAY") +
-                " x" + rate + " ink=" + doc.annotations.size + " via=" + transport.name,
-            color = Color.White,
-            fontSize = 16.sp,
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .background(Color.Black.copy(alpha = 0.6f))
-                .padding(horizontal = 12.dp, vertical = 6.dp)
-                .testTag("status"),
-        )
-    }
-}
-
-@Composable
-private fun PairingCard(
-    url: String,
-    transport: String,
-    failure: String?,
-    modifier: Modifier = Modifier,
-) {
-    val qr = remember(url) { runCatching { qrBitmap(url, 300) }.getOrNull() }
-    Column(
-        modifier = modifier
-            .background(Color.White.copy(alpha = 0.92f))
-            .padding(12.dp)
-            .width(180.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        if (qr != null) {
-            Image(bitmap = qr, contentDescription = "Pairing QR", modifier = Modifier.size(150.dp))
-        }
-        Text(text = url.removePrefix("http://"), color = Color.Black, fontSize = 11.sp)
-        Text(text = "via $transport", color = Color.DarkGray, fontSize = 10.sp)
-        if (failure != null) {
-            Text(text = failure, color = Color.Red, fontSize = 10.sp, modifier = Modifier.testTag("transportError"))
+        // Machine-readable status line: the live UI test reads this instead of guessing. It is
+        // diagnostics, not part of the picture, so it shows while Menu is peeking and no longer.
+        if (peeking) {
+            Text(
+                text = "t=" + tMs + "ms " + (if (paused) "PAUSED" else "PLAY") +
+                    " x" + rate + " ink=" + doc.annotations.size + " via=" + transport.name,
+                color = Color.White,
+                fontSize = 16.sp,
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .background(Color.Black.copy(alpha = 0.6f))
+                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .testTag("status"),
+            )
         }
     }
 }
