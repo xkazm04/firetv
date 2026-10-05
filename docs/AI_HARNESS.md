@@ -73,6 +73,12 @@ going red. The drift watch leaves a trace of that
   alerted, or when it is older than 21 days.
 - **Proven on every PR.** The same workflow runs `tools/model-drift-test.cjs`: the thresholds, `--status` and the
   refusals, on the bench's replay.
+- **Judged before merge, when a PR changes what a model is asked.** `.github/workflows/model-drift-pr.yml` runs
+  `node tools/model-drift-pr.cjs --base origin/<base>` on every PR. The live surface is derived from the bench's own
+  imports (`--surface` lists it): the hint, read and pick pipelines, the rules they import, the engine seam and the bench.
+  A PR that touches it goes red unless it adds a live record that measured its code and does not alert against the base
+  branch's newest live record. The operator runs that one bench run on the PR branch. Every other PR owes no call
+  ([../.ai/memory/0017-prompt-prs-carry-a-live-record.md](../.ai/memory/0017-prompt-prs-carry-a-live-record.md)).
 
 ## Prompt and agent library
 
@@ -104,6 +110,8 @@ going red. The drift watch leaves a trace of that
 | Telestrator full cycle (unit, build, emulator, deploy, live UI) | `scripts/dev.ps1`, `fixtures/README.md` |
 | Second dev server in a worktree | [../.ai/memory/0006-worktrees-next-dev-webpack.md](../.ai/memory/0006-worktrees-next-dev-webpack.md) |
 | Several agents in one checkout | [../.ai/memory/0010-shared-checkout-waves-serialise.md](../.ai/memory/0010-shared-checkout-waves-serialise.md) |
+| Handing a task to an agent | `.github/ISSUE_TEMPLATE/agent-task.yml` (acceptance criteria and gates per surface are required), [../CONTRIBUTING.md](../CONTRIBUTING.md#handing-work-to-an-agent) |
+| A PR that changes a prompt, an engine or a rule the bench runs | `./scripts/model-drift.ps1` on the branch, commit the record ([../uat/drift/README.md](../uat/drift/README.md)) |
 | Pinning the workflow actions to commit SHAs | `node scripts/pin-actions.mjs` ([../.ai/memory/0013-pin-actions-with-the-script.md](../.ai/memory/0013-pin-actions-with-the-script.md)) |
 
 Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/README.md](../.ai/memory/README.md)).
@@ -122,6 +130,7 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
   - `conformance-gate.yml` judges the same doctor through `scripts/doctor-gate.mjs` on every PR. It goes red on any fail outside the waivers, each of which is owned by a memory entry.
   - `capabilities-pr.yml` proves the manifest commands on every same-repo PR and checks the committed `verified` flags against that run. `capabilities.yml` repeats the proof every week.
   - `model-drift.yml` watches the committed live-quality records every week and runs the drift suite on every PR.
+  - `model-drift-pr.yml` holds a PR that changes the live surface to a fresh live record, compared with the base's newest one.
   - `changelog.yml` keeps `CHANGELOG.md`'s shape and links on every PR.
   - `supply-chain.yml` builds and attests the APK on main.
 - A human approves every merge (`.ai/guardrails.yaml`).

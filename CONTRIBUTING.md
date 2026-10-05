@@ -12,6 +12,18 @@ a change must show before it lands. The commands and the architecture map live i
 3. If you are working through a skill (`/scan-sweep`, `/uat`, `/cx`, `/spark`, `/contest`, `/perfect`, `/leonardo`), read its overlay in `.claude/<skill>/config.md` or `uat/README.md`. The overlay adds procedure. It never relaxes a constraint in AGENTS.md.
 4. If another session may share the checkout, work in a worktree.
 
+## Handing work to an agent
+
+File agent work with the **Agent task** issue form ([.github/ISSUE_TEMPLATE/agent-task.yml](.github/ISSUE_TEMPLATE/agent-task.yml)). A good task description holds:
+
+- **What and why**: the outcome and the problem it solves, linked to where it came from (a backlog row, card, UAT run or doc).
+- **Acceptance criteria** (required): one observable outcome per line, each checked by a test that fails without the change, a gate, a screenshot or a number.
+- **Gates for the touched surfaces** (required): picked from the AGENTS.md table, so the agent knows before it starts what it must run and report.
+- **Constraints in play**, **settled decisions** (`.ai/memory/`) and **out of scope**: where to look twice and what to leave alone.
+- **Live model calls the owner approves**: none by default. A change on the live surface needs a drift record the operator takes ([0017](.ai/memory/0017-prompt-prs-carry-a-live-record.md)).
+
+The agent starts from the criteria, not from a restatement of them. Its pull request links the issue in "What and why", ticks each criterion with its evidence, and fills the gates table with the exit code of every gate named in the issue. A criterion it could not meet stays unticked, with the reason. When a request arrives free-form, the agent writes these fields down first and works from them.
+
 ## Development setup
 
 | Product | One-time setup |

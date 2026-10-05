@@ -35,7 +35,7 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Build: tv APK | `node tools/gradlew.cjs :tv-app:assembleDebug` | Same prerequisites. |
 | Full telestrator cycle | `./scripts/dev.ps1` | Unit, build, emulator, deploy, live UI test (PowerShell, Windows). |
 | Death Ride | `cd deathride` then `.\gradlew.bat :core:test`, `:link:test`, `:app:assembleDebug` | Its own build. Never run it through the root wrapper. |
-| Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. See `uat/drift/README.md`. |
+| Model drift (live quality over time) | `node tools/model-drift.cjs --status --max-age 21` (no model); the live run is `scripts/model-drift.ps1` | The live run spends real calls and is the operator's. Its suite is `node tools/model-drift-test.cjs`. The pre-merge check is `node tools/model-drift-pr.cjs --base origin/main`, and its suite is `node tools/model-drift-pr-test.cjs`. See `uat/drift/README.md`. |
 | Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
 | Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | The doctor exits 1 on the waived `control.prepush` fail. The verdict is `node .ai/doctor.mjs --json > doctor.out` then `node scripts/doctor-gate.mjs doctor.out`. Its suite is `node tools/doctor-gate-test.cjs`. |
 | Pin workflow actions | `node scripts/pin-actions.mjs` (`--check` works offline) | Needs network and a GitHub token. Never type a SHA (`.ai/memory/0013`). |
@@ -55,6 +55,7 @@ There is no linter or formatter wired yet. Match the surrounding style. Kotlin f
 | `tv-app/` or `companion/` | `node tools/gradlew.cjs :core:test :tv-app:compileDebugKotlin` |
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the desk gate, plus a Playwright capture against a second dev server (`next dev --webpack`, its own seeded `DESK_DATA_DIR`) |
 | `uat/driver` | `node --check uat/driver/linga-text.cjs` (a live LT run spends codex calls and is the operator's call) |
+| a file on the live surface (`node tools/model-drift-pr.cjs --surface`: the hint, read and pick pipelines, the rules they import, `desk/src/lib/engines/`, the lab bench) | the desk gate, plus a live drift record the operator takes on the branch (`scripts/model-drift.ps1`) and commits in the PR. Ask for it; never run it yourself (`.ai/memory/0017`). |
 | `deathride/` | that build's `:core:test :link:test` from `deathride/` |
 
 ## Architecture map
@@ -106,6 +107,7 @@ design pages that `prototype/build.py` builds.
 
 ## Working agreement (for agents)
 
+- Start from the task's acceptance criteria and gates. A task filed with the agent-task issue form (`.github/ISSUE_TEMPLATE/agent-task.yml`) has both. For a free-form request, write them down before the first edit (CONTRIBUTING.md, "Handing work to an agent").
 - Read this file, then the `.ai/memory/` entries whose `scope` covers what you will touch.
 - Run the gate for what you touched (table above) and report its exit code. Never propose a diff with a red gate.
 - Keep changes small and focused. Match the surrounding code's conventions. Use pathspec-scoped commits.
@@ -129,6 +131,7 @@ design pages that `prototype/build.py` builds.
   - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
   - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
+  - `model-drift-pr.yml` runs on every PR. A PR that touches the live surface goes red unless it adds a live record that measured its code and does not alert against the base branch's newest one (`.ai/memory/0017`).
   - `changelog.yml` checks `CHANGELOG.md`'s shape and links on every PR and push to main (`.ai/memory/0015`).
 - `.github/dependabot.yml` keeps Gradle, npm and the Actions current.
 

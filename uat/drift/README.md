@@ -16,6 +16,13 @@ pick worse, and no gate would notice. This directory is where that leaves a trac
   - no live record exists ("never measured")
   - the newest live record alerted
   - the newest live record is older than 21 days
+- **The pre-merge check** (`.ai/memory/0017`): `.github/workflows/model-drift-pr.yml` runs
+  `node tools/model-drift-pr.cjs --base origin/<base>` on every pull request. A pull request that changes the live
+  surface owes a live record. The surface is the desk modules the bench loads and their runtime imports, the engine
+  seam, and the bench itself: `node tools/model-drift-pr.cjs --surface` lists it. The record must not alert against the
+  base branch's newest live record (the same `compare()` the watch uses), and it must have measured the pull request's
+  own code: no surface file may change after the record's `commit`. A pull request that leaves the surface alone owes
+  nothing, and a pull request that rewrites or deletes a committed record goes red.
 
 ## Which role drifts first
 
@@ -56,8 +63,10 @@ likely cause. It never alerts on its own.
 |---|---|---|
 | the operator, weekly | `./scripts/model-drift.ps1` (it runs `MODEL_DRIFT_ALLOW_LIVE=1 node tools/model-drift.cjs --live`) | yes |
 | the operator, once | `./scripts/model-drift.ps1 -Register` (a weekly Windows Scheduled Task for the line above) | no |
+| the operator, for a pull request that touches the live surface | `./scripts/model-drift.ps1` on that branch, then commit the record and `DRIFT.md` in the pull request (one bench run: 12 hint problems asked at most twice, two page reads, 9 lesson picks) | yes |
 | anyone, CI | `node tools/model-drift.cjs --status --max-age 21` | no |
-| anyone, the suite | `node tools/model-drift-test.cjs` (the replay path, into a temp directory) | no |
+| anyone, CI on a pull request | `node tools/model-drift-pr.cjs --base origin/main` | no |
+| anyone, the suites | `node tools/model-drift-test.cjs` (the replay path, into a temp directory) and `node tools/model-drift-pr-test.cjs` (the pre-merge verdicts and the surface) | no |
 
 A live run needs the engines the desk uses: Ollama with the vision model for the read, and claude-cli (or codex with
 `DESK_TEXT_ENGINE=codex`) for the hints and lessons. **Commit the new record and `DRIFT.md`.** CI can only watch what is
