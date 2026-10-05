@@ -2,9 +2,9 @@
  * One open ledger across every LT run, derived from the runs' own files and never stored: what is open for Linga now,
  * which Character x journey holds it, and how long each gap has gone unasked.
  *
- *   ledger(runsDir)      -> { dir, runs, rows, gaps, open, byGid }
- *   statusOf(ledger)     -> the operator view (OPEN.md): open gaps by pair, highest rank first, the next command
- *   writeStatus(runsDir) -> writes <runsDir>/OPEN.md from a fresh ledger; returns { md, file }
+ *   ledger(runsDir, opts?) -> { dir, runs, rows, gaps, open, byGid, product }
+ *   statusOf(ledger)       -> the operator view (OPEN.md): open gaps by pair, highest rank first, the next command
+ *   writeStatus(runsDir)   -> writes <runsDir>/OPEN.md from a fresh ledger; returns { md, file }
  *
  * Runs are the directories under uat/runs/ with a findings.json, and each one's reruns (recert-<k>/). They are ordered
  * by run.json `started`, else by directory name; a recert-<k> always comes after its parent. A finding's id is
@@ -16,7 +16,11 @@
  * `recurs: <id>` (a local id of the run it recertified, or a global id when the rerun came from the ledger). The gap is
  * named by its newest row and is open while that row is. `unasked` counts the later runs that ran the gap's pair and
  * did not show its judge the gap (in the record's prior[] or by a recertify stamp): a gap no rerun asks about ages here
- * instead of vanishing. Nothing here calls a model.
+ * instead of vanishing. With `opts.repo` each gap also says what product it was seen on (product.cjs): `seen` is the
+ * run's own stamp (run.json `product`) or, for a run without one, the commit that first added its findings.json;
+ * `changed` lists the files of the driver's load set whose blob differs now, and `productState` is 'current' (none),
+ * 'aged' (some) or 'unknown' (no stamp and no history: never read as current). `opts` may inject `git`, `files` and
+ * `current` (product.cjs stampOf), so a stamped run needs no git call. Nothing here calls a model.
  */
 const fs = require('node:fs'), path = require('node:path');
 const UAT = path.resolve(__dirname, '..'), RUNS = path.join(UAT, 'runs'), INSIGHTS = path.resolve(UAT, '../docs/uat-insights');
@@ -53,7 +57,7 @@ const resultsOf = d => fs.readdirSync(d).filter(f => f.endsWith('.json') && !NOT
 /** A reference to a finding, read in the run that holds it: a global id as it is, a local id in the run it recertified. */
 const resolveIn = (run, ref) => String(ref).includes('/') ? String(ref) : `${run.parent ?? run.id}/${ref}`;
 
-function ledger(dir = RUNS) {
+function ledger(dir = RUNS, opts = {}) {
   const runs = runsOf(dir), runById = new Map(runs.map(r => [r.id, r])), rows = [];
   const ran = new Map(), asked = new Map(); // run id -> Set(pair), run id -> Set(gid)
   for (const run of runs) {
@@ -101,11 +105,38 @@ function ledger(dir = RUNS) {
     for (const g of gap.gids) byGid.set(g, gap);
   }
   gaps.sort((a, b) => a.head.order - b.head.order || a.head.at - b.head.at);
-  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid };
+  const product = opts.repo ? productOf(runs, gaps, opts) : null;
+  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid, product };
+}
+
+/**
+ * Stamps each gap with the product its newest sighting saw (seen, changed, productState) and counts the open ones.
+ * null when the product now cannot be stamped (no git, not a repo): then nothing is claimed either way.
+ */
+function productOf(runs, gaps, { repo, git, files, current }) {
+  const PR = require('./product.cjs');
+  let now;
+  try {
+    const g = git ?? PR.gitOf(repo), list = files ?? PR.surface();
+    now = { git: g, files: list, current: current ?? PR.stampOf(repo, list, g) };
+  } catch { return null; }
+  const cache = new Map(), seenBy = new Map();
+  const seenOf = run => { if (!seenBy.has(run.id)) seenBy.set(run.id, PR.seenOf(run, { repo, git: now.git, files: now.files, cache })); return seenBy.get(run.id); };
+  for (const g of gaps) {
+    const s = seenOf(runs.find(r => r.id === g.lastSeen));
+    if (!s) { Object.assign(g, { seen: null, changed: null, productState: 'unknown', productFiles: null }); continue; }
+    const d = PR.changedBetween(s.files, now.current.files);
+    Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total });
+  }
+  const counts = { current: 0, aged: 0, unknown: 0 };
+  for (const g of gaps) if (g.open) counts[g.productState]++;
+  return { files: now.files, current: now.current, counts };
 }
 
 // ---------------------------------------------------------------- the operator view
 const one = s => String(s ?? '').replace(/\s*\n\s*/g, ' ');
+/** How a row's product stands: nothing when it was seen on the current one (or the ledger was built without a repo). */
+const productCell = g => g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '';
 /** OPEN.md: every open gap by Character x journey, the pair with the highest rank first. */
 function statusOf(L, { insights = INSIGHTS } = {}) {
   const pairs = new Map();
@@ -115,11 +146,12 @@ function statusOf(L, { insights = INSIGHTS } = {}) {
   const holding = new Set(L.open.flatMap(g => g.rows.map(r => r.run)));
   const top = L.runs.filter(r => !r.parent), drained = top.filter(r => fs.existsSync(path.join(insights, `${r.id}.md`)));
   const recurring = L.open.filter(g => g.recurrence > 1).length, unasked = L.open.filter(g => g.unasked > 0).length;
-  const row = g => `- \`${g.id}\` ${g.severity} · rank ${g.rank} · ${one(g.title)}${g.recurrence > 1 ? ` · recurrence ${g.recurrence}, first seen ${g.firstSeen}` : ''}${g.unasked > 0 ? ` · unasked since ${g.unaskedSince} (${g.unasked} later run${g.unasked === 1 ? '' : 's'} of this pair)` : ''}`;
+  const row = g => `- \`${g.id}\` ${g.severity} · rank ${g.rank} · ${one(g.title)}${g.recurrence > 1 ? ` · recurrence ${g.recurrence}, first seen ${g.firstSeen}` : ''}${g.unasked > 0 ? ` · unasked since ${g.unaskedSince} (${g.unasked} later run${g.unasked === 1 ? '' : 's'} of this pair)` : ''}${productCell(g)}`;
   return [
     '# Open LT findings — Linga', '',
     'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run.', '',
-    `${L.open.length} open in ${pairs.size} pairs across ${holding.size} runs`, '',
+    `${L.open.length} open in ${pairs.size} pairs across ${holding.size} runs`,
+    ...(L.product ? [`${L.open.length} open: ${L.product.counts.current} seen on the current product, ${L.product.counts.aged} seen before a product change${L.product.counts.unknown ? `, ${L.product.counts.unknown} unknown` : ''}`] : []), '',
     `recurring ${recurring} · unasked by a later run of their pair ${unasked}`,
     `drained ${drained.length} of ${top.length} runs`,
     ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []), '',
@@ -128,8 +160,8 @@ function statusOf(L, { insights = INSIGHTS } = {}) {
   ].join('\n');
 }
 /** OPEN.md beside the runs, from a fresh ledger. */
-function writeStatus(dir = RUNS, opts) {
-  const md = statusOf(ledger(dir), opts), file = path.join(dir, 'OPEN.md');
+function writeStatus(dir = RUNS, opts = {}) {
+  const md = statusOf(ledger(dir, opts), opts), file = path.join(dir, 'OPEN.md');
   fs.writeFileSync(file, md);
   return { md, file };
 }

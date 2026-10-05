@@ -32,6 +32,7 @@ uat/
   driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
   driver/recertify.cjs   recertify from a run's own data: open pairs, metric deltas, confounds, write-back
   driver/ledger.cjs      one open ledger across every run: run-qualified ids, recurs chains, unasked counts, OPEN.md
+  driver/product.cjs     the product a run saw: the desk/src files the driver loads, git blobs, stamped into run.json; read from git for older runs
   driver/verdict.cjs     the journey verdict decided in code from named checks
   runs/<id>/             findings.json, report.md, SUMMARY.md, run.json, per-Character transcripts and voices
   runs/<id>/recert-<k>/  a rerun of <id>'s open pairs; recertify.md (then recertify-<k>.md) sits beside <id>'s findings

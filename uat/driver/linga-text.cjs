@@ -15,6 +15,8 @@
  * and each answer is stamped into the run that owns the row (finishLedger), then uat/runs/OPEN.md is rewritten.
  * --status writes and prints OPEN.md: what is open now, by pair, and how long each row has gone unasked. No model call.
  * Every run records its instrument (model, efforts, judge screen cap, driver hashes) in run.json.
+ * Beside it, never inside it, run.json records the product the run exercised (product.cjs: the desk/src files the driver
+ * loads, each with its git blob), so the ledger and recertify can tell a product change from noise.
  *
  * One process per Character, in parallel, each with its own DESK_DATA_DIR and DESK_TEXT_ENGINE=codex.
  * Inside, the Character walks its journeys over the real command surface (`englishCommand`):
@@ -163,11 +165,21 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
   }
   return { mode: status ? 'status' : out.recertify ? 'recertify' : ledger ? 'ledger' : 'run', ...out };
 }
-/** --status: OPEN.md from the ledger of every run, written beside the runs and returned. Reads files only; no model. */
-function statusCommand({ runs = RUNS_DIR } = {}) {
-  return require('./ledger.cjs').writeStatus(runs);
+/**
+ * --status: OPEN.md from the ledger of every run, written beside the runs and returned. Reads files and git only; no model.
+ * Runs inside this repo also say which product each row was seen on (product.cjs); `product` injects that for a test.
+ */
+function statusCommand({ runs = RUNS_DIR, product } = {}) {
+  const PR = require('./product.cjs'), inRepo = !path.relative(PR.REPO, runs).startsWith('..') && !path.isAbsolute(path.relative(PR.REPO, runs));
+  return require('./ledger.cjs').writeStatus(runs, product ?? (inRepo ? { repo: PR.REPO } : {}));
 }
 module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, JUDGE_SCREEN_CAP };
+
+/** run.json's `product`: the desk/src files the driver loads and their git blobs now. Nothing when git cannot say. */
+function productStamp() {
+  try { const PR = require('./product.cjs'); return { product: PR.stampOf(PR.REPO, PR.surface()) }; }
+  catch (e) { console.error(`product not stamped in run.json: ${e.message}`); return {}; }
+}
 
 // ---------------------------------------------------------------- parent
 async function parent() {
@@ -207,9 +219,10 @@ async function parent() {
   }
   fs.mkdirSync(logDir, { recursive: true });
   fs.mkdirSync(dir, { recursive: true });
-  // the instrument, so a driver or model change can never pass for a product change; a ledger rerun also records
+  // the instrument, so a driver or model change can never pass for a product change, and beside it the product the run
+  // is about to exercise (product.cjs), so a product change can never pass for an instrument change; a ledger rerun also records
   // exactly which rows each pair's judge is shown
-  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, ...(ledgerPrior ? { ledger: { prior: ledgerPrior } } : {}), instrument: RC.instrumentOf({ model: MODEL, judgeScreenCap: JUDGE_SCREEN_CAP }) }, null, 2));
+  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, ...(ledgerPrior ? { ledger: { prior: ledgerPrior } } : {}), instrument: RC.instrumentOf({ model: MODEL, judgeScreenCap: JUDGE_SCREEN_CAP }), ...productStamp() }, null, 2));
   const pairCount = pairs && Object.values(pairs).reduce((n, js) => n + js.length, 0);
   const rowCount = ledgerPrior && Object.values(ledgerPrior).flatMap(Object.values).reduce((n, rows) => n + rows.length, 0);
   console.log(`LT run ${id} · ${cast.length} Character(s) · codex/${MODEL}${pickJourneys ? ` · journeys ${pickJourneys.join(',')}` : ''}${prior ? ` · recertify ${pairCount} open pair(s) of ${RC.runId(prior)}` : ''}${ledgerPrior ? ` · recertify ${pairCount} open pair(s), ${rowCount} open row(s) from every run` : ''}`);
