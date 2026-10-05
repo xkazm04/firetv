@@ -19,6 +19,9 @@ import kotlinx.coroutines.withContext
 
 private const val TAG = "PenSessionHost"
 
+/** How often a shared conversation is ticked; only the wrong-PIN cooldown depends on it. */
+private const val SHARED_TICK_MS = 1_000L
+
 /**
  * Drives the pen conversation over one [PenChannel]: frames and ticks go in, effects come out.
  *
@@ -37,7 +40,9 @@ class PenSessionHost(
 
     /** Runs for the lifetime of one pen connection. */
     suspend fun host(channel: PenChannel) = coroutineScope {
-        val pen = desk.open(openedAtMs = now()) { text, error -> Log.w(TAG, "bad message: $text", error) }
+        // A relay socket is not a pen: its conversation has no hello deadline and no hang-up.
+        val shared = !channel.carriesOnePen
+        val pen = desk.open(openedAtMs = now(), shared = shared) { text, error -> Log.w(TAG, "bad message: $text", error) }
         var ticker: Job? = null
         var watchdog: Job? = null
 
@@ -50,18 +55,38 @@ class PenSessionHost(
                     channel.close(effect.reason)
                 }
                 is PenEffect.Paired -> {
-                    watchdog?.cancel()
-                    session.penConnected()
-                    Log.i(TAG, "pen ${effect.clientId} paired via ${channel.remoteName} (gen ${effect.generation})")
+                    // A dedicated connection is done waiting once it pairs; a shared one keeps
+                    // ticking for the guess-limit cooldown.
+                    if (!shared) watchdog?.cancel()
+                    // One pen is counted per conversation, however many times it re-pairs.
+                    if (!effect.replaced) session.penConnected()
+                    Log.i(TAG, "pen ${effect.clientId} paired via ${channel.remoteName} (gen ${effect.generation}, replaced ${effect.replaced})")
+                    // A fresh heartbeat is what a new phone needs to receive the document and the
+                    // thumbnail again; the old one would be a second ticker on one channel.
+                    ticker?.cancel()
                     ticker = launch { pushState(channel, pen) }
+                }
+                is PenEffect.Unpaired -> {
+                    ticker?.cancel()
+                    ticker = null
+                    session.penDisconnected()
+                    Log.i(TAG, "pen ${effect.clientId} unpaired via ${channel.remoteName}")
                 }
             }
         }
 
         watchdog = launch {
-            delay(PairingDesk.HELLO_TIMEOUT_MS)
-            // A refusal is best effort: the pen may already be gone.
-            runCatching { carryOut(pen.onTick(now())) }
+            if (shared) {
+                // Never refuses; the ticks carry the clock that ends a wrong-PIN cooldown.
+                while (isActive) {
+                    delay(SHARED_TICK_MS)
+                    carryOut(pen.onTick(now()))
+                }
+            } else {
+                delay(PairingDesk.HELLO_TIMEOUT_MS)
+                // A refusal is best effort: the pen may already be gone.
+                runCatching { carryOut(pen.onTick(now())) }
+            }
         }
 
         try {
