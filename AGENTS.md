@@ -44,6 +44,10 @@ the same way on Windows and Linux (it is `gradlew.bat` / `./gradlew` from the re
 | Changelog shape | `node tools/changelog-test.cjs` | A noticeable change adds a line under its product's `### Unreleased` in `CHANGELOG.md`. |
 | Agent contract | `node .ai/doctor.mjs` (`--run` also executes every capability) | The doctor exits 1 on the waived `control.prepush` fail. The verdict is `node .ai/doctor.mjs --json > doctor.out` then `node scripts/doctor-gate.mjs doctor.out`. Its suite is `node tools/doctor-gate-test.cjs`. |
 | Pin workflow actions | `node scripts/pin-actions.mjs` (`--check` works offline) | Needs network and a GitHub token. Never type a SHA (`.ai/memory/0013`). |
+| Security policy | `node tools/security-policy-test.cjs` | Fails while `SECURITY.md` is a template, names no private channel or response time, or ticks a guardrail no workflow runs. |
+| Degraded-engine drill | `node tools/engine-degraded-test.cjs` | Needs `desk/node_modules`. Puts each degraded engine answer in `tools/engine-degraded-fixtures.json` through the read and hint routes. Its `todo` rows are known gaps on the live surface. |
+| SBOM converter | `node tools/gradle-sbom-test.cjs` | `tools/gradle-sbom.cjs` turns Gradle's resolved dependency report into the CycloneDX SBOM that `sbom.yml` attests against the APK (`.ai/memory/0021`). |
+| Stick frame budget | `node deathride/tools/frame-budget.mjs [summary.json]`; its suite is `node deathride/tools/frame-budget-test.mjs` | Holds a Stick soak summary to `deathride/perf/frame-budget.json`, a ratchet over the accepted soak (`.ai/memory/0020`). The soak itself is a device run and is the operator's. |
 
 `gradle.properties` pins `org.gradle.java.home` to the operator's Android Studio JBR. On any
 other machine, pass `-Dorg.gradle.java.home=<a JDK 17>` or remove that line locally.
@@ -137,6 +141,8 @@ design pages that `prototype/build.py` builds.
   - `capabilities-pr.yml` runs every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` on each same-repo PR. It goes red when a capability fails, or when a committed `verified: true` did not hold. To set a flag, commit the write-back of a local `node .ai/doctor.mjs --run`; never hand-flip one (`.ai/memory/0016`).
   - `quality.yml` runs the desk gate and `:core:test` on every PR.
   - `supply-chain.yml` runs on main. It submits the Gradle dependency graph and builds and attests the debug APK.
+  - `sbom.yml` runs after each green `supply-chain` run. It attests a CycloneDX SBOM of that APK's runtime classpath against the same APK, and uploads the desk's `npm sbom` inventory (`.ai/memory/0021`).
+  - `harness-drills.yml` runs on every PR and push to main. It holds `SECURITY.md` to its word, runs the SBOM converter suite, holds the committed Stick soaks to the frame budget, and runs the degraded-engine drill.
   - `capabilities.yml` runs weekly and on dispatch. It executes every `.ai/manifest.yaml` capability through `node .ai/doctor.mjs --run` and goes red on any failure (`.ai/memory/0012`).
   - `model-drift.yml` runs its suite on every PR. Weekly, it goes red when the committed live-quality record in `uat/drift/` drifted, is missing, or is older than 21 days (`.ai/memory/0014`).
   - `model-drift-pr.yml` runs on every PR. A PR that touches the live surface goes red unless it adds a live record that measured its code and does not alert against the base branch's newest one (`.ai/memory/0017`).

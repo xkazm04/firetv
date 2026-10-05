@@ -1,0 +1,49 @@
+# Harness drills: checks added outside the desk gate and repo-guardrails, each runnable offline by any agent.
+#  - checks (plain node, no install):
+#    - tools/security-policy-test.cjs fails while SECURITY.md is still a template, names no reporting channel or response
+#      time, or ticks a guardrail that no workflow runs.
+#    - tools/gradle-sbom-test.cjs holds the SBOM converter that .github/workflows/sbom.yml uses.
+#    - deathride/tools/frame-budget-test.mjs and frame-budget.mjs hold every committed Stick soak to the frame budget in
+#      deathride/perf/frame-budget.json (a regression ratchet; .ai/memory/0020).
+#  - degraded-engine: tools/engine-degraded-test.cjs puts every degraded engine answer in
+#    tools/engine-degraded-fixtures.json through the real read and hint routes and checks the fallback the TV shows. Every
+#    engine is stubbed at the provider seam: no live model call (.ai/memory/0007). Rows marked todo report known gaps
+#    without failing.
+name: harness-drills
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Security policy is filled in and honest
+        run: node tools/security-policy-test.cjs
+      - name: SBOM converter suite
+        run: node tools/gradle-sbom-test.cjs
+      - name: Stick frame budget suite
+        run: node deathride/tools/frame-budget-test.mjs
+      - name: Committed Stick soaks hold the frame budget
+        run: node deathride/tools/frame-budget.mjs
+
+  degraded-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: desk/package-lock.json
+      - run: npm ci --prefix desk
+      - name: Degraded-engine drill (stubbed engines, no live model call)
+        run: node tools/engine-degraded-test.cjs

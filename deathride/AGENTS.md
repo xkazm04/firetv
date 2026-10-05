@@ -25,6 +25,21 @@ Running `:desktop:run` (`--smoke`, `--keyboard-check`, `--soak`) is evidence, no
 test does not prove Stick frame time, Wi-Fi delay or feel ([PITFALLS](docs/concepts/DEATH-RIDE-PITFALLS.md), "Scope of
 truth").
 
+## Stick frame budget
+
+Frame time on the Stick is held to a committed budget, [perf/frame-budget.json](perf/frame-budget.json). Its ceilings
+are the accepted P8 delivery soak plus a stated tolerance, so it is a regression ratchet and not the 16.7/33 ms target,
+which stays open by owner decision ([.ai/memory/0020](../.ai/memory/0020-stick-frame-budget-is-a-ratchet.md)).
+
+- A desktop soak is not a proxy for this budget. It runs vsync-capped on a far faster GPU. Only a Stick soak counts.
+- After a Stick soak (`tools/integration-soak.mjs` or the perf probes, then `python tools/perf-summary.py <raw>`), run
+  `node tools/frame-budget.mjs <summary.json>`. It exits 1 and names the scene, the metric and the delta for every
+  ceiling the soak breaks.
+- A soak that holds the budget and stands for the build joins the budget's `records` with its `sourceSha256`. When it
+  beats a ceiling, tighten that ceiling. Never loosen one to let a change through.
+- `node tools/frame-budget.mjs` with no argument re-checks every record, and `node tools/frame-budget-test.mjs` is the
+  check's own suite. Both read files only and run in CI (`.github/workflows/harness-drills.yml`).
+
 ## Which app you are building
 
 The application id and label come from, in order:

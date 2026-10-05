@@ -25,6 +25,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Unreleased
 
 - The live model-drift watch: the lab bench on the real engines, recorded weekly in [uat/drift/](uat/drift/README.md). See the harness section.
+- A degraded-engine drill ([engine-degraded-fixtures.json](tools/engine-degraded-fixtures.json)): prose, empty, wrong-typed, out-of-range and failed engine answers go through the real read, hint and lesson routes, and the TV's fallback is checked. Three gaps are recorded as todo: a blank hint card, an inverted page band and a blank page item ([AI_HARNESS.md](docs/AI_HARNESS.md)).
 
 ### 2026-09-30: Family Phase 1 complete, Adult mode chosen
 
@@ -93,6 +94,7 @@ format is adapted from [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Unreleased
 
 - An agent guidance overlay of its own ([deathride/AGENTS.md](deathride/AGENTS.md)): its own wrapper and gate, which app id a build installs as, the pure-JVM modules, and owner-only checks.
+- Stick frame time has a committed budget ([frame-budget.json](deathride/perf/frame-budget.json)). Its ceilings are the accepted P8 delivery soak plus a stated tolerance, and `deathride/tools/frame-budget.mjs` fails a soak that regresses it. It is a ratchet, not the 16.7/33 ms target, which the owner deferred ([0020](.ai/memory/0020-stick-frame-budget-is-a-ratchet.md)).
 
 ### 2026-10-04: Status entry point, regions approved, track library triaged
 
@@ -135,6 +137,9 @@ The agent contract, CI and the evals that cover every product.
   - The desk's layering is a failing check (`tools/desk-boundaries.cjs`): engines are a leaf behind their entry modules, rules reach no engine or Node built-in, only engines spawn, only the session writes ([0018](.ai/memory/0018-desk-import-boundaries.md)). It shares one import scanner with the model-drift check (`tools/import-graph.cjs`).
   - Every separate build has a guidance overlay (`tools/guidance-overlay-test.cjs`).
   - Agent authorship is read from `Co-Authored-By:` and `Agent-Lane:` trailers (`tools/commit-provenance.cjs`). PR commits that record it only in prose are annotated ([0019](.ai/memory/0019-commit-provenance-trailers.md)).
+- A real [SECURITY.md](SECURITY.md): private vulnerability reporting, response times for a solo owner, the scope, and an honest guardrail list. `tools/security-policy-test.cjs` fails when it slips back to a template or ticks a guardrail no workflow runs.
+- The TV APK carries a CycloneDX SBOM attested against the same APK (`sbom.yml`, `tools/gradle-sbom.cjs`), and the desk an `npm sbom` inventory ([CONTRIBUTING.md](CONTRIBUTING.md), [0021](.ai/memory/0021-apk-sbom-from-gradle-report.md)).
+- `harness-drills.yml`, a new workflow: the security policy check, the SBOM converter suite, the Stick frame budget and the degraded-engine drill.
 
 ### 2026-10-05: The AI-native standard
 

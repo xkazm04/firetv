@@ -42,6 +42,35 @@ once a week. On a PR, `scripts/doctor-gate.mjs --claims` also holds every commit
 to that run. See
 [../.ai/memory/0016-capabilities-proven-per-pr.md](../.ai/memory/0016-capabilities-proven-per-pr.md).
 
+### Degraded engines: the drill for when a live engine answers nonsense
+
+`tools/engine-degraded-test.cjs` takes each row of `tools/engine-degraded-fixtures.json` through the real routes:
+`POST /api/read`, `POST /api/hint`, and the lesson pick behind the hint. A row is one provider answer:
+
+- prose instead of JSON, or an empty object;
+- wrong types or empty strings;
+- centres outside the photo, or an unknown or padded lesson id;
+- a timeout, an engine that is not running, or a process that dies.
+
+The suite checks the fallback the child at the TV is owed:
+
+- a desk sentence on the status line, never the engine's words or the answer;
+- the page not stuck on "reading", and no hint card;
+- "no lesson" instead of an endless wait;
+- a retry that works once the engine is back.
+
+Engines are stubbed at the `provider` seam, so it makes no live call. It runs on every PR in
+`.github/workflows/harness-drills.yml`.
+
+Rows with a `todo` are gaps the desk has today. They run and report without failing:
+
+- an empty hint passes the hint schema and shows a blank card;
+- a centre outside the photo gives an inverted crop band;
+- a page item of spaces is kept.
+
+Their fixes are in `hint.ts` and `read.ts`, on the live surface, so they land with a live drift record (0017). The
+drift records cannot seed these rows because they are counts-only.
+
 ### Live: opt-in, these spend real calls
 
 These measure the quality of model output itself, so they need a real engine. Running one is the
@@ -139,5 +168,10 @@ Durable lessons from past runs are in `.ai/memory/` (format: [../.ai/memory/READ
 
     On a PR it also annotates every AI commit whose agent or lane is not in a trailer (`tools/commit-provenance.cjs`,
     0019). That step warns until the operator adds `--strict`.
-  - `supply-chain.yml` builds and attests the APK on main.
+  - `supply-chain.yml` builds and attests the APK on main. `sbom.yml` then attests the same APK's CycloneDX SBOM (0021).
+  - `harness-drills.yml` runs on every PR and push to main:
+    - the security policy check (`tools/security-policy-test.cjs`);
+    - the SBOM converter suite;
+    - the Stick frame budget (`deathride/tools/frame-budget.mjs`, 0020);
+    - the degraded-engine drill.
 - A human approves every merge (`.ai/guardrails.yaml`).

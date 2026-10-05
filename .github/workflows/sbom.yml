@@ -1,0 +1,95 @@
+# SBOM: what is inside the signed APK, attested against that same APK.
+#  1. apk - runs after each green supply-chain run on main. It downloads the debug APK that run built and checksummed,
+#     resolves the APK's runtime classpath at the same commit (`:tv-app:dependencies --configuration
+#     debugRuntimeClasspath`), turns Gradle's own report into a CycloneDX 1.5 SBOM (tools/gradle-sbom.cjs, no plugin),
+#     and attests it against the APK's digest next to its build provenance:
+#       gh attestation verify tv-app-debug.apk -R xkazm04/firetv --predicate-type https://cyclonedx.org/bom
+#     The job goes red if the APK fails its checksum, a module does not resolve, or the report holds no module.
+#  2. desk - the Study Desk's production dependencies as a CycloneDX SBOM from its lockfile (`npm sbom`). The desk is a
+#     prototype and ships no artifact, so this is an inventory to trace a Dependabot alert, uploaded and not attested.
+# gradle.properties pins the operator's local Android Studio JBR, which does not exist on a runner; the apk job drops
+# that one line from the checkout and uses the JDK that setup-java installs (as supply-chain.yml does).
+name: sbom
+on:
+  workflow_run:
+    workflows: [supply-chain]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  apk:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read # downloads the APK from the supply-chain run
+      id-token: write # signs the SBOM attestation
+      attestations: write
+    env:
+      SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Drop the operator's local JDK pin
+        run: sed -i '/^org.gradle.java.home=/d' gradle.properties
+      - name: The APK this SBOM describes (built, checksummed and provenance-attested by supply-chain)
+        uses: actions/download-artifact@v4
+        with:
+          name: tv-app-debug-${{ github.event.workflow_run.head_sha }}
+          path: dist/apk
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Check the APK against its checksum
+        working-directory: dist/apk
+        run: sha256sum -c SHA256SUMS
+      - name: Resolve the APK's runtime classpath
+        run: node tools/gradlew.cjs :tv-app:dependencies --configuration debugRuntimeClasspath -q --console=plain > dist/tv-app-deps.txt
+      - name: SBOM converter suite
+        run: node tools/gradle-sbom-test.cjs
+      - name: Write the CycloneDX SBOM
+        run: node tools/gradle-sbom.cjs dist/tv-app-deps.txt --name tv-app-debug --version "$SHA" > dist/tv-app-debug.cdx.json
+      - uses: actions/attest-sbom@v2
+        with:
+          subject-path: dist/apk/tv-app-debug.apk
+          sbom-path: dist/tv-app-debug.cdx.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tv-app-debug-sbom-${{ github.event.workflow_run.head_sha }}
+          path: |
+            dist/tv-app-debug.cdx.json
+            dist/tv-app-deps.txt
+          if-no-files-found: error
+
+  desk:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Write the desk's CycloneDX SBOM from its lockfile
+        working-directory: desk
+        run: |
+          mkdir -p ../dist
+          npm sbom --sbom-format cyclonedx --omit dev --package-lock-only > ../dist/desk.cdx.json
+          node -e "const b=require('../dist/desk.cdx.json');if(!(b.components||[]).length)throw new Error('the desk SBOM lists no component');console.log(b.components.length+' components')"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desk-sbom-${{ github.event.workflow_run.head_sha || github.sha }}
+          path: dist/desk.cdx.json
+          if-no-files-found: error

@@ -89,6 +89,19 @@ sha256sum -c SHA256SUMS
 
 A file that fails either check did not come from this repo's CI. Do not install it.
 
+When that run is green, `.github/workflows/sbom.yml` takes the APK it built and writes a CycloneDX SBOM of what is
+inside: the APK's resolved `debugRuntimeClasspath`, converted by `tools/gradle-sbom.cjs`. It attests the SBOM against
+the same APK and publishes it as the `tv-app-debug-sbom-<commit>` artifact. To trace a Dependabot alert to a build,
+check the SBOM attestation and search the SBOM for the module:
+
+```sh
+gh attestation verify tv-app-debug.apk -R xkazm04/firetv --predicate-type https://cyclonedx.org/bom
+grep -o '"purl": "pkg:maven/io.ktor/[^"]*"' tv-app-debug.cdx.json
+```
+
+The same workflow uploads the desk's production dependencies as `desk-sbom-<commit>` (`npm sbom`, CycloneDX). The desk
+ships no artifact, so that SBOM is an inventory and is not attested.
+
 ## Licensing and the CLA
 
 This repository has no licence file and takes no outside contributions, so there is no CLA. If
