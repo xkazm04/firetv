@@ -9,7 +9,17 @@ class GlyphLayer(private val font: BitmapFont) {
     private val vertices=FloatArray(40000)
     private var count=0
     private var color=Color.WHITE.toFloatBits()
-    fun clear() { count=0 }
+    // Retained layout: addText calls repeat in the same order every rebuild, so a call whose string, origin and colour match the call at
+    // the same index last time, and which starts at the same vertex offset, finds its quads still in the array and is not laid out again.
+    private var calls=0
+    private var previousCalls=0
+    private var texts=arrayOfNulls<String>(64)
+    private var xs=FloatArray(64)
+    private var ys=FloatArray(64)
+    private var colors=IntArray(64)
+    private var starts=IntArray(64)
+    private var ends=IntArray(64)
+    fun clear() { previousCalls=calls;calls=0;count=0 }
     fun setColor(value: Color) { color=value.toFloatBits() }
     fun width(text: CharSequence): Float {
         var width=0f
@@ -31,6 +41,18 @@ class GlyphLayer(private val font: BitmapFont) {
         return baseline
     }
     fun addText(text: CharSequence, originX: Float, originY: Float) {
+        val slot=calls++
+        if(slot>=texts.size)grow()
+        val start=count;val bits=color.toRawBits()
+        if(text is String && slot<previousCalls && starts[slot]==start && texts[slot]==text && xs[slot]==originX && ys[slot]==originY && colors[slot]==bits) { count=ends[slot];return }
+        layout(text,originX,originY)
+        texts[slot]=text as? String;xs[slot]=originX;ys[slot]=originY;colors[slot]=bits;starts[slot]=start;ends[slot]=count
+    }
+    private fun grow() {
+        val n=texts.size*2
+        texts=texts.copyOf(n);xs=xs.copyOf(n);ys=ys.copyOf(n);colors=colors.copyOf(n);starts=starts.copyOf(n);ends=ends.copyOf(n)
+    }
+    private fun layout(text: CharSequence, originX: Float, originY: Float) {
         var x=originX; var y=originY+font.data.ascent
         var previous: BitmapFont.Glyph?=null
         val sx=font.data.scaleX; val sy=font.data.scaleY
