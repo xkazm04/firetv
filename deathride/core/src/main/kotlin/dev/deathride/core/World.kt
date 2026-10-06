@@ -246,6 +246,7 @@ class Snapshot(private val combat: Combat?=null) {
     private val drift=DoubleArray(Tuning.CAR_COUNT*4)
     private val abilityState=DoubleArray(Tuning.CAR_COUNT*12)
     private val abilityDefinitions=arrayOfNulls<AbilityDefinition>(Tuning.CAR_COUNT)
+    private val weaponState=DoubleArray(Tuning.CAR_COUNT*Weapons.all.size*5)
     private val pickupState=DoubleArray((combat?.pickups?.size?:0)*4)
     private val blastState=DoubleArray((combat?.blasts?.size?:0)*5)
     val pickupCount get()=pickupState.size/4
@@ -264,6 +265,11 @@ class Snapshot(private val combat: Combat?=null) {
             abilityState[an+9]=c.spec.circleOffsetM+c.spec.circleRadiusM;abilityState[an+10]=c.spec.circleRadiusM;abilityState[an+11]=a.slowSeconds
         }
         if(combat!=null) {
+            for(i in cars.indices)for(w in Weapons.all.indices) {
+                val n=(i*Weapons.all.size+w)*5
+                weaponState[n]=combat.burstRemaining(i,w).toDouble();weaponState[n+1]=combat.cooldownFraction(i,w);weaponState[n+2]=combat.heatFraction(i,w)
+                weaponState[n+3]=if(combat.overheated(i,w))1.0 else 0.0;weaponState[n+4]=combat.fireCount(i,w).toDouble()
+            }
             for(i in combat.pickups.indices){val p=combat.pickups[i];val n=i*4;pickupState[n]=p.x;pickupState[n+1]=p.y;pickupState[n+2]=p.cooldownSeconds;pickupState[n+3]=p.type.radiusM}
             for(i in combat.blasts.indices){val p=combat.blasts[i];val n=i*5;blastState[n]=p.x;blastState[n+1]=p.y;blastState[n+2]=p.remainingSeconds;blastState[n+3]=p.radiusM;blastState[n+4]=p.activation.toDouble()}
         }
@@ -283,6 +289,12 @@ class Snapshot(private val combat: Combat?=null) {
     fun traceX(i: Int)=condition[i*8+4];fun traceY(i: Int)=condition[i*8+5]
     fun entered(i: Int)=condition[i*8+6]>0;fun drifting(i: Int)=condition[i*8+7]>0
     fun slipRadians(i: Int)=drift[i*4];fun driftQuality(i: Int)=drift[i*4+1];fun driftSpeedRetained(i: Int)=drift[i*4+2];fun spunOut(i: Int)=drift[i*4+3]>0
+    /** Per-car weapon state for mounted-weapon rendering: bullets left in a burst, cooldown 0..1, heat 0..1, overheat lockout, monotonic bullet-fired id. */
+    fun weaponBurstRemaining(car: Int,weapon: Int)=weaponState[(car*Weapons.all.size+weapon)*5].toInt()
+    fun weaponCooldownFraction(car: Int,weapon: Int)=weaponState[(car*Weapons.all.size+weapon)*5+1]
+    fun weaponHeat(car: Int,weapon: Int)=weaponState[(car*Weapons.all.size+weapon)*5+2]
+    fun weaponOverheated(car: Int,weapon: Int)=weaponState[(car*Weapons.all.size+weapon)*5+3]>0
+    fun weaponFireCount(car: Int,weapon: Int)=weaponState[(car*Weapons.all.size+weapon)*5+4].toInt()
     fun pickupX(i: Int)=pickupState[i*4];fun pickupY(i: Int)=pickupState[i*4+1];fun pickupReady(i: Int)=pickupState[i*4+2]<=0
     fun pickupRadius(i: Int)=pickupState[i*4+3];fun pickupId(i: Int)=combat!!.pickups[i].type.id
     fun blastX(i: Int)=blastState[i*5];fun blastY(i: Int)=blastState[i*5+1];fun blastRemaining(i: Int)=blastState[i*5+2]

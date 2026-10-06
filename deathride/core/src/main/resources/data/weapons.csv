@@ -1,5 +1,5 @@
-id,kind,damage,cooldownSeconds,ammo,rangeM,speedMps,radiusM,armingSeconds,lifeSeconds,traceSeconds
-Rivet,ray,2.4,0.20,180,48,0,0.15,0,0.08,0.08
-Hammer,projectile,21,1.4,5,65,55,0.6,0,1.19,0.06
-Mine,mine,24,2.5,4,0,0,0.5,1.4,18,0.35
-Scatter,spread,12,1.0,12,22,0,0.25,0,0.10,0.10
+id,kind,damage,cooldownSeconds,ammo,rangeM,speedMps,radiusM,armingSeconds,lifeSeconds,traceSeconds,burstRounds,burstIntervalSeconds,heatPerShot,heatCoolPerSecond,overheatCoolPerSecond,overheatResumeFraction
+Rivet,ray,2.4,0.20,180,48,0,0.15,0,0.08,0.08,1,0,0,0,0,0
+Hammer,projectile,21,1.4,5,65,55,0.6,0,1.19,0.06,1,0,0,0,0,0
+Mine,mine,24,2.5,4,0,0,0.5,1.4,18,0.35,1,0,0,0,0,0
+Scatter,spread,12,1.0,12,22,0,0.25,0,0.10,0.10,1,0,0,0,0,0

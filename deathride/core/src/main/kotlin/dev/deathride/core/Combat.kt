@@ -32,8 +32,16 @@ class Weapon(row: Map<String,String>) {
     val damage=row.number("damage");val cooldownSeconds=row.number("cooldownSeconds");val ammo=row.number("ammo").toInt()
     val rangeM=row.number("rangeM");val speedMps=row.number("speedMps");val radiusM=row.number("radiusM")
     val armingSeconds=row.number("armingSeconds");val lifeSeconds=row.number("lifeSeconds");val traceSeconds=row.number("traceSeconds")
-    init { require(kind in setOf("ray","projectile","mine","spread"));require(damage>0 && cooldownSeconds>0 && ammo>0 && radiusM>0 && lifeSeconds>0) }
-    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo,\"radiusM\":$radiusM,\"armingSeconds\":$armingSeconds}"
+    /** One press fires [burstRounds] bullets [burstIntervalSeconds] apart; the cooldown then runs from the last bullet. */
+    val burstRounds=row.number("burstRounds").toInt();val burstIntervalSeconds=row.number("burstIntervalSeconds")
+    /** Heat is 0..1; each bullet adds [heatPerShot], it cools at [heatCoolPerSecond], and 1.0 locks the weapon until it falls to [overheatResumeFraction] at [overheatCoolPerSecond]. */
+    val heatPerShot=row.number("heatPerShot");val heatCoolPerSecond=row.number("heatCoolPerSecond")
+    val overheatCoolPerSecond=row.number("overheatCoolPerSecond");val overheatResumeFraction=row.number("overheatResumeFraction")
+    val overheats get()=heatPerShot>0
+    init { require(kind in setOf("ray","projectile","mine","spread"));require(damage>0 && cooldownSeconds>0 && ammo>0 && radiusM>0 && lifeSeconds>0)
+        require(burstRounds>=1 && (burstRounds==1 || burstIntervalSeconds>0) && heatPerShot>=0)
+        if(heatPerShot>0)require(heatCoolPerSecond>0 && overheatCoolPerSecond>0 && overheatResumeFraction in 0.0..0.95) }
+    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo,\"radiusM\":$radiusM,\"armingSeconds\":$armingSeconds,\"burstRounds\":$burstRounds,\"burstIntervalSeconds\":$burstIntervalSeconds,\"heatPerShot\":$heatPerShot}"
 }
 object Weapons {
     const val RIVET=0;const val HAMMER=1;const val MINE=2;const val SCATTER=3
@@ -66,6 +74,12 @@ class Combat(private val world: World,val enabled: Boolean) {
     private val states=Array(Tuning.CAR_COUNT){LifeState.ACTIVE}
     private val ammunition=IntArray(Tuning.CAR_COUNT*Weapons.all.size)
     private val cooldowns=DoubleArray(ammunition.size)
+    // Per car and weapon: bullets still owed by a committed burst, the gap to the next one, heat 0..1, lockout, and a monotonic bullet-fired id.
+    private val burstLeft=IntArray(ammunition.size)
+    private val burstTimer=DoubleArray(ammunition.size)
+    private val heat=DoubleArray(ammunition.size)
+    private val locked=BooleanArray(ammunition.size)
+    private val fireCounter=IntArray(ammunition.size)
     private val ramCooldown=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     private val wallCooldown=DoubleArray(Tuning.CAR_COUNT)
     internal val lastTarget=IntArray(Tuning.CAR_COUNT){-1}
@@ -109,12 +123,20 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun wrecked(id: Int)=states[id]==LifeState.WRECKED
     fun ammo(id: Int,weapon: Int)=ammunition[id*Weapons.all.size+weapon]
     fun cooldown(id: Int,weapon: Int)=cooldowns[id*Weapons.all.size+weapon]
+    /** Bullets a burst still has to fire (0 when none is in flight). */
+    fun burstRemaining(id: Int,weapon: Int)=burstLeft[id*Weapons.all.size+weapon]
+    /** 0 when the weapon is off cooldown, 1 right after a shot; a burst counts down from its first bullet. */
+    fun cooldownFraction(id: Int,weapon: Int)=min(1.0,cooldowns[id*Weapons.all.size+weapon]/Weapons.all[weapon].cooldownSeconds)
+    fun heatFraction(id: Int,weapon: Int)=heat[id*Weapons.all.size+weapon]
+    fun overheated(id: Int,weapon: Int)=locked[id*Weapons.all.size+weapon]
+    /** Monotonic count of bullets/shots/drops this weapon has fired since the race reset; a change means "muzzle flash now". */
+    fun fireCount(id: Int,weapon: Int)=fireCounter[id*Weapons.all.size+weapon]
     fun capacity(id: Int,weapon: Int): Int {
         if((weapon==Weapons.HAMMER || weapon==Weapons.SCATTER) && world.cars[id].weaponSlots<2)return 0
         return floor(Weapons.all[weapon].ammo*(world.cars[id].carClass?.ammoScale?:1.0)).toInt()+if(weapon==Weapons.HAMMER)max(0,world.cars[id].weaponSlots-2)*CombatRules["heavyExtraAmmoPerSlot"].toInt() else 0
     }
     fun reset() {
-        for(i in hp.indices)hp[i]=if(world.cars[i].entered)maxHealth(i)*world.cars[i].startingCondition else 0.0;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
+        for(i in hp.indices)hp[i]=if(world.cars[i].entered)maxHealth(i)*world.cars[i].startingCondition else 0.0;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);burstLeft.fill(0);burstTimer.fill(0.0);heat.fill(0.0);locked.fill(false);fireCounter.fill(0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
         wreckSource.fill(-1);selectedWeapon.fill(0);kills.fill(0);damageEvents.fill(0);damageDealt.fill(0.0);damageTaken.fill(0.0);damageFlashSeconds.fill(0.0);wreckSeconds.fill(-1.0)
         cashCollected.fill(0);sabotageTarget.fill(-1);firstDamageSeconds.fill(-1.0);repairPickupsTaken.fill(0);ammoPickupsTaken.fill(0)
         abilityDamage.fill(0.0);abilityHits.fill(0);damageByKind.fill(0.0)
@@ -212,7 +234,7 @@ class Combat(private val world: World,val enabled: Boolean) {
                 if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds}
             }
         }
-        ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++
+        ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++;fireCounter[n]++
         world.presentationEvents.emit(PresentationKind.FIRE,id,detail=weapon,x=c.x,y=c.y,seconds=world.seconds)
         return true
     }
@@ -228,7 +250,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         val c=world.cars[id]
         if(!enabled || !canAct(id) || armingSeconds>0 || c.ability.definition?.kind!=AbilityKind.DISPATCHER || c.ability.phase!=AbilityPhase.ACTIVE)return false
         if(!placeMine(c))return false
-        shots[Weapons.MINE]++
+        shots[Weapons.MINE]++;fireCounter[id*Weapons.all.size+Weapons.MINE]++
         world.presentationEvents.emit(PresentationKind.FIRE,id,detail=Weapons.MINE,x=c.x,y=c.y,seconds=world.seconds)
         return true
     }
