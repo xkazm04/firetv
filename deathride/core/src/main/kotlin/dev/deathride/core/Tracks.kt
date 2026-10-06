@@ -48,7 +48,9 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     val checkpoints=spots.filter { it.kind=="checkpoint" }.map { it.fraction }.toDoubleArray()
     val grid=spots.filter { it.kind=="grid" }
     private val cell=TrackRules["projectionCellM"]
-    private val columns: Int; private val rows: Int; private val candidates: Array<IntArray>
+    private val columns: Int; private val rows: Int
+    /** Baked on first projection, not at class load: the eager bake of every archived course stalled Android startup. */
+    private val candidates: Array<IntArray> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
     val json get()=json(region)
     fun json(region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
@@ -73,14 +75,14 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         minX=min(x.min(),branches.minOfOrNull { it.alternative.x.min() }?:x.min())-width.max()-cell; maxX=max(x.max(),branches.maxOfOrNull { it.alternative.x.max() }?:x.max())+width.max()+cell
         minY=min(y.min(),branches.minOfOrNull { it.alternative.y.min() }?:y.min())-width.max()-cell; maxY=max(y.max(),branches.maxOfOrNull { it.alternative.y.max() }?:y.max())+width.max()+cell
         columns=ceil((maxX-minX)/cell).toInt();rows=ceil((maxY-minY)/cell).toInt()
-        // Static spatial bins: each contains segments close enough to any point in its cell.
-        candidates=Array(columns*rows) { index ->
-            val cx=minX+(index%columns+.5)*cell;val cy=minY+(index/columns+.5)*cell
-            var nearest=Double.POSITIVE_INFINITY
-            for(i in 0 until count)nearest=min(nearest,sqrt(distance2(cx,cy,i)))
-            (0 until count).filter { sqrt(distance2(cx,cy,it))<=nearest+cell*sqrt(2.0) }.toIntArray()
-        }
         obstacles=ObstacleContent.bake(this,obstaclePlacements)
+    }
+    // Static spatial bins: each contains segments close enough to any point in its cell.
+    private fun bakeCandidates()=Array(columns*rows) { index ->
+        val cx=minX+(index%columns+.5)*cell;val cy=minY+(index/columns+.5)*cell
+        var nearest=Double.POSITIVE_INFINITY
+        for(i in 0 until count)nearest=min(nearest,sqrt(distance2(cx,cy,i)))
+        (0 until count).filter { sqrt(distance2(cx,cy,it))<=nearest+cell*sqrt(2.0) }.toIntArray()
     }
     private fun distance2(px: Double,py: Double,i: Int): Double {
         val t=((px-x[i])*dx[i]+(py-y[i])*dy[i])*inverseLength2[i]
