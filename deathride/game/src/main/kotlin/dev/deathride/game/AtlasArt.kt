@@ -16,6 +16,10 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                      val loop: Boolean, val approved: Boolean, val referenceSelected: Boolean=false, val usable: Boolean=true)
     private val entries=HashMap<String,Entry>()
     private val regions=HashMap<String,Region>()
+    /** Per-key resolution (entry plus the region of every frame), memoised once the catalog and atlases are final. */
+    private class Resolved(val entry: Entry?,val frames: Array<Region?>,val available: Boolean)
+    private val resolved=HashMap<String,Resolved>()
+    private var sealed=false
     private val atlases=ArrayList<TextureAtlas>()
     private val tiles=HashMap<String,Texture>()
     private val patches=HashMap<String,NinePatch>()
@@ -67,6 +71,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                 tiles[e.id]=t
             } catch(x: Exception){failed(e.id,x)}
         } catch(e: Exception){failed("catalog",e)}
+        sealed=true
         Gdx.app.log("DeathRide","art ready regions=$regionCount bytes=$textureBytes failures=$failures heading=runtime-rotation")
     }
     private fun loadTexture(file: String,limit: Int): Texture = loadTexture(root.child(file),limit)
@@ -106,13 +111,24 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
             atlases.add(atlas);regions.putAll(accepted)
         } catch(e: Exception) { loaded.forEach{it.dispose()};textureBytes-=bytes;failed(group,e) }
     }
+    private fun resolve(key: String): Resolved {
+        resolved[key]?.let{return it}
+        val e=entries[key]
+        val r=if(e==null)Resolved(null,arrayOf(regions[key]),regions.containsKey(key)) else {
+            val frames=Array(e.frames.size){regions[e.frames[it]]}
+            Resolved(e,frames,e.usable && frames.all{it!=null})
+        }
+        // Entries and regions change during init (aliases, later atlas pages); after that they are fixed.
+        if(sealed)resolved[key]=r
+        return r
+    }
     fun region(key: String,seconds: Double=0.0): Region? {
-        val e=entries[key]?:return regions[key]
+        val s=resolve(key);val e=s.entry?:return s.frames[0]
         if(!e.usable)return null
         val frame=frameAt(e.durations,e.loop,seconds)
-        return if(frame<0)null else regions[e.frames[frame]]
+        return if(frame<0)null else s.frames[frame]
     }
-    fun available(key: String)=entries[key]?.let{e->e.usable && e.frames.all{regions.containsKey(it)}}?:regions.containsKey(key)
+    fun available(key: String)=resolve(key).available
     fun themeProps(theme: String)=environmentSets[theme]?:EnvironmentArt.fallbackSets[theme]?:EnvironmentArt.fallbackSets.getValue("industrial")
     fun obstacleKey(id: String,fallback: String)=environmentObstacles[id]?.takeIf{available(it)}?:fallback
     fun duration(key: String)=(entries[key]?.durations?.sum()?:0)/1000.0
