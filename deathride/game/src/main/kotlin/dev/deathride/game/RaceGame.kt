@@ -416,6 +416,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
     private lateinit var carSprites: CarSprites
+    private val abilityHudKeys=KeyCache("hud/ability-")
     private val viewBounds=ViewBounds()
     private fun drawWorld(dt: Double) {
         val course=courseCatalog[selectedTrack]
@@ -595,7 +596,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val c=activeDriver();val a=c.ability
                 art.draw(batch,Weapons.all[world.combat.selectedWeapon[c.id]].id,777f,680f,32f,32f)
                 art.draw(batch,"pickups/mine",777f,636f,32f,32f)
-                a.definition?.let{art.draw(batch,"hud/ability-"+it.id,1017f,644f,32f,32f)}
+                a.definition?.let{art.draw(batch,abilityHudKeys.of(it.id),1017f,644f,32f,32f)}
                 art.frame(batch,"hud/frame-meter",548f,643f,190f,26f)
                 art.frame(batch,"hud/frame-meter",1033f,585f,192f,26f)
                 if(Presentation.FOLLOW_CAMERA && scene.ready)frame(1044f,394f,200f,150f,"hud/frame-dial")

@@ -10,6 +10,7 @@ import kotlin.math.*
 /** Fixed visual pools, fed only by the read-only simulation snapshot. */
 class AtlasEffects(private val art: AtlasArt) {
     private val keys=arrayOf("effects/muzzle","effects/explosion","effects/sparks","effects/smoke","effects/fire","decals/skid","decals/scorch")
+    private val pickupKeys=KeyCache("pickups/")
     private val capacity=64
     private val pool=FloatArray(capacity*7)
     private val trace=DoubleArray(6);private val flash=DoubleArray(6);private val smoke=DoubleArray(6)
@@ -53,7 +54,7 @@ class AtlasEffects(private val art: AtlasArt) {
     }
     fun ground(batch: SpriteBatch,s: Snapshot,view: ViewBounds=ViewBounds.ALL) {
         for(n in pool.indices step 7)if(pool[n+6]>0 && pool[n]>=5 && view.sees(pool[n+1].toDouble(),pool[n+2].toDouble(),pool[n+3].toDouble()))draw(batch,n)
-        for(i in 0 until s.pickupCount)if(s.pickupReady(i) && view.sees(s.pickupX(i),s.pickupY(i),s.pickupRadius(i)+1.0))art.draw(batch,"pickups/"+s.pickupId(i),s.pickupX(i).toFloat(),s.pickupY(i).toFloat(),s.pickupRadius(i).toFloat()*2,s.pickupRadius(i).toFloat()*2)
+        for(i in 0 until s.pickupCount)if(s.pickupReady(i) && view.sees(s.pickupX(i),s.pickupY(i),s.pickupRadius(i)+1.0))art.draw(batch,pickupKeys.of(s.pickupId(i)),s.pickupX(i).toFloat(),s.pickupY(i).toFloat(),s.pickupRadius(i).toFloat()*2,s.pickupRadius(i).toFloat()*2)
     }
     private fun draw(batch: SpriteBatch,n: Int) {
         val kind=pool[n].toInt();val age=pool[n+5].toDouble()
