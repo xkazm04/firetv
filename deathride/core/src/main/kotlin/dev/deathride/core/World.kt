@@ -502,7 +502,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val radius=spec.circleRadiusM
         for(end in -1..1 step 2) {
             val ox=c.cosHeading*spec.circleOffsetM*end; val oy=c.sinHeading*spec.circleOffsetM*end
-            track.project(c.x+ox,c.y+oy,projection,track.startM+c.lap.progressM,c.trackRoute)
+            projectEnd(c,end,c.x+ox,c.y+oy)
             val limit=track.widthAt(projection.s,projection.route)-radius
             if(abs(projection.distance)>limit) {
                 val sign=if(projection.distance>0) 1.0 else -1.0
@@ -517,8 +517,6 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun collide(a: Car,b: Car) {
         if(!a.entered || !b.entered)return
         val sa=a.spec; val sb=b.spec; val limit=sa.circleRadiusM+sb.circleRadiusM
-        // No contact circle of either car can reach the other from this far apart (offsets only move a circle by circleOffsetM).
-        val reach=limit+sa.circleOffsetM+sb.circleOffsetM+1e-6;val cdx=b.x-a.x;val cdy=b.y-a.y
         val invA=1/sa.massKg; val invB=1/sb.massKg; val invSum=invA+invB
         // A middle circle closes the side-contact gap on the longer W6 silhouettes.
         for(ea in -1..1) for(eb in -1..1) {
