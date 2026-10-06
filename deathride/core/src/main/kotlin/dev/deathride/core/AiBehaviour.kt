@@ -154,7 +154,7 @@ class AiBehaviour(private val world: World) {
         val d=c.ability.definition?.kind
         var rearRange=c.spec.lengthM*AiControls["blockReachCarLengths"]
         if(d==AbilityKind.PATCH || d==AbilityKind.SPIKES)rearRange=max(rearRange,c.ability.definition!!.aiRangeM)
-        if(c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)rearRange=max(rearRange,CombatRules["aiChaserRangeM"])
+        if(c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)rearRange=max(rearRange,CombatRules.aiChaserRangeM)
         return !rear || s.distance[id]<rearRange &&
             (s.temperament!!.block>=AiControls["blockThreshold"] || c.aiSkill?.mines!=false && c.aiStyle?.mines!=false || d==AbilityKind.PATCH || d==AbilityKind.SPIKES)
     }
@@ -181,11 +181,11 @@ class AiBehaviour(private val world: World) {
         var best=-1;var bestScore=Double.NEGATIVE_INFINITY;var second=Double.NEGATIVE_INFINITY
         for(o in world.cars)if(o!==c && candidate(c,s,o.id)) {
             s.candidates=s.candidates or (1 shl o.id);val value=score(c,s,o.id);s.score[o.id]=value
-            if(attackers(o.id,c.id)>=CombatRules["aiMaxAttackers"].toInt())continue
+            if(attackers(o.id,c.id)>=CombatRules.aiMaxAttackers.toInt())continue
             if(value>bestScore){second=bestScore;bestScore=value;best=o.id} else second=max(second,value)
         }
         val old=s.target
-        val held=old>=0 && candidate(c,s,old) && attackers(old,c.id)<CombatRules["aiMaxAttackers"] &&
+        val held=old>=0 && candidate(c,s,old) && attackers(old,c.id)<CombatRules.aiMaxAttackers &&
             (world.seconds<s.commitmentUntil || best<0 || bestScore<s.score[old]+plan.margin)
         if(held){best=old;s.reason=AiReason.COMMITTED}
         else s.reason=if(best<0)if(s.candidates!=0)AiReason.SLOTS_BUSY else AiReason.NO_VISIBLE else if(s.hunting)AiReason.LEADER else if(s.phase==0)AiReason.SETTLE else AiReason.TEMPERAMENT
@@ -201,11 +201,11 @@ class AiBehaviour(private val world: World) {
             if(!held)s.reason=AiReason.WEAKNESS
         }
         val front=s.targetAlong>0 && s.targetAlong<Weapons.all[Weapons.RIVET].rangeM*(c.aiStyle?.fireRangeScale?:1.0) &&
-            s.side[best]<world.cars[best].spec.circleRadiusM+s.targetAlong*CombatRules["aiForwardConeRadians"]
+            s.side[best]<world.cars[best].spec.circleRadiusM+s.targetAlong*CombatRules.aiForwardConeRadians
         c.aiInput.fire=if(front)1.0 else 0.0
-        c.aiInput.mine=if(s.targetAlong<0 && s.targetDistance<CombatRules["aiChaserRangeM"] && c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)1.0 else 0.0
+        c.aiInput.mine=if(s.targetAlong<0 && s.targetDistance<CombatRules.aiChaserRangeM && c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)1.0 else 0.0
         val heavyScale=if(s.tactic==AiTactic.RAM_HAMMER || s.tactic==AiTactic.RANGED_PRESSURE)AiControls["heavyWeaknessRangeScale"] else 1.0
-        c.aiInput.weapon=if(front && s.targetDistance>CombatRules["aiHeavyMinRangeM"]*(c.aiStyle?.heavyRangeScale?:1.0)*heavyScale && world.combat.ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER
+        c.aiInput.weapon=if(front && s.targetDistance>CombatRules.aiHeavyMinRangeM*(c.aiStyle?.heavyRangeScale?:1.0)*heavyScale && world.combat.ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER
             else if(front && s.targetDistance<Weapons.all[Weapons.SCATTER].rangeM && world.combat.ammo(c.id,Weapons.SCATTER)>0)Weapons.SCATTER else Weapons.RIVET
         c.aiCombatReason=if(c.aiInput.mine>0)2 else if(front)1 else 0
         record(c);return true

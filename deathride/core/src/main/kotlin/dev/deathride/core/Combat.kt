@@ -8,6 +8,22 @@ import java.lang.StrictMath.sqrt
 object CombatRules {
     private val values=Content.table("combat").associate { it.getValue("key") to it.number("value") }
     operator fun get(key: String)=values.getValue(key)
+    // Per-tick rules resolved once: the step and the AI read these dozens of times a tick.
+    val startProtectionSeconds=values.getValue("startProtectionSeconds")
+    val aiForwardConeRadians=values.getValue("aiForwardConeRadians")
+    val aiMaxAttackers=values.getValue("aiMaxAttackers")
+    val aiChaserRangeM=values.getValue("aiChaserRangeM")
+    val aiChaserCarWidths=values.getValue("aiChaserCarWidths")
+    val aiHeavyMinRangeM=values.getValue("aiHeavyMinRangeM")
+    val aiMineAvoidDistanceM=values.getValue("aiMineAvoidDistanceM")
+    val aiMineAvoidMarginM=values.getValue("aiMineAvoidMarginM")
+    val wallMinImpactMps=values.getValue("wallMinImpactMps")
+    val wallDamagePerMps=values.getValue("wallDamagePerMps")
+    val wallCooldownSeconds=values.getValue("wallCooldownSeconds")
+    val ramMaxDamage=values.getValue("ramMaxDamage")
+    val ramDamagePerMps=values.getValue("ramDamagePerMps")
+    val ramCooldownSeconds=values.getValue("ramCooldownSeconds")
+    val wreckDragPerSecond=values.getValue("wreckDragPerSecond")
 }
 enum class LifeState { ACTIVE, WRECKED }
 enum class DamageKind { RIVET, HAMMER, MINE, RAM, WALL, SCATTER, ABILITY }
@@ -78,7 +94,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     private var activation=0
     var poolExhaustions=0;private set
     var oneShotKills=0;private set
-    val armingSeconds get()=max(0.0,CombatRules["startProtectionSeconds"]-world.seconds)
+    val armingSeconds get()=max(0.0,CombatRules.startProtectionSeconds-world.seconds)
     val wreckCount get(): Int { var count=0;for(i in states.indices)if(world.cars[i].entered && states[i]==LifeState.WRECKED)count++;return count }
     init {
         val point=TrackPoint()
@@ -238,17 +254,17 @@ class Combat(private val world: World,val enabled: Boolean) {
         val cx=c.cosHeading;val cy=c.sinHeading
         for(o in world.cars)if(o!==c && canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)
-            if(along>0 && along<distance && side<o.spec.circleRadiusM+along*CombatRules["aiForwardConeRadians"]) {
+            if(along>0 && along<distance && side<o.spec.circleRadiusM+along*CombatRules.aiForwardConeRadians) {
                 var attackers=0;for(i in lastTarget.indices)if(i!=c.id && lastTarget[i]==o.id && canAct(i))attackers++
-                if(attackers<CombatRules["aiMaxAttackers"]){target=o.id;distance=along}
+                if(attackers<CombatRules.aiMaxAttackers){target=o.id;distance=along}
             }
-            if(along<0 && -along<CombatRules["aiChaserRangeM"] && side<c.spec.circleRadiusM*2*CombatRules["aiChaserCarWidths"])chaser=true
+            if(along<0 && -along<CombatRules.aiChaserRangeM && side<c.spec.circleRadiusM*2*CombatRules.aiChaserCarWidths)chaser=true
         }
         lastTarget[c.id]=target
         c.aiInput.fire=if(target>=0)1.0 else 0.0
         c.aiInput.mine=if(chaser && c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)1.0 else 0.0
         c.aiCombatReason=if(c.aiInput.mine>0)2 else if(target>=0)1 else 0
-        c.aiInput.weapon=if(target>=0 && distance<Weapons.all[Weapons.SCATTER].rangeM && ammo(c.id,Weapons.SCATTER)>0)Weapons.SCATTER else if(target>=0 && distance>CombatRules["aiHeavyMinRangeM"]*(c.aiStyle?.heavyRangeScale?:1.0) && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
+        c.aiInput.weapon=if(target>=0 && distance<Weapons.all[Weapons.SCATTER].rangeM && ammo(c.id,Weapons.SCATTER)>0)Weapons.SCATTER else if(target>=0 && distance>CombatRules.aiHeavyMinRangeM*(c.aiStyle?.heavyRangeScale?:1.0) && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
     }
     fun seekRepair(c: Car,lane: Double): Double {
         c.aiPickupTarget=-1
@@ -268,9 +284,9 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(!enabled || c.aiSkill?.avoidMines==false)return lane
         for(m in mines)if(m.active && m.ageSeconds>=Weapons.all[Weapons.MINE].armingSeconds) {
             val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*c.cosHeading+dy*c.sinHeading
-            if(ahead>0 && ahead<CombatRules["aiMineAvoidDistanceM"] && dx*dx+dy*dy<CombatRules["aiMineAvoidDistanceM"]*CombatRules["aiMineAvoidDistanceM"]) {
+            if(ahead>0 && ahead<CombatRules.aiMineAvoidDistanceM && dx*dx+dy*dy<CombatRules.aiMineAvoidDistanceM*CombatRules.aiMineAvoidDistanceM) {
                 world.track.project(m.x,m.y,projection)
-                val margin=Weapons.all[Weapons.MINE].radiusM+c.spec.circleRadiusM+CombatRules["aiMineAvoidMarginM"]
+                val margin=Weapons.all[Weapons.MINE].radiusM+c.spec.circleRadiusM+CombatRules.aiMineAvoidMarginM
                 return if(projection.distance>=lane)projection.distance-margin else projection.distance+margin
             }
         }
@@ -285,13 +301,13 @@ class Combat(private val world: World,val enabled: Boolean) {
         for(i in world.cars.indices) {
             val c=world.cars[i]
             if(!canAct(i))continue
-            if(c.wallImpactMps>CombatRules["wallMinImpactMps"] && wallCooldown[i]<=0) { damage(i,(c.wallImpactMps-CombatRules["wallMinImpactMps"])*CombatRules["wallDamagePerMps"],-1,DamageKind.WALL);wallCooldown[i]=CombatRules["wallCooldownSeconds"] }
+            if(c.wallImpactMps>CombatRules.wallMinImpactMps && wallCooldown[i]<=0) { damage(i,(c.wallImpactMps-CombatRules.wallMinImpactMps)*CombatRules.wallDamagePerMps,-1,DamageKind.WALL);wallCooldown[i]=CombatRules.wallCooldownSeconds }
             for(j in i+1 until world.cars.size) {
                 val pair=i*Tuning.CAR_COUNT+j;val closing=world.ramClosingMps[pair]
                 if(closing>0 && ramCooldown[pair]<=0) {
                     val other=world.cars[j];val total=c.spec.massKg+other.spec.massKg
-                    val raw=min(CombatRules["ramMaxDamage"],closing*CombatRules["ramDamagePerMps"])
-                    damage(i,raw*other.spec.massKg/total*(if(other.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),j,DamageKind.RAM);damage(j,raw*c.spec.massKg/total*(if(c.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),i,DamageKind.RAM);ramCooldown[pair]=CombatRules["ramCooldownSeconds"]
+                    val raw=min(CombatRules.ramMaxDamage,closing*CombatRules.ramDamagePerMps)
+                    damage(i,raw*other.spec.massKg/total*(if(other.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),j,DamageKind.RAM);damage(j,raw*c.spec.massKg/total*(if(c.utilityMask and 1!=0)Consumables.all[Consumables.SPIKES].magnitude else 1.0),i,DamageKind.RAM);ramCooldown[pair]=CombatRules.ramCooldownSeconds
                 }
             }
             val input=if(c.human)inputs[i] else c.aiInput

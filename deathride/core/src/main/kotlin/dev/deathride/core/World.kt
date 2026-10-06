@@ -357,7 +357,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.trackRoute=projection.route
             c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM,projection.route)
             if(combat.wrecked(c.id)) {
-                val drag=exp(-CombatRules["wreckDragPerSecond"]*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
+                val drag=exp(-CombatRules.wreckDragPerSecond*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
                 c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)
             } else {
                 val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }

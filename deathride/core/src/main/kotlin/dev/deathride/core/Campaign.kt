@@ -14,7 +14,7 @@ object CampaignRules {
         require(get("allyRaceBenefit")==0.0) { "No unmeasured ally power is supported" }
         require(values.values.all{it.isFinite()})
         require(get("bossPerceptionM")>0 && get("bossWaitSpeedFraction") in 0.0..1.0 && get("bossWaitLaneM")>=0)
-        require(get("duelOpeningSeconds")>CombatRules["startProtectionSeconds"] && get("duelLimitSeconds")>get("duelOpeningSeconds"))
+        require(get("duelOpeningSeconds")>CombatRules.startProtectionSeconds && get("duelLimitSeconds")>get("duelOpeningSeconds"))
     }
 }
 
