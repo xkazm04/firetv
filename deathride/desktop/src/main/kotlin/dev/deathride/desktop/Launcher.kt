@@ -9,6 +9,7 @@ fun main(args: Array<String>) {
     val config = Lwjgl3ApplicationConfiguration().apply { setTitle("Death Ride"); setInitialVisible(!args.contains("--hidden")); setWindowedMode(if(args.contains("--1080"))1920 else 1280, if(args.contains("--1080"))1080 else 720); useVsync(true); setForegroundFPS(60); setIdleFPS(60) }
     val duration=args.firstOrNull{it.startsWith("--duration=")}?.substringAfter('=')?.toDoubleOrNull() ?: 0.0
     if(args.contains("--drift-lab")){config.setTitle("Death Ride Drift Lab");Lwjgl3Application(DriftLabScreen(args.contains("--drift-lab-check"),duration),config);return}
+    if(args.contains("--wheel-shots")){Lwjgl3Application(WheelShots(),config);return}
     if(args.contains("--atlas-check")){Lwjgl3Application(AtlasAudit(),config);return}
     if(args.contains("--story-art-check")){Lwjgl3Application(StoryArtAudit(),config);return}
     if(args.contains("--rework-art-check")){Lwjgl3Application(ReworkArtAudit(),config);return}

@@ -356,6 +356,13 @@ class CarPainter {
         val ax=x+a*c-b*s;val ay=y+a*s+b*c;val bx=ax+w*c;val by=ay+w*s;val cx=bx-h*s;val cy=by+h*c;val dx=ax-h*s;val dy=ay+h*c
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
+    /** Quad centred on car-frame (a,b), turned by [ang] relative to the car heading: steered front tyres. */
+    private fun quadTurned(r: ShapeRenderer,a: Float,b: Float,w: Float,h: Float,ang: Float) {
+        val ca=cos(ang);val sa=sin(ang);val cc=c*ca-s*sa;val ss=s*ca+c*sa
+        val mx=x+a*c-b*s;val my=y+a*s+b*c;val hw=w*.5f;val hh=h*.5f
+        val ux=hw*cc;val uy=hw*ss;val vx=-hh*ss;val vy=hh*cc
+        r.triangle(mx-ux-vx,my-uy-vy,mx+ux-vx,my+uy-vy,mx+ux+vx,my+uy+vy);r.triangle(mx-ux-vx,my-uy-vy,mx+ux+vx,my+uy+vy,mx-ux+vx,my-uy+vy)
+    }
     private fun body(r: ShapeRenderer,l: Float,w: Float,nose: Float) {
         quad(r,-l*.46f,-w*.5f,l*.75f,w)
         val ax=x+l*.29f*c+w*.5f*s;val ay=y+l*.29f*s-w*.5f*c
@@ -364,14 +371,25 @@ class CarPainter {
         val dx=x+l*.29f*c-w*.5f*s;val dy=y+l*.29f*s+w*.5f*c
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
-    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false) {
+    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false,wheelAngle: Float=0f,tread: Float=0f,braking: Float=0f) {
         val spec=CarShapes.forId(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
         x=px+.35f*scale;y=py-.45f*scale;c=cos(heading).toFloat();s=sin(heading).toFloat()
         r.setColor(.025f,.035f,.04f,.65f);body(r,l*1.08f,w*1.15f,spec.noseWidth.toFloat())
         x=px;y=py
         // Four tires and their sidewalls sit outside the colored shell.
         r.setColor(.035f,.045f,.05f,1f)
-        for(axle in -1..1 step 2)for(side in -1..1 step 2)quad(r,axle*l*.29f-l*.105f,side*w*.43f-w*.115f,l*.21f,w*.23f)
+        for(k in 0..1)quad(r,-l*.29f-l*.105f,(k*2-1)*w*.43f-w*.115f,l*.21f,w*.23f)
+        for(k in 0..1) {
+            val side=k*2-1
+            quadTurned(r,l*.29f,side*w*.43f,l*.21f,w*.23f,wheelAngle)
+            // Hub line and one scrolling tread block say the wheel turns and rolls; brakes darken the block.
+            val shade=.30f-braking*.14f
+            r.setColor(shade,shade+.01f,shade+.02f,1f);quadTurned(r,l*.29f,side*w*.43f,l*.17f,w*.035f,wheelAngle)
+            val o=(tread/.9f-.5f)*l*.17f
+            r.setColor(shade*.8f,shade*.8f,shade*.85f,1f)
+            quadTurned(r,l*.29f+o*kotlin.math.cos(wheelAngle),side*w*.43f+o*kotlin.math.sin(wheelAngle),l*.03f,w*.19f,wheelAngle)
+            r.setColor(.035f,.045f,.05f,1f)
+        }
         if(wrecked)r.setColor(.17f,.18f,.17f,1f) else if(flash)r.color=Color.WHITE else r.color=color;body(r,l,w*.87f,spec.noseWidth.toFloat())
         r.setColor(color.r*.55f,color.g*.55f,color.b*.55f,1f);quad(r,-l*.43f,-w*.43f,l*.72f,w*.09f)
         r.setColor(min(1f,color.r+.22f),min(1f,color.g+.22f),min(1f,color.b+.22f),1f);quad(r,-l*.40f,w*.30f,l*.65f,w*.08f)

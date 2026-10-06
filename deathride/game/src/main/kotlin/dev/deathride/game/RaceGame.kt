@@ -48,6 +48,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
     private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates)
     private val painter=CarPainter()
+    private val wheels=WheelRig(32)
     private val combatPainter=CombatPainter()
     private val obstaclePainter=ObstaclePainter()
     private val abilityPainter=AbilityPainter()
@@ -202,7 +203,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
 
     override fun create() {
         if(profiler!=null) { profileGl=ProfileGl(Gdx.gl20);Gdx.gl20=profileGl;Gdx.gl=profileGl }
-        shape=ShapeRenderer(10000); batch=SpriteBatch()
+        shape=ShapeRenderer(10000); batch=SpriteBatch(); wheels.init()
         font=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
         large=HandCutFont.create(HudTheme.TITLE)
         small=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
@@ -428,12 +429,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         combatPainter.ground(shape,world)
         effects.draw(shape,world,dt,!art.available("decals/skid"))
         shape.end();batch.begin();obstaclePainter.sprites(batch,world,art,false);atlasEffects.ground(batch,world.snapshot);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
+        for(c in world.cars)if(c.entered)wheels.update(c.id,dt.toFloat(),c.filteredSteer.toFloat(),c.vx,c.vy,c.heading,c.longitudinalAcceleration,world.combat.wrecked(c.id))
         for(c in world.cars) {
             if(!c.entered)continue
             val prev=world.previousSnapshot;val current=world.snapshot
             val x=(prev.x(c.id)+(current.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(current.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(current.heading(c.id)-prev.heading(c.id))*alpha
-            if(c.ability.definition?.kind==AbilityKind.DISPATCHER || art.carKey(c.carClass?.id?:"Line",current.healthFraction(c.id).toFloat(),current.wrecked(c.id),c.id)==null)painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=current.healthFraction(c.id).toFloat(),wrecked=world.combat.wrecked(c.id))
+            if(c.ability.definition?.kind==AbilityKind.DISPATCHER || art.carKey(c.carClass?.id?:"Line",current.healthFraction(c.id).toFloat(),current.wrecked(c.id),c.id)==null)painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=current.healthFraction(c.id).toFloat(),wrecked=world.combat.wrecked(c.id),wheelAngle=wheels.angle[c.id],tread=wheels.tread[c.id],braking=wheels.braking[c.id])
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
         combatPainter.air(shape,world,art)
@@ -448,6 +450,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val heading=prev.heading(c.id)+wrapAngle(s.heading(c.id)-prev.heading(c.id))*alpha
             val spec=CarShapes.forId(c.carClass?.id?:"Line")
             art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading,colors[c.id],s.flash(c.id)>0)
+            wheels.draw(batch,c.id,spec.id,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading)
         }
         atlasEffects.air(batch,world.snapshot,world.seconds);abilityPainter.art(batch,world.snapshot,art);batch.end()
         shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true);shape.end()
@@ -749,5 +752,5 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(y in 0 until 240)for(x in 0 until 240)pix.drawPixel(x,y,if(matrix[x,y])0x0b141eff else 0xffffffff.toInt())
         qr=Texture(pix); pix.dispose()
     }
-    override fun dispose() { if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};server.stop(); storyArt.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
+    override fun dispose() { if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};server.stop(); storyArt.dispose();wheels.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
 }
