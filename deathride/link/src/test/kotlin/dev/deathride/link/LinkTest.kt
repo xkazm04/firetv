@@ -81,7 +81,7 @@ class LinkTest {
             host.suspendLink();host.consume(0,host.nowMs(),input);assertEquals(0.0,input.ability); assertFalse(host.running); host.start(); waitReady()
             val returned=Listener(); val again=connect(returned); again.sendText("""{"t":"hello","token":"$token"}""",true).join(); assertEquals(0,returned.next("welcome")["slot"]!!.jsonPrimitive.int)
             host.eventType="ELIMINATION";host.raceEntrants=2;host.raceLaps=0
-            host.audioJson="""{"lastNarration":"voice.announcer.duel","cap":8}"""
+            host.audioJson={"""{"lastNarration":"voice.announcer.duel","cap":8}"""}
             val response=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:$port/stats")).build(),HttpResponse.BodyHandlers.ofString())
             assertEquals(200,response.statusCode()); assertTrue(Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject["connected"]!!.jsonPrimitive.boolean)
             val stats=Json.parseToJsonElement(response.body()).jsonObject

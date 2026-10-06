@@ -58,9 +58,15 @@ class Slot(val id: Int) {
     @Volatile var effectiveMine=0.0
     @Volatile var effectiveAbility=0.0
     @Volatile var combatJson="{}"
+    /** Lean combat object for the phone hud; empty means send [combatJson]. */
+    @Volatile var combatHud=""
+    /** Full combat object for /stats, built by the reader; null means [combatJson]. */
+    @Volatile var combatFull: (()->String)?=null
     @Volatile var layout="Drive"
     @Volatile var mirrored=false
     @Volatile var hudDelta=false
+    /** The phone page reported itself hidden: its hud is paused until it is visible again. */
+    @Volatile var hidden=false
     @Volatile var hudMessages=0L
     @Volatile var hudCharacters=0L
     @Volatile var hudFullSnapshots=0L
@@ -84,9 +90,10 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     @Volatile var feel=FeelProfiles.default
     @Volatile var phase="lobby"
     @Volatile var raceSeconds=0.0
-    @Volatile var combatSummaryJson="{}"
-    @Volatile var trafficJson="[]"
-    @Volatile var pickupsJson="[]"
+    /** The /stats and metrics-log fields are built by the reader (an IO thread, 0.1 Hz or on request), never per frame on the render thread. Suppliers must tolerate a racing read. */
+    @Volatile var combatSummaryJson: ()->String={"{}"}
+    @Volatile var trafficJson: ()->String={"[]"}
+    @Volatile var pickupsJson: ()->String={"[]"}
     @Volatile var frameNumber=0L
     @Volatile var flashFrames=0L
     @Volatile var serverStatus="Opening port $port..."
@@ -96,15 +103,20 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     @Volatile var eventType="LAPS"
     @Volatile var raceEntrants=6
     @Volatile var sceneryReady=false
-    @Volatile var artJson="{}"
-    @Volatile var audioJson="{}"
+    @Volatile var artJson: ()->String={"{}"}
+    @Volatile var audioJson: ()->String={"{}"}
     @Volatile var address=lanAddress()
     @Volatile var pin=(1000+SecureRandom().nextInt(9000)).toString()
     private var engine: ApplicationEngine?=null
     private var networkJob: Job?=null
     private val origin=System.nanoTime()
     private val errors=CoroutineExceptionHandler { _, e -> running=false; serverStatus="Link error: ${e.javaClass.simpleName}"; log(serverStatus) }
-    private val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO+errors)
+    /** Link work runs below the render thread's priority (ART maps this to a positive nice value) so input bursts and JSON do not take its core. */
+    private val linkDispatcher=java.util.concurrent.Executors.newCachedThreadPool(object: java.util.concurrent.ThreadFactory {
+        private val count=java.util.concurrent.atomic.AtomicInteger()
+        override fun newThread(r: Runnable)=Thread(r,"deathride-link-${count.incrementAndGet()}").apply{isDaemon=true;priority=Thread.NORM_PRIORITY-2}
+    }).asCoroutineDispatcher()
+    private val scope=CoroutineScope(SupervisorJob()+linkDispatcher+errors)
     fun nowMs()=(System.nanoTime()-origin)/1e6
     fun pairingUrl()="http://$address:$port/?pin=$pin"
     @Synchronized private fun claim(token: String, providedPin: String, profile: String): Slot? {
@@ -130,7 +142,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
                 if(!free) { serverStatus="Port $port busy; retry ${it+1}/10"; delay(300); return@repeat }
-                val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors) {
+                val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors+linkDispatcher) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondPacked(htmlPacked,ContentType.Text.Html) }
@@ -165,6 +177,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val inputSample=if(profileInputs!=null)DoubleArray(9) else null
         var previousInputNs=0L
         var hudJob: Job?=null
+        val hidden=java.util.concurrent.atomic.AtomicBoolean(false);val resume=java.util.concurrent.atomic.AtomicBoolean(false)
         val inputPacket=InputPacket();val ack=StringBuilder(96)
         try {
             withTimeout(10000) {
@@ -180,16 +193,18 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             s.hudDelta=deltaHud
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")
             hudJob=socket.launch {
-                val metadata=HudMetadata(deltaHud)
+                var metadata=HudMetadata(deltaHud)
                 // Two reused builders: an unchanged snapshot is not resent (only a 1 s heartbeat), and nothing is allocated per tick but the frame.
                 var cur=StringBuilder(2048);var last=StringBuilder(2048);var lastSentMs=Double.NEGATIVE_INFINITY
                 while(isActive && generation==s.generation) {
+                    if(hidden.get()) { delay(100);continue } // a locked or backgrounded phone: no hud until it reports visible
+                    if(resume.getAndSet(false)) { metadata=HudMetadata(deltaHud);lastSentMs=Double.NEGATIVE_INFINITY } // resume with a full snapshot
                     val currentPhase=phase
                     val fullBefore=metadata.fullSnapshots
                     val now=nowMs()
                     val meta=metadata.json(currentPhase,now,hostCareerJson,s.careerJson,s.garageJson,s.carJson,trackJson,feel.json)
                     cur.setLength(0)
-                    cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatJson)
+                    cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatHud.ifEmpty{s.combatJson})
                         .append(",\"surface\":\"").append(surface.id).append("\",\"drifting\":").append(s.drifting).append(",\"driftQuality\":").appendFixed(s.driftQuality,3).append(",\"slipRadians\":").appendFixed(s.slipRadians,3)
                         .append(",\"spunOut\":").append(s.spunOut).append(",\"loadTransfer\":").appendFixed(s.loadTransfer,3).append(",\"surfaceId\":\"").append(s.surfaceId).append("\",\"impact\":").appendFixed(s.impact,3)
                         .append(",\"phase\":\"").append(currentPhase).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants).append(",\"raceLaps\":").append(raceLaps)
@@ -231,6 +246,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 val now=nowMs()
                 when(msg.text("t")) {
                     "ping" -> { val ts=msg.number("ts"); if(ts.isFinite())socket.send("{\"t\":\"pong\",\"ts\":$ts,\"tvNow\":$now}") }
+                    "vis" -> { val hide=msg["v"]?.jsonPrimitive?.intOrNull==0;s.hidden=hide;if(hide)hidden.set(true) else if(hidden.getAndSet(false))resume.set(true) }
                     "sync" -> { val value=msg.number("offset"); if(value.isFinite()) { offset=value; calibrated=true; s.clockSynced=true } }
                     "i" -> {
                         val q=msg["q"]?.jsonPrimitive?.longOrNull ?: continue
@@ -238,7 +254,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0,
                             msg["f"]?.jsonPrimitive?.intOrNull==1,now,receiveNs)
                     }
-                    "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
+                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices && (phase=="lobby" || phase=="results")) { Courses.course(index);trackRequest.set(index) } } // bake on this IO thread so the render thread only swaps
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
                     "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career"))s.carRequest.set(index) }
                     "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3)
@@ -263,7 +279,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 }
             }
         } catch(_: Exception) { /* An individual phone cannot kill the host. */ }
-        finally { hudJob?.cancel(); val s=slot; if(s!=null && generation==s.generation) s.connected=false }
+        finally { hudJob?.cancel(); val s=slot; if(s!=null && generation==s.generation) { s.connected=false;s.hidden=false } }
     }
     fun consume(id: Int, now: Double, out: InputFrame,recordSimulationAge: Boolean=true) {
         val slot=slots[id]
@@ -276,15 +292,15 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     // Keep each Android log line below its 4 KB payload limit. Full car/profile state is on /stats.
     private fun metricsJson(): String {
         val now=nowMs()
-        return "{\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"inputAgeMs\":[${metrics.inputAgeMs.joinToString(","){it.json(now)}}],\"combatSummary\":$combatSummaryJson}"
+        return "{\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"inputAgeMs\":[${metrics.inputAgeMs.joinToString(","){it.json(now)}}],\"combatSummary\":${combatSummaryJson()}}"
     }
     fun statsJson(): String {
         val now=nowMs(); val runtime=Runtime.getRuntime()
         val sb=StringBuilder(3000)
-        sb.append("{\"audio\":$audioJson,\"art\":$artJson,\"traffic\":$trafficJson,\"pickups\":$pickupsJson,\"combatSummary\":$combatSummaryJson,\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"raceSeconds\":$raceSeconds,\"sceneryReady\":$sceneryReady,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
+        sb.append("{\"audio\":${audioJson()},\"art\":${artJson()},\"traffic\":${trafficJson()},\"pickups\":${pickupsJson()},\"combatSummary\":${combatSummaryJson()},\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"raceSeconds\":$raceSeconds,\"sceneryReady\":$sceneryReady,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"hudDelta\":${s.hudDelta},\"hudMessages\":${s.hudMessages},\"hudCharacters\":${s.hudCharacters},\"hudFullSnapshots\":${s.hudFullSnapshots},\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveBrake\":${s.effectiveBrake},\"effectiveDrift\":${s.effectiveDrift},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
+            sb.append("{\"slot\":$i,\"hudDelta\":${s.hudDelta},\"hudMessages\":${s.hudMessages},\"hudCharacters\":${s.hudCharacters},\"hudFullSnapshots\":${s.hudFullSnapshots},\"hidden\":${s.hidden},\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveBrake\":${s.effectiveBrake},\"effectiveDrift\":${s.effectiveDrift},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatFull?.invoke()?:s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
         }
         sb.append("]}"); return sb.toString()
     }
@@ -292,10 +308,10 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         running=false; networkJob?.cancel(); networkJob=null; engine?.stop(100,500); engine=null
         for(slot in slots) { slot.generation++; slot.connected=false; slot.input.newConnection() }
     }
-    fun stop() { suspendLink(); scope.cancel() }
+    fun stop() { suspendLink(); scope.cancel();linkDispatcher.close() }
     companion object {
         // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car.
-        private val routesJson by lazy { Courses.all.joinToString(",","[","]"){c->
+        private val routesJson by lazy { Courses.playable.joinToString(",","[","]"){c->
             "{\"id\":\"${c.id}\",\"lengthM\":${c.lengthM},\"startM\":${c.startFraction*c.lengthM},\"gridLanes\":[${c.grid.joinToString(","){it.laneM.toString()}}],\"points\":["+(0..c.count).joinToString(","){i->"[${c.x[i]},${c.y[i]},${c.arc[i]},${c.curvature[i]},${c.surfaces[i].gripScale}]"}+"]}"
         } }
         const val HUD_HEARTBEAT_MS=1000.0

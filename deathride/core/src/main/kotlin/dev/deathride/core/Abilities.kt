@@ -197,6 +197,13 @@ class Abilities(private val world: World,var enabled: Boolean) {
         }
         return h
     }
+    /** The fields the phone hud reads; /stats keeps the full [json]. */
+    fun hudJson(id: Int): String {
+        val c=world.cars[id];val s=c.ability;val d=s.definition?:return "null"
+        val available=enabled && world.combat.canAct(id)
+        val ready=available && world.combat.armingSeconds<=0 && !s.committed && s.cooldownSeconds<=1e-9 && s.energy+1e-9>=d.energyCost
+        return "{\"id\":\"${d.id}\",\"name\":\"${d.name}\",\"phase\":\"${s.phase}\",\"cooldownSeconds\":${s.cooldownSeconds},\"energy\":${s.energy},\"energyCapacity\":${d.energyCapacity},\"energyCost\":${d.energyCost},\"ready\":$ready,\"available\":$available}"
+    }
     fun json(id: Int): String {
         val c=world.cars[id];val s=c.ability;val d=s.definition?:return "null"
         val available=enabled && world.combat.canAct(id)
