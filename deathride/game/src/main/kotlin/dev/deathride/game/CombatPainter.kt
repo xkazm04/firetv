@@ -13,9 +13,9 @@ class CombatPainter {
             r.rectLine(x+cos(a).toFloat()*radius,y+sin(a).toFloat()*radius,x+cos(b).toFloat()*radius,y+sin(b).toFloat()*radius,width)
         }
     }
-    fun ground(r: ShapeRenderer,w: World) {
+    fun ground(r: ShapeRenderer,w: World,view: ViewBounds=ViewBounds.ALL) {
         val combat=w.combat
-        for(p in combat.pickups)if(p.cooldownSeconds<=0) {
+        for(p in combat.pickups)if(p.cooldownSeconds<=0 && view.sees(p.x,p.y,p.type.radiusM+1.5)) {
             val x=p.x.toFloat();val y=p.y.toFloat();val radius=p.type.radiusM.toFloat()
             r.setColor(.015f,.035f,.04f,.6f);r.circle(x+.3f,y-.4f,radius,12)
             if(p.type.id=="repair")r.setColor(.22f,.84f,.57f,.85f) else r.setColor(.45f,.76f,1f,.85f)
@@ -26,7 +26,7 @@ class CombatPainter {
         }
         val mine=Weapons.all[Weapons.MINE]
         val mineRadius=mine.radiusM.toFloat();val bodyScale=min(1f,mineRadius/1.3f)
-        for(m in combat.mines)if(m.active) {
+        for(m in combat.mines)if(m.active && view.sees(m.x,m.y,mine.radiusM+1.0)) {
             val x=m.x.toFloat();val y=m.y.toFloat();val armed=m.ageSeconds>=mine.armingSeconds
             val pulse=(.5+.5*sin(w.seconds*12)).toFloat()
             if(armed)r.setColor(1f,.30f,.13f,.18f) else r.setColor(1f,.74f,.26f,.12f)

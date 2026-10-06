@@ -405,12 +405,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(smokeTime>9) { capture("race.png"); logger("desktop smoke complete; GL ${Gdx.gl.glGetString(GL20.GL_RENDERER)}; hash ${world.stateHash()}"); Gdx.app.exit() }
         }
         profiler?.finish(phase=="race" && scene.ready,world.entrantCount-world.resolved,
-            profileGl?.draws?:0,profileGl?.binds?:0,profileGl?.uploads?:0,atlasEffects.activeCount+atmosphere.activeCount)
+            profileGl?.draws?:0,profileGl?.binds?:0,profileGl?.uploads?:0,atlasEffects.activeCount+atmosphere.activeCount,profileGl?.indices?:0)
     }
     private fun capture(name: String) { val p=Pixmap.createFromFrameBuffer(0,0,Gdx.graphics.width,Gdx.graphics.height); val writer=PixmapIO.PNG(); writer.setFlipY(true); writer.write(Gdx.files.local("../evidence/$name"),p); writer.dispose(); p.dispose() }
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
     private lateinit var carSprites: CarSprites
+    private val viewBounds=ViewBounds()
     private fun drawWorld(dt: Double) {
         val course=courseCatalog[selectedTrack]
         val alpha=(accumulator/Tuning.STEP_SECONDS).coerceIn(0.0,1.0)
@@ -435,18 +436,19 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         } else { focusX=(course.minX+course.maxX)*.5;focusY=(course.minY+course.maxY)*.5;cameraZoom=VisualTuning["soloPixelsPerM"] }
         if(phase!="lobby")lobbyCamera=false
         worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
+        viewBounds.set(focusX,focusY,pixelsPerM)
         profiler?.mark(12,"DR.effectsUpdate")
         atlasEffects.update(world.snapshot,dt);atmosphere.update(dt)
         profiler?.mark(13,"DR.sceneryDraw")
-        batch.projectionMatrix=worldMatrix;batch.begin();scene.draw(batch);batch.end()
+        batch.projectionMatrix=worldMatrix;batch.begin();scene.draw(batch,viewBounds);batch.end()
         profiler?.mark(14,"DR.carsEffects")
         Gdx.gl.glEnable(GL20.GL_BLEND);Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA)
         shape.projectionMatrix=worldMatrix;shape.begin(ShapeRenderer.ShapeType.Filled)
         scene.drawRoadMarks(shape)
-        obstaclePainter.shapes(shape,world,art,false)
-        combatPainter.ground(shape,world)
+        obstaclePainter.shapes(shape,world,art,false,viewBounds)
+        combatPainter.ground(shape,world,viewBounds)
         effects.draw(shape,world,dt,!art.available("decals/skid"))
-        shape.end();batch.begin();obstaclePainter.sprites(batch,world,art,false);atlasEffects.ground(batch,world.snapshot);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.end();batch.begin();obstaclePainter.sprites(batch,world,art,false,viewBounds);atlasEffects.ground(batch,world.snapshot,viewBounds);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
         for(c in world.cars)if(c.entered)wheels.update(c.id,dt.toFloat(),c.filteredSteer.toFloat(),c.vx,c.vy,c.heading,c.longitudinalAcceleration,world.combat.wrecked(c.id))
         for(c in world.cars) {
             if(!c.entered)continue
@@ -466,9 +468,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.end()
         batch.begin()
         carSprites.draw(batch,world,alpha)
-        atlasEffects.air(batch,world.snapshot,world.seconds);abilityPainter.art(batch,world.snapshot,art);batch.end()
-        shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true);shape.end()
-        batch.begin();obstaclePainter.sprites(batch,world,art,true);batch.end()
+        atlasEffects.air(batch,world.snapshot,world.seconds,viewBounds);abilityPainter.art(batch,world.snapshot,art);batch.end()
+        shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true,viewBounds);shape.end()
+        batch.begin();obstaclePainter.sprites(batch,world,art,true,viewBounds);batch.end()
     }
     private fun drawOverlay() {
         shape.projectionMatrix=view.camera.combined
