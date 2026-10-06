@@ -174,6 +174,17 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         batch.color=Color.WHITE
         draw(batch,key,x,y,scale*r.image.regionWidth,scale*r.image.regionHeight,(heading*180/Math.PI).toFloat())
     }
+    /** Atlas page of a sprite, so callers can batch by texture. */
+    fun carPage(key: String): Texture? = region(key)?.image?.texture
+    /** The measured body box of a car sprite as drawn by [car]: out = forward offset, left offset (both from the car position),
+     *  half length, half width, in metres. False when the sprite or its body bounds are unavailable. */
+    fun carBody(key: String,length: Float,width: Float,out: FloatArray): Boolean {
+        val r=region(key)?:return false;val b=r.bodyBounds?:return false
+        val scale=fitScale(length,width,(b[2]-b[0]).toFloat(),(b[3]-b[1]).toFloat())
+        out[0]=((b[0]+b[2])*.5f-r.pivotX)*scale;out[1]=((r.image.regionHeight-(b[1]+b[3])*.5f)-r.pivotY)*scale
+        out[2]=(b[2]-b[0])*.5f*scale;out[3]=(b[3]-b[1])*.5f*scale
+        return true
+    }
     fun selectBackdrop(key: String?) {
         val next=key?:"";if(next==backdropKey)return
         backdrop?.let{textureBytes-=it.width.toLong()*it.height*4;it.dispose()};backdrop=null;backdropKey=next

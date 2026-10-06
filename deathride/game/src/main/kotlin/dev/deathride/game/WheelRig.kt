@@ -146,6 +146,19 @@ class WheelRig(slots: Int=16) {
         batch.setColor(1f,1f,1f,1f)
     }
 
+    /** World centres of the two front-tyre overlays (written to xs/ys at [at] and [at]+1) and one radius that bounds every rect [draw] paints around them. */
+    fun tyreDiscs(id: String,length: Float,width: Float,x: Float,y: Float,heading: Double,xs: FloatArray,ys: FloatArray,at: Int): Float {
+        val g=Geometry.of(id)
+        val axle=g.axleX*length;val half=g.halfTrack*width
+        val ch=cos(heading).toFloat();val sh=sin(heading).toFloat()
+        for(k in 0..1) {
+            val ly=(k*2-1)*half
+            xs[at+k]=x+axle*ch-ly*sh;ys[at+k]=y+axle*sh+ly*ch
+        }
+        val l=g.tyreLength*length*1.08f;val w=g.tyreWidth*width*1.12f
+        return .5f*sqrt(l*l+w*w)+.05f
+    }
+
     /** Front tyre centre/size as fractions of the drawn body length/width (x forward of centre, y per side). */
     class Geometry(val axleX: Float,val halfTrack: Float,val tyreLength: Float,val tyreWidth: Float) {
         companion object {
