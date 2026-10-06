@@ -117,14 +117,15 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     fun obstacleKey(id: String,fallback: String)=environmentObstacles[id]?.takeIf{available(it)}?:fallback
     fun duration(key: String)=(entries[key]?.durations?.sum()?:0)/1000.0
     /** Fixed corner widths from the measured transparent opening; labels live above this layer. */
-    fun frame(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float): Boolean {
+    fun frame(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float,cornerScale: Float=0f): Boolean {
         val r=region(key)?:return false
         val bounds=r.interior?:return false
-        val patch=patches.getOrPut(key) {
+        // [cornerScale] lets large TV panels show the chunky Hot Ink border; 0 keeps the thin HUD default.
+        val patch=patches.getOrPut(if(cornerScale>0f)"$key@$cornerScale" else key) {
             NinePatch(r.image,bounds[0],r.image.regionWidth-bounds[2],bounds[1],r.image.regionHeight-bounds[3]).apply {
                 // Authoring cells include transparent margins. Bound corners so thin meters
                 // never acquire a negative stretchable centre or cover adjacent text.
-                val scale=if(r.image.regionWidth>=256).12f else .5f
+                val scale=if(cornerScale>0f)cornerScale else if(r.image.regionWidth>=256).12f else .5f
                 scale(scale,scale)
             }
         }

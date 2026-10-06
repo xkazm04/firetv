@@ -40,7 +40,7 @@ class AtlasAudit: ApplicationAdapter() {
             for((row,car) in dev.deathride.core.CarCatalog.all.withIndex())for(col in 0..6) {
                 val hp=when(col){1->.5f;2->.2f;else->1f}
                 val key=a.carKey(car.id,hp,col==3,if(col>=4)col-3 else 0)?:error("missing ${car.id} frame $col")
-                a.car(batch,key,95f+col*180,675f-row*67,155f,57f,0.0,Color.WHITE,false)
+                a.car(batch,key,95f+col*180,675f-row*67,155f,57f,0.0)
             }
             batch.end()
             check(a.carKey("missing",1f,false)==null)

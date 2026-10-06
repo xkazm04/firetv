@@ -87,6 +87,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var focusX=0.0
     private var focusY=0.0
     private var cameraZoom=1.0
+    private var lobbyCamera=false
     private var smokeTime=0.0
     private var smokeStarted=false
     private var captured=false
@@ -420,7 +421,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             var target=(VisualTuning["soloPixelsPerM"]-speed/count*VisualTuning["speedZoomPerMps"]).coerceAtLeast(VisualTuning["minPixelsPerM"])
             if(count>1)target=min(target,min(1100/(maxX-minX+VisualTuning["sharedPaddingM"]),480/(maxY-minY+VisualTuning["sharedPaddingM"])))
             cameraZoom+=(target-cameraZoom)*ease;pixelsPerM=cameraZoom
+        } else if(phase=="lobby") {
+            // Lobby backdrop: a close, live look at the demo pack on the chosen region's ground, framed by the centre window.
+            var n=0;var x=0.0;var y=0.0
+            for(c in world.cars)if(c.entered){x+=c.x;y+=c.y;n++}
+            if(n>0){x/=n;y/=n}else{x=(course.minX+course.maxX)*.5;y=(course.minY+course.maxY)*.5}
+            if(!lobbyCamera){focusX=x;focusY=y;lobbyCamera=true} else {val ease=1-exp(-dt*VisualTuning["cameraResponsePerSecond"]);focusX+=(x-focusX)*ease;focusY+=(y-focusY)*ease}
+            cameraZoom=LOBBY_PIXELS_PER_M;pixelsPerM=cameraZoom
         } else { focusX=(course.minX+course.maxX)*.5;focusY=(course.minY+course.maxY)*.5;cameraZoom=VisualTuning["soloPixelsPerM"] }
+        if(phase!="lobby")lobbyCamera=false
         worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
         profiler?.mark(12,"DR.effectsUpdate")
         atlasEffects.update(world.snapshot,dt);atmosphere.update(dt)
@@ -492,15 +501,26 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         when(phase) {
             "lobby" -> {
-                panel(44f,96f,390f,506f);panel(455f,96f,781f,506f)
-                shape.color=accent;shape.rect(65f,129f,345f,42f)
+                // Three columns: pairing panel, a live window onto the chosen region, car panel. Opaque margins keep the world inside the window.
+                shape.color=bg;shape.rect(0f,80f,44f,534f);shape.rect(1236f,80f,44f,534f);shape.rect(44f,80f,1192f,16f);shape.rect(44f,602f,1192f,12f)
+                panel(44f,96f,360f,506f);panel(876f,96f,360f,506f)
+                // Lesson strip and campaign card sit on the world with a translucent / solid Hot Ink underlay.
+                shape.setColor(.09f,.08f,.07f,.88f);shape.rect(414f,498f,452f,88f)
+                shape.color=HudTheme.rust;shape.rect(416f,120f,448f,92f)
+                shape.color=accent;shape.rect(64f,130f,320f,50f)
                 val car=CarCatalog.all[selectedCars[0]]
+                val spec=CarShapes.forId(car.id)
+                // Turntable: seat-coloured ring so the livery identity reads even on damaged or procedural cars.
+                shape.setColor(.13f,.11f,.10f,1f);shape.rect(896f,392f,320f,110f)
+                shape.color=colors[0];shape.ellipse(1056f-128f,447f-40f,256f,80f)
+                shape.setColor(.16f,.14f,.12f,1f);shape.ellipse(1056f-122f,447f-35f,244f,70f)
                 for(i in CarCatalog.statNames.indices) {
                     val value=car.stat(CarCatalog.statNames[i],profiles[0].bonuses())
-                    val x=if(i<4)475f else 815f;val y=416f-(i%4)*55
-                    bar(x,y,210f,value.toFloat()/CarCatalog.statMax,if(weakStats[i])warning else accent)
+                    val y=330f-i*29f
+                    shape.color=road;shape.rect(1015f,y+5f,158f,14f)
+                    shape.color=if(weakStats[i])warning else accent;shape.rect(1015f,y+5f,158f*(value.toFloat()/CarCatalog.statMax).coerceIn(0f,1f),14f)
                 }
-                if(previewKey()==null)painter.draw(shape,world.cars[0],1120f,541f,0.0,colors[0],false,10f)
+                if(previewKey()==null)painter.draw(shape,world.cars[0],1056f,447f,0.0,colors[0],false,min(24f,160f/spec.lengthM.toFloat()))
             }
             "garage" -> {
                 panel(44f,96f,1192f,506f)
@@ -530,10 +550,16 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(Presentation.FOLLOW_CAMERA && racing && scene.ready)drawMinimap()
         shape.end()
         batch.projectionMatrix=view.camera.combined;batch.begin();batch.color=Color.WHITE
-        fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument") {art.frame(batch,key,x,y,w,h)}
+        fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument",corner: Float=0f) {art.frame(batch,key,x,y,w,h,corner)}
         when(phase) {
-            "lobby" -> {frame(44f,96f,390f,506f,"hud/frame-panel");frame(455f,96f,781f,506f,"hud/frame-panel");frame(60f,124f,355f,52f,"hud/frame-button")
-                previewKey()?.let{key->val spec=CarShapes.forId(world.cars[0].carClass?.id?:"Line");art.car(batch,key,1120f,541f,spec.lengthM.toFloat()*10f,spec.widthM.toFloat()*10f,0.0)}}
+            "lobby" -> {
+                previewKey()?.let{key->val spec=CarShapes.forId(world.cars[0].carClass?.id?:"Line");val s=min(34f,200f/spec.lengthM.toFloat());art.car(batch,key,1056f,447f,spec.lengthM.toFloat()*s,spec.widthM.toFloat()*s,0.0)}
+                frame(44f,96f,360f,506f,"hud/frame-panel",.2f);frame(876f,96f,360f,506f,"hud/frame-panel",.2f)
+                frame(404f,96f,472f,506f,"hud/frame-instrument",.2f)
+                frame(892f,388f,328f,118f,"hud/frame-instrument",.14f)
+                frame(58f,124f,332f,62f,"hud/frame-button",.14f);frame(410f,114f,460f,104f,"hud/frame-button",.14f)
+                for(i in CarCatalog.statNames.indices)frame(1010f,330f-i*29f,168f,24f,"hud/frame-meter")
+            }
             "garage" -> {
                 frame(44f,96f,1192f,506f,"hud/frame-panel");frame(61f,453f-selectedPart*52,513f,56f);frame(621f,197f,585f,58f,"hud/frame-button")
                 art.draw(batch,"hud/icon-engine",548f,480f,32f,32f)
@@ -571,7 +597,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 if(Presentation.FOLLOW_CAMERA && scene.ready)frame(1044f,394f,200f,150f,"hud/frame-dial")
             }
         }
-        if(phase=="lobby" && qr!=null)batch.draw(qr,67f,265f,164f,164f)
+        if(phase=="lobby" && qr!=null)batch.draw(qr,64f,266f,150f,150f)
         text.draw(batch);headline.draw(batch);detail.draw(batch);batch.end()
     }
     /** Atlas key for the lobby preview car (clean frame, seat 0 livery), or null for the procedural fallback. */
@@ -631,7 +657,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="race") {
             title("DEATH RIDE",42f,699f)
             label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
-            label("BACK: LOBBY   /   ${server.feel.id}",810f,691f)
+            label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else "BACK: LOBBY   /   ${server.feel.id}",810f,691f)
             label(if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(scene.ready)muted else accent)
         }
         if(phase=="race" || phase=="countdown" || phase=="results") {
@@ -641,30 +667,37 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 label(if(world.combat.wrecked(c.id))"WRECKED" else if(world.eventType==EventType.ELIMINATION)"HP ${world.combat.health(c.id).toInt()} / DUEL" else "HP ${world.combat.health(c.id).toInt()}  L${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",x,39f)
             }
         } else {
-            label("P1 ${CarCatalog.all[profiles[0].selectedCar].id} / ${profiles[0].credits} CR",42f,55f,accent)
-            label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,55f)
-            label(if(audio.gain("master")==0f)"M / Y: SOUND OFF" else "M / Y: SOUND ON",995f,55f)
+            label("P1 ${CarCatalog.all[profiles[0].selectedCar].id} / ${profiles[0].credits} CR",42f,if(phase=="lobby")62f else 55f,accent)
+            label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,if(phase=="lobby")62f else 55f)
+            label(if(audio.gain("master")==0f)"M / Y: SOUND OFF" else "M / Y: SOUND ON",995f,if(phase=="lobby")62f else 55f)
         }
         when(phase) {
             "lobby" -> {
                 val car=CarCatalog.all[selectedCars[0]]
-                title("PAIR + DRIVE",66f,578f)
-                detail.wrapped("1  Same Wi-Fi as this TV\n2  Scan the code with your phone\n3  Hold GO. Find the first corner.",67f,517f,342f,27f)
-                updateQr();label("PIN ${server.pin}",250f,420f,accent)
-                detail.wrapped("No app to install. Two phone seats. Your car stays yours.",250f,379f,160f,27f)
-                label(addressLabel,67f,246f)
-                label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,67f,211f,accent)
-                label("SELECT / PRACTICE",109f,160f,bg)
-                label("UP Career / PLAY Garage",67f,128f)
-                title(car.id,477f,578f);detail.wrapped(car.role,477f,528f,536f)
+                // Left column: pair. Centre: lesson caption + campaign card. Right: car. Hints share one tidy footer row.
+                title("SCAN + GO",64f,578f)
+                detail.setColor(HudTheme.bone);detail.wrapped("1  Same Wi-Fi as this TV\n2  Scan with your phone\n3  Hold GO. Find the first corner.",64f,517f,320f,27f)
+                updateQr();label("PIN ${server.pin}",232f,408f,accent)
+                detail.setColor(muted);detail.wrapped("No app needed.\nTwo phone seats.",232f,378f,152f,25f)
+                label(addressLabel,64f,246f)
+                label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,64f,214f,accent)
+                label("SELECT / PRACTICE",124f,168f,bg)
+                title(car.id,896f,578f);detail.setColor(muted);detail.wrapped(car.role,896f,534f,320f)
+                label("P1",904f,494f,colors[0])
+                val ability=AbilityCatalog.byCar[car.id]
+                if(ability!=null)label("SIGNATURE / ${ability.name}",896f,380f,accent)
                 for(i in CarCatalog.statNames.indices) {
                     val stat=CarCatalog.statNames[i];val value=car.stat(stat,profiles[0].bonuses())
-                    label("$stat  $value / ${CarCatalog.statMax}",if(i<4)475f else 815f,463f-(i%4)*55,if(weakStats[i])warning else muted)
+                    val y=351f-i*29f;val c=if(weakStats[i])warning else HudTheme.bone
+                    label(stat,896f,y,c);label("$value",1186f,y,c)
                 }
-                val ability=AbilityCatalog.byCar[car.id]
-                if(ability!=null)label("SIGNATURE / ${ability.name}",477f,236f,accent)
-                detail.setColor(muted);detail.wrapped(courseCatalog[selectedTrack].lesson,477f,204f,730f,25f)
-                label("DOWN Car / MENU Circuit / LEFT-RIGHT Feel",477f,133f)
+                detail.setColor(HudTheme.bone);detail.wrapped(courseCatalog[selectedTrack].lesson,424f,574f,432f,24f)
+                val p=profiles[0];val event=Career.events[p.careerRound]
+                label("UP  /  CAREER",432f,202f,HudTheme.bone)
+                label((if(p.careerCleared>0)"ROUND ${p.careerRound+1} OF ${Career.events.size}" else "NEW SEASON")+"  /  "+event.name,432f,176f,HudTheme.bone)
+                label(if(p.campaign.debt>0)"LEAGUE DEBT ${p.campaign.debt} CR" else "THE ASH CIRCUIT",432f,150f,HudTheme.bone)
+                val hints=arrayOf("DOWN  CAR","MENU  CIRCUIT","L / R  FEEL","PLAY  GARAGE","BACK  EXIT")
+                for(i in hints.indices)label(hints[i],42f+i*238f,32f)
             }
             "garage" -> {
                 val p=profiles[0];val offer=Garage.offer(p,selectedPart);val part=Parts.all[selectedPart]
@@ -800,3 +833,4 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     override fun dispose() { if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};server.stop(); storyArt.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
 }
+private const val LOBBY_PIXELS_PER_M=9.0
