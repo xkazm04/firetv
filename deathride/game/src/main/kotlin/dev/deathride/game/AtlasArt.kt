@@ -165,15 +165,13 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         val key=if(state==0)liveryKeys[id]?.get(Math.floorMod(livery,4)) else carKeys[id]?.get(state)
         return key?.takeIf{entries[it]?.let{e->e.approved || e.referenceSelected}==true && available(it)}
     }
-    fun car(batch: Batch,key: String,x: Float,y: Float,length: Float,width: Float,heading: Double,tint: Color,flash: Boolean) {
+    /** Sprite bodies are often shorter than the contact shape (Needle 5.6 vs 6.6 m): fit the body to the contact LENGTH,
+     *  keeping aspect, but never let the body overhang the contact width by more than [WIDTH_SLACK]. */
+    fun car(batch: Batch,key: String,x: Float,y: Float,length: Float,width: Float,heading: Double) {
         val r=region(key)?:return;val body=r.bodyBounds?:return
-        val scale=minOf(length/(body[2]-body[0]),width/(body[3]-body[1]))
-        val cellLength=scale*r.image.regionWidth;val cellWidth=scale*r.image.regionHeight
+        val scale=fitScale(length,width,(body[2]-body[0]).toFloat(),(body[3]-body[1]).toFloat())
         batch.color=Color.WHITE
-        draw(batch,key,x,y,cellLength,cellWidth,(heading*180/Math.PI).toFloat())
-        // Only a separately authored body-panel mask is tinted: rubber/glass/outline keep their roles.
-        if(available("$key-tint")){batch.color=if(flash)Color.WHITE else tint;draw(batch,"$key-tint",x,y,cellLength,cellWidth,(heading*180/Math.PI).toFloat())}
-        batch.color=Color.WHITE
+        draw(batch,key,x,y,scale*r.image.regionWidth,scale*r.image.regionHeight,(heading*180/Math.PI).toFloat())
     }
     fun selectBackdrop(key: String?) {
         val next=key?:"";if(next==backdropKey)return
@@ -183,6 +181,8 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     fun drawBackdrop(batch: Batch,x: Float,y: Float,width: Float,height: Float) { backdrop?.let{batch.setColor(.24f,.24f,.24f,1f);batch.draw(it,x,y,width,height);batch.color=Color.WHITE} }
     fun dispose() { atlases.forEach{it.dispose()};tiles.values.forEach{it.dispose()};backdrop?.dispose() }
     companion object {
+        const val WIDTH_SLACK=1.25f
+        fun fitScale(length: Float,width: Float,bodyLength: Float,bodyWidth: Float)=minOf(length/bodyLength,width/bodyWidth*WIDTH_SLACK)
         fun carState(hp: Float,wreck: Boolean)=if(wreck)3 else if(hp<.34f)2 else if(hp<.67f)1 else 0
         /** Catalog frame boundaries, including non-looping end: no guessed or retimed frames. */
         fun frameAt(durations: IntArray,loop: Boolean,seconds: Double): Int {
