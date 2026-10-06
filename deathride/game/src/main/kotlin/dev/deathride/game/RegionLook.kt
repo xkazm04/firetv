@@ -2,6 +2,7 @@ package dev.deathride.game
 
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
+import dev.deathride.core.BoundaryMaterial
 import dev.deathride.core.RegionDefinition
 
 /** Cached colours, applied inside existing scenery draws. No post-process target/pass. */
@@ -13,6 +14,13 @@ class RegionLook(val definition: RegionDefinition) {
     fun color(slot: String)=colors.getValue(slot)
     fun tileColor(slot: String,variant: Boolean)=if(variant)Color.WHITE else tints.getValue(slot)
     fun slot(surface: String)=when(surface){"Gravel"->"gravel";"Ice"->"ice";"Oil"->"oil";else->"asphalt"}
+    /** Barrier module per region, from the three straight modules already in the atlas. Presentation only: contact events still use the course material. */
+    fun barrier(material: BoundaryMaterial)=when(definition.id) {
+        "scrap","switchback" -> "barriers/metal-straight"
+        "foundry","crown" -> "barriers/hazard-straight"
+        "salt" -> "barriers/concrete-straight"
+        else -> if(material==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight"
+    }
     val groundSlot=if(definition.backdrop=="bare-ridges")"ice" else "dirt"
 
     /** Missing prop art keeps an act-specific, off-road silhouette, never a new collider. */
