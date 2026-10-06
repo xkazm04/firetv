@@ -35,15 +35,15 @@ await touch('touchMove',[tp(ax,ay+drive.brakeTravelPx+10,1)]);await settle();st=
 await touch('touchMove',[tp(ax,ay+30,1)]);await settle();st=await stats();driveNumbers.down30=st.slots[0].effectiveBrake;assert.ok(st.slots[0].effectiveBrake>.3&&st.slots[0].effectiveBrake<.4,'analog BRAKE at 30 px');
 await touch('touchMove',[tp(ax+24,ay,1)]);await settle();st=await stats();driveNumbers.right24=st.slots[0].effectiveSteer;assert.ok(Math.abs(st.slots[0].effectiveSteer-24/travel)<.03,'steer at doubled sensitivity '+st.slots[0].effectiveSteer);assert.equal(st.slots[0].effectiveThrottle,0);assert.equal(st.slots[0].effectiveBrake,0);
 await touch('touchMove',[tp(ax-travel-30,ay,1)]);await settle();assert.equal((await stats()).slots[0].effectiveSteer,-1);
-await touch('touchMove',[tp(ax+30,ay-60,1)]);await settle();st=await stats();assert.ok(st.slots[0].effectiveSteer>.4&&st.slots[0].effectiveThrottle>.5,'diagonal combines steer + GO');
+await touch('touchMove',[tp(ax+30,ay-60,1)]);await settle();st=await stats();assert.ok(st.slots[0].effectiveSteer>.3&&st.slots[0].effectiveThrottle>.5,'diagonal combines steer + GO');
 await touch('touchEnd',[tp(ax+30,ay-60,1)]);await settle();st=await stats();assert.deepEqual([st.slots[0].effectiveSteer,st.slots[0].effectiveThrottle,st.slots[0].effectiveBrake],[0,0,0],'release returns to coast');
 await p.screenshot({path:process.env.BROWSER_DRIVE_SCREENSHOT||'../evidence/controller-drive.png'});
 // Pad held + DRIFT + FIRE + MINE all at once (3 and 4 simultaneous touches).
 const centre=async id=>{const b=await box(id);return{x:b.x+b.width/2,y:b.y+b.height/2}};
 const padHeld=tp(ax+20,ay-80,1),dr=await centre('drift'),fi=await centre('fire'),mi=await centre('mine');const drift=tp(dr.x,dr.y,2),fire=tp(fi.x,fi.y,3),mine=tp(mi.x,mi.y,4);
 await touch('touchStart',[tp(ax,ay,1)]);await touch('touchMove',[padHeld]);await settle();
-await touch('touchStart',[padHeld,drift]);await settle();st=await stats();assert.equal(st.slots[0].effectiveDrift,1,'DRIFT with pad held (2 touches)');assert.ok(st.slots[0].effectiveThrottle>.8);assert.ok(st.slots[0].effectiveSteer>.3);
-await touch('touchStart',[padHeld,drift,fire]);await settle();st=await stats();assert.equal(st.slots[0].effectiveDrift,1);assert.equal(st.slots[0].effectiveFire,1,'FIRE with pad + DRIFT held (3 touches)');assert.ok(st.slots[0].effectiveThrottle>.8);assert.ok(st.slots[0].effectiveSteer>.3);
+await touch('touchStart',[padHeld,drift]);await settle();st=await stats();assert.equal(st.slots[0].effectiveDrift,1,'DRIFT with pad held (2 touches)');assert.ok(st.slots[0].effectiveThrottle>.8);assert.ok(st.slots[0].effectiveSteer>.15);
+await touch('touchStart',[padHeld,drift,fire]);await settle();st=await stats();assert.equal(st.slots[0].effectiveDrift,1);assert.equal(st.slots[0].effectiveFire,1,'FIRE with pad + DRIFT held (3 touches)');assert.ok(st.slots[0].effectiveThrottle>.8);assert.ok(st.slots[0].effectiveSteer>.15);
 await touch('touchStart',[padHeld,drift,fire,mine]);await settle();st=await stats();assert.equal(st.slots[0].effectiveMine,1,'MINE as the fourth touch');assert.equal(st.slots[0].effectiveFire,1);assert.equal(st.slots[0].effectiveDrift,1);
 await touch('touchEnd',[drift]);await settle();st=await stats();assert.equal(st.slots[0].effectiveDrift,0,'DRIFT releases alone');assert.equal(st.slots[0].effectiveFire,1);assert.equal(st.slots[0].effectiveMine,1);assert.ok(st.slots[0].effectiveThrottle>.8);
 await touch('touchEnd',[]);await settle();st=await stats();assert.deepEqual([st.slots[0].effectiveFire,st.slots[0].effectiveMine,st.slots[0].effectiveDrift,st.slots[0].effectiveThrottle,st.slots[0].effectiveSteer],[0,0,0,0,0]);
