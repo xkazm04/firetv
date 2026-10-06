@@ -181,13 +181,24 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")
             hudJob=socket.launch {
                 val metadata=HudMetadata(deltaHud)
+                // Two reused builders: an unchanged snapshot is not resent (only a 1 s heartbeat), and nothing is allocated per tick but the frame.
+                var cur=StringBuilder(2048);var last=StringBuilder(2048);var lastSentMs=Double.NEGATIVE_INFINITY
                 while(isActive && generation==s.generation) {
                     val currentPhase=phase
                     val fullBefore=metadata.fullSnapshots
-                    val meta=metadata.json(currentPhase,nowMs(),hostCareerJson,s.careerJson,s.garageJson,s.carJson,trackJson,feel.json)
-                    val payload="{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"combat\":${s.combatJson},\"surface\":\"${surface.id}\",\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"impact\":${s.impact},\"phase\":\"$currentPhase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"stale\":${s.stale},\"sceneryReady\":$sceneryReady,\"paused\":$paused$meta}"
-                    socket.send(payload)
-                    s.hudMessages++;s.hudCharacters+=payload.length;s.hudFullSnapshots+=metadata.fullSnapshots-fullBefore
+                    val now=nowMs()
+                    val meta=metadata.json(currentPhase,now,hostCareerJson,s.careerJson,s.garageJson,s.carJson,trackJson,feel.json)
+                    cur.setLength(0)
+                    cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatJson)
+                        .append(",\"surface\":\"").append(surface.id).append("\",\"drifting\":").append(s.drifting).append(",\"driftQuality\":").appendFixed(s.driftQuality,3).append(",\"slipRadians\":").appendFixed(s.slipRadians,3)
+                        .append(",\"spunOut\":").append(s.spunOut).append(",\"loadTransfer\":").appendFixed(s.loadTransfer,3).append(",\"surfaceId\":\"").append(s.surfaceId).append("\",\"impact\":").appendFixed(s.impact,3)
+                        .append(",\"phase\":\"").append(currentPhase).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants).append(",\"raceLaps\":").append(raceLaps)
+                        .append(",\"raceMode\":\"").append(raceMode).append("\",\"stale\":").append(s.stale).append(",\"sceneryReady\":").append(sceneryReady).append(",\"paused\":").append(paused).append(meta).append('}')
+                    if(now-lastSentMs>=HUD_HEARTBEAT_MS || !sameChars(cur,last)) {
+                        socket.send(cur.toString()); lastSentMs=now
+                        s.hudMessages++;s.hudCharacters+=cur.length;s.hudFullSnapshots+=metadata.fullSnapshots-fullBefore
+                        val t=cur;cur=last;last=t
+                    }
                     delay(100)
                 }
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
@@ -287,6 +298,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         private val routesJson by lazy { Courses.all.joinToString(",","[","]"){c->
             "{\"id\":\"${c.id}\",\"lengthM\":${c.lengthM},\"startM\":${c.startFraction*c.lengthM},\"gridLanes\":[${c.grid.joinToString(","){it.laneM.toString()}}],\"points\":["+(0..c.count).joinToString(","){i->"[${c.x[i]},${c.y[i]},${c.arc[i]},${c.curvature[i]},${c.surfaces[i].gripScale}]"}+"]}"
         } }
+        const val HUD_HEARTBEAT_MS=1000.0
         fun lanAddress(): String = runCatching {
             val interfaces=NetworkInterface.getNetworkInterfaces().toList().filter{it.isUp && !it.isLoopback}
             val addresses=interfaces.flatMap{it.inetAddresses.toList()}.filterIsInstance<Inet4Address>().filter{!it.isLoopbackAddress && !it.isLinkLocalAddress}

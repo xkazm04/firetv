@@ -41,9 +41,15 @@ class LinkBenchTest {
             host.start(); repeat(500){ if(!host.running)Thread.sleep(20) }
             val l=Count();val ws=client.newWebSocketBuilder().buildAsync(URI("ws://127.0.0.1:$port/ws"),l).join()
             ws.sendText("""{"t":"hello","pin":"${host.pin}","hudDelta":1}""",true).join();Thread.sleep(500);host.phase="race";ws.sendText("""{"t":"sync","offset":0}""",true).join()
-            Thread.sleep(1000); var b0=serverBytes();var m0=l.messages.get();var c0=l.chars.get()
+            Thread.sleep(4000); var b0=serverBytes();var m0=l.messages.get();var c0=l.chars.get()
             Thread.sleep(10000); var b1=serverBytes();val m1=l.messages.get();val c1=l.chars.get()
-            println("BENCH hud-only 10s: msgs=${m1-m0} chars/msg=${(c1-c0)/(m1-m0)} KB/s=${(c1-c0)/10240.0} serverAlloc KB/s=${(b1-b0)/10240.0}")
+            println("BENCH hud-static 10s: msgs=${m1-m0} chars/msg=${(c1-c0)/(m1-m0)} KB/s=${(c1-c0)/10240.0} serverAlloc KB/s=${(b1-b0)/10240.0}")
+            run { // racing: speed / drift change every 50 ms like a live car
+                val live=java.util.concurrent.atomic.AtomicBoolean(true)
+                val th=Thread{ var k=0.0; while(live.get()){ k+=0.37; s.speed=23.456789012345678+k%9; s.driftQuality=(k%1.0); s.slipRadians=0.2+(k%0.3); Thread.sleep(50) } };th.start()
+                Thread.sleep(500); val ba=serverBytes();val ma=l.messages.get();val ca=l.chars.get()
+                Thread.sleep(10000); val bb=serverBytes();val mb=l.messages.get();val cb=l.chars.get(); live.set(false);th.join()
+                println("BENCH hud-live 10s: msgs=${mb-ma} chars/msg=${(cb-ca)/maxOf(1,mb-ma)} KB/s=${(cb-ca)/10240.0} serverAlloc KB/s=${(bb-ba)/10240.0}") }
             run { val n=3000;b0=serverBytes();val t0=System.nanoTime()
                 for(i in 0 until n){ ws.sendText("{\"t\":\"x\"}",true).join(); val due=t0+(i+1)*3_300_000L; while(System.nanoTime()<due)Thread.sleep(0,200_000) }
                 Thread.sleep(300);b1=serverBytes();val wall=(System.nanoTime()-t0)/1e9
