@@ -103,10 +103,10 @@ class CombatFireSourceTest {
     @Test fun shotsFromCombatBecomeFireEventsPerWeapon() {
         val w=arena();val s=CombatDerivedFireSource();s.update(w)
         assertEquals(0,s.fireCount(0,Weapons.RIVET))
-        assertTrue(w.combat.fire(0,Weapons.RIVET));s.update(w);assertEquals(1,s.fireCount(0,Weapons.RIVET));assertEquals(0,s.fireCount(1,Weapons.RIVET))
-        s.update(w);assertEquals(1,s.fireCount(0,Weapons.RIVET),"no new shot, no new event")
+        assertTrue(w.combat.fire(0,Weapons.RIVET));s.update(w);assertTrue(s.fireCount(0,Weapons.RIVET)>=1,"first bullet is an event");assertEquals(0,s.fireCount(1,Weapons.RIVET))
+        val first=s.fireCount(0,Weapons.RIVET);s.update(w);assertEquals(first,s.fireCount(0,Weapons.RIVET),"no new bullet, no new event")
         assertTrue(w.combat.fire(0,Weapons.MINE));s.update(w);assertEquals(1,s.fireCount(0,Weapons.MINE))
-        repeat(40){w.combat.step(input,Tuning.STEP_SECONDS)};assertTrue(w.combat.fire(0,Weapons.RIVET));s.update(w);assertEquals(2,s.fireCount(0,Weapons.RIVET))
+        repeat(120){w.combat.step(input,Tuning.STEP_SECONDS)};s.update(w);assertEquals(6,s.fireCount(0,Weapons.RIVET),"a burst is six bullet events");assertTrue(w.combat.fire(0,Weapons.RIVET));s.update(w);assertTrue(s.fireCount(0,Weapons.RIVET)>6)
     }
     @Test fun loadoutFollowsTheCarsSlotsAndUtilities() {
         val plain=arena();val spiked=arena(1 shl Consumables.SPIKES)

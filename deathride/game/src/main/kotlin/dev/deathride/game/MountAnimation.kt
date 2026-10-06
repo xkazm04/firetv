@@ -17,23 +17,17 @@ interface WeaponFireSource {
     fun spikeHitCount(slot: Int): Int
 }
 
-/** Fire events from what combat already exposes: a magazine count that drops or a cooldown that jumps up is a shot. */
+/** Fire events from WPN-A's per-bullet counter; spike hits are still inferred from damage flashes. */
 class CombatDerivedFireSource: WeaponFireSource {
     private val weapons=Weapons.all.size
     private val fired=IntArray(Tuning.CAR_COUNT*weapons)
-    private val lastAmmo=IntArray(fired.size){-1}
-    private val lastCooldown=DoubleArray(fired.size)
     private val spikeHits=IntArray(Tuning.CAR_COUNT)
     private val lastFlash=DoubleArray(Tuning.CAR_COUNT)
     override fun update(world: World) {
         val combat=world.combat;val cars=world.cars
         for(c in cars) {
             val id=c.id;if(id>=Tuning.CAR_COUNT || !c.entered)continue
-            for(w in 0 until weapons) {
-                val n=id*weapons+w;val ammo=combat.ammo(id,w);val cooldown=combat.cooldown(id,w)
-                if(lastAmmo[n]>=0 && (ammo<lastAmmo[n] || cooldown>lastCooldown[n]+1e-6))fired[n]++
-                lastAmmo[n]=ammo;lastCooldown[n]=cooldown
-            }
+            for(w in 0 until weapons)fired[id*weapons+w]=combat.fireCount(id,w)
         }
         // Contact spikes: a car that carries them and touches a car whose damage flash just started.
         for(i in cars.indices) {
