@@ -614,10 +614,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun seatRing(x: Float,y: Float,radius: Float,color: Color,flash: Boolean) {
         shape.color=if(flash)Color.WHITE else color
         val width=if(flash).35f else .22f
-        for(i in 0 until 20) {
-            val a=i*2*PI/20;val b=(i+1)*2*PI/20
-            shape.rectLine(x+(cos(a)*radius).toFloat(),y+(sin(a)*radius).toFloat(),x+(cos(b)*radius).toFloat(),y+(sin(b)*radius).toFloat(),width)
-        }
+        val u=UnitRing.SEGMENTS_20
+        for(i in 0 until 20)shape.rectLine(x+(u.cos[i]*radius).toFloat(),y+(u.sin[i]*radius).toFloat(),x+(u.cos[i+1]*radius).toFloat(),y+(u.sin[i+1]*radius).toFloat(),width)
     }
     private fun drawMinimap() {
         val c=courseCatalog[selectedTrack];val scale=min(166/(c.maxX-c.minX),112/(c.maxY-c.minY)).toFloat()

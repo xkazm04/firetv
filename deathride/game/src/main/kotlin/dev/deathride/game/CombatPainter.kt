@@ -7,11 +7,8 @@ import kotlin.math.*
 /** Geometry only: no game-art assets, growing collections or per-frame effect objects. */
 class CombatPainter {
     private fun ring(r: ShapeRenderer,x: Float,y: Float,radius: Float,width: Float) {
-        val count=24
-        for(i in 0 until count) {
-            val a=i*Math.PI*2/count;val b=(i+1)*Math.PI*2/count
-            r.rectLine(x+cos(a).toFloat()*radius,y+sin(a).toFloat()*radius,x+cos(b).toFloat()*radius,y+sin(b).toFloat()*radius,width)
-        }
+        val u=UnitRing.SEGMENTS_24
+        for(i in 0 until 24)r.rectLine(x+u.cos[i].toFloat()*radius,y+u.sin[i].toFloat()*radius,x+u.cos[i+1].toFloat()*radius,y+u.sin[i+1].toFloat()*radius,width)
     }
     fun ground(r: ShapeRenderer,w: World,view: ViewBounds=ViewBounds.ALL) {
         val combat=w.combat
