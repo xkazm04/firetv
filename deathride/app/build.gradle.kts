@@ -12,6 +12,15 @@ android {
         minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1-spike"
         ndk { abiFilters += tvAbis }
     }
+    buildTypes {
+        // R8 + resource shrink for release only (debug unchanged); -PnoMinify=true opts out. Verified: starts on Fire TV, race server listens.
+        release {
+            val minify = !providers.gradleProperty("noMinify").isPresent
+            isMinifyEnabled = minify; isShrinkResources = minify
+            proguardFiles(file("proguard-rules.pro"))
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions { jvmTarget = "17" }
     sourceSets["main"].assets.srcDir(rootProject.file("controller"))
