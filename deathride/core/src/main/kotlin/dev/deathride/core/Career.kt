@@ -33,7 +33,7 @@ class Cup(row: Map<String,String>) {
 }
 class CareerEvent(row: Map<String,String>) {
     val id=row.getValue("id");val name=row.getValue("name")
-    val cupIndex=Career.cups.indexOfFirst{it.id==row.getValue("cup")};val courseIndex=Courses.all.indexOfFirst{it.id==row.getValue("course")}
+    val cupIndex=Career.cups.indexOfFirst{it.id==row.getValue("cup")};val courseIndex=Courses.indexOf(row.getValue("course"))
     val region=Career.cups[cupIndex].region
     val story=AshStory.cards.getValue(row.getValue("story"));val boss=row.number("boss")!=0.0;val duel=row.number("duel")!=0.0
     val laps=row.number("laps").toInt()
@@ -43,7 +43,7 @@ class CareerEvent(row: Map<String,String>) {
     val elimination get()=type==EventType.ELIMINATION
     init {
         require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 2..6))
-        require(laps==RacePacing.laps(id,Courses.all[courseIndex].id,playerTier)){"$id: laps must derive from the measured course and target time"}
+        require(laps==RacePacing.laps(id,Courses.id(courseIndex),playerTier)){"$id: laps must derive from the measured course and target time"}
         require(phase in setOf("build-up","pressure","qualifier","boss","finale"))
         require((phase=="finale")==elimination && (phase in setOf("boss","finale"))==boss)
     }
@@ -71,7 +71,7 @@ object Career {
         require(partUnlocks.map{it.part to it.tier}.toSet()==Parts.all.indices.flatMap{p->(2..Parts.all[p].maxTier).map{p to it}}.toSet())
         require(rivals.all{it.carIndex in CarCatalog.all.indices})
         for(i in cups.indices)require(cups[i].targets.last()<=events.count{it.cupIndex==i}*points.max())
-        for((i,e) in events.withIndex())require(unlocks.single{it.kind=="track" && it.id==Courses.all[e.courseIndex].id}.afterRounds<=i)
+        for((i,e) in events.withIndex())require(unlocks.single{it.kind=="track" && it.id==Courses.id(e.courseIndex)}.afterRounds<=i)
     }
     fun unlocked(p: Profile,kind: String,id: String)=(kind=="car" && p.owned[CarCatalog.all.indexOfFirst{it.id==id}]) || p.careerCleared>=unlocks.single{it.kind==kind && it.id==id}.afterRounds
     fun maximumPartTier(p: Profile,part: Int)=max(1,partUnlocks.filter{it.part==part && it.afterRounds<=p.careerCleared}.maxOfOrNull{it.tier}?:1)
@@ -90,7 +90,7 @@ object Career {
         Campaign.prepare(p,expectedRound)
         require(bossPosition in 1..Tuning.CAR_COUNT)
         val result=advance(p,expectedRound,position,qualified && (!events[expectedRound].boss || hp>0 && finished))
-        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished,league=true)!=null)
+        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.id(events[expectedRound].courseIndex),targetWrecked=targetWrecked,clean=clean,finished=finished,league=true)!=null)
         if(result.advanced && events[expectedRound].boss)Campaign.promoted(p,expectedRound)
         if(result.advanced && events[expectedRound].elimination)DeathDuel.victory(p)
         return result

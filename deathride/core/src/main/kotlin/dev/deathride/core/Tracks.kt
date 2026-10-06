@@ -53,7 +53,7 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     private val candidates: Array<IntArray> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
     val json get()=json(region)
-    fun json(region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
+    fun json(region: RegionDefinition)=courseJson(id,name,lesson,theme,features,pool,region)
     init {
         require(nodes.size>=5 && nodes.first()==nodes.last()) { "$id: centerline must explicitly close" }
         val n=nodes.size-1
@@ -151,21 +151,40 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     }
 }
 object Courses {
-    val all=Content.table("tracks").map { row ->
-        val id=row.getValue("id")
-        Course(id,row.getValue("name"),row.getValue("lesson"),row.number("startFraction"),row.getValue("theme"),
+    private val rows=Content.table("tracks")
+    private val ids=rows.map { it.getValue("id") }
+    /** Built on first use. A course bakes a spline, obstacles, branches and junctions: building all 66 at class load cost ~270 ms on desktop (several seconds on a Stick) and only the selected course is ever raced. */
+    private val built=arrayOfNulls<Course>(rows.size)
+    private fun build(index: Int): Course {
+        val row=rows[index];val id=ids[index]
+        return Course(id,row.getValue("name"),row.getValue("lesson"),row.number("startFraction"),row.getValue("theme"),
             Content.table("tracks/$id").map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),Surfaces.all.first { s->s.id==it.getValue("surface") },it.number("aiLaneM")) },
             Content.table("tracks/$id-spots").map { TrackSpot(it.getValue("kind"),it.number("fraction"),it.number("laneM")) })
     }
+    fun course(index: Int): Course = synchronized(built) { built[index]?:build(index).also { built[index]=it } }
+    /** Same order and stable legacy indices as before; elements materialise on access. */
+    val all: List<Course> = object: AbstractList<Course>(),RandomAccess {
+        override val size get()=ids.size
+        override fun get(index: Int)=course(index)
+    }
+    /** Cheap lookups that do not build any course. */
+    fun indexOf(id: String)=ids.indexOf(id)
+    fun id(index: Int)=ids[index]
     // Keep stable legacy indices for saved identifiers and archived authoring fixtures.
     // Only owner-selected campaign courses and retained alternates are offered for play.
     val playableIndices=Content.table("active-tracks").map { row->
-        all.indexOfFirst{it.id==row.getValue("id")}.also{require(it>=0){"Unknown active course"}}
+        ids.indexOf(row.getValue("id")).also{require(it>=0){"Unknown active course"}}
     }.also{require(it.isNotEmpty() && it.distinct().size==it.size)}
-    val playable=playableIndices.map{all[it]}
+    val playable: List<Course> = object: AbstractList<Course>(),RandomAccess {
+        override val size get()=playableIndices.size
+        override fun get(index: Int)=course(playableIndices[index])
+    }
     fun nextPlayable(index:Int)=playableIndices[(playableIndices.indexOf(index)+1).mod(playableIndices.size)]
-    val json=playable.joinToString(",","[","]"){it.json}
+    /** Catalogue metadata straight from the tables, byte-identical to Course.json, without baking any geometry. */
+    val json=playableIndices.joinToString(",","[","]"){ i->val row=rows[i];val id=ids[i];val theme=row.getValue("theme")
+        courseJson(id,row.getValue("name"),row.getValue("lesson"),theme,TrackContent.features[id]?:emptyList(),TrackContent.pools[id]?:TrackPool(0,4),Regions.forCourse(id,theme)) }
 }
+internal fun courseJson(id: String,name: String,lesson: String,theme: String,features: List<TrackFeature>,pool: TrackPool,region: RegionDefinition)="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"region\":\"${region.id}\",\"regionName\":\"${region.name}\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
 
 object TrackLinter {
     fun errors(c: Course): List<String> {

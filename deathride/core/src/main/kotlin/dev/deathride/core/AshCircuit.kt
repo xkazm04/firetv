@@ -136,7 +136,7 @@ object RivalEconomy {
         for(r in results) {
             val npc=p.rivalProfiles[r.index]
             Economy.settle(npc,Economy.start(npc),r.position,r.kills,r.hp,rewardScale=scale,
-                cash=r.cash,course=Courses.all[Career.events[round].courseIndex].id,clean=r.clean,finished=r.finished)
+                cash=r.cash,course=Courses.id(Career.events[round].courseIndex),clean=r.clean,finished=r.finished)
             if(r.playerWrecked)p.grudges[r.index]=1
         }
         p.rivalSettledTicket=ticket
