@@ -32,7 +32,7 @@ class ProgressionRosterTest {
         while(w.combat.armingSeconds>0)w.step(input)
         val began=w.seconds;var next=w.seconds
         while(!w.combat.wrecked(0) && w.seconds-began<RosterRules["maximumHeavyKillSeconds"]){
-            if(w.seconds>=next){w.combat.damage(0,Weapons.all[Weapons.RIVET].damage,1,DamageKind.RIVET);next+=Weapons.all[Weapons.RIVET].cooldownSeconds}
+            if(w.seconds>=next){w.combat.damage(0,Weapons.all[Weapons.RIVET].burstDamage,1,DamageKind.RIVET);next+=Weapons.all[Weapons.RIVET].cycleSeconds}
             w.step(input)
         }
         assertTrue(w.combat.wrecked(0),"Heavy survives declared continuous Rivet envelope")

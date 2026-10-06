@@ -16,11 +16,20 @@ object HudTheme {
     val ochre=Color.valueOf("B4A044")
     val muted=Color.valueOf("C3B898")
     fun fraction(value: Double,total: Double): Float = if(!value.isFinite() || !total.isFinite() || total<=0)0f else (value/total).coerceIn(0.0,1.0).toFloat()
+    /** Selected-weapon readiness bar: fills while cooling, drains with heat during a lockout, full when ready. */
+    fun weaponBar(combat: Combat,car: Car,weapon: Int): Float = when {
+        combat.ammo(car.id,weapon)<=0 || !combat.canAct(car.id) -> 0f
+        combat.overheated(car.id,weapon) -> (1.0-combat.heatFraction(car.id,weapon)).toFloat().coerceIn(0f,1f)
+        combat.cooldown(car.id,weapon)>1e-9 -> (1.0-combat.cooldownFraction(car.id,weapon)).toFloat().coerceIn(0f,1f)
+        else -> 1f
+    }
     fun weaponState(combat: Combat,car: Car,weapon: Int): String = when {
         !combat.canAct(car.id) -> "DISABLED"
         combat.armingSeconds>0 -> "ARMING ${ceil(combat.armingSeconds).toInt()}s"
         combat.ammo(car.id,weapon)<=0 -> "EMPTY"
         car.ability.weaponsLocked -> "LOCKED"
+        combat.overheated(car.id,weapon) -> "OVERHEAT"
+        combat.burstRemaining(car.id,weapon)>0 -> "FIRING"
         combat.cooldown(car.id,weapon)>1e-9 -> "COOL ${ceil(combat.cooldown(car.id,weapon)).toInt()}s"
         else -> "READY"
     }

@@ -1,5 +1,5 @@
-id,kind,damage,cooldownSeconds,ammo,rangeM,speedMps,radiusM,armingSeconds,lifeSeconds,traceSeconds,burstRounds,burstIntervalSeconds,heatPerShot,heatCoolPerSecond,overheatCoolPerSecond,overheatResumeFraction
-Rivet,ray,2.4,0.20,180,48,0,0.15,0,0.08,0.08,1,0,0,0,0,0
-Hammer,projectile,21,1.4,5,65,55,0.6,0,1.19,0.06,1,0,0,0,0,0
-Mine,mine,24,2.5,4,0,0,0.5,1.4,18,0.35,1,0,0,0,0,0
-Scatter,spread,12,1.0,12,22,0,0.25,0,0.10,0.10,1,0,0,0,0,0
+id,kind,damage,cooldownSeconds,ammo,rangeM,speedMps,radiusM,armingSeconds,lifeSeconds,traceSeconds,burstRounds,burstIntervalSeconds,heatPerShot,heatCoolPerSecond,overheatCoolPerSecond,overheatResumeFraction,rationale
+Rivet,ray,2.0,1.2,180,48,0,0.15,0,0.08,0.08,6,0.06,0.035,0.05,0.25,0.35,One press fires 6 bullets 0.06 s apart then 1.2 s cooldown from the last bullet so a held FIRE repeats a burst every 1.5 s; bullet damage 2.0 (was 2.4 at 0.2 s) because bursts land more of an AI tap so races stay near the old 1.4 wrecks per race while sustained fire drops from 12 to 8.4 dps; ammo counts bullets so 180 is 30 bursts; heat 0.21 per burst vs 0.075 cooled per cycle overheats after about 7 bursts then locks 2.6 s
+Hammer,projectile,21,1.4,5,65,55,0.6,0,1.19,0.06,1,0,0,0,0,0,Single slow heavy shot; 5 rounds and a 1.4 s cooldown already gate it so no heat
+Mine,mine,24,2.5,4,0,0,0.5,1.4,18,0.35,1,0,0,0,0,0,Rear drop with 4 charges and a 2.5 s cooldown; scarcity gates it so no heat
+Scatter,spread,12,1.0,12,22,0,0.25,0,0.10,0.10,1,0,0.22,0.08,0.2,0.4,Five-ray close fan every 1.0 s; heat 0.22 per shot vs 0.08 cooled per second overheats after about 7 shots then locks 3 s so the 12 rounds cannot be emptied in one hold

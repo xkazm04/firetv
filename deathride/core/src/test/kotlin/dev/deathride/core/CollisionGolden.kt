@@ -26,8 +26,8 @@ object CollisionGolden {
     val scenarios: List<Pair<Course?,Int>> get()=listOf(null to 1,Courses.playable[0] to 2,Courses.playable[12] to 3,Courses.playable[26] to 4,Courses.playable[37] to 5)
 }
 class CollisionGoldenTest {
-    /** Recorded before the heading-trig cache, collide early-out and projection replay; every later change must reproduce them. */
-    private val expected=listOf(9195575670409204053L to 682,5994494553560485689L to 949,-8060466528624370543L to 781,8665719274956727097L to 623,-7668453370987968838L to 731)
+    /** Recorded before the heading-trig cache, collide early-out and projection replay; every later change must reproduce them. Hashes re-recorded 2026-10-06 for the Rivet burst/heat model (contact counts unchanged: the fixture fires at random, so Combat state now differs). */
+    private val expected=listOf(6177387736479784724L to 682,6271446066024274139L to 949,6685665031148120156L to 781,1482306193252499400L to 623,2501690005341265422L to 731)
     @org.junit.jupiter.api.Test fun contactHeavyReplaysAreBitIdenticalToTheRecordedBaseline() {
         for((k,s) in CollisionGolden.scenarios.withIndex()) org.junit.jupiter.api.Assertions.assertEquals(expected[k],CollisionGolden.run(s.first,s.second),"scenario $k")
     }

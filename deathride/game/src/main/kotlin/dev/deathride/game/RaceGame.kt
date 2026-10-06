@@ -491,6 +491,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val c=activeDriver();val combat=world.combat;val a=c.ability;val d=a.definition
             bar(553f,648f,180f,world.snapshot.healthFraction(c.id).toFloat(),if(combat.health(c.id)<combat.maxHealth(c.id)*.35)warning else accent)
             bar(553f,589f,180f,c.armorReduction.toFloat(),HudTheme.bone)
+            val sel=combat.selectedWeapon[c.id]
+            shape.color=road;shape.rect(800f,644f,150f,6f);shape.color=if(combat.overheated(c.id,sel))HudTheme.rust else if(combat.cooldown(c.id,sel)>1e-9)HudTheme.muted else accent;shape.rect(800f,644f,150f*HudTheme.weaponBar(combat,c,sel),6f)
             if(d!=null) {
                 bar(1038f,590f,182f,HudTheme.fraction(a.energy,d.energyCapacity),accent)
                 bar(1038f,567f,182f,1f-HudTheme.fraction(a.cooldownSeconds,d.cooldownSeconds),HudTheme.bone)

@@ -310,3 +310,8 @@ Reload the controller on the phone (the default is now **Drive**). Hold the phon
 4. Try Classic, Cruise and Split once for comparison.
 
 The browser test (tools/browser-check.mjs) covers 2, 3 and 4 simultaneous touches with synthetic CDP touches; it cannot show whether a real Android Chrome cancels a third finger (gesture/palm rejection, OEM three-finger shortcuts), so this section is the physical-phone check. If a third touch is still lost on your phone, note the model and whether the page said Connection lost at that moment.
+
+
+## WPN-A weapon cooldowns (Rivet bursts, heat)
+
+Race with Line or Bastion (Hammer/Scatter need two weapon slots). (1) Tap FIRE once with Rivet: six quick bullets leave, then the FIRE bar turns amber and refills over about 1.2 s; releasing early does not cut the burst. Good: one tap feels like one punch. Bad: the burst feels delayed, or the pause feels like lag instead of a cooldown. (2) Hold FIRE: bursts repeat roughly every 1.5 s, never a constant stream; after about 11 s of holding the bar goes red, the button dims and the TV shows OVERHEAT, then Rivet returns after about 2.6 s. Good: you choose when to hold back. Bad: the lockout arrives so soon that you stop using Rivet. (3) Fire Rivet, tap SWAP to Scatter or Hammer and fire at once: the other weapon should be ready while Rivet keeps cooling, and swapping back must not reset it. (4) Hold Scatter at close range: it overheats after about 7 shots. (5) Watch an AI car: it fires in the same bursts, with the same pauses, and still lands damage. Phone SWAP shows HAMMER/SCATTER with COOLING/OVERHEATED beside them; the bar shows the weapon SWAP would select next.

@@ -6,6 +6,7 @@ select{font:inherit;background:#243442;color:#fff;padding:10px;border:1px solid 
 .pedals{grid-template-columns:1fr 1.25fr;grid-template-rows:1.3fr 1fr .8fr .9fr;gap:8px}
 .pedal{font-size:19px;border-radius:12px}.pedal span{font-size:9px;margin-top:4px}.pedal:after{display:none}
 .fire{background:#e0643f;border-color:#ff916b;font-size:25px}.fire.held{background:#ff9b65;box-shadow:inset 0 0 0 4px #ffd8a5}
+.fire,.utility{position:relative}.wbar{position:absolute;left:10px;right:10px;bottom:7px;height:7px;border-radius:4px;background:#0007;overflow:hidden;pointer-events:none}.wbar u{display:block;height:100%;width:100%;border-radius:4px;background:#8fd16a}.wbar.cooling u{background:#ffd27a}.wbar.hot u{background:#ff9b3d}.wbar.over u{background:#ff4b3a}.fire.over{filter:saturate(.45) brightness(.8)}.fire.cooling{filter:brightness(.88)}
 .mine{border-color:#ac8249;background:#332b20;color:#f7cf88;font-size:16px}.utility{font-size:15px}.held{filter:brightness(1.45)}
 .mirrored main{grid-template-columns:1fr 1.4fr}.mirrored .steer{order:2}.mirrored .pedals{order:1}
 .layout-Split .gas{display:none}.layout-Split .fire{grid-column:1 / 3}.layout-Split .steer .hint{color:var(--accent)}
@@ -36,11 +37,11 @@ select{font:inherit;background:#243442;color:#fff;padding:10px;border:1px solid 
 <div class="app"><header><div class="brand">DEATH RIDE <small>SLIPSTREAM</small></div><div class="telemetry"><span><b id="speed">0</b> km/h</span><span><span id="lapLabel">LAP</span> <b id="lap">1/3</b></span><span><b id="position">—</b>/<span id="entrants">6</span></span></div><div class="combatHud"><span>HP <b id="hp">100</b></span><meter id="hpMeter" min="0" max="100" value="100"></meter><span id="combatStatus">RIVET 180</span></div><div class="status"><span class="dot"></span><span id="status">Connecting…</span></div></header>
 <main><div class="steer" id="steer" role="slider" aria-label="Steering" aria-valuemin="-100" aria-valuemax="100"><div class="label"><strong id="player">YOUR CAR</strong> &nbsp; / &nbsp; STEER</div><div class="rig" id="rig" aria-hidden="true"><div class="lane up"><i id="goFill"></i></div><div class="lane down"><i id="brakeFill"></i></div><b class="laneLabel goLabel">GO</b><b class="laneLabel brakeLabel">BRAKE</b><div class="ring"></div><div class="padDot" id="dot"></div><span class="steerCue l">‹</span><span class="steerCue r">›</span></div><div class="rail"></div><span class="direction left">‹</span><span class="direction right">›</span><div class="thumb" id="thumb"></div><div class="hint">LEFT &nbsp; ← &nbsp; drag from any starting point &nbsp; → &nbsp; RIGHT</div></div><div class="pedals">
 <button class="pedal gas" id="gas">GO<span>HOLD TO DRIVE</span></button>
-<button class="pedal fire" id="fire"><b id="fireLabel">FIRE</b><span id="ammo">RIVET 180</span></button>
+<button class="pedal fire" id="fire"><b id="fireLabel">FIRE</b><span id="ammo">RIVET 180</span><i class="wbar" id="fireBar"><u id="fireFill"></u></i></button>
 <button class="pedal brake" id="brake">BRAKE<span>OVERRIDES GO</span></button>
 <button class="pedal utility" id="drift">DRIFT<span>HOLD IN A TURN</span></button>
 <button class="pedal mine" id="mine">MINE<span id="mineAmmo">4 READY</span></button>
-<button class="pedal utility" id="swap">SWAP<span id="swapHint">RIVET / HAMMER</span></button>
+<button class="pedal utility" id="swap">SWAP<span id="swapHint">RIVET / HAMMER</span><i class="wbar" id="swapBar"><u id="swapFill"></u></i></button>
 <button class="pedal ability" id="ability" aria-label="Signature ability"><b id="abilityName">ABILITY</b><span><span id="abilityStatus">ENERGY</span><meter id="abilityMeter" min="0" max="100" value="100"></meter></span></button>
 </div></main>
 <footer><button id="race">START RACE</button><button id="leave">LOBBY</button><span class="spacer"></span><span id="linkInfo">30 Hz + instant changes</span><button id="careerButton">CAREER</button><button id="garageButton">GARAGE</button><button id="carButton">CAR</button><button id="settings">FEEL</button></footer></div>
@@ -94,6 +95,8 @@ let lastStatus='',lastOk=null,tvPaused=false,lastRttPaint=0;const textCache=new 
 function setText(id,v){v=String(v);if(textCache.get(id)===v)return;textCache.set(id,v);$(id).textContent=v}
 const shown={},meterCache=new Map(),classCache=new Map(),ariaCache=new Map();
 function setMeter(id,max,value){const k=max+'/'+value;if(meterCache.get(id)===k)return;meterCache.set(id,k);const el=$(id);el.max=max;el.value=value}
+const WEAPON_NAMES=['Rivet','Hammer','Mine','Scatter'];const barCache=new Map();
+function paintBar(btn,bar,fill,state,frac){const k=state+'/'+frac.toFixed(2);if(barCache.get(bar)===k)return;barCache.set(bar,k);const el=$(bar);el.className='wbar '+state;$(fill).style.width=Math.round(Math.max(0,Math.min(1,frac))*100)+'%';if(btn==='fire'){$(btn).classList.toggle('over',state==='over');$(btn).classList.toggle('cooling',state==='cooling')}}
 function setClass(id,cls,on){const k=id+'.'+cls;if(classCache.get(k)===on)return;classCache.set(k,on);$(id).classList.toggle(cls,on)}
 function setAria(id,v){if(ariaCache.get(id)===v)return;ariaCache.set(id,v);$(id).setAttribute('aria-label',v)}
 function status(message,okay){if(message!==lastStatus){lastStatus=message;$('status').textContent=message}if(okay!==lastOk){lastOk=okay;document.body.classList.toggle('online',okay);document.body.classList.toggle('lost',!okay)}}
@@ -117,9 +120,13 @@ if(m.t==='hud'){if(m.phase!==curPhase){curPhase=m.phase;retime()}for(const key o
  if(m.combat&&Number.isFinite(m.combat.hp)){
   const c=m.combat;setText('hp',Math.ceil(c.hp));setMeter('hpMeter',c.maxHp,c.hp);
   setText('combatStatus',c.spectating?'SPECTATING THE FINAL DUEL':c.wrecked?'WRECKED':c.armingSeconds>0?'ARMING '+Math.ceil(c.armingSeconds)+'s':c.weaponName.toUpperCase()+' '+c.ammo);
-  setText('ammo',c.weaponName.toUpperCase()+' '+c.ammo+(c.cooldownSeconds>.2?' / '+c.cooldownSeconds.toFixed(1)+'s':''));
+  const ws=c.weaponStates,wi=Math.max(0,WEAPON_NAMES.indexOf(c.weaponName)),ready=w=>!w?'ready':w.over?'over':w.burst>0?'cooling':w.cd>.005?'cooling':w.heat>=.6?'hot':'ready';
+  const fs=ws?.[wi],fst=c.armingSeconds>0?'cooling':c.ammo<=0?'over':ready(fs);
+  setText('ammo',c.weaponName.toUpperCase()+' '+c.ammo+(!fs?(c.cooldownSeconds>.2?' / '+c.cooldownSeconds.toFixed(1)+'s':''):fst==='over'?(c.ammo<=0?' EMPTY':' OVERHEATED'):fs.burst>0?' FIRING':fst==='cooling'?' COOLING':fst==='hot'?' HOT':' READY'));
+  paintBar('fire','fireBar','fireFill',fst,c.armingSeconds>0?0:c.ammo<=0?0:fs?(fst==='over'?1-fs.heat:fst==='cooling'?1-fs.cd:1):1);
+  const nx=ws?.[[0,1,3][([0,1,3].indexOf(wi)+1)%3]],nst=ready(nx),sh=w=>{const q=ready(ws?.[w]);return q==='over'?' OVERHEATED':q==='cooling'?' COOLING':q==='hot'?' HOT':''};
   setText('mineAmmo',c.mines+(c.mineCooldownSeconds>0?' / '+c.mineCooldownSeconds.toFixed(1)+'s':' READY'));
-  setText('swapHint','HAMMER '+c.heavyAmmo+' / SCATTER '+(c.scatterAmmo||0));
+  setText('swapHint','HAMMER '+c.heavyAmmo+sh(1)+' / SCATTER '+(c.scatterAmmo||0)+sh(3));paintBar('swap','swapBar','swapFill',nst,nx?(nst==='over'?1-nx.heat:nst==='cooling'?1-nx.cd:1):1);
   const ab=c.ability;if(ab){setText('abilityName',(layout?.fireDrives?'GO + ':'')+ab.name);setMeter('abilityMeter',ab.energyCapacity,ab.energy);setText('abilityStatus',(c.armingSeconds>0?'ARMING':ab.phase!=='READY'?ab.phase:ab.cooldownSeconds>0?'COOL '+Math.ceil(ab.cooldownSeconds)+'s':ab.energy<ab.energyCost?'LOW ENERGY':ab.id==='mine-dispatcher'?'AUTO WHILE MOVING':'READY')+' / '+Math.floor(ab.energy));setClass('ability','ready',ab.ready);setClass('ability','unavailable',!ab.available);setAria('ability',ab.name+' / '+textCache.get('abilityStatus'));}
   if(c.damageEvents>damageEvents&&navigator.vibrate)navigator.vibrate(c.wrecked?[40,35,70]:25);damageEvents=c.damageEvents;
   if(c.wrecked&&(fire||mine||ability||a))neutral();
