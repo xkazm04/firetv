@@ -165,6 +165,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val inputSample=if(profileInputs!=null)DoubleArray(9) else null
         var previousInputNs=0L
         var hudJob: Job?=null
+        val inputPacket=InputPacket();val ack=StringBuilder(96)
         try {
             withTimeout(10000) {
                 val frame=socket.incoming.receive() as? Frame.Text ?: error("Expected hello")
@@ -191,10 +192,30 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 }
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
             }
+            suspend fun handleInput(q: Long,rawTs: Double,steer: Double,throttle: Double,brake: Double,handbrake: Double,fire: Double,mine: Double,weapon: Int,ability: Double,flashRequested: Boolean,now: Double,receiveNs: Long) {
+                val previousDropped=s.input.dropped; val previousOrder=s.input.outOfOrder
+                val timestamp=if(calibrated) rawTs+offset else now
+                val offerNs=if(profileInputs!=null)System.nanoTime() else 0L
+                val accepted=s.input.offer(q,timestamp,now,steer,throttle,brake,handbrake,fire,mine,weapon,ability)
+                val offeredNs=if(profileInputs!=null)System.nanoTime() else 0L
+                metrics.dropped[s.id].add(s.input.dropped-previousDropped,now); metrics.outOfOrder[s.id].add(s.input.outOfOrder-previousOrder,now)
+                if(accepted && flashRequested) flash.set(true)
+                ack.setLength(0);ack.append("{\"t\":\"ack\",\"q\":").append(q).append(",\"tvNow\":").append(round3(now)).append(",\"accepted\":").append(accepted).append('}')
+                socket.send(ack.toString())
+                if(inputSample!=null) {
+                    inputSample[0]=receiveNs.toDouble();inputSample[1]=s.id.toDouble();inputSample[2]=q.toDouble()
+                    inputSample[3]=now-timestamp;inputSample[4]=(offerNs-receiveNs)/1e6
+                    inputSample[5]=(offeredNs-offerNs)/1e6;inputSample[6]=(System.nanoTime()-offeredNs)/1e6
+                    inputSample[7]=when { accepted->0.0;s.input.outOfOrder>previousOrder->2.0;now-timestamp>Tuning.STALE_MS->1.0;timestamp-now>100->3.0;else->4.0 }
+                    inputSample[8]=if(previousInputNs==0L)0.0 else (receiveNs-previousInputNs)/1e6
+                    previousInputNs=receiveNs;profileInputs!!.append(inputSample)
+                }
+            }
             for(frame in socket.incoming) {
                 val receiveNs=if(profileInputs!=null)System.nanoTime() else 0L
                 if(generation!=s.generation)break
                 if(frame !is Frame.Text)continue
+                if(frame.fin && inputPacket.parse(frame.data)) { handleInput(inputPacket.q,inputPacket.ts,inputPacket.s,inputPacket.a,inputPacket.b,inputPacket.h,inputPacket.fire,inputPacket.mine,inputPacket.weapon,inputPacket.ability,inputPacket.flash==1,nowMs(),receiveNs); continue }
                 val msg=runCatching { Json.parseToJsonElement(frame.readText()).jsonObject }.getOrNull() ?: continue
                 val now=nowMs()
                 when(msg.text("t")) {
@@ -202,23 +223,9 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     "sync" -> { val value=msg.number("offset"); if(value.isFinite()) { offset=value; calibrated=true; s.clockSynced=true } }
                     "i" -> {
                         val q=msg["q"]?.jsonPrimitive?.longOrNull ?: continue
-                        val previousDropped=s.input.dropped; val previousOrder=s.input.outOfOrder
-                        val timestamp=if(calibrated) msg.number("ts")+offset else now
-                        val offerNs=if(profileInputs!=null)System.nanoTime() else 0L
-                        val accepted=s.input.offer(q,timestamp,now,msg.number("s"),msg.number("a"),msg.number("b"),msg["h"]?.jsonPrimitive?.doubleOrNull?:0.0,
-                            msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0)
-                        val offeredNs=if(profileInputs!=null)System.nanoTime() else 0L
-                        metrics.dropped[s.id].add(s.input.dropped-previousDropped,now); metrics.outOfOrder[s.id].add(s.input.outOfOrder-previousOrder,now)
-                        if(accepted && msg["f"]?.jsonPrimitive?.intOrNull==1) flash.set(true)
-                        socket.send("{\"t\":\"ack\",\"q\":$q,\"tvNow\":$now,\"accepted\":$accepted}")
-                        if(inputSample!=null) {
-                            inputSample[0]=receiveNs.toDouble();inputSample[1]=s.id.toDouble();inputSample[2]=q.toDouble()
-                            inputSample[3]=now-timestamp;inputSample[4]=(offerNs-receiveNs)/1e6
-                            inputSample[5]=(offeredNs-offerNs)/1e6;inputSample[6]=(System.nanoTime()-offeredNs)/1e6
-                            inputSample[7]=when { accepted->0.0;s.input.outOfOrder>previousOrder->2.0;now-timestamp>Tuning.STALE_MS->1.0;timestamp-now>100->3.0;else->4.0 }
-                            inputSample[8]=if(previousInputNs==0L)0.0 else (receiveNs-previousInputNs)/1e6
-                            previousInputNs=receiveNs;profileInputs!!.append(inputSample)
-                        }
+                        handleInput(q,msg.number("ts"),msg.number("s"),msg.number("a"),msg.number("b"),msg["h"]?.jsonPrimitive?.doubleOrNull?:0.0,
+                            msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0,
+                            msg["f"]?.jsonPrimitive?.intOrNull==1,now,receiveNs)
                     }
                     "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
@@ -287,5 +294,6 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         }.getOrNull() ?: "127.0.0.1"
     }
 }
+private fun round3(v: Double)=Math.round(v*1000.0)/1000.0
 private fun JsonObject.text(key: String)=this[key]?.jsonPrimitive?.contentOrNull ?: ""
 private fun JsonObject.number(key: String)=this[key]?.jsonPrimitive?.doubleOrNull ?: Double.NaN

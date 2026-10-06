@@ -10,4 +10,4 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
 }
 
-tasks.test { useJUnitPlatform(); testLogging { events("passed", "failed"); showStandardStreams=true } }
+tasks.test { useJUnitPlatform(); System.getenv("LINK_JFR")?.let { jvmArgs("-XX:StartFlightRecording=filename=$it,settings=profile") }; testLogging { events("passed", "failed"); showStandardStreams=true } }
