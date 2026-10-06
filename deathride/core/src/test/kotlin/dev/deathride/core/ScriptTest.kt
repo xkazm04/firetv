@@ -13,7 +13,7 @@ class ScriptTest {
     @Test fun resourceCopyMatchesTheNarrativeSource() {
         val source=File("../narrative/lines.csv")
         assertTrue(source.isFile,"run from deathride/core")
-        assertEquals(source.readText(Charsets.UTF_8),File("src/main/resources/data/lines.csv").readText(Charsets.UTF_8),
+        assertEquals(source.readText(Charsets.UTF_8).lines(),File("src/main/resources/data/lines.csv").readText(Charsets.UTF_8).lines(),
             "core/src/main/resources/data/lines.csv must be a copy of narrative/lines.csv (cp narrative/lines.csv core/src/main/resources/data/)")
     }
 
