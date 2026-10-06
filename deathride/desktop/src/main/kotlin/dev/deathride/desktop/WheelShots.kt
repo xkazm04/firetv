@@ -34,7 +34,7 @@ class WheelShots: ApplicationAdapter() {
             val s=CarShapes.forId(id);val m=Matrix4(screen).translate(cx,cy,0f).scale(ppm,ppm,1f)
             rig.angle[slot]=angle;rig.tread[slot]=.3f
             val key=art.carKey(id,1f,false,0)!!
-            batch.projectionMatrix=m;batch.begin();art.car(batch,key,0f,0f,s.lengthM.toFloat(),s.widthM.toFloat(),heading,Color.WHITE,false)
+            batch.projectionMatrix=m;batch.begin();art.car(batch,key,0f,0f,s.lengthM.toFloat(),s.widthM.toFloat(),heading)
             if(overlay)rig.draw(batch,slot,id,0f,0f,s.lengthM.toFloat(),s.widthM.toFloat(),heading);batch.end()
         }
         if(System.getenv("DEATHRIDE_WHEEL_GRID")=="1") {
