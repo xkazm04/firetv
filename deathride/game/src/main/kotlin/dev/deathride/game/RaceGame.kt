@@ -85,6 +85,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var stateTime=0.0
     private var uiTime=0.0
     private var keyboard=false
+    /** Camera roll in radians: with one human on the road the view turns so the car always points up the screen, making left/right on the phone match left/right on the TV. */
+    private var cameraRoll=0.0
     private var focusX=0.0
     private var focusY=0.0
     private var cameraZoom=1.0
@@ -431,7 +433,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             cameraZoom=LOBBY_PIXELS_PER_M;pixelsPerM=cameraZoom
         } else { focusX=(course.minX+course.maxX)*.5;focusY=(course.minY+course.maxY)*.5;cameraZoom=VisualTuning["soloPixelsPerM"] }
         if(phase!="lobby")lobbyCamera=false
-        worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
+        var rollTarget=0.0
+        if(following) {
+            val drivers=world.cars.filter{it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0}
+            if(drivers.size==1)rollTarget=PI/2-drivers[0].heading
+        }
+        cameraRoll=wrapAngle(cameraRoll+wrapAngle(rollTarget-cameraRoll)*(1-exp(-dt*8.0)))
+        worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).rotateRad(0f,0f,1f,cameraRoll.toFloat()).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
         profiler?.mark(12,"DR.effectsUpdate")
         atlasEffects.update(world.snapshot,dt);atmosphere.update(dt)
         profiler?.mark(13,"DR.sceneryDraw")
@@ -453,7 +461,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(c.ability.definition?.kind==AbilityKind.DISPATCHER || art.carKey(c.carClass?.id?:"Line",current.healthFraction(c.id).toFloat(),current.wrecked(c.id),c.id)==null)painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=current.healthFraction(c.id).toFloat(),wrecked=world.combat.wrecked(c.id),wheelAngle=wheels.angle[c.id],tread=wheels.tread[c.id],braking=wheels.braking[c.id])
             if(c.ability.definition?.kind!=AbilityKind.DISPATCHER) {
                 val hp=current.healthFraction(c.id).toFloat()
-                if(AtlasArt.carState(hp,current.wrecked(c.id))>0 && art.carKey(c.carClass?.id?:"Line",hp,current.wrecked(c.id),c.id)!=null)
+                if(!c.human && AtlasArt.carState(hp,current.wrecked(c.id))>0 && art.carKey(c.carClass?.id?:"Line",hp,current.wrecked(c.id),c.id)!=null)
                     seatRing(x,y,CarShapes.forId(c.carClass?.id?:"Line").lengthM.toFloat()*.5f,colors[c.id],world.combat.damageFlashSeconds[c.id]>0)
             }
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
