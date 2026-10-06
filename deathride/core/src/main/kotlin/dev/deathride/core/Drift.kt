@@ -75,7 +75,7 @@ object DriftDynamics {
     fun integrate(c: Car,input: InputFrame,spec: CarSpec,throttle: Double,brake: Double,dt: Double,p: DriftParameters) {
         val g=spec.driftGeometry ?: return
         val speed=c.speedMps
-        val cx=cos(c.heading);val cy=sin(c.heading)
+        val cx=c.cosHeading;val cy=c.sinHeading
         val forward=c.vx*cx+c.vy*cy;val lateral=-c.vx*cy+c.vy*cx
         val beta=if(speed>p["lowSpeedMps"])wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val hb=input.handbrake

@@ -129,7 +129,7 @@ class AiBehaviour(private val world: World) {
     }
     private fun perceive(c: Car,s: AiDecision) {
         s.visible=0;s.candidates=0
-        val range=c.spec.lengthM*s.plan!!.perception;val cx=cos(c.heading);val cy=sin(c.heading)
+        val range=c.spec.lengthM*s.plan!!.perception;val cx=c.cosHeading;val cy=c.sinHeading
         world.track.project(c.x,c.y,projection,world.track.startM+c.lap.progressM,c.trackRoute)
         val skill=c.aiSkill?:AiSkills.legacy[(c.id+world.seed).mod(AiSkills.legacy.size)]
         world.track.sample(projection.s+c.spec.lengthM*TrackRules["aiLookCarLengths"]+c.speedMps*skill.lookAheadSeconds,0.0,point,c.trackRoute)

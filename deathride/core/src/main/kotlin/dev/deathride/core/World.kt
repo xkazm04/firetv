@@ -185,6 +185,11 @@ class Car(val id: Int, track: Track) {
     var aiDuelTarget=-1;var aiDuelWait=false
     val aiInput=InputFrame()
     val speedMps get()=sqrt(vx*vx+vy*vy)
+    /** cos/sin of [heading], recomputed only when the heading bits change: the same StrictTrig value, evaluated once per step instead of dozens of times. */
+    private var trigBits=0L;private var trigValid=false;private var trigCos=1.0;private var trigSin=0.0
+    private fun refreshTrig() { val bits=heading.toRawBits();if(!trigValid || bits!=trigBits){trigBits=bits;trigValid=true;trigCos=cos(heading);trigSin=sin(heading)} }
+    val cosHeading: Double get() { refreshTrig();return trigCos }
+    val sinHeading: Double get() { refreshTrig();return trigSin }
 }
 interface Handling { fun integrate(car: Car, input: InputFrame, spec: CarSpec, dt: Double) }
 /** Momentum model: tire force saturates, brake unloads rear grip, yaw has inertia. */
@@ -421,8 +426,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         var gap=1000.0
         for(o in cars) if(o.entered && o!==c && !combat.wrecked(o.id)) {
             val dx=o.x-c.x; val dy=o.y-c.y
-            val along=dx*cos(c.heading)+dy*sin(c.heading)
-            if(along>0 && abs(-dx*sin(c.heading)+dy*cos(c.heading))<c.spec.circleRadiusM+o.spec.circleRadiusM+TrackRules["aiLateralClearanceM"]) gap=min(gap,along)
+            val along=dx*c.cosHeading+dy*c.sinHeading
+            if(along>0 && abs(-dx*c.sinHeading+dy*c.cosHeading)<c.spec.circleRadiusM+o.spec.circleRadiusM+TrackRules["aiLateralClearanceM"]) gap=min(gap,along)
         }
         c.aiPerceivedGapM=gap
         if(c.aiBlockedSteps>150 && c.aiDwell>90) { c.aiMode=AiMode.RECOVER; c.aiDwell=0; c.aiReason=1 }
@@ -444,7 +449,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 if(distance<nearest && combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)>=1.0) {
                     nearest=distance;c.aiDuelTarget=o.id
                     track.project(o.x,o.y,duelProjection,track.startM+o.lap.progressM,o.trackRoute);lane=duelProjection.distance
-                    c.aiDuelWait=dx*cos(c.heading)+dy*sin(c.heading)<0
+                    c.aiDuelWait=dx*c.cosHeading+dy*c.sinHeading<0
                     // Leave a passing lane while waiting for the visible car behind.
                     // Matching its lane here merely parks a shield in front of its guns.
                     if(c.aiDuelWait)lane=if(lane>=0)-DeathDuel.waitLaneM else DeathDuel.waitLaneM
@@ -479,11 +484,24 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             if(catching)min(a,driftRules["aiSlipThrottleLimit"]) else a,b)
         c.aiInput.handbrake=ai.drift(c,steer)
     }
+    // Projection is a pure function of (point, progress hint, route hint) on an immutable course. contain() runs four times a step
+    // and mostly sees the same two end points per car, so the last answer per car end is replayed when every input is bit-equal.
+    private val endKey=DoubleArray(Tuning.CAR_COUNT*2*3);private val endOut=DoubleArray(Tuning.CAR_COUNT*2*4)
+    private val endRoute=IntArray(Tuning.CAR_COUNT*2*2);private val endValid=BooleanArray(Tuning.CAR_COUNT*2)
+    private fun projectEnd(c: Car,end: Int,px: Double,py: Double) {
+        val slot=c.id*2+(end+1)/2;val hint=track.startM+c.lap.progressM;val k=slot*3;val o=slot*4;val r=slot*2
+        if(endValid[slot] && endKey[k].toRawBits()==px.toRawBits() && endKey[k+1].toRawBits()==py.toRawBits() && endKey[k+2].toRawBits()==hint.toRawBits() && endRoute[r]==c.trackRoute) {
+            projection.s=endOut[o];projection.distance=endOut[o+1];projection.nx=endOut[o+2];projection.ny=endOut[o+3];projection.route=endRoute[r+1];return
+        }
+        track.project(px,py,projection,hint,c.trackRoute)
+        endKey[k]=px;endKey[k+1]=py;endKey[k+2]=hint;endOut[o]=projection.s;endOut[o+1]=projection.distance;endOut[o+2]=projection.nx;endOut[o+3]=projection.ny
+        endRoute[r]=c.trackRoute;endRoute[r+1]=projection.route;endValid[slot]=true
+    }
     fun contain(c: Car) {
         val spec=c.spec
         val radius=spec.circleRadiusM
         for(end in -1..1 step 2) {
-            val ox=cos(c.heading)*spec.circleOffsetM*end; val oy=sin(c.heading)*spec.circleOffsetM*end
+            val ox=c.cosHeading*spec.circleOffsetM*end; val oy=c.sinHeading*spec.circleOffsetM*end
             track.project(c.x+ox,c.y+oy,projection,track.startM+c.lap.progressM,c.trackRoute)
             val limit=track.widthAt(projection.s,projection.route)-radius
             if(abs(projection.distance)>limit) {
@@ -499,11 +517,13 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun collide(a: Car,b: Car) {
         if(!a.entered || !b.entered)return
         val sa=a.spec; val sb=b.spec; val limit=sa.circleRadiusM+sb.circleRadiusM
+        // No contact circle of either car can reach the other from this far apart (offsets only move a circle by circleOffsetM).
+        val reach=limit+sa.circleOffsetM+sb.circleOffsetM+1e-6;val cdx=b.x-a.x;val cdy=b.y-a.y
         val invA=1/sa.massKg; val invB=1/sb.massKg; val invSum=invA+invB
         // A middle circle closes the side-contact gap on the longer W6 silhouettes.
         for(ea in -1..1) for(eb in -1..1) {
-            val ax=cos(a.heading)*sa.circleOffsetM*ea; val ay=sin(a.heading)*sa.circleOffsetM*ea
-            val bx=cos(b.heading)*sb.circleOffsetM*eb; val by=sin(b.heading)*sb.circleOffsetM*eb
+            val ax=a.cosHeading*sa.circleOffsetM*ea; val ay=a.sinHeading*sa.circleOffsetM*ea
+            val bx=b.cosHeading*sb.circleOffsetM*eb; val by=b.sinHeading*sb.circleOffsetM*eb
             val dx=b.x+bx-a.x-ax; val dy=b.y+by-a.y-ay
             val d2=dx*dx+dy*dy
             if(d2<limit*limit) {

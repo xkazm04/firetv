@@ -142,8 +142,8 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(a<1e-12)return Double.POSITIVE_INFINITY
         var earliest=Double.POSITIVE_INFINITY
         for(end in -1..1) {
-            val cx=target.x+cos(target.heading)*target.spec.circleOffsetM*end
-            val cy=target.y+sin(target.heading)*target.spec.circleOffsetM*end
+            val cx=target.x+target.cosHeading*target.spec.circleOffsetM*end
+            val cy=target.y+target.sinHeading*target.spec.circleOffsetM*end
             val ox=ax-cx;val oy=ay-cy;val r=radius+target.spec.circleRadiusM
             val c=ox*ox+oy*oy-r*r
             if(c<=0)return 0.0
@@ -154,11 +154,11 @@ class Combat(private val world: World,val enabled: Boolean) {
     }
     internal fun inRadius(c: Car,x: Double,y: Double,radius: Double): Boolean {
         val r=radius+c.spec.circleRadiusM
-        for(end in -1..1) { val dx=c.x+cos(c.heading)*c.spec.circleOffsetM*end-x;val dy=c.y+sin(c.heading)*c.spec.circleOffsetM*end-y;if(dx*dx+dy*dy<=r*r)return true }
+        for(end in -1..1) { val dx=c.x+c.cosHeading*c.spec.circleOffsetM*end-x;val dy=c.y+c.sinHeading*c.spec.circleOffsetM*end-y;if(dx*dx+dy*dy<=r*r)return true }
         return false
     }
-    private fun muzzleX(c: Car)=c.x+cos(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
-    private fun muzzleY(c: Car)=c.y+sin(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
+    private fun muzzleX(c: Car)=c.x+c.cosHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM)
+    private fun muzzleY(c: Car)=c.y+c.sinHeading*(c.spec.circleOffsetM+c.spec.circleRadiusM)
     /** Same road obstruction test used by guns, ability tells and AI visibility. */
     internal fun roadFraction(x: Double,y: Double,ex: Double,ey: Double,spacingM: Double,obstacles: Boolean=true): Double {
         val barrier=if(obstacles)world.obstacles.solidFraction(x,y,ex,ey) else 1.0
@@ -179,7 +179,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         } else if(weapon==Weapons.HAMMER) {
             var free: Projectile?=null;for(p in projectiles)if(!p.active){free=p;break}
             if(free==null){poolExhaustions++;return false}
-            free.active=true;free.owner=id;free.x=muzzleX(c);free.y=muzzleY(c);free.vx=cos(c.heading)*w.speedMps;free.vy=sin(c.heading)*w.speedMps;free.remainingM=w.rangeM;free.remainingSeconds=w.lifeSeconds;free.hitMask=0
+            free.active=true;free.owner=id;free.x=muzzleX(c);free.y=muzzleY(c);free.vx=c.cosHeading*w.speedMps;free.vy=c.sinHeading*w.speedMps;free.remainingM=w.rangeM;free.remainingSeconds=w.lifeSeconds;free.hitMask=0
         } else {
             val rays=if(weapon==Weapons.SCATTER)CombatRules["scatterRays"].toInt() else 1
             var hitMask=0
@@ -204,8 +204,8 @@ class Combat(private val world: World,val enabled: Boolean) {
         var free: Mine?=null;for(m in mines)if(!m.active){free=m;break}
         if(free==null){poolExhaustions++;return false}
         val rear=c.spec.circleOffsetM+c.spec.circleRadiusM+CombatRules["dropClearanceM"]
-        if(world.obstacles.solidAt(c.x-cos(c.heading)*rear,c.y-sin(c.heading)*rear,Weapons.all[Weapons.MINE].radiusM))return false
-        free.active=true;free.owner=c.id;free.x=c.x-cos(c.heading)*rear;free.y=c.y-sin(c.heading)*rear;free.ageSeconds=0.0;free.activation=++activation
+        if(world.obstacles.solidAt(c.x-c.cosHeading*rear,c.y-c.sinHeading*rear,Weapons.all[Weapons.MINE].radiusM))return false
+        free.active=true;free.owner=c.id;free.x=c.x-c.cosHeading*rear;free.y=c.y-c.sinHeading*rear;free.ageSeconds=0.0;free.activation=++activation
         return true
     }
     internal fun dispatchMine(id: Int): Boolean {
@@ -235,7 +235,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(world.ai.think(c))return
         if(!enabled || !canAct(c.id)){c.aiInput.fire=0.0;c.aiInput.mine=0.0;return}
         var target=-1;var distance=Weapons.all[Weapons.RIVET].rangeM*(c.aiStyle?.fireRangeScale?:1.0);var chaser=false
-        val cx=cos(c.heading);val cy=sin(c.heading)
+        val cx=c.cosHeading;val cy=c.sinHeading
         for(o in world.cars)if(o!==c && canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)
             if(along>0 && along<distance && side<o.spec.circleRadiusM+along*CombatRules["aiForwardConeRadians"]) {
@@ -256,7 +256,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         var closest=Career["repairSeekDistanceM"];var chosen=lane
         for(i in pickups.indices) {
             val p=pickups[i];if(p.type.id!="repair" || p.cooldownSeconds>0)continue
-            val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
+            val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*c.cosHeading+dy*c.sinHeading
             if(ahead>c.spec.circleOffsetM+c.spec.circleRadiusM && dx*dx+dy*dy<closest*closest) {
                 world.track.project(p.x,p.y,projection)
                 if(abs(projection.distance)<=world.track.widthAt(projection.s,projection.route)*Career["repairSeekLaneLimitFraction"]) { closest=sqrt(dx*dx+dy*dy);chosen=projection.distance;c.aiPickupTarget=i }
@@ -267,7 +267,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun avoidMine(c: Car,s: Double,lane: Double): Double {
         if(!enabled || c.aiSkill?.avoidMines==false)return lane
         for(m in mines)if(m.active && m.ageSeconds>=Weapons.all[Weapons.MINE].armingSeconds) {
-            val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
+            val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*c.cosHeading+dy*c.sinHeading
             if(ahead>0 && ahead<CombatRules["aiMineAvoidDistanceM"] && dx*dx+dy*dy<CombatRules["aiMineAvoidDistanceM"]*CombatRules["aiMineAvoidDistanceM"]) {
                 world.track.project(m.x,m.y,projection)
                 val margin=Weapons.all[Weapons.MINE].radiusM+c.spec.circleRadiusM+CombatRules["aiMineAvoidMarginM"]

@@ -100,8 +100,8 @@ class Abilities(private val world: World,var enabled: Boolean) {
         s.phase=AbilityPhase.WINDUP;s.remainingSeconds=d.windupSeconds;s.activation++;s.hitMask=0;s.fired=false
         val nose=c.spec.circleOffsetM+c.spec.circleRadiusM
         val offset=if(d.kind==AbilityKind.PATCH)-nose-CombatRules["dropClearanceM"] else nose
-        s.x=c.x+cos(c.heading)*offset;s.y=c.y+sin(c.heading)*offset
-        s.endX=s.x+cos(c.heading)*d.rangeM;s.endY=s.y+sin(c.heading)*d.rangeM
+        s.x=c.x+c.cosHeading*offset;s.y=c.y+c.sinHeading*offset
+        s.endX=s.x+c.cosHeading*d.rangeM;s.endY=s.y+c.sinHeading*d.rangeM
         world.presentationEvents.emit(PresentationKind.ABILITY,c.id,detail=s.activation,x=s.x,y=s.y,seconds=world.seconds)
         if(d.ray) {
             val fraction=world.combat.roadFraction(s.x,s.y,s.endX,s.endY,c.spec.circleRadiusM)
@@ -134,7 +134,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
                     val pair=min(c.id,o.id)*Tuning.CAR_COUNT+max(c.id,o.id)
                     if(world.ramClosingMps[pair]<=0)continue
                     val dx=o.x-c.x;val dy=o.y-c.y
-                    val along=dx*cos(c.heading)+dy*sin(c.heading);val side=abs(-dx*sin(c.heading)+dy*cos(c.heading))
+                    val along=dx*c.cosHeading+dy*c.sinHeading;val side=abs(-dx*c.sinHeading+dy*c.cosHeading)
                     if(along>side || d.kind==AbilityKind.SPIKES && -along>side)hit(c,o,d)
                 }
             }
@@ -163,7 +163,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
         world.track.project(c.x,c.y,projection,world.track.startM+c.lap.progressM,c.trackRoute);world.track.sample(projection.s+look,0.0,point,c.trackRoute)
         val straight=abs(point.curvature)<=d.aiMaxCurvature
         var front=false;var rear=false;var near=false
-        val cx=cos(c.heading);val cy=sin(c.heading)
+        val cx=c.cosHeading;val cy=c.sinHeading
         for(o in world.cars)if(o!==c && world.combat.canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y
             val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)

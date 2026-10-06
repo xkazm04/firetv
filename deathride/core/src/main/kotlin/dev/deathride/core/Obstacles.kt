@@ -126,7 +126,7 @@ class Obstacles(private val world: World) {
         if(!enabled)return
         var multiplier=1.0
         for(o in all)if(o.definition.effect==ObstacleEffect.DRAG)for(end in -1..1) {
-            if(contact(o,c.x+cos(c.heading)*c.spec.circleOffsetM*end,c.y+sin(c.heading)*c.spec.circleOffsetM*end,c.spec.circleRadiusM))multiplier=min(multiplier,o.definition.drag)
+            if(contact(o,c.x+c.cosHeading*c.spec.circleOffsetM*end,c.y+c.sinHeading*c.spec.circleOffsetM*end,c.spec.circleRadiusM))multiplier=min(multiplier,o.definition.drag)
         }
         if(multiplier<1){dragTicks++;val factor=exp(kotlin.math.ln(multiplier)*dt);c.vx*=factor;c.vy*=factor}
     }
@@ -160,7 +160,7 @@ class Obstacles(private val world: World) {
     fun collide(c: Car) {
         if(!enabled || !c.entered)return
         for(o in all)if(o.definition.effect==ObstacleEffect.SOLID)for(end in -1..1) {
-            val ox=cos(c.heading)*c.spec.circleOffsetM*end;val oy=sin(c.heading)*c.spec.circleOffsetM*end
+            val ox=c.cosHeading*c.spec.circleOffsetM*end;val oy=c.sinHeading*c.spec.circleOffsetM*end
             if(!contact(o,c.x+ox,c.y+oy,c.spec.circleRadiusM))continue
             solidContacts++
             val nx=normalX;val ny=normalY;c.x+=nx*penetration;c.y+=ny*penetration
@@ -180,12 +180,12 @@ class Obstacles(private val world: World) {
         if(!enabled)return lane
         var result=lane;var nearest=ObstacleContent["perceptionM"]
         for(o in all)if(o.definition.effect!=ObstacleEffect.NONE) {
-            val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*cos(c.heading)+dy*sin(c.heading)
+            val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*c.cosHeading+dy*c.sinHeading
             if(along<=0 || along>nearest || dx*dx+dy*dy>nearest*nearest)continue
             // Do not let the target obstacle occlude its own visibility; road visibility still applies.
             if(world.combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM,false)<1.0)continue
             if(solidFraction(c.x,c.y,o.x,o.y)<o.fraction(c.x,c.y,o.x,o.y)-1e-6)continue
-            val side=abs(-dx*sin(c.heading)+dy*cos(c.heading))
+            val side=abs(-dx*c.sinHeading+dy*c.cosHeading)
             if(o.definition.effect==ObstacleEffect.SOLID && side<o.radius+c.spec.circleRadiusM+ObstacleContent["avoidClearanceM"]) {
                 val reaction=(c.aiSkill?.reactionSteps?:18)*Tuning.STEP_SECONDS
                 val room=max(0.0,along-o.radius-c.spec.circleOffsetM-c.spec.circleRadiusM-c.speedMps*reaction-ObstacleContent["avoidClearanceM"])
