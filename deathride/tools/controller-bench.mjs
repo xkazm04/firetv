@@ -20,7 +20,7 @@ await cdp.send('Performance.enable');
 await cdp.send('Emulation.setCPUThrottlingRate',{rate:throttle});
 if(process.env.NET_MBPS){await cdp.send('Network.enable');const bps=Number(process.env.NET_MBPS)*125000;await cdp.send('Network.emulateNetworkConditions',{offline:false,latency:Number(process.env.NET_LATENCY_MS||20),downloadThroughput:bps,uploadThroughput:bps})}
 const t0=Date.now();
-await p.goto(base+'/?pin='+pin,{waitUntil:'load'});
+await p.goto(base+'/?pin='+pin+(process.env.BENCH_QUERY||''),{waitUntil:'load'});
 const load=await p.evaluate(()=>({transferBytes:performance.getEntriesByType('navigation').concat(performance.getEntriesByType('resource')).filter(e=>!e.name.startsWith('ws')).reduce((a,e)=>a+e.transferSize,0),fcp:performance.getEntriesByType('paint').find(e=>e.name==='first-contentful-paint')?.startTime,dcl:performance.timing.domContentLoadedEventEnd-performance.timing.navigationStart,htmlBytes:document.documentElement.outerHTML.length}));
 await p.waitForFunction(()=>document.getElementById('player').textContent.startsWith('PLAYER'),null,{timeout:15000});
 const linked=Date.now()-t0;

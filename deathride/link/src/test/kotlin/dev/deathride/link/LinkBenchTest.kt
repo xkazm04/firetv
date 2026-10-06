@@ -50,7 +50,7 @@ class LinkBenchTest {
                 Thread.sleep(500); val ba=serverBytes();val ma=l.messages.get();val ca=l.chars.get()
                 Thread.sleep(10000); val bb=serverBytes();val mb=l.messages.get();val cb=l.chars.get(); live.set(false);th.join()
                 println("BENCH hud-live 10s: msgs=${mb-ma} chars/msg=${(cb-ca)/maxOf(1,mb-ma)} KB/s=${(cb-ca)/10240.0} serverAlloc KB/s=${(bb-ba)/10240.0}") }
-            run { val n=3000;b0=serverBytes();val t0=System.nanoTime()
+            if(System.getenv("LINK_BENCH_UNKNOWN")!=null) run { val n=3000;b0=serverBytes();val t0=System.nanoTime()
                 for(i in 0 until n){ ws.sendText("{\"t\":\"x\"}",true).join(); val due=t0+(i+1)*3_300_000L; while(System.nanoTime()<due)Thread.sleep(0,200_000) }
                 Thread.sleep(300);b1=serverBytes();val wall=(System.nanoTime()-t0)/1e9
                 println("BENCH unknown-type frames: B/frame incl hud=${(b1-b0)/n} (hud tick share ${(128.0*1024*wall/n).toInt()} B)") }
