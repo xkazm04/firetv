@@ -365,19 +365,24 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         script.frame(phase,campaignRace,profiles[0],raceRound,world,actual.coerceIn(0.0,.1))
         profiler?.mark(9,"DR.telemetry")
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps;server.eventType=world.eventType.name;server.raceEntrants=world.entrantCount
-        if(uiTime>=.1) {
-            uiTime=0.0
+        if(uiStage==0 && uiTime>=.1) { uiTime=0.0;uiStage=1 }
+        // The 10 Hz telemetry/UI refresh is split over three consecutive frames (stats JSON and slot HUD, traffic and pickup JSON, HUD text layout): same cadence, a third of the burst per frame.
+        if(uiStage==1) {
             server.audioJson=audio.statsJson()
             val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
             val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
             val artBytes=art.textureBytes+storyArt.textureBytes
             server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":$artBytes,\"storyTextureBytes\":${storyArt.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${artBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(artBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures+storyArt.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"region\":\"${activeRegion.id}\",\"regionPresentation\":$regionPresentation,\"regionCandidates\":$regionCandidates,\"weatherLive\":${atmosphere.activeCount},\"weatherCap\":${activeRegion.weatherCap},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
             val combat=world.combat
-            server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"ability\":${world.abilities.json(c.id)},\"ai\":${world.ai.json(c)},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
-            server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
             server.combatSummaryJson="{\"mineBlastRadiusM\":${Weapons.all[Weapons.MINE].radiusM},\"mineTriggerRadiusM\":${combat.mineTriggerRadiusM},\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
+            uiStage=2
+        } else if(uiStage==2) {
+            server.trafficJson=trafficJson();server.pickupsJson=pickupsJson()
+            uiStage=3
+        } else if(uiStage==3) {
             rebuildUi()
+            uiStage=0
         }
         profiler?.mark(10,"DR.clear")
         view.apply(); ScreenUtils.clear(bg)
@@ -822,6 +827,31 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=HudTheme.soot;shape.rect(175f,98f,930f,105f);shape.end()
         batch.projectionMatrix=view.camera.combined;batch.begin();captions.draw(batch);batch.end()
+    }
+    private var uiStage=0
+    private val jsonBuilder=StringBuilder(8192)
+    /** Same text as the former joinToString/template version, built in one reusable buffer. */
+    private fun trafficJson(): String {
+        val sb=jsonBuilder;sb.setLength(0);val combat=world.combat
+        sb.append('[');var first=true
+        for(c in world.cars)if(c.entered) {
+            if(!first)sb.append(',');first=false
+            sb.append("{\"id\":").append(c.id).append(",\"name\":\"").append(driverName(c)).append("\",\"car\":\"").append(c.carClass?.id).append("\",\"human\":").append(c.human)
+                .append(",\"x\":").append(c.x).append(",\"y\":").append(c.y).append(",\"heading\":").append(c.heading).append(",\"radius\":").append(c.spec.circleRadiusM)
+                .append(",\"ability\":").append(world.abilities.json(c.id)).append(",\"ai\":").append(world.ai.json(c)).append(",\"hp\":").append(combat.health(c.id))
+                .append(",\"wrecked\":").append(combat.wrecked(c.id)).append(",\"finished\":").append(c.finishSeconds>=0).append(",\"finishKind\":\"").append(c.finishKind)
+                .append("\",\"laps\":").append(c.lap.laps).append(",\"position\":").append(c.position).append(",\"repairPickups\":").append(combat.repairPickupsTaken[c.id]).append('}')
+        }
+        return sb.append(']').toString()
+    }
+    private fun pickupsJson(): String {
+        val sb=jsonBuilder;sb.setLength(0);val pickups=world.combat.pickups
+        sb.append('[')
+        for(i in pickups.indices) {
+            val p=pickups[i];if(i>0)sb.append(',')
+            sb.append("{\"kind\":\"").append(p.type.id).append("\",\"x\":").append(p.x).append(",\"y\":").append(p.y).append(",\"cooldown\":").append(p.cooldownSeconds).append('}')
+        }
+        return sb.append(']').toString()
     }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
