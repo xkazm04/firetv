@@ -228,6 +228,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         raceAudio=RaceAudioDirector(audio);raceAudio.bind(world)
         campaignAudio=CampaignAudioDirector(audio)
         server=RaceServer(assets,logger,port=serverPort,profileFrames=profiler?.trace,profileRuntime=profiler?.let{{it.platform.runtimeJson()}}); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
+        server.audioJson={statsSafe("audio"){audio.statsJson()}};server.artJson={statsSafe("art"){artJson()}};server.combatSummaryJson={statsSafe("combatSummary"){combatSummaryJson()}};server.trafficJson={statsSafe("traffic"){trafficJson()}};server.pickupsJson={statsSafe("pickups"){pickupsJson()}}
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels)
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
@@ -368,18 +369,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(uiStage==0 && uiTime>=.1) { uiTime=0.0;uiStage=1 }
         // The 10 Hz telemetry/UI refresh is split over three consecutive frames (stats JSON and slot HUD, traffic and pickup JSON, HUD text layout): same cadence, a third of the burst per frame.
         if(uiStage==1) {
-            server.audioJson=audio.statsJson()
-            val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
-            val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
-            val artBytes=art.textureBytes+storyArt.textureBytes
-            server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":$artBytes,\"storyTextureBytes\":${storyArt.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${artBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(artBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures+storyArt.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"region\":\"${activeRegion.id}\",\"regionPresentation\":$regionPresentation,\"regionCandidates\":$regionCandidates,\"weatherLive\":${atmosphere.activeCount},\"weatherCap\":${activeRegion.weatherCap},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
-            val combat=world.combat
-            server.combatSummaryJson="{\"mineBlastRadiusM\":${Weapons.all[Weapons.MINE].radiusM},\"mineTriggerRadiusM\":${combat.mineTriggerRadiusM},\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             uiStage=2
         } else if(uiStage==2) {
-            server.trafficJson=trafficJson();server.pickupsJson=pickupsJson()
-            uiStage=3
+            uiStage=3 // was traffic/pickup JSON; now built by /stats readers
         } else if(uiStage==3) {
             rebuildUi()
             uiStage=0
@@ -828,6 +821,19 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=HudTheme.soot;shape.rect(175f,98f,930f,105f);shape.end()
         batch.projectionMatrix=view.camera.combined;batch.begin();captions.draw(batch);batch.end()
+    }
+    /** Stats-only strings, built on the reader's thread. Reads race the render thread: a torn read serves the last good text instead of failing the request. */
+    private val statsLock=Any();private val statsLast=HashMap<String,String>()
+    private fun statsSafe(key: String,build: ()->String): String = synchronized(statsLock) { try { build().also{statsLast[key]=it} } catch(_: RuntimeException) { statsLast[key]?:if(key=="traffic" || key=="pickups")"[]" else "{}" } }
+    private fun artJson(): String {
+        val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
+        val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
+        val artBytes=art.textureBytes+storyArt.textureBytes
+        return "{\"regions\":${art.regionCount},\"textureBytes\":$artBytes,\"storyTextureBytes\":${storyArt.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${artBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(artBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures+storyArt.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"region\":\"${activeRegion.id}\",\"regionPresentation\":$regionPresentation,\"regionCandidates\":$regionCandidates,\"weatherLive\":${atmosphere.activeCount},\"weatherCap\":${activeRegion.weatherCap},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
+    }
+    private fun combatSummaryJson(): String {
+        val combat=world.combat
+        return "{\"mineBlastRadiusM\":${Weapons.all[Weapons.MINE].radiusM},\"mineTriggerRadiusM\":${combat.mineTriggerRadiusM},\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
     }
     private var uiStage=0
     private val jsonBuilder=StringBuilder(8192)
