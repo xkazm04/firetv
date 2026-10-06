@@ -624,8 +624,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val ox=1144f-((c.minX+c.maxX)*.5).toFloat()*scale;val oy=469f-((c.minY+c.maxY)*.5).toFloat()*scale
         shape.color=bg;shape.rect(1044f,394f,200f,150f)
         shape.color=muted
-        for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
-        for(line in scene.branchCenters)for(i in 0 until line.size/2-1)shape.rectLine(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f)
+        // The 360-segment road line is static per course: one retained mesh draw instead of ~2,200 immediate-mode vertices per frame.
+        shape.end()
+        val retained=scene.drawMinimapRoad(view.camera.combined,muted.r,muted.g,muted.b)
+        shape.begin(ShapeRenderer.ShapeType.Filled);shape.color=muted
+        if(!retained) {
+            for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
+            for(line in scene.branchCenters)for(i in 0 until line.size/2-1)shape.rectLine(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f)
+        }
         // Dark halo keeps every seat colour readable on the road line; a nose triangle gives heading, humans are larger.
         for(car in world.cars)if(car.entered) {
             val x=ox+car.x.toFloat()*scale;val y=oy+car.y.toFloat()*scale;val r=if(car.human)6f else 4.5f

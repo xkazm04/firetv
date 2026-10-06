@@ -12,6 +12,9 @@ import kotlin.math.*
 /** One reusable GPU target and renderer; never allocate/delete them at a course change. */
 class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     val roadMarks=RoadMarkMesh()
+    /** HUD minimap road lines: 360 centre-line segments and every branch, 6 vertices each, retained on the GPU. */
+    val minimap=RoadMarkMesh(6*(VisualTuning["roadSamples"].toInt()+8*128+16),roadMarks.program)
+    var minimapOwner: Any?=null
     val regionShader=RegionShader.create()
     val markMatrix=Matrix4()
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
@@ -47,7 +50,7 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
             sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
         }
     }
-    fun dispose() { regionShader.dispose();roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
+    fun dispose() { regionShader.dispose();roadMarks.dispose();minimap.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
 class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null,
@@ -304,6 +307,22 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         art.tile("tiles/gravel")?.let{t->for(v in shortcuts)batch.draw(t,v,0,v.size)}
         for(p in oils)art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])
         if(look!=null)batch.shader=previous
+    }
+    private var minimapFits=true
+    /** Draws the HUD minimap road lines from the retained mesh; false (nothing drawn) when they do not fit, so the caller keeps the immediate path. */
+    fun drawMinimapRoad(matrix: Matrix4,r: Float,g: Float,b: Float): Boolean {
+        if(!ready || !minimapFits)return false
+        if(canvas.minimapOwner!==this) {
+            val lines=samples+branchCenters.sumOf{it.size/2-1}
+            if(!canvas.minimap.let{it.clear();it.fits(lines)}){minimapFits=false;return false}
+            val scale=min(166/(course.maxX-course.minX),112/(course.maxY-course.minY)).toFloat()
+            val ox=1144f-((course.minX+course.maxX)*.5).toFloat()*scale;val oy=469f-((course.minY+course.maxY)*.5).toFloat()*scale
+            val m=canvas.minimap
+            for(i in 0 until samples)m.line(ox+center[i*2]*scale,oy+center[i*2+1]*scale,ox+center[(i+1)*2]*scale,oy+center[(i+1)*2+1]*scale,3f,r,g,b)
+            for(line in branchCenters)for(i in 0 until line.size/2-1)m.line(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f,r,g,b)
+            m.upload();canvas.minimapOwner=this
+        }
+        canvas.minimap.draw(matrix);return true
     }
     fun drawRoadMarks(r: ShapeRenderer) {
         if(liveRoad.isEmpty())return
