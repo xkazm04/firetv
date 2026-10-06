@@ -229,6 +229,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         campaignAudio=CampaignAudioDirector(audio)
         server=RaceServer(assets,logger,port=serverPort,profileFrames=profiler?.trace,profileRuntime=profiler?.let{{it.platform.runtimeJson()}}); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         server.audioJson={statsSafe("audio"){audio.statsJson()}};server.artJson={statsSafe("art"){artJson()}};server.combatSummaryJson={statsSafe("combatSummary"){combatSummaryJson()}};server.trafficJson={statsSafe("traffic"){trafficJson()}};server.pickupsJson={statsSafe("pickups"){pickupsJson()}}
+        for(i in server.slots.indices){val slot=server.slots[i];slot.combatFull={statsSafe("combat$i"){combatJson(i)}}}
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels)
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
@@ -369,7 +370,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(uiStage==0 && uiTime>=.1) { uiTime=0.0;uiStage=1 }
         // The 10 Hz telemetry/UI refresh is split over three consecutive frames (stats JSON and slot HUD, traffic and pickup JSON, HUD text layout): same cadence, a third of the burst per frame.
         if(uiStage==1) {
-            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
+            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatHud=combatHudJson(i) }
             uiStage=2
         } else if(uiStage==2) {
             uiStage=3 // was traffic/pickup JSON; now built by /stats readers
@@ -859,6 +860,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             sb.append("{\"kind\":\"").append(p.type.id).append("\",\"x\":").append(p.x).append(",\"y\":").append(p.y).append(",\"cooldown\":").append(p.cooldownSeconds).append('}')
         }
         return sb.append(']').toString()
+    }
+    /** What the phone hud reads of [combatJson]; the full object is served by /stats. */
+    private fun combatHudJson(id: Int): String {
+        val c=world.combat;val weapon=c.selectedWeapon[id]
+        return "{\"spectating\":${!activeSeat(id)},\"ability\":${world.abilities.hudJson(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]}}"
     }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]

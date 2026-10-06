@@ -33,7 +33,9 @@ class LinkBenchTest {
         val s=host.slots[0]
         s.garageJson="{\"offers\":["+(0 until 40).joinToString(","){"{\"id\":\"part$it\",\"name\":\"Part $it\",\"description\":\"Adds grip and a longer description string here\",\"tier\":1,\"maxTier\":3,\"price\":120,\"available\":true,\"before\":[1,2,3,4,5],\"after\":[2,2,3,4,5]}"}+"]}"
         s.careerJson="{\"round\":3,\"story\":\""+"x".repeat(5000)+"\"}"
-        s.combatJson="{\"hp\":87.123456789,\"maxHp\":100.0,\"ammo\":14,\"weaponName\":\"Rivet\",\"mines\":3,\"heavyAmmo\":2,\"scatterAmmo\":2,\"cooldownSeconds\":0.0,\"mineCooldownSeconds\":0.0,\"armingSeconds\":0.0,\"damageEvents\":4,\"wrecked\":false,\"spectating\":false,\"ability\":{\"id\":\"x\",\"name\":\"Boost\",\"energy\":55.5,\"energyCapacity\":100,\"energyCost\":30,\"phase\":\"READY\",\"ready\":true,\"available\":true,\"cooldownSeconds\":0.0}}"
+        // Real racing combat object (tools/bench/hud-fixture.json); LINK_BENCH_LEAN=1 sends the trimmed hud variant like RaceGame does.
+        s.combatJson="""{"spectating":false,"ability":{"id":"plate-brace","name":"Plate Brace","phase":"READY","remainingSeconds":0,"cooldownSeconds":0,"energy":100,"energyCapacity":100,"energyCost":50,"ready":false,"available":true,"uses":0,"hits":0,"damage":0,"effectId":"abilities/plate-brace"},"armingSeconds":3.4166666666666665,"hp":100,"maxHp":100,"wrecked":false,"weapon":0,"weaponName":"Rivet","ammo":243,"mines":5,"heavyAmmo":8,"scatterAmmo":16,"cash":0,"sabotageTarget":-1,"cooldownSeconds":0,"mineCooldownSeconds":0,"damageEvents":0,"kills":0}"""
+        if(System.getenv("LINK_BENCH_LEAN")!=null)s.combatHud="""{"spectating":false,"ability":{"id":"plate-brace","name":"Plate Brace","phase":"READY","cooldownSeconds":0,"energy":100,"energyCapacity":100,"energyCost":50,"ready":false,"available":true},"armingSeconds":3.4166666666666665,"hp":100,"maxHp":100,"wrecked":false,"weaponName":"Rivet","ammo":243,"mines":5,"heavyAmmo":8,"scatterAmmo":16,"cooldownSeconds":0,"mineCooldownSeconds":0,"damageEvents":0}"""
         s.speed=23.456789012345678;s.driftQuality=0.4567891234
 
         val client=HttpClient.newHttpClient()

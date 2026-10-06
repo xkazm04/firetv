@@ -58,6 +58,10 @@ class Slot(val id: Int) {
     @Volatile var effectiveMine=0.0
     @Volatile var effectiveAbility=0.0
     @Volatile var combatJson="{}"
+    /** Lean combat object for the phone hud; empty means send [combatJson]. */
+    @Volatile var combatHud=""
+    /** Full combat object for /stats, built by the reader; null means [combatJson]. */
+    @Volatile var combatFull: (()->String)?=null
     @Volatile var layout="Drive"
     @Volatile var mirrored=false
     @Volatile var hudDelta=false
@@ -195,7 +199,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     val now=nowMs()
                     val meta=metadata.json(currentPhase,now,hostCareerJson,s.careerJson,s.garageJson,s.carJson,trackJson,feel.json)
                     cur.setLength(0)
-                    cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatJson)
+                    cur.append("{\"t\":\"hud\",\"speed\":").appendFixed(s.speed,2).append(",\"lap\":").append(s.lap).append(",\"pos\":").append(s.position).append(",\"combat\":").append(s.combatHud.ifEmpty{s.combatJson})
                         .append(",\"surface\":\"").append(surface.id).append("\",\"drifting\":").append(s.drifting).append(",\"driftQuality\":").appendFixed(s.driftQuality,3).append(",\"slipRadians\":").appendFixed(s.slipRadians,3)
                         .append(",\"spunOut\":").append(s.spunOut).append(",\"loadTransfer\":").appendFixed(s.loadTransfer,3).append(",\"surfaceId\":\"").append(s.surfaceId).append("\",\"impact\":").appendFixed(s.impact,3)
                         .append(",\"phase\":\"").append(currentPhase).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants).append(",\"raceLaps\":").append(raceLaps)
@@ -291,7 +295,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         sb.append("{\"audio\":${audioJson()},\"art\":${artJson()},\"traffic\":${trafficJson()},\"pickups\":${pickupsJson()},\"combatSummary\":${combatSummaryJson()},\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"raceSeconds\":$raceSeconds,\"sceneryReady\":$sceneryReady,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"hudDelta\":${s.hudDelta},\"hudMessages\":${s.hudMessages},\"hudCharacters\":${s.hudCharacters},\"hudFullSnapshots\":${s.hudFullSnapshots},\"hidden\":${s.hidden},\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveBrake\":${s.effectiveBrake},\"effectiveDrift\":${s.effectiveDrift},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
+            sb.append("{\"slot\":$i,\"hudDelta\":${s.hudDelta},\"hudMessages\":${s.hudMessages},\"hudCharacters\":${s.hudCharacters},\"hudFullSnapshots\":${s.hudFullSnapshots},\"hidden\":${s.hidden},\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveBrake\":${s.effectiveBrake},\"effectiveDrift\":${s.effectiveDrift},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatFull?.invoke()?:s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
         }
         sb.append("]}"); return sb.toString()
     }
