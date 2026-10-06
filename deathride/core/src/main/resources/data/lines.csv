@@ -1,0 +1,519 @@
+id,speaker,kind,event,trigger,conditions,text,voice_direction,tags,chars,duration_s,status
+card.prologue.1,card,card,prologue,card-show,line=1,Paper Night. The pen is chained to the table.,"Not voiced: story-card caption, read at TV distance",plant:rounding;theme:car-over-driver,45,3.6,key-pick
+card.prologue.2,card,card,prologue,card-show,line=2,"Marrow reads the car's number, not yours.","Not voiced: story-card caption, read at TV distance",plant:rounding;theme:car-over-driver,41,2.9,key-pick
+card.prologue.3,card,card,prologue,card-show,line=3,The Voice reads the figure and rounds it. Twelve Hundred.,"Not voiced: story-card caption, read at TV distance",plant:rounding;theme:car-over-driver,57,3.9,key-pick
+card.scrap-1.1,card,card,scrap-1,card-show,line=1,Forty-one keys on the Tag Board now. Rook hung the last one.,"Not voiced: story-card caption, read at TV distance",institution:tag-board;intro:rook;intro:mechanic,60,4.9,key-pick
+card.scrap-1.2,card,card,scrap-1,card-show,line=2,Every key is a car the league took back.,"Not voiced: story-card caption, read at TV distance",institution:tag-board;intro:rook;intro:mechanic,40,3.6,key-pick
+card.scrap-1.3,card,card,scrap-1,card-show,line=3,"The parts shop leaves one bulb on, over the empty bay.","Not voiced: story-card caption, read at TV distance",institution:tag-board;intro:rook;intro:mechanic,54,4.3,key-pick
+card.scrap-2.1,card,card,scrap-2,card-show,line=1,Your first receipt has four lines. You understand three.,"Not voiced: story-card caption, read at TV distance",plant:levy;ledger-ritual,56,3.6,draft
+card.scrap-2.2,card,card,scrap-2,card-show,line=2,"The fourth says road levy, in Marrow's own hand.","Not voiced: story-card caption, read at TV distance",plant:levy;ledger-ritual,48,3.6,draft
+card.scrap-2.3,card,card,scrap-2,card-show,line=3,Keep it. Marrow keeps a different copy.,"Not voiced: story-card caption, read at TV distance",plant:levy;ledger-ritual,39,2.9,draft
+card.scrap-3.1,card,card,scrap-3,card-show,line=1,"Scree on the Yards road, and scree on the shop floor.","Not voiced: story-card caption, read at TV distance",plant:frame;mechanic-need,53,4.3,draft
+card.scrap-3.2,card,card,scrap-3,card-show,line=2,Under a sheet in the back sits a bare Line frame.,"Not voiced: story-card caption, read at TV distance",plant:frame;mechanic-need,49,4.3,draft
+card.scrap-3.3,card,card,scrap-3,card-show,line=3,"Nobody bid on it, the Mechanic says, so it's nobody's.","Not voiced: story-card caption, read at TV distance",plant:frame;mechanic-need,54,3.9,draft
+card.scrap-4.1,card,card,scrap-4,card-show,line=1,Relay asks you to carry a sealed gearbox across the Yards.,"Not voiced: story-card caption, read at TV distance",plant:gearbox;contract:delivery,58,4.3,draft
+card.scrap-4.2,card,card,scrap-4,card-show,line=2,It has no league stamp. Nothing in the basin has no league stamp.,"Not voiced: story-card caption, read at TV distance",plant:gearbox;contract:delivery,65,4.9,draft
+card.scrap-4.3,card,card,scrap-4,card-show,line=3,The prize still pays if you refuse. Relay won't ask twice.,"Not voiced: story-card caption, read at TV distance",plant:gearbox;contract:delivery,58,4.3,draft
+card.scrap-5.1,card,card,scrap-5,card-show,line=1,Rook's Needle rolls to the grid with a league tag on its mirror.,"Not voiced: story-card caption, read at TV distance",refusal:rook;leash-bites-others;plant:rook-saw-frame,64,4.9,draft
+card.scrap-5.2,card,card,scrap-5,card-show,line=2,The Mechanic offers to hide it behind his curtain. Rook looks behind it.,"Not voiced: story-card caption, read at TV distance",refusal:rook;leash-bites-others;plant:rook-saw-frame,72,4.9,draft
+card.scrap-5.3,card,card,scrap-5,card-show,line=3,He says no. He doesn't say what he saw.,"Not voiced: story-card caption, read at TV distance",refusal:rook;leash-bites-others;plant:rook-saw-frame,39,3.6,draft
+card.scrap-6.1,card,card,scrap-6,card-show,line=1,Wipe the soot off the Tag Board and the names come up.,"Not voiced: story-card caption, read at TV distance",reveal:collector-owes;plant:tull,54,4.6,draft
+card.scrap-6.2,card,card,scrap-6,card-show,line=2,Three rows down: Rook's own key. Hung apart from the rest: Tull's.,"Not voiced: story-card caption, read at TV distance",reveal:collector-owes;plant:tull,66,4.6,draft
+card.scrap-6.3,card,card,scrap-6,card-show,line=3,Clear the qualifier. Rook's gate is next.,"Not voiced: story-card caption, read at TV distance",reveal:collector-owes;plant:tull,41,2.9,draft
+card.scrap-7.1,card,card,scrap-7,card-show,line=1,Rook has never lost at his own gate.,"Not voiced: story-card caption, read at TV distance",boss:rook;rule:first-place,36,3.3,key-pick
+card.scrap-7.2,card,card,scrap-7,card-show,line=2,"He polished the tag on his mirror this morning, so it would look paid.","Not voiced: story-card caption, read at TV distance",boss:rook;rule:first-place,70,5.3,key-pick
+card.scrap-7.3,card,card,scrap-7,card-show,line=3,Win outright. Second is just a better view of him.,"Not voiced: story-card caption, read at TV distance",boss:rook;rule:first-place,50,3.9,key-pick
+card.foundry-1.1,card,card,foundry-1,card-show,line=1,Cinder Row stamps a lost hand's name into every ingot.,"Not voiced: story-card caption, read at TV distance",witness:ox-sees-rook;cost:rook;institution:roll-call,54,3.9,draft
+card.foundry-1.2,card,card,foundry-1,card-show,line=2,"Rook pulls up beside your pit in a Trail, with no tags to hang.","Not voiced: story-card caption, read at TV distance",witness:ox-sees-rook;cost:rook;institution:roll-call,63,5.3,draft
+card.foundry-1.3,card,card,foundry-1,card-show,line=3,"Ox watches him from the furnace door, and doesn't look away.","Not voiced: story-card caption, read at TV distance",witness:ox-sees-rook;cost:rook;institution:roll-call,60,4.3,draft
+card.foundry-2.1,card,card,foundry-2,card-show,line=1,The lender's stall is painted the same red as the Crown.,"Not voiced: story-card caption, read at TV distance",loan,56,4.3,draft
+card.foundry-2.2,card,card,foundry-2,card-show,line=2,The fee is written where you can read it. That's new.,"Not voiced: story-card caption, read at TV distance",loan,53,4.3,draft
+card.foundry-2.3,card,card,foundry-2,card-show,line=3,The Mechanic will fix the car without the loan. He says so twice.,"Not voiced: story-card caption, read at TV distance",loan,65,4.9,draft
+card.foundry-3.1,card,card,foundry-3,card-show,line=1,Ox's Bastion owns every straight in Cinder Row.,"Not voiced: story-card caption, read at TV distance",teach:ox-signature,47,3.3,draft
+card.foundry-3.2,card,card,foundry-3,card-show,line=2,She runs wide in the hairpins and never seems to mind.,"Not voiced: story-card caption, read at TV distance",teach:ox-signature,54,4.3,draft
+card.foundry-3.3,card,card,foundry-3,card-show,line=3,Her crew counts your brake lights from the furnace door.,"Not voiced: story-card caption, read at TV distance",teach:ox-signature,56,3.9,draft
+card.foundry-4.1,card,card,foundry-4,card-show,line=1,"A new house car rolls off Ox's belt, still warm.","Not voiced: story-card caption, read at TV distance",reveal-part:equity;house-cars,48,3.9,draft
+card.foundry-4.2,card,card,foundry-4,card-show,line=2,Its driver has a fleet number instead of a name.,"Not voiced: story-card caption, read at TV distance",reveal-part:equity;house-cars,48,3.9,draft
+card.foundry-4.3,card,card,foundry-4,card-show,line=3,His key hangs on the Tag Board in the Yards.,"Not voiced: story-card caption, read at TV distance",reveal-part:equity;house-cars,44,3.9,draft
+card.foundry-5.1,card,card,foundry-5,card-show,line=1,Crew wages and your payments land in the same account.,"Not voiced: story-card caption, read at TV distance",refusal:ox,54,3.9,draft
+card.foundry-5.2,card,card,foundry-5,card-show,line=2,"Ox has a second set of receipts, folded into her vest.","Not voiced: story-card caption, read at TV distance",refusal:ox,54,4.3,draft
+card.foundry-5.3,card,card,foundry-5,card-show,line=3,"She keeps them there, and keeps her crew fed.","Not voiced: story-card caption, read at TV distance",refusal:ox,45,3.6,draft
+card.foundry-6.1,card,card,foundry-6,card-show,line=1,"The Mechanic asks Ox's crew for an offcut, for a thing.","Not voiced: story-card caption, read at TV distance",plant:plate;dissent:cinder-row,55,4.3,draft
+card.foundry-6.2,card,card,foundry-6,card-show,line=2,A young hand says Ox's caution keeps the crew poor.,"Not voiced: story-card caption, read at TV distance",plant:plate;dissent:cinder-row,51,3.9,draft
+card.foundry-6.3,card,card,foundry-6,card-show,line=3,Clear the qualifier. Ox will race for the account.,"Not voiced: story-card caption, read at TV distance",plant:plate;dissent:cinder-row,50,3.6,draft
+card.foundry-7.1,card,card,foundry-7,card-show,line=1,Ox reads the Roll Call. Every name.,"Not voiced: story-card caption, read at TV distance",boss:ox;rule:first-place,35,2.9,key-pick
+card.foundry-7.2,card,card,foundry-7,card-show,line=2,Two receipts sit in her vest.,"Not voiced: story-card caption, read at TV distance",boss:ox;rule:first-place,29,2.6,key-pick
+card.foundry-7.3,card,card,foundry-7,card-show,line=3,Win outright to see the second.,"Not voiced: story-card caption, read at TV distance",boss:ox;rule:first-place,31,2.6,key-pick
+card.salt-1.1,card,card,salt-1,card-show,line=1,Cinder Row's furnaces are cold. The crew eats at the door anyway.,"Not voiced: story-card caption, read at TV distance",witness:vex-sees-ox;cost:ox,65,4.6,draft
+card.salt-1.2,card,card,salt-1,card-show,line=2,Vex drives through on a haul and slows down to look.,"Not voiced: story-card caption, read at TV distance",witness:vex-sees-ox;cost:ox,52,4.3,draft
+card.salt-1.3,card,card,salt-1,card-show,line=3,On the Salt Cut they race at dusk. Noon would blind you.,"Not voiced: story-card caption, read at TV distance",witness:vex-sees-ox;cost:ox,56,4.6,draft
+card.salt-2.1,card,card,salt-2,card-show,line=1,Tyre tracks run out at the third cairn and don't come back.,"Not voiced: story-card caption, read at TV distance",plant:tull;institution:cairn-log,59,4.6,draft
+card.salt-2.2,card,card,salt-2,card-show,line=2,"The Cairn Log says Tull crashed there alone, two winters ago.","Not voiced: story-card caption, read at TV distance",plant:tull;institution:cairn-log,61,4.3,draft
+card.salt-2.3,card,card,salt-2,card-show,line=3,Vex laps the third cairn faster than anywhere else.,"Not voiced: story-card caption, read at TV distance",plant:tull;institution:cairn-log,51,3.6,draft
+card.salt-3.1,card,card,salt-3,card-show,line=1,Your ammunition crate comes back from the league depot light.,"Not voiced: story-card caption, read at TV distance",plant:drum;competence,61,3.9,draft
+card.salt-3.2,card,card,salt-3,card-show,line=2,The Mechanic weighs it at the counter and swaps it before you notice.,"Not voiced: story-card caption, read at TV distance",plant:drum;competence,69,4.9,draft
+card.salt-3.3,card,card,salt-3,card-show,line=3,"Behind him, a quarry drum is now bolted to the bare frame.","Not voiced: story-card caption, read at TV distance",plant:drum;competence,58,4.6,draft
+card.salt-4.1,card,card,salt-4,card-show,line=1,The Cairn Log names a house car as the Salt Line record holder.,"Not voiced: story-card caption, read at TV distance",contract:clean;teach:vex-signature,63,4.9,draft
+card.salt-4.2,card,card,salt-4,card-show,line=2,Vex knows the real time. He has never once said it aloud.,"Not voiced: story-card caption, read at TV distance",contract:clean;teach:vex-signature,57,4.6,draft
+card.salt-4.3,card,card,salt-4,card-show,line=3,"Win untouched today, and the haulers will talk about it.","Not voiced: story-card caption, read at TV distance",contract:clean;teach:vex-signature,56,3.9,draft
+card.salt-5.1,card,card,salt-5,card-show,line=1,"Vex's stopwatch stopped two winters ago, at the third cairn.","Not voiced: story-card caption, read at TV distance",refusal:vex,60,3.9,draft
+card.salt-5.2,card,card,salt-5,card-show,line=2,He winds it every dusk and never lets it run.,"Not voiced: story-card caption, read at TV distance",refusal:vex,45,3.9,draft
+card.salt-5.3,card,card,salt-5,card-show,line=3,He won't give it up. The crews have stopped asking.,"Not voiced: story-card caption, read at TV distance",refusal:vex,51,3.9,draft
+card.salt-6.1,card,card,salt-6,card-show,line=1,"Relay reads the Cairn Log twice, by lamp, at the third cairn.","Not voiced: story-card caption, read at TV distance",reveal-part:whiteout;relay,61,4.6,draft
+card.salt-6.2,card,card,salt-6,card-show,line=2,One line has been scraped off and written over in league ink.,"Not voiced: story-card caption, read at TV distance",reveal-part:whiteout;relay,61,4.6,draft
+card.salt-6.3,card,card,salt-6,card-show,line=3,Clear the qualifier. Vex is waiting on the flats.,"Not voiced: story-card caption, read at TV distance",reveal-part:whiteout;relay,49,3.6,draft
+card.salt-7.1,card,card,salt-7,card-show,line=1,"One stopwatch, stopped two winters ago at the third cairn.","Not voiced: story-card caption, read at TV distance",boss:vex;rule:first-place,58,3.9,key-pick
+card.salt-7.2,card,card,salt-7,card-show,line=2,Vex carries it in his fist on the grid.,"Not voiced: story-card caption, read at TV distance",boss:vex;rule:first-place,39,3.6,key-pick
+card.salt-7.3,card,card,salt-7,card-show,line=3,First place opens the fist.,"Not voiced: story-card caption, read at TV distance",boss:vex;rule:first-place,27,2.3,key-pick
+card.switchback-1.1,card,card,switchback-1,card-show,line=1,"The shop climbs the pass on a trailer, in silence, as the custom asks.","Not voiced: story-card caption, read at TV distance",institution:hut-law;cost:vex;mechanic-name,70,5.3,draft
+card.switchback-1.2,card,card,switchback-1,card-show,line=2,"At the first hut, Mica asks the Mechanic his name. He has to think.","Not voiced: story-card caption, read at TV distance",institution:hut-law;cost:vex;mechanic-name,67,5.3,draft
+card.switchback-1.3,card,card,switchback-1,card-show,line=3,Vex races up here now for nothing but the record.,"Not voiced: story-card caption, read at TV distance",institution:hut-law;cost:vex;mechanic-name,49,3.9,draft
+card.switchback-2.1,card,card,switchback-2,card-show,line=1,"Ox's receipts, the Yards tags and Relay's log, on one hut table.","Not voiced: story-card caption, read at TV distance",the-book,64,4.6,draft
+card.switchback-2.2,card,card,switchback-2,card-show,line=2,Three regions. One handwriting.,"Not voiced: story-card caption, read at TV distance",the-book,31,1.9,draft
+card.switchback-2.3,card,card,switchback-2,card-show,line=3,Mica reads them all and says nothing for a long time.,"Not voiced: story-card caption, read at TV distance",the-book,53,4.3,draft
+card.switchback-3.1,card,card,switchback-3,card-show,line=1,"Every hut on the pass has a radio, and every radio has the Voice.","Not voiced: story-card caption, read at TV distance",protected-thing:1;plant:rounding,65,5.3,draft
+card.switchback-3.2,card,card,switchback-3,card-show,line=2,He still calls you Twelve Hundred. A clerk on the line corrects him.,"Not voiced: story-card caption, read at TV distance",protected-thing:1;plant:rounding,68,4.9,draft
+card.switchback-3.3,card,card,switchback-3,card-show,line=3,"Then Marrow, on air, for once: let it stand.","Not voiced: story-card caption, read at TV distance",protected-thing:1;plant:rounding,44,3.6,draft
+card.switchback-4.1,card,card,switchback-4,card-show,line=1,Runoff has washed the ink off half the road signs.,"Not voiced: story-card caption, read at TV distance",copies,50,3.9,draft
+card.switchback-4.2,card,card,switchback-4,card-show,line=2,Mica gives each crew a different copy of the evidence.,"Not voiced: story-card caption, read at TV distance",copies,54,3.9,draft
+card.switchback-4.3,card,card,switchback-4,card-show,line=3,No single seized car can carry it all away now.,"Not voiced: story-card caption, read at TV distance",copies,47,3.9,draft
+card.switchback-5.1,card,card,switchback-5,card-show,line=1,"Mica keeps every hut open to anyone, enemy or not.","Not voiced: story-card caption, read at TV distance",refusal:mica;contract:grudge,50,3.9,draft
+card.switchback-5.2,card,card,switchback-5,card-show,line=2,"Asked to shut them to Marrow, she says no.","Not voiced: story-card caption, read at TV distance",refusal:mica;contract:grudge,42,3.6,draft
+card.switchback-5.3,card,card,switchback-5,card-show,line=3,"That night his Bulwark parks outside her hut, and she lets him in.","Not voiced: story-card caption, read at TV distance",refusal:mica;contract:grudge,66,4.9,draft
+card.switchback-6.1,card,card,switchback-6,card-show,line=1,"Marrow knew the Mechanic at six, sweeping his garage.","Not voiced: story-card caption, read at TV distance",reveal:mechanic-history;plant:pardon;witness:mica,53,3.6,key-pick
+card.switchback-6.2,card,card,switchback-6,card-show,line=2,"Tonight, at Mica's table, he offers the bench back, and a clean page.","Not voiced: story-card caption, read at TV distance",reveal:mechanic-history;plant:pardon;witness:mica,69,4.9,key-pick
+card.switchback-6.3,card,card,switchback-6,card-show,line=3,"The page goes in the apron, unsigned. Mica watches.","Not voiced: story-card caption, read at TV distance",reveal:mechanic-history;plant:pardon;witness:mica,51,3.6,key-pick
+card.switchback-7.1,card,card,switchback-7,card-show,line=1,"Mica's knife is on the dash, next to Marrow's cloth strips.","Not voiced: story-card caption, read at TV distance",boss:mica;rule:first-place,59,4.3,key-pick
+card.switchback-7.2,card,card,switchback-7,card-show,line=2,She hasn't decided what it's for.,"Not voiced: story-card caption, read at TV distance",boss:mica;rule:first-place,33,2.6,key-pick
+card.switchback-7.3,card,card,switchback-7,card-show,line=3,Win outright and she'll decide.,"Not voiced: story-card caption, read at TV distance",boss:mica;rule:first-place,31,2.3,key-pick
+card.crown-1.1,card,card,crown-1,card-show,line=1,The Crown gates check every car's paper.,"Not voiced: story-card caption, read at TV distance",leash-bites-others;rehearsal:seizure;cost:mica,40,2.9,draft
+card.crown-1.2,card,card,crown-1,card-show,line=2,Relay's comes back with a clause nine. He has never seen one.,"Not voiced: story-card caption, read at TV distance",leash-bites-others;rehearsal:seizure;cost:mica,61,4.6,draft
+card.crown-1.3,card,card,crown-1,card-show,line=3,His car goes to the Lien Wall. He walks in carrying a sealed gearbox.,"Not voiced: story-card caption, read at TV distance",leash-bites-others;rehearsal:seizure;cost:mica,69,5.3,draft
+card.crown-2.1,card,card,crown-2,card-show,line=1,Half the Crown grid wears fleet numbers instead of names.,"Not voiced: story-card caption, read at TV distance",marrow-on-track;house-cars,57,3.9,draft
+card.crown-2.2,card,card,crown-2,card-show,line=2,Marrow's Bulwark sits on pole. He swept the start line himself.,"Not voiced: story-card caption, read at TV distance",marrow-on-track;house-cars,63,4.3,draft
+card.crown-2.3,card,card,crown-2,card-show,line=3,The Mechanic says a rating can't choose a line. Choose one.,"Not voiced: story-card caption, read at TV distance",marrow-on-track;house-cars,59,4.3,draft
+card.crown-3.1,card,card,crown-3,card-show,line=1,"Marrow waits for the Voice to finish, as he always has.","Not voiced: story-card caption, read at TV distance",protected-thing:3;voice-turn,55,4.3,key-pick
+card.crown-3.2,card,card,crown-3,card-show,line=2,"Tonight it takes forty minutes, and every line is about him.","Not voiced: story-card caption, read at TV distance",protected-thing:3;voice-turn,60,4.3,key-pick
+card.crown-3.3,card,card,crown-3,card-show,line=3,He interrupts once. The Voice had rounded.,"Not voiced: story-card caption, read at TV distance",protected-thing:3;voice-turn,42,2.9,key-pick
+card.crown-4.1,card,card,crown-4,card-show,line=1,"Relay's sealed gearbox, seal still on. Rook's tyres. Ox's plate.","Not voiced: story-card caption, read at TV distance",rig-reveal;payoff:pardon;payoff:bearing;contract:delivery,64,3.9,key-pick
+card.crown-4.2,card,card,crown-4,card-show,line=2,Vex's watch ticks in the drum; Mica's pins hold it down.,"Not voiced: story-card caption, read at TV distance",rig-reveal;payoff:pardon;payoff:bearing;contract:delivery,56,4.3,key-pick
+card.crown-4.3,card,card,crown-4,card-show,line=3,"The only registered thing on it is the shim, and that's Marrow's pardon.","Not voiced: story-card caption, read at TV distance",rig-reveal;payoff:pardon;payoff:bearing;contract:delivery,72,4.9,key-pick
+card.crown-5.1,card,card,crown-5,card-show,line=1,"A new line on your receipt: registration, under review.","Not voiced: story-card caption, read at TV distance",lien-foreshadow,55,3.6,draft
+card.crown-5.2,card,card,crown-5,card-show,line=2,Marrow has stopped talking about money. He talks about the car.,"Not voiced: story-card caption, read at TV distance",lien-foreshadow,63,4.3,draft
+card.crown-5.3,card,card,crown-5,card-show,line=3,He chains the Crown's exits for the longest race of the year.,"Not voiced: story-card caption, read at TV distance",lien-foreshadow,61,4.6,draft
+card.crown-6.1,card,card,crown-6,card-show,line=1,Clause nine is one sentence long and a week old.,"Not voiced: story-card caption, read at TV distance",lien,48,3.9,key-pick
+card.crown-6.2,card,card,crown-6,card-show,line=2,It makes every registered car on the road the league's.,"Not voiced: story-card caption, read at TV distance",lien,55,3.9,key-pick
+card.crown-6.3,card,card,crown-6,card-show,line=3,The Mechanic's rig was never registered.,"Not voiced: story-card caption, read at TV distance",lien,40,2.6,key-pick
+card.crown-7.1,card,card,crown-7,card-show,line=1,Marrow sweeps the start line himself.,"Not voiced: story-card caption, read at TV distance",finale;rule:elimination,37,2.6,key-pick
+card.crown-7.2,card,card,crown-7,card-show,line=2,"Your car waits on the plinth, chained, his tag on the mirror.","Not voiced: story-card caption, read at TV distance",finale;rule:elimination,61,4.6,key-pick
+card.crown-7.3,card,card,crown-7,card-show,line=3,The rig only drops while it's rolling. Don't stop.,"Not voiced: story-card caption, read at TV distance",finale;rule:elimination,50,3.6,key-pick
+card.campaign-victory.1,card,card,campaign-victory,card-show,line=1,Your key comes home with Marrow's clamp cut through.,"Not voiced: story-card caption, read at TV distance",ending;locked-first;payoff:keys,52,3.6,key-pick
+card.campaign-victory.2,card,card,campaign-victory,card-show,line=2,The Mechanic takes the mine rack off the rig first.,"Not voiced: story-card caption, read at TV distance",ending;locked-first;payoff:keys,51,3.9,key-pick
+card.campaign-victory.3,card,card,campaign-victory,card-show,line=3,"By the door there's a new hook, at your height.","Not voiced: story-card caption, read at TV distance",ending;locked-first;payoff:keys,47,3.9,key-pick
+ann.paper-night,voice,announcer,prologue,card-show,,The figure's got some change on it. I don't do change. Twelve Hundred.,"Callum noir: low, dry, unhurried; full stops are the pauses",key;plant:rounding;address,70,5.9,key-pick
+ann.grid.a1.1,voice,announcer,any,race-start,act=1,Ash on the Yards road. Six cars. Twelve Hundred at the bottom of the paper.,"Callum noir: low, dry, unhurried; full stops are the pauses",,75,6.7,draft
+ann.grid.a1.2,voice,announcer,any,race-start,act=1;race>=3,"The Yards are listening. They usually are, when someone owes.","Callum noir: low, dry, unhurried; full stops are the pauses",,61,4.5,draft
+ann.grid.a1.3,voice,announcer,any,race-start,act=1;first-win,Twelve Hundred again. The basin has started to remember the name.,"Callum noir: low, dry, unhurried; full stops are the pauses",,65,4.9,draft
+ann.grid.a2.1,voice,announcer,any,race-start,act=2,Cinder Row. The belt never stops. It's stopped for this.,"Callum noir: low, dry, unhurried; full stops are the pauses",,56,4.7,draft
+ann.grid.a2.2,voice,announcer,any,race-start,act=2;rook=ally,Rook on the grid with no tags to hang. The Yards are still talking.,"Callum noir: low, dry, unhurried; full stops are the pauses",,67,6.0,draft
+ann.grid.a3.1,voice,announcer,any,race-start,act=3,Dusk on the flats. The glare's down. The log is open.,"Callum noir: low, dry, unhurried; full stops are the pauses",,53,5.1,draft
+ann.grid.a3.2,voice,announcer,any,race-start,act=3;race>=2,Salt Cut. Mind the third cairn. Everybody does.,"Callum noir: low, dry, unhurried; full stops are the pauses",plant:tull,47,3.9,draft
+ann.grid.a4.1,voice,announcer,any,race-start,act=4,Thin Air. They cross the pass in silence. Not tonight.,"Callum noir: low, dry, unhurried; full stops are the pauses",,54,4.7,draft
+ann.grid.a4.2,voice,announcer,any,race-start,act=4;race>=2,"The pass is open. The grit is low. Six cars, one road.","Callum noir: low, dry, unhurried; full stops are the pauses",,54,5.5,draft
+ann.grid.a5.1,voice,announcer,any,race-start,act=5,"The Crown. Empty stands, full grid. The basin is listening.","Callum noir: low, dry, unhurried; full stops are the pauses",,59,4.7,draft
+ann.grid.a5.2,voice,announcer,crown-2,race-start,act=5;first-marrow,Mister Marrow on the grid. First time in a long time.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-on-track,53,4.9,draft
+ann.grid.a5.3,voice,announcer,any,race-start,act=5;voice-corrected,Same booth. Same voice. Different paper.,"Callum noir: low, dry, unhurried; full stops are the pauses",after:crown-3,40,3.1,draft
+ann.grid.debt-paid,voice,announcer,any,race-start,debt=paid,Twelve Hundred's paper reads nothing owed. First time I've said that on air.,"Callum noir: low, dry, unhurried; full stops are the pauses",,76,5.7,draft
+ann.grid.retry.1,voice,announcer,any,race-start,retry=1,"Twelve Hundred, again. The paper's patient.","Callum noir: low, dry, unhurried; full stops are the pauses",,43,2.9,draft
+ann.grid.retry.3,voice,announcer,any,race-start,retry>=3,Third try. The basin has stopped switching off.,"Callum noir: low, dry, unhurried; full stops are the pauses",,47,3.7,draft
+ann.boss.rook,voice,announcer,scrap-7,race-start,boss-race,Rook's gate. Nine years unbeaten. A tow truck is parked by the board.,"Callum noir: low, dry, unhurried; full stops are the pauses",boss:rook,69,5.9,draft
+ann.boss.ox,voice,announcer,foundry-7,race-start,boss-race,Ox on the line. Twenty years on the belt. The furnace door is full.,"Callum noir: low, dry, unhurried; full stops are the pauses",boss:ox,67,6.3,draft
+ann.boss.vex,voice,announcer,salt-7,race-start,boss-race,Dusk on the Salt Line. Vex holds the real record. The log disagrees.,"Callum noir: low, dry, unhurried; full stops are the pauses",boss:vex,68,5.9,draft
+ann.boss.mica,voice,announcer,switchback-7,race-start,boss-race,"The keeper of the pass, racing on her own road. The huts are quiet.","Callum noir: low, dry, unhurried; full stops are the pauses",boss:mica,67,6.0,draft
+ann.book.rook,voice,announcer,scrap-7,pre-race,boss-race;retry=0,"From the book: the league thanks Rook for nine years at the gate, in advance.","Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;key,77,6.5,key-pick
+ann.book.rook.retry,voice,announcer,scrap-7,pre-race,boss-race;retry>=1,From the book: tow crews are asked to stand by the Tag Board. That is all.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;retry;scored,74,7.1,draft
+ann.book.scrap-6,voice,announcer,scrap-6,pre-race,,From the book: the Tag Board is league property. Do not clean it.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present,65,5.9,draft
+ann.book.ox,voice,announcer,foundry-7,pre-race,boss-race,"From the book: the belt resumes at the next shift, whatever the result.","Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present,71,5.7,draft
+ann.book.interest,voice,announcer,salt-1,pre-race,levy-exposed,From the book: interest on Yards accounts is suspended. The league is generous.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;ledger,79,5.9,draft
+ann.book.vex,voice,announcer,salt-7,pre-race,boss-race,From the book: tonight's times will be entered in the Cairn Log by league staff only.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present,85,6.9,draft
+ann.book.mica,voice,announcer,switchback-7,pre-race,boss-race,From the book: the league thanks the huts of the pass for their continued neutrality.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present,85,6.5,draft
+ann.book.relay,voice,announcer,crown-1,pre-race,,From the book: one car has been retired at the gate under clause nine. Racing continues.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;rehearsal:seizure,88,7.1,draft
+ann.book.review,voice,announcer,crown-5,pre-race,,From the book: registrations are under review. Drivers will be informed.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;lien-foreshadow,72,5.1,draft
+ann.book.lien,voice,announcer,crown-6,pre-race,,From the book: a lien has been posted under clause nine. In good order.,"Callum noir: low, dry, unhurried; full stops are the pauses",marrow-present;lien,71,6.3,draft
+ann.book.seizure,voice,announcer,crown-7,seizure,seized,From the book: the car of Twelve Hundred has been retired under clause nine.,"Callum noir: low, dry, unhurried; full stops are the pauses",seizure;replaces:rec.announcer.seizure,76,6.0,draft
+ann.correction.1,voice,announcer,crown-3,pre-race,,Correction to the record. I've never said that before. Settle in.,"Callum noir: low, dry, unhurried; full stops are the pauses",voice-turn;scored,65,5.1,draft
+ann.correction.2,voice,announcer,crown-3,pre-race,after:ann.correction.1,Forty minutes of corrections. I'll take them in order.,"Callum noir: low, dry, unhurried; full stops are the pauses",voice-turn;scored,54,4.0,draft
+ann.correction.3,voice,announcer,crown-3,pre-race,after:ann.correction.2,"Third cairn, two winters back. I called it a driver alone. I was reading his paper. Correction.","Callum noir: low, dry, unhurried; full stops are the pauses",voice-turn;payoff:tull;key,95,7.8,key-pick
+ann.finish.win,voice,announcer,any,finish,result=win,"Twelve Hundred, first. Somebody in the Yards just lost a bet.","Callum noir: low, dry, unhurried; full stops are the pauses",,61,4.9,draft
+ann.finish.first-win,voice,announcer,any,finish,result=win;first-win,First win for Twelve Hundred. The paper doesn't care. The Yards do.,"Callum noir: low, dry, unhurried; full stops are the pauses",,67,5.5,draft
+ann.finish.win.a5,voice,announcer,any,finish,result=win;act=5,"Twelve Hundred, first, at the Crown. The house has noticed.","Callum noir: low, dry, unhurried; full stops are the pauses",,59,4.5,draft
+ann.finish.loss,voice,announcer,any,finish,result=loss,"Twelve Hundred, down the order. The paper gets paid either way.","Callum noir: low, dry, unhurried; full stops are the pauses",,63,4.9,draft
+ann.finish.wrecked,voice,announcer,any,finish,result=wrecked,Twelve Hundred is off the road. The tow crews know the way.,"Callum noir: low, dry, unhurried; full stops are the pauses",,59,5.2,draft
+ann.finish.wrecked.2,voice,announcer,any,finish,result=wrecked;wrecked-streak>=2,Off again. The Yards' mechanic will have opinions.,"Callum noir: low, dry, unhurried; full stops are the pauses",,50,3.7,draft
+ann.finish.clean,voice,announcer,any,finish,result=win;clean,"First, and not a scratch. The Yards' mechanic will be impossible.","Callum noir: low, dry, unhurried; full stops are the pauses",finesse,65,4.9,draft
+ann.finish.comeback,voice,announcer,any,finish,result=win;started-last,From the back of the paper to the front. I'll stop calling it luck.,"Callum noir: low, dry, unhurried; full stops are the pauses",finesse,67,6.0,draft
+ann.finish.mined,voice,announcer,any,wrecked-by-player,weapon=mine,Mined. The league will send somebody a bill.,"Callum noir: low, dry, unhurried; full stops are the pauses",finesse,44,3.7,draft
+ann.finish.boss-loss.rook,voice,announcer,scrap-7,finish,boss-race;result!=win,The gate holds. Rook keeps his car another night.,"Callum noir: low, dry, unhurried; full stops are the pauses",boss-loss,49,4.0,draft
+ann.finish.boss-loss.any,voice,announcer,any,finish,boss-race;result!=win,Close isn't first. Nothing changes hands tonight.,"Callum noir: low, dry, unhurried; full stops are the pauses",boss-loss,49,3.2,draft
+ann.finish.boss-win.rook,voice,announcer,scrap-7,finish,boss-race;result=win,Rook's gate is open. The tow truck has a job after all.,"Callum noir: low, dry, unhurried; full stops are the pauses",,55,5.2,draft
+ann.finish.boss-win.ox,voice,announcer,foundry-7,finish,boss-race;result=win,"Ox, beaten on her own belt. First time in twenty years.","Callum noir: low, dry, unhurried; full stops are the pauses",,55,4.9,draft
+ann.finish.boss-win.vex,voice,announcer,salt-7,finish,boss-race;result=win,"Vex, second on the flats. Somebody check the log.","Callum noir: low, dry, unhurried; full stops are the pauses",,49,4.0,draft
+ann.finish.boss-win.mica,voice,announcer,switchback-7,finish,boss-race;result=win,"The keeper of the pass, beaten on her own road. The huts are very quiet.","Callum noir: low, dry, unhurried; full stops are the pauses",,72,6.5,draft
+ann.ally.rook,voice,announcer,foundry-1,race-start,rook=ally,"Rook, out of a Trail, pitted next to Twelve Hundred. Write your own story.","Callum noir: low, dry, unhurried; full stops are the pauses",,74,6.0,draft
+ann.ally.ox,voice,announcer,salt-1,race-start,ox=ally,The belt has stopped. Cinder Row is eating at the door. I just call it.,"Callum noir: low, dry, unhurried; full stops are the pauses",,71,6.7,draft
+ann.ally.vex,voice,announcer,switchback-1,race-start,vex=ally,Vex is out of the haul book. Racing for the record. Only the record.,"Callum noir: low, dry, unhurried; full stops are the pauses",,68,6.3,draft
+ann.ally.mica,voice,announcer,crown-1,race-start,mica=ally,No grit going up the pass this winter. The keeper knows why.,"Callum noir: low, dry, unhurried; full stops are the pauses",,60,5.2,draft
+ann.duel.open,voice,finale,crown-7,duel-start,retry=0,"Listen for engines. When there's one, I'll say so.","Callum noir: low, dry, unhurried; full stops are the pauses",key;rule:elimination,50,4.0,key-pick
+ann.duel.open.alt,voice,finale,crown-7,duel-start,retry>=1,No laps tonight. I'll count cars instead. There are two.,"Callum noir: low, dry, unhurried; full stops are the pauses",rule:elimination;scored,56,4.7,alternate
+rec.announcer.debt,voice,announcer,scrap-1,career-start,,Your engine is collateral. Every race buys another day. Marrow keeps the books.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;fallback-for:ann.paper-night,79,5.9,recorded-keep
+rec.announcer.boss,voice,announcer,any,race-start,boss-race,Beat the division boss. Give them a reason to stand beside you.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;replaced-by:ann.boss.*,63,5.2,recorded-replace
+rec.announcer.ally,voice,announcer,any,boss-turn,,A beaten rival. A new ally. Their backing keeps you on the road.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;replaced-by:ann.ally.*,64,5.9,recorded-replace
+rec.announcer.seizure,voice,announcer,crown-7,seizure,seized,Marrow has taken your car. The debt was never meant to end.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;replaced-by:ann.book.seizure,59,5.2,recorded-replace
+rec.announcer.duel,voice,announcer,crown-7,duel-start,,No laps. No points. The last car running ends this.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;fallback-for:ann.duel.open,51,4.7,recorded-keep
+rec.announcer.freedom,voice,announcer,crown-7,duel-win,,The ledger is closed. This road belongs to the living.,"Callum noir: low, dry, unhurried; full stops are the pauses",recorded;replaced-by:fin.end.voice,54,4.5,recorded-replace
+marrow.paper-night,marrow,card,prologue,card-show,,A good chassis. I will remember it.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;plant:car-over-driver;foreclosure,35,3.2,key-pick
+ledger.first,marrow,shop,any,ledger-receipt,first-receipt,Four lines. Each one fair. M.,"Not voiced: ledger remark under the receipt, signed M.",key;plant:levy,29,3.1,key-pick
+ledger.second,marrow,shop,any,ledger-receipt,receipt=2,Keep this. Compare it with the next one. M.,"Not voiced: ledger remark under the receipt, signed M.",plant:duplicates;scored,43,4.3,draft
+ledger.depreciating,marrow,shop,any,ledger-receipt,receipt>=5;result=win;rare,A sound result. The car is depreciating more slowly than most. M.,"Not voiced: ledger remark under the receipt, signed M.",plant:car-over-driver;scored,65,5.5,draft
+ledger.levy,marrow,shop,any,ledger-receipt,receipt>=3;levy-hidden,The levy keeps the road open. You are welcome to walk instead. M.,"Not voiced: ledger remark under the receipt, signed M.",plant:levy,65,5.9,draft
+ledger.interest,marrow,shop,any,ledger-receipt,interest>0,Time is a cost. I only pass it on. M.,"Not voiced: ledger remark under the receipt, signed M.",,37,4.7,draft
+ledger.win,marrow,shop,any,ledger-receipt,result=win,A good result for the car. M.,"Not voiced: ledger remark under the receipt, signed M.",,29,3.2,draft
+ledger.loss,marrow,shop,any,ledger-receipt,result=loss,"A poor result, correctly recorded. M.","Not voiced: ledger remark under the receipt, signed M.",,37,2.9,draft
+ledger.wrecked,marrow,shop,any,ledger-receipt,result=wrecked,Repairs insured. The car will be good as new. You will be as you were. M.,"Not voiced: ledger remark under the receipt, signed M.",,73,7.4,draft
+ledger.recovered,marrow,shop,any,ledger-receipt,levy-exposed;first,Recovered amounts returned per the book. The book was always willing. M.,"Not voiced: ledger remark under the receipt, signed M.",exposure,72,5.5,draft
+ledger.low,marrow,shop,any,ledger-receipt,debt=low,Nearly settled. Nearly is a long word. M.,"Not voiced: ledger remark under the receipt, signed M.",,41,3.9,draft
+ledger.paid,marrow,shop,any,ledger-receipt,debt=paid,Settled in full. The car remains registered. M.,"Not voiced: ledger remark under the receipt, signed M.",lien-foreshadow,47,3.9,draft
+ledger.review,marrow,shop,any,ledger-receipt,event=crown-5,Registration under review. You will be informed. M.,"Not voiced: ledger remark under the receipt, signed M.",lien-foreshadow,51,3.9,draft
+ledger.lien,marrow,shop,any,ledger-receipt,event=crown-6,Lien posted under clause nine. In good order. M.,"Not voiced: ledger remark under the receipt, signed M.",lien,48,4.3,draft
+ledger.held,marrow,shop,any,ledger-receipt,seized,Collateral held. M.,"Not voiced: ledger remark under the receipt, signed M.",seizure,19,1.6,draft
+ledger.void,marrow,shop,any,ledger-receipt,duel-won,Claim void. Unsigned.,"Not voiced: ledger remark under the receipt, signed M.",ending,21,1.6,draft
+marrow.offer.1,marrow,pre,switchback-6,pre-race,scene=hut,I kept your bench. Nobody has touched it in thirteen years. I have already signed my side.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",offer;plant:bench;scored,90,7.5,draft
+marrow.offer.2,marrow,pre,switchback-6,pre-race,scene=hut;after:marrow.offer.1,I will not ask what is under the sheet. I will only ask you to leave it there.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;offer,78,7.7,key-pick
+marrow.offer.3,marrow,pre,switchback-6,pre-race,scene=hut;after:mech.offer.reply,Take the page. Read it in the morning. I am in no hurry.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",offer,56,5.9,draft
+mech.offer.reply,mechanic,pre,switchback-6,pre-race,scene=hut,"I'll, um. I'll keep it. To look at.","Harry: nervous but helpful; short breaths; at most one restart; barely audible is fine, but do not direct a whisper",offer;plant:pardon,35,3.9,draft
+mica.offer.after,mica,pre,switchback-6,pre-race,scene=hut;after-offer,You didn't sign.,"UNCAST: calm, low woman's voice; unhurried pauses",witness:mica,16,1.4,draft
+mech.offer.after,mechanic,pre,switchback-6,pre-race,scene=hut;after-offer,I didn't give it back either.,Harry: nervous but helpful; short breaths; at most one restart,plant:pardon,29,2.6,draft
+seizure.caption.1,card,shop,crown-7,seizure,seized;line=1,"Marrow steps into the shop for the first time, and wipes his feet.","Not voiced: story-card caption, read at TV distance",seizure;tell:wipes-feet,66,4.9,draft
+marrow.seizure.1,marrow,shop,crown-7,seizure,seized;after:seizure.caption.1,Clause nine. You will find it on the back of your copy now.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;seizure,59,5.7,key-pick
+marrow.seizure.2,marrow,shop,crown-7,seizure,seized;after:marrow.seizure.1,Key on the counter. Thank you.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",seizure;scored,30,2.9,draft
+seizure.caption.2,card,shop,crown-7,seizure,seized;line=2,"He leaves your receipts on the counter, folded.","Not voiced: story-card caption, read at TV distance",seizure;tell:folds,47,3.3,draft
+clerk.lien,clerk,shop,crown-6,lien-tag,,Sorry. It's the form.,"Not voiced: league clerk, caption only",lien;minor-voice,21,2.1,draft
+bark.marrow.first,marrow,bark,crown-2,near-player,first-marrow,Your car is cornering well. I have made a note.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;foreclosure,47,4.5,key-pick
+bark.marrow.grid,marrow,bark,any,grid,act=5,Good evening. Keep to your line.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,32,2.9,draft
+bark.marrow.grid.paid,marrow,bark,any,grid,act=5;debt=paid,"Paid in full, and still on my road.","UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,35,3.4,draft
+bark.marrow.overtakes,marrow,bark,any,overtakes-player,,Excuse me.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,10,1.0,draft
+bark.marrow.overtaken,marrow,bark,any,overtaken-by-player,,Noted.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,6,0.6,draft
+bark.marrow.hit,marrow,bark,any,hit-by-player,,Mind the paint. It is registered.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",scored,33,2.9,draft
+bark.marrow.hit.2,marrow,bark,any,hit-by-player,repeat,You are scratching your own collateral.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,39,2.6,draft
+bark.marrow.wrecks,marrow,bark,any,wrecks-player,,Tow it to the bay. Gently.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,26,2.9,draft
+bark.marrow.wrecked,marrow,bark,any,wrecked-by-player,,Recorded.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,9,0.6,draft
+bark.marrow.lastlap,marrow,bark,any,last-lap,leading,The inside line is mine. It has always been mine.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,49,4.5,draft
+bark.marrow.lowhp,marrow,bark,any,low-hp,,Brace.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",ability:plate-brace,6,0.6,draft
+bark.marrow.ahead,marrow,bark,any,finish-ahead,,In good order.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,14,1.4,draft
+bark.marrow.behind,marrow,bark,any,finish-behind,,A good result for the car.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,26,2.6,draft
+bark.marrow.rook,marrow,bark,any,near-rival,rival=rook;rook=ally,Rook. You were a good collector.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,32,2.9,draft
+bark.marrow.ox,marrow,bark,any,near-rival,rival=ox;ox=ally,Ox. Your belt is idle. That is a choice.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,40,4.3,draft
+bark.marrow.vex,marrow,bark,any,near-rival,rival=vex;vex=ally,Vex. Your best time is still in my log. Under another name.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,59,5.5,draft
+bark.marrow.mica,marrow,bark,any,near-rival,rival=mica;mica=ally,Mica. The pass will be cold this winter.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,40,3.7,draft
+bark.marrow.bulwark,marrow,bark,any,near-player,player-car=bulwark,A Bulwark. You have good taste in my cars.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",,42,4.0,draft
+shop.welcome.a1,mechanic,shop,scrap-1,shop-enter,first-visit,"Okay. Let me see. Stock tyres, honest axle. I can work with honest.",Harry: nervous but helpful; short breaths; at most one restart,key;intro,67,6.2,key-pick
+shop.welcome.a1b,mechanic,shop,scrap-1,shop-enter,first-visit;after:shop.welcome.a1,Don't touch the bench at the back. It's not finished. Your bay's this one.,Harry: nervous but helpful; short breaths; at most one restart,plant:frame,74,6.3,draft
+shop.welcome.a2,mechanic,shop,foundry-1,shop-enter,act=2;first-visit,"Shop's on a trailer now. Mind the step. It's an old step, it's just new here.",Harry: nervous but helpful; short breaths; at most one restart,,77,7.1,draft
+shop.welcome.a3,mechanic,shop,salt-1,shop-enter,act=3;first-visit,"Salt gets into everything. Bearings, eyes. Give me a minute with the filters.",Harry: nervous but helpful; short breaths; at most one restart,,77,5.9,draft
+shop.welcome.a4,mechanic,shop,switchback-1,shop-enter,act=4;first-visit,Thin air. The engine won't like it. I'll make it like it.,Harry: nervous but helpful; short breaths; at most one restart,,57,5.5,draft
+shop.welcome.a5,mechanic,shop,crown-1,shop-enter,act=5;first-visit,The Crown. I swept that pit floor once. A long time ago. Pull in.,Harry: nervous but helpful; short breaths; at most one restart,payoff:history,65,6.5,draft
+shop.welcome.any,mechanic,shop,any,shop-enter,,Pull in. Let me hear it idle first.,Harry: nervous but helpful; short breaths; at most one restart,,35,3.7,draft
+shop.welcome.win,mechanic,shop,any,shop-enter,result=win,You won? I heard. I was holding a spanner the whole race. Didn't use it.,Harry: nervous but helpful; short breaths; at most one restart,,72,7.0,draft
+shop.welcome.loss,mechanic,shop,any,shop-enter,result=loss,Something's rubbing. I heard it from here. That's what cost you the race.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,73,5.9,draft
+shop.repair.light,mechanic,shop,any,repair,damage=light,Paint and a mirror. I'll have it honest by the flag.,Harry: nervous but helpful; short breaths; at most one restart,,52,4.9,draft
+shop.repair.heavy,mechanic,shop,any,repair,damage=heavy,Okay. The frame's true. Everything hanging off it is a conversation.,Harry: nervous but helpful; short breaths; at most one restart,,68,5.1,draft
+shop.repair.wrecked,mechanic,shop,any,repair,result=wrecked,The left mount again. It's always the left mount. I'll make it honest.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,70,5.9,draft
+shop.repair.streak,mechanic,shop,any,repair,wrecked-streak>=3,That's the same bumper bracket as last time. I'm starting to know it personally.,Harry: nervous but helpful; short breaths; at most one restart,humour,80,6.0,draft
+shop.repair.won-hurt,mechanic,shop,any,repair,result=win;damage=heavy,"You won in that? Sit down. No, the car. The car should sit down.",Harry: nervous but helpful; short breaths; at most one restart,humour,64,6.5,draft
+shop.repair.mine,mechanic,shop,any,repair,hit-by=mine,"Mine damage. Underside. I'll check every weld twice, so give me a minute.",Harry: nervous but helpful; short breaths; at most one restart,,73,5.9,draft
+shop.books.levy,mechanic,shop,scrap-2,ledger-open,first-receipt,"Four lines. The fourth one, the levy. Nobody's ever explained it. I've asked.",Harry: nervous but helpful; short breaths; at most one restart,plant:levy,77,6.2,draft
+shop.books.levy.2,mechanic,shop,any,ledger-open,act=2;levy-hidden,The levy's a quarter of every payment. A quarter. That's a lot of road.,Harry: nervous but helpful; short breaths; at most one restart,plant:levy,71,6.3,draft
+shop.books.exposed,mechanic,shop,foundry-7,ledger-open,levy-exposed;first,Ox's receipts match your levy to the credit. Every one. I checked three times.,Harry: nervous but helpful; short breaths; at most one restart,exposure,78,6.3,draft
+shop.books.restitution,mechanic,shop,salt-1,ledger-open,restitution>0,"The levy came back. Some on the balance, some in your hand. Spend the hand part on tyres.",Harry: nervous but helpful; short breaths; at most one restart,exposure,89,7.9,draft
+shop.books.low,mechanic,shop,any,ledger-open,debt=low,Your balance is nearly nothing. I keep looking at it. It's nice to look at.,Harry: nervous but helpful; short breaths; at most one restart,,75,6.7,draft
+shop.books.paid,mechanic,shop,any,ledger-open,debt=paid,Nothing owed. I wrote it on the wall. Small. In pencil. In case.,Harry: nervous but helpful; short breaths; at most one restart,lien-foreshadow,64,6.4,draft
+shop.books.review,mechanic,shop,crown-5,ledger-open,,"Under review. He doesn't review things. He decides them, then reads them.",Harry: nervous but helpful; short breaths; at most one restart,lien-foreshadow,73,5.5,draft
+shop.books.lien,mechanic,shop,crown-6,ledger-open,,Clause nine. Relay's clause. I've got a rig in the back. That's all I've got.,Harry: nervous but helpful; short breaths; at most one restart,lien,77,7.0,draft
+shop.loan.offer,mechanic,shop,foundry-2,loan-screen,,"A loan's fine. It's a fee you can read. I'd rather fix it for nothing, that's all.",Harry: nervous but helpful; short breaths; at most one restart,loan,82,7.5,draft
+shop.loan.taken,mechanic,shop,any,loan-taken,,Okay. That's yours to carry. I'll make the car worth it.,Harry: nervous but helpful; short breaths; at most one restart,loan,56,5.1,draft
+shop.buy.needle,mechanic,shop,any,car-bought,player-car=needle,A Needle. Light. Don't lean on anyone; they lean back harder.,Harry: nervous but helpful; short breaths; at most one restart,,61,5.4,draft
+shop.buy.line,mechanic,shop,any,car-bought,player-car=line,"A Line. Slow to wake up, hard to kill. Honest car.",Harry: nervous but helpful; short breaths; at most one restart,,50,5.1,draft
+shop.buy.bastion,mechanic,shop,any,car-bought,player-car=bastion,"A Bastion. Fast in a straight line, which this world doesn't offer much.",Harry: nervous but helpful; short breaths; at most one restart,humour,72,5.7,draft
+shop.buy.trail,mechanic,shop,any,car-bought,player-car=trail,A Trail. It likes dirt. It's the only thing here that does.,Harry: nervous but helpful; short breaths; at most one restart,,59,5.5,draft
+shop.buy.comet,mechanic,shop,any,car-bought,player-car=comet,A Comet. Don't corner it like you mean it. Corner it like you're sorry.,Harry: nervous but helpful; short breaths; at most one restart,,71,6.3,draft
+shop.buy.flint,mechanic,shop,any,car-bought,player-car=flint,A Flint. It's a fist with wheels. Mind the windup on the lance.,Harry: nervous but helpful; short breaths; at most one restart,,63,5.9,draft
+shop.buy.quill,mechanic,shop,any,car-bought,player-car=quill,"A Quill. Spikes out, skin thin. Hit first, or don't hit.",Harry: nervous but helpful; short breaths; at most one restart,,56,5.1,draft
+shop.buy.vandal,mechanic,shop,any,car-bought,player-car=vandal,A Vandal. It goes fast and stops when it feels like it. Like a rumour.,Harry: nervous but helpful; short breaths; at most one restart,humour,70,6.7,draft
+shop.buy.kestrel,mechanic,shop,any,car-bought,player-car=kestrel,"A Kestrel. Precise. It forgives nothing, so I'll forgive it for you.",Harry: nervous but helpful; short breaths; at most one restart,,68,5.5,draft
+shop.buy.bulwark,mechanic,shop,any,car-bought,player-car=bulwark,A Bulwark. That's his model. Give me a day before I can look at it.,Harry: nervous but helpful; short breaths; at most one restart,history,67,6.7,draft
+shop.part.wrong,mechanic,shop,any,part-refused,part-useless,"I can fit it. I won't. It's the wrong part for this car, and you'd pay twice.",Harry: nervous but helpful; short breaths; at most one restart,refuses-player,77,7.5,draft
+shop.plant.frame,mechanic,shop,scrap-3,shop-enter,,Don't. It's nobody's. Forty kilos of nobody's. Let it stay that way a bit longer.,Harry: nervous but helpful; short breaths; at most one restart,key;plant:frame;mechanic-need,81,7.0,key-pick
+shop.plant.bearing,mechanic,shop,scrap-3,shop-idle,,This? It's a spare bearing. For something. I'll know what when I see it.,Harry: nervous but helpful; short breaths; at most one restart,plant:bearing,72,6.5,draft
+shop.plant.radio,mechanic,shop,scrap-4,shop-idle,,I don't watch races. I listen. Your name twice means I fetch the tow chain.,Harry: nervous but helpful; short breaths; at most one restart,plant:radio;plant:voice,75,6.7,draft
+shop.plant.mine,mechanic,shop,scrap-3,shop-idle,act=1,I tried arming a test mine. I couldn't. I said sorry to it. To the mine.,Harry: nervous but helpful; short breaths; at most one restart,plant:killing-blow;humour,72,7.4,draft
+shop.plant.gearbox,mechanic,shop,scrap-4,shop-idle,contract=delivery,Relay's box? On the top shelf. Nobody puts anything on the top shelf. That's the point.,Harry: nervous but helpful; short breaths; at most one restart,plant:gearbox,87,7.4,draft
+shop.plant.clerk,mechanic,shop,foundry-4,shop-idle,act=2,"If you saw me with a league clerk last night, I was buying scrap. Just scrap. A drum.",Harry: nervous but helpful; short breaths; at most one restart,plant:betrayal-1,85,7.9,draft
+shop.plant.offcut,mechanic,shop,foundry-6,shop-idle,,Ox's crew gave me an offcut. I said it was for a thing. It is for a thing.,Harry: nervous but helpful; short breaths; at most one restart,plant:plate,74,7.9,draft
+shop.plant.crate,mechanic,shop,salt-3,shop-enter,,Your crate came back light. I weighed it. I weigh everything. Swapped it for a good one.,Harry: nervous but helpful; short breaths; at most one restart,competence,88,7.8,draft
+shop.plant.watch,mechanic,shop,salt-7,shop-enter,vex=ally,Vex gave me his stopwatch. It's still stopped. I'm going to make it run.,Harry: nervous but helpful; short breaths; at most one restart,plant:watch,72,6.3,draft
+shop.ally.rook,mechanic,shop,scrap-7,ally-joined,rook=ally,Rook gave me tyres. He tagged every one with his name. I think that's affection.,Harry: nervous but helpful; short breaths; at most one restart,ally;rig-gift,80,6.7,draft
+shop.ally.ox,mechanic,shop,foundry-7,ally-joined,ox=ally,Ox cast me a plate with the Roll Call on it. I'll be very careful with it.,Harry: nervous but helpful; short breaths; at most one restart,ally;rig-gift,74,7.2,draft
+shop.ally.vex,mechanic,shop,salt-7,ally-joined,vex=ally,Vex called me Spanner. Then he gave me his watch. I'm keeping both.,Harry: nervous but helpful; short breaths; at most one restart,ally;rig-gift,67,5.9,draft
+shop.ally.mica,mechanic,shop,switchback-7,ally-joined,mica=ally,Mica's anchor pins. Hut-forged. She said they hold anything that wants to stay.,Harry: nervous but helpful; short breaths; at most one restart,ally;rig-gift,79,6.3,draft
+shop.ally.relay,mechanic,shop,crown-1,ally-joined,,Relay's gearbox. The seal's still on. I'm not opening it. I'm just going to use it.,Harry: nervous but helpful; short breaths; at most one restart,rig-gift,83,7.4,draft
+shop.payout.money,mechanic,shop,any,payout-chosen,payout=money,Cash. Good. Cash doesn't need a lift jack.,Harry: nervous but helpful; short breaths; at most one restart,,42,3.9,draft
+shop.payout.car,mechanic,shop,any,payout-chosen,payout=car,A whole car. I'll learn it tonight. All of it. Don't wait up.,Harry: nervous but helpful; short breaths; at most one restart,,61,6.2,draft
+shop.payout.part,mechanic,shop,any,payout-chosen,payout=part,"A part. Oh, that's a good part. Can I fit it now? I'm fitting it now.",Harry: nervous but helpful; short breaths; at most one restart,,69,7.4,draft
+mica.name.1,mica,shop,switchback-1,hut,,I don't tie numbers to the anchor. Give me a name.,"UNCAST: calm, low woman's voice; unhurried pauses",key;mechanic-name,50,4.9,key-pick
+mech.name.2,mechanic,shop,switchback-1,hut,after:mica.name.1,"Ennis. Nobody's asked in, um. A while.",Harry: nervous but helpful; short breaths; at most one restart,mechanic-name,38,3.5,draft
+mica.name.3,mica,shop,switchback-1,hut,after:mech.name.2,Ennis. Sit by the stove.,"UNCAST: calm, low woman's voice; unhurried pauses",mechanic-name,24,2.5,draft
+shop.pardon.1,mechanic,shop,switchback-6,shop-enter,after-offer,He kept my bench. Thirteen years. Who keeps a bench?,Harry: nervous but helpful; short breaths; at most one restart,key;plant:pardon;history,52,4.7,key-pick
+shop.pardon.2,mechanic,shop,switchback-6,shop-idle,after-offer,I didn't sign it. I didn't give it back either. I don't know what that makes me.,Harry: nervous but helpful; short breaths; at most one restart,plant:betrayal-2,80,7.5,draft
+shop.history,mechanic,shop,switchback-7,shop-idle,mica=ally,I was six. He gave me a broom and a bed.,Harry: nervous but helpful; short breaths; at most one restart,reveal:mechanic-history,40,4.9,draft
+shop.history.2,mechanic,shop,switchback-7,shop-idle,mica=ally;after:shop.history,At nine I took a bag of his bolts and ran. That's all of it.,Harry: nervous but helpful; short breaths; at most one restart,reveal:mechanic-history,60,6.5,draft
+shop.rig.2,mechanic,shop,crown-4,shop-enter,,"Three years in his garage, he never let a single bolt go. He'll follow anything that leaves.",Harry: nervous but helpful; short breaths; at most one restart,key;rig-plan;payoff:history,92,7.2,key-pick
+shop.rig.shim,mechanic,shop,crown-4,shop-idle,,I folded it six times. Seven was too thick.,Harry: nervous but helpful; short breaths; at most one restart,key;payoff:pardon;humour,43,4.0,key-pick
+shop.rig.shim.2,mechanic,shop,crown-4,shop-idle,after:shop.rig.shim,"Good paper, his. Heavy. Doesn't compress.",Harry: nervous but helpful; short breaths; at most one restart,humour;scored,41,3.1,draft
+shop.rig.watch,mechanic,shop,crown-4,shop-idle,,Vex's watch runs again. In the drum. It counts five seconds between drops.,Harry: nervous but helpful; short breaths; at most one restart,payoff:watch;rig-truth,74,5.9,draft
+shop.rig.bearing,mechanic,shop,crown-4,shop-idle,,The drum turns on my bearing. The spare. I knew I'd know when I saw it.,Harry: nervous but helpful; short breaths; at most one restart,payoff:bearing,71,7.1,draft
+shop.seizure.1,mechanic,shop,crown-7,seizure,seized;after:seizure.caption.2,"Don't look at the empty bay. Look at me. Okay, look at the rig.",Harry: nervous but helpful; short breaths; at most one restart,key;seizure,63,6.3,key-pick
+shop.seizure.2,mechanic,shop,crown-7,seizure,seized;after:shop.seizure.1,Okay. Okay. The rig's warm. I warmed it when I saw him on the road.,Harry: nervous but helpful; short breaths; at most one restart,seizure;scored,67,7.0,draft
+shop.seizure.3,mechanic,shop,crown-7,shop-idle,seized,I wiped my feet too. When he did. I don't know why I did that.,Harry: nervous but helpful; short breaths; at most one restart,seizure;tell:wipes-feet;scored,62,6.7,draft
+shop.after.1,mechanic,shop,campaign-victory,shop-enter,duel-won,"The radio went quiet, so I counted the bolts on the shelf. All of them. Sit down.","Harry: nervous but helpful; short breaths; at most one restart; quiet, worn out",key;payoff:radio,81,7.5,key-pick
+shop.after.2,mechanic,shop,campaign-victory,shop-idle,duel-won;after:shop.after.1,Rack first. Then everything.,Harry: nervous but helpful; short breaths; at most one restart,key;ending;cost,28,2.1,key-pick
+shop.after.3,mechanic,shop,campaign-victory,shop-idle,duel-won,Rook's bringing your car on his chain. I told him slow. He's going slow.,Harry: nervous but helpful; short breaths; at most one restart,,72,6.3,draft
+rec.mechanic.welcome,mechanic,shop,scrap-1,shop-enter,first-visit,You made it. Good. Let me check that engine before Marrow sends you out again.,Harry: nervous but helpful; short breaths; at most one restart,recorded;fallback-for:shop.welcome.a1,78,6.7,recorded-keep
+rec.mechanic.repair,mechanic,shop,any,repair,,"Easy. I can hold this together. Just bring it back in one piece, all right?",Harry: nervous but helpful; short breaths; at most one restart,recorded;fallback-for:shop.repair.*,75,6.7,recorded-keep
+rec.mechanic.books,mechanic,shop,foundry-7,ledger-open,levy-exposed,"I checked the receipts. You keep winning, but his numbers never let you go.",Harry: nervous but helpful; short breaths; at most one restart,recorded;replaced-by:shop.books.exposed,75,6.0,recorded-replace
+rec.mechanic.ally,mechanic,shop,any,ally-joined,,"That boss is backing you now. Money, a car, parts. We finally have some help.",Harry: nervous but helpful; short breaths; at most one restart,recorded;fallback-for:shop.ally.*,77,6.7,recorded-keep
+rec.mechanic.seizure,mechanic,shop,crown-7,seizure,seized,He took your car? Right. Right... I thought he might. Come round the back.,Harry: nervous but helpful; short breaths; at most one restart,recorded;replaced-by:shop.seizure.1 (the Mechanic is now present at the seizure),74,7.3,recorded-replace
+rec.mechanic.rig,mechanic,shop,crown-4,shop-enter,,It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.,Harry: nervous but helpful; short breaths; at most one restart,recorded;matches-plan,84,7.8,recorded-keep
+rec.mechanic.duel,mechanic,shop,crown-7,duel-start,,No finish line this time. You come back. Marrow does not.,Harry: nervous but helpful; short breaths; at most one restart,recorded;fallback-for:fin.mech.open,57,5.1,recorded-keep
+rec.mechanic.after,mechanic,shop,campaign-victory,shop-enter,duel-won,You are back. I kept listening for the engine. Thought I had lost you.,Harry: nervous but helpful; short breaths; at most one restart,recorded;fallback-for:shop.after.1,70,6.3,recorded-keep
+rook.refuse.1,mechanic,pre,scrap-5,pre-race,scene=shop,Put it in here. Behind the curtain. Nobody looks behind the curtain.,Harry: nervous but helpful; short breaths; at most one restart,refusal:rook,68,5.5,draft
+rook.refuse.2,rook,pre,scrap-5,pre-race,scene=shop,"Kid, I collect for a living. Don't show me things.","UNCAST: dry, gravelled, clipped; sour; flat, already looking behind the curtain",key;refusal:rook;plant:rook-saw-frame,50,4.5,key-pick
+rook.refuse.3,rook,pre,scrap-5,pre-race,scene=shop,"In the Yards, help's a hook. I'm on his already. Don't hang me on yours.","UNCAST: dry, gravelled, clipped; sour",refusal:rook;culture;scored,72,6.7,draft
+rook.refuse.4,rook,pre,scrap-5,pre-race,scene=shop,Nice frame. Never saw it. Now shut your curtain.,"UNCAST: dry, gravelled, clipped; sour",plant:rook-saw-frame;scored,48,4.3,draft
+rook.pre.1,rook,pre,scrap-7,pre-race,boss-race;retry=0,Tow truck's parked where I can see it. Thoughtful of him.,"UNCAST: dry, gravelled, clipped; sour",boss:rook,57,4.9,draft
+rook.pre.2,rook,pre,scrap-7,pre-race,boss-race;retry=0,"You brake at the third post, fresh tag. I brake at the fourth.","UNCAST: dry, gravelled, clipped; sour",boss:rook;teach,62,5.7,draft
+rook.pre.mech,mechanic,pre,scrap-7,pre-race,boss-race,He brakes later than late. Don't follow him into the corner. Follow him out.,Harry: nervous but helpful; short breaths; at most one restart,boss:rook;teach,76,6.3,draft
+rook.pre.retry1,rook,pre,scrap-7,pre-race,boss-race;retry=1,"Back again, fresh tag? Truck's still here. So am I.","UNCAST: dry, gravelled, clipped; sour",retry,51,4.7,draft
+rook.pre.retry2,rook,pre,scrap-7,pre-race,boss-race;retry=2,"Third go. The board's got room, if you're tired.","UNCAST: dry, gravelled, clipped; sour",retry,48,4.0,draft
+rook.pre.retry3,rook,pre,scrap-7,pre-race,boss-race;retry>=3,You keep coming back. I used to do that.,"UNCAST: dry, gravelled, clipped; sour; a crack in it",retry;crack,40,4.0,draft
+rook.post.finished,rook,post,scrap-7,boss-turn,boss-finished,You had me on the wall twice. You let me finish. Huh.,"UNCAST: dry, gravelled, clipped; sour",witness:mercy,53,5.5,draft
+rook.post.wrecked,rook,post,scrap-7,boss-turn,boss-wrecked,Weighed. Fair enough.,"UNCAST: dry, gravelled, clipped; sour",witness,21,1.6,draft
+rook.turn,rook,post,scrap-7,boss-turn,,Truck's got my car. Board's got my key. Only one of those I can give away.,"UNCAST: dry, gravelled, clipped; sour; holding out the key",key;turn:rook;payoff:keys,74,7.1,key-pick
+rook.payout,rook,post,scrap-7,payout-offer,,"Pick. Tag money, a Trail on a clean tag, or tyres I pulled myself.","UNCAST: dry, gravelled, clipped; sour",payout,66,6.0,draft
+rook.payout.money,rook,post,scrap-7,payout-chosen,payout=money,Tag money. Collected it nine years. Now I'm uncollecting it.,"UNCAST: dry, gravelled, clipped; sour",payout,60,4.7,draft
+rook.payout.car,rook,post,scrap-7,payout-chosen,payout=car,A Trail on a clean tag. Cleaner than mine ever was.,"UNCAST: dry, gravelled, clipped; sour",payout,51,4.9,draft
+rook.payout.part,rook,post,scrap-7,payout-chosen,payout=part,Yard tyres. Pulled them myself. Tagged them with my name.,"UNCAST: dry, gravelled, clipped; sour",payout,57,4.7,draft
+rook.gift,rook,post,scrap-7,boss-turn,after:rook.payout,"Kid. Spare set of tyres, for whatever's under your sheet. Which I never saw.","UNCAST: dry, gravelled, clipped; sour",rig-gift;payoff:rook-saw-frame,76,6.3,draft
+rook.weak.armour,rook,post,scrap-7,boss-turn,weakness=armour,I was on your doors all race. Thin doors. Get them fixed.,"UNCAST: dry, gravelled, clipped; sour",weakness-reveal,57,5.5,draft
+rook.weak.handling,rook,post,scrap-7,boss-turn,weakness=handling,I took you in the corners every lap. You turn like a cart.,"UNCAST: dry, gravelled, clipped; sour",weakness-reveal,58,5.7,draft
+rook.loss.1,rook,post,scrap-7,boss-loss,,Gate's mine. Truck goes home empty. Brake later next time.,"UNCAST: dry, gravelled, clipped; sour",loss-is-content,58,4.7,draft
+rook.loss.mech,mechanic,post,scrap-7,boss-loss,,Your brakes faded on the last lap. I'll bleed them tonight.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,59,4.9,draft
+ox.refuse.1,rook,pre,foundry-5,pre-race,rook=ally,"Show them, Ox. The book's got your crew too.","UNCAST: dry, gravelled, clipped; sour",refusal:ox,44,4.0,draft
+ox.refuse.2,ox,pre,foundry-5,pre-race,,I know what's in my vest. I also know who eats while it stays there.,"UNCAST: low, steady woman's voice; flat; even stresses",key;refusal:ox,68,6.5,key-pick
+ox.refuse.3,rook,pre,foundry-5,pre-race,rook=ally,I said that once. About my board.,"UNCAST: dry, gravelled, clipped; sour",,33,3.2,draft
+ox.refuse.4,ox,pre,foundry-5,pre-race,,And where's your car now?,"UNCAST: low, steady woman's voice; flat; even stresses",refusal:ox;witness:cost-of-turning,25,2.2,draft
+ox.pre.1,ox,pre,foundry-7,pre-race,boss-race;retry=0,Crew's watching. Make it worth their shift.,"UNCAST: low, steady woman's voice; flat; even stresses",boss:ox,43,3.2,draft
+ox.pre.2,ox,pre,foundry-7,pre-race,boss-race;retry=0,This car came off my belt. It knows the road better than you.,"UNCAST: low, steady woman's voice; flat; even stresses",boss:ox,61,5.7,draft
+ox.pre.mech,mechanic,pre,foundry-7,pre-race,boss-race,She runs wide in the hairpins. Every time. Be there when she does.,Harry: nervous but helpful; short breaths; at most one restart,boss:ox;teach,66,5.9,draft
+ox.pre.retry1,ox,pre,foundry-7,pre-race,boss-race;retry=1,Again. The crew's brought more food.,"UNCAST: low, steady woman's voice; flat; even stresses",retry,36,2.9,draft
+ox.pre.retry2,ox,pre,foundry-7,pre-race,boss-race;retry>=2,"You're on the pour now, driver. So am I.","UNCAST: low, steady woman's voice; flat; even stresses",retry;culture,40,4.0,draft
+ox.post.finished,ox,post,foundry-7,boss-turn,boss-finished,You left me a lane. I noticed.,"UNCAST: low, steady woman's voice; flat; even stresses",witness:mercy,30,3.2,draft
+ox.post.wrecked,ox,post,foundry-7,boss-turn,boss-wrecked,Slagged me. Fair. The crew'll talk about it for a week.,"UNCAST: low, steady woman's voice; flat; even stresses",witness,55,5.1,draft
+ox.turn.1,ox,post,foundry-7,boss-turn,,I built the cars that chased you. Here's what you paid me for them.,"UNCAST: low, steady woman's voice; flat; even stresses; laying two receipts on the bonnet",key;turn:ox;reveal:levy,67,6.0,key-pick
+ox.turn.2,ox,post,foundry-7,boss-turn,after:ox.turn.1,Take them. Read them to the crew. Don't let me do it.,"UNCAST: low, steady woman's voice; flat; even stresses",turn:ox;scored,53,5.5,draft
+ox.prev.money,ox,post,foundry-7,boss-turn,prev-payout=money,You took Rook's cash. Good. Cash is honest.,"UNCAST: low, steady woman's voice; flat; even stresses",remembers-choice,43,3.9,draft
+ox.prev.car,ox,post,foundry-7,boss-turn,prev-payout=car,You took a car off a collector. Brave.,"UNCAST: low, steady woman's voice; flat; even stresses",remembers-choice,38,3.7,draft
+ox.prev.part,ox,post,foundry-7,boss-turn,prev-payout=part,You took Rook's tyres. Good. Tyres are honest.,"UNCAST: low, steady woman's voice; flat; even stresses",remembers-choice,46,3.9,draft
+ox.payout,ox,post,foundry-7,payout-offer,,"Cash, a Flint off my belt, or plate cut to your car. The crew's watching how you pick.","UNCAST: low, steady woman's voice; flat; even stresses",key;payout,86,7.7,key-pick
+ox.payout.money,ox,post,foundry-7,payout-chosen,payout=money,"The levy back, counted twice. Buy something that isn't his.","UNCAST: low, steady woman's voice; flat; even stresses",payout,59,4.5,draft
+ox.payout.car,ox,post,foundry-7,payout-chosen,payout=car,A Flint off my belt. Built before we knew who for.,"UNCAST: low, steady woman's voice; flat; even stresses",payout,50,4.9,draft
+ox.payout.part,ox,post,foundry-7,payout-chosen,payout=part,"Plate, poured from the same ladle as the house cars. Seems fair.","UNCAST: low, steady woman's voice; flat; even stresses",payout,64,5.2,draft
+ox.gift,ox,post,foundry-7,boss-turn,after:ox.payout,Spanner gets a plate too. I'm stamping the Roll Call into it tonight.,"UNCAST: low, steady woman's voice; flat; even stresses",rig-gift,69,5.7,draft
+ox.weak.armour,ox,post,foundry-7,boss-turn,weakness=armour,I leaned on your doors every straight. They gave. Plate them.,"UNCAST: low, steady woman's voice; flat; even stresses",weakness-reveal,61,5.1,draft
+ox.weak.accel,ox,post,foundry-7,boss-turn,weakness=acceleration,Slow off the line. I sat in front of you on every exit.,"UNCAST: low, steady woman's voice; flat; even stresses",weakness-reveal,55,5.7,draft
+ox.loss.1,ox,post,foundry-7,boss-loss,,"Crew eats tonight. Learn to turn, then try me.","UNCAST: low, steady woman's voice; flat; even stresses",loss-is-content,46,4.0,draft
+ox.loss.mech,mechanic,post,foundry-7,boss-loss,,She's heavier. Heavy's a fact. We can fix a fact.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,49,4.7,draft
+vex.refuse.1,ox,pre,salt-5,pre-race,ox=ally,"The crews need the time, Vex.","UNCAST: low, steady woman's voice; flat; even stresses",refusal:vex,29,2.6,draft
+vex.refuse.2,vex,pre,salt-5,pre-race,,Every haul I've run is in the log under somebody else's name. The watch is the one place I'm first.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",refusal:vex;want;scored,99,8.4,draft
+vex.refuse.3,ox,pre,salt-5,pre-race,ox=ally,I said that about the belt.,"UNCAST: low, steady woman's voice; flat; even stresses",,27,2.6,draft
+vex.refuse.4,vex,pre,salt-5,pre-race,,And how's the belt?,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,19,1.8,draft
+vex.refuse.5,ox,pre,salt-5,pre-race,ox=ally,Cold. Crew's still eating.,"UNCAST: low, steady woman's voice; flat; even stresses",witness:cost-of-turning,26,2.1,draft
+vex.refuse.6,vex,pre,salt-5,pre-race,,"Race me for it. You won't, but race me.","UNCAST: quick, bright, a little hoarse; fast but every word clear",key;refusal:vex,39,4.0,key-pick
+vex.pre.1,vex,pre,salt-7,pre-race,boss-race;retry=0,"Glare's down. Try staying in the mirror, Mirror.","UNCAST: quick, bright, a little hoarse; fast but every word clear",boss:vex,48,3.7,draft
+vex.pre.2,vex,pre,salt-7,pre-race,boss-race;retry=0,Third cairn's on the lap tonight. I go through it fast. Don't ask.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",boss:vex;plant:tull,66,5.9,draft
+vex.pre.mech,mechanic,pre,salt-7,pre-race,boss-race,Nobody catches him on a straight. Take him where it bends.,Harry: nervous but helpful; short breaths; at most one restart,boss:vex;teach,58,4.9,draft
+vex.pre.retry1,vex,pre,salt-7,pre-race,boss-race;retry=1,Back already? I'll count it. I count everything.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",retry,48,3.9,draft
+vex.pre.retry2,vex,pre,salt-7,pre-race,boss-race;retry>=2,You're getting faster. I've got the splits. I hate it.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",retry,54,4.7,draft
+vex.post.finished,vex,post,salt-7,boss-turn,boss-finished,You could've put me in the cairn. You went round.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",witness:mercy,49,4.5,draft
+vex.post.wrecked,vex,post,salt-7,boss-turn,boss-wrecked,Whiteout. Fair. Don't log it.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",witness,29,2.7,draft
+vex.turn.1,vex,post,salt-7,boss-turn,,You want the fastest lap ever run on the flats? I ran it past a dead man. Here.,"UNCAST: quick, bright, a little hoarse; fast but every word clear; the speed drops out of it",key;turn:vex;reveal:tull,79,7.9,key-pick
+vex.turn.2,vex,post,salt-7,boss-turn,after:vex.turn.1,Four seconds. That's how long the house car stayed on Tull. I counted.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",turn:vex;reveal:tull;scored;edited:dropped-final-Here,70,5.9,draft
+vex.payout,vex,post,salt-7,payout-offer,,"Cash, a Quill, or my engine tune. Pick fast. I hate waiting.","UNCAST: quick, bright, a little hoarse; fast but every word clear",payout,60,5.5,draft
+vex.payout.money,vex,post,salt-7,payout-chosen,payout=money,Every haul I'll never get paid for again. Take it before it's whiteout.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",payout,71,5.7,draft
+vex.payout.car,vex,post,salt-7,payout-chosen,payout=car,A Quill. Fastest thing I've got that isn't me.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",payout,46,4.0,draft
+vex.payout.part,vex,post,salt-7,payout-chosen,payout=part,I tuned that engine to a stopwatch. Now it's yours. Don't let it idle.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",payout,70,6.3,draft
+vex.gift,vex,post,salt-7,boss-turn,after:vex.payout,Spanner. Make the watch run again. I can't.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",rig-gift,43,3.9,draft
+vex.weak.speed,vex,post,salt-7,boss-turn,weakness=speed,I sat on your tail down every straight. You never had the top end.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",weakness-reveal,66,6.0,draft
+vex.weak.grip,vex,post,salt-7,boss-turn,weakness=grip,Pushed you onto the crust every lap. Your tyres hate salt.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",weakness-reveal,58,4.9,draft
+vex.loss.1,vex,post,salt-7,boss-loss,,"Second's a long way back on the flats, Mirror. I'd know.","UNCAST: quick, bright, a little hoarse; fast but every word clear",loss-is-content,56,4.9,draft
+vex.loss.mech,mechanic,post,salt-7,boss-loss,,He's got straights we haven't got. I'll find you some corners.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,62,4.9,draft
+mica.refuse.1,vex,pre,switchback-5,pre-race,vex=ally,"Shut the huts to him, Mica. One winter.","UNCAST: quick, bright, a little hoarse; fast but every word clear",refusal:mica,39,3.7,draft
+mica.refuse.2,mica,pre,switchback-5,pre-race,,The hut takes everyone. Him too.,"UNCAST: calm, low woman's voice; unhurried pauses",key;refusal:mica,32,2.9,key-pick
+mica.refuse.3,vex,pre,switchback-5,pre-race,vex=ally,His cars put Tull in the ground at the third cairn.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,51,4.6,draft
+mica.refuse.4,mica,pre,switchback-5,pre-race,,I've buried people who were turned from a hut. I won't be the one turning.,"UNCAST: calm, low woman's voice; unhurried pauses",refusal:mica;scored,74,6.5,draft
+marrow.hut.1,marrow,pre,switchback-5,post-race,scene=hut,"Before the book, they burned convoys on this pass. Nobody burns a convoy that owes them money.","UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",grievance;marrow-present;trade:wants-her-neutrality,94,7.2,draft
+mica.hut.2,mica,pre,switchback-5,post-race,scene=hut;after:marrow.hut.1,The bed by the door is yours. Same as always.,"UNCAST: calm, low woman's voice; unhurried pauses",hut-law;refusal:mica,45,4.5,draft
+mica.pre.1,mica,pre,switchback-7,pre-race,boss-race;retry=0,The road gives every warning. I give one.,"UNCAST: calm, low woman's voice; unhurried pauses",boss:mica,41,3.7,draft
+mica.pre.2,mica,pre,switchback-7,pre-race,boss-race;retry=0,Cross quiet. Talk at the top.,"UNCAST: calm, low woman's voice; unhurried pauses",boss:mica;culture,29,2.9,draft
+mica.pre.mech,mechanic,pre,switchback-7,pre-race,boss-race,She waits for you to make the mistake. Don't make it first.,Harry: nervous but helpful; short breaths; at most one restart,boss:mica;teach,59,5.2,draft
+mica.pre.retry1,mica,pre,switchback-7,pre-race,boss-race;retry=1,Again. Good. The pass rewards people who come back.,"UNCAST: calm, low woman's voice; unhurried pauses",retry,51,4.3,draft
+mica.pre.retry2,mica,pre,switchback-7,pre-race,boss-race;retry>=2,You're learning the corners. Your downshifts give it away.,"UNCAST: calm, low woman's voice; unhurried pauses",retry,58,4.0,draft
+mica.post.finished,mica,post,switchback-7,boss-turn,boss-finished,"You could have put me over the edge. You waited. Up here, that's a language.","UNCAST: calm, low woman's voice; unhurried pauses",witness:mercy,76,6.7,draft
+mica.post.wrecked,mica,post,switchback-7,boss-turn,boss-wrecked,"Over the top. Alive, this time.","UNCAST: calm, low woman's voice; unhurried pauses",witness,31,2.9,draft
+mica.turn.1,mica,post,switchback-7,boss-turn,,Forty strips on that anchor are his. I'm cutting forty.,"UNCAST: calm, low woman's voice; unhurried pauses",key;turn:mica,55,4.5,key-pick
+mica.turn.2,mica,post,switchback-7,boss-turn,after:mica.turn.1,The boy refused him at my table. I poured the man's tea.,"UNCAST: calm, low woman's voice; unhurried pauses",key;turn:mica;witness:mechanic,56,5.2,key-pick
+mica.payout,mica,post,switchback-7,payout-offer,,"Grit money, a Kestrel, or suspension built for the pass. Choose slow.","UNCAST: calm, low woman's voice; unhurried pauses",payout,69,5.2,draft
+mica.payout.money,mica,post,switchback-7,payout-chosen,payout=money,Grit money. There's no grit coming. Spend it on something that moves.,"UNCAST: calm, low woman's voice; unhurried pauses",payout,69,5.5,draft
+mica.payout.car,mica,post,switchback-7,payout-chosen,payout=car,A Kestrel. It doesn't argue with the road.,"UNCAST: calm, low woman's voice; unhurried pauses",payout,42,3.7,draft
+mica.payout.part,mica,post,switchback-7,payout-chosen,payout=part,Hut-built suspension. It forgives you once.,"UNCAST: calm, low woman's voice; unhurried pauses",payout,43,3.2,draft
+mica.gift,mica,post,switchback-7,boss-turn,after:mica.payout,"Ennis. Anchor pins, for your drum. They hold anything that wants to stay.","UNCAST: calm, low woman's voice; unhurried pauses",rig-gift;mechanic-name,73,5.9,draft
+mica.weak.handling,mica,post,switchback-7,boss-turn,weakness=handling,I waited at every hairpin. You always turned in a breath early.,"UNCAST: calm, low woman's voice; unhurried pauses",weakness-reveal,63,5.2,draft
+mica.weak.brakes,mica,post,switchback-7,boss-turn,weakness=braking,Your brakes fade on the way down. I let them.,"UNCAST: calm, low woman's voice; unhurried pauses",weakness-reveal,45,4.5,draft
+mica.loss.1,mica,post,switchback-7,boss-loss,,Patience is free up here. Take some.,"UNCAST: calm, low woman's voice; unhurried pauses",loss-is-content,36,3.2,draft
+mica.loss.mech,mechanic,post,switchback-7,boss-loss,,The air's thin and the engine's gasping. I'll lean the mix.,Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,59,4.9,draft
+relay.box,relay,pre,scrap-4,pre-race,,It's sealed. Don't open it. Don't let them weigh it. That's all.,"UNCAST: quiet, polite, precise",plant:gearbox,64,5.8,draft
+relay.box.done,relay,post,scrap-4,finish,contract=delivery-done,Delivered. I read the route twice. You drove it once. Thank you.,"UNCAST: quiet, polite, precise; the word read is past tense here (pronounced red)",,64,5.8,draft
+relay.log,relay,pre,salt-6,pre-race,,Third cairn. The line's been scraped. League ink over it. I read it twice.,"UNCAST: quiet, polite, precise; the word read is past tense here (pronounced red)",reveal-part:whiteout,74,6.5,draft
+relay.seized,relay,pre,crown-1,pre-race,,Clause nine. Read yours.,"UNCAST: quiet, polite, precise",key;rehearsal:seizure,24,2.1,key-pick
+relay.seized.2,relay,pre,crown-1,pre-race,after:relay.seized,I read it twice. Wasn't enough.,"UNCAST: quiet, polite, precise; the word read is past tense here (pronounced red)",rehearsal:seizure;scored,31,2.9,draft
+relay.gearbox,relay,pre,crown-1,pre-race,after:relay.seized,No car to put it in now. Give it to the mechanic. He'll know.,"UNCAST: quiet, polite, precise",rig-gift,61,6.3,draft
+bark.rook.grid,rook,taunt,any,grid,rook=rival,That corner collects faster than I do.,"UNCAST: dry, gravelled, clipped; sour",canon:K1,38,3.0,draft
+bark.rook.overtakes,rook,bark,any,overtakes-player,rook=rival,"Excuse me, fresh tag. Collecting.","UNCAST: dry, gravelled, clipped; sour",,33,2.5,draft
+bark.rook.overtaken,rook,bark,any,overtaken-by-player,rook=rival,Late brake. Huh. Noted.,"UNCAST: dry, gravelled, clipped; sour",,23,2.3,draft
+bark.rook.hit,rook,taunt,any,hit-by-player,rook=rival,That's a scratch you'll be paying for.,"UNCAST: dry, gravelled, clipped; sour",,38,3.0,draft
+bark.rook.wrecked,rook,bark,any,wrecked-by-player,rook=rival,Weighed. Fine.,"UNCAST: dry, gravelled, clipped; sour",,14,1.2,draft
+bark.rook.wrecks,rook,taunt,any,wrecks-player,rook=rival,Board's got room.,"UNCAST: dry, gravelled, clipped; sour",,17,1.4,draft
+bark.rook.lastlap,rook,taunt,any,last-lap,rook=rival;leading,"Gate's shut, fresh tag. Go round.","UNCAST: dry, gravelled, clipped; sour",,33,2.9,draft
+bark.rook.lowhp,rook,bark,any,low-hp,rook=rival,"Hold together, you tin can. Hold.","UNCAST: dry, gravelled, clipped; sour",,33,2.9,draft
+bark.rook.mine,rook,bark,any,mine-hit,rook=rival,Who mines the Yards? Nobody mines the Yards.,"UNCAST: dry, gravelled, clipped; sour",,44,3.7,draft
+bark.rook.needle,rook,taunt,any,grid,rook=rival;player-car=needle,A Needle. Light as a promise. I'll lean on it.,"UNCAST: dry, gravelled, clipped; sour",,46,4.7,draft
+bark.rook.ally.grid,rook,bark,any,grid,rook=ally,I'm on your hook now. Don't make it a long one.,"UNCAST: dry, gravelled, clipped; sour",,47,4.9,draft
+bark.rook.ally.overtakes,rook,bark,any,overtakes-player,rook=ally,"Fourth post, Twelve. Not third.","UNCAST: dry, gravelled, clipped; sour",,31,2.5,draft
+bark.rook.ally.overtaken,rook,bark,any,overtaken-by-player,rook=ally,Go on. I'll hang nothing.,"UNCAST: dry, gravelled, clipped; sour",,25,2.5,draft
+bark.rook.ally.ahead,rook,bark,any,finish-ahead,rook=ally,Collected. Don't tell anyone I enjoyed it.,"UNCAST: dry, gravelled, clipped; sour",,42,3.2,draft
+bark.rook.grudge.hit,rook,bark,any,hit-by-player,rook=grudge,"I gave you my key, not my doors.","UNCAST: dry, gravelled, clipped; sour",,32,3.4,draft
+bark.rook.grudge.wrecked,rook,bark,any,wrecked-by-player,rook=grudge,I'm writing that down. I don't write things down anymore. I'm writing that down.,"UNCAST: dry, gravelled, clipped; sour",,80,6.3,draft
+bark.rook.a5.marrow,rook,bark,any,near-rival,act=5;rival=marrow;rook=ally,There's his Bulwark. I hung forty-one keys for that car.,"UNCAST: dry, gravelled, clipped; sour",,56,4.9,draft
+bark.ox.grid,ox,taunt,any,grid,ox=rival,"Leave a lane, or be one.","UNCAST: low, steady woman's voice; flat; even stresses",canon:K1,24,2.6,draft
+bark.ox.overtakes,ox,bark,any,overtakes-player,ox=rival,Weight through. Mind your doors.,"UNCAST: low, steady woman's voice; flat; even stresses",,32,2.5,draft
+bark.ox.overtaken,ox,bark,any,overtaken-by-player,ox=rival,Corners are yours. The straights aren't.,"UNCAST: low, steady woman's voice; flat; even stresses",,40,2.9,draft
+bark.ox.hit,ox,taunt,any,hit-by-player,ox=rival,That's belt steel. You'll dent first.,"UNCAST: low, steady woman's voice; flat; even stresses",,37,2.9,draft
+bark.ox.wrecked,ox,bark,any,wrecked-by-player,ox=rival,Slag.,"UNCAST: low, steady woman's voice; flat; even stresses",,5,0.6,draft
+bark.ox.wrecks,ox,taunt,any,wrecks-player,ox=rival,Drag it to the belt. We'll make it into something.,"UNCAST: low, steady woman's voice; flat; even stresses",,50,4.5,draft
+bark.ox.lastlap,ox,bark,any,last-lap,ox=rival;leading,Crew's counting. I'm not losing count.,"UNCAST: low, steady woman's voice; flat; even stresses",,38,2.9,draft
+bark.ox.lowhp,ox,bark,any,low-hp,ox=rival,Cooling. Not done.,"UNCAST: low, steady woman's voice; flat; even stresses",,18,1.6,draft
+bark.ox.mine,ox,bark,any,mine-hit,ox=rival,Who's mining my straight?,"UNCAST: low, steady woman's voice; flat; even stresses",,25,1.8,draft
+bark.ox.light,ox,taunt,any,grid,ox=rival;player-car-weight=light,Light car. I'll try to remember you're there.,"UNCAST: low, steady woman's voice; flat; even stresses",,45,3.7,draft
+bark.ox.ally.grid,ox,bark,any,grid,ox=ally,Crew's with you. Still won't give you the inside.,"UNCAST: low, steady woman's voice; flat; even stresses",,49,4.0,draft
+bark.ox.ally.overtakes,ox,bark,any,overtakes-player,ox=ally,"Heavy coming through, crew.","UNCAST: low, steady woman's voice; flat; even stresses",,27,1.8,draft
+bark.ox.ally.overtaken,ox,bark,any,overtaken-by-player,ox=ally,Good line. The crew'll want to hear it.,"UNCAST: low, steady woman's voice; flat; even stresses",,39,3.7,draft
+bark.ox.ally.ahead,ox,bark,any,finish-ahead,ox=ally,Ahead of you. Crew says it's for your own good.,"UNCAST: low, steady woman's voice; flat; even stresses",,47,4.5,draft
+bark.ox.grudge.hit,ox,bark,any,hit-by-player,ox=grudge,We share a cause. That doesn't make my steel yours to break.,"UNCAST: low, steady woman's voice; flat; even stresses",canon:campaign-allies,60,5.2,draft
+bark.ox.grudge.wrecked,ox,bark,any,wrecked-by-player,ox=grudge,Crew saw that. Crew remembers.,"UNCAST: low, steady woman's voice; flat; even stresses",,30,2.5,draft
+bark.ox.a5.house,ox,bark,any,grid,act=5;ox=ally,I built half this grid. Doesn't mean I like any of it.,"UNCAST: low, steady woman's voice; flat; even stresses",,54,5.2,draft
+bark.vex.grid,vex,taunt,any,grid,vex=rival,Try staying in the mirror.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",canon:rival-stories,26,2.2,draft
+bark.vex.overtakes,vex,bark,any,overtakes-player,vex=rival,"Mirror, mirror. Bye.","UNCAST: quick, bright, a little hoarse; fast but every word clear",,20,1.6,draft
+bark.vex.overtaken,vex,bark,any,overtaken-by-player,vex=rival,That was my straight. Fine. Keep it warm.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,41,3.9,draft
+bark.vex.hit,vex,taunt,any,hit-by-player,vex=rival,Don't touch the paint. The paint's faster than you.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,51,4.0,draft
+bark.vex.wrecked,vex,bark,any,wrecked-by-player,vex=rival,Whiteout. Don't write that down.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,32,2.5,draft
+bark.vex.wrecks,vex,taunt,any,wrecks-player,vex=rival,"Drew too much glare, Mirror.","UNCAST: quick, bright, a little hoarse; fast but every word clear",,28,2.2,draft
+bark.vex.lastlap,vex,bark,any,last-lap,vex=rival;leading,Last lap. I can hear the seconds.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,33,3.2,draft
+bark.vex.lowhp,vex,bark,any,low-hp,vex=rival,I'm fine. That's a long load. I'm fine.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,39,3.9,draft
+bark.vex.straight,vex,bark,any,overtaken-by-player,vex=rival;on-straight;rare,Nobody passes me on a straight. Somebody just did.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,50,4.0,draft
+bark.vex.ally.grid,vex,bark,any,grid,vex=ally,Your split's better than mine on the back straight. Don't tell anyone.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,70,5.2,draft
+bark.vex.ally.overtakes,vex,bark,any,overtakes-player,vex=ally,Still faster. Still on your side. Both true.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,44,3.9,draft
+bark.vex.ally.overtaken,vex,bark,any,overtaken-by-player,vex=ally,Go on. I'm timing you.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,22,2.5,draft
+bark.vex.ally.ahead,vex,bark,any,finish-ahead,vex=ally,First by four tenths. I'm keeping those.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",,40,3.2,draft
+bark.vex.grudge.hit,vex,bark,any,hit-by-player,vex=grudge,You took my line. Earn the next one clean.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",canon:campaign-allies,42,4.0,draft
+bark.vex.grudge.wrecked,vex,bark,any,wrecked-by-player,vex=grudge,"Twice the speed, half the friends. Lovely.","UNCAST: quick, bright, a little hoarse; fast but every word clear",,42,3.2,draft
+bark.vex.a5.crown,vex,bark,any,grid,act=5;vex=ally,"Third cairn's a long way from here. Feels close, at the Crown.","UNCAST: quick, bright, a little hoarse; fast but every word clear",,62,5.2,draft
+bark.mica.grid,mica,taunt,any,grid,mica=rival,The road gives every warning.,"UNCAST: calm, low woman's voice; unhurried pauses",canon:rival-stories,29,2.2,draft
+bark.mica.overtakes,mica,bark,any,overtakes-player,mica=rival,Patience. You'd have liked it.,"UNCAST: calm, low woman's voice; unhurried pauses",,30,2.5,draft
+bark.mica.overtaken,mica,bark,any,overtaken-by-player,mica=rival,Brave. Now hold it on the way down.,"UNCAST: calm, low woman's voice; unhurried pauses",,35,3.7,draft
+bark.mica.hit,mica,taunt,any,hit-by-player,mica=rival,Loose rock. Drive.,"UNCAST: calm, low woman's voice; unhurried pauses",,18,1.6,draft
+bark.mica.wrecked,mica,bark,any,wrecked-by-player,mica=rival,Left me thin. Well driven.,"UNCAST: calm, low woman's voice; unhurried pauses",,26,2.5,draft
+bark.mica.wrecks,mica,taunt,any,wrecks-player,mica=rival,"The hut's open. Walk, if you have to.","UNCAST: calm, low woman's voice; unhurried pauses",,37,3.7,draft
+bark.mica.lastlap,mica,bark,any,last-lap,mica=rival;leading,Last crossing. Quiet now.,"UNCAST: calm, low woman's voice; unhurried pauses",,25,2.1,draft
+bark.mica.lowhp,mica,bark,any,low-hp,mica=rival,Thin. Still moving.,"UNCAST: calm, low woman's voice; unhurried pauses",,19,1.6,draft
+bark.mica.mine,mica,bark,any,mine-hit,mica=rival,Mines on the pass. Someone's never crossed it.,"UNCAST: calm, low woman's voice; unhurried pauses",,46,3.7,draft
+bark.mica.noname,mica,bark,any,grid,mica=rival;race>=2,I won't call you a number. Tell me your name when you've a mind to.,"UNCAST: calm, low woman's voice; unhurried pauses",address;rare,67,6.5,draft
+bark.mica.ally.grid,mica,bark,any,grid,mica=ally,I'll wait at the corner. You know that.,"UNCAST: calm, low woman's voice; unhurried pauses",,39,3.7,draft
+bark.mica.ally.overtakes,mica,bark,any,overtakes-player,mica=ally,Inside's mine. It always was.,"UNCAST: calm, low woman's voice; unhurried pauses",,29,2.5,draft
+bark.mica.ally.overtaken,mica,bark,any,overtaken-by-player,mica=ally,Anchored. Go.,"UNCAST: calm, low woman's voice; unhurried pauses",,13,1.2,draft
+bark.mica.ally.ahead,mica,bark,any,finish-ahead,mica=ally,Patience. Still works.,"UNCAST: calm, low woman's voice; unhurried pauses",,22,1.6,draft
+bark.mica.grudge.hit,mica,bark,any,hit-by-player,mica=grudge,I gave Ennis my pins. Keep my doors whole.,"UNCAST: calm, low woman's voice; unhurried pauses",,42,4.0,draft
+bark.mica.grudge.wrecked,mica,bark,any,wrecked-by-player,mica=grudge,You'll want a hut tonight. I'll think about it.,"UNCAST: calm, low woman's voice; unhurried pauses",,47,4.0,draft
+bark.mica.a5.marrow,mica,bark,any,near-rival,act=5;rival=marrow;mica=ally,He slept in my hut every winter for ten years. He drives like he's never been cold.,"UNCAST: calm, low woman's voice; unhurried pauses",,83,7.2,draft
+bark.relay.grid,relay,taunt,any,grid,,Read the receipt before you sign.,"UNCAST: quiet, polite, precise",canon:rival-stories,33,2.6,draft
+bark.relay.overtakes,relay,bark,any,overtakes-player,,Passing on your left. Signalled.,"UNCAST: quiet, polite, precise",,32,2.5,draft
+bark.relay.overtaken,relay,bark,any,overtaken-by-player,,Fair pass. I'll note it.,"UNCAST: quiet, polite, precise",,24,2.5,draft
+bark.relay.hit,relay,bark,any,hit-by-player,,That goes on my repair slip. I'll read it twice.,"UNCAST: quiet, polite, precise",,48,4.5,draft
+bark.relay.wrecked,relay,bark,any,wrecked-by-player,,Recorded. Not by me.,"UNCAST: quiet, polite, precise",,20,2.1,draft
+bark.relay.wrecks,relay,bark,any,wrecks-player,,Sorry. Contact wasn't on the route.,"UNCAST: quiet, polite, precise",,35,2.9,draft
+bark.relay.lastlap,relay,bark,any,last-lap,,Final leg. Delivering.,"UNCAST: quiet, polite, precise",,22,1.6,draft
+bark.relay.lowhp,relay,bark,any,low-hp,,Still on route. Only just.,"UNCAST: quiet, polite, precise",,26,2.5,draft
+bark.relay.thanks,relay,bark,any,grid,contract=delivery-done,Thanks for carrying the box. I never said. I'm saying.,"UNCAST: quiet, polite, precise",,54,4.7,draft
+bark.relay.grudge,relay,bark,any,hit-by-player,relay=grudge,I changed my route for you.,"UNCAST: quiet, polite, precise",canon:rival-stories,27,2.6,draft
+bark.house.contact,house,bark,any,hits-player,act>=2;optional,Fleet nine. Contact.,"Not voiced: flat call sign, caption only",equity;optional,20,1.6,draft
+bark.house.wrecked,house,bark,any,wrecked-by-player,act>=2;optional,Fleet nine. Retired.,"Not voiced: flat call sign, caption only",equity;optional,20,1.6,draft
+bark.house.station,house,bark,any,grid,act>=2;optional;rare,"Fleet nine, on station. Name withheld.","Not voiced: flat call sign, caption only",equity;optional,38,2.6,draft
+fin.pit.rook,rook,finale,crown-7,duel-pit,rook=ally,Nine years I wrote everything down. That frame I left off.,"UNCAST: dry, gravelled, clipped; sour",key;payoff:rook-saw-frame,58,4.9,key-pick
+fin.pit.ox,ox,finale,crown-7,duel-pit,ox=ally,"Forty names on that plate, and one more: Tull. Bring them all back.","UNCAST: low, steady woman's voice; flat; even stresses",payoff:tull;rig-gift,67,5.9,draft
+fin.pit.vex,vex,finale,crown-7,duel-pit,vex=ally,My watch is in the drum. It's never kept better time.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",payoff:watch,53,4.9,draft
+fin.pit.mica,mica,finale,crown-7,duel-pit,mica=ally,Pins are hut-forged. Strip's on your mirror. No one crosses alone.,"UNCAST: calm, low woman's voice; unhurried pauses",payoff:hut-law,66,5.5,draft
+fin.pit.relay,relay,finale,crown-7,duel-pit,,That gearbox has never been on paper. Not one line in his book.,"UNCAST: quiet, polite, precise",payoff:gearbox,63,5.7,draft
+fin.mech.open,mechanic,finale,crown-7,duel-start,,Five seconds a drop. Count with me.,"Harry: calm for once, low and steady, on the radio",key;rig-truth,35,3.2,key-pick
+fin.mech.open.2,mechanic,finale,crown-7,duel-start,after:fin.mech.open,Don't double back over your own. They don't know whose side they're on.,"Harry: calm for once, low and steady, on the radio",payoff:killing-blow;rig-truth;scored,71,5.7,draft
+fin.p1.marrow,marrow,finale,crown-7,phase,finale-phase=1,Bring it in gently. Every part on that car was bought on my road.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;phase:collection,65,6.0,key-pick
+fin.p1.voice,voice,finale,crown-7,phase,finale-phase=1,The Bulwark is on the rig's tail. He likes to collect in person.,"Callum noir: low, dry, unhurried; full stops are the pauses",phase:collection,64,5.7,draft
+fin.p1.mech.follow,mechanic,finale,crown-7,marrow-close,finale-phase=1,He's following. Good. Let him.,"Harry: calm for once, low and steady, on the radio",rig-plan,30,2.7,draft
+fin.mech.stopped,mechanic,finale,crown-7,player-slow,speed<4,You've stopped. So has the drum. Roll.,"Harry: calm for once, low and steady, on the radio",rig-truth,38,3.5,draft
+fin.mech.minehit,mechanic,finale,crown-7,mine-hit-marrow,,That's one. The watch says another in five.,"Harry: calm for once, low and steady, on the radio",payoff:watch,43,3.7,draft
+fin.mech.lowhp,mechanic,finale,crown-7,player-low-hp,,"You're hurt. Pickups by the pit wall. Go, and keep him behind you.","Harry: calm for once, low and steady, on the radio",rig-truth,66,5.9,draft
+fin.mech.ownmine,mechanic,finale,crown-7,own-mine-hit,,That one was ours. Sorry. Sorry. Keep going.,Harry: nervous but helpful; short breaths; at most one restart,humour;payoff:apologises-to-machines,44,4.2,draft
+fin.p2.marrow,marrow,finale,crown-7,phase,finale-phase=2,Tell him I kept his bench.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",key;phase:the-boy;payoff:bench,26,2.6,key-pick
+fin.p2.marrow.alt,marrow,finale,crown-7,phase,finale-phase=2,That is the boy's welding. He always overdid the bead.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",phase:the-boy;scored,54,4.5,alternate
+fin.p2.voice,voice,finale,crown-7,phase,finale-phase=2,Mister Marrow is losing plate. I'll say that once.,"Callum noir: low, dry, unhurried; full stops are the pauses",phase:the-boy,50,4.0,draft
+fin.p2.mech,mechanic,finale,crown-7,phase,finale-phase=2;after:fin.p2.marrow,Don't listen to him. Listen to the drum. Left side's open.,"Harry: calm for once, low and steady, on the radio",refuses-to-engage,58,5.1,draft
+fin.p3.marrow,marrow,finale,crown-7,phase,finale-phase=3,Do not round it.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats; to the booth, not to the player; almost gentle",key;phase:the-book;protected-thing:4,16,1.8,key-pick
+fin.p3.marrow.alt,marrow,finale,crown-7,phase,finale-phase=3,You always round. Not tonight.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats; to the booth",phase:the-book;scored,30,2.5,alternate
+fin.p3.voice,voice,finale,crown-7,phase,finale-phase=3,The Bulwark is down to the frame. The rig is still rolling.,"Callum noir: low, dry, unhurried; full stops are the pauses",phase:the-book,59,5.2,draft
+fin.p3.mech,mechanic,finale,crown-7,phase,finale-phase=3,He won't stop. He can't. Keep rolling.,"Harry: calm for once, low and steady, on the radio",rig-plan,38,3.5,draft
+fin.end.voice,voice,finale,crown-7,duel-win,after:fin.end.card.1,Didn't round it.,"Callum noir: low, dry, unhurried; full stops are the pauses; after a long silence; to the dead man, not the basin; no emphasis at all",key;protected-thing:payoff,16,1.4,key-pick
+fin.end.voice.alt,voice,finale,crown-7,duel-win,after:fin.end.card.1,To the second.,"Callum noir: low, dry, unhurried; full stops are the pauses; after a long silence",protected-thing:payoff;scored,14,1.4,alternate
+fin.end.card.1,card,finale,crown-7,duel-win,line=1,"The Voice reads the time once, to the second.","Not voiced: story-card caption, read at TV distance",ending-sequence,45,3.6,draft
+fin.end.card.2,card,finale,crown-7,duel-win,line=2,Then the booth goes dark for the first time in thirty years.,"Not voiced: story-card caption, read at TV distance",ending-sequence,60,4.6,draft
+fin.after.rook,rook,finale,crown-7,duel-win,rook=ally,Board's coming down. Starting with mine.,"UNCAST: dry, gravelled, clipped; sour",ending,40,2.9,draft
+fin.after.ox,ox,finale,crown-7,duel-win,ox=ally,Furnace relights Monday. We'll pour something that isn't a house car.,"UNCAST: low, steady woman's voice; flat; even stresses",ending,69,4.9,draft
+fin.after.vex,vex,finale,crown-7,duel-win,vex=ally,I wrote the time down too. Same number. First time I've agreed with the log.,"UNCAST: quick, bright, a little hoarse; fast but every word clear",ending,76,6.7,draft
+fin.after.mica,mica,finale,crown-7,duel-win,mica=ally,Grit runs out in eleven weeks. We'll see.,"UNCAST: calm, low woman's voice; unhurried pauses",ending;bounded-hope,41,3.7,draft
+fin.after.relay,relay,finale,crown-7,duel-win,,I read the book twice. There's nothing in it now but names.,"UNCAST: quiet, polite, precise; the word read is past tense here (pronounced red)",ending,59,5.2,draft
+fin.loss.marrow,marrow,finale,crown-7,duel-loss,,Recovered. Tow the rig to the bay.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",loss-is-content,34,3.2,draft
+fin.loss.voice,voice,finale,crown-7,duel-loss,,Last car running: the house. The rig goes back on the chain.,"Callum noir: low, dry, unhurried; full stops are the pauses",loss-is-content,60,5.5,draft
+fin.loss.mech,mechanic,finale,crown-7,duel-loss,,"It's the rig, not you. Give me a minute. Same plan. It's a good plan.",Harry: nervous but helpful; short breaths; at most one restart,loss-is-content,69,7.0,draft
+fin.retry.marrow,marrow,finale,crown-7,duel-retry,retry>=1,Again. The terms have not changed.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",retry,34,2.9,draft
+fin.retry.mech,mechanic,finale,crown-7,duel-retry,retry>=2,He follows you every time. Every single time. That's the whole thing.,"Harry: calm for once, low and steady, on the radio",retry;rig-plan,69,5.5,draft
+fin.draw.voice,voice,finale,crown-7,duel-draw,,"Ten minutes, both still moving. The paper calls that a draw. Go again.","Callum noir: low, dry, unhurried; full stops are the pauses",watchdog,70,5.9,draft
+fin.var.p1.marrow,marrow,finale,crown-7,phase,finale-phase=1;variant=seized-car,It handles beautifully. I can see why you kept it.,"UNCAST (needs casting): low, unhurried older man; even, never louder; full stops as beats",variant:FC-13,50,4.5,variant
+fin.var.mech,mechanic,finale,crown-7,duel-start,variant=seized-car,"That's your car. I know every bolt on it. So does he, now.","Harry: calm for once, low and steady, on the radio",variant:FC-13,58,5.9,variant
+fin.var.p3.voice,voice,finale,crown-7,phase,finale-phase=3;variant=seized-car,Twelve Hundred is wrecking their own car to keep it. I'll just call it.,"Callum noir: low, dry, unhurried; full stops are the pauses",variant:FC-13,71,6.0,variant
+fin.var.card.3,card,finale,crown-7,card-show,line=3;variant=seized-car,Marrow climbs into your car. He adjusts your mirror.,"Not voiced: story-card caption, read at TV distance",variant:FC-13,52,3.6,variant

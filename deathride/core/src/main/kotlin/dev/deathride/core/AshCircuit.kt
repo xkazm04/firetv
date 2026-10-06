@@ -7,10 +7,20 @@ object AshRules {
     operator fun get(key: String)=rules.getValue(key)
 }
 data class StoryCard(val id: String,val title: String,val backdrop: String,val lines: List<String>) {
-    val json get()="{\"id\":\"$id\",\"title\":\"$title\",\"backdrop\":\"$backdrop\",\"lines\":[${lines.joinToString(","){"\"$it\""}}]}"
+    val json get()="{\"id\":\"${esc(id)}\",\"title\":\"${esc(title)}\",\"backdrop\":\"${esc(backdrop)}\",\"lines\":[${lines.joinToString(","){"\"${esc(it)}\""}}]}"
+    private fun esc(v: String)=v.replace("\\","\\\\").replace("\"","\\\"")
 }
 object AshStory {
-    val cards=Content.table("story-cards").associate{it.getValue("id") to StoryCard(it.getValue("id"),it.getValue("title"),it.getValue("backdropKey"),(1..3).map{i->it.getValue("line$i")})}
+    /** story-cards.csv owns id, title and backdrop and is the per-line fallback; narrative/lines.csv owns the text. */
+    private val rows=Content.table("story-cards")
+    val cards=rows.associate{row->
+        val script=Script.cardLines(row.getValue("id"))
+        row.getValue("id") to StoryCard(row.getValue("id"),row.getValue("title"),row.getValue("backdropKey"),(1..3).map{i->script[i-1]?:row.getValue("line$i")})
+    }
+    /** Event ids whose card has at least one line still taken from story-cards.csv. */
+    val fallbackEvents=rows.filter{row->Script.cardLines(row.getValue("id")).any{it==null}}.map{it.getValue("id")}
+    /** Paper Night has no career event; the script owns it outright (no story-cards.csv row, so no fallback). */
+    val prologue: StoryCard? get()=Script.cardLines("prologue").takeIf{l->l.all{it!=null}}?.let{StoryCard("prologue","Paper Night",cards.getValue("scrap-1").backdrop,it.filterNotNull())}
     val rivals=Content.table("rival-stories").associateBy{it.getValue("id")}
 }
 data class CurvePoint(val event: String,val number: Int,val act: Int,val fieldTarget: Double,val ratioTarget: Double,val rewardScale: Double,val rivalGrant: Int,val fieldTier: Int=act,val ratioBasis: String="lap-field",val ratioLow: Double=.80,val ratioHigh: Double=1.15)

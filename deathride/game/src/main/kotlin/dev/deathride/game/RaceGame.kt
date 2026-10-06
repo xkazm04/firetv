@@ -33,6 +33,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var campaignAudio: CampaignAudioDirector
     private lateinit var captions: GlyphLayer
     private var drawnCaption=""
+    private val script=ScriptDirector()
+    private lateinit var scriptLayer: GlyphLayer
+    private var drawnScript=-1
     private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[Courses.playableIndices.first()]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
@@ -151,6 +154,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun careerSelect() {
         val p=profiles[0];val index=Campaign.pending(p)
         if(index<0){startRace(true);return}
+        script.payoutChosen(p,index,Campaign.choices[selectedReward])
         buyMarket(0,dev.deathride.link.MarketRequest(p.id,p.selectedCar,"ally","${Campaign.allies[index].id}:${Campaign.choices[selectedReward]}",p.marketRevision))
     }
     private fun openCareer() {
@@ -158,7 +162,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(!editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
         phase="career";server.phase=phase;accumulator=0.0
         for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot])
-        campaignAudio.careerOpened(profiles[0]);rebuildUi()
+        campaignAudio.careerOpened(profiles[0]);script.careerOpened(profiles[0]);rebuildUi()
     }
     private fun selectDifficulty(direction: Int) { if(Campaign.pending(profiles[0])>=0)selectedReward=(selectedReward+direction).mod(Campaign.choices.size) else server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
@@ -197,6 +201,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         phase="results";server.phase=phase;stateTime=0.0;raceAudio.results(world)
         if(campaignRace)campaignAudio.settled(before,profiles[0])
+        script.raceFinished(world,profiles[0],raceRound,campaignRace,profiles[0].careerRound!=raceRound)
         rebuildUi()
     }
 
@@ -208,7 +213,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         small=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
         fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
-        captions=GlyphLayer(small)
+        captions=GlyphLayer(small);scriptLayer=GlyphLayer(small)
         val cueManifest=runCatching{CueManifest.parse(Gdx.files.internal("audio/cues.json").readString("UTF-8"))}.getOrElse{logger("audio manifest unavailable; silent fallback");CueManifest.silent()}
         logger("audio musicMode=${cueManifest.musicMode}")
         for((id,gap) in cueManifest.gaps)logger("audio gap $id: $gap")
@@ -353,6 +358,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         profiler?.mark(8,"DR.audio")
         raceAudio.update(world,phase,scene.ready,countdown,actual.coerceAtLeast(0.0))
+        script.frame(phase,campaignRace,profiles[0],raceRound,world,actual.coerceIn(0.0,.1))
         profiler?.mark(9,"DR.telemetry")
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps;server.eventType=world.eventType.name;server.raceEntrants=world.entrantCount
         if(uiTime>=.1) {
@@ -376,7 +382,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         profiler?.mark(15,"DR.hud")
         drawOverlay()
         profiler?.mark(16,"DR.caption")
-        drawCaption()
+        drawCaption();drawScriptCaption()
         profiler?.mark(17,"DR.tail")
         // Flash is a display event, consumed once after all other drawing.
         if(server.flash.getAndSet(false)) { Gdx.gl.glClearColor(1f,1f,1f,1f); Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); server.flashFrames++ }
@@ -728,6 +734,17 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
     }
     private fun combatWrecked(c: Car)=world.combat.wrecked(c.id)
+    /** Timed script captions (pre/post-race scenes, barks); yields to a playing voice caption. No audio. */
+    private fun drawScriptCaption(){
+        val value=script.caption
+        if(value.isEmpty() || audio.caption.isNotEmpty())return
+        val (bx,by)=when(phase){"career"->60f to 300f;"results"->190f to 84f;else->190f to 132f}
+        val width=if(phase=="career")700f else 900f
+        if(script.serial!=drawnScript){scriptLayer.clear();scriptLayer.setColor(HudTheme.bone);scriptLayer.wrapped(value,bx+16f,by+38f,width-32f,24f);drawnScript=script.serial}
+        shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.color=HudTheme.soot;shape.rect(bx,by,width,60f);shape.end()
+        batch.projectionMatrix=view.camera.combined;batch.begin();scriptLayer.draw(batch);batch.end()
+    }
     private fun drawCaption(){
         val value=audio.caption
         if(value!=drawnCaption){captions.clear();captions.setColor(HudTheme.bone);captions.wrapped(value,190f,177f,900f,26f);captions.addText("N / X: SKIP VOICE",190f,117f);drawnCaption=value}

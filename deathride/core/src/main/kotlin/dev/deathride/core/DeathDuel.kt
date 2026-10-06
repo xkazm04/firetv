@@ -33,7 +33,8 @@ object DeathDuel {
     }
     fun story(p: Profile): StoryCard {
         val card=Career.events[p.careerRound].story
-        if(!seized(p))return card
+        // The scripted crown-7 card already shows the chained car; the old seizure sentence only fronts a csv-fallback card.
+        if(!seized(p) || card.id !in AshStory.fallbackEvents)return card
         return card.copy(lines=listOf("Marrow seized your ${CarCatalog.all[p.campaign.seizedCar].id} under a false lien.",card.lines[1],card.lines[2]))
     }
 }
