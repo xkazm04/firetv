@@ -85,8 +85,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var stateTime=0.0
     private var uiTime=0.0
     private var keyboard=false
-    /** Camera roll in radians: with one human on the road the view turns so the car always points up the screen, making left/right on the phone match left/right on the TV. */
-    private var cameraRoll=0.0
+    /** Race camera sits 50% farther away than the authored zoom (owner, 2026-10-06). */
+    private val RACE_ZOOM_OUT=1.5
     private var focusX=0.0
     private var focusY=0.0
     private var cameraZoom=1.0
@@ -423,7 +423,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             focusX+=(x/count-focusX)*ease;focusY+=(y/count-focusY)*ease
             var target=(VisualTuning["soloPixelsPerM"]-speed/count*VisualTuning["speedZoomPerMps"]).coerceAtLeast(VisualTuning["minPixelsPerM"])
             if(count>1)target=min(target,min(1100/(maxX-minX+VisualTuning["sharedPaddingM"]),480/(maxY-minY+VisualTuning["sharedPaddingM"])))
-            cameraZoom+=(target-cameraZoom)*ease;pixelsPerM=cameraZoom
+            target/=RACE_ZOOM_OUT;cameraZoom+=(target-cameraZoom)*ease;pixelsPerM=cameraZoom
         } else if(phase=="lobby") {
             // Lobby backdrop: a close, live look at the demo pack on the chosen region's ground, framed by the centre window.
             var n=0;var x=0.0;var y=0.0
@@ -433,13 +433,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             cameraZoom=LOBBY_PIXELS_PER_M;pixelsPerM=cameraZoom
         } else { focusX=(course.minX+course.maxX)*.5;focusY=(course.minY+course.maxY)*.5;cameraZoom=VisualTuning["soloPixelsPerM"] }
         if(phase!="lobby")lobbyCamera=false
-        var rollTarget=0.0
-        if(following) {
-            val drivers=world.cars.filter{it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0}
-            if(drivers.size==1)rollTarget=PI/2-drivers[0].heading
-        }
-        cameraRoll=wrapAngle(cameraRoll+wrapAngle(rollTarget-cameraRoll)*(1-exp(-dt*8.0)))
-        worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).rotateRad(0f,0f,1f,cameraRoll.toFloat()).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
+        worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
         profiler?.mark(12,"DR.effectsUpdate")
         atlasEffects.update(world.snapshot,dt);atmosphere.update(dt)
         profiler?.mark(13,"DR.sceneryDraw")
