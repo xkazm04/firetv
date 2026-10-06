@@ -49,6 +49,8 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     val grid=spots.filter { it.kind=="grid" }
     private val cell=TrackRules["projectionCellM"]
     private val columns: Int; private val rows: Int
+    /** Projection bins are cell*BIN_TOP/BIN_SPLIT on a side (see bakeCandidates): candidate lists ~10x shorter than the 20 m authoring cell gave. */
+    private val binM: Double
     /** Baked on first projection, not at class load: the eager bake of every archived course stalled Android startup. */
     private val candidates: Array<IntArray> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
@@ -74,15 +76,41 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         curvature[count]=curvature[0]
         minX=min(x.min(),branches.minOfOrNull { it.alternative.x.min() }?:x.min())-width.max()-cell; maxX=max(x.max(),branches.maxOfOrNull { it.alternative.x.max() }?:x.max())+width.max()+cell
         minY=min(y.min(),branches.minOfOrNull { it.alternative.y.min() }?:y.min())-width.max()-cell; maxY=max(y.max(),branches.maxOfOrNull { it.alternative.y.max() }?:y.max())+width.max()+cell
-        columns=ceil((maxX-minX)/cell).toInt();rows=ceil((maxY-minY)/cell).toInt()
+        columns=ceil((maxX-minX)/(cell*BIN_TOP)).toInt()*BIN_SPLIT;rows=ceil((maxY-minY)/(cell*BIN_TOP)).toInt()*BIN_SPLIT;binM=cell*BIN_TOP/BIN_SPLIT
         obstacles=ObstacleContent.bake(this,obstaclePlacements)
     }
-    // Static spatial bins: each contains segments close enough to any point in its cell.
-    private fun bakeCandidates()=Array(columns*rows) { index ->
-        val cx=minX+(index%columns+.5)*cell;val cy=minY+(index/columns+.5)*cell
-        var nearest=Double.POSITIVE_INFINITY
-        for(i in 0 until count)nearest=min(nearest,sqrt(distance2(cx,cy,i)))
-        (0 until count).filter { sqrt(distance2(cx,cy,it))<=nearest+cell*sqrt(2.0) }.toIntArray()
+    // Static spatial bins: each contains every segment that can be the nearest segment of some point in its cell
+    // (centre distance <= nearest + cellSize*sqrt(2)). Built coarse-to-fine: a child bin only has to look through its
+    // parent's list, because a segment that cannot be nearest anywhere in the parent cannot be nearest in the child.
+    // For any in-bounds point the argmin is exactly what the single 20 m grid produced, with ~10x shorter lists.
+    private fun bakeCandidates(): Array<IntArray> {
+        val scratch=DoubleArray(count)
+        var size=cell*BIN_TOP;var cols=columns/BIN_SPLIT;var rws=rows/BIN_SPLIT
+        var level=Array(cols*rws) { index ->
+            val cx=minX+(index%cols+.5)*size;val cy=minY+(index/cols+.5)*size
+            var nearest=Double.POSITIVE_INFINITY
+            for(i in 0 until count) { val d=sqrt(distance2(cx,cy,i));scratch[i]=d;if(d<nearest)nearest=d }
+            val limit=nearest+size*sqrt(2.0)
+            var n=0;for(i in 0 until count)if(scratch[i]<=limit)n++
+            val out=IntArray(n);n=0;for(i in 0 until count)if(scratch[i]<=limit)out[n++]=i
+            out
+        }
+        var split=1
+        while(split<BIN_SPLIT) {
+            val half=size/2;val parents=level;val parentCols=cols;cols*=2;rws*=2
+            level=Array(cols*rws) { index ->
+                val fx=index%cols;val fy=index/cols;val parent=parents[(fy/2)*parentCols+fx/2]
+                val cx=minX+(fx+.5)*half;val cy=minY+(fy+.5)*half
+                var nearest=Double.POSITIVE_INFINITY
+                for(k in parent.indices) { val d=sqrt(distance2(cx,cy,parent[k]));scratch[k]=d;if(d<nearest)nearest=d }
+                val limit=nearest+half*sqrt(2.0)
+                var n=0;for(k in parent.indices)if(scratch[k]<=limit)n++
+                val out=IntArray(n);n=0;for(k in parent.indices)if(scratch[k]<=limit)out[n++]=parent[k]
+                out
+            }
+            size=half;split*=2
+        }
+        return level
     }
     private fun distance2(px: Double,py: Double,i: Int): Double {
         val t=((px-x[i])*dx[i]+(py-y[i])*dy[i])*inverseLength2[i]
@@ -121,7 +149,7 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         out.heading=atan2(dy[i],dx[i]);out.curvature=curvature[i]
     }
     fun project(px: Double,py: Double,out: Projection,hintS: Double=Double.NaN,routeHint: Int=0) {
-        val col=((px-minX)/cell).toInt().coerceIn(0,columns-1);val row=((py-minY)/cell).toInt().coerceIn(0,rows-1)
+        val col=((px-minX)/binM).toInt().coerceIn(0,columns-1);val row=((py-minY)/binM).toInt().coerceIn(0,rows-1)
         val list=candidates[row*columns+col];var best=Double.POSITIVE_INFINITY;var chosen=0
         for(k in list.indices) { val i=list[k];val d=distance2(px,py,i);if(d<best){best=d;chosen=i} }
         // Preserve passage identity at an at-grade crossing. A far teleport still uses global projection.
@@ -150,6 +178,9 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         }
     }
 }
+/** Projection bins: 4 authoring cells across at the top level, halved BIN_SPLIT-fold (8 -> 10 m bins; 16 -> 5 m is ~10% faster for ~3x the list memory). */
+private const val BIN_SPLIT=8
+private const val BIN_TOP=4
 object Courses {
     private val rows=Content.table("tracks")
     private val ids=rows.map { it.getValue("id") }
