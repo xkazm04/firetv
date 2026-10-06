@@ -15,6 +15,9 @@ android {
     sourceSets["main"].assets.srcDir(rootProject.file("controller"))
     sourceSets["main"].assets.srcDir(rootProject.file("assets"))
     sourceSets["main"].jniLibs.srcDir(layout.buildDirectory.dir("generated/natives"))
+    // Runtime loads only phase2-states, story-art, regions, audio (+controller). The other phase2 bundles
+    // are audit/test inputs (desktop AtlasAudit, tests read ../assets directly) and stay in the repo.
+    androidResources { ignoreAssetsPattern = "!phase2-v1:!phase2-hud:!phase2-fusion" }
     packaging { resources.excludes += setOf("META-INF/INDEX.LIST", "META-INF/AL2.0", "META-INF/LGPL2.1") }
 }
 dependencies {
