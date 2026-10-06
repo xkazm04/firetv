@@ -27,6 +27,11 @@ class ParseBenchTest {
         measure("InputPacket byte parse (compact phone packet)",500000){ if(pk.parse(phone))sink+=pk.q+pk.ts+pk.s+pk.a }
         val now=987654.321012345
         measure("ack string template",500000){ val s="{\"t\":\"ack\",\"q\":${it.toLong()},\"tvNow\":$now,\"accepted\":${it%2==0}}";sink+=s.length }
+        run { val d=Distribution();val r=java.util.Random(1);for(i in 0 until 5000)d.add(r.nextDouble()*20,i*2.0)
+            measure("Distribution.add",2000000){ d.add((it%97)*0.1,10000.0+it) }
+            measure("Distribution.json (4096 window)",2000){ sink+=d.json(10000.0).length } }
+        run { val h=RaceServer({"{}"},{},port=0);for(i in 0 until 5000){h.metrics.frameMs.add(16.0+i%5,i*2.0);h.metrics.simMs.add(0.02,i*2.0);h.metrics.inputAgeMs[0].add(20.0,i*2.0);h.metrics.inputAgeMs[1].add(20.0,i*2.0)}
+            measure("RaceServer.statsJson (/stats)",2000){ sink+=h.statsJson().length } }
         println("BENCH sink $sink")
     }
 }

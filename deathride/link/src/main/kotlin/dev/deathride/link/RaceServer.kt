@@ -125,7 +125,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     fun start() {
         if(running || networkJob?.isActive==true)return
         val rawHtml=assets("index.html");val buildId=Integer.toHexString(rawHtml.hashCode());val html=rawHtml.replace("__BUILD__",buildId)
-        val manifest=assets("manifest.webmanifest")
+        val manifest=assets("manifest.webmanifest");val htmlPacked=Packed(html);val cssPacked=Packed(assets("hud.css"));val catalogCache=PackedCache()
         networkJob=scope.launch {
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
@@ -133,9 +133,9 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
-                        get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
+                        get("/") { call.response.header("Cache-Control","no-store"); call.respondPacked(htmlPacked,ContentType.Text.Html) }
                         get("/build") { call.response.header("Cache-Control","no-store"); call.respondText(buildId,ContentType.Text.Plain) }
-                        get("/hud.css") { call.respondText(assets("hud.css"),ContentType.Text.CSS) }
+                        get("/hud.css") { call.respondPacked(cssPacked,ContentType.Text.CSS,"no-cache") }
                 get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
                         if(profileFrames!=null)get("/profile") {
@@ -143,7 +143,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             val inputs=call.request.queryParameters["inputs"]?.toLongOrNull()?:0
                             call.respondText("{\"frames\":${profileFrames.json(frames)},\"inputs\":${profileInputs!!.json(inputs)},\"runtime\":${profileRuntime?.invoke()?:"{}"}}",ContentType.Application.Json)
                         }
-                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}",ContentType.Application.Json) }
+                        get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         get("/routes") { call.respondText(routesJson,ContentType.Application.Json) }
                         webSocket("/ws") { handle(this) }
