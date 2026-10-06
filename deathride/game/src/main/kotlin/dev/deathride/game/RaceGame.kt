@@ -456,7 +456,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(c.ability.definition?.kind!=AbilityKind.DISPATCHER) {
                 val hp=current.healthFraction(c.id).toFloat()
                 if(!c.human && AtlasArt.carState(hp,current.wrecked(c.id))>0 && art.carKey(c.carClass?.id?:"Line",hp,current.wrecked(c.id),c.id)!=null)
-                    seatRing(x,y,CarShapes.forId(c.carClass?.id?:"Line").lengthM.toFloat()*.5f,colors[c.id],world.combat.damageFlashSeconds[c.id]>0)
+                    seatRing(x,y,CarShapeCache.of(c.carClass?.id?:"Line").lengthM.toFloat()*.5f,colors[c.id],world.combat.damageFlashSeconds[c.id]>0)
             }
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
@@ -470,7 +470,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val key=art.carKey(c.carClass?.id?:"Line",s.healthFraction(c.id).toFloat(),s.wrecked(c.id),c.id)?:continue
             val x=(prev.x(c.id)+(s.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(s.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(s.heading(c.id)-prev.heading(c.id))*alpha
-            val spec=CarShapes.forId(c.carClass?.id?:"Line")
+            val spec=CarShapeCache.of(c.carClass?.id?:"Line")
             art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading)
             wheels.draw(batch,c.id,spec.id,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading)
         }
@@ -514,7 +514,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 shape.color=HudTheme.rust;shape.rect(416f,120f,448f,92f)
                 shape.color=accent;shape.rect(64f,130f,320f,50f)
                 val car=CarCatalog.all[selectedCars[0]]
-                val spec=CarShapes.forId(car.id)
+                val spec=CarShapeCache.of(car.id)
                 // Turntable: seat-coloured ring so the livery identity reads even on damaged or procedural cars.
                 shape.setColor(.13f,.11f,.10f,1f);shape.rect(896f,392f,320f,110f)
                 shape.color=colors[0];shape.ellipse(1056f-128f,447f-40f,256f,80f)
@@ -558,7 +558,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument",corner: Float=0f) {art.frame(batch,key,x,y,w,h,corner)}
         when(phase) {
             "lobby" -> {
-                previewKey()?.let{key->val spec=CarShapes.forId(world.cars[0].carClass?.id?:"Line");val s=min(34f,200f/spec.lengthM.toFloat());art.car(batch,key,1056f,447f,spec.lengthM.toFloat()*s,spec.widthM.toFloat()*s,0.0)}
+                previewKey()?.let{key->val spec=CarShapeCache.of(world.cars[0].carClass?.id?:"Line");val s=min(34f,200f/spec.lengthM.toFloat());art.car(batch,key,1056f,447f,spec.lengthM.toFloat()*s,spec.widthM.toFloat()*s,0.0)}
                 frame(44f,96f,360f,506f,"hud/frame-panel",.2f);frame(876f,96f,360f,506f,"hud/frame-panel",.2f)
                 frame(404f,96f,472f,506f,"hud/frame-instrument",.2f)
                 frame(892f,388f,328f,118f,"hud/frame-instrument",.14f)
