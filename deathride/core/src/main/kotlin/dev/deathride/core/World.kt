@@ -479,9 +479,9 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         }
         val b=if(c.speedMps>obstacles.speedLimit[c.id])1.0 else if(c.speedMps>cornerTarget+2.0) .45 else 0.0
         // Grip-driving AI. A slide is caught with inputs through the identical axle solver.
-        val catching=c.spec.driftGeometry!=null && abs(slip)>driftRules["assistFadeStartRadians"]
-        c.aiInput.set(if(catching)(-slip*driftRules["aiCountersteerGain"]).coerceIn(-1.0,1.0) else steer,
-            if(catching)min(a,driftRules["aiSlipThrottleLimit"]) else a,b)
+        val catching=c.spec.driftGeometry!=null && abs(slip)>driftRules.assistFadeStartRadians
+        c.aiInput.set(if(catching)(-slip*driftRules.aiCountersteerGain).coerceIn(-1.0,1.0) else steer,
+            if(catching)min(a,driftRules.aiSlipThrottleLimit) else a,b)
         c.aiInput.handbrake=ai.drift(c,steer)
     }
     // Projection is a pure function of (point, progress hint, route hint) on an immutable course. contain() runs four times a step
