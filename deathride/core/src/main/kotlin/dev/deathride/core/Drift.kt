@@ -91,7 +91,7 @@ object DriftDynamics {
         val counter=c.filteredSteer*beta<0
         val assist=1-blend(abs(beta),p["assistFadeStartRadians"],p["spinSlipRadians"])
         val counterGain=if(counter)p["countersteerGain"]*min(1.0,speed/p["countersteerFullSpeedMps"])*min(1.0,abs(beta)/p["assistFadeStartRadians"])*assist else 0.0
-        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*spec.steeringRateRadPerSecond*c.abilitySteerScale*steeringGeometryScale(spec,p)*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
+        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*(if(c.human && !c.labCar)p["humanSteerGain"] else 1.0)*spec.steeringRateRadPerSecond*c.abilitySteerScale*steeringGeometryScale(spec,p)*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
         val steerAngle=atan2(steerYaw*g.wheelbaseM,max(speed,p["lowSpeedMps"]))
         val wheelCos=cos(steerAngle);val wheelSin=sin(steerAngle)
         val vf=(lateral+g.frontArmM*c.yaw)*wheelCos-forward*wheelSin

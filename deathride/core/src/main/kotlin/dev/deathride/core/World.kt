@@ -177,7 +177,7 @@ class Car(val id: Int, track: Track) {
     var finishKind=FinishKind.NONE
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
-    var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
+    var human=false; /** Drift-lab cars keep the calibrated steering so the lab stays a fixed instrument. */ var labCar=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
     var aiBossHealthScale=1.0; val effectiveStats=DoubleArray(8)
     var aiMode=AiMode.DRIVE; var aiDwell=0; var aiBlockedSteps=0; var aiLane=0.0
     var aiReason=0; var aiPerceivedGapM=1000.0

@@ -1,6 +1,6 @@
 id,deadZone,exponent,touchTravelPx,touchTravelFraction,steerRisePerSecond,steerReturnPerSecond,lowSpeedAuthority,highSpeedAuthority,speedBlendMps,yawResponseScale,stabilityScale,throttleRisePerSecond,throttleExponent,brakeScale,yawMinRadPerSecond,yawMaxRadPerSecond,turnInMaxSeconds,recoveryMaxSeconds
-Spike,0.09,1,75,0.175,1000,1000,1,1,30,1,1,1000,1,1,0.35,1.5,0.8,2.5
-Loose,0.04,0.8,47.5,0.152,10,14,1.5,1.25,30,0.65,0.6,5,1,1.1,0.5,2.5,0.8,2.5
-Agile,0.05,0.85,52.5,0.157,8,12,1.45,1.15,30,0.6,0.9,4,1.1,1.05,0.5,2.5,0.8,2.5
-Balanced,0.06,1,57.5,0.163,6,10,1.35,1.05,30,0.75,1.1,3,1.15,1,0.4,2,0.8,2.5
-Stable,0.08,1.2,65,0.175,4,8,1.2,0.85,30,0.9,1.5,2.5,1.25,1,0.3,1.8,1,2.5
+Spike,0.045,1,150,0.30,1000,1000,1,1,30,1,1,1000,1,1,0.35,1.5,0.8,2.5
+Loose,0.02,0.8,95,0.26,10,14,1.5,1.25,30,0.65,0.6,5,1,1.1,0.5,2.5,0.8,2.5
+Agile,0.025,0.85,105,0.27,8,12,1.45,1.15,30,0.6,0.9,4,1.1,1.05,0.5,2.5,0.8,2.5
+Balanced,0.03,1,115,0.28,6,10,1.35,1.05,30,0.75,1.1,3,1.15,1,0.4,2,0.8,2.5
+Stable,0.04,1.2,130,0.30,4,8,1.2,0.85,30,0.9,1.5,2.5,1.25,1,0.3,1.8,1,2.5

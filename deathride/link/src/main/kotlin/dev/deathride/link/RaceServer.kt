@@ -124,7 +124,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     }
     fun start() {
         if(running || networkJob?.isActive==true)return
-        val html=assets("index.html")
+        val rawHtml=assets("index.html");val buildId=Integer.toHexString(rawHtml.hashCode());val html=rawHtml.replace("__BUILD__",buildId)
         val manifest=assets("manifest.webmanifest")
         networkJob=scope.launch {
             repeat(10) {
@@ -134,6 +134,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
+                        get("/build") { call.response.header("Cache-Control","no-store"); call.respondText(buildId,ContentType.Text.Plain) }
                         get("/hud.css") { call.respondText(assets("hud.css"),ContentType.Text.CSS) }
                 get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
