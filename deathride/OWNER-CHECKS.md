@@ -299,3 +299,14 @@ On desktop, earn a named-boss promotion while another entrant finishes first. Co
 Drive the varied build-up, pressure, qualifier and boss lap lengths. Record actual elapsed play including menus and reading, retry counts and selected difficulty. The simulated lead-decision proxies are not human players or the actual difficulty settings. Compare stock and developed class identities with the displayed fractional offers. In the finale, judge the fixed basic Mechanic rig, automatic mines, seizure, free retry and fight-to-the-death ending. No new art or recorded voice is supplied.
 
 Every Fire TV Stick install, input, performance, thermal, memory, reconnect and felt-play check remains pending. The device was reserved and never accessed during this pass. Desktop browser tests and headless simulations cannot certify those observations.
+
+## W-Control - Drive pad and doubled steering (2026-10-06)
+
+Reload the controller on the phone (the default is now **Drive**). Hold the phone with both thumbs, left thumb on the left half.
+
+1. **Steering speed.** Balanced now needs about 57 px of drag for full lock (was 115). Take the hairpin and the slalom from W1 again. Good: a normal flick turns the car as fast as you think it should and you can still make small corrections down a straight. Bad: the car twitches or hunts on a straight (try Stable and report the preset), or you hit full lock by accident. Spike is the fastest and has no smoothing by design.
+2. **One-thumb driving.** Put the left thumb down, drag UP and keep it there: the green bar fills and the car accelerates, release and it coasts. Drag DOWN: the red bar fills, the car brakes harder the further you drag. Steer by moving sideways while up or down. Good: you never need the right hand to move the car, small throttle values are controllable. Bad: the pad runs out of room, you brake when you meant to steer (tell us the dead zone feeling), or the ring is not where your thumb landed.
+3. **Right hand.** DRIFT and FIRE are the big bottom buttons; ABILITY, MINE and SWAP are above. Hold DRIFT (power brake) into a bend, add FIRE with the same thumb or a quick index tap while the left thumb keeps steering. Good: all three are held together without a missed press and without looking down. Bad: a button is hard to reach, an accidental press, the mirror (left-handed) option feels wrong.
+4. Try Classic, Cruise and Split once for comparison.
+
+The browser test (tools/browser-check.mjs) covers 2, 3 and 4 simultaneous touches with synthetic CDP touches; it cannot show whether a real Android Chrome cancels a third finger (gesture/palm rejection, OEM three-finger shortcuts), so this section is the physical-phone check. If a third touch is still lost on your phone, note the model and whether the page said Connection lost at that moment.
