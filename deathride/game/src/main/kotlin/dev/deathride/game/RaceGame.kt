@@ -434,6 +434,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val x=(prev.x(c.id)+(current.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(current.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(current.heading(c.id)-prev.heading(c.id))*alpha
             if(c.ability.definition?.kind==AbilityKind.DISPATCHER || art.carKey(c.carClass?.id?:"Line",current.healthFraction(c.id).toFloat(),current.wrecked(c.id),c.id)==null)painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=current.healthFraction(c.id).toFloat(),wrecked=world.combat.wrecked(c.id))
+            if(c.ability.definition?.kind!=AbilityKind.DISPATCHER) {
+                val hp=current.healthFraction(c.id).toFloat()
+                if(AtlasArt.carState(hp,current.wrecked(c.id))>0 && art.carKey(c.carClass?.id?:"Line",hp,current.wrecked(c.id),c.id)!=null)
+                    seatRing(x,y,CarShapes.forId(c.carClass?.id?:"Line").lengthM.toFloat()*.5f,colors[c.id],world.combat.damageFlashSeconds[c.id]>0)
+            }
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
         combatPainter.air(shape,world,art)
@@ -447,7 +452,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val x=(prev.x(c.id)+(s.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(s.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(s.heading(c.id)-prev.heading(c.id))*alpha
             val spec=CarShapes.forId(c.carClass?.id?:"Line")
-            art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading,colors[c.id],s.flash(c.id)>0)
+            art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading)
         }
         atlasEffects.air(batch,world.snapshot,world.seconds);abilityPainter.art(batch,world.snapshot,art);batch.end()
         shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true);shape.end()
@@ -489,7 +494,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     val x=if(i<4)475f else 815f;val y=416f-(i%4)*55
                     bar(x,y,210f,value.toFloat()/CarCatalog.statMax,if(weakStats[i])warning else accent)
                 }
-                painter.draw(shape,world.cars[0],1120f,541f,0.0,colors[0],false,10f)
+                if(previewKey()==null)painter.draw(shape,world.cars[0],1120f,541f,0.0,colors[0],false,10f)
             }
             "garage" -> {
                 panel(44f,96f,1192f,506f)
@@ -520,7 +525,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         batch.projectionMatrix=view.camera.combined;batch.begin();batch.color=Color.WHITE
         fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument") {art.frame(batch,key,x,y,w,h)}
         when(phase) {
-            "lobby" -> {frame(44f,96f,390f,506f,"hud/frame-panel");frame(455f,96f,781f,506f,"hud/frame-panel");frame(60f,124f,355f,52f,"hud/frame-button")}
+            "lobby" -> {frame(44f,96f,390f,506f,"hud/frame-panel");frame(455f,96f,781f,506f,"hud/frame-panel");frame(60f,124f,355f,52f,"hud/frame-button")
+                previewKey()?.let{key->val spec=CarShapes.forId(world.cars[0].carClass?.id?:"Line");art.car(batch,key,1120f,541f,spec.lengthM.toFloat()*10f,spec.widthM.toFloat()*10f,0.0)}}
             "garage" -> {
                 frame(44f,96f,1192f,506f,"hud/frame-panel");frame(61f,453f-selectedPart*52,513f,56f);frame(621f,197f,585f,58f,"hud/frame-button")
                 art.draw(batch,"hud/icon-engine",548f,480f,32f,32f)
@@ -561,6 +567,20 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase=="lobby" && qr!=null)batch.draw(qr,67f,265f,164f,164f)
         text.draw(batch);headline.draw(batch);detail.draw(batch);batch.end()
     }
+    /** Atlas key for the lobby preview car (clean frame, seat 0 livery), or null for the procedural fallback. */
+    private fun previewKey(): String? {
+        val c=world.cars[0]
+        return if(c.ability.definition?.kind==AbilityKind.DISPATCHER)null else art.carKey(c.carClass?.id?:"Line",1f,false,0)
+    }
+    /** Seat identity that survives damaged and wreck frames, which are not livery-coloured: a ring under the sprite. */
+    private fun seatRing(x: Float,y: Float,radius: Float,color: Color,flash: Boolean) {
+        shape.color=if(flash)Color.WHITE else color
+        val width=if(flash).35f else .22f
+        for(i in 0 until 20) {
+            val a=i*2*PI/20;val b=(i+1)*2*PI/20
+            shape.rectLine(x+(cos(a)*radius).toFloat(),y+(sin(a)*radius).toFloat(),x+(cos(b)*radius).toFloat(),y+(sin(b)*radius).toFloat(),width)
+        }
+    }
     private fun drawMinimap() {
         val c=courseCatalog[selectedTrack];val scale=min(166/(c.maxX-c.minX),112/(c.maxY-c.minY)).toFloat()
         val ox=1144f-((c.minX+c.maxX)*.5).toFloat()*scale;val oy=469f-((c.minY+c.maxY)*.5).toFloat()*scale
@@ -568,7 +588,17 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.color=muted
         for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
         for(line in scene.branchCenters)for(i in 0 until line.size/2-1)shape.rectLine(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f)
-        for(car in world.cars)if(car.entered) {shape.color=colors[car.id];val x=ox+car.x.toFloat()*scale;val y=oy+car.y.toFloat()*scale;if(car.human)shape.rect(x-5,y-5,10f,10f) else shape.circle(x,y,3f,10)}
+        // Dark halo keeps every seat colour readable on the road line; a nose triangle gives heading, humans are larger.
+        for(car in world.cars)if(car.entered) {
+            val x=ox+car.x.toFloat()*scale;val y=oy+car.y.toFloat()*scale;val r=if(car.human)6f else 4.5f
+            val hx=cos(car.heading).toFloat();val hy=sin(car.heading).toFloat()
+            val dead=world.combat.wrecked(car.id)
+            shape.setColor(.02f,.03f,.035f,1f);shape.circle(x,y,r+1.6f,12)
+            if(dead)shape.setColor(.35f,.36f,.35f,1f) else shape.color=colors[car.id]
+            shape.circle(x,y,r,12)
+            if(!dead){shape.setColor(.02f,.03f,.035f,1f);shape.triangle(x+hx*(r+4f),y+hy*(r+4f),x-hy*r*.6f+hx*r*.3f,y+hx*r*.6f+hy*r*.3f,x+hy*r*.6f+hx*r*.3f,y-hx*r*.6f+hy*r*.3f);shape.color=colors[car.id];shape.triangle(x+hx*(r+2.6f),y+hy*(r+2.6f),x-hy*r*.4f+hx*r*.5f,y+hx*r*.4f+hy*r*.5f,x+hy*r*.4f+hx*r*.5f,y-hx*r*.4f+hy*r*.5f)}
+            if(dead){shape.color=colors[car.id];shape.rect(x-r*.7f,y-1f,r*1.4f,2f)}
+        }
     }
     private fun rebuildUi() {
         if(!::text.isInitialized)return

@@ -15,6 +15,11 @@ class AtlasArtTest {
     @Test fun damageSelectionHasStableBoundariesAndWreckTakesPriority() {
         assertEquals(listOf(0,0,1,1,2,3),listOf(1f,.67f,.669f,.34f,.339f,1f).mapIndexed{i,hp->AtlasArt.carState(hp,i==5)})
     }
+    @Test fun bodyFitMatchesContactLengthButNeverOverhangsWidthBeyondSlack() {
+        // Short body (5.6 of 6.6 m) grows to the contact length; wide-and-short body is capped by the width slack.
+        assertEquals(6.6f/5.6f,AtlasArt.fitScale(6.6f,3f,5.6f,2.4f),1e-5f)
+        assertEquals(3f/3f*AtlasArt.WIDTH_SLACK,AtlasArt.fitScale(6.6f,3f,3f,3f),1e-5f)
+    }
     @Test fun shippedCarFamiliesHaveSevenRegisteredRegionsAndReferenceApproval() {
         val root=FileHandle(File("../assets/phase2-states"));val catalog=JsonReader().parse(root.child("catalog.json"))
         val cars=catalog.get("assets").filter{it.getString("group")=="cars"}
