@@ -238,7 +238,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0,
                             msg["f"]?.jsonPrimitive?.intOrNull==1,now,receiveNs)
                     }
-                    "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
+                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices && (phase=="lobby" || phase=="results")) { Courses.course(index);trackRequest.set(index) } } // bake on this IO thread so the render thread only swaps
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
                     "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career"))s.carRequest.set(index) }
                     "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3)
@@ -295,7 +295,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     fun stop() { suspendLink(); scope.cancel() }
     companion object {
         // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car.
-        private val routesJson by lazy { Courses.all.joinToString(",","[","]"){c->
+        private val routesJson by lazy { Courses.playable.joinToString(",","[","]"){c->
             "{\"id\":\"${c.id}\",\"lengthM\":${c.lengthM},\"startM\":${c.startFraction*c.lengthM},\"gridLanes\":[${c.grid.joinToString(","){it.laneM.toString()}}],\"points\":["+(0..c.count).joinToString(","){i->"[${c.x[i]},${c.y[i]},${c.arc[i]},${c.curvature[i]},${c.surfaces[i].gripScale}]"}+"]}"
         } }
         const val HUD_HEARTBEAT_MS=1000.0
