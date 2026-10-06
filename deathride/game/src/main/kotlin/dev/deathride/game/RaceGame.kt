@@ -510,6 +510,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     shape.color=warning;shape.rect(66f,326f,240f*HudTheme.fraction(debt,initial),8f)
                 }
                 shape.color=accent;shape.rect(66f,137f,677f,44f)
+                shape.color=bg;shape.rect(400f,288f,343f,64f);CoursePreview.draw(shape,Courses.all[Career.events[profiles[0].careerRound].courseIndex],410f,292f,110f,56f,muted,road,accent)
             }
             "results" -> {panel(260f,96f,760f,506f);shape.color=accent;shape.rect(286f,128f,708f,44f)}
             "countdown" -> if(scene.ready)panel(542f,268f,196f,172f)
@@ -670,6 +671,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label("SELECT / RACE NEXT ROUND",220f,169f,bg)
                     label("PLAY Garage / LEFT-RIGHT Difficulty",66f,127f)
                 }
+                label(Courses.all[event.courseIndex].name.uppercase(),532f,346f,accent);label(cup.region.name,532f,321f,HudTheme.bone);label(if(event.elimination)"DEATH DUEL" else "${event.laps} LAPS",532f,296f)
                 label("RIVALS / THEIR GARAGES",808f,577f,accent)
                 for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) {
                     val rival=Career.rivals[index];val g=p.rivalProfiles[index]
