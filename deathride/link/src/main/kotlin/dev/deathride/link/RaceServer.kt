@@ -111,7 +111,12 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     private var networkJob: Job?=null
     private val origin=System.nanoTime()
     private val errors=CoroutineExceptionHandler { _, e -> running=false; serverStatus="Link error: ${e.javaClass.simpleName}"; log(serverStatus) }
-    private val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO+errors)
+    /** Link work runs below the render thread's priority (ART maps this to a positive nice value) so input bursts and JSON do not take its core. */
+    private val linkDispatcher=java.util.concurrent.Executors.newCachedThreadPool(object: java.util.concurrent.ThreadFactory {
+        private val count=java.util.concurrent.atomic.AtomicInteger()
+        override fun newThread(r: Runnable)=Thread(r,"deathride-link-${count.incrementAndGet()}").apply{isDaemon=true;priority=Thread.NORM_PRIORITY-2}
+    }).asCoroutineDispatcher()
+    private val scope=CoroutineScope(SupervisorJob()+linkDispatcher+errors)
     fun nowMs()=(System.nanoTime()-origin)/1e6
     fun pairingUrl()="http://$address:$port/?pin=$pin"
     @Synchronized private fun claim(token: String, providedPin: String, profile: String): Slot? {
@@ -137,7 +142,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
                 if(!free) { serverStatus="Port $port busy; retry ${it+1}/10"; delay(300); return@repeat }
-                val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors) {
+                val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors+linkDispatcher) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondPacked(htmlPacked,ContentType.Text.Html) }
@@ -303,7 +308,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         running=false; networkJob?.cancel(); networkJob=null; engine?.stop(100,500); engine=null
         for(slot in slots) { slot.generation++; slot.connected=false; slot.input.newConnection() }
     }
-    fun stop() { suspendLink(); scope.cancel() }
+    fun stop() { suspendLink(); scope.cancel();linkDispatcher.close() }
     companion object {
         // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car.
         private val routesJson by lazy { Courses.playable.joinToString(",","[","]"){c->
