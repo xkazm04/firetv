@@ -18,7 +18,7 @@ class FrameProfiler(val platform: ProfilePlatform) {
         "cameraMs", "effectsUpdateMs", "sceneryDrawMs", "carsEffectsMs", "hudMs", "captionMs",
         "drawCalls", "textureBinds", "textureUploads", "effectSlots",
         "requestsBytes", "prepareBytes", "simulationBytes", "audioBytes", "telemetryBytes", "clearBytes",
-        "cameraBytes", "effectsUpdateBytes", "sceneryDrawBytes", "carsEffectsBytes", "hudBytes", "captionBytes"))
+        "cameraBytes", "effectsUpdateBytes", "sceneryDrawBytes", "carsEffectsBytes", "hudBytes", "captionBytes", "drawIndices"))
     private val row = DoubleArray(trace.columns.size)
     private var start = 0L
     private var cpu = 0L
@@ -39,14 +39,14 @@ class FrameProfiler(val platform: ProfilePlatform) {
         if (section) platform.end()
         platform.begin(next); section = true
     }
-    fun finish(active: Boolean, live: Int, draws: Int, binds: Int, uploads: Int, effects: Int) {
+    fun finish(active: Boolean, live: Int, draws: Int, binds: Int, uploads: Int, effects: Int, indices: Int = 0) {
         if (section) platform.end()
         section = false
         row[2] = (System.nanoTime() - start) / 1e6
         row[3] = (platform.cpuNanos() - cpu) / 1e6
         row[4] = if (active) 1.0 else 0.0; row[5] = live.toDouble()
         row[18] = draws.toDouble(); row[19] = binds.toDouble()
-        row[20] = uploads.toDouble(); row[21] = effects.toDouble()
+        row[20] = uploads.toDouble(); row[21] = effects.toDouble(); row[34] = indices.toDouble()
         trace.append(row)
     }
 }

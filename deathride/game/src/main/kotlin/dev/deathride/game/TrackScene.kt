@@ -12,6 +12,9 @@ import kotlin.math.*
 /** One reusable GPU target and renderer; never allocate/delete them at a course change. */
 class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     val roadMarks=RoadMarkMesh()
+    /** HUD minimap road lines: 360 centre-line segments and every branch, 6 vertices each, retained on the GPU. */
+    val minimap=RoadMarkMesh(6*(VisualTuning["roadSamples"].toInt()+8*128+16),roadMarks.program)
+    var minimapOwner: Any?=null
     val regionShader=RegionShader.create()
     val markMatrix=Matrix4()
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
@@ -47,7 +50,7 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
             sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
         }
     }
-    fun dispose() { regionShader.dispose();roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
+    fun dispose() { regionShader.dispose();roadMarks.dispose();minimap.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
 class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null,
@@ -91,6 +94,21 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         // Preserve compositing order: shortcuts are separate from the base surface batches.
         for((t,v) in grouped)put(t,v.toFloatArray())
+    }
+    // The whole road is retained as textured quads; only the stretch the camera can show is submitted each frame.
+    private val roadTextures=liveRoad.keys.toTypedArray()
+    private val roadVertices=liveRoad.values.toTypedArray()
+    private val roadChunks=Array(roadVertices.size){chunkBounds(roadVertices[it])}
+    private fun chunkBounds(v: FloatArray): FloatArray {
+        val quads=v.size/QUAD_FLOATS;val chunks=(quads+CHUNK_QUADS-1)/CHUNK_QUADS
+        val b=FloatArray(chunks*4)
+        for(c in 0 until chunks) {
+            var x0=Float.MAX_VALUE;var y0=Float.MAX_VALUE;var x1=-Float.MAX_VALUE;var y1=-Float.MAX_VALUE
+            var i=c*CHUNK_QUADS*QUAD_FLOATS;val end=minOf(v.size,(c+1)*CHUNK_QUADS*QUAD_FLOATS)
+            while(i<end){x0=minOf(x0,v[i]);x1=maxOf(x1,v[i]);y0=minOf(y0,v[i+1]);y1=maxOf(y1,v[i+1]);i+=5}
+            b[c*4]=x0;b[c*4+1]=y0;b[c*4+2]=x1;b[c*4+3]=y1
+        }
+        return b
     }
     private val marks=ArrayList<FloatArray>()
     private val oils=ArrayList<FloatArray>()
@@ -296,14 +314,41 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
     }
-    fun draw(batch: SpriteBatch) {
+    fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL) {
         val previous=batch.shader
         if(look!=null){batch.shader=canvas.regionShader;val g=regionDefinition.grade;canvas.regionShader.setUniformf("u_regionGrade",g[0].toFloat(),g[1].toFloat(),g[2].toFloat())}
         batch.draw(region,left,bottom,width,height)
-        for((texture,vertices) in liveRoad)batch.draw(texture,vertices,0,vertices.size)
-        art.tile("tiles/gravel")?.let{t->for(v in shortcuts)batch.draw(t,v,0,v.size)}
-        for(p in oils)art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])
+        for(t in roadTextures.indices) {
+            val v=roadVertices[t];val b=roadChunks[t];val chunks=b.size/4;var run=-1
+            for(c in 0..chunks) {
+                if(c<chunks && view.seesBox(b[c*4],b[c*4+1],b[c*4+2],b[c*4+3])){if(run<0)run=c}
+                else if(run>=0) {
+                    val from=run*CHUNK_QUADS*QUAD_FLOATS;val to=minOf(v.size,c*CHUNK_QUADS*QUAD_FLOATS)
+                    batch.draw(roadTextures[t],v,from,to-from);run=-1
+                }
+            }
+        }
+        val gravel=art.tile("tiles/gravel")
+        if(gravel!=null)for(i in shortcuts.indices){val v=shortcuts[i];if(view.seesBox(minOf(minOf(v[0],v[5]),minOf(v[10],v[15])),minOf(minOf(v[1],v[6]),minOf(v[11],v[16])),maxOf(maxOf(v[0],v[5]),maxOf(v[10],v[15])),maxOf(maxOf(v[1],v[6]),maxOf(v[11],v[16]))))batch.draw(gravel,v,0,v.size)}
+        for(i in oils.indices){val p=oils[i];if(view.sees(p[0].toDouble(),p[1].toDouble(),4.0))art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])}
         if(look!=null)batch.shader=previous
+    }
+    private companion object { const val QUAD_FLOATS=20;const val CHUNK_QUADS=12 }
+    private var minimapFits=true
+    /** Draws the HUD minimap road lines from the retained mesh; false (nothing drawn) when they do not fit, so the caller keeps the immediate path. */
+    fun drawMinimapRoad(matrix: Matrix4,r: Float,g: Float,b: Float): Boolean {
+        if(!ready || !minimapFits)return false
+        if(canvas.minimapOwner!==this) {
+            val lines=samples+branchCenters.sumOf{it.size/2-1}
+            if(!canvas.minimap.let{it.clear();it.fits(lines)}){minimapFits=false;return false}
+            val scale=min(166/(course.maxX-course.minX),112/(course.maxY-course.minY)).toFloat()
+            val ox=1144f-((course.minX+course.maxX)*.5).toFloat()*scale;val oy=469f-((course.minY+course.maxY)*.5).toFloat()*scale
+            val m=canvas.minimap
+            for(i in 0 until samples)m.line(ox+center[i*2]*scale,oy+center[i*2+1]*scale,ox+center[(i+1)*2]*scale,oy+center[(i+1)*2+1]*scale,3f,r,g,b)
+            for(line in branchCenters)for(i in 0 until line.size/2-1)m.line(ox+line[i*2]*scale,oy+line[i*2+1]*scale,ox+line[(i+1)*2]*scale,oy+line[(i+1)*2+1]*scale,3f,r,g,b)
+            m.upload();canvas.minimapOwner=this
+        }
+        canvas.minimap.draw(matrix);return true
     }
     fun drawRoadMarks(r: ShapeRenderer) {
         if(liveRoad.isEmpty())return
@@ -373,7 +418,7 @@ class CarPainter {
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
     fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false,wheelAngle: Float=0f,tread: Float=0f,braking: Float=0f) {
-        val spec=CarShapes.forId(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
+        val spec=CarShapeCache.of(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
         x=px+.35f*scale;y=py-.45f*scale;c=cos(heading).toFloat();s=sin(heading).toFloat()
         r.setColor(.025f,.035f,.04f,.65f);body(r,l*1.08f,w*1.15f,spec.noseWidth.toFloat())
         x=px;y=py

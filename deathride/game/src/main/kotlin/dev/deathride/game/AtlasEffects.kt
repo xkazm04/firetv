@@ -10,6 +10,7 @@ import kotlin.math.*
 /** Fixed visual pools, fed only by the read-only simulation snapshot. */
 class AtlasEffects(private val art: AtlasArt) {
     private val keys=arrayOf("effects/muzzle","effects/explosion","effects/sparks","effects/smoke","effects/fire","decals/skid","decals/scorch")
+    private val pickupKeys=KeyCache("pickups/")
     private val capacity=64
     private val pool=FloatArray(capacity*7)
     private val trace=DoubleArray(6);private val flash=DoubleArray(6);private val smoke=DoubleArray(6)
@@ -51,9 +52,9 @@ class AtlasEffects(private val art: AtlasArt) {
             blasts[i]=s.blastActivation(i);emit(1,s.blastX(i),s.blastY(i),s.blastRadius(i)*2)
         }
     }
-    fun ground(batch: SpriteBatch,s: Snapshot) {
-        for(n in pool.indices step 7)if(pool[n+6]>0 && pool[n]>=5)draw(batch,n)
-        for(i in 0 until s.pickupCount)if(s.pickupReady(i))art.draw(batch,"pickups/"+s.pickupId(i),s.pickupX(i).toFloat(),s.pickupY(i).toFloat(),s.pickupRadius(i).toFloat()*2,s.pickupRadius(i).toFloat()*2)
+    fun ground(batch: SpriteBatch,s: Snapshot,view: ViewBounds=ViewBounds.ALL) {
+        for(n in pool.indices step 7)if(pool[n+6]>0 && pool[n]>=5 && view.sees(pool[n+1].toDouble(),pool[n+2].toDouble(),pool[n+3].toDouble()))draw(batch,n)
+        for(i in 0 until s.pickupCount)if(s.pickupReady(i) && view.sees(s.pickupX(i),s.pickupY(i),s.pickupRadius(i)+1.0))art.draw(batch,pickupKeys.of(s.pickupId(i)),s.pickupX(i).toFloat(),s.pickupY(i).toFloat(),s.pickupRadius(i).toFloat()*2,s.pickupRadius(i).toFloat()*2)
     }
     private fun draw(batch: SpriteBatch,n: Int) {
         val kind=pool[n].toInt();val age=pool[n+5].toDouble()
@@ -61,8 +62,8 @@ class AtlasEffects(private val art: AtlasArt) {
         art.draw(batch,keys[kind],pool[n+1],pool[n+2],pool[n+3],pool[n+3],pool[n+4],if(kind>=5)0.0 else age)
         batch.color=Color.WHITE
     }
-    fun air(batch: SpriteBatch,s: Snapshot,seconds: Double) {
-        for(n in pool.indices step 7)if(pool[n+6]>0 && pool[n]<5)draw(batch,n)
-        for(i in 0..5)if(s.entered(i) && s.wrecked(i))art.draw(batch,"effects/fire",s.x(i).toFloat(),s.y(i).toFloat(),5f,5f,seconds=seconds)
+    fun air(batch: SpriteBatch,s: Snapshot,seconds: Double,view: ViewBounds=ViewBounds.ALL) {
+        for(n in pool.indices step 7)if(pool[n+6]>0 && pool[n]<5 && view.sees(pool[n+1].toDouble(),pool[n+2].toDouble(),pool[n+3].toDouble()))draw(batch,n)
+        for(i in 0..5)if(s.entered(i) && s.wrecked(i) && view.sees(s.x(i),s.y(i),5.0))art.draw(batch,"effects/fire",s.x(i).toFloat(),s.y(i).toFloat(),5f,5f,seconds=seconds)
     }
 }

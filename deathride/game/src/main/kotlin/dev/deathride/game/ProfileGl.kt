@@ -8,11 +8,13 @@ class ProfileGl(private val delegate: GL20) : GL20 by delegate {
     var draws = 0; private set
     var binds = 0; private set
     var uploads = 0; private set
-    fun reset() { draws = 0; binds = 0; uploads = 0 }
+    /** Indices (or array vertices) submitted to draw calls: a vertex-work counter independent of the host GPU. */
+    var indices = 0; private set
+    fun reset() { draws = 0; binds = 0; uploads = 0; indices = 0 }
     override fun glBindTexture(target: Int, texture: Int) { binds++; delegate.glBindTexture(target, texture) }
-    override fun glDrawArrays(mode: Int, first: Int, count: Int) { draws++; delegate.glDrawArrays(mode, first, count) }
-    override fun glDrawElements(mode: Int, count: Int, type: Int, indices: Buffer?) { draws++; delegate.glDrawElements(mode, count, type, indices) }
-    override fun glDrawElements(mode: Int, count: Int, type: Int, indices: Int) { draws++; delegate.glDrawElements(mode, count, type, indices) }
+    override fun glDrawArrays(mode: Int, first: Int, count: Int) { draws++; indices += count; delegate.glDrawArrays(mode, first, count) }
+    override fun glDrawElements(mode: Int, count: Int, type: Int, indices: Buffer?) { draws++; this.indices += count; delegate.glDrawElements(mode, count, type, indices) }
+    override fun glDrawElements(mode: Int, count: Int, type: Int, indices: Int) { draws++; this.indices += count; delegate.glDrawElements(mode, count, type, indices) }
     override fun glTexImage2D(target: Int, level: Int, internalformat: Int, width: Int, height: Int, border: Int, format: Int, type: Int, pixels: Buffer?) {
         uploads++; delegate.glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels)
     }
