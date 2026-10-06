@@ -73,6 +73,8 @@ class WheelRig(slots: Int=16) {
     private val wreckTilt=FloatArray(slots)
     private var pixel: Texture?=null
     private val tmp=Color()
+    /** The shared 1x1 white texture, so mounts drawn after the tyres stay on the same texture (no extra switch). */
+    val pixelTexture: Texture? get()=pixel
 
     fun init() {
         if(pixel!=null)return

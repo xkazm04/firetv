@@ -129,6 +129,8 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         return if(frame<0)null else s.frames[frame]
     }
     fun available(key: String)=resolve(key).available
+    /** Owner-approved (or exact-reference-approved) AND present. Mount sprites must pass this; candidates never do. */
+    fun approved(key: String)=entries[key]?.let{it.approved || it.referenceSelected}==true && available(key)
     fun themeProps(theme: String)=environmentSets[theme]?:EnvironmentArt.fallbackSets[theme]?:EnvironmentArt.fallbackSets.getValue("industrial")
     fun obstacleKey(id: String,fallback: String)=environmentObstacles[id]?.takeIf{available(it)}?:fallback
     fun duration(key: String)=(entries[key]?.durations?.sum()?:0)/1000.0

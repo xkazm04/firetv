@@ -231,7 +231,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.audioJson={statsSafe("audio"){audio.statsJson()}};server.artJson={statsSafe("art"){artJson()}};server.combatSummaryJson={statsSafe("combatSummary"){combatSummaryJson()}};server.trafficJson={statsSafe("traffic"){trafficJson()}};server.pickupsJson={statsSafe("pickups"){pickupsJson()}}
         for(i in server.slots.indices){val slot=server.slots[i];slot.combatFull={statsSafe("combat$i"){combatJson(i)}}}
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
-        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels)
+        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
@@ -410,6 +410,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
     private lateinit var carSprites: CarSprites
+    private lateinit var mountPainter: MountPainter
     private val abilityHudKeys=KeyCache("hud/ability-")
     private val viewBounds=ViewBounds()
     private fun drawWorld(dt: Double) {
@@ -467,7 +468,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         abilityPainter.draw(shape,world.snapshot)
         shape.end()
         batch.begin()
-        carSprites.draw(batch,world,alpha)
+        carSprites.draw(batch,world,alpha);mountPainter.draw(batch,world,alpha,dt.toFloat(),viewBounds)
         atlasEffects.air(batch,world.snapshot,world.seconds,viewBounds);abilityPainter.art(batch,world.snapshot,art);batch.end()
         shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true,viewBounds);shape.end()
         batch.begin();obstaclePainter.sprites(batch,world,art,true,viewBounds);batch.end()

@@ -10,6 +10,7 @@ fun main(args: Array<String>) {
     val duration=args.firstOrNull{it.startsWith("--duration=")}?.substringAfter('=')?.toDoubleOrNull() ?: 0.0
     if(args.contains("--drift-lab")){config.setTitle("Death Ride Drift Lab");Lwjgl3Application(DriftLabScreen(args.contains("--drift-lab-check"),duration),config);return}
     if(args.contains("--wheel-shots")){Lwjgl3Application(WheelShots(),config);return}
+    if(args.contains("--mount-shots")){Lwjgl3Application(MountShots(),config);return}
     if(args.contains("--atlas-check")){Lwjgl3Application(AtlasAudit(),config);return}
     if(args.contains("--story-art-check")){Lwjgl3Application(StoryArtAudit(),config);return}
     if(args.contains("--rework-art-check")){Lwjgl3Application(ReworkArtAudit(),config);return}
