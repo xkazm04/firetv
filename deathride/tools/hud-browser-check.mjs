@@ -14,11 +14,11 @@ try {
  await page.goto(base+'/?pin='+pin);await page.waitForFunction(()=>document.getElementById('player').textContent==='PLAYER 1');
  for(const viewport of [{width:896,height:414},{width:740,height:360},{width:667,height:320}]) {
   await page.setViewportSize(viewport);
-  for(const layout of ['Classic','Cruise','Split'])for(const mirror of [false,true]) {
+  for(const layout of ['Drive','Classic','Cruise','Split'])for(const mirror of [false,true]) {
    await page.locator('#settings').tap();await page.locator('#layoutChoice').selectOption(layout);await page.locator('#mirrorChoice').setChecked(mirror);await page.locator('#closeFeel').tap();
    const sizes={};
    for(const id of ['steer','gas','fire','brake','drift','mine','swap','ability','race','leave','careerButton','garageButton','carButton','settings']) {
-    if(id==='gas'&&layout==='Split')continue;
+    if((id==='gas'&&(layout==='Split'||layout==='Drive'))||(id==='brake'&&layout==='Drive'))continue;
     const b=await page.locator('#'+id).boundingBox();assert.ok(b&&b.width>=44&&b.height>=44,id+' target floor');
     assert.ok(b.x>=0&&b.y>=0&&b.x+b.width<=viewport.width+.5&&b.y+b.height<=viewport.height+.5,id+' in viewport');sizes[id]=b;
    }

@@ -34,7 +34,7 @@ object ControllerLayouts {
     private val rows=Content.table("controller-layouts")
     val ids=rows.map { it.getValue("id") }
     val json=rows.joinToString(",","[","]") {
-        "{\"id\":\"${it.getValue("id")}\",\"name\":\"${it.getValue("name")}\",\"fireDrives\":${it.number("fireDrives")!=0.0},\"padThrottle\":${it.number("padThrottle")!=0.0},\"throttleTravelPx\":${it.number("throttleTravelPx")},\"description\":\"${it.getValue("description")}\"}"
+        "{\"id\":\"${it.getValue("id")}\",\"name\":\"${it.getValue("name")}\",\"fireDrives\":${it.number("fireDrives")!=0.0},\"padThrottle\":${it.number("padThrottle")!=0.0},\"throttleTravelPx\":${it.number("throttleTravelPx")},\"padBrake\":${it.number("padBrake")!=0.0},\"brakeTravelPx\":${it.number("brakeTravelPx")},\"description\":\"${it.getValue("description")}\"}"
     }
 }
 class Projectile { var active=false;var owner=0;var x=0.0;var y=0.0;var vx=0.0;var vy=0.0;var remainingM=0.0;var remainingSeconds=0.0;var hitMask=0 }

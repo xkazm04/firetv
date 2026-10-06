@@ -9,7 +9,7 @@ const contexts=[],errors=[];
 async function join(profile,seat){
  const ctx=await browser.newContext({viewport:{width:896,height:414},isMobile:true,hasTouch:true});contexts.push(ctx);
  await ctx.addInitScript(p=>localStorage.setItem('profile',p),profile);const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base+'/?pin='+pin);await page.waitForFunction(s=>document.getElementById('player').textContent===s,'PLAYER '+seat);return page;
+ await page.goto(base+'/?pin='+pin+'&layout=Classic');await page.waitForFunction(s=>document.getElementById('player').textContent===s,'PLAYER '+seat);return page;
 }
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 async function until(fn){for(let n=0;n<160;n++){if(await fn())return;await pause(100)}assert.fail('Duel state timeout')}

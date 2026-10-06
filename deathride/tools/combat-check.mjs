@@ -15,7 +15,7 @@ try {
  const cdp=await context.newCDPSession(page);
  const point=async(id,touchId)=>{const b=await page.locator('#'+id).boundingBox();assert.ok(b&&b.height>=38,id+' reachable target');return{x:b.x+b.width/2,y:b.y+b.height/2,id:touchId}};
  const touch=async(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
- for(const layout of ['Classic','Cruise','Split']) {
+ for(const layout of ['Drive','Classic','Cruise','Split']) {
   await page.locator('#settings').tap();await page.locator('#layoutChoice').selectOption(layout);await page.locator('#closeFeel').tap();
   await page.locator('#race').tap();await pause(3300);assert.equal((await stats()).phase,'race');
   while((await stats()).slots[0].combat.armingSeconds>0)await pause(100);
@@ -24,10 +24,10 @@ try {
   assert.equal((await stats()).slots[0].combat.weaponName,'Rivet');
   const steering=await point('steer',1),fire=await point('fire',2),mine=await point('mine',3);
   const before=(await stats()).slots[0].combat.ammo;
-  await touch('touchStart',[steering,fire]);steering.x+=60;if(layout==='Split')steering.y-=75;
+  await touch('touchStart',[steering,fire]);steering.x+=60;if(layout==='Split'||layout==='Drive')steering.y-=75;
   await touch('touchMove',[steering,fire]);await pause(420);
   let slot=(await stats()).slots[0];assert.equal(slot.effectiveFire,1);assert.ok(slot.combat.ammo<before);assert.ok(slot.effectiveSteer>0);
-  assert.equal(slot.layout,layout);if(layout==='Cruise'||layout==='Split')assert.ok(slot.effectiveThrottle>.5);
+  assert.equal(slot.layout,layout);if(layout!=='Classic')assert.ok(slot.effectiveThrottle>.5);
   await touch('touchStart',[steering,fire,mine]);await pause(160);
   assert.equal((await stats()).slots[0].effectiveMine,1);
   await touch('touchEnd',[mine]);await pause(150);
