@@ -472,13 +472,15 @@ const W7_SLIPS={};
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 /** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
 const B3_UNITS=['ratio-share','unit-rate','area','mean-range'];
+/** The v2 M2b units beyond the school path (tables at the end of this file). */
+const M2B_UNITS=['pythagoras'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
 test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
  const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
  // W7 batch 2 adds the decimals and percent units, batch 3 the last four, each with its own closed list (tables at the end of this file)
- assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS].sort());
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS,...M2B_UNITS].sort());
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
  assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
@@ -1583,4 +1585,160 @@ test('W7c typeset: a square unit typed flat after an amount prints with its powe
  const sq=(line)=>{const out=[];T.walk(T.parseMath(line),(x)=>{if(x.t==='text'&&x.sup)out.push(`${x.v}^${T.flatten(x.sup)}`);});return out;};
  for (const [line,want] of [['28 cm2',['cm^2']],['12 m2',['m^2']],['7.5 cm2',['cm^2']],['28 cm^2',['cm^2']],['28 cm²',['cm^2']],['8 cm3',['cm^3']],['28 cm2.',['cm^2']],['x = 28 cm2',['cm^2']]]) assert.deepEqual(sq(line),want,line);
  for (const line of ['cm2','2 cm23','3 m 2','28 cm 2','28 cm25']) assert.deepEqual(sq(line),[],line);
+});
+
+// ------------------------------------------------------------------ v2 M2b: the units beyond the school path - Pythagoras' theorem
+// Each expected verdict worked by hand first (the answer and each slip's value are in the comments). The unit is not on the path
+// yet: the sweep (tools/gcse-units-test.cjs) decides whether it ships.
+const py=(expr,unit='cm')=>({shape:'pythagoras',expr,unit});
+const PA=py('longest 6 8');        // 10 cm. sides added 14; squares added, no root 100
+const PB=py('shorter 10 6');       // 8 cm. sides added 16; squares taken away, no root 64; squares added 136
+const PC=py('longest 5 12','mm');  // 13 mm. added 17; no root 169
+const PD=py('shorter 13 5','m');   // 12 m. added 18; no root 144; squares added 194
+const PE=py('longest 9 12');       // 15 cm. added 21; no root 225
+const PF=py('shorter 17 8');       // 15 cm. added 25; no root 225; squares added 353
+const PG=py('longest 30 40','m');  // 50 m. added 70; no root 2500
+const PH=py('shorter 25 7');       // 24 cm. added 32; no root 576; squares added 674
+const PYTH_SPELLINGS=[
+ // 6 and 8 -> 10: the number alone or with its own length unit is right, in any equal form
+ [PA,'10','uk','right'],[PA,'10 cm','uk','right'],[PA,'10cm','uk','right'],[PA,'10 centimetres','uk','right'],[PA,'x = 10','uk','right'],[PA,'10.0','us','right'],[PA,'10,0','cz','right'],[PA,'= 10','de','right'],[PA,'20/2','uk','right'],[PA,'10.','uk','right'],
+ [PA,'14','uk','wrong','pyth-sides-added'],[PA,'14 cm','uk','wrong','pyth-sides-added'],[PA,'100','uk','wrong','pyth-no-root'],[PA,'100 cm','uk','wrong','pyth-no-root'],
+ [PA,'9','uk','wrong'],[PA,'11','uk','wrong'],[PA,'-10','uk','wrong'],[PA,'9.9','uk','wrong'],[PA,'6','uk','wrong'],[PA,'48','uk','wrong'],[PA,'28','uk','wrong'],
+ [PA,'10 m','uk','unsure'],[PA,'10 mm','uk','unsure'],[PA,'100 cm2','uk','unsure'],[PA,'10%','uk','unsure'],[PA,'5:10','uk','unsure'],[PA,'ten','uk','unsure'],[PA,'','uk','unsure'],[PA,'about 10','uk','unsure'],[PA,'10,0','uk','unsure'],[PA,'√100','uk','unsure'],[PA,'10 or 14','uk','unsure'],
+ // 10 and 6 -> a shorter side 8
+ [PB,'8','uk','right'],[PB,'8 cm','uk','right'],[PB,'8.0','uk','right'],[PB,'8,0','de','right'],[PB,'16','uk','wrong','pyth-sides-added'],[PB,'64','uk','wrong','pyth-no-root'],[PB,'136','uk','wrong','pyth-squares-added'],
+ [PB,'10','uk','wrong'],[PB,'4','uk','wrong'],[PB,'8 m','uk','unsure'],[PB,'80%','uk','unsure'],
+ // 5 mm and 12 mm -> 13 mm
+ [PC,'13','uk','right'],[PC,'13 mm','uk','right'],[PC,'13 millimetres','uk','right'],[PC,'13 cm','uk','unsure'],[PC,'17','uk','wrong','pyth-sides-added'],[PC,'169','uk','wrong','pyth-no-root'],[PC,'12','uk','wrong'],
+ // the longest side 13 m and a shorter side 5 m -> 12 m
+ [PD,'12','uk','right'],[PD,'12 m','uk','right'],[PD,'12 metres','uk','right'],[PD,'12 metre','uk','right'],[PD,'12 km','uk','unsure'],[PD,'18','uk','wrong','pyth-sides-added'],[PD,'144','uk','wrong','pyth-no-root'],[PD,'194','uk','wrong','pyth-squares-added'],[PD,'8','uk','wrong'],
+ // 9 and 12 -> 15
+ [PE,'15','uk','right'],[PE,'15 cm','uk','right'],[PE,'21','uk','wrong','pyth-sides-added'],[PE,'225','uk','wrong','pyth-no-root'],[PE,'3','uk','wrong'],
+ // 17 and 8 -> 15: the unrooted c² - b² is 225
+ [PF,'15','uk','right'],[PF,'25','uk','wrong','pyth-sides-added'],[PF,'225','uk','wrong','pyth-no-root'],[PF,'353','uk','wrong','pyth-squares-added'],[PF,'15.5','uk','wrong'],
+ // 30 m and 40 m -> 50 m; 2500 written with a thousands mark
+ [PG,'50','uk','right'],[PG,'50 m','uk','right'],[PG,'70','uk','wrong','pyth-sides-added'],[PG,'2500','uk','wrong','pyth-no-root'],[PG,'2,500','uk','wrong','pyth-no-root'],[PG,'2 500','cz','wrong','pyth-no-root'],[PG,'2500 m2','uk','unsure'],
+ // 25 and 7 -> 24
+ [PH,'24','uk','right'],[PH,'32','uk','wrong','pyth-sides-added'],[PH,'576','uk','wrong','pyth-no-root'],[PH,'674','uk','wrong','pyth-squares-added'],[PH,'25','uk','wrong'],
+];
+const PYTH_LEAKS=[
+ [PA,'The answer is 10 cm.'],[PA,'It is 10.'],[PA,'Ten centimetres.'],[PA,'The square root of 100 is 10.'],[PA,'So the longest side is 10'],[PA,'√100 = 10'],[PA,'20 ÷ 2'],[PA,'Half of 20.'],[PA,'5 × 2'],[PA,'10.0 cm'],[PA,'It comes to 1000%.'],
+ [PB,'The missing side is 8.'],[PB,'Eight centimetres.'],[PB,'It is 8 cm.'],[PB,'16 ÷ 2'],[PB,'The square root of 64 is 8.'],
+ [PC,'It is 13 mm.'],[PC,'Thirteen.'],[PD,'It is 12 metres.'],[PD,'The root of 144 is 12.'],[PE,'It is 15.'],[PG,'The longest side is 50 m.'],[PH,'The other side is 24 cm.'],
+];
+const PYTH_LEGIT=[
+ [PA,'Square both shorter sides.'],[PA,'Square 6 and 8 and add them.'],[PA,'6 × 6 = 36'],[PA,'8 × 8 = 64'],[PA,'36 + 64 = 100'],[PA,'Then take the square root of the total.'],[PA,'Add the squares of the two shorter sides.'],
+ [PA,'The longest side is opposite the right angle.'],[PA,'Your answer is in cm.'],[PA,'The longest side is longer than both of the others.'],[PA,'Adding 6 and 8 does not use the squares.'],[PA,'The sum of the squares is 100.'],
+ [PB,'Square the longest side and the shorter side.'],[PB,'10 × 10 = 100'],[PB,'6 × 6 = 36'],[PB,'100 - 36 = 64'],[PB,'Take the square of the shorter side away from the square of the longest.'],[PB,'The missing side is shorter than the longest side, 10 cm.'],
+ [PC,'5 × 5 = 25'],[PC,'12 × 12 = 144'],[PC,'25 + 144 = 169'],[PC,'Your answer is in mm.'],
+ [PD,'13 × 13 = 169'],[PD,'5 × 5 = 25'],[PD,'169 - 25 = 144'],[PD,'Your answer is in metres.'],
+ [PE,'9 × 9 = 81'],[PE,'12 × 12 = 144'],[PE,'81 + 144 = 225'],[PH,'25 × 25 = 625'],[PH,'7 × 7 = 49'],[PH,'625 - 49 = 576'],
+];
+const PYTH_PRINTS=[
+ [PA,'A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side.'],
+ [PB,'A right-angled triangle has longest side 10 cm and a shorter side 6 cm. Find the other shorter side.'],
+ [PC,'A right-angled triangle has shorter sides 5 mm and 12 mm. Find the longest side.'],
+ [PD,'A right-angled triangle has longest side 13 metres and a shorter side 5 metres. Find the other shorter side.'],
+ [PG,'A right-angled triangle has shorter sides 30 metres and 40 metres. Find the longest side.'],
+];
+const PYTH_BAD=[
+ [py('longest 6 7'),'not a whole number'],[py('shorter 10 7'),'not a whole number'],[py('shorter 6 10'),'not longer'],[py('shorter 6 6'),'not longer'],[py('longest 75 100'),'longer than a school question'],[py('shorter 101 20'),'longer than a school question'],
+ [py('longest 6 8','kg'),'mm, cm or metres'],[py('longest 6 8','cm2'),'mm, cm or metres'],[py('longest 6 8','km'),'mm, cm or metres'],[{shape:'pythagoras',expr:'longest 6 8'},'mm, cm or metres'],
+ [py('longest 0 8'),'cannot read'],[py('longest 6.0 8'),'cannot read'],[py('longest 6 8 10'),'cannot read'],[py('hypotenuse 6 8'),'cannot read'],[py('longest 06 8'),'cannot read'],[py('longest 1000 8'),'cannot read'],
+ [{...PA,answer:10},'no answer field'],[{...PA,form:'decimal'},'does not take'],[{...PA,to:'decimal'},'does not take'],
+];
+/** The slip values a hand-worked reference gives for a Pythagoras spec: integers throughout (Math.round on a root is checked by squaring). */
+function pyRef(s){
+ const m=/^(longest|shorter) (\d+) (\d+)$/.exec(s.expr);if(!m||s.shape!=='pythagoras')return null;
+ const x=+m[2],y=+m[3],root=(n)=>{const r=Math.round(Math.sqrt(n));assert.equal(r*r,n,`${s.expr}: a whole root`);return r;};
+ if(m[1]==='longest'){const t=root(x*x+y*y);return {find:'longest',x,y,truth:t,slips:{'pyth-sides-added':x+y,'pyth-no-root':x*x+y*y},nums:[x,y]};}
+ const t=root(x*x-y*y);return {find:'shorter',x,y,truth:t,slips:{'pyth-sides-added':x+y,'pyth-no-root':x*x-y*y,'pyth-squares-added':x*x+y*y},nums:[x,y]};
+}
+test(`M2b SPELLINGS Pythagoras: ${PYTH_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{spellings('PYTH_SPELLINGS',PYTH_SPELLINGS,'pythagoras');});
+test(`M2b LEAKS Pythagoras: ${PYTH_LEAKS.length} hints that give the answer away are refused; ${PYTH_LEGIT.length} legit hints pass`,()=>{
+ const missed=PYTH_LEAKS.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ const flagged=PYTH_LEGIT.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+ console.log(`# M2b LEAKS Pythagoras: ${PYTH_LEAKS.length} (missed ${missed.length}), LEGIT ${PYTH_LEGIT.length} (flagged ${flagged.length})`);
+ assert.deepEqual(missed,[]);assert.deepEqual(flagged,[]);
+ for (const [s] of [...PYTH_LEAKS,...PYTH_LEGIT]) assert.equal(S.unitOf(s),'pythagoras');
+});
+test('M2b question and wellFormed Pythagoras: one plain sentence, the hyphen kept through the typesetter, never the answer, read back to its spec; poor questions refused with a reason',()=>{
+ for (const [s,plain] of PYTH_PRINTS){
+  assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+  const q=S.question(s);assert.equal(q.plain,plain);assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+  for (const line of [q.plain,q.tex]){
+   const flat=T.flatten(T.parseMath(line));
+   assert.ok(flat.includes('right-angled'),`${line}: the hyphen is a hyphen, not a minus: ${flat}`);
+   for (const d of s.expr.match(/\d+/g)) assert.ok(flat.includes(d),`${line} keeps ${d}`);
+   assert.ok(/ (cm|mm|metres)\b/.test(flat),`${line} keeps its unit: ${flat}`);
+  }
+  assert.deepEqual(S.specFromQuestion(q.plain),s,`${q.plain} reads back to its spec`);
+ }
+ for (const [s,why] of PYTH_BAD){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
+ for (const t of ['A right-angled triangle has shorter sides 6 cm and 8 m. Find the longest side.','A right-angled triangle has shorter sides 6 and 8. Find the longest side.','A right-angled triangle has shorter sides 6 cm and 7 cm. Find the longest side.',
+  'A right-angled triangle has shorter sides 6.5 cm and 8 cm. Find the longest side.','A triangle has shorter sides 6 cm and 8 cm. Find the longest side.','A right-angled triangle has shorter sides 6 cm and 8 cm. Find the hypotenuse.',
+  'A right-angled triangle has longest side 6 cm and a shorter side 10 cm. Find the other shorter side.','Find the longest side of a right-angled triangle with shorter sides 6 cm and 8 cm.','A ladder 10 m long leans against a wall. How high up does it reach?'])
+  assert.equal(S.specFromQuestion(t),null,t);
+ assert.deepEqual(S.specFromQuestion('A right angled triangle has shorter sides 6 centimetres and 8 centimetres. Find the longest side.'),PA,'right angled, centimetres');
+ assert.deepEqual(S.specFromQuestion('a right-angled triangle has longest side 10 cm and one shorter side 6 cm. find the other shorter side'),PB,'one shorter side, lower case');
+});
+test('M2b GENERATOR Pythagoras: seeds 1..300 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference, every slip reachable',()=>{
+ const counts={},units=new Set(),slipsSeen={};
+ for (const tier of [1,2]){
+  const seen=new Set();
+  for (let seed=1;seed<=300;seed++){
+   const s=S.genPythagoras(seed,tier);
+   assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(S.genPythagoras(seed,tier),s,'same seed, same spec');
+   assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));assert.equal(S.unitOf(s),'pythagoras');
+   const r=pyRef(s);assert.ok(r,JSON.stringify(s));units.add(s.unit);assert.ok(['mm','cm','m'].includes(s.unit));
+   if(tier===1)assert.ok(r.find==='longest'&&r.truth<=50,`tier 1: the longest side from the two shorter, at most 50: ${s.expr}`);
+   else assert.ok(r.find==='shorter'&&r.x<=100&&r.y<r.x,`tier 2: a shorter side: ${s.expr}`);
+   assert.ok(!r.nums.includes(r.truth),'the question does not print its answer');
+   const q=S.question(s).plain;
+   for (const sys of S.SCHOOL_SYSTEMS){
+    assert.equal(S.check(s,String(r.truth),sys).verdict,'right',`${q} = ${r.truth} (${sys})`);
+    assert.equal(S.check(s,String(r.truth+1),sys).verdict,'wrong',`${q} != ${r.truth+1} (${sys})`);
+    for (const [id,v] of Object.entries(r.slips)){const got=S.check(s,String(v),sys);assert.deepEqual([got.verdict,got.slip],['wrong',id],`${q}: ${v} is ${id} (${sys})`);slipsSeen[id]=(slipsSeen[id]||0)+1;}
+   }
+   assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${q}`);assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+   assert.deepEqual(S.specFromQuestion(q),s,`${q} reads back to its spec`);
+   assert.ok(T.flatten(T.parseMath(q)).includes('right-angled'));
+   seen.add(JSON.stringify(s));
+  }
+  counts[tier]=seen.size;
+ }
+ console.log(`# M2b GENERATOR Pythagoras distinct specs over seeds 1..300: tier 1 ${counts[1]}, tier 2 ${counts[2]}; units ${[...units].sort()}`);
+ assert.ok(counts[1]>=60&&counts[2]>=150,'seeds spread');
+ assert.deepEqual([...units].sort(),['cm','m','mm']);
+ assert.deepEqual(Object.keys(slipsSeen).sort(),[...S.SCHOOL_UNIT_SLIPS.pythagoras].sort());
+ for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(S.genPythagoras(bad,1),null);
+ for (const bad of [0,3,'1',null,1.5]) assert.equal(S.genPythagoras(1,bad),null);
+});
+test('M2b Pythagoras: the unit has a withheld line with no digit or number word, its slips carry no value, and nothing here is on the path or in the generators yet',()=>{
+ const line=S.SCHOOL_WITHHELD.pythagoras;assert.ok(line&&!/\d/.test(line));
+ assert.equal(S.withheldSchool(PA),line);assert.equal(S.withheldSchool(PH),line);
+ for (const id of S.SCHOOL_UNIT_SLIPS.pythagoras){const sl=S.SCHOOL_SLIPS.find((x)=>x.id===id);assert.ok(sl&&!/\d/.test(sl.name+sl.says+sl.points)&&/^[A-Z][^]*\.$/.test(sl.says),id);}
+ for (const sh of ['pythagoras']) assert.ok(S.SCHOOL_SHAPES.includes(sh));
+ assert.equal(S.slipValue(PA,'pyth-sides-added'),'14');assert.equal(S.slipValue(PA,'pyth-no-root'),'100');assert.equal(S.slipValue(PA,'pyth-squares-added'),null,'a longest-side item shows no squares-added slip');
+ assert.equal(S.slipValue(PB,'pyth-squares-added'),'136');assert.equal(S.slipValue(PB,'area-no-half'),null,'another unit\'s slip');
+ assert.equal(S.slipValue(py('longest 6 7'),'pyth-no-root'),null,'a spec that is not well formed shows nothing');
+ assert.deepEqual(Object.keys(S.GCSE_GENERATORS).sort(),['pythagoras']);
+});
+test('M2b PURITY Pythagoras: random strings through check and leaksSchool never throw and give the same answer twice',()=>{
+ let seed=2024;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+ const alphabet=['0','1','2','4','6','8','.',',',' ','%','/','-','x','=','cm','m','mm','cm2','metres','√','²','^2',':','and','or','The answer is ','square root of '];
+ for (let i=0;i<300;i++){
+  let s='';const len=Math.floor(rnd()*14);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
+  for (const sp of [PA,PB,PC,PD]){
+   for (const sys of S.SCHOOL_SYSTEMS){const v=S.check(sp,s,sys);assert.ok(['right','wrong','unsure'].includes(v.verdict));assert.deepEqual(S.check(sp,s,sys),v);}
+   const l=S.leaksSchool(sp,s);assert.equal(typeof l,'boolean');assert.equal(S.leaksSchool(sp,s),l);
+  }
+  const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
+ }
+});
+test('M2b typeset: a hyphen between two words stays a hyphen, and a minus between numbers or letters is still a minus',()=>{
+ const kinds=(line)=>T.parseMath(line).filter((x)=>x.t==='bin'||x.v==='-').map((x)=>`${x.t}:${x.v}`);
+ assert.deepEqual(kinds('A right-angled triangle'),['ord:-']);assert.deepEqual(kinds('well-known and right-angled'),['ord:-','ord:-']);
+ assert.deepEqual(kinds('6 - 4'),['bin:−']);assert.deepEqual(kinds('x-y'),['bin:−']);assert.deepEqual(kinds('x - 4'),['bin:−']);assert.deepEqual(kinds('right - angled'),['bin:−']);
+ assert.equal(T.flatten(T.parseMath('A right-angled triangle')),'A right-angled triangle');
 });

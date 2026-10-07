@@ -420,7 +420,13 @@ export function parsePlain(src: string): MNode[] {
       if (c === "_") { attach(out, "sub", script()); continue; }
       if (c in VULGAR) { const [a, b] = VULGAR[c]; out.push({ t: "frac", small: true, num: [{ t: "num", v: a }], den: [{ t: "num", v: b }] }); continue; }
       if (c === "+") { out.push({ t: "bin", v: "+" }); continue; }
-      if (c === "-" || c === "−") { out.push({ t: "bin", v: "−" }); continue; }
+      if (c === "-" || c === "−") {
+        // a hyphen joining two English words ("right-angled") stays a hyphen, never a minus sign
+        const nx = peek();
+        if (c === "-" && out[out.length - 1]?.t === "text" && nx?.k === "let" && isWord(nx.v)) out.push({ t: "ord", v: "-" });
+        else out.push({ t: "bin", v: "−" });
+        continue;
+      }
       if (c === "±" || c === "∓" || c === "÷" || c === "×" || c === "·" || c === "⋅") { out.push({ t: "bin", v: c === "⋅" ? "·" : c }); continue; }
       if (c === "*") { out.push({ t: "bin", v: "*" }); continue; }
       if ("=<>≤≥≠≈⇒→←⇔↦≡".includes(c)) { out.push({ t: "rel", v: c }); continue; }

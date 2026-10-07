@@ -112,6 +112,21 @@ const exactAt = (a: Q, k: number) => (a.n * pow10(k)) % a.d === Z;
 /** The fewest decimal places that write a terminating value exactly (0 for a whole number); 12 at most. */
 function placesNeeded(a: Q): number { let k = 0; while (k < 12 && !exactAt(a, k)) k++; return k; }
 
+/** The integer square root of n, rounded down (Newton's method on bigints): exact, no floating point (M2b, Pythagoras). */
+function isqrt(n: bigint): bigint {
+  if (n < BigInt(2)) return n < Z ? Z : n;
+  let x = n, y = (x + ONE) / BigInt(2);
+  while (y < x) { x = y; y = (x + n / x) / BigInt(2); }
+  return x;
+}
+/**
+ * The slips a kind can show, each used only where its value differs from the answer and from every other slip's: a value
+ * that is also the answer is no slip (it is right), and a value two slips share cannot say which was made (M2b).
+ */
+function distinctSlips(cands: [string, Q][], truth: Q): [string, Q][] {
+  return cands.filter(([id, v], i) => !eq(v, truth) && !cands.some(([id2, v2], j) => j !== i && id2 !== id && eq(v, v2)));
+}
+
 /** A rational as the desk hands it out: lowest terms, d > 0, both safe integers (the reader's bounds keep them so). */
 export interface Rat { n: number; d: number }
 const toRat = (q: Q): Rat => ({ n: Number(q.n), d: Number(q.d) });
@@ -344,6 +359,10 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *   - stat (W7 batch 3, "Mean and range"): expr "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7", three to ten whole numbers
  *     0..999 in the order printed; no unit. The mean is the total over the count exactly, allowed only when it terminates
  *     within two decimal places; the range the largest less the smallest, above nothing.
+ *   - pythagoras (v2 M2b, Pythagoras' theorem; the unit is mapped to a Foundation statement, never certified): expr "longest 6 8"
+ *     (the two shorter sides 6 and 8 are given: find the longest) or "shorter 10 6" (the longest side 10 and one shorter side 6
+ *     are given: find the other shorter side); `unit` mm, cm or m, required: the answer's own. All three sides are whole numbers,
+ *     at most 100 (a scaled Pythagorean triple); the truth is an exact integer square root, never a floating point root.
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -358,13 +377,14 @@ export type RatioSpec = { shape: "ratio"; expr: string; unit?: Unit };
 export type RateSpec = { shape: "rate"; expr: string; unit: Unit };
 export type AreaSpec = { shape: "area"; expr: string; unit: Unit };
 export type StatSpec = { shape: "stat"; expr: string };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec;
+export type PythagorasSpec = { shape: "pythagoras"; expr: string; unit: Unit };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec | PythagorasSpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat", "pythagoras"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
 /** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
-const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio", "rate", "area"];
+const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio", "rate", "area", "pythagoras"];
 /**
  * The things a rate question may price (W7 batch 3), plural as the question prints them, with the singular for "What does
  * 1 pen cost?". Closed, so a rate spec never carries free text; the generator draws only the short ones (a row's width).
@@ -522,6 +542,10 @@ const REJECT = {
   rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
   areaUnit: "An area names its square unit, cm2 or m2.",
   sameList: "Every number in the list is the same: there is nothing to work out.",
+  pythUnit: "A side is in mm, cm or metres, and the spec names which.",
+  pythBig: "A side is longer than a school question uses (at most 100).",
+  pythTriangle: "The longest side is not longer than the other side: it is not a right-angled triangle.",
+  pythWhole: "The missing side is not a whole number.",
 } as const;
 
 /**
@@ -545,7 +569,9 @@ type Kind =
   // W7 batch 3: a rectangle's two sides, a triangle's base and height, or two rectangles' four sides, as written
   | { k: "area"; fig: "rectangle" | "triangle" | "composite"; sides: Q[]; texts: string[] }
   // W7 batch 3: the mean or the range of a list, in the order printed
-  | { k: "stat"; stat: "mean" | "range"; xs: bigint[] };
+  | { k: "stat"; stat: "mean" | "range"; xs: bigint[] }
+  // M2b: find the longest side from the two shorter (x, y), or a shorter side from the longest (x) and the other shorter (y)
+  | { k: "pyth"; find: "longest" | "shorter"; x: bigint; y: bigint };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -578,6 +604,8 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
 /** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
+/** M2b: "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given): sides of up to three digits. */
+const PYTH_RE = /^(longest|shorter) ([1-9]\d{0,2}) ([1-9]\d{0,2})$/;
 const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
@@ -645,6 +673,12 @@ function structure(spec: unknown): Structure {
       return { ok: true, spec: s as SchoolSpec, node, kind: { k: "area", fig, sides, texts } };
     }
     return { ok: false, why: REJECT.read };
+  }
+  if (shape === "pythagoras") {
+    const m = PYTH_RE.exec(s.expr);
+    if (!m) return { ok: false, why: REJECT.read };
+    const [x, y] = [BigInt(m[2]), BigInt(m[3])];
+    return { ok: true, spec: s as SchoolSpec, node: fracNode(x, y), kind: { k: "pyth", find: m[1] as "longest" | "shorter", x, y } };
   }
   if (shape === "stat") {
     const m = STAT_RE.exec(s.expr);
@@ -831,6 +865,21 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     // two half sides of a triangle make eighths (2.5 × 3.5 ÷ 2 = 4.375): not a school answer
     if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
     return ok(truth);
+  }
+  if (K.k === "pyth") {
+    // M2b: c squared is a squared plus b squared, in whole numbers only; the root is the bigint integer square root
+    const u = (st.spec as { unit?: Unit }).unit;
+    if (u !== "mm" && u !== "cm" && u !== "m") return { ok: false, why: REJECT.pythUnit };
+    const top = BigInt(100);
+    if (K.x > top || K.y > top) return { ok: false, why: REJECT.pythBig };
+    if (K.find === "longest") {
+      const sq = K.x * K.x + K.y * K.y, c = isqrt(sq);
+      if (c * c !== sq) return { ok: false, why: REJECT.pythWhole };
+      return c > top ? { ok: false, why: REJECT.pythBig } : ok(qi(c));
+    }
+    if (K.y >= K.x) return { ok: false, why: REJECT.pythTriangle };
+    const sq = K.x * K.x - K.y * K.y, a = isqrt(sq);
+    return a * a !== sq ? { ok: false, why: REJECT.pythWhole } : ok(qi(a));
   }
   if (K.k === "stat") {
     // W7 batch 3: the total over the count, to two places at most; the largest less the smallest, above nothing
@@ -1026,6 +1075,16 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
         tex: `\\text{Find the total area of rectangles } ${A.tex} \\text{ by } ${B.tex} \\text{ and } ${C.tex} \\text{ by } ${D.tex}.`,
       };
     }
+    if (K.k === "pyth") {
+      // M2b: "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." - one plain sentence, no diagram;
+      // a side in metres is printed as the word (the typesetter sets a lone m as a letter)
+      const u = specUnit(st.spec);
+      if (u !== "mm" && u !== "cm" && u !== "m") return null;
+      const side = (x: bigint) => (u === "m" ? { plain: `${x} metres`, tex: `${x} \\text{ metres}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
+      const [X, Y] = [side(K.x), side(K.y)];
+      if (K.find === "longest") return { plain: `A right-angled triangle has shorter sides ${X.plain} and ${Y.plain}. Find the longest side.`, tex: `\\text{A right-angled triangle has shorter sides } ${X.tex} \\text{ and } ${Y.tex}. \\text{ Find the longest side.}` };
+      return { plain: `A right-angled triangle has longest side ${X.plain} and a shorter side ${Y.plain}. Find the other shorter side.`, tex: `\\text{A right-angled triangle has longest side } ${X.tex} \\text{ and a shorter side } ${Y.tex}. \\text{ Find the other shorter side.}` };
+    }
     if (K.k === "rate") {
       // W7 batch 3: "5 pens cost €3.50. What do 8 pens cost?", "12 kg cost €30. What does 1 kg cost?", "240 km in 3 hours. How far in 5 hours?"
       if (K.measure === "distance") {
@@ -1125,6 +1184,10 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "stat-median", name: "Took the middle value", says: "This is the middle value of the list put in order, not the mean. The mean shares the total out equally among the numbers.", points: "the answer" },
   { id: "range-largest", name: "The largest number only", says: "This is the largest number of the list only. The range is the largest take away the smallest.", points: "the answer" },
   { id: "range-backwards", name: "Took away the wrong way round", says: "The largest was taken away from the smallest, so the answer is below zero. The range is the largest take away the smallest, and it is never negative.", points: "the subtraction" },
+  // Pythagoras' theorem (v2 M2b)
+  { id: "pyth-sides-added", name: "Added the two sides", says: "The two lengths were added. The sides of a right-angled triangle are linked through their squares, not their sum: multiply each by itself first, then add or take away.", points: "the line where the two lengths were combined" },
+  { id: "pyth-no-root", name: "Stopped before the square root", says: "The squares were combined correctly but the square root was never taken. That result is the side multiplied by itself, so find the number that multiplies by itself to make it.", points: "the last line" },
+  { id: "pyth-squares-added", name: "Added the squares for a shorter side", says: "The squares were added, but a shorter side comes from taking the square of the other shorter side away from the square of the longest side. The longest side is the biggest square.", points: "the line where the squares were combined" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -1251,6 +1314,15 @@ function slipCandidates(r: ReadOk): [string, Q][] {
       else push("area-no-half", mul(a, b));
     }
     return out;
+  }
+  if (K.k === "pyth") {
+    // M2b: the two given sides added (a + b, or c + b); the squares combined and the root not taken (a² + b², or c² − b²); for a
+    // shorter side the squares added instead of taken away, c² + b² (its root is no whole number, so only the unrooted value is
+    // exact - the rooted slip has no exact value and is not listed)
+    const X = qi(K.x), Y = qi(K.y), xx = mul(X, X), yy = mul(Y, Y);
+    const cands: [string, Q][] = [["pyth-sides-added", add(X, Y)], ["pyth-no-root", K.find === "longest" ? add(xx, yy) : sub(xx, yy)]];
+    if (K.find === "shorter") cands.push(["pyth-squares-added", add(xx, yy)]);
+    return distinctSlips(cands, r.truth);
   }
   if (K.k === "rate") {
     // W7 batch 3, q1 at p, then q2: q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of divided;
@@ -1547,7 +1619,7 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     if ((K.k === "pct-of" || K.k === "pct-change") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
     // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area" || K.k === "stat") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
@@ -1833,6 +1905,11 @@ function leakProfile(r: ReadOk): LeakProfile {
     if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
     const restated: LeakProfile["restated"] = K.fig === "rectangle" ? [{ p: K.sides[0], o: "×", q: K.sides[1], both: true }] : [];
     return { T, targets: [T], lowestOnly: false, bare, restated, written: [] };
+  }
+  if (K.k === "pyth") {
+    // M2b: the side in any form. The squares, their sum or difference, and the given sides are steps and pass; the root of the
+    // last step makes the answer and is refused (rule 6 needs no restated operation: the question holds none)
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [] };
   }
   if (K.k === "rate") {
     // W7 batch 3: the value in any form; its digits with the point left out (56 for 5.60) and a cost in cents or pence (560)
@@ -2543,6 +2620,46 @@ export function genStat(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "stat", expr: "mean 4, 7, 9, 12" } : { shape: "stat", expr: "mean 4, 7, 9, 10" };
 }
 
+// ------------------------------------------------------------------ the v2 M2b generators: Pythagoras' theorem, probability
+
+/** Every right-angled triangle with whole sides a < b < c and c at most 100 (the primitive triples and their multiples). */
+const TRIPLES: [number, number, number][] = (() => {
+  const out: [number, number, number][] = [];
+  for (let c = 5; c <= 100; c++) for (let a = 3; a < c; a++) { const b2 = c * c - a * a, b = Math.round(Math.sqrt(b2)); if (b > a && b < c && b * b === b2) out.push([a, b, c]); }
+  return out;
+})();
+
+/**
+ * One "Pythagoras' theorem" item, from a seed and a tier that code computed (a table of whole triples, never a root):
+ *   - tier 1: the longest side from the two shorter sides, the triple's longest at most 50 ("longest 6 8");
+ *   - tier 2: a shorter side from the longest side and the other shorter side, the longest at most 100 ("shorter 10 6").
+ * The unit is cm in half, mm and metres in a quarter each; the given sides turn round with the seed's draw. Drawn again: an item
+ * on which any listed slip of its kind has no value of its own (every generated item shows every slip of its kind) and an answer
+ * the question prints. Pure and seeded; null for a bad seed or tier.
+ */
+export function genPythagoras(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed2b02);
+  if (!rnd) return null;
+  const pool = tier === 1 ? TRIPLES.filter(([, , c]) => c <= 50) : TRIPLES;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [a, b, c] = pool[Math.floor(rnd() * pool.length)], u = rnd(), flip = rnd() < 0.5;
+    const unit: Unit = u < 0.5 ? "cm" : u < 0.75 ? "mm" : "m";
+    const spec: SchoolSpec = tier === 1 ? { shape: "pythagoras", expr: `longest ${flip ? b : a} ${flip ? a : b}`, unit } : { shape: "pythagoras", expr: `shorter ${c} ${flip ? a : b}`, unit };
+    const r = read(spec);
+    if (!r.ok || slipCandidates(r).length !== (tier === 1 ? 2 : 3)) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "pythagoras", expr: "longest 6 8", unit: "cm" } : { shape: "pythagoras", expr: "shorter 10 6", unit: "cm" };
+}
+
+/**
+ * The units of v2 M2b, beyond the school path, with their generators. They join SCHOOL_GENERATORS (and the path) only when
+ * the sweep passes (tools/gcse-units-test.cjs): a unit that fails stays out of this table's spread there, its code kept.
+ */
+export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
+  "pythagoras": (seed, tier) => genPythagoras(seed, tier),
+};
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
@@ -2585,6 +2702,8 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "unit-rate": ["rate-wrong-way", "rate-multiplied", "rate-other-quantity"],
   "area": ["area-added-sides", "area-no-half", "area-one-part"],
   "mean-range": ["stat-not-divided", "stat-wrong-count", "stat-median", "range-largest", "range-backwards"],
+  // v2 M2b: the units beyond the school path (a slip of a kind with no exact value is not listed: the rooted squares-added slip)
+  "pythagoras": ["pyth-sides-added", "pyth-no-root", "pyth-squares-added"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -2932,6 +3051,31 @@ function readStat(t0: string): SchoolSpec | null {
   return read(spec).ok ? spec : null;
 }
 
+/** A side with its unit in a Pythagoras task: '6 cm', '6 mm', '6 m', '6 metres'. */
+const PY_SIDE = String.raw`([1-9]\d{0,2})\s?(mm|millimetres?|cm|centimetres?|m|metres?)`;
+const pyUnitOf = (u: string): Unit => (/^mm|^milli/i.test(u) ? "mm" : /^c/i.test(u) ? "cm" : "m");
+
+/**
+ * A Pythagoras task (v2 M2b), or null: 'A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side.' or 'A
+ * right-angled triangle has longest side 10 cm and a shorter side 6 cm. Find the other shorter side.' (also 'right angled', 'one
+ * shorter side'); both sides carry the same unit, mm, cm or m. A diagram, a story, a hypotenuse, a decimal side, two units, and a
+ * spec wellFormed refuses (no whole third side, a shorter side longer than the longest) are all null.
+ */
+function readPythagoras(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim(), S = PY_SIDE, H = String.raw`^a right[- ]angled triangle has `;
+  let find: "longest" | "shorter", m = new RegExp(String.raw`${H}shorter sides ${S} and ${S}\.\s*find the longest side$`, "i").exec(t);
+  if (m) find = "longest";
+  else {
+    m = new RegExp(String.raw`${H}longest side ${S} and (?:a|one) shorter side ${S}\.\s*find the other shorter side$`, "i").exec(t);
+    find = "shorter";
+  }
+  if (!m) return null;
+  const u = pyUnitOf(m[2]);
+  if (pyUnitOf(m[4]) !== u) return null;
+  const spec: SchoolSpec = { shape: "pythagoras", expr: `${find} ${m[1]} ${m[3]}`, unit: u };
+  return read(spec).ok ? spec : null;
+}
+
 /**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
@@ -2973,7 +3117,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t);
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t);
   } catch {
     return null;
   }
@@ -2999,6 +3143,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "rate") return "unit-rate";
     if (r.kind.k === "area") return "area";
     if (r.kind.k === "stat") return "mean-range";
+    if (r.kind.k === "pyth") return "pythagoras";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -3028,6 +3173,7 @@ export const SCHOOL_WITHHELD = {
   "area": "The area of a rectangle is its length times its width. For a triangle, multiply the base by the height and halve the result. For two rectangles together, find the area of each and add them. The answer is yours to work out.",
   "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
   "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
+  "pythagoras": "In a right-angled triangle, multiply each shorter side by itself and add the results to get the longest side multiplied by itself. To find the longest side, add those squares and then take the square root. To find a shorter side, take the square of the other shorter side away from the square of the longest side, then take the square root. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */
