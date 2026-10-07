@@ -11,6 +11,9 @@ p.add_argument('--seconds', type=int, default=900)
 p.add_argument('--install', action='store_true')
 p.add_argument('--profile', action='store_true')
 p.add_argument('--extra', action='append', default=[])
+# Courses build lazily since baf5181a: the first /routes builds every playable course, past the
+# probe's 5 s setup fetch on a Stick. P8 paid that at class load; this pays it before the probe.
+p.add_argument('--warm-routes', action='store_true')
 p.add_argument('--apk', type=Path, default=ROOT / 'app/build/outputs/apk/debug/app-debug.apk')
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
@@ -64,6 +67,12 @@ for _ in range(100):
         except OSError:
             pass
 assert pin, 'Listener not ready; no fixed-delay pairing'
+if a.warm_routes:
+    started = time.perf_counter()
+    with urllib.request.urlopen(base + '/routes', timeout=300) as r:
+        size = len(r.read())
+    (a.output / 'routes-warmup.json').write_text(json.dumps({'seconds': time.perf_counter() - started,
+        'bytes': size, 'limit': 'One untimed-out GET before the probe; includes LAN transfer.'}, indent=2))
 (a.output / 'thread-priorities-before.txt').write_bytes(adb('shell','ps','-T','-p',pid,'-o','PID,TID,NI,CMD'))
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
