@@ -88,3 +88,12 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
   3. **P13f finds the GC source.** Reason: run 2's two frames over 100 ms are lobby frames next to background GCs of 626 and 364 ms; the app frees 15-21 MB of large objects every 6-7 s (57 GCs in 360 s), the source is unfound, and it feeds M1 goal 1 (active max) as well as goal 2.
   4. **The course showing about 0.3 s later is accepted.** Reason: I2 budgets frames, memory and inputs, not reveal time, and a smooth reveal is the trade this mitigation exists for.
 - **Reverse:** `TrackScene` back to `BakeShape.UNBANDED` (revert 5df2a49b) brings back the ~100 ms switch gap and the earlier reveal.
+
+## 6. P13f rulings (settle, cut the reply's bytes, PSS)
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of the three.
+- **Context:** P13f (d2b12042, partial) found the lobby's 6-7 s large-object GC churn in the probe's own `GET /stats` and built it in place with the same bytes (bb49e716): 1.378 -> 0.426 MB per read, 115 -> 47 GCs in an ungraded 360 s run. Its graded pair was never started: four 900 s waits (22:01-23:01Z) never saw 60 s under 60% host CPU. See `docs/concepts/deathride/P13f-gc-churn.md`.
+- **Rulings:**
+  1. **Settle, pause no one.** The graded pair waits for a quiet window; each run may use up to eight 900 s settle waits (P13e's `runs-n.sh` allowed four). `settle.ps1`'s rule (60 consecutive 1 s samples under 60%) and the HOST rule stand. Reason: pausing other projects' runs is the operator's call, and waiting costs only Stick time. If no settle comes, the App Master asks the operator for a 20-minute pause.
+  2. **Cut the reply String and its UTF-8 copy** (P13g step 1, in `link/`, with a served-bytes proof). Reason: the bytes on the wire stay the same, and it removes most of the probe's remaining large-object churn, which is observer effect on the bar being graded (players' phones never read `/stats`).
+  3. **PSS:** P13f step 3's single 195.1 MiB sample is answered by the settled pair's PSS readings against 192 MiB; no separate action. Reason: one sample on an unsettled run, in the GC cycle's peak, is not a reading of the budget.
