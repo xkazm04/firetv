@@ -426,11 +426,11 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
       {/* the rows take their width from the picks, so their rules stop short of the band */}
       <div className="guide" style={{ marginTop: 16, width: "fit-content" }}>
         {rows.slice(0, -1).map((row, r) => (
-          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: "6px 0" }}>
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: rows.length > 6 ? "2px 0" : "6px 0" }}>
             <div className="u">{row.title}</div>
             <div style={{ display: "flex", gap: row.cells.length > 3 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: rows.length > 6 ? "10px 18px" : "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
@@ -441,7 +441,8 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
         <span className="cap">{cell.label}</span>
         <div className="cap-text">{cell.blurb}</div>
       </div>}
-      <div className="actions">
+      {/* in the flow, under the caption: pinned to the bottom (on-air .actions) a two-line caption ran into them (2026-10-07 capture) */}
+      <div className="actions" style={{ position: "static", marginTop: 24 }}>
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>

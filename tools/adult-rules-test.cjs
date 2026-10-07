@@ -197,14 +197,14 @@ test('A5: adultAllowed is 18+, or "other" with no age; every school age under 18
   assert.equal(adultAllowed({ type: 'other' }), true, '"other" with no age: the Mode row is the confirmation');
   assert.equal(adultAllowed({ type: 'high-school' }), false); assert.equal(adultAllowed({ type: 'elementary' }), false); assert.equal(adultAllowed(undefined), false);
 });
-test('A5: the profile Mode row offers Adult only where the gate allows, else Family says why', () => {
-  const mode = (d) => profileRows(d).find(r => r.title === 'Mode').cells;
-  assert.deepEqual(mode({ type: 'elementary', age: 12, modules: [] }).map(c => c.mode), ['family']);
-  assert.match(mode({ type: 'elementary', age: 12, modules: [] })[0].blurb, /18 and over/);
-  assert.deepEqual(mode({ type: 'high-school', age: 17, modules: [] }).map(c => c.mode), ['family']);
+test('A5: the profile shows the Mode row only where there is a choice (18+, or "other")', () => {
+  const mode = (d) => profileRows(d).find(r => r.title === 'Mode')?.cells;
+  assert.equal(mode({ type: 'elementary', age: 12, modules: [] }), undefined, 'under 18: no row, the mode is Family');
+  assert.equal(mode({ type: 'high-school', age: 17, modules: [] }), undefined);
+  assert.equal(mode(null), undefined, 'a fresh draft is a high-school learner with no age yet');
   assert.deepEqual(mode({ type: 'high-school', age: 18, modules: [] }).map(c => c.mode), ['family', 'adult']);
   assert.deepEqual(mode({ type: 'other', modules: [] }).map(c => c.mode), ['family', 'adult']);
-  assert.deepEqual(mode(null).map(c => c.mode), ['family'], 'a fresh draft is a high-school learner with no age yet');
+  assert.match(modeCells({ type: 'elementary', age: 12 })[0].blurb, /18 and over/, 'the cells still say why, where they are used');
   assert.equal(profileRows({ type: 'other', modules: [] }).findIndex(r => r.title === 'Mode'), 1, 'right under the type (no age row for "other")');
   assert.deepEqual(modeCells({ type: 'other' }).map(c => c.label), ['Family', 'Adult (18+)']);
 });

@@ -44,7 +44,7 @@ export const TYPE_BLURB: Record<StudentType, string> = {
 export interface Cell { kind: "type" | "age" | "mode" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; mode?: Mode; system?: SchoolSystem; sub?: Subject; path?: MathPath }
 export interface Row { title: string; cells: Cell[] }
 
-/** The Mode row (slice A5; O1 = 18+): Family always; Adult only where rules/mode adultAllowed holds, else Family says why. */
+/** The Mode row (slice A5; O1 = 18+): shown only where rules/mode adultAllowed holds, with Family and Adult (18+). */
 export const MODE_WORDS: Record<Mode, string> = { family: "Family", adult: "Adult (18+)" };
 export const MODE_BLURB: Record<Mode, string> = {
   family: "Guided learning: school syllabus, careful topics, a voice for your age.",
@@ -69,7 +69,9 @@ export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
   if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
-  rows.push({ title: "Mode", cells: modeCells(d ?? { type: t }) });
+  // the Mode row only where there is a choice to make (18+, or "other"): under 18 the mode is Family and the row would
+  // only cost the screen its room (the caption ran into Save/Back with it, 2026-10-07 capture)
+  if (adultAllowed(d ?? { type: t })) rows.push({ title: "Mode", cells: modeCells(d ?? { type: t }) });
   rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
   if ((d?.modules ?? ALL).includes("maths")) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });
