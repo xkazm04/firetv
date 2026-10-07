@@ -200,3 +200,63 @@ export function taught(v: Pick<VerdictLike, "verdict" | "fix" | "was"> | undefin
   const own = cleanFix(from);
   return own ? { fix: own, own: true } : { fix: playbook, own: false };
 }
+
+// ---- the plan: a paragraph written from its pattern, one sentence per slot ----
+
+/** One slot of a pattern: its label (the words in the [brackets], as the playbook shows them) and the job its sentence does. */
+export interface PlanSlot { label: string; role: Exclude<Role, "context">; }
+/** A plan as the desk holds it: the lens it will be read through, and one sentence per slot ("" until written). */
+export interface Plan { lens: string; slots: string[]; }
+
+/**
+ * The slots of a playbook pattern, in the pattern's order, with the role each one plays. The role is read from the
+ * frame words in front of the slot by the same first-pass rule as a sentence's (LINK, then EVIDENCE, else a claim),
+ * so a pattern with its slots reordered gives the new order and nothing here is listed by hand.
+ */
+export function planSlots(play: { pattern: string }): PlanSlot[] {
+  const out: PlanSlot[] = [];
+  for (const piece of play.pattern.split(/(?<=[.!?])\s+/)) {
+    const label = piece.match(/\[([^[\]]+)\]/)?.[1];
+    if (!label) continue;
+    const frame = piece.replace(/\[[^[\]]+\]/g, " ").trim();
+    out.push({ label, role: LINK.test(frame) ? "link" : EVIDENCE.test(frame) ? "evidence" : "claim" });
+  }
+  return out;
+}
+
+/**
+ * The learner's sentence for slot `i`, checked by the rules of a one-sentence rewrite (revise): refused, in the desk's
+ * words, when blank, over the paragraph cap, still holding a [bracket], more than one sentence, or not a sentence on
+ * its own (a capital to begin, a full stop to end), which the joined text needs to split back into its slots. The plan
+ * passed in is never changed; an accepted sentence is stored as written, spaces normalised.
+ */
+export function planFill(plan: Plan, i: number, text: string): { ok: true; plan: Plan } | { ok: false; error: string } {
+  if (!Number.isInteger(i) || i < 0 || i >= plan.slots.length) return { ok: false, error: "That slot is not on the plan." };
+  const t = norm(typeof text === "string" ? text : "");
+  if (!t) return { ok: false, error: `Write slot ${i + 1} first, then send it.` };
+  if (/[[\]]/.test(t)) return { ok: false, error: "Leave the [brackets] out. Write the sentence in your own words." };
+  const long = essayTooLong(t); if (long) return { ok: false, error: long };
+  const one = splitSentences(t);
+  if (one.length !== 1) return { ok: false, error: `That is ${one.length} sentences. Send slot ${i + 1} as one sentence.` };
+  if (!/^["“]?[A-Z]/.test(t) || !/[.!?]["'”’)]?$/.test(t)) return { ok: false, error: "Start it with a capital and end it with a full stop." };
+  return { ok: true, plan: { ...plan, slots: plan.slots.map((x, k) => (k === i ? t : x)) } };
+}
+
+/** What a sentence of this role is, said as the comment names it. */
+const PLAN_READS: Record<PlanSlot["role"], string> = { claim: "a claim", evidence: "evidence", link: "a link back" };
+const PLAN_WANTS: Record<PlanSlot["role"], string> = { claim: "your claim: the side you take", evidence: "your evidence: something a reader can check", link: "your link back: what the evidence shows" };
+
+/**
+ * A comment when the sentence in slot `i` reads as another job than the slot's, else null. A comment only: the slot
+ * is inked because it is written, never because it fits. A bare sentence cannot open as a link ("This shows" is the
+ * pattern's own frame), so a link slot is met by a claim or a link and flagged only for evidence.
+ */
+export function planFit(slots: PlanSlot[], i: number, text: string): string | null {
+  const slot = slots[i], first = splitSentences(norm(text))[0];
+  if (!slot || !first || first.role === slot.role) return null;
+  if (slot.role === "link" && first.role === "claim") return null;
+  return `That reads as ${PLAN_READS[first.role as PlanSlot["role"]].replace(/^a /, "")}. This slot wants ${PLAN_WANTS[slot.role]}.`;
+}
+
+/** The learner's sentences, in slot order, joined: never a frame word of the pattern. Splits back into exactly the written slots. */
+export function planText(plan: Plan): string { return plan.slots.map(norm).filter(Boolean).join(" "); }
