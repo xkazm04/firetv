@@ -11,6 +11,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import dev.deathride.game.RaceGame
 import dev.deathride.game.TrackPreview
+import dev.deathride.game.SwitchArm
 import dev.deathride.game.audio.AudioArm
 
 class MainActivity : AndroidApplication() {
@@ -61,7 +62,9 @@ class MainActivity : AndroidApplication() {
         val region=if(regionDebug)intent.getStringExtra("region")?.let(dev.deathride.core.Regions::named) else null
         // P12: only the debuggable perf package reads an audio arm (muted/capped/still); every other build plays the full mix.
         val audioArm=if(applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf")AudioArm.parse(intent.getStringExtra("audioArm")) else AudioArm.FULL
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm), config)
+        // P13d: likewise only the perf package reads a course-switch arm (delay/skip/early/reuse); every other build runs OFF.
+        val switchArm=if(applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf")SwitchArm.parse(intent.getStringExtra("switchArm")) else SwitchArm.OFF
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
         if(paced)graphics.isContinuousRendering=false

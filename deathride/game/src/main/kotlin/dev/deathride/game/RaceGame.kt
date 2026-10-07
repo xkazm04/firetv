@@ -15,7 +15,7 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL, private val switchArm: SwitchArm=SwitchArm.OFF) : ApplicationAdapter() {
     private val courseCatalog=if(trackPreview==null)Courses.all else Courses.all+trackPreview.course
     private val profiler=profilePlatform?.let{FrameProfiler(it)}
     private var profileGl: ProfileGl?=null
@@ -205,7 +205,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val worldMs=msSince(started)
         if(::raceAudio.isInitialized)raceAudio.bind(world)
         val sceneStarted=System.nanoTime()
-        if(changed)scene=makeScene()
+        if(changed) { scene=makeScene();glWindow("switch") }
         logger("transition configureWorld ${courseCatalog[courseIndex].id} changed=$changed worldMs=$worldMs worldNewMs=$worldNewMs sceneMs=${msSince(sceneStarted)} totalMs=${msSince(started)}")
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
@@ -242,6 +242,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for((id,gap) in cueManifest.gaps)logger("audio gap $id: $gap")
         logger("audio countdown retained as delivered; owner Maybe, later review")
         if(audioArm!=AudioArm.FULL)logger("audio arm=${audioArm.id} (P12 perf-only)")
+        if(switchArm!=SwitchArm.OFF)logger("switch arm=${switchArm.id} (P13d perf-only)")
         val nativeAudio=GdxAudioBackend(cueManifest.decodedBudgetBytes,audioArm)
         audio=CueService(cueManifest,if(Gdx.app.type==Application.ApplicationType.Android)QueuedAudioBackend(nativeAudio) else nativeAudio);audio.preload()
         if(Gdx.app.getPreferences("deathride-audio").getBoolean("muted",false))audio.setGain("master",0f)
@@ -253,7 +254,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         profileStore=ProfileStore(Gdx.files.local("profiles").file())
         saves=ProfileSaves(ProfileWriter(profileStore),profiles,saveStatus,shopMessage,careerMessage,persistence,logger,saveHooks)
         for(i in profiles.indices)loadProfile(i);publishes.flushAll();world.reset()
-        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
+        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L},switchArm);carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
@@ -344,6 +345,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         profiler?.begin(nanos,actual);profileGl?.reset()
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
+        if(art.frame()>0 && glWindowEvent!="release")glWindow("release")
         publishes.frame()
         saves.pump()
         for(i in server.slots.indices) {
@@ -360,7 +362,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         // A pick still on the course worker holds the queued commands (start, lobby, garage, career) until it lands.
         val pickPending=server.trackPending
-        val courseIndex=server.trackRequest.getAndSet(-1)
+        var courseIndex=server.trackRequest.getAndSet(-1)
+        // P13d EARLY arm (perf-only): upload the picked region's tiles now and run the switch itself EARLY_FRAMES frames later.
+        if(switchArm==SwitchArm.EARLY) {
+            if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start==null && earlyCourse<0 && courseIndex!=selectedTrack) {
+                art.stageRegion();glWindow("stage");earlyCourse=courseIndex;earlyFrames=SwitchArm.EARLY_FRAMES;courseIndex=-1
+            } else if(courseIndex<0 && earlyCourse>=0 && --earlyFrames<=0) { courseIndex=earlyCourse;earlyCourse=-1 }
+        }
         if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start!=null)logger("transition refused track reason=\"${ProfileSaves.SAVING_TICKET}\"")
         else if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
             val started=System.nanoTime();configureWorld(courseIndex,false);publishes.requestUi();logger("transition track totalMs=${msSince(started)}")
@@ -372,7 +380,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
-        if(!pickPending)when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
+        if(!pickPending && earlyCourse<0)when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
         profiler?.mark(6,"DR.prepare")
         if(!scene.ready) { scene.advance();accumulator=0.0;if(scene.ready)rebuildUi() };server.sceneryReady=scene.ready
         profiler?.mark(7,"DR.simulation")
@@ -451,7 +459,25 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         profiler?.finish(phase=="race" && scene.ready,world.entrantCount-world.resolved,
             profileGl?.draws?:0,profileGl?.binds?:0,profileGl?.uploads?:0,atlasEffects.activeCount+atmosphere.activeCount,profileGl?.indices?:0)
+        profileGl?.let{glInventory(it,actual,nanos)}
     }
+    /** P13d (profiled builds only): the GL objects each frame of a window creates, deletes or re-specifies, one log line per frame,
+     *  [GL_WINDOW] frames from a course switch, a tile release or an EARLY-arm stage (k=0 is the event's frame). Outside a window
+     *  only a frame that creates or deletes an object logs, at most [GL_STRAY_LINES] times per run. */
+    private fun glInventory(gl: ProfileGl,actual: Double,nanos: Long) {
+        val inWindow=glWindowFrame in 0 until GL_WINDOW
+        if(!inWindow && (gl.objectEvents()==0 || glStrayLines>=GL_STRAY_LINES))return
+        if(!inWindow)glStrayLines++
+        logger("glInventory event=${if(inWindow)glWindowEvent else "none"} k=${if(inWindow)glWindowFrame else -1} frame=${server.frameNumber} intervalMs=${String.format(java.util.Locale.ROOT,"%.1f",actual*1000)} workMs=${String.format(java.util.Locale.ROOT,"%.1f",(System.nanoTime()-nanos)/1e6)} ${gl.inventory()}")
+        if(inWindow && ++glWindowFrame>=GL_WINDOW) { glWindowFrame=-1;glWindowEvent="" }
+    }
+    private fun glWindow(event: String) { if(profileGl!=null) { glWindowEvent=event;glWindowFrame=0 } }
+    private var glWindowEvent=""
+    private var glWindowFrame=-1
+    private var glStrayLines=0
+    private var earlyCourse=-1
+    private var earlyFrames=0
+    private companion object { const val GL_WINDOW=20;const val GL_STRAY_LINES=400 }
     private fun capture(name: String) { val p=Pixmap.createFromFrameBuffer(0,0,Gdx.graphics.width,Gdx.graphics.height); val writer=PixmapIO.PNG(); writer.setFlipY(true); writer.write(Gdx.files.local("../evidence/$name"),p); writer.dispose(); p.dispose() }
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
         ?: world.cars.firstOrNull { it.human } ?: world.cars[0]
