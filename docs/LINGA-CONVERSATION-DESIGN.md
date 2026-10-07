@@ -185,4 +185,6 @@ Pilot with elementary learners and guardians, teens, and adults including beginn
 
 Release gates: no spoken-credit from taps or copied model phrases; uncertain audio cannot lower skill state; interruptions do not lose turns; retries do not double-count evidence; one learner's notes cannot enter another's session; age-restricted scenarios cannot be selected for children; generated partner speech stays within the scene and readable caption budget; progress survives a normal reset. Validate noisy-room speech and real device response times before increasing scenario breadth.
 
+The credit rules behind that gate are enforced in code, in `desk/src/lib/english/credit.ts`: a formula (a yes, a thanks, a greeting) earns nothing, each skill's quote must have its shape (a repair asks to repeat or clarify, a request asks for something, the rest need three words), and a quote that repeats four or more consecutive words the scene already showed is stored as supported. The prompt is no longer the only guard; the lists are data a teacher can widen.
+
 The central design question for testing is concrete: **Does replaying one meaningful moment help people speak more independently the next time?**
