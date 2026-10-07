@@ -152,12 +152,11 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
         val groundTint=look?.tileColor(look.groundSlot,art.hasRegionVariant(look.groundSlot))?:Color.WHITE
-        if(groundBands<0) {} // P13e NOGROUND arm (diagnostic): no ground tile
-        else if(groundBands<=1 || groundTile==null)canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
-        else for(band in 0 until groundBands) {
-            // P13e GROUNDn arms: the same full-target quad, drawn n times through a scissor of one row band each, one band per
-            // pass. The scissor only limits which pixels are written, so every pixel gets the value the single draw gives it.
-            val y0=canvas.textureSize*band/groundBands;val y1=canvas.textureSize*(band+1)/groundBands
+        if(shape.groundBands<0) {} // NOGROUND arm (diagnostic): no ground tile
+        else if(shape.groundBands<=1 || groundTile==null)canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
+        else for((y0,y1) in BakeShape.rows(canvas.textureSize,shape.groundBands)) {
+            // The same full-target quad through a scissor of one row band, one band per pass (see BakeShape). The scissor
+            // only limits which pixels are written, so every pixel gets the value the single draw gives it.
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);Gdx.gl.glScissor(0,y0,canvas.textureSize,y1-y0)
             canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST)
@@ -349,17 +348,8 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         }
     }.iterator()
-    /** P13e PASSESn arms (perf-only): the bake's pass limit, 0 for today's budget slices. Set before the first [advance]. */
-    var passLimit=0
-    /** P13e FINISH arm (perf-only): glFinish at the end of every bake slice, with the scenery target still bound. */
-    var finishSlices=false
-    /** P13e GROUNDn arms (perf-only): the ground tile in n scissored row bands, one per pass; -1 draws no ground (diagnostic). */
-    var groundBands=1
-    /** P13e BANDS arms (perf-only): how a pass that drew a ground band is submitted: 0 as any pass, 1 glFlush, 2 glFinish
-     * (the target still bound), so the driver runs that band's GPU work in its own frame instead of batching the bands. */
-    var bandSync=0
-    /** P13e BANDS arms (perf-only): the frame that creates the scene (the switch frame) runs no pass. */
-    var skipCreationFrame=false
+    /** P13e: how the bake is submitted ([BakeShape.SHIPPED] unless a perf-only arm says otherwise). Set before the first [advance]. */
+    var shape=BakeShape.SHIPPED
     /** Set by a bake step that must end its pass (a ground band). */
     private var endPass=false
     private var bandPass=false
@@ -370,10 +360,10 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private var idleFrames=0
     fun advance() {
         if(ready)return
-        val passes=plan?:BakePasses.of(passLimit,VisualTuning["sceneryBuildBudgetMs"]*sliceScale).also{plan=it}
+        val passes=plan?:BakePasses.of(shape.passLimit,VisualTuning["sceneryBuildBudgetMs"]*sliceScale).also{plan=it}
         // A limited plan binds nothing while the bake waits for the course worker's bins: a waiting frame is not a pass.
-        if(passLimit>0 && waitingForBins && !course.projectionReady){idleFrames++;return}
-        if(skipCreationFrame && !advanced){advanced=true;idleFrames++;return}
+        if(shape.passLimit>0 && waitingForBins && !course.projectionReady){idleFrames++;return}
+        if(shape.skipCreationFrame && !advanced){advanced=true;idleFrames++;return}
         advanced=true
         val started=System.nanoTime();endPass=false;bandPass=false
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
@@ -390,11 +380,11 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         },{waitingForBins || endPass})
         if(finished) { canvas.roadMarks.upload();ready=true }
-        r.end();if(flushSlices || bandPass && bandSync==1)Gdx.gl.glFlush();if(finishSlices || bandPass && bandSync==2)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        r.end();if(flushSlices || bandPass && shape.bandSync==BakeShape.SYNC_FLUSH)Gdx.gl.glFlush();if(shape.finishSlices || bandPass && shape.bandSync==BakeShape.SYNC_FINISH)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(sliceLog.isNotEmpty())sliceLog.append(',');sliceLog.append(String.format(java.util.Locale.ROOT,"%.1f",sliceMs))
         if(ready) {
             Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
-            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=$passLimit budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=$finishSlices groundBands=$groundBands bandSync=$bandSync skipCreationFrame=$skipCreationFrame sliceMs=$sliceLog")
+            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=${shape.passLimit} budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=${shape.finishSlices} groundBands=${shape.groundBands} bandSync=${shape.bandSync} skipCreationFrame=${shape.skipCreationFrame} sliceMs=$sliceLog")
             Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+
                 bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"}+" binWaitMs=$binWaitMs binWaitFrames=$binWaitFrames")
         }

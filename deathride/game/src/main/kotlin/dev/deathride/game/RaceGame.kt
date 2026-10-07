@@ -50,7 +50,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var activeRegion=regionOverride?:courseCatalog[selectedTrackIndex()].region
     private val regionLooks=Regions.all.associate{it.id to RegionLook(it)}
     private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
-    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR;it.passLimit=SwitchArm.passLimit(switchArm);it.finishSlices=switchArm==SwitchArm.FINISH || switchArm==SwitchArm.GROUND8FINISH;it.groundBands=SwitchArm.groundBands(switchArm);it.bandSync=SwitchArm.bandSync(switchArm);it.skipCreationFrame=it.bandSync>0}
+    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR;it.shape=SwitchArm.shape(switchArm)}
     private val painter=CarPainter()
     private val wheels=WheelRig(32)
     private val combatPainter=CombatPainter()
@@ -482,14 +482,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         logger("glInventory event=${if(inWindow)glWindowEvent else "none"} k=${if(inWindow)glWindowFrame else -1} frame=${server.frameNumber} intervalMs=${String.format(java.util.Locale.ROOT,"%.1f",actual*1000)} workMs=${String.format(java.util.Locale.ROOT,"%.1f",(System.nanoTime()-nanos)/1e6)} ${gl.inventory()}")
         if(inWindow && ++glWindowFrame>=GL_WINDOW) { glWindowFrame=-1;glWindowEvent="" }
     }
-    /** P13e perf-only, ungraded runs: the target this bake finished, then the same course baked again in today's 3 ms slices
-     * (blocking, in this frame), hashed both times. The scene left behind is the today-shaped one. */
+    /** P13e perf-only, ungraded runs: the target this bake finished, then the same course baked again as before P13e
+     * ([BakeShape.UNBANDED], blocking, in this frame), hashed both times. The scene left behind is the unbanded one. */
     private fun hashBake() {
-        val shaped=scene.targetSha256()
-        val today=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates)
+        val shaped=scene.targetSha256();val shape=scene.shape
+        val today=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.shape=BakeShape.UNBANDED}
         while(!today.ready)today.advance()
         val reference=today.targetSha256();scene=today
-        logger("sceneryHash ${courseCatalog[selectedTrack].id} arm=${switchArm.id} armSha256=$shaped todaySha256=$reference same=${shaped==reference}")
+        logger("sceneryHash ${courseCatalog[selectedTrack].id} arm=${switchArm.id} shape=$shape shapedSha256=$shaped unbandedSha256=$reference same=${shaped==reference}")
     }
     private fun glWindow(event: String) { if(profileGl!=null) { glWindowEvent=event;glWindowFrame=0 } }
     private var glWindowEvent=""

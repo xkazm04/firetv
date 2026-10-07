@@ -68,12 +68,4 @@ class BakePassesTest {
         assertEquals(3.0,BakePasses.of(0,3.0).budgetMs,1e-9)
         assertEquals(1.5,BakePasses.of(0,1.5).budgetMs,1e-9)
     }
-    @Test fun thePassArmsParseAndCarryTheirLimit() {
-        assertEquals(SwitchArm.PASSES9,SwitchArm.parse("passes9"));assertEquals(9,SwitchArm.passLimit(SwitchArm.PASSES9))
-        assertEquals(6,SwitchArm.passLimit(SwitchArm.parse("passes6")));assertEquals(3,SwitchArm.passLimit(SwitchArm.parse("passes3")))
-        assertEquals(0,SwitchArm.passLimit(SwitchArm.parse("finish")));assertEquals(0,SwitchArm.passLimit(SwitchArm.parse(null)))
-        assertEquals(8,SwitchArm.groundBands(SwitchArm.parse("ground8")));assertEquals(4,SwitchArm.groundBands(SwitchArm.parse("ground4")))
-        assertEquals(-1,SwitchArm.groundBands(SwitchArm.parse("noground")));assertEquals(1,SwitchArm.groundBands(SwitchArm.OFF))
-        assertThrows(IllegalArgumentException::class.java){SwitchArm.parse("passes12")}
-    }
 }
