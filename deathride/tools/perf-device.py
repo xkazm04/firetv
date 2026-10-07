@@ -95,8 +95,13 @@ def device_counters(name):
     # P11: Wi-Fi bytes and per-thread CPU ticks (utime+stime) of the threads that took the render thread's CPU in the
     # trace (system_server's NetworkStats, the audio mixer and HAL writer, this app), read once before and once after
     # the probe, never during it.
+    # P12: plus /proc schedstat (CPU ns, runqueue-wait ns, slices) of the audio pair's processes and this app, at the same
+    # two reads; readers that predate P12 skip the section.
     script = ('for p in $(pidof system_server) $(pidof audioserver) $(pidof fireos.hardware.audio.service) $(pidof ' + package + '); '
-              'do for t in /proc/$p/task/*; do echo "$p $(cat $t/stat)"; done; done; echo ==net; cat /proc/net/dev; echo ==uptime; cat /proc/uptime')
+              'do for t in /proc/$p/task/*; do echo "$p $(cat $t/stat)"; done; done; '
+              'echo ==schedstat; for p in $(pidof audioserver) $(pidof fireos.hardware.audio.service) $(pidof ' + package + '); '
+              'do for t in /proc/$p/task/*; do echo "$p ${t##*/} $(cat $t/schedstat)"; done; done; '
+              'echo ==net; cat /proc/net/dev; echo ==uptime; cat /proc/uptime')
     try:
         (a.output / name).write_bytes(adb('shell', script))
     except (OSError, subprocess.SubprocessError) as e:

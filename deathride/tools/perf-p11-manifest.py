@@ -1,12 +1,14 @@
-"""Seal P11: committed summaries under evidence/perf/p11 and the raw evidence kept outside git, each with its SHA-256."""
+"""Seal P11: committed summaries under evidence/perf/p11 and the raw evidence kept outside git, each with its SHA-256.
+P12 reuses it: --evidence evidence/perf/p12 --raw <its raw root>."""
 import argparse, datetime, hashlib, json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 p = argparse.ArgumentParser()
 p.add_argument('--raw', type=Path, default=Path('C:/Users/kazda/kiro/deathride-raw-evidence/p11'))
+p.add_argument('--evidence', default='evidence/perf/p11', help='committed summaries, relative to deathride/')
 a = p.parse_args()
-base = ROOT / 'evidence/perf/p11'
+base = ROOT / a.evidence
 
 def item(path, root):
     return {'path': path.relative_to(root).as_posix(), 'bytes': path.stat().st_size,
@@ -15,7 +17,7 @@ def item(path, root):
 committed = [item(f, ROOT) for f in sorted(base.rglob('*')) if f.is_file() and f.name != 'manifest.json']
 raw = [item(f, a.raw) for f in sorted(a.raw.rglob('*')) if f.is_file()]
 total = sum(f['bytes'] for f in committed)
-assert total < 5 * 1048576, f'committed P11 evidence is {total} bytes, over 5 MiB'
+assert total < 5 * 1048576, f'committed evidence is {total} bytes, over 5 MiB'
 (base / 'manifest.json').write_text(json.dumps({
     'generatedUtc': datetime.datetime.now(datetime.timezone.utc).isoformat(),
     'committedBytes': total, 'committed': committed,
