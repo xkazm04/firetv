@@ -451,3 +451,23 @@ test('M4b: a table renders as a grid with drawn delimiters, in both voices',()=>
  }
  assert.equal((html('\\begin{cases} 1 & a \\\\ 2 & b \\end{cases}').match(/class="mtab-d /g)||[]).length,1,'cases: a brace on the left only');
 });
+test('M4c: a Calculus paper ticks the lines the chain checker says hold, leaves a line it cannot tell bare, and the school and linear papers are unchanged',()=>{
+ const calc={n:1,question:'Find the derivative of x^2 sin x',spec:{shape:'derivative',f:'x^2 sin x'},studentAnswer:'2x cos x',verdict:'wrong'};
+ const lines="f(x) = x^2 sin x\nuse the product rule\nf'(x) = 2x sin x + x^2 cos x\nf'(x) = 2x cos x";
+ const w=W.working({...calc,studentWorking:lines,slipAt:{line:3}});
+ assert.deepEqual(w.ticks,[true,false,true,false],'line 0 and line 2 hold; the line in words is bare; the pen line is not ticked');
+ assert.equal(w.at,3);assert.equal(w.placed,'slipAt');
+ const first=W.working({...calc,studentWorking:"f(x) = x^2 sin x\nf'(x) = 2x cos x",slipAt:{line:1}});
+ assert.deepEqual(first.ticks,[true,false]);
+ const bare=W.working({...calc,studentWorking:'use the product rule\nthen differentiate\n2x cos x',slipAt:{line:2}});
+ assert.deepEqual(bare.ticks,[false,false,false],'lines the chain cannot tell get no tick');
+ const noChain=W.working({...calc,studentWorking:"f(x) = x^2 sin x\nf'(x) = 2x sin x + x^2 cos x"});
+ assert.deepEqual(noChain.ticks,[false,false],'no chain pen: the paper behaves as it did (pen on the answer line, no tick)');assert.equal(noChain.placed,'answer');
+ const right=W.working({...calc,verdict:'right',studentWorking:lines});
+ assert.deepEqual(right.ticks,[false,false,false,true],'a right Calculus item still ticks its answer line only');
+ // school and linear papers: the arithmetic ticks, exactly as before
+ const lin={n:2,question:'3x + 7 = 11',studentAnswer:'6',verdict:'wrong'};
+ assert.deepEqual(W.working({...lin,studentWorking:'3x = 18\nx = -6',slipAt:{line:1}}).ticks,[true,false]);
+ const school={n:3,question:'Work out 3/4 + 1/6',spec:{shape:'compute',expr:'3/4 + 1/6'},studentAnswer:'5/10',verdict:'wrong'};
+ assert.deepEqual(W.working({...school,studentWorking:'3/4 = 9/12\n1/6 = 2/12\n9/12 + 2/12 = 5/10',slipAt:{line:2}}).ticks,[true,true,false]);
+});

@@ -155,8 +155,14 @@ which the verdict is about, is marked and nothing else is claimed. The rulebook'
 pen or earns a tick; the taped card says "Look where the pen is." when the pen was placed from the working. The
 line split (`workingLines`) and the slip names are one rule each, in `rules/maths`.
 
-**A Calculus item has no pen position.** `locate` reads linear lines only, so marking a Calculus set
-([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) writes no `slipAt`. A wrong Calculus item takes the third step: the
+**A Calculus item is located by the chain checker (M4c).** `locate` reads linear lines only, so a Calculus set
+([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) is located by `rules/chain` instead: the item's working lines are read
+from its own spec (`tagLines`; line 0 follows the spec's function, a line whose relation the tagger cannot tell, or a
+line in words, is null and never blamed) and each line is checked numerically against the line before it. A wrong
+item with working gets `slipAt` at the FIRST line the chain rings (`judgeItem`, the existing field, no new one); the
+verdict stays `checkAnswer`'s. `working.ts` ticks a Calculus line before the pen only where the chain says it
+holds (it computes the same chain; the school and linear lines keep the arithmetic tick); a null line gets neither
+tick nor pen. If no line is rung the chain places nothing and the item takes the third step: the
 answer line gets the wavy underline, and the card says "Look at ..." with the slip's place in words. The slip's
 title is its Calculus name, for example "The constant left off" or "The inside not differentiated". A right one
 ticks its answer line. With no working, the shared line split draws the answer alone: on the school path a bare

@@ -180,7 +180,7 @@ Where a practice set lands when the phone's photo of it comes back marked. The w
 learner's paper under the lamp (Lamplight, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)): each item
 folded to its printed question and the one line of their working the desk's pen is on - a right item
 is its question and a tick, a wrong one its marked line (the pen inside the line where the data places
-it), an unsure one its last line and "not sure". Never an answer the learner did not write. The title counts what to look at ("Two to look at", "All six right"); the caption
+it; on a Calculus item the first line its working stops holding, with a tick on each earlier line that checks, none on a line the desk cannot check - M4c), an unsure one its last line and "not sure". Never an answer the learner did not write. The title counts what to look at ("Two to look at", "All six right"); the caption
 names the focused item and where to start looking (the slip's `points`), the only prose on screen.
 Two actions: **Six more** (a new set on the same topic, written by the same `/api/practice` job
 as Topics and aimed at the learner's recorded slips) and **Put the sheet away** (clears the set).
