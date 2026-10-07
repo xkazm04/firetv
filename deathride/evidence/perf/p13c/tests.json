@@ -1,0 +1,40 @@
+{
+  "command": "cd deathride && gradlew.bat :core:test :link:test :game:test --console=plain",
+  "code": "5bbf4fa2 (P13c step 2: FramePublish + tests) on e4ec2163; f78d8438 adds tools only",
+  "runs": [
+    {
+      "when": "after the step-2 commit, before the Stick runs",
+      "result": "BUILD SUCCESSFUL",
+      "modules": {"core": {"tests": 247, "skipped": 0, "failed": 0}, "link": {"tests": 20, "skipped": 2, "failed": 0}, "game": {"tests": 92, "skipped": 0, "failed": 0}}
+    },
+    {
+      "utcTimestamp": "2026-10-07T10:17:24Z",
+      "when": "--rerun-tasks after the Stick runs, host at 68-82% CPU from other sessions",
+      "result": "BUILD FAILED in 4m 8s, 15 tasks executed",
+      "modules": {"core": {"tests": 247, "skipped": 0, "failed": 0}, "link": {"tests": 20, "skipped": 2, "failed": 1}, "game": {"tests": 92, "skipped": 0, "failed": 0}},
+      "failure": "link TrackRequestTest.trackHandlerQueuesThePickOnlyAfterItsBinsAreBakedAndKeepsAcknowledgingInputs: its watcher thread saw no queued pick (expected [(52, true)], was []). link/ and core/ are unchanged on this branch (git diff e4ec2163 -- link core is empty) and the test runs no game code."
+    },
+    {
+      "when": ":link:test --rerun-tasks, three consecutive runs right after",
+      "result": "3/3 BUILD SUCCESSFUL, 20 tests, 2 skipped, 0 failed each"
+    },
+    {
+      "when": "the acceptance command as written, final",
+      "result": "BUILD SUCCESSFUL (up to date after the forced runs)"
+    }
+  ],
+  "newTests": {
+    "class": "game/src/test/kotlin/dev/deathride/game/FramePublishTest.kt",
+    "cases": [
+      {"name": "twoPublishesOfASeatInOneFrameBuildItOnce()", "seconds": 0.006, "status": "passed", "shows": "two publishes of a seat in one frame build its JSON once, and none in the publishing frame"},
+      {"name": "aFrameBuildsAtMostOneSeat()", "seconds": 0.087, "status": "passed", "shows": "seats 0 and 1 dirty: one frame builds seat 0, the next seat 1, the third nothing"},
+      {"name": "theFlushedJsonIsByteIdenticalToAnImmediatePublish()", "seconds": 0.011, "status": "passed", "shows": "car, garage and career JSON byte-identical to DeathDuel.carJson/Garage.json/Career.json of the same profile and messages"},
+      {"name": "aRequestFrameDoesNotRebuildTheUiAndTheNextFrameDoes()", "seconds": 0.001, "status": "passed", "shows": "requestUi in frame N rebuilds nothing in N; frame N+1 rebuilds once; N+2 does not"},
+      {"name": "aRebuildBeforeTheNextFrameCoversTheRequest()", "seconds": 0.0, "status": "passed", "shows": "a 10 Hz rebuild after the request clears it"},
+      {"name": "flushBuildsADirtySeatAtOnceAndOnlyThen()", "seconds": 0.001, "status": "passed", "shows": "flush(seat) builds a dirty seat at once, a clean one not at all"},
+      {"name": "aStartRequestFrameBuildsNoJsonAndNoUi()", "seconds": 0.077, "status": "passed", "shows": "RaceGame's wiring through ProfileSaves: a car pick then beginStart build no JSON and no UI in their frame; the next frame rebuilds the UI and builds seat 0 once from its final state (SAVING_TICKET career message), the frame after builds seat 1"}
+    ],
+    "unchanged": "GarageTest (core), ProfileSavesTest and every other existing test: unchanged and green; none needed a flush."
+  },
+  "notBuilt": "Nothing was built for the bake-phase gap (A), so it has no test."
+}

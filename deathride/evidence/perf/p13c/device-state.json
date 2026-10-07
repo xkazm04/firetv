@@ -1,0 +1,20 @@
+{
+  "device": "10.0.0.139:5555 (AFTKM, Android 11), private ADB server port 5041",
+  "ownerPackage": "dev.deathride.tv",
+  "perfPackage": "dev.deathride.perf (port 8772). The diagnostic trace ran on the installed P13 APK (f3804fcd...); both measured runs installed p13c.apk (84f3cd35...) with adb install -r through perf-device.py --install.",
+  "atStart": {"utc": "2026-10-07T09:35:52Z", "resumed": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}", "ownerPid": "14337", "ownerLastUpdateTime": "2026-10-06 23:44:23"},
+  "runs": {
+    "diag-trace": {"probeSeconds": 150, "probeExit": 1, "note": "diagnostic arm beside the atrace; 2 rejected inputs while tracing; not graded"},
+    "run1": {"started": "2026-10-07T09:54:29Z", "seconds": 360, "probeExit": 0},
+    "run2": {"started": "2026-10-07T10:06:52Z", "seconds": 360, "probeExit": 0}
+  },
+  "atEnd": {
+    "utc": "2026-10-07T10:15:47Z",
+    "action": "am force-stop dev.deathride.perf",
+    "resumed": "mResumedActivity: ActivityRecord{a03c5a7 u0 dev.deathride.tv/.MainActivity t330}",
+    "ownerPid": "14337",
+    "perfRunning": false,
+    "ownerLastUpdateTime": "2026-10-06 23:44:23",
+    "note": "The owner's app is in front again: same task t330 and process 14337 as at the start, package not updated. Nothing was installed over or launched in dev.deathride.tv."
+  }
+}
