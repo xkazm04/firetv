@@ -52,24 +52,36 @@ if a.profile:
 for entry in a.extra:
     name, value = entry.split('=', 1)
     launch += ['--es', name, value]
+# P12: when other sessions keep the Stick's adbd busy, its 256 KiB main log turns over in about three minutes and the
+# pairing line can be gone before the scenery is ready. The DeathRide lines are streamed from just before the launch
+# (startup-logcat.txt, which also keeps the startup lines) and the stream stops before the probe.
+startup_log = (a.output / 'startup-logcat.txt').open('wb')
+startup = subprocess.Popen(['adb', '-P', '5041', '-s', a.device, 'logcat', '-v', 'threadtime', '-T', '1', '-s', 'DeathRide:I'],
+    stdout=startup_log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
 adb(*launch)
 pin = None
-for _ in range(100):
-    time.sleep(.5)
-    pid = adb('shell', 'pidof', package).decode().strip()
-    if not pid:
-        continue
-    log = adb('logcat', '-d', '--pid=' + pid, '-s', 'DeathRide:I').decode(errors='replace')
-    pins = re.findall(r'pairing http[^\n]*pin=(\d+)', log)
-    if pins:
-        try:
-            with urllib.request.urlopen(base + '/stats', timeout=3) as r:
-                stats = json.load(r)
-            if stats['sceneryReady']:
-                pin = pins[-1]
-                break
-        except OSError:
-            pass
+try:
+    for _ in range(100):
+        time.sleep(.5)
+        pid = adb('shell', 'pidof', package).decode().strip()
+        if not pid:
+            continue
+        startup_log.flush()
+        log = (a.output / 'startup-logcat.txt').read_text(errors='replace')
+        pins = re.findall(r'^\S+ \S+\s+' + pid + r'\s.*pairing http[^\n]*pin=(\d+)', log, re.M)
+        if pins:
+            try:
+                with urllib.request.urlopen(base + '/stats', timeout=3) as r:
+                    stats = json.load(r)
+                if stats['sceneryReady']:
+                    pin = pins[-1]
+                    break
+            except OSError:
+                pass
+finally:
+    startup.terminate()
+    startup.wait(timeout=10)
+    startup_log.close()
 assert pin, 'Listener not ready; no fixed-delay pairing'
 if a.warm_routes:
     started = time.perf_counter()

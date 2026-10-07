@@ -71,7 +71,7 @@ def scheduler(run):
 
 def arm_seen(run, arm, audio):
     """The arm the APK actually ran: RaceGame logs 'audio arm=<id>' for a perf arm; /stats audio.backend.native.arm agrees."""
-    log = (run / 'logcat.txt').read_text(errors='replace') if (run / 'logcat.txt').exists() else ''
+    log = ''.join((run / f).read_text(errors='replace') for f in ('startup-logcat.txt', 'logcat.txt') if (run / f).exists())
     logged = re.findall(r'DeathRide: audio arm=(\w+)', log)
     native = ((audio or {}).get('backend') or {}).get('native') or {}
     seen = native.get('arm', 'full')
