@@ -19,6 +19,8 @@ export type Audience = "all" | "school" | "older" | "adult";
 export interface EnglishScene {
   id: string; name: string; goal: string; partner: string; skill: SkillId;
   audience: Audience; minutes: string;
+  /** two or three goals the learner reaches in the scene (mission.ts); absent on a plan topic, which gets generated ones */
+  steps?: string[];
   premise: string; cue: string; quiz: { question: string; options: [string, string]; correct: number };
 }
 
@@ -109,6 +111,8 @@ export interface ConversationHelp {
   /** the cue on screen is that rung (not the quiz's or a choice's line) */
   shown: boolean;
 }
+/** A scene's steps and the replies that reached them, in order (mission.ts). Never evidence. */
+export interface Mission { steps: string[]; reached: Array<{ turnId: string; quote: string }>; }
 export interface Conversation {
   id: string; learnerId: string; sceneId: string; title: string; goal: string; partner: string;
   focusSkill: SkillId; reviewSkill?: SkillId; preferences: EnglishPreferences;
@@ -124,6 +128,8 @@ export interface Conversation {
   help?: ConversationHelp | null;
   /** absent on a conversation saved before review, null when nothing taught was due */
   review?: Review | null;
+  /** absent on a conversation saved before missions, and null-free: a scene with no valid steps has none */
+  mission?: Mission;
   commands: string[]; evidence: EnglishEvidence[];
   provider?: string; responseMs?: number; startedAt: number;
 }
