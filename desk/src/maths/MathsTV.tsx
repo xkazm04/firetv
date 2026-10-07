@@ -16,7 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
@@ -297,13 +297,14 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
     {topics.map((t, i) => {
       const sk = skills[t.id], box = m.topics[i];
       const state = sk?.secure ? "secure" : usualSeen(s, t.id) ? "prog" : "unseen";
-      const slips = (sk?.slips ?? []).slice(0, 4);
+      // the NEWEST four live slips: a slip the child stops making is rubbed out (rules/slips), and the fifth is never hidden behind four old ones
+      const slips = (sk?.slips ?? []).slice(-4);
       return (
         <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: box.x, width: box.w }}>
           <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
           {/* the step-up picture (Family W8): a second, thinner ink line under the groove once the step-up record latches */}
           {up.has(t.id) && <div className="mb-ink2" data-role="maths-stretch" />}
-          {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
+          {slips.length > 0 && <div className="mb-slips" data-slips={slips.join(" ")} aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
           {/* on a panning ruler the name is laid out at its box's final width at once, so the fit never measures a box mid-slide */}
           <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
         </div>
@@ -791,7 +792,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
         <div className="mb-khead"><div className="mb-kick">{at === "more" ? <>{KIND_ICON.six}Six more</> : <>Put away</>}</div></div>
         <div className="mb-stitle" data-role="maths-slip"><Amber text={at === "more" ? `Six more on ${name}` : "The set leaves the desk"} /></div>
         <div className="mb-card" data-role="maths-hint">
-          <div className="ht" data-role="maths-said">{at === "more" ? `Six new questions on ${name}, aimed at the slips the desk has seen. Work them on paper, like this set.` : "The set leaves the desk. What it showed is already in your record."}</div>
+          <div className="ht" data-role="maths-said">{at === "more" ? moreLine(p.topic, name, s.skills?.[p.topic]?.slips ?? []) : "The set leaves the desk. What it showed is already in your record."}</div>
         </div>
       </aside>
     )}

@@ -5,6 +5,8 @@
 import type { Screen, Session } from "@/lib/session/store";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
+import { slip as slipById } from "@/lib/rules/maths";
+import { SCHOOL_UNIT_SLIPS } from "@/lib/rules/school";
 
 /** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
 export type TopicState = "secure" | "here" | "next" | "later";
@@ -136,6 +138,23 @@ function sheetCount(n: number, cap: boolean): string {
   const w = SET_WORDS[n];
   if (!w) return String(n);
   return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+}
+
+/** Words in a line, as the card is counted. */
+const wordCount = (t: string) => t.split(/s+/).filter(Boolean).length;
+/**
+ * The Sheet's Six more card (math-buddy-A): what the next six are aimed at, said truthfully. A school unit written by code
+ * (rules/school SCHOOL_UNIT_SLIPS) with a live slip on it names the newest one in the desk's own slip words - the set is
+ * drawn so it shows (lib/desk/items makeSchoolItems); a school unit with none makes no claim of aiming; a linear or Calculus
+ * topic keeps the line it had, since the model is only asked there. `slips` is the record's, newest last. At most 25 words.
+ */
+export function moreLine(topicId: string, name: string, slips: readonly string[]): string {
+  if (!Object.prototype.hasOwnProperty.call(SCHOOL_UNIT_SLIPS, topicId)) return `Six new questions on ${name}, aimed at the slips the desk has seen. Work them on paper, like this set.`;
+  const own = SCHOOL_UNIT_SLIPS[topicId], live = slips.filter((id) => own.includes(id));
+  if (!live.length) return `Six new questions on ${name}. Work them on paper, like this set.`;
+  const id = live[live.length - 1], said = slipById(id)?.name ?? humanTopic(id);
+  const lines = [`Six new questions on ${name}, aimed at: ${said}. Work them on paper, like this set.`, `Six new questions on ${name}, aimed at: ${said}. Work them on paper.`, `Six new questions, aimed at: ${said}.`];
+  return lines.find((l) => wordCount(l) <= 25) ?? lines[2];
 }
 
 /**

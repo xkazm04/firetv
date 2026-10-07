@@ -204,6 +204,16 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   the records say, so a unit whose usual record is not secure can carry it (the learner stretched first), and the
   groove, the word under the topic and Tonight's "N of M topics secure" stay about the usual record. Static: it does
   not grow in. `.mb-ink2`, `data-role="maths-stretch"`.
+- **How a scratch leaves the ruler** (challenge-2026-10-07 math-buddy-A). A slip is set down when the child makes it and
+  rubbed out when they stop, decided in code (`desk/src/lib/rules/slips.ts`, applied in `session/learners.ts`). On a
+  school unit each marked attempt carries the slips its item *shows* (`slipShows` in `rules/school.ts`, pinned to the
+  desk's own `check`); the third usual right answer on items that show a live slip, counted since it was last made,
+  rubs it out of `skills[topic].slips` and its pencil scratch leaves the ruler. Making it again starts the count over
+  and puts it back as the newest. A right answer on an item where it cannot show moves nothing, a step-up attempt moves
+  neither slips nor counts, and a linear or Calculus topic never rubs a slip out. The ruler draws the **newest** four
+  live scratches (`data-slips`). **Six more** on a school unit is drawn in code so at least three of six would show
+  the learner's live slips (`makeSchoolItems` with an aim), and its card names the newest one in the desk's slip words
+  (`moreLine` in `tv/mathsRows.ts`); with no live slip it claims no aim. A picture, not a number: no count is drawn.
 - **The ruler** - the topic path as a boxwood ruler: secure topics inked navy, an in-progress one hatched to its
   estimate, unseen ones a dashed groove, slips as pencil scratches. The learner's name on a lamp-lit needle at the
   frontier (`rulerFrontier` in `desk/src/tv/rulerRows.ts`: on the school path the first topic not secure after the

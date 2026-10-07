@@ -120,7 +120,10 @@ linear equations, because it is met first.
   profile has none), so `0,75` is three quarters in cz and de and unsure in us and uk. Unsure asks and records
   nothing. The slip is only the one code detects from the spec's operands; the unit's closed list is
   `SCHOOL_UNIT_SLIPS` (`tops-and-bottoms`, `top-not-scaled`, `tops-one-bottom`, `wrong-direction`), served by
-  `slipsFor` with `SCHOOL_SLIPS`' own words. A school item has no pen position.
+  `slipsFor` with `SCHOOL_SLIPS`' own words. A school item has no pen position. A school attempt carries the slips its
+  spec shows (`slipShows`, pinned to `check`); the slip record is no longer append-only: three usual right answers on
+  items that show a live slip rub it out (`rules/slips.ts`, an optional `held` count per live slip in `learners.json`),
+  and Six more on a school unit is drawn so at least three of six show the live slips (`moreLine` names the newest).
 - **Hints.** `hint.ts` also reads the task with `specFromQuestion` from `rules/school.ts` ('3/4 + 1/6', 'Work out
   3/4 - 1/6', 'Add 3/4 and 1/6', 'Subtract 1/6 from 3/4', a practice item's printed question; null for anything it
   cannot read with one meaning: whole numbers, decimals, mixed numbers, three terms, words, an x). When it reads, both

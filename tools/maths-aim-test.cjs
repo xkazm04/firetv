@@ -208,8 +208,8 @@ test('case 6: the ruler draws the NEWEST four live slips; Six more names the sli
  // drawn on the Sheet
  seat();
  const items=makeSchoolItems('frac-add-sub',6,9).items.map((it)=>({...it,studentAnswer:'1',verdict:'right',said:'ok'}));
- const K=require(src('tv/keys.ts')),practice={topic:'frac-add-sub',items,marked:true};
- const f=[...Array(30).keys()].find((i)=>K.stopAt(K.sheetStops(practice),i)==='more');assert.notEqual(f,undefined);
+ const K=require(src('tv/keys.ts')),SR=require(src('tv/sheetRows.ts')),practice={topic:'frac-add-sub',items,marked:true};
+ const f=[...Array(30).keys()].find((i)=>K.stopAt(SR.sheetStops(practice),i)==='more');assert.notEqual(f,undefined);
  const sheet=(slips)=>drawMaths('Sheet',seated({'frac-add-sub':{topic:'frac-add-sub',seen:5,right:1,estimate:0.2,secure:false,lastSeen:1,slips}},{practice,focus:f,topic:'frac-add-sub'}));
  assert.ok(sheet(['tops-and-bottoms']).includes('Added the tops and the bottoms'));
  assert.ok(!/aimed/i.test(sheet([])));
