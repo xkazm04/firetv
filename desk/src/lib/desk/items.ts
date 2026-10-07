@@ -33,7 +33,7 @@ import { topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
 import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
-import { generatorFor, leaksSchool, question as schoolQuestion, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
+import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 import { setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
 
@@ -123,7 +123,8 @@ export async function makeItems(
     stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
   const kind = kindOfTopic(topicId);
   if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n));
-  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch);
+  // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
+  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse());
   return flag(await makeLinearItems(topicId, learnerId, n));
 }
 
@@ -328,9 +329,17 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  * generator for, never a model's number. Each item is { n, question: the printed question, spec, tier }, and
  * `stretch: true` beside the tier when the set is a step up; provider "code", no tries (no engine call). Fewer than n
  * only if a generator runs dry.
+ *
+ * `aim` (challenge-2026-10-07 math-buddy-A): the learner's live slips on this unit, newest first. With one, at least half
+ * the set (three of six) is drawn where an aimed slip SHOWS (rules/school slipShows, pinned to the desk's own check), the
+ * hits shared between the tiers, the tier mix and the six distinct questions kept, still no engine call. With no aim (none,
+ * an empty list, or ids the unit cannot show) the set is exactly what it was.
  */
-export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = []): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
   const t0 = Date.now();
+  const own = Object.prototype.hasOwnProperty.call(SCHOOL_UNIT_SLIPS, topicId) ? SCHOOL_UNIT_SLIPS[topicId] : [];
+  const live = (Array.isArray(aim) ? aim : []).filter((id): id is string => typeof id === "string" && own.includes(id));
+  if (live.length) return aimedSchoolItems(topicId, n, seed, mix, stretch, live, t0);
   const make = generatorFor(topicId);
   const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 }[] = [];
   const seen = new Set<string>();
@@ -349,5 +358,45 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
       got++;
     }
   }
+  return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier, ...(stretch ? { stretch: true as const } : {}) })), provider: "code", ms: Date.now() - t0, tries: 0 };
+}
+
+/**
+ * The aimed set: each tier is scanned as makeSchoolItems scans it, the specs where an aimed slip shows kept apart from the
+ * rest. Half the set (rounded up) is taken from the hits, alternating the tiers while both have some, then each tier is
+ * filled to its mix from its other specs, and from more hits when it has no others. In draw order within a tier.
+ */
+function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, stretch: boolean, aim: readonly string[], t0: number): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+  const make = generatorFor(topicId);
+  type Drawn = { spec: SchoolSpec; question: string; tier: 1 | 2; k: number };
+  const seen = new Set<string>();
+  const { tier1, tier2 } = tierCounts(mix, n);
+  const pools = ([[1, tier1], [2, tier2]] as const).map(([tier, want]) => {
+    const hits: Drawn[] = [], rest: Drawn[] = [];
+    for (let k = 0; make && k < SCHOOL_TRIES && (hits.length < want || rest.length < want); k++) {
+      const spec = make((seed + k) % 0x100000000, tier);
+      if (!spec || !schoolWellFormed(spec).ok) continue;
+      const q = schoolQuestion(spec);
+      if (!q || leaksSchool(spec, q.plain)) continue;
+      const hit = aim.some((id) => slipShows(spec, id));
+      if ((hit ? hits : rest).length >= want) continue;
+      const key = sameKey(q.plain);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      (hit ? hits : rest).push({ spec, question: q.plain, tier, k });
+    }
+    return { tier, want, hits, rest, take: 0 };
+  });
+  let aimed = Math.min(Math.ceil(n / 2), pools.reduce((s, p) => s + Math.min(p.hits.length, p.want), 0));
+  while (aimed > 0) {
+    let moved = false;
+    for (const p of pools) if (aimed > 0 && p.take < Math.min(p.hits.length, p.want)) { p.take++; aimed--; moved = true; }
+    if (!moved) break;
+  }
+  const kept = pools.flatMap((p) => {
+    const chosen = p.hits.slice(0, p.take), others = p.rest.slice(0, p.want - chosen.length);
+    const more = p.hits.slice(p.take, p.take + p.want - chosen.length - others.length);
+    return [...chosen, ...others, ...more].sort((a, b) => a.k - b.k);
+  });
   return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier, ...(stretch ? { stretch: true as const } : {}) })), provider: "code", ms: Date.now() - t0, tries: 0 };
 }

@@ -10,13 +10,20 @@ import path from "node:path";
 import { emptyEnglish, type EnglishLearning } from "../english/types";
 import { cleanEnglish } from "../english/rules";
 import { DIGEST_CAP, cleanDigest, type DigestEntry } from "../rules/digest";
+import { stepSlips } from "../rules/slips";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
   estimate: number;         // 0..1
   secure: boolean;          // once true, NEVER set false again
   lastSeen: number;         // ms epoch
-  slips: string[];          // slip ids seen for this learner+topic, deduped, newest last
+  slips: string[];          // slip ids seen for this learner+topic, deduped, newest last; a slip the child stops making is rubbed out (rules/slips)
+  /**
+   * For a live slip held at least once, the usual right attempts on items that show it since it was last made (rules/slips
+   * stepSlips); three rub it out. Only ids still in `slips`, whole numbers >= 0; absent when no live slip has a count, and on
+   * a learners.json written before it existed.
+   */
+  held?: Record<string, number>;
   /**
    * The step-up record (Family W8): moved ONLY by attempts on items of a set asked for as "a step up" (rules/stretch), by
    * the same rule as the record above - the estimate 30% of the way toward each outcome, secure latched at 0.85 with four
@@ -164,6 +171,17 @@ function cleanStretch(raw: unknown): StretchRecord | undefined {
   };
 }
 
+/** A held count kept only as a whole number >= 0 for an id still in `slips`; anything else is dropped. Undefined when none is kept. */
+function cleanHeld(raw: unknown, slips: readonly string[]): Record<string, number> | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const out: Record<string, number> = {};
+  for (const id of slips) {
+    const n = Object.prototype.hasOwnProperty.call(raw, id) ? (raw as Record<string, unknown>)[id] : undefined;
+    if (typeof n === "number" && Number.isInteger(n) && n >= 0) out[id] = n;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 function cleanSkills(raw: unknown): Record<string, SkillRecord> {
   const skills: Record<string, SkillRecord> = {};
   const src = (raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {}) as Record<string, Partial<SkillRecord>>;
@@ -171,6 +189,8 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
     const r = src[k] ?? {};
     // the whitelist: a field not named here is dropped on read (the step-up record is named since Family W8)
     const stretch = cleanStretch(r.stretch);
+    const slips = Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [];
+    const held = cleanHeld(r.held, slips);
     skills[k] = {
       topic: typeof r.topic === "string" ? r.topic : k,
       seen: Number(r.seen) || 0,
@@ -178,7 +198,8 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
       estimate: Number.isFinite(Number(r.estimate)) ? Math.min(1, Math.max(0, Number(r.estimate))) : 0,
       secure: r.secure === true,
       lastSeen: Number(r.lastSeen) || 0,
-      slips: Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [],
+      slips,
+      ...(held ? { held } : {}),
       ...(stretch ? { stretch } : {}),
     };
   }
@@ -242,7 +263,7 @@ export function saveEnglish(id: string, english: EnglishLearning): void {
  * `tier` as code set it. The record is chosen by `stretch` alone - a step-up set holds tier-1 items too, and each of its
  * attempts counts toward the step-up record - so the tier is carried for the caller's sake and never read as a lever.
  */
-export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 }
+export interface AttemptSet { stretch?: boolean; tier?: 1 | 2; /** the slips the item shows (school items only): a usual right attempt counts toward rubbing them out */ shows?: string[] }
 
 /**
  * One attempt at one topic. The estimate moves 30% of the way toward the outcome (1 right,
@@ -254,7 +275,7 @@ export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 }
 export function recordAttempt(id: string, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): SkillRecord {
   const l = getLearner(id);
   const before = l.skills[topic];
-  const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip);
+  const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip, set.shows);
   l.skills[topic] = rec;
   saveLearner(l);
   return rec;
@@ -282,16 +303,17 @@ export function recordWriting(id: string, lens: string, sentences: number, fault
   return rec;
 }
 
-function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string): SkillRecord {
+function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string, shows?: readonly string[]): SkillRecord {
   const prev: SkillRecord = before ?? { topic, seen: 0, right: 0, estimate: 0, secure: false, lastSeen: 0, slips: [] };
   const estimate = Math.min(1, Math.max(0, prev.estimate + RATE * ((right ? 1 : 0) - prev.estimate)));
   const seen = prev.seen + 1;
-  const slips = slip ? [...prev.slips.filter((s) => s !== slip), slip] : prev.slips;
+  // a slip is set down when made and rubbed out when it stops (rules/slips); only a usual attempt on a school item moves a count
+  const { slips, held } = stepSlips({ slips: prev.slips, held: prev.held }, { right, slip, shows });
   return {
     topic, seen, right: prev.right + (right ? 1 : 0), estimate,
     // latched: once secure, always secure
     secure: prev.secure || (estimate >= SECURE_AT && seen >= SECURE_SEEN),
-    lastSeen: Date.now(), slips,
+    lastSeen: Date.now(), slips, ...(held ? { held } : {}),
     // a usual attempt carries the step-up record over untouched (Family W8)
     ...(prev.stretch ? { stretch: prev.stretch } : {}),
   };

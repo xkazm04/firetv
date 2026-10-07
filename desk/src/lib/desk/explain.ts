@@ -28,6 +28,7 @@ import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type
 import { leaksCalc } from "../rules/calc";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
 import { kindOfSpec } from "../rules/kinds";
+import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, topicIn } from "../library/paths";
@@ -201,7 +202,7 @@ export async function explainItem(
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
     : settle(item, h.value, h.slip, topicId);
   // a step-up item (Family W8) settles onto the step-up record only, as marking does
-  if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip, { stretch: item.stretch === true, tier: item.tier });
+  if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip, { stretch: item.stretch === true, tier: item.tier, ...(school ? { shows: slipsShown(topicId, item.spec) } : {}) });
   // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict,
   // no record) - never on a school item, whose slip only code detects
   const named = !verdict && !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;

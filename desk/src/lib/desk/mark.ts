@@ -245,7 +245,7 @@ function land(
 
   // only settled items reach the record, each once, and only for the set still on the desk
   // a step-up item's attempt goes to the step-up record only (learners.ts recordAttempt, Family W8)
-  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier });
+  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier, shows: a.shows });
   // what happened, in one line the home screen can read back: never invented, always these counts
   // (rules/maths; a later settle restates the same line from the same verdicts - session/store). The label is the
   // topic's name on whichever path it belongs to (topicIn), as session/store's restate reads it.

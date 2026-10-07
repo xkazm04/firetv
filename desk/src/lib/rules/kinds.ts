@@ -20,6 +20,7 @@
 import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
 import { specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, type SchoolSpec } from "./school";
+import { slipsShown } from "./slips";
 import { pathOfTopic } from "../library/paths";
 import { degenerate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
@@ -93,8 +94,12 @@ export function judgeItem(item: { n: number; question: string; spec?: unknown },
   return rest;
 }
 
-/** One settled item's attempt, and how its item was set: a step-up item (Family W8) and its code-set tier. */
-export interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2 }
+/**
+ * One settled item's attempt, and how its item was set: a step-up item (Family W8) and its code-set tier. `shows`
+ * (math-buddy-A): the slips a school item's spec shows, by code (rules/slips slipsShown) - what a right answer here counts
+ * toward rubbing out; absent on a linear or Calculus item and on one that shows none.
+ */
+export interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2; shows?: string[] }
 /** How an item was set, as its attempt carries it: the step-up flag and the tier, both code's own (absent is a usual item). */
 const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 } => ({
   ...(item.stretch === true ? { stretch: true } : {}), ...(item.tier === 1 || item.tier === 2 ? { tier: item.tier } : {}),
@@ -123,7 +128,8 @@ export function judgeSet(practice: { topic: string; items: PracticeItem[] }, rea
       unsure++;
       return { ...item, studentAnswer, studentWorking, verdict: "unsure", said: ASK(item.n) };
     }
-    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
+    const shows = kindOfSpec(item.spec) === "school" ? slipsShown(practice.topic, item.spec) : [];
+    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item), ...(shows.length ? { shows } : {}) });
     return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said, ...(s.slipAt ? { slipAt: s.slipAt } : {}) };
   });
   return { items, attempts, unsure };
