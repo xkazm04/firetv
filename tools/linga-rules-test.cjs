@@ -816,6 +816,16 @@ test('the reply box stays closed until the scene is ready',()=>{
  assert.match(closed,/Not yet/);
  assert.equal(open.includes('Not yet'),false);
 });
+test('MH-4: a finished capture pre-ticks the confirmation, an edit makes a typed reply',()=>{
+ require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+ const {afterCapture,afterEdit}=require(path.join(root,'src/english/ReplyBox.tsx'));
+ assert.deepEqual(afterCapture('which bridge do you mean'),{mode:'speech',confirmed:true,sendable:true});
+ assert.deepEqual(afterCapture('   '),{mode:'speech',confirmed:false,sendable:false});
+ assert.deepEqual(afterCapture(''),{mode:'speech',confirmed:false,sendable:false});
+ assert.deepEqual(afterEdit('which bridge'),{mode:'text',confirmed:false,sendable:true});
+ assert.equal(afterEdit('').sendable,false);
+ // the component itself is state-driven (effects and speech events), so the rendered tick after a capture needs a DOM: the browser harness covers it
+});
 test('the map and the print name spoken practice, not only written and choice',()=>{
  const {practiceLine}=require(path.join(root,'src/lib/english/rules.ts'));
  const ev=mode=>({id:mode,episodeId:'ep',turnId:'t',sceneId:'booking',skill:'request',at:1,mode,supported:false,success:true,quote:'q',note:'n'});

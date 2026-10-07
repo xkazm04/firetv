@@ -163,8 +163,9 @@ language) needs a scope call first. It is listed after the cut.
   The design's target of about 2 s from send to voice (`docs/LINGA-CONVERSATION-DESIGN.md` §9) has never been
   measured.
 - **Smallest change.**
-  - After Stop, one button, *Send what I said*, confirms and sends the transcript the child can see and still edit.
-    It replaces the tick box and the second button, and nothing is sent unseen.
+  - **Owner's choice, 2026-10-07:** the tick stays, shown already ticked once the transcript shows, so a spoken
+    reply is one tap after Stop. The child can untick it, which disables Send, and editing the words makes it a typed
+    reply. This replaces the *Send what I said* button; nothing is sent unseen.
   - The browser run times every turn three ways:
     - send → the partner's line on the TV;
     - the model's own `responseMs` (already in `timings.json`);

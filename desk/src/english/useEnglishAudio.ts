@@ -6,8 +6,10 @@ export interface SpokenLine { line: string; key: string; blocked: boolean; slow:
 
 /** Cancel synthesis/playback on capture, pause, navigation and learner change. */
 export function useEnglishAudio({line,key,blocked:held,slow,speaker}:SpokenLine,enabled:boolean,visible:boolean){
-  const [status,setStatus]=useState("");const played=useRef("");
+  const [state,setState]=useState({key:"",text:""});const played=useRef("");
   const blocked=!enabled||!visible||held;
+  // a status belongs to the line key it was set for; another key reads as silent
+  const setStatus=(text:string)=>setState({key,text});
   useEffect(()=>{
     if(blocked||!line||played.current===key){setStatus("");return;}
     let alive=true,url="";let audio:HTMLAudioElement|null=null;
@@ -26,5 +28,5 @@ export function useEnglishAudio({line,key,blocked:held,slow,speaker}:SpokenLine,
     (async()=>{try{const r=await fetch("/api/speak",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:line}),signal:controller.signal});if(!r.ok)throw new Error("No server voice");const blob=await r.blob();if(!alive)return;url=URL.createObjectURL(blob);audio=new Audio(url);audio.onended=done;audio.onerror=()=>fallback();await audio.play();if(alive){played.current=key;setStatus(`${speaker} speaking`);}}catch{fallback();}finally{clearTimeout(timeout);}})();
     return()=>{alive=false;clearTimeout(timeout);controller.abort();audio?.pause();if(url)URL.revokeObjectURL(url);if("speechSynthesis" in window)window.speechSynthesis.cancel();};
   },[key,line,blocked,slow,speaker]);
-  return status;
+  return state.key===key?state.text:"";
 }
