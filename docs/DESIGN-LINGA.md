@@ -217,3 +217,19 @@ down. The scene starts at once, over the one that was running. Pitched scenes ar
 situations after the plan's topics; on `linga-scenes` their card's kicker begins **Your own scene**, and the phone's
 list says "your own". A profile back in Family is never offered one. Nothing loosens here: rude characters and
 in-character insults (C3) and 18+ romance and nightlife (C4) are v2 L5, behind the red-team.
+
+## The Company: Cut and three notes (v2 L3, Adult mode, 2026-10-07)
+
+Owner decision L4 (Cut & Take Two), its first half. In Adult mode, once the learner has a line of their own, **Cut**
+stands on the TV row of `linga-talk` (beside the help and the coach, and beside Resume and Finish when paused) and on
+the phone. It is refused, with no model call, in Family mode, before a reply, over a reply in flight, a moment or the
+coach (`turn.ts`). One call reads this take's learner lines and proposes up to three notes; code keeps a note only when
+its quote is the learner's own words character for character, from that very turn, one sentence, not a quote another
+note already took, and calls it **form** only where the tense rule finds a conflict (otherwise it is labelled **A
+reading**) (`notes.ts`). With one kept, the take ends as Finish ends it, and `linga-recap` shows the **tape**: up to three
+pins in a row (the row of doors the topics use), each the learner's quote with its kind and the better wording, and one
+caption slot holding the focused pin's note, one sentence at the caption's type. Left and Right walk the pins, then
+Another situation and Learning map. A call that fails or keeps no note makes up nothing: the scene stays as it was with
+its error line, and Cut can be pressed again. Notes write no evidence and move no skill. They stay on the conversation
+with their turn ids, for Take Two (v2 L4). The tape's styling uses the topics' classes as they are; a tape-specific
+style in `design/linga.css`, and the capture at 1920 x 1080 and 1280 x 720, are owed.

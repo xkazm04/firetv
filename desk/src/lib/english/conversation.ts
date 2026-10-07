@@ -8,6 +8,7 @@ import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction, pitchAsk } from "./check";
 import { keywordAudience } from "./gate";
 import { keepPitch, PITCH_MAX, PITCH_PREFIX, shapePitch } from "./pitch";
+import { BETTER_MAX, cleanNotes, NOTE_KINDS, NOTE_MAX, NOTES_MAX, QUOTE_MAX } from "./notes";
 import { modeOf } from "../rules/mode";
 import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, isAdult, oldestDue } from "./curriculum";
 import { ConversationError } from "./errors";
@@ -108,6 +109,28 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
   return {id:`${turnId}:moment`,kind,said,better,why,turnId,at:Date.now()};
 }
 
+/**
+ * The take ends: the session listed once, the week's digest, a certificate when this completes one, then the recap.
+ * Finish and Cut (v2 L3) end a take the same way; Cut's notes ride on the conversation and write nothing else.
+ */
+function endTake(c:Conversation,commandId:string){
+  const learnerId=c.learnerId,learning=getLearner(learnerId).english;
+  const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
+  saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
+  // the week's digest (Family W9, rules/digest): the scene, its skill and the replies counted, never a word of them;
+  // once per conversation, as the sessions list keeps it once
+  if(!learning.sessions.some(x=>x.id===c.id))addDigest(learnerId,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
+  // a certificate, when this rehearsal completes what one needs (cert.ts): issued by code from the record, tonight's
+  // quotes checked again against the replies as sent. Never at read time, never back-issued.
+  const words=Object.fromEntries(c.turns.filter(t=>t.role==="learner").map(t=>[t.id,t.text]));
+  const earned=withCertificate(getLearner(learnerId).english,entry.at,words);if(earned.cert)saveEnglish(learnerId,earned.learning);
+  commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");
+}
+const CUT_TASK=`Cut: this take is over. Give at most ${NOTES_MAX} notes on the learner's own lines in learnerTurns, the ones that would help most in a second take. Each note: turnId, the id of one learner turn; quote, an exact excerpt of that turn's text, copied character for character (at most ${QUOTE_MAX} characters); kind: meaning (what they said did not carry what they meant), form (a grammar form, such as a verb tense), word (a word or phrase choice) or register (too formal or too casual for this scene); note, one plain sentence to the learner, at most ${NOTE_MAX} characters, in English simple enough for their level; better, the same idea said well (at most ${BETTER_MAX} characters), or empty. Only real slips that matter; never a valid alternative, a style choice or the partner's words. Fewer notes are better than invented ones; never two on the same words.`;
+const cutSchema=schema({notes:{type:"array",maxItems:NOTES_MAX,items:schema({turnId:str(100),quote:str(QUOTE_MAX),kind:{type:"string",enum:[...NOTE_KINDS]},note:str(NOTE_MAX),better:str(BETTER_MAX,0)})}});
+// held to its list only: notes.ts drops a note that does not fit, rather than the whole cut failing
+const cutAccept=schema({notes:{type:"array"}});
+
 /** One validated command surface for both devices. No client can commit model evidence. */
 export async function englishCommand(raw:unknown){
   const input=object(raw),s=getSession();
@@ -189,13 +212,14 @@ export async function englishCommand(raw:unknown){
   const c=s.conversation;
   if(!c||c.id!==input.episodeId||c.learnerId!==learnerId)throw new ConversationError("This conversation has changed. Open the current scene.",409);
   if(c.commands.includes(commandId))return getSession();
-  const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c);
+  const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c),deskMode=modeOf(profile,prefs);
   if(!scene||!audienceAllowed(profile,prefs,scene.audience))throw new ConversationError("This situation is no longer available for this learner.",403);
   // Stopping the phone's microphone is never refused: it only ever ends a capture.
   if(action==="capture"&&input.active!==true){commit({...c,capture:false,captureAt:Date.now()});return getSession();}
   if(!isTurnAction(action))throw new ConversationError("Unknown conversation action.");
   // One guard for the whole turn (turn.ts): the table the view and both devices read decides what this state takes.
-  if(!accepts(c,action))throw new ConversationError(refusal(c,action),409);
+  // Cut is Adult mode's (v2 L3): outside it, refused as not allowed, before any model call.
+  if(!accepts(c,action,deskMode))throw new ConversationError(refusal(c,action,deskMode),action==="cut"&&deskMode!=="adult"?403:409);
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
   if(action==="moment-done") {commit({...c,moment:null},"linga-talk");return getSession();}
@@ -219,17 +243,20 @@ export async function englishCommand(raw:unknown){
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
     commit({...c,supported:true,quizOpen:!correct,cue:correct?"Now use the idea in your own reply on the phone.":"That phrase has a different purpose. Try the other option.",help:c.help&&{...c.help,shown:false},commands:[...c.commands,commandId],evidence:[...c.evidence,e]},"linga-talk");return getSession();
   }
-  if(action==="finish"){
-    const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
-    saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
-    // the week's digest (Family W9, rules/digest): the scene, its skill and the replies counted, never a word of them;
-    // once per conversation, as the sessions list keeps it once
-    if(!learning.sessions.some(x=>x.id===c.id))addDigest(learnerId,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
-    // a certificate, when this rehearsal completes what one needs (cert.ts): issued by code from the record, tonight's
-    // quotes checked again against the replies as sent. Never at read time, never back-issued.
-    const words=Object.fromEntries(c.turns.filter(t=>t.role==="learner").map(t=>[t.id,t.text]));
-    const earned=withCertificate(getLearner(learnerId).english,entry.at,words);if(earned.cert)saveEnglish(learnerId,earned.learning);
-    commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
+  if(action==="finish"){endTake(c,commandId);return getSession();}
+  if(action==="cut"){
+    // Cut (v2 L3, Adult mode; the turn table took it): one fast call over this take's learner lines asks for at most
+    // three notes, and code keeps the ones that quote the learner (notes.ts). With one kept the take ends as finish
+    // ends it, the notes on the conversation; a failed or empty answer makes up no note and leaves the take as it was.
+    const lines=c.turns.filter(t=>t.role==="learner").map(t=>({turnId:t.id,text:t.text}));
+    const failed="Linga could not give notes on this take. The scene is as it was; press Cut again.";
+    commit({...c,pending:commandId,capture:false,error:""});
+    try{
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({scene:{title:c.title,goal:c.goal},preferences:c.preferences,learnerTurns:lines,task:CUT_TASK}),schema:cutSchema,accept:cutAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+      const current=checkCurrent(c,commandId),notes=cleanNotes(result.json.notes,current.turns);
+      if(!notes.length)throw new ConversationError(failed,502);
+      endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes},provider:result.provider,responseMs:result.ms},commandId);return getSession();
+    }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:failed});}catch{/* newer episode owns the UI */}throw e;}
   }
   // what is left is turn, coach or replay: each asks the model
   if(c.turns.filter(t=>t.role==="learner").length>=24&&action==="turn")throw new ConversationError("A good place to pause. Finish this rehearsal and start a new scene.");

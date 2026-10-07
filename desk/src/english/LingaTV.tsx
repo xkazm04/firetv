@@ -65,7 +65,8 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     addEventListener("keydown",handler);return()=>removeEventListener("keydown",handler);
   });
   const h=v.hero;
-  const layout:Layout=menu||h.kind==="certs"?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"?"plan":"door";
+  // the Cut recap's tape (v2 L3) is a row of pins, as the topics are a row of doors
+  const layout:Layout=menu||h.kind==="certs"?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"||h.kind==="tape"?"plan":"door";
   /** The topics screen shows only the focused action: one "Swap this topic" per topic would be a wall of buttons. */
   const single=layout==="plan"&&actions.length>2;
   /** A choice has no primary: every option is the same kind of button. */
@@ -108,6 +109,15 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       <div className="lo-doors linga-topics" data-count={h.topics.length||4} data-selecting={h.selected>=0}>{h.topics.length?h.topics.map((t,i)=>{const {Art,label}=ART[t.art];return <div key={t.id} className="lo-topic" data-selected={i===h.selected}>
         <div className="lo-mini" role="img" aria-label={label}><Art/></div><b>{t.title}</b><small>{t.skill}</small>
       </div>;}):[0,1,2,3].map(i=><div key={i} className="lo-topic lo-ghost" aria-hidden="true"><div className="lo-mini"/></div>)}</div>
+      {nav}
+    </>}
+    {layout==="plan"&&h.kind==="tape"&&<>
+      <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
+      {/* three pins at most, the learner's own words on each; the focused pin's note is the one caption above */}
+      <div className="lo-doors linga-topics linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="lo-topic" data-selected={i===h.selected}>
+        <small>{x.label}</small><b>“{x.quote}”</b>{x.better&&<small>{x.better}</small>}
+      </div>)}</div>
+      <DataLine>{h.data}</DataLine>
       {nav}
     </>}
     {layout==="menu"&&(h.kind==="menu"||h.kind==="certs")&&<>

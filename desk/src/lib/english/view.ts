@@ -14,6 +14,7 @@ import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, pl
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
+import { NOTE_LABEL } from "./notes";
 import { modeOf } from "../rules/mode";
 import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
@@ -59,6 +60,8 @@ export const VIEW_ACTION_IDS = [
   "answer", "pick-situation", "pick-band", "add-topic",
   // Adult mode (v2 L3): a scene pitched in the learner's own words on the phone
   "pitch-scene",
+  // Adult mode (v2 L3): Cut ends a take with up to three notes, and the recap's tape walks them one pin at a time
+  "cut", "note",
 ] as const;
 export type ActionId = typeof VIEW_ACTION_IDS[number];
 
@@ -109,6 +112,8 @@ export type Hero =
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
+  /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot */
+  | { kind: "tape"; kicker: string; title: string; pins: Array<{ label: string; quote: string; better: string; note: string }>; selected: number; data: string }
   /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote.
    * With none held it is the plate in outline (cert.ts certGap): the skills shown so far, and `open`, the skills still to show, as empty slots. */
   | { kind: "cert"; kicker: string; title: string; band: Band; issued: string; topics: string[];
@@ -231,6 +236,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   /** where the conversation stands in its turn (turn.ts), and whether a conversation command is refused there */
   const st = c ? turnState(c) : null, inFlight = st === "preparing" || st === "waiting";
   const refused = (action: string) => !c || !accepts(c, action);
+  // Cut (v2 L3): Adult mode only, where the learner has a line of their own (turn.ts reads the mode for it)
+  const mode = modeOf(p, prefs), hasLine = !!c?.turns.some(t => t.role === "learner"), cutting = mode === "adult" && hasLine;
+  const cutAction = () => act("cut", "Cut", "End this take. Linga gives up to three notes, each quoting your own words.", cmd("cut"), { disabled: waiting || !c || !accepts(c, "cut", mode) });
   const spoken: Spoken = s.screen === "linga-check" && lc
     ? { line: lc.stage === "about" ? (asked?.role === "tutor" ? asked.text : "") : lc.task?.kind === "listen" ? lc.task.line : lc.task?.kind === "say" ? lc.task.prompt : "", key: `${lc.id}:${asked?.id}:${lc.task?.id}:${lc.audioNonce}`, blocked: !!lc.pending, slow: easyBand(lc.task?.band ?? "A2"), speaker: "Linga" }
     : { line: c?.phase === "coaching" ? c.coaching?.note ?? "" : last?.role === "partner" ? last.text : "", key: `${c?.id}:${c?.phase}:${last?.id}:${c?.audioNonce}`, blocked: !c || c.capture || inFlight || st === "paused" || st === "finished", slow: easyBand(c && isBand(c.preferences.level) ? c.preferences.level : "A1"), speaker: "Partner" };
@@ -404,9 +412,16 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
     recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
-    const rv = c.review;
+    const rv = c.review, notes = c.cut?.notes ?? [];
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
-    if (rv?.used) {
+    if (notes.length) {
+      // Cut (v2 L3): the take's notes as a tape strip. Three pins at most and one caption slot: the focused pin's note,
+      // one sentence. Each pin is the learner's own words, quoted exactly (notes.ts); a reading says it is one.
+      const at = s.focus >= 0 && s.focus < notes.length ? s.focus : 0, label = (i: number) => notes[i].reading ? "A reading" : NOTE_LABEL[notes[i].kind];
+      title = notes.length === 1 ? "A note on your take" : "Notes on your take";
+      caption = notes[at].note; captionTag = s.focus >= notes.length ? "What next" : label(at);
+      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => ({ label: label(i), quote: n.quote, better: n.better ?? "", note: n.note })), selected: s.focus < notes.length ? s.focus : -1, data: counts };
+    } else if (rv?.used) {
       // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
       title = "It came back";
       hero = { kind: "comparison", before: { kicker: `Linga taught · ${rv.fromTitle}`, quote: rv.better }, after: { kicker: "You said it tonight", quote: rv.used }, note: "", art: "done", data: counts };
@@ -419,6 +434,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
     } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better } : {}) };
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
+    // the tape's pins come first: Left and Right walk them, and each one's note is its caption
+    if (notes.length) actions = [...notes.map((n, i) => act("note", `Note ${i + 1}`, n.note, { focus: i })), ...actions];
   } else if (c) {
     tag = c.phase === "replay" ? "Try it again" : "Conversation";
     const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!;
@@ -443,8 +460,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       // At the top of the ladder the help button gives way to the recognition fallback.
       const first = inFlight ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") }) : help.offered ? act("cue", help.label, help.help, cmd("cue"), { disabled: refused("cue") }) : second === quiz ? null : quiz;
       actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })), chooseSituation("Choose a different situation.", "Choose another")]
-        : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") })]
-        : [...(first ? [first] : []), second];
+        : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") }), ...(cutting ? [cutAction()] : [])]
+        : [...(first ? [first] : []), second, ...(cutting && !c.quizOpen ? [cutAction()] : [])];
       // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
       if (c.mission && missionDone(c.mission) && st === "your-turn") {
         const done = "Mission done. See what you did tonight.";
@@ -549,6 +566,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       if (c.quizOpen && scene) scene.quiz.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));
       onPhone(act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }));
     }
+    if (cutting && st !== "coaching") onPhone(cutAction());
     onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") })
       : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
     onPhone(act("finish", "Finish rehearsal (phone)", "End this scene and save a recap.", cmd("finish"), { disabled: refused("finish") }));
@@ -604,6 +622,7 @@ export function viewText(v: LingaView): string {
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
+    case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}`), h.data); break;
     case "cert": out.push(h.kicker, ...(h.issued ? [`${h.issued}.`] : []), ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), ...(h.skills.length ? [`Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`] : []), ...(h.open?.length ? [`Still to show, empty slots: ${h.open.join(", ")}`] : []), ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
     case "certs": out.push(`${h.kicker} · ${h.title}`); break;
     case "plain": out.push(h.title); break;

@@ -1226,3 +1226,80 @@ test('cut case 2: Family mode refuses "cut" in every state, and so does a caller
  }
  for(const a of CONVERSATION_ACTIONS)for(const [name,[,c]] of Object.entries(TURN_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a} · ${name}`);
 });
+/** The adult at the desk in a booking scene with two replies of his own; `cutAnswer` is what the Cut call returns. */
+async function adultTake(cutAnswer){
+ await adultAtDesk();
+ const calls=[];answer=async req=>{const p=JSON.parse(req.prompt);calls.push({task:(p.task??'').slice(0,4),thinking:req.thinking,prompt:p});
+  if(/^Cut:/.test(p.task??''))return cutAnswer(p);
+  if(p.submittedReply)return {json:{reply:'Of course. Which date was it?',observations:[]},provider:'test',ms:1};
+  return {json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking',replace:true});
+ for(const text of ['Yesterday I book a room here.','I want check the date please.'])await command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ return calls;
+}
+const GOOD_NOTES=p=>{const [a,b]=p.learnerTurns;return {json:{notes:[
+ {turnId:a.turnId,quote:'Yesterday I book',kind:'form',note:'Yesterday asks for the past: booked.',better:'Yesterday I booked'},
+ {turnId:b.turnId,quote:'I want check',kind:'form',note:'Say want to before another verb.',better:'I want to check'},
+ {turnId:b.turnId,quote:'Which date was it',kind:'meaning',note:'Not your words.',better:''},
+ {turnId:a.turnId,quote:'a room hear',kind:'word',note:'A misquote.',better:''}]},provider:'test',ms:1};};
+test('cut case 3: Cut in Adult mode asks once over the learner\'s lines, keeps the notes that quote them, and ends the take as finish does',async()=>{
+ const calls=await adultTake(GOOD_NOTES);
+ const before=getLearner('jakub').english,c0=getSession().conversation;
+ await command('cut');
+ const c=getSession().conversation,after=getLearner('jakub').english,cut=calls.filter(x=>x.task==='Cut:');
+ assert.equal(cut.length,1,'one call');assert.equal(cut[0].thinking,false,'fast, thinking off');
+ assert.deepEqual(cut[0].prompt.learnerTurns.map(x=>x.text),['Yesterday I book a room here.','I want check the date please.'],'the learner\'s turns only, never the partner\'s');
+ assert.equal(c.phase,'finished');assert.equal(getSession().screen,'linga-recap');
+ assert.deepEqual(c.cut.notes.map(n=>[n.quote,n.kind,n.reading??false]),[['Yesterday I book','form',false],['I want check','meaning',true]],'the partner quote and the misquote are dropped; a form note without a tense conflict is a reading');
+ assert(c.cut.notes.every(n=>c0.turns.some(t=>t.id===n.turnId&&t.role==='learner')),'each note keeps the turnId it quotes (Take Two forks from it)');
+ assert.equal(after.sessions.filter(x=>x.id===c.id).length,1,'the session is recorded, as finish records it');
+ assert.deepEqual(after.evidence,before.evidence,'notes never write evidence');assert.deepEqual(after.achievements,before.achievements,'nor move a skill');
+ await assert.rejects(command('cut'),e=>e.status===409,'a finished take takes no second Cut');
+});
+test('cut case 4: a failed or empty Cut makes up no note; the take stays as it was with the error line, and Cut can be pressed again',async()=>{
+ await adultTake(async()=>{throw new Error('engine down');});
+ const turns=getSession().conversation.turns.length;
+ await assert.rejects(command('cut'));
+ let c=getSession().conversation;
+ assert.equal(c.phase,'conversation');assert.equal(c.pending,null);assert.equal(c.turns.length,turns);assert.equal(c.cut,undefined);
+ assert.match(c.error,/could not give notes on this take/);assert.equal(getLearner('jakub').english.sessions.some(x=>x.id===c.id),false,'nothing recorded');
+ answer=async req=>({json:{notes:[{turnId:'nope',quote:'invented',kind:'word',note:'Made up.',better:''}]},provider:'test',ms:1});
+ await assert.rejects(command('cut'),e=>e.status===502);
+ c=getSession().conversation;assert.equal(c.phase,'conversation');assert.equal(c.cut,undefined,'no note survived, so none is shown');
+ assert(turn().accepts(c,'cut','adult'),'Cut is offered again');
+ answer=async req=>GOOD_NOTES(JSON.parse(req.prompt));await command('cut');
+ assert.equal(getSession().conversation.cut.notes.length,2);
+});
+test('cut case 5: Family mode refuses Cut on the server with a plain reason and no model call',async()=>{
+ fresh();await command('start',{sceneId:'booking'});
+ answer=async()=>({json:{reply:'Of course. Which date?',observations:[]},provider:'test',ms:1});
+ await command('turn',{text:'Could you help?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert(turn().accepts(getSession().conversation,'cut','adult'),'the same take would take Cut in Adult mode');
+ let calls=0;answer=async()=>{calls++;throw new Error('no call expected');};
+ await assert.rejects(command('cut'),e=>e.status===403&&e.message==='Cut is part of Adult mode.');
+ assert.equal(calls,0);assert.equal(getSession().conversation.phase,'conversation');
+});
+test('cut case 6: the view offers Cut in Adult mode only, and the Cut recap is a tape: up to three pins, one caption, one sentence each',()=>{
+ const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ assert(V.VIEW_ACTION_IDS.includes('cut')&&V.VIEW_ACTION_IDS.includes('note'));
+ for(const [name,[screen,c]] of Object.entries(TURN_STATES))for(const ui of [{},{menu:true}])
+  assert(!V.offeredActions(V.lingaView(sessionOf(fixture(screen,{placement:placed(),conversation:c})),ui)).some(a=>a.id==='cut'),`Family · ${name}: no Cut`);
+ const talk=V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED})})));
+ const tvCut=talk.actions.find(a=>a.id==='cut');assert(tvCut&&!tvCut.disabled,'Adult · your turn: Cut on the TV row');assert.equal(tvCut.run.command.action,'cut');
+ assert(!V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})}))).actions.some(a=>a.id==='cut'),'no line of the learner\'s yet: no Cut');
+ const pausedCut=V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED,paused:true})}))).actions.find(a=>a.id==='cut');
+ assert(pausedCut&&!pausedCut.disabled,'Adult · paused: Cut');
+ const notes=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'},{turnId:'l1',quote:'work in hotel',kind:'meaning',note:'Clear enough to be understood.',reading:true}];
+ const recap=asJakub(fixture('linga-recap',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub',turns:REPLIED,phase:'finished',cut:{at:1,notes}})}));
+ const v=V.lingaView(recap);
+ assert.equal(v.hero.kind,'tape');assert.equal(v.hero.pins.length,3);
+ assert.deepEqual(v.hero.pins.map(x=>x.label),['Form','Word','A reading']);
+ assert.equal(v.baseCaption,'Say I work, with no am.','the caption slot holds one note: the first, at rest');assert.equal(v.captionTag,'Form');
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map']);
+ const second=V.lingaView({...recap,focus:1});assert.equal(second.caption,'Say in a hotel.');assert.equal(second.captionTag,'Word');assert.equal(second.hero.selected,1);
+ for(const n of notes)assert(!/[.!?]\s+\S/.test(n.note),'one sentence per caption');
+ assert.match(V.viewText(v),/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\./);
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(tv,/h\.kind==="topics"\|\|h\.kind==="tape"\?"plan"/,'the tape takes the row-of-doors layout');assert.match(tv,/data-role="linga-tape"/);
+});

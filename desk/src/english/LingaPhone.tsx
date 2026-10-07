@@ -7,6 +7,7 @@ import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPI
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
+import { NOTE_LABEL } from "@/lib/english/notes";
 import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
@@ -32,7 +33,8 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const currentQuestion=c?.turns.at(-1)?.text;
   // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)
   const offered=offeredActions(lingaView(s)),offer=(id:string)=>offered.find(a=>a.id===id);
-  const cue=offer("cue"),quiz=offer("quiz"),panelOf=phonePanel(s);
+  // Cut (v2 L3) is offered in Adult mode only, where the learner has a line of their own (view.ts, turn.ts)
+  const cue=offer("cue"),quiz=offer("quiz"),cut=offer("cut"),panelOf=phonePanel(s);
   // where the conversation stands in its turn, and what the server takes there (lib/english/turn.ts)
   const st=c?turnState(c):null,inFlight=st==="preparing"||st==="waiting",refused=(action:string)=>busy||!c||!accepts(c,action);
   return <div className="pscreen linga-phone">
@@ -78,7 +80,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
           <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
           <button className="pbtn" data-secondary="true" disabled={refused("coach")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
-        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button></div>
+        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button>{cut&&<button className="pbtn" data-secondary="true" disabled={busy||cut.disabled} onClick={()=>run("cut")}>Cut · notes on my lines</button>}</div>
         {st==="unprepared"&&<button className="pbtn" onClick={()=>run("start",{sceneId:c.sceneId,replace:true})}>Retry preparing scene</button>}
         <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`You · ${t.mode==="speech"?"spoken":"written"}`:c.partner}</b>{t.text}</p>)}</div></details>
       </>}
@@ -240,6 +242,7 @@ function StartPanel({s,learning,run,busy,list,pitch}:{s:Session;learning:English
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
       {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
+      {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map(n=><p key={`${n.turnId}:${n.quote}`}><b>{n.reading?"A reading":NOTE_LABEL[n.kind]}</b>“{n.quote}”{n.better&&<> → “{n.better}”</>}<br/><small>{n.note}</small></p>)}</div>}
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
