@@ -172,11 +172,11 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/build") { call.response.header("Cache-Control","no-store"); call.respondText(buildId,ContentType.Text.Plain) }
                         get("/hud.css") { call.respondPacked(cssPacked,ContentType.Text.CSS,"no-cache") }
                 get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
-                        get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
+                        get("/stats") { call.response.header("Cache-Control","no-store"); call.respondJsonText(statsJson()) }
                         if(profileFrames!=null)get("/profile") {
                             val frames=call.request.queryParameters["frames"]?.toLongOrNull()?:0
                             val inputs=call.request.queryParameters["inputs"]?.toLongOrNull()?:0
-                            call.respondText("{\"frames\":${profileFrames.json(frames)},\"inputs\":${profileInputs!!.json(inputs)},\"runtime\":${profileRuntime?.invoke()?:"{}"}}",ContentType.Application.Json)
+                            call.respondJsonText("{\"frames\":${profileFrames.json(frames)},\"inputs\":${profileInputs!!.json(inputs)},\"runtime\":${profileRuntime?.invoke()?:"{}"}}")
                         }
                         get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
@@ -317,15 +317,42 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val now=nowMs()
         return "{\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"inputAgeMs\":[${metrics.inputAgeMs.joinToString(","){it.json(now)}}],\"combatSummary\":${combatSummaryJson()}}"
     }
-    fun statsJson(): String {
-        val now=nowMs(); val runtime=Runtime.getRuntime()
-        val sb=StringBuilder(3000)
-        sb.append("{\"audio\":${audioJson()},\"art\":${artJson()},\"traffic\":${trafficJson()},\"pickups\":${pickupsJson()},\"combatSummary\":${combatSummaryJson()},\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"raceSeconds\":$raceSeconds,\"sceneryReady\":$sceneryReady,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
+    /** Reused under its own lock. The text is appended in place: on Android each Kotlin template becomes its own growing
+     *  StringBuilder, and a slot object holds ~31 KB of career and garage JSON, so every 77 KB response used to grow and copy
+     *  several large buffers on the link threads (P11). Same text, field for field (StatsJsonTest). */
+    private val statsBuffer=StringBuilder(3000)
+    fun statsJson(): String { val runtime=Runtime.getRuntime(); return statsJson(nowMs(),(runtime.totalMemory()-runtime.freeMemory())/1048576.0) }
+    internal fun statsJson(now: Double,heapUsedMB: Double): String = synchronized(statsBuffer) {
+        val sb=statsBuffer; sb.setLength(0)
+        sb.append("{\"audio\":").append(audioJson()).append(",\"art\":").append(artJson()).append(",\"traffic\":").append(trafficJson())
+        sb.append(",\"pickups\":").append(pickupsJson()).append(",\"combatSummary\":").append(combatSummaryJson()).append(",\"track\":").append(trackJson)
+        sb.append(",\"surface\":\"").append(surface.id).append("\",\"feel\":").append(feel.json).append(",\"units\":\"ms\",\"uptimeMs\":").append(now)
+        sb.append(",\"phase\":\"").append(phase).append("\",\"eventType\":\"").append(eventType).append("\",\"raceEntrants\":").append(raceEntrants)
+        sb.append(",\"raceLaps\":").append(raceLaps).append(",\"raceMode\":\"").append(raceMode).append("\",\"raceSeconds\":").append(raceSeconds)
+        sb.append(",\"sceneryReady\":").append(sceneryReady).append(",\"paused\":").append(paused).append(",\"frameNumber\":").append(frameNumber)
+        sb.append(",\"flashFrames\":").append(flashFrames).append(",\"heapUsedMB\":").append(heapUsedMB)
+        sb.append(",\"frameTimeMs\":").append(metrics.frameMs.json(now)).append(",\"simStepMs\":").append(metrics.simMs.json(now))
+        sb.append(",\"discardedSimulationMs\":").append(metrics.discardedSimMs.json(now))
+        sb.append(",\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"hudDelta\":${s.hudDelta},\"hudMessages\":${s.hudMessages},\"hudCharacters\":${s.hudCharacters},\"hudFullSnapshots\":${s.hudFullSnapshots},\"hidden\":${s.hidden},\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveBrake\":${s.effectiveBrake},\"effectiveDrift\":${s.effectiveDrift},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatFull?.invoke()?:s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
+            sb.append("{\"slot\":").append(i).append(",\"hudDelta\":").append(s.hudDelta).append(",\"hudMessages\":").append(s.hudMessages)
+            sb.append(",\"hudCharacters\":").append(s.hudCharacters).append(",\"hudFullSnapshots\":").append(s.hudFullSnapshots).append(",\"hidden\":").append(s.hidden)
+            sb.append(",\"connected\":").append(s.connected).append(",\"reserved\":").append(s.claimed).append(",\"clockSynced\":").append(s.clockSynced)
+            sb.append(",\"inputAgeMs\":").append(metrics.inputAgeMs[i].json(now)).append(",\"stale\":").append(metrics.stale[i].json(now))
+            sb.append(",\"dropped\":").append(metrics.dropped[i].json(now)).append(",\"outOfOrder\":").append(metrics.outOfOrder[i].json(now))
+            sb.append(",\"effectiveThrottle\":").append(s.effectiveThrottle).append(",\"effectiveSteer\":").append(s.effectiveSteer)
+            sb.append(",\"effectiveBrake\":").append(s.effectiveBrake).append(",\"effectiveDrift\":").append(s.effectiveDrift)
+            sb.append(",\"effectiveFire\":").append(s.effectiveFire).append(",\"effectiveMine\":").append(s.effectiveMine).append(",\"effectiveAbility\":").append(s.effectiveAbility)
+            sb.append(",\"layout\":\"").append(s.layout).append("\",\"mirrored\":").append(s.mirrored).append(",\"hostCareer\":").append(hostCareerJson)
+            sb.append(",\"career\":").append(s.careerJson).append(",\"garage\":").append(s.garageJson).append(",\"combat\":").append(s.combatFull?.invoke()?:s.combatJson)
+            sb.append(",\"drifting\":").append(s.drifting).append(",\"driftQuality\":").append(s.driftQuality).append(",\"slipRadians\":").append(s.slipRadians)
+            sb.append(",\"spunOut\":").append(s.spunOut).append(",\"loadTransfer\":").append(s.loadTransfer).append(",\"surfaceId\":\"").append(s.surfaceId)
+            sb.append("\",\"car\":").append(s.carJson).append(",\"lap\":").append(s.lap).append(",\"position\":").append(s.position).append(",\"speedMps\":").append(s.speed)
+            sb.append(",\"xM\":").append(s.x).append(",\"yM\":").append(s.y).append(",\"heading\":").append(s.heading).append(",\"yaw\":").append(s.yaw)
+            sb.append(",\"progressM\":").append(s.progressM).append('}')
         }
-        sb.append("]}"); return sb.toString()
+        sb.append("]}").toString()
     }
     fun suspendLink() {
         running=false; networkJob?.cancel(); networkJob=null; engine?.stop(100,500); engine=null

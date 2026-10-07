@@ -11,13 +11,17 @@ class Distribution(private val capacity: Int = 4096, private val binMs: Double =
     private var filled=0
     private var count=0L
     private var maximum=0.0
+    /** Sort scratch for [json], reused under this lock: /stats reads four distributions several times a second, and a fresh
+     *  32 KB array each time was a large-object allocation made while the render thread's [add] waits on the same lock. */
+    private var scratch=DoubleArray(0)
     @Synchronized fun add(valueMs: Double, nowMs: Double) {
         val value=valueMs.coerceAtLeast(0.0)
         values[cursor]=value; times[cursor]=nowMs; cursor=(cursor+1)%capacity; filled=min(filled+1,capacity)
         histogram[(value/binMs).toInt().coerceIn(0,histogram.lastIndex)]++; count++; maximum=max(maximum,value)
     }
     @Synchronized fun json(nowMs: Double): String {
-        val window=DoubleArray(filled); var n=0
+        if(scratch.size<filled)scratch=DoubleArray(capacity)
+        val window=scratch; var n=0
         for(i in 0 until filled) if(nowMs-times[i]<=10000) window[n++]=values[i]
         java.util.Arrays.sort(window,0,n)
         fun q(p: Double)=if(n==0) 0.0 else window[(ceil(p*n).toInt()-1).coerceIn(0,n-1)]
