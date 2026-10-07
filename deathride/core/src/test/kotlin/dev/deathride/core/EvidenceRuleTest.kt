@@ -25,6 +25,13 @@ object EvidenceRule {
     /** True when a file at [path] of [bytes] may be tracked under deathride/evidence/. */
     fun allowed(path:String,bytes:Long,grandfathered:Boolean=false):Boolean =
         grandfathered||(!refusedAtAnySize(path)&&bytes<=MAX_BYTES)
+
+    /** Grandfathered by blob, not path: only while [blob] is the blob [ruling] (path to blob id at RULING_COMMIT) tracked for [path]. */
+    fun isGrandfathered(path:String,blob:String,ruling:Map<String,String>):Boolean = ruling[path]==blob
+
+    /** The rule applied to a tracked file: a grandfathered path whose blob changed is judged like a new file. */
+    fun allowedTracked(path:String,bytes:Long,blob:String,ruling:Map<String,String>):Boolean =
+        allowed(path,bytes,isGrandfathered(path,blob,ruling))
 }
 
 class EvidenceRuleTest {
@@ -52,21 +59,33 @@ class EvidenceRuleTest {
         assertTrue(EvidenceRule.allowed("deathride/evidence/perf/p9/trace.perfetto-trace",300_000_000,grandfathered=true))
         assertTrue(EvidenceRule.allowed("deathride/evidence/perf/p9/logcat.txt",big,grandfathered=true))
     }
+    @Test fun anUnchangedGrandfatheredRawFilePasses() {
+        val ruling=mapOf("deathride/evidence/perf/p9/trace.perfetto-trace" to "aaa111")
+        assertTrue(EvidenceRule.allowedTracked("deathride/evidence/perf/p9/trace.perfetto-trace",300_000_000,"aaa111",ruling))
+    }
+    @Test fun aGrandfatheredPathWithADifferentBlobIsRefused() {
+        val ruling=mapOf("deathride/evidence/perf/p9/trace.perfetto-trace" to "aaa111","deathride/evidence/perf/p9/logcat.txt" to "bbb222")
+        assertFalse(EvidenceRule.allowedTracked("deathride/evidence/perf/p9/trace.perfetto-trace",10,"ccc333",ruling))
+        assertFalse(EvidenceRule.allowedTracked("deathride/evidence/perf/p9/logcat.txt",big,"ccc333",ruling))
+    }
+    @Test fun aNewSmallSummaryPasses() =
+        assertTrue(EvidenceRule.allowedTracked("deathride/evidence/perf/p14/summary.json",20_000,"ddd444",mapOf("deathride/evidence/perf/p9/logcat.txt" to "bbb222")))
+
     @Test fun capIsAboutFourTimesTheLargestPostRulingFile() = assertEquals(3.95,EvidenceRule.MAX_BYTES/132_871.0,0.01)
 
     @Test fun everyTrackedEvidenceFileKeepsTheRuleOrIsGrandfathered() {
         val repo=File("../..").canonicalFile
         assertTrue(File(repo,"deathride/evidence").isDirectory,"run from deathride/core (repo root not found at $repo)")
         val head=lsTree(repo,"HEAD")
-        val ruling=lsTree(repo,EvidenceRule.RULING_COMMIT).keys
-        val offenders=head.filter{(path,bytes)->path !in ruling&&!EvidenceRule.allowed(path,bytes)}
+        val ruling=lsTree(repo,EvidenceRule.RULING_COMMIT).mapValues{it.value.first}
+        val offenders=head.filter{(path,f)->!EvidenceRule.allowedTracked(path,f.second,f.first,ruling)}.mapValues{it.value.second}
         assertTrue(offenders.isEmpty(),
             "tracked under ${EvidenceRule.ROOT} but refused by the evidence rule (raw outside git, summaries inside; cap ${EvidenceRule.MAX_BYTES} B):\n"+
                 offenders.entries.joinToString("\n"){"  ${it.key} (${it.value} B)"})
     }
 
-    /** path to size for every blob under deathride/evidence at [rev]; fails, never skips, when git cannot answer. */
-    private fun lsTree(repo:File,rev:String):Map<String,Long> {
+    /** path to (blob id, size) for every blob under deathride/evidence at [rev]; fails, never skips, when git cannot answer. */
+    private fun lsTree(repo:File,rev:String):Map<String,Pair<String,Long>> {
         val out=try {
             val p=ProcessBuilder("git","-c","core.quotepath=off","ls-tree","-r","-l","-z",rev,"--",EvidenceRule.ROOT)
                 .directory(repo).redirectErrorStream(false).start()
@@ -78,8 +97,8 @@ class EvidenceRuleTest {
         } catch(e:java.io.IOException) { return fail("git cannot run, so the evidence rule cannot be checked: ${e.message}") }
         val files=out.split('\u0000').filter{it.isNotEmpty()}.associate{rec->
             val tab=rec.indexOf('\t')
-            val bytes=rec.substring(0,tab).trim().split(Regex("\\s+"))[3].toLong()
-            rec.substring(tab+1) to bytes
+            val meta=rec.substring(0,tab).trim().split(Regex("\\s+"))
+            rec.substring(tab+1) to (meta[2] to meta[3].toLong())
         }
         assertTrue(files.isNotEmpty(),"git ls-tree $rev returned no files under ${EvidenceRule.ROOT}")
         return files
