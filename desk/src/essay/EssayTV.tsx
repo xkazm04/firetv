@@ -137,7 +137,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
-  const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
+  const reading = a?.piece && a.piece.read.length + a.piece.failed.length < a.piece.paragraphs;
+  const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: a.summary }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
