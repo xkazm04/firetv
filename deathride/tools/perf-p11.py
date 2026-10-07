@@ -195,12 +195,67 @@ if len(runtime) > 2:
              'blockingGcCount': int(r1['art.gc.blocking-gc-count']) - int(r0['art.gc.blocking-gc-count']), 'seconds': s1 - s0,
              'limit': 'Whole process (ART runtime stats from /profile), between the second and the last profile fetch.'}
 
+# Device counters (perf-device since P11): Wi-Fi bytes and thread CPU between the probe's start and end, no tracing.
+def counters(name):
+    f = a.arm / name
+    if not f.exists():
+        return None
+    text = f.read_text(errors='replace')
+    threads, net, uptime = {}, {}, None
+    part = 'threads'
+    for ln in text.splitlines():
+        if ln.startswith('=='):
+            part = ln[2:]
+            continue
+        if part == 'threads':
+            m = re.match(r'(\d+) (\d+) \((.*)\) \S+ (.*)$', ln)
+            if m:
+                rest = m[4].split()
+                threads[(int(m[1]), int(m[2]), m[3])] = int(rest[10]) + int(rest[11])  # utime + stime, clock ticks
+        elif part == 'net':
+            m = re.match(r'\s*(\w+):\s*(\d+)\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+\d+\s+(\d+)', ln)
+            if m:
+                net[m[1]] = (int(m[2]), int(m[3]))
+        elif part == 'uptime' and ln.strip():
+            uptime = float(ln.split()[0])
+    return threads, net, uptime
+c0, c1 = counters('device-counters-start.txt'), counters('device-counters-end.txt')
+device = None
+if c0 and c1 and c0[2] and c1[2]:
+    seconds = c1[2] - c0[2]
+    app_pid = max((k[0] for k in c1[0] if k[2].startswith('GLThread')), default=None)
+    def group(key):
+        pid, tid, name = key
+        if name == 'NetworkStats':
+            return 'system_server NetworkStats'
+        if name.startswith('AudioOut'):
+            return 'audioserver ' + name
+        if name == 'writer':
+            return 'audio HAL writer'
+        if pid == app_pid:
+            for prefix, label in (('GLThread', 'app GLThread'), ('DefaultDispatch', 'app DefaultDispatcher (link)'), ('deathride-link', 'app link threads'),
+                                  ('HeapTaskDaemon', 'app GC (HeapTaskDaemon)'), ('Jit thread', 'app JIT'), ('DeathRideAudio', 'app audio worker'),
+                                  ('SoundPool', 'app SoundPool'), ('AudioTrack', 'app AudioTrack')):
+                if name.startswith(prefix):
+                    return label
+            return 'app other threads'
+        return None
+    used = Counter()
+    for key, ticks in c1[0].items():
+        g = group(key)
+        if g:
+            used[g] += ticks - c0[0].get(key, 0)
+    wl0, wl1 = c0[1].get('wlan0'), c1[1].get('wlan0')
+    device = {'seconds': round(seconds, 2), 'cpuPercentOfOneCore': {k: round(v / seconds, 2) for k, v in used.most_common()},  # a 10 ms tick per second is 1%
+              'wlan0BytesPerSecond': {'rx': round((wl1[0] - wl0[0]) / seconds), 'tx': round((wl1[1] - wl0[1]) / seconds)} if wl0 and wl1 else None,
+              'limit': 'Clock ticks of 10 ms between two reads around the probe (app threads that exited during the run are missing).'}
+
 out = {'arm': a.arm.name, 'apkSha256': s['apkSha256'], 'sourceSha256': s['sourceSha256'], 'durationSeconds': s['durationSeconds'],
        'rounds': s['rounds'], 'functionalPass': s['functionalPass'], 'error': s.get('error'), 'hostCpu': hostCpu, 'readings': readings,
        'sampling': sampling, 'profileRows': sum(1 for r in rows if r), 'profileGaps': gaps, 'alignment': alignment,
        'activePhaseMediansMs': {k: round(v, 3) for k, v in med.items()}, 'attribution': attribution,
        'gc': {'lines': len(gcs), 'totalMs': rng([g['totalMs'] for g in gcs]), 'activeFramesOverlappingGc': activeGc, 'waits': gcWaits},
-       'runtimeAllocation': alloc, 'profileSaves': saveSummary, 'activeFramesOver33Ms': over33,
+       'runtimeAllocation': alloc, 'deviceCounters': device, 'profileSaves': saveSummary, 'activeFramesOver33Ms': over33,
        'activeWindows': aw, 'sixLiveWindows': s['sixLiveWindows'], 'clients': clients,
        'limits': 'Profiled arm (/profile every 10 s). Off-CPU time (work - thread CPU) says the render thread was not running, '
                  'not why: a scheduler trace separates runnable (preempted) from sleeping (blocked). GC overlap is time overlap, not cause. '
@@ -209,4 +264,4 @@ a.out.parent.mkdir(parents=True, exist_ok=True)
 a.out.write_text(json.dumps(out, indent=2) + '\n')
 print(json.dumps({'readings': {r['reading']: [r['value'], r['status']] for r in readings}, 'stalls': stalls, 'alignment': alignment,
                   'attribution': {k: {x: v[x] for x in ('frames', 'byDominantCategory', 'duringGc', 'offCpuOver8Ms')} for k, v in attribution.items()},
-                  'gc': out['gc']['lines'], 'activeFramesOverlappingGc': activeGc, 'alloc': alloc, 'saves': saveSummary}, indent=1))
+                  'gc': out['gc']['lines'], 'activeFramesOverlappingGc': activeGc, 'alloc': alloc, 'device': device, 'saves': saveSummary}, indent=1))
