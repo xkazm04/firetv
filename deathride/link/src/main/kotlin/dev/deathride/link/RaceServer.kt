@@ -8,6 +8,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.websocket.*
+import io.ktor.utils.io.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.*
@@ -180,7 +181,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         }
                         get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
-                        get("/routes") { call.respondText(routesJson,ContentType.Application.Json) }
+                        get("/routes") { val reply=routesReply;call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){for(i in 0 until reply.blockCount)writeFully(reply.block(i),0,reply.size(i))} }
                         webSocket("/ws") { handle(this) }
                     }
                 }
@@ -333,10 +334,9 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     }
     fun stop() { suspendLink(); scope.cancel();linkDispatcher.close() }
     companion object {
-        // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car.
-        private val routesJson by lazy { Courses.playable.joinToString(",","[","]"){c->
-            "{\"id\":\"${c.id}\",\"lengthM\":${c.lengthM},\"startM\":${c.startFraction*c.lengthM},\"gridLanes\":[${c.grid.joinToString(","){it.laneM.toString()}}],\"points\":["+(0..c.count).joinToString(","){i->"[${c.x[i]},${c.y[i]},${c.arc[i]},${c.curvature[i]},${c.surfaces[i].gripScale}]"}+"]}"
-        } }
+        // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car. Built on the first
+        // request, on the link side; P13e: UTF-8 blocks, no reply-sized String (see RoutesReply).
+        private val routesReply by lazy { RoutesReply.of(Courses.playable) }
         const val HUD_HEARTBEAT_MS=1000.0
         fun lanAddress(): String = runCatching {
             val interfaces=NetworkInterface.getNetworkInterfaces().toList().filter{it.isUp && !it.isLoopback}
