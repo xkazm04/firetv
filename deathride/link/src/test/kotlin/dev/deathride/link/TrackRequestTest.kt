@@ -61,4 +61,19 @@ class TrackRequestTest {
             ws.abort()
         } finally { hold.countDown();watcher.interrupt();host.stop() }
     }
+    @Test fun prepareTrackRunsOnTheCourseWorkerAfterTheBinsAndBeforeTheRequestIsQueued() {
+        val host=RaceServer({"{}"},{},port=0)
+        val index=Courses.indexOf("crown-1-a")
+        var thread="";var queuedWhilePreparing=0;var binsWhilePreparing=false
+        host.prepareTrack={ i->thread=Thread.currentThread().name;queuedWhilePreparing=host.trackRequest.get();binsWhilePreparing=Courses.course(i).projectionReady }
+        host.requestTrack(index).get(60,TimeUnit.SECONDS)
+        assertEquals("deathride-course-bake",thread)
+        assertEquals(-1,queuedWhilePreparing,"prepared before it is queued")
+        assertTrue(binsWhilePreparing,"after its bins")
+        assertEquals(index,host.trackRequest.get())
+        // A failing preparation must not lose the pick.
+        host.trackRequest.set(-1);host.prepareTrack={ error("decode failed") }
+        host.requestTrack(index).get(60,TimeUnit.SECONDS)
+        assertEquals(index,host.trackRequest.get())
+    }
 }
