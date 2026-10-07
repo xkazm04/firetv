@@ -125,9 +125,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(!persistence[i]) { shopMessage[i]="Save unavailable - changes disabled";publishGarage(i);return false }
         val updated=profiles[i].copy()
         if(runCatching{edit(updated)}.isFailure) { shopMessage[i]="Profile change unavailable";publishGarage(i);return false }
+        val saveStarted=System.nanoTime()
         if(runCatching{profileStore.save(updated)}.isFailure) { saveStatus[i]="Save failed - change cancelled";publishGarage(i);return false }
-        profiles[i]=updated;saveStatus[i]="Saved";publishGarage(i);return true
+        val published=System.nanoTime()
+        profiles[i]=updated;saveStatus[i]="Saved";publishGarage(i)
+        logger("transition profile seat=$i saveMs=${(published-saveStarted)/1e6} publishMs=${msSince(published)}");return true
     }
+    /** Diagnostic (P10): render-thread wall ms of a lobby, track, car or start request, one log line each (no per-frame cost). */
+    private fun msSince(started: Long)=(System.nanoTime()-started)/1e6
     private fun publishGarage(i: Int) {
         server.slots[i].carJson=DeathDuel.carJson(profiles[i])
         server.slots[i].garageJson=Garage.json(profiles[i],shopMessage[i],saveStatus[i])
@@ -174,6 +179,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun selectDifficulty(direction: Int) { if(Campaign.pending(profiles[0])>=0)selectedReward=(selectedReward+direction).mod(Campaign.choices.size) else server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
+        val started=System.nanoTime();var worldNewMs=0.0
         val nextRegion=regionOverride?:if(career)Career.events[raceRound].region else courseCatalog[courseIndex].region
         val changed=selectedTrack!=courseIndex || activeRegion!=nextRegion;selectedTrack=courseIndex;activeRegion=nextRegion
         atmosphere.select(if(regionPresentation)activeRegion else null)
@@ -182,7 +188,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(!career && trackPreview!=null && courseIndex==courseCatalog.lastIndex) {
             world=trackPreview.world(seed);server.raceMode="track-preview"
         } else {
-            world=World(seed,track=Track(course=courseCatalog[courseIndex]),combatEnabled=true)
+            val worldStarted=System.nanoTime()
+            world=World(seed,track=Track(course=courseCatalog[courseIndex]),combatEnabled=true);worldNewMs=msSince(worldStarted)
             for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i])
             if(career)Career.prepareRivals(world,raceDifficulty,profiles[0],server.slots[1].claimed)
             if(career)Encounters.apply(world,if(Career.events[raceRound].elimination)"death-duel" else listOf("scrap","foundry","salt","switchback","crown")[Career.events[raceRound].cupIndex])
@@ -190,8 +197,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
         }
         world.reset();effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();server.trackJson=courseCatalog[courseIndex].json(activeRegion);server.surface=Surfaces.asphalt
+        val worldMs=msSince(started)
         if(::raceAudio.isInitialized)raceAudio.bind(world)
+        val sceneStarted=System.nanoTime()
         if(changed)scene=makeScene()
+        logger("transition configureWorld ${courseCatalog[courseIndex].id} changed=$changed worldMs=$worldMs worldNewMs=$worldNewMs sceneMs=${msSince(sceneStarted)} totalMs=${msSince(started)}")
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
     private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else c.aiStyle?.name?.uppercase()?:"RIVAL ${c.id+1}"
@@ -279,6 +289,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.feelRequest.set((FeelProfiles.all.indexOf(server.feel)+direction).mod(FeelProfiles.all.size))
     }
     private fun startRace(career: Boolean=false) {
+        val started=System.nanoTime()
         val finale=career && Career.events[profiles[0].careerRound].elimination
         if(career && !server.slots[0].claimed && !keyboard) { careerMessage[0]="Pair Player 1 before starting a career race";publishGarage(0);return }
         if(career && !finale && CarCatalog.all[selectedCars[0]].tierRank>Career.events[profiles[0].careerRound].playerTier) { careerMessage[0]="Choose a car in this division or a lower tier";publishGarage(0);return }
@@ -297,8 +308,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         configureWorld(if(career)Career.events[raceRound].courseIndex else selectedTrack,career,(profiles[0].startedRaces+raceRound).toInt())
         world.reset(); effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown mode=${server.raceMode}"); rebuildUi()
         audio.play("ui.confirm")
+        logger("transition startRace totalMs=${msSince(started)}")
     }
-    private fun lobby() { raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi() }
+    private fun lobby() { val started=System.nanoTime();raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi();logger("transition lobby totalMs=${msSince(started)}") }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
     override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); accumulator=0.0 }
     override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=makeScene();if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
@@ -312,7 +324,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val choice=server.slots[i].carRequest.getAndSet(-1)
             if(choice>=0 && choice!=selectedCars[i] && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career")) {
                 if(DeathDuel.seized(profiles[i])) { careerMessage[i]="Your car is seized. The Mechanic rig is supplied.";publishGarage(i) }
-                else if(editProfile(i){it.selectedCar=choice}) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() }
+                else { val started=System.nanoTime();if(editProfile(i){it.selectedCar=choice}) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() };logger("transition car seat=$i totalMs=${msSince(started)}") }
             }
             val purchase=server.slots[i].shopRequest.getAndSet(null)
             if(purchase!=null && purchase.profileId==profiles[i].id)buyPart(i,purchase.part,purchase.tier,purchase.car)
@@ -321,7 +333,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
-            configureWorld(courseIndex,false);rebuildUi()
+            val started=System.nanoTime();configureWorld(courseIndex,false);rebuildUi();logger("transition track totalMs=${msSince(started)}")
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
         if(surfaceIndex>=0 && !campaignRace) { server.surface=Surfaces.practice[surfaceIndex]; world.track.surface=server.surface; world.track.surfaceOverride=true; logger("surface ${server.surface.json}") }
