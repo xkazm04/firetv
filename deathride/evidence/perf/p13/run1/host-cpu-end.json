@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T08:47:49.6686354Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  27304,
+                             "PercentProcessorTime":  105
+                         },
+                         {
+                             "Name":  "git#2",
+                             "IDProcess":  10060,
+                             "PercentProcessorTime":  105
+                         },
+                         {
+                             "Name":  "python#3",
+                             "IDProcess":  38200,
+                             "PercentProcessorTime":  105
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  55
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  25
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  49224,
+                             "PercentProcessorTime":  15
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  15
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  10
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  10
+                         },
+                         {
+                             "Name":  "msedgewebview2#19",
+                             "IDProcess":  43952,
+                             "PercentProcessorTime":  10
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                25,
+                                35,
+                                26
+                            ]
+}

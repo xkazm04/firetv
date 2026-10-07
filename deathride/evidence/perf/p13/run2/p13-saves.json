@@ -1,0 +1,516 @@
+{
+  "arm": "run2",
+  "bar": {
+    "transitionMaxMs": 117.19669300000001,
+    "windowsOver100": 32,
+    "pass": false
+  },
+  "timers": {
+    "submitMs": {
+      "CHOICE": [
+        3.951,
+        12.365
+      ],
+      "MONEY": [
+        4.463,
+        11.578
+      ]
+    },
+    "publishMs": {
+      "CHOICE": [
+        10.072,
+        24.831
+      ],
+      "MONEY": [
+        10.58,
+        23.957
+      ]
+    },
+    "writeMs": {
+      "CHOICE": [
+        76.421,
+        246.054
+      ],
+      "TICKET": [
+        56.457,
+        306.477
+      ],
+      "SETTLE": [
+        91.468,
+        217.546
+      ]
+    },
+    "writes": {
+      "CHOICE": 11,
+      "TICKET": 12,
+      "SETTLE": 2
+    },
+    "writeStatus": [
+      "OK"
+    ],
+    "carMs": [
+      21.657,
+      52.503
+    ],
+    "startRaceMs": [
+      56.404,
+      106.121
+    ],
+    "raceLaunchMs": [
+      7.191,
+      10.876
+    ],
+    "trackMs": [
+      11.52,
+      71.852
+    ]
+  },
+  "starts": [
+    {
+      "logTime": "10-07 10:51:14.826",
+      "pending": "true",
+      "tickets": [
+        2,
+        3
+      ],
+      "ticketsOkBeforeLaunch": [
+        2,
+        3
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 9.0,
+        "waitMs": 466.080154,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    },
+    {
+      "logTime": "10-07 10:52:01.319",
+      "pending": "true",
+      "tickets": [
+        8,
+        9
+      ],
+      "ticketsOkBeforeLaunch": [
+        8,
+        9
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 5.0,
+        "waitMs": 278.001231,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    },
+    {
+      "logTime": "10-07 10:53:08.526",
+      "pending": "true",
+      "tickets": [
+        12,
+        13
+      ],
+      "ticketsOkBeforeLaunch": [
+        12,
+        13
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 7.0,
+        "waitMs": 208.921077,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    },
+    {
+      "logTime": "10-07 10:54:15.904",
+      "pending": "true",
+      "tickets": [
+        16,
+        17
+      ],
+      "ticketsOkBeforeLaunch": [
+        16,
+        17
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 4.0,
+        "waitMs": 169.947154,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    },
+    {
+      "logTime": "10-07 10:55:23.394",
+      "pending": "true",
+      "tickets": [
+        20,
+        21
+      ],
+      "ticketsOkBeforeLaunch": [
+        20,
+        21
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 6.0,
+        "waitMs": 173.299924,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    },
+    {
+      "logTime": "10-07 10:56:28.309",
+      "pending": "true",
+      "tickets": [
+        24,
+        25
+      ],
+      "ticketsOkBeforeLaunch": [
+        24,
+        25
+      ],
+      "launched": true,
+      "ticketWait": {
+        "frames": 7.0,
+        "waitMs": 235.848539,
+        "status": "durable"
+      },
+      "launchedAfterTickets": true
+    }
+  ],
+  "everyLaunchAfterDurableTickets": true,
+  "settles": [
+    {
+      "job": 4,
+      "seat": 0,
+      "logTime": "10-07 10:51:56.848",
+      "status": "OK",
+      "purpose": "SETTLE",
+      "writeMs": 217.546384,
+      "completedAfterMs": 207.0
+    },
+    {
+      "job": 5,
+      "seat": 1,
+      "logTime": "10-07 10:51:56.901",
+      "status": "OK",
+      "purpose": "SETTLE",
+      "writeMs": 91.467769,
+      "completedAfterMs": 244.0
+    }
+  ],
+  "everySettleCompleted": true,
+  "refusals": [],
+  "renders100msPlus": [
+    {
+      "approxSecond": 0.11,
+      "workMs": 103.884462,
+      "intervalMs": 20.274615,
+      "requestsMs": 64.499846,
+      "prepareMs": 0.006693,
+      "simulationMs": 2.374461,
+      "hudMs": 7.952307,
+      "sceneryDrawMs": 16.253384,
+      "carsEffectsMs": 11.419847,
+      "logTimeApprox": "2026-10-07T10:51:14.407774",
+      "nearbyRequests": [
+        "10:51:14.193 configureWorld totalMs=14.468384 sceneMs=0.017846",
+        "10:51:14.196 lobby totalMs=17.712616",
+        "10:51:14.342 profile seat=0.0 kind=CHOICE submitMs=12.365461 publishMs=24.831462",
+        "10:51:14.345 car seat=0.0 totalMs=52.503077",
+        "10:51:14.355 configureWorld totalMs=9.807231 sceneMs=0.020231",
+        "10:51:14.356 track totalMs=11.52023",
+        "10:51:14.575 write seat=0.0 kind=CHOICE purpose=CHOICE writeMs=246.053693",
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307"
+      ]
+    },
+    {
+      "approxSecond": 0.22,
+      "workMs": 30.856461,
+      "intervalMs": 105.506693,
+      "requestsMs": 5.986538,
+      "prepareMs": 0.004231,
+      "simulationMs": 17.119923,
+      "hudMs": 2.665846,
+      "sceneryDrawMs": 1.002692,
+      "carsEffectsMs": 2.707616,
+      "logTimeApprox": "2026-10-07T10:51:14.517774",
+      "nearbyRequests": [
+        "10:51:14.193 configureWorld totalMs=14.468384 sceneMs=0.017846",
+        "10:51:14.196 lobby totalMs=17.712616",
+        "10:51:14.342 profile seat=0.0 kind=CHOICE submitMs=12.365461 publishMs=24.831462",
+        "10:51:14.345 car seat=0.0 totalMs=52.503077",
+        "10:51:14.355 configureWorld totalMs=9.807231 sceneMs=0.020231",
+        "10:51:14.356 track totalMs=11.52023",
+        "10:51:14.575 write seat=0.0 kind=CHOICE purpose=CHOICE writeMs=246.053693",
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307",
+        "10:51:15.062 write seat=0.0 kind=MONEY purpose=TICKET writeMs=306.476616"
+      ]
+    },
+    {
+      "approxSecond": 0.54,
+      "workMs": 115.778924,
+      "intervalMs": 10.078846,
+      "requestsMs": 106.421231,
+      "prepareMs": 0.006769,
+      "simulationMs": 3.021924,
+      "hudMs": 2.464923,
+      "sceneryDrawMs": 0.979462,
+      "carsEffectsMs": 1.961538,
+      "logTimeApprox": "2026-10-07T10:51:14.837774",
+      "nearbyRequests": [
+        "10:51:14.342 profile seat=0.0 kind=CHOICE submitMs=12.365461 publishMs=24.831462",
+        "10:51:14.345 car seat=0.0 totalMs=52.503077",
+        "10:51:14.355 configureWorld totalMs=9.807231 sceneMs=0.020231",
+        "10:51:14.356 track totalMs=11.52023",
+        "10:51:14.575 write seat=0.0 kind=CHOICE purpose=CHOICE writeMs=246.053693",
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307",
+        "10:51:15.062 write seat=0.0 kind=MONEY purpose=TICKET writeMs=306.476616",
+        "10:51:15.165 write seat=1.0 kind=MONEY purpose=TICKET writeMs=56.456615",
+        "10:51:15.187 ticketWait ",
+        "10:51:15.195 configureWorld totalMs=7.284231 sceneMs=0.019923",
+        "10:51:15.196 countdown ",
+        "10:51:15.198 raceLaunch totalMs=10.876462"
+      ]
+    },
+    {
+      "approxSecond": 0.66,
+      "workMs": 22.545384,
+      "intervalMs": 117.19669300000001,
+      "requestsMs": 0.183615,
+      "prepareMs": 0.005,
+      "simulationMs": 15.409308,
+      "hudMs": 2.676385,
+      "sceneryDrawMs": 1.149693,
+      "carsEffectsMs": 1.904615,
+      "logTimeApprox": "2026-10-07T10:51:14.957774",
+      "nearbyRequests": [
+        "10:51:14.575 write seat=0.0 kind=CHOICE purpose=CHOICE writeMs=246.053693",
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307",
+        "10:51:15.062 write seat=0.0 kind=MONEY purpose=TICKET writeMs=306.476616",
+        "10:51:15.165 write seat=1.0 kind=MONEY purpose=TICKET writeMs=56.456615",
+        "10:51:15.187 ticketWait ",
+        "10:51:15.195 configureWorld totalMs=7.284231 sceneMs=0.019923",
+        "10:51:15.196 countdown ",
+        "10:51:15.198 raceLaunch totalMs=10.876462"
+      ]
+    },
+    {
+      "approxSecond": 0.88,
+      "workMs": 101.052462,
+      "intervalMs": 38.427923,
+      "requestsMs": 76.238077,
+      "prepareMs": 0.006,
+      "simulationMs": 12.765154,
+      "hudMs": 2.056461,
+      "sceneryDrawMs": 4.389846,
+      "carsEffectsMs": 2.72777,
+      "logTimeApprox": "2026-10-07T10:51:15.177774",
+      "nearbyRequests": [
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307",
+        "10:51:15.062 write seat=0.0 kind=MONEY purpose=TICKET writeMs=306.476616",
+        "10:51:15.165 write seat=1.0 kind=MONEY purpose=TICKET writeMs=56.456615",
+        "10:51:15.187 ticketWait ",
+        "10:51:15.195 configureWorld totalMs=7.284231 sceneMs=0.019923",
+        "10:51:15.196 countdown ",
+        "10:51:15.198 raceLaunch totalMs=10.876462"
+      ]
+    },
+    {
+      "approxSecond": 0.98,
+      "workMs": 41.101539,
+      "intervalMs": 103.731077,
+      "requestsMs": 34.302923,
+      "prepareMs": 0.00677,
+      "simulationMs": 0.037692,
+      "hudMs": 1.839538,
+      "sceneryDrawMs": 0.977923,
+      "carsEffectsMs": 2.256847,
+      "logTimeApprox": "2026-10-07T10:51:15.277774",
+      "nearbyRequests": [
+        "10:51:14.766 profile seat=0.0 kind=MONEY submitMs=9.939692 publishMs=23.956924",
+        "10:51:14.806 profile seat=1.0 kind=MONEY submitMs=8.015461 publishMs=22.905693",
+        "10:51:14.826 startRace totalMs=106.121307",
+        "10:51:15.062 write seat=0.0 kind=MONEY purpose=TICKET writeMs=306.476616",
+        "10:51:15.165 write seat=1.0 kind=MONEY purpose=TICKET writeMs=56.456615",
+        "10:51:15.187 ticketWait ",
+        "10:51:15.195 configureWorld totalMs=7.284231 sceneMs=0.019923",
+        "10:51:15.196 countdown ",
+        "10:51:15.198 raceLaunch totalMs=10.876462"
+      ]
+    },
+    {
+      "approxSecond": 42.67,
+      "workMs": 105.643769,
+      "intervalMs": 16.966077,
+      "requestsMs": 0.135231,
+      "prepareMs": 0.004769,
+      "simulationMs": 96.490615,
+      "hudMs": 1.829384,
+      "sceneryDrawMs": 1.489,
+      "carsEffectsMs": 4.508769,
+      "logTimeApprox": "2026-10-07T10:51:56.967774",
+      "nearbyRequests": [
+        "10:51:56.848 profile seat=0.0 kind=MONEY submitMs=5.586077 publishMs=13.784077",
+        "10:51:56.901 profile seat=1.0 kind=MONEY submitMs=11.523077 publishMs=21.167308",
+        "10:51:57.055 write seat=0.0 kind=MONEY purpose=SETTLE writeMs=217.546384",
+        "10:51:57.145 write seat=1.0 kind=MONEY purpose=SETTLE writeMs=91.467769",
+        "10:51:57.296 configureWorld totalMs=10.494231 sceneMs=0.016615",
+        "10:51:57.298 lobby totalMs=18.069692",
+        "10:51:57.497 profile seat=0.0 kind=CHOICE submitMs=5.617 publishMs=12.868923",
+        "10:51:57.498 car seat=0.0 totalMs=27.759231",
+        "10:51:57.525 profile seat=1.0 kind=CHOICE submitMs=4.898538 publishMs=14.676231",
+        "10:51:57.526 car seat=1.0 totalMs=27.502231"
+      ]
+    },
+    {
+      "approxSecond": 42.78,
+      "workMs": 10.000077,
+      "intervalMs": 106.916077,
+      "requestsMs": 0.07,
+      "prepareMs": 0.018769,
+      "simulationMs": 0.036308,
+      "hudMs": 1.815769,
+      "sceneryDrawMs": 1.253769,
+      "carsEffectsMs": 5.422231,
+      "logTimeApprox": "2026-10-07T10:51:57.077774",
+      "nearbyRequests": [
+        "10:51:56.848 profile seat=0.0 kind=MONEY submitMs=5.586077 publishMs=13.784077",
+        "10:51:56.901 profile seat=1.0 kind=MONEY submitMs=11.523077 publishMs=21.167308",
+        "10:51:57.055 write seat=0.0 kind=MONEY purpose=SETTLE writeMs=217.546384",
+        "10:51:57.145 write seat=1.0 kind=MONEY purpose=SETTLE writeMs=91.467769",
+        "10:51:57.296 configureWorld totalMs=10.494231 sceneMs=0.016615",
+        "10:51:57.298 lobby totalMs=18.069692",
+        "10:51:57.497 profile seat=0.0 kind=CHOICE submitMs=5.617 publishMs=12.868923",
+        "10:51:57.498 car seat=0.0 totalMs=27.759231",
+        "10:51:57.525 profile seat=1.0 kind=CHOICE submitMs=4.898538 publishMs=14.676231",
+        "10:51:57.526 car seat=1.0 totalMs=27.502231",
+        "10:51:57.653 write seat=0.0 kind=CHOICE purpose=CHOICE writeMs=163.190769"
+      ]
+    },
+    {
+      "approxSecond": 45.81,
+      "workMs": 9.979769,
+      "intervalMs": 108.526077,
+      "requestsMs": 0.071769,
+      "prepareMs": 5.524461,
+      "simulationMs": 0.039077,
+      "hudMs": 2.399847,
+      "sceneryDrawMs": 0,
+      "carsEffectsMs": 0.006769,
+      "logTimeApprox": "2026-10-07T10:52:00.107774",
+      "nearbyRequests": [
+        "10:51:59.693 configureWorld totalMs=70.531307 sceneMs=57.235923",
+        "10:51:59.694 track totalMs=71.851769"
+      ]
+    },
+    {
+      "approxSecond": 47.08,
+      "workMs": 102.431384,
+      "intervalMs": 16.168462,
+      "requestsMs": 91.237692,
+      "prepareMs": 0.007846,
+      "simulationMs": 1.256539,
+      "hudMs": 2.295462,
+      "sceneryDrawMs": 0.835385,
+      "carsEffectsMs": 1.725538,
+      "logTimeApprox": "2026-10-07T10:52:01.343737",
+      "nearbyRequests": [
+        "10:52:01.262 profile seat=0.0 kind=MONEY submitMs=7.059 publishMs=13.618",
+        "10:52:01.300 profile seat=1.0 kind=MONEY submitMs=11.57777 publishMs=13.819153",
+        "10:52:01.319 startRace totalMs=90.861846",
+        "10:52:01.390 write seat=0.0 kind=MONEY purpose=TICKET writeMs=116.386077",
+        "10:52:01.494 write seat=1.0 kind=MONEY purpose=TICKET writeMs=119.854385",
+        "10:52:01.507 ticketWait ",
+        "10:52:01.513 configureWorld totalMs=5.893154 sceneMs=0.013615",
+        "10:52:01.516 countdown ",
+        "10:52:01.517 raceLaunch totalMs=10.148615"
+      ]
+    },
+    {
+      "approxSecond": 47.19,
+      "workMs": 55.787,
+      "intervalMs": 103.770077,
+      "requestsMs": 0.453846,
+      "prepareMs": 0.041846,
+      "simulationMs": 48.696692,
+      "hudMs": 1.931616,
+      "sceneryDrawMs": 0.816615,
+      "carsEffectsMs": 2.429692,
+      "logTimeApprox": "2026-10-07T10:52:01.453737",
+      "nearbyRequests": [
+        "10:52:01.262 profile seat=0.0 kind=MONEY submitMs=7.059 publishMs=13.618",
+        "10:52:01.300 profile seat=1.0 kind=MONEY submitMs=11.57777 publishMs=13.819153",
+        "10:52:01.319 startRace totalMs=90.861846",
+        "10:52:01.390 write seat=0.0 kind=MONEY purpose=TICKET writeMs=116.386077",
+        "10:52:01.494 write seat=1.0 kind=MONEY purpose=TICKET writeMs=119.854385",
+        "10:52:01.507 ticketWait ",
+        "10:52:01.513 configureWorld totalMs=5.893154 sceneMs=0.013615",
+        "10:52:01.516 countdown ",
+        "10:52:01.517 raceLaunch totalMs=10.148615"
+      ]
+    },
+    {
+      "approxSecond": 113.45,
+      "workMs": 18.298693,
+      "intervalMs": 100.11623,
+      "requestsMs": 0.071,
+      "prepareMs": 3.565539,
+      "simulationMs": 0.037769,
+      "hudMs": 1.757846,
+      "sceneryDrawMs": 0,
+      "carsEffectsMs": 0.007077,
+      "logTimeApprox": "2026-10-07T10:53:07.713737",
+      "nearbyRequests": [
+        "10:53:07.337 configureWorld totalMs=30.146923 sceneMs=24.267154",
+        "10:53:07.338 track totalMs=31.442846"
+      ]
+    },
+    {
+      "approxSecond": 180.87,
+      "workMs": 18.175693,
+      "intervalMs": 100.18192300000001,
+      "requestsMs": 0.073077,
+      "prepareMs": 3.09877,
+      "simulationMs": 0.037692,
+      "hudMs": 1.792923,
+      "sceneryDrawMs": 0,
+      "carsEffectsMs": 0.006538,
+      "logTimeApprox": "2026-10-07T10:54:15.113395",
+      "nearbyRequests": [
+        "10:54:14.794 configureWorld totalMs=28.250692 sceneMs=22.876615",
+        "10:54:14.795 track totalMs=29.488692"
+      ]
+    },
+    {
+      "approxSecond": 248.36,
+      "workMs": 17.093385,
+      "intervalMs": 102.713077,
+      "requestsMs": 0.090462,
+      "prepareMs": 3.830615,
+      "simulationMs": 0.120923,
+      "hudMs": 1.835461,
+      "sceneryDrawMs": 0,
+      "carsEffectsMs": 0.007154,
+      "logTimeApprox": "2026-10-07T10:55:22.590604",
+      "nearbyRequests": [
+        "10:55:22.272 configureWorld totalMs=27.785923 sceneMs=22.487769",
+        "10:55:22.273 track totalMs=28.976846"
+      ]
+    }
+  ],
+  "limits": "Log lines are render-thread order. Render seconds come from the /profile fetch clock (about 0.1 s) mapped onto the log clock through each round start; nearby requests are within 0.6 s and are candidates, not proof."
+}

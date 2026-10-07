@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T08:51:09.4971758Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  22296,
+                             "PercentProcessorTime":  153
+                         },
+                         {
+                             "Name":  "svchost#95",
+                             "IDProcess":  34348,
+                             "PercentProcessorTime":  91
+                         },
+                         {
+                             "Name":  "cleanmgr",
+                             "IDProcess":  48684,
+                             "PercentProcessorTime":  30
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  20
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  20
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  49224,
+                             "PercentProcessorTime":  10
+                         },
+                         {
+                             "Name":  "BackgroundDownload",
+                             "IDProcess":  40656,
+                             "PercentProcessorTime":  5
+                         },
+                         {
+                             "Name":  "java#1",
+                             "IDProcess":  30604,
+                             "PercentProcessorTime":  5
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  5
+                         },
+                         {
+                             "Name":  "chrome",
+                             "IDProcess":  44852,
+                             "PercentProcessorTime":  5
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                27,
+                                17,
+                                32
+                            ]
+}

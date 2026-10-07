@@ -1,0 +1,326 @@
+{
+  "generatedUtc": "2026-10-07T09:05:08.469989+00:00",
+  "committedBytes": 230224,
+  "committed": [
+    {
+      "path": "evidence/perf/p13/comparison.json",
+      "bytes": 19557,
+      "sha256": "9e2f2bd117b457550c5ad7ef96dbfdd4b250229fb98701d2bcbf8d5330e0d147"
+    },
+    {
+      "path": "evidence/perf/p13/device-state.json",
+      "bytes": 1146,
+      "sha256": "e07e332ab892755c1d47e9ef75960986bd0a6b711289827ae45f1257cf9a17bd"
+    },
+    {
+      "path": "evidence/perf/p13/run1/host-cpu-end.json",
+      "bytes": 2569,
+      "sha256": "674c97b9736ede17f71a4569a6787cc04dcb012cab4f6a681dfb8f24aa1f8a78"
+    },
+    {
+      "path": "evidence/perf/p13/run1/host-cpu-start.json",
+      "bytes": 2573,
+      "sha256": "e640164bce4914f72ca2c46b4a25109a928e4dee6150fb38c451583034c664d6"
+    },
+    {
+      "path": "evidence/perf/p13/run1/installed.json",
+      "bytes": 376,
+      "sha256": "dce68a4add3ddfd87321b968c6bc9971313fa5ad9a2313bc55026a61e98b726a"
+    },
+    {
+      "path": "evidence/perf/p13/run1/p10-readings.json",
+      "bytes": 56492,
+      "sha256": "a320c113efad51a9be0f37d66287171a03d6bd001604a915f5cf35f711a2ad17"
+    },
+    {
+      "path": "evidence/perf/p13/run1/p13-saves.json",
+      "bytes": 17787,
+      "sha256": "0dcb9d11175792d5f02effff86f8dac35c245fbbfb9380d2f0f147c3ac256d22"
+    },
+    {
+      "path": "evidence/perf/p13/run1/probe.log",
+      "bytes": 1115,
+      "sha256": "09f9a321f88ed387e4ab623b9d5a5378a4450f6a28019b1381414bdb01a7a451"
+    },
+    {
+      "path": "evidence/perf/p13/run1/routes-warmup.json",
+      "bytes": 134,
+      "sha256": "458df9f2c5116fa16873d624293883385c1509095c111087e3b536316ed56af2"
+    },
+    {
+      "path": "evidence/perf/p13/run1/summary.json",
+      "bytes": 21175,
+      "sha256": "4ed05594da1b0479f02e7f2c579344932cdcf3111d17f21084960a83a5f42f08"
+    },
+    {
+      "path": "evidence/perf/p13/run1/thread-priorities-before.txt",
+      "bytes": 1431,
+      "sha256": "571ccdc8a7ea769ff13c3e79e874379ae0e03804d11a6963373d4bcf5560271b"
+    },
+    {
+      "path": "evidence/perf/p13/run2/host-cpu-end.json",
+      "bytes": 2550,
+      "sha256": "14997001a7d6f4e49221ddd095bd582b1777aa9feac2b17dd8557e10a40528fd"
+    },
+    {
+      "path": "evidence/perf/p13/run2/host-cpu-start.json",
+      "bytes": 2554,
+      "sha256": "084e83006743e066afe2657bf5c73e473f5dc99f6287a251275a51beee59c603"
+    },
+    {
+      "path": "evidence/perf/p13/run2/installed.json",
+      "bytes": 376,
+      "sha256": "dce68a4add3ddfd87321b968c6bc9971313fa5ad9a2313bc55026a61e98b726a"
+    },
+    {
+      "path": "evidence/perf/p13/run2/p10-readings.json",
+      "bytes": 56609,
+      "sha256": "fb7eecb09f6131075ee09a49ced32252f1f9daad6f07d977ce16bbc69044e7f1"
+    },
+    {
+      "path": "evidence/perf/p13/run2/p13-saves.json",
+      "bytes": 17155,
+      "sha256": "b941e40e0737d7ca58992efcd3c1655525d91a59d691cbeafd3aae527e0c56c1"
+    },
+    {
+      "path": "evidence/perf/p13/run2/probe.log",
+      "bytes": 1113,
+      "sha256": "efeb2fbb35010b8aaf74074a418f62109e0106a8998486f3cc48aa0bfcc54fd5"
+    },
+    {
+      "path": "evidence/perf/p13/run2/routes-warmup.json",
+      "bytes": 135,
+      "sha256": "9592a5d311918c3f9157d0255d847671d046c135e37ce3ae1d701ea327e9b038"
+    },
+    {
+      "path": "evidence/perf/p13/run2/summary.json",
+      "bytes": 21245,
+      "sha256": "d64045729fc8dc50cc7f7dfe227837e7b286cf58e69a5d7aaa3eb8c24c26f95c"
+    },
+    {
+      "path": "evidence/perf/p13/run2/thread-priorities-before.txt",
+      "bytes": 1431,
+      "sha256": "efb5fdcd77cf6785dc673d6d4faf72ca4987698eb736b25de8d83edf12c5353e"
+    },
+    {
+      "path": "evidence/perf/p13/tests.json",
+      "bytes": 2701,
+      "sha256": "530d151416d9283e3dcb23ff9ff4376e2e1c0c256766e42c6a3d48ae5a87872a"
+    }
+  ],
+  "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence/p13",
+  "rawBytes": 48554825,
+  "raw": [
+    {
+      "path": "build-perf.cmd",
+      "bytes": 220,
+      "sha256": "0a819fec16862babd4ea769777ba76ebbc51eebf3c60d0d3af5cd091076ebf4e"
+    },
+    {
+      "path": "build-perf.log",
+      "bytes": 3609,
+      "sha256": "62c9e512c81e9a9bc1a27752254f511f9b2849c9348c53603912d3a7f13d43e2"
+    },
+    {
+      "path": "gate-final.log",
+      "bytes": 34470,
+      "sha256": "736f7134f5927846bafc1d04b7f6f839e1d287313a28b57bfaf13b95aafa3f5d"
+    },
+    {
+      "path": "p13.apk",
+      "bytes": 41380839,
+      "sha256": "f3804fcd43ed0e7096d8982b6d54a4b5581b99d9d26009a00b3a7bca03b8239e"
+    },
+    {
+      "path": "run1/badging.txt",
+      "bytes": 5671,
+      "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+    },
+    {
+      "path": "run1/device-counters-end.txt",
+      "bytes": 90256,
+      "sha256": "ac94588887bbbac420b033f4333804d86bfbe42efe172900552465de5fa4cc20"
+    },
+    {
+      "path": "run1/device-counters-start.txt",
+      "bytes": 86386,
+      "sha256": "cdd712526ba38680e886b272033eba0bb0435a7bfea6817e42f05f3beebe1d7a"
+    },
+    {
+      "path": "run1/host-cpu-end.json",
+      "bytes": 2569,
+      "sha256": "674c97b9736ede17f71a4569a6787cc04dcb012cab4f6a681dfb8f24aa1f8a78"
+    },
+    {
+      "path": "run1/host-cpu-start.json",
+      "bytes": 2573,
+      "sha256": "e640164bce4914f72ca2c46b4a25109a928e4dee6150fb38c451583034c664d6"
+    },
+    {
+      "path": "run1/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "run1/installed.json",
+      "bytes": 376,
+      "sha256": "dce68a4add3ddfd87321b968c6bc9971313fa5ad9a2313bc55026a61e98b726a"
+    },
+    {
+      "path": "run1/logcat.txt",
+      "bytes": 153291,
+      "sha256": "d8a283d6abc0b57acf711193c0548209087ec0a95be14420dd485a772982eb7e"
+    },
+    {
+      "path": "run1/probe.log",
+      "bytes": 1115,
+      "sha256": "09f9a321f88ed387e4ab623b9d5a5378a4450f6a28019b1381414bdb01a7a451"
+    },
+    {
+      "path": "run1/raw.json.gz",
+      "bytes": 3122496,
+      "sha256": "150265255d530e715d0e914abb2cbaaff3e7337c4ed7cbdff1417ce29cc71909"
+    },
+    {
+      "path": "run1/routes-warmup.json",
+      "bytes": 134,
+      "sha256": "458df9f2c5116fa16873d624293883385c1509095c111087e3b536316ed56af2"
+    },
+    {
+      "path": "run1/startup-logcat.txt",
+      "bytes": 2133,
+      "sha256": "3178970d70bc43bf2385253d8e70e973a7b34a93834f8ca95c1c8353f187236d"
+    },
+    {
+      "path": "run1/summary.json",
+      "bytes": 21175,
+      "sha256": "4ed05594da1b0479f02e7f2c579344932cdcf3111d17f21084960a83a5f42f08"
+    },
+    {
+      "path": "run1/thread-priorities-before.txt",
+      "bytes": 1431,
+      "sha256": "571ccdc8a7ea769ff13c3e79e874379ae0e03804d11a6963373d4bcf5560271b"
+    },
+    {
+      "path": "run1-device.out",
+      "bytes": 446,
+      "sha256": "bbc8f73aa661cc62f7e6ff13032e634f9f70bed37fda6d437ad106cea6392460"
+    },
+    {
+      "path": "run1-p10.out",
+      "bytes": 2728,
+      "sha256": "d452795ed92c60f432ae719ee2822490f7a2b967678df24f50b719e8fd313bef"
+    },
+    {
+      "path": "run1-readings.json",
+      "bytes": 56492,
+      "sha256": "a320c113efad51a9be0f37d66287171a03d6bd001604a915f5cf35f711a2ad17"
+    },
+    {
+      "path": "run1-saves.json",
+      "bytes": 17787,
+      "sha256": "0dcb9d11175792d5f02effff86f8dac35c245fbbfb9380d2f0f147c3ac256d22"
+    },
+    {
+      "path": "run1-summary.out",
+      "bytes": 958,
+      "sha256": "fd2125d85a3d6ae037fa5ca0cccbd2b0ed3059d2fbf7d9f6436fe4740ebe3771"
+    },
+    {
+      "path": "run2/badging.txt",
+      "bytes": 5671,
+      "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+    },
+    {
+      "path": "run2/device-counters-end.txt",
+      "bytes": 90262,
+      "sha256": "87ac0c0e3ab068c4c21ac6a267d3d8279063002a259e131abceb784bbdd0f308"
+    },
+    {
+      "path": "run2/device-counters-start.txt",
+      "bytes": 86422,
+      "sha256": "b3b6cbd0a55eddf630473e16d9131bff24f457b126debb45917383def6431755"
+    },
+    {
+      "path": "run2/host-cpu-end.json",
+      "bytes": 2550,
+      "sha256": "14997001a7d6f4e49221ddd095bd582b1777aa9feac2b17dd8557e10a40528fd"
+    },
+    {
+      "path": "run2/host-cpu-start.json",
+      "bytes": 2554,
+      "sha256": "084e83006743e066afe2657bf5c73e473f5dc99f6287a251275a51beee59c603"
+    },
+    {
+      "path": "run2/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "run2/installed.json",
+      "bytes": 376,
+      "sha256": "dce68a4add3ddfd87321b968c6bc9971313fa5ad9a2313bc55026a61e98b726a"
+    },
+    {
+      "path": "run2/logcat.txt",
+      "bytes": 162835,
+      "sha256": "b1111a43f4d2b4db3b5a3ace681d238c7eef087eeb940b9539492b2f09edd2e1"
+    },
+    {
+      "path": "run2/probe.log",
+      "bytes": 1113,
+      "sha256": "efeb2fbb35010b8aaf74074a418f62109e0106a8998486f3cc48aa0bfcc54fd5"
+    },
+    {
+      "path": "run2/raw.json.gz",
+      "bytes": 3112938,
+      "sha256": "351a39df89dfe7cfe5e76c3a91fbc6be3ec1f9d5bd75a686fb6fd1b138b9366c"
+    },
+    {
+      "path": "run2/routes-warmup.json",
+      "bytes": 135,
+      "sha256": "9592a5d311918c3f9157d0255d847671d046c135e37ce3ae1d701ea327e9b038"
+    },
+    {
+      "path": "run2/startup-logcat.txt",
+      "bytes": 2131,
+      "sha256": "20a7b265fb131a83bc5d1dd17be2528ba3f8a5d6cc060a3c8e5913cdfdee95d6"
+    },
+    {
+      "path": "run2/summary.json",
+      "bytes": 21245,
+      "sha256": "d64045729fc8dc50cc7f7dfe227837e7b286cf58e69a5d7aaa3eb8c24c26f95c"
+    },
+    {
+      "path": "run2/thread-priorities-before.txt",
+      "bytes": 1431,
+      "sha256": "efb5fdcd77cf6785dc673d6d4faf72ca4987698eb736b25de8d83edf12c5353e"
+    },
+    {
+      "path": "run2-device.out",
+      "bytes": 446,
+      "sha256": "58475496515da48ae20ab502e1caa4e2e77017103a267ea3b5e433dc32ae3617"
+    },
+    {
+      "path": "run2-p10.out",
+      "bytes": 2765,
+      "sha256": "5c822268de80b529c00a95838139eb8a3e0b6baa048066495eb33dd0932fd2f8"
+    },
+    {
+      "path": "run2-readings.json",
+      "bytes": 56609,
+      "sha256": "fb7eecb09f6131075ee09a49ced32252f1f9daad6f07d977ce16bbc69044e7f1"
+    },
+    {
+      "path": "run2-saves.json",
+      "bytes": 17155,
+      "sha256": "b941e40e0737d7ca58992efcd3c1655525d91a59d691cbeafd3aae527e0c56c1"
+    },
+    {
+      "path": "run2-summary.out",
+      "bytes": 956,
+      "sha256": "3d84443bef3f90aca623bdff9d47c29344fd24238f4901f136c4e29ffec44ce4"
+    }
+  ],
+  "limits": "Raw traces (.gz), logcats, build logs and APKs stay outside git; this manifest binds their bytes. It excludes itself."
+}
