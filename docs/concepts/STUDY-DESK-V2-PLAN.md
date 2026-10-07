@@ -70,7 +70,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 16 | P4 | Platform: PC drop page and .docx text (adult A7) | 4 | P2 | done | c108f63 | 2026-10-07 |
 | 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | done, built locally on main (no PR, nothing pushed); captures and the company sim's live run owed to the owner's batch review | d29111c9..aa5ac64d | 2026-10-07 |
 | 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | done (built locally on main; kill test passed: clean chains rung 0 of 50, slips rung at their own line 50, left null 0, rung at another line 0; TV captures owed) | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
-| 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | not started | | |
+| 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | done (built locally on main; 6 of 6 detectors pass the zero-false-positive gate; wired to nothing, no capture owed) | 267694f5, 79da4106 | 2026-10-08 |
 | 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | not started | | |
 | 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | not started | | |
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
@@ -373,3 +373,30 @@ two-sided equation, a second derivative or a limit at another point is null. A l
 follows the last line that asserted something.
 Owed to the owner's batch review: TV captures of a ticked and penned Calculus paper at 1920 x 1080 and 1280 x 720.
 Next: T3 (row 19), then M2b.
+### 2026-10-08 · batch 5 · T3 · autopilot/accepted-idea-delivery-23b57e2b 79da4106
+Built locally on main per the owner's 2026-10-07 evening ruling: batch 5 one slice per run in table order (L3 and M4c done,
+T3 now, then M2b), each merged into local main through the gate; no PR, nothing pushed. Commits: 056e7019 (the T3 card),
+267694f5 (tools/habits-fixtures.cjs alone, before any detector), 79da4106 (habits.ts, SHIPPED, openHabits, the suite and its
+rows, the package.json append).
+Precision table (tools/habits-rules-test.cjs; 16 planted and 16 clean rows a detector, 192 in all):
+| detector | found at its sentence | missed | found at another sentence | clean flagged |
+| vague-opener | 16 | 0 | 0 | 0 |
+| hedge-stack | 16 | 0 | 0 | 0 |
+| repeated-opener | 12 | 4 | 0 | 0 |
+| long-run | 16 | 0 | 0 | 0 |
+| filler | 16 | 0 | 0 | 0 |
+| two-claims | 13 | 3 | 0 | 0 |
+SHIPPED: all six. Withheld: none. No fixture row was changed after its commit; the detectors were fixed, never the rows.
+Caveats, stated rather than hidden: the rows are the author's own, so zero false positives is zero on this fixture, not a
+proof; the fixture is small. The 7 misses: the English-only guard (under 15% common function words reads as not English)
+silences terse texts such as "Dogs bark. Cats purr. Dogs run." and "Homework should be banned. ..." (4 repeated-opener, and
+2 two-claims); "Tax is too high" has no stance word. two-claims is NOT the card's plain "two claims by the first-pass roles":
+that rule tags every non-link, non-evidence sentence a claim, so it would flag "We went to the museum. The tickets were
+free." The shipped rule also asks for a statement (no question) with a stance word (should, must, better, wrong, ...). It is
+the narrowest of the six and the likeliest to miss in real prose. long-run reads no band under 20 sentences or without one.
+Nothing is on screen (no route, store, event or card constraints), so no capture is owed. T3 is built ahead of the T1
+probe's live pass, like T2; the batch 4 entry names T3 among the slices that stop if that pass fails, and the adult plan's
+kill row keeps D1-D5 either way.
+Gate: `cd desk && npm run test:rules` green (habits-rules-test 12 rows: fixture, precision table, SHIPPED, hit shape, English
+only, long-run band, openHabits 5, detectAll); `tsc --noEmit --incremental false` clean. No existing assertion changed.
+Next: M2b (row 20).

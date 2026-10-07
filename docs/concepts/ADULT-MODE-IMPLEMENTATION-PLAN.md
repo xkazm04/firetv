@@ -44,7 +44,7 @@ relative, not measured; nothing here is L (anything L was split).
 | 16 | B3 | Math: jobs for applications of derivatives | M | B2 | not started | | | |
 | 17 | C3 | Linga: genres, twist decks, Kind and Real | M | A1 | not started | | | |
 | 18 | D4 | Essay: the format lens, first format card | S | D2 | not started | | | |
-| 19 | D5 | Essay: habit detectors | M | D1 | not started | | | |
+| 19 | D5 | Essay: habit detectors | M | D1 | done as v2 T3 (built locally on main; 6 of 6 detectors pass the zero-false-positive gate; precision table in the v2 log) | autopilot/accepted-idea-delivery-23b57e2b | 267694f5, 79da4106 | 2026-10-08 |
 | 20 | B4 | Math: jobs for the other 12 topics (two batches) | M | B2 | not started | | | |
 | 21 | B5 | Math: Beyond and the course map | M | B2 | not started | | | |
 | 22 | B6 | Math: the mock paper, sealed and re-sat | M | A3 | not started | | | |
