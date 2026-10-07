@@ -56,10 +56,10 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 2 | E0 | Essay: the reading core keeps paragraphs (adult D1) | 1 | - | done | 307d2ec | 2026-10-07 |
 | 3 | P1 | Platform: the mode switch and the 18+ gate (adult A5) | 1 | - | done | b160c50 | 2026-10-07 |
 | 4 | P2 | Platform: the text store and /api/texts (adult A6, store half) | 1 | - | done | e9271eb | 2026-10-07 |
-| 5 | P3 | Platform: phone shelf, TV piece map, the engine notice, the curtain (adult A6, UI half) | 2 | P2 | not started | | |
-| 6 | E1 | Essay Family: a whole piece, sent at once, read paragraph by paragraph | 2 | E0, P3 | not started | | |
-| 7 | R1 | Rewards: the collectible engine (pure) and one collectible per app | 2 | - | not started | | |
-| 8 | L1 | Linga: the Cambridge A2 Key / B1 PET for Schools map (data and coverage) | 2 | - | not started | | |
+| 5 | P3 | Platform: phone shelf, TV piece map, the engine notice, the curtain (adult A6, UI half) | 2 | P2 | done (the curtain: the shelf is phone-only, the TV never lists kept texts) | f8d64f1 | 2026-10-07 |
+| 6 | E1 | Essay Family: a whole piece, sent at once, read paragraph by paragraph | 2 | E0, P3 | done | f8d64f1 | 2026-10-07 |
+| 7 | R1 | Rewards: the collectible engine (pure) and one collectible per app | 2 | - | done | e162e4d | 2026-10-07 |
+| 8 | L1 | Linga: the Cambridge A2 Key / B1 PET for Schools map (data and coverage) | 2 | - | done (unverified table; claim off) | ce795b1 | 2026-10-07 |
 | 9 | M1 | Math: teach a new topic, worked lessons for the 12 school units | 3 | - | not started | | |
 | 10 | M4a | Math: function graphs on the TV (pure SVG plotter) | 3 | - | not started | | |
 | 11 | M4b | Math: typesetting coverage: the custom typesetter extended for `cases` and small matrices (KaTeX deferred, [concept](KATEX-TYPESETTING.md)) | 3 | - | not started | | |
@@ -200,3 +200,18 @@ school type; the new test caught it, and the gate now runs last. `mode-rules-tes
 honoured" were revised on purpose. The essay-on-a-learner-change leak (adult plan finding 6) was already fixed on
 2026-10-05 and is now pinned again in the texts suite.
 Next: batch 2 (P3, E1, R1, L1). Owner: V2-O1 to V2-O6 (defaults stand if not answered).
+
+### 2026-10-07 · batch 2 · V2-O3 P3 E1 R1 L1 (+ two layout fixes) · claude/trusting-franklin-a8g19w
+Gate: `tsc --noEmit` clean, `next build` succeeds. Every suite is green when run one by one, except `maths-rules-test`
+"learners case 3" (root-only, as in batch 1). New suites: `essay-piece-test` (7), `collect-rules-test` (5),
+`cambridge-rules-test` (3); `texts-rules-test` gained the notice rows, and `adult-rules-test` gained V2-O3 and the Mode-row
+rows.
+Captures: for the first time, a dev server with a scratch `DESK_DATA_DIR` and Playwright from `tools/node_modules`, at
+1920 x 1080 and 1280 x 720. The essay piece was captured mid-reading, with a stand-in `CLAUDE_BIN` that answers fixed
+verdicts and holds paragraph 2 back; no model was called.
+Surprises: the profile caption ran into Save/Back on every profile, a problem from before this batch (on-air pins
+`.actions` to the bottom); fixed by putting them in the flow. The Mode row now shows only where there is a choice. The
+first cabinet layout overflowed four-across, so it is now two rows. Cambridge coverage at skill level reads high (A2 Key
+94% at 12) while two real gaps remain for children (narrating the past, feelings). The claim stays off until a person
+verifies the table.
+Next: batch 3 (M1 lessons, M4a graphs, M4b typesetting, T1 the simulated twin probe). Owner: nothing blocking.
