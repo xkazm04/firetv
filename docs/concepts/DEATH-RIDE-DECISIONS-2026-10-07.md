@@ -10,6 +10,7 @@ Captured from the commit record on `deathride/main` at e4ec2163. "Owner" is the 
 - **Constraint:** `deathride/evidence/` had grown to 994.2 MiB in 6,354 files, and every perf run added traces and captures to every clone.
 - **Lost:** Git LFS for new evidence and art sources (a second store and a server dependency for the same problem); rewriting history (breaks every pin and hash that names a commit).
 - **Reverse:** delete `EvidenceRuleTest.kt` or raise `EvidenceRule.MAX_BYTES`. Nothing was moved or deleted, so nothing needs restoring.
+- **2026-10-07 update:** grandfathering is now by blob, not by path, because a grandfathered file that grew in place was not caught (commit 53c59e5e). A path is grandfathered only while its blob id equals the one tracked at 20189c47; a changed blob is judged like a new file. This supersedes "Grandfathering is by path" under The guard.
 
 ### Figures (M1 goal 5's measure)
 
