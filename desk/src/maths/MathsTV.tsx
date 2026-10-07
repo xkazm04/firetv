@@ -16,6 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
+import { MathsCollection } from "./MathsCollection";
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
@@ -111,13 +112,14 @@ function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Ses
     </div>
   );
 }
-function Top({ s, crumb, right }: { s: Session; crumb?: string; right?: ReactNode }) {
+function Top({ s, crumb, right, shelf }: { s: Session; crumb?: string; right?: ReactNode; shelf?: ReactNode }) {
   return (
     <header className="mb-top">
       <div className="mb-brand">
         <Mark />
         <div className="mb-word">Math <em>Buddy</em></div>
         {crumb && <div className="mb-crumb"><span className="sep" /><span className="tp">{crumb}</span></div>}
+        {shelf}
       </div>
       {right ?? <Chips s={s} />}
     </header>
@@ -539,7 +541,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const door: Door = at === "teach" || at === "prepare" ? at : "homework";
   const title = secureTitle(secure.length, topics.length, first);
   return (<>
-    <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
+    <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} shelf={<MathsCollection s={s} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
     <div className={`mb-doors${cont ? "" : " wide"}${doors.length > 2 ? " three" : ""}`} data-dim={at !== "continue" || undefined}>
       {doors.map((d) => (

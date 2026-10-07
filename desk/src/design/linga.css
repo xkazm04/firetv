@@ -707,3 +707,7 @@
   .linga-print footer { font-size: 8pt; }
   .linga-print tr { break-inside: avoid; }
 }
+
+/* v2 R1: the keys, one per skill used on your own, golden once used elsewhere (english/LingaKeys.tsx) */
+.linga-tv .lo-keys { display: inline-flex; align-items: center; gap: 10px; margin-left: 28px; }
+.linga-tv .lo-keys svg { display: block; }

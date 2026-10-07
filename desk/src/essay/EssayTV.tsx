@@ -16,6 +16,7 @@ import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks";
 import { ESSAY_FONTS } from "./fonts";
+import { EssayCabinet } from "./EssayCabinet";
 
 const MUTE = "rgba(238,233,224,.5)";
 
@@ -182,6 +183,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
           <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
         </div>
       )}
+      <EssayCabinet s={s} />
     </aside>
     <div className="em-caption"><Caption label={cap.label} text={cap.text} /></div>
   </>);

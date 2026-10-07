@@ -128,3 +128,10 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
 Not a broadcast (no band, no ticker, no red), not a dashboard (no percentages, no marks out of ten),
 not a ghostwriter (no rewritten sentence, no example to copy), not a rainbow (one accent), and never
 motion that a sentence needs in order to be understood.
+
+## The collection (v2 R1, 2026-10-07)
+
+A specimen cabinet under the paragraph card on the lens home: four drawers, one per lens, in two rows. A lens latched
+Secure pins its specimen (Specimen's arrow, in citron, on a citron-framed drawer); an open drawer is a dashed outline. It
+appears once the first specimen is pinned. It is never counted, only Family mode shows it, and nothing earns a specimen
+but the lens's own latch (`lib/rules/collect.ts`). `data-role="essay-collection"`; `essay/EssayCabinet.tsx`.

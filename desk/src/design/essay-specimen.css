@@ -239,3 +239,11 @@
   .essay-tv .em-move.done .em-gink { --em-f: 100%; }
   .essay-tv .em-sent .em-land { --em-u: 100%; }
 }
+
+/* v2 R1: the specimen cabinet, a drawer per lens (essay/EssayCabinet.tsx) */
+.essay-tv .em-cabinet { margin-top: 28px; }
+.essay-tv .em-drawers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.essay-tv .em-drawer { border: 2px solid var(--em-hair); padding: 14px 10px 10px; display: grid; gap: 10px; justify-items: start; min-height: 86px; }
+.essay-tv .em-drawer[data-pinned="true"] { border-color: var(--em-cit); }
+.essay-tv .em-drawer .em-lbl { font-size: 20px; }
+.essay-tv .em-drawer-empty { display: block; width: 64px; height: 28px; border: 2px dashed var(--em-faint); }

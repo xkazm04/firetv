@@ -178,3 +178,10 @@ It isn't On Air: no charcoal, no red diagonal band, no condensed caps, no skew, 
 storybook either: text never sits on the picture except the name tag, and the picture never becomes a
 background. It isn't a dashboard: no tiles, no numbers without a picture. It isn't a slide: the arch changes
 the world on every screen, but the door stays where it is.
+
+## The collection (v2 R1, 2026-10-07)
+
+Keys in the footer of Linga's home and map (never inside a scene): **a key for every skill used on your own**
+("independent"), and **a golden key** once it was used elsewhere too ("transfer"). The Open Door's own object, in plum
+and the warm amber. It is derived from the achievements code already decides (`lib/rules/collect.ts`); a phrase picked or
+a helped reply never earns one. Never counted, Family mode only. `data-role="linga-collection"`; `english/LingaKeys.tsx`.

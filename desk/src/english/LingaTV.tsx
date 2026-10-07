@@ -1,4 +1,5 @@
 "use client";
+import { LingaKeys } from "./LingaKeys";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
 import { ENGLISH_SCENES } from "@/lib/english/curriculum";
@@ -115,6 +116,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     </>}
     <footer className="lo-footer linga-footer">
       {v.tag&&<span className="lo-where">{v.tag}</span>}
+      <LingaKeys s={s}/>
       {dots&&<Dots dots={dots}/>}
       <span className="lo-status">{status}</span>
       <button onClick={()=>go(menuKey)}>{menuKey.label}</button>{repeat&&<button onClick={()=>go(repeat)}>{repeat.label}</button>}

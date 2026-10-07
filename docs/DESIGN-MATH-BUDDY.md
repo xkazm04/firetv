@@ -289,3 +289,11 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 Not On Air: no charcoal, no red band, no condensed caps, no ticker, no rail. Not a textbook: the working is the
 learner's hand, not typeset solutions. Not a marker's red pen: the pen names a place and a kind, never the right
 answer, and never a position the data does not hold. Not a dashboard: no percentages; a set is ticks and rings.
+
+## The collection (v2 R1, 2026-10-07)
+
+Owner decisions V1 (D3 reversed), X1 and S1: rewards are a collection drawn in Lamplight's own world, earned only by
+latches the desk already keeps (`lib/rules/collect.ts`). On Tonight, a shelf beside the wordmark holds **a lit lamp for
+every topic latched secure**, and **a star over the lamp** when that topic's step-up record is latched too (the extra
+mile). The twelve most recent are shown, oldest on the left. Never a number, never for volume, never lost. Adult mode
+shows no shelf (X2: progress, not a game). `data-role="maths-collection"`; `maths/MathsCollection.tsx`.

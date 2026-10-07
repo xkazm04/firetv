@@ -646,3 +646,7 @@
 .maths-tv[data-screen="page"] .mb-row.q.wrap { padding-right: 216px; }
 /* on the walk the open item is the one in hand: the lamp and the full ink say so, not a box */
 .maths-tv[data-screen="walk"] .mb-item[data-focused="true"]::before { display: none; }
+
+/* v2 R1: the lamps lit, one per topic secure, a star for the extra mile (maths/MathsCollection.tsx) */
+.mb-shelf { display: flex; align-items: flex-end; gap: 8px; margin-left: 28px; height: 52px; }
+.mb-shelf svg { display: block; }
