@@ -109,7 +109,14 @@ object ProfileCodec {
     }
 }
 data class LoadedProfile(val profile: Profile,val status: String)
-class ProfileStore(private val root: File) {
+/** The points inside [ProfileStore.save] where a test may stop it, as a kill would. */
+enum class SaveStep { TEMP_SYNCED, BACKUP_COPIED, BEFORE_MOVE }
+/**
+ * [checkpoint] is a test seam: called with the profile id at each [SaveStep]; throwing from it stops the save there.
+ * Production builds use the public constructor, so the seam is one null check per step: no I/O, no reflection.
+ */
+class ProfileStore internal constructor(private val root: File,private val checkpoint: ((String,SaveStep)->Unit)?) {
+    constructor(root: File): this(root,null)
     private fun path(id: String,suffix: String="sav"): File {
         require(validProfileId(id));val file=File(root,"$id.$suffix")
         require(file.canonicalFile.parentFile==root.canonicalFile)
@@ -128,10 +135,13 @@ class ProfileStore(private val root: File) {
         val encoded=ProfileCodec.encode(profile)
         ProfileCodec.decode(encoded,profile.id) // Never replace a valid save with invalid state.
         FileOutputStream(temporary).use { it.write(encoded.toByteArray(Charsets.UTF_8));it.fd.sync() }
+        checkpoint?.invoke(profile.id,SaveStep.TEMP_SYNCED)
         if(main.exists()) {
             if(runCatching { ProfileCodec.decode(main.readText(),profile.id) }.isSuccess)main.copyTo(backup,overwrite=true)
             else { val corrupt=path(profile.id,"corrupt");if(!corrupt.exists())main.copyTo(corrupt) }
         }
+        checkpoint?.invoke(profile.id,SaveStep.BACKUP_COPIED)
+        checkpoint?.invoke(profile.id,SaveStep.BEFORE_MOVE)
         try { Files.move(temporary.toPath(),main.toPath(),StandardCopyOption.ATOMIC_MOVE,StandardCopyOption.REPLACE_EXISTING) }
         catch(_: AtomicMoveNotSupportedException) { Files.move(temporary.toPath(),main.toPath(),StandardCopyOption.REPLACE_EXISTING) }
     }
