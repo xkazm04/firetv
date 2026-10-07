@@ -82,7 +82,15 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     @Volatile var raceMode="practice"
     @Volatile var hostCareerJson="{}"
     val flash=AtomicBoolean(false)
+    /** Set only by [requestTrack], once the course is built and its bins baked: the render thread only swaps. */
     val trackRequest=AtomicInteger(-1)
+    private val trackTicket=AtomicInteger()
+    /** Builds course [index] and bakes its projection bins on the course worker, then queues it. Never blocks the caller
+     *  (a phone's receive loop must keep acknowledging inputs through a 1-2 s Stick bake); a newer pick supersedes one still baking. */
+    fun requestTrack(index: Int): java.util.concurrent.Future<*> {
+        val ticket=trackTicket.incrementAndGet()
+        return CoursePrewarm.submit(index) { if(trackTicket.get()==ticket)trackRequest.set(index) }
+    }
     @Volatile var trackJson=Courses.all[0].json
     val surfaceRequest=AtomicInteger(-1)
     @Volatile var surface=Surfaces.asphalt
@@ -254,7 +262,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0,
                             msg["f"]?.jsonPrimitive?.intOrNull==1,now,receiveNs)
                     }
-                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices && (phase=="lobby" || phase=="results")) { Courses.course(index);trackRequest.set(index) } } // bake on this IO thread so the render thread only swaps
+                    "track" -> { val index=Courses.indexOf(msg.text("id"));if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))requestTrack(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
                     "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career"))s.carRequest.set(index) }
                     "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3)

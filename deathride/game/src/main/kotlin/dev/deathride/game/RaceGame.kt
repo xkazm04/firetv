@@ -56,6 +56,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val obstaclePainter=ObstaclePainter()
     private val abilityPainter=AbilityPainter()
     private var selectedTrack=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
+    // The launch course's bins bake on the course worker while create() loads fonts, audio and art (Android constructs this on its UI thread, not the GL one).
+    init { CoursePrewarm.submit(courseCatalog[selectedTrack]) }
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
     private val view=FitViewport(1280f,720f)
@@ -165,6 +167,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="lobby" && phase!="results")return
         if(!editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
         phase="career";server.phase=phase;accumulator=0.0
+        // The next career race switches course at its start: build it and bake its bins while this screen is read.
+        CoursePrewarm.submit(Career.events[profiles[0].careerRound].courseIndex)
         for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot])
         campaignAudio.careerOpened(profiles[0]);script.careerOpened(profiles[0]);rebuildUi()
     }
@@ -254,7 +258,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     Input.Keys.LEFT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]-1).mod(CarCatalog.all.size)) else if(phase=="career")selectDifficulty(-1) else selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size) else if(phase=="career")selectDifficulty(1) else selectFeel(1); return true }
                     Input.Keys.MEDIA_PLAY_PAUSE -> { openGarage();return true }
-                    Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.trackRequest.set(Courses.nextPlayable(selectedTrack)); return true }
+                    Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.requestTrack(Courses.nextPlayable(selectedTrack)); return true }
                     Input.Keys.DOWN -> if(phase=="career") { startRace(true);return true } else if(phase=="garage") { selectedPart=(selectedPart+1)%Parts.all.size;return true } else if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
                     Input.Keys.UP -> if(phase=="garage") { selectedPart=(selectedPart-1).mod(Parts.all.size);return true } else if(phase=="lobby" || phase=="results") { openCareer();return true }
                     Input.Keys.MEDIA_REWIND -> if(phase=="lobby") { server.resetPairing();keyboard=false;return true }

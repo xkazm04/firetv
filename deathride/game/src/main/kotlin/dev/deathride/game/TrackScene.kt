@@ -128,6 +128,10 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private var slowStage=-1
     private var slowStepMs=0.0
     private var firstProjectMs=-1.0
+    /** Frames and wall ms this bake waited for the course worker to finish the projection bins (0 when they were ready). */
+    private var binWaitFrames=0
+    private var binWaitMs=0.0
+    private var waitingForBins=false
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
@@ -195,6 +199,14 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 else -> r.setColor(v,v+.025f,v+.035f,1f)
             }
             r.rect(point.x.toFloat(),point.y.toFloat(),.16f+rand.nextFloat()*.35f,.1f+rand.nextFloat()*.25f);yield(Unit)
+        }
+        // Kerbs (branch boundaries) and landmarks project onto the course. Its bins bake on the course worker, never on
+        // this thread (P9: 1.1-2.3 s per first visit): give back whole frames until they are ready. The sim and the
+        // countdown wait for this scene, so nothing else on the render thread projects onto the course before it.
+        if(!course.projectionReady) {
+            CoursePrewarm.submit(course);val waitStarted=System.nanoTime();waitingForBins=true
+            while(!course.projectionReady){binWaitFrames++;yield(Unit)}
+            waitingForBins=false;binWaitMs=(System.nanoTime()-waitStarted)/1e6
         }
         stage=4;for(i in 0..samples) {
             val s=course.lengthM*i/samples;course.sample(s,0.0,point);center[i*2]=point.x.toFloat();center[i*2+1]=point.y.toFloat()
@@ -330,12 +342,12 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             baking.next()
             val stepMs=(System.nanoTime()-step)/1e6;stageMs[stage]+=stepMs
             if(stepMs>slowStepMs){slowStepMs=stepMs;slowStage=stage}
-        } while(System.nanoTime()<deadline)
+        } while(!waitingForBins && System.nanoTime()<deadline)
         r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(ready) {
             Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
             Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+
-                bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"})
+                bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"}+" binWaitMs=$binWaitMs binWaitFrames=$binWaitFrames")
         }
     }
     fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL) {

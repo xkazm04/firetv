@@ -51,8 +51,10 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     private val columns: Int; private val rows: Int
     /** Projection bins are cell*BIN_TOP/BIN_SPLIT on a side (see bakeCandidates): candidate lists ~10x shorter than the 20 m authoring cell gave. */
     private val binM: Double
-    /** Baked on first projection, not at class load: the eager bake of every archived course stalled Android startup. */
-    private val candidates: Array<IntArray> by lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
+    /** Baked on first projection, not at class load: the eager bake of every archived course stalled Android startup.
+     *  [prewarmProjection] bakes them ahead of use; a project() racing an unfinished bake waits on this lock. */
+    private val candidateBins=lazy(LazyThreadSafetyMode.SYNCHRONIZED) { bakeCandidates() }
+    private val candidates: Array<IntArray> by candidateBins
     val pool=TrackContent.pools[id]?:TrackPool(0,4)
     val json get()=json(region)
     fun json(region: RegionDefinition)=courseJson(id,name,lesson,theme,features,pool,region)
@@ -112,6 +114,19 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         }
         return level
     }
+    /** Bakes this course's projection bins and every branch's on the calling thread, so the first project() is a lookup.
+     *  Call it off the render thread (see [CoursePrewarm]) for the course about to be used, never for the whole catalogue. */
+    fun prewarmProjection() { candidates;for(i in branches.indices)branches[i].alternative.prewarmProjection() }
+    /** True once [prewarmProjection] has nothing left to do. */
+    val projectionReady: Boolean get() {
+        if(!candidateBins.isInitialized())return false
+        for(i in branches.indices)if(!branches[i].alternative.projectionReady)return false
+        return true
+    }
+    /** Memory report only: ints held by this course's bins and its branches' (bakes them if needed). */
+    fun projectionInts(): Long { var n=0L;for(bin in candidates)n+=bin.size;for(i in branches.indices)n+=branches[i].alternative.projectionInts();return n }
+    /** Memory report only: bin arrays held, each with its own array header. */
+    fun projectionBinArrays(): Int { var n=candidates.size;for(i in branches.indices)n+=branches[i].alternative.projectionBinArrays();return n }
     private fun distance2(px: Double,py: Double,i: Int): Double {
         val t=((px-x[i])*dx[i]+(py-y[i])*dy[i])*inverseLength2[i]
         val u=t.coerceIn(0.0,1.0);val a=px-x[i]-dx[i]*u;val b=py-y[i]-dy[i]*u
