@@ -1,0 +1,3550 @@
+{
+ "summary": {
+  "apk": "app-release.apk",
+  "apk_bytes": 35120077,
+  "asset_dirs": {
+   "dexopt": {
+    "files": 2,
+    "bytes": 218,
+    "png_files": 0,
+    "png_bytes": 0,
+    "png_stored": 0,
+    "png_deflated": 0
+   },
+   "audio": {
+    "files": 60,
+    "bytes": 4897374,
+    "png_files": 0,
+    "png_bytes": 0,
+    "png_stored": 0,
+    "png_deflated": 0
+   },
+   "(root)": {
+    "files": 3,
+    "bytes": 17480,
+    "png_files": 0,
+    "png_bytes": 0,
+    "png_stored": 0,
+    "png_deflated": 0
+   },
+   "phase2-states": {
+    "files": 41,
+    "bytes": 14242547,
+    "png_files": 23,
+    "png_bytes": 14056124,
+    "png_stored": 23,
+    "png_deflated": 0
+   },
+   "regions": {
+    "files": 17,
+    "bytes": 1351148,
+    "png_files": 16,
+    "png_bytes": 1349696,
+    "png_stored": 16,
+    "png_deflated": 0
+   },
+   "story-art": {
+    "files": 17,
+    "bytes": 2951871,
+    "png_files": 16,
+    "png_bytes": 2949429,
+    "png_stored": 16,
+    "png_deflated": 0
+   }
+  },
+  "png_count": 55,
+  "png_before": 18355249,
+  "flags": "pyoxipng 9.1.1: level=6 (-o max), zopfli(15 iters), all reductions off (--nx), strip none",
+  "totals": {
+   "all": {
+    "files": 55,
+    "saved_bytes": 1729850,
+    "accepted": 55,
+    "json_pins_to_rewrite": 248
+   },
+   "no_owner_or_review": {
+    "files": 48,
+    "saved_bytes": 1585587,
+    "accepted": 48,
+    "json_pins_to_rewrite": 223
+   },
+   "owner_approved": {
+    "files": 7,
+    "saved_bytes": 144263,
+    "accepted": 7,
+    "json_pins_to_rewrite": 25
+   },
+   "review_only": {
+    "files": 0,
+    "saved_bytes": 0,
+    "accepted": 0,
+    "json_pins_to_rewrite": 0
+   }
+  },
+  "by_class": {
+   "owner-approval": {
+    "files": 7,
+    "saved_bytes": 144263,
+    "accepted": 7,
+    "json_pins_to_rewrite": 25
+   },
+   "review-pin": {
+    "files": 0,
+    "saved_bytes": 0,
+    "accepted": 0,
+    "json_pins_to_rewrite": 0
+   },
+   "technical-pin": {
+    "files": 48,
+    "saved_bytes": 1585587,
+    "accepted": 48,
+    "json_pins_to_rewrite": 223
+   },
+   "unpinned": {
+    "files": 0,
+    "saved_bytes": 0,
+    "accepted": 0,
+    "json_pins_to_rewrite": 0
+   }
+  }
+ },
+ "files": [
+  {
+   "apk_entry": "assets/phase2-states/autotile-barrier-0.png",
+   "source": "assets/phase2-states/autotile-barrier-0.png",
+   "apk_compress": "stored",
+   "before": 57156,
+   "sha256": "d6be1c88abf74e4796acb8ffcfc4fec16331657753f672dee7277ae90e7dd54f",
+   "apk_matches_source": true,
+   "after": 44051,
+   "saved": 13105,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/autotile-barrier.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "pages/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/autotile-barrier.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "pages/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/autotile-barrier.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/1/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 6
+  },
+  {
+   "apk_entry": "assets/phase2-states/autotile-track-edge-0.png",
+   "source": "assets/phase2-states/autotile-track-edge-0.png",
+   "apk_compress": "stored",
+   "before": 153863,
+   "sha256": "983384e90640093d6032ba722794c0c53c3d26e1df4084a0c8aa6b646a6eab8e",
+   "apk_matches_source": true,
+   "after": 125383,
+   "saved": 28480,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/autotile-track-edge.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "pages/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/autotile-track-edge.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "pages/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/autotile-track-edge.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 6
+  },
+  {
+   "apk_entry": "assets/phase2-states/cars-0.png",
+   "source": "assets/phase2-states/cars-0.png",
+   "apk_compress": "stored",
+   "before": 1584879,
+   "sha256": "99ad8e7ab089a8cf7ff7b3aa53bdcd64e3d37ed25b7e82676b976945f8097d14",
+   "apk_matches_source": true,
+   "after": 1509576,
+   "saved": 75303,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-states/cars.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/2/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 2
+  },
+  {
+   "apk_entry": "assets/phase2-states/cars-1.png",
+   "source": "assets/phase2-states/cars-1.png",
+   "apk_compress": "stored",
+   "before": 1112325,
+   "sha256": "aed1579f3c173ec605a329d9354ea522887aa7eee0715a4d086562d1adf61e94",
+   "apk_matches_source": true,
+   "after": 1058379,
+   "saved": 53946,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-states/cars.json",
+     "path": "pages/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/3/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 2
+  },
+  {
+   "apk_entry": "assets/phase2-states/course-ribbon.png",
+   "source": "assets/phase2-states/course-ribbon.png",
+   "apk_compress": "stored",
+   "before": 102906,
+   "sha256": "e4f5673d88f4828a38a28b8edc76580dcb087e125612aa1e7815aca220ded816",
+   "apk_matches_source": true,
+   "after": 87520,
+   "saved": 15386,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    256
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "ribbons/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "ribbons/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "ribbons/0/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/phase2-states/ui-0.png",
+   "source": "assets/phase2-states/ui-0.png",
+   "apk_compress": "stored",
+   "before": 1117815,
+   "sha256": "f5064b4b68387d1a3d8990e4d89d878be9d0218fa0537312377e71a59a374ee0",
+   "apk_matches_source": true,
+   "after": 1061371,
+   "saved": 56444,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/5/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/ui.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 2
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-backdrops-alpine-v1.png",
+   "source": "assets/phase2-states/v4-fusion-backdrops-alpine-v1.png",
+   "apk_compress": "stored",
+   "before": 1632922,
+   "sha256": "dde9a11e7320ab178dda0a61944c00f8bc4bcfccd5d5aeb77178f54bcd3aea17",
+   "apk_matches_source": true,
+   "after": 1481275,
+   "saved": 151647,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "themes/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "67/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "67/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "themes/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "67/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "67/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "themes/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "67/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "67/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-backdrops-desert-v1.png",
+   "source": "assets/phase2-states/v4-fusion-backdrops-desert-v1.png",
+   "apk_compress": "stored",
+   "before": 1471841,
+   "sha256": "435db62cade82a661ca3f4a80080d98be8986d7bceee9dff7ac20cbc7d5dbe23",
+   "apk_matches_source": true,
+   "after": 1302913,
+   "saved": 168928,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "themes/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "65/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "65/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "themes/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "65/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "65/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "themes/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "65/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "65/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-backdrops-industrial-v1.png",
+   "source": "assets/phase2-states/v4-fusion-backdrops-industrial-v1.png",
+   "apk_compress": "stored",
+   "before": 1225933,
+   "sha256": "7b6fdbad858478c9cb667de32933e207d84d403df2ab7666035c9528a64e2aec",
+   "apk_matches_source": true,
+   "after": 1096341,
+   "saved": 129592,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "themes/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "63/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "63/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "themes/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "63/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "63/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "themes/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "63/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "63/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-backdrops-quarry-v1.png",
+   "source": "assets/phase2-states/v4-fusion-backdrops-quarry-v1.png",
+   "apk_compress": "stored",
+   "before": 1964343,
+   "sha256": "cc24adebe61794c33a00959aebc66e642690c947437461ec2b4f618a7bd1b34a",
+   "apk_matches_source": true,
+   "after": 1811799,
+   "saved": 152544,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "themes/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "64/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "64/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "themes/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "64/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "64/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "themes/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "64/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "64/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-backdrops-wetland-v1.png",
+   "source": "assets/phase2-states/v4-fusion-backdrops-wetland-v1.png",
+   "apk_compress": "stored",
+   "before": 1724797,
+   "sha256": "dcd3a0dc2ea7a41e3f2a81d2943033ec85512ffdf9aed99bbece0536602d1bf5",
+   "apk_matches_source": true,
+   "after": 1595959,
+   "saved": 128838,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "themes/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "66/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "66/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "themes/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "66/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "66/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "themes/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "66/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "66/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-ground-dirt-v1.png",
+   "source": "assets/phase2-states/v4-fusion-ground-dirt-v1.png",
+   "apk_compress": "stored",
+   "before": 90214,
+   "sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+   "apk_matches_source": true,
+   "after": 75959,
+   "saved": 14255,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/9/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "9/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "9/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/9/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "9/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "9/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/9/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "9/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "9/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/1/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/4/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/7/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/10/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/14/sourceSha256",
+     "field": "sourceSha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256",
+    "sourceSha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 14
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-ground-grass-v1.png",
+   "source": "assets/phase2-states/v4-fusion-ground-grass-v1.png",
+   "apk_compress": "stored",
+   "before": 92547,
+   "sha256": "22a9cb593ca96c18f468a01794ce0b49ad781cf7f57ec03fa8ef99bb14b0c743",
+   "apk_matches_source": true,
+   "after": 80612,
+   "saved": 11935,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/8/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "8/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "8/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/8/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "8/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "8/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/8/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "8/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "8/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-ground-gravel-v1-wrap-v1.png",
+   "source": "assets/phase2-states/v4-fusion-ground-gravel-v1-wrap-v1.png",
+   "apk_compress": "stored",
+   "before": 175180,
+   "sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+   "apk_matches_source": true,
+   "after": 164033,
+   "saved": 11147,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/10/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/selection/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/selection/model_observations/0/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/selection/model_observations/1/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/provenance/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "10/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/10/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/selection/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/selection/model_observations/0/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/selection/model_observations/1/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/provenance/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "10/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/10/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/selection/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/selection/model_observations/0/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/selection/model_observations/1/image_sha256",
+     "field": "image_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/provenance/source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "10/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/2/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/5/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/8/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/11/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/15/sourceSha256",
+     "field": "sourceSha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "image_sha256",
+    "processed_sha256",
+    "sha256",
+    "sourceSha256",
+    "source_sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 26
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-asphalt-clean-crop768-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-asphalt-clean-crop768-v1.png",
+   "apk_compress": "stored",
+   "before": 70260,
+   "sha256": "c7614be2e8b4cde0847f19686b606fd0b3d3f72b6af45f894ad8578f2cb94178",
+   "apk_matches_source": true,
+   "after": 56404,
+   "saved": 13856,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "4/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "4/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "4/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "4/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "4/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "4/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-asphalt-heavy-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-asphalt-heavy-v1.png",
+   "apk_compress": "stored",
+   "before": 99563,
+   "sha256": "845eab47a1bfa71a1ef67b35f436de48c92b69a01726b6934e14ffb16e78afff",
+   "apk_matches_source": true,
+   "after": 82749,
+   "saved": 16814,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "1/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "1/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "1/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "1/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "1/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "1/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-asphalt-worn-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-asphalt-worn-v1.png",
+   "apk_compress": "stored",
+   "before": 58163,
+   "sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+   "apk_matches_source": true,
+   "after": 44565,
+   "saved": 13598,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/autotile-track-edge-rules.json",
+     "path": "source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "0/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "0/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/autotile-track-edge-rules.json",
+     "path": "source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "0/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "0/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/autotile-track-edge-rules.json",
+     "path": "source_sha256",
+     "field": "source_sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "0/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "0/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/0/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/3/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/6/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/9/sourceSha256",
+     "field": "sourceSha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/13/sourceSha256",
+     "field": "sourceSha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256",
+    "sourceSha256",
+    "source_sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 17
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-concrete-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-concrete-v1.png",
+   "apk_compress": "stored",
+   "before": 85803,
+   "sha256": "462c79ac455e24088f9b2b4735bc8c48dc4fb4560e2ff23391ae3736663ba911",
+   "apk_matches_source": true,
+   "after": 70880,
+   "saved": 14923,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "2/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "2/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "2/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "2/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "2/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "2/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-ice-crop768-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-ice-crop768-v1.png",
+   "apk_compress": "stored",
+   "before": 95594,
+   "sha256": "cb4bc0511c512e4268da7f194d4b2a24b5c025c7522de5d2c7d2bd6821059a96",
+   "apk_matches_source": true,
+   "after": 80737,
+   "saved": 14857,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/5/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "5/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "5/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/5/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "5/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "5/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/5/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "5/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "5/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/12/sourceSha256",
+     "field": "sourceSha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256",
+    "sourceSha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 10
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-kerb-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-kerb-v1.png",
+   "apk_compress": "stored",
+   "before": 110818,
+   "sha256": "c890c349f062f7da6e4d500b55765f7c30328a29fbf35cd16ece0e6d9e1d4166",
+   "apk_matches_source": true,
+   "after": 98695,
+   "saved": 12123,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/7/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "7/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "7/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/7/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "7/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "7/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/7/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "7/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "7/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-metal-crop768-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-metal-crop768-v1.png",
+   "apk_compress": "stored",
+   "before": 46187,
+   "sha256": "0bfed30b6576db58728d7994cbe1e600b28ca7ed89ea124684062d5690a89dc2",
+   "apk_matches_source": true,
+   "after": 35467,
+   "saved": 10720,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "3/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "3/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "3/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "3/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "3/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "3/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/v4-fusion-surfaces-oil-v1.png",
+   "source": "assets/phase2-states/v4-fusion-surfaces-oil-v1.png",
+   "apk_compress": "stored",
+   "before": 85193,
+   "sha256": "7569f3871a32d20be84c2e3cf1a7316ab2f2d8043b1fbf8991b07044c50fe309",
+   "apk_matches_source": true,
+   "after": 69744,
+   "saved": 15449,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-fusion/manifest.json",
+     "path": "tiles/6/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "6/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-fusion/provenance.json",
+     "path": "6/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/manifest.json",
+     "path": "tiles/6/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "6/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-hud/provenance.json",
+     "path": "6/provenance/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "tiles/6/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "6/selection/processed_sha256",
+     "field": "processed_sha256"
+    },
+    {
+     "file": "assets/phase2-states/provenance.json",
+     "path": "6/provenance/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "processed_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 9
+  },
+  {
+   "apk_entry": "assets/phase2-states/world-0.png",
+   "source": "assets/phase2-states/world-0.png",
+   "apk_compress": "stored",
+   "before": 897822,
+   "sha256": "923ba3c25a8df002999234453b305950f6575a9114cec5a104b7fbcc00c93ad1",
+   "apk_matches_source": true,
+   "after": 844861,
+   "saved": 52961,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    1024,
+    1024
+   ],
+   "ihdr": {
+    "w": 1024,
+    "h": 1024,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-states/manifest.json",
+     "path": "pages/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/phase2-states/world.json",
+     "path": "pages/0/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "none in Kotlin (only tools/art/*.py read these pins)"
+   ],
+   "pin_values_to_rewrite": 2
+  },
+  {
+   "apk_entry": "assets/regions/g1-crown-asphalt-tint-v1.png",
+   "source": "assets/regions/g1-crown-asphalt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 43881,
+   "sha256": "bd4432da66160aa5b74c50c585540cf6689c7d8abd9e850421d733f29b86a3fc",
+   "apk_matches_source": true,
+   "after": 31243,
+   "saved": 12638,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/13/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-crown-dirt-tint-v1.png",
+   "source": "assets/regions/g1-crown-dirt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 73613,
+   "sha256": "a4446426ad1bb5e5b008a454afa45aa7fa200b987a4dc369b6719242a971f295",
+   "apk_matches_source": true,
+   "after": 50553,
+   "saved": 23060,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/14/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-crown-gravel-tint-v1.png",
+   "source": "assets/regions/g1-crown-gravel-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 134701,
+   "sha256": "ea9163ba8f241addb7e5ba32b30c0ebda55c790f76abb3a2a3981e026b245688",
+   "apk_matches_source": true,
+   "after": 113442,
+   "saved": 21259,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/15/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-foundry-asphalt-tint-v1.png",
+   "source": "assets/regions/g1-foundry-asphalt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 43830,
+   "sha256": "c74aed4fd79015e81d3d14478f5d01061a649719a141d93b9a88714d78856e6a",
+   "apk_matches_source": true,
+   "after": 31257,
+   "saved": 12573,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/3/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-foundry-dirt-tint-v1.png",
+   "source": "assets/regions/g1-foundry-dirt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 73613,
+   "sha256": "350095c4780a55fb0921712880c01caf3d740aa3950d350325ecd6f8dbb241e1",
+   "apk_matches_source": true,
+   "after": 50548,
+   "saved": 23065,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/4/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-foundry-gravel-tint-v1.png",
+   "source": "assets/regions/g1-foundry-gravel-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 138485,
+   "sha256": "3cb76ca70f64f31672910e9f6d215c153f550fe4d66baff1a074ba5028fdb5d4",
+   "apk_matches_source": true,
+   "after": 112416,
+   "saved": 26069,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/5/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-salt-asphalt-tint-v1.png",
+   "source": "assets/regions/g1-salt-asphalt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 44348,
+   "sha256": "61e6acf92063eb29110ad6fd274d0c860c2bd725d4561e555765004f6939e574",
+   "apk_matches_source": true,
+   "after": 31297,
+   "saved": 13051,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/6/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-salt-dirt-tint-v1.png",
+   "source": "assets/regions/g1-salt-dirt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 73613,
+   "sha256": "e3787afce0334378990997fa40bee8057ce1f250eb6a82bd42f4cc30bd91e28d",
+   "apk_matches_source": true,
+   "after": 50599,
+   "saved": 23014,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/7/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-salt-gravel-tint-v1.png",
+   "source": "assets/regions/g1-salt-gravel-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 134490,
+   "sha256": "0f4f0269e2aefe6cdfb8056a032fcff166e73d90c13b4c2765925e3a57d53ece",
+   "apk_matches_source": true,
+   "after": 113867,
+   "saved": 20623,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/8/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-scrap-asphalt-tint-v1.png",
+   "source": "assets/regions/g1-scrap-asphalt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 43992,
+   "sha256": "7ee9430cfc512d03065d351c75d242826c1ceacfc2a00fcb787fa07ab272f225",
+   "apk_matches_source": true,
+   "after": 31261,
+   "saved": 12731,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/0/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-scrap-dirt-tint-v1.png",
+   "source": "assets/regions/g1-scrap-dirt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 73613,
+   "sha256": "3934e683c6a4c786739bce43a86773df36c37c10a174bc9203ab3490be33bbd9",
+   "apk_matches_source": true,
+   "after": 50544,
+   "saved": 23069,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/1/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-scrap-gravel-tint-v1.png",
+   "source": "assets/regions/g1-scrap-gravel-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 135351,
+   "sha256": "48672ab11cf5276283ea6ed854b7662d826685080f7634c937a068ab5014f6c3",
+   "apk_matches_source": true,
+   "after": 113278,
+   "saved": 22073,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/2/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-switchback-asphalt-tint-v1.png",
+   "source": "assets/regions/g1-switchback-asphalt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 44263,
+   "sha256": "d2d62004b94f1fb4ebde21fbbf9743fccfcb3774a2011dc102b7950afa5b0ab2",
+   "apk_matches_source": true,
+   "after": 31263,
+   "saved": 13000,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/9/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-switchback-dirt-tint-v1.png",
+   "source": "assets/regions/g1-switchback-dirt-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 73613,
+   "sha256": "012d7da045def1ada5b18fa635776c868e2557a850da2de0287e686696cc6bb9",
+   "apk_matches_source": true,
+   "after": 50527,
+   "saved": 23086,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/10/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-switchback-gravel-tint-v1.png",
+   "source": "assets/regions/g1-switchback-gravel-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 134506,
+   "sha256": "9db8aa0f063a5120f019d134d7d6a1d64b627d6bca4eb19ea80f4c1ec5adb170",
+   "apk_matches_source": true,
+   "after": 113522,
+   "saved": 20984,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/11/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/regions/g1-switchback-ice-tint-v1.png",
+   "source": "assets/regions/g1-switchback-ice-tint-v1.png",
+   "apk_compress": "stored",
+   "before": 83784,
+   "sha256": "4f19fda5c41ce4c17b3ca768a7cf8ecd63be64bf308a6021e672f78710443e3b",
+   "apk_matches_source": true,
+   "after": 58613,
+   "saved": 25171,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    256,
+    256
+   ],
+   "ihdr": {
+    "w": 256,
+    "h": 256,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/regions/materials.json",
+     "path": "assets/12/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "RegionMaterials.verifiedFile (RegionMaterials.kt:25, require digest==sha256, runtime)"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/ally-mica.png",
+   "source": "assets/story-art/ally-mica.png",
+   "apk_compress": "stored",
+   "before": 274368,
+   "sha256": "b6c827aa3100f88db1512a44a42b4b0840dc831e53895bd108e6d64f357c83a8",
+   "apk_matches_source": true,
+   "after": 250698,
+   "saved": 23670,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/5/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/5/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/5/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/ally-ox.png",
+   "source": "assets/story-art/ally-ox.png",
+   "apk_compress": "stored",
+   "before": 312939,
+   "sha256": "9ebc5650549fc7ae5c714949e82ce91076859dd2092a5983f84146c38f63600b",
+   "apk_matches_source": true,
+   "after": 286050,
+   "saved": 26889,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/3/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/3/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/3/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/ally-rook.png",
+   "source": "assets/story-art/ally-rook.png",
+   "apk_compress": "stored",
+   "before": 348643,
+   "sha256": "7b90ca54d170fbb917038b4ac4bf139bc8471c100f78fb24c90b1f2b8a259767",
+   "apk_matches_source": true,
+   "after": 323570,
+   "saved": 25073,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/2/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/2/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/2/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/ally-vex.png",
+   "source": "assets/story-art/ally-vex.png",
+   "apk_compress": "stored",
+   "before": 289469,
+   "sha256": "2c23dc8d67a3f923faa2683584c2f662cde5b63106bd47ed0b8e121ad4044f41",
+   "apk_matches_source": true,
+   "after": 267676,
+   "saved": 21793,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/4/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/4/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/4/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/car-seizure.png",
+   "source": "assets/story-art/car-seizure.png",
+   "apk_compress": "stored",
+   "before": 335374,
+   "sha256": "a810d94632a12c9f1783438d681680619df2972d7f73022fc4afbfb15566fd8c",
+   "apk_matches_source": true,
+   "after": 313299,
+   "saved": 22075,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/6/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/debt-contract.png",
+   "source": "assets/story-art/debt-contract.png",
+   "apk_compress": "stored",
+   "before": 284876,
+   "sha256": "eeec2c676d6cac466e780842d6f78888a02a23d49d73a41b7728687ff1a8ef88",
+   "apk_matches_source": true,
+   "after": 263812,
+   "saved": 21064,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/1/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/1/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/1/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/debt-meter.png",
+   "source": "assets/story-art/debt-meter.png",
+   "apk_compress": "stored",
+   "before": 11446,
+   "sha256": "0ce51cc4ea2d1f776942b7aaa91190483150b4ef5d51b730d3b661e969677a5e",
+   "apk_matches_source": true,
+   "after": 10513,
+   "saved": 933,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    74
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 74,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/15/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/ending.png",
+   "source": "assets/story-art/ending.png",
+   "apk_compress": "stored",
+   "before": 263710,
+   "sha256": "bb70e94eff1cb42d023347c64711c9a09e05ddacea675a7455108c48587ff3ff",
+   "apk_matches_source": true,
+   "after": 239140,
+   "saved": 24570,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/9/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/9/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/9/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 3
+  },
+  {
+   "apk_entry": "assets/story-art/final-duel.png",
+   "source": "assets/story-art/final-duel.png",
+   "apk_compress": "stored",
+   "before": 431313,
+   "sha256": "a1d623f22e9ff160cc18a9f99609b2c4aad5424c802a55de85f6f138efd38988",
+   "apk_matches_source": true,
+   "after": 395192,
+   "saved": 36121,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/8/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/icon-cancelled.png",
+   "source": "assets/story-art/icon-cancelled.png",
+   "apk_compress": "stored",
+   "before": 27567,
+   "sha256": "619b6defcaba548b4ccb6449efcecb320696bd7a1532db89af49025c8acead58",
+   "apk_matches_source": true,
+   "after": 25578,
+   "saved": 1989,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/14/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/icon-diversion.png",
+   "source": "assets/story-art/icon-diversion.png",
+   "apk_compress": "stored",
+   "before": 24311,
+   "sha256": "92fcb9fed3958d4e9075c7ba4a4f550c56ab45924ba2df78d22218266840af7c",
+   "apk_matches_source": true,
+   "after": 23353,
+   "saved": 958,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/12/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/icon-ledger.png",
+   "source": "assets/story-art/icon-ledger.png",
+   "apk_compress": "stored",
+   "before": 24083,
+   "sha256": "69f829ae4f1630e0d274e321d0b034eb4b5f4b2a0aa893c9678fd4d97950382b",
+   "apk_matches_source": true,
+   "after": 23000,
+   "saved": 1083,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/10/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/icon-payment.png",
+   "source": "assets/story-art/icon-payment.png",
+   "apk_compress": "stored",
+   "before": 18927,
+   "sha256": "2f3def8f95a8075ea7c7b5e5b66c6233bc3f6f4fc1f4c673607b1735ed7bece6",
+   "apk_matches_source": true,
+   "after": 17960,
+   "saved": 967,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/11/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/icon-recovery.png",
+   "source": "assets/story-art/icon-recovery.png",
+   "apk_compress": "stored",
+   "before": 27782,
+   "sha256": "ac50213fd8276eb0d8608fcfef10607c372bf7c929fe5a650775910b423a3f83",
+   "apk_matches_source": true,
+   "after": 26336,
+   "saved": 1446,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/13/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  },
+  {
+   "apk_entry": "assets/story-art/mechanic.png",
+   "source": "assets/story-art/mechanic.png",
+   "apk_compress": "stored",
+   "before": 19059,
+   "sha256": "ab7a73dbd6a43421af3b9a287a30b0cf0fc08bb8f8032b2bc0340357070afb07",
+   "apk_matches_source": true,
+   "after": 17855,
+   "saved": 1204,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    128,
+    128
+   ],
+   "ihdr": {
+    "w": 128,
+    "h": 128,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/phase2-states/catalog.json",
+     "path": "assets/164/export_sha256",
+     "field": "export_sha256"
+    },
+    {
+     "file": "assets/phase2-states/catalog.json",
+     "path": "assets/164/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/phase2-states/catalog.json",
+     "path": "assets/164/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    },
+    {
+     "file": "assets/phase2-states/ui.json",
+     "path": "regions/7/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/0/sha256",
+     "field": "sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/0/approved_export_sha256",
+     "field": "approved_export_sha256"
+    },
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/0/face_visibility_export_sha256",
+     "field": "face_visibility_export_sha256"
+    }
+   ],
+   "pin_class": "owner-approval",
+   "pin_fields": [
+    "approved_export_sha256",
+    "export_sha256",
+    "face_visibility_export_sha256",
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "FaceArt.screened (FaceArt.kt:15-16), called by StoryArt.eligible and AtlasArt:50; test FaceArtTest",
+    "StoryArt.eligible (game/.../StoryArt.kt:75), EnvironmentArt.eligible for phase2-states catalog entries (EnvironmentArt.kt:15); tests StoryArtTest, EnvironmentArtTest",
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 7
+  },
+  {
+   "apk_entry": "assets/story-art/rig-reveal.png",
+   "source": "assets/story-art/rig-reveal.png",
+   "apk_compress": "stored",
+   "before": 255562,
+   "sha256": "922f68bfeba3322d41bb6db35f512a95229b835f31ecd10d24b5e99dd226aad9",
+   "apk_matches_source": true,
+   "after": 227864,
+   "saved": 27698,
+   "ihdr_same": true,
+   "mode": "RGBA",
+   "size": [
+    512,
+    512
+   ],
+   "ihdr": {
+    "w": 512,
+    "h": 512,
+    "depth": 8,
+    "ctype": 6,
+    "comp": 0,
+    "filt": 0,
+    "interlace": 0
+   },
+   "pixels_native_same": true,
+   "pixels_rgba_same": true,
+   "palette_same": true,
+   "accepted": true,
+   "pins": [
+    {
+     "file": "assets/story-art/catalog.json",
+     "path": "assets/7/sha256",
+     "field": "sha256"
+    }
+   ],
+   "pin_class": "technical-pin",
+   "pin_fields": [
+    "sha256"
+   ],
+   "kotlin_readers": [
+    "StoryArt.eligible/matches (StoryArt.kt:73,78), StoryArtTest:48"
+   ],
+   "pin_values_to_rewrite": 1
+  }
+ ]
+}
