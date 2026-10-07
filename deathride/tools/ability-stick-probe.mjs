@@ -54,7 +54,9 @@ try {
  await join();await join();assert.deepEqual(clients.map(c=>c.slot),[0,1]);await memory(0);
  started=performance.now();let next=started;pumping=true;
  function pump(){if(!pumping)return;const now=performance.now();if(now>=next){for(const c of clients){const q=c.q++,ts=performance.now();c.pending.set(q,{ts,offset:c.offset});c.send({t:'i',q,ts,...c.command});c.sent++}next+=1000/30;if(now-next>100){const stall={second:(now-started)/1000,lateMs:now-next,epochMs:performance.timeOrigin+now,cpu:process.cpuUsage(),memory:process.memoryUsage()};result.pumpStalls.push(stall);console.log(JSON.stringify({hostPumpStall:stall}));next=now+1000/30}}timer=setTimeout(pump,Math.max(0,next-performance.now()))}pump();
- const tracks=['foundry','saltline','scree','sluice','ridge'];
+ // PROBE_TRACKS overrides the five-course cycle (the P8 ids are no longer playable on region courses).
+ const tracks=process.env.PROBE_TRACKS?process.env.PROBE_TRACKS.split(','):['foundry','saltline','scree','sluice','ridge'];
+ assert.ok(tracks.length===5&&tracks.every(id=>catalog.tracks.some(t=>t.id===id)),'Every probe track must be playable: '+tracks);result.tracks=tracks;
  let roundIndex=0;
  while((performance.now()-started)/1000<duration){
   const pair=rotateFirst?roundIndex%10:(roundIndex%5)*2,track=tracks[roundIndex%5];

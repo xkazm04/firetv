@@ -14,6 +14,7 @@ p.add_argument('--extra', action='append', default=[])
 # Courses build lazily since baf5181a: the first /routes builds every playable course, past the
 # probe's 5 s setup fetch on a Stick. P8 paid that at class load; this pays it before the probe.
 p.add_argument('--warm-routes', action='store_true')
+p.add_argument('--tracks', help='comma-separated five playable course ids (PROBE_TRACKS)')
 p.add_argument('--apk', type=Path, default=ROOT / 'app/build/outputs/apk/debug/app-debug.apk')
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
@@ -77,6 +78,8 @@ if a.warm_routes:
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
     'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0', 'PROBE_APK_PATH': str(apk)}
+if a.tracks:
+    env['PROBE_TRACKS'] = a.tracks
 with (a.output / 'logcat.txt').open('wb') as log:
     logcat = subprocess.Popen(['adb', '-P', '5041', '-s', a.device, 'logcat', '--pid=' + pid,
         '-v', 'threadtime'], stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)
