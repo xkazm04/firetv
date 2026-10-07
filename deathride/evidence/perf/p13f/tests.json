@@ -1,0 +1,40 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "commit": "the branch tip after the test fix (code unchanged since bb49e716)",
+ "result": "BUILD SUCCESSFUL",
+ "modules": {
+  "core": {
+   "tests": 261,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  },
+  "link": {
+   "tests": 26,
+   "skipped": 2,
+   "failures": 0,
+   "errors": 0
+  },
+  "game": {
+   "tests": 110,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "new": {
+  "StatsJsonTest": {
+   "cases": [
+    "appendedStatsAreTheTemplatedTextByteForByte()",
+    "servedStatsAreTheTemplatedBytesWithTheSameHeaders()",
+    "reusedScratchDistributionMatchesTheFreshArrayOne()"
+   ],
+   "failures": 0
+  }
+ },
+ "note": "link 26 = 23 on the base + 3 new (2 skipped, as on the base); core 261 and game 110 unchanged. Every existing test file is unchanged. The first forced run on the loaded host failed StatsJsonTest.servedStats...: the live server started over 10 s after its clock origin, so its last10s counter aged out a sample the reference reply kept (a clock difference, not a byte one); fixed in the test (samples ahead of the live clock), then the full forced run was green. A one-field mutation of the in-place build (lap appended as a Double) fails both text tests.",
+ "logs": [
+  "p13f/9d88747c/gate-final.log (first run, the served test failed on the clock)",
+  "p13f/9d88747c/gate-final2.log (final, green)"
+ ]
+}
