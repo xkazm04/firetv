@@ -1,0 +1,2009 @@
+{
+ "measure": "The interval k frames after the event frame (k=0), from the glInventory lines of a profiled perf build. A frame interval holds the previous frame's GPU wait, so a slow interval at k is the GPU job of frame k-1. P13c: the interval at k=11 after every switch frame, 101-112 ms, 22 of 22.",
+ "arms": {
+  "off": {
+   "what": "The shipping switch (P13c code plus the inventory).",
+   "apkSha256": "8c9c21616698d0978cf47dff17d81364e33b58c8320f546d57b4fa84603a83b7",
+   "extra": [],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 5927,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 100.0
+      }
+     ],
+     "k11IntervalMs": 100.0,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      40.8,
+      84.2,
+      11.3,
+      16.5,
+      16.9,
+      16.6,
+      18.5,
+      14.8,
+      18.1,
+      16.7,
+      16.9,
+      100.0,
+      28.0,
+      14.0,
+      12.6,
+      19.1,
+      14.0,
+      17.7,
+      17.0,
+      33.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9825,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 99.9
+      }
+     ],
+     "k11IntervalMs": 99.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      16.5,
+      35.9,
+      14.6,
+      16.3,
+      16.5,
+      16.7,
+      16.8,
+      16.5,
+      16.7,
+      16.7,
+      16.7,
+      99.9,
+      7.6,
+      14.3,
+      16.2,
+      16.8,
+      17.7,
+      15.8,
+      18.8,
+      14.3
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13747,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 100.7
+      }
+     ],
+     "k11IntervalMs": 100.7,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      20.2,
+      34.5,
+      11.1,
+      13.1,
+      13.9,
+      17.1,
+      16.3,
+      17.9,
+      15.6,
+      16.5,
+      16.9,
+      100.7,
+      22.1,
+      14.9,
+      19.0,
+      14.4,
+      17.1,
+      16.3,
+      17.4,
+      16.5
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "delay": {
+   "what": "Replaced tiles deleted 60 frames after the switch, one per frame.",
+   "apkSha256": "8c9c21616698d0978cf47dff17d81364e33b58c8320f546d57b4fa84603a83b7",
+   "extra": [
+    "switchArm=delay"
+   ],
+   "events": [
+    {
+     "event": "release",
+     "frame": 60,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 1
+      },
+      {
+       "k": 1,
+       "texDelete": 1
+      },
+      {
+       "k": 2,
+       "texDelete": 1
+      },
+      {
+       "k": 3,
+       "texDelete": 1
+      }
+     ],
+     "intervalsMs": [
+      16.2,
+      18.8,
+      15.4,
+      17.0,
+      16.7,
+      16.4,
+      16.5,
+      17.1,
+      17.1,
+      16.2,
+      16.4,
+      16.9,
+      16.1,
+      17.5,
+      16.5,
+      16.4,
+      17.4,
+      16.7,
+      16.5,
+      17.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 6358,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 108.4
+      }
+     ],
+     "k11IntervalMs": 108.4,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      17.4,
+      69.2,
+      12.0,
+      15.9,
+      16.9,
+      21.9,
+      12.3,
+      14.5,
+      17.3,
+      16.1,
+      16.2,
+      108.4,
+      21.9,
+      16.0,
+      15.5,
+      16.7,
+      17.2,
+      16.1,
+      16.7,
+      17.2
+     ]
+    },
+    {
+     "event": "release",
+     "frame": 6418,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.3,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 1
+      },
+      {
+       "k": 1,
+       "texDelete": 1
+      },
+      {
+       "k": 2,
+       "texDelete": 1
+      },
+      {
+       "k": 3,
+       "texDelete": 1
+      }
+     ],
+     "intervalsMs": [
+      16.7,
+      16.9,
+      16.6,
+      16.8,
+      16.5,
+      16.8,
+      18.1,
+      16.5,
+      17.0,
+      16.3,
+      17.1,
+      16.3,
+      16.7,
+      16.7,
+      15.3,
+      16.7,
+      16.7,
+      16.6,
+      16.9,
+      16.5
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 10333,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 99.7
+      }
+     ],
+     "k11IntervalMs": 99.7,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      28.0,
+      68.2,
+      11.1,
+      11.8,
+      16.4,
+      18.2,
+      16.3,
+      15.6,
+      16.6,
+      16.7,
+      18.3,
+      99.7,
+      20.5,
+      17.4,
+      16.0,
+      18.6,
+      15.8,
+      18.4,
+      14.1,
+      17.3
+     ]
+    },
+    {
+     "event": "release",
+     "frame": 10393,
+     "slowIntervals": [],
+     "k11IntervalMs": 15.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 1
+      },
+      {
+       "k": 1,
+       "texDelete": 1
+      },
+      {
+       "k": 2,
+       "texDelete": 1
+      },
+      {
+       "k": 3,
+       "texDelete": 1
+      }
+     ],
+     "intervalsMs": [
+      15.2,
+      17.7,
+      21.9,
+      34.2,
+      27.7,
+      28.7,
+      13.3,
+      25.9,
+      18.2,
+      10.7,
+      20.6,
+      15.9,
+      17.2,
+      24.7,
+      8.4,
+      16.5,
+      16.1,
+      16.5,
+      16.5,
+      15.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 14268,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 102.1
+      }
+     ],
+     "k11IntervalMs": 102.1,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      38.6,
+      41.1,
+      15.7,
+      16.4,
+      17.0,
+      17.6,
+      17.1,
+      16.3,
+      16.7,
+      16.6,
+      16.7,
+      102.1,
+      18.9,
+      16.0,
+      22.9,
+      15.9,
+      12.1,
+      15.6,
+      16.6,
+      17.0
+     ]
+    },
+    {
+     "event": "release",
+     "frame": 14328,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.2,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 1
+      },
+      {
+       "k": 1,
+       "texDelete": 1
+      },
+      {
+       "k": 2,
+       "texDelete": 1
+      },
+      {
+       "k": 3,
+       "texDelete": 1
+      }
+     ],
+     "intervalsMs": [
+      21.5,
+      11.2,
+      17.5,
+      16.2,
+      17.9,
+      15.2,
+      16.2,
+      17.5,
+      16.3,
+      16.9,
+      17.4,
+      16.2,
+      19.4,
+      13.4,
+      17.6,
+      15.4,
+      17.6,
+      16.5,
+      16.8,
+      16.4
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=20709376 prepared=false",
+    "regionMaterials released bytes=262144 held=786432 resident=20447232 peak=20709376",
+    "regionMaterials released bytes=262144 held=524288 resident=20185088 peak=20709376",
+    "regionMaterials released bytes=262144 held=262144 resident=19922944 peak=20709376",
+    "regionMaterials released bytes=262144 held=0 resident=19660800 peak=20709376",
+    "regionMaterials foundry:true candidates=3 bytes=20709376 prepared=true held=1048576 peak=20709376 from=scrap:true",
+    "regionMaterials released bytes=262144 held=786432 resident=20447232 peak=20709376",
+    "regionMaterials released bytes=262144 held=524288 resident=20185088 peak=20709376"
+   ]
+  },
+  "skip": {
+   "what": "No tile replaced: no delete, no upload (diagnostic only).",
+   "apkSha256": "8c9c21616698d0978cf47dff17d81364e33b58c8320f546d57b4fa84603a83b7",
+   "extra": [
+    "switchArm=skip"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 5940,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 107.4
+      }
+     ],
+     "k11IntervalMs": 107.4,
+     "objectEvents": [],
+     "intervalsMs": [
+      13.2,
+      77.8,
+      13.6,
+      11.5,
+      16.3,
+      19.3,
+      14.0,
+      16.3,
+      17.5,
+      21.4,
+      35.6,
+      107.4,
+      19.7,
+      26.2,
+      21.0,
+      14.8,
+      15.0,
+      22.6,
+      10.7,
+      18.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9831,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 100.5
+      }
+     ],
+     "k11IntervalMs": 100.5,
+     "objectEvents": [],
+     "intervalsMs": [
+      16.3,
+      29.1,
+      13.8,
+      14.8,
+      17.0,
+      17.7,
+      16.6,
+      16.7,
+      16.6,
+      16.8,
+      16.5,
+      100.5,
+      20.5,
+      16.4,
+      17.0,
+      16.4,
+      16.3,
+      16.7,
+      16.7,
+      17.3
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13772,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 101.9
+      }
+     ],
+     "k11IntervalMs": 101.9,
+     "objectEvents": [],
+     "intervalsMs": [
+      14.3,
+      29.2,
+      10.4,
+      16.6,
+      18.0,
+      15.8,
+      17.3,
+      16.7,
+      15.7,
+      16.9,
+      16.4,
+      101.9,
+      19.7,
+      16.9,
+      16.5,
+      17.9,
+      16.0,
+      20.0,
+      13.4,
+      16.1
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true skipped arm=skip bytes=19660800",
+    "regionMaterials salt:true skipped arm=skip bytes=19660800",
+    "regionMaterials switchback:true skipped arm=skip bytes=19660800"
+   ]
+  },
+  "early": {
+   "what": "New tiles uploaded when the pick lands; the switch runs 30 frames later and only swaps and deletes.",
+   "apkSha256": "8c9c21616698d0978cf47dff17d81364e33b58c8320f546d57b4fa84603a83b7",
+   "extra": [
+    "switchArm=early"
+   ],
+   "events": [
+    {
+     "event": "stage",
+     "frame": 5988,
+     "slowIntervals": [],
+     "k11IntervalMs": 38.2,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      11.8,
+      35.5,
+      15.4,
+      16.7,
+      16.6,
+      16.6,
+      16.9,
+      16.5,
+      15.7,
+      20.9,
+      16.9,
+      38.2,
+      27.2,
+      18.9,
+      13.3,
+      14.8,
+      16.6,
+      16.3,
+      16.9,
+      16.7
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 6018,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 107.9
+      }
+     ],
+     "k11IntervalMs": 107.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 4
+      }
+     ],
+     "intervalsMs": [
+      16.8,
+      67.8,
+      14.3,
+      16.5,
+      17.0,
+      16.4,
+      16.7,
+      17.8,
+      16.8,
+      16.7,
+      30.5,
+      107.9,
+      16.7,
+      18.0,
+      20.1,
+      12.1,
+      20.6,
+      20.4,
+      10.7,
+      16.2
+     ]
+    },
+    {
+     "event": "stage",
+     "frame": 9979,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.7,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      16.2,
+      17.2,
+      16.2,
+      16.9,
+      16.4,
+      16.7,
+      18.0,
+      15.4,
+      16.6,
+      16.7,
+      16.6,
+      16.7,
+      16.7,
+      17.0,
+      16.5,
+      16.5,
+      16.6,
+      16.8,
+      16.7,
+      18.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 10009,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 108.8
+      }
+     ],
+     "k11IntervalMs": 108.8,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 4
+      }
+     ],
+     "intervalsMs": [
+      16.7,
+      29.7,
+      9.7,
+      16.3,
+      18.9,
+      17.5,
+      12.3,
+      15.9,
+      16.8,
+      16.5,
+      17.2,
+      108.8,
+      12.1,
+      12.1,
+      17.5,
+      17.4,
+      16.6,
+      14.9,
+      16.8,
+      17.4
+     ]
+    },
+    {
+     "event": "stage",
+     "frame": 13938,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.3,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      14.5,
+      21.9,
+      13.8,
+      15.7,
+      15.3,
+      16.8,
+      16.9,
+      18.6,
+      14.7,
+      16.6,
+      16.8,
+      16.3,
+      16.8,
+      16.6,
+      16.8,
+      16.7,
+      16.5,
+      16.7,
+      16.7,
+      16.9
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13968,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 101.5
+      }
+     ],
+     "k11IntervalMs": 101.5,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texDelete": 4
+      }
+     ],
+     "intervalsMs": [
+      27.8,
+      42.1,
+      12.6,
+      14.5,
+      16.7,
+      16.7,
+      17.0,
+      24.3,
+      9.3,
+      16.2,
+      16.8,
+      101.5,
+      20.7,
+      16.9,
+      18.1,
+      25.9,
+      16.7,
+      17.3,
+      16.2,
+      16.5
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials staged foundry:true tiles=4 bytes=20709376 peak=20709376",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=staged peak=20709376",
+    "regionMaterials staged salt:true tiles=4 bytes=20709376 peak=20709376",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=staged peak=20709376",
+    "regionMaterials staged switchback:true tiles=4 bytes=20709376 peak=20709376",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=staged peak=20709376"
+   ]
+  },
+  "reuse": {
+   "what": "New pixels uploaded into the old texture objects: no texture created or deleted.",
+   "apkSha256": "8c9c21616698d0978cf47dff17d81364e33b58c8320f546d57b4fa84603a83b7",
+   "extra": [
+    "switchArm=reuse"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 5546,
+     "slowIntervals": [
+      {
+       "k": 1,
+       "intervalMs": 96.6
+      },
+      {
+       "k": 11,
+       "intervalMs": 108.1
+      }
+     ],
+     "k11IntervalMs": 108.1,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      13.4,
+      96.6,
+      10.5,
+      20.0,
+      11.6,
+      16.2,
+      17.2,
+      19.3,
+      16.2,
+      12.6,
+      16.9,
+      108.1,
+      31.2,
+      10.9,
+      30.6,
+      19.6,
+      13.7,
+      13.6,
+      16.8,
+      16.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9481,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 101.5
+      }
+     ],
+     "k11IntervalMs": 101.5,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      16.8,
+      45.5,
+      10.4,
+      10.9,
+      16.4,
+      16.6,
+      16.8,
+      16.9,
+      16.3,
+      16.8,
+      16.7,
+      101.5,
+      15.2,
+      18.0,
+      16.7,
+      15.8,
+      16.2,
+      16.7,
+      16.8,
+      16.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13392,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 101.9
+      }
+     ],
+     "k11IntervalMs": 101.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      17.1,
+      31.8,
+      12.4,
+      14.5,
+      15.3,
+      16.6,
+      16.9,
+      16.6,
+      17.0,
+      16.3,
+      17.0,
+      101.9,
+      19.7,
+      16.6,
+      16.3,
+      17.5,
+      16.1,
+      18.1,
+      15.4,
+      16.9
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "holdbake": {
+   "what": "The scenery bake starts 30 frames after the switch (diagnostic only).",
+   "apkSha256": "2663cb1e9f63f6a3f1c4dff0974643de17cd18371aec327c46c3f59d2e35ac80",
+   "extra": [
+    "switchArm=holdbake"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 6577,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.7,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      26.6,
+      74.6,
+      14.1,
+      16.8,
+      16.5,
+      16.9,
+      16.4,
+      16.6,
+      16.6,
+      15.2,
+      16.8,
+      16.7,
+      16.9,
+      16.3,
+      16.8,
+      16.5,
+      17.2,
+      16.6,
+      16.5,
+      16.7
+     ]
+    },
+    {
+     "event": "bake",
+     "frame": 6606,
+     "slowIntervals": [
+      {
+       "k": 12,
+       "intervalMs": 106.9
+      }
+     ],
+     "k11IntervalMs": 10.9,
+     "objectEvents": [],
+     "intervalsMs": [
+      18.2,
+      16.3,
+      15.5,
+      16.9,
+      16.5,
+      16.7,
+      17.6,
+      15.9,
+      16.9,
+      16.5,
+      22.3,
+      10.9,
+      106.9,
+      31.2,
+      46.6,
+      15.8,
+      19.3,
+      33.8,
+      28.7,
+      28.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 10579,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.8,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      17.3,
+      31.4,
+      16.5,
+      16.7,
+      18.1,
+      15.4,
+      17.9,
+      15.3,
+      16.8,
+      16.9,
+      16.6,
+      16.8,
+      16.4,
+      16.9,
+      17.8,
+      16.7,
+      16.6,
+      15.6,
+      17.8,
+      16.6
+     ]
+    },
+    {
+     "event": "bake",
+     "frame": 10608,
+     "slowIntervals": [
+      {
+       "k": 12,
+       "intervalMs": 99.9
+      }
+     ],
+     "k11IntervalMs": 16.8,
+     "objectEvents": [],
+     "intervalsMs": [
+      20.2,
+      14.4,
+      16.7,
+      15.3,
+      17.0,
+      17.7,
+      17.1,
+      16.3,
+      15.4,
+      19.1,
+      14.2,
+      16.8,
+      99.9,
+      17.0,
+      16.5,
+      17.1,
+      16.2,
+      16.7,
+      18.0,
+      15.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 14552,
+     "slowIntervals": [],
+     "k11IntervalMs": 16.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      26.6,
+      35.2,
+      6.8,
+      14.9,
+      18.0,
+      15.4,
+      16.9,
+      16.6,
+      22.8,
+      10.9,
+      16.4,
+      16.9,
+      16.2,
+      16.9,
+      16.5,
+      17.5,
+      16.5,
+      16.7,
+      16.1,
+      16.7
+     ]
+    },
+    {
+     "event": "bake",
+     "frame": 14581,
+     "slowIntervals": [
+      {
+       "k": 12,
+       "intervalMs": 110.7
+      }
+     ],
+     "k11IntervalMs": 16.5,
+     "objectEvents": [],
+     "intervalsMs": [
+      17.0,
+      17.2,
+      17.0,
+      16.3,
+      17.3,
+      16.1,
+      16.3,
+      18.7,
+      14.6,
+      17.4,
+      16.7,
+      16.5,
+      110.7,
+      9.5,
+      13.0,
+      17.0,
+      16.9,
+      16.9,
+      15.9,
+      16.4
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "flush": {
+   "what": "glFlush after every bake slice, after FrameBuffer.end.",
+   "apkSha256": "2663cb1e9f63f6a3f1c4dff0974643de17cd18371aec327c46c3f59d2e35ac80",
+   "extra": [
+    "switchArm=flush"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 5671,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 101.8
+      }
+     ],
+     "k11IntervalMs": 29.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      39.1,
+      75.1,
+      17.2,
+      14.7,
+      21.1,
+      12.3,
+      16.8,
+      101.8,
+      20.3,
+      17.4,
+      15.9,
+      29.9,
+      19.5,
+      38.1,
+      15.5,
+      16.5,
+      13.7,
+      31.2,
+      15.9,
+      14.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9616,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 100.9
+      }
+     ],
+     "k11IntervalMs": 17.1,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      19.9,
+      36.5,
+      10.9,
+      13.6,
+      16.7,
+      16.9,
+      16.9,
+      100.9,
+      19.5,
+      16.5,
+      16.3,
+      17.1,
+      16.3,
+      18.7,
+      15.4,
+      15.9,
+      17.0,
+      16.6,
+      17.7,
+      15.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13566,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 101.6
+      }
+     ],
+     "k11IntervalMs": 11.7,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      20.3,
+      41.7,
+      11.9,
+      16.6,
+      16.7,
+      18.0,
+      16.8,
+      101.6,
+      18.8,
+      16.7,
+      22.3,
+      11.7,
+      17.1,
+      15.7,
+      17.5,
+      15.7,
+      16.5,
+      17.4,
+      16.7,
+      16.3
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "flushbound": {
+   "what": "glFlush after every bake slice, before FrameBuffer.end (scenery target bound).",
+   "apkSha256": "7952b4a10afe720632781988d201c910c5afc07e5c42a529c36dcbc004106bd4",
+   "extra": [
+    "switchArm=flushbound"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 5808,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 101.2
+      }
+     ],
+     "k11IntervalMs": 14.2,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      17.2,
+      68.0,
+      10.6,
+      15.0,
+      15.4,
+      16.6,
+      16.8,
+      101.2,
+      21.7,
+      15.6,
+      30.9,
+      14.2,
+      16.5,
+      16.5,
+      16.7,
+      17.6,
+      26.1,
+      10.0,
+      13.2,
+      16.5
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9761,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 100.9
+      }
+     ],
+     "k11IntervalMs": 19.8,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      10.4,
+      50.8,
+      10.6,
+      16.6,
+      16.6,
+      16.6,
+      16.7,
+      100.9,
+      21.2,
+      16.0,
+      16.6,
+      19.8,
+      14.0,
+      17.1,
+      16.1,
+      16.5,
+      19.3,
+      13.7,
+      18.6,
+      14.8
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13740,
+     "slowIntervals": [
+      {
+       "k": 7,
+       "intervalMs": 102.0
+      }
+     ],
+     "k11IntervalMs": 17.0,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      23.3,
+      39.5,
+      15.0,
+      14.8,
+      16.7,
+      18.0,
+      16.6,
+      102.0,
+      18.7,
+      16.4,
+      16.3,
+      17.0,
+      17.0,
+      16.3,
+      17.2,
+      15.6,
+      17.0,
+      18.4,
+      14.5,
+      18.8
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "halfslice": {
+   "what": "Half the per-slice bake budget: about twice the passes (diagnostic only).",
+   "apkSha256": "a9a01cd1317a87d5534e97eef3141841e5af1bf916992f3747752406b03e8637",
+   "extra": [
+    "switchArm=halfslice"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 6073,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 101.9
+      }
+     ],
+     "k11IntervalMs": 101.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      27.4,
+      78.1,
+      8.1,
+      15.9,
+      16.7,
+      16.6,
+      16.7,
+      16.7,
+      16.8,
+      16.5,
+      16.7,
+      101.9,
+      23.8,
+      14.6,
+      15.7,
+      25.2,
+      12.8,
+      12.2,
+      16.7,
+      18.0
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 10025,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 108.9
+      }
+     ],
+     "k11IntervalMs": 108.9,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      14.7,
+      38.3,
+      8.4,
+      13.5,
+      16.5,
+      17.1,
+      16.6,
+      17.0,
+      22.0,
+      12.0,
+      15.4,
+      108.9,
+      9.0,
+      16.0,
+      16.4,
+      16.5,
+      16.9,
+      16.8,
+      16.4,
+      18.1
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 14010,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 110.3
+      }
+     ],
+     "k11IntervalMs": 110.3,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      15.7,
+      37.3,
+      6.5,
+      17.9,
+      17.0,
+      15.8,
+      16.7,
+      18.4,
+      15.1,
+      17.0,
+      17.2,
+      110.3,
+      6.6,
+      16.4,
+      15.9,
+      16.4,
+      16.6,
+      18.7,
+      15.0,
+      16.5
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  },
+  "noclear": {
+   "what": "The bake's first pass paints an opaque full-target rect instead of glClear (same pixels).",
+   "apkSha256": "37b4374f627804edb5cc1e09cd817e0cd5878092c3090ac8345f7afd8d76eea1",
+   "extra": [
+    "switchArm=noclear"
+   ],
+   "events": [
+    {
+     "event": "switch",
+     "frame": 6015,
+     "slowIntervals": [
+      {
+       "k": 1,
+       "intervalMs": 117.0
+      },
+      {
+       "k": 11,
+       "intervalMs": 114.4
+      }
+     ],
+     "k11IntervalMs": 114.4,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      86.3,
+      117.0,
+      21.1,
+      17.9,
+      21.6,
+      19.5,
+      14.2,
+      14.9,
+      34.4,
+      16.8,
+      21.5,
+      114.4,
+      17.9,
+      22.0,
+      12.8,
+      16.0,
+      15.5,
+      17.5,
+      54.0,
+      13.3
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 9950,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 107.4
+      }
+     ],
+     "k11IntervalMs": 107.4,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      14.6,
+      37.5,
+      11.3,
+      14.4,
+      15.7,
+      18.7,
+      15.8,
+      16.6,
+      18.5,
+      14.0,
+      16.5,
+      107.4,
+      8.5,
+      17.2,
+      17.3,
+      16.2,
+      17.0,
+      16.7,
+      15.9,
+      17.6
+     ]
+    },
+    {
+     "event": "switch",
+     "frame": 13842,
+     "slowIntervals": [
+      {
+       "k": 11,
+       "intervalMs": 100.2
+      }
+     ],
+     "k11IntervalMs": 100.2,
+     "objectEvents": [
+      {
+       "k": 0,
+       "texGen": 4,
+       "texDelete": 4,
+       "texUploads": 4,
+       "texUploadBytes": 1048576
+      }
+     ],
+     "intervalsMs": [
+      21.2,
+      38.8,
+      12.2,
+      11.3,
+      16.8,
+      17.7,
+      15.4,
+      16.7,
+      16.7,
+      16.5,
+      16.8,
+      100.2,
+      9.1,
+      11.9,
+      17.1,
+      17.6,
+      16.8,
+      17.4,
+      15.9,
+      17.2
+     ]
+    }
+   ],
+   "strayObjectFrames": 0,
+   "regionMaterials": [
+    "regionMaterials scrap:true candidates=3 bytes=19660800 prepared=false",
+    "regionMaterials foundry:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=scrap:true",
+    "regionMaterials salt:true candidates=3 bytes=19660800 prepared=true held=0 peak=19660800 from=foundry:true",
+    "regionMaterials switchback:true candidates=4 bytes=19660800 prepared=true held=0 peak=19660800 from=salt:true"
+   ]
+  }
+ },
+ "offFirstSwitchWindow": [
+  {
+   "k": 0,
+   "intervalMs": 40.8,
+   "workMs": 82.1,
+   "gl": {
+    "texGen": 4,
+    "texDelete": 4,
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 2,
+    "texUploads": 4,
+    "texUploadBytes": 1048576,
+    "bufBytes": 75392
+   }
+  },
+  {
+   "k": 1,
+   "intervalMs": 84.2,
+   "workMs": 8.8,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 74144
+   }
+  },
+  {
+   "k": 2,
+   "intervalMs": 11.3,
+   "workMs": 8.7,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 72512
+   }
+  },
+  {
+   "k": 3,
+   "intervalMs": 16.5,
+   "workMs": 7.6,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 80096
+   }
+  },
+  {
+   "k": 4,
+   "intervalMs": 16.9,
+   "workMs": 7.5,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 81248
+   }
+  },
+  {
+   "k": 5,
+   "intervalMs": 16.6,
+   "workMs": 11.5,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 72896
+   }
+  },
+  {
+   "k": 6,
+   "intervalMs": 18.5,
+   "workMs": 7.3,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 78752
+   }
+  },
+  {
+   "k": 7,
+   "intervalMs": 14.8,
+   "workMs": 6.8,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 84512
+   }
+  },
+  {
+   "k": 8,
+   "intervalMs": 18.1,
+   "workMs": 8.1,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 88736
+   }
+  },
+  {
+   "k": 9,
+   "intervalMs": 16.7,
+   "workMs": 7.0,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 85184
+   }
+  },
+  {
+   "k": 10,
+   "intervalMs": 16.9,
+   "workMs": 8.0,
+   "gl": {
+    "bufData": 7,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 88544
+   }
+  },
+  {
+   "k": 11,
+   "intervalMs": 100.0,
+   "workMs": 26.5,
+   "gl": {
+    "bufData": 9,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 73088
+   }
+  },
+  {
+   "k": 12,
+   "intervalMs": 28.0,
+   "workMs": 12.2,
+   "gl": {
+    "bufData": 9,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 72320
+   }
+  },
+  {
+   "k": 13,
+   "intervalMs": 14.0,
+   "workMs": 10.9,
+   "gl": {
+    "bufData": 9,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 73664
+   }
+  },
+  {
+   "k": 14,
+   "intervalMs": 12.6,
+   "workMs": 17.7,
+   "gl": {
+    "bufData": 11,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 73952
+   }
+  },
+  {
+   "k": 15,
+   "intervalMs": 19.1,
+   "workMs": 12.0,
+   "gl": {
+    "bufData": 11,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 74528
+   }
+  },
+  {
+   "k": 16,
+   "intervalMs": 14.0,
+   "workMs": 15.7,
+   "gl": {
+    "bufData": 11,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 74624
+   }
+  },
+  {
+   "k": 17,
+   "intervalMs": 17.7,
+   "workMs": 14.8,
+   "gl": {
+    "bufData": 9,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 72320
+   }
+  },
+  {
+   "k": 18,
+   "intervalMs": 17.0,
+   "workMs": 27.0,
+   "gl": {
+    "bufData": 10,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 74144
+   }
+  },
+  {
+   "k": 19,
+   "intervalMs": 33.0,
+   "workMs": 8.7,
+   "gl": {
+    "bufData": 9,
+    "fboBinds": 2,
+    "clears": 1,
+    "bufBytes": 73376
+   }
+  }
+ ],
+ "voided": [
+  {
+   "arm": "noclear",
+   "dir": "arm-noclear-void1",
+   "why": "perf-device.py polled pidof before the process existed (CalledProcessError on the first poll); the app had started. Rerun as arm-noclear."
+  }
+ ],
+ "limits": "About 3 lobby course switches per arm (210 s probe runs, profiled, graded by nothing: the probe exits 1 on its 900 s duration gate). The GPU job itself is not visible to the app; the arms move or keep it."
+}

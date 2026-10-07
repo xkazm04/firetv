@@ -1,0 +1,65 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "commit": "source of the final APK, 60ac7cb9",
+ "result": "BUILD SUCCESSFUL",
+ "modules": {
+  "core": {
+   "tests": 258,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  },
+  "link": {
+   "tests": 20,
+   "skipped": 2,
+   "failures": 0,
+   "errors": 0
+  },
+  "game": {
+   "tests": 101,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "new": {
+  "FramePublishRequestTest": {
+   "cases": [
+    "aRequestHoldsOnlyItsOwnFrame()",
+    "aRequestFrameBuildsNoSeatEvenWithASeatLeftDirtyAndTheNextQuietFrameDoes()",
+    "consecutiveRequestFramesHoldTheSeatUntilTheFirstQuietOne()",
+    "theUiRebuildAndTheSeatKeepTheirOwnFrames()"
+   ],
+   "failures": 0,
+   "errors": 0
+  },
+  "TileReleaseTest": {
+   "cases": [
+    "bytesStayCountedUntilEachRelease()",
+    "noHoldReleasesAtOnceAndCountsNothing()",
+    "heldTilesAreReleasedAfterTheHoldOnePerFrameOldestFirst()",
+    "aSecondSwitchQueuesBehindTheFirst()",
+    "releaseAllEmptiesTheHold()"
+   ],
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "unchanged": {
+  "FramePublishTest": {
+   "cases": [
+    "aFrameBuildsAtMostOneSeat()",
+    "theFlushedJsonIsByteIdenticalToAnImmediatePublish()",
+    "twoPublishesOfASeatInOneFrameBuildItOnce()",
+    "flushBuildsADirtySeatAtOnceAndOnlyThen()",
+    "aRebuildBeforeTheNextFrameCoversTheRequest()",
+    "aRequestFrameDoesNotRebuildTheUiAndTheNextFrameDoes()",
+    "aStartRequestFrameBuildsNoJsonAndNoUi()"
+   ],
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "note": "game 101 = 92 on the base + 9 new. Every existing test file is unchanged. link's 2 skipped are as on the base.",
+ "log": "p13d/gate-final.log (raw, bound in manifest.json)"
+}
