@@ -1,0 +1,432 @@
+Libraries NOT loaded:
+Libraries loaded:
+ Library dynamics_processing
+  path: /vendor/lib/soundfx/libdynproc.so
+  Dynamics Processing / The Android Open Source Project
+    UUID: e0e6539b-1781-7261-676f-6d7573696340
+    TYPE: 7261676f-6d75-7369-6364-28e2fd3ac39e
+    apiVersion: 00020000
+    flags: 00000050
+ Library loudness_enhancer
+  path: /vendor/lib/soundfx/libldnhncr.so
+  Loudness Enhancer / The Android Open Source Project
+    UUID: fa415329-2034-4bea-b5dc-5b381c8d1e2c
+    TYPE: fe3199be-aed0-413f-87bb-11260eb63cf1
+    apiVersion: 00020000
+    flags: 00000008
+ Library downmix
+  path: /vendor/lib/soundfx/libdownmix.so
+  Multichannel Downmix To Stereo / The Android Open Source Project
+    UUID: 93f04452-e4fe-41cc-91f9-e475b6d1d69f
+    TYPE: 381e49cc-a858-4aa2-87f6-e8388e7601b2
+    apiVersion: 00020000
+    flags: 00000008
+ Library visualizer
+  path: /vendor/lib/soundfx/libvisualizer.so
+  Visualizer / The Android Open Source Project
+    UUID: d069d9e0-8329-11df-9168-0002a5d5c51b
+    TYPE: e46b26a0-dddd-11db-8afd-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000008
+ Library reverb
+  path: /vendor/lib/soundfx/libreverbwrapper.so
+  Insert Preset Reverb / NXP Software Ltd.
+    UUID: 172cdf00-a3bc-11df-a72f-0002a5d5c51b
+    TYPE: 47382d60-ddd8-11db-bf3a-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000048
+  Auxiliary Preset Reverb / NXP Software Ltd.
+    UUID: f29a1400-a3bb-11df-8ddc-0002a5d5c51b
+    TYPE: 47382d60-ddd8-11db-bf3a-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000001
+  Insert Environmental Reverb / NXP Software Ltd.
+    UUID: c7a511a0-a3bb-11df-860e-0002a5d5c51b
+    TYPE: c2e5d5f0-94bd-4763-9cac-4e234d06839e
+    apiVersion: 00020000
+    flags: 00000048
+  Auxiliary Environmental Reverb / NXP Software Ltd.
+    UUID: 4a387fc0-8ab3-11df-8bad-0002a5d5c51b
+    TYPE: c2e5d5f0-94bd-4763-9cac-4e234d06839e
+    apiVersion: 00020000
+    flags: 00000001
+ Library bundle
+  path: /vendor/lib/soundfx/libbundlewrapper.so
+  Volume / NXP Software Ltd.
+    UUID: 119341a0-8469-11df-81f9-0002a5d5c51b
+    TYPE: 09e8ede0-ddde-11db-b4f6-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000050
+  Equalizer / NXP Software Ltd.
+    UUID: ce772f20-847d-11df-bb17-0002a5d5c51b
+    TYPE: 0bed4300-ddd6-11db-8f34-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000048
+  Virtualizer / NXP Software Ltd.
+    UUID: 1d4033c0-8557-11df-9f2d-0002a5d5c51b
+    TYPE: 37cc2c00-dddd-11db-8577-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000250
+  Dynamic Bass Boost / NXP Software Ltd.
+    UUID: 8631f300-72e2-11df-b57e-0002a5d5c51b
+    TYPE: 0634f220-ddd4-11db-a0fc-0002a5d5c51b
+    apiVersion: 00020000
+    flags: 00000248
+XML effect configuration loaded successfully.
+Clients:
+  pid: 695
+  pid: 8209
+Notification Clients:
+   pid    uid  name
+   421   1041  audioserver
+   585   1013  media
+   695   1000  android.uid.system
+  1382  10188  com.amazon.tv.ime
+  5899  10265  dev.telestrator.tv
+  7383  10194  com.amazon.tv.launcher
+  8209  10279  dev.deathride.perf
+ 14337  10272  dev.deathride.tv
+ 25567  10197  com.amazon.tv.parentalcontrols
+Global session refs:
+  session  cnt     pid    uid  name
+      129    2     695   1000  android.uid.system
+      969    1     695   1000  android.uid.system
+     1017    1     695   1000  android.uid.system
+     1025    1     695   1000  android.uid.system
+   260361    1    8209  10279  dev.deathride.perf
+   260369    1    8209  10279  dev.deathride.perf
+   260457    1    8209  10279  dev.deathride.perf
+   260881    1    8209  10279  dev.deathride.perf
+   260969    1    8209  10279  dev.deathride.perf
+   261009    1    8209  10279  dev.deathride.perf
+   261017    1    8209  10279  dev.deathride.perf
+Hardware status: 0
+Standby Time mSec: 3000
+
+Output thread 0xea91a800, name AudioOut_D, tid 683, type 0 (MIXER):
+  I/O handle: 13
+  Standby: no
+  Sample rate: 48000 Hz
+  HAL frame count: 768
+  HAL format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  HAL buffer size: 3072 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  Processing frame size: 4 bytes
+  Pending config events: none
+  Output devices: 0x2 (AUDIO_DEVICE_OUT_SPEAKER)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=1007809 disc=31456 cold=19 nRdy=0 err=37208363 rate=0.999688 jitterMs(ave=-0.00140087 std=8.15033 min=-15.8533 max=934.46) localSR(47983.1, 3.99152e-05) correctedJitterMs(ave=-0.000305792 std=0.613132 min=-19.8211 max=611.964)
+  Timestamp corrected: no
+  Last write occurred (msecs): 41651464
+  Threadloop write latency stats: ave=191.197 std=0 min=191.197 max=191.197
+  Master volume: 1.000000
+  Master mute: off
+  Normal frame count: 768
+  Total writes: 38139639
+  Delayed writes: 1
+  Blocked in write: no
+  Suspend count: 0
+  Sink buffer : 0xead7a000
+  Mixer buffer: 0xeac96000
+  Effect buffer: 0xeac97800
+  Fast track availMask=0xfe
+  Standby delay ns=3000000000
+  AudioStreamOut: 0xeb347f70 flags 0x2 (AUDIO_OUTPUT_FLAG_PRIMARY)
+  Frames written: 715220736
+  Suspended frames: 0
+  Hal stream dump:
+      Signal power history:
+       10-06 21:56:37.369:    -40.7  -40.6  -40.5  -41.1  -41.0  -41.1  -40.5  -41.2  -39.9  -41.0
+       10-06 21:56:37.880:    -40.6  -18.4  -16.4  -23.4  -27.3  -30.5  -33.1  -36.5  -38.9  -39.6
+       10-06 21:56:38.391:    -42.9  -44.4  -43.4  -43.5  -43.3  -45.2  -44.2  -43.7  -44.4  -44.7
+       10-06 21:56:38.873:    -43.4  -44.3  -44.5  -44.0  -44.1  -44.7  -45.1  -44.9  -44.3  -43.9
+       10-06 21:56:39.383:    -45.0  -44.8  -45.7  -45.3  -45.2  -45.4  -45.2  -44.3  -44.5  -44.3
+       10-06 21:56:39.895:    -45.2  -44.9  -45.0  -44.7  -44.1  -45.3  -45.0  -43.3  -44.1  -44.3
+       10-06 21:56:40.376:    -43.6  -43.6  -44.9  -45.3  -45.4  -48.0  -49.1  -47.2  -45.5  -46.2
+       10-06 21:56:40.887:    -45.3  -45.3  -44.9  -44.9  -45.4  -45.5  -44.6  -44.3  -44.7  -45.2
+       10-06 21:56:41.368:    -44.0  -44.5  -45.1  -44.2  -44.5  -44.8  -45.1  -44.8  -44.5  -44.3
+       10-06 21:56:41.880:    -45.0  -44.7  -45.4  -45.3  -44.9  -45.4  -45.0  -44.1  -44.0  -44.0
+       10-06 21:56:42.391:    -44.7  -45.0  -44.8  -44.6  -43.9  -45.1  -45.1  -43.7  -44.1  -44.2
+       10-06 21:56:42.872:    -43.7  -43.5  -44.7  -45.1  -45.4  -47.8  -48.9  -47.0  -45.7  -45.9
+       10-06 21:56:43.384:    -45.3  -45.4  -44.7  -44.8  -45.2  -45.7  -44.5  -44.6  -44.5  -44.7
+       10-06 21:56:43.895:    -43.6  -44.0  -44.5  -43.8  -44.5  -44.6  -45.0  -44.5  -44.2  -44.3
+       10-06 21:56:44.376:    -45.1  -44.9  -45.5  -45.3  -44.8  -45.4  -45.2  -44.5  -44.2  -44.3
+       10-06 21:56:44.887:    -45.0  -45.0  -45.1  -44.6  -44.1  -45.1  -45.0  -43.4  -44.1  -44.2
+       10-06 21:56:45.368:    -43.6  -43.4  -45.0  -45.0  -45.0  -47.7  -49.2  -46.8  -45.6  -45.8
+       10-06 21:56:45.880:    -45.3  -45.5  -44.9  -45.1  -45.0  -45.5  -44.6  -44.7  -44.7  -44.9
+       10-06 21:56:46.391:    -44.0  -44.2  -44.5  -44.2  -44.6  -45.0  -45.1  -44.7  -44.2  -44.5
+       10-06 21:56:46.871:    -45.1  -45.1  -45.8  -45.2  -44.8  -45.3  -45.0  -44.6  -44.5  -44.2
+       10-06 21:56:47.383:    -44.8  -44.7  -44.8  -44.5  -44.2  -44.6  -44.8  -43.3  -44.2  -44.2
+       10-06 21:56:47.895:    -43.6  -43.4  -45.0  -45.4  -45.4  -47.7  -48.9  -47.0  -45.6  -45.7
+       10-06 21:56:48.376:    -45.2  -45.1  -45.0  -44.9  -45.0  -45.3  -44.4  -44.4  -44.5  -44.8
+       10-06 21:56:48.887:    -43.8  -44.4  -44.6  -43.9  -44.3  -44.7  -45.1  -44.9  -44.3  -43.9
+       10-06 21:56:49.368:    -45.0  -44.8  -45.7  -45.3  -45.2  -45.4  -45.2  -44.3  -44.5  -44.3
+       10-06 21:56:49.879:    -45.2  -44.9  -45.0  -44.7  -44.1  -45.3  -45.0  -43.3  -44.1  -44.3
+       10-06 21:56:50.391:    -43.6  -43.6  -44.9  -45.3  -45.4  -48.0  -49.1  -47.2  -45.5  -46.2
+       10-06 21:56:50.872:    -45.3  -45.3  -44.9  -44.9  -45.4  -45.5  -44.6  -44.3  -44.7  -45.2
+       10-06 21:56:51.383:    -44.0  -44.5  -45.1  -44.2  -44.5  -44.8  -45.1  -44.8  -44.5  -44.3
+       10-06 21:56:51.895:    -45.0  -44.7  -45.4  -45.3  -44.9  -45.4  -45.0  -44.1  -44.0  -44.0
+       10-06 21:56:52.376:    -44.7  -45.0  -44.8  -44.6  -43.9  -45.1  -45.1  -43.7  -44.1  -44.2
+       10-06 21:56:52.887:    -43.7  -43.5  -44.7  -45.1  -45.4  -47.8  -48.9  -47.0  -45.7  -45.9
+       10-06 21:56:53.368:    -45.3  -45.4  -44.7  -44.8  -45.2  -45.7  -44.5  -44.6  -44.5  -44.7
+       10-06 21:56:53.881:    -43.6  -44.0  -44.5  -43.8  -44.5  -44.6  -45.0  -44.5  -44.2  -44.3
+       10-06 21:56:54.391:    -45.1  -44.9  -45.5  -45.3  -44.8  -45.4  -45.2  -44.5  -44.2  -44.3
+       10-06 21:56:54.872:    -45.0  -45.0  -45.1  -44.6  -44.1  -45.1  -45.0  -43.4  -44.1  -44.2
+       10-06 21:56:55.384:    -43.6  -43.4  -45.0  -45.0  -45.0  -47.7  -49.2  -46.8  -45.6  -45.8
+       10-06 21:56:55.895:    -45.3  -45.5  -44.9  -45.1  -45.0  -45.5  -44.6  -44.7  -44.7  -44.9
+       10-06 21:56:56.376:    -44.0  -44.2  -44.5  -44.2  -44.6  -45.0  -45.1  -44.7  -44.2  -45.5 ] sum(24.5)
+
+    -13.1 -|
+    -16.4 -|
+    -19.7 -|
+    -22.9 -|
+    -26.2 -|
+    -29.5 -|
+    -32.8 -|
+    -36.0 -|
+    -39.3 -|
+    -42.6 -|        *    *  *****                  *  *     *              *  ** **                  *  *             ***    *  *****                  ** *    *         *     *  *****                  ** *
+    -45.9 -|******** **** **     ***  ************* ** ***** ************** **  *  ***  ************* ** *************   **** **     ***  *************  * **** ********* ***** **     ***  *************  * ******
+    -49.2 -|                        **                                                **                                                **                                                **
+    -52.4 -|
+    -55.7 -|
+           |________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+  Thread throttle time (msecs): 2809947
+  AudioMixer tracks: 68 158 164 165 32582 32583 32594 32647 32658 32663 32664 
+  Master mono: off
+  Master balance: 0.000000 (balance 0 channelCount 2 volumes: 1 1)
+  No FastMixer
+  Stream volumes in dB: 0:-6, 1:-6, 2:-6, 3:-6, 4:-6, 5:-6, 6:-inf, 7:-6, 8:-6, 9:-6, 10:-6, 11:-6, 12:-6, 13:0, 14:-6
+  Normal mixer raw underrun counters: partial=0 empty=0
+  11 Tracks of which 7 are active
+    Type     Id Active Client Session Port Id S  Flags   Format Chn mask  SRate ST Usg CT  G db  L dB  R dB  VS dB   Server FrmCnt  FrmRdy F Underruns  Flushed   Latency
+       S  32664    yes   8209  261017   32751 A  0x000 00000001 00000001  22050  3   e  4   -13    -7    -7     0  00000000   7131    7131 A         0        0       new
+       S  32582    yes   8209  260361   32669 S  0x200 00000001 00000001  29264  3   e  4  -inf  -inf  -inf     0  00000000  44100  99999999 A         0        0       new
+       S  32647    yes   8209  260881   32734 S  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   2986    2986 A         0        0       new
+       S  32594    yes   8209  260457   32681 S  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  12517   12517 A         0        0       new
+       S  32658    yes   8209  260969   32745 S  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 A         0        0       new
+       S  32663    yes   8209  261009   32750 A  0x000 00000001 00000001  22050  3   e  4   -17   -11   -11     0  00000000  14201   14201 A         0        0       new
+       S  32583    yes   8209  260369   32670 S  0x200 00000001 00000001  28930  3   e  4  -inf  -inf  -inf     0  00000000  44100  99999999 A         0        0       new
+             68     no    695     129      37 S  0x600 00000001 00000001  44100  2   6  4     0     0     0     0  0006BAA8  22560       0 f         0        0  191.48 k
+       S    165     no    695    1025     187 S  0x600 00000001 00000003  48000  1   d  4    -6    -6    -6     0  00005DC0   6000       0 f         0        0  191.46 k
+       S    164     no    695    1017     186 S  0x600 00000001 00000003  48000  1   d  4    -6    -6    -6     0  0000DA23  55843       0 f         0        0  185.21 k
+       S    158     no    695     969     158 S  0x600 00000001 00000003  48000  1   d  4    -6    -6    -6     0  0001A5E0   6000       0 f         0        0  199.45 k
+  0 Effect Chains
+  Local log:
+   10-07 09:30:46.276 removeTrack_l (0xea1cd000)    S  32646     no   8209  260873   32733 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  16210   16210 f         0        0       new
+   10-07 09:30:47.226 AT::add       (0xe9e68000)    S  32652     no   8209  260921   32739 A  0x000 00000001 00000001  22050  3   e  4  -inf   -39  -inf     0  00000000  13433   13433 F         0        0       new
+   10-07 09:30:47.228 AT::remove    (0xea1cdc00)    S  32648     no   8209  260889   32735 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:47.228 removeTrack_l (0xea1cdc00)    S  32648     no   8209  260889   32735 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:47.481 AT::add       (0xe9d8d800)    S  32653     no   8209  260929   32740 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000   3969    3969 F         0        0       new
+   10-07 09:30:47.488 AT::remove    (0xea077800)    S  32650     no   8209  260905   32737 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:30:47.488 removeTrack_l (0xea077800)    S  32650     no   8209  260905   32737 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:30:49.162 AT::add       (0xe9d8dc00)    S  32654     no   8209  260937   32741 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000   3969    3969 F         0        0       new
+   10-07 09:30:49.164 AT::remove    (0xe9e68000)    S  32652     no   8209  260921   32739 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  13433   13433 f         0        0       new
+   10-07 09:30:49.165 removeTrack_l (0xe9e68000)    S  32652     no   8209  260921   32739 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  13433   13433 f         0        0       new
+   10-07 09:30:53.215 AT::add       (0xe9f7ec00)    S  32655     no   8209  260945   32742 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000  15053   15053 F         0        0       new
+   10-07 09:30:53.217 AT::remove    (0xe9d8d400)    S  32651     no   8209  260913   32738 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:53.219 removeTrack_l (0xe9d8d400)    S  32651     no   8209  260913   32738 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:55.509 AT::add       (0xe9f98800)    S  32656     no   8209  260953   32743 A  0x000 00000001 00000001  22050  3   e  4  -inf   -28   -50     0  00000000   3969    3969 F         0        0       new
+   10-07 09:30:55.512 AT::remove    (0xe9f7ec00)    S  32655     no   8209  260945   32742 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:30:55.512 removeTrack_l (0xe9f7ec00)    S  32655     no   8209  260945   32742 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:30:56.230 AT::add       (0xea87d000)    S  32657     no   8209  260961   32744 A  0x000 00000001 00000001  22050  3   e  4  -inf   -34  -inf     0  00000000  13433   13433 F         0        0       new
+   10-07 09:30:56.234 AT::remove    (0xe9f98800)    S  32656     no   8209  260953   32743 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:56.235 removeTrack_l (0xe9f98800)    S  32656     no   8209  260953   32743 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:30:59.074 AT::add       (0xea1cd000)    S  32658     no   8209  260969   32745 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000   3969    3969 F         0        0       new
+   10-07 09:30:59.079 AT::remove    (0xea87d000)    S  32657     no   8209  260961   32744 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  13433   13433 f         0        0       new
+   10-07 09:30:59.079 removeTrack_l (0xea87d000)    S  32657     no   8209  260961   32744 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  13433   13433 f         0        0       new
+   10-07 09:31:00.236 AT::add       (0xea1d8400)    S  32659     no   8209  260977   32746 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7  -7.5     0  00000000  15053   15053 F         0        0       new
+   10-07 09:31:00.238 AT::remove    (0xe9d8d800)    S  32653     no   8209  260929   32740 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:00.238 removeTrack_l (0xe9d8d800)    S  32653     no   8209  260929   32740 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:01.409 AT::add       (0xea1cd800)    S  32660     no   8209  260985   32747 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000   3969    3969 F         0        0       new
+   10-07 09:31:01.412 AT::remove    (0xea1d8400)    S  32659     no   8209  260977   32746 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:31:01.413 removeTrack_l (0xea1d8400)    S  32659     no   8209  260977   32746 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:31:07.204 AT::add       (0xea87d000)    S  32661     no   8209  260993   32748 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7  -7.2     0  00000000  15053   15053 F         0        0       new
+   10-07 09:31:07.206 AT::remove    (0xea1cd800)    S  32660     no   8209  260985   32747 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:07.207 removeTrack_l (0xea1cd800)    S  32660     no   8209  260985   32747 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:07.444 AT::add       (0xe9f98800)    S  32662     no   8209  261001   32749 A  0x000 00000001 00000001  22050  3   e  4  -inf   -11   -11     0  00000000   5781    5781 F         0        0       new
+   10-07 09:31:07.446 AT::remove    (0xe9d8dc00)    S  32654     no   8209  260937   32741 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:07.447 removeTrack_l (0xe9d8dc00)    S  32654     no   8209  260937   32741 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   3969    3969 f         0        0       new
+   10-07 09:31:11.249 AT::add       (0xea1d9000)    S  32663     no   8209  261009   32750 A  0x000 00000001 00000001  22050  3   e  4  -inf   -11   -11     0  00000000  14201   14201 F         0        0       new
+   10-07 09:31:11.250 AT::remove    (0xe9f98800)    S  32662     no   8209  261001   32749 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   5781    5781 f         0        0       new
+   10-07 09:31:11.251 removeTrack_l (0xe9f98800)    S  32662     no   8209  261001   32749 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000   5781    5781 f         0        0       new
+   10-07 09:31:11.297 AT::add       (0xe9e68c00)    S  32664     no   8209  261017   32751 A  0x000 00000001 00000001  22050  3   e  4  -inf    -7    -7     0  00000000   7131    7131 F         0        0       new
+   10-07 09:31:11.300 AT::remove    (0xea87d000)    S  32661     no   8209  260993   32748 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+   10-07 09:31:11.301 removeTrack_l (0xea87d000)    S  32661     no   8209  260993   32748 T  0x200 00000001 00000001  22050  3   e  4  -inf  -inf  -inf     0  00000000  15053   15053 f         0        0       new
+
+Output thread 0xea6a3540, name AudioOut_15, tid 689, type 0 (MIXER):
+  I/O handle: 21
+  Standby: yes
+  Sample rate: 48000 Hz
+  HAL frame count: 480
+  HAL format: 0x1 (AUDIO_FORMAT_PCM_16_BIT)
+  HAL buffer size: 1920 bytes
+  Channel count: 2
+  Channel mask: 0x00000003 (front-left, front-right)
+  Processing format: 0x5 (AUDIO_FORMAT_PCM_FLOAT)
+  Processing frame size: 8 bytes
+  Pending config events: none
+  Output devices:  (Empty device types)
+  Input device: 0 (AUDIO_DEVICE_NONE)
+  Audio source: 0 (AUDIO_SOURCE_DEFAULT)
+  Timestamp stats: n=0 disc=0 cold=0 nRdy=0 err=1 jitterMs(unavail) localSR(nan, nan) correctedJitterMs(unavail)
+  Timestamp corrected: no
+  Master volume: 1.000000
+  Master mute: off
+  Normal frame count: 960
+  Total writes: 0
+  Delayed writes: 0
+  Blocked in write: no
+  Suspend count: 0
+  Sink buffer : 0xeabe4000
+  Mixer buffer: 0xeabe8000
+  Effect buffer: 0xeabe6000
+  Fast track availMask=0xfe
+  Standby delay ns=3000000000
+  AudioStreamOut: 0xeb347f00 flags 0x2 (AUDIO_OUTPUT_FLAG_PRIMARY)
+  Frames written: 0
+  Suspended frames: 0
+  PipeSink frames written: 0
+  Hal stream dump:
+      Signal power history: (none)
+  Thread throttle time (msecs): 0
+  AudioMixer tracks: 
+  Master mono: off
+  Master balance: 0.000000 (0.000000)
+  FastMixer thread 0xea2da780 tid=688  FastMixer command=COLD_IDLE writeSequence=0 framesWritten=0
+            numTracks=0 writeErrors=0 underruns=0 overruns=0
+            sampleRate=0 frameCount=0 measuredWarmup=0 ms, warmupCycles=0
+            mixPeriod=nan ms latency=0.00 ms
+  FastMixer Timestamp stats: n=0 disc=0 cold=0 nRdy=0 err=0 jitterMs(unavail) localSR(nan, nan) correctedJitterMs(unavail)
+  No FastMixer statistics available currently
+  Fast tracks: sMaxFastTracks=8 activeMask=0
+  Index Active Full Partial Empty  Recent Ready    Written
+      0     no    0       0     0    full     0          0
+      1     no    0       0     0    full     0          0
+      2     no    0       0     0    full     0          0
+      3     no    0       0     0    full     0          0
+      4     no    0       0     0    full     0          0
+      5     no    0       0     0    full     0          0
+      6     no    0       0     0    full     0          0
+      7     no    0       0     0    full     0          0
+  Stream volumes in dB: 0:-18, 1:-22, 2:-26, 3:-40, 4:-25, 5:-26, 6:-inf, 7:-22, 8:-20, 9:nan, 10:-39, 11:-40, 12:0, 13:0, 14:0
+  Normal mixer raw underrun counters: partial=0 empty=0
+  0 Tracks
+  0 Effect Chains
+  Local log:
+   01-01 01:00:11.413 CFG_EVENT_CREATE_AUDIO_PATCH: old device  (Empty device types) new device 0x40000000 (AUDIO_DEVICE_OUT_DEFAULT)
+   08-15 04:11:55.637 CFG_EVENT_RELEASE_AUDIO_PATCH: old device 0x40000000 (AUDIO_DEVICE_OUT_DEFAULT) new device  (Empty device types)
+
+USB audio module:
+  No output streams.
+
+  No input streams.
+
+Reroute submix audio module:
+ route[0] rate in=0 out=0, addr=[]
+ route[1] rate in=0 out=0, addr=[]
+ route[2] rate in=0 out=0, addr=[]
+ route[3] rate in=0 out=0, addr=[]
+ route[4] rate in=0 out=0, addr=[]
+ route[5] rate in=0 out=0, addr=[]
+ route[6] rate in=0 out=0, addr=[]
+ route[7] rate in=0 out=0, addr=[]
+ route[8] rate in=0 out=0, addr=[]
+ route[9] rate in=48000 out=48000, addr=[]
+
+Patches:
+  Patch 108: No software bridge (thread 0x0 => thread 0x0) thread 0xea91a800 num sinks (1) first device type 00000002
+
+Device Effects:
+
+Rejected setParameters:
+
+App setParameters:
+    09-07 08:39:24.350 UID 10124, 1 KVP received: set_hdmi_delay=0
+
+System setParameters:
+    10-07 08:09:16.129 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:09:16.166 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:13:12.049 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:13:12.052 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:13:12.060 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:13:12.509 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:13:12.514 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:13:12.524 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:17:48.115 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:17:48.121 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:17:48.126 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:17:48.783 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:17:48.784 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:17:48.787 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:24:51.800 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:24:51.802 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:24:51.814 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:24:52.123 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:24:52.125 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:24:52.128 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:32:04.920 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:32:04.935 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:32:04.943 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:32:05.253 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:32:05.257 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:32:05.260 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:39:13.474 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:39:13.478 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:39:13.480 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:39:16.251 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:39:16.253 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:39:16.257 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:46:25.056 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:46:25.063 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:46:25.065 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:46:25.366 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:46:25.368 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:46:25.370 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:53:27.742 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:53:27.749 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:53:27.760 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 08:53:27.886 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 08:53:27.891 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 08:53:27.895 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:01:00.451 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:01:00.453 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:01:00.456 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:01:01.503 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:01:01.514 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:01:01.517 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:08:25.595 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:08:25.600 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:08:25.603 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:08:27.091 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:08:27.095 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:08:27.097 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:15:47.708 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:15:47.709 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:15:47.712 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:15:48.543 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:15:48.550 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:15:48.559 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:20:12.389 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:20:12.391 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:20:12.393 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:20:13.121 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:20:13.124 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:20:13.128 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:24:31.043 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:24:31.046 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:24:31.049 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:24:31.509 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:24:31.513 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:24:31.519 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:29:06.548 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:29:06.557 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:29:06.577 UID  1000, 1 KVP received: is_voip_app_foreground=0
+    10-07 09:29:08.588 UID  1000, 1 KVP received: continuous_audio_mode=0
+    10-07 09:29:08.592 UID  1000, 1 KVP received: foreground_app_change=
+    10-07 09:29:08.597 UID  1000, 1 KVP received: is_voip_app_foreground=0

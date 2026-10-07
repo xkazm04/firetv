@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T06:24:34.7022228Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "UnrealEditor-Cmd",
+                             "IDProcess":  43092,
+                             "PercentProcessorTime":  407
+                         },
+                         {
+                             "Name":  "node#36",
+                             "IDProcess":  54116,
+                             "PercentProcessorTime":  98
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  46856,
+                             "PercentProcessorTime":  89
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  23724,
+                             "PercentProcessorTime":  74
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  42
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  37
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  28
+                         },
+                         {
+                             "Name":  "WmiPrvSE",
+                             "IDProcess":  5712,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "claude#5",
+                             "IDProcess":  49676,
+                             "PercentProcessorTime":  18
+                         },
+                         {
+                             "Name":  "Code - Insiders#5",
+                             "IDProcess":  33004,
+                             "PercentProcessorTime":  18
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                36,
+                                66,
+                                57
+                            ]
+}

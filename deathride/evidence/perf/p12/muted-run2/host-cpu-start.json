@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T06:54:02.1018431Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#27",
+                             "IDProcess":  48176,
+                             "PercentProcessorTime":  112
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  55808,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "rustc#1",
+                             "IDProcess":  10892,
+                             "PercentProcessorTime":  95
+                         },
+                         {
+                             "Name":  "node#30",
+                             "IDProcess":  36700,
+                             "PercentProcessorTime":  90
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  86
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  82
+                         },
+                         {
+                             "Name":  "node#28",
+                             "IDProcess":  27136,
+                             "PercentProcessorTime":  69
+                         },
+                         {
+                             "Name":  "node#26",
+                             "IDProcess":  53256,
+                             "PercentProcessorTime":  38
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  34
+                         },
+                         {
+                             "Name":  "OneDrive.Sync.Service",
+                             "IDProcess":  30916,
+                             "PercentProcessorTime":  21
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                59,
+                                98,
+                                85
+                            ]
+}

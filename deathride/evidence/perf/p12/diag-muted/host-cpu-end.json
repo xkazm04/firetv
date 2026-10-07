@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T07:24:00.2579049Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  35960,
+                             "PercentProcessorTime":  509
+                         },
+                         {
+                             "Name":  "python",
+                             "IDProcess":  46440,
+                             "PercentProcessorTime":  155
+                         },
+                         {
+                             "Name":  "node#34",
+                             "IDProcess":  54652,
+                             "PercentProcessorTime":  98
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  84
+                         },
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  51572,
+                             "PercentProcessorTime":  80
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#7",
+                             "IDProcess":  10176,
+                             "PercentProcessorTime":  80
+                         },
+                         {
+                             "Name":  "node#31",
+                             "IDProcess":  3168,
+                             "PercentProcessorTime":  61
+                         },
+                         {
+                             "Name":  "node#32",
+                             "IDProcess":  41332,
+                             "PercentProcessorTime":  56
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  42
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  28
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}
