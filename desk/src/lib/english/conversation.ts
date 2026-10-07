@@ -11,7 +11,8 @@ import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, usedLine } from "./review";
+import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines, usedLine } from "./review";
+import { copiesShown } from "./credit";
 import { accepts, isTurnAction, refusal } from "./turn";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId } from "./types";
 
@@ -218,7 +219,9 @@ export async function englishCommand(raw:unknown){
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
       const partnerReply=line(result.json.reply),turnId=`${c.id}:${commandId}`;
-      const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
+      const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,shown:shownLines(c),skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
+      // a reply read back from the partner's last line is supported: code can add support, never remove it
+      const copied=copiesShown(reply,c.turns.filter(t=>t.role==="partner").slice(-1).map(t=>t.text));
       const moment=mayStop?parseMoment(result.json.moment,reply,turnId):null;
       // Reuse is decided here, in code (review.ts): the reply as sent, on the scene as it stood when it was sent.
       const reused=reuseOf(reply,c),learned=mergeEvidence(getLearner(learnerId).english,observations);
@@ -226,7 +229,7 @@ export async function englishCommand(raw:unknown){
       saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
+      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
