@@ -204,3 +204,16 @@ Honest limits:
   practises feelings (B1).
 - No screen may name Cambridge while `claimAllowed()` is false (verified, and A2 Key coverage at least 90%: the plan's
   kill criterion). A test enforces it.
+
+## The Company: a pitched scene (v2 L3, Adult mode, 2026-10-07)
+
+Owner decisions L3 (wild but non-explicit) and the v2 plan's L3 card. In Adult mode only (`modeOf`, `lib/rules/mode.ts`),
+the phone's Linga start panel has a **Pitch a scene** field (at most 400 characters, as the topic handshake's "add a
+topic in your own words"; no microphone, as there is none there). **Play this scene** sends it: code refuses first,
+with no model call, any other mode and a premise on the never-list (`gate.ts`); one shaping call turns it into a
+scene contract that keeps the premise, absurd, comedic or high-stakes; the topic's words and the premise are gated
+again, the stricter audience wins, and anything this learner may not practise is refused in one sentence, never toned
+down. The scene starts at once, over the one that was running. Pitched scenes are kept (the newest 12) and lead the
+situations after the plan's topics; on `linga-scenes` their card's kicker begins **Your own scene**, and the phone's
+list says "your own". A profile back in Family is never offered one. Nothing loosens here: rude characters and
+in-character insults (C3) and 18+ romance and nightlife (C4) are v2 L5, behind the red-team.

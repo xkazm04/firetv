@@ -13,6 +13,8 @@ import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificat
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
 import { currentStep, missionDone } from "./mission";
+import { isPitchId } from "./pitch";
+import { modeOf } from "../rules/mode";
 import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
@@ -55,6 +57,8 @@ export const VIEW_ACTION_IDS = [
   "menu", "repeat",
   // the phone: a typed or spoken answer, and the pickers that take a value
   "answer", "pick-situation", "pick-band", "add-topic",
+  // Adult mode (v2 L3): a scene pitched in the learner's own words on the phone
+  "pitch-scene",
 ] as const;
 export type ActionId = typeof VIEW_ACTION_IDS[number];
 
@@ -95,7 +99,9 @@ export type Hero =
       /** the scene's partner, for the name tag; its cue as a sentence to take with you; its picture; the level and length */
       partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string;
       /** the scene's mission, when it has one: the subtitle is then its current step (mission.ts), and the TV's data line reads "Now" */
-      steps?: Array<{ text: string; state: Dot }> }
+      steps?: Array<{ text: string; state: Dot }>;
+      /** a scene this learner pitched (v2 L3): the situation card says it is their own */
+      own?: boolean }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string }
@@ -345,7 +351,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const i = sceneIndex % scenes.length, scene = scenes[i];
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
-      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes };
+      partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes, ...(isPitchId(scene.id) ? { own: true } : {}) };
     actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } })];
   } else if (s.screen === "linga-cert") {
     // the plate (Family W10): what cert.ts issued, in words; no count, no score, no digit but the band's
@@ -506,6 +512,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     start.forEach(onPhone);
     onPhone(act("pick-situation", "Choose a situation from the phone's list", "Start any situation from the phone's list.", cmd("start", { replace: true }), { needs: "sceneId" }));
     if (s.screen === "linga-scenes" && !menu && !picking) details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
+    // Adult mode only (v2 L3): a scene in the learner's own words, shaped and started at once (conversation.ts "pitch")
+    if (modeOf(p, prefs) === "adult") phone.push(act("pitch-scene", "Pitch a scene in your own words on the phone", "Linga shapes the scene you describe and starts it now.", cmd("pitch"), { needs: "text" }));
     if (h === "no-placement") onPhone(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
   }
   if (panel === "check" && lc) {
@@ -592,7 +600,7 @@ export function viewText(v: LingaView): string {
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
-    case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : [])); break;
+    case "scene": out.push(...(h.own ? ["Your own scene"] : []), h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;

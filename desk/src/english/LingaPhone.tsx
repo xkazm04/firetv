@@ -6,6 +6,7 @@ import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PR
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
+import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
 import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
@@ -62,7 +63,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
     {panel==="talk"&&<>
       {panelOf==="check"&&lc?<CheckPanel lc={lc} run={run} busy={busy} hasPlan={!!learning.plan} leave={offered.find(a=>a.run.command?.action==="check-leave")}/>
       :panelOf==="moment"&&c?<MomentPanel c={c} run={run} busy={pending}/>
-      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")}/>
+      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")} pitch={!!offer("pitch-scene")}/>
       :<>
         <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
         <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
@@ -183,10 +184,19 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
 }
 
 /** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
-function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean}){
+/** Adult mode (v2 L3): a scene in the learner's own words, as the topic handshake takes one; Linga shapes it and starts it now. */
+function PitchBox({run,busy}:{run:Run;busy:boolean}){
+  const [premise,setPremise]=useState("");
+  return <>
+    <label>Pitch a scene<textarea value={premise} maxLength={PITCH_MAX} placeholder="A dragon opens a bank account, and I translate…" onChange={e=>setPremise(e.target.value)}/><small className="linga-note">{premise.length} of {PITCH_MAX} characters. Linga plays it now; absurd and high-stakes are welcome.</small></label>
+    {premise.trim()&&<button className="pbtn" disabled={busy} onClick={async()=>{if(await run("pitch",{text:premise}))setPremise("");}}>Play this scene</button>}
+  </>;
+}
+
+function StartPanel({s,learning,run,busy,list,pitch}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean}){
   const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
   const next=recommendFor(profile,learning),placement=learning.placement,home=lingaHome(s);
-  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
+  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}{isPitchId(x.id)?" · your own":""}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
   const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;
   let body;
@@ -233,6 +243,7 @@ function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearni
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
+    {pitch&&<PitchBox run={run} busy={busy}/>}
   </>;
 }
 

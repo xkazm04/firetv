@@ -1149,3 +1149,20 @@ test('pitch case 4 GUARD: a pitch on the record is offered only in Adult mode; a
   assert(!eligibleScenes(p,defaultPreferences(p),l).some(x=>x.id==='pitch-a1'),`${p.type} ${p.mode??''}`);
  assert.deepEqual(eligibleScenes(adult,defaultPreferences(adult),emptyEnglish()).map(x=>x.id),eligibleScenes(adult,defaultPreferences(adult)).map(x=>x.id),'no pitch, no change');
 });
+test('pitch case 5: the phone offers Pitch a scene on its start panel in Adult mode only, and the TV marks a pitched card as the learner\'s own',()=>{
+ const V=view(),adultPrefs={...defaultPreferences({type:'other'}),adultConfirmed:true};
+ const asJakub=(fx)=>{const s=sessionOf(fx);return {...s,learner:{...s.learner,id:'jakub',name:'Jakub'}};};
+ const home=fixture('linga',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]});
+ const offered=V.lingaView(asJakub(home)).phone.find(a=>a.id==='pitch-scene');
+ assert(offered,'Adult mode: the start panel takes a pitch');assert.equal(offered.run.command.action,'pitch');assert.equal(offered.needs,'text');
+ assert(V.VIEW_ACTION_IDS.includes('pitch-scene'));
+ for(const [name,fx] of Object.entries(HOMES))assert(!V.lingaView(sessionOf(fx)).phone.some(a=>a.id==='pitch-scene'),`Family (${name}): no pitch`);
+ assert(!V.lingaView(asJakub(fixture('linga',{placement:placed(),preferences:{...adultPrefs,adultConfirmed:false}}))).phone.some(a=>a.id==='pitch-scene'),'"other" unconfirmed is Family');
+ assert(!V.lingaView(asJakub(fixture('linga-talk',{placement:placed(),preferences:adultPrefs,conversation:convo({learnerId:'jakub'})}))).phone.some(a=>a.id==='pitch-scene'),'not over a live scene: the phone holds the conversation');
+ const scenes=asJakub(fixture('linga-scenes',{placement:placed(),preferences:adultPrefs,pitches:[pitchTopic()]}));
+ const first=V.lingaView(scenes,{sceneIndex:0});
+ assert.equal(first.title,'The dragon at the bank','no plan: the pitched scene leads the list');assert.equal(first.hero.own,true);
+ assert.match(V.viewText(first),/Your own scene/);
+ const authored=V.lingaView(scenes,{sceneIndex:1});assert.equal(authored.hero.own,undefined,'an authored situation is not marked');
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.own\?"Your own scene · ":""/,'the TV card draws the mark');
+});

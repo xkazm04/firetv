@@ -162,7 +162,8 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     case "choices":return <><Kicker text={h.kicker}/><h1 className="lo-prompt" data-role="linga-title">{h.prompt}</h1>
       <div className="lo-choices linga-choices">{h.options.map((x,i)=><div key={x} data-selected={focus===i}><small>0{i+1}</small>{x}</div>)}</div>{caption}</>;
     case "scene":{
-      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
+      // a scene the learner pitched (v2 L3) is marked as their own on its card
+      if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.own?"Your own scene · ":""}${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
       return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
