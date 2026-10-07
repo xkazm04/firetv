@@ -13,8 +13,10 @@ p.add_argument('--profile', action='store_true')
 p.add_argument('--extra', action='append', default=[])
 # Courses build lazily since baf5181a: the first /routes builds every playable course, past the
 # probe's 5 s setup fetch on a Stick. P8 paid that at class load; this pays it before the probe.
-p.add_argument('--warm-routes', action='store_true')
-p.add_argument('--tracks', help='comma-separated five playable course ids (PROBE_TRACKS)')
+# P11: the P9/P10 arm is the default (--no-warm-routes and --tracks override it).
+p.add_argument('--warm-routes', action=argparse.BooleanOptionalAction, default=True)
+p.add_argument('--tracks', default='scrap-1-c,foundry-1-c,salt-1-b,switchback-1-a,crown-1-a',
+    help='comma-separated five playable course ids (PROBE_TRACKS); default: the first course of each region')
 p.add_argument('--apk', type=Path, default=ROOT / 'app/build/outputs/apk/debug/app-debug.apk')
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
@@ -27,7 +29,8 @@ def adb(*args, **kw):
 
 apk = a.apk.resolve()
 receipt = {'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
-    'device': a.device, 'package': package, 'profile': a.profile, 'extra': a.extra}
+    'device': a.device, 'package': package, 'profile': a.profile, 'extra': a.extra,
+    'warmRoutes': a.warm_routes, 'tracks': a.tracks}
 # aapt identity check before any installation.
 sdk = Path(os.environ['ANDROID_HOME'])
 aapt = sorted((sdk / 'build-tools').glob('*/aapt.exe'))[-1]

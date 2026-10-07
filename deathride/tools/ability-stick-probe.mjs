@@ -3,7 +3,7 @@ import WebSocket from 'ws';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 import {dirname} from 'node:path';
-import {execFile} from 'node:child_process';
+import {execFile,fork} from 'node:child_process';
 import {promisify} from 'node:util';
 import {randomUUID,createHash} from 'node:crypto';
 import {setPriority,getPriority,constants as osConstants} from 'node:os';
@@ -37,7 +37,18 @@ let nextProfile=0,frameCursor=0,inputCursor=0;
 const ackTracing=profiling||stream==='perf';
 if(profiling)result.profiles=[];
 if(ackTracing)result.ackObservations=[];
-async function memory(second){const [text,thermal]=await Promise.all([adb('shell','dumpsys','meminfo','--local',testPackage),adb('shell','dumpsys','thermalservice')]);result.memory.push({second,hostMemory:process.memoryUsage(),pssKb:Number(text.match(/TOTAL PSS:\s+(\d+)/)?.[1]??text.match(/TOTAL\s+(\d+)/)?.[1]??-1),thermalStatus:Number(thermal.match(/Thermal Status: (\d+)/)?.[1]??-1),text,thermal});console.log(JSON.stringify({second:Math.round(second),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length}))}
+// P11: the adb meminfo/thermal sample runs in perf-memory-sampler.mjs, its own process. P9/P10 saw every host pump stall begin
+// 0.6-2 s after a sample that spawned, completed and logged on this loop. The pump's loop now only sends a request and
+// receives an acknowledgement; the cadence (when to sample) and the sample fields are unchanged. Samples return at the end.
+const sampler=fork(new URL('./perf-memory-sampler.mjs',import.meta.url),[JSON.stringify({device,adbPort,testPackage})],{stdio:['ignore','inherit','inherit','ipc'],windowsHide:true});
+const sampleWaiters=new Map();let sampleId=0,samplerReply=null,samplerExit=null;
+sampler.on('message',m=>{if(m.t==='samples'){samplerReply?.(m);return}const w=sampleWaiters.get(m.id);sampleWaiters.delete(m.id);if(m.t==='sampled')w?.resolve();else w?.reject(Error(m.error))});
+sampler.on('exit',(code,signal)=>{samplerExit={code,signal};samplerReply?.(null);for(const w of sampleWaiters.values())w.reject(Error('memory sampler exited '+code+' '+signal));sampleWaiters.clear()});
+function memory(second){return new Promise((resolve,reject)=>{if(samplerExit)return reject(Error('memory sampler exited'));const id=sampleId++;sampleWaiters.set(id,{resolve,reject});sampler.send({t:'sample',id,second,requestedEpochMs:performance.timeOrigin+performance.now(),hostMemory:process.memoryUsage(),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length})})}
+async function collectMemory(){
+ const reply=samplerExit?null:await new Promise(resolve=>{const t=setTimeout(()=>resolve(null),30000);samplerReply=m=>{clearTimeout(t);resolve(m)};sampler.send({t:'finish'})});
+ if(reply){result.memory=reply.samples;if(reply.adbReconnects.length)(result.adbReconnects??=[]).push(...reply.adbReconnects)}else{result.memorySamplerError='No sample reply; exit '+JSON.stringify(samplerExit);sampler.kill()}
+}
 async function waitFor(fn,label){const end=performance.now()+15000;while(performance.now()<end){const s=await get('/stats');if(fn(s))return s;await pause(100)}throw Error('Timed out: '+label)}
 async function join(){
  const c={ws:new WebSocket(base.replace('http','ws')+'/ws'),slot:-1,q:0,offset:0,bestRtt:Infinity,pending:new Map(),accepted:0,rejected:0,sent:0,command:{s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0}};clients.push(c);
@@ -54,8 +65,9 @@ try {
  await join();await join();assert.deepEqual(clients.map(c=>c.slot),[0,1]);await memory(0);
  started=performance.now();let next=started;pumping=true;
  function pump(){if(!pumping)return;const now=performance.now();if(now>=next){for(const c of clients){const q=c.q++,ts=performance.now();c.pending.set(q,{ts,offset:c.offset});c.send({t:'i',q,ts,...c.command});c.sent++}next+=1000/30;if(now-next>100){const stall={second:(now-started)/1000,lateMs:now-next,epochMs:performance.timeOrigin+now,cpu:process.cpuUsage(),memory:process.memoryUsage()};result.pumpStalls.push(stall);console.log(JSON.stringify({hostPumpStall:stall}));next=now+1000/30}}timer=setTimeout(pump,Math.max(0,next-performance.now()))}pump();
- // PROBE_TRACKS overrides the five-course cycle (the P8 ids are no longer playable on region courses).
- const tracks=process.env.PROBE_TRACKS?process.env.PROBE_TRACKS.split(','):['foundry','saltline','scree','sluice','ridge'];
+ // PROBE_TRACKS overrides the five-course cycle. Default: the first course of each region, all five themes (P9-P11 arm);
+ // the P8 ids (foundry, saltline, scree, sluice, ridge) are no longer playable on region courses.
+ const tracks=process.env.PROBE_TRACKS?process.env.PROBE_TRACKS.split(','):['scrap-1-c','foundry-1-c','salt-1-b','switchback-1-a','crown-1-a'];
  assert.ok(tracks.length===5&&tracks.every(id=>catalog.tracks.some(t=>t.id===id)),'Every probe track must be playable: '+tracks);result.tracks=tracks;
  let roundIndex=0;
  while((performance.now()-started)/1000<duration){
@@ -119,6 +131,7 @@ try {
 finally{
  pumping=false;clearTimeout(timer);for(const c of clients){c.send({t:'i',q:c.q++,ts:performance.now(),s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0});c.ws.close()}
  if(memoryPending)await memoryPending.catch(()=>{});
+ await collectMemory();
  hostGc.disconnect();await hostHeartbeat.terminate();result.finishedUtc=new Date().toISOString();await writeFile(output,JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify({functionalPass:result.functionalPass,error:result.error,duration:result.actualDurationSeconds,rounds:result.rounds.length,classUses:result.classUses,clients:result.clients},null,2));
 }
