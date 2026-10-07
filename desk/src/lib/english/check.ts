@@ -139,31 +139,56 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
   return k;
 }
 
-function allowedAudiences(ctx: Ctx): Audience[] {
+function allowedAudiences(ctx: Omit<Ctx, "commandId">): Audience[] {
   const prefs = ctx.learning.preferences ?? defaultPreferences(ctx.profile);
   return (["all", "older", "adult"] as Audience[]).filter(a => audienceAllowed(ctx.profile, prefs, a));
 }
+const inInterest = " naming it in the title or premise";
+/** What the planning call is asked beyond the learner record: the check's own read, the titles to avoid, the interest gap. */
+interface PlanAsk { count: number; asked?: string; goal: string; interest: string; read: string; avoid: string[]; need: boolean; }
+/**
+ * The planning call's system, request and schema, in one place, so a pitched scene (v2 L3, pitchAsk) is shaped under
+ * exactly the rules a plan topic is, through the same learnerAsked seam.
+ */
+function planAsk(ctx: Omit<Ctx, "commandId">, o: PlanAsk) {
+  const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
+  const band: Band = learning.placement?.band ?? prefs.level;
+  const { count, asked, need } = o;
+  const system = `${checkSystem(ctx.profile, ctx.adult)}
+Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
+  const request = {
+    step: "plan", count, band, bandGuide: BAND_TUTOR[band],
+    learner: { goal: o.goal, interest: o.interest, read: o.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowedAudiences(ctx) },
+    skills: ENGLISH_SKILLS, avoid: o.avoid, ...(asked ? { learnerAsked: asked } : {}),
+    task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? ` Spread them over at least four different skills and put the two closest to their goal first${need ? `, and set at least two in their interest (learner.interest),${inInterest}` : ""}.` : ` Make it different from the topics in avoid.${need ? ` Set it in their interest (learner.interest),${inInterest}.` : ""}`}`}
+Each topic: title (at most 48 characters, plain words the learner would use); goal (what the learner achieves by talking, at most 120); why (one line to the learner saying why this topic is in their plan, at most 120); skill (one id from skills); partner ("Name · role", fictional, at most 40); premise (the scene contract: the situation, the learner's aim, what makes it go well, at most 400); cue (a phrase starter beginning "Try:", at most 90); quiz (a question and two short phrases; one serves the scene's aim, correct is its index).
+audience: "adult" for anything only adults should practise (dating, alcohol, adult workplace conflict); "older" for 15 and over (job interviews, sharp disagreements); otherwise "all". Mark it honestly — the desk filters by age. Only propose audiences listed in mayPractise.`,
+  };
+  return { system, request, schema: planSchema(count) };
+}
+
+/**
+ * The shaping call of a pitched scene (v2 L3): the plan's learnerAsked seam with the premise as the ask, and one line
+ * more that keeps the learner's premise. No rule of the planning system is changed or dropped. The caller makes the
+ * call (conversation.ts, thinking off as every conversation call is) and gates what comes back.
+ */
+export function pitchAsk(profile: Profile, learning: EnglishLearning, adult: boolean, premise: string) {
+  const prefs = learning.preferences ?? defaultPreferences(profile);
+  const a = planAsk({ profile, learning, adult }, { count: 1, asked: premise, goal: prefs.goal, interest: prefs.interest, read: "", avoid: [], need: false });
+  return { ...a, request: { ...a.request, task: `${a.request.task}
+learnerAsked is a scene this learner pitched to play now. Keep their premise as they put it, even an absurd, comedic or high-stakes one, within every rule above. partner is the character they will talk to; why says in one line that this is their own scene.` } };
+}
+
 /** Ask for topics; age filters them before any screen sees one. `swap` replaces that topic; otherwise they are added. */
 async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, swap: string | null, failure: string, asked?: string): Promise<LevelCheck> {
   const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-  const band: Band = learning.placement?.band ?? prefs.level;
   const allowed = allowedAudiences(ctx);
   // The interest the learner gave reaches the plan (S57): known, and no topic kept in the plan carries it, so this
   // answer must. Checked in code (placement.ts touchesInterest) and asked for once more with the gap named; the
   // desk never writes a topic itself, so a second miss keeps the first answer. A topic in the learner's own words is exempt.
   const stems = asked ? [] : interestWords(prefs.interest || k.interest);
   const need = stems.length > 0 && !k.topics.some(t => t.id !== swap && touchesInterest(t, stems));
-  const system = `${checkSystem(ctx.profile, ctx.adult)}
-Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
-  const inInterest = " naming it in the title or premise";
-  const request = {
-    step: "plan", count, band, bandGuide: BAND_TUTOR[band],
-    learner: { goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowed },
-    skills: ENGLISH_SKILLS, avoid: k.topics.map(t => t.title), ...(asked ? { learnerAsked: asked } : {}),
-    task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? ` Spread them over at least four different skills and put the two closest to their goal first${need ? `, and set at least two in their interest (learner.interest),${inInterest}` : ""}.` : ` Make it different from the topics in avoid.${need ? ` Set it in their interest (learner.interest),${inInterest}.` : ""}`}`}
-Each topic: title (at most 48 characters, plain words the learner would use); goal (what the learner achieves by talking, at most 120); why (one line to the learner saying why this topic is in their plan, at most 120); skill (one id from skills); partner ("Name · role", fictional, at most 40); premise (the scene contract: the situation, the learner's aim, what makes it go well, at most 400); cue (a phrase starter beginning "Try:", at most 90); quiz (a question and two short phrases; one serves the scene's aim, correct is its index).
-audience: "adult" for anything only adults should practise (dating, alcohol, adult workplace conflict); "older" for 15 and over (job interviews, sharp disagreements); otherwise "all". Mark it honestly — the desk filters by age. Only propose audiences listed in mayPractise.`,
-  };
+  const { system, request } = planAsk(ctx, { count, asked, goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, avoid: k.topics.map(t => t.title), need });
   const pick = (json: Record<string, unknown>) => {
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])

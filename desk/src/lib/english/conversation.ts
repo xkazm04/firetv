@@ -5,7 +5,10 @@ import { dispatch, getSession, type Screen } from "../session/store";
 import { addDigest, getLearner, saveEnglish } from "../session/learners";
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
-import { checkCommand, isCheckAction } from "./check";
+import { checkCommand, isCheckAction, pitchAsk } from "./check";
+import { keywordAudience } from "./gate";
+import { keepPitch, PITCH_MAX, PITCH_PREFIX, shapePitch } from "./pitch";
+import { modeOf } from "../rules/mode";
 import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, isAdult, oldestDue } from "./curriculum";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
@@ -44,6 +47,8 @@ const replaySchema=schema({reply:str(230),help:helpSchema}),replayAccept=loose({
 // timed out a third of the time; off, a turn took 4-6 s and still caught the error it was set (T10 A/B, 2026-09-25).
 // The level check, plan, hints and marking keep the model's own thinking.
 
+/** Learners whose pitch is being shaped: a second pitch, or a pitch over a scene being prepared, waits. Server memory only. */
+const pitching=(globalThis as unknown as {__lingaPitching?:Set<string>}).__lingaPitching??=new Set<string>();
 function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-recap":c.moment?"linga-moment":c.phase==="coaching"?"linga-coach":"linga-talk";}
 /** `check` is the level check a scene that starts or resumes parks (activity.ts): at most one of the two is live. */
 function commit(c:Conversation,screen?:Screen,check?:LevelCheck){dispatch({type:"linga.changed",conversation:c,screen,...(check?{check}:{})});}
@@ -137,6 +142,29 @@ export async function englishCommand(raw:unknown){
     dispatch({type:"linga.changed",screen:"linga-cert"});return getSession();
   }
   if(isCheckAction(action)){await checkCommand(action,input,profile,commandId);return getSession();}
+  if(action==="pitch"){
+    // A scene the learner pitched, played now (v2 L3, pitch.ts). Code refuses first, with no model call: any mode but
+    // Adult, a premise too long, a premise on the never-list (gate.ts). Then one shaping call through the plan's own
+    // learnerAsked seam (check.ts pitchAsk), gated again (pitch.ts shapePitch), kept, and started as start starts it.
+    const prefs=learning.preferences??defaultPreferences(profile);
+    if(modeOf(profile,prefs)!=="adult")throw new ConversationError("Pitching a scene is part of Adult mode.",403);
+    const premise=typeof input.text==="string"?input.text.trim():"";
+    if(!premise)throw new ConversationError("Say the scene you would like to play.");
+    if(premise.length>PITCH_MAX)throw new ConversationError(`Pitch the scene in up to ${PITCH_MAX} characters.`);
+    if(keywordAudience(premise)===null)throw new ConversationError("Linga can't play that scene. Try another one.");
+    if(s.conversation?.commands.includes(commandId))return getSession();
+    if(s.conversation?.pending||pitching.has(learnerId))throw new ConversationError("A scene is already being prepared. You can cancel it.",409);
+    const {system,request,schema:shape}=pitchAsk(profile,learning,isAdult(profile,prefs),premise);
+    pitching.add(learnerId);
+    let r;
+    try{r=await text<Record<string,unknown>>({system,prompt:JSON.stringify(request),schema:shape,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});}
+    finally{pitching.delete(learnerId);}
+    if(getSession().learner?.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
+    const topic=shapePitch(r.json,premise,`${PITCH_PREFIX}${randomUUID().slice(0,8)}`,a=>audienceAllowed(profile,prefs,a));
+    if(!topic)throw new ConversationError("Linga could not make that into a scene it can play with you. Try it another way.");
+    saveEnglish(learnerId,keepPitch(getLearner(learnerId).english,topic));
+    return englishCommand({...input,action:"start",sceneId:topic.id,replace:true});
+  }
   if(action==="start"){
     const prefs=learning.preferences??defaultPreferences(profile),allowed=eligibleScenes(profile,prefs,learning);
     const scene=input.sceneId?allowed.find(x=>x.id===input.sceneId):recommendFor(profile,learning);

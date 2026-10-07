@@ -238,3 +238,81 @@ test('V2-O3: the profile\'s Adult (18+) is the one confirmation Linga needs; Fam
   assert.equal(audienceAllowed({ ...other, mode: 'adult', age: 16 }, unticked, 'adult'), false, 'an age always decides first');
   assert.equal(audienceAllowed({ id: 'h', name: 'H', type: 'high-school', mode: 'adult', modules: [] }, { ...unticked, adultConfirmed: true }, 'adult'), false, 'a school type with no age never');
 });
+
+// ------------------------------------------------------------------ v2 L3: pitch a scene, played now
+// [the premise as the learner typed it, the shaping call's label, expected audience (null = refused)]
+const PITCH_ROWS = [
+  // romance and nightlife a model labels "all" come out adult, absurd or not
+  ['My crush asks me to dance at the wedding and I panic', 'all', 'adult'],
+  ['A blind date with a vampire who is a vegetarian', 'all', 'adult'],
+  ['Flirting with the barista while ordering for my whole office', 'all', 'adult'],
+  ['My first night as a bartender and a pirate orders rum', 'all', 'adult'],
+  ['A heist at the casino where I am the getaway driver', 'older', 'adult'],
+  ['A wine tasting where I pretend to be an expert', 'all', 'adult'],
+  // older: work and money trouble, however absurd
+  ['A job interview where the interviewer is a talking cat', 'all', 'older'],
+  ['Convincing my landlord that the ghost in the flat should pay half the rent', 'all', 'older'],
+  // absurd, comedic and high-stakes premises with none of the words keep their label
+  ['Negotiating with aliens who want to buy the moon', 'all', 'all'],
+  ['I must defuse a bomb with an expert on the phone', 'all', 'all'],
+  ['Returning a cursed toaster to a very rude shop', 'all', 'all'],
+  ['A spaceship captain gives me ten minutes to save the crew', 'adult', 'adult'],
+  // the never-list refuses a pitch at every label
+  ['The villain plans to torture the hero in the cellar', 'adult', null],
+  ['A nude modelling class at the art school', 'all', null],
+  ['A gore-soaked zombie film night', 'adult', null],
+];
+test(`L3 pitch rows: a pitched premise meets the same gate, the stricter wins (${PITCH_ROWS.length} rows)`, () => {
+  assert(PITCH_ROWS.length >= 10, 'the brief asks for at least 10 pitch rows');
+  for (const [text, label, want] of PITCH_ROWS) assert.equal(audienceOf(text, label), want, `"${text}" labelled ${label}`);
+});
+
+const pitchScene = { title: 'The dragon at the bank', goal: 'Open an account for a dragon.', why: 'Your own scene.', skill: 'request', audience: 'all', partner: 'Mo · Bank clerk', premise: 'A dragon wants to open a bank account; the learner translates for it.', cue: 'Try: My friend would like to…', quiz: { question: 'Which asks politely?', options: ['Could you help us?', 'Give me money.'], correct: 0 } };
+/** The shaping call answers `shaped`, the opening answers a line; every call is listed by its step. */
+const pitching = (shaped = pitchScene) => { const steps = []; answer = async (req) => { const p = JSON.parse(req.prompt); steps.push(p.step ?? 'opening'); return p.step === 'plan' ? { json: { topics: [shaped] }, provider: 'test', ms: 1 } : { json: { title: shaped.title, goal: shaped.goal, opening: 'Next, please. Oh. Is that a dragon?' }, provider: 'test', ms: 1 }; }; return steps; };
+test('L3: a pitch in Family mode is refused with no model call: a 13-year-old, a 16-year-old, and an adult who chose Family', async () => {
+  for (const [id, patch] of [['klara', { type: 'elementary', age: 13 }], ['tom', { type: 'high-school', age: 16 }], ['martin', { type: 'other', age: 45, mode: 'family' }]]) {
+    await seat(id, patch);
+    const steps = pitching();
+    await assert.rejects(command('pitch', { text: 'Negotiating with aliens who want to buy the moon' }), e => e.status === 403 && /Adult mode/.test(e.message), id);
+    assert.deepEqual(steps, [], `${id}: no model call`);
+    assert.equal(getSession().conversation, null, `${id}: no scene`);
+    assert.equal(getSession().englishLearning.pitches, undefined, `${id}: nothing kept`);
+  }
+});
+test('L3: a never-list premise is refused in Adult mode with no model call; so is an empty or an over-long one', async () => {
+  await seat('martin', { type: 'other', age: 45 });
+  const steps = pitching();
+  for (const text of ['The villain plans to torture the hero in the cellar', 'A nude modelling class', 'a porn shoot'])
+    await assert.rejects(command('pitch', { text }), e => e.status === 400 && /can't play that scene/.test(e.message), text);
+  await assert.rejects(command('pitch', { text: '   ' }), e => e.status === 400);
+  await assert.rejects(command('pitch', { text: 'x'.repeat(401) }), e => e.status === 400 && /400 characters/.test(e.message));
+  assert.deepEqual(steps, []);
+  assert.equal(getSession().conversation, null);
+});
+test('L3: a romance pitch the model labels "all" is kept and played as adult; a topic made never-list, or one this learner may not practise, is refused', async () => {
+  await seat('martin', { type: 'other', age: 45 });
+  let steps = pitching({ ...pitchScene, title: 'A dance at the wedding', premise: 'At a wedding the learner asks their crush to dance and tries not to panic.' });
+  await command('pitch', { text: 'My crush asks me to dance at the wedding and I panic' });
+  assert.deepEqual(steps, ['plan', 'opening'], 'one shaping call, then the opening');
+  const kept = getSession().englishLearning.pitches;
+  assert.equal(kept.length, 1); assert.equal(kept[0].audience, 'adult', 'the stricter of label and words');
+  assert.equal(getSession().conversation.sceneId, kept[0].id); assert.equal(getSession().conversation.scene.audience, 'adult');
+  // the model's own words hit the never-list: refused, never carried as "adult" (plan-add's fallback is not used here)
+  steps = pitching({ ...pitchScene, premise: 'The bank clerk threatens to torture the dragon.' });
+  await assert.rejects(command('pitch', { text: 'A dragon wants to open a bank account' }), e => e.status === 400 && /could not make that into a scene/.test(e.message));
+  assert.deepEqual(steps, ['plan']); assert.equal(getSession().englishLearning.pitches.length, 1, 'nothing more kept');
+  // a "school" label is no audience an adult practises: refused, not toned to one they can
+  steps = pitching({ ...pitchScene, audience: 'school' });
+  await assert.rejects(command('pitch', { text: 'A dragon wants to open a bank account' }), e => /could not make that into a scene/.test(e.message));
+  assert.equal(getSession().englishLearning.pitches.length, 1);
+});
+test('L3: no safety line loosens: the shaping call keeps the planning rules, and the tutor keeps its never-lines for an adult', async () => {
+  await seat('martin', { type: 'other', age: 45 });
+  const seen = []; answer = async (req) => { seen.push(req); const p = JSON.parse(req.prompt); return p.step === 'plan' ? { json: { topics: [pitchScene] }, provider: 'test', ms: 1 } : { json: { title: pitchScene.title, goal: pitchScene.goal, opening: 'Hello?' }, provider: 'test', ms: 1 }; };
+  await command('pitch', { text: 'A dragon wants to open a bank account' });
+  assert.match(seen[0].system, /No explicit content, no humiliation, threats or manipulation\./);
+  assert.equal(seen[0].thinking, false, 'the shaping call runs with thinking off');
+  assert.equal(JSON.parse(seen[0].prompt).learnerAsked, 'A dragon wants to open a bank account', "the plan's learnerAsked seam");
+  assert.match(seen[1].system, /you never express romantic or sexual attraction to the learner/);
+});

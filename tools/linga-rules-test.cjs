@@ -1102,3 +1102,50 @@ test('phoneUrl is https:// with DESK_HTTPS=1 and http:// without it (MH-1)',()=>
   process.env.DESK_HTTPS='0';dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^http:\/\//,'only "1" switches it on');
  }finally{if(was===undefined)delete process.env.DESK_HTTPS;else process.env.DESK_HTTPS=was;dispatch({type:'reset'});}
 });
+
+// ---- v2 L3: pitch a scene, played now (lib/english/pitch.ts; conversation.ts "pitch"; check.ts pitchAsk)
+const PITCH=()=>require(path.join(root,'src/lib/english/pitch.ts'));
+const pitchTopic=(patch={})=>({id:'pitch-a1',title:'The dragon at the bank',goal:'Open an account for a dragon.',why:'Your own scene.',skill:'request',audience:'all',partner:'Mo · Bank clerk',premise:'A dragon wants to open a bank account; the learner translates for it.',cue:'Try: My friend would like to…',quiz:{question:'Which asks politely?',options:['Could you help us?','Give me money.'],correct:0},...patch});
+/** jakub is type "other": with the adult box ticked he is in Adult mode (rules/mode.ts modeOf). */
+async function adultAtDesk(){fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});}
+test('pitch case 1: with a stubbed engine, a pitch is shaped once, kept as "pitch-", and started at once over the current scene',async()=>{
+ await adultAtDesk();await command('start',{sceneId:'booking'});const before=getSession().conversation.id;
+ const seen=[];answer=async req=>{const p=JSON.parse(req.prompt);seen.push({step:p.step??'opening',thinking:req.thinking});
+  if(p.step==='plan'){const {id,...t}=pitchTopic();return {json:{topics:[t]},provider:'test',ms:1};}
+  return {json:{title:'The dragon at the bank',goal:'Open the account.',opening:'Next, please. Oh. Is that a dragon?'},provider:'test',ms:1};};
+ await command('pitch',{text:'A dragon wants to open a bank account and I translate'});
+ const c=getSession().conversation,kept=getLearner('jakub').english.pitches;
+ assert.deepEqual(seen.map(x=>x.step),['plan','opening'],'one shaping call, then the opening start makes');
+ assert.equal(seen[0].thinking,false,'the shaping call runs with thinking off, as every conversation call');
+ assert.notEqual(c.id,before,'the pitch replaced the scene that was running');
+ assert.match(c.sceneId,/^pitch-[0-9a-f]{8}$/);assert.equal(kept.length,1);assert.equal(kept[0].id,c.sceneId);
+ assert.equal(c.scene.premise,pitchTopic().premise,'the scene contract is the shaped pitch');assert.equal(c.turns.length,1);
+ const profile=getSession().profiles.find(p=>p.id==='jakub'),prefs=getLearner('jakub').english.preferences;
+ const ids=eligibleScenes(profile,prefs,getLearner('jakub').english).map(x=>x.id);
+ assert(ids.includes(c.sceneId),'start resolves it through eligibleScenes');
+ assert(ids.indexOf(c.sceneId)<ids.indexOf('meet'),'after the plan topics, before the authored situations');
+});
+test('pitch case 2: pitches are capped at 12 and the newest are kept; the newest leads the list',()=>{
+ const {keepPitch,pitchScenes,PITCHES_CAP}=PITCH();
+ let l=emptyEnglish();for(let i=1;i<=14;i++)l=keepPitch(l,pitchTopic({id:`pitch-${i}`,title:`Scene ${i}`}));
+ assert.equal(PITCHES_CAP,12);assert.equal(l.pitches.length,12);
+ assert.deepEqual(l.pitches.map(t=>t.id),Array.from({length:12},(_,i)=>`pitch-${i+3}`),'the two oldest went');
+ assert.equal(pitchScenes(l)[0].id,'pitch-14');
+ assert.equal(keepPitch(l,pitchTopic({id:'pitch-14',title:'Again'})).pitches.length,12,'the same id is replaced, not doubled');
+});
+test('pitch case 3: cleanEnglish keeps and trims pitches; a record without any stays without the field',()=>{
+ const raw={pitches:[...Array.from({length:14},(_,i)=>pitchTopic({id:`pitch-${i}`})),pitchTopic({id:'plan-x'}),pitchTopic({id:'pitch-bad',premise:'A naked dragon.'}),{id:'pitch-junk'},'junk',pitchTopic({id:'pitch-13'})]};
+ const kept=cleanEnglish(raw).pitches;
+ assert.equal(kept.length,12,'trimmed to the newest 12');
+ assert.deepEqual(kept.map(t=>t.id),Array.from({length:12},(_,i)=>`pitch-${i+2}`),'no plan id, no never-list pitch, no malformed one, no duplicate');
+ assert.equal('pitches' in cleanEnglish({}),false);assert.deepEqual(cleanEnglish(undefined),emptyEnglish());
+ assert.equal(cleanEnglish({pitches:[pitchTopic({premise:'Two strangers flirt at a bar in the station.'})]}).pitches[0].audience,'adult','the gate reads a pitch on load too');
+});
+test('pitch case 4 GUARD: a pitch on the record is offered only in Adult mode; a Family profile never sees it',()=>{
+ const l={...emptyEnglish(),pitches:[pitchTopic()]};
+ const adult={id:'a',name:'A',type:'other',modules:['english'],mode:'adult'};
+ assert(eligibleScenes(adult,defaultPreferences(adult),l).some(x=>x.id==='pitch-a1'));
+ for(const p of [{...adult,mode:'family'},{id:'k',name:'K',type:'elementary',age:12,modules:['english']},{id:'t',name:'T',type:'high-school',age:16,modules:['english']}])
+  assert(!eligibleScenes(p,defaultPreferences(p),l).some(x=>x.id==='pitch-a1'),`${p.type} ${p.mode??''}`);
+ assert.deepEqual(eligibleScenes(adult,defaultPreferences(adult),emptyEnglish()).map(x=>x.id),eligibleScenes(adult,defaultPreferences(adult)).map(x=>x.id),'no pitch, no change');
+});

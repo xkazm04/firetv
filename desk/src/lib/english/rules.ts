@@ -2,6 +2,7 @@ import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
 import { cleanCertificates, cleanSeen } from "./cert";
 import { creditOf } from "./credit";
 import { cleanPlacement, cleanPlacements, cleanPlan, cleanTaught, isBand } from "./placement";
+import { cleanPitches } from "./pitch";
 import { emptyEnglish, type EnglishEvidence, type EnglishLearning, type EnglishPreferences, type Progress, type SkillId } from "./types";
 
 const obj = (v: unknown): Record<string, unknown> => v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
@@ -27,6 +28,9 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   result.seenIds = cleanSeen(v.seenIds, result.certificates);
   result.plan = cleanPlan(v.plan);
   result.taught = cleanTaught(v.taught);
+  // optional (v2 L3): only a record that holds a pitch carries the field
+  const pitches = cleanPitches(v.pitches);
+  if (pitches.length) result.pitches = pitches;
   result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];
   return result;
 }

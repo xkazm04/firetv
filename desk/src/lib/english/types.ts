@@ -95,6 +95,11 @@ export interface EnglishLearning {
   certificates: Certificate[];
   /** the certificates already opened; the one place a certificate's state changes, so the certificate never does */
   seenIds: string[];
+  /**
+   * Scenes the learner pitched in Adult mode (v2 L3, pitch.ts), newest last, at most 12; ids start "pitch-". Absent on
+   * every record saved before, read as `?? []`. Not `notes`, which are the teaching notes the model is given.
+   */
+  pitches?: PlanTopic[];
 }
 export interface ConversationTurn { id: string; role: "partner" | "learner"; text: string; mode?: EvidenceMode; supported?: boolean; }
 export interface Coaching { before: string; after: string; note: string; }

@@ -1,8 +1,9 @@
 import type { Profile } from "../session/store";
-import { isAdult } from "../rules/mode";
+import { isAdult, modeOf } from "../rules/mode";
 import type { Audience, EnglishLearning, EnglishPreferences, EnglishScene, Progress, SkillId } from "./types";
 export type { EnglishScene } from "./types";
 import { SPEAKING_PRACTICE } from "./speaking";
+import { pitchScenes } from "./pitch";
 
 export const ENGLISH_SKILLS: Array<{ id: SkillId; name: string; goal: string }> = [
   { id: "contact", name: "Make contact", goal: "Greet, introduce yourself, and take a turn." },
@@ -79,9 +80,13 @@ export function planScenes(l?: EnglishLearning | null): EnglishScene[] {
 }
 /** Every authored scene: the free situations, then Speaking practice (v2 L2). Plan topics are the learner's own. */
 export const AUTHORED_SCENES: EnglishScene[] = [...ENGLISH_SCENES, ...SPEAKING_PRACTICE];
-/** Plan topics first, then the built-in situations, then Speaking practice; all filtered by age. */
+/**
+ * Plan topics first, then the scenes this learner pitched (v2 L3, newest first, Adult mode only: a profile back in
+ * Family keeps its pitches on the record and is never offered one), then the built-in situations, then Speaking
+ * practice; all filtered by age.
+ */
 export function eligibleScenes(p: Profile | undefined, prefs: EnglishPreferences, l?: EnglishLearning | null): EnglishScene[] {
-  return [...planScenes(l), ...AUTHORED_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
+  return [...planScenes(l), ...(modeOf(p, prefs) === "adult" ? pitchScenes(l) : []), ...AUTHORED_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
 }
 /** Every topic in the plan has been talked through at least once. */
 export function planDone(l: EnglishLearning): boolean {
