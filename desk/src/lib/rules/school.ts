@@ -1579,6 +1579,69 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
   }
 }
 
+// ------------------------------------------------------------------ which slips an item shows
+
+/** A value as a worksheet writes it: a whole number or a terminating decimal ('12', '0.035', '-5'), or null. */
+function plainText(c: Q): string | null {
+  if (!terminating(c)) return null;
+  const k = placesNeeded(c), neg = c.n < Z, digits = (babs(c.n) * pow10(k) / c.d).toString().padStart(k + 1, "0");
+  return (neg ? "-" : "") + (k === 0 ? digits : `${digits.slice(0, -k)}.${digits.slice(-k)}`);
+}
+
+/** The ways a value can be written down for `check` to read: plain, as a percent, as a fraction. */
+function writingsOf(c: Q): string[] {
+  const out: string[] = [], plain = plainText(c), pct = plainText(mul(c, qi(BigInt(100))));
+  if (plain !== null) out.push(plain);
+  if (pct !== null) out.push(`${pct}%`);
+  if (c.d !== ONE) out.push(`${c.n}/${c.d}`);
+  return out;
+}
+
+/** The pairs a ratio question's own judge names (checkRatio), by slip id, as the two numbers a child would write. */
+function slippedPairs(r: ReadOk, slipId: string): [Q, Q][] {
+  const K = r.kind;
+  if (K.k === "ratio-simplify") return slipId === "ratio-swapped" ? [[qi(r.truth.d), qi(r.truth.n)]] : [];
+  if (K.k !== "ratio-share") return [];
+  const T = qi(K.T), a = qi(K.a), b = qi(K.b), d = qi(babs(K.a - K.b));
+  const pair = r.pair ?? [a, b];
+  if (slipId === "ratio-swapped") return [[pair[1], pair[0]]];
+  if (K.a === K.b) return [];
+  if (slipId === "ratio-split-each") return [[div(T, a)!, div(T, b)!]];
+  if (slipId === "ratio-as-amounts") return [[a, b]];
+  if (slipId === "ratio-by-difference") return [[mul(div(T, d)!, a), mul(div(T, d)!, b)]];
+  return [];
+}
+
+/**
+ * The answer a child who made the slip `slipId` would write for this spec, as text `check` reads, or null when the slip
+ * does not show on it. Pinned to `check` itself: a text is returned only when `check(spec, text, "uk")` is wrong and names
+ * exactly this slip, so a slip "shows" on a spec precisely when the desk would name it. Pure; a junk spec, an unknown id or
+ * another unit's slip is null, never a throw.
+ */
+export function slipValue(spec: unknown, slipId: unknown): string | null {
+  if (typeof slipId !== "string") return null;
+  try {
+    const r = read(spec);
+    if (!r.ok) return null;
+    const writings: string[] = [];
+    for (const [x, y] of slippedPairs(r, slipId)) {
+      const xs = writingsOf(x), ys = writingsOf(y);
+      for (let i = 0; i < Math.min(xs.length, ys.length); i++) writings.push(`${xs[i]}:${ys[i]}`);
+    }
+    for (const [id, c] of slipCandidates(r)) if (id === slipId && !eq(c, r.truth)) writings.push(...writingsOf(c));
+    for (const w of writings) {
+      const v = check(spec, w, DEFAULT_SCHOOL_SYSTEM);
+      if (v.verdict === "wrong" && v.slip === slipId) return w;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/** Does the slip `slipId` show on this spec: would `check` name it for the answer that slip gives? */
+export const slipShows = (spec: unknown, slipId: unknown): boolean => slipValue(spec, slipId) !== null;
+
 // ------------------------------------------------------------------ the leak check
 
 const SMALL: Record<string, number> = { zero: 0, nought: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
