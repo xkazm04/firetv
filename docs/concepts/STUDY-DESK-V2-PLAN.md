@@ -142,6 +142,42 @@ No live model call in a gate (stub at the provider seam). Never touch `desk/data
   Card's 8 `style.dims` (integers 1-5) with the raw measures in `extensions`. `tools/twin-probe.cjs` runs the protocol
   of section g.
 
+**L3. Linga Adult: pitch a scene, Cut and three notes** (M; adult A1 rest and A2, amended for v2; batch 5, built
+locally per the owner's 2026-10-07 evening ruling)
+- Goal, the pitch: in Adult mode only (`modeOf(profile, prefs) === "adult"`, `lib/rules/mode.ts`), the learner types a
+  premise (at most 400 characters) and plays it at once. Code refuses before any model call: a Family profile, and a
+  premise on the never-list (`keywordAudience` null, `lib/english/gate.ts`). Otherwise one shaping call (fast, thinking
+  off) through the plan's own `learnerAsked` seam (`lib/english/check.ts`, exported, not copied) returns one scene
+  contract in the PlanTopic shape that keeps the learner's premise, absurd, comedic or high-stakes. It passes
+  `cleanTopic`, then `audienceOf(premise, label)` (the stricter wins; null refuses, it never becomes "adult"), then
+  `audienceAllowed`; a dropped topic is refused with a plain reason. Kept in `EnglishLearning.pitches` (ids `pitch-`,
+  the newest 12, optional and read as `?? []`, in `cleanEnglish`), offered by `eligibleScenes` in Adult mode only, and
+  started through `start` with `replace`. No safety line loosens: the tutor's never-lines (`conversation.ts`), the
+  planning system's "no explicit content, no humiliation, threats or manipulation", and `gate.ts` (which may only gain
+  words). Tone (C3) and 18+ romance and nightlife (C4) stay in L5, behind the red-team.
+- Goal, Cut: a turn action `cut`, accepted only in Adult mode and only where a reply exists (your-turn, quiz, paused,
+  with the coach's `hasReply` guard). One fast call over this take's learner turns asks for at most 3 notes (turnId,
+  quote, kind meaning|form|word|register, one-sentence note, optional better). A pure `lib/english/notes.ts`
+  `cleanNotes(raw, turns)` keeps a note only when its quote is an exact substring of that learner turn (never a partner
+  line), drops a duplicate quote and a fourth note, and keeps "form" only where `resolveEnglish` finds a conflict in
+  that turn's sentence (else "meaning", labelled a reading). On success the take ends as `finish` does (session,
+  digest, certificate) with the notes on the conversation (`Conversation.cut`, their turnIds kept for L4), and
+  `linga-recap` shows them as a tape strip: three pins, one caption slot, one sentence per caption. A failed or empty
+  call makes up no note: the take stays, with the error line, and Cut can be pressed again. Notes never write
+  evidence or achievements. No new Screen.
+- Files: `lib/english/{check,conversation,curriculum,notes,rules,turn,types,view}.ts`, `english/LingaTV.tsx`,
+  `english/LingaPhone.tsx`, `tools/adult-rules-test.cjs`, `tools/linga-rules-test.cjs`, a new operator tool
+  `tools/linga-company-sim.cjs` (not in `test:rules`; the A2 protocol: 20 pitched scenes at B1 over four genres, read
+  by a person; a stub mode), `docs/DESIGN-LINGA.md`, `docs/STUDY-DESK-SCREENS.md`.
+- Tests: adult-rules (a Family pitch and a never-list pitch are refused with no call; at least 10 pitch rows in the
+  `audienceOf` table, romance labelled "all" coming out "adult"); linga-rules (the stubbed pitch starts a scene; pitches
+  capped at 12; `cleanEnglish` keeps and trims them; `cleanNotes` drops a misquote, a partner quote, a fourth note and
+  a duplicate, and turns a conflict-free "form" into "meaning"; `turnState`/`accepts` rows for `cut` in every state;
+  Family refuses `cut`).
+- Accept: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit` clean. Owed to the owner's batch review:
+  the TV capture of `linga-scenes` with a pitched card and of the recap tape, the phone capture (390 px) of the pitch
+  field, and the company sim's live run.
+
 ## e. Batches
 
 - **Batch 1 (this PR):** G1, E0, P1, P2, the decisions doc, this plan, Twin Card 1.0 vendored.
