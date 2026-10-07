@@ -23,12 +23,22 @@ enum class SwitchArm {
     /** Each bake slice gets half its CPU budget, so the bake runs about twice as many, smaller FBO passes. Diagnostic only. */
     HALFSLICE,
     /** The bake's first pass paints its ground colour as an opaque full-target rect instead of glClear (the same pixels). */
-    NOCLEAR;
+    NOCLEAR,
+    /** P13e: the whole bake runs in at most 9 FBO passes ([BakePasses]); a frame that waits for the bins binds nothing. */
+    PASSES9,
+    /** P13e: at most 6 FBO passes. */
+    PASSES6,
+    /** P13e: at most 3 FBO passes. */
+    PASSES3,
+    /** P13e: glFinish at the end of every bake slice, the target still bound (today's slices otherwise). Diagnostic only. */
+    FINISH;
     val id get()=name.lowercase()
     companion object {
         const val DELAY_FRAMES=60
         const val EARLY_FRAMES=30
         const val HOLD_FRAMES=30
+        /** P13e: the pass limit of a PASSESn arm, 0 for every other arm. */
+        fun passLimit(arm: SwitchArm)=when(arm){PASSES9->9;PASSES6->6;PASSES3->3;else->0}
         /** No value is OFF. An unknown value is an error, so a mistyped perf run cannot pass for OFF. */
         fun parse(value: String?)=if(value==null)OFF else entries.firstOrNull{it.id==value}
             ?:throw IllegalArgumentException("switchArm=$value: expected one of ${entries.joinToString{it.id}}")

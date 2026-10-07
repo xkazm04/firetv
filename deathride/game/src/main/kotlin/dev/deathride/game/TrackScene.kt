@@ -338,25 +338,52 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         }
     }.iterator()
+    /** P13e PASSESn arms (perf-only): the bake's pass limit, 0 for today's budget slices. Set before the first [advance]. */
+    var passLimit=0
+    /** P13e FINISH arm (perf-only): glFinish at the end of every bake slice, with the scenery target still bound. */
+    var finishSlices=false
+    private var plan: BakePasses?=null
+    /** Each pass's ms, logged with the bake. */
+    private val sliceLog=StringBuilder()
+    private var idleFrames=0
     fun advance() {
         if(ready)return
-        val started=System.nanoTime();val deadline=started+(VisualTuning["sceneryBuildBudgetMs"]*sliceScale*1e6).toLong()
+        val passes=plan?:BakePasses.of(passLimit,VisualTuning["sceneryBuildBudgetMs"]*sliceScale).also{plan=it}
+        // A limited plan binds nothing while the bake waits for the course worker's bins: a waiting frame is not a pass.
+        if(passLimit>0 && waitingForBins && !course.projectionReady){idleFrames++;return}
+        val started=System.nanoTime()
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
         val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
-        do {
+        val finished=passes.pass({System.nanoTime()},{
             // hasNext() runs the section up to its next yield; time the whole step.
             val step=System.nanoTime()
-            if(!baking.hasNext()) { canvas.roadMarks.upload();ready=true;break }
-            baking.next()
-            val stepMs=(System.nanoTime()-step)/1e6;stageMs[stage]+=stepMs
-            if(stepMs>slowStepMs){slowStepMs=stepMs;slowStage=stage}
-        } while(!waitingForBins && System.nanoTime()<deadline)
-        r.end();if(flushSlices)Gdx.gl.glFlush();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+            if(!baking.hasNext())false
+            else {
+                baking.next()
+                val stepMs=(System.nanoTime()-step)/1e6;stageMs[stage]+=stepMs
+                if(stepMs>slowStepMs){slowStepMs=stepMs;slowStage=stage}
+                true
+            }
+        },{waitingForBins})
+        if(finished) { canvas.roadMarks.upload();ready=true }
+        r.end();if(flushSlices)Gdx.gl.glFlush();if(finishSlices)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        if(sliceLog.isNotEmpty())sliceLog.append(',');sliceLog.append(String.format(java.util.Locale.ROOT,"%.1f",sliceMs))
         if(ready) {
             Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
+            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=$passLimit budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=$finishSlices sliceMs=$sliceLog")
             Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+
                 bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"}+" binWaitMs=$binWaitMs binWaitFrames=$binWaitFrames")
         }
+    }
+    /** P13e perf-only proof of the bake shape: SHA-256 of the finished scenery target's RGBA pixels (a 16 MiB readback, so
+     * only in an ungraded run). */
+    fun targetSha256(): String {
+        check(ready)
+        val size=canvas.textureSize;val pixels=com.badlogic.gdx.utils.BufferUtils.newByteBuffer(size*size*4)
+        canvas.buffer.begin();Gdx.gl.glPixelStorei(GL20.GL_PACK_ALIGNMENT,1)
+        Gdx.gl.glReadPixels(0,0,size,size,GL20.GL_RGBA,GL20.GL_UNSIGNED_BYTE,pixels);canvas.buffer.end()
+        val digest=java.security.MessageDigest.getInstance("SHA-256");pixels.position(0);digest.update(pixels)
+        return digest.digest().joinToString(""){String.format(java.util.Locale.ROOT,"%02x",it)}
     }
     fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL) {
         val previous=batch.shader

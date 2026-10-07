@@ -15,7 +15,7 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL, private val switchArm: SwitchArm=SwitchArm.OFF) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL, private val switchArm: SwitchArm=SwitchArm.OFF, private val bakeHash: Boolean=false) : ApplicationAdapter() {
     private val courseCatalog=if(trackPreview==null)Courses.all else Courses.all+trackPreview.course
     private val profiler=profilePlatform?.let{FrameProfiler(it)}
     private var profileGl: ProfileGl?=null
@@ -50,7 +50,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var activeRegion=regionOverride?:courseCatalog[selectedTrackIndex()].region
     private val regionLooks=Regions.all.associate{it.id to RegionLook(it)}
     private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
-    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR}
+    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR;it.passLimit=SwitchArm.passLimit(switchArm);it.finishSlices=switchArm==SwitchArm.FINISH}
     private val painter=CarPainter()
     private val wheels=WheelRig(32)
     private val combatPainter=CombatPainter()
@@ -389,7 +389,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             // P13d HOLDBAKE/FLUSH arms (perf-only): start the bake late, or submit each bake slice in its own frame.
             if(bakeHold>0) { if(--bakeHold==0)glWindow("bake") }
             else { scene.advance();if(switchArm==SwitchArm.FLUSH)Gdx.gl.glFlush() }
-            accumulator=0.0;if(scene.ready)rebuildUi()
+            accumulator=0.0;if(scene.ready){if(bakeHash)hashBake();rebuildUi()}
         };server.sceneryReady=scene.ready
         profiler?.mark(7,"DR.simulation")
         // Keep release/stale state current in menus without mislabelling it as simulation-age evidence.
@@ -480,6 +480,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(!inWindow)glStrayLines++
         logger("glInventory event=${if(inWindow)glWindowEvent else "none"} k=${if(inWindow)glWindowFrame else -1} frame=${server.frameNumber} intervalMs=${String.format(java.util.Locale.ROOT,"%.1f",actual*1000)} workMs=${String.format(java.util.Locale.ROOT,"%.1f",(System.nanoTime()-nanos)/1e6)} ${gl.inventory()}")
         if(inWindow && ++glWindowFrame>=GL_WINDOW) { glWindowFrame=-1;glWindowEvent="" }
+    }
+    /** P13e perf-only, ungraded runs: the target this bake finished, then the same course baked again in today's 3 ms slices
+     * (blocking, in this frame), hashed both times. The scene left behind is the today-shaped one. */
+    private fun hashBake() {
+        val shaped=scene.targetSha256()
+        val today=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates)
+        while(!today.ready)today.advance()
+        val reference=today.targetSha256();scene=today
+        logger("sceneryHash ${courseCatalog[selectedTrack].id} arm=${switchArm.id} armSha256=$shaped todaySha256=$reference same=${shaped==reference}")
     }
     private fun glWindow(event: String) { if(profileGl!=null) { glWindowEvent=event;glWindowFrame=0 } }
     private var glWindowEvent=""
