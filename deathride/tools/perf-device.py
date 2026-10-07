@@ -75,6 +75,20 @@ if a.warm_routes:
     (a.output / 'routes-warmup.json').write_text(json.dumps({'seconds': time.perf_counter() - started,
         'bytes': size, 'limit': 'One untimed-out GET before the probe; includes LAN transfer.'}, indent=2))
 (a.output / 'thread-priorities-before.txt').write_bytes(adb('shell','ps','-T','-p',pid,'-o','PID,TID,NI,CMD'))
+
+def host_cpu(name):
+    # P9: other sessions held the host at 85-91% CPU; record it beside each run (3 x 1 s samples, top processes).
+    ps = ("$t=1..3|%{(Get-CimInstance Win32_PerfFormattedData_PerfOS_Processor -Filter \"Name='_Total'\").PercentProcessorTime;Start-Sleep 1};"
+          "$p=Get-CimInstance Win32_PerfFormattedData_PerfProc_Process|?{$_.Name -notin '_Total','Idle'}|sort PercentProcessorTime -desc|select -first 10 Name,IDProcess,PercentProcessorTime;"
+          "@{utc=(Get-Date).ToUniversalTime().ToString('o');totalPercentSamples=@($t);logicalProcessors=[Environment]::ProcessorCount;"
+          "topProcesses=@($p);limit='Process percentages are per logical processor (can exceed 100)'}|ConvertTo-Json -Depth 3")
+    try:
+        (a.output / name).write_text(subprocess.check_output(['powershell', '-NoProfile', '-Command', ps], text=True,
+            creationflags=subprocess.CREATE_NO_WINDOW, timeout=60))
+    except (OSError, subprocess.SubprocessError) as e:
+        (a.output / name).write_text(json.dumps({'error': repr(e)}))
+
+host_cpu('host-cpu-start.json')
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
     'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0', 'PROBE_APK_PATH': str(apk)}
@@ -91,5 +105,6 @@ with (a.output / 'logcat.txt').open('wb') as log:
     finally:
         logcat.terminate()
         logcat.wait(timeout=10)
+host_cpu('host-cpu-end.json')
 print(json.dumps({'output': str(a.output), 'returncode': result.returncode, **receipt}), flush=True)
 raise SystemExit(result.returncode)
