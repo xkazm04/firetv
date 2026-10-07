@@ -13,7 +13,7 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
-import { continueCard } from "@/tv/mathsRows";
+import { continueCard, likeUnit } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
@@ -329,7 +329,11 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   hint: (s, k, local, o) => {
     const at = stopAt(HINT_STOPS, s.focus);
     if (k === "left") o.move(HINT_STOPS.length, -1); if (k === "right") o.move(HINT_STOPS.length, 1);
-    if (k === "select") { if (at === "stuck" && s.hint?.stage === 1) o.hint(local, { stage: 2 }); if (at === "lesson" && s.lesson) o.nav("lesson"); }
+    if (k === "select") { if (at === "stuck" && s.hint?.stage === 1) o.hint(local, { stage: 2 }); if (at === "lesson") {
+        // a task that reads as a school unit has no lesson in the library: the stop is Six like this, a set on that unit, the hint kept on screen
+        const unit = likeUnit(s);
+        if (unit) o.set(local, unit, { stay: true }); else if (s.lesson) o.nav("lesson");
+      } }
     if (k === "back") o.nav("page");
   },
   lesson: (s, k, _, o) => {

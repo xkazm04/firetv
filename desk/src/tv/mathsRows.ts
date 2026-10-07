@@ -7,6 +7,7 @@ import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } 
 import { firstToLook } from "@/tv/sheetRows";
 import { slip as slipById } from "@/lib/rules/maths";
 import { SCHOOL_UNIT_SLIPS } from "@/lib/rules/school";
+import { likeTopic } from "@/lib/rules/kinds";
 
 /** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
 export type TopicState = "secure" | "here" | "next" | "later";
@@ -307,4 +308,32 @@ export function paperSquare(rows: ReadonlyArray<{ h: number; min: number }>, chr
     if (squares * sq <= room) return sq;
   }
   return sizes[sizes.length - 1];
+}
+
+/** The page item under the lamp: the hint's own problem on the Hint screen, else the item the page has focused. */
+type InHand = Pick<Session, "profiles" | "learner" | "hint" | "pages" | "pageIx" | "itemIx">;
+
+/** The unit Six like this would write for the task in hand (rules/kinds likeTopic, on the learner's path), or null: the pill stays as it was. */
+export function likeUnit(s: InHand): string | null {
+  const text = s.hint?.problem ?? s.pages[s.pageIx]?.items[s.itemIx]?.text;
+  return likeTopic(text, learnerPath(s));
+}
+
+/**
+ * The Hint screen's second pill on a task that reads as a unit (math-buddy-B): 'Six like this' to press, 'Writing six like
+ * it' while that unit's practice job runs (the pill is not pressable then), and after a failed job the job's own sentence
+ * `failed` for the card's quiet line, the pill pressable again. Null when the task reads as no unit.
+ */
+export function likePill(s: Pick<Session, "jobs"> & InHand): { label: string; busy: boolean; failed: string | null } | null {
+  const unit = likeUnit(s);
+  if (!unit) return null;
+  const j = s.jobs?.practice?.key === unit ? s.jobs.practice : undefined;
+  return j?.phase === "running" ? { label: "Writing six like it", busy: true, failed: null }
+    : { label: "Six like this", busy: false, failed: j?.phase === "failed" ? j.error ?? null : null };
+}
+
+/** The Page side card's title for item `n`: 'Number 3 · Add and subtract fractions' when the task reads as a unit on the learner's path, else 'Number 3'. */
+export function itemTitle(n: number, text: string, s: Pick<Session, "profiles" | "learner">): string {
+  const unit = likeTopic(text, learnerPath(s));
+  return unit ? `Number ${n} · ${topicName(unit)}` : `Number ${n}`;
 }
