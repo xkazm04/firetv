@@ -72,6 +72,8 @@ class BakePassesTest {
         assertEquals(SwitchArm.PASSES9,SwitchArm.parse("passes9"));assertEquals(9,SwitchArm.passLimit(SwitchArm.PASSES9))
         assertEquals(6,SwitchArm.passLimit(SwitchArm.parse("passes6")));assertEquals(3,SwitchArm.passLimit(SwitchArm.parse("passes3")))
         assertEquals(0,SwitchArm.passLimit(SwitchArm.parse("finish")));assertEquals(0,SwitchArm.passLimit(SwitchArm.parse(null)))
+        assertEquals(8,SwitchArm.groundBands(SwitchArm.parse("ground8")));assertEquals(4,SwitchArm.groundBands(SwitchArm.parse("ground4")))
+        assertEquals(-1,SwitchArm.groundBands(SwitchArm.parse("noground")));assertEquals(1,SwitchArm.groundBands(SwitchArm.OFF))
         assertThrows(IllegalArgumentException::class.java){SwitchArm.parse("passes12")}
     }
 }

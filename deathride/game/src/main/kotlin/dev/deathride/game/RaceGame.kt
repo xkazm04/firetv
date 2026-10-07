@@ -50,7 +50,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var activeRegion=regionOverride?:courseCatalog[selectedTrackIndex()].region
     private val regionLooks=Regions.all.associate{it.id to RegionLook(it)}
     private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
-    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR;it.passLimit=SwitchArm.passLimit(switchArm);it.finishSlices=switchArm==SwitchArm.FINISH}
+    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR;it.passLimit=SwitchArm.passLimit(switchArm);it.finishSlices=switchArm==SwitchArm.FINISH || switchArm==SwitchArm.GROUND8FINISH;it.groundBands=SwitchArm.groundBands(switchArm)}
     private val painter=CarPainter()
     private val wheels=WheelRig(32)
     private val combatPainter=CombatPainter()
