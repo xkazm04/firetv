@@ -13,7 +13,7 @@ from pathlib import Path
 
 LINE = re.compile(r'^(\S+ \S+).*DeathRide: glInventory event=(\w+) k=(-?\d+) frame=(\d+) intervalMs=([\d.]+) workMs=([\d.]+) ?(.*)$')
 SLOW_MS = 85.0
-BAKE = re.compile(r'^(\S+ \S+).*DeathRide: sceneryBakePasses (\S+) limit=(\d+) budgetMs=([\d.]+) passes=(\d+) idleFrames=(\d+) finish=(\w+)(?: groundBands=(-?\d+))? sliceMs=(\S*)$')
+BAKE = re.compile(r'^(\S+ \S+).*DeathRide: sceneryBakePasses (\S+) limit=(\d+) budgetMs=([\d.]+) passes=(\d+) idleFrames=(\d+) finish=(\w+)(?: groundBands=(-?\d+))?(?: bandSync=\d+ skipCreationFrame=\w+)? sliceMs=(\S*)$')
 
 def arm(directory: Path):
     log = (directory / 'logcat.txt').read_text(errors='replace')

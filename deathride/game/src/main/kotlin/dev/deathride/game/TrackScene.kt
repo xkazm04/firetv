@@ -161,7 +161,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);Gdx.gl.glScissor(0,y0,canvas.textureSize,y1-y0)
             canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,groundTint)
             Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST)
-            endPass=true;yield(Unit)
+            endPass=true;bandPass=true;yield(Unit)
         }
         // Distant silhouettes stay beyond every playable road/branch, baked into the existing target.
         look?.backdrop(r,left,bottom+height-margin.toFloat()*.8f,width,margin.toFloat()*.7f)
@@ -355,8 +355,15 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     var finishSlices=false
     /** P13e GROUNDn arms (perf-only): the ground tile in n scissored row bands, one per pass; -1 draws no ground (diagnostic). */
     var groundBands=1
+    /** P13e BANDS arms (perf-only): how a pass that drew a ground band is submitted: 0 as any pass, 1 glFlush, 2 glFinish
+     * (the target still bound), so the driver runs that band's GPU work in its own frame instead of batching the bands. */
+    var bandSync=0
+    /** P13e BANDS arms (perf-only): the frame that creates the scene (the switch frame) runs no pass. */
+    var skipCreationFrame=false
     /** Set by a bake step that must end its pass (a ground band). */
     private var endPass=false
+    private var bandPass=false
+    private var advanced=false
     private var plan: BakePasses?=null
     /** Each pass's ms, logged with the bake. */
     private val sliceLog=StringBuilder()
@@ -366,7 +373,9 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         val passes=plan?:BakePasses.of(passLimit,VisualTuning["sceneryBuildBudgetMs"]*sliceScale).also{plan=it}
         // A limited plan binds nothing while the bake waits for the course worker's bins: a waiting frame is not a pass.
         if(passLimit>0 && waitingForBins && !course.projectionReady){idleFrames++;return}
-        val started=System.nanoTime();endPass=false
+        if(skipCreationFrame && !advanced){advanced=true;idleFrames++;return}
+        advanced=true
+        val started=System.nanoTime();endPass=false;bandPass=false
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
         val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
         val finished=passes.pass({System.nanoTime()},{
@@ -381,11 +390,11 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             }
         },{waitingForBins || endPass})
         if(finished) { canvas.roadMarks.upload();ready=true }
-        r.end();if(flushSlices)Gdx.gl.glFlush();if(finishSlices)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        r.end();if(flushSlices || bandPass && bandSync==1)Gdx.gl.glFlush();if(finishSlices || bandPass && bandSync==2)Gdx.gl.glFinish();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(sliceLog.isNotEmpty())sliceLog.append(',');sliceLog.append(String.format(java.util.Locale.ROOT,"%.1f",sliceMs))
         if(ready) {
             Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
-            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=$passLimit budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=$finishSlices groundBands=$groundBands sliceMs=$sliceLog")
+            Gdx.app.log("DeathRide","sceneryBakePasses ${course.id} limit=$passLimit budgetMs=${passes.budgetMs} passes=${passes.passes} idleFrames=$idleFrames finish=$finishSlices groundBands=$groundBands bandSync=$bandSync skipCreationFrame=$skipCreationFrame sliceMs=$sliceLog")
             Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+
                 bakeStages.indices.joinToString(","){"${bakeStages[it]}:${String.format(java.util.Locale.ROOT,"%.3f",stageMs[it])}"}+" binWaitMs=$binWaitMs binWaitFrames=$binWaitFrames")
         }

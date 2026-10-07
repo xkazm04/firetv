@@ -38,6 +38,12 @@ enum class SwitchArm {
     GROUND4,
     /** P13e: GROUND8 with glFinish at the end of every slice, so each band's GPU time shows in its slice. Diagnostic only. */
     GROUND8FINISH,
+    /** P13e: the ground in 8 scissored bands, glFinish at the end of each band's pass, no pass in the switch frame. */
+    BANDS8,
+    /** P13e: the same in 16 bands. */
+    BANDS16,
+    /** P13e: BANDS8 with glFlush instead of glFinish. */
+    BANDS8FLUSH,
     /** P13e: no ground tile at all. Diagnostic only: the scenery differs, so it never ships. */
     NOGROUND;
     val id get()=name.lowercase()
@@ -48,7 +54,9 @@ enum class SwitchArm {
         /** P13e: the pass limit of a PASSESn arm, 0 for every other arm. */
         fun passLimit(arm: SwitchArm)=when(arm){PASSES9->9;PASSES6->6;PASSES3->3;else->0}
         /** P13e: the ground bands of an arm: 1 (one draw) for every arm but GROUNDn, -1 for NOGROUND. */
-        fun groundBands(arm: SwitchArm)=when(arm){GROUND8,GROUND8FINISH->8;GROUND4->4;NOGROUND->-1;else->1}
+        /** P13e: how a band's pass is submitted (0 as any pass, 1 glFlush, 2 glFinish). */
+        fun bandSync(arm: SwitchArm)=when(arm){BANDS8,BANDS16->2;BANDS8FLUSH->1;else->0}
+        fun groundBands(arm: SwitchArm)=when(arm){GROUND8,GROUND8FINISH,BANDS8,BANDS8FLUSH->8;BANDS16->16;GROUND4->4;NOGROUND->-1;else->1}
         /** No value is OFF. An unknown value is an error, so a mistyped perf run cannot pass for OFF. */
         fun parse(value: String?)=if(value==null)OFF else entries.firstOrNull{it.id==value}
             ?:throw IllegalArgumentException("switchArm=$value: expected one of ${entries.joinToString{it.id}}")
