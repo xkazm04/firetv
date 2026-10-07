@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:https": "node ../tools/desk-dev-https.cjs",
     "build": "next build",
     "start": "next start",
     "measure": "node ../tools/kpi-measure.cjs",

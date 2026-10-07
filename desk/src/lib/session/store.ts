@@ -301,7 +301,7 @@ const FILE = path.join(DATA, "session.json");
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
 function phoneUrl(): string {
   const ip = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
-  return `http://${ip}:${process.env.PORT ?? "3000"}/phone`;
+  return `${process.env.DESK_HTTPS === "1" ? "https" : "http"}://${ip}:${process.env.PORT ?? "3000"}/phone`;
 }
 
 /**

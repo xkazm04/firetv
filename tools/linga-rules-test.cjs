@@ -1079,3 +1079,13 @@ test('the recap hero is the latest moment or coaching change as a picture; "It c
  v=recap({moments:[fix],review:{...REVIEW,used:REUSED,usedTurn:'l1'}});assert.equal(v.hero.kind,'comparison');assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:REUSED});
  v=recap({});assert.equal(v.hero.kind,'track');
 });
+
+// ---- MH-1: the phone is served over https when DESK_HTTPS=1 ----
+test('phoneUrl is https:// with DESK_HTTPS=1 and http:// without it (MH-1)',()=>{
+ const was=process.env.DESK_HTTPS;
+ try{
+  process.env.DESK_HTTPS='1';dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^https:\/\/.+\/phone$/);
+  delete process.env.DESK_HTTPS;dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^http:\/\/.+\/phone$/);
+  process.env.DESK_HTTPS='0';dispatch({type:'reset'});assert.match(getSession().phoneUrl,/^http:\/\//,'only "1" switches it on');
+ }finally{if(was===undefined)delete process.env.DESK_HTTPS;else process.env.DESK_HTTPS=was;dispatch({type:'reset'});}
+});
