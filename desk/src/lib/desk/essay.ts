@@ -1,30 +1,46 @@
 /**
  * Forensic essay analysis. Sentences are split, measured and given a first-pass role in code;
- * the model then judges through the chosen lens and returns verdicts anchored to sentence
- * numbers, so every highlight lands on a sentence that exists.
+ * the model then observes through the chosen lens (the job a sentence does, the side it takes, the support it gives,
+ * a word it leans on) and returns observations anchored to sentence numbers. It never gives a verdict: rules/essay
+ * decideVerdicts decides strong, faulty and neutral from those observations and the text, so every highlight lands on
+ * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, cleanFix, numberedLines, paragraphCount, paragraphStats, revise, splitSentences, taught, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, JOBS, numberedLines, observationOk, paragraphCount, paragraphStats, revise, SIDES, splitSentences, SUPPORTS, taught, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { addDigest, addHistory, recordWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
+type Lens = (typeof ANALYSIS_TYPES)[number];
+
 /**
- * `fix` is optional and carries no length limits here on purpose: a verdict whose fix is too long, has no
- * slot or is the sentence rewritten loses the fix (cleanFix), never the whole reading.
+ * `fix` is optional and carries no length limits here on purpose: a fix that is too long, has no slot or is the
+ * sentence rewritten loses the fix (cleanFix), never the whole reading. There is no verdict field: code decides
+ * those (rules/essay decideVerdicts). What is observed depends on the lens.
  */
-const SCHEMA = {
+const FIX = { type: "object", properties: { move: { type: "string" }, pattern: { type: "string" } }, required: ["move", "pattern"] };
+const OBSERVED: Record<string, Record<string, unknown>> = {
+  structure: { job: { type: "string", enum: [...JOBS] } },
+  argument: { side: { type: "string", enum: [...SIDES] }, turnsBack: { type: "boolean" } },
+  evidence: { support: { type: "string", enum: [...SUPPORTS] } },
+  language: { issues: { type: "array", items: { type: "object", properties: { kind: { type: "string", enum: [...ISSUE_KINDS] }, word: { type: "string" } }, required: ["kind", "word"] } } },
+};
+const OBSERVE: Record<string, string> = {
+  structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none.",
+  argument: "For each sentence, report the side it takes: side is pushes (for the paragraph's claim), against, wanders or neutral; turnsBack is true when a sentence on the other side turns back to the claim.",
+  evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context.",
+  language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. Report no issue for a sentence that has none; the desk counts length itself.",
+};
+const observedOf = (lens: Lens) => OBSERVED[lens.id] ?? OBSERVED.structure;
+const schemaFor = (lens: Lens) => ({
   type: "object",
   properties: {
-    verdicts: { type: "array", items: { type: "object", properties: {
-      n: { type: "integer" }, verdict: { type: "string", enum: ["strong", "faulty", "neutral"] }, note: { type: "string" },
-      fix: { type: "object", properties: { move: { type: "string" }, pattern: { type: "string" } }, required: ["move", "pattern"] } },
-      required: ["n", "verdict", "note"] } },
+    observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note"] } },
     summary: { type: "string" },
   },
-  required: ["verdicts", "summary"],
-};
+  required: ["observations", "summary"],
+});
 
 /**
  * The withholding rules of an essay reading, in every voice: a reading comments, it never writes the sentence for the
@@ -34,42 +50,38 @@ export const NEVER_REWRITE = "Never rewrite their sentences for them.";
 export const PATTERN_RULE =
   "A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts.";
 
-type Lens = (typeof ANALYSIS_TYPES)[number];
 type Voice = ReturnType<typeof voiceOf>;
 const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
 
 /**
- * One model call: verdicts for `judged` (sentence numbers), read in the context of `sentences`. A paragraph reading
- * passes the same list twice; a piece passes the whole piece and one paragraph's numbers, so the Structure lens can see
- * the thesis while it judges a body paragraph. Verdicts are anchored by code: a number outside `judged` is dropped.
+ * One model call: observations for `judged` (sentence numbers), read in the context of `sentences`, and the verdicts
+ * code decides from them. A paragraph reading passes the same list twice; a piece passes the whole piece and one
+ * paragraph's numbers, so the Structure lens can see the thesis while it judges a body paragraph. Anchored by code:
+ * an observation for a number outside `judged` is dropped, and the model is never asked for a verdict.
  */
 async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }) {
   const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
   const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
   const ns = [...judged].sort((a, b) => a - b);
-  const { json, provider } = await text<{ verdicts: EssayAnalysis["verdicts"]; summary: string }>({
+  const { json, provider } = await text<{ observations: Record<string, unknown>[]; summary: string }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
-      `Give one verdict per sentence, by its number: 'strong' for something done well, 'faulty' for a real problem, 'neutral' otherwise. ` +
+      `Observe each sentence by its number and report only what you see; the desk decides what is done well and what needs fixing. ` +
+      `${OBSERVE[lens.id] ?? OBSERVE.structure} ` +
       `Each note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
-      `For a 'faulty' verdict only, add a fix: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
+      `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
       `Then one summary sentence. Plain text, to be read aloud.`, voice),
     prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\n` +
-      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one verdict each, in the context of the whole piece. The summary is about that paragraph.\n` : "") +
+      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece. The summary is about that paragraph.\n` : "") +
       `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
-    schema: SCHEMA, model: "best",
+    schema: schemaFor(lens), model: "best",
   });
-  // A highlight may only land on a sentence number that exists. Anything else the model returned —
-  // a number off either end, or a `verdicts` that is not a list at all — is dropped, not shown.
-  // A fix rides only on a faulty verdict, and only as a move plus a slotted pattern (rules/essay cleanFix);
-  // anything else loses the fix and keeps the verdict.
-  const byN = new Map(sentences.filter((s) => judged.has(s.n)).map((s) => [s.n, s.text]));
-  const verdicts = (Array.isArray(json?.verdicts) ? json.verdicts : []).filter((v) => byN.has(v?.n)).map((v) => {
-    const { fix, ...rest } = v;
-    const clean = rest.verdict === "faulty" ? cleanFix(fix, byN.get(v.n)) : undefined;
-    return clean ? { ...rest, fix: clean } : rest;
-  });
+  // A highlight may only land on a sentence number that exists, and only on one this call judges: an observation for
+  // any other number, or an `observations` that is not a list at all, is dropped. Which sentences are faulty is
+  // decided by code (rules/essay decideVerdicts), which also keeps a fix only on a faulty sentence (cleanFix).
+  const seen = (Array.isArray(json?.observations) ? json.observations : []).filter((o) => judged.has(o?.n as number));
+  const verdicts = decideVerdicts(lens.id, sentences, judged, seen);
   return { verdicts, summary: typeof json?.summary === "string" ? json.summary : "", provider };
 }
 
@@ -132,16 +144,15 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   return now();
 }
 
-/** One verdict, for the one sentence a rewrite asks about. */
-const VERDICT = SCHEMA.properties.verdicts;
-const REVISE_SCHEMA = { type: "object", properties: { verdicts: VERDICT }, required: ["verdicts"] };
-const KINDS = new Set(["strong", "faulty", "neutral"]);
+/** One observation, for the one sentence a rewrite asks about. */
+const reviseSchema = (lens: Lens) => { return { type: "object", properties: { observations: schemaFor(lens).properties.observations }, required: ["observations"] }; };
 
 /**
  * Sentence `n` rewritten by the learner, re-judged alone. rules/essay revise() puts the sentence in place (and
- * refuses what is not one new sentence, before any model call); the model is asked about sentence n only - in
- * its paragraph, through the reading's lens, against the move the page taught - and every other verdict is kept
- * by code, not asked again. The new verdict remembers the sentence it replaced (`was`, from the first reading).
+ * refuses what is not one new sentence, before any model call); the model is asked to observe sentence n only - in
+ * its paragraph, through the reading's lens, against the move the page taught - and decideVerdicts rules on it,
+ * with the other sentences' first-pass roles as context. Every other verdict is kept by code, not asked again.
+ * The new verdict remembers the sentence it replaced (`was`, from the first reading).
  * Nothing is written to the learner record: the paragraph was read once, and a rewrite is not another reading.
  */
 export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number): Promise<EssayAnalysis> {
@@ -154,25 +165,27 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const play = playFor(reading.type);
   const move = taught(before, { move: play.move, pattern: play.pattern })?.fix;
   const numbered = numberedLines(next.sentences);
-  const { json, provider } = await text<{ verdicts: Verdict[] }>({
+  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
-      `The student has rewritten one sentence of their paragraph, sentence ${n}. Judge sentence ${n} alone, in the context of the paragraph, and give exactly one verdict, for sentence ${n}: ` +
-      `'strong' if it now does its job, 'faulty' if the problem is still there, 'neutral' otherwise. Do not judge the other sentences. ` +
+      `The student has rewritten one sentence of their paragraph, sentence ${n}. Observe sentence ${n} alone, in the context of the paragraph, and give exactly one observation, for sentence ${n}; report only what you see, the desk decides whether it now does its job. ` +
+      `${OBSERVE[lens.id] ?? OBSERVE.structure} Do not observe the other sentences. ` +
       `The note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
-      `For a 'faulty' verdict only, add a fix: 'move' names the technique in 2 to 6 words, and 'pattern' is a sentence frame with the content left as bracketed slots. ` +
+      `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words, and 'pattern' is a sentence frame with the content left as bracketed slots. ` +
       `${PATTERN_RULE} Plain text, to be read aloud.`, voice),
     prompt: `The student's paragraph, sentence by sentence, with sentence ${n} as rewritten:\n${numbered}\n\n` +
       `Before the rewrite, sentence ${n} read: "${old.text}"` + (before ? ` (${before.verdict}: ${before.note})` : "") + `.\n` +
       (move ? `The move they were asked to make: ${move.move} (pattern: ${move.pattern}).\n` : "") +
-      `Judge sentence ${n} alone.`,
-    schema: REVISE_SCHEMA, model: "best",
+      `Observe sentence ${n} alone.`,
+    schema: reviseSchema(lens), model: "best",
   });
-  // only the verdict for sentence n is read; one that is missing or not a verdict fails the run, it is never invented
-  const got = (Array.isArray(json?.verdicts) ? json.verdicts : []).find((v) => v?.n === n);
-  if (!got || !KINDS.has(got.verdict) || typeof got.note !== "string") throw new Error(`no verdict came back for sentence ${n}`);
-  const fix = got.verdict === "faulty" ? cleanFix(got.fix, next.sentences.find((s) => s.n === n)!.text) : undefined;
+  // only the observation for sentence n is read; one that is missing or that the lens cannot read fails the run, so a
+  // verdict is never invented. The others come from the first pass, as context for the rule.
+  const got = (Array.isArray(json?.observations) ? json.observations : []).find((o) => o?.n === n);
+  if (!got || !observationOk(lens.id, got)) throw new Error(`no observation came back for sentence ${n}`);
+  const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n)]).find((v) => v.n === n);
+  if (!decided) throw new Error(`no verdict could be decided for sentence ${n}`);
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
-  const verdict: Verdict = { n, verdict: got.verdict, note: got.note, ...(fix ? { fix } : {}), was };
+  const verdict: Verdict = { ...decided, was };
   const verdicts = next.sentences.flatMap((s) => (s.n === n ? [verdict] : reading.verdicts.filter((v) => v.n === s.n)));
   return { ...next, verdicts, provider };
 }

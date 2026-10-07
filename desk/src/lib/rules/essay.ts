@@ -193,6 +193,127 @@ export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
   return { move: m, pattern: p };
 }
 
+// ---- the verdicts: the model observes, code rules ----
+
+/** A sentence over this many words is faulty on the Language lens. Counted by code, never asked of the model. */
+export const LONG_SENTENCE_WORDS = 35;
+/** The connectors that turn a sentence back on what it conceded: the only words that make an Argument turn real. */
+const CONTRAST = new Set(["but", "however", "although", "whereas", "in contrast"]);
+
+/** What the model reports about one sentence, per lens. Nothing here is a verdict. */
+export const JOBS = ["claim", "evidence", "link", "context", "none"] as const;
+export const SIDES = ["pushes", "against", "wanders", "neutral"] as const;
+export const SUPPORTS = ["checkable", "opinion", "context"] as const;
+export const ISSUE_KINDS = ["vague", "repeated"] as const;
+type Obs = Record<string, unknown>;
+
+const oneOf = <T extends string>(set: readonly T[], v: unknown): v is T => typeof v === "string" && (set as readonly string[]).includes(v);
+const wordIn = (word: string, sentence: string) => {
+  const w = word.trim().toLowerCase();
+  return !!w && (sentence.toLowerCase().match(/[a-z0-9']+/g) ?? [] as string[]).includes(w);
+};
+const validIssues = (o: Obs, text: string) =>
+  (Array.isArray(o.issues) ? o.issues : []).filter((i): i is { kind: string; word: string } =>
+    !!i && typeof i === "object" && oneOf(ISSUE_KINDS, (i as Obs).kind) && typeof (i as Obs).word === "string" && wordIn((i as Obs).word as string, text));
+
+/** Whether an observation carries this lens's field with a value it knows. A rewrite with none is a failed run, never a verdict. */
+export function observationOk(lens: string, o: unknown): boolean {
+  if (!o || typeof o !== "object") return false;
+  const x = o as Obs;
+  switch (lens) {
+    case "argument": return oneOf(SIDES, x.side);
+    case "evidence": return oneOf(SUPPORTS, x.support);
+    case "language": return Array.isArray(x.issues);
+    default: return oneOf(JOBS, x.job);
+  }
+}
+
+/** The line a faulty sentence gets when the model's note is empty: the check that failed, in its own words. */
+const CHECKS = {
+  unsupported: "This claim has no evidence after it that a reader can check.",
+  floating: "This links back to nothing: no evidence comes before it.",
+  noTurn: "It takes the other side but never turns back: a turn needs a word like 'but' or 'although'.",
+  wanders: "This sentence wanders from the side the paragraph takes.",
+  opinion: "This only asserts; nothing here is checkable.",
+  long: (words: number) => `This sentence runs to ${words} words; split it.`,
+  word: (word: string) => `'${word}' is doing too little here; say what you mean.`,
+};
+
+/**
+ * The verdicts of a reading, decided here from the model's observations (one per sentence, by number) and the text.
+ * The model never says strong or faulty. Only sentences in `judged` get a verdict; an observation for any other
+ * number is ignored as a verdict, but still reads as context (a rewrite passes the other sentences' first-pass roles).
+ * A sentence gets an entry when it was observed (an observation the lens cannot read is neutral) or when code alone
+ * rules it faulty (a Language sentence over LONG_SENTENCE_WORDS). The note is the model's; a faulty sentence with no
+ * note gets the failed check's own line. A fix rides only on a faulty sentence, through cleanFix.
+ *  structure: a claim with an observed evidence sentence (carrying an EVIDENCE marker) after it, before the next
+ *    claim, is strong; the FIRST claim without is faulty, later ones neutral. Evidence with a marker is strong; a link
+ *    with such evidence before it is strong, with none it is faulty.
+ *  argument: pushes strong, wanders faulty, neutral neutral; against is a turn only when turnsBack is true AND the
+ *    sentence holds a contrast connector, then strong, else faulty.
+ *  evidence: checkable is strong only with an EVIDENCE marker or a number, else neutral; opinion is faulty unless a
+ *    checkable sentence follows it.
+ *  language: a vague or repeated word that is really in the sentence is faulty, and so is length over the limit.
+ */
+export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<number>, observations: unknown): VerdictLike[] {
+  const by = new Map<number, Obs>();
+  for (const o of Array.isArray(observations) ? observations : []) {
+    const n = (o as Obs | null)?.n;
+    if (o && typeof o === "object" && typeof n === "number" && sentences.some((s) => s.n === n) && !by.has(n)) by.set(n, o as Obs);
+  }
+  const ok = (n: number) => (observationOk(lens, by.get(n)) ? by.get(n)! : null);
+  const marked = (s: Sentence) => EVIDENCE.test(s.text);
+  const out: VerdictLike[] = [];
+  let unsupportedSeen = false;
+  sentences.forEach((s, at) => {
+    if (!judged.has(s.n)) return;
+    const o = by.get(s.n), read = ok(s.n);
+    let verdict: VerdictLike["verdict"] = "neutral", check = "";
+    if (read) {
+      if (lens === "argument") {
+        if (read.side === "pushes") verdict = "strong";
+        else if (read.side === "wanders") { verdict = "faulty"; check = CHECKS.wanders; }
+        else if (read.side === "against") {
+          if (read.turnsBack === true && s.connectors.some((c) => CONTRAST.has(c))) verdict = "strong";
+          else { verdict = "faulty"; check = CHECKS.noTurn; }
+        }
+      } else if (lens === "evidence") {
+        if (read.support === "checkable") verdict = marked(s) ? "strong" : "neutral";
+        else if (read.support === "opinion") {
+          const backed = sentences.slice(at + 1).some((t) => ok(t.n)?.support === "checkable" && marked(t));
+          if (!backed) { verdict = "faulty"; check = CHECKS.opinion; }
+        }
+      } else if (lens === "language") {
+        const bad = validIssues(read, s.text)[0];
+        if (bad) { verdict = "faulty"; check = CHECKS.word(bad.word); }
+      } else if (read.job === "claim") {
+        const rest = sentences.slice(at + 1), stop = rest.findIndex((t) => ok(t.n)?.job === "claim");
+        const supported = (stop < 0 ? rest : rest.slice(0, stop)).some((t) => ok(t.n)?.job === "evidence" && marked(t));
+        if (supported) verdict = "strong";
+        else if (!unsupportedSeen) { verdict = "faulty"; check = CHECKS.unsupported; unsupportedSeen = true; }
+      } else if (read.job === "evidence") verdict = marked(s) ? "strong" : "neutral";
+      else if (read.job === "link") {
+        if (sentences.slice(0, at).some((t) => ok(t.n)?.job === "evidence" && marked(t))) verdict = "strong";
+        else { verdict = "faulty"; check = CHECKS.floating; }
+      }
+    }
+    if (lens === "language" && verdict !== "faulty" && s.words > LONG_SENTENCE_WORDS) { verdict = "faulty"; check = CHECKS.long(s.words); }
+    if (!o && verdict === "neutral") return;
+    const said = typeof o?.note === "string" ? o.note : "";
+    const note = verdict === "faulty" && !said.trim() ? check : said;
+    const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
+    out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}) });
+  });
+  return out;
+}
+
+/** The other sentences of a paragraph as the first pass saw them, for a rewrite to be judged against (rules, not a model). */
+export function contextObservations(lens: string, sentences: Sentence[], except: number): Obs[] {
+  if (lens !== "structure" && lens !== "evidence") return [];
+  return sentences.filter((s) => s.n !== except).flatMap((s): Obs[] =>
+    lens === "structure" ? [{ n: s.n, job: s.role }] : s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : []);
+}
+
 // ---- rewriting one sentence in place ----
 
 /** A reading as the desk holds it (session/store EssayAnalysis), in the shape these rules need. */
