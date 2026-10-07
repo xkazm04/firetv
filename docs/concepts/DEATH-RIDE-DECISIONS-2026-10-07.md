@@ -77,3 +77,14 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
 - **Alternatives that lost:** capping voices and slower pitch/pan updates (no gain); muting. Muted, frames over 33 ms fell from 128/120 to 3/1 per run, but the muted worst p95, 19.4 ms, still fails I2's 16.7 ms, and muting removes every race sound, which N3 does not allow.
 - **So no sound trade is offered to the owner.**
 - **Reverse:** the perf-only audio arms (df31a677) stay in the perf build; the shipped game is unchanged, so there is nothing to undo.
+
+## 5. P13e rulings (the bake, the settled pair, the GC source, the later reveal)
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z ("Design mitigation solution and execute"). The owner may overrule any of the four.
+- **Context:** P13e (bba8be1b) removed the course-switch gap by drawing the scenery bake's ground tile in 16 synced bands (5df2a49b). Its two graded runs (transition max 97.0 and 103.3 ms) ran on a host that never settled, so neither is a valid grade. See `docs/concepts/deathride/P13e-bake-passes.md`.
+- **Rulings:**
+  1. **`BakeShape.SHIPPED` (16 synced bands) stays.** Reason: it met all four of P13e's ship rules: no switch-window interval over 100 ms; every bake frame at or under 50 ms of work; a byte-identical target for all five courses on the Stick; and the lowest max of the passing arms (67.2 ms against bands8's 74.9). No passesN arm could meet rule (i). `switchArm=unbanded` stays on the perf build for A/B.
+  2. **The settled graded pair is owed** and is step 4 of P13f. Reason: by the brief's own rule an unsettled run is not a grade, and both P13e runs were unsettled.
+  3. **P13f finds the GC source.** Reason: run 2's two frames over 100 ms are lobby frames next to background GCs of 626 and 364 ms; the app frees 15-21 MB of large objects every 6-7 s (57 GCs in 360 s), the source is unfound, and it feeds M1 goal 1 (active max) as well as goal 2.
+  4. **The course showing about 0.3 s later is accepted.** Reason: I2 budgets frames, memory and inputs, not reveal time, and a smooth reveal is the trade this mitigation exists for.
+- **Reverse:** `TrackScene` back to `BakeShape.UNBANDED` (revert 5df2a49b) brings back the ~100 ms switch gap and the earlier reveal.
