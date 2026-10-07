@@ -669,3 +669,13 @@
 .maths-tv .mb-plot .pt { stroke: var(--mb-pen-d); stroke-width: 3.5; stroke-dasharray: 12 8; }
 .maths-tv .mb-plot .pa { fill: var(--mb-amber); opacity: .45; }
 .maths-tv .mb-plot .pm { fill: var(--mb-pen-d); }
+
+/* v2 M4b: environments as tables - cases, matrices, aligned (maths/typeset.ts, MathText.tsx) */
+.maths-tv .mx .mtab { display: inline-flex; align-items: stretch; vertical-align: middle; margin: 0 .15em; }
+.maths-tv .mx .mtab-g { display: inline-grid; column-gap: .9em; row-gap: .25em; align-items: baseline; padding: .1em .15em; }
+.maths-tv .mx .mtab-g[data-align="c"] .mtab-c { justify-self: center; }
+.maths-tv .mx .mtab-g[data-align="ll"] .mtab-c { justify-self: start; }
+.maths-tv .mx .mtab-g[data-align="rl"] .mtab-c:nth-child(odd) { justify-self: end; }
+.maths-tv .mx .mtab-g[data-align="rl"] .mtab-c:nth-child(even) { justify-self: start; margin-left: -.6em; }
+.maths-tv .mx .mtab-d { width: .42em; align-self: stretch; height: auto; flex: 0 0 .42em; overflow: visible; }
+.maths-tv .mx .mtab-d path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }

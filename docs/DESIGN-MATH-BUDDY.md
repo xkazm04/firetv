@@ -319,3 +319,15 @@ derivative-at item asks about, the area washed in amber between a definite integ
 evaluate or limit item is about. The window per shape comes from `plotFor`. The y range is the 5th-95th percentile,
 padded, and it includes y = 0 when that is near. A pole is never bridged. The tangent's slope is `derivativeAt`, the same
 numeric derivative the marking uses. A graph shows what the desk computed; it never marks.
+
+## Tables in the typesetter (v2 M4b, 2026-10-07)
+
+The custom typesetter (`maths/typeset.ts`, `MathText.tsx`) now lays out `cases`, `matrix`, `pmatrix`, `bmatrix`,
+`vmatrix`, `aligned`, `align` and `array` as rows and columns (`{ t: "table" }`). Before, these were read as one line.
+- Cells are typeset like any other text.
+- Brackets are drawn as strokes that stretch to the table's height, so they work in both the print and hand voices.
+- `cases` has a brace on the left only; `aligned` sets its columns right then left around the `&`.
+- An environment the desk does not set as a table reads as it always did, and an unclosed one never throws.
+- A table counts as tall (three squares of paper).
+
+KaTeX stays deferred ([concept](concepts/KATEX-TYPESETTING.md)).
