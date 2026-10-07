@@ -11,6 +11,7 @@ import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { audienceOf, keywordAudience } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError } from "./errors";
@@ -167,6 +168,9 @@ audience: "adult" for anything only adults should practise (dating, alcohol, adu
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
+      // A topic in the learner's own words keeps what they asked for: their words are gated too, so a model that tones
+      // a pitch down for a child cannot carry an adult ask past the age filter (gate.ts).
+      .map(t => t && asked ? { ...t, audience: audienceOf(asked, t.audience) ?? "adult" } : t)
       .filter((t): t is PlanTopic => !!t && allowed.includes(t.audience) && !titles.has(t.title.toLowerCase()) && !!titles.add(t.title.toLowerCase()))
       .slice(0, count);
   };
@@ -332,6 +336,9 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     const asked = typeof input.text === "string" ? input.text.trim() : "";
     if (!asked) throw new ConversationError("Say what you would like to talk about.");
     if (asked.length > TOPIC_ASK_MAX) throw new ConversationError(`Describe the topic in up to ${TOPIC_ASK_MAX} characters.`);
+    const askedFor = keywordAudience(asked);
+    if (askedFor === null) throw new ConversationError("Linga can't practise that topic. Try another one.");
+    if (!allowedAudiences(ctx).includes(askedFor)) throw new ConversationError("That topic is for older learners. Try another one.");
     await propose(k, ctx, commandId, 1, null, "Linga could not shape that topic. Try again, or say it another way.", asked);
     return true;
   }
