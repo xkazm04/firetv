@@ -10,8 +10,9 @@ import dev.deathride.core.ProfileCodec
  * the copies are taken on the caller's thread and never published.
  */
 object CodecWarm {
-    /** Rounds over the profiles: enough calls for ART's hotness counter (decode loops over every save row). */
-    const val ROUNDS=300
+    /** Rounds over the profiles. On the Stick ART compiled decode about 1.3 s into the first warm-up (300 rounds took 14.8-18.6 s
+     * at the lowest priority, all before the probe); 100 rounds keep a margin and end sooner. */
+    const val ROUNDS=100
     fun start(profiles: List<Profile>,logger: (String)->Unit,rounds: Int=ROUNDS): Thread {
         val copies=profiles.map{it.copy()}
         return Thread({
