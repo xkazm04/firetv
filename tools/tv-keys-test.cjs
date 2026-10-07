@@ -157,9 +157,9 @@ const SIXV=[{n:1,verdict:'strong',note:'clear'},{n:3,verdict:'neutral',note:''},
 const essay=(patch={})=>session({subject:'essay',essay:reading(SIXV),essayAt:null,...patch});
 const at=(s,step)=>{const e=step.events.filter(x=>x.type==='essay.at');return e.length?e.at(-1).n:undefined;};
 
-test('essay 1: essayOwns names exactly the four Essay Master screens, and the TV routes them to their own module',()=>{
+test('essay 1: essayOwns names exactly the Essay Master screens (the four lenses and, v2 T2, the Workroom), and the TV routes them to their own module',()=>{
  const {essayOwns,ESSAY_SCREENS}=keys();
- assert.deepEqual([...ESSAY_SCREENS],['essaytype','forensic','playbook','xray']);
+ assert.deepEqual([...ESSAY_SCREENS],['essaytype','forensic','playbook','xray','workroom']);
  for(const screen of SCREENS)assert.equal(essayOwns(session({screen,subject:'essay'})),ESSAY_SCREENS.includes(screen),screen);
  const page=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
  assert.match(page,/essayOwns\(s\)/,'page.tsx asks the keymap, not a list of its own');

@@ -17,6 +17,7 @@ import { day } from "@/tv/screens";
 import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks";
 import { ESSAY_FONTS } from "./fonts";
 import { EssayCabinet } from "./EssayCabinet";
+import { WorkroomScreen } from "./Workroom";
 
 const MUTE = "rgba(238,233,224,.5)";
 
@@ -27,7 +28,8 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
       {s.screen === "essaytype" ? <EssayType s={s} focus={s.focus} />
         : s.screen === "forensic" ? <Forensic s={s} table={table} />
         : s.screen === "playbook" ? <Playbook s={s} focus={s.focus} />
-        : s.screen === "xray" ? <Xray s={s} /> : null}
+        : s.screen === "xray" ? <Xray s={s} />
+        : s.screen === "workroom" ? <WorkroomScreen s={s} focus={s.focus} /> : null}
     </div>
   );
 }

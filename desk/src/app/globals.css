@@ -117,3 +117,20 @@ button, input, textarea { font: inherit; }
 .pshelf li .pbtn { padding: 10px 12px; min-height: 44px; }
 .pnotice { border: 2px solid currentColor; border-radius: 10px; padding: 12px; margin: 10px 0; }
 .types[data-compact="true"] { grid-template-columns: 1fr 1fr; } .types[data-compact="true"] label { align-items: center; padding: 10px; min-height: 48px; }
+
+/* v2 P4: the PC page (/drop) - read at a desk, not from the sofa */
+.drop { max-width: 880px; margin: 32px auto; padding: 0 20px; font: 17px/1.5 system-ui, sans-serif; color: #1d1d1f; background: #fff; }
+.drop h1 { font-size: 28px; } .drop h2 { font-size: 21px; margin-top: 28px; } .drop h3 { font-size: 17px; margin: 14px 0 6px; }
+.drop section { border-top: 1px solid #ddd; padding-top: 6px; }
+.drop .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+.drop input[type="text"], .drop input:not([type]), .drop input[inputmode] { padding: 8px 10px; font-size: 16px; border: 1px solid #bbb; border-radius: 6px; }
+.drop textarea { width: 100%; font: inherit; padding: 10px; border: 1px solid #bbb; border-radius: 6px; box-sizing: border-box; }
+.drop button, .drop .btn { padding: 9px 16px; font-size: 16px; border-radius: 6px; border: 1px solid #222; background: #222; color: #fff; cursor: pointer; text-decoration: none; display: inline-block; }
+.drop button.secondary, .drop button.link { background: #fff; color: #222; } .drop button.link { border: 0; text-decoration: underline; padding: 0; }
+.drop button:disabled { opacity: .4; cursor: default; }
+.drop .file { border: 1px dashed #888; padding: 8px 12px; border-radius: 6px; cursor: pointer; } .drop .file input { display: none; }
+.drop .bad { color: #b8261a; }
+.drop .twin-ch dl { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px 24px; margin: 0; } .drop .twin-ch dl div { display: flex; justify-content: space-between; }
+.drop .twin-ch dt { text-transform: capitalize; color: #666; } .drop .twin-ch ul { padding-left: 0; list-style: none; } .drop .twin-ch li { margin: 6px 0; white-space: pre-wrap; }
+.drop .pshelf .pbtn { padding: 6px 10px; }
+body:has(.drop) { background: #fff; }

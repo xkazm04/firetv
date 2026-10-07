@@ -5,6 +5,7 @@
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
+import type { Workroom } from "../twin/workroom";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
@@ -27,7 +28,7 @@ import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -262,6 +263,8 @@ export interface Session {
   topic: string | null; practice: Practice | null; walkIx: number;
   /** The worked lesson on the desk (v2 M1); cleared when another learner sits down. */
   worked?: Worked | null;
+  /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
+  workroom?: Workroom | null;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
@@ -301,7 +304,7 @@ export type Event =
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
@@ -479,7 +482,7 @@ export function reduce(s: Session, e: Event): Session {
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; n.worked = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
     case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch) });
       // the age first (a type change may clear it), then the Adult gate on what is left
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = adultGated(d, s.draft); break; }
@@ -555,6 +558,8 @@ export function reduce(s: Session, e: Event): Session {
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
     // a worked lesson lands for the learner who asked, and only while they are at the desk
     case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
+    // the Workroom summary for the learner at the desk; `open` also puts it on the TV
+    case "workroom.set": if (e.workroom.owner !== me) break; n.workroom = e.workroom; if (e.open) { n.screen = "workroom"; n.subject = "essay"; n.focus = 0; } break;
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at

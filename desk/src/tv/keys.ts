@@ -7,6 +7,7 @@
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
 import { hasWorked } from "@/lib/library/worked";
+import { modeOf } from "@/lib/rules/mode";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
@@ -40,7 +41,7 @@ export interface Call { url: string; body: Record<string, unknown>; onFail?: Par
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
 
 /** Essay Master draws its own screens (essay/EssayTV.tsx, the Specimen design); the On Air shell steps aside for them. */
-export const ESSAY_SCREENS = ["essaytype", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
+export const ESSAY_SCREENS = ["essaytype", "forensic", "playbook", "xray", "workroom"] as const satisfies readonly Screen[];
 export function essayOwns(s: Session): boolean { return (ESSAY_SCREENS as readonly Screen[]).includes(s.screen); }
 
 /** Linga draws and drives its own screens (english/LingaTV.tsx); the TV's map stays out of them. */
@@ -62,6 +63,14 @@ export function mathsOwns(s: Session): boolean {
   if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
   return false;
 }
+
+/** Is the learner at the desk in Adult mode (rules/mode)? */
+export function isAdultHere(s: Pick<Session, "profiles" | "learner" | "englishLearning">): boolean {
+  const p = s.profiles.find((x) => x.id === s.learner?.id);
+  return modeOf(p, s.englishLearning?.preferences ?? undefined) === "adult";
+}
+/** The Workroom's stops: each piece, top to bottom, then the one action. */
+export function workroomStops(s: Pick<Session, "workroom">): (string)[] { return [...(s.workroom?.pieces ?? []).map((p) => p.id), "lenses"]; }
 
 /** The worked lesson's actions, left to right (v2 M1). */
 export const WORKED_STOPS = ["try", "back"] as const;
@@ -223,6 +232,8 @@ function openWaiting(s: Session, app: Subject, o: Out) {
   if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
   else if (cont) o.nav(cont.go, cont.focus);
   else if (app === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+  // Adult mode opens Essay Master on the Workroom (v2 T2): the desk puts the summary on the TV, never the text
+  else if (app === "essay" && isAdultHere(s)) o.calls.push({ url: "/api/twin", body: { open: true } });
   else if (app === "essay") o.nav(MODULE_HOME.essay, Math.max(0, LENS_STOPS.findIndex((t) => t.id === essayWaiting(s).lens)));
   else o.nav(MODULE_HOME[app]);
 }
@@ -353,6 +364,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
+    if (k === "back") o.nav("landing", landingFocus(s, "essay"));
+  },
+  // the Workroom (v2 T2, Adult mode): Up/Down the pieces, Right to the actions (the lenses), Back to the desk
+  workroom: (s, k, _, o) => {
+    const stops = workroomStops(s), at = stopAt(stops, s.focus);
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k === "right" || k === "left") o.focus(at === "lenses" ? 0 : stops.indexOf("lenses"));
+    if ((k === "select" && at === "lenses") || k === "menu") o.nav("essaytype", 0);
     if (k === "back") o.nav("landing", landingFocus(s, "essay"));
   },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk

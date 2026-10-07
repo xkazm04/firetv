@@ -124,3 +124,11 @@ test('the essay on the desk is the seated learner\'s: a learner change never sho
   dispatch({ type: 'learner.set', id: 'jakub' });
   assert.notEqual(getSession().essay?.text, 'Ema wrote this.', 'jakub never sees ema\'s paragraph');
 });
+test('a title is never the text of a message: a heading or a heading-like first line, else "Untitled <format>"', () => {
+  assert.equal(T.addPiece('ema', { text: 'hey, running late, 10 min', format: 'message' }).value.title, 'Untitled message');
+  assert.equal(T.addPiece('ema', { text: 'Dear Ana,\n\nThe files are attached.', format: 'email' }).value.title, 'Untitled email', 'a greeting is not a heading');
+  assert.equal(T.addPiece('ema', { text: 'Teenagers sleep late.\n\nSo school should start later.' }).value.title, 'Untitled essay');
+  assert.equal(T.addPiece('ema', { text: 'Why we sleep\n\nTeenagers sleep late.' }).value.title, 'Why we sleep');
+  assert.equal(T.addPiece('ema', { text: '## Sleep\n\nOne line.' }).value.title, 'Sleep');
+  T.deleteAll('ema');
+});

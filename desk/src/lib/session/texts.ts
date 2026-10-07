@@ -65,7 +65,17 @@ function versionProblem(text: unknown): string | null {
   if (text.length > TEXT_VERSION_MAX_CHARS) return `That text is too long to keep. Keep it under ${TEXT_VERSION_MAX_CHARS / 1024} KB.`;
   return null;
 }
-const titleOf = (text: string) => (paragraphsOf(text)[0] ?? "").replace(/^#{1,6}\s+/, "").slice(0, 80) || "Untitled";
+/**
+ * A title when none was given: a "# heading", or a heading-like first line (short, no closing punctuation) above more
+ * text. Never the first sentence of a message: titles show on the TV, and a chat line as its title is its text (the
+ * curtain; found by the twin suite, v2 batch 4).
+ */
+function titleOf(text: string, format: string): string {
+  const ps = paragraphsOf(text), first = (ps[0] ?? "").trim();
+  if (/^#{1,6}\s+\S/.test(first)) return first.replace(/^#{1,6}\s+/, "").slice(0, 80);
+  if (ps.length > 1 && first.length <= 80 && !/[.?!,;:…]$/.test(first) && !first.includes("\n")) return first;
+  return `Untitled ${format}`;
+}
 
 export function listPieces(learnerId: string): PieceCard[] {
   if (!LEARNER_ID.test(learnerId)) return [];
@@ -87,7 +97,7 @@ export function addPiece(learnerId: string, input: { text: unknown; source?: unk
   const source = (TEXT_SOURCES as readonly unknown[]).includes(input.source) ? (input.source as TextSource) : "paste";
   const format = typeof input.format === "string" && FORMAT.test(input.format) ? input.format : "essay";
   const text = input.text as string;
-  const title = typeof input.title === "string" && input.title.trim() ? input.title.trim().slice(0, 80) : titleOf(text);
+  const title = typeof input.title === "string" && input.title.trim() ? input.title.trim().slice(0, 80) : titleOf(text, format);
   const piece: Piece = { id: `t-${randomUUID().replace(/-/g, "").slice(0, 12)}`, format, title, versions: [{ at: now, source, text }] };
   writePiece(learnerId, piece);
   return { ok: true, value: piece };
