@@ -131,6 +131,7 @@
 .essay-tv .em-r .em-n { font-family: var(--em-mono); font-size: 30px; font-weight: 600; width: 34px; }
 .essay-tv .em-r svg { display: block; overflow: visible; }
 .essay-tv .em-r.para { margin-top: var(--em-para-gap, 18px); }
+.essay-tv .em-r[data-pending="true"] { opacity: .22; }
 .essay-tv .em-r.cur { opacity: 1; }
 .essay-tv .em-r.cur .em-n { color: var(--em-bone); }
 .essay-tv .em-r.bad .em-n { color: var(--em-cit); }

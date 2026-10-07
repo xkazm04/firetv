@@ -6,7 +6,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, paragraphsOf } from "@/lib/rules/essay";
+import { essayFileProblem, essayTooLong, paragraphsOf, pieceProblem } from "@/lib/rules/essay";
+import { EssayShelf, TextNotice } from "./EssayShelf";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
@@ -59,6 +60,15 @@ export default function Phone() {
   const essay = paras[pix] ?? "";
   const setEssay = (f: (v: string) => string) => setParas((ps) => ps.map((p, i) => (i === pix ? f(p) : p)));
   const [etype, setEtype] = useState("structure");
+  /**
+   * A whole piece (v2 E1, P3): where the text came from, the shelf id once kept (a new version then goes to the same
+   * piece), whether to keep it, the one-time notice's words while it is showing, and a tick that reloads the shelf.
+   */
+  const [source, setSource] = useState<"file" | "paste" | "message">("message");
+  const [pieceId, setPieceId] = useState<string | undefined>(undefined);
+  const [keep, setKeep] = useState(true);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [shelfTick, setShelfTick] = useState(0);
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -189,15 +199,35 @@ export default function Phone() {
     if (after) return setNote(after);
     const ps = paragraphsOf(text);
     if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
-    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. The desk reads one at a time.` : "");
+    setSource("file"); setPieceId(undefined);
+    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.` : "");
   };
   /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */
   const onEssayPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     const t = e.currentTarget, pasted = e.clipboardData.getData("text");
     const ps = paragraphsOf(t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd));
     if (ps.length < 2) return;
-    e.preventDefault(); loadParagraphs(ps, `That is ${ps.length} paragraphs. The desk reads one at a time.`);
+    e.preventDefault(); setSource("paste"); setPieceId(undefined); loadParagraphs(ps, `That is ${ps.length} paragraphs. Read the whole piece, or one paragraph at a time.`);
   };
+  /** The whole piece to the TV (v2 E1): kept on the shelf first when asked; a 428 means the one-time notice is due. */
+  const readPiece = async (keepIt = keep) => {
+    const whole = paras.join("\n\n"), problem = pieceProblem(whole);
+    if (problem) return setNote(problem);
+    setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading your piece…");
+    try {
+      const r = await call("/api/analyse", { kind: "piece", text: whole, type: etype, keep: keepIt, pieceId, source });
+      const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
+      if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
+      if (r.ok) { setMsg("on the TV"); setReadIx(paras.map((_, i) => i)); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
+      else { setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that piece. Try again."); }
+    } catch { setMsg(""); setNote("That did not reach the desk."); } finally { setBusy(false); }
+  };
+  const acceptNotice = async () => {
+    setNotice(null);
+    try { const r = await call("/api/texts", { notice: true }); if (r.ok) return void readPiece(true); } catch {}
+    setNote("That did not reach the desk.");
+  };
+  const openKept = (id: string, text: string) => { const ps = paragraphsOf(text); setPieceId(id); setSource("message"); loadParagraphs(ps.length ? ps : [text], `Opened from your shelf: ${ps.length} paragraph${ps.length === 1 ? "" : "s"}. Change it, then read it again as a new version.`); };
   /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
   const analyseParagraph = async () => {
     const ps = paragraphsOf(essay); if (!ps.length) return;
@@ -531,7 +561,7 @@ export default function Phone() {
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
         {screen === "paste" && !onSentence && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
-          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads one paragraph at a time. Pick the lens, or pick it on the TV.</p>
+          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads a whole piece, or one paragraph at a time. Pick the lens, or pick it on the TV.</p>
           <div className="types" data-compact="true">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b></span></label>)}</div>
           <p style={{ fontSize: 14 }}>{ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
           <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>
@@ -541,8 +571,13 @@ export default function Phone() {
             <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
           <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
+          {notice !== null && <TextNotice text={notice} onAccept={() => void acceptNotice()} onDecline={() => { setNotice(null); setKeep(false); void readPiece(false); }} />}
+          {paras.length > 1 && <div className="field" data-role="essay-piece">
+            <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || notice !== null} onClick={() => void readPiece()} data-role="essay-read-piece">Read the whole piece on the TV ({paras.length} paragraphs)</button></div>}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>Analyse on the TV</button></div></div>}
+            <button className="pbtn" data-signal={paras.length > 1 ? undefined : "true"} data-secondary={paras.length > 1 ? "true" : undefined} style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>{paras.length > 1 ? "This paragraph only" : "Analyse on the TV"}</button></div>
+          <EssayShelf learnerId={s?.learner?.id} refresh={shelfTick} onOpen={openKept} /></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>

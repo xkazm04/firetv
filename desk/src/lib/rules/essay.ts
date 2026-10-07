@@ -101,6 +101,24 @@ export function essayTooLong(text: unknown): string | null {
 }
 
 /**
+ * A whole piece (v2 E1) is read one call per paragraph, so its size is a count of calls. 30 paragraphs is a long
+ * school essay several times over; the cap is not measured (as the caps above) and is to be revisited after use.
+ */
+export const PIECE_PARAGRAPHS_MAX = 30;
+export const PIECE_MAX_CHARS = 100 * 1024;
+
+/** Why a whole piece cannot be read in one go, or null. Each paragraph must fit the paragraph cap; never truncates. */
+export function pieceProblem(text: unknown): string | null {
+  if (typeof text !== "string" || !text.trim()) return "There is nothing to read. Write or send a piece first.";
+  if (text.length > PIECE_MAX_CHARS) return `That piece is too long to read in one go. Keep it under ${PIECE_MAX_CHARS / 1024} KB.`;
+  const ps = paragraphsOf(text);
+  if (ps.length > PIECE_PARAGRAPHS_MAX) return `That is ${ps.length} paragraphs. The desk reads up to ${PIECE_PARAGRAPHS_MAX} at a time: send it in parts.`;
+  const long = ps.findIndex((p) => essayTooLong(p) !== null);
+  if (long >= 0) return `Paragraph ${long + 1} is too long to read in one go. Split it in two (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters each).`;
+  return null;
+}
+
+/**
  * Whether a file the learner picked can be read as text, checked in the browser before anything is read into the
  * panel (nothing is uploaded or kept). Call it with the file's name, type and size, then again with the text once
  * it is read: a binary file that was renamed .txt shows itself in the text (a NUL, or a run of replacement marks).

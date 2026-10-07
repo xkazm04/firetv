@@ -106,7 +106,20 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core keeps paragraphs (2026-10-07, adult plan D1):
   `splitSentences` splits each paragraph on its own, numbers run on through the piece, every sentence of a longer text carries
   `para`, a rewrite rebuilds with the breaks, and the prompt names each paragraph. One paragraph in reads exactly as it always
-  did (no `para`). Sending a whole piece from the phone in one go is the next step (v2 E1).
+  did (no `para`).
+- **A whole piece** (2026-10-07, v2 E1 and P3). With more than one paragraph on the phone, the Essay tab offers "Read the
+  whole piece on the TV" (POST /api/analyse kind `piece`) beside "This paragraph only". The desk reads one call per
+  paragraph, each with the whole piece as context, so the Structure lens sees the thesis while it judges a body
+  paragraph. The first paragraph back opens `forensic`; later ones grow the reading where the learner is
+  (`essay.progress`) and never move the screen. The specimen card says "Last piece · reading 2 of 4", draws a wider gap
+  between paragraphs, and outlines a paragraph still being read; on the rail it is dimmed. A failed paragraph is listed
+  and the rest still land. The record holds one reading per piece. Limits (`pieceProblem`): 30 paragraphs, 100 KB, and
+  each paragraph within the paragraph cap.
+- **The shelf** (P3) is the phone's, never the TV's. "Keep it on my shelf" (on by default) stores the piece with its
+  versions (`/api/texts`, `lib/session/texts.ts`). A one-time notice, before the first kept piece, says where the text
+  goes; "Read without keeping" skips it. The shelf lists titles and counts; Open loads the latest version, and the next
+  read of it is a new version. Delete one, or "Delete everything I kept" (a second press confirms), which also forgets
+  the notice.
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 

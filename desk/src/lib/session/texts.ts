@@ -110,6 +110,20 @@ export function deletePiece(learnerId: string, id: string): boolean {
   return true;
 }
 
+/**
+ * The one-time notice (P3): before a learner's first kept piece, the phone says where the text goes. Accepted once per
+ * learner, recorded beside their pieces, so delete-all also forgets it and the notice shows again.
+ */
+export const TEXT_NOTICE = "To read your writing, the desk sends it to its text engine: Claude, through the command line on this computer. Pieces you keep stay on this desk under your name until you delete them.";
+const noticeFile = (learnerId: string) => path.join(folder(learnerId), "notice.json");
+export function noticed(learnerId: string): boolean { return LEARNER_ID.test(learnerId) && existsSync(noticeFile(learnerId)); }
+export function markNoticed(learnerId: string, now = Date.now()): boolean {
+  if (!LEARNER_ID.test(learnerId)) return false;
+  mkdirSync(folder(learnerId), { recursive: true });
+  writeFileSync(noticeFile(learnerId), JSON.stringify({ at: now }));
+  return true;
+}
+
 /** Everything the learner kept, gone: the folder and all it holds. True when nothing of theirs is left on disk. */
 export function deleteAll(learnerId: string): boolean {
   if (!LEARNER_ID.test(learnerId)) return false;

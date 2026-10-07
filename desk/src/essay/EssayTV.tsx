@@ -193,13 +193,17 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   const first = a.sentences.find((x) => faulty.has(x.n));
   const w0 = (a.sentences[0]?.text ?? "").split(",")[0].split(/\s+/).filter(Boolean);
   const opening = (w0.length > 8 ? w0.slice(0, 6) : w0).join(" ");
-  const W = 432, gap = 8, n = a.sentences.length, tot = a.sentences.reduce((x, y) => x + y.words, 0) || 1, per = (W - gap * Math.max(0, n - 1)) / tot;
+  // a piece (v2 E1): a wider gap between paragraphs, and a paragraph still being read drawn as an outline
+  const breaks = a.sentences.filter((sn, i) => i > 0 && sn.para !== a.sentences[i - 1].para).length, PARA_GAP = 16;
+  const W = 432, gap = 8, n = a.sentences.length, tot = a.sentences.reduce((x, y) => x + y.words, 0) || 1, per = (W - gap * Math.max(0, n - 1) - (PARA_GAP - gap) * breaks) / tot;
+  const pending = (sn: (typeof a.sentences)[number]) => !!a.piece && !a.piece.read.includes(sn.para ?? 0);
   let x = 0;
-  const blocks = a.sentences.map((sn) => {
-    const bw = Math.max(4, sn.words * per), bad = faulty.has(sn.n), at = x; x += bw + gap;
+  const blocks = a.sentences.map((sn, i) => {
+    if (i > 0 && sn.para !== a.sentences[i - 1].para) x += PARA_GAP - gap;
+    const bw = Math.max(4, sn.words * per), bad = faulty.has(sn.n), at = x, wait = pending(sn); x += bw + gap;
     return (
-      <g key={sn.n}>
-        <rect x={at.toFixed(1)} y="28" width={bw.toFixed(1)} height="30" fill={bad ? CIT : "rgba(238,233,224,.3)"} />
+      <g key={sn.n} data-para={sn.para ?? 0} data-pending={wait}>
+        <rect x={at.toFixed(1)} y="28" width={bw.toFixed(1)} height="30" fill={wait ? "none" : bad ? CIT : "rgba(238,233,224,.3)"} stroke={wait ? "rgba(238,233,224,.45)" : "none"} strokeWidth={wait ? 2 : 0} strokeDasharray={wait ? "6 5" : undefined} />
         {bad && bw > 30 && <path d={`M${at + 12} 43 l14 -9 v18 z`} fill="#0B0B0D" />}
         {(bw >= 26 || bad) && <text x={(at + bw / 2).toFixed(1)} y="96" textAnchor="middle" fontFamily="var(--em-mono)" fontWeight="600" fontSize="28" fill={bad ? CIT : "rgba(238,233,224,.55)"}>{sn.n}</text>}
       </g>
@@ -207,7 +211,7 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   });
   return (
     <div className={`em-panel${focused ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={focused}>
-      <div className="em-lbl">Last paragraph</div>
+      <div className="em-lbl">{a.piece ? `Last piece · ${a.piece.read.length < a.piece.paragraphs - a.piece.failed.length ? `reading ${a.piece.read.length + a.piece.failed.length + 1} of ${a.piece.paragraphs}` : `${a.piece.paragraphs} paragraphs`}` : "Last paragraph"}</div>
       <h2>“{opening}…”</h2>
       <svg className="em-strip" width={W} height="104" viewBox={`0 0 ${W} 104`} aria-hidden="true">
         {blocks}
@@ -297,9 +301,9 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
           const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
-          const opens = j > 0 && x.para !== a.sentences[j - 1].para;
+          const opens = j > 0 && x.para !== a.sentences[j - 1].para, wait = !!a.piece && !a.piece.read.includes(x.para ?? 0);
           return (
-            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0}>
+            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0} data-pending={wait}>
               <span className="em-n">{x.n}</span>
               <Arrow len={Math.round(56 + (124 * x.words) / maxW)} against={bad} color={bad ? CIT : vd === "strong" ? BONE : MUTE} />
               {/* a rewritten sentence keeps its old arrow as a ghost under the new one: the before and after as one picture */}

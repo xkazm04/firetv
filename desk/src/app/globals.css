@@ -108,4 +108,12 @@ button, input, textarea { font: inherit; }
 .pparas { display: flex; align-items: center; gap: 8px; }
 .pparas b { flex: 1; text-align: center; font-family: var(--display); font-size: 16px; text-transform: uppercase; letter-spacing: .04em; }
 .pparas .pbtn { padding: 12px 14px; min-height: 48px; }
+.pkeep { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.pshelf { margin-top: 18px; display: grid; gap: 8px; }
+.pshelf ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.pshelf li { display: flex; align-items: center; gap: 8px; }
+.pshelf li > span { flex: 1; display: grid; }
+.pshelf li small { opacity: .7; }
+.pshelf li .pbtn { padding: 10px 12px; min-height: 44px; }
+.pnotice { border: 2px solid currentColor; border-radius: 10px; padding: 12px; margin: 10px 0; }
 .types[data-compact="true"] { grid-template-columns: 1fr 1fr; } .types[data-compact="true"] label { align-items: center; padding: 10px; min-height: 48px; }

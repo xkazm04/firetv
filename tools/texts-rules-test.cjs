@@ -72,14 +72,30 @@ test('delete one, delete all: nothing of the learner is left on disk', () => {
 // ------------------------------------------------------------------ the route
 const req = (method, q = '', body, headers = {}) => new Request(`http://desk/api/texts${q}`, { method, headers: { 'x-desk-role': 'phone', ...headers }, ...(body !== undefined ? { body: typeof body === 'string' ? body : JSON.stringify(body) } : {}) });
 const seat = (id) => { dispatch({ type: 'learner.set', id }); };
-test('route: the seated learner only; one learner never reaches another\'s', async () => {
+test('route: a piece is kept only after the one-time notice; delete-all forgets the notice too', async () => {
   seat('ema');
+  const first = await route.GET(req('GET')); const j = await first.json();
+  assert.equal(j.noticed, false); assert.match(j.notice, /Claude/);
+  const refused = await route.POST(req('POST', '', { text: 'Before the notice.' }));
+  assert.equal(refused.status, 428); assert.equal((await refused.json()).notice, true);
+  assert.equal(fs.existsSync(folder('ema')) && fs.readdirSync(folder('ema')).some(f => f.startsWith('t-')), false, 'nothing kept');
+  assert.equal((await (await route.POST(req('POST', '', { notice: true }))).json()).noticed, true);
+  assert.equal((await (await route.GET(req('GET'))).json()).noticed, true);
+  assert.equal((await route.POST(req('POST', '', { text: 'After the notice.' }))).status, 200);
+  await route.DELETE(req('DELETE', '?all=1'));
+  assert.equal((await (await route.GET(req('GET'))).json()).noticed, false, 'deleting everything forgets the notice: it shows again');
+});
+test('route: the seated learner only; one learner never reaches another\'s', async () => {
+  seat('ema'); await route.POST(req('POST', '', { notice: true }));
   const made = await (await route.POST(req('POST', '', { text: PIECE, source: 'paste' }))).json();
   assert.match(made.id, /^t-/);
   let r = await route.POST(req('POST', '', { id: made.id, text: PIECE + '\n\nMore.' })); assert.equal(r.status, 200);
   assert.equal((await (await route.GET(req('GET'))).json()).pieces.length, 1);
   seat('jakub');
   assert.deepEqual((await (await route.GET(req('GET'))).json()).pieces, [], 'jakub sees an empty shelf');
+  assert.equal((await (await route.GET(req('GET'))).json()).noticed, false, 'and has not accepted ema\'s notice');
+  assert.equal((await route.POST(req('POST', '', { id: 'x', text: 'y' }))).status, 428, 'jakub must accept his own notice first');
+  await route.POST(req('POST', '', { notice: true }));
   assert.equal((await route.GET(req('GET', `?id=${made.id}`))).status, 404, 'and cannot read ema\'s piece by its id');
   assert.equal((await route.POST(req('POST', '', { id: made.id, text: 'Jakub was here.' }))).status, 404, 'nor add to it');
   assert.equal((await route.DELETE(req('DELETE', `?id=${made.id}`))).status, 404, 'nor delete it');

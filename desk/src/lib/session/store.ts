@@ -225,7 +225,11 @@ function settled(jobs: unknown): Jobs {
  * `was` is set only by a rewrite of this sentence (essay.revised): the sentence as first read, its verdict and the fix it was taught.
  */
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
-export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
+/**
+ * `piece` (v2 E1) is set on a whole-piece reading: how many paragraphs, which have been read and which failed (0-based),
+ * and the text store's id when the learner kept it. A one-paragraph reading has none.
+ */
+export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; pieceId?: string }; }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
@@ -290,7 +294,7 @@ export type Event =
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
@@ -520,6 +524,9 @@ export function reduce(s: Session, e: Event): Session {
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
     case "essay.set": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis, essayAt: null })); break; }
       n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    // a piece's later paragraphs (v2 E1): the reading grows where the learner is, without moving the screen or the sentence
+    case "essay.progress": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis })); break; }
+      if (s.essay?.text !== e.analysis.text) break; n.essay = e.analysis; break;
     // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page;
     // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";

@@ -4,7 +4,7 @@
  * numbers, so every highlight lands on a sentence that exists.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, cleanFix, numberedLines, paragraphCount, paragraphStats, revise, splitSentences, taught, type AnalysisType } from "../rules/essay";
+import { ANALYSIS_TYPES, cleanFix, numberedLines, paragraphCount, paragraphStats, revise, splitSentences, taught, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { addDigest, addHistory, recordWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
@@ -34,13 +34,19 @@ export const NEVER_REWRITE = "Never rewrite their sentences for them.";
 export const PATTERN_RULE =
   "A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts.";
 
-/** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
-export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number): Promise<EssayAnalysis> {
-  const sentences = splitSentences(raw);
-  const stats = paragraphStats(sentences);
-  const lens = ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
-  const voice = voiceOf("essay", age);
+type Lens = (typeof ANALYSIS_TYPES)[number];
+type Voice = ReturnType<typeof voiceOf>;
+const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
+
+/**
+ * One model call: verdicts for `judged` (sentence numbers), read in the context of `sentences`. A paragraph reading
+ * passes the same list twice; a piece passes the whole piece and one paragraph's numbers, so the Structure lens can see
+ * the thesis while it judges a body paragraph. Verdicts are anchored by code: a number outside `judged` is dropped.
+ */
+async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }) {
+  const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
   const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
+  const ns = [...judged].sort((a, b) => a - b);
   const { json, provider } = await text<{ verdicts: EssayAnalysis["verdicts"]; summary: string }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Give one verdict per sentence, by its number: 'strong' for something done well, 'faulty' for a real problem, 'neutral' otherwise. ` +
@@ -49,35 +55,81 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
       `Then one summary sentence. Plain text, to be read aloud.`, voice),
-    prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\nCounts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
+    prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\n` +
+      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one verdict each, in the context of the whole piece. The summary is about that paragraph.\n` : "") +
+      `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
     schema: SCHEMA, model: "best",
   });
   // A highlight may only land on a sentence number that exists. Anything else the model returned —
   // a number off either end, or a `verdicts` that is not a list at all — is dropped, not shown.
   // A fix rides only on a faulty verdict, and only as a move plus a slotted pattern (rules/essay cleanFix);
   // anything else loses the fix and keeps the verdict.
-  const byN = new Map(sentences.map((s) => [s.n, s.text]));
+  const byN = new Map(sentences.filter((s) => judged.has(s.n)).map((s) => [s.n, s.text]));
   const verdicts = (Array.isArray(json?.verdicts) ? json.verdicts : []).filter((v) => byN.has(v?.n)).map((v) => {
     const { fix, ...rest } = v;
     const clean = rest.verdict === "faulty" ? cleanFix(fix, byN.get(v.n)) : undefined;
     return clean ? { ...rest, fix: clean } : rest;
   });
+  return { verdicts, summary: typeof json?.summary === "string" ? json.summary : "", provider };
+}
 
-  // The reading happened, so the learner record says so — the same one-line episode Math Buddy
-  // writes after a marked set, from counts the reading actually produced, never invented — and
-  // the lens's estimate takes it as one attempt. A paragraph with no sentences in it is neither.
-  if (sentences.length) {
+/**
+ * The reading happened, so the learner record says so — the same one-line episode Math Buddy writes after a marked
+ * set, from counts the reading actually produced, never invented — and the lens's estimate takes it as one attempt.
+ * A piece is one reading, however many paragraphs it has. A reading with no sentences in it is neither.
+ */
+function record(learnerId: string, lens: Lens, sentences: number, faulty: number, paragraphs = 1) {
+  if (!sentences) return;
+  addHistory(learnerId, {
+    at: Date.now(), kind: "writing", label: lens.name,
+    detail: `${faulty} of ${sentences} sentence${sentences === 1 ? "" : "s"} to fix${paragraphs > 1 ? `, ${paragraphs} paragraphs` : ""}`,
+  });
+  recordWriting(learnerId, lens.id, sentences, faulty);
+  // the week's digest (Family W9, rules/digest): the lens and the two counts, never a sentence
+  addDigest(learnerId, { at: Date.now(), kind: "essay", lens: lens.id, sentences, faulty });
+}
+
+/** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
+export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number): Promise<EssayAnalysis> {
+  const sentences = splitSentences(raw);
+  const stats = paragraphStats(sentences);
+  const lens = lensOf(type);
+  const { verdicts, summary, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, voiceOf("essay", age));
+  record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length);
+  return { text: raw, type, sentences, stats, verdicts, summary, provider };
+}
+
+/**
+ * A whole piece (v2 E1): one call per paragraph (owner default V2-O5: verdicts stay anchored, a failure loses one
+ * paragraph, not the piece), each read with the whole piece as context. `onProgress` gets the reading so far after
+ * every paragraph, so the TV's map fills in as they come back. A paragraph that fails is listed in `piece.failed` and
+ * the rest still land; only a piece where every paragraph failed fails. Recorded once, as one reading.
+ */
+export async function analysePiece(raw: string, type: AnalysisType, learnerId: string, age: number | undefined,
+  onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string): Promise<EssayAnalysis> {
+  const sentences = splitSentences(raw), lens = lensOf(type), voice = voiceOf("essay", age);
+  const of = paragraphCount(sentences);
+  const piece: NonNullable<EssayAnalysis["piece"]> = { paragraphs: of, read: [], failed: [], ...(pieceId ? { pieceId } : {}) };
+  let verdicts: Verdict[] = [], provider: string | undefined, lastError: unknown;
+  const summaries: string[] = [];
+  const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: { ...piece, read: [...piece.read], failed: [...piece.failed] } });
+  const pieceSummary = () => {
     const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
-    addHistory(learnerId, {
-      at: Date.now(), kind: "writing", label: lens.name,
-      detail: `${faulty} of ${sentences.length} sentence${sentences.length === 1 ? "" : "s"} to fix`,
-    });
-    recordWriting(learnerId, lens.id, sentences.length, faulty);
-    // the week's digest (Family W9, rules/digest): the lens and the two counts, never a sentence
-    addDigest(learnerId, { at: Date.now(), kind: "essay", lens: lens.id, sentences: sentences.length, faulty });
+    const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
+    const head = `${faulty} of ${sentences.length} sentences to fix across ${of} paragraphs.`;
+    return at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
+  };
+  for (let para = 0; para < of; para++) {
+    const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
+    try {
+      const r = await judge(sentences, judged, lens, voice, { para, of });
+      verdicts = [...verdicts, ...r.verdicts]; summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
+    } catch (e) { lastError = e; piece.failed.push(para); }
+    onProgress(now());
   }
-
-  return { text: raw, type, sentences, stats, verdicts, summary: json.summary, provider };
+  if (!piece.read.length) throw lastError ?? new Error("no paragraph of the piece came back");
+  record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length, of);
+  return now();
 }
 
 /** One verdict, for the one sentence a rewrite asks about. */
@@ -97,7 +149,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const r = revise(reading, n, rewrite);
   if (!r.ok) throw new Error(r.error);
   const next = r.reading;
-  const lens = ANALYSIS_TYPES.find((t) => t.id === reading.type) ?? ANALYSIS_TYPES[0];
+  const lens = lensOf(reading.type);
   const old = reading.sentences.find((s) => s.n === n)!, before = reading.verdicts.find((v) => v.n === n);
   const play = playFor(reading.type);
   const move = taught(before, { move: play.move, pattern: play.pattern })?.fix;
