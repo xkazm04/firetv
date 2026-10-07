@@ -56,6 +56,8 @@ Placement is a provisional 3–5 minute conversation: an easy opening, one follo
 | Debrief | A small visual path: tried → with help → on your own → used elsewhere | Private evidence, phrase notes, and next recommendation; distinguish today's example from accumulated progress |
 | Next visit | A new setting calls for an earlier skill | Spaced review, not just a continuation of yesterday's story |
 
+A scene's steps are decided in `desk/src/lib/english/mission.ts`: two or three goals per scene (authored on the built-in scenes, generated for a plan topic), each reached only when the model's claim quotes the learner's own reply (two words or more), in order, one step per reply. A step writes no evidence and touches no credit or progress; it lights a dot on the TV and nothing more.
+
 Design starting points: 6–8 minutes for younger children, 10–12 for teens, 10–15 for adults; user can end or extend at a natural boundary. Aim for most active practice time in conversation and replay. Quizzes occupy at most a short rescue or contrast moment, not a compulsory block in every episode. These are pilot defaults, not research-derived optimal timings.
 
 ### Five example episodes
