@@ -363,6 +363,11 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     (the two shorter sides 6 and 8 are given: find the longest) or "shorter 10 6" (the longest side 10 and one shorter side 6
  *     are given: find the other shorter side); `unit` mm, cm or m, required: the answer's own. All three sides are whole numbers,
  *     at most 100 (a scaled Pythagorean triple); the truth is an exact integer square root, never a floating point root.
+ *   - probability (v2 M2b, the probability of an event in a single experiment): expr "bag red 3, blue 5, green 2 ask red" (a bag
+ *     of two to four different colours, at most 20 counters, one taken at random; ask a colour, "not red", or "red or blue") or
+ *     "complement red 0.35" / "complement red 35%" (the probability of a colour is stated, as a decimal or a percent: find the
+ *     probability it does not happen). No unit. The value is a fraction strictly between 0 and 1, exactly; a certain or an
+ *     impossible event is not well formed; the answer in any equal form (a fraction, unsimplified too, a decimal, a percent) is right.
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -378,9 +383,10 @@ export type RateSpec = { shape: "rate"; expr: string; unit: Unit };
 export type AreaSpec = { shape: "area"; expr: string; unit: Unit };
 export type StatSpec = { shape: "stat"; expr: string };
 export type PythagorasSpec = { shape: "pythagoras"; expr: string; unit: Unit };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec | PythagorasSpec;
+export type ProbabilitySpec = { shape: "probability"; expr: string };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec | PythagorasSpec | ProbabilitySpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat", "pythagoras"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat", "pythagoras", "probability"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
 /** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
@@ -546,6 +552,12 @@ const REJECT = {
   pythBig: "A side is longer than a school question uses (at most 100).",
   pythTriangle: "The longest side is not longer than the other side: it is not a right-angled triangle.",
   pythWhole: "The missing side is not a whole number.",
+  probBag: "A bag holds two to four different colours, each at least one counter, at most twenty counters in all.",
+  probColour: "The question asks about a colour that is not in the bag.",
+  probTwo: "A question about either of two colours names two different colours.",
+  probCertain: "The probability is nothing or a whole: a certain or an impossible event is not asked here.",
+  probRange: "A stated probability is above nothing and below a whole.",
+  probSame: "The probability asked for equals the one given, so the question would print its own answer.",
 } as const;
 
 /**
@@ -571,7 +583,11 @@ type Kind =
   // W7 batch 3: the mean or the range of a list, in the order printed
   | { k: "stat"; stat: "mean" | "range"; xs: bigint[] }
   // M2b: find the longest side from the two shorter (x, y), or a shorter side from the longest (x) and the other shorter (y)
-  | { k: "pyth"; find: "longest" | "shorter"; x: bigint; y: bigint };
+  | { k: "pyth"; find: "longest" | "shorter"; x: bigint; y: bigint }
+  // M2b: a bag's colours with their counts in the order printed, and the colour(s) asked about (mode: one, not one, either of two)
+  | { k: "prob"; mode: "colour" | "not" | "or"; counts: [string, bigint][]; ask: string[] }
+  // M2b: the stated probability p of a colour; the probability it does not happen
+  | { k: "prob-comp"; colour: string; p: Q; ptext: string };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -604,6 +620,12 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
 /** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
+/** M2b: the colours a bag holds, closed so a spec never carries free text. */
+export const PROB_COLOURS = ["red", "blue", "green", "yellow", "white", "black", "orange", "purple", "pink"] as const;
+const COL = `(?:${PROB_COLOURS.join("|")})`;
+/** "bag red 3, blue 5, green 2 ask red" (also "ask not red", "ask red or blue") and "complement red 0.35" / "complement red 35%". */
+const PROB_BAG_RE = new RegExp(String.raw`^bag (${COL} [1-9]\d?(?:, ${COL} [1-9]\d?){1,3}) ask (?:(${COL})|not (${COL})|(${COL}) or (${COL}))$`);
+const PROB_COMP_RE = new RegExp(String.raw`^complement (${COL}) (0\.(?:[1-9]\d?|0[1-9])|[1-9]\d?%)$`);
 /** M2b: "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given): sides of up to three digits. */
 const PYTH_RE = /^(longest|shorter) ([1-9]\d{0,2}) ([1-9]\d{0,2})$/;
 const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
@@ -671,6 +693,20 @@ function structure(spec: unknown): Structure {
       const texts = m.slice(1), sides = texts.map(sideQ);
       const node: Node = { k: "op", op: "×", a: { k: "num", q: sides[0], s: texts[0], whole: !texts[0].includes(".") }, b: { k: "num", q: sides[1], s: texts[1], whole: !texts[1].includes(".") } };
       return { ok: true, spec: s as SchoolSpec, node, kind: { k: "area", fig, sides, texts } };
+    }
+    return { ok: false, why: REJECT.read };
+  }
+  if (shape === "probability") {
+    let m = PROB_BAG_RE.exec(s.expr);
+    if (m) {
+      const counts = m[1].split(", ").map((x): [string, bigint] => { const [c, n] = x.split(" "); return [c, BigInt(n)]; });
+      const mode = m[2] ? "colour" : m[3] ? "not" : "or", ask = m[2] ? [m[2]] : m[3] ? [m[3]] : [m[4], m[5]];
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind: { k: "prob", mode, counts, ask } };
+    }
+    if ((m = PROB_COMP_RE.exec(s.expr))) {
+      const pct = m[2].endsWith("%"), t = pct ? m[2].slice(0, -1) : m[2].slice(2);
+      const p = pct ? mk(BigInt(t), BigInt(100))! : mk(BigInt(t), pow10(t.length))!;
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind: { k: "prob-comp", colour: m[1], p, ptext: m[2] } };
     }
     return { ok: false, why: REJECT.read };
   }
@@ -865,6 +901,23 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     // two half sides of a triangle make eighths (2.5 × 3.5 ÷ 2 = 4.375): not a school answer
     if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
     return ok(truth);
+  }
+  if (K.k === "prob") {
+    // M2b: the counters asked about over all the counters, in whole counters; never nothing and never all of them
+    const names = K.counts.map(([c]) => c), total = K.counts.reduce((a, [, n]) => a + n, Z);
+    if (new Set(names).size !== names.length || K.counts.some(([, n]) => n < ONE) || total > BigInt(20)) return { ok: false, why: REJECT.probBag };
+    if (K.ask.some((c) => !names.includes(c))) return { ok: false, why: REJECT.probColour };
+    if (new Set(K.ask).size !== K.ask.length) return { ok: false, why: REJECT.probTwo };
+    const ev = K.ask.reduce((a, c) => a + K.counts.find(([x]) => x === c)![1], Z);
+    const truth = mk(K.mode === "not" ? total - ev : ev, total)!;
+    return truth.n <= Z || truth.n >= truth.d ? { ok: false, why: REJECT.probCertain } : ok(truth);
+  }
+  if (K.k === "prob-comp") {
+    // M2b: 1 less the stated probability, exactly; a decimal does not end in a zero, and the answer is not the figure given
+    if (K.ptext.endsWith("0") && !K.ptext.includes("%")) return { ok: false, why: REJECT.trailing };
+    if (K.p.n <= Z || K.p.n >= K.p.d) return { ok: false, why: REJECT.probRange };
+    const truth = sub(qi(ONE), K.p);
+    return eq(truth, K.p) ? { ok: false, why: REJECT.probSame } : ok(truth);
   }
   if (K.k === "pyth") {
     // M2b: c squared is a squared plus b squared, in whole numbers only; the root is the bigint integer square root
@@ -1075,6 +1128,24 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
         tex: `\\text{Find the total area of rectangles } ${A.tex} \\text{ by } ${B.tex} \\text{ and } ${C.tex} \\text{ by } ${D.tex}.`,
       };
     }
+    if (K.k === "prob" || K.k === "prob-comp") {
+      // M2b: "A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random is red." (also "is not
+      // red", "is red or blue"); "The probability that a spinner lands on red is 0.35. What is the probability it does not land
+      // on red?" - words and numbers in turn, the numbers outside the TeX text
+      const bits: (string | { n: string; tex?: string })[] = [];
+      if (K.k === "prob-comp") {
+        bits.push(`The probability that a spinner lands on ${K.colour} is `, { n: K.ptext, tex: K.ptext.replace("%", "\\%") }, `. What is the probability it does not land on ${K.colour}?`);
+      } else {
+        bits.push("A bag has ");
+        K.counts.forEach(([c, n], i) => bits.push({ n: String(n) }, ` ${c}${i < K.counts.length - 2 ? ", " : i === K.counts.length - 2 ? " and " : ""}`));
+        const [a, b] = K.ask;
+        bits.push(` counters. Find the probability that one taken at random is ${K.mode === "not" ? `not ${a}` : K.mode === "or" ? `${a} or ${b}` : a}.`);
+      }
+      return {
+        plain: bits.map((x) => (typeof x === "string" ? x : x.n)).join(""),
+        tex: bits.map((x) => (typeof x === "string" ? `\\text{${x}}` : x.tex ?? x.n)).join(" "),
+      };
+    }
     if (K.k === "pyth") {
       // M2b: "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." - one plain sentence, no diagram;
       // a side in metres is printed as the word (the typesetter sets a lone m as a letter)
@@ -1188,6 +1259,11 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "pyth-sides-added", name: "Added the two sides", says: "The two lengths were added. The sides of a right-angled triangle are linked through their squares, not their sum: multiply each by itself first, then add or take away.", points: "the line where the two lengths were combined" },
   { id: "pyth-no-root", name: "Stopped before the square root", says: "The squares were combined correctly but the square root was never taken. That result is the side multiplied by itself, so find the number that multiplies by itself to make it.", points: "the last line" },
   { id: "pyth-squares-added", name: "Added the squares for a shorter side", says: "The squares were added, but a shorter side comes from taking the square of the other shorter side away from the square of the longest side. The longest side is the biggest square.", points: "the line where the squares were combined" },
+  // the probability of an event (v2 M2b)
+  { id: "prob-count-alone", name: "The count instead of the chance", says: "The number of counters was given, not a probability. A probability compares that number with the number of counters in the bag altogether, so it is never more than a whole.", points: "the answer" },
+  { id: "prob-part-over-rest", name: "Compared with the rest instead of the whole", says: "The counters asked about were compared with the other counters. A probability compares them with all the counters in the bag, the ones asked about included.", points: "the bottom of the fraction" },
+  { id: "prob-one-over-colours", name: "One over the number of colours", says: "Every colour was given the same chance. The counters are not equal in number, so each colour has its own chance: its count over all the counters.", points: "the bottom of the fraction" },
+  { id: "prob-own", name: "The chance of the event itself", says: "This is the chance of the colour itself, but the question asks for the chance that it is not that colour. Take it away from a whole.", points: "the last line" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -1314,6 +1390,17 @@ function slipCandidates(r: ReadOk): [string, Q][] {
       else push("area-no-half", mul(a, b));
     }
     return out;
+  }
+  if (K.k === "prob" || K.k === "prob-comp") {
+    // M2b: the count of the event alone; the event's counters over the other counters; one over the number of colours; and, for
+    // "not" and a stated probability, the event's own probability. Each only where its value differs from the answer and from
+    // every other slip's (a bag of three equal colours: one over the colours IS the answer)
+    if (K.k === "prob-comp") return distinctSlips([["prob-own", K.p]], r.truth);
+    const total = K.counts.reduce((a, [, n]) => a + n, Z), ev = K.ask.reduce((a, c) => a + K.counts.find(([x]) => x === c)![1], Z);
+    const asked = K.mode === "not" ? total - ev : ev;
+    const cands: [string, Q][] = [["prob-count-alone", qi(asked)], ["prob-part-over-rest", mk(asked, total - asked)!], ["prob-one-over-colours", mk(ONE, BigInt(K.counts.length))!]];
+    if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
+    return distinctSlips(cands, r.truth);
   }
   if (K.k === "pyth") {
     // M2b: the two given sides added (a + b, or c + b); the squares combined and the root not taken (a² + b², or c² − b²); for a
@@ -1905,6 +1992,19 @@ function leakProfile(r: ReadOk): LeakProfile {
     if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
     const restated: LeakProfile["restated"] = K.fig === "rectangle" ? [{ p: K.sides[0], o: "×", q: K.sides[1], both: true }] : [];
     return { T, targets: [T], lowestOnly: false, bare, restated, written: [] };
+  }
+  if (K.k === "prob" || K.k === "prob-comp") {
+    // M2b: the probability in any form (a fraction, unsimplified too, a decimal, a percent). The counters, the total, and a count
+    // over the total of another event are steps and pass; the method of the question, 1 less the event's own probability or the
+    // two events added, is restated (its result is still refused)
+    const restated: LeakProfile["restated"] = [];
+    if (K.k === "prob-comp") restated.push({ p: qi(ONE), o: "-", q: K.p, both: false });
+    else {
+      const total = K.counts.reduce((a, [, n]) => a + n, Z), got = K.ask.map((c) => K.counts.find(([x]) => x === c)![1]);
+      if (K.mode === "not") restated.push({ p: qi(ONE), o: "-", q: mk(got[0], total)!, both: false });
+      if (K.mode === "or") restated.push({ p: mk(got[0], total)!, o: "+", q: mk(got[1], total)!, both: true });
+    }
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated, written: [] };
   }
   if (K.k === "pyth") {
     // M2b: the side in any form. The squares, their sum or difference, and the given sides are steps and pass; the root of the
@@ -2653,11 +2753,54 @@ export function genPythagoras(seed: unknown, tier: unknown): SchoolSpec | null {
 }
 
 /**
+ * One "Probability of an event" item (a single experiment), from a seed and a tier that code computed:
+ *   - tier 1: a bag of two to four different colours, each 1 to 8 counters, 5 to 20 in all, one taken at random: the probability
+ *     that it is a named colour ("bag red 3, blue 5, green 2 ask red");
+ *   - tier 2, the kind turning with the seed alone (never a retry), a bag of three or four colours: the probability that it is NOT a
+ *     colour, one of two named colours, or (the third kind) the complement of a stated probability, 0.05 to 0.95 in steps of 0.05
+ *     but not 0.5, given as a decimal or (the seed again) as a percent ("complement red 0.35").
+ * A probability of nothing or a whole is never drawn (wellFormed refuses it); nor is an item on which a listed slip of its kind has
+ * no value of its own (a bag of equal colours makes one over the colours the answer), so every generated item shows every slip of
+ * its kind; nor an answer the question prints. Pure and seeded; null for a bad seed or tier.
+ */
+export function genProbability(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed2c03);
+  if (!rnd) return null;
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  const kind = tier === 1 ? "colour" : (["not", "or", "comp"] as const)[(seed as number) % 3];
+  const want = { colour: 3, not: 4, or: 3, comp: 1 }[kind];
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (kind === "comp") {
+      const v = 5 * int(1, 19);
+      if (v === 50) continue;
+      const pct = Math.floor((seed as number) / 3) % 2 === 1, dec = String(v).padStart(2, "0").replace(/0$/, "");
+      spec = { shape: "probability", expr: `complement ${PROB_COLOURS[int(0, PROB_COLOURS.length - 1)]} ${pct ? `${v}%` : `0.${dec}`}` };
+    } else {
+      const m = tier === 1 ? int(2, 4) : int(3, 4), pool = [...PROB_COLOURS], names: string[] = [];
+      for (let i = 0; i < m; i++) names.push(pool.splice(int(0, pool.length - 1), 1)[0]);
+      const counts = names.map(() => int(1, 8)), total = counts.reduce((a, b) => a + b, 0);
+      if (total < 5 || total > 20) continue;
+      const a = int(0, m - 1);
+      let ask = names[a];
+      if (kind === "not") ask = `not ${ask}`;
+      else if (kind === "or") { const b = (a + int(1, m - 1)) % m; ask = `${names[a]} or ${names[b]}`; }
+      spec = { shape: "probability", expr: `bag ${names.map((c, i) => `${c} ${counts[i]}`).join(", ")} ask ${ask}` };
+    }
+    const r = read(spec);
+    if (!r.ok || slipCandidates(r).length !== want) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "probability", expr: "bag red 3, blue 5, green 2 ask red" } : { shape: "probability", expr: "bag red 3, blue 5, green 2 ask not red" };
+}
+
+/**
  * The units of v2 M2b, beyond the school path, with their generators. They join SCHOOL_GENERATORS (and the path) only when
  * the sweep passes (tools/gcse-units-test.cjs): a unit that fails stays out of this table's spread there, its code kept.
  */
 export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "pythagoras": (seed, tier) => genPythagoras(seed, tier),
+  "probability": (seed, tier) => genProbability(seed, tier),
 };
 
 /**
@@ -2704,6 +2847,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "mean-range": ["stat-not-divided", "stat-wrong-count", "stat-median", "range-largest", "range-backwards"],
   // v2 M2b: the units beyond the school path (a slip of a kind with no exact value is not listed: the rooted squares-added slip)
   "pythagoras": ["pyth-sides-added", "pyth-no-root", "pyth-squares-added"],
+  "probability": ["prob-count-alone", "prob-part-over-rest", "prob-one-over-colours", "prob-own"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -3077,6 +3221,27 @@ function readPythagoras(t0: string): SchoolSpec | null {
 }
 
 /**
+ * A probability task (v2 M2b), or null: 'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random
+ * is red.' (also 'is not red', 'is red or blue'; two to four colours from PROB_COLOURS, each with its count, at most 20 in all) or
+ * 'The probability that a spinner lands on red is 0.35. What is the probability it does not land on red?' (a decimal or a whole
+ * percent). A story, a second draw, a replacement, a colour not on the list, a count in words, a ratio, and a spec wellFormed refuses
+ * (a certain event, a colour not in the bag) are all null.
+ */
+function readProbability(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim().toLowerCase(), C = COL, item = String.raw`\d{1,2} ${C}`;
+  let m = new RegExp(String.raw`^a bag has (${item}(?:, ${item}){0,2} and ${item}) counters\.\s*find the probability that one taken at random is (?:(${C})|not (${C})|(${C}) or (${C}))$`).exec(t);
+  if (m) {
+    const items = m[1].split(/, | and /).map((x) => x.split(" ").reverse().join(" ")), ask = m[2] ? m[2] : m[3] ? `not ${m[3]}` : `${m[4]} or ${m[5]}`;
+    const spec: SchoolSpec = { shape: "probability", expr: `bag ${items.join(", ")} ask ${ask}` };
+    return read(spec).ok ? spec : null;
+  }
+  m = new RegExp(String.raw`^the probability that a spinner lands on (${C}) is (0\.\d{1,2}|\d{1,2}%)\.\s*what is the probability (?:that )?it does not land on (${C})$`).exec(t);
+  if (!m || m[3] !== m[1]) return null;
+  const spec: SchoolSpec = { shape: "probability", expr: `complement ${m[1]} ${m[2]}` };
+  return read(spec).ok ? spec : null;
+}
+
+/**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
  * rule still runs), exactly as an unread Calculus task does. After an item label ('1.', '2)', '(b)', 'c)') it reads:
@@ -3117,7 +3282,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t);
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t);
   } catch {
     return null;
   }
@@ -3144,6 +3309,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "area") return "area";
     if (r.kind.k === "stat") return "mean-range";
     if (r.kind.k === "pyth") return "pythagoras";
+    if (r.kind.k === "prob" || r.kind.k === "prob-comp") return "probability";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -3174,6 +3340,7 @@ export const SCHOOL_WITHHELD = {
   "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
   "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
   "pythagoras": "In a right-angled triangle, multiply each shorter side by itself and add the results to get the longest side multiplied by itself. To find the longest side, add those squares and then take the square root. To find a shorter side, take the square of the other shorter side away from the square of the longest side, then take the square root. The answer is yours to work out.",
+  "probability": "A probability is the number of counters you want divided by the number of counters in the bag altogether, so it is never more than a whole. For the chance of not getting a colour, count the counters that are not it, or take its chance away from a whole. For either of a pair of colours, add their counters first. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */
