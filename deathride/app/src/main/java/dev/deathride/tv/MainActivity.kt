@@ -11,6 +11,7 @@ import com.badlogic.gdx.backends.android.AndroidApplication
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration
 import dev.deathride.game.RaceGame
 import dev.deathride.game.TrackPreview
+import dev.deathride.game.audio.AudioArm
 
 class MainActivity : AndroidApplication() {
     private var paced=false
@@ -58,7 +59,9 @@ class MainActivity : AndroidApplication() {
         }else null
         val regionDebug=applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.regions"
         val region=if(regionDebug)intent.getStringExtra("region")?.let(dev.deathride.core.Regions::named) else null
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off"), config)
+        // P12: only the debuggable perf package reads an audio arm (muted/capped/still); every other build plays the full mix.
+        val audioArm=if(applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf")AudioArm.parse(intent.getStringExtra("audioArm")) else AudioArm.FULL
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
         if(paced)graphics.isContinuousRendering=false

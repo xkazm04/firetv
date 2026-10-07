@@ -14,7 +14,7 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL) : ApplicationAdapter() {
     private val courseCatalog=if(trackPreview==null)Courses.all else Courses.all+trackPreview.course
     private val profiler=profilePlatform?.let{FrameProfiler(it)}
     private var profileGl: ProfileGl?=null
@@ -237,7 +237,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         logger("audio musicMode=${cueManifest.musicMode}")
         for((id,gap) in cueManifest.gaps)logger("audio gap $id: $gap")
         logger("audio countdown retained as delivered; owner Maybe, later review")
-        val nativeAudio=GdxAudioBackend(cueManifest.decodedBudgetBytes)
+        if(audioArm!=AudioArm.FULL)logger("audio arm=${audioArm.id} (P12 perf-only)")
+        val nativeAudio=GdxAudioBackend(cueManifest.decodedBudgetBytes,audioArm)
         audio=CueService(cueManifest,if(Gdx.app.type==Application.ApplicationType.Android)QueuedAudioBackend(nativeAudio) else nativeAudio);audio.preload()
         if(Gdx.app.getPreferences("deathride-audio").getBoolean("muted",false))audio.setGain("master",0f)
         raceAudio=RaceAudioDirector(audio);raceAudio.bind(world)

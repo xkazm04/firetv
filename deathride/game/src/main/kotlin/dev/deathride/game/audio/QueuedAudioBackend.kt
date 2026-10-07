@@ -121,7 +121,9 @@ class QueuedAudioBackend(private val native: AudioBackend, private val maxStartA
             try{native.dispose()}finally{nativeActive=0;for(s in slots)retire(s)}
         }
     }
-    override fun statsJson()="{\"worker\":true,\"handoff\":\"spsc-mailboxes\",\"nativeActive\":$nativeActive,\"nativeHighWater\":$nativeHighWater,\"starts\":$starts,\"failedStarts\":$failures,\"staleStarts\":$stale,\"cancelledStarts\":$cancelled,\"overflow\":$overflow,\"maxQueueMs\":${maxQueueNs/1e6},\"maxNativeCallMs\":${maxCallNs/1e6},\"maxStartCompletionMs\":${maxCompletionNs/1e6},\"maxParameterQueueMs\":${maxParameterQueueNs/1e6},\"startAgeLimitMs\":$maxStartAgeMs}"
+    override fun statsJson()="{\"worker\":true,\"handoff\":\"spsc-mailboxes\",\"nativeActive\":$nativeActive,\"nativeHighWater\":$nativeHighWater,\"starts\":$starts,\"failedStarts\":$failures,\"staleStarts\":$stale,\"cancelledStarts\":$cancelled,\"overflow\":$overflow,\"maxQueueMs\":${maxQueueNs/1e6},\"maxNativeCallMs\":${maxCallNs/1e6},\"maxStartCompletionMs\":${maxCompletionNs/1e6},\"maxParameterQueueMs\":${maxParameterQueueNs/1e6},\"startAgeLimitMs\":$maxStartAgeMs${nativeJson()}}"
+    // P12: a perf arm's counters ride along; the FULL backend reports "{}" and adds nothing.
+    private fun nativeJson()=native.statsJson().let{if(it=="{}")"" else ",\"native\":$it"}
     override fun dispose() {
         if(closing)return
         closing=true;LockSupport.unpark(worker)
