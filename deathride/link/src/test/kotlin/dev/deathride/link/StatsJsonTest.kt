@@ -58,14 +58,16 @@ class StatsJsonTest {
         while(sb.length<size) { if(i>0)sb.append(','); sb.append("{\"id\":\"$name-$i\",\"value\":${i*0.37},\"ok\":${i%3==0}}"); i++ }
         return sb.append("]}").toString()
     }
-    private fun populate(h: RaceServer) {
+    /** [origin] shifts every metric sample's time; the served test puts them ahead of the server's live clock, so a slow
+     *  start cannot age a sample out of a last10s window between the two servers' replies. */
+    private fun populate(h: RaceServer,origin: Double=0.0) {
         val r=java.util.Random(11)
         h.audioJson={"{\"worker\":true,\"starts\":42,\"maxQueueMs\":0.125}"}; h.artJson={blob("art",900)}; h.trafficJson={"["+blob("traffic",4700)+"]"}
         h.pickupsJson={"["+blob("pickups",1260)+"]"}; h.combatSummaryJson={blob("combat",780)}; h.trackJson=blob("track",2000)
         h.surface=Surfaces.practice[2]; h.feel=FeelProfiles.all.last(); h.phase="race"; h.eventType="ELIMINATION"; h.raceEntrants=6; h.raceLaps=2
         h.raceMode="career"; h.raceSeconds=37.016666666666; h.sceneryReady=true; h.paused=false; h.frameNumber=123456789012L; h.flashFrames=3
         h.hostCareerJson=blob("hostCareer",12380)
-        for(t in 0 until 9000) { val now=t*16.7; h.metrics.frameMs.add(16.6+r.nextGaussian()*2,now); h.metrics.simMs.add(abs(r.nextGaussian()),now)
+        for(t in 0 until 9000) { val now=origin+t*16.7; h.metrics.frameMs.add(16.6+r.nextGaussian()*2,now); h.metrics.simMs.add(abs(r.nextGaussian()),now)
             for(i in 0..1) { h.metrics.inputAgeMs[i].add(20+abs(r.nextGaussian())*30,now); if(t%97==0)h.metrics.stale[i].add(1,now) }
             if(t%301==0) { h.metrics.dropped[1].add(2,now); h.metrics.outOfOrder[0].add(1,now); h.metrics.discardedSimMs.add(7,now) } }
         for(s in h.slots) {
@@ -112,7 +114,7 @@ class StatsJsonTest {
     @Test fun servedStatsAreTheTemplatedBytesWithTheSameHeaders() {
         val port=java.net.ServerSocket(0).use{it.localPort}; val oldPort=java.net.ServerSocket(0).use{it.localPort}
         val h=RaceServer({ "{}" },{},port=port)
-        populate(h)
+        populate(h,1e9)
         val old=embeddedServer(CIO,host="127.0.0.1",port=oldPort){ routing { get("/stats"){ call.response.header("Cache-Control","no-store"); call.respondText(templatedStats(h,0.0,0.0),ContentType.Application.Json) } } }.start(false)
         val http=HttpClient.newHttpClient()
         fun clockless(text: String)=text.replace(Regex("\"uptimeMs\":[^,]*"),"").replace(Regex("\"heapUsedMB\":[^,]*"),"")
