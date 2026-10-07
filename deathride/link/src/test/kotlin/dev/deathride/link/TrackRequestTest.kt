@@ -35,7 +35,8 @@ class TrackRequestTest {
         val seen=ArrayList<Pair<Int,Boolean>>()
         val watcher=Thread { var last=-1;while(!Thread.currentThread().isInterrupted) { val v=host.trackRequest.get();if(v!=last){last=v;if(v>=0)synchronized(seen){seen.add(v to Courses.course(v).projectionReady)}};Thread.onSpinWait() } }.apply{isDaemon=true}
         try {
-            host.start();repeat(500){ if(!host.running)Thread.sleep(20) };assertTrue(host.running,host.serverStatus)
+            // A loaded host has taken over 10 s to open the first ktor listener in a fresh JVM.
+            host.start();val up=System.nanoTime()+TimeUnit.SECONDS.toNanos(60);while(!host.running && System.nanoTime()<up)Thread.sleep(20);assertTrue(host.running,host.serverStatus)
             val l=Listener();val ws=HttpClient.newHttpClient().newWebSocketBuilder().buildAsync(URI("ws://127.0.0.1:$port/ws"),l).join()
             ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join();l.next("welcome")
             CoursePrewarm.submit(Courses.indexOf("scrap-1-c")){ held.countDown();hold.await() }
@@ -48,10 +49,12 @@ class TrackRequestTest {
             ws.sendText("""{"t":"i","q":1,"ts":0,"s":0,"a":0,"b":0}""",true).join()
             assertTrue(l.next("ack")["accepted"]!!.jsonPrimitive.boolean)
             assertEquals(-1,host.trackRequest.get(),"nothing is queued before its bake")
+            assertTrue(host.trackPending,"the render thread holds commands while a pick is in flight")
             hold.countDown()
             val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(60)
             while(host.trackRequest.get()!=picked && System.nanoTime()<deadline)Thread.sleep(5)
             assertEquals(picked,host.trackRequest.get())
+            repeat(500){ if(host.trackPending)Thread.sleep(5) };assertFalse(host.trackPending,"settled once the newest pick is queued")
             CoursePrewarm.submit(Courses.course(picked)).get(60,TimeUnit.SECONDS);Thread.sleep(50)
             watcher.interrupt();watcher.join(5000)
             synchronized(seen) {
@@ -64,9 +67,10 @@ class TrackRequestTest {
     @Test fun prepareTrackRunsOnTheCourseWorkerAfterTheBinsAndBeforeTheRequestIsQueued() {
         val host=RaceServer({"{}"},{},port=0)
         val index=Courses.indexOf("crown-1-a")
-        var thread="";var queuedWhilePreparing=0;var binsWhilePreparing=false
-        host.prepareTrack={ i->thread=Thread.currentThread().name;queuedWhilePreparing=host.trackRequest.get();binsWhilePreparing=Courses.course(i).projectionReady }
+        var thread="";var queuedWhilePreparing=0;var binsWhilePreparing=false;var pendingWhilePreparing=false
+        host.prepareTrack={ i->thread=Thread.currentThread().name;queuedWhilePreparing=host.trackRequest.get();binsWhilePreparing=Courses.course(i).projectionReady;pendingWhilePreparing=host.trackPending }
         host.requestTrack(index).get(60,TimeUnit.SECONDS)
+        assertTrue(pendingWhilePreparing);assertFalse(host.trackPending)
         assertEquals("deathride-course-bake",thread)
         assertEquals(-1,queuedWhilePreparing,"prepared before it is queued")
         assertTrue(binsWhilePreparing,"after its bins")
@@ -74,6 +78,6 @@ class TrackRequestTest {
         // A failing preparation must not lose the pick.
         host.trackRequest.set(-1);host.prepareTrack={ error("decode failed") }
         host.requestTrack(index).get(60,TimeUnit.SECONDS)
-        assertEquals(index,host.trackRequest.get())
+        assertEquals(index,host.trackRequest.get());assertFalse(host.trackPending,"a failed preparation still settles")
     }
 }

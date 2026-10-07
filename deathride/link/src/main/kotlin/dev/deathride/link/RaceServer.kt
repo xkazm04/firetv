@@ -85,15 +85,22 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     /** Set only by [requestTrack], once the course is built and its bins baked: the render thread only swaps. */
     val trackRequest=AtomicInteger(-1)
     private val trackTicket=AtomicInteger()
+    private val trackSettled=AtomicInteger()
+    /** A pick is still being built, baked or prepared on the course worker. The render thread holds queued commands until it
+     *  lands, so a 'start' sent right after a pick never races the old course. Read it BEFORE taking [trackRequest]: a pick
+     *  is queued before it is marked settled. */
+    val trackPending get()=trackSettled.get()!=trackTicket.get()
     /** Builds course [index] and bakes its projection bins on the course worker, then queues it. Never blocks the caller
      *  (a phone's receive loop must keep acknowledging inputs through a 1-2 s Stick bake); a newer pick supersedes one still baking. */
     fun requestTrack(index: Int): java.util.concurrent.Future<*> {
         val ticket=trackTicket.incrementAndGet()
         return CoursePrewarm.submit(index) {
-            if(trackTicket.get()==ticket) {
-                try { prepareTrack?.invoke(index) } catch(e: Exception) { log("prepareTrack ${Courses.id(index)}: ${e.javaClass.simpleName}") }
-                if(trackTicket.get()==ticket)trackRequest.set(index)
-            }
+            try {
+                if(trackTicket.get()==ticket) {
+                    try { prepareTrack?.invoke(index) } catch(e: Exception) { log("prepareTrack ${Courses.id(index)}: ${e.javaClass.simpleName}") }
+                    if(trackTicket.get()==ticket)trackRequest.set(index)
+                }
+            } finally { trackSettled.set(ticket) }
         }
     }
     /** Further off-render-thread preparation of a picked course, run on the course worker after its bins and before it is

@@ -251,7 +251,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
         // A picked course's region tiles are verified and decoded on the course worker; its switch then only uploads them.
-        server.prepareTrack={i->art.prepareRegion(if(regionPresentation)regionOverride?:courseCatalog[i].region else null,regionCandidates)}
+        server.prepareTrack={i->if(i!=selectedTrack)art.prepareRegion(if(regionPresentation)regionOverride?:courseCatalog[i].region else null,regionCandidates)}
         atlasEffects=AtlasEffects(art);scene=makeScene();effects.clear();atmosphere.select(if(regionPresentation)activeRegion else null);server.trackJson=courseCatalog[selectedTrack].json(activeRegion)
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
@@ -266,7 +266,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     Input.Keys.LEFT,Input.Keys.RIGHT,Input.Keys.UP,Input.Keys.DOWN,Input.Keys.MENU->audio.play("ui.focus")
                 }
                 when(keycode) {
-                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="career")careerSelect() else if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); return true }
+                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="career")careerSelect() else if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results") { if(server.trackPending)server.command.compareAndSet(0,1) else startRace() }; return true }
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
                     Input.Keys.LEFT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]-1).mod(CarCatalog.all.size)) else if(phase=="career")selectDifficulty(-1) else selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size) else if(phase=="career")selectDifficulty(1) else selectFeel(1); return true }
@@ -334,6 +334,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val market=server.slots[i].marketRequest.getAndSet(null)
             if(market!=null && market.profileId==profiles[i].id)buyMarket(i,market)
         }
+        // A pick still on the course worker holds the queued commands (start, lobby, garage, career) until it lands.
+        val pickPending=server.trackPending
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
             val started=System.nanoTime();configureWorld(courseIndex,false);rebuildUi();logger("transition track totalMs=${msSince(started)}")
@@ -345,7 +347,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
-        when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
+        if(!pickPending)when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
         profiler?.mark(6,"DR.prepare")
         if(!scene.ready) { scene.advance();accumulator=0.0;if(scene.ready)rebuildUi() };server.sceneryReady=scene.ready
         profiler?.mark(7,"DR.simulation")
