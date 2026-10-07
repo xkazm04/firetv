@@ -158,12 +158,21 @@ test('6: a finished Linga conversation writes one english entry (scene, skill, r
 
 test('7: an Essay Master reading writes one essay entry - the lens and the two counts, never a sentence',async()=>{
  seat();
- answer=async()=>({json:{verdicts:[{n:2,verdict:'faulty',note:'no evidence'},{n:3,verdict:'strong',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
  const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
  await analyseEssay(para,'evidence',LEARNER);
  const d=digest();assert.equal(d.length,1);
  assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'evidence',sentences:3,faulty:1});
  assert.ok(!JSON.stringify(d).includes('Homework')&&!JSON.stringify(d).includes('One to fix'),'no text of the paragraph or the reading');
+});
+
+test('6 (essay-master-A case 6): the digest counts codes verdicts - observations that decide 2 of 3 faulty beat legacy verdicts that say none',async()=>{
+ seat();
+ answer=async()=>({json:{observations:[{n:1,side:'wanders',verdict:'strong',note:'a'},{n:2,side:'wanders',verdict:'strong',note:'b'},{n:3,side:'pushes',verdict:'strong',note:'c'}],summary:'s'},provider:'test',ms:1});
+ await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','argument',LEARNER);
+ const d=digest();assert.equal(d.length,1);
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2});
+ assert.equal(learners.getLearner(LEARNER).history.at(-1).detail,'2 of 3 sentences to fix');
 });
 
 // ------------------------------------------------------------------ 8. the cap
@@ -246,7 +255,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  const questions=[],answers=[];
  const sets=[[SIX,TYPED],[[A,B,C,A,B,C],['11/12','7/12','3/4','2/3','1/2','0.75']],[[C,C,C,C,C,C],['3/4','2/6','3/4','75%','1 1/2','3/4']]];
  for(const [specs,typed] of sets){setOn(specs);questions.push(...specs.map(q));answers.push(...typed.filter(Boolean));assert.equal((await post('mark',{answers:typed})).status,200);}
- answer=async()=>({json:{verdicts:[{n:1,verdict:'faulty',note:'Too vague.'}],summary:'Make it sharper.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,issues:[{kind:'vague',word:'nice'}],note:'Too vague.'}],summary:'Make it sharper.'},provider:'test',ms:1});
  const para='My summer was nice. We went to the lake.';
  await analyseEssay(para,'language',LEARNER);
  const d=digest(),text=JSON.stringify(d);

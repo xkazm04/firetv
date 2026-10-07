@@ -3,6 +3,7 @@
  *   - one call per paragraph, each told which paragraph it judges, with the whole piece as context;
  *   - verdicts anchor across paragraphs: a number outside the judged paragraph is dropped;
  *   - a paragraph that fails does not lose the others; only a piece where every paragraph failed fails;
+ *   - the model only observes (rules/essay decideVerdicts rules); the structure rule runs per judged paragraph;
  *   - one reading in the learner's record per piece;
  *   - the route: limits checked before any call, keep needs the notice (428), a kept piece gets an id and a new
  *     version on the next read, the TV opens on the first paragraph back and later ones never move the screen.
@@ -20,7 +21,35 @@ const data = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-piece-')); process.env.
 const src = (f) => path.join(root, 'src', f);
 const engine = require(src('lib/engines/text.ts'));
 let seen = [], answer = async () => { throw new Error('no model call expected'); };
-engine.text = (req) => { seen.push(req); return answer(req); };
+/**
+ * The model observes, code rules (rules/essay decideVerdicts). Most fixtures below were written when the model gave the
+ * verdict, and still say what they want in those words: this turns each wanted verdict into the observation that makes the
+ * rule decide it for that lens and sentence, so the stubs speak the new schema and the assertions stay as they were.
+ * Only a reply with a `verdicts` list is turned; a reply with `observations` goes through untouched (the cases that pin
+ * the rule send observations directly, with a legacy `verdict` beside them to show it is ignored).
+ */
+const WANTED={
+ structure:{faulty:{job:'link'},strong:{job:'evidence'},neutral:{job:'context'}},
+ argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
+ evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
+};
+const asObservations=(req,r)=>{
+ if(!r||!r.json||!('verdicts' in r.json)||!req.schema?.properties?.observations)return r;
+ const lens=(/Lens for this reading: (\w+)/.exec(req.system)||[])[1]?.toLowerCase();
+ const text=new Map([...req.prompt.matchAll(/^(\d+)\. (.*?) {2}\[\d+ words/gm)].map(m=>[Number(m[1]),m[2]]));
+ const {verdicts,...rest}=r.json;
+ const field=(e)=>{
+  if(lens==='language'){const w=(text.get(e.n)||'').match(/[A-Za-z']+/)?.[0]||'';return e.verdict==='faulty'?{issues:[{kind:'vague',word:w}]}:['strong','neutral'].includes(e.verdict)?{issues:[]}:{issues:'unreadable'};}
+  return WANTED[lens]?.[e.verdict]||{bogus:true};
+ };
+ const observations=Array.isArray(verdicts)?verdicts.map(e=>{
+  if(!e||typeof e!=='object')return e;
+  const {verdict,...keep}=e;
+  return {...keep,...field(e)};
+ }):verdicts;
+ return {...r,json:{...rest,observations}};
+};
+engine.text = (req) => { seen.push(req); return Promise.resolve(answer(req)).then((r) => asObservations(req, r)); };
 const { analysePiece } = require(src('lib/desk/essay.ts'));
 const R = require(src('lib/rules/essay.ts'));
 const { getLearner } = require(src('lib/session/learners.ts'));
@@ -69,6 +98,20 @@ test('a piece is one reading in the learner\'s record, with the paragraph count'
   const h = getLearner('jakub').history;
   assert.equal(h.length, before + 1);
   assert.equal(h.at(-1).detail, '2 of 5 sentences to fix, 3 paragraphs');
+});
+test('essay-master-A case 9: Structure runs per judged paragraph - each paragraph\'s first unsupported claim is faulty, and the record counts both', async () => {
+  const TWO = 'Schools start too early. Teenagers are tired.\n\nHomework is pointless. Pupils are busy.';
+  seen = [];
+  answer = async (req) => {
+    const m = /Judge only paragraph (\d+) of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);
+    const observations = []; for (let n = Number(m[2]); n <= Number(m[3]); n++) observations.push({ n, job: 'claim', note: '', verdict: 'strong' });
+    return { json: { observations, summary: 'ok' }, provider: 'test', ms: 1 };
+  };
+  const a = await analysePiece(TWO, 'structure', 'oa-9', undefined);
+  assert.equal(seen.length, 2, 'one call per paragraph');
+  assert.deepEqual(a.verdicts.map(v => [v.n, v.verdict]), [[1, 'faulty'], [2, 'neutral'], [3, 'faulty'], [4, 'neutral']], 'exactly one faulty sentence in EACH paragraph');
+  assert.equal(getLearner('oa-9').history.at(-1).detail, '2 of 4 sentences to fix, 2 paragraphs');
+  assert.match(a.summary, /^2 of 4 sentences to fix across 2 paragraphs\./);
 });
 test('pieceProblem: limits checked in code, in the desk\'s words, never cut', () => {
   assert.equal(R.pieceProblem(PIECE), null);

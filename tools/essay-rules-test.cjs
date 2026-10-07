@@ -13,7 +13,35 @@ require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFil
 process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/essay-rules',String(Date.now()));
 const {splitSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essay.ts'));
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
-let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
+/**
+ * The model observes, code rules (rules/essay decideVerdicts). Most fixtures below were written when the model gave the
+ * verdict, and still say what they want in those words: this turns each wanted verdict into the observation that makes the
+ * rule decide it for that lens and sentence, so the stubs speak the new schema and the assertions stay as they were.
+ * Only a reply with a `verdicts` list is turned; a reply with `observations` goes through untouched (the cases that pin
+ * the rule send observations directly, with a legacy `verdict` beside them to show it is ignored).
+ */
+const WANTED={
+ structure:{faulty:{job:'link'},strong:{job:'evidence'},neutral:{job:'context'}},
+ argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
+ evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
+};
+const asObservations=(req,r)=>{
+ if(!r||!r.json||!('verdicts' in r.json)||!req.schema?.properties?.observations)return r;
+ const lens=(/Lens for this reading: (\w+)/.exec(req.system)||[])[1]?.toLowerCase();
+ const text=new Map([...req.prompt.matchAll(/^(\d+)\. (.*?) {2}\[\d+ words/gm)].map(m=>[Number(m[1]),m[2]]));
+ const {verdicts,...rest}=r.json;
+ const field=(e)=>{
+  if(lens==='language'){const w=(text.get(e.n)||'').match(/[A-Za-z']+/)?.[0]||'';return e.verdict==='faulty'?{issues:[{kind:'vague',word:w}]}:['strong','neutral'].includes(e.verdict)?{issues:[]}:{issues:'unreadable'};}
+  return WANTED[lens]?.[e.verdict]||{bogus:true};
+ };
+ const observations=Array.isArray(verdicts)?verdicts.map(e=>{
+  if(!e||typeof e!=='object')return e;
+  const {verdict,...keep}=e;
+  return {...keep,...field(e)};
+ }):verdicts;
+ return {...r,json:{...rest,observations}};
+};
+let answer,seen=[];engine.text=(req)=>{seen.push(req);return Promise.resolve(answer(req)).then(r=>asObservations(req,r));};
 const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
 const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const {lensStandings,writingTotals}=require(path.join(root,'src/tv/writingRows.ts'));
@@ -211,8 +239,8 @@ test('the model is asked for a fix only on a faulty verdict, as a move and a slo
  assert.match(system,/never their sentence rewritten/);
  assert.match(system,/\[slot\]/);
  assert.match(system,/No fix on strong or neutral verdicts/);
- const item=schema.properties.verdicts.items;
- assert.deepEqual(item.required,['n','verdict','note'],'fix is optional: a model that omits it still answers inside the schema');
+ const item=schema.properties.observations.items;
+ assert.deepEqual(item.required,['n','note'],'fix is optional: a model that omits it still answers inside the schema');
  assert.deepEqual(item.properties.fix.required,['move','pattern']);
  assert.equal(item.properties.fix.properties.pattern.maxLength,undefined,'no length limit in the schema: an over-long fix loses the fix, not the reading');
 });
@@ -855,3 +883,126 @@ test('D1: a piece is read with paragraphs named in the prompt; verdicts still an
  assert.deepEqual(a.sentences.map(x=>x.para),[0,1,1,2,2,3]);
 });
 }
+
+// ---- the model observes, code rules (challenge essay-master-A): every verdict is decided in rules/essay ----
+// These send observations directly. Where a legacy `verdict` rides beside one it is there to show it is ignored.
+const obsReply=(observations)=>reply({observations,summary:'s'});
+const verdictsOf=(a)=>a.verdicts.map(v=>[v.n,v.verdict]);
+
+test('essay-master-A case 1: Structure - only the FIRST unsupported claim is faulty; a claim with a marked evidence sentence after it is strong; the legacy verdict is ignored',async()=>{
+ answer=obsReply([1,2,3].map(n=>({n,job:'claim',verdict:'strong'})));
+ const a=await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','structure','oa-1');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty'],[2,'neutral'],[3,'neutral']],'one unsupported claim is named, the rest are not piled on');
+ answer=obsReply([{n:1,job:'claim',verdict:'faulty'},{n:2,job:'evidence',verdict:'faulty'},{n:3,job:'claim',verdict:'faulty'}]);
+ const b=await analyseEssay('Homework is pointless. Research found that pupils lose sleep. It ruins evenings.','structure','oa-1');
+ assert.deepEqual(verdictsOf(b),[[1,'strong'],[2,'strong'],[3,'faulty']],'claim 1 has marked evidence after it; claim 3 is the first without');
+ answer=obsReply([{n:1,job:'claim'},{n:2,job:'evidence'}]);
+ const c=await analyseEssay('Homework is pointless. Teachers give too much.','structure','oa-1');
+ assert.deepEqual(verdictsOf(c),[[1,'faulty'],[2,'neutral']],'evidence with no EVIDENCE marker does not support a claim');
+ assert.equal(a.verdicts[0].note,'This claim has no evidence after it that a reader can check.','no note from the model: the failed check\'s own line');
+});
+test('essay-master-A case 2: Argument - a turn the model claims is refused unless the sentence holds a contrast connector',async()=>{
+ answer=obsReply([{n:1,side:'against',turnsBack:true,note:'x'}]);
+ const a=await analyseEssay('Some people say early starts build discipline.','argument','oa-2');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty']],'no contrast connector, so no turn');
+ const b=await analyseEssay('Some say early starts build discipline, but tired pupils learn less.','argument','oa-2');
+ assert.deepEqual(verdictsOf(b),[[1,'strong']]);
+ answer=obsReply([{n:1,side:'against',turnsBack:false,note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Some say early starts build discipline, but tired pupils learn less.','argument','oa-2')),[[1,'faulty']],'a connector alone is not a turn the model saw');
+});
+test('essay-master-A case 3: Language - a vague word must be in the sentence; length is counted by code',async()=>{
+ const {LONG_SENTENCE_WORDS}=rules();
+ answer=obsReply([{n:1,issues:[{kind:'vague',word:'important'}],note:'vague'}]);
+ const a=await analyseEssay('Sleep matters.','language','oa-3');
+ assert.deepEqual(verdictsOf(a),[[1,'neutral']],'the word is not in the sentence: the issue is dropped');
+ const long=`The ${Array(LONG_SENTENCE_WORDS-1).fill('long').join(' ')} end.`;
+ assert.equal(splitSentences(long)[0].words,LONG_SENTENCE_WORDS+1,'a 36-word sentence');
+ answer=obsReply([]);
+ const b=await analyseEssay(long,'language','oa-3');
+ assert.deepEqual(verdictsOf(b),[[1,'faulty']],'no observed issue, faulty by length alone');
+ assert.match(b.verdicts[0].note,/36 words/);
+ const edge=`The ${Array(LONG_SENTENCE_WORDS-2).fill('long').join(' ')} end.`;
+ assert.equal((await analyseEssay(edge,'language','oa-3')).verdicts.length,0,'exactly at the limit is fine');
+ answer=obsReply([{n:1,issues:[{kind:'vague',word:'important'}],note:''}]);
+ const c=await analyseEssay('Sleep is important.','language','oa-3');
+ assert.deepEqual(verdictsOf(c),[[1,'faulty']]);
+ assert.match(c.verdicts[0].note,/important/,'an empty note becomes the failed check\'s line');
+});
+test('essay-master-A case 4: Evidence - checkable is strong only with an EVIDENCE marker or a number; an opinion with nothing checkable after it is faulty',async()=>{
+ answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'neutral']],'never strong without a marker');
+ answer=obsReply([{n:1,support:'checkable',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Research found that teenagers fall asleep later.','evidence','oa-4')),[[1,'strong']]);
+ answer=obsReply([{n:1,support:'opinion',note:'x'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy.','evidence','oa-4')),[[1,'faulty']]);
+ answer=obsReply([{n:1,support:'opinion',note:'x'},{n:2,support:'checkable',note:'y'}]);
+ assert.deepEqual(verdictsOf(await analyseEssay('Teenagers are just lazy. A 2019 study measured their sleep.','evidence','oa-4')),[[1,'neutral'],[2,'strong']],'an opinion with checkable support after it is not left bare');
+});
+test('essay-master-A case 5: a rewrite is decided by the same rule - the move stays hatched until the check passes',async()=>{
+ const {reviseSentence}=deskEssay();
+ const text='Homework is pointless. Some people say early starts build discipline. Pupils need their evenings.';
+ const s=splitSentences(text);
+ const reading={text,type:'argument',sentences:s,stats:paragraphStats(s),verdicts:[{n:2,verdict:'faulty',note:'No turn.'}],summary:'s',provider:'test'};
+ answer=obsReply([{n:2,verdict:'strong',side:'against',turnsBack:false,note:'x'}]);
+ const still=await reviseSentence(reading,2,'Some say early starts build discipline.');
+ assert.equal(still.verdicts.find(v=>v.n===2).verdict,'faulty','the stub said strong; the observation decides');
+ assert.equal(rules().rewriteState(still.verdicts.find(v=>v.n===2)),'still');
+ answer=obsReply([{n:2,verdict:'faulty',side:'against',turnsBack:true,note:'ok'}]);
+ const holds=await reviseSentence(reading,2,'Although some say early starts build discipline, pupils need their evenings.');
+ assert.equal(holds.verdicts.find(v=>v.n===2).verdict,'strong');
+ assert.equal(rules().rewriteState(holds.verdicts.find(v=>v.n===2)),'holds');
+ // a missing or unreadable observation for sentence n still fails the run: it never becomes a neutral 'holds'
+ for(const observations of [[],[{n:1,side:'pushes'}],[{n:2,note:'x'}],[{n:2,side:'great'}],'nope',undefined]){
+  answer=obsReply(observations);
+  await assert.rejects(reviseSentence(reading,2,'Some say early starts build discipline.'),/no observation/,JSON.stringify(observations));
+ }
+});
+test('essay-master-A case 6: the learner record counts code\'s verdicts, not the legacy ones',async()=>{
+ answer=obsReply([{n:1,side:'wanders',verdict:'strong'},{n:2,side:'wanders',verdict:'strong'},{n:3,side:'pushes',verdict:'strong'}]);
+ const a=await analyseEssay(THREE,'argument','oa-6');
+ assert.deepEqual(verdictsOf(a),[[1,'faulty'],[2,'faulty'],[3,'strong']]);
+ const l=getLearner('oa-6');
+ assert.equal(l.history.at(-1).detail,'2 of 3 sentences to fix');
+ assert.equal(l.writing.argument.right,0,'two of three faulty is not under a quarter');
+ assert.deepEqual({...l.digest.at(-1),at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2});
+});
+test('essay-master-A case 7: the prompt no longer asks for a verdict; the withholding rules are still in it verbatim',async()=>{
+ const {NEVER_REWRITE,PATTERN_RULE}=deskEssay();
+ for(const lens of ['structure','argument','evidence','language']){
+  seen=[];answer=obsReply([]);
+  await analyseEssay(THREE,lens,'oa-7');
+  const {system,schema}=seen[0];
+  assert.doesNotMatch(system,/'faulty' for a real problem/);
+  assert.doesNotMatch(system,/one verdict per sentence/i);
+  assert.ok(system.includes(NEVER_REWRITE)&&system.includes(PATTERN_RULE),`${lens}: NEVER_REWRITE and PATTERN_RULE verbatim`);
+  assert.equal(schema.properties.verdicts,undefined,'the schema has no verdicts list');
+  const item=schema.properties.observations.items;
+  assert.equal('verdict' in item.properties,false,`${lens}: no verdict property on a sentence`);
+  assert.equal(JSON.stringify(schema).includes('"verdict"'),false);
+ }
+ seen=[];answer=obsReply([{n:2,support:'checkable'}]);
+ const {reviseSentence}=deskEssay();
+ await reviseSentence(R3(),2,STUDY);
+ assert.doesNotMatch(seen[0].system,/'strong' if it now does its job/);
+ assert.equal('verdict' in seen[0].schema.properties.observations.items.properties,false);
+});
+test('essay-master-A case 8 (GUARD): observations that cannot be read are neutral, never throw, and a fix rides only on a code-faulty sentence',async()=>{
+ const junk=[
+  [{n:9,job:'claim'},{n:0,job:'claim'},{n:-1,job:'claim'},{n:'1',job:'claim'},{job:'claim'},null,'x',7],
+  'not an array',undefined,null,{n:1},
+ ];
+ for(const observations of junk){
+  answer=obsReply(observations);
+  const a=await analyseEssay(THREE,'structure','oa-8');
+  assert.deepEqual(a.verdicts,[],JSON.stringify(observations));
+ }
+ for(const [lens,bad] of [['structure',{job:'boss'}],['argument',{side:'sideways'}],['evidence',{support:'vibes'}],['language',{issues:'many'}]]){
+  answer=obsReply([{n:1,...bad,note:'x',fix:CONCEDE}]);
+  const a=await analyseEssay(THREE,lens,'oa-8');
+  assert.deepEqual(a.verdicts,[{n:1,verdict:'neutral',note:'x'}],`${lens}: an unknown value is neutral, with its fix dropped`);
+ }
+ // a fix on a sentence code rules neutral or strong is dropped; on a faulty one it stays
+ answer=obsReply([{n:1,side:'pushes',fix:CONCEDE,note:'a'},{n:2,side:'wanders',fix:CONCEDE,note:'b'},{n:3,side:'neutral',fix:CONCEDE,note:'c'}]);
+ const b=await analyseEssay(THREE,'argument','oa-8');
+ assert.deepEqual(b.verdicts.map(v=>[v.n,v.verdict,'fix' in v]),[[1,'strong',false],[2,'faulty',true],[3,'neutral',false]]);
+});

@@ -20,6 +20,10 @@ it reads from the sofa. Bold type that still carries nested, readable content.
    a move a sentence misses is hatched, with the caret waiting at it. Ink is a claim of done, so pressing
    Rewrite on my phone does not ink it: the move inks only when the rewrite, re-judged alone, holds
    (`rules/essay` `rewriteState` is `holds`). A rewrite still faulty stays hatched, and the caption says why.
+   Who decides "holds" is code: the model only observes each sentence (the job it does, the side it takes, the
+   support it gives, a word it leans on), and `decideVerdicts` in `rules/essay` turns those observations, checked
+   against the text, into strong, faulty or neutral. That one function rules the first reading, a piece's paragraphs
+   and a rewrite alike, so ink, the Secure seal and the learner record follow a rule, never a model's mood.
 3. **Arrows mean direction.** A paragraph is a column of arrows, one per sentence, as long as the
    sentence. A sentence that argues against the paragraph points back, in citron. Slots carry an arrow for
    the side they stand for.
