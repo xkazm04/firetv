@@ -178,6 +178,32 @@ locally per the owner's 2026-10-07 evening ruling)
   the TV capture of `linga-scenes` with a pitched card and of the recap tape, the phone capture (390 px) of the pitch
   field, and the company sim's live run.
 
+**M4c. Multi-step Calculus working: the chain checker (adult B1) and checked working lines** (M; batch 5, built locally
+per the owner's 2026-10-07 evening ruling; carries the owner's M4 decision, "long problems with checked working lines")
+- Goal: a pure `lib/rules/chain.ts` `checkChain(lines: {tag, text}[], {letter})` rings the first line of a Calculus
+  working that stops holding. Tags `=` (the same function, or equal values for constants), `d/dx`, `int` (+C required on
+  the last indefinite line), `at` (the value at a point), `lim` (`limitAt`, `limitInf`), `solve0` (a line `x = c`
+  where the line before is zero at c). A two-sided equation line is null; each line is `true | false | null`. Built only
+  on the primitives of `calc-expr.ts`; that file, its SAMPLES and every tolerance stay as they are. Measured first on
+  50 clean and 50 planted chains. Then a pure tagger in the same file reads a Calculus item's working lines (the one
+  `workingLines` split), line 0 anchored to the item's own spec, a line whose relation it cannot tell tagged so it is
+  null (it never guesses). A wrong Calculus item with working gets `slipAt` at the first line the chain rings; the
+  paper ticks a Calculus line only where the chain is true. Multi-part and word problems stay with M3a (row 24).
+- Files: new `lib/rules/chain.ts`; `lib/rules/kinds.ts` (`judgeItem` places the pen); `maths/working.ts` (the ticks);
+  new `tools/chain-rules-test.cjs`, appended at the end of `test:rules`; `tools/maths-judge-test.cjs`,
+  `tools/maths-type-test.cjs`; `docs/DESIGN-MATH-BUDDY.md`, `docs/STUDY-DESK-SCREENS.md`.
+- Tests: the fixture suite (zero clean chains rung; each planted slip rung at its own line or null, never at another
+  line; under 5 ms a chain; it prints the counts); judge rows (a planted-slip item's `slipAt` lands on the line that
+  slipped, a wrong answer whose working holds on every line gets no chain pen, a line in words is null, every existing
+  Calculus verdict unchanged); type rows (chain-true lines ticked, null lines bare, school and linear papers unchanged).
+- Accept: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit` clean. Calculus is a course path, not a
+  mode: the pen applies in either mode. The verdict stays `checkAnswer`'s; no field is added to `store.ts`, no event
+  changes shape. Owed to the owner's batch review: TV captures of a ticked and penned Calculus paper (1920 x 1080,
+  1280 x 720).
+- Kill: one clean chain rung that cannot be fixed in the checker, or a planted slip rung at another line: the checked
+  lines are withheld (the checker stays, nothing draws it). More than 5 of 50 slips missed (null): narrow the tags and
+  record which.
+
 ## e. Batches
 
 - **Batch 1 (this PR):** G1, E0, P1, P2, the decisions doc, this plan, Twin Card 1.0 vendored.
