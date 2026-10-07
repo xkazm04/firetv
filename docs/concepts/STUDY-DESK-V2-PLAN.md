@@ -69,7 +69,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | done, ahead of the T1 live pass (deviation, see the batch 4 log) | c108f63 | 2026-10-07 |
 | 16 | P4 | Platform: PC drop page and .docx text (adult A7) | 4 | P2 | done | c108f63 | 2026-10-07 |
 | 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | done, built locally on main (no PR, nothing pushed); captures and the company sim's live run owed to the owner's batch review | d29111c9..aa5ac64d | 2026-10-07 |
-| 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | not started | | |
+| 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | done (built locally on main; kill test passed: clean chains rung 0 of 50, slips rung at their own line 50, left null 0, rung at another line 0; TV captures owed) | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
 | 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | not started | | |
 | 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | not started | | |
 | 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | not started | | |
@@ -332,3 +332,20 @@ Owed to the owner's batch review: the TV captures of `linga-scenes` with a pitch
 (1920 x 1080, 1280 x 720), the phone's pitch field at 390 px, a tape style in `design/linga.css` if the capture asks for
 one, and the company sim's live run read by a person (counts into this log).
 Next: M4c (row 18), then T3, then M2b, one slice per run.
+
+### 2026-10-07 · batch 5 · M4c · autopilot/accepted-idea-delivery-857aadd8 1e33a656
+Built locally on main per the owner's 2026-10-07 evening ruling: batch 5 one slice per run in table order (L3 done, M4c now,
+then T3, M2b), each merged into local main through the gate; no PR, nothing pushed. Commits: 92004a98 (the card), 1a00ec08
+(chain.ts, the 100-chain fixture, the tagger), aaaee240 (the pen on a wrong Calculus item, server), 1e33a656 (the paper's
+ticks, DESIGN-MATH-BUDDY and STUDY-DESK-SCREENS).
+Chain counts (tools/chain-rules-test.cjs, the kill test): clean chains rung 0 of 50; planted slips rung at their own line
+50 of 50, left null 0, rung at another line 0; slowest chain 0.13 ms (best of three). The kill criterion passed; no tag was
+narrowed. The bounds-swapped slip has no chain expression (it is a value of F at both ends) and is not in the 50.
+Gate: `cd desk && npm run test:rules` green; `tsc --noEmit --incremental false` clean. New rows: chain-rules-test 9 (fixture,
+clean, slips, null cases, rounding, tagger 4); maths-judge-test M4c-1 to M4c-3; maths-type-test M4c. No existing assertion changed.
+The tagger reads: derivative, derivative-at, evaluate, antiderivative (F(x) = ..., the integral sign), definite integral
+(an F line, no +C), limit (lim x->a, at the spec's own point) and critical-point (f'(x) = ..., x = c). A bare expression, a
+two-sided equation, a second derivative or a limit at another point is null. A line in words is skipped: the next line
+follows the last line that asserted something.
+Owed to the owner's batch review: TV captures of a ticked and penned Calculus paper at 1920 x 1080 and 1280 x 720.
+Next: T3 (row 19), then M2b.

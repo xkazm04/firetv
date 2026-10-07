@@ -31,7 +31,7 @@ relative, not measured; nothing here is L (anything L was split).
 | 3 | A3 | Math: Field Work, the first job | M | A1 (mode.ts) | not started | | | |
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
 | 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
-| 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | not started | | | |
+| 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | done as v2 M4c (built locally on main; kill test passed: 0 of 50 clean rung, 50 of 50 slips at their own line) | autopilot/accepted-idea-delivery-857aadd8 | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
 | 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | done (v2 P1; adopted W4; O1 = 18+) | claude/trusting-franklin-a8g19w | b160c50 | 2026-10-07 |
 | 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | store and route done (v2 P2); phone, curtain and notice not started (v2 P3) | claude/trusting-franklin-a8g19w | e9271eb | 2026-10-07 |
 | 9 | D1 | Essay: the reading core keeps paragraphs | M | - | done (v2 E0) | claude/trusting-franklin-a8g19w | 307d2ec | 2026-10-07 |
