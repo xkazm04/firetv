@@ -69,6 +69,12 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     }
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
+    /** P13d FLUSHBOUND arm (perf-only): glFlush at the end of every bake slice, with the scenery target still bound. */
+    var flushSlices=false
+    /** P13d HALFSLICE arm (perf-only): the share of the bake budget a slice may use. */
+    var sliceScale=1.0
+    /** P13d NOCLEAR arm (perf-only): the first pass fills the target with a rect instead of clearing it. */
+    var clearByDraw=false
     private var buildFrames=0
     private var buildCpuMs=0.0
     private var buildMaxMs=0.0
@@ -135,7 +141,9 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
-        stage=0;if(look!=null)ScreenUtils.clear(look.color(look.groundSlot)) else ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
+        stage=0
+        if(clearByDraw) { if(look!=null)r.color=look.color(look.groundSlot) else r.setColor(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f);r.rect(left,bottom,width,height) }
+        else if(look!=null)ScreenUtils.clear(look.color(look.groundSlot)) else ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
         val groundTile=art.tile(if(look!=null)RegionMaterials.tileSlots.getValue(look.groundSlot) else if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass")
         // Opaque material art already supplies grain. Retain procedural specks only for fallback.
         if(groundTile==null)repeat(VisualTuning["groundGrainCount"].toInt()) {
@@ -332,7 +340,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     }.iterator()
     fun advance() {
         if(ready)return
-        val started=System.nanoTime();val deadline=started+(VisualTuning["sceneryBuildBudgetMs"]*1e6).toLong()
+        val started=System.nanoTime();val deadline=started+(VisualTuning["sceneryBuildBudgetMs"]*sliceScale*1e6).toLong()
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
         val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
         do {
@@ -343,7 +351,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             val stepMs=(System.nanoTime()-step)/1e6;stageMs[stage]+=stepMs
             if(stepMs>slowStepMs){slowStepMs=stepMs;slowStage=stage}
         } while(!waitingForBins && System.nanoTime()<deadline)
-        r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        r.end();if(flushSlices)Gdx.gl.glFlush();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(ready) {
             Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
             Gdx.app.log("DeathRide","sceneryBakeDetail ${course.id} selectRegionMs=$selectRegionMs selectRegionUploadMs=$selectRegionUploadMs slowStep=${bakeStages.getOrElse(slowStage){"none"}}:$slowStepMs firstProjectMs=$firstProjectMs stages="+

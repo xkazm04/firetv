@@ -50,7 +50,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var activeRegion=regionOverride?:courseCatalog[selectedTrackIndex()].region
     private val regionLooks=Regions.all.associate{it.id to RegionLook(it)}
     private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
-    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates)
+    private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates).also{it.flushSlices=switchArm==SwitchArm.FLUSHBOUND;if(switchArm==SwitchArm.HALFSLICE)it.sliceScale=.5;it.clearByDraw=switchArm==SwitchArm.NOCLEAR}
     private val painter=CarPainter()
     private val wheels=WheelRig(32)
     private val combatPainter=CombatPainter()
@@ -205,7 +205,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val worldMs=msSince(started)
         if(::raceAudio.isInitialized)raceAudio.bind(world)
         val sceneStarted=System.nanoTime()
-        if(changed) { scene=makeScene();glWindow("switch") }
+        if(changed) { scene=makeScene();glWindow("switch");if(switchArm==SwitchArm.HOLDBAKE)bakeHold=SwitchArm.HOLD_FRAMES }
         logger("transition configureWorld ${courseCatalog[courseIndex].id} changed=$changed worldMs=$worldMs worldNewMs=$worldNewMs sceneMs=${msSince(sceneStarted)} totalMs=${msSince(started)}")
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
@@ -382,7 +382,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
         if(!pickPending && earlyCourse<0)when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
         profiler?.mark(6,"DR.prepare")
-        if(!scene.ready) { scene.advance();accumulator=0.0;if(scene.ready)rebuildUi() };server.sceneryReady=scene.ready
+        if(!scene.ready) {
+            // P13d HOLDBAKE/FLUSH arms (perf-only): start the bake late, or submit each bake slice in its own frame.
+            if(bakeHold>0) { if(--bakeHold==0)glWindow("bake") }
+            else { scene.advance();if(switchArm==SwitchArm.FLUSH)Gdx.gl.glFlush() }
+            accumulator=0.0;if(scene.ready)rebuildUi()
+        };server.sceneryReady=scene.ready
         profiler?.mark(7,"DR.simulation")
         // Keep release/stale state current in menus without mislabelling it as simulation-age evidence.
         if(!scene.ready || phase=="countdown" || phase=="results" || phase=="garage" || phase=="career")for(i in server.slots.indices)server.consume(i,server.nowMs(),inputs[i],false)
@@ -477,6 +482,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var glStrayLines=0
     private var earlyCourse=-1
     private var earlyFrames=0
+    private var bakeHold=0
     private companion object { const val GL_WINDOW=20;const val GL_STRAY_LINES=400 }
     private fun capture(name: String) { val p=Pixmap.createFromFrameBuffer(0,0,Gdx.graphics.width,Gdx.graphics.height); val writer=PixmapIO.PNG(); writer.setFlipY(true); writer.write(Gdx.files.local("../evidence/$name"),p); writer.dispose(); p.dispose() }
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
