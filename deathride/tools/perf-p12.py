@@ -63,8 +63,11 @@ def scheduler(run):
         if label is None or key not in c0:
             continue
         b = c0[key]
-        out[label] = {'tid': key[1], 'cpuPercentOfOneCore': round((cpu - b[0]) / 1e9 / seconds * 100, 2),
-                      'slicesPerSecond': round((slices - b[2]) / seconds), 'runqueueWaitMsPerSecond': round((wait - b[1]) / 1e6 / seconds, 2)}
+        row = {'tid': key[1], 'cpuPercentOfOneCore': round((cpu - b[0]) / 1e9 / seconds * 100, 2),
+               'slicesPerSecond': round((slices - b[2]) / seconds), 'runqueueWaitMsPerSecond': round((wait - b[1]) / 1e6 / seconds, 2)}
+        # The app has several GLThread-named threads; the render thread is the busiest one.
+        if label not in out or row['cpuPercentOfOneCore'] > out[label]['cpuPercentOfOneCore']:
+            out[label] = row
     return {'seconds': round(seconds, 2), 'threads': out,
             'limit': '/proc/<pid>/task/<tid>/schedstat between the two counter reads around the probe (the probe only, no tracing). '
                      'Runqueue wait is all time runnable but not running (preempted or waking), whoever held the CPU.'}
@@ -85,7 +88,7 @@ def run_row(arm, run):
     audio = s.get('audio') or {}
     backend = audio.get('backend') or {}
     dev = (d.get('deviceCounters') or {}).get('cpuPercentOfOneCore') or {}
-    return {'arm': arm, 'run': run.name, 'apkSha256': d['apkSha256'], 'durationSeconds': d['durationSeconds'], 'functionalPass': d['functionalPass'],
+    return {'arm': arm, 'run': run.name, 'apkSha256': d['apkSha256'], 'durationSeconds': d['durationSeconds'], 'functionalPass': d['functionalPass'], 'error': d.get('error'),
             'armCheck': arm_seen(run, arm, audio),
             'activeFrames': at['over33Ms']['ofActive'], 'activeFramesOver33Ms': at['over33Ms']['frames'], 'activeFramesOver20Ms': at['over20Ms']['frames'],
             'activeFramesOver16_7Ms': at['over16.7Ms']['frames'], 'activeP95WorstMs': value(d, 'activeP95WorstMs'), 'activeMaxMs': value(d, 'activeMaxMs'),
@@ -124,7 +127,8 @@ def pairs(items):
 
 runs = [run_row(arm, path) for arm, path in pairs(a.run)]
 traces = [trace_row(arm, path) for arm, path in pairs(a.trace)]
-valid = [r for r in runs if r['armCheck']['matches']]
+# Void: the wrong arm, or a functional failure (rerun under the rule; the failed run stays in 'runs').
+valid = [r for r in runs if r['armCheck']['matches'] and r['functionalPass']]
 by = {arm: [r for r in valid if r['arm'] == arm] for arm in ARMS}
 READINGS = ('activeFramesOver33Ms', 'activeP95WorstMs', 'activeFramesOver20Ms')
 
@@ -147,7 +151,8 @@ for arm in ARMS[1:]:
     v['primary'] = v['activeFramesOver33Ms']['verdict']
     v['clearsI2Frames'] = len(rows) >= 2 and all(r['activeP95WorstMs'] <= 16.7 and r['activeMaxMs'] <= 33 for r in rows)
     verdicts[arm] = v
-out = {'rule': RULE, 'runs': runs, 'void': [r['run'] for r in runs if not r['armCheck']['matches']], 'verdicts': verdicts,
+out = {'rule': RULE, 'runs': runs, 'void': [{'run': r['run'], 'reason': 'arm not seen' if not r['armCheck']['matches'] else 'functional failure: ' + str(r['error'])[:160]}
+                                             for r in runs if r not in valid], 'verdicts': verdicts,
        'perArmMeans': {arm: {k: mean([r[k] for r in by[arm]]) for k in READINGS + ('activeMaxMs',)} for arm in ARMS},
        'traces': traces,
        'limits': 'Two profiled 360 s runs per arm on one Stick, interleaved, with the host shared with other builders (host CPU per run recorded). '
