@@ -4,7 +4,6 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import java.io.ByteArrayOutputStream
-import java.util.zip.Deflater
 import java.util.zip.GZIPOutputStream
 
 /** A static text resource held as UTF-8 bytes and (lazily, once) as gzip; the controller page is 44 KB, the catalog 26 KB. */
@@ -25,14 +24,3 @@ suspend fun ApplicationCall.respondPacked(p: Packed,type: ContentType,cache: Str
     if(request.headers[HttpHeaders.AcceptEncoding]?.contains("gzip")==true) { response.header(HttpHeaders.ContentEncoding,"gzip"); respondBytes(p.gz,charset) }
     else respondBytes(p.raw,charset)
 }
-/** JSON rebuilt per request (/stats, /profile): the same UTF-8 bytes and content type as respondText, gzipped at BEST_SPEED
- *  when the reader accepts it. A probe polling the 77 KB /stats about four times a second moved ~0.3 MB/s, which tripped
- *  Android's 2 MiB data alert, and with it a NetworkStats poll (~0.6 s of a Stick core), every ~7 s (P11). */
-suspend fun ApplicationCall.respondJsonText(text: String) {
-    val raw=text.toByteArray(Charsets.UTF_8)
-    response.header(HttpHeaders.Vary,"Accept-Encoding")
-    if(request.headers[HttpHeaders.AcceptEncoding]?.contains("gzip")==true) { response.header(HttpHeaders.ContentEncoding,"gzip"); respondBytes(gzipFast(raw),ContentType.Application.Json) }
-    else respondBytes(raw,ContentType.Application.Json)
-}
-fun gzipFast(raw: ByteArray): ByteArray = ByteArrayOutputStream(raw.size/4+64).also { out ->
-    object: GZIPOutputStream(out,8192) { init { def.setLevel(Deflater.BEST_SPEED) } }.use { it.write(raw) } }.toByteArray()
