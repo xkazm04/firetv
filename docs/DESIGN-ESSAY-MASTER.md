@@ -135,3 +135,25 @@ A specimen cabinet under the paragraph card on the lens home: four drawers, one 
 Secure pins its specimen (Specimen's arrow, in citron, on a citron-framed drawer); an open drawer is a dashed outline. It
 appears once the first specimen is pinned. It is never counted, only Family mode shows it, and nothing earns a specimen
 but the lens's own latch (`lib/rules/collect.ts`). `data-role="essay-collection"`; `essay/EssayCabinet.tsx`.
+
+## The twin: the style meter and the simulated probe (v2 T1, 2026-10-07)
+
+`lib/rules/style.ts` measures how a person writes from their own messages. Every measure is an integer, as Twin Card 1.0
+requires: sentence and message lengths, openers, and rates of connectors, contractions, questions, exclamations, emoji,
+hedges, greetings, sign-offs, thanks, formal words, slang and lists. `twinDims` maps the measures onto the card's eight
+`twin-card.style/1` dimensions and keeps its coherence rules. The cut points are a first guess, to be tuned. `styleDistance`,
+`withinBands` and `copyRun` serve the probe and the twin's later validators.
+
+`tools/twin-probe.cjs` is the kill test for T2-T5, simulated by owner decision V2-O1:
+1. It invents eight synthetic writers (terse, formal, bubbly, hedger, storyteller, lister, dry, warm-direct) and has each
+   write about 20 messages.
+2. Three messages per writer are held out.
+3. For each held-out message, the twin (the eight dimensions in the card's level words, plus five exemplars) and the
+   plain model draft a message on the same subject.
+4. The drafts are scored by code distance and by a blind judge model. A twin draft that lifts eight words from the
+   corpus loses the trial.
+5. A writer passes with 2 of 3 trials won on both scores; the probe passes at 6 of 8 writers.
+
+Run it on the owner's PC (`node ../tools/twin-probe.cjs` from `desk/`); `--stub` is the gate's dry run. A pass is
+recorded as simulated. The synthetic writers are the model's own writing, so it shows the profile steers style, not that
+a twin sounds like a real person.
