@@ -1,16 +1,16 @@
 "use client";
 /**
  * Essay Master's television, in its own design language: Specimen (docs/DESIGN-ESSAY-MASTER.md,
- * design/essay-specimen.css). Four screens - the lens home (essaytype), one sentence at a time (forensic,
+ * design/essay-specimen.css). Five screens - the lens home, the plan (the Paragraph's slots, written on the phone) (essaytype), one sentence at a time (forensic,
  * with the table behind Menu), the playbook and the x-ray - each drawn from the session and from the stop
  * lists in tv/keys.ts, so the D-pad there and the focus drawn here share one list. The On Air shell (grid,
  * band, safe box) steps aside: this root is the whole 1920 x 1080 stage and keeps the 5% margins itself.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
-import { ESSAY_TYPES, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { rewriteState, taught, type Fix } from "@/lib/rules/essay";
-import { stopAt, lensStops, forensicAt, rewriteStatus, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
+import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
+import { planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
@@ -24,6 +24,7 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
   return (
     <div className={`essay-tv ${ESSAY_FONTS}`} data-screen={s.screen}>
       {s.screen === "essaytype" ? <EssayType s={s} focus={s.focus} />
+        : s.screen === "essayplan" ? <EssayPlan s={s} />
         : s.screen === "forensic" ? <Forensic s={s} table={table} />
         : s.screen === "playbook" ? <Playbook s={s} focus={s.focus} />
         : s.screen === "xray" ? <Xray s={s} /> : null}
@@ -110,7 +111,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const standings = lensStandings(s.history, s.writing);
   const totals = writingTotals(standings, s.history);
   const stops = lensStops(s), at = stopAt(stops, focus);
-  const lens = at && at !== "last" ? at : null;
+  const lens = at && at !== "last" && at !== "plan" ? at : null;
   const a = s.essay;
   const rows = useRef<HTMLDivElement>(null);
   const commit = useCommit(s.status);
@@ -138,6 +139,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const chosen = lens && s.essayType === lens.id;
   const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
+    : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: a.summary }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
     : lens ? { label: `${lens.name} reads`, text: lens.promise } : { label: "Essay Master", text: "Choose a lens." };
@@ -175,15 +177,66 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
     </section>
     <aside className="em-side">
       {a ? <LastParagraph a={a} focused={at === "last"} /> : (
-        <div className="em-panel" data-role="essay-specimen-card">
+        <div className={`em-panel${at === "plan" ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={at === "plan"}>
           <div className="em-lbl">First paragraph</div>
           <h2 className="em-big">Nothing read</h2>
           <div className="em-ways">{["Paste", "Type", "Dictate"].map((w, k) => <div key={w}>{WAYS[k]}<span className="em-lbl">{w}</span></div>)}</div>
           <div className="em-meta">{PHONE}{s.joined ? "Phone joined" : `PIN ${s.pin}`}</div>
+          <div className="em-door" data-role="essay-plan-door"><span>Start from the pattern</span>{at === "plan" && <span className="em-key">OK</span>}</div>
         </div>
       )}
     </aside>
     <div className="em-caption"><Caption label={cap.label} text={cap.text} /></div>
+  </>);
+}
+
+/**
+ * The plan: the Paragraph's slots, one row each, hatched until the learner has written the sentence and inked with their
+ * own words once they have. The caret is on the focused row; the caption carries the fit comment (a comment, never ink)
+ * or the ask. Nothing on screen is the learner's but what they wrote; the sentence comes from the phone, never the TV.
+ */
+export function EssayPlan({ s }: { s: Session }) {
+  const defs = planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]);
+  const slots = s.essayPlan?.slots ?? defs.map(() => "");
+  const stops = planStops(s), at = stopAt(stops, s.focus), here = at === "slot" ? s.focus : -1;
+  const done = slots.every(Boolean);
+  const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
+  const fit = here >= 0 && slots[here] ? planFit(defs, here, slots[here]) : null;
+  const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
+    : job?.phase === "failed" ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Press OK on Read it to send it again." }
+    : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }
+    : at === "read" ? { label: "Read it", text: done ? "The desk reads your paragraph through the " + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
+    : { label: "Your plan", text: "Back to the lenses. What you wrote stays." };
+  const acts: Array<{ k: string; word: string; on: boolean; off?: boolean }> = [
+    { k: "write", word: "Write on my phone", on: at === "slot" },
+    { k: "read", word: "Read it", on: at === "read", off: !done },
+    { k: "back", word: "Back", on: at === "back" },
+  ];
+  return (<>
+    <Brand /><Top s={s} menu="Playbook" lit />
+    <section className="em-stack" data-role="essay-plan">
+      <div className="em-lbl em-h">Your paragraph, one sentence at a time</div>
+      <div className="em-plan">
+        {defs.map((d, i) => {
+          const text = slots[i], focused = here === i;
+          return (
+            <div key={i} className={`em-prow${text ? " written" : ""}${focused ? " is-focused" : ""}`} data-focused={focused} data-written={!!text} data-role="essay-plan-slot">
+              <span className="em-caret" />
+              <div className="em-lbl">{i + 1} · {d.label}</div>
+              <div className={`em-plate${text.length > 110 ? " long" : ""}`}>{text}</div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+    <div className="em-caption"><Caption label={cap.label} text={cap.text} /></div>
+    <nav className="em-acts">
+      {acts.map((a, j) => (
+        <div key={a.k} className={`em-pill em-act${j === 1 ? " prim" : ""}${a.on ? " is-focused" : ""}${a.off ? " off" : ""}`} data-focused={a.on} {...(j === 1 ? { "data-role": "essay-primary" } : {})}>
+          {a.k === "write" ? PHONE : a.k === "read" ? ACT_ICON.next : ACT_ICON.back}<span>{a.word}</span>
+        </div>
+      ))}
+    </nav>
   </>);
 }
 

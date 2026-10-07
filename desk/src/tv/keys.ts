@@ -367,6 +367,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   essayplan: (s, k, _, o) => {
     const plan = s.essayPlan, stops = planStops(s), at = stopAt(stops, s.focus);
     if (k === "back") { o.nav("essaytype", LENS_STOPS.length); return; }
+    if (k === "menu") { o.nav("playbook", PLAYBOOK.findIndex((p) => p.id === "para"), "essaytype"); return; }
     if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
     if (k !== "select") return;
     if (at === "back") o.nav("essaytype", LENS_STOPS.length);

@@ -187,6 +187,16 @@
 .essay-tv .em-act.prim { border-color: var(--em-cit); color: var(--em-cit); }
 .essay-tv .em-act.is-focused { background: var(--em-bone); color: var(--em-bg); border-color: var(--em-bone); box-shadow: 0 0 0 4px var(--em-cit); transform: scale(1.05); }
 
+/* the plan: the Paragraph's slots as rows - a hatched plate until written, the learner's own sentence inked once it is */
+.essay-tv .em-plan { position: absolute; left: 52px; top: 64px; width: 1128px; display: flex; flex-direction: column; gap: 28px; }
+.essay-tv .em-prow { position: relative; padding-left: 42px; }
+.essay-tv .em-prow > .em-caret { left: 0; top: 4px; bottom: 4px; width: 12px; }
+.essay-tv .em-prow .em-plate { margin-top: 10px; min-height: 164px; padding: 18px 26px; border: 3px dashed rgba(238, 233, 224, .42); border-radius: 6px; background: var(--em-hatch); font-size: 46px; font-weight: 600; line-height: 1.2; font-variation-settings: "wdth" 90; }
+.essay-tv .em-prow.written .em-plate { background: none; border: 3px solid var(--em-bone); color: var(--em-bone); }
+.essay-tv .em-prow .em-plate.long { font-size: 36px; }
+.essay-tv .em-prow.is-focused .em-plate { box-shadow: 0 0 0 4px var(--em-cit); }
+.essay-tv .em-act.off { opacity: .5; }
+
 /* the table (Menu): the paragraph as rows - mono labels, role chips, length bars */
 .essay-tv .em-table { position: absolute; left: 96px; top: 148px; width: 1728px; }
 .essay-tv .em-figs { display: flex; gap: 44px; margin-top: 18px; }
