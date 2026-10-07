@@ -985,3 +985,82 @@ test('owner case 8 GUARD: leaving the check keeps it, and carrying on resumes th
  await command('check-resume',{checkId:k.id});
  assert.equal(getSession().screen,'linga-check');assert.equal(getSession().check.turns.at(-1).id,asked);assert.equal(!!getSession().check.parked,false);
 });
+
+// ---- MH-2: a topic's audience is the stricter of its words and the model's label (gate.ts) ----
+const {audienceOf}=require(path.join(root,'src/lib/english/gate.ts'));
+const GATE_TABLE=[
+ // adult
+ ['Two people meet at a cafe. One hopes it turns into romance and tries to flirt a little.','all','adult'],
+ ['You are on a first date and want to keep the conversation going.','all','adult'],
+ ['Talk about dating apps with a friend.','all','adult'],
+ ['Ask your girlfriend what she wants for dinner.','all','adult'],
+ ['Tell your boyfriend you are running late.','all','adult'],
+ ['A romantic dinner for two at a restaurant.','older','adult'],
+ ['Order a beer at the bar.','all','adult'],
+ ['Choose a wine to go with the meal.','all','adult'],
+ ['A friend has had too much and is drunk at the party.','all','adult'],
+ ['Say no politely when someone offers you drugs.','all','adult'],
+ ['Explain why you do not like gambling.','all','adult'],
+ ['A night at the casino with colleagues.','all','adult'],
+ ['Betting on a football match with friends.','all','adult'],
+ ['A talk about sexual health at a clinic.','all','adult'],
+ ['Sex education questions.','all','adult'],
+ ['She wants to kiss him goodnight.','all','adult'],
+ ['A pub that serves alcohol asks for your ID.','all','adult'],
+ ['Flirting with a stranger on a train.','older','adult'],
+ ['Planning a second date after dinner.','all','adult'],
+ ['A date night with your partner.','all','adult'],
+ // older
+ ['Prepare for a job interview at a warehouse.','all','older'],
+ ['You answer questions in a JOB INTERVIEW for a shop.','all','older'],
+ ['A sharp disagreement at work about who finishes the report.','all','older'],
+ ['Settle a conflict at work with a colleague.','all','older'],
+ ['A workplace conflict over the shift list.','all','older'],
+ ['Argue with a colleague about the schedule.','all','older'],
+ // stays all: benign near-misses
+ ['Write the date on the calendar and tell your teacher.','all','all'],
+ ['What is the date today? Check the calendar.','all','all'],
+ ['Updating data in a spreadsheet for the class.','all','all'],
+ ['Read the menu at the coffee bar and order a latte.','all','all'],
+ ['Join the school band and talk about your instrument.','all','all'],
+ ['Ask a classmate to share their notes.','all','all'],
+ ['Order a pizza for the family.','all','all'],
+ ['A trip to the zoo with your class.','all','all'],
+ ['Buying a train ticket for tomorrow.','all','all'],
+ ['Talk about your favourite games with friends.','all','all'],
+ ['Sort the bottles in the recycling bin.','all','all'],
+ ['A sweet bakery order: two rolls and a juice.','all','all'],
+ ['Describe your weekend hobby.','all','all'],
+ ['The expiry date on the milk is today.','all','all'],
+ ['Sexton Street is where the library is.','all','all'],
+ ['Wine-coloured curtains in the shop window.','all','adult'],
+ // the label alone still holds when the words are clean
+ ['Talk about your weekend plans.','adult','adult'],
+ ['Talk about your hobbies.','older','older'],
+ ['Chatting about a quiet evening at home.','school','school'],
+ // the stricter wins
+ ['Prepare for a job interview.','adult','adult'],
+ ['Bring a beer to the barbecue.','older','adult'],
+];
+test('the audience gate: the stricter of the words and the label wins, near-misses stay "all" (MH-2)',()=>{
+ assert(GATE_TABLE.length>=40);
+ for(const [text,label,want] of GATE_TABLE)assert.equal(audienceOf(text,label),want,`${label} + "${text}"`);
+ for(const a of ['all','older','adult'])assert.equal(audienceOf('',a),a);
+});
+test('a romance premise the model labels "all" never reaches a 12-year-old\'s plan, and an adult\'s plan holds it (MH-2)',async()=>{
+ const romance={...topic('A coffee with Alex','all','relate'),premise:'Two people meet at a cafe. The learner hopes it turns into romance and tries to flirt a little.'};
+ const plan=req=>{const p=JSON.parse(req.prompt);return p.step==='plan'?{topics:[romance,topic('Gaming with friends','all'),topic('Planning a trip','all','negotiate')].slice(0,p.count)}:checkAnswer(req);};
+ fresh();answer=wrap(plan);const propose=async()=>{await command('plan-propose');const g=getSession().check;if(g.askGoal)await command('plan-goal',{checkId:g.id,text:'talk with friends online'});return getSession().check;};
+ let k=await propose();
+ assert(!k.topics.some(t=>t.title==='A coffee with Alex'),'kept out of the proposal');
+ await command('plan-agree',{checkId:k.id});assert(!getLearner('ema').english.plan.topics.some(t=>t.title==='A coffee with Alex'));
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ answer=wrap(plan);k=await propose();
+ const held=k.topics.find(t=>t.title==='A coffee with Alex');assert(held,'an adult\'s plan holds it');assert.equal(held.audience,'adult');
+ await command('plan-agree',{checkId:k.id});assert(getLearner('jakub').english.plan.topics.some(t=>t.title==='A coffee with Alex'));
+ // a stale plan that already holds the topic as "all" is re-derived at agreement
+ fresh();answer=wrap(checkAnswer);k=await propose();
+ getSession().check.topics.push({...romance,id:'plan-stale',why:'x',audience:'all'});
+ await command('plan-agree',{checkId:k.id});assert(!getLearner('ema').english.plan.topics.some(t=>t.id==='plan-stale'));
+});

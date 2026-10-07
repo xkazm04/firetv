@@ -10,6 +10,7 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
+import { audienceOf } from "./gate";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
@@ -167,6 +168,7 @@ audience: "adult" for anything only adults should practise (dating, alcohol, adu
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
+      .map(t => t && { ...t, audience: audienceOf(`${t.title} ${t.goal} ${t.premise}`, t.audience) })
       .filter((t): t is PlanTopic => !!t && allowed.includes(t.audience) && !titles.has(t.title.toLowerCase()) && !!titles.add(t.title.toLowerCase()))
       .slice(0, count);
   };
@@ -336,7 +338,7 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     return true;
   }
   if (action === "plan-agree") {
-    const allowed = allowedAudiences(ctx), topics = k.topics.filter(t => allowed.includes(t.audience));
+    const allowed = allowedAudiences(ctx), topics = k.topics.map(t => ({ ...t, audience: audienceOf(`${t.title} ${t.goal} ${t.premise}`, t.audience) })).filter(t => allowed.includes(t.audience));
     saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: learning.placement?.band ?? prefs.level, topics } });
     commit(null, "linga");
     return true;
