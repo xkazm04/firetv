@@ -1,0 +1,316 @@
+{
+ "step3": {
+  "settled": null,
+  "settleWaitedSeconds": null,
+  "transitionMaxMs": 114.5,
+  "transitionWindows": 57,
+  "windowsOver100": 3,
+  "bar": "fail",
+  "perRoundMaxMs": [
+   [
+    0,
+    "scrap-1-c",
+    78.3
+   ],
+   [
+    1,
+    "foundry-1-c",
+    80.5
+   ],
+   [
+    2,
+    "salt-1-b",
+    72.8
+   ],
+   [
+    3,
+    "switchback-1-a",
+    51.0
+   ],
+   [
+    4,
+    "crown-1-a",
+    114.5
+   ],
+   [
+    5,
+    "scrap-1-c",
+    60.7
+   ]
+  ],
+  "switches": [
+   {
+    "course": "foundry-1-c",
+    "k11IntervalMs": 18.0,
+    "maxIntervalMs": 80.5,
+    "switchFrameWorkMs": 78.6,
+    "passes": 96,
+    "maxSliceMs": 24.3
+   },
+   {
+    "course": "salt-1-b",
+    "k11IntervalMs": 17.5,
+    "maxIntervalMs": 32.8,
+    "switchFrameWorkMs": 31.3,
+    "passes": 75,
+    "maxSliceMs": 13.3
+   },
+   {
+    "course": "switchback-1-a",
+    "k11IntervalMs": 19.2,
+    "maxIntervalMs": 28.8,
+    "switchFrameWorkMs": 27.1,
+    "passes": 68,
+    "maxSliceMs": 13.2
+   },
+   {
+    "course": "crown-1-a",
+    "k11IntervalMs": 18.2,
+    "maxIntervalMs": 31.8,
+    "switchFrameWorkMs": 30.3,
+    "passes": 62,
+    "maxSliceMs": 14.7
+   },
+   {
+    "course": "scrap-1-c",
+    "k11IntervalMs": 17.8,
+    "maxIntervalMs": 43.3,
+    "switchFrameWorkMs": 42.1,
+    "passes": 60,
+    "maxSliceMs": 12.9
+   }
+  ],
+  "carPickMs": [
+   7.4,
+   50.9,
+   11
+  ],
+  "startRaceMs": [
+   13.0,
+   21.5,
+   6
+  ],
+  "raceLaunchMs": [
+   6.6,
+   17.4,
+   6
+  ],
+  "trackMs": [
+   13.3,
+   72.0,
+   6
+  ],
+  "flushMs": {
+   "0": [
+    10.0,
+    27.6,
+    25
+   ],
+   "1": [
+    9.9,
+    37.9,
+    23
+   ]
+  },
+  "pssRangeMiB": [
+   174.2,
+   195.1
+  ],
+  "rejected": [
+   0,
+   0
+  ],
+  "inputStream": {
+   "hz": [
+    30.00222798477776,
+    30.00222798477776
+   ],
+   "pumpStalls": 0
+  },
+  "hostCpu": {
+   "host-cpu-start.json": [
+    61,
+    63,
+    56
+   ],
+   "host-cpu-end.json": [
+    99,
+    66,
+    73
+   ]
+  },
+  "settleLastMinute": null,
+  "framesOver100": [
+   {
+    "approxSecond": -40.0,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 114.9,
+    "workMs": 60.5,
+    "cpuMs": 55.1,
+    "requestsMs": 0.7,
+    "prepareMs": 0.4,
+    "simulationMs": 0.1,
+    "telemetryMs": 2.2,
+    "carsEffectsMs": 0.0,
+    "hudMs": 52.2
+   },
+   {
+    "approxSecond": -37.7,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 95.4,
+    "workMs": 100.7,
+    "cpuMs": 95.5,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 84.8,
+    "telemetryMs": 1.0,
+    "carsEffectsMs": 9.0,
+    "hudMs": 2.6
+   },
+   {
+    "approxSecond": -37.6,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 102.1,
+    "workMs": 91.0,
+    "cpuMs": 90.1,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 77.1,
+    "telemetryMs": 0.0,
+    "carsEffectsMs": 8.0,
+    "hudMs": 2.7
+   },
+   {
+    "approxSecond": -36.4,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 21.7,
+    "workMs": 186.6,
+    "cpuMs": 16.1,
+    "requestsMs": 0.2,
+    "prepareMs": 0.0,
+    "simulationMs": 5.8,
+    "telemetryMs": 171.9,
+    "carsEffectsMs": 3.7,
+    "hudMs": 2.3
+   },
+   {
+    "approxSecond": -36.2,
+    "beforeRound": 0,
+    "track": "scrap-1-c",
+    "startup": true,
+    "intervalMs": 188.0,
+    "workMs": 41.5,
+    "cpuMs": 40.3,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 31.6,
+    "telemetryMs": 0.7,
+    "carsEffectsMs": 4.0,
+    "hudMs": 2.4
+   },
+   {
+    "approxSecond": 265.0,
+    "beforeRound": 4,
+    "track": "crown-1-a",
+    "startup": false,
+    "intervalMs": 36.4,
+    "workMs": 102.0,
+    "cpuMs": 39.7,
+    "requestsMs": 0.2,
+    "prepareMs": 0.0,
+    "simulationMs": 30.9,
+    "telemetryMs": 34.9,
+    "carsEffectsMs": 13.6,
+    "hudMs": 9.7
+   },
+   {
+    "approxSecond": 265.1,
+    "beforeRound": 4,
+    "track": "crown-1-a",
+    "startup": false,
+    "intervalMs": 104.9,
+    "workMs": 110.3,
+    "cpuMs": 46.6,
+    "requestsMs": 51.9,
+    "prepareMs": 0.0,
+    "simulationMs": 24.9,
+    "telemetryMs": 0.4,
+    "carsEffectsMs": 14.5,
+    "hudMs": 9.9
+   },
+   {
+    "approxSecond": 265.2,
+    "beforeRound": 4,
+    "track": "crown-1-a",
+    "startup": false,
+    "intervalMs": 114.5,
+    "workMs": 73.7,
+    "cpuMs": 38.7,
+    "requestsMs": 0.3,
+    "prepareMs": 0.0,
+    "simulationMs": 55.6,
+    "telemetryMs": 11.4,
+    "carsEffectsMs": 2.5,
+    "hudMs": 1.6
+   }
+  ],
+  "decodeCompiles": [
+   "10-07 23:51:51.688 Compiler allocated 4206KB to compile dev.deathride.core.Profile dev.deathride.core.ProfileCodec.decode(java.lang.String, java.lang.String, boolean)"
+  ],
+  "firstProbeRequest": "10-07 23:52:32.559",
+  "decodeCompileBeforeFirstRequest": true,
+  "codecWarm": [
+   "10-07 23:51:57.507 profileCodecWarm calls=200 ms=6861.4"
+  ],
+  "gcOver300msTotal": [
+   [
+    "10-07 23:51:51.874",
+    "19.908ms",
+    "331.336ms"
+   ]
+  ],
+  "fails": [
+   "transitionFramesOver100Ms",
+   "roundTransitionMaxMs[4:crown-1-a]",
+   "pssRangeMiB",
+   "activeP95WorstVsG1Ms",
+   "activeMaxMs"
+  ],
+  "gc": {
+   "loggedGcs": 23,
+   "loggedBackgroundGcs": 23,
+   "losMBPerGc": [
+    9.98,
+    16.0
+   ],
+   "losMBTotal": 322.0,
+   "losMBps": 0.89,
+   "gapSeconds": [
+    3.5,
+    15.69,
+    49.4
+   ],
+   "totalMs": [
+    100.8,
+    288.6
+   ],
+   "runtime": {
+    "fromSecond": 3.7,
+    "toSecond": 357.1,
+    "allocatedMB": 1182.7,
+    "allocatedMBps": 3.35,
+    "gcCount": 47,
+    "gcPerMinute": 8.0,
+    "unit": "MB = 10^6 B, from art.gc.bytes-allocated and art.gc.gc-count"
+   }
+  }
+ }
+}

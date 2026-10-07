@@ -1,0 +1,322 @@
+[
+ {
+  "run": "C:\\Users\\kazda\\kiro\\deathride-raw-evidence\\p13f\\9d88747c\\step3",
+  "probeSeconds": 360.1065896,
+  "loggedGcs": 23,
+  "loggedBackgroundGcs": 23,
+  "losMBPerGc": [
+   9.98,
+   16.0
+  ],
+  "losMBTotal": 322.0,
+  "losMBps": 0.89,
+  "gapSeconds": [
+   3.5,
+   15.69,
+   49.4
+  ],
+  "totalMs": [
+   100.8,
+   288.6
+  ],
+  "runtime": {
+   "fromSecond": 3.7,
+   "toSecond": 357.1,
+   "allocatedMB": 1182.7,
+   "allocatedMBps": 3.35,
+   "gcCount": 47,
+   "gcPerMinute": 8.0,
+   "unit": "MB = 10^6 B, from art.gc.bytes-allocated and art.gc.gc-count"
+  },
+  "gcs": [
+   {
+    "kind": "Background young",
+    "freedMB": 3.71,
+    "losObjects": 42,
+    "losMB": 3.48,
+    "heapMB": 14,
+    "heapTotalMB": 20,
+    "pauseMs": 19.908,
+    "totalMs": 331.3,
+    "second": -34.88,
+    "doing": "before probe (startup, /routes warm-up)"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 2.61,
+    "losObjects": 137,
+    "losMB": 11.0,
+    "heapMB": 48,
+    "heapTotalMB": 72,
+    "pauseMs": 0.201,
+    "totalMs": 131.8,
+    "second": 12.68,
+    "doing": "race scrap-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.01,
+    "losObjects": 461,
+    "losMB": 16.0,
+    "heapMB": 48,
+    "heapTotalMB": 72,
+    "pauseMs": 0.364,
+    "totalMs": 103.4,
+    "second": 62.08,
+    "doing": "race scrap-1-c"
+   },
+   {
+    "kind": "Background young",
+    "freedMB": 9.34,
+    "losObjects": 473,
+    "losMB": 13.0,
+    "heapMB": 50,
+    "heapTotalMB": 72,
+    "pauseMs": 0.397,
+    "totalMs": 155.0,
+    "second": 70.07,
+    "doing": "race foundry-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 11.0,
+    "losObjects": 349,
+    "losMB": 10.0,
+    "heapMB": 50,
+    "heapTotalMB": 74,
+    "pauseMs": 0.106,
+    "totalMs": 102.9,
+    "second": 73.67,
+    "doing": "race foundry-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.39,
+    "losObjects": 454,
+    "losMB": 15.0,
+    "heapMB": 50,
+    "heapTotalMB": 74,
+    "pauseMs": 0.164,
+    "totalMs": 130.4,
+    "second": 88.81,
+    "doing": "race foundry-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 9.34,
+    "losObjects": 499,
+    "losMB": 14.0,
+    "heapMB": 50,
+    "heapTotalMB": 74,
+    "pauseMs": 0.149,
+    "totalMs": 102.1,
+    "second": 106.12,
+    "doing": "race foundry-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.11,
+    "losObjects": 451,
+    "losMB": 15.0,
+    "heapMB": 50,
+    "heapTotalMB": 74,
+    "pauseMs": 0.101,
+    "totalMs": 120.3,
+    "second": 122.11,
+    "doing": "race foundry-1-c"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 10.0,
+    "losObjects": 441,
+    "losMB": 12.0,
+    "heapMB": 50,
+    "heapTotalMB": 74,
+    "pauseMs": 0.098,
+    "totalMs": 134.1,
+    "second": 137.23,
+    "doing": "race salt-1-b"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 7.02,
+    "losObjects": 406,
+    "losMB": 15.0,
+    "heapMB": 52,
+    "heapTotalMB": 76,
+    "pauseMs": 3.783,
+    "totalMs": 288.6,
+    "second": 147.07,
+    "doing": "race salt-1-b"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 9.22,
+    "losObjects": 493,
+    "losMB": 14.0,
+    "heapMB": 52,
+    "heapTotalMB": 76,
+    "pauseMs": 0.174,
+    "totalMs": 123.0,
+    "second": 163.84,
+    "doing": "race salt-1-b"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.01,
+    "losObjects": 442,
+    "losMB": 16.0,
+    "heapMB": 52,
+    "heapTotalMB": 76,
+    "pauseMs": 0.087,
+    "totalMs": 100.8,
+    "second": 179.65,
+    "doing": "race salt-1-b"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 7.89,
+    "losObjects": 451,
+    "losMB": 16.0,
+    "heapMB": 52,
+    "heapTotalMB": 76,
+    "pauseMs": 0.088,
+    "totalMs": 122.2,
+    "second": 195.36,
+    "doing": "race salt-1-b"
+   },
+   {
+    "kind": "Background young",
+    "freedMB": 9.37,
+    "losObjects": 499,
+    "losMB": 14.0,
+    "heapMB": 53,
+    "heapTotalMB": 76,
+    "pauseMs": 3.252,
+    "totalMs": 136.3,
+    "second": 203.81,
+    "doing": "race switchback-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 12.0,
+    "losObjects": 330,
+    "losMB": 9.98,
+    "heapMB": 55,
+    "heapTotalMB": 79,
+    "pauseMs": 0.218,
+    "totalMs": 179.9,
+    "second": 207.31,
+    "doing": "race switchback-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.54,
+    "losObjects": 472,
+    "losMB": 16.0,
+    "heapMB": 54,
+    "heapTotalMB": 78,
+    "pauseMs": 0.801,
+    "totalMs": 102.4,
+    "second": 221.91,
+    "doing": "race switchback-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.32,
+    "losObjects": 448,
+    "losMB": 15.0,
+    "heapMB": 54,
+    "heapTotalMB": 78,
+    "pauseMs": 0.086,
+    "totalMs": 214.2,
+    "second": 238.99,
+    "doing": "race switchback-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.21,
+    "losObjects": 448,
+    "losMB": 15.0,
+    "heapMB": 54,
+    "heapTotalMB": 78,
+    "pauseMs": 0.103,
+    "totalMs": 121.1,
+    "second": 254.59,
+    "doing": "race switchback-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 10.0,
+    "losObjects": 490,
+    "losMB": 14.0,
+    "heapMB": 55,
+    "heapTotalMB": 79,
+    "pauseMs": 7.857,
+    "totalMs": 238.4,
+    "second": 270.88,
+    "doing": "race crown-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 7.04,
+    "losObjects": 400,
+    "losMB": 15.0,
+    "heapMB": 57,
+    "heapTotalMB": 81,
+    "pauseMs": 0.135,
+    "totalMs": 126.9,
+    "second": 279.44,
+    "doing": "race crown-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.25,
+    "losObjects": 447,
+    "losMB": 15.0,
+    "heapMB": 57,
+    "heapTotalMB": 81,
+    "pauseMs": 0.225,
+    "totalMs": 137.0,
+    "second": 296.17,
+    "doing": "race crown-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.02,
+    "losObjects": 450,
+    "losMB": 15.0,
+    "heapMB": 57,
+    "heapTotalMB": 81,
+    "pauseMs": 0.086,
+    "totalMs": 104.5,
+    "second": 311.86,
+    "doing": "race crown-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 8.97,
+    "losObjects": 491,
+    "losMB": 14.0,
+    "heapMB": 58,
+    "heapTotalMB": 82,
+    "pauseMs": 0.086,
+    "totalMs": 121.3,
+    "second": 328.54,
+    "doing": "race crown-1-a"
+   },
+   {
+    "kind": "Background",
+    "freedMB": 12.0,
+    "losObjects": 400,
+    "losMB": 12.0,
+    "heapMB": 57,
+    "heapTotalMB": 81,
+    "pauseMs": 0.336,
+    "totalMs": 118.7,
+    "second": 340.9,
+    "doing": "race scrap-1-c"
+   }
+  ]
+ }
+]
