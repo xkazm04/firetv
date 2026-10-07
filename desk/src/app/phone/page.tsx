@@ -5,14 +5,14 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
-import { ESSAY_TYPES } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, paragraphsOf } from "@/lib/rules/essay";
+import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
+import { essayFileProblem, essayTooLong, paragraphsOf, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
-import { forensicAt } from "@/tv/keys";
+import { forensicAt, planAt } from "@/tv/keys";
 import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
@@ -28,7 +28,7 @@ const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
 const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
-  headtohead: "head to head", essaytype: "Essay Master", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
+  headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
   topics: "Math Buddy's topics", prepare: "getting ready for school", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
@@ -170,6 +170,13 @@ export default function Phone() {
   // the TV is on one sentence of the paragraph: the Essay tab offers that sentence, the learner's own words, to rewrite
   const onSentence = s?.screen === "forensic" && s.essay?.sentences.length ? s.essay.sentences[forensicAt(s)] : null;
   const [rewrite, setRewrite] = useState("");
+  // the TV is on the plan: the Essay tab writes the slot its caret is on, one sentence, in the learner's own words
+  const onPlan = s?.screen === "essayplan" && s.essayPlan ? { i: planAt(s), plan: s.essayPlan, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]) } : null;
+  const [slotText, setSlotText] = useState("");
+  useEffect(() => { if (onPlan) setSlotText(onPlan.plan.slots[onPlan.i] ?? ""); }, [onPlan?.i, onPlan?.plan.slots[onPlan?.i ?? 0]]); // eslint-disable-line react-hooks/exhaustive-deps
+  const sendSlot = async () => { if (!onPlan) return; const r = planFill(onPlan.plan, onPlan.i, slotText); if (!r.ok) { setMsg(r.error); return; }
+    setBusy(true); setMsg("sending…");
+    try { const res = await post({ type: "essay.slot", i: onPlan.i, text: slotText }); setMsg(res.ok ? "on the TV" : "That did not reach the desk."); } catch { setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   useEffect(() => { if (onSentence) setRewrite(onSentence.text); }, [onSentence?.n, onSentence?.text]); // eslint-disable-line react-hooks/exhaustive-deps
   const sendRewrite = async () => { if (!onSentence) return; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
@@ -530,7 +537,13 @@ export default function Phone() {
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div>
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
-        {screen === "paste" && !onSentence && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
+        {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
+          <div className="field"><textarea aria-label="Your sentence for this slot" value={slotText} onChange={(e) => setSlotText(e.target.value)} /></div>
+          {onPlan.plan.slots[onPlan.i] && planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i]) && <p data-role="essay-plan-fit">{planFit(onPlan.slots, onPlan.i, onPlan.plan.slots[onPlan.i])}</p>}
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setSlotText(t))}>Dictate</button>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !slotText.trim()} onClick={sendSlot}>Send</button></div></div>}
+
+        {screen === "paste" && !onSentence && !onPlan && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
           <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads one paragraph at a time. Pick the lens, or pick it on the TV.</p>
           <div className="types" data-compact="true">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b></span></label>)}</div>
           <p style={{ fontSize: 14 }}>{ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>

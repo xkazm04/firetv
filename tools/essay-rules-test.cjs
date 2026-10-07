@@ -784,7 +784,7 @@ test('plan case 4: a phone-posted essay.slot fills the slot, moves focus to the 
  dispatch({type:'learner.set',id:'ema'});
  dispatch({type:'essay.slot',i:0,text:CLAIM});
  assert.equal(getSession().essayPlan,undefined,'no plan open: nothing to fill');
- dispatch({type:'essay.plan',lens:'evidence'});
+ dispatch({type:'essay.plan',lens:'evidence'});dispatch({type:'nav',screen:'essayplan',focus:0});
  assert.deepEqual(getSession().essayPlan,{lens:'evidence',slots:['','','']});
  dispatch({type:'essay.slot',i:1,text:EVID});
  let s=getSession();

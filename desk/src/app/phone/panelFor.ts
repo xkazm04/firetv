@@ -40,6 +40,8 @@ function cueFor(s: Seen): Cue | null {
     }
     // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
     case "essaytype": case "forensic": return { panel: "paste", key: sc };
+    // "Say it on the phone": one sentence per slot of the plan, written on the Essay tab
+    case "essayplan": return { panel: "paste", key: sc };
     // "Say one sentence on your phone": the sentence screen with nothing to check yet (Linga's Sentence help)
     case "sentence": return s.english ? null : { panel: "say", key: "sentence:empty" };
     // "circle on the phone" (a paused lesson): no phone panel circles a lesson frame, so the phone stays

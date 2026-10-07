@@ -14,7 +14,7 @@ import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
 import { addHistory, getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
-import { LESSONS } from "../library/lessons.data";
+import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
@@ -22,12 +22,12 @@ import { mathsEntry } from "../rules/digest";
 import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
-import type { Fix, Sentence, Was } from "../rules/essay";
+import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
 import type { Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -238,6 +238,8 @@ export interface Session {
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
   /** The sentence (its number) the forensic page is about; null for the default, the first faulty one. */
   essayAt?: number | null;
+  /** The paragraph being written from the Paragraph pattern, one sentence per slot (rules/essay Plan); absent until a plan is opened. */
+  essayPlan?: Plan;
   englishLearning: EnglishLearning; conversation: Conversation | null;
   /** finding the level and agreeing the topics, while it is under way */
   check: LevelCheck | null;
@@ -283,6 +285,8 @@ export type Event =
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
   | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
+  | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
@@ -318,12 +322,14 @@ export interface MathsSlot {
   tasks: Task[];
   /** Essay Master's: the paragraph on the desk, the lens chosen for it, and the sentence the forensic page is on. Optional so a slot saved before they existed still loads. */
   essay?: EssayAnalysis | null; essayType?: string | null; essayAt?: number | null;
+  /** The plan on the desk; optional so a slot saved before it existed still loads. */
+  essayPlan?: Plan;
 }
-const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null });
+const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [], essay: null, essayType: null, essayAt: null, essayPlan: undefined });
 const slotOf = (s: Session): MathsSlot => ({ pages: s.pages, pageIx: s.pageIx, itemIx: s.itemIx, reading: s.reading, hint: s.hint, lesson: s.lesson, noLesson: s.noLesson, lessonPaused: s.lessonPaused,
   topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [],
-  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null });
-const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType;
+  essay: s.essay ?? null, essayType: s.essayType ?? null, essayAt: s.essayAt ?? null, essayPlan: s.essayPlan });
+const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length && !x.essay && !x.essayType && !x.essayPlan?.slots.some(Boolean);
 /** A slot onto the session's fields; the log keeps the desk's clock (minutes, started), which is the evening's, not a learner's. */
 function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
@@ -437,7 +443,7 @@ export function fresh(): Session {
  * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
-  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
+  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
   "walk", "practice.clear", "session.end"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
@@ -515,6 +521,12 @@ export function reduce(s: Session, e: Event): Session {
     // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
       n.focus = focusAfterRewrite(e.analysis, e.n, s.screen === "forensic" ? s.focus : 0); n.screen = "forensic"; break;
+    // the plan opens empty on a lens (a plan with sentences in it keeps them: the learner's words are never thrown away by pressing OK again)
+    case "essay.plan": n.essayPlan = s.essayPlan?.slots.some(Boolean) ? { ...s.essayPlan, lens: e.lens } : { lens: e.lens, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]).map(() => "") };
+      n.essayType = e.lens; n.subject = "essay"; break;
+    // a refused sentence changes nothing but the status line; a written one moves the caret to the first empty slot (or Read it)
+    case "essay.slot": { if (!s.essayPlan) break; const r = planFill(s.essayPlan, e.i, e.text); if (!r.ok) { n.status = r.error; break; }
+      n.essayPlan = r.plan; if (s.screen === "essayplan") { const open = r.plan.slots.findIndex((x) => !x); n.focus = open < 0 ? r.plan.slots.length : open; } break; }
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
     // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch

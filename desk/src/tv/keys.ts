@@ -7,7 +7,7 @@
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
-import { rewriteState } from "@/lib/rules/essay";
+import { planSlots, planText, rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
@@ -39,7 +39,7 @@ export interface Call { url: string; body: Record<string, unknown>; onFail?: Par
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
 
 /** Essay Master draws its own screens (essay/EssayTV.tsx, the Specimen design); the On Air shell steps aside for them. */
-export const ESSAY_SCREENS = ["essaytype", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
+export const ESSAY_SCREENS = ["essaytype", "essayplan", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
 export function essayOwns(s: Session): boolean { return (ESSAY_SCREENS as readonly Screen[]).includes(s.screen); }
 
 /** Linga draws and drives its own screens (english/LingaTV.tsx); the TV's map stays out of them. */
@@ -105,9 +105,25 @@ export function unitsFocus(s: Session): number { return Math.max(0, lessonStates
 export const TONIGHT_MENU = "Lessons";
 /** The lenses, straight from the library, top to bottom. */
 export const LENS_STOPS = ESSAY_TYPES;
-/** Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read. */
-export type LensStop = (typeof ESSAY_TYPES)[number] | "last";
-export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS]; }
+/**
+ * Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read - or, with
+ * nothing read yet, the way to start from the pattern (Down from the last lens): the plan.
+ */
+export type LensStop = (typeof ESSAY_TYPES)[number] | "last" | "plan";
+export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS, "plan"]; }
+
+/** The plan screen's stops, top to bottom: one per slot, then Read it and Back. Select on a slot asks for the sentence on the phone. */
+export type PlanStop = "slot" | "read" | "back";
+export function planStops(s: Session): PlanStop[] { return [...(s.essayPlan?.slots ?? []).map((): PlanStop => "slot"), "read", "back"]; }
+/** The slot the phone writes: the one the caret is on, else the first empty one (the caret is on Read it or Back), else the last. */
+export function planAt(s: Session): number {
+  const slots = s.essayPlan?.slots ?? [];
+  if (s.focus >= 0 && s.focus < slots.length) return s.focus;
+  const open = slots.findIndex((x) => !x);
+  return open < 0 ? Math.max(0, slots.length - 1) : open;
+}
+/** What Select on a slot says: the one thing to do next, on the phone. */
+export function planStatus(i: number): string { const sl = planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0])[i]; return sl ? `say or type slot ${i + 1}, ${sl.label}, on the phone` : "say or type the sentence on the phone"; }
 /** The lens the paragraph on the desk was read through, as a stop; the first lens when there is none. */
 export function readingLens(s: Session): number { return Math.max(0, LENS_STOPS.findIndex((t) => t.id === s.essay?.type)); }
 /** The playbook's four structures, straight from the library, top to bottom. */
@@ -335,13 +351,30 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (at === "last") {
       if (k === "left") o.focus(readingLens(s));
       if (k === "select") { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
-    } else {
+    } else if (at === "plan") {
+      if (k === "up") o.focus(LENS_STOPS.length - 1);
+      if (k === "select") { const lens = LENS_STOPS.find((t) => t.id === s.essayType) ?? LENS_STOPS[0]; o.ev({ type: "essay.plan", lens: lens.id }); o.nav("essayplan", 0, "essaytype"); }
+    } else if (at) {
+      if (k === "down" && stops.includes("plan") && stops.indexOf(at) === LENS_STOPS.length - 1) { o.focus(stops.indexOf("plan")); return; }
       if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
       if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
     if (k === "back") o.nav("landing", landingFocus(s, "essay"));
+  },
+  // the Paragraph's slots, written on the phone: Up/Down walk the slots, then Read it and Back; Read it reads only when all three are written
+  essayplan: (s, k, _, o) => {
+    const plan = s.essayPlan, stops = planStops(s), at = stopAt(stops, s.focus);
+    if (k === "back") { o.nav("essaytype", LENS_STOPS.length); return; }
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k !== "select") return;
+    if (at === "back") o.nav("essaytype", LENS_STOPS.length);
+    if (at === "slot") o.ev({ type: "status", text: planStatus(s.focus) });
+    if (at === "read" && plan && !running(s, "analyse")) {
+      const open = plan.slots.findIndex((x) => !x);
+      if (open >= 0) o.focus(open); else o.calls.push({ url: "/api/analyse", body: { kind: "essay", text: planText(plan), type: plan.lens } });
+    }
   },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
   forensic: (s, k, local, o) => {

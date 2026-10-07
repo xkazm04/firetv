@@ -640,8 +640,8 @@ test('plan case 5: Read it with all three written pushes one analyse call of the
  assert.deepEqual(g.calls,[],'no model call with a slot empty');
  assert.equal(focusAfter(gap,g),1,'the first empty slot');
  assert.equal(planStops(full).length,5,'three slots, Read it, Back');
- assert.deepEqual(tvKey(planned(W,{focus:4}),'select',LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}],'Back returns to the lens home');
- assert.deepEqual(tvKey(planned(W,{focus:1}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}]);
+ assert.deepEqual(tvKey(planned(W,{focus:4}),'select',LOCAL).events,[{type:'nav',screen:'essaytype',focus:4}],'Back returns to the lens home, on the plan');
+ assert.deepEqual(tvKey(planned(W,{focus:1}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:4}]);
  const walk=planned(['','',''],{focus:0});
  assert.equal(focusAfter(walk,tvKey(walk,'down',LOCAL)),1);
  assert.equal(focusAfter(walk,tvKey(walk,'up',LOCAL)),0,'Up on the first slot stays');
