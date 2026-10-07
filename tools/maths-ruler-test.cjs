@@ -22,18 +22,19 @@ const firstSecure=(topics,n)=>Object.fromEntries(topics.map((t,i)=>[t.id,i<n?'se
 
 // ---------------------------------------------------------------- 1. the school ruler is drawn as it was
 
-test('ruler model 1: N = 15 (the school path since W7 batch 3) - the small ruler keeps today\'s formulas; the big Topics ruler pans',()=>{
+test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) - the small ruler keeps today\'s formulas; the big Topics ruler pans',()=>{
  const {rulerModel,needleX,flagX,clampLabel,TRACK,PAD,MIN_SPAN,FOCUS_SPAN,STRIP_AFTER}=RR();
  assert.equal(TRACK,1728,'the ruler is the stage less its two 96 px safe margins');assert.equal(PAD,26,'26 px each end, the 52 px margins');
  // W5b put 'Add and subtract fractions' first in its own strand; W7 batch 1 made the Fractions strand four units; W7
  // batch 2 put the Decimals and percent strand after one-step equations; W7 batch 3 put Ratio and rates and Geometry and
  // data after it: fifteen topics, six strands (Equations twice).
- // (1728 - 52) / 15 = 111.7 px is under MIN_SPAN (288), so the big ruler pans as Calculus 1 does; past STRIP_AFTER (8)
+ // v2 M2b put Pythagoras' theorem and probability after the equations, a second Geometry and data strand: seventeen topics, seven strands.
+ // (1728 - 52) / 17 = 98.6 px (111.7 px at fifteen) is under MIN_SPAN (288), so the big ruler pans as Calculus 1 does; past STRIP_AFTER (8)
  // Tonight draws the strand strip, not the small ruler (tools/school-ruler-test.cjs draws it), so these formulas are the model's own
- const topics=school(),N=topics.length;assert.equal(N,15);assert.ok(N>STRIP_AFTER);
+ const topics=school(),N=topics.length;assert.equal(N,17);assert.ok(N>STRIP_AFTER);
  const span=(1728-26*2)/N;
- const STRANDS=['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data','Equations'],FROM=[0,4,5,9,11,13];
- assert.ok(span<MIN_SPAN,'fifteen boxes are narrower than the big ruler\'s minimum slot');
+ const STRANDS=['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data','Equations','Geometry and data'],FROM=[0,4,5,9,11,13,15];
+ assert.ok(span<MIN_SPAN,'seventeen boxes are narrower than the big ruler\'s minimum slot');
  for(let focus=0;focus<N;focus++){
   const m=rulerModel(topics,firstSecure(topics,1),focus,true);
   assert.equal(m.pan,true,`focus ${focus}: the Topics ruler pans`);assert.equal(m.topics[focus].sw,FOCUS_SPAN,'the focused slot is the wide one');
@@ -43,7 +44,7 @@ test('ruler model 1: N = 15 (the school path since W7 batch 3) - the small ruler
   for(const g of m.strands)assert.equal(g.label,clampLabel(g.name,g.labelW),`${g.name}: its label fits its strand`);
   assert.equal(needleX(m,1,0.5),m.topics[1].sx+0.5*m.topics[1].sw,'the needle is part way through its slot');
  }
- for(const big of [false])for(const focus of [undefined,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]){
+ for(const big of [false])for(const focus of [undefined,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]){
   const m=rulerModel(topics,firstSecure(topics,1),focus,big);
   assert.equal(m.span,span,'span = (1728 - 52) / N');
   assert.equal(m.trackWidth,1728);assert.equal(m.offset,0,'nothing to pan');assert.equal(m.pan,false);
@@ -58,7 +59,7 @@ test('ruler model 1: N = 15 (the school path since W7 batch 3) - the small ruler
   m.strands.forEach((g,i)=>{assert.equal(g.labelX,26+FROM[i]*span+20,`${g.name} starts at slot ${FROM[i]}`);assert.equal(g.label,clampLabel(g.name,g.labelW));});
   assert.equal(m.strands[0].label,'Fractions','the fractions strand over the first four slots, unclamped');
   for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1],[5,0.5],[6,1],[9,0.3],[10,1],[12,0.5],[14,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
-  for(const exp of [-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
+  for(const exp of [-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
  }
  assert.equal(rulerModel(topics,{},0,true).topics[1].state,'later','a topic with no state is later');
  assert.equal(rulerModel(topics,firstSecure(topics,1),0,true).topics[0].state,'secure');

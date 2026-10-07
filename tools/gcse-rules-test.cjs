@@ -34,9 +34,11 @@ test('every mapped topic is a school-path topic, and every school topic touches 
 test('coverage is computed by code from the topics given', () => {
   const all = G.gcseCoverage();
   assert.equal(all.touched.length + all.gaps.length, all.total);
-  assert.equal(all.touched.length, 19); assert(all.share < 0.25, 'an honest quarter: M2b fills the gaps');
+  // v2 M2b: Pythagoras' theorem (G20) and the probability of an event (P3, P4, P7) are touched now: 23 of 86, 27%
+  assert.equal(all.touched.length, 23); assert(all.share < 0.3, 'an honest quarter and a bit: M2b filled four of the gaps');
   assert.deepEqual(all.topics.A17, ['linear-one-step', 'linear-two-step', 'linear-both-sides']);
-  assert.equal(all.byArea.probability.touched, 0);
+  assert.equal(all.byArea.probability.touched, 3); assert.equal(all.byArea.geometry.touched, 3);
+  assert.deepEqual(all.topics.G20, ['pythagoras']); assert.deepEqual(all.topics.P4, ['probability']); assert.deepEqual(all.gaps.filter((c) => /^P/.test(c)), ['P1', 'P2', 'P5', 'P6', 'P8']);
   assert.equal(Object.values(all.byArea).reduce((a, b) => a + b.total, 0), all.total);
   const none = G.gcseCoverage([]); assert.equal(none.touched.length, 0); assert.equal(none.share, 0);
   const fr = G.gcseCoverage(['frac-of-amount', 'not-a-topic']); assert.deepEqual(fr.touched, ['N12']);

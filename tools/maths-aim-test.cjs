@@ -52,11 +52,11 @@ const heldOf=(id,topic)=>learners.getLearner(id).skills[topic]?.held;
 const made=(id,topic,slip)=>learners.recordAttempt(id,topic,false,slip);
 
 // ------------------------------------------------------------------ 1. the pure rules, pinned against check
-test('case 1: slipShows and slipValue are pinned against check(); 46 of 46 slips show on a drawn spec; another unit\'s slip and junk give false, never a throw',()=>{
+test('case 1: slipShows and slipValue are pinned against check(); 53 of 53 slips show on a drawn spec; another unit\'s slip and junk give false, never a throw',()=>{
  assert.equal(typeof S.slipShows,'function');assert.equal(typeof S.slipValue,'function');
- assert.equal(UNITS.length,12);
+ assert.equal(UNITS.length,14);
  const all=UNITS.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u].map((s)=>[u,s]));
- assert.equal(all.length,46);
+ assert.equal(all.length,53);
  const reached=new Set();
  for(const u of UNITS)for(let seed=0;seed<200;seed++)for(const tier of [1,2]){
   const spec=S.SCHOOL_GENERATORS[u](seed,tier);if(!spec)continue;
@@ -68,7 +68,7 @@ test('case 1: slipShows and slipValue are pinned against check(); 46 of 46 slips
    assert.equal(v.slip,slip,`${u} ${spec.expr}: check names ${v.slip}, not ${slip}`);
   }
  }
- assert.deepEqual(all.map(([,s])=>s).filter((s)=>!reached.has(s)),[],'every one of the 46 slips shows on at least one drawn spec');
+ assert.deepEqual(all.map(([,s])=>s).filter((s)=>!reached.has(s)),[],'every one of the 53 slips shows on at least one drawn spec');
  for(const s of ['ratio-split-each','ratio-as-amounts','ratio-by-difference'])assert.ok(reached.has(s),`${s} is a checkRatio pair and shows`);
  // another unit's slip, an unknown id, junk specs: false, no throw
  const frac=S.SCHOOL_GENERATORS['frac-add-sub'](3,1),dec=S.SCHOOL_GENERATORS['dec-arith'](3,1);

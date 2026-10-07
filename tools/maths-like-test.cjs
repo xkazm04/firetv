@@ -79,7 +79,7 @@ test('case 1: likeTopic reads the unit of a printed task, on the learner\'s path
  assert.equal(typeof K.likeTopic,'function','likeTopic is exported by rules/kinds.ts');
  assert.equal(K.likeTopic(FRAC,'school'),'frac-add-sub');
  assert.equal(K.likeTopic('Work out 3/4 - 1/6','school'),'frac-add-sub');
- assert.equal(UNITS.length,12);
+ assert.equal(UNITS.length,14);
  for(const unit of UNITS)for(let seed=0;seed<20;seed++)for(const tier of [1,2]){
   const spec=S.SCHOOL_GENERATORS[unit](seed,tier);if(!spec)continue;
   const q=S.question(spec).plain;

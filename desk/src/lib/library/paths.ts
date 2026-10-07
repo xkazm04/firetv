@@ -42,7 +42,7 @@ export const PATHS: Record<MathPath, PathInfo> = {
   school: {
     id: "school",
     name: "School maths",
-    blurb: "School maths from equivalent fractions to equations with brackets and x on both sides.",
+    blurb: "School maths from equivalent fractions through equations to Pythagoras' theorem and the probability of an event.",
     school: true,
     topics: SYLLABUS.map((t): PathTopic => ({
       id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq,

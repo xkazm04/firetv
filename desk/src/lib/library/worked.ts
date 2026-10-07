@@ -31,6 +31,10 @@ export const WORKED_METHODS: Readonly<Record<string, WorkedMethod>> = {
     steps: ["Rectangle: multiply the two sides", "Triangle: base times height, then halve", "Composite: split into rectangles and add"] },
   "mean-range": { idea: "The mean shares the total out equally. The range is the gap between the biggest and the smallest.",
     steps: ["Mean: add all the values", "Divide by how many values there are", "Range: biggest take away smallest"] },
+  "pythagoras": { idea: "In a right-angled triangle, the square of the longest side equals the squares of the other two sides added together.",
+    steps: ["Square the two sides you know", "Longest side: add them. A shorter side: take the smaller from the bigger", "Take the square root"] },
+  "probability": { idea: "A probability says how likely something is: the ways it can happen over all the equally likely outcomes, from nothing up to a whole.",
+    steps: ["Count the outcomes you want", "Count all the outcomes", "Write the first over the second. Not happening: take it from a whole"] },
 };
 
 /** Is this a unit with a worked lesson (a code-generated school unit)? */

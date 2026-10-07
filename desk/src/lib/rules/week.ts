@@ -56,6 +56,8 @@ export const DO_IT: Readonly<Record<string, string>> = {
   "unit-rate": "Compare the price per kilo of two packs of the same food.",
   "area": "Measure a rug together and work out its area.",
   "mean-range": "Time a few walks to school and work out the mean and the range.",
+  "pythagoras": "Lean a plank on a wall and ask how long it must be.",
+  "probability": "Put coloured sweets in a bag and ask the chance of pulling red.",
   "linear-two-step": "Think of a number, double it, add three, and let them find your number.",
   "linear-both-sides": "Ask when two plans, each a fee plus a monthly charge, cost the same.",
 };

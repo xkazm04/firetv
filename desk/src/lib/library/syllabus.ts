@@ -33,6 +33,13 @@
  * every system's year is fixed, so all four take US 7, UK 8, CZ 7, DE 6 - the one place where the strands stay whole
  * bars (earlier, mean and range would come before the decimals it needs; after two-step equations the Equations strand
  * would split again and no year would be earlier). Each unit's comment says where that is later or earlier than usual.
+ *
+ * v2 M2b adds the first two units beyond the school path's old end, both with generators: "Pythagoras' theorem" and
+ * "Probability of an event", seventeen topics, after the equations with brackets, both in the "Geometry and data" strand
+ * (which now appears twice, as Equations does: the bar after the equations is a second "Geometry and data" bar). The
+ * topics are mapped to Foundation-tier statements in lib/library/gcse.ts, a map that is unverified and makes no claim
+ * (owner decision X5). Years are written from memory and a teacher must check them; where a usual year is held later
+ * to keep the list from going down, the comment on the unit says so. None has a lessonId.
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -248,6 +255,31 @@ export const SYLLABUS: Topic[] = [
     year: { us: 8, uk: 9, cz: 8, de: 7 },
     prereq: ["linear-two-step"],
     lessonId: "bAerID24QJ0",
+  },
+  {
+    id: "pythagoras",
+    name: "Pythagoras' theorem",
+    strand: "Geometry and data",
+    blurb: "In a right-angled triangle the square of the longest side is the sum of the squares of the other two, which finds a missing side when the other two are known.",
+    // from memory, unchecked: a teacher reads these four before release. US Grade 8 (the theorem and its use for a missing
+    // side), UK Year 9 (often Year 8 or 10), CZ 8. ročník (Pythagorova věta), DE Klasse 8 (Satz des Pythagoras, Klasse 8 or 9
+    // by Bundesland). All four sit at or after equations with brackets (8 / 9 / 8 / 7), so none is held later than usual.
+    bands: { us: "Grade 8", uk: "Year 9", cz: "8. ročník", de: "Klasse 8–9 (varies by Bundesland)" },
+    year: { us: 8, uk: 9, cz: 8, de: 8 },
+    prereq: ["area"],
+  },
+  {
+    id: "probability",
+    name: "Probability of an event",
+    strand: "Geometry and data",
+    blurb: "The probability of an event is the number of ways it can happen over all the equally likely outcomes, a fraction from nothing to a whole, and the chance it does not happen is what is left of the whole.",
+    // from memory, unchecked: a teacher reads these four before release. HELD LATER THAN USUAL in three systems to keep the
+    // list from going down after Pythagoras (8 / 9 / 8 / 8): US Grade 8 (usually Grade 7), UK Year 9 (usually Year 8; the
+    // Foundation single-event work is Year 10 to 11), DE Klasse 8 (usually Klasse 7, often earlier in Bundesland courses).
+    // CZ 9. ročník is the usual year (pravděpodobnost), not held.
+    bands: { us: "Grade 8", uk: "Year 9", cz: "9. ročník", de: "Klasse 8 (varies by Bundesland)" },
+    year: { us: 8, uk: 9, cz: 9, de: 8 },
+    prereq: ["frac-equivalent", "dec-convert"],
   },
 ];
 

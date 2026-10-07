@@ -423,8 +423,8 @@ test('path 1: on the calc1 path the states are the Calculus topics - a latched c
 test('path 2: a record off the learner\'s path is ignored - calc1 on a school profile, school on a calc1 profile',()=>{
  const {topicStates}=R();
  const school=topicStates(onPath(SCHOOL,{'calc1-functions':rec('calc1-functions',0.9,true)}));
- const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides'];
- assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step; W7 batch 3: ratio and rates, geometry and data');
+ const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability'];
+ assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step; W7 batch 3: ratio and rates, geometry and data; v2 M2b: Pythagoras and probability last');
  assert.equal(school['linear-one-step'],'next');assert.equal(school['frac-equivalent'],'next');assert.equal(school['frac-of-amount'],'next');
  // W7: add and subtract, and multiply and divide, need equivalent fractions first, so they wait
  assert.equal(school['frac-add-sub'],'later');assert.equal(school['frac-mul-div'],'later');assert.ok(!('calc1-functions' in school));
@@ -466,7 +466,7 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
  assert.equal(title(onPath(SCHOOL,seven)),'School maths, from the first step','calc1 records on a school profile count for nothing');
- assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 15 topics secure','W7 batch 3: the school path has fifteen topics');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 17 topics secure','v2 M2b: the school path has seventeen topics (fifteen since W7 batch 3)');
  assert.equal(title({skills:{}}),'School maths, from the first step','no learner: the school path');
 });
 
@@ -533,11 +533,11 @@ test('W8 prepare 1: the units grouped by strand - strands in the order the path 
  assert.deepEqual(g.map((x)=>x.strand),['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data']);
  assert.deepEqual(g.map((x)=>x.units.map((u)=>u.id)),[
   ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'],['linear-one-step','linear-two-step','linear-both-sides'],
-  ['dec-arith','dec-convert','pct-of-amount','pct-change'],['ratio-share','unit-rate'],['area','mean-range']]);
+  ['dec-arith','dec-convert','pct-of-amount','pct-change'],['ratio-share','unit-rate'],['area','mean-range','pythagoras','probability']]);
  const ids=prepareStops(onW8({})).map((u)=>u.id);
  assert.deepEqual([...ids].sort(),P.topicsOf('school').map((t)=>t.id).sort(),'every school unit, once');
  assert.deepEqual(prepareGroups(onW8({mathPath:'calc1',type:'other',age:19})),[]);assert.deepEqual(prepareStops(onW8({mathPath:'calc1'})),[]);
- assert.equal(prepareStops({skills:{}}).length,15,'no learner: the school path');
+ assert.equal(prepareStops({skills:{}}).length,17,'no learner: the school path');
 });
 
 test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year, ročník, Klasse - from its year in their system',()=>{
@@ -557,21 +557,21 @@ test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card u
  const {prepareGroups,prepareModel,WINDOW,CARD,CARD_GAP,GROUP_GAP,EDGE}=PR();
  const g=prepareGroups(onW8({}));
  const m0=prepareModel(g,0);
- assert.equal(m0.cards.length,15);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
- assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'fifteen cards pan');
+ assert.equal(m0.cards.length,17);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
+ assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'seventeen cards pan');
  // a strand break is wider than a card gap; strand headings span their cards
  assert.equal(m0.cards[4].x-(m0.cards[3].x+CARD),GROUP_GAP,'Fractions to Equations');assert.equal(m0.cards[2].x-(m0.cards[1].x+CARD),CARD_GAP);
  m0.strands.forEach((s,i)=>{const cs=m0.cards.filter((c)=>c.group===i);assert.equal(s.x,cs[0].x);assert.equal(s.w,cs.at(-1).x+CARD-cs[0].x);});
- for(let f=0;f<15;f++){
+ for(let f=0;f<17;f++){
   const m=prepareModel(g,f),c=m.cards[f];
   assert.ok(m.offset>=0&&m.offset<=m.trackWidth-WINDOW,`${f}: clamped`);
   assert.ok(c.x-m.offset>=0&&c.x+c.w-m.offset<=WINDOW,`${f}: the focused card is on the stage`);
   if(m.offset>0&&m.offset<m.trackWidth-WINDOW)assert.equal(c.x+c.w/2-m.offset,WINDOW/2,`${f}: under the lamp`);
  }
- const last=prepareModel(g,14);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
+ const last=prepareModel(g,16);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
  // a strand heading: at its strand's start, or - when the strand starts off the stage - kept past the left fade while it fits over its cards
  const {FADE,HEAD_CH}=PR();
- for(let f=0;f<15;f++){const m=prepareModel(g,f);for(const s of m.strands){
+ for(let f=0;f<17;f++){const m=prepareModel(g,f);for(const s of m.strands){
   assert.ok(s.labelX>=s.x&&s.labelX<=s.x+s.w,`${f} ${s.strand}: over its cards`);
   if(m.offset===0)assert.equal(s.labelX,s.x);
   else if(s.x<m.offset+FADE&&s.x+s.w-s.strand.length*HEAD_CH>=m.offset+FADE)assert.equal(s.labelX,m.offset+FADE,`${f} ${s.strand}: kept on the stage`);
@@ -608,7 +608,7 @@ test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topic
  const P=require(path.join(root,'src/lib/library/paths.ts'));
  const SCHOOL=P.topicsOf('school'),st=Object.fromEntries(SCHOOL.map((t)=>[t.id,t.id==='frac-add-sub'?'secure':'later']));
  const plain=RR.stripModel(SCHOOL,st,true),up=RR.stripModel(SCHOOL,st,true,(id)=>['area','ratio-share','unit-rate','frac-equivalent'].includes(id));
- assert.deepEqual(up.segments.map((g)=>[g.name,g.stretch,g.stretchShare]),[['Fractions',1,0.25],['Equations',0,0],['Decimals and percent',0,0],['Ratio and rates',2,1],['Geometry and data',1,0.5],['Equations',0,0]]);
+ assert.deepEqual(up.segments.map((g)=>[g.name,g.stretch,g.stretchShare]),[['Fractions',1,0.25],['Equations',0,0],['Decimals and percent',0,0],['Ratio and rates',2,1],['Geometry and data',1,0.5],['Equations',0,0],['Geometry and data',0,0]]);
  assert.deepEqual(plain.segments.map((g)=>[g.stretch,g.stretchShare]),plain.segments.map(()=>[0,0]),'no step-up record: nothing to draw');
  const strip=(m)=>m.segments.map(({stretch,stretchShare,...rest})=>rest);
  assert.deepEqual(strip(up),strip(plain),'the bars, their ink, labels and the needle are the usual record\'s alone');assert.deepEqual(up.needle,plain.needle);

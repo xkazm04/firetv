@@ -311,8 +311,8 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
 });
 
 // ------------------------------------------------------------------ W7: the three units on the path, and the route that writes their sets
-test('W7 1: the school path has fifteen topics since W7 batch 3 - four fractions units, one-step, the decimals and percent strand, ratio and rates, geometry and data, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
- assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);
+test('W7 1: the school path has seventeen topics since v2 M2b (fifteen since W7 batch 3) - four fractions units, one-step, the decimals and percent strand, ratio and rates, geometry and data, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
+ assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability']);
  const want={
   'frac-equivalent':['Equivalent fractions',[],{us:4,uk:5,cz:5,de:5}],
   'frac-of-amount':['A fraction of an amount',[],{us:5,uk:5,cz:5,de:5}],
@@ -326,7 +326,7 @@ test('W7 1: the school path has fifteen topics since W7 batch 3 - four fractions
   assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');
   assert.equal(SYLLABUS.find((x)=>x.id===id).bands.us.startsWith('Grade '),true);
  }
- assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions to equations with brackets and x on both sides.');
+ assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions through equations to Pythagoras\' theorem and the probability of an event.');
 });
 
 // ------------------------------------------------------------------ Family W7 batch 2: decimals and percent, written by code
@@ -566,4 +566,42 @@ test('W7c 1: the four batch-3 units are on the school path after the percent uni
   assert.equal(P.topicIn(S.unitOf(spec)).id,id);
  // every school unit has a generator now: the path's only topics left to the model are the three linear ones
  assert.deepEqual(order.filter((id)=>!S.generatorFor(id)),['linear-one-step','linear-two-step','linear-both-sides']);
+});
+
+// ------------------------------------------------------------------ v2 M2b: Pythagoras' theorem and the probability of an event join the path
+test('M2b 1: the path grows by two units after the equations - their names, strand, years (from memory, a teacher checks), honest prerequisites, no lesson, a generator, a worked method and an act; no learner-visible string names the exam',()=>{
+ const {hasWorked,WORKED_METHODS}=require(src('lib/library/worked.ts'));
+ const {DO_IT}=require(src('lib/rules/week.ts'));
+ const order=P.topicsOf('school').map((t)=>t.id);
+ assert.deepEqual(order.slice(-3),['linear-both-sides','pythagoras','probability']);
+ const want={
+  'pythagoras':["Pythagoras' theorem",['area'],{us:8,uk:9,cz:8,de:8}],
+  'probability':['Probability of an event',['frac-equivalent','dec-convert'],{us:8,uk:9,cz:9,de:8}],
+ };
+ for(const [id,[name,prereq,year]] of Object.entries(want)){
+  const t=P.topicIn(id),row=SYLLABUS.find((x)=>x.id===id);
+  assert.equal(t.name,name);assert.equal(t.strand,'Geometry and data');assert.deepEqual(t.prereq,prereq,`${id}: prerequisites`);assert.deepEqual(t.year,year,`${id}: years`);
+  assert.ok(!('lessonId' in t),`${id}: no lesson in the library`);
+  assert.ok(row.bands.us.startsWith('Grade ')&&row.bands.uk.startsWith('Year ')&&/ročník/.test(row.bands.cz)&&/^Klasse/.test(row.bands.de),`${id}: bands`);
+  assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${id}: one sentence`);assert.doesNotMatch(t.blurb,/\d/,`${id}: no number in the blurb`);
+  assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');assert.ok(S.SCHOOL_UNIT_SLIPS[id].length>=3);
+  assert.ok(hasWorked(id));assert.equal(WORKED_METHODS[id].steps.length,3);assert.ok(DO_IT[id]);
+  assert.doesNotMatch([t.name,t.blurb,...Object.values(row.bands),WORKED_METHODS[id].idea,...WORKED_METHODS[id].steps,DO_IT[id],S.SCHOOL_WITHHELD[id]].join(' '),/GCSE|1MA1|Edexcel|certified/i,`${id}: no exam named`);
+  // a set is written by code: six distinct questions over the two tiers, none naming the exam, each its unit's own, every spec well formed
+  for(const seed of [0,1,7,99,0xffffffff]){
+   const set=makeSchoolItems(id,6,seed);
+   assert.equal(set.provider,'code');assert.equal(set.items.length,6,`${id} seed ${seed}`);
+   assert.equal(new Set(set.items.map((i)=>i.question)).size,6,'six distinct questions');
+   assert.deepEqual(set.items.map((i)=>i.tier),[1,1,1,2,2,2]);
+   for(const it of set.items){assert.equal(S.unitOf(it.spec),id);assert.deepEqual(S.wellFormed(it.spec),{ok:true});assert.doesNotMatch(it.question,/GCSE|1MA1|Edexcel/i);assert.equal(S.check(it.spec,S.workedAnswer(it.spec,'uk'),'uk').verdict,'right');}
+  }
+ }
+ // every generated unit but the three linear ones is on the path with its generator, as before
+ assert.deepEqual(order.filter((id)=>!S.generatorFor(id)),['linear-one-step','linear-two-step','linear-both-sides']);
+ assert.equal(Object.keys(S.SCHOOL_GENERATORS).length,14);
+ // the gap years: probability is held later than usual in us, uk and de, to keep the list from going down (the unit's comment says so)
+ const prob=SYLLABUS.find((x)=>x.id==='probability'),pyth=SYLLABUS.find((x)=>x.id==='pythagoras'),both=SYLLABUS.find((x)=>x.id==='linear-both-sides');
+ for(const k of ['us','uk','cz','de']){assert.ok(pyth.year[k]>=both.year[k]&&prob.year[k]>=pyth.year[k],`${k}: the list never goes down`);}
+ const src2=fs.readFileSync(src('lib/library/syllabus.ts'),'utf8');
+ assert.match(src2,/HELD LATER THAN USUAL in three systems/);assert.match(src2,/a teacher reads these four before release/);
 });

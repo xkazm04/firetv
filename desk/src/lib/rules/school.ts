@@ -2806,7 +2806,8 @@ export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
- * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area, mean and range). A topic not here is written as
+ * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area, mean and range; v2 M2b: Pythagoras' theorem and
+ * probability, once their sweep passed). A topic not here is written as
  * it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
@@ -2822,6 +2823,8 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "unit-rate": (seed, tier) => genRate(seed, tier),
   "area": (seed, tier) => genArea(seed, tier),
   "mean-range": (seed, tier) => genStat(seed, tier),
+  // v2 M2b: the units that passed the sweep (tools/gcse-units-test.cjs); a unit that fails stays out of GCSE_GENERATORS' spread here
+  ...GCSE_GENERATORS,
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>

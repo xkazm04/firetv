@@ -80,7 +80,7 @@ test('2: topic.open for calc1-chain on a calc1 learner focuses index 9; a school
 });
 
 // ---- the keys walk the learner's path ----
-test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 15 on the school path',()=>{
+test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 17 on the school path',()=>{
  const {tvKey,topicStops,TOPIC_STOPS}=keys();
  assert.equal(TOPIC_STOPS,SYLLABUS,'TOPIC_STOPS stays the school syllabus for the existing tests');
  let s=session(CALC_P,{screen:'topics',focus:0});
@@ -93,12 +93,12 @@ test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the la
  assert.deepEqual(sel.calls.map((c)=>c.body),[{topic:'calc1-area-average'}]);
  let sc=session(SCHOOL_P,{screen:'topics',focus:0});
  // W5b: 'Add and subtract fractions' joined the school path first; W7 batch 1 added three more fractions units; W7 batch 2
- // the four decimals and percent units; W7 batch 3 ratio and rates and geometry and data: 15 stops
- assert.equal(topicStops(sc).length,15,'a school learner has 15 stops');
- for(let i=0;i<16;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
- assert.equal(sc.focus,14);
- assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[14].id}]);
- assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,15,'no mathPath is the school path');
+ // the four decimals and percent units; W7 batch 3 ratio and rates and geometry and data: 15 stops; v2 M2b Pythagoras and probability: 17
+ assert.equal(topicStops(sc).length,17,'a school learner has 17 stops');
+ for(let i=0;i<18;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
+ assert.equal(sc.focus,16);
+ assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[16].id,stay:true}],'the last stop is now a unit with a generator: Select writes its set and stays on Topics');
+ assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,17,'no mathPath is the school path');
 });
 
 test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure on Calculus 1; 0 with nothing secure on school',()=>{

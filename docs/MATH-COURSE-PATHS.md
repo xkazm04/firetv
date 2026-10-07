@@ -3,8 +3,8 @@
 **Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`; the tests table also
 covers `a7ef54e`). A learner in Math Buddy is
 on one Math course, a **path**: the school path, **School maths** (four fractions units since Family W7 batch 1, linear
-equations, the decimals and percent strand since W7 batch 2, and ratio and rates and geometry and data since W7
-batch 3: fifteen topics, with school-year bands), or Calculus 1 (a
+equations, the decimals and percent strand since W7 batch 2, ratio and rates and geometry and data since W7
+batch 3, and Pythagoras' theorem and the probability of an event since v2 M2b: seventeen topics, with school-year bands), or Calculus 1 (a
 university first course, with no school year). This page says what a path is, why Calculus is one, how a Calculus
 item is decided in code, how the answer is withheld, and what it takes to add another path. Every number on it was
 measured from the code or a test run named beside it. To recheck a line, open the file it cites.
@@ -35,7 +35,7 @@ strand, a blurb, its prerequisites (earlier topics of the same path) and, on the
 
 | path | name | topics | `school` | built from |
 |---|---|---|---|---|
-| `school` | School maths | 15 in five strands, six bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, with their US/UK/CZ/DE years |
+| `school` | School maths | 17 in five strands, seven bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations, Geometry and data) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, then Pythagoras' theorem and Probability of an event (v2 M2b, section 2f), with their US/UK/CZ/DE years |
 | `calc1` | Calculus 1 | 22 in six strands | false | `CALC1_SPINE`; no topic has a year |
 
 Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 37 ids, none in two paths), so
@@ -277,6 +277,45 @@ record with nothing seen, which every screen reads as not started. `cleanSkills`
 `right` at most `seen`, the estimate in 0..1, `secure` only when `true`) and drops junk; an older learners.json loads
 unchanged. The history line and the recap are the same as for a usual set ("5 of 6 right", never a point). The TV
 draws a latched step-up record as a second ink line (`docs/DESIGN-MATH-BUDDY.md`), never as a number.
+
+### 2f. Beyond the equations: Pythagoras' theorem and the probability of an event (v2 M2b)
+
+Two units join the school path after the equations with brackets, both in the "Geometry and data" strand (which now
+appears twice, as Equations does): **Pythagoras' theorem** (`pythagoras`) and **Probability of an event** (`probability`).
+Each is its own shape, set and marked by code with no model call, and passed a kill test before it joined
+(`tools/gcse-units-test.cjs`: 500 seeds a tier, tiers 1 and 2, systems uk us cz de, counting specs not well formed,
+specs not fair, worked answers `check` does not mark right, and per slip the seeds where it is reachable and detected;
+all zero and all detected, section j of the v2 plan has the table). The units are mapped, in `lib/library/gcse.ts`, to the
+Foundation-tier statements G20 (the Pythagoras part only) and P3, P4, P7; that map is unverified and no screen says more
+than "mapped to" (owner decision X5).
+
+| unit (id) | shape (`rules/school.ts`) | generator | tier 1 | tier 2 | closed slips (`SCHOOL_UNIT_SLIPS`) |
+|---|---|---|---|---|---|
+| Pythagoras' theorem (`pythagoras`) | `pythagoras` "longest 6 8" (the shorter sides given) or "shorter 10 6" (the longest and a shorter side given), `unit` mm, cm or m; all three sides whole, at most 100; the truth is a bigint integer square root | `genPythagoras` | the longest side from the two shorter, the longest at most 50 | a shorter side from the longest and the other shorter, the longest at most 100 | `pyth-sides-added`, `pyth-no-root`, `pyth-squares-added` (a shorter side only) |
+| Probability of an event (`probability`) | `probability` "bag red 3, blue 5, green 2 ask red" (also "ask not red", "ask red or blue"; two to four colours from nine, at most 20 counters) or "complement red 0.35" / "complement red 35%"; no unit; 0 and 1 are not well formed | `genProbability` | a named colour of a bag of two to four colours | by the seed: NOT a colour, either of two colours, or the complement of a stated decimal or percent | `prob-count-alone`, `prob-part-over-rest`, `prob-one-over-colours`, `prob-own` (a NOT question or a stated probability) |
+
+- **Verdicts.** Pythagoras: the number alone or with its own length unit is right in any equal form; another unit, a
+  percent, a ratio and words are unsure. Probability: any equal value is right, a fraction (unsimplified too), a decimal in
+  the system's mark, a percent; a ratio (5:10), words ("3 out of 10") and a unit are unsure; a value outside 0 to 1 is
+  wrong. A slip is used only where its value differs from the answer and from every other slip (three equal colours: one
+  over the colours IS the answer; a bag of 3 red and 1 blue: the count and the part over the rest are both 3).
+- **A slip dropped.** "Squares added instead of subtracted" for a shorter side, with the root taken, is irrational on every
+  item and has no exact value; only the unrooted value (c squared plus b squared) is listed.
+- **Leak check.** The side or probability in any form; the squares, their sum or difference, the counts and the total are
+  steps and pass; "1 less the event's probability" and "the two events added" are the method and pass, their results are
+  refused.
+- **Task reader.** "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." (also "longest side 10
+  cm and a shorter side 6 cm ... Find the other shorter side"), "A bag has 3 red, 5 blue and 2 green counters. Find the
+  probability that one taken at random is red." (also "is not red", "is red or blue"), "The probability that a spinner lands
+  on red is 0.35. What is the probability it does not land on red?".
+- **On the TV.** The sentences are longer than the earlier rows (about 80 to 110 characters): the sheet fits them down to
+  the 28 px floor and wraps a row that is still too wide (the owner's captures are owed). The typesetter keeps a hyphen
+  between two words ("right-angled") as a hyphen.
+- **Years** (from memory, a teacher checks): Pythagoras US 8, UK 9, CZ 8, DE 8, none held later than usual; probability US
+  8 (usually 7), UK 9 (usually 8), CZ 9, DE 8 (usually 7): held later in three systems to keep the list from going down.
+  A UK 13-year-old's SCHOOL tick now stands after all 17; a 12-year-old's after 14 (US, UK, CZ) or 15 (DE).
+- **The ruler.** Seventeen topics make the strip seven bars (370, 189, 369, 189, 185, 189, 185 px): three bars are held
+  at 189 px by their labels, every label whole in at most two lines ("Decimals and / percent" is two lines now).
 
 ## 3. The spec model
 

@@ -185,10 +185,12 @@ test('the syllabus is a path: unique ids, prereqs that point back along it, less
  // W7 batch 2: the "Decimals and percent" strand after one-step equations, the one place every system's years allow
  // W7 batch 3: "Ratio and rates" and "Geometry and data" after the percent units and before two-step equations, where every
  // system's year is fixed (US 7, UK 8, CZ 7, DE 6): fifteen topics
- assert.deepEqual(ids,['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
+ // v2 M2b: Pythagoras' theorem and the probability of an event after the equations with brackets: seventeen topics
+ assert.deepEqual(ids,['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides','pythagoras','probability']);assert.equal(new Set(ids).size,ids.length);
  for(const f of ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'])assert.equal(topic(f).lessonId,undefined,`no fractions lesson in the library: ${f} names none`);
  for(const f of ['dec-arith','dec-convert','pct-of-amount','pct-change'])assert.equal(topic(f).lessonId,undefined,`no decimals or percent lesson in the library: ${f} names none`);
  for(const f of ['ratio-share','unit-rate','area','mean-range'])assert.equal(topic(f).lessonId,undefined,`no ratio, area or statistics lesson in the library: ${f} names none`);
+ for(const f of ['pythagoras','probability'])assert.equal(topic(f).lessonId,undefined,`no Pythagoras or probability lesson in the library: ${f} names none`);
  const lessons=new Set(LESSONS.map(l=>l.id));
  SYLLABUS.forEach((t,ix)=>{
   for(const p of t.prereq)assert(ids.indexOf(p)>-1&&ids.indexOf(p)<ix,`${t.id} needs ${p}, which must come earlier`);
@@ -228,7 +230,10 @@ test('nextTopic walks the path in order, ignores ids it does not know, and runs 
  assert.equal(next([...FR,ONE,...DP,...B3]),'linear-two-step');
  assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step']),'linear-both-sides');
  assert.equal(next([...FR,...DP,...B3,'linear-two-step',ONE]),'linear-both-sides','the order the ids are listed in does not matter');
- assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step','linear-both-sides']),undefined);
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step','linear-both-sides']),'pythagoras','v2 M2b: after the equations, Pythagoras (was: nothing left)');
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step','linear-both-sides','pythagoras']),'probability');
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step','linear-both-sides','pythagoras','probability']),undefined);
+ assert.equal(next([...FR,ONE,DA,DC,PO,PC,RS,UR,MR,'linear-two-step','linear-both-sides','pythagoras','probability']),AR,'Pythagoras and probability secured without area: area is the gap earlier on the path');
  assert.equal(next([...FR,ONE,...DP,'linear-two-step','linear-both-sides']),RS,'the batch-3 strands are a gap earlier on the path for a learner who had every other topic');
  assert.equal(next([...FR,ONE,'linear-two-step','linear-both-sides']),DA,'the new strand is a gap earlier on the path for a learner who had every linear topic');
  assert.equal(next(['unknown','','linear-two-step-x']),E,'unknown ids unlock nothing');
@@ -248,12 +253,14 @@ test("expectedIndex reads age against each system's own year: -1 before the path
  // W7 batch 3 adds ratio and sharing, unit rates, area, and mean and range at 7/8/7/6 each, between percent change and
  // two-step equations: a 12-year-old is now past 14 of 15 topics in us, uk and cz, all 15 in de; an 11-year-old in de
  // is past 14 (Klasse 6 reaches two-step equations)
+ // v2 M2b adds Pythagoras at 8/9/8/8 and probability at 8/9/9/8 after both sides (8/9/8/7): a 13-year-old in us and uk is past
+ // all 17, a 12-year-old in de past 15 of 17 (Klasse 7 stops at both sides), a 13-year-old in cz past 16 (probability is 9. ročník)
  for(const [sys,first,n] of [['us',9,1],['uk',9,2],['cz',10,3],['de',10,5]]){
   assert.equal(expectedIndex(sys,first-1),-1,`${sys} age ${first-1}`);assert.equal(expectedIndex(sys,first),n,`${sys} age ${first}`);
  }
- assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),14);assert.equal(expectedIndex('uk',13),15);
- assert.equal(expectedIndex('de',11),14);assert.equal(expectedIndex('de',12),15);
- assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),15);assert.equal(expectedIndex('cz',12),14);assert.equal(expectedIndex('us',12),14);assert.equal(expectedIndex('cz',11),6);
+ assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),14);assert.equal(expectedIndex('uk',13),17);
+ assert.equal(expectedIndex('de',11),14);assert.equal(expectedIndex('de',12),15);assert.equal(expectedIndex('de',13),17);
+ assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),17);assert.equal(expectedIndex('cz',13),16);assert.equal(expectedIndex('cz',14),17);assert.equal(expectedIndex('cz',12),14);assert.equal(expectedIndex('us',12),14);assert.equal(expectedIndex('cz',11),6);
  for(const sys of ['us','uk','cz','de'])for(const age of [0,5,SYSTEM_START[sys]])assert.equal(expectedIndex(sys,age),-1,`${sys} age ${age}`);
  for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
  assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');
