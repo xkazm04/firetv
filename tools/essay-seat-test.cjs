@@ -102,3 +102,18 @@ test('case 7: Jakub has read the same lens himself; Ema\'s paragraph is not draw
  const own=essayWaiting({...reduce(seatedEma(),{type:'essay.set',analysis:A1}),history:s.history});
  assert.deepEqual(own.rail.map(x=>[x.n,x.against]),[[1,false],[2,true],[3,false]]);
 });
+
+test('plan case 8: Ema fills two slots, the desk goes to Jakub, who has no plan; back to Ema, her two slots are there',()=>{
+ const {reduce}=store();
+ let s=reduce(seatedEma(),{type:'essay.plan',lens:'argument'});
+ s=reduce(s,{type:'essay.slot',i:0,text:'Schools should start later.'});s=reduce(s,{type:'essay.slot',i:1,text:'Research found that teenagers fall asleep later.'});
+ assert.equal(s.essayPlan.slots.filter(Boolean).length,2);
+ s=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(s.essayPlan,undefined,'Jakub has no plan');
+ assert.ok(s.away.ema.essayPlan,'it sits in Ema\'s slot');
+ s=reduce(s,{type:'learner.set',id:'ema'});
+ assert.deepEqual(s.essayPlan,{lens:'argument',slots:['Schools should start later.','Research found that teenagers fall asleep later.','']});
+ assert.equal(s.away.jakub,undefined,'his empty chair keeps nothing');
+ s=reduce(s,{type:'learner.set',id:'jakub'});
+ assert.equal(JSON.parse(JSON.stringify(s)).away.ema.essayPlan.slots[0],'Schools should start later.','it survives a JSON round trip');
+});

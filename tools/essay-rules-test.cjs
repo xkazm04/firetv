@@ -736,3 +736,78 @@ test('seat case 6: a reading that finishes after the desk was handed to another 
  assert.equal(getSession().essay.summary,'Ema\'s reading.');
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
+
+// ---- Essay plan slots (challenge essay-master-B): the Paragraph's three slots, filled in the learner's own words ----
+const PLAN=()=>require(path.join(root,'src/lib/rules/essay.ts'));
+const {PLAYBOOK:PB}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+const PARA=PB.find(p=>p.id==='para');
+const CLAIM='Schools should start later.',EVID='Research found that teenagers fall asleep two hours later.',LINK='A later start fits how they sleep.';
+const plan3=(...slots)=>({lens:'structure',slots:[...slots,...Array(3-slots.length).fill('')]});
+
+test('plan case 1: planSlots derives the slots and their roles from the pattern, never a hand list',()=>{
+ const {planSlots}=PLAN();
+ assert.deepEqual(planSlots(PARA),[{label:'Your claim',role:'claim'},{label:'the evidence',role:'evidence'},{label:'the link back',role:'link'}]);
+ const turned=planSlots({pattern:'This shows [the link back]. [Your claim]. For example, [the evidence].'});
+ assert.deepEqual(turned.map(x=>x.role),['link','claim','evidence'],'a reordered pattern gives the new order');
+ assert.deepEqual(turned.map(x=>x.label),['the link back','Your claim','the evidence']);
+ assert.deepEqual(planSlots({pattern:'no slots here.'}),[]);
+});
+
+test('plan case 2: planFill refuses a blank, two sentences, a leftover bracket and an over-long text, and leaves the plan unchanged',()=>{
+ const {planFill,ESSAY_PARAGRAPH_MAX_CHARS}=PLAN();
+ const p=plan3(CLAIM),before=JSON.stringify(p);
+ const long='A'+'a'.repeat(ESSAY_PARAGRAPH_MAX_CHARS)+'.';
+ for(const [text,re] of [['   ',/first/i],['It is early. It is dark.',/2 sentences/],['The [evidence] goes here.',/bracket/i],[long,/too long/i],['no capital and no stop',/capital|full stop/i]]){
+  const r=planFill(p,1,text);assert.equal(r.ok,false,text.slice(0,30));assert.match(r.error,re,text.slice(0,30));
+ }
+ assert.equal(planFill(p,7,CLAIM).ok,false,'no such slot');
+ assert.equal(JSON.stringify(p),before,'the plan passed in is never changed');
+ const ok=planFill(p,1,'  '+EVID.replace(' that ',' that   ')+' ');
+ assert.equal(ok.ok,true);assert.deepEqual(ok.plan.slots,[CLAIM,EVID,''],'stored as written, spaces normalised');
+ assert.equal(ok.plan.lens,'structure');
+});
+
+test('plan case 3: planFit comments on a role mismatch and never blocks the ink',()=>{
+ const {planSlots,planFill,planFit}=PLAN();
+ const slots=planSlots(PARA);
+ assert.equal(planFit(slots,0,EVID),'That reads as evidence. This slot wants your claim: the side you take.');
+ assert.equal(planFit(slots,1,EVID),null);
+ assert.equal(planFit(slots,0,CLAIM),null);
+ assert.equal(planFill(plan3(),0,EVID).ok,true,'the slot inks because it is written, whatever the comment says');
+ assert.equal(planFit(slots,9,EVID),null);
+});
+
+test('plan case 4: a phone-posted essay.slot fills the slot, moves focus to the first empty one, and a refusal changes nothing',()=>{
+ dispatch({type:'reset'});
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().essayPlan,undefined,'no learner: nothing is written for no one');
+ dispatch({type:'learner.set',id:'ema'});
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().essayPlan,undefined,'no plan open: nothing to fill');
+ dispatch({type:'essay.plan',lens:'evidence'});
+ assert.deepEqual(getSession().essayPlan,{lens:'evidence',slots:['','','']});
+ dispatch({type:'essay.slot',i:1,text:EVID});
+ let s=getSession();
+ assert.deepEqual(s.essayPlan.slots,['',EVID,'']);assert.equal(s.focus,0,'focus on the first empty slot');
+ const kept=JSON.stringify(s.essayPlan);
+ dispatch({type:'essay.slot',i:2,text:'Two. Sentences.'});dispatch({type:'essay.slot',i:2,text:'[the link back]'});
+ assert.equal(JSON.stringify(getSession().essayPlan),kept,'a refused text leaves essayPlan untouched');
+ dispatch({type:'essay.slot',i:0,text:CLAIM});
+ assert.equal(getSession().focus,2);
+ dispatch({type:'essay.slot',i:2,text:LINK});
+ assert.equal(getSession().focus,3,'all written: focus on Read it');
+ const route=fs.readFileSync(path.join(root,'src/app/api/session/route.ts'),'utf8');
+ assert.doesNotMatch(route.split('SERVER_ONLY')[1].split('};')[0],/essay\.slot|essay\.plan/,'the phone may post a slot');
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
+test('plan case 6: planText is the learner\'s sentences only and splits back into exactly the slots',()=>{
+ const {planText,splitSentences}=PLAN();
+ const p=plan3(CLAIM,EVID,LINK),t=planText(p);
+ assert.equal(t,[CLAIM,EVID,LINK].join(' '));
+ assert.doesNotMatch(t,/For example,|This shows/);
+ assert.deepEqual(splitSentences(t).map(x=>x.text),p.slots);
+ assert.equal(planText(plan3(CLAIM,'',LINK)),CLAIM+' '+LINK,'an empty slot adds nothing');
+ const own=plan3(CLAIM,'For example, sleep studies agree.',LINK);
+ assert.match(planText(own),/^Schools should start later\. For example, sleep studies agree\./,'a frame word the learner wrote stays');
+});

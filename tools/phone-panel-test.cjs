@@ -108,6 +108,7 @@ const FIXTURES={
  essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
  sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
+ essayplan:{s:session({screen:'essayplan',subject:'essay'}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
@@ -322,4 +323,10 @@ test('case 14 (W6): the TV\'s Practice card is not made false by the typed route
  assert.match(tv,/then snap the whole sheet with the phone/);
  const card=tv.slice(tv.indexOf('The phone is waiting for the sheet or your answers.')-200,tv.indexOf('The phone is waiting for the sheet or your answers.')+80);
  assert.doesNotMatch(card,/\btype\b/i,'no typing asked of the TV');
+});
+
+test('plan case 7 (panel): the plan screen hands the phone to the Essay panel',()=>{
+ const {panelFor}=P();
+ assert.equal(panelFor(session({screen:'essayplan',subject:'essay'})),'paste');
+ assert.equal(panelFor(session({joined:false,screen:'essayplan',subject:'essay'})),'join','an unjoined phone is still asked for the code first');
 });
