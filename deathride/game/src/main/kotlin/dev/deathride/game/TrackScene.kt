@@ -314,10 +314,13 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
     }
-    fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL) {
+    /** [opaqueRoad]: road and shortcut tiles are alpha-255 texels under an alpha-1 tint, so they draw with blending off
+     *  (identical pixels; a tiler GPU may drop the fragments they hide). The baked scenery quad and oil decals keep blending. */
+    fun draw(batch: SpriteBatch,view: ViewBounds=ViewBounds.ALL,opaqueRoad: Boolean=true) {
         val previous=batch.shader
         if(look!=null){batch.shader=canvas.regionShader;val g=regionDefinition.grade;canvas.regionShader.setUniformf("u_regionGrade",g[0].toFloat(),g[1].toFloat(),g[2].toFloat())}
         batch.draw(region,left,bottom,width,height)
+        if(opaqueRoad)batch.disableBlending()
         for(t in roadTextures.indices) {
             val v=roadVertices[t];val b=roadChunks[t];val chunks=b.size/4;var run=-1
             for(c in 0..chunks) {
@@ -330,6 +333,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         val gravel=art.tile("tiles/gravel")
         if(gravel!=null)for(i in shortcuts.indices){val v=shortcuts[i];if(view.seesBox(minOf(minOf(v[0],v[5]),minOf(v[10],v[15])),minOf(minOf(v[1],v[6]),minOf(v[11],v[16])),maxOf(maxOf(v[0],v[5]),maxOf(v[10],v[15])),maxOf(maxOf(v[1],v[6]),maxOf(v[11],v[16]))))batch.draw(gravel,v,0,v.size)}
+        if(opaqueRoad)batch.enableBlending()
         for(i in oils.indices){val p=oils[i];if(view.sees(p[0].toDouble(),p[1].toDouble(),4.0))art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])}
         if(look!=null)batch.shader=previous
     }
