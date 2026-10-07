@@ -29,6 +29,8 @@ export interface ChainLine {
   side?: "+" | "-";
   /** The expression this line follows, when it is not the line before. */
   of?: string;
+  /** A line in words: it asserts nothing, is null, and the next line follows the last line that did. */
+  skip?: boolean;
 }
 export interface ChainOpts {
   /** The variable the learner writes (default x); the engine reads x only. */
@@ -149,6 +151,7 @@ export function checkChain(lines: readonly ChainLine[], opts: ChainOpts = {}): C
   const bodies: (string | null)[] = [];
   for (const line of lines) {
     let result: ChainResult = null, body: string | null = null;
+    if (line?.skip) { out.push(null); bodies.push(null); continue; }
     try {
       if (line && typeof line.text === "string") {
         if (line.tag === "solve0") {
@@ -235,6 +238,8 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
     const parts = t.split("=").map((p) => p.trim());
     let line: ChainLine | null = null;
     if (!t || parts.length > 2) { out.push(none()); continue; }
+    // a line in words asserts nothing: it is null, and the next line follows the last line that did
+    if (parts.length === 1 && !compile(t) && !LIM.test(t) && !INTEGRAL.test(t)) { out.push({ tag: NONE, text: raw, skip: true }); continue; }
 
     const lead = parts.length === 2 && parts[0] === "";
     const lim = LIM.exec(lead ? parts[1] : parts[0]);

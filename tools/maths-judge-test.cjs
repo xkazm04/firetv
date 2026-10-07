@@ -125,3 +125,28 @@ test('8: mark.ts lands from one place, builds no byN map and counts no unsure by
  assert.equal((text.match(/\bbyN\b/g)||[]).length,0);
  assert.equal((text.match(/unsure\+\+/g)||[]).length,0);
 });
+
+// ---- M4c: the chain checker places the pen on a wrong Calculus item with working (rules/kinds judgeItem, rules/chain)
+test('M4c-1: a planted-slip Calculus item\'s slipAt lands on the line that slipped (kinds.ts judgeItem)',()=>{
+ const k=kinds(),item={n:1,question:'Find the derivative of x^2 sin x',spec:{shape:'derivative',f:'x^2 sin x'}},ctx={topic:'calc1-derivative'};
+ const s=k.judgeItem(item,{studentAnswer:'2x cos x',studentWorking:"f(x) = x^2 sin x\nf'(x) = 2x cos x"},ctx);
+ assert.equal(s.verdict,'wrong');assert.deepEqual(s.slipAt,{line:1});
+ const t=k.judgeItem({n:2,question:'Find the derivative of cos(3x) at x = 0',spec:{shape:'derivative-at',f:'cos(3x)',at:0}},{studentAnswer:'3',studentWorking:"f'(x) = 3 sin(3x)\nf'(0) = 0\n= 3"},{topic:'calc1-derivative'});
+ assert.equal(t.verdict,'wrong');assert.deepEqual(t.slipAt,{line:0},'the first line that stops holding, not a later one');
+});
+test('M4c-2: a wrong answer whose working holds on every line gets no chain pen; a line in words is null',()=>{
+ const k=kinds(),item={n:1,question:'Find the derivative of x^3',spec:{shape:'derivative',f:'x^3'}},ctx={topic:'calc1-derivative'};
+ const s=k.judgeItem(item,{studentAnswer:'2x',studentWorking:"f(x) = x^3\nf'(x) = 3x^2"},ctx);
+ assert.equal(s.verdict,'wrong');assert.equal(s.slipAt,undefined);
+ const w=k.judgeItem(item,{studentAnswer:'2x',studentWorking:'use the power rule\nthen simplify'},ctx);
+ assert.equal(w.verdict,'wrong');assert.equal(w.slipAt,undefined);
+});
+test('M4c-3: the verdict is checkAnswer\'s with or without working; a right or unsure item gets no chain pen',()=>{
+ const k=kinds(),item={n:1,question:'Find the derivative of x^2',spec:{shape:'derivative',f:'x^2'}},ctx={topic:'calc1-derivative'};
+ const working="f(x) = x^2\nf'(x) = 3x";
+ for(const a of ['3x','2x','x','2x+1'])assert.equal(k.judgeItem(item,{studentAnswer:a,studentWorking:working},ctx).verdict,k.judgeItem(item,{studentAnswer:a},ctx).verdict);
+ assert.equal(k.judgeItem(item,{studentAnswer:'2x',studentWorking:working},ctx).slipAt,undefined,'a right item');
+ assert.equal(k.judgeItem(item,{studentAnswer:'',studentWorking:working},ctx),null,'a blank asks');
+ const set=k.judgeSet({topic:'calc1-derivative',items:[item]},[{n:1,studentAnswer:'3x',studentWorking:working}],ctx);
+ assert.deepEqual(set.items[0].slipAt,{line:1});assert.equal(set.items[0].verdict,'wrong');
+});

@@ -17,6 +17,7 @@
  *
  * Pure: it imports rules, the substitution checker and the path table, never the session, a learner file or an engine.
  */
+import { chainPen } from "./chain";
 import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
 import { specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
@@ -78,7 +79,8 @@ const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 /**
  * One item judged by its own kind, or null (the desk asks, records nothing). Never a model's verdict:
  *   - school: rules/school check by the learner's school system; the slip is code's own;
- *   - calc: rules/calc checkAnswer from the spec, the slip code's own where it names one, else the pick offered;
+ *   - calc: rules/calc checkAnswer from the spec, the slip code's own where it names one, else the pick offered; a wrong item
+ *     with working is located by the chain checker (rules/chain: the first line that stops holding), never by a model;
  *   - linear, the read carries the model's own `solution`: that solution must hold in the equation (the model can solve the
  *     item, so its read of the page is trusted) and the answer must substitute, else null; a wrong item is located in its own
  *     working;
@@ -89,7 +91,15 @@ const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
 export function judgeItem(item: { n: number; question: string; spec?: unknown }, read: Read, ctx: JudgeCtx): Settled | null {
   const answer = str(read.studentAnswer), working = str(read.studentWorking);
   const kind = kindOfSpec(item.spec);
-  if (kind !== "linear") return answer ? settleSpec(item.n, item.spec, answer, read.slip, ctx.topic, ctx.system ?? DEFAULT_SCHOOL_SYSTEM) : null;
+  if (kind !== "linear") {
+    const s = answer ? settleSpec(item.n, item.spec, answer, read.slip, ctx.topic, ctx.system ?? DEFAULT_SCHOOL_SYSTEM) : null;
+    // a wrong Calculus item with working: the pen at the first line the chain rings (rules/chain), the verdict untouched
+    if (s && s.verdict === "wrong" && kind === "calc" && working) {
+      const line = chainPen(item.spec, workingLines({ studentWorking: working, studentAnswer: answer, spec: item.spec }));
+      if (line !== null) return { ...s, slipAt: { line } };
+    }
+    return s;
+  }
 
   const value = cleanValue(answer);
   if (read.solution !== undefined) {

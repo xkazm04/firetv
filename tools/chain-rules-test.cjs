@@ -105,3 +105,8 @@ test('tagger: every shape with a chain reads its lines (antiderivative, derivati
   assert.deepEqual(chainChecks(crit,["f'(x) = 3x^2 - 12",'3x^2 - 12 = 0','x = 2','x = -2']),[true,null,true,true]);
   assert.deepEqual(chainChecks(crit,["f'(x) = 3x^2 - 12",'3x^2 - 12 = 0','x = 4']),[true,null,false]);
 });
+test('tagger: a line in words is null and the next line still follows the last line that asserted something',()=>{
+  const spec={shape:'derivative',f:'x^2 sin x'};
+  assert.deepEqual(chainChecks(spec,['f(x) = x^2 sin x','use the product rule',"f'(x) = 2x sin x + x^2 cos x"]),[true,null,true]);
+  assert.deepEqual(chainChecks(spec,['f(x) = x^2 sin x','use the product rule',"f'(x) = 2x cos x"]),[true,null,false]);
+});
