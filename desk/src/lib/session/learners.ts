@@ -5,7 +5,7 @@
  * beside session.json in the same data dir and is only ever written by the functions below,
  * none of which the reducer calls. A skill that has gone secure never goes back.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { emptyEnglish, type EnglishLearning } from "../english/types";
 import { cleanEnglish } from "../english/rules";
@@ -118,13 +118,28 @@ function readAll(): Book {
   return readBook() ?? {};
 }
 
-/** Put one learner into the book on disk - never over a file that could not be read. A failure is logged. */
+/**
+ * The one way learners.json is written: the JSON goes to a temp file beside it, then renames over it, so a crash
+ * mid-write leaves the old file whole, never a partial one. A failure removes the temp file and throws.
+ */
+function writeBook(book: Book): void {
+  const tmp = path.join(DATA, `learners.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  try {
+    mkdirSync(DATA, { recursive: true });
+    writeFileSync(tmp, JSON.stringify(book));
+    renameSync(tmp, FILE);
+  } catch (e) {
+    try { rmSync(tmp, { force: true }); } catch {}
+    throw new Error(`learners.json could not be written, so progress was not saved: ${why(e)}`);
+  }
+}
+
+/** Put one learner into the book on disk - never over a file that could not be read. Throws when it cannot. */
 function writeLearner(id: string, l: Learner): void {
   const book = readBook();
-  if (!book) { console.error(`learners.json left as it is: ${id}'s change was not saved`); return; }
+  if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
   book[id] = l;
-  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); }
-  catch (e) { console.error(`learners.json could not be written: ${id}'s change was not saved: ${why(e)}`); }
+  writeBook(book);
 }
 
 function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
@@ -214,13 +229,12 @@ export function saveLearner(l: Learner): void {
   writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP) });
 }
 
-/** English commits report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
+/** English commits (and saveLearner, the same way) report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
 export function saveEnglish(id: string, english: EnglishLearning): void {
   const book = readBook();
   if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
   book[id] = { ...getLearner(id), english };
-  mkdirSync(DATA, { recursive: true });
-  writeFileSync(FILE, JSON.stringify(book));
+  writeBook(book);
 }
 
 /**

@@ -522,15 +522,14 @@ test('settle case 2: through the explain route, a spoken "5x" leaves the unsure 
 const booked=()=>path.join(process.env.DESK_DATA_DIR,'learners.json');
 /** Run `f` with console.error captured; the lines it logged. */
 const quietly=(f)=>{const lines=[],was=console.error;console.error=(...a)=>{lines.push(a.map(String).join(' '));};try{f();}finally{console.error=was;}return lines;};
-test('learners case 1: with garbage in learners.json, recording an attempt leaves the file byte-identical and says so in the server log',()=>{
+test('learners case 1: with garbage in learners.json, recording an attempt leaves the file byte-identical and the save throws',()=>{
  recordAttempt('maths-book-keep','linear-one-step',true);
  const good=fs.readFileSync(booked());
  try{
   for(const garbage of ['{"ema":{"skills":{"linear-one-step":{"seen":9','not json at all','[1,2,3]','null','"a string"']){
    fs.writeFileSync(booked(),garbage);
-   const logged=quietly(()=>{recordAttempt('maths-book-corrupt','linear-one-step',true);saveLearner({...getLearner('maths-book-corrupt'),memory:['x']});addHistory('maths-book-corrupt',{at:1,kind:'practice',label:'t',detail:'d'});});
+   quietly(()=>{for(const save of [()=>recordAttempt('maths-book-corrupt','linear-one-step',true),()=>saveLearner({...getLearner('maths-book-corrupt'),memory:['x']}),()=>addHistory('maths-book-corrupt',{at:1,kind:'practice',label:'t',detail:'d'})])assert.throws(save,/learners\.json could not be read/,'a save over an unreadable book throws, as saveEnglish does');});
    assert.equal(fs.readFileSync(booked(),'utf8'),garbage,`learners.json was written over: ${garbage}`);
-   assert(logged.some((l)=>/learners\.json/.test(l)),`the failure is logged: ${garbage} -> ${JSON.stringify(logged)}`);
    assert.throws(()=>quietly(()=>saveEnglish('maths-book-corrupt',getLearner('maths-book-corrupt').english)),undefined,'an English commit reports it, as it reports a disk failure');
    assert.equal(fs.readFileSync(booked(),'utf8'),garbage);
   }
@@ -552,13 +551,13 @@ test('learners case 2: a valid file still round-trips; a missing or empty file s
   }
  }finally{fs.writeFileSync(booked(),good);}
 });
-test('learners case 3: a write that fails is logged, not silent',()=>{
+test('learners case 3: a write that fails throws, and is logged where the book is unreadable',()=>{
  const good=fs.readFileSync(booked());
  fs.chmodSync(booked(),0o444);
  let logged;
- try{logged=quietly(()=>recordAttempt('maths-book-keep','linear-one-step',true));}
+ try{logged=quietly(()=>assert.throws(()=>recordAttempt('maths-book-keep','linear-one-step',true),/learners\.json could not be written/));}
  finally{fs.chmodSync(booked(),0o666);fs.writeFileSync(booked(),good);}
- assert(logged.some((l)=>/learners\.json/.test(l)),`the failed write is logged: ${JSON.stringify(logged)}`);
+ assert.deepEqual(fs.readFileSync(booked()),good,'the book is as it was');
 });
 
 test('answer line per course: workingLines decides x = from the item alone - a spec item keeps its bare answer, a school item is unchanged byte for byte',()=>{
