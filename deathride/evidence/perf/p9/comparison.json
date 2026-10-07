@@ -1,0 +1,132 @@
+{
+  "card": "Disable GL blending for the opaque scenery and road draws (PowerVR hidden-surface removal)",
+  "change": "TrackScene.draw: road and shortcut tiles with batch.disableBlending(); scenery quad and oil decals kept blended (commit 4b2f23b9)",
+  "arm": "tools/perf-device.py --install --profile --warm-routes --tracks scrap-1-c,foundry-1-c,salt-1-b,switchback-1-a,crown-1-a --seconds 900; two 30 Hz probe controllers, host probe AboveNormal, other host processes untouched",
+  "baseline": {
+    "apkSha256": "3ec2ee5de7bc4c476c5d417b2190e3584ab679a331f9ff665d248e4ffbb4d029",
+    "source": "deathride/main 86cb512d"
+  },
+  "changed": {
+    "apkSha256": "cd2513d75d55811095f91e6d2dcd9aa808268a64af7bed06b45e5d8cf88e9a5b",
+    "source": "4b2f23b9"
+  },
+  "keepRule": "keep only if sceneryDrawMs and active p95 are no worse than the baseline",
+  "readings": {
+    "worstActiveWindowP95Ms": [
+      21.964385,
+      25.397538
+    ],
+    "pooledActiveIntervalP95Ms": [
+      18.812846,
+      19.028462
+    ],
+    "activeMaxMs": [
+      79.61146099999999,
+      92.68092299999999
+    ],
+    "sixLiveWorstP95Ms": [
+      21.964385,
+      23.799538
+    ],
+    "sceneryDrawMs": [
+      {
+        "p50": 0.8532,
+        "p95": 1.9758,
+        "p99": 4.0271,
+        "max": 19.8765,
+        "mean": 1.0331,
+        "count": 48960
+      },
+      {
+        "p50": 0.8973,
+        "p95": 1.9724,
+        "p99": 4.1849,
+        "max": 28.2656,
+        "mean": 1.0747,
+        "count": 48821
+      }
+    ],
+    "carsEffectsMs (untouched)": [
+      {
+        "p50": 2.4389,
+        "p95": 4.1931,
+        "p99": 9.3178,
+        "max": 32.9027,
+        "mean": 2.7019,
+        "count": 48960
+      },
+      {
+        "p50": 2.7019,
+        "p95": 4.5259,
+        "p99": 10.0043,
+        "max": 40.4547,
+        "mean": 3.0101,
+        "count": 48821
+      }
+    ],
+    "hudMs (untouched)": [
+      {
+        "p50": 0.9635,
+        "p95": 1.6522,
+        "p99": 3.6652,
+        "max": 20.7939,
+        "mean": 1.105,
+        "count": 48960
+      },
+      {
+        "p50": 1.0652,
+        "p95": 1.9041,
+        "p99": 4.1007,
+        "max": 24.4192,
+        "mean": 1.2258,
+        "count": 48821
+      }
+    ],
+    "cpuMs": [
+      {
+        "p50": 6.9452,
+        "p95": 9.6558,
+        "p99": 11.6682,
+        "max": 23.1055,
+        "mean": 7.1979,
+        "count": 48960
+      },
+      {
+        "p50": 7.4629,
+        "p95": 10.2082,
+        "p99": 12.5077,
+        "max": 30.6365,
+        "mean": 7.6892,
+        "count": 48821
+      }
+    ],
+    "drawCalls": [
+      {
+        "p50": 17,
+        "p95": 26,
+        "p99": 27,
+        "max": 28,
+        "mean": 18.416,
+        "count": 48960
+      },
+      {
+        "p50": 18,
+        "p95": 26,
+        "p99": 27,
+        "max": 28,
+        "mean": 18.4173,
+        "count": 48821
+      }
+    ],
+    "transitionMaxMs": [
+      2376.9014620000003,
+      2249.7866160000003
+    ]
+  },
+  "order": "[baseline, changed]",
+  "verdict": "not better",
+  "decision": "reverted (commit 6af138c5)",
+  "reading": "Worst active p95 +3.433 ms, pooled p95 +0.215 ms, sceneryDrawMs p50 +0.044 / mean +0.042 ms, p95 -0.004 ms. Untouched phases moved further (carsEffects p50 +0.263, cpu p50 +0.518 ms), so the difference is consistent with run-to-run variation; either way no gain was measured. The scenery quad stays blended (its target holds alpha 185-254 texels), which leaves the fragments under the road shaded.",
+  "pixelEvidence": "blend-audit.json: 0 of 136,857,600 RGBA pixels differ (six courses, 66 views, desktop GL)",
+  "limits": "Two single 900 s runs, one per APK, sequential on one Stick; no repeated-measures variance estimate. Profiled arm. Host was loaded by other sessions (85-91% CPU); both arms fail the input-stream gate on host pump stalls."
+}

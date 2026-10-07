@@ -1,0 +1,53 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":4.8842053,"lateMs":584.2053000000333,"epochMs":1791333299066.7385,"cpu":{"user":515000,"system":171000},"memory":{"rss":182546432,"heapTotal":66019328,"heapUsed":47714872,"external":54201205,"arrayBuffers":50159365}}}
+{"second":4,"accepted":[145,145],"rejected":[0,0],"hostPumpStalls":1}
+{"second":70,"accepted":[2112,2112],"rejected":[0,0],"hostPumpStalls":1}
+{"second":137,"accepted":[4119,4119],"rejected":[0,0],"hostPumpStalls":1}
+{"second":204,"accepted":[6126,6126],"rejected":[0,0],"hostPumpStalls":1}
+{"second":271,"accepted":[8131,8131],"rejected":[0,0],"hostPumpStalls":1}
+{"hostPumpStall":{"second":336.0698039,"lateMs":118.93193334789248,"epochMs":1791333630252.3372,"cpu":{"user":9515000,"system":2828000},"memory":{"rss":171966464,"heapTotal":118910976,"heapUsed":51866032,"external":6278701,"arrayBuffers":2241230}}}
+{"second":336,"accepted":[10068,10068],"rejected":[0,0],"hostPumpStalls":2}
+{"second":400,"accepted":[12008,12008],"rejected":[0,0],"hostPumpStalls":2}
+{"second":465,"accepted":[13946,13950],"rejected":[0,0],"hostPumpStalls":2}
+{"second":530,"accepted":[15885,15885],"rejected":[0,0],"hostPumpStalls":2}
+{"hostPumpStall":{"second":594.9110311000001,"lateMs":274.56053335464094,"epochMs":1791333889093.5642,"cpu":{"user":16234000,"system":4718000},"memory":{"rss":195112960,"heapTotal":133025792,"heapUsed":76289696,"external":13511989,"arrayBuffers":9474518}}}
+{"second":594,"accepted":[17834,17834],"rejected":[0,0],"hostPumpStalls":3}
+{"second":659,"accepted":[19758,19758],"rejected":[0,0],"hostPumpStalls":3}
+{"second":724,"accepted":[21698,21698],"rejected":[0,0],"hostPumpStalls":3}
+{"hostPumpStall":{"second":789.3421896000001,"lateMs":731.1584997745231,"epochMs":1791334083524.7227,"cpu":{"user":20937000,"system":6125000},"memory":{"rss":222990336,"heapTotal":210100224,"heapUsed":91505320,"external":19825123,"arrayBuffers":15787652}}}
+{"second":788,"accepted":[23638,23638],"rejected":[0,0],"hostPumpStalls":4}
+{"second":853,"accepted":[25576,25576],"rejected":[0,0],"hostPumpStalls":4}
+{"second":900,"accepted":[26949,26949],"rejected":[0,0],"hostPumpStalls":4}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n4 !== 0\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/50bd2af9/deathride/tools/ability-stick-probe.mjs:116:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.1408538000001,
+  "rounds": 14,
+  "classUses": {
+    "Needle": 16,
+    "Line": 21,
+    "Bastion": 18,
+    "Comet": 15,
+    "Trail": 21,
+    "Flint": 21,
+    "Quill": 19,
+    "Vandal": 14,
+    "Kestrel": 12,
+    "Bulwark": 10
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 26949,
+      "accepted": 26949,
+      "rejected": 0,
+      "hz": 29.93864780854367
+    },
+    {
+      "slot": 1,
+      "sent": 26949,
+      "accepted": 26949,
+      "rejected": 0,
+      "hz": 29.93864780854367
+    }
+  ]
+}
