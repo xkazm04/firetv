@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T17:06:17.5116835Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  16636,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "Code - Insiders#14",
+                             "IDProcess":  31868,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  92
+                         },
+                         {
+                             "Name":  "Code - Insiders#5",
+                             "IDProcess":  33464,
+                             "PercentProcessorTime":  60
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  46
+                         },
+                         {
+                             "Name":  "OneDrive.Sync.Service",
+                             "IDProcess":  30916,
+                             "PercentProcessorTime":  27
+                         },
+                         {
+                             "Name":  "claude#11",
+                             "IDProcess":  43348,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "claude#10",
+                             "IDProcess":  42340,
+                             "PercentProcessorTime":  13
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  13
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                64,
+                                66,
+                                49
+                            ]
+}

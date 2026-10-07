@@ -1,0 +1,211 @@
+{
+ "what": "P13e step 0: the baseline bake (before P13e: 3 ms slices, one ground draw) of each of the five soak courses, from the sceneryBake log line. P13d runs 1-2 (APK from 60ac7cb9, 360 s each) and the P13e off arm (210 s).",
+ "note": "scrap-1-c's first bake of each run is the startup bake (before the probe, cold): 112-123 passes, 506-552 ms, max slice 35-39 ms. Every later bake: 49-86 passes, 174-369 ms, max slice 5-23 ms. sceneryBuildBudgetMs is 3.",
+ "perCourse": {
+  "scrap-1-c": {
+   "bakes": 5,
+   "slicedFrames": [
+    49,
+    123
+   ],
+   "totalCpuMs": [
+    174.4,
+    552.3
+   ],
+   "maxSliceMs": [
+    5.0,
+    38.6
+   ]
+  },
+  "foundry-1-c": {
+   "bakes": 3,
+   "slicedFrames": [
+    74,
+    86
+   ],
+   "totalCpuMs": [
+    341.6,
+    368.8
+   ],
+   "maxSliceMs": [
+    22.0,
+    23.2
+   ]
+  },
+  "salt-1-b": {
+   "bakes": 3,
+   "slicedFrames": [
+    52,
+    67
+   ],
+   "totalCpuMs": [
+    184.2,
+    279.8
+   ],
+   "maxSliceMs": [
+    6.1,
+    11.3
+   ]
+  },
+  "switchback-1-a": {
+   "bakes": 3,
+   "slicedFrames": [
+    51,
+    53
+   ],
+   "totalCpuMs": [
+    193.5,
+    213.6
+   ],
+   "maxSliceMs": [
+    7.4,
+    19.5
+   ]
+  },
+  "crown-1-a": {
+   "bakes": 2,
+   "slicedFrames": [
+    50,
+    52
+   ],
+   "totalCpuMs": [
+    179.8,
+    192.5
+   ],
+   "maxSliceMs": [
+    6.7,
+    7.7
+   ]
+  }
+ },
+ "bakes": [
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:51:55.381",
+   "course": "scrap-1-c",
+   "slicedFrames": 123,
+   "totalCpuMs": 552.3,
+   "maxSliceMs": 38.6
+  },
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:53:33.145",
+   "course": "foundry-1-c",
+   "slicedFrames": 86,
+   "totalCpuMs": 366.1,
+   "maxSliceMs": 22.0
+  },
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:54:40.015",
+   "course": "salt-1-b",
+   "slicedFrames": 52,
+   "totalCpuMs": 184.2,
+   "maxSliceMs": 6.1
+  },
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:55:46.761",
+   "course": "switchback-1-a",
+   "slicedFrames": 52,
+   "totalCpuMs": 193.5,
+   "maxSliceMs": 7.4
+  },
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:56:54.252",
+   "course": "crown-1-a",
+   "slicedFrames": 52,
+   "totalCpuMs": 192.5,
+   "maxSliceMs": 7.7
+  },
+  {
+   "run": "p13d-run1",
+   "logTime": "10-07 14:57:59.100",
+   "course": "scrap-1-c",
+   "slicedFrames": 49,
+   "totalCpuMs": 174.4,
+   "maxSliceMs": 5.0
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:00:09.193",
+   "course": "scrap-1-c",
+   "slicedFrames": 116,
+   "totalCpuMs": 522.3,
+   "maxSliceMs": 36.6
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:01:51.662",
+   "course": "foundry-1-c",
+   "slicedFrames": 74,
+   "totalCpuMs": 341.6,
+   "maxSliceMs": 23.2
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:02:58.854",
+   "course": "salt-1-b",
+   "slicedFrames": 67,
+   "totalCpuMs": 279.8,
+   "maxSliceMs": 8.6
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:04:06.033",
+   "course": "switchback-1-a",
+   "slicedFrames": 51,
+   "totalCpuMs": 196.9,
+   "maxSliceMs": 14.6
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:05:13.603",
+   "course": "crown-1-a",
+   "slicedFrames": 50,
+   "totalCpuMs": 179.8,
+   "maxSliceMs": 6.7
+  },
+  {
+   "run": "p13d-run2",
+   "logTime": "10-07 15:06:18.618",
+   "course": "scrap-1-c",
+   "slicedFrames": 49,
+   "totalCpuMs": 191.4,
+   "maxSliceMs": 16.1
+  },
+  {
+   "run": "p13e-arm-off",
+   "logTime": "10-07 17:37:36.053",
+   "course": "scrap-1-c",
+   "slicedFrames": 112,
+   "totalCpuMs": 506.1,
+   "maxSliceMs": 35.4
+  },
+  {
+   "run": "p13e-arm-off",
+   "logTime": "10-07 17:39:20.042",
+   "course": "foundry-1-c",
+   "slicedFrames": 79,
+   "totalCpuMs": 368.8,
+   "maxSliceMs": 22.5
+  },
+  {
+   "run": "p13e-arm-off",
+   "logTime": "10-07 17:40:26.964",
+   "course": "salt-1-b",
+   "slicedFrames": 53,
+   "totalCpuMs": 212.8,
+   "maxSliceMs": 11.3
+  },
+  {
+   "run": "p13e-arm-off",
+   "logTime": "10-07 17:41:34.044",
+   "course": "switchback-1-a",
+   "slicedFrames": 53,
+   "totalCpuMs": 213.6,
+   "maxSliceMs": 19.5
+  }
+ ]
+}

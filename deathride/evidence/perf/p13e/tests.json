@@ -1,0 +1,69 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "commit": "5df2a49b (last code commit, the graded APK's source)",
+ "result": "BUILD SUCCESSFUL",
+ "modules": {
+  "core": {
+   "tests": 261,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  },
+  "link": {
+   "tests": 23,
+   "skipped": 2,
+   "failures": 0,
+   "errors": 0
+  },
+  "game": {
+   "tests": 110,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "new": {
+  "BakeShapeTest": {
+   "cases": [
+    "theShippedShapeIs16FinishedBandsAndNoPassInTheSwitchFrame()",
+    "everyArmHasAShapeAndThePreP13eArmsRunTheUnbandedBake()",
+    "eachBandGetsItsOwnPassAndEveryStepRunsOnceInTheSameOrder()",
+    "theBandsCoverTheTargetOnceInRowOrder()"
+   ],
+   "failures": 0,
+   "errors": 0
+  },
+  "BakePassesTest": {
+   "cases": [
+    "aBinWaitEndsItsPassAndCostsAtMostOneMore()",
+    "aLimitedPlanNeverTakesMoreThanItsLimitAndRunsEveryStepOnceInOrder()",
+    "noLimitIsTodaysSlicing()",
+    "aLimitedPlanSpreadsItsBudgetOverItsPasses()"
+   ],
+   "failures": 0,
+   "errors": 0
+  },
+  "CodecWarmTest": {
+   "cases": [
+    "itRoundTripsCopiesOnItsOwnThreadAndLeavesTheProfilesAlone()"
+   ],
+   "failures": 0,
+   "errors": 0
+  },
+  "RoutesReplyTest": {
+   "cases": [
+    "aBlockBoundaryAndAnEmptyListKeepTheBytes()",
+    "theBlocksAreTheOldReplyByteForByte()",
+    "theServedReplyHasTheOldBodyAndHeaders()"
+   ],
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "note": "game 110 = 101 on the base + 9 new; link 23 = 20 + 3 new (2 skipped, as on the base); core 261 unchanged. Every existing test file is unchanged. A first forced run under a 100% host failed two link timing tests that do not touch /routes (CompactLinkTest:39 server start within 8 s, HudPayloadTest:38 idle heartbeat count); a link rerun and this final full run were green.",
+ "logs": [
+  "p13e/gate-final.log (first run, 2 link timing failures)",
+  "p13e/gate-link-rerun1.log",
+  "p13e/gate-final2.log (final, green)"
+ ]
+}
