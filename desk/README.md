@@ -32,6 +32,12 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
   in about two seconds and with no model call. Add `?live=1` to run text, vision (needs `data/sample.jpg`), embed and speak for real,
   side by side. The TV may ask; a paired phone gets 403.
 
+- **/api/texts** — the seated learner's own texts, kept with versions (`src/lib/session/texts.ts`; adult plan A6). Phone only;
+  every call acts on the learner at the desk, never on an id the client sends. One file per piece under
+  `DESK_DATA_DIR/texts/<learner>/`, never in `learners.json`; `DELETE ?all=1` removes the learner's folder. Caps: a version
+  100 KB, 20 versions, 50 pieces, refused with a sentence. No screen uses it yet (the phone's shelf and the TV's piece map
+  are the next slice).
+
 ## Linga conversations
 
 Eight authored situations cover introductions, interests, a children's adventure, teamwork,
