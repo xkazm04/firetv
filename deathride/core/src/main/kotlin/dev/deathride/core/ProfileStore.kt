@@ -115,7 +115,7 @@ enum class SaveStep { TEMP_SYNCED, BACKUP_COPIED, BEFORE_MOVE }
  * [checkpoint] is a test seam: called with the profile id at each [SaveStep]; throwing from it stops the save there.
  * Production builds use the public constructor, so the seam is one null check per step: no I/O, no reflection.
  */
-class ProfileStore internal constructor(private val root: File,private val checkpoint: ((String,SaveStep)->Unit)?) {
+class ProfileStore internal constructor(private val root: File,private val checkpoint: ((String,SaveStep)->Unit)?) : ProfileSaver {
     constructor(root: File): this(root,null)
     private fun path(id: String,suffix: String="sav"): File {
         require(validProfileId(id));val file=File(root,"$id.$suffix")
@@ -129,7 +129,7 @@ class ProfileStore internal constructor(private val root: File,private val check
         if(backup.exists())runCatching { ProfileCodec.decode(backup.readText(),id) }.getOrNull()?.let { return LoadedProfile(it,"Recovered previous save") }
         error("Save damaged - persistence disabled")
     }
-    fun save(profile: Profile) {
+    override fun save(profile: Profile) {
         check(root.isDirectory || root.mkdirs()) { "Profile folder unavailable" }
         val main=path(profile.id);val temporary=path(profile.id,"tmp");val backup=path(profile.id,"bak")
         val encoded=ProfileCodec.encode(profile)

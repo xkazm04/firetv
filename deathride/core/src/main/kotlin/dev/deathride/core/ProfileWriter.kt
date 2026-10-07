@@ -2,6 +2,9 @@ package dev.deathride.core
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
+/** The one thing [ProfileWriter] needs of a store: a durable save that throws when it did not complete. [ProfileStore] in production. */
+fun interface ProfileSaver { fun save(profile: Profile) }
+
 /**
  * Takes [ProfileStore.save] (50-156 ms on the Stick, P10) off the render thread. One daemon thread below the render
  * thread's priority writes every submitted save in submission order: no coalescing, no parallel writes, and the store's
@@ -16,11 +19,12 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * because those jobs were built on the state that did not reach the disk. The caller then reverts to [durable].
  * Because the queue is FIFO, a durable job implies every job submitted before it has completed too.
  */
-class ProfileWriter(private val store: ProfileStore) : AutoCloseable {
+class ProfileWriter(private val store: ProfileSaver) : AutoCloseable {
     /** CHOICE: a car pick, a garage or market purchase, career prep. MONEY: the Economy.start ticket or a settle; nothing counts until it is durable. */
     enum class Kind { CHOICE, MONEY }
     enum class Status { PENDING, OK, FAILED, CANCELLED }
-    class Completion(val job: Long,val slot: Int,val kind: Kind,val status: Status,val error: Throwable?)
+    /** [writeMs] is the writer thread's wall time in [ProfileSaver.save] (0 for a cancelled job). */
+    class Completion(val job: Long,val slot: Int,val kind: Kind,val status: Status,val error: Throwable?,val writeMs: Double=0.0)
     private class Job(val id: Long,val slot: Int,val kind: Kind,val snapshot: Profile,val basis: Int)
 
     private val lock=Object()
@@ -106,8 +110,9 @@ class ProfileWriter(private val store: ProfileStore) : AutoCloseable {
                 inFlight=true;queue.removeFirst()
             }
             val done=if(job.basis<(failures[job.slot]?:0)) Completion(job.id,job.slot,job.kind,Status.CANCELLED,null)
-            else try { store.save(job.snapshot);Completion(job.id,job.slot,job.kind,Status.OK,null) }
-            catch(t: Throwable) { failures[job.slot]=(failures[job.slot]?:0)+1;Completion(job.id,job.slot,job.kind,Status.FAILED,t) }
+            else { val started=System.nanoTime()
+                try { store.save(job.snapshot);Completion(job.id,job.slot,job.kind,Status.OK,null,(System.nanoTime()-started)/1e6) }
+                catch(t: Throwable) { failures[job.slot]=(failures[job.slot]?:0)+1;Completion(job.id,job.slot,job.kind,Status.FAILED,t,(System.nanoTime()-started)/1e6) } }
             finished.add(job to done)
             synchronized(lock) { inFlight=false;lock.notifyAll() }
         }
