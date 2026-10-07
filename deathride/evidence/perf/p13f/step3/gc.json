@@ -2,6 +2,7 @@
  {
   "run": "C:\\Users\\kazda\\kiro\\deathride-raw-evidence\\p13f\\9d88747c\\step3",
   "probeSeconds": 360.1065896,
+  "clockSpreadSeconds": 0.008,
   "loggedGcs": 23,
   "loggedBackgroundGcs": 23,
   "losMBPerGc": [
@@ -13,7 +14,7 @@
   "gapSeconds": [
    3.5,
    15.69,
-   49.4
+   49.39
   ],
   "totalMs": [
    100.8,
@@ -38,7 +39,7 @@
     "heapTotalMB": 20,
     "pauseMs": 19.908,
     "totalMs": 331.3,
-    "second": -34.88,
+    "second": -40.61,
     "doing": "before probe (startup, /routes warm-up)"
    },
    {
@@ -50,7 +51,7 @@
     "heapTotalMB": 72,
     "pauseMs": 0.201,
     "totalMs": 131.8,
-    "second": 12.68,
+    "second": 6.95,
     "doing": "race scrap-1-c"
    },
    {
@@ -62,7 +63,7 @@
     "heapTotalMB": 72,
     "pauseMs": 0.364,
     "totalMs": 103.4,
-    "second": 62.08,
+    "second": 56.34,
     "doing": "race scrap-1-c"
    },
    {
@@ -74,8 +75,8 @@
     "heapTotalMB": 72,
     "pauseMs": 0.397,
     "totalMs": 155.0,
-    "second": 70.07,
-    "doing": "race foundry-1-c"
+    "second": 64.34,
+    "doing": "lobby"
    },
    {
     "kind": "Background",
@@ -86,7 +87,7 @@
     "heapTotalMB": 74,
     "pauseMs": 0.106,
     "totalMs": 102.9,
-    "second": 73.67,
+    "second": 67.94,
     "doing": "race foundry-1-c"
    },
    {
@@ -98,7 +99,7 @@
     "heapTotalMB": 74,
     "pauseMs": 0.164,
     "totalMs": 130.4,
-    "second": 88.81,
+    "second": 83.07,
     "doing": "race foundry-1-c"
    },
    {
@@ -110,7 +111,7 @@
     "heapTotalMB": 74,
     "pauseMs": 0.149,
     "totalMs": 102.1,
-    "second": 106.12,
+    "second": 100.39,
     "doing": "race foundry-1-c"
    },
    {
@@ -122,7 +123,7 @@
     "heapTotalMB": 74,
     "pauseMs": 0.101,
     "totalMs": 120.3,
-    "second": 122.11,
+    "second": 116.38,
     "doing": "race foundry-1-c"
    },
    {
@@ -134,8 +135,8 @@
     "heapTotalMB": 74,
     "pauseMs": 0.098,
     "totalMs": 134.1,
-    "second": 137.23,
-    "doing": "race salt-1-b"
+    "second": 131.5,
+    "doing": "lobby"
    },
    {
     "kind": "Background",
@@ -146,7 +147,7 @@
     "heapTotalMB": 76,
     "pauseMs": 3.783,
     "totalMs": 288.6,
-    "second": 147.07,
+    "second": 141.34,
     "doing": "race salt-1-b"
    },
    {
@@ -158,7 +159,7 @@
     "heapTotalMB": 76,
     "pauseMs": 0.174,
     "totalMs": 123.0,
-    "second": 163.84,
+    "second": 158.11,
     "doing": "race salt-1-b"
    },
    {
@@ -170,7 +171,7 @@
     "heapTotalMB": 76,
     "pauseMs": 0.087,
     "totalMs": 100.8,
-    "second": 179.65,
+    "second": 173.92,
     "doing": "race salt-1-b"
    },
    {
@@ -182,7 +183,7 @@
     "heapTotalMB": 76,
     "pauseMs": 0.088,
     "totalMs": 122.2,
-    "second": 195.36,
+    "second": 189.63,
     "doing": "race salt-1-b"
    },
    {
@@ -194,8 +195,8 @@
     "heapTotalMB": 76,
     "pauseMs": 3.252,
     "totalMs": 136.3,
-    "second": 203.81,
-    "doing": "race switchback-1-a"
+    "second": 198.08,
+    "doing": "lobby"
    },
    {
     "kind": "Background",
@@ -206,7 +207,7 @@
     "heapTotalMB": 79,
     "pauseMs": 0.218,
     "totalMs": 179.9,
-    "second": 207.31,
+    "second": 201.58,
     "doing": "race switchback-1-a"
    },
    {
@@ -218,7 +219,7 @@
     "heapTotalMB": 78,
     "pauseMs": 0.801,
     "totalMs": 102.4,
-    "second": 221.91,
+    "second": 216.18,
     "doing": "race switchback-1-a"
    },
    {
@@ -230,7 +231,7 @@
     "heapTotalMB": 78,
     "pauseMs": 0.086,
     "totalMs": 214.2,
-    "second": 238.99,
+    "second": 233.25,
     "doing": "race switchback-1-a"
    },
    {
@@ -242,7 +243,7 @@
     "heapTotalMB": 78,
     "pauseMs": 0.103,
     "totalMs": 121.1,
-    "second": 254.59,
+    "second": 248.86,
     "doing": "race switchback-1-a"
    },
    {
@@ -254,8 +255,8 @@
     "heapTotalMB": 79,
     "pauseMs": 7.857,
     "totalMs": 238.4,
-    "second": 270.88,
-    "doing": "race crown-1-a"
+    "second": 265.15,
+    "doing": "lobby"
    },
    {
     "kind": "Background",
@@ -266,7 +267,7 @@
     "heapTotalMB": 81,
     "pauseMs": 0.135,
     "totalMs": 126.9,
-    "second": 279.44,
+    "second": 273.71,
     "doing": "race crown-1-a"
    },
    {
@@ -278,7 +279,7 @@
     "heapTotalMB": 81,
     "pauseMs": 0.225,
     "totalMs": 137.0,
-    "second": 296.17,
+    "second": 290.44,
     "doing": "race crown-1-a"
    },
    {
@@ -290,7 +291,7 @@
     "heapTotalMB": 81,
     "pauseMs": 0.086,
     "totalMs": 104.5,
-    "second": 311.86,
+    "second": 306.13,
     "doing": "race crown-1-a"
    },
    {
@@ -302,7 +303,7 @@
     "heapTotalMB": 82,
     "pauseMs": 0.086,
     "totalMs": 121.3,
-    "second": 328.54,
+    "second": 322.81,
     "doing": "race crown-1-a"
    },
    {
@@ -314,7 +315,7 @@
     "heapTotalMB": 81,
     "pauseMs": 0.336,
     "totalMs": 118.7,
-    "second": 340.9,
+    "second": 335.17,
     "doing": "race scrap-1-c"
    }
   ]

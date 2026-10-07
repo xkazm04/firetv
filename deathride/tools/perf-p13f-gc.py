@@ -32,22 +32,27 @@ def phase_at(raw, second):
 def run(path):
     path = Path(path)
     raw = json.loads((path / 'raw.json').read_text())
-    started = datetime.datetime.fromisoformat(raw['startedUtc'].replace('Z', '+00:00'))
-    year = started.year
+    year = datetime.datetime.fromisoformat(raw['startedUtc'].replace('Z', '+00:00')).year
+    def local(day, clock):
+        return datetime.datetime.strptime(f'{year}-{day} {clock[:15]}', '%Y-%m-%d %H:%M:%S.%f')
+    text = (path / 'logcat.txt').read_text(errors='replace')
     gcs = []
-    for line in (path / 'logcat.txt').read_text(errors='replace').splitlines():
+    for line in text.splitlines():
         m = LINE.match(line)
         if not m:
             continue
-        t = datetime.datetime.strptime(f'{year}-{m[1]} {m[2][:15]}', '%Y-%m-%d %H:%M:%S.%f')
-        gcs.append(dict(local=t, kind=((m[3] or '') + ' ' + (m[4] or '')).strip(), freedMB=round(mb(m[6], m[7]), 2),
+        gcs.append(dict(local=local(m[1], m[2]), kind=((m[3] or '') + ' ' + (m[4] or '')).strip(), freedMB=round(mb(m[6], m[7]), 2),
                         losObjects=int(m[8]), losMB=round(mb(m[9], m[10]), 2), heapMB=int(m[12]), heapTotalMB=int(m[13]),
                         pauseMs=round(ms(m[14], m[15]), 3), totalMs=round(ms(m[16], m[17]), 1)))
-    # Device clock is local time; its offset is the whole hours between the first log line and the probe start.
-    first = gcs[0]['local'] if gcs else started.replace(tzinfo=None)
-    offset = datetime.timedelta(hours=round((first - started.replace(tzinfo=None)).total_seconds() / 3600))
+    # The device clock is placed on the probe clock by the race starts: the probe records each round's startedSecond just
+    # before it sends 'start', and the app logs 'transition startRace' when it handles it (the median offset of the rounds).
+    starts = [local(m[1], m[2]) for m in re.finditer(r'^(\d\d-\d\d) (\S+)\s+\d+\s+\d+ I DeathRide: transition startRace ', text, re.M)]
+    pairs = sorted((t - datetime.timedelta(seconds=r['startedSecond'])) for t, r in zip(starts, raw['rounds']))
+    assert pairs, 'no startRace line to place the device clock'
+    zero = pairs[len(pairs) // 2]
+    spread = round((pairs[-1] - pairs[0]).total_seconds(), 3)
     for g in gcs:
-        g['second'] = round((g.pop('local') - offset - started.replace(tzinfo=None)).total_seconds(), 2)
+        g['second'] = round((g.pop('local') - zero).total_seconds(), 2)
         g['doing'] = phase_at(raw, g['second']) if g['second'] >= 0 else 'before probe (startup, /routes warm-up)'
     inside = [g for g in gcs if 0 <= g['second'] <= raw['actualDurationSeconds']]
     prof = [p for p in raw.get('profiles', []) if p.get('runtime')]
@@ -62,7 +67,7 @@ def run(path):
                     unit='MB = 10^6 B, from art.gc.bytes-allocated and art.gc.gc-count')
     los = [g['losMB'] for g in inside]
     gaps = [b['second'] - a['second'] for a, b in zip(inside, inside[1:])]
-    return dict(run=str(path), probeSeconds=raw['actualDurationSeconds'], loggedGcs=len(inside),
+    return dict(run=str(path), probeSeconds=raw['actualDurationSeconds'], clockSpreadSeconds=spread, loggedGcs=len(inside),
                 loggedBackgroundGcs=sum(1 for g in inside if g['kind'].startswith('Background')),
                 losMBPerGc=[min(los), max(los)] if los else None, losMBTotal=round(sum(los), 1),
                 losMBps=round(sum(los) / raw['actualDurationSeconds'], 2),

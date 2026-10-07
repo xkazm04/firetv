@@ -5,18 +5,19 @@
   {
    "run": "p13e/run1",
    "probeSeconds": 360.1261907,
-   "loggedGcs": 58,
-   "loggedBackgroundGcs": 58,
+   "clockSpreadSeconds": 0.012,
+   "loggedGcs": 59,
+   "loggedBackgroundGcs": 59,
    "losMBPerGc": [
     4.88,
     21.0
    ],
-   "losMBTotal": 1104.9,
-   "losMBps": 3.07,
+   "losMBTotal": 1123.9,
+   "losMBps": 3.12,
    "gapSeconds": [
-    1.68,
-    6.76,
-    10.64
+    1.67,
+    6.77,
+    10.63
    ],
    "totalMs": [
     63.9,
@@ -41,7 +42,7 @@
      "heapTotalMB": 18,
      "pauseMs": 0.144,
      "totalMs": 135.7,
-     "second": -36.94,
+     "second": -43.39,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -53,7 +54,7 @@
      "heapTotalMB": 24,
      "pauseMs": 0.168,
      "totalMs": 133.6,
-     "second": -36.12,
+     "second": -42.57,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -65,7 +66,7 @@
      "heapTotalMB": 24,
      "pauseMs": 0.17,
      "totalMs": 101.6,
-     "second": -31.71,
+     "second": -38.16,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -77,7 +78,7 @@
      "heapTotalMB": 27,
      "pauseMs": 0.153,
      "totalMs": 110.2,
-     "second": -31.17,
+     "second": -37.61,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -89,8 +90,8 @@
      "heapTotalMB": 69,
      "pauseMs": 0.274,
      "totalMs": 222.0,
-     "second": 6.89,
-     "doing": "race scrap-1-c"
+     "second": 0.45,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -101,7 +102,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.092,
      "totalMs": 121.9,
-     "second": 9.06,
+     "second": 2.61,
      "doing": "race scrap-1-c"
     },
     {
@@ -113,7 +114,7 @@
      "heapTotalMB": 72,
      "pauseMs": 3.092,
      "totalMs": 162.5,
-     "second": 11.35,
+     "second": 4.91,
      "doing": "race scrap-1-c"
     },
     {
@@ -125,7 +126,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.661,
      "totalMs": 130.0,
-     "second": 15.78,
+     "second": 9.34,
      "doing": "race scrap-1-c"
     },
     {
@@ -137,7 +138,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.246,
      "totalMs": 139.2,
-     "second": 23.49,
+     "second": 17.04,
      "doing": "race scrap-1-c"
     },
     {
@@ -149,7 +150,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.087,
      "totalMs": 101.2,
-     "second": 27.37,
+     "second": 20.93,
      "doing": "race scrap-1-c"
     },
     {
@@ -161,7 +162,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.16,
      "totalMs": 133.3,
-     "second": 30.83,
+     "second": 24.39,
      "doing": "race scrap-1-c"
     },
     {
@@ -173,7 +174,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.272,
      "totalMs": 144.6,
-     "second": 38.32,
+     "second": 31.87,
      "doing": "race scrap-1-c"
     },
     {
@@ -185,7 +186,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.087,
      "totalMs": 148.2,
-     "second": 45.43,
+     "second": 38.99,
      "doing": "race scrap-1-c"
     },
     {
@@ -197,7 +198,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.136,
      "totalMs": 178.2,
-     "second": 52.69,
+     "second": 46.24,
      "doing": "race scrap-1-c"
     },
     {
@@ -209,7 +210,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.094,
      "totalMs": 100.8,
-     "second": 59.76,
+     "second": 53.32,
      "doing": "race scrap-1-c"
     },
     {
@@ -221,8 +222,8 @@
      "heapTotalMB": 72,
      "pauseMs": 0.118,
      "totalMs": 121.9,
-     "second": 66.53,
-     "doing": "lobby"
+     "second": 60.09,
+     "doing": "race scrap-1-c"
     },
     {
      "kind": "Background",
@@ -233,8 +234,8 @@
      "heapTotalMB": 73,
      "pauseMs": 0.231,
      "totalMs": 157.3,
-     "second": 71.99,
-     "doing": "race foundry-1-c"
+     "second": 65.55,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -245,7 +246,7 @@
      "heapTotalMB": 74,
      "pauseMs": 0.452,
      "totalMs": 120.3,
-     "second": 76.48,
+     "second": 70.04,
      "doing": "race foundry-1-c"
     },
     {
@@ -257,7 +258,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.085,
      "totalMs": 108.9,
-     "second": 82.78,
+     "second": 76.34,
      "doing": "race foundry-1-c"
     },
     {
@@ -269,7 +270,7 @@
      "heapTotalMB": 73,
      "pauseMs": 1.579,
      "totalMs": 117.9,
-     "second": 89.64,
+     "second": 83.19,
      "doing": "race foundry-1-c"
     },
     {
@@ -281,7 +282,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.18,
      "totalMs": 164.0,
-     "second": 96.6,
+     "second": 90.15,
      "doing": "race foundry-1-c"
     },
     {
@@ -293,7 +294,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.208,
      "totalMs": 162.2,
-     "second": 103.42,
+     "second": 96.97,
      "doing": "race foundry-1-c"
     },
     {
@@ -305,7 +306,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.187,
      "totalMs": 127.7,
-     "second": 110.17,
+     "second": 103.72,
      "doing": "race foundry-1-c"
     },
     {
@@ -317,7 +318,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.194,
      "totalMs": 118.8,
-     "second": 117.05,
+     "second": 110.6,
      "doing": "race foundry-1-c"
     },
     {
@@ -329,7 +330,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.143,
      "totalMs": 112.9,
-     "second": 123.74,
+     "second": 117.29,
      "doing": "race foundry-1-c"
     },
     {
@@ -341,7 +342,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.142,
      "totalMs": 136.9,
-     "second": 130.5,
+     "second": 124.06,
      "doing": "race foundry-1-c"
     },
     {
@@ -353,8 +354,8 @@
      "heapTotalMB": 73,
      "pauseMs": 0.122,
      "totalMs": 123.5,
-     "second": 137.28,
-     "doing": "race salt-1-b"
+     "second": 130.84,
+     "doing": "race foundry-1-c"
     },
     {
      "kind": "Background",
@@ -365,8 +366,8 @@
      "heapTotalMB": 76,
      "pauseMs": 0.092,
      "totalMs": 129.2,
-     "second": 141.49,
-     "doing": "race salt-1-b"
+     "second": 135.05,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -377,7 +378,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.179,
      "totalMs": 206.3,
-     "second": 146.0,
+     "second": 139.56,
      "doing": "race salt-1-b"
     },
     {
@@ -389,7 +390,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.172,
      "totalMs": 135.1,
-     "second": 152.89,
+     "second": 146.44,
      "doing": "race salt-1-b"
     },
     {
@@ -401,7 +402,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.192,
      "totalMs": 127.2,
-     "second": 159.51,
+     "second": 153.07,
      "doing": "race salt-1-b"
     },
     {
@@ -413,7 +414,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.136,
      "totalMs": 211.2,
-     "second": 166.32,
+     "second": 159.88,
      "doing": "race salt-1-b"
     },
     {
@@ -425,7 +426,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.494,
      "totalMs": 456.8,
-     "second": 173.51,
+     "second": 167.07,
      "doing": "race salt-1-b"
     },
     {
@@ -437,7 +438,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.406,
      "totalMs": 128.2,
-     "second": 180.13,
+     "second": 173.69,
      "doing": "race salt-1-b"
     },
     {
@@ -449,7 +450,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.183,
      "totalMs": 117.9,
-     "second": 186.9,
+     "second": 180.45,
      "doing": "race salt-1-b"
     },
     {
@@ -461,7 +462,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.14,
      "totalMs": 146.0,
-     "second": 193.82,
+     "second": 187.38,
      "doing": "race salt-1-b"
     },
     {
@@ -473,8 +474,8 @@
      "heapTotalMB": 75,
      "pauseMs": 0.091,
      "totalMs": 131.5,
-     "second": 200.32,
-     "doing": "lobby"
+     "second": 193.88,
+     "doing": "race salt-1-b"
     },
     {
      "kind": "Background",
@@ -485,8 +486,8 @@
      "heapTotalMB": 76,
      "pauseMs": 0.096,
      "totalMs": 227.1,
-     "second": 206.32,
-     "doing": "race switchback-1-a"
+     "second": 199.87,
+     "doing": "lobby"
     },
     {
      "kind": "Background young",
@@ -497,8 +498,8 @@
      "heapTotalMB": 76,
      "pauseMs": 5.632,
      "totalMs": 63.9,
-     "second": 208.48,
-     "doing": "race switchback-1-a"
+     "second": 202.04,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -509,7 +510,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.085,
      "totalMs": 106.9,
-     "second": 210.16,
+     "second": 203.71,
      "doing": "race switchback-1-a"
     },
     {
@@ -521,7 +522,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.17,
      "totalMs": 118.1,
-     "second": 215.52,
+     "second": 209.08,
      "doing": "race switchback-1-a"
     },
     {
@@ -533,7 +534,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.131,
      "totalMs": 129.4,
-     "second": 222.89,
+     "second": 216.44,
      "doing": "race switchback-1-a"
     },
     {
@@ -545,7 +546,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.256,
      "totalMs": 135.1,
-     "second": 229.62,
+     "second": 223.18,
      "doing": "race switchback-1-a"
     },
     {
@@ -557,7 +558,7 @@
      "heapTotalMB": 79,
      "pauseMs": 11.408,
      "totalMs": 264.3,
-     "second": 236.41,
+     "second": 229.97,
      "doing": "race switchback-1-a"
     },
     {
@@ -569,7 +570,7 @@
      "heapTotalMB": 78,
      "pauseMs": 1.137,
      "totalMs": 153.8,
-     "second": 243.44,
+     "second": 236.99,
      "doing": "race switchback-1-a"
     },
     {
@@ -581,7 +582,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.306,
      "totalMs": 123.8,
-     "second": 250.41,
+     "second": 243.97,
      "doing": "race switchback-1-a"
     },
     {
@@ -593,7 +594,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.095,
      "totalMs": 132.5,
-     "second": 257.14,
+     "second": 250.69,
      "doing": "race switchback-1-a"
     },
     {
@@ -605,7 +606,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.126,
      "totalMs": 147.5,
-     "second": 264.24,
+     "second": 257.8,
      "doing": "race switchback-1-a"
     },
     {
@@ -617,8 +618,8 @@
      "heapTotalMB": 78,
      "pauseMs": 0.11,
      "totalMs": 120.7,
-     "second": 271.16,
-     "doing": "race crown-1-a"
+     "second": 264.71,
+     "doing": "race switchback-1-a"
     },
     {
      "kind": "Background",
@@ -629,8 +630,8 @@
      "heapTotalMB": 82,
      "pauseMs": 0.135,
      "totalMs": 167.7,
-     "second": 275.86,
-     "doing": "race crown-1-a"
+     "second": 269.42,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -641,7 +642,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.093,
      "totalMs": 116.1,
-     "second": 286.5,
+     "second": 280.05,
      "doing": "race crown-1-a"
     },
     {
@@ -653,7 +654,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.199,
      "totalMs": 125.3,
-     "second": 293.45,
+     "second": 287.0,
      "doing": "race crown-1-a"
     },
     {
@@ -665,7 +666,7 @@
      "heapTotalMB": 81,
      "pauseMs": 2.498,
      "totalMs": 159.5,
-     "second": 300.29,
+     "second": 293.85,
      "doing": "race crown-1-a"
     },
     {
@@ -677,7 +678,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.102,
      "totalMs": 128.9,
-     "second": 307.11,
+     "second": 300.66,
      "doing": "race crown-1-a"
     },
     {
@@ -689,7 +690,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.107,
      "totalMs": 115.1,
-     "second": 313.83,
+     "second": 307.39,
      "doing": "race crown-1-a"
     },
     {
@@ -701,7 +702,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.226,
      "totalMs": 109.8,
-     "second": 320.7,
+     "second": 314.26,
      "doing": "race crown-1-a"
     },
     {
@@ -713,7 +714,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.706,
      "totalMs": 124.7,
-     "second": 327.31,
+     "second": 320.87,
      "doing": "race crown-1-a"
     },
     {
@@ -725,7 +726,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.096,
      "totalMs": 121.8,
-     "second": 334.06,
+     "second": 327.62,
      "doing": "race crown-1-a"
     },
     {
@@ -737,8 +738,8 @@
      "heapTotalMB": 81,
      "pauseMs": 0.174,
      "totalMs": 158.7,
-     "second": 340.7,
-     "doing": "race scrap-1-c"
+     "second": 334.26,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -749,7 +750,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.422,
      "totalMs": 143.8,
-     "second": 344.47,
+     "second": 338.03,
      "doing": "race scrap-1-c"
     },
     {
@@ -761,7 +762,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.142,
      "totalMs": 150.6,
-     "second": 350.77,
+     "second": 344.33,
      "doing": "race scrap-1-c"
     },
     {
@@ -773,7 +774,7 @@
      "heapTotalMB": 81,
      "pauseMs": 1.654,
      "totalMs": 140.7,
-     "second": 357.75,
+     "second": 351.31,
      "doing": "race scrap-1-c"
     },
     {
@@ -785,26 +786,27 @@
      "heapTotalMB": 81,
      "pauseMs": 0.108,
      "totalMs": 120.5,
-     "second": 364.52,
-     "doing": "lobby"
+     "second": 358.08,
+     "doing": "race scrap-1-c"
     }
    ]
   },
   {
    "run": "p13e/run2",
    "probeSeconds": 360.0954728,
-   "loggedGcs": 54,
-   "loggedBackgroundGcs": 54,
+   "clockSpreadSeconds": 0.062,
+   "loggedGcs": 55,
+   "loggedBackgroundGcs": 55,
    "losMBPerGc": [
     15.0,
     22.0
    ],
-   "losMBTotal": 1057.0,
-   "losMBps": 2.94,
+   "losMBTotal": 1077.0,
+   "losMBps": 2.99,
    "gapSeconds": [
     3.31,
     6.45,
-    17.59
+    17.6
    ],
    "totalMs": [
     101.3,
@@ -829,7 +831,7 @@
      "heapTotalMB": 19,
      "pauseMs": 0.153,
      "totalMs": 201.3,
-     "second": -27.61,
+     "second": -33.37,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -841,7 +843,7 @@
      "heapTotalMB": 24,
      "pauseMs": 0.226,
      "totalMs": 163.9,
-     "second": -26.95,
+     "second": -32.7,
      "doing": "before probe (startup, /routes warm-up)"
     },
     {
@@ -853,7 +855,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.568,
      "totalMs": 164.8,
-     "second": 11.61,
+     "second": 5.85,
      "doing": "race scrap-1-c"
     },
     {
@@ -865,7 +867,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.471,
      "totalMs": 176.6,
-     "second": 19.5,
+     "second": 13.75,
      "doing": "race scrap-1-c"
     },
     {
@@ -877,7 +879,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.273,
      "totalMs": 143.9,
-     "second": 27.11,
+     "second": 21.35,
      "doing": "race scrap-1-c"
     },
     {
@@ -889,7 +891,7 @@
      "heapTotalMB": 72,
      "pauseMs": 1.353,
      "totalMs": 104.4,
-     "second": 30.42,
+     "second": 24.66,
      "doing": "race scrap-1-c"
     },
     {
@@ -901,7 +903,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.316,
      "totalMs": 102.9,
-     "second": 34.04,
+     "second": 28.28,
      "doing": "race scrap-1-c"
     },
     {
@@ -913,7 +915,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.094,
      "totalMs": 104.8,
-     "second": 40.65,
+     "second": 34.9,
      "doing": "race scrap-1-c"
     },
     {
@@ -925,7 +927,7 @@
      "heapTotalMB": 72,
      "pauseMs": 0.129,
      "totalMs": 156.4,
-     "second": 47.66,
+     "second": 41.91,
      "doing": "race scrap-1-c"
     },
     {
@@ -937,7 +939,7 @@
      "heapTotalMB": 71,
      "pauseMs": 0.225,
      "totalMs": 133.7,
-     "second": 54.3,
+     "second": 48.54,
      "doing": "race scrap-1-c"
     },
     {
@@ -949,8 +951,8 @@
      "heapTotalMB": 74,
      "pauseMs": 0.1,
      "totalMs": 147.4,
-     "second": 71.89,
-     "doing": "race foundry-1-c"
+     "second": 66.14,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -961,7 +963,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.1,
      "totalMs": 146.5,
-     "second": 76.39,
+     "second": 70.64,
      "doing": "race foundry-1-c"
     },
     {
@@ -973,7 +975,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.13,
      "totalMs": 136.2,
-     "second": 82.72,
+     "second": 76.97,
      "doing": "race foundry-1-c"
     },
     {
@@ -985,7 +987,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.143,
      "totalMs": 103.3,
-     "second": 89.18,
+     "second": 83.42,
      "doing": "race foundry-1-c"
     },
     {
@@ -997,7 +999,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.198,
      "totalMs": 119.7,
-     "second": 95.92,
+     "second": 90.17,
      "doing": "race foundry-1-c"
     },
     {
@@ -1009,7 +1011,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.238,
      "totalMs": 142.6,
-     "second": 102.69,
+     "second": 96.93,
      "doing": "race foundry-1-c"
     },
     {
@@ -1021,7 +1023,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.41,
      "totalMs": 131.2,
-     "second": 109.24,
+     "second": 103.48,
      "doing": "race foundry-1-c"
     },
     {
@@ -1033,7 +1035,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.284,
      "totalMs": 108.7,
-     "second": 115.93,
+     "second": 110.17,
      "doing": "race foundry-1-c"
     },
     {
@@ -1045,7 +1047,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.121,
      "totalMs": 111.0,
-     "second": 122.23,
+     "second": 116.47,
      "doing": "race foundry-1-c"
     },
     {
@@ -1057,7 +1059,7 @@
      "heapTotalMB": 73,
      "pauseMs": 0.135,
      "totalMs": 110.2,
-     "second": 128.53,
+     "second": 122.77,
      "doing": "race foundry-1-c"
     },
     {
@@ -1069,8 +1071,8 @@
      "heapTotalMB": 73,
      "pauseMs": 0.38,
      "totalMs": 110.0,
-     "second": 135.09,
-     "doing": "race salt-1-b"
+     "second": 129.33,
+     "doing": "race foundry-1-c"
     },
     {
      "kind": "Background",
@@ -1081,7 +1083,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.084,
      "totalMs": 106.2,
-     "second": 143.32,
+     "second": 137.56,
      "doing": "race salt-1-b"
     },
     {
@@ -1093,7 +1095,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.09,
      "totalMs": 101.7,
-     "second": 149.51,
+     "second": 143.75,
      "doing": "race salt-1-b"
     },
     {
@@ -1105,7 +1107,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.129,
      "totalMs": 138.4,
-     "second": 162.39,
+     "second": 156.64,
      "doing": "race salt-1-b"
     },
     {
@@ -1117,7 +1119,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.189,
      "totalMs": 133.3,
-     "second": 168.64,
+     "second": 162.88,
      "doing": "race salt-1-b"
     },
     {
@@ -1129,7 +1131,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.106,
      "totalMs": 119.4,
-     "second": 174.87,
+     "second": 169.12,
      "doing": "race salt-1-b"
     },
     {
@@ -1141,7 +1143,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.319,
      "totalMs": 141.0,
-     "second": 181.46,
+     "second": 175.71,
      "doing": "race salt-1-b"
     },
     {
@@ -1153,7 +1155,7 @@
      "heapTotalMB": 75,
      "pauseMs": 0.083,
      "totalMs": 127.6,
-     "second": 187.79,
+     "second": 182.03,
      "doing": "race salt-1-b"
     },
     {
@@ -1165,7 +1167,7 @@
      "heapTotalMB": 76,
      "pauseMs": 0.094,
      "totalMs": 112.6,
-     "second": 194.01,
+     "second": 188.25,
      "doing": "race salt-1-b"
     },
     {
@@ -1177,8 +1179,8 @@
      "heapTotalMB": 76,
      "pauseMs": 0.109,
      "totalMs": 132.4,
-     "second": 200.64,
-     "doing": "lobby"
+     "second": 194.89,
+     "doing": "race salt-1-b"
     },
     {
      "kind": "Background",
@@ -1189,8 +1191,8 @@
      "heapTotalMB": 78,
      "pauseMs": 0.333,
      "totalMs": 136.9,
-     "second": 205.54,
-     "doing": "race switchback-1-a"
+     "second": 199.79,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -1201,7 +1203,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.095,
      "totalMs": 101.3,
-     "second": 209.38,
+     "second": 203.62,
      "doing": "race switchback-1-a"
     },
     {
@@ -1213,7 +1215,7 @@
      "heapTotalMB": 77,
      "pauseMs": 0.083,
      "totalMs": 124.8,
-     "second": 214.86,
+     "second": 209.11,
      "doing": "race switchback-1-a"
     },
     {
@@ -1225,7 +1227,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.131,
      "totalMs": 130.3,
-     "second": 221.31,
+     "second": 215.55,
      "doing": "race switchback-1-a"
     },
     {
@@ -1237,7 +1239,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.086,
      "totalMs": 131.3,
-     "second": 228.01,
+     "second": 222.25,
      "doing": "race switchback-1-a"
     },
     {
@@ -1249,7 +1251,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.91,
      "totalMs": 111.8,
-     "second": 234.39,
+     "second": 228.64,
      "doing": "race switchback-1-a"
     },
     {
@@ -1261,7 +1263,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.173,
      "totalMs": 185.9,
-     "second": 241.05,
+     "second": 235.3,
      "doing": "race switchback-1-a"
     },
     {
@@ -1273,7 +1275,7 @@
      "heapTotalMB": 77,
      "pauseMs": 0.253,
      "totalMs": 132.9,
-     "second": 247.7,
+     "second": 241.94,
      "doing": "race switchback-1-a"
     },
     {
@@ -1285,7 +1287,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.095,
      "totalMs": 121.0,
-     "second": 253.95,
+     "second": 248.19,
      "doing": "race switchback-1-a"
     },
     {
@@ -1297,7 +1299,7 @@
      "heapTotalMB": 78,
      "pauseMs": 0.091,
      "totalMs": 122.7,
-     "second": 260.56,
+     "second": 254.81,
      "doing": "race switchback-1-a"
     },
     {
@@ -1309,8 +1311,8 @@
      "heapTotalMB": 78,
      "pauseMs": 0.103,
      "totalMs": 125.0,
-     "second": 266.83,
-     "doing": "lobby"
+     "second": 261.07,
+     "doing": "race switchback-1-a"
     },
     {
      "kind": "Background",
@@ -1321,8 +1323,8 @@
      "heapTotalMB": 82,
      "pauseMs": 10.514,
      "totalMs": 626.2,
-     "second": 272.53,
-     "doing": "race crown-1-a"
+     "second": 266.77,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -1333,7 +1335,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.084,
      "totalMs": 104.4,
-     "second": 276.24,
+     "second": 270.48,
      "doing": "race crown-1-a"
     },
     {
@@ -1345,7 +1347,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.111,
      "totalMs": 104.9,
-     "second": 281.28,
+     "second": 275.53,
      "doing": "race crown-1-a"
     },
     {
@@ -1357,7 +1359,7 @@
      "heapTotalMB": 82,
      "pauseMs": 0.095,
      "totalMs": 129.3,
-     "second": 288.02,
+     "second": 282.27,
      "doing": "race crown-1-a"
     },
     {
@@ -1369,7 +1371,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.197,
      "totalMs": 141.9,
-     "second": 294.57,
+     "second": 288.82,
      "doing": "race crown-1-a"
     },
     {
@@ -1381,7 +1383,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.085,
      "totalMs": 106.3,
-     "second": 300.91,
+     "second": 295.16,
      "doing": "race crown-1-a"
     },
     {
@@ -1393,7 +1395,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.084,
      "totalMs": 127.1,
-     "second": 307.38,
+     "second": 301.63,
      "doing": "race crown-1-a"
     },
     {
@@ -1405,7 +1407,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.101,
      "totalMs": 135.0,
-     "second": 313.68,
+     "second": 307.92,
      "doing": "race crown-1-a"
     },
     {
@@ -1417,7 +1419,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.13,
      "totalMs": 125.1,
-     "second": 319.94,
+     "second": 314.18,
      "doing": "race crown-1-a"
     },
     {
@@ -1429,7 +1431,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.117,
      "totalMs": 132.8,
-     "second": 326.54,
+     "second": 320.78,
      "doing": "race crown-1-a"
     },
     {
@@ -1441,7 +1443,7 @@
      "heapTotalMB": 81,
      "pauseMs": 2.387,
      "totalMs": 295.9,
-     "second": 333.0,
+     "second": 327.24,
      "doing": "race crown-1-a"
     },
     {
@@ -1453,8 +1455,8 @@
      "heapTotalMB": 85,
      "pauseMs": 4.016,
      "totalMs": 363.5,
-     "second": 339.44,
-     "doing": "race scrap-1-c"
+     "second": 333.68,
+     "doing": "lobby"
     },
     {
      "kind": "Background",
@@ -1465,7 +1467,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.147,
      "totalMs": 107.9,
-     "second": 343.48,
+     "second": 337.72,
      "doing": "race scrap-1-c"
     },
     {
@@ -1477,7 +1479,7 @@
      "heapTotalMB": 80,
      "pauseMs": 0.143,
      "totalMs": 114.2,
-     "second": 349.42,
+     "second": 343.66,
      "doing": "race scrap-1-c"
     },
     {
@@ -1489,7 +1491,7 @@
      "heapTotalMB": 81,
      "pauseMs": 0.109,
      "totalMs": 124.0,
-     "second": 355.94,
+     "second": 350.18,
      "doing": "race scrap-1-c"
     },
     {
@@ -1501,8 +1503,8 @@
      "heapTotalMB": 80,
      "pauseMs": 0.108,
      "totalMs": 109.3,
-     "second": 362.94,
-     "doing": "lobby"
+     "second": 357.18,
+     "doing": "race scrap-1-c"
     }
    ]
   }
