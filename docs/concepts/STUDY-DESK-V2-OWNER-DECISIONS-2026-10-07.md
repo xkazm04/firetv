@@ -101,3 +101,22 @@ The owner supplied the standard (`docs/standards/twin-card/1.0/`: SPEC, RENDERER
 3. Update `ADULT-MODE-IMPLEMENTATION-PLAN.md`: O1 = 18+, O3 per L3, O5 per E5. Retire or reshape the Field Work slices
    (B2-B7) per V4/M3/M4. Re-target D8 export to Twin Card 1.0.
 4. Update `FAMILY-PHASE-1-PLAN.md`'s D3 note to point here.
+
+## 6. Session 2 (same day): build rules and the open questions
+
+**Build rules (owner).** One draft PR per batch, reviewed by the owner after all of the batch is done, then merged by
+the owner. No other fleet changes the code meanwhile. Model output is checked with stubbed tests in the cloud session;
+live engine checks run on the owner's PC at milestones. The kill-criteria approach is approved: the host proposes the
+criteria in the v2 plan, the owner approves or edits them.
+
+| # | Question | Owner answer | Host reading |
+|---|---|---|---|
+| S1 | What the mastery collectibles are (X1) | **Each app's own world** | A collectible is drawn in that app's design language (Lamplight, Open Door, Specimen), never a shared badge shelf. It is earned by the existing code latches only. |
+| S2 | GCSE tier and board (M2) | **Foundation as the MVP; the host recommends the board** | Recommendation: **Pearson Edexcel**. Its GCSE Maths (1MA1) is, to the host's knowledge, the most-entered GCSE maths specification in England. Edexcel's International GCSE (4MA1) shares most content and serves the international market (X3). Map 1MA1 Foundation first; 4MA1 is a later overlay. The owner can override with AQA (8300) at no structural cost: the mapping is a data table. |
+| S3 | Cambridge Speaking (L2) | **Practice mode only** | No simulated examiner, timing or exam parts. The free scenes stay the core. A practice mode adds Speaking-paper-shaped tasks (personal questions, a picture to describe, a discussion with a partner), mapped to A2 Key / B1 Preliminary for Schools. |
+| S4 | Twin Card's 500-character exemplars (T1) | **Short passages first: train email/chat language before longer posts (MVP)** | The twin's MVP channels are `email` and `chat` (plus `generic`), the Twin Card's own vocabulary. Exemplars at 500 characters or less fit as is, so no change to the standard is needed. Long-form formats (newsletter, column) come after the MVP. The Workroom's first formats are a message and an email, not an essay. |
+| S5 | Kill criteria | **Approved approach** | Proposed per risky slice in `STUDY-DESK-V2-PLAN.md` section g. |
+
+T2-T5 keep the defaults proposed in section 3 until the owner says otherwise: the style sheet maps to the 8 dims plus
+an `extensions` block; integrity hashes in v2, with signing and sealing later; an exemplar review step before export;
+no import in the MVP.
