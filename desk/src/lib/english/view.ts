@@ -10,7 +10,7 @@
 import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
+import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
 import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
@@ -406,7 +406,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
   } else if (c) {
     tag = c.phase === "replay" ? "Try it again" : "Conversation";
-    const scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId)!;
+    const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!;
     const said = last?.role === "partner" ? last.text : "", hasReply = c.turns.some(t => t.role === "learner");
     caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal.");
     const help = helpOf(c);
@@ -519,7 +519,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
     else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }));
     else {
-      const help = helpOf(c), scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId);
+      const help = helpOf(c), scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId);
       if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));
       onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
       if (c.quizOpen && scene) scene.quiz.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));

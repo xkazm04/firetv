@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
+import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
@@ -25,7 +25,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const [notes,setNotes]=useState(learning.notes.join("\n"));
   const [message,setMessage]=useState("");
   const pending=busy||!!c?.pending;
-  const scene=c?.scene??ENGLISH_SCENES.find(x=>x.id===c?.sceneId);
+  const scene=c?.scene??AUTHORED_SCENES.find(x=>x.id===c?.sceneId);
   const save=async()=>{if(await run("preferences",{preferences:prefs,notes:notes.split("\n").map(n=>n.trim()).filter(Boolean)})){setMessage("Your learning preferences are saved. They apply to your next situation.");setPanel("talk");}};
   const currentQuestion=c?.turns.at(-1)?.text;
   // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)

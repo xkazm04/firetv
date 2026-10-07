@@ -26,7 +26,7 @@ import type { DigestEntry, EnglishDigest, EssayDigest, MathsDigest } from "./dig
 import { slipName } from "./digest";
 import { topicIn } from "../library/paths";
 import { ESSAY_TYPES } from "../library/lessons.data";
-import { ENGLISH_SCENES } from "../english/curriculum";
+import { AUTHORED_SCENES } from "../english/curriculum";
 import { SCHOOL_SLIPS } from "./school";
 
 /** The empty week, whole: the desk's rule that an empty state is two words. */
@@ -109,7 +109,7 @@ export const wordsIn = (line: string) => line.split(/\s+/).filter(Boolean).lengt
 
 /** A Linga scene's name: the authored scene's, or the learner's own plan topic's title as the desk stores it; else none. */
 function sceneName(id: string, learner: Pick<Learner, "english">): string | null {
-  return ENGLISH_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
+  return AUTHORED_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
 }
 
 /** The week's rows from this learner's own digest. Deterministic: the same learner, profile and `now` give the same page. */

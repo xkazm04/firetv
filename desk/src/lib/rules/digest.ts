@@ -18,7 +18,7 @@
  */
 import { topicIn } from "../library/paths";
 import { ESSAY_TYPES } from "../library/lessons.data";
-import { ENGLISH_SCENES, ENGLISH_SKILLS } from "../english/curriculum";
+import { AUTHORED_SCENES, ENGLISH_SKILLS } from "../english/curriculum";
 import type { SkillId } from "../english/types";
 import { SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS } from "./school";
 
@@ -42,7 +42,7 @@ const MAX_ITEMS = 50, MAX_TURNS = 200, MAX_SENTENCES = 500;
 /** A plan topic's id as english/check.ts mints it: "plan-" and eight hex digits. Never words. */
 const PLAN_ID = /^plan-[0-9a-f]{8}$/;
 const SKILLS = new Set<string>(ENGLISH_SKILLS.map((s) => s.id));
-const SCENES = new Set<string>(ENGLISH_SCENES.map((s) => s.id));
+const SCENES = new Set<string>(AUTHORED_SCENES.map((s) => s.id));
 const LENSES = new Set<string>(ESSAY_TYPES.map((t) => t.id));
 
 /** A whole number from 0 to `max`, or null when it is not a finite number at all. */

@@ -16,6 +16,7 @@ for (const exam of Object.keys(C.EXAMS)) {
   const c = C.coverage(exam, age);
   console.log(`${C.EXAMS[exam].name}: ${c.practised.length} of ${c.total} descriptors practised (${Math.round(c.share * 100)}%)`);
   for (const d of C.DESCRIPTORS.filter((x) => x.bands.includes(exam))) console.log(`  ${c.scenesFor[d.id].length ? 'yes' : 'GAP'}  ${d.can}  [${d.skills.join(', ')}]  ${c.scenesFor[d.id].join(', ')}`);
+  for (const p of C.partPractice(exam)) console.log(`  part ${p.part} ${p.name}: ${p.scenes.length ? `practised by ${p.scenes.join(", ")}` : "NO PRACTICE"}`);
   console.log('');
 }
 console.log(`Claim allowed (verified and A2 Key at least ${C.CLAIM_FLOOR * 100}%): ${C.claimAllowed(age)}`);

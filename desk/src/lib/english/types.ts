@@ -20,6 +20,8 @@ export interface EnglishScene {
   id: string; name: string; goal: string; partner: string; skill: SkillId;
   audience: Audience; minutes: string;
   premise: string; cue: string; quiz: { question: string; options: [string, string]; correct: number };
+  /** A Speaking-practice scene's task shape (v2 L2, speaking.ts): the paper and part it copies. Never displayed. */
+  practice?: { exam: string; part: number };
 }
 
 export type TaskKind = "say" | "listen" | "choose";

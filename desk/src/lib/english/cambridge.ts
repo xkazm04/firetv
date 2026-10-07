@@ -15,7 +15,7 @@
  * A TEACHER OR EXAMINER MUST READ THIS TABLE, as with the band tables (placement.ts, cert.ts).
  */
 import type { Audience, SkillId } from "./types";
-import { ENGLISH_SCENES } from "./curriculum";
+import { AUTHORED_SCENES } from "./curriculum";
 
 export type Exam = "a2-key-schools" | "b1-preliminary-schools";
 export const EXAMS: Record<Exam, { name: string; band: "A2" | "B1"; minutes: string; format: string; source: string }> = {
@@ -105,7 +105,7 @@ export function audiencesAt(age: number): Audience[] {
 export interface Coverage { exam: Exam; total: number; practised: string[]; gaps: string[]; share: number; scenesFor: Record<string, string[]>; }
 /** Which of a paper's descriptors an authored scene practises for a learner of `age` (plan topics change; they are not counted). */
 export function coverage(exam: Exam, age: number): Coverage {
-  const allowed = new Set(audiencesAt(age)), scenes = ENGLISH_SCENES.filter((x) => allowed.has(x.audience));
+  const allowed = new Set(audiencesAt(age)), scenes = AUTHORED_SCENES.filter((x) => allowed.has(x.audience));
   const ds = DESCRIPTORS.filter((d) => d.bands.includes(exam));
   const scenesFor: Record<string, string[]> = {};
   for (const d of ds) scenesFor[d.id] = scenes.filter((x) => d.skills.includes(x.skill)).map((x) => x.id);
@@ -117,4 +117,10 @@ export function coverage(exam: Exam, age: number): Coverage {
 export const CLAIM_FLOOR = 0.9;
 export function claimAllowed(age = 12): boolean {
   return VERIFIED && coverage("a2-key-schools", age).share >= CLAIM_FLOOR;
+}
+
+/** Each Speaking part of a paper with the Speaking-practice scenes that copy its task shape (v2 L2, speaking.ts). */
+export function partPractice(exam: Exam): { part: number; name: string; scenes: string[] }[] {
+  return SPEAKING_PARTS.filter((p) => p.exam === exam).map((p) => ({ part: p.part, name: p.name,
+    scenes: AUTHORED_SCENES.filter((s) => s.practice?.exam === exam && s.practice.part === p.part).map((s) => s.id) }));
 }

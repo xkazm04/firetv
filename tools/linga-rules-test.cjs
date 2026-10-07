@@ -699,7 +699,8 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
 // ---- Family mode, W1: three school situations, offered to learners under 18 and to no one else
 const {ENGLISH_SCENES,ENGLISH_SKILLS,audienceAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
 const SCHOOL=['teacher','project','lost'];
-const schoolIds=list=>list.filter(x=>x.audience==='school').map(x=>x.id);
+// the three free school situations; Speaking practice (v2 L2, speaking.ts) is school-audience too and has its own suite (cambridge-rules)
+const schoolIds=list=>list.filter(x=>x.audience==='school'&&!x.practice).map(x=>x.id);
 const prefsOf=p=>defaultPreferences(p);
 test('scene ids are unique, and the three school situations are authored to the scene contract',()=>{
  const ids=ENGLISH_SCENES.map(x=>x.id);assert.equal(new Set(ids).size,ids.length);

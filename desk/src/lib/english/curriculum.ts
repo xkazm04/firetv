@@ -2,6 +2,7 @@ import type { Profile } from "../session/store";
 import { isAdult } from "../rules/mode";
 import type { Audience, EnglishLearning, EnglishPreferences, EnglishScene, Progress, SkillId } from "./types";
 export type { EnglishScene } from "./types";
+import { SPEAKING_PRACTICE } from "./speaking";
 
 export const ENGLISH_SKILLS: Array<{ id: SkillId; name: string; goal: string }> = [
   { id: "contact", name: "Make contact", goal: "Greet, introduce yourself, and take a turn." },
@@ -65,9 +66,11 @@ export function audienceAllowed(p: Profile | undefined, prefs: EnglishPreference
 export function planScenes(l?: EnglishLearning | null): EnglishScene[] {
   return (l?.plan?.topics ?? []).map(t => ({ id: t.id, name: t.title, goal: t.goal, partner: t.partner, skill: t.skill, audience: t.audience, minutes: "8–10", premise: t.premise, cue: t.cue, quiz: t.quiz }));
 }
-/** Plan topics first, then the built-in situations; both filtered by age. */
+/** Every authored scene: the free situations, then Speaking practice (v2 L2). Plan topics are the learner's own. */
+export const AUTHORED_SCENES: EnglishScene[] = [...ENGLISH_SCENES, ...SPEAKING_PRACTICE];
+/** Plan topics first, then the built-in situations, then Speaking practice; all filtered by age. */
 export function eligibleScenes(p: Profile | undefined, prefs: EnglishPreferences, l?: EnglishLearning | null): EnglishScene[] {
-  return [...planScenes(l), ...ENGLISH_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
+  return [...planScenes(l), ...AUTHORED_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
 }
 /** Every topic in the plan has been talked through at least once. */
 export function planDone(l: EnglishLearning): boolean {
