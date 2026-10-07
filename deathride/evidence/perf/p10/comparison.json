@@ -1,0 +1,1169 @@
+{
+  "p9": {
+    "diagApk": "41f0a14f30c97a1963d2e872c1686c7b26ce7915c7252aec297b5ee13a95f395",
+    "diagTransitionMaxMs": 2272.752154,
+    "baselineTransitionMaxMs": 2376.9014620000003,
+    "diagCourses": [
+      {
+        "course": "scrap-1-c",
+        "selectRegionMs": 115.749846,
+        "selectRegionUploadMs": 7.551768,
+        "slowStep": "landmarks",
+        "slowStepMs": 1139.638154,
+        "firstProjectMs": 1138.509693
+      },
+      {
+        "course": "foundry-1-c",
+        "selectRegionMs": 90.804077,
+        "selectRegionUploadMs": 4.759384,
+        "slowStep": "landmarks",
+        "slowStepMs": 1372.878154,
+        "firstProjectMs": 1372.249461
+      },
+      {
+        "course": "salt-1-b",
+        "selectRegionMs": 106.082077,
+        "selectRegionUploadMs": 5.635231,
+        "slowStep": "landmarks",
+        "slowStepMs": 1790.240693,
+        "firstProjectMs": 1789.71623
+      },
+      {
+        "course": "switchback-1-a",
+        "selectRegionMs": 70.995154,
+        "selectRegionUploadMs": 4.855153,
+        "slowStep": "landmarks",
+        "slowStepMs": 1839.227693,
+        "firstProjectMs": 1838.751692
+      },
+      {
+        "course": "crown-1-a",
+        "selectRegionMs": 64.531077,
+        "selectRegionUploadMs": 4.875615,
+        "slowStep": "landmarks",
+        "slowStepMs": 2268.371692,
+        "firstProjectMs": 2268.282616
+      },
+      {
+        "course": "scrap-1-c",
+        "selectRegionMs": 78.232384,
+        "selectRegionUploadMs": 4.851152,
+        "slowStep": "kerbsBarriers",
+        "slowStepMs": 3.468769,
+        "firstProjectMs": 0.055923
+      }
+    ],
+    "diagRenders100msPlusPreparePhase": 5,
+    "baselinePssRangeMiB": [
+      171.4951171875,
+      187.8779296875
+    ],
+    "diagPssRangeMiB": [
+      155.4892578125,
+      176.3701171875
+    ]
+  },
+  "arms": [
+    {
+      "arm": "fix-run1",
+      "apkSha256": "656c0d6f8aea2c1a38f21546786a99f1e4823a131cadda8f40ba8f66dbf48fa8",
+      "durationSeconds": 360.0938471,
+      "transitionMaxMs": 300.444616,
+      "transitionWindowsOver100Ms": 42,
+      "roundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          300.444616
+        ],
+        [
+          "foundry-1-c",
+          168.143693
+        ],
+        [
+          "salt-1-b",
+          201.38230800000002
+        ],
+        [
+          "switchback-1-a",
+          185.20961499999999
+        ],
+        [
+          "crown-1-a",
+          257.625769
+        ],
+        [
+          "scrap-1-c",
+          242.887308
+        ]
+      ],
+      "courses": [
+        {
+          "course": "scrap-1-c",
+          "visit": "launch",
+          "firstProjectMs": 0.379076,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 33.903231,
+          "selectRegionMs": 116.556308,
+          "selectRegionUploadMs": 6.924616,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "foundry-1-c",
+          "visit": "first",
+          "firstProjectMs": 0.069616,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 21.091462,
+          "selectRegionMs": 103.523923,
+          "selectRegionUploadMs": 6.371076,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "salt-1-b",
+          "visit": "first",
+          "firstProjectMs": 0.072769,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.964692,
+          "selectRegionMs": 69.336231,
+          "selectRegionUploadMs": 4.227307,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "switchback-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.091231,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 11.184308,
+          "selectRegionMs": 71.561462,
+          "selectRegionUploadMs": 4.006384,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "crown-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.035538,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.042077,
+          "selectRegionMs": 61.379846,
+          "selectRegionUploadMs": 4.007538,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "scrap-1-c",
+          "visit": "revisit",
+          "firstProjectMs": 0.051154,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.125461,
+          "selectRegionMs": 71.807077,
+          "selectRegionUploadMs": 4.197615,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        }
+      ],
+      "requestMs": {
+        "profileSave": [
+          49.528,
+          133.31
+        ],
+        "garagePublish": [
+          9.319,
+          26.348
+        ],
+        "car": [
+          70.012,
+          168.509
+        ],
+        "startRace": [
+          144.52,
+          281.607
+        ],
+        "lobby": [
+          7.658,
+          31.944
+        ],
+        "track": [
+          13.365,
+          156.689
+        ],
+        "changedCourseScene": [
+          73.493,
+          149.355
+        ],
+        "changedCourseWorld": [
+          5.452,
+          6.927
+        ]
+      },
+      "renders100msPlusAfterProbeStart": {
+        "requestsPhase": 14,
+        "preparePhase": 0,
+        "intervalOnly": 18,
+        "otherWork": 0
+      },
+      "pssRangeMiB": [
+        154.4169921875,
+        166.986328125
+      ],
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00051260803673,
+          30.00051260803673
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T02:28:37.3672773Z",
+          "totalPercentSamples": [
+            35,
+            41,
+            44
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#35",
+              163
+            ],
+            [
+              "Code - Insiders#7",
+              100
+            ],
+            [
+              "git#1",
+              100
+            ],
+            [
+              "MsMpEng",
+              52
+            ],
+            [
+              "claude#14",
+              47
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T02:34:47.0225878Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#35",
+              142
+            ],
+            [
+              "node#33",
+              115
+            ],
+            [
+              "node#31",
+              106
+            ],
+            [
+              "node#41",
+              101
+            ],
+            [
+              "node#40",
+              92
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "fix-run2",
+      "apkSha256": "656c0d6f8aea2c1a38f21546786a99f1e4823a131cadda8f40ba8f66dbf48fa8",
+      "durationSeconds": 360.2308703,
+      "transitionMaxMs": 245.80523100000002,
+      "transitionWindowsOver100Ms": 41,
+      "roundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          245.65
+        ],
+        [
+          "foundry-1-c",
+          185.54623
+        ],
+        [
+          "salt-1-b",
+          183.665385
+        ],
+        [
+          "switchback-1-a",
+          174.846461
+        ],
+        [
+          "crown-1-a",
+          155.08292300000002
+        ],
+        [
+          "scrap-1-c",
+          245.80523100000002
+        ]
+      ],
+      "courses": [
+        {
+          "course": "scrap-1-c",
+          "visit": "launch",
+          "firstProjectMs": 0.383154,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 30.255384,
+          "selectRegionMs": 117.104846,
+          "selectRegionUploadMs": 5.249691,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "foundry-1-c",
+          "visit": "first",
+          "firstProjectMs": 0.081308,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 21.480846,
+          "selectRegionMs": 85.667384,
+          "selectRegionUploadMs": 6.448155,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "salt-1-b",
+          "visit": "first",
+          "firstProjectMs": 0.068,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 5.734308,
+          "selectRegionMs": 73.638231,
+          "selectRegionUploadMs": 4.064,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "switchback-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.085,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 11.631077,
+          "selectRegionMs": 77.604923,
+          "selectRegionUploadMs": 4.549846,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "crown-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.035154,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.988923,
+          "selectRegionMs": 62.206923,
+          "selectRegionUploadMs": 4.003538,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "scrap-1-c",
+          "visit": "revisit",
+          "firstProjectMs": 0.053769,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.53,
+          "selectRegionMs": 66.077539,
+          "selectRegionUploadMs": 5.511153,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        }
+      ],
+      "requestMs": {
+        "profileSave": [
+          51.554,
+          123.575
+        ],
+        "garagePublish": [
+          10.005,
+          30.507
+        ],
+        "car": [
+          74.699,
+          166.835
+        ],
+        "startRace": [
+          149.368,
+          236.738
+        ],
+        "lobby": [
+          6.629,
+          27.263
+        ],
+        "track": [
+          12.12,
+          169.02
+        ],
+        "changedCourseScene": [
+          75.571,
+          162.048
+        ],
+        "changedCourseWorld": [
+          5.687,
+          12.256
+        ]
+      },
+      "renders100msPlusAfterProbeStart": {
+        "requestsPhase": 13,
+        "preparePhase": 0,
+        "intervalOnly": 18,
+        "otherWork": 3
+      },
+      "pssRangeMiB": [
+        161.8720703125,
+        175.0771484375
+      ],
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          29.853077253051847,
+          29.853077253051847
+        ],
+        "pumpStalls": 4
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T02:37:43.8257037Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "MsMpEng",
+              99
+            ],
+            [
+              "node#41",
+              99
+            ],
+            [
+              "node#40",
+              67
+            ],
+            [
+              "Code - Insiders#7",
+              67
+            ],
+            [
+              "node#48",
+              49
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T02:44:00.1867193Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#59",
+              210
+            ],
+            [
+              "SearchIndexer",
+              177
+            ],
+            [
+              "node#63",
+              122
+            ],
+            [
+              "node#47",
+              101
+            ],
+            [
+              "node#71",
+              84
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "prep-run1",
+      "apkSha256": "d2f03ea7dd5ede0a70f710f6d8256c7e5846d37343aa893cd2504bfbaa0ff1c0",
+      "durationSeconds": 360.05610599999994,
+      "transitionMaxMs": 374.42153900000005,
+      "transitionWindowsOver100Ms": 43,
+      "roundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          374.42153900000005
+        ],
+        [
+          "foundry-1-c",
+          239.878077
+        ],
+        [
+          "salt-1-b",
+          220.548308
+        ],
+        [
+          "switchback-1-a",
+          213.280692
+        ],
+        [
+          "crown-1-a",
+          179.658923
+        ],
+        [
+          "scrap-1-c",
+          212.668923
+        ]
+      ],
+      "courses": [
+        {
+          "course": "scrap-1-c",
+          "visit": "launch",
+          "firstProjectMs": 0.377154,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 30.426692,
+          "selectRegionMs": 127.902077,
+          "selectRegionUploadMs": 8.825845,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "foundry-1-c",
+          "visit": "first",
+          "firstProjectMs": 0.069538,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 20.353769,
+          "selectRegionMs": 7.861846,
+          "selectRegionUploadMs": 4.915308,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "salt-1-b",
+          "visit": "first",
+          "firstProjectMs": 0.068307,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.569615,
+          "selectRegionMs": 9.255846,
+          "selectRegionUploadMs": 3.758461,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "switchback-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.071769,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.807846,
+          "selectRegionMs": 7.144461,
+          "selectRegionUploadMs": 4.159693,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "crown-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.051461,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 8.067923,
+          "selectRegionMs": 5.849923,
+          "selectRegionUploadMs": 3.338,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "scrap-1-c",
+          "visit": "revisit",
+          "firstProjectMs": 0.054,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.595538,
+          "selectRegionMs": 16.549692,
+          "selectRegionUploadMs": 5.36723,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        }
+      ],
+      "requestMs": {
+        "profileSave": [
+          60.018,
+          156.065
+        ],
+        "garagePublish": [
+          11.136,
+          58.297
+        ],
+        "car": [
+          82.271,
+          153.069
+        ],
+        "startRace": [
+          166.135,
+          366.499
+        ],
+        "lobby": [
+          6.563,
+          30.892
+        ],
+        "track": [
+          20.246,
+          71.663
+        ],
+        "changedCourseScene": [
+          16.731,
+          64.484
+        ],
+        "changedCourseWorld": [
+          4.522,
+          6.152
+        ]
+      },
+      "renders100msPlusAfterProbeStart": {
+        "requestsPhase": 12,
+        "preparePhase": 0,
+        "intervalOnly": 17,
+        "otherWork": 2
+      },
+      "pssRangeMiB": [
+        159.8349609375,
+        180.7431640625
+      ],
+      "rejectedInputs": [
+        3,
+        4
+      ],
+      "inputStream": {
+        "hz": [
+          29.97588381406314,
+          29.97588381406314
+        ],
+        "pumpStalls": 1
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T02:46:19.2116668Z",
+          "totalPercentSamples": [
+            100,
+            96,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#49",
+              141
+            ],
+            [
+              "table_runtime-c34e1fc7f0f14531",
+              106
+            ],
+            [
+              "git#1",
+              97
+            ],
+            [
+              "Code - Insiders#7",
+              93
+            ],
+            [
+              "SearchIndexer",
+              93
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T02:52:31.2508045Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python#1",
+              885
+            ],
+            [
+              "UnrealEditor-Cmd",
+              97
+            ],
+            [
+              "chrome-headless-shell",
+              88
+            ],
+            [
+              "SearchIndexer",
+              79
+            ],
+            [
+              "node#37",
+              60
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "prep-run2",
+      "apkSha256": "d2f03ea7dd5ede0a70f710f6d8256c7e5846d37343aa893cd2504bfbaa0ff1c0",
+      "durationSeconds": 360.2243663,
+      "transitionMaxMs": 335.885462,
+      "transitionWindowsOver100Ms": 42,
+      "roundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          335.885462
+        ],
+        [
+          "foundry-1-c",
+          210.167077
+        ],
+        [
+          "salt-1-b",
+          175.905846
+        ],
+        [
+          "switchback-1-a",
+          186.625539
+        ],
+        [
+          "crown-1-a",
+          167.38815300000002
+        ],
+        [
+          "scrap-1-c",
+          215.99707700000002
+        ]
+      ],
+      "courses": [
+        {
+          "course": "scrap-1-c",
+          "visit": "launch",
+          "firstProjectMs": 0.388846,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 31.071384,
+          "selectRegionMs": 73.387846,
+          "selectRegionUploadMs": 7.889539,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "foundry-1-c",
+          "visit": "first",
+          "firstProjectMs": 0.098,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 20.739077,
+          "selectRegionMs": 6.304307,
+          "selectRegionUploadMs": 3.414692,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "salt-1-b",
+          "visit": "first",
+          "firstProjectMs": 0.066615,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.736308,
+          "selectRegionMs": 7.730385,
+          "selectRegionUploadMs": 4.451307,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "switchback-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.079154,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.072692,
+          "selectRegionMs": 10.842846,
+          "selectRegionUploadMs": 8.177616,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "crown-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.034385,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 11.441231,
+          "selectRegionMs": 10.315539,
+          "selectRegionUploadMs": 7.134538,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "scrap-1-c",
+          "visit": "revisit",
+          "firstProjectMs": 0.054538,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.253692,
+          "selectRegionMs": 10.760384,
+          "selectRegionUploadMs": 8.141308,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        }
+      ],
+      "requestMs": {
+        "profileSave": [
+          56.181,
+          121.344
+        ],
+        "garagePublish": [
+          8.186,
+          45.424
+        ],
+        "car": [
+          78.032,
+          160.424
+        ],
+        "startRace": [
+          154.314,
+          303.286
+        ],
+        "lobby": [
+          7.246,
+          15.233
+        ],
+        "track": [
+          28.864,
+          61.046
+        ],
+        "changedCourseScene": [
+          21.468,
+          51.933
+        ],
+        "changedCourseWorld": [
+          4.818,
+          8.307
+        ]
+      },
+      "renders100msPlusAfterProbeStart": {
+        "requestsPhase": 12,
+        "preparePhase": 0,
+        "intervalOnly": 16,
+        "otherWork": 3
+      },
+      "pssRangeMiB": [
+        162.3720703125,
+        187.37109375
+      ],
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          29.98409050154251,
+          29.98409050154251
+        ],
+        "pumpStalls": 1
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T02:53:56.1559488Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python",
+              727
+            ],
+            [
+              "ffmpeg",
+              104
+            ],
+            [
+              "SearchIndexer",
+              86
+            ],
+            [
+              "svchost#72",
+              72
+            ],
+            [
+              "git#1",
+              54
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T03:00:11.2419646Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python",
+              851
+            ],
+            [
+              "node#58",
+              124
+            ],
+            [
+              "git#1",
+              88
+            ],
+            [
+              "Code - Insiders#7",
+              84
+            ],
+            [
+              "SearchIndexer",
+              44
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "final-run1",
+      "apkSha256": "93911607723bf410b570af758e79b0cecb583c68c5cbf90feed73d73343f634a",
+      "durationSeconds": 360.19578210000003,
+      "transitionMaxMs": 308.36577,
+      "transitionWindowsOver100Ms": 41,
+      "roundTransitionMaxMs": [
+        [
+          "scrap-1-c",
+          308.36577
+        ],
+        [
+          "foundry-1-c",
+          210.744769
+        ],
+        [
+          "salt-1-b",
+          163.439923
+        ],
+        [
+          "switchback-1-a",
+          173.19430699999998
+        ],
+        [
+          "crown-1-a",
+          180.017538
+        ],
+        [
+          "scrap-1-c",
+          198.887077
+        ]
+      ],
+      "courses": [
+        {
+          "course": "scrap-1-c",
+          "visit": "launch",
+          "firstProjectMs": 0.38623,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 31.461307,
+          "selectRegionMs": 82.284308,
+          "selectRegionUploadMs": 4.61623,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "foundry-1-c",
+          "visit": "first",
+          "firstProjectMs": 0.094923,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 21.563615,
+          "selectRegionMs": 10.425615,
+          "selectRegionUploadMs": 7.021155,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "salt-1-b",
+          "visit": "first",
+          "firstProjectMs": 0.085231,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 5.85677,
+          "selectRegionMs": 7.275308,
+          "selectRegionUploadMs": 4.653153,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "switchback-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.068539,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.135692,
+          "selectRegionMs": 6.300847,
+          "selectRegionUploadMs": 3.819615,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "crown-1-a",
+          "visit": "first",
+          "firstProjectMs": 0.033307,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 4.615769,
+          "selectRegionMs": 8.475615,
+          "selectRegionUploadMs": 5.984076,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        },
+        {
+          "course": "scrap-1-c",
+          "visit": "revisit",
+          "firstProjectMs": 0.059231,
+          "slowStep": "kerbsBarriers",
+          "slowStepMs": 3.524462,
+          "selectRegionMs": 12.401615,
+          "selectRegionUploadMs": 6.641538,
+          "binWaitMs": 0.0,
+          "binWaitFrames": 0
+        }
+      ],
+      "requestMs": {
+        "profileSave": [
+          50.153,
+          107.667
+        ],
+        "garagePublish": [
+          10.186,
+          52.347
+        ],
+        "car": [
+          70.084,
+          131.263
+        ],
+        "startRace": [
+          139.617,
+          273.528
+        ],
+        "lobby": [
+          6.344,
+          19.841
+        ],
+        "track": [
+          11.733,
+          72.028
+        ],
+        "changedCourseScene": [
+          18.429,
+          63.118
+        ],
+        "changedCourseWorld": [
+          4.538,
+          7.581
+        ]
+      },
+      "renders100msPlusAfterProbeStart": {
+        "requestsPhase": 12,
+        "preparePhase": 0,
+        "intervalOnly": 17,
+        "otherWork": 0
+      },
+      "pssRangeMiB": [
+        165.185546875,
+        170.025390625
+      ],
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00035130061563,
+          30.00035130061563
+        ],
+        "pumpStalls": 0
+      },
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-07T03:15:20.5389158Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "python",
+              881
+            ],
+            [
+              "SearchIndexer",
+              76
+            ],
+            [
+              "node#37",
+              67
+            ],
+            [
+              "git#1",
+              62
+            ],
+            [
+              "personas-desktop",
+              58
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-07T03:21:32.4441909Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#47",
+              212
+            ],
+            [
+              "node#42",
+              110
+            ],
+            [
+              "git#1",
+              75
+            ],
+            [
+              "node#37",
+              66
+            ],
+            [
+              "System",
+              62
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "limits": "P9 diag had no request timers; its per-request split is not available. P9 hitch counts include app start; the P10 arm counts start at the probe."
+}

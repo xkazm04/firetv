@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T02:37:43.8257037Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "node#41",
+                             "IDProcess":  39864,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "node#40",
+                             "IDProcess":  3604,
+                             "PercentProcessorTime":  67
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  23724,
+                             "PercentProcessorTime":  67
+                         },
+                         {
+                             "Name":  "node#48",
+                             "IDProcess":  43808,
+                             "PercentProcessorTime":  49
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  45
+                         },
+                         {
+                             "Name":  "node#42",
+                             "IDProcess":  14820,
+                             "PercentProcessorTime":  31
+                         },
+                         {
+                             "Name":  "node#47",
+                             "IDProcess":  50840,
+                             "PercentProcessorTime":  27
+                         },
+                         {
+                             "Name":  "node#46",
+                             "IDProcess":  31628,
+                             "PercentProcessorTime":  27
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  15304,
+                             "PercentProcessorTime":  27
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

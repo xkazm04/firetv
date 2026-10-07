@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-07T02:53:56.1559488Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "python",
+                             "IDProcess":  52008,
+                             "PercentProcessorTime":  727
+                         },
+                         {
+                             "Name":  "ffmpeg",
+                             "IDProcess":  27712,
+                             "PercentProcessorTime":  104
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  86
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  72
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  12980,
+                             "PercentProcessorTime":  54
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  54
+                         },
+                         {
+                             "Name":  "Code - Insiders#7",
+                             "IDProcess":  23724,
+                             "PercentProcessorTime":  54
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  45
+                         },
+                         {
+                             "Name":  "UnrealEditor-Cmd",
+                             "IDProcess":  56404,
+                             "PercentProcessorTime":  40
+                         },
+                         {
+                             "Name":  "WmiPrvSE",
+                             "IDProcess":  5712,
+                             "PercentProcessorTime":  31
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}

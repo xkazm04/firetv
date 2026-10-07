@@ -1,0 +1,63 @@
+{
+  "source": "CoursePrewarmTest.reportsTheBinFootprintOfTheSoakCourses (core, desktop JVM), first combined gate run; log in the raw evidence (gate-first-combined.log)",
+  "courses": [
+    {
+      "course": "scrap-1-c",
+      "intsHeld": 332538,
+      "binArrays": 2304,
+      "branches": 0,
+      "intBytes": 1330152,
+      "estimatedRetainedBytes": 1376248,
+      "estimatedRetainedMiB": 1.312,
+      "desktopBakeMs": 6.2
+    },
+    {
+      "course": "foundry-1-c",
+      "intsHeld": 421862,
+      "binArrays": 2688,
+      "branches": 0,
+      "intBytes": 1687448,
+      "estimatedRetainedBytes": 1741224,
+      "estimatedRetainedMiB": 1.661,
+      "desktopBakeMs": 11.8
+    },
+    {
+      "course": "salt-1-b",
+      "intsHeld": 545012,
+      "binArrays": 3584,
+      "branches": 0,
+      "intBytes": 2180048,
+      "estimatedRetainedBytes": 2251744,
+      "estimatedRetainedMiB": 2.147,
+      "desktopBakeMs": 12.8
+    },
+    {
+      "course": "switchback-1-a",
+      "intsHeld": 555683,
+      "binArrays": 3584,
+      "branches": 0,
+      "intBytes": 2222732,
+      "estimatedRetainedBytes": 2294428,
+      "estimatedRetainedMiB": 2.188,
+      "desktopBakeMs": 10.7
+    },
+    {
+      "course": "crown-1-a",
+      "intsHeld": 730393,
+      "binArrays": 4480,
+      "branches": 0,
+      "intBytes": 2921572,
+      "estimatedRetainedBytes": 3011188,
+      "estimatedRetainedMiB": 2.872,
+      "desktopBakeMs": 12.5
+    }
+  ],
+  "fiveCourseTotal": {
+    "intsHeld": 2585488,
+    "binArrays": 16640,
+    "intMiB": 9.863,
+    "estimatedRetainedMiB": 10.18
+  },
+  "history": "84e8b125 (2026-10-06) moved the bins from 20 m cells to 10 m coarse-to-fine bins: about 0.3M -> 0.7M ints per course by its own message. 54a66fcf made them lazy (before it, every course baked at class load).",
+  "limits": "Retained bytes are an estimate (payload plus about 20 bytes of header, length and outer reference per bin, padding ignored); ints held are exact. Bins persist for every course visited in a process (Courses keeps built courses). Not a PSS attribution; PSS not fixed here."
+}

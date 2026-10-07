@@ -1,0 +1,45 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[148,148],"rejected":[0,0],"hostPumpStalls":0}
+{"hostPumpStall":{"second":71.8621184,"lateMs":462.11839999958465,"epochMs":1791340740248.1548,"cpu":{"user":1984000,"system":1046000},"memory":{"rss":130453504,"heapTotal":54214656,"heapUsed":38883856,"external":4174799,"arrayBuffers":137328}}}
+{"second":71,"accepted":[2153,2153],"rejected":[0,0],"hostPumpStalls":1}
+{"second":138,"accepted":[4147,4147],"rejected":[0,0],"hostPumpStalls":1}
+{"hostPumpStall":{"second":138.94986409999999,"lateMs":154.41236667116755,"epochMs":1791340807335.9004,"cpu":{"user":3421000,"system":1468000},"memory":{"rss":155467776,"heapTotal":75186176,"heapUsed":39053552,"external":4371733,"arrayBuffers":334262}}}
+{"second":205,"accepted":[6168,6168],"rejected":[0,0],"hostPumpStalls":2}
+{"hostPumpStall":{"second":273.5851498,"lateMs":835.285699974047,"epochMs":1791340941971.186,"cpu":{"user":6671000,"system":2437000},"memory":{"rss":164282368,"heapTotal":82001920,"heapUsed":57753016,"external":13943883,"arrayBuffers":9906412}}}
+{"second":272,"accepted":[8174,8174],"rejected":[0,0],"hostPumpStalls":3}
+{"hostPumpStall":{"second":337.62044410000004,"lateMs":201.96096670383122,"epochMs":1791341006006.4805,"cpu":{"user":7984000,"system":2734000},"memory":{"rss":176144384,"heapTotal":118915072,"heapUsed":58633456,"external":12021484,"arrayBuffers":7984013}}}
+{"second":337,"accepted":[10119,10119],"rejected":[0,0],"hostPumpStalls":4}
+{"second":360,"accepted":[10754,10754],"rejected":[0,0],"hostPumpStalls":4}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n4 !== 0\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/ae3015cf/deathride/tools/ability-stick-probe.mjs:116:90\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 360.2308703,
+  "rounds": 6,
+  "classUses": {
+    "Needle": 12,
+    "Line": 10,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 5,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10754,
+      "accepted": 10754,
+      "rejected": 0,
+      "hz": 29.853077253051847
+    },
+    {
+      "slot": 1,
+      "sent": 10754,
+      "accepted": 10754,
+      "rejected": 0,
+      "hz": 29.853077253051847
+    }
+  ]
+}
