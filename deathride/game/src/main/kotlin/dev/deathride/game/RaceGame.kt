@@ -116,6 +116,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var raceRound=0
     private var raceDifficulty=0
     private val careerMessage=Array(2){"Player 1 hosts. Player 2 is a guest."}
+    /** P13c: request frames mark a seat's JSON and the UI stale; the next frames build them (see [FramePublish]). */
+    private val publishes=FramePublish(profiles,shopMessage,saveStatus,careerMessage,FramePublish.Sink { i,car,garage,career ->
+        server.slots[i].carJson=car;server.slots[i].garageJson=garage;server.slots[i].careerJson=career;if(i==0)server.hostCareerJson=career
+    },::rebuildUi,logger)
     private val rivalPreviews=Array(Tuning.CAR_COUNT-1){i->Car(i,Track()).also{CarCatalog.apply(it,Career.rivals[i].carIndex)}}
 
     private fun loadProfile(i: Int) {
@@ -129,17 +133,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         override fun publish(seat: Int)=publishGarage(seat)
         override fun reverted(seat: Int) { selectedCars[seat]=profiles[seat].selectedCar;Garage.apply(profiles[seat],world.cars[seat]);if(phase!="race" && phase!="countdown")world.reset();publishGarage(seat) }
         override fun startReady(start: ProfileSaves.Start)=launchRace(start)
-        override fun changed() { if(::scene.isInitialized)rebuildUi() }
+        override fun changed() { if(::scene.isInitialized)publishes.requestUi() }
     }
     /** A start waits for its tickets: car, purchase and track requests are refused until it lands. */
     private fun refusedWhileStarting(i: Int)=saves.refuseWhileStarting(i)
     /** Diagnostic (P10): render-thread wall ms of a lobby, track, car or start request, one log line each (no per-frame cost). */
     private fun msSince(started: Long)=(System.nanoTime()-started)/1e6
-    private fun publishGarage(i: Int) {
-        server.slots[i].carJson=DeathDuel.carJson(profiles[i])
-        server.slots[i].garageJson=Garage.json(profiles[i],shopMessage[i],saveStatus[i])
-        server.slots[i].careerJson=Career.json(profiles[i],careerMessage[i]);if(i==0)server.hostCareerJson=server.slots[i].careerJson
-    }
+    /** Seat [i]'s garage, car and career JSON are stale; a later frame builds them (P13c), one seat per frame. */
+    private fun publishGarage(i: Int)=publishes.publish(i)
     private fun buyPart(i: Int,part: Int,tier: Int,car: Int) {
         if(phase!="garage" || refusedWhileStarting(i))return
         val offer=Garage.offer(profiles[i],part)
@@ -224,7 +225,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         phase="results";server.phase=phase;stateTime=0.0;raceAudio.results(world)
         if(campaignRace)campaignAudio.settled(before,profiles[0])
         script.raceFinished(world,profiles[0],raceRound,campaignRace,profiles[0].careerRound!=raceRound)
-        rebuildUi()
+        publishes.requestUi()
     }
 
     override fun create() {
@@ -251,7 +252,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(i in server.slots.indices){val slot=server.slots[i];slot.combatFull={statsSafe("combat$i"){combatJson(i)}}}
         profileStore=ProfileStore(Gdx.files.local("profiles").file())
         saves=ProfileSaves(ProfileWriter(profileStore),profiles,saveStatus,shopMessage,careerMessage,persistence,logger,saveHooks)
-        for(i in profiles.indices)loadProfile(i);world.reset()
+        for(i in profiles.indices)loadProfile(i);publishes.flushAll();world.reset()
         sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
@@ -330,7 +331,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         raceTickets.fill(0)
         for(k in start.seats.indices)if(start.jobs[k]>0) { raceTickets[start.seats[k]]=start.tickets[k];raceProfiles[start.seats[k]]=start.profileIds[k] }
         configureWorld(if(start.career)Career.events[raceRound].courseIndex else selectedTrack,start.career,(profiles[0].startedRaces+raceRound).toInt())
-        world.reset(); effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown mode=${server.raceMode}"); rebuildUi()
+        world.reset(); effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown mode=${server.raceMode}"); publishes.requestUi()
         audio.play("ui.confirm")
         logger("transition raceLaunch totalMs=${msSince(started)}")
     }
@@ -343,6 +344,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         profiler?.begin(nanos,actual);profileGl?.reset()
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
+        publishes.frame()
         saves.pump()
         for(i in server.slots.indices) {
             if(server.slots[i].profileId!=profiles[i].id && phase!="race" && phase!="countdown")loadProfile(i)
@@ -361,7 +363,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start!=null)logger("transition refused track reason=\"${ProfileSaves.SAVING_TICKET}\"")
         else if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
-            val started=System.nanoTime();configureWorld(courseIndex,false);rebuildUi();logger("transition track totalMs=${msSince(started)}")
+            val started=System.nanoTime();configureWorld(courseIndex,false);publishes.requestUi();logger("transition track totalMs=${msSince(started)}")
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
         if(surfaceIndex>=0 && !campaignRace) { server.surface=Surfaces.practice[surfaceIndex]; world.track.surface=server.surface; world.track.surfaceOverride=true; logger("surface ${server.surface.json}") }
@@ -685,6 +687,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun rebuildUi() {
         if(!::text.isInitialized)return
+        publishes.uiBuilt()
         if(::art.isInitialized) {
             storyPanel=StoryArt.panel(profiles[0],phase,campaignRace && (phase!="results" || raceRound==Career.events.lastIndex))
             val keys=linkedSetOf<String>()
