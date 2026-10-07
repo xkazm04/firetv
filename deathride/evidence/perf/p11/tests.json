@@ -1,0 +1,71 @@
+{
+  "command": "cd deathride && gradlew.bat :core:test :link:test :game:test --console=plain",
+  "final": {
+    "commit": "f28e5faa",
+    "rerunTasks": true,
+    "exit": 0,
+    "results": {
+      "core": {
+        "tests": 239,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      },
+      "link": {
+        "tests": 20,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "game": {
+        "tests": 71,
+        "skipped": 0,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    "log": "gate-final-rerun.log (raw)",
+    "note": "f28e5faa holds the final code: link/game/core/app/desktop are identical to deathride/main 4bbae5d2 (the cut was reverted in e11edc7d); later commits change only docs, evidence and the ledger."
+  },
+  "runs": [
+    {
+      "what": ":link:test --tests StatsJsonTest on the cut (working tree that became cc882e7f)",
+      "exit": 0,
+      "tests": 3,
+      "failures": 0
+    },
+    {
+      "what": "StatsJsonTest with a deliberate mutation (slot xM appended as a float)",
+      "exit": 1,
+      "appendedStatsAreTheTemplatedTextByteForByte": "FAILED",
+      "expected": "fail",
+      "log": "mutation-check.log (raw)"
+    },
+    {
+      "what": ":link:test on the cut",
+      "commit": "cc882e7f content",
+      "exit": 0,
+      "link": {
+        "tests": 23,
+        "skipped": 2,
+        "failures": 0,
+        "errors": 0
+      },
+      "log": "gate-link-cut.log (raw)"
+    },
+    {
+      "what": "combined gate (Gradle cache allowed)",
+      "commit": "f28e5faa",
+      "exit": 0,
+      "log": "gate-final.log (raw)"
+    },
+    {
+      "what": "combined gate --rerun-tasks",
+      "commit": "f28e5faa",
+      "exit": 0,
+      "seconds": 222,
+      "log": "gate-final-rerun.log (raw)"
+    }
+  ],
+  "limits": "Run on a host shared with other builders; no link socket test failed in these runs."
+}

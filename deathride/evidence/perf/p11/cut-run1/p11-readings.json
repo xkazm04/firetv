@@ -1,0 +1,1497 @@
+{
+  "arm": "cut-run1",
+  "apkSha256": "64c0708d379732e70b15dc5e468a1f0e725311ddceb3dbdfe7647010d077bfde",
+  "sourceSha256": "7f78fa26f13f24152a01a5709226256ffef6efa63891732ee40a014e988f21b8",
+  "durationSeconds": 360.2186001,
+  "rounds": 6,
+  "functionalPass": true,
+  "error": null,
+  "hostCpu": {
+    "host-cpu-start.json": {
+      "utc": "2026-10-07T04:47:13.2917549Z",
+      "totalPercentSamples": [
+        52,
+        75,
+        55
+      ],
+      "logicalProcessors": 16,
+      "top": [
+        [
+          "git#1",
+          101
+        ],
+        [
+          "Code - Insiders#7",
+          96
+        ],
+        [
+          "WmiPrvSE#2",
+          19
+        ],
+        [
+          "System",
+          19
+        ],
+        [
+          "msedgewebview2#15",
+          14
+        ]
+      ]
+    },
+    "host-cpu-end.json": {
+      "utc": "2026-10-07T04:53:23.0414991Z",
+      "totalPercentSamples": [
+        64,
+        46,
+        77
+      ],
+      "logicalProcessors": 16,
+      "top": [
+        [
+          "rustc#1",
+          100
+        ],
+        [
+          "rustc",
+          100
+        ],
+        [
+          "SearchIndexer",
+          100
+        ],
+        [
+          "Code - Insiders#7",
+          100
+        ],
+        [
+          "git",
+          82
+        ]
+      ]
+    }
+  },
+  "readings": [
+    {
+      "reading": "activeP95WorstMs",
+      "value": 26.964846,
+      "limit": "<= 16.7 ms",
+      "status": "fail",
+      "basis": "I2 frame objective (original ambition); worst 10 s active window"
+    },
+    {
+      "reading": "activeP95WorstVsG1Ms",
+      "value": 26.964846,
+      "limit": "<= 21.60 ms (G1, comparison only)",
+      "status": "fail",
+      "basis": "I2 comparison with G1"
+    },
+    {
+      "reading": "activeMaxMs",
+      "value": 141.929847,
+      "limit": "<= 33 ms",
+      "status": "fail",
+      "basis": "I2 active maximum target"
+    },
+    {
+      "reading": "activeP50RangeMs",
+      "value": [
+        16.646462,
+        16.700923
+      ],
+      "limit": "16-18 ms",
+      "status": "pass",
+      "basis": "I2 median objective"
+    },
+    {
+      "reading": "pssRangeMiB",
+      "value": [
+        164.294921875,
+        192.048828125
+      ],
+      "limit": "< 192 MiB",
+      "status": "fail",
+      "basis": "I2 whole-process PSS (dumpsys meminfo --local)"
+    },
+    {
+      "reading": "warmPssGrowthMiB",
+      "value": -6.384765625,
+      "limit": "<= 8 MiB",
+      "status": "pass",
+      "basis": "I2 first/last three warm medians"
+    },
+    {
+      "reading": "rejectedInputs",
+      "value": [
+        0,
+        0
+      ],
+      "limit": "0 per seat",
+      "status": "pass",
+      "basis": "I2 zero-rejection gate"
+    },
+    {
+      "reading": "inputStream",
+      "value": {
+        "hz": [
+          30.00122702436764,
+          30.00122702436764
+        ],
+        "pumpStalls": 0
+      },
+      "limit": "> 29 Hz per seat, no host pump stall",
+      "status": "pass",
+      "basis": "I2 required input throughput"
+    },
+    {
+      "reading": "durationSeconds",
+      "value": 360.2186001,
+      "limit": ">= 900 s for a soak",
+      "status": "fail",
+      "basis": "I2 sustained run"
+    }
+  ],
+  "sampling": {
+    "samples": 8,
+    "withSamplerTiming": 8,
+    "sampleDurationMs": [
+      315.616,
+      625.611
+    ],
+    "requestToStartMs": [
+      -0.26,
+      1.662
+    ],
+    "pumpStalls": [],
+    "heartbeatStalls": 0,
+    "memorySamplerError": null
+  },
+  "profileRows": 22779,
+  "profileGaps": 0,
+  "alignment": {
+    "anchors": 19,
+    "matched": 13,
+    "spreadMs": 0.904,
+    "limit": "Logcat stamps are milliseconds; the anchor is the request line minus its totalMs."
+  },
+  "activePhaseMediansMs": {
+    "requests": 0.056,
+    "prepare": 0.004,
+    "simulation": 1.941,
+    "audio": 0.164,
+    "telemetry": 0.007,
+    "camera": 0.097,
+    "scenery": 0.879,
+    "cars": 2.556,
+    "hud": 1.015,
+    "tail": 0.015,
+    "flushSwap": 9.406
+  },
+  "attribution": {
+    "over16.7Ms": {
+      "frames": 8562,
+      "ofActive": 18933,
+      "byDominantCategory": {
+        "flushSwap": 4102,
+        "simulation": 1864,
+        "cars": 1491,
+        "scenery": 336,
+        "hud": 308,
+        "telemetry": 308,
+        "audio": 132,
+        "camera": 13,
+        "requests": 7,
+        "tail": 1
+      },
+      "duringGc": 82,
+      "offCpuOver8Ms": 1619,
+      "byDominantCategoryOutsideGc": {
+        "flushSwap": 4090,
+        "simulation": 1838,
+        "cars": 1465,
+        "scenery": 328,
+        "telemetry": 307,
+        "hud": 300,
+        "audio": 131,
+        "camera": 13,
+        "requests": 7,
+        "tail": 1
+      },
+      "meanCategoryMs": {
+        "requests": 0.081,
+        "prepare": 0.005,
+        "simulation": 2.29,
+        "audio": 0.276,
+        "telemetry": 0.176,
+        "camera": 0.122,
+        "scenery": 1.089,
+        "cars": 2.942,
+        "hud": 1.208,
+        "tail": 0.016,
+        "flushSwap": 9.493
+      }
+    },
+    "over20Ms": {
+      "frames": 487,
+      "ofActive": 18933,
+      "byDominantCategory": {
+        "cars": 177,
+        "flushSwap": 114,
+        "simulation": 86,
+        "scenery": 41,
+        "hud": 34,
+        "audio": 23,
+        "telemetry": 9,
+        "camera": 2,
+        "requests": 1
+      },
+      "duringGc": 36,
+      "offCpuOver8Ms": 392,
+      "byDominantCategoryOutsideGc": {
+        "cars": 165,
+        "flushSwap": 112,
+        "simulation": 78,
+        "scenery": 35,
+        "hud": 28,
+        "audio": 22,
+        "telemetry": 8,
+        "camera": 2,
+        "requests": 1
+      },
+      "meanCategoryMs": {
+        "requests": 0.126,
+        "prepare": 0.007,
+        "simulation": 4.323,
+        "audio": 0.933,
+        "telemetry": 0.465,
+        "camera": 0.248,
+        "scenery": 2.62,
+        "cars": 6.524,
+        "hud": 2.361,
+        "tail": 0.028,
+        "flushSwap": 7.63
+      }
+    },
+    "over33Ms": {
+      "frames": 44,
+      "ofActive": 18933,
+      "byDominantCategory": {
+        "cars": 18,
+        "simulation": 13,
+        "scenery": 4,
+        "hud": 3,
+        "flushSwap": 3,
+        "audio": 2,
+        "telemetry": 1
+      },
+      "duringGc": 8,
+      "offCpuOver8Ms": 43,
+      "byDominantCategoryOutsideGc": {
+        "cars": 15,
+        "simulation": 11,
+        "scenery": 3,
+        "hud": 2,
+        "flushSwap": 2,
+        "audio": 2,
+        "telemetry": 1
+      },
+      "meanCategoryMs": {
+        "requests": 0.18,
+        "prepare": 0.017,
+        "simulation": 9.177,
+        "audio": 2.106,
+        "telemetry": 0.935,
+        "camera": 0.32,
+        "scenery": 4.596,
+        "cars": 13.06,
+        "hud": 4.353,
+        "tail": 0.04,
+        "flushSwap": 6.775
+      }
+    }
+  },
+  "gc": {
+    "lines": 27,
+    "totalMs": [
+      102.687,
+      494.038
+    ],
+    "activeFramesOverlappingGc": 143,
+    "waits": []
+  },
+  "runtimeAllocation": {
+    "bytesAllocatedPerSecond": 3683321.0007412885,
+    "gcCount": 49,
+    "gcTimeMs": 4639,
+    "blockingGcCount": 0,
+    "seconds": 338.54669949999993,
+    "limit": "Whole process (ART runtime stats from /profile), between the second and the last profile fetch."
+  },
+  "deviceCounters": {
+    "seconds": 383.43,
+    "cpuPercentOfOneCore": {
+      "audio HAL writer": 52.98,
+      "app GLThread": 47.72,
+      "audioserver AudioOut_D": 47.31,
+      "app DefaultDispatcher (link)": 33.93,
+      "app other threads": 6.77,
+      "app SoundPool": 4.74,
+      "app audio worker": 3.48,
+      "system_server NetworkStats": 2.92,
+      "app JIT": 1.0,
+      "app GC (HeapTaskDaemon)": 0.9,
+      "app link threads": 0.05,
+      "audioserver AudioOut_15": 0.0,
+      "app AudioTrack": 0.0
+    },
+    "wlan0BytesPerSecond": {
+      "rx": 18032,
+      "tx": 157258
+    },
+    "limit": "Clock ticks of 10 ms between two reads around the probe (app threads that exited during the run are missing)."
+  },
+  "profileSaves": {
+    "saves": 25,
+    "framesOver33Ms": 25,
+    "framesOver100Ms": 25,
+    "inActiveFrames": 0,
+    "saveMs": [
+      54.911,
+      187.568
+    ]
+  },
+  "activeFramesOver33Ms": [
+    {
+      "startSeconds": 2585553.8964,
+      "intervalMs": 38.673,
+      "workMs": 37.579,
+      "cpuMs": 10.204,
+      "offCpuMs": 27.375,
+      "dominant": "hud",
+      "categoryMs": {
+        "requests": 0.053,
+        "prepare": 0.004,
+        "simulation": 2.234,
+        "audio": 0.255,
+        "telemetry": 0.59,
+        "camera": 0.3,
+        "scenery": 1.939,
+        "cars": 10.238,
+        "hud": 14.658,
+        "tail": 0.018,
+        "flushSwap": 8.384
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 17
+    },
+    {
+      "startSeconds": 2585559.1066,
+      "intervalMs": 38.261,
+      "workMs": 35.82,
+      "cpuMs": 16.427,
+      "offCpuMs": 19.393,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.058,
+        "prepare": 0.004,
+        "simulation": 14.739,
+        "audio": 0.25,
+        "telemetry": 0.72,
+        "camera": 0.798,
+        "scenery": 2.001,
+        "cars": 5.799,
+        "hud": 6.388,
+        "tail": 0.019,
+        "flushSwap": 7.486
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 25
+    },
+    {
+      "startSeconds": 2585597.1048,
+      "intervalMs": 40.051,
+      "workMs": 37.3,
+      "cpuMs": 16.896,
+      "offCpuMs": 20.404,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.054,
+        "prepare": 0.004,
+        "simulation": 7.819,
+        "audio": 3.967,
+        "telemetry": 0.042,
+        "camera": 0.822,
+        "scenery": 2.481,
+        "cars": 12.313,
+        "hud": 8.252,
+        "tail": 0.024,
+        "flushSwap": 4.273
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 134.887
+        }
+      ],
+      "liveCars": 6,
+      "drawCalls": 27
+    },
+    {
+      "startSeconds": 2585597.1449,
+      "intervalMs": 54.504,
+      "workMs": 53.217,
+      "cpuMs": 23.45,
+      "offCpuMs": 29.767,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.666,
+        "prepare": 0.046,
+        "simulation": 33.302,
+        "audio": 0.661,
+        "telemetry": 1.566,
+        "camera": 0.517,
+        "scenery": 8.618,
+        "cars": 4.824,
+        "hud": 0.971,
+        "tail": 0.015,
+        "flushSwap": 3.319
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 134.887
+        }
+      ],
+      "liveCars": 6,
+      "drawCalls": 27
+    },
+    {
+      "startSeconds": 2585610.1479,
+      "intervalMs": 34.439,
+      "workMs": 27.16,
+      "cpuMs": 9.925,
+      "offCpuMs": 17.234,
+      "dominant": "flushSwap",
+      "categoryMs": {
+        "requests": 0.058,
+        "prepare": 0.004,
+        "simulation": 5.161,
+        "audio": 0.402,
+        "telemetry": 0.008,
+        "camera": 0.095,
+        "scenery": 1.218,
+        "cars": 2.545,
+        "hud": 1.053,
+        "tail": 0.015,
+        "flushSwap": 23.878
+      },
+      "gc": [],
+      "liveCars": 5,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585612.4498,
+      "intervalMs": 33.527,
+      "workMs": 32.159,
+      "cpuMs": 15.201,
+      "offCpuMs": 16.958,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.192,
+        "prepare": 0.038,
+        "simulation": 5.122,
+        "audio": 1.105,
+        "telemetry": 0.009,
+        "camera": 0.093,
+        "scenery": 8.969,
+        "cars": 12.64,
+        "hud": 3.412,
+        "tail": 0.027,
+        "flushSwap": 1.919
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 127.867
+        }
+      ],
+      "liveCars": 5,
+      "drawCalls": 27
+    },
+    {
+      "startSeconds": 2585634.1518,
+      "intervalMs": 35.971,
+      "workMs": 35.052,
+      "cpuMs": 15.184,
+      "offCpuMs": 19.869,
+      "dominant": "scenery",
+      "categoryMs": {
+        "requests": 0.328,
+        "prepare": 0.008,
+        "simulation": 8.426,
+        "audio": 0.158,
+        "telemetry": 3.511,
+        "camera": 0.126,
+        "scenery": 14.389,
+        "cars": 5.89,
+        "hud": 1.575,
+        "tail": 0.015,
+        "flushSwap": 1.545
+      },
+      "gc": [],
+      "liveCars": 5,
+      "drawCalls": 19
+    },
+    {
+      "startSeconds": 2585636.7592,
+      "intervalMs": 38.197,
+      "workMs": 36.476,
+      "cpuMs": 12.732,
+      "offCpuMs": 23.743,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.06,
+        "prepare": 0.004,
+        "simulation": 1.327,
+        "audio": 0.156,
+        "telemetry": 0.006,
+        "camera": 0.332,
+        "scenery": 3.765,
+        "cars": 14.5,
+        "hud": 6.817,
+        "tail": 0.053,
+        "flushSwap": 11.177
+      },
+      "gc": [],
+      "liveCars": 5,
+      "drawCalls": 19
+    },
+    {
+      "startSeconds": 2585666.0742,
+      "intervalMs": 38.026,
+      "workMs": 37.046,
+      "cpuMs": 14.249,
+      "offCpuMs": 22.797,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.233,
+        "prepare": 0.004,
+        "simulation": 2.582,
+        "audio": 10.734,
+        "telemetry": 0.013,
+        "camera": 0.246,
+        "scenery": 4.061,
+        "cars": 16.676,
+        "hud": 1.311,
+        "tail": 0.021,
+        "flushSwap": 2.144
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 109.726
+        }
+      ],
+      "liveCars": 6,
+      "drawCalls": 26
+    },
+    {
+      "startSeconds": 2585670.3086,
+      "intervalMs": 43.315,
+      "workMs": 42.186,
+      "cpuMs": 13.379,
+      "offCpuMs": 28.807,
+      "dominant": "scenery",
+      "categoryMs": {
+        "requests": 0.054,
+        "prepare": 0.004,
+        "simulation": 4.708,
+        "audio": 0.768,
+        "telemetry": 0.494,
+        "camera": 0.108,
+        "scenery": 16.111,
+        "cars": 13.349,
+        "hud": 5.794,
+        "tail": 0.018,
+        "flushSwap": 1.908
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585670.409,
+      "intervalMs": 36.109,
+      "workMs": 34.606,
+      "cpuMs": 14.17,
+      "offCpuMs": 20.435,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.231,
+        "prepare": 0.005,
+        "simulation": 20.517,
+        "audio": 0.433,
+        "telemetry": 0.007,
+        "camera": 0.314,
+        "scenery": 4.408,
+        "cars": 4.886,
+        "hud": 0.955,
+        "tail": 0.014,
+        "flushSwap": 4.337
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585670.4451,
+      "intervalMs": 40.307,
+      "workMs": 38.802,
+      "cpuMs": 15.683,
+      "offCpuMs": 23.119,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 1.465,
+        "prepare": 0.01,
+        "simulation": 27.891,
+        "audio": 1.259,
+        "telemetry": 0.01,
+        "camera": 0.207,
+        "scenery": 2.607,
+        "cars": 3.398,
+        "hud": 1.027,
+        "tail": 0.015,
+        "flushSwap": 2.418
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585670.4854,
+      "intervalMs": 47.179,
+      "workMs": 45.831,
+      "cpuMs": 18.086,
+      "offCpuMs": 27.745,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.775,
+        "prepare": 0.007,
+        "simulation": 18.97,
+        "audio": 2.196,
+        "telemetry": 0.637,
+        "camera": 0.46,
+        "scenery": 5.204,
+        "cars": 14.449,
+        "hud": 1.726,
+        "tail": 0.017,
+        "flushSwap": 2.739
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585672.7295,
+      "intervalMs": 37.288,
+      "workMs": 35.052,
+      "cpuMs": 14.254,
+      "offCpuMs": 20.798,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.055,
+        "prepare": 0.004,
+        "simulation": 8.833,
+        "audio": 0.571,
+        "telemetry": 1.24,
+        "camera": 0.094,
+        "scenery": 6.293,
+        "cars": 11.645,
+        "hud": 4.625,
+        "tail": 0.018,
+        "flushSwap": 3.91
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585673.3409,
+      "intervalMs": 39.354,
+      "workMs": 38.512,
+      "cpuMs": 13.042,
+      "offCpuMs": 25.47,
+      "dominant": "scenery",
+      "categoryMs": {
+        "requests": 0.073,
+        "prepare": 0.004,
+        "simulation": 15.683,
+        "audio": 0.151,
+        "telemetry": 0.006,
+        "camera": 0.096,
+        "scenery": 18.159,
+        "cars": 2.638,
+        "hud": 1.063,
+        "tail": 0.015,
+        "flushSwap": 1.468
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585728.0388,
+      "intervalMs": 34.651,
+      "workMs": 33.783,
+      "cpuMs": 13.396,
+      "offCpuMs": 20.387,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.269,
+        "prepare": 0.04,
+        "simulation": 7.971,
+        "audio": 0.473,
+        "telemetry": 0.009,
+        "camera": 0.095,
+        "scenery": 2.228,
+        "cars": 18.859,
+        "hud": 3.176,
+        "tail": 0.016,
+        "flushSwap": 1.515
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 22
+    },
+    {
+      "startSeconds": 2585735.0332,
+      "intervalMs": 35.488,
+      "workMs": 32.399,
+      "cpuMs": 13.924,
+      "offCpuMs": 18.474,
+      "dominant": "hud",
+      "categoryMs": {
+        "requests": 0.054,
+        "prepare": 0.004,
+        "simulation": 9.279,
+        "audio": 2.3,
+        "telemetry": 0.01,
+        "camera": 0.122,
+        "scenery": 0.808,
+        "cars": 8.515,
+        "hud": 9.34,
+        "tail": 0.074,
+        "flushSwap": 4.982
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 178.52400000000003
+        }
+      ],
+      "liveCars": 6,
+      "drawCalls": 26
+    },
+    {
+      "startSeconds": 2585737.2302,
+      "intervalMs": 37.296,
+      "workMs": 36.234,
+      "cpuMs": 13.188,
+      "offCpuMs": 23.046,
+      "dominant": "audio",
+      "categoryMs": {
+        "requests": 0.06,
+        "prepare": 0.004,
+        "simulation": 4.011,
+        "audio": 12.137,
+        "telemetry": 0.419,
+        "camera": 0.949,
+        "scenery": 3.439,
+        "cars": 12.636,
+        "hud": 1.348,
+        "tail": 0.016,
+        "flushSwap": 2.278
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585747.7702,
+      "intervalMs": 40.188,
+      "workMs": 37.956,
+      "cpuMs": 12.715,
+      "offCpuMs": 25.241,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.056,
+        "prepare": 0.003,
+        "simulation": 0.015,
+        "audio": 0.178,
+        "telemetry": 0.411,
+        "camera": 0.322,
+        "scenery": 2.587,
+        "cars": 26.662,
+        "hud": 6.095,
+        "tail": 0.064,
+        "flushSwap": 3.794
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 26
+    },
+    {
+      "startSeconds": 2585747.8224,
+      "intervalMs": 34.077,
+      "workMs": 28.985,
+      "cpuMs": 11.793,
+      "offCpuMs": 17.192,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.196,
+        "prepare": 0.039,
+        "simulation": 9.722,
+        "audio": 0.292,
+        "telemetry": 2.698,
+        "camera": 0.425,
+        "scenery": 3.056,
+        "cars": 7.638,
+        "hud": 1.236,
+        "tail": 0.016,
+        "flushSwap": 8.759
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 17
+    },
+    {
+      "startSeconds": 2585793.9724,
+      "intervalMs": 42.154,
+      "workMs": 41.159,
+      "cpuMs": 18.632,
+      "offCpuMs": 22.527,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.056,
+        "prepare": 0.004,
+        "simulation": 21.548,
+        "audio": 0.717,
+        "telemetry": 0.048,
+        "camera": 0.552,
+        "scenery": 3.445,
+        "cars": 11.175,
+        "hud": 1.683,
+        "tail": 0.023,
+        "flushSwap": 2.904
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 17
+    },
+    {
+      "startSeconds": 2585794.1306,
+      "intervalMs": 34.267,
+      "workMs": 33.239,
+      "cpuMs": 12.918,
+      "offCpuMs": 20.321,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.131,
+        "prepare": 0.005,
+        "simulation": 2.928,
+        "audio": 0.196,
+        "telemetry": 0.353,
+        "camera": 0.338,
+        "scenery": 3.738,
+        "cars": 14.811,
+        "hud": 3.925,
+        "tail": 0.019,
+        "flushSwap": 7.823
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 23
+    },
+    {
+      "startSeconds": 2585803.8965,
+      "intervalMs": 34.57,
+      "workMs": 30.808,
+      "cpuMs": 13.811,
+      "offCpuMs": 16.997,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.055,
+        "prepare": 0.004,
+        "simulation": 11.059,
+        "audio": 0.36,
+        "telemetry": 0.44,
+        "camera": 0.517,
+        "scenery": 3.165,
+        "cars": 8.779,
+        "hud": 5.583,
+        "tail": 0.089,
+        "flushSwap": 4.52
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 22
+    },
+    {
+      "startSeconds": 2585803.9688,
+      "intervalMs": 37.013,
+      "workMs": 34.732,
+      "cpuMs": 8.785,
+      "offCpuMs": 25.947,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.052,
+        "prepare": 0.003,
+        "simulation": 0.015,
+        "audio": 0.163,
+        "telemetry": 0.466,
+        "camera": 0.254,
+        "scenery": 1.554,
+        "cars": 14.125,
+        "hud": 1.181,
+        "tail": 0.02,
+        "flushSwap": 19.179
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 22
+    },
+    {
+      "startSeconds": 2585807.7758,
+      "intervalMs": 33.861,
+      "workMs": 29.57,
+      "cpuMs": 12.359,
+      "offCpuMs": 17.211,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.254,
+        "prepare": 0.356,
+        "simulation": 4.036,
+        "audio": 0.204,
+        "telemetry": 0.007,
+        "camera": 0.435,
+        "scenery": 3.652,
+        "cars": 10.878,
+        "hud": 5.017,
+        "tail": 0.044,
+        "flushSwap": 8.979
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 17
+    },
+    {
+      "startSeconds": 2585807.8097,
+      "intervalMs": 43.505,
+      "workMs": 42.016,
+      "cpuMs": 15.126,
+      "offCpuMs": 26.89,
+      "dominant": "audio",
+      "categoryMs": {
+        "requests": 0.216,
+        "prepare": 0.042,
+        "simulation": 8.563,
+        "audio": 10.34,
+        "telemetry": 2.415,
+        "camera": 0.137,
+        "scenery": 2.153,
+        "cars": 11.769,
+        "hud": 5.115,
+        "tail": 0.019,
+        "flushSwap": 2.735
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 17
+    },
+    {
+      "startSeconds": 2585823.946,
+      "intervalMs": 34.101,
+      "workMs": 32.487,
+      "cpuMs": 14.012,
+      "offCpuMs": 18.476,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.066,
+        "prepare": 0.004,
+        "simulation": 2.709,
+        "audio": 0.17,
+        "telemetry": 0.006,
+        "camera": 0.101,
+        "scenery": 1.469,
+        "cars": 17.428,
+        "hud": 9.887,
+        "tail": 0.019,
+        "flushSwap": 2.241
+      },
+      "gc": [],
+      "liveCars": 5,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585835.951,
+      "intervalMs": 34.621,
+      "workMs": 33.445,
+      "cpuMs": 11.445,
+      "offCpuMs": 22.001,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.187,
+        "prepare": 0.005,
+        "simulation": 5.473,
+        "audio": 0.748,
+        "telemetry": 0.039,
+        "camera": 0.516,
+        "scenery": 2.515,
+        "cars": 17.126,
+        "hud": 5.419,
+        "tail": 0.019,
+        "flushSwap": 2.574
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585836.2429,
+      "intervalMs": 141.93,
+      "workMs": 139.384,
+      "cpuMs": 10.57,
+      "offCpuMs": 128.815,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.061,
+        "prepare": 0.004,
+        "simulation": 9.942,
+        "audio": 26.771,
+        "telemetry": 0.009,
+        "camera": 0.302,
+        "scenery": 2.84,
+        "cars": 96.909,
+        "hud": 0.907,
+        "tail": 0.014,
+        "flushSwap": 4.172
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585836.5785,
+      "intervalMs": 36.596,
+      "workMs": 33.413,
+      "cpuMs": 9.606,
+      "offCpuMs": 23.807,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.054,
+        "prepare": 0.003,
+        "simulation": 1.414,
+        "audio": 0.336,
+        "telemetry": 0.007,
+        "camera": 0.324,
+        "scenery": 1.109,
+        "cars": 11.814,
+        "hud": 7.529,
+        "tail": 0.046,
+        "flushSwap": 13.96
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585836.6151,
+      "intervalMs": 45.034,
+      "workMs": 42.553,
+      "cpuMs": 16.548,
+      "offCpuMs": 26.005,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.148,
+        "prepare": 0.004,
+        "simulation": 16.302,
+        "audio": 1.907,
+        "telemetry": 2.012,
+        "camera": 0.339,
+        "scenery": 2.954,
+        "cars": 12.295,
+        "hud": 5.026,
+        "tail": 0.046,
+        "flushSwap": 4.0
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585836.7327,
+      "intervalMs": 41.855,
+      "workMs": 35.912,
+      "cpuMs": 13.178,
+      "offCpuMs": 22.735,
+      "dominant": "hud",
+      "categoryMs": {
+        "requests": 0.166,
+        "prepare": 0.004,
+        "simulation": 9.654,
+        "audio": 0.845,
+        "telemetry": 0.88,
+        "camera": 0.318,
+        "scenery": 2.339,
+        "cars": 9.892,
+        "hud": 10.433,
+        "tail": 0.02,
+        "flushSwap": 7.304
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585836.8639,
+      "intervalMs": 59.627,
+      "workMs": 53.33,
+      "cpuMs": 13.796,
+      "offCpuMs": 39.534,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.062,
+        "prepare": 0.004,
+        "simulation": 18.757,
+        "audio": 3.429,
+        "telemetry": 0.015,
+        "camera": 0.102,
+        "scenery": 4.772,
+        "cars": 18.289,
+        "hud": 5.766,
+        "tail": 0.018,
+        "flushSwap": 8.413
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585837.2464,
+      "intervalMs": 36.562,
+      "workMs": 33.739,
+      "cpuMs": 10.671,
+      "offCpuMs": 23.068,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.056,
+        "prepare": 0.003,
+        "simulation": 1.826,
+        "audio": 0.149,
+        "telemetry": 0.006,
+        "camera": 0.351,
+        "scenery": 3.175,
+        "cars": 12.313,
+        "hud": 6.672,
+        "tail": 0.019,
+        "flushSwap": 11.991
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585837.283,
+      "intervalMs": 40.252,
+      "workMs": 39.158,
+      "cpuMs": 15.956,
+      "offCpuMs": 23.202,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.213,
+        "prepare": 0.004,
+        "simulation": 16.293,
+        "audio": 0.291,
+        "telemetry": 2.055,
+        "camera": 0.274,
+        "scenery": 2.286,
+        "cars": 9.711,
+        "hud": 6.55,
+        "tail": 0.019,
+        "flushSwap": 2.556
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585837.6347,
+      "intervalMs": 38.472,
+      "workMs": 31.585,
+      "cpuMs": 8.452,
+      "offCpuMs": 23.133,
+      "dominant": "telemetry",
+      "categoryMs": {
+        "requests": 0.058,
+        "prepare": 0.004,
+        "simulation": 7.607,
+        "audio": 0.272,
+        "telemetry": 13.387,
+        "camera": 0.095,
+        "scenery": 0.743,
+        "cars": 7.825,
+        "hud": 1.0,
+        "tail": 0.015,
+        "flushSwap": 7.467
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585838.0053,
+      "intervalMs": 36.06,
+      "workMs": 32.43,
+      "cpuMs": 11.067,
+      "offCpuMs": 21.363,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.053,
+        "prepare": 0.004,
+        "simulation": 3.32,
+        "audio": 0.559,
+        "telemetry": 0.01,
+        "camera": 0.679,
+        "scenery": 4.073,
+        "cars": 15.345,
+        "hud": 7.1,
+        "tail": 0.052,
+        "flushSwap": 4.866
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585838.0414,
+      "intervalMs": 47.21,
+      "workMs": 40.433,
+      "cpuMs": 14.377,
+      "offCpuMs": 26.057,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.199,
+        "prepare": 0.004,
+        "simulation": 11.018,
+        "audio": 1.141,
+        "telemetry": 5.155,
+        "camera": 0.578,
+        "scenery": 3.679,
+        "cars": 11.274,
+        "hud": 5.342,
+        "tail": 0.377,
+        "flushSwap": 8.442
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 16
+    },
+    {
+      "startSeconds": 2585838.322,
+      "intervalMs": 47.164,
+      "workMs": 38.437,
+      "cpuMs": 10.066,
+      "offCpuMs": 28.371,
+      "dominant": "flushSwap",
+      "categoryMs": {
+        "requests": 0.06,
+        "prepare": 0.003,
+        "simulation": 15.846,
+        "audio": 1.779,
+        "telemetry": 0.009,
+        "camera": 0.091,
+        "scenery": 0.738,
+        "cars": 1.948,
+        "hud": 1.058,
+        "tail": 0.016,
+        "flushSwap": 25.616
+      },
+      "gc": [],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585838.6401,
+      "intervalMs": 35.765,
+      "workMs": 9.802,
+      "cpuMs": 7.242,
+      "offCpuMs": 2.56,
+      "dominant": "flushSwap",
+      "categoryMs": {
+        "requests": 0.069,
+        "prepare": 0.005,
+        "simulation": 1.941,
+        "audio": 0.19,
+        "telemetry": 0.007,
+        "camera": 0.12,
+        "scenery": 0.909,
+        "cars": 2.443,
+        "hud": 1.196,
+        "tail": 0.02,
+        "flushSwap": 28.866
+      },
+      "gc": [
+        {
+          "kind": "Background young concurrent copying",
+          "totalMs": 155.582
+        }
+      ],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585838.6902,
+      "intervalMs": 49.096,
+      "workMs": 47.231,
+      "cpuMs": 11.738,
+      "offCpuMs": 35.493,
+      "dominant": "scenery",
+      "categoryMs": {
+        "requests": 0.058,
+        "prepare": 0.004,
+        "simulation": 1.023,
+        "audio": 0.161,
+        "telemetry": 0.006,
+        "camera": 0.086,
+        "scenery": 29.605,
+        "cars": 9.886,
+        "hud": 5.681,
+        "tail": 0.019,
+        "flushSwap": 2.567
+      },
+      "gc": [
+        {
+          "kind": "Background young concurrent copying",
+          "totalMs": 155.582
+        }
+      ],
+      "liveCars": 4,
+      "drawCalls": 15
+    },
+    {
+      "startSeconds": 2585864.8506,
+      "intervalMs": 35.12,
+      "workMs": 33.823,
+      "cpuMs": 14.573,
+      "offCpuMs": 19.25,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.051,
+        "prepare": 0.003,
+        "simulation": 4.042,
+        "audio": 0.248,
+        "telemetry": 0.007,
+        "camera": 0.38,
+        "scenery": 3.483,
+        "cars": 17.144,
+        "hud": 1.131,
+        "tail": 0.016,
+        "flushSwap": 8.615
+      },
+      "gc": [],
+      "liveCars": 6,
+      "drawCalls": 25
+    },
+    {
+      "startSeconds": 2585870.9819,
+      "intervalMs": 33.059,
+      "workMs": 32.125,
+      "cpuMs": 12.954,
+      "offCpuMs": 19.17,
+      "dominant": "simulation",
+      "categoryMs": {
+        "requests": 0.241,
+        "prepare": 0.005,
+        "simulation": 12.301,
+        "audio": 2.596,
+        "telemetry": 0.958,
+        "camera": 0.389,
+        "scenery": 2.305,
+        "cars": 10.61,
+        "hud": 1.273,
+        "tail": 0.02,
+        "flushSwap": 2.362
+      },
+      "gc": [
+        {
+          "kind": "Background concurrent copying",
+          "totalMs": 143.741
+        }
+      ],
+      "liveCars": 6,
+      "drawCalls": 18
+    },
+    {
+      "startSeconds": 2585884.2597,
+      "intervalMs": 33.861,
+      "workMs": 31.626,
+      "cpuMs": 11.776,
+      "offCpuMs": 19.85,
+      "dominant": "cars",
+      "categoryMs": {
+        "requests": 0.345,
+        "prepare": 0.005,
+        "simulation": 7.88,
+        "audio": 0.667,
+        "telemetry": 0.459,
+        "camera": 0.297,
+        "scenery": 3.191,
+        "cars": 10.744,
+        "hud": 6.257,
+        "tail": 0.281,
+        "flushSwap": 3.733
+      },
+      "gc": [],
+      "liveCars": 5,
+      "drawCalls": 16
+    }
+  ],
+  "activeWindows": {
+    "count": 234,
+    "worstP95Ms": 26.964846,
+    "maxMs": 141.929847,
+    "p50RangeMs": [
+      16.646462,
+      16.700923
+    ],
+    "stepWorstP95Ms": 6.267692
+  },
+  "sixLiveWindows": {
+    "count": 64,
+    "worstP95Ms": 20.432,
+    "maxMs": 54.503692,
+    "p50RangeMs": [
+      16.646462,
+      16.688693
+    ],
+    "stepWorstP95Ms": 6.267692
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10807,
+      "accepted": 10807,
+      "rejected": 0,
+      "hz": 30.00122702436764
+    },
+    {
+      "slot": 1,
+      "sent": 10807,
+      "accepted": 10807,
+      "rejected": 0,
+      "hz": 30.00122702436764
+    }
+  ],
+  "limits": "Profiled arm (/profile every 10 s). Off-CPU time (work - thread CPU) says the render thread was not running, not why: a scheduler trace separates runnable (preempted) from sleeping (blocked). GC overlap is time overlap, not cause. Not optical latency or owner feel."
+}
