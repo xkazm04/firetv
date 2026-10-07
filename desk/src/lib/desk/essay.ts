@@ -4,7 +4,7 @@
  * numbers, so every highlight lands on a sentence that exists.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, cleanFix, paragraphStats, revise, splitSentences, taught, type AnalysisType } from "../rules/essay";
+import { ANALYSIS_TYPES, cleanFix, numberedLines, paragraphCount, paragraphStats, revise, splitSentences, taught, type AnalysisType } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { addDigest, addHistory, recordWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
@@ -40,7 +40,7 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
   const stats = paragraphStats(sentences);
   const lens = ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
   const voice = voiceOf("essay", age);
-  const numbered = sentences.map((s) => `${s.n}. ${s.text}  [${s.words} words, first-pass role: ${s.role}]`).join("\n");
+  const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
   const { json, provider } = await text<{ verdicts: EssayAnalysis["verdicts"]; summary: string }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Give one verdict per sentence, by its number: 'strong' for something done well, 'faulty' for a real problem, 'neutral' otherwise. ` +
@@ -49,7 +49,7 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
       `Then one summary sentence. Plain text, to be read aloud.`, voice),
-    prompt: `The student's paragraph, sentence by sentence:\n${numbered}\n\nCounts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
+    prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\nCounts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
     schema: SCHEMA, model: "best",
   });
   // A highlight may only land on a sentence number that exists. Anything else the model returned —
@@ -101,7 +101,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const old = reading.sentences.find((s) => s.n === n)!, before = reading.verdicts.find((v) => v.n === n);
   const play = playFor(reading.type);
   const move = taught(before, { move: play.move, pattern: play.pattern })?.fix;
-  const numbered = next.sentences.map((s) => `${s.n}. ${s.text}  [${s.words} words, first-pass role: ${s.role}]`).join("\n");
+  const numbered = numberedLines(next.sentences);
   const { json, provider } = await text<{ verdicts: Verdict[] }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `The student has rewritten one sentence of their paragraph, sentence ${n}. Judge sentence ${n} alone, in the context of the paragraph, and give exactly one verdict, for sentence ${n}: ` +

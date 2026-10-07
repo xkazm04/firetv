@@ -130,6 +130,7 @@
 .essay-tv .em-r { position: relative; height: var(--em-rh, 96px); display: flex; align-items: center; gap: 16px; padding-left: 30px; opacity: .42; transition: opacity .3s, background .3s; }
 .essay-tv .em-r .em-n { font-family: var(--em-mono); font-size: 30px; font-weight: 600; width: 34px; }
 .essay-tv .em-r svg { display: block; overflow: visible; }
+.essay-tv .em-r.para { margin-top: var(--em-para-gap, 18px); }
 .essay-tv .em-r.cur { opacity: 1; }
 .essay-tv .em-r.cur .em-n { color: var(--em-bone); }
 .essay-tv .em-r.bad .em-n { color: var(--em-cit); }

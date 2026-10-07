@@ -82,7 +82,8 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   door to the sentence that needs a look (`essay-specimen-card`).
 - **Rail** — the paragraph as arrows, the current sentence at full strength (`essay-rail`). A rewritten
   sentence keeps its old arrow as a faint ghost just under the new one (`essay-ghost`): a reversed ghost
-  under a forward arrow is the turn, drawn.
+  under a forward arrow is the turn, drawn. A text of several paragraphs keeps them: a gap opens before each
+  new paragraph and the label counts them ("3 paragraphs"; `data-para` on each row, `data-paragraphs` on the rail).
 - **The sentence** — the learner's words, the clause it ends on underlined in citron, a reversed arrow.
 - **The move** — line one solid, a citron hook and THEN, line two hatched with the caret (`essay-move`).
 - **The pattern** — literal words in 44 px around dashed slots (`essay-pattern`, `essay-slot`).
@@ -102,8 +103,10 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   sentence, and a rewrite is not another paragraph read: no writing episode, no lens attempt.
 - The paragraph comes in as text, never as a photo of handwriting: a `.txt` or `.md` file the learner sends, or a message typed,
   pasted or dictated on the phone. A text with several paragraphs is split on blank lines and read one paragraph at a time; the phone
-  steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core takes one paragraph, so one paragraph in reads
-  exactly as it always did; reading a whole piece is later work.
+  steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core keeps paragraphs (2026-10-07, adult plan D1):
+  `splitSentences` splits each paragraph on its own, numbers run on through the piece, every sentence of a longer text carries
+  `para`, a rewrite rebuilds with the breaks, and the prompt names each paragraph. One paragraph in reads exactly as it always
+  did (no `para`). Sending a whole piece from the phone in one go is the next step (v2 E1).
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 

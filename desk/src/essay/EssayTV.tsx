@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -288,15 +288,18 @@ const verdictOf = (m: Map<number, Verdict>, n: number) => m.get(n)?.verdict ?? "
 /** The paragraph as one arrow per sentence, as long as the sentence; faulty sentences point back, in citron. */
 function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<number, Verdict> }) {
   const maxW = Math.max(1, ...a.sentences.map((x) => x.words));
-  const rh = Math.max(44, Math.min(96, Math.floor(740 / a.sentences.length)));
+  // a longer piece keeps its paragraphs: a gap opens before each new one, and the rows give it the room
+  const paras = paragraphCount(a.sentences), PARA_GAP = 18;
+  const rh = Math.max(44, Math.min(96, Math.floor((740 - PARA_GAP * (paras - 1)) / a.sentences.length)));
   return (
-    <aside className="em-rail" data-role="essay-rail" style={{ "--em-rh": `${rh}px` } as CSSProperties}>
-      <div className="em-lbl">Paragraph</div>
+    <aside className="em-rail" data-role="essay-rail" data-paragraphs={paras} style={{ "--em-rh": `${rh}px`, "--em-para-gap": `${PARA_GAP}px` } as CSSProperties}>
+      <div className="em-lbl">{paras > 1 ? `${paras} paragraphs` : "Paragraph"}</div>
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
           const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
+          const opens = j > 0 && x.para !== a.sentences[j - 1].para;
           return (
-            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))}>
+            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0}>
               <span className="em-n">{x.n}</span>
               <Arrow len={Math.round(56 + (124 * x.words) / maxW)} against={bad} color={bad ? CIT : vd === "strong" ? BONE : MUTE} />
               {/* a rewritten sentence keeps its old arrow as a ghost under the new one: the before and after as one picture */}
