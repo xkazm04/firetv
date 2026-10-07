@@ -17,6 +17,9 @@ import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
 import { MathsCollection } from "./MathsCollection";
+import { Plot } from "./Plot";
+import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
+const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
@@ -730,6 +733,8 @@ function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?
         <div className="ht" data-role="maths-said">{prose(said)}</div>
         {job ? <JobNote job={job} /> : next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
       </div>
+      {/* v2 M4a: a Calculus item shows its graph under the card - the tangent at the point, the area between the bounds */}
+      {isCalcSpec(it.spec) && <Plot spec={it.spec} />}
     </aside>
   );
 }

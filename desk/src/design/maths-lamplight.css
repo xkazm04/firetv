@@ -660,3 +660,12 @@
 .maths-tv .mb-worked .mb-row.q .rin { font-size: 44px; }
 .maths-tv .mb-worked .mb-wans { font-size: 38px; margin-bottom: 6px; }
 .maths-tv .mb-worked .mb-paper { max-height: 780px; overflow: hidden; }
+
+/* v2 M4a: a Calculus graph under the walk's card (maths/Plot.tsx) */
+.maths-tv .mb-plot { margin-top: 26px; padding: 14px; border-radius: 10px; background: var(--mb-paper); box-shadow: 0 10px 30px rgba(0, 0, 0, .35); transform: rotate(-.5deg); }
+.maths-tv .mb-plot svg { display: block; overflow: hidden; }
+.maths-tv .mb-plot .ax { stroke: var(--mb-ink); stroke-width: 2; opacity: .45; }
+.maths-tv .mb-plot .pc { fill: none; stroke: var(--mb-ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.maths-tv .mb-plot .pt { stroke: var(--mb-pen-d); stroke-width: 3.5; stroke-dasharray: 12 8; }
+.maths-tv .mb-plot .pa { fill: var(--mb-amber); opacity: .45; }
+.maths-tv .mb-plot .pm { fill: var(--mb-pen-d); }

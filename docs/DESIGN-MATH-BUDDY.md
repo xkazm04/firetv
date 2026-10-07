@@ -310,3 +310,12 @@ sentences and 320 characters, else the authored idea stands. **Try six** writes 
 returns. The linear and Calculus topics still go straight to their set. Measured over 19,200 generated items (12 units,
 both tiers, four systems, 200 seeds): every one has a worked answer `check` confirms. Route `/api/worked`, job kind
 `teach`.
+
+## Calculus graphs (v2 M4a, 2026-10-07)
+
+A Calculus item open on `walk` shows its graph under the card (`maths/plot.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),
+on paper in Lamplight's hand: the axes in faint ink, the curve in ink, a tangent dashed in the desk's pen at the point a
+derivative-at item asks about, the area washed in amber between a definite integral's bounds, a dot at the point an
+evaluate or limit item is about. The window per shape comes from `plotFor`. The y range is the 5th-95th percentile,
+padded, and it includes y = 0 when that is near. A pole is never bridged. The tangent's slope is `derivativeAt`, the same
+numeric derivative the marking uses. A graph shows what the desk computed; it never marks.
