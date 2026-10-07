@@ -23,7 +23,7 @@ import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { Fix, Sentence, Was } from "../rules/essay";
-import type { Mode } from "../rules/mode";
+import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
@@ -34,9 +34,8 @@ export type StudentType = "elementary" | "high-school" | "other";
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
 /** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
 /**
- * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4). Optional and usually absent: unset means the mode
- * is derived (modeOf). Phase 1 honours only "family"; a stored "adult" is kept on disk but modeOf ignores it until the
- * Adult build (slice A5) adds its gate.
+ * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4; the gate since slice A5). Optional and usually absent:
+ * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
 export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
 /** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
@@ -46,13 +45,22 @@ function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
 }
 /**
  * Only "family" and "adult" are modes: any other `mode` (junk in a draft patch, a hand-edited session.json) is dropped, so the
- * profile is back to the derived default. `allowAdult` is false for a profile.draft patch: nothing may set Adult in Phase 1
- * (no screen reaches it, and the parent gate is built with the Adult build), so a patch may set only "family". session.json
- * load passes true: a stored "adult" is kept as data, and modeOf does not honour it.
+ * profile is back to the derived default. `allowAdult` false drops "adult" too. A profile.draft patch may set "adult" since
+ * slice A5, and the merged draft then passes adultGated; session.json load keeps a stored "adult" as data and modeOf
+ * honours it only while the gate holds.
  */
 export function modeChecked<T extends { mode?: unknown }>(p: T, allowAdult = true): T {
   if (p.mode === undefined || p.mode === "family" || (allowAdult && p.mode === "adult")) return p;
   const q = { ...p }; delete q.mode; return q;
+}
+/**
+ * A draft that may not be Adult (under 18, or a school type with no age) loses "adult": the gate is re-checked on every
+ * edit. A refused adult falls back to a "family" the draft already held, never erasing it.
+ */
+function adultGated(p: Profile, before?: Profile | null): Profile {
+  if (p.mode !== "adult" || adultAllowed(p)) return p;
+  const q = { ...p }; delete q.mode;
+  return before?.mode === "family" ? { ...q, mode: "family" } : q;
 }
 /**
  * A practice topic's name as the desk writes it, on whichever path it belongs to: topicIn(id)?.name ?? id. For every
@@ -461,8 +469,9 @@ export function reduce(s: Session, e: Event): Session {
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch, false) });
-      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
+    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch) });
+      // the age first (a type change may clear it), then the Adult gate on what is left
+      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = adultGated(d, s.draft); break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
       n.conversation = null; seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }

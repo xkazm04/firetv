@@ -270,13 +270,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath, mode: at.mode } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
-    // rows of picks (type, age when a school type, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
+    // rows of picks (type, age when a school type, mode, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
     const rows = profileRows(s.draft), at = locate(rows, s.focus), cell = rows[at.r].cells[at.c];
     if (k === "right") o.focus(flat(rows, at.r, at.c + 1)); if (k === "left") o.focus(flat(rows, at.r, at.c - 1));
     if (k === "down" && at.r < rows.length - 1) o.focus(flat(rows, at.r + 1, at.c)); if (k === "up" && at.r > 0) o.focus(flat(rows, at.r - 1, at.c));
     if (k === "select") {
       if (cell.kind === "type" && cell.type) o.ev({ type: "profile.draft", patch: { type: cell.type } });
       else if (cell.kind === "age") o.ev({ type: "profile.draft", patch: { age: cell.age } });
+      else if (cell.kind === "mode" && cell.mode) o.ev({ type: "profile.draft", patch: { mode: cell.mode } });
       else if (cell.kind === "system" && cell.system) o.ev({ type: "profile.draft", patch: { system: cell.system } });
       else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
       else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; o.ev({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }

@@ -68,19 +68,21 @@ test('modeOf: the derived value for each row', () => {
   assert.equal(modeOf(profile(20, 'other')), 'adult', 'no prefs, age known');
   for (const age of AGES) for (const type of TYPES) for (const c of [false, true]) assert.equal(modeOf(profile(age, type), prefs(c)), isAdult(profile(age, type), prefs(c)) ? 'adult' : 'family', 'derived = isAdult, everywhere');
 });
-test('modeOf: an explicit "family" always wins; an explicit "adult" is not honoured', () => {
+// Slice A5 (v2 decisions 2026-10-07, O1 = 18+) revised these rows on purpose: a stored "adult" is honoured where
+// rules/mode adultAllowed holds (18+, or "other" with no age, whose Mode row is the confirmation). It pinned "never" before.
+test('modeOf: an explicit "family" always wins; an explicit "adult" counts only behind the 18+ gate (A5)', () => {
   assert.equal(modeOf(profile(30, 'other', { mode: 'family' }), prefs(true)), 'family', 'family at 30');
   assert.equal(modeOf(profile(18, 'high-school', { mode: 'family' }), prefs(false)), 'family');
   assert.equal(modeOf(profile(undefined, 'other', { mode: 'family' }), prefs(true)), 'family');
   assert.equal(modeOf(profile(12, 'elementary', { mode: 'adult' }), prefs(false)), 'family', '12 with a stored adult');
   assert.equal(modeOf(profile(16, 'high-school', { mode: 'adult' }), prefs(false)), 'family', '16 with a stored adult');
-  assert.equal(modeOf(profile(undefined, 'other', { mode: 'adult' }), prefs(false)), 'family', 'unconfirmed "other" with a stored adult');
+  assert.equal(modeOf(profile(undefined, 'other', { mode: 'adult' }), prefs(false)), 'adult', '"other" with no age: choosing Adult (18+) is the confirmation');
   assert.equal(modeOf(profile(undefined, 'high-school', { mode: 'adult' }), prefs(true)), 'family', 'no age, school type');
   for (const age of [18, 25, 60]) for (const type of TYPES) for (const c of [false, true]) assert.equal(modeOf(profile(age, type, { mode: 'adult' }), prefs(c)), modeOf(profile(age, type), prefs(c)), 'an 18+ with a stored adult equals the derived value');
   for (const bad of [1, 'ADULT', '', null, {}, [], true]) assert.equal(modeOf(profile(12, 'elementary', { mode: bad }), prefs(false)), 'family', `junk ${JSON.stringify(bad)}`);
 });
 
-test('modeChecked drops junk and keeps family; a draft patch may set family but never adult', () => {
+test('modeChecked drops junk and keeps family; a draft patch may set adult only where the gate allows (A5)', () => {
   const { modeChecked } = store;
   for (const bad of [1, 0, 'ADULT', 'Family', '', null, {}, [], true, false]) assert.equal('mode' in modeChecked({ id: 'p', mode: bad }), false, `dropped: ${JSON.stringify(bad)}`);
   assert.equal(modeChecked({ mode: 'family' }).mode, 'family'); assert.equal(modeChecked({ mode: 'adult' }).mode, 'adult', 'a stored adult is kept as data on load');
@@ -89,7 +91,9 @@ test('modeChecked drops junk and keeps family; a draft patch may set family but 
   // through the reducer
   const s0 = { ...store.fresh() };
   let s = store.reduce(s0, { type: 'profile.draft', patch: { name: 'Mia', type: 'elementary', age: 12, mode: 'adult' } });
-  assert.equal(s.draft.mode, undefined, 'adult patch dropped'); assert.equal(s.draft.name, 'Mia', 'the rest of the patch is kept');
+  assert.equal(s.draft.mode, undefined, 'adult patch dropped at 12'); assert.equal(s.draft.name, 'Mia', 'the rest of the patch is kept');
+  assert.equal(store.reduce(s0, { type: 'profile.draft', patch: { name: 'Ada', type: 'other', mode: 'adult' } }).draft.mode, 'adult', 'an "other" may choose Adult');
+  assert.equal(store.reduce(s0, { type: 'profile.draft', patch: { name: 'Leo', type: 'high-school', age: 18, mode: 'adult' } }).draft.mode, 'adult', '18 may choose Adult');
   s = store.reduce(s0, { type: 'profile.draft', patch: { name: 'Mia', type: 'elementary', age: 12, mode: 'family' } }); assert.equal(s.draft.mode, 'family');
   s = store.reduce(s, { type: 'profile.draft', patch: { mode: 'adult' } }); assert.equal(s.draft.mode, 'family', 'a dropped adult does not erase the family already drafted');
   for (const bad of [1, 'ADULT', '', null, {}]) { s = store.reduce(s0, { type: 'profile.draft', patch: { mode: bad } }); assert.equal(s.draft.mode, undefined, `junk ${JSON.stringify(bad)}`); }
@@ -108,7 +112,7 @@ test('an edit-save copies mode through the keys.ts list', () => {
   assert.equal(saved(p).mode, 'family', 'edit-save kept the stored family');
   const q = { ...p }; delete q.mode;
   assert.equal(saved(q).mode, undefined, 'unset stays unset');
-  // a stored "adult" is not carried into a draft (a patch may not set it): the edit-save returns the profile to the derived default
+  // a stored "adult" at 12 does not survive the gate (A5): the edit-save returns the profile to the derived default
   assert.equal(saved({ ...p, mode: 'adult' }).mode, undefined);
 });
 
@@ -133,5 +137,6 @@ test('session.json: a file with no mode field loads unchanged; junk modes are dr
   assert.deepEqual(got.map(p => p.mode), ['family', 'adult', undefined, undefined, undefined]);
   assert.ok(got.slice(2).every(p => !('mode' in p)), 'junk keys are gone, not just undefined');
   assert.equal(got[1].mathPath, 'calc1', 'pathChecked still applies');
-  assert.equal(modeOf(got[1], prefs(false)), 'family', 'the stored adult on an "other" with no age and no box is not honoured');
+  assert.equal(modeOf(got[1], prefs(false)), 'adult', 'a stored adult on an "other" with no age is honoured since A5');
+  assert.equal(modeOf({ ...got[0], mode: 'adult' }, prefs(true)), 'family', 'a stored adult at 16 never is');
 });

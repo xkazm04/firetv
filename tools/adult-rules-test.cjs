@@ -183,3 +183,48 @@ test('a never-list ask is refused before any model call, at any age', async () =
   await assert.rejects(command('plan-add', { checkId: k.id, text: 'a porn shoot' }), e => e.status === 400 && /can't practise/.test(e.message));
   assert.equal(calls(), 0);
 });
+
+// ------------------------------------------------------------------ A5: the Mode row and the 18+ gate
+const { modeOf, adultAllowed } = require(src('lib/rules/mode.ts'));
+const { profileRows, modeCells, locate, flat } = require(src('tv/profileRows.ts'));
+const store = require(src('lib/session/store.ts'));
+const { tvKey } = require(src('tv/keys.ts'));
+const KEYS = { ev: () => {}, nav: () => {}, focus: () => {}, move: () => {} };
+
+test('A5: adultAllowed is 18+, or "other" with no age; every school age under 18 is refused', () => {
+  for (let age = 6; age <= 17; age++) for (const type of ['elementary', 'high-school', 'other']) assert.equal(adultAllowed({ age, type }), false, `${type} ${age}`);
+  for (const age of [18, 19, 30, 70]) for (const type of ['elementary', 'high-school', 'other']) assert.equal(adultAllowed({ age, type }), true, `${type} ${age}`);
+  assert.equal(adultAllowed({ type: 'other' }), true, '"other" with no age: the Mode row is the confirmation');
+  assert.equal(adultAllowed({ type: 'high-school' }), false); assert.equal(adultAllowed({ type: 'elementary' }), false); assert.equal(adultAllowed(undefined), false);
+});
+test('A5: the profile Mode row offers Adult only where the gate allows, else Family says why', () => {
+  const mode = (d) => profileRows(d).find(r => r.title === 'Mode').cells;
+  assert.deepEqual(mode({ type: 'elementary', age: 12, modules: [] }).map(c => c.mode), ['family']);
+  assert.match(mode({ type: 'elementary', age: 12, modules: [] })[0].blurb, /18 and over/);
+  assert.deepEqual(mode({ type: 'high-school', age: 17, modules: [] }).map(c => c.mode), ['family']);
+  assert.deepEqual(mode({ type: 'high-school', age: 18, modules: [] }).map(c => c.mode), ['family', 'adult']);
+  assert.deepEqual(mode({ type: 'other', modules: [] }).map(c => c.mode), ['family', 'adult']);
+  assert.deepEqual(mode(null).map(c => c.mode), ['family'], 'a fresh draft is a high-school learner with no age yet');
+  assert.equal(profileRows({ type: 'other', modules: [] }).findIndex(r => r.title === 'Mode'), 1, 'right under the type (no age row for "other")');
+  assert.deepEqual(modeCells({ type: 'other' }).map(c => c.label), ['Family', 'Adult (18+)']);
+});
+test('A5: Select on Adult drafts it; the age dropping under 18 takes it away, a saved adult reads as adult', () => {
+  const s0 = { ...store.fresh(), learner: null, screen: 'profile' };
+  let s = store.reduce(s0, { type: 'profile.draft', patch: { name: 'Ada', type: 'high-school', age: 19, modules: ['english'] } });
+  const rows = profileRows(s.draft), r = rows.findIndex(x => x.title === 'Mode');
+  const ev = tvKey({ ...s, focus: flat(rows, r, 1) }, 'select', KEYS).events.find(e => e.type === 'profile.draft');
+  assert.deepEqual(ev.patch, { mode: 'adult' });
+  s = store.reduce(s, ev); assert.equal(s.draft.mode, 'adult');
+  assert.equal(store.reduce(s, { type: 'profile.draft', patch: { age: 16 } }).draft.mode, undefined, 'under 18: adult is gone');
+  assert.equal(store.reduce(s, { type: 'profile.draft', patch: { type: 'elementary' } }).draft.mode, undefined, 'a school type with no age: gone');
+  const saved = store.reduce(s, { type: 'profile.save' }).profiles.find(p => p.name === 'Ada');
+  assert.equal(saved.mode, 'adult'); assert.equal(modeOf(saved), 'adult');
+  const back = store.reduce(store.reduce(s, { type: 'profile.draft', patch: { mode: 'family' } }), { type: 'profile.save' }).profiles.find(p => p.name === 'Ada');
+  assert.equal(modeOf(back), 'family', 'back to Family is always allowed');
+});
+test('A5: the Linga age gate is unchanged by the mode: Adult mode on a 16-year-old is impossible, and audienceAllowed reads age, not mode', () => {
+  const { audienceAllowed } = require(src('lib/english/curriculum.ts'));
+  const teen = { id: 't', name: 'T', type: 'high-school', age: 16, modules: ['english'], mode: 'adult' };
+  assert.equal(modeOf(teen), 'family');
+  assert.equal(audienceAllowed(teen, defaultPreferences(teen), 'adult'), false);
+});
