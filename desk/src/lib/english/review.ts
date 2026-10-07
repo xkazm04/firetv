@@ -48,9 +48,9 @@ export function findPhrase(text: string, phrase: string): string | null {
   return null;
 }
 /** Everything this scene has already put in front of the learner: the partner's lines, the cue, its moments, the coach. */
+export const shownLines = (c: Conversation): string[] => [...c.turns.filter(t => t.role === "partner").map(t => t.text), c.cue, ...(c.moments ?? []).map(m => m.better), c.coaching?.after ?? ""];
 function alreadyShown(c: Conversation, phrase: string): boolean {
-  const shown = [...c.turns.filter(t => t.role === "partner").map(t => t.text), c.cue, ...(c.moments ?? []).map(m => m.better), c.coaching?.after ?? ""];
-  return shown.some(x => !!x && findPhrase(x, phrase) !== null);
+  return shownLines(c).some(x => !!x && findPhrase(x, phrase) !== null);
 }
 /**
  * Whether `reply`, sent on conversation `c` as it stood, used the scene's review item unaided: the learner's own
