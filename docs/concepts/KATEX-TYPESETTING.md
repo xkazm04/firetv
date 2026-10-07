@@ -10,7 +10,8 @@ answered there. Slice M4b in [STUDY-DESK-V2-PLAN.md](STUDY-DESK-V2-PLAN.md) wait
 - `desk/src/maths/typeset.ts` and `MathText.tsx`: a custom typesetter for plain notation and a subset of TeX. It handles
   stacked fractions, roots, ∫ and ∑ with limits, `lim` and Greek letters, in a handwritten look (Caveat with drawn strokes).
   Pen marks are drawn by `working.ts` on the same lines.
-- Gaps, from the 2026-10-07 analysis: `cases` is not laid out as rows; there are no matrices and no aligned equations.
+- Gaps, from the 2026-10-07 analysis: `cases` was not laid out as rows, and there were no matrices or aligned equations.
+  Closed the same day by v2 M4b (the custom typesetter sets them as tables).
   Greek letters and arrows fall back to a system font that has never been checked on a Fire TV. `package.json` holds
   only next, react and qrcode.
 - The owner's adult Math must-haves (v2 M4) include **proper typesetting**: matrices, `cases`, aligned equations, at the

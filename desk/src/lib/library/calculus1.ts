@@ -90,7 +90,7 @@ const EXAMPLES: Record<string, CalcExample[]> = {
     { id: "c05-p2", kind: "page", plain: "0 < |x - a| < delta implies |f(x) - L| < epsilon", tex: t`0 < \lvert x - a \rvert < \delta \implies \lvert f(x) - L \rvert < \varepsilon`, render: "renders", renderTex: "renders", check: "none" },
   ],
   "calc1-continuity": [
-    { id: "c06-q1", kind: "question", plain: "Find c so that f is continuous: f(x) = { cx + 1 if x < 2;  x^2 - c if x >= 2 }", tex: t`\text{Find } c \text{ so that } f(x) = \begin{cases} cx + 1 & x < 2 \\ x^2 - c & x \ge 2 \end{cases} \text{ is continuous.}`, answer: "c = 1", render: "degrades:too-wide", renderTex: "degrades:cases-one-line,too-wide", check: "none" },
+    { id: "c06-q1", kind: "question", plain: "Find c so that f is continuous: f(x) = { cx + 1 if x < 2;  x^2 - c if x >= 2 }", tex: t`\text{Find } c \text{ so that } f(x) = \begin{cases} cx + 1 & x < 2 \\ x^2 - c & x \ge 2 \end{cases} \text{ is continuous.}`, answer: "c = 1", render: "degrades:too-wide", renderTex: "renders", check: "none" },
     { id: "c06-w1", kind: "working", plain: lines("2c + 1 = 4 - c", "3c = 3", "c = 1"), tex: lines(t`2c + 1 = 4 - c`, t`3c = 3`, t`c = 1`), note: "linear, but in c: verify.ts reads only x", render: "renders", renderTex: "renders", check: "none" },
     { id: "c06-c1", kind: "caption", plain: "Both pieces must meet at x = 2: set the left piece's value there equal to the right piece's.", render: "renders", check: "none" },
     { id: "c06-p1", kind: "page", plain: "lim_(x->infinity) (3x^2 - x)/(2x^2 + 5) = 3/2", tex: t`\lim_{x \to \infty} \frac{3x^2 - x}{2x^2 + 5} = \frac{3}{2}`, render: "renders", renderTex: "renders", check: "none" },
