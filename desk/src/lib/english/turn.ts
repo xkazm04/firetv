@@ -8,6 +8,7 @@
  *
  * Pure data, no React and no filesystem: the server, the view, the TV and the phone all import it.
  */
+import type { Mode } from "../rules/mode";
 import type { Conversation } from "./types";
 
 /**
@@ -19,8 +20,11 @@ import type { Conversation } from "./types";
 export const TURN_STATES = ["finished", "preparing", "waiting", "unprepared", "moment", "paused", "coaching", "quiz", "your-turn"] as const;
 export type TurnState = typeof TURN_STATES[number];
 
-/** Every conversation command after the scene has started. "capture" is starting the phone's microphone. */
-export const TURN_ACTIONS = ["turn", "cue", "quiz", "choice", "coach", "replay", "capture", "pause", "resume", "repeat", "leave", "finish", "moment-done"] as const;
+/**
+ * Every conversation command after the scene has started. "capture" is starting the phone's microphone. "cut" ends a
+ * take with up to three notes (v2 L3): Adult mode only, so accepts() takes the mode.
+ */
+export const TURN_ACTIONS = ["turn", "cue", "quiz", "choice", "coach", "replay", "capture", "pause", "resume", "repeat", "leave", "finish", "moment-done", "cut"] as const;
 export type TurnAction = typeof TURN_ACTIONS[number];
 export function isTurnAction(action: string): action is TurnAction { return (TURN_ACTIONS as readonly string[]).includes(action); }
 
@@ -38,7 +42,9 @@ export function turnState(c: Conversation): TurnState {
 /**
  * What each state takes. Repeat audio is harmless everywhere. Leave cancels a reply in flight and keeps the scene
  * for later. Pause is a toggle, so a paused scene takes it too. Resume brings back a scene the learner left, so
- * every live state takes it, but never one with a reply in flight: clearing that token threw the reply away.
+ * every live state takes it, but never one with a reply in flight: clearing that token threw the reply away. Cut
+ * (Adult mode) works on the learner's own lines, so it is taken where a reply can stand: the learner's turn, the quiz
+ * and a pause, never over a reply in flight, a moment or the coach.
  */
 export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
   finished: ["repeat"],
@@ -46,17 +52,19 @@ export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
   waiting: ["leave", "repeat"],
   unprepared: ["resume", "finish", "leave", "repeat"],
   moment: ["moment-done", "resume", "finish", "leave", "repeat"],
-  paused: ["resume", "pause", "finish", "leave", "repeat"],
+  paused: ["resume", "pause", "finish", "leave", "repeat", "cut"],
   coaching: ["replay", "pause", "resume", "finish", "leave", "repeat"],
-  quiz: ["turn", "cue", "quiz", "choice", "coach", "capture", "pause", "resume", "finish", "leave", "repeat"],
-  "your-turn": ["turn", "cue", "quiz", "coach", "capture", "pause", "resume", "finish", "leave", "repeat"],
+  quiz: ["turn", "cue", "quiz", "choice", "coach", "capture", "pause", "resume", "finish", "leave", "repeat", "cut"],
+  "your-turn": ["turn", "cue", "quiz", "coach", "capture", "pause", "resume", "finish", "leave", "repeat", "cut"],
 };
 
-/** Coaching works on a reply the learner gave: the one guard the table needs from the data. */
+/** Coaching and Cut work on a reply the learner gave: the one guard the table needs from the data. */
 const hasReply = (c: Conversation) => c.turns.some(t => t.role === "learner");
 
-export function accepts(c: Conversation, action: string): boolean {
+/** `mode` is the learner's (rules/mode.ts modeOf); only "cut" reads it, and with none given Cut is refused. */
+export function accepts(c: Conversation, action: string, mode?: Mode): boolean {
   if (!isTurnAction(action) || !ACCEPTS[turnState(c)].includes(action)) return false;
+  if (action === "cut") return mode === "adult" && hasReply(c);
   return action !== "coach" || hasReply(c);
 }
 
@@ -76,10 +84,13 @@ const BY_ACTION: Partial<Record<TurnAction, string>> = {
   replay: "Ask for a coaching moment first.",
   choice: "Open Choose a phrase first.",
   "moment-done": "There is no moment on screen.",
+  cut: "Say a line in the scene first; Cut gives notes on your own words.",
 };
 
 /** The sentence a refused action shows the learner: what the state asks for first, or what the action is missing. */
-export function refusal(c: Conversation, action: string): string {
+export function refusal(c: Conversation, action: string, mode?: Mode): string {
   const state = turnState(c);
+  if (action === "cut" && mode !== "adult") return "Cut is part of Adult mode.";
+  if (action === "cut" && state === "paused") return BY_ACTION.cut!;
   return (state === "quiz" || state === "your-turn") && BY_ACTION[action as TurnAction] || BY_STATE[state];
 }

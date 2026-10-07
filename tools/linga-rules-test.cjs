@@ -1166,3 +1166,63 @@ test('pitch case 5: the phone offers Pitch a scene on its start panel in Adult m
  const authored=V.lingaView(scenes,{sceneIndex:1});assert.equal(authored.hero.own,undefined,'an authored situation is not marked');
  assert.match(fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),/h\.own\?"Your own scene · ":""/,'the TV card draws the mark');
 });
+
+// ---- v2 L3: Cut and three notes (lib/english/notes.ts cleanNotes; turn.ts "cut")
+const NOTES=()=>require(path.join(root,'src/lib/english/notes.ts'));
+const TAKE=[{id:'p1',role:'partner',text:'Welcome to the bank. How can I help you today?'},{id:'l1',role:'learner',text:'Yesterday I go to the shop. My dragon want a account.',mode:'text'},{id:'p2',role:'partner',text:'A dragon? Does your dragon have an address?'},{id:'l2',role:'learner',text:'He live in a cave, very cosy, very hot.',mode:'speech'},{id:'p3',role:'partner',text:'I see. Please sign here.'}];
+const note=(patch={})=>({turnId:'l1',quote:'My dragon want a account',kind:'word',note:'Say an account before a vowel sound.',better:'My dragon wants an account',...patch});
+test('notes case 1: a misquote is dropped, and so is a quote of a partner line',()=>{
+ const {cleanNotes}=NOTES();
+ assert.equal(cleanNotes([note({quote:'My dragon wants a account'})],TAKE).length,0,'not character for character');
+ assert.equal(cleanNotes([note({quote:'He live in a cave'})],TAKE).length,0,'words of another learner turn under this turnId');
+ assert.equal(cleanNotes([note({turnId:'p2',quote:'Does your dragon have an address'})],TAKE).length,0,'a partner line is never quoted back as the learner\'s');
+ assert.equal(cleanNotes([note({turnId:'p3',quote:'Please sign here'}),note({turnId:'nope'})],TAKE).length,0,'a partner turn or an unknown turn');
+ assert.equal(cleanNotes([note({quote:''}),note({quote:'   '})],TAKE).length,0,'an empty quote');
+ assert.equal(cleanNotes([note({kind:'grammar'}),note({note:''}),note({note:'Good. Now try the article.'})],TAKE).length,0,'an unknown kind, no note, two sentences');
+ const [kept]=cleanNotes([note()],TAKE);
+ assert.deepEqual(kept,{turnId:'l1',quote:'My dragon want a account',kind:'word',note:'Say an account before a vowel sound.',better:'My dragon wants an account'});
+ assert.deepEqual(cleanNotes({notes:[note()]},TAKE),[kept],'the shaped answer { notes } is read too');
+ assert.deepEqual(cleanNotes('junk',TAKE),[]);assert.deepEqual(cleanNotes(undefined,TAKE),[]);
+});
+test('notes case 2: a fourth note is dropped, and so is a duplicate quote (notes do not pile on one slip)',()=>{
+ const {cleanNotes,NOTES_MAX}=NOTES();
+ assert.equal(NOTES_MAX,3);
+ const four=[note(),note({turnId:'l2',quote:'He live in a cave',kind:'meaning',note:'Lives, with an s, for one dragon.'}),note({quote:'Yesterday I go',kind:'register',note:'Fine at a bank counter.'}),note({turnId:'l2',quote:'very hot',kind:'word',note:'Cosy and hot is a nice pair.'})];
+ assert.deepEqual(cleanNotes(four,TAKE).map(n=>n.quote),['My dragon want a account','He live in a cave','Yesterday I go'],'the fourth is dropped');
+ const twice=[note(),note({kind:'meaning',note:'The same slip again.'}),note({quote:'my dragon want a account',note:'And again, in lower case.'})];
+ assert.equal(cleanNotes(twice,TAKE).length,1,'the same quote twice, or in another case, is one note');
+ assert.equal(cleanNotes([note({quote:'nothing like it'}),note(),note({quote:'My dragon want a account',note:'Again.'})],TAKE).length,1,'a dropped note does not take a quote');
+});
+test('notes case 3: a "form" note stays form only where the tense rule finds a conflict; otherwise it is meaning, labelled a reading',()=>{
+ const {cleanNotes,sentenceWith}=NOTES(),{resolveEnglish}=require(path.join(root,'src/lib/rules/english.ts'));
+ assert.equal(sentenceWith(TAKE[1].text,'Yesterday I go'),'Yesterday I go to the shop.');
+ assert.notEqual(resolveEnglish('Yesterday I go to the shop.').conflict,null,'the fixture: the rule sees go against yesterday');
+ assert.equal(resolveEnglish('My dragon want a account.').conflict,null,'the fixture: no tense conflict here');
+ const [ruled]=cleanNotes([note({quote:'Yesterday I go',kind:'form',note:'Yesterday asks for went.',better:'Yesterday I went'})],TAKE);
+ assert.equal(ruled.kind,'form');assert.equal(ruled.reading,undefined);
+ const [read]=cleanNotes([note({kind:'form',note:'Wants, for one dragon.'})],TAKE);
+ assert.equal(read.kind,'meaning','no rule conflict: not form');assert.equal(read.reading,true,'and labelled a reading');
+ const [crossing]=cleanNotes([note({quote:'shop. My dragon',kind:'form',note:'Two sentences run together.'})],TAKE);
+ assert.equal(crossing.kind,'form','a quote across a sentence end is read against the whole turn, where yesterday clashes');
+});
+test('cut case 1: turnState and accepts for "cut" in every state - Adult mode, a reply of the learner\'s, the learner\'s turn, the quiz or a pause',()=>{
+ const T=turn();
+ assert(T.TURN_ACTIONS.includes('cut'));
+ const want={finished:false,preparing:false,waiting:false,unprepared:false,moment:false,paused:true,coaching:false,quiz:true,'your-turn':true};
+ for(const [name,[,c]] of Object.entries(TURN_STATES)){
+  assert.equal(T.turnState(c),name);
+  assert.equal(T.accepts(c,'cut','adult'),want[name],`adult · ${name}`);
+  assert.equal(T.ACCEPTS[name].includes('cut'),want[name],`the table · ${name}`);
+ }
+ for(const [name,c] of [['your-turn, no reply yet',convo()],['quiz, no reply yet',convo({quizOpen:true})],['paused, no reply yet',convo({paused:true})]]){
+  assert.equal(T.accepts(c,'cut','adult'),false,name);assert.match(T.refusal(c,'cut','adult'),/Say a line in the scene first/,name);
+ }
+});
+test('cut case 2: Family mode refuses "cut" in every state, and so does a caller that names no mode',()=>{
+ const T=turn();
+ for(const [name,[,c]] of Object.entries(TURN_STATES)){
+  assert.equal(T.accepts(c,'cut','family'),false,`family · ${name}`);assert.equal(T.accepts(c,'cut'),false,`no mode · ${name}`);
+  assert.equal(T.refusal(c,'cut','family'),'Cut is part of Adult mode.');
+ }
+ for(const a of CONVERSATION_ACTIONS)for(const [name,[,c]] of Object.entries(TURN_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a} · ${name}`);
+});

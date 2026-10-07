@@ -118,6 +118,16 @@ export interface ConversationHelp {
   /** the cue on screen is that rung (not the quiz's or a choice's line) */
   shown: boolean;
 }
+export type NoteKind = "meaning" | "form" | "word" | "register";
+/**
+ * One of the three notes at Cut (v2 L3, notes.ts cleanNotes): a quote, exact, from one learner turn of this take, and
+ * one sentence about it. "form" only where the tense rule (lib/rules/english.ts) finds a conflict in that sentence;
+ * otherwise it is a "meaning" note marked `reading`, the model's read rather than a rule. Never evidence. Not the
+ * learner's teaching `notes` (EnglishLearning.notes).
+ */
+export interface SceneNote { turnId: string; quote: string; kind: NoteKind; note: string; better?: string; reading?: boolean; }
+/** A take ended by Cut: when, and its notes, kept with their turnIds (v2 L4 Take Two forks from a note). */
+export interface Cut { at: number; notes: SceneNote[]; }
 /** A scene's steps and the replies that reached them, in order (mission.ts). Never evidence. */
 export interface Mission { steps: string[]; reached: Array<{ turnId: string; quote: string }>; }
 export interface Conversation {
@@ -137,6 +147,8 @@ export interface Conversation {
   review?: Review | null;
   /** absent on a conversation saved before missions, and null-free: a scene with no valid steps has none */
   mission?: Mission;
+  /** absent unless the take was ended by Cut in Adult mode (v2 L3) */
+  cut?: Cut;
   commands: string[]; evidence: EnglishEvidence[];
   provider?: string; responseMs?: number; startedAt: number;
 }
