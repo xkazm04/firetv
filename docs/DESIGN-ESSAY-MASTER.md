@@ -111,11 +111,11 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
 
 From the lens home with nothing read, OK on *Start from the pattern* opens the Paragraph's plan: one row per
 slot of the pattern (your claim, the evidence, the link back), read from the pattern's [brackets] in
-, never listed by hand. A row is a hatched plate until the learner has written its
+`rules/essay.ts planSlots`, never listed by hand. A row is a hatched plate until the learner has written its
 sentence on the phone, and is inked with their own words once they have (ink means done, hatch means still to
 write). The frame words ("For example,", "This shows") are never on a plate and never in the text that is read.
 
-- A fit check () is a comment in the caption, never ink and never a refusal: the slot inks because it is written.
+- A fit check (`planFit`) is a comment in the caption, never ink and never a refusal: the slot inks because it is written.
 - A sentence is refused only for the reasons a rewrite is (blank, two sentences, a leftover bracket, over the cap, not a sentence on its own).
 - The TV never asks for typing; Select on a slot says to say it on the phone. No model is called until *Read it*, and *Read it* with a slot empty only moves the caret to the first empty slot.
 - Phase 1 had deferred this (FAMILY-PHASE-1-PLAN.md, *Essay plan slots*); it is built on the Paragraph pattern alone.
