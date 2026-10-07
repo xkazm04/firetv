@@ -60,10 +60,10 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 6 | E1 | Essay Family: a whole piece, sent at once, read paragraph by paragraph | 2 | E0, P3 | done | f8d64f1 | 2026-10-07 |
 | 7 | R1 | Rewards: the collectible engine (pure) and one collectible per app | 2 | - | done | e162e4d | 2026-10-07 |
 | 8 | L1 | Linga: the Cambridge A2 Key / B1 PET for Schools map (data and coverage) | 2 | - | done (unverified table; claim off) | ce795b1 | 2026-10-07 |
-| 9 | M1 | Math: teach a new topic, worked lessons for the 12 school units | 3 | - | not started | | |
-| 10 | M4a | Math: function graphs on the TV (pure SVG plotter) | 3 | - | not started | | |
-| 11 | M4b | Math: typesetting coverage: the custom typesetter extended for `cases` and small matrices (KaTeX deferred, [concept](KATEX-TYPESETTING.md)) | 3 | - | not started | | |
-| 12 | T1 | Twin: the style meter and the **simulated** twin probe on email/chat (adult A4; V2-O1) | 3 | - | not started | | |
+| 9 | M1 | Math: teach a new topic, worked lessons for the 12 school units | 3 | - | done | f49b234 | 2026-10-07 |
+| 10 | M4a | Math: function graphs on the TV (pure SVG plotter) | 3 | - | done | 4e0ec70 | 2026-10-07 |
+| 11 | M4b | Math: typesetting coverage: the custom typesetter extended for `cases` and small matrices (KaTeX deferred, [concept](KATEX-TYPESETTING.md)) | 3 | - | done (cases, matrices, aligned, array) | b9c6e77 | 2026-10-07 |
+| 12 | T1 | Twin: the style meter and the **simulated** twin probe on email/chat (adult A4; V2-O1) | 3 | - | built; the probe's live run awaits the owner's PC | dba30f8 | 2026-10-07 |
 | 13 | L2 | Linga: Speaking practice mode, Key/PET task shapes | 4 | L1 | not started | | |
 | 14 | M2a | Math: GCSE Foundation 1MA1 map and coverage | 4 | - | not started | | |
 | 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | not started | | |
@@ -215,3 +215,17 @@ first cabinet layout overflowed four-across, so it is now two rows. Cambridge co
 94% at 12) while two real gaps remain for children (narrating the past, feelings). The claim stays off until a person
 verifies the table.
 Next: batch 3 (M1 lessons, M4a graphs, M4b typesetting, T1 the simulated twin probe). Owner: nothing blocking.
+
+### 2026-10-07 · batch 3 · M1 M4a M4b T1 · claude/trusting-franklin-a8g19w
+Gate: `tsc --noEmit` clean, `next build` succeeds. Every suite is green when run one by one, except `maths-rules-test`
+"learners case 3" (root-only, as before). New suites: `worked-rules-test` (7, covering 14,000+ generated items),
+`plot-rules-test` (5), `style-rules-test` (5, including the probe's stub run); `maths-type-test` gained three M4b rows.
+Captures: the worked lesson at 1920 x 1080 and 1280 x 720 on the dev server (stand-in `CLAUDE_BIN`). Graphs and tables
+were rendered statically and looked at.
+Surprises: the worked answers first came out as "156/5 litres", "128,0" and "£70.2". They now follow the question's form:
+decimals where it speaks in decimals, units kept, money to the cent, a decimal comma in cz/de. Measured over 19,200 items,
+every answer `check` confirms. Long area questions overran the paper; they now wrap and use a smaller face. M4b retired a
+declared degrade: Calculus c06-q1's TeX renders now, re-declared in the ratchet. Pins revised openly: tv-keys case 3, the
+Math screen list, and the thinking-off allowlist (lib/desk/worked.ts, whose idea is code-checked).
+Next: batch 4 (L2 Speaking practice, M2a the GCSE Foundation map, T2 the Workroom for messages, P4 the PC drop page). The
+T1 probe's live run waits on the owner's PC; T2 is built behind its result.
