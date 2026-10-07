@@ -68,7 +68,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 14 | M2a | Math: GCSE Foundation 1MA1 map and coverage | 4 | - | done (unverified table; 19 of 86 statements touched; claim off) | 3b6768a | 2026-10-07 |
 | 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | done, ahead of the T1 live pass (deviation, see the batch 4 log) | c108f63 | 2026-10-07 |
 | 16 | P4 | Platform: PC drop page and .docx text (adult A7) | 4 | P2 | done | c108f63 | 2026-10-07 |
-| 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | not started | | |
+| 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | done, built locally on main (no PR, nothing pushed); captures and the company sim's live run owed to the owner's batch review | d29111c9..aa5ac64d | 2026-10-07 |
 | 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | not started | | |
 | 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | not started | | |
 | 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | not started | | |
@@ -287,3 +287,22 @@ Pins revised openly: tv-keys "essay 1" (the Workroom is a fifth Essay Master scr
 (now filled), and linga's school-situation helper (Speaking practice is school-audience too, with its own suite).
 Next: batch 5 (L3 pitch a scene and Cut, M4c multi-step problems, T3 habit detectors, M2b the first GCSE units). Owner:
 the merge and the hands-on twin test (desk/README "Trying the twin"); the T1 probe's live run on the owner's PC.
+
+### 2026-10-07 · batch 5 · L3 · autopilot/accepted-idea-delivery-9d230b69 aa5ac64d
+Built locally on main per the owner's 2026-10-07 evening ruling: batch 5 one slice per run in table order (L3, M4c, T3,
+M2b), each merged into local main through the gate; no PR, nothing pushed. Commits: 6a12bd2a (the card), d29111c9 (the
+pitch, server), 83445c98 (the pitch, phone and TV), c3649e60 (notes.ts and Cut in the turn table), 123ea27c (Cut and the
+recap tape), aa5ac64d (the company sim).
+Gate: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit --incremental false` clean. New rows:
+`adult-rules-test` the L3 pitch table (15 rows) and four pitch command rows; `linga-rules-test` pitch cases 1-5, notes
+cases 1-3, cut cases 1-6. No existing assertion changed. `tools/linga-company-sim.cjs` ran once, `--stub` only: 20 of
+20 scenes played through Cut.
+Surprises: plan-add's `audienceOf(asked, label) ?? "adult"` (check.ts) cannot be reached by a never-list ask, which is
+refused before the call; the pitch refuses on null at both gates instead of carrying it as adult. The shaping call needed
+thinking off, and the thinking allowlist pins thinking:false to conversation.ts, so check.ts exports the request
+(`pitchAsk`) and conversation.ts makes the call. The tape has no style of its own: `design/linga.css` was outside this
+slice, so it borrows the topics' row of doors.
+Owed to the owner's batch review: the TV captures of `linga-scenes` with a pitched card and of the Cut recap's tape
+(1920 x 1080, 1280 x 720), the phone's pitch field at 390 px, a tape style in `design/linga.css` if the capture asks for
+one, and the company sim's live run read by a person (counts into this log).
+Next: M4c (row 18), then T3, then M2b, one slice per run.

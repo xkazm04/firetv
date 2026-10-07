@@ -26,8 +26,8 @@ relative, not measured; nothing here is L (anything L was split).
 
 | # | Id | Slice | Size | Depends on | Status | Branch | Commit | Date |
 |---|---|---|---|---|---|---|---|---|
-| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | keyword gate done (v2 G1); pitch a scene not started (v2 L3) | claude/trusting-franklin-a8g19w | af47204 | 2026-10-07 |
-| 2 | A2 | Linga: Cut and three notes | M | A1 | not started | | | |
+| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | done: keyword gate (v2 G1, af47204); pitch a scene (v2 L3, built locally on main, captures owed) | autopilot/accepted-idea-delivery-9d230b69 | d29111c9, 83445c98 | 2026-10-07 |
+| 2 | A2 | Linga: Cut and three notes | M | A1 | done as v2 L3 (built locally on main; captures and the company sim's live run owed) | autopilot/accepted-idea-delivery-9d230b69 | c3649e60, 123ea27c, aa5ac64d | 2026-10-07 |
 | 3 | A3 | Math: Field Work, the first job | M | A1 (mode.ts) | not started | | | |
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
 | 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
