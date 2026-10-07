@@ -47,6 +47,7 @@ const FAILED: Record<JobKind, string> = {
   practice: "The desk could not write this set.",
   analyse: "The desk could not read that through.",
   memory: "The desk could not write tonight down.",
+  teach: "The desk could not put the lesson together.",
 };
 /** Why, when the engine says. */
 const WHY: Record<EngineErrorKind, string> = {

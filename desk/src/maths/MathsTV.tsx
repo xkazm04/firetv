@@ -18,7 +18,7 @@ import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
 import { MathsCollection } from "./MathsCollection";
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
-import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
+import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -38,7 +38,7 @@ import { KIND_WORD, lookAt, working } from "./working";
 export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: 0 | 1 | null }) {
   const f = s.focus;
   const blank = s.screen === "tonight" && !continueCard(s);
-  const lamp = ["sheet", "walk", "page", "hint", "practice", "units"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "calendar" ? "wide" : "desk";
+  const lamp = ["sheet", "walk", "page", "hint", "practice", "units", "worked"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "calendar" ? "wide" : "desk";
   return (
     <div className={`maths-tv ${MATHS_FONTS}`} data-screen={s.screen} data-lamp={lamp}>
       <div className="mb-lamp" aria-hidden="true"><i /></div>
@@ -53,6 +53,7 @@ export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; as
         : s.screen === "lesson" ? <LessonScreen s={s} />
         : s.screen === "units" ? <Units s={s} focus={f} />
         : s.screen === "calendar" ? <Calendar s={s} focus={f} />
+        : s.screen === "worked" ? <WorkedScreen s={s} focus={f} />
         : null}
     </div>
   );
@@ -1034,5 +1035,44 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
       ])}
     </div>
     <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the units.`} top={960} />
+  </>);
+}
+
+// ---------------------------------------------------------------- v2 M1 · a worked lesson before the set
+
+/**
+ * The idea and three steps on the taped card; three worked examples on the paper, each answered in the desk's pen. Every
+ * number on this screen is code's: the questions from the unit's generator, the answers from rules/school workedAnswer
+ * (marked right by `check` before they are shown). Try six writes the usual set on this unit; Back returns to the topics.
+ */
+function WorkedScreen({ s, focus }: { s: Session; focus: number }) {
+  const w = s.worked;
+  const at = stopAt(WORKED_STOPS, focus);
+  if (!w) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="The lesson is on its way" /></h1></>;
+  return (<>
+    <Top s={s} crumb={w.title} />
+    <div className="mb-practice mb-worked">
+      <div className="mb-paper" data-role="maths-worked">
+        <header className="mb-sheethead"><span className="st">Worked examples</span><span className="who">{s.learner?.name}</span></header>
+        {w.examples.map((ex, i) => (
+          <section key={i} className="mb-item" data-role="maths-worked-example" data-tier={ex.tier}>
+            <div className="num">{i + 1}</div>
+            <div className="mb-wk"><PrintRow text={ex.question} wrap /><div className="mb-wans"><span className="eq">=</span><MathText text={ex.answer} voice="hand" /></div></div>
+          </section>
+        ))}
+      </div>
+    </div>
+    <aside className="mb-side">
+      <div className="mb-khead"><div className="mb-kick">{KIND_ICON.six}Before the set</div></div>
+      <div className="mb-stitle" data-role="maths-title">The <em>idea</em></div>
+      <div className="mb-card" data-role="maths-idea" data-own={w.own}>
+        <div className="ht">{w.idea}</div>
+        <ol className="mb-steps">{w.steps.map((st) => <li key={st}>{st}</li>)}</ol>
+      </div>
+    </aside>
+    <div className="mb-acts">
+      <Act icon={ICON.six} label="Try six" focused={at === "try"} primary />
+      <Act icon={ICON.back} label="Back to the topics" focused={at === "back"} />
+    </div>
   </>);
 }

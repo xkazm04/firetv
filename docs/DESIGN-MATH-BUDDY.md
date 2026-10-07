@@ -297,3 +297,16 @@ latches the desk already keeps (`lib/rules/collect.ts`). On Tonight, a shelf bes
 every topic latched secure**, and **a star over the lamp** when that topic's step-up record is latched too (the extra
 mile). The twelve most recent are shown, oldest on the left. Never a number, never for volume, never lost. Adult mode
 shows no shelf (X2: progress, not a game). `data-role="maths-collection"`; `maths/MathsCollection.tsx`.
+
+## The worked lesson (v2 M1, 2026-10-07)
+
+"Teach me something" now teaches before it practises. Select on a generated school unit (the twelve with a generator) opens
+`worked`, a new screen. **The paper** holds three worked examples: questions from the unit's own generator, and answers in
+the desk's pen. Each answer is built from the spec's truth (`rules/school` `workedAnswer`) and shown only when `check`
+marks it right for the learner's school system, so it uses a decimal comma in cz/de, money to the cent, and the unit
+kept. **The taped card** holds the idea and three method steps (`library/worked.ts`, authored, words only). The idea may be
+reworded by the model in the learner's voice (fast, thinking off); its words are kept only with no digit, at most three
+sentences and 320 characters, else the authored idea stands. **Try six** writes the usual set; **Back to the topics**
+returns. The linear and Calculus topics still go straight to their set. Measured over 19,200 generated items (12 units,
+both tiers, four systems, 200 seeds): every one has a worked answer `check` confirms. Route `/api/worked`, job kind
+`teach`.

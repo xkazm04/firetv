@@ -6,6 +6,7 @@
  * list from here, so the screen that draws `data-focused` and the key that moves it share one list.
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
+import { hasWorked } from "@/lib/library/worked";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
@@ -48,7 +49,7 @@ export function lingaOwns(s: Session): boolean {
 }
 
 /** Math Buddy's own screens, whatever the subject says: its home and the practice loop, and the calendar of its lessons. */
-export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
+export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar", "worked"] as const satisfies readonly Screen[];
 /**
  * Math Buddy draws its screens (maths/MathsTV.tsx, the Lamplight design): its own, and the screens it shares
  * with the other modules while maths is what is on them - a maths page and its hint, the maths units and lesson.
@@ -61,6 +62,9 @@ export function mathsOwns(s: Session): boolean {
   if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
   return false;
 }
+
+/** The worked lesson's actions, left to right (v2 M1). */
+export const WORKED_STOPS = ["try", "back"] as const;
 
 // ---- the stop lists: one per screen, drawn by the module screens and walked by tvKey ----
 const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
@@ -181,6 +185,13 @@ class Out implements Step {
     if (local.busy || running(this.s, "practice")) return;
     this.ev(opts.stay ? { type: "topic.open", topic, stay: true } : { type: "topic.open", topic });
     this.calls.push({ url: "/api/practice", body: opts.stretch ? { topic, stretch: true } : { topic }, onFail: { busy: false } });
+    this.local.busy = true;
+  }
+  /** Ask for a worked lesson (v2 M1) unless one is already being written: the topic opens, the lesson lands on `worked`. */
+  teach(local: Local, topic: string) {
+    if (local.busy || running(this.s, "teach")) return;
+    this.ev({ type: "topic.open", topic, stay: true });
+    this.calls.push({ url: "/api/worked", body: { topic }, onFail: { busy: false }, onDone: { busy: false } });
     this.local.busy = true;
   }
   /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
@@ -374,8 +385,17 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select") { const t = stopAt(stops, s.focus); if (t) o.set(local, t.id); }
+    // a school unit with a worked lesson (v2 M1) is taught first; the others go straight to a set, as before
+    if (k === "select") { const t = stopAt(stops, s.focus); if (t && hasWorked(t.id)) o.teach(local, t.id); else if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
+  },
+  // the worked lesson (v2 M1): two actions, Try six (the usual set on this unit) and Back to the topics
+  worked: (s, k, local, o) => {
+    const stops = WORKED_STOPS;
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
+    const at = stopAt(stops, s.focus);
+    if (k === "select" && at === "try" && s.worked) o.set(local, s.worked.topic);
+    if ((k === "select" && at === "back") || k === "back" || k === "up" || k === "menu") o.nav("topics");
   },
   // Get ready for school (Family W8): Left/Right walk the units strand by strand; Select asks "The usual" or "A step up"
   // (two cells, "The usual" lit), Left/Right between them, Select writes the set as Topics does - staying here while it is

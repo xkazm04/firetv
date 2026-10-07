@@ -650,3 +650,13 @@
 /* v2 R1: the lamps lit, one per topic secure, a star for the extra mile (maths/MathsCollection.tsx) */
 .mb-shelf { display: flex; align-items: flex-end; gap: 8px; margin-left: 28px; height: 52px; }
 .mb-shelf svg { display: block; }
+
+/* v2 M1: the worked lesson - three examples answered in the desk's pen, the idea and its steps on the card */
+.maths-tv .mb-worked .mb-wk { display: grid; gap: 6px; }
+.maths-tv .mb-worked .mb-wans { display: flex; align-items: baseline; gap: 14px; color: var(--mb-pen-d); font-size: 44px; }
+.maths-tv .mb-worked .mb-wans .eq { font-family: var(--mb-hand); font-weight: 600; }
+.maths-tv .mb-steps { margin: 18px 0 0; padding-left: 34px; display: grid; gap: 10px; font-size: 28px; line-height: 1.2; }
+/* the worked paper holds three questions and three answers in the practice paper's room: questions at 44px, answers at 38px */
+.maths-tv .mb-worked .mb-row.q .rin { font-size: 44px; }
+.maths-tv .mb-worked .mb-wans { font-size: 38px; margin-bottom: 6px; }
+.maths-tv .mb-worked .mb-paper { max-height: 780px; overflow: hidden; }
