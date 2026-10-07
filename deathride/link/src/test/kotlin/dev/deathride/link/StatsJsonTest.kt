@@ -16,7 +16,8 @@ import java.net.http.HttpResponse
 import kotlin.math.*
 import kotlinx.serialization.json.*
 
-/** P13f: /stats is appended in place (P11's build, without its gzip) and served as before; the bytes must not change by one. */
+/** P13f: /stats is appended in place (P11's build, without its gzip) and served as before; P13g: served as UTF-8 blocks with no reply
+ *  String. The bytes must not change by one. */
 class StatsJsonTest {
     /** The pre-P13f RaceServer.statsJson (bba8be1b), verbatim apart from its two clock inputs. */
     private fun templatedStats(h: RaceServer, now: Double, heapUsedMB: Double): String = with(h) {
@@ -109,29 +110,102 @@ class StatsJsonTest {
             }
         }
     }
-    /** The served reply against a bare server running the unchanged route line on the pre-P13f text: same status, headers
-     *  (but Date) and body, with or without Accept-Encoding; nothing is gzipped. */
-    @Test fun servedStatsAreTheTemplatedBytesWithTheSameHeaders() {
+    /** P13g: the reply blocks are String.toByteArray(UTF_8) byte for byte: ASCII, 2-, 3- and 4-byte characters, unpaired
+     *  surrogates ('?'), pairs split across the char window and across a block boundary, and the populated 77 KB text. */
+    @Test fun replyBlocksAreTheUtf8OfTheText() {
+        val chars=CharArray(StatsReply.WINDOW)
+        fun check(text: String,why: String) { val r=StatsReply();r.clear();r.encode(StringBuilder(text),chars)
+            assertArrayEquals(text.toByteArray(Charsets.UTF_8),r.bytes(),why);assertEquals(text.toByteArray(Charsets.UTF_8).size.toLong(),r.length,why)
+            r.clear();r.encode(text,chars);assertArrayEquals(text.toByteArray(Charsets.UTF_8),r.bytes(),"$why (CharSequence)") }
+        check("","empty")
+        check("{\"name\":\"Zoë Łódź 日本 🏎️\"}","accents, CJK, an emoji pair")
+        check("a\ud800b\udc00c\ud800𐀀\udc00\ud83c","unpaired surrogates")
+        for(k in listOf(StatsReply.WINDOW-1,StatsReply.WINDOW,StatsReply.BLOCK-1,StatsReply.BLOCK-2,StatsReply.BLOCK-3,3*StatsReply.BLOCK))
+            check("x".repeat(k)+"🏎é€"+"y".repeat(k)+"\ud83c","split at $k")
+        val h=RaceServer({ "{}" },{},port=0); populate(h)
+        val now=9000*16.7+4000.0; val expected=templatedStats(h,now,37.5).toByteArray(Charsets.UTF_8)
+        val reply=h.statsReply(now,37.5)
+        assertArrayEquals(expected,reply.bytes()); assertEquals(expected.size.toLong(),reply.length)
+        assertTrue(reply.blockCount>=expected.size/StatsReply.BLOCK,"blocks ${reply.blockCount}")
+        assertTrue(StatsReply.BLOCK<12*1024 && StatsReply.WINDOW*2<12*1024,"every array under ART's 12 KiB large-object threshold")
+        // A one-byte mutation is seen.
+        val mutated=reply.bytes().also{it[it.size/2]=(it[it.size/2]+1).toByte()}
+        assertFalse(expected.contentEquals(mutated))
+    }
+    /** A read that races another takes its own reply: neither is refilled while the other is held, and the pool keeps a few. */
+    @Test fun racingRepliesAreDistinctAndReturnToThePool() {
+        val h=RaceServer({ "{}" },{},port=0); populate(h)
+        val a=h.statsReply(1e5,1.0); val b=h.statsReply(2e5,2.0)
+        assertNotSame(a,b)
+        assertArrayEquals(templatedStats(h,1e5,1.0).toByteArray(Charsets.UTF_8),a.bytes(),"a is untouched by b's fill")
+        assertArrayEquals(templatedStats(h,2e5,2.0).toByteArray(Charsets.UTF_8),b.bytes())
+        h.releaseStats(a); h.releaseStats(b); assertEquals(2,h.freeStatsReplies)
+        assertSame(b,h.statsReply(1e5,1.0),"reused")
+        val held=List(StatsReply.KEEP+3){h.statsReply(3e5,3.0)}; held.forEach{h.releaseStats(it)}
+        assertEquals(StatsReply.KEEP,h.freeStatsReplies,"bounded")
+    }
+    /** Warm, a /stats build allocates far less than the reply: no reply String and no reply-sized array (JVM thread counter). */
+    @Test fun aWarmReplyAllocatesNoReplySizedArray() {
+        val h=RaceServer({ "{}" },{},port=0); populate(h)
+        val art=blob("art",900); val traffic="["+blob("traffic",4700)+"]"; val pickups="["+blob("pickups",1260)+"]"; val combat=blob("combat",780); val full=blob("combatFull",800)
+        h.artJson={art}; h.trafficJson={traffic}; h.pickupsJson={pickups}; h.combatSummaryJson={combat}; h.slots[0].combatFull={full}
+        val mx=java.lang.management.ManagementFactory.getThreadMXBean() as com.sun.management.ThreadMXBean
+        val id=Thread.currentThread().id
+        repeat(50){ h.releaseStats(h.statsReply(1e5,1.0)) }
+        val before=mx.getThreadAllocatedBytes(id); var length=0L
+        repeat(20){ val r=h.statsReply(1e5,1.0); length=r.length; h.releaseStats(r) }
+        val perRead=(mx.getThreadAllocatedBytes(id)-before)/20
+        println("stats reply bytes=$length allocated per warm build=$perRead")
+        // Under 12 KiB in all, so no single array reaches ART's large-object threshold (the reply itself is ~79 KB).
+        assertTrue(perRead<12*1024,"per read $perRead against a $length-byte reply")
+    }
+    /** The served reply against a bare server running the old route line (respondText) on the pre-P13f text at the same two
+     *  clocks: same status, every header but Date (Content-Type and Content-Length included) and the body byte for byte, with
+     *  or without Accept-Encoding; never gzipped; a name with accents and an emoji in the state; and racing reads. */
+    @Test fun servedStatsAreTheOldRouteByteForByte() {
         val port=java.net.ServerSocket(0).use{it.localPort}; val oldPort=java.net.ServerSocket(0).use{it.localPort}
         val h=RaceServer({ "{}" },{},port=port)
         populate(h,1e9)
-        val old=embeddedServer(CIO,host="127.0.0.1",port=oldPort){ routing { get("/stats"){ call.response.header("Cache-Control","no-store"); call.respondText(templatedStats(h,0.0,0.0),ContentType.Application.Json) } } }.start(false)
+        h.slots[1].careerJson="{\"name\":\"Zoë Łódź 🏎\",\"rest\":"+blob("career1",12380)+"}"
+        val old=embeddedServer(CIO,host="127.0.0.1",port=oldPort){ routing { get("/stats"){
+            val now=call.request.queryParameters["now"]!!.toDouble(); val heap=call.request.queryParameters["heap"]!!.toDouble()
+            call.response.header("Cache-Control","no-store"); call.respondText(templatedStats(h,now,heap),ContentType.Application.Json) } } }.start(false)
         val http=HttpClient.newHttpClient()
-        fun clockless(text: String)=text.replace(Regex("\"uptimeMs\":[^,]*"),"").replace(Regex("\"heapUsedMB\":[^,]*"),"")
+        fun clock(body: ByteArray,key: String)=Regex("\"$key\":([^,]*)").find(String(body,Charsets.UTF_8))!!.groupValues[1]
+        fun get(url: String,accept: String?): HttpResponse<ByteArray> { val b=HttpRequest.newBuilder(URI(url)); if(accept!=null)b.header("Accept-Encoding",accept)
+            return http.send(b.build(),HttpResponse.BodyHandlers.ofByteArray()) }
+        fun headers(x: HttpResponse<ByteArray>)=x.headers().map().filterKeys{!it.equals("date",true)}
+        /** The old route's reply at the clocks [r] carries. */
+        fun oldFor(r: HttpResponse<ByteArray>,accept: String?)=get("http://127.0.0.1:$oldPort/stats?now=${clock(r.body(),"uptimeMs")}&heap=${clock(r.body(),"heapUsedMB")}",accept)
         try {
-            h.start();repeat(500){if(!h.running)Thread.sleep(20)}
-            for(accept in listOf(null,"gzip, deflate")) {
-                fun get(p: Int): HttpResponse<ByteArray> { val b=HttpRequest.newBuilder(URI("http://127.0.0.1:$p/stats")); if(accept!=null)b.header("Accept-Encoding",accept)
-                    return http.send(b.build(),HttpResponse.BodyHandlers.ofByteArray()) }
-                val r=get(port); val o=get(oldPort)
+            h.start();repeat(500){if(!h.running)Thread.sleep(20)}; assertTrue(h.running,h.serverStatus)
+            for(accept in listOf(null,"gzip, deflate","gzip")) {
+                val r=get("http://127.0.0.1:$port/stats",accept); val o=oldFor(r,accept)
+                assertEquals(200,r.statusCode())
                 assertEquals(o.statusCode(),r.statusCode())
-                fun headers(x: HttpResponse<ByteArray>)=x.headers().map().filterKeys{!it.equals("date",true) && !it.equals("content-length",true)}
                 assertEquals(headers(o),headers(r),"headers ($accept)")
+                assertEquals("no-store",r.headers().firstValue("Cache-Control").get())
                 assertNull(r.headers().firstValue("Content-Encoding").orElse(null),"never gzipped ($accept)")
                 assertEquals(r.body().size.toString(),r.headers().firstValue("Content-Length").get())
-                assertEquals(clockless(String(o.body(),Charsets.UTF_8)),clockless(String(r.body(),Charsets.UTF_8)),"served body ($accept)")
+                assertArrayEquals(o.body(),r.body(),"served body ($accept)")
                 assertTrue(r.body().size>70_000,"realistic size ${r.body().size}")
+                assertTrue(String(r.body(),Charsets.UTF_8).contains("Zoë Łódź 🏎"),"the name survives")
+                // A one-byte mutation of the served body fails the comparison.
+                val bent=r.body().copyOf().also{it[it.size/3]=(it[it.size/3]+1).toByte()}
+                assertFalse(o.body().contentEquals(bent))
+                println("stats served bytes=${r.body().size} type=${r.headers().firstValue("Content-Type").orElse("")} accept=$accept")
             }
+            // Racing reads: each is whole, valid JSON, and the old route's bytes at its own clocks.
+            val pool=java.util.concurrent.Executors.newFixedThreadPool(8)
+            try {
+                val replies=(0 until 64).map{ pool.submit<HttpResponse<ByteArray>>{ get("http://127.0.0.1:$port/stats",null) } }.map{it.get()}
+                for(r in replies) {
+                    assertEquals(200,r.statusCode()); assertEquals(r.body().size.toString(),r.headers().firstValue("Content-Length").get())
+                    Json.parseToJsonElement(String(r.body(),Charsets.UTF_8))
+                    val o=oldFor(r,null); assertArrayEquals(o.body(),r.body(),"a racing read"); assertEquals(headers(o),headers(r))
+                }
+            } finally { pool.shutdown() }
+            assertTrue(h.freeStatsReplies in 1..StatsReply.KEEP,"replies returned to the pool: ${h.freeStatsReplies}")
         } finally { h.stop(); old.stop(0,0,java.util.concurrent.TimeUnit.MILLISECONDS) }
     }
 }

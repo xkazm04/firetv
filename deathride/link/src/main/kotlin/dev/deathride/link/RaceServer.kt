@@ -173,7 +173,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/build") { call.response.header("Cache-Control","no-store"); call.respondText(buildId,ContentType.Text.Plain) }
                         get("/hud.css") { call.respondPacked(cssPacked,ContentType.Text.CSS,"no-cache") }
                 get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
-                        get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
+                        get("/stats") { call.response.header("Cache-Control","no-store"); val reply=statsReply(); try { call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){reply.writeTo(this)} } finally { releaseStats(reply) } }
                         if(profileFrames!=null)get("/profile") {
                             val frames=call.request.queryParameters["frames"]?.toLongOrNull()?:0
                             val inputs=call.request.queryParameters["inputs"]?.toLongOrNull()?:0
@@ -321,10 +321,22 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     /** Reused under its own lock. The text is appended in place: on Android each Kotlin template becomes its own growing
      *  StringBuilder, and a slot object holds ~31 KB of career and garage JSON, so every 77 KB response grew and dropped
      *  about 0.9 MB of large char arrays on the link threads, the app's 6-7 s large-object GC churn under the probe (P13f).
-     *  Same text, field for field (StatsJsonTest). */
+     *  Same text, field for field (StatsJsonTest). The buffer, [statsChars] and [statsPool] share its lock. */
     private val statsBuffer=StringBuilder(3000)
-    fun statsJson(): String { val runtime=Runtime.getRuntime(); return statsJson(nowMs(),(runtime.totalMemory()-runtime.freeMemory())/1048576.0) }
-    internal fun statsJson(now: Double,heapUsedMB: Double): String = synchronized(statsBuffer) {
+    private val statsChars=CharArray(StatsReply.WINDOW)
+    private val statsPool=StatsReply.Pool()
+    private fun heapUsedMB(): Double { val runtime=Runtime.getRuntime(); return (runtime.totalMemory()-runtime.freeMemory())/1048576.0 }
+    fun statsJson(): String=statsJson(nowMs(),heapUsedMB())
+    internal fun statsJson(now: Double,heapUsedMB: Double): String = synchronized(statsBuffer) { appendStats(now,heapUsedMB).toString() }
+    /** P13g: the served /stats, the same text as UTF-8 blocks with no reply String or reply-sized array. Built under the
+     *  lock and written after it is released (the write suspends); hand it back with [releaseStats] once written. */
+    internal fun statsReply(now: Double=nowMs(),heapUsedMB: Double=heapUsedMB()): StatsReply = synchronized(statsBuffer) {
+        val reply=statsPool.take(); reply.encode(appendStats(now,heapUsedMB),statsChars); reply
+    }
+    internal fun releaseStats(reply: StatsReply) { synchronized(statsBuffer) { statsPool.give(reply) } }
+    internal val freeStatsReplies get()=synchronized(statsBuffer) { statsPool.size }
+    /** Call under statsBuffer's lock. */
+    private fun appendStats(now: Double,heapUsedMB: Double): StringBuilder {
         val sb=statsBuffer; sb.setLength(0)
         sb.append("{\"audio\":").append(audioJson()).append(",\"art\":").append(artJson()).append(",\"traffic\":").append(trafficJson())
         sb.append(",\"pickups\":").append(pickupsJson()).append(",\"combatSummary\":").append(combatSummaryJson()).append(",\"track\":").append(trackJson)
@@ -354,7 +366,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             sb.append(",\"xM\":").append(s.x).append(",\"yM\":").append(s.y).append(",\"heading\":").append(s.heading).append(",\"yaw\":").append(s.yaw)
             sb.append(",\"progressM\":").append(s.progressM).append('}')
         }
-        sb.append("]}").toString()
+        return sb.append("]}")
     }
     fun suspendLink() {
         running=false; networkJob?.cancel(); networkJob=null; engine?.stop(100,500); engine=null
