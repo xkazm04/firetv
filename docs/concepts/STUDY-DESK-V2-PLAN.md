@@ -64,17 +64,17 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 10 | M4a | Math: function graphs on the TV (pure SVG plotter) | 3 | - | done | 4e0ec70 | 2026-10-07 |
 | 11 | M4b | Math: typesetting coverage: the custom typesetter extended for `cases` and small matrices (KaTeX deferred, [concept](KATEX-TYPESETTING.md)) | 3 | - | done (cases, matrices, aligned, array) | b9c6e77 | 2026-10-07 |
 | 12 | T1 | Twin: the style meter and the **simulated** twin probe on email/chat (adult A4; V2-O1) | 3 | - | built; the probe's live run awaits the owner's PC | dba30f8 | 2026-10-07 |
-| 13 | L2 | Linga: Speaking practice mode, Key/PET task shapes | 4 | L1 | not started | | |
-| 14 | M2a | Math: GCSE Foundation 1MA1 map and coverage | 4 | - | not started | | |
-| 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | not started | | |
-| 16 | P4 | Platform: PC drop page and .docx text (adult A7) | 4 | P2 | not started | | |
+| 13 | L2 | Linga: Speaking practice mode, Key/PET task shapes | 4 | L1 | done (six practice scenes, one per part; no exam named) | f6aa6a8 | 2026-10-07 |
+| 14 | M2a | Math: GCSE Foundation 1MA1 map and coverage | 4 | - | done (unverified table; 19 of 86 statements touched; claim off) | 3b6768a | 2026-10-07 |
+| 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | done, ahead of the T1 live pass (deviation, see the batch 4 log) | c108f63 | 2026-10-07 |
+| 16 | P4 | Platform: PC drop page and .docx text (adult A7) | 4 | P2 | done | c108f63 | 2026-10-07 |
 | 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | not started | | |
 | 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | not started | | |
 | 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | not started | | |
 | 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | not started | | |
 | 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | not started | | |
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
-| 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | not started | | |
+| 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
 | 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | not started | | |
 | 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | not started | | |
 | 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4 | not started | | |
@@ -229,3 +229,25 @@ declared degrade: Calculus c06-q1's TeX renders now, re-declared in the ratchet.
 Math screen list, and the thinking-off allowlist (lib/desk/worked.ts, whose idea is code-checked).
 Next: batch 4 (L2 Speaking practice, M2a the GCSE Foundation map, T2 the Workroom for messages, P4 the PC drop page). The
 T1 probe's live run waits on the owner's PC; T2 is built behind its result.
+
+### 2026-10-07 · batch 4 · P4 T2 T5-lite L2 M2a · claude/trusting-franklin-a8g19w
+Gate: `tsc --noEmit` clean, `next build` succeeds. Every suite is green when run one by one, except `maths-rules-test`
+"learners case 3" (root-only, as before). New suites: `docx-rules-test` (4: .docx built in memory, the zip-bomb cap, the
+diff), `twin-rules-test` (7: the portrait, the card checked against the vendored schema with a small validator, the
+spec's own examples reproduced, the routes, the keys), `gcse-rules-test` (4); `cambridge-rules-test` gained the L2 case and
+`texts-rules-test` the title rule.
+Captures: the whole twin flow on the dev server (stand-in `CLAUDE_BIN`): an adult profile, `/drop` joined, four messages
+kept, the twin born, the card downloaded with a valid header, the Workroom on the TV at 1920 x 1080.
+Deviation, deliberate: T2 was built before the T1 probe's live pass, and a slice of T5 (the card export) was pulled
+forward. The reason is the owner's ask for a twin to try after batch 4. If the live probe fails its kill criterion, the
+Workroom and the export stay; T3 and T4 (Sittings, Spot yourself) are what stop.
+Surprises: the twin suite found a curtain leak from batch 2. An untitled piece took its first line as its title, and
+titles show on the TV, so a chat message's title was its own text. Derived titles are now a heading or "Untitled
+<format>". The docx reader dropped tabs and line breaks (fixed). The vendored schema allows exemplars up to 8,000
+characters; the 500 cap is the renderer's (RENDERER.md) and is ours too. L2 closes the two children's gaps L1 found
+(past events, feelings) at age 12. The claim stays off: unverified. GCSE: 19 of 86 Foundation statements are touched by
+the school path; probability and most geometry are gaps, for M2b.
+Pins revised openly: tv-keys "essay 1" (the Workroom is a fifth Essay Master screen), the L1 "gap for L2 to fill" row
+(now filled), and linga's school-situation helper (Speaking practice is school-audience too, with its own suite).
+Next: batch 5 (L3 pitch a scene and Cut, M4c multi-step problems, T3 habit detectors, M2b the first GCSE units). Owner:
+the merge and the hands-on twin test (desk/README "Trying the twin"); the T1 probe's live run on the owner's PC.

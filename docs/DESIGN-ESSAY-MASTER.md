@@ -157,3 +157,30 @@ hedges, greetings, sign-offs, thanks, formal words, slang and lists. `twinDims` 
 Run it on the owner's PC (`node ../tools/twin-probe.cjs` from `desk/`); `--stub` is the gate's dry run. A pass is
 recorded as simulated. The synthetic writers are the model's own writing, so it shows the profile steers style, not that
 a twin sounds like a real person.
+
+## The Workroom, the PC page and the Twin Card (v2 T2, P4, T5-lite, 2026-10-07)
+
+**The PC page** (`/drop`, `app/drop/page.tsx`) is where an adult's writing comes in (E4: writing happens on a PC, the
+TV is the stage). It joins like a phone, keeps a message, an email or an essay by paste or by a .txt, .md or .docx file
+(`lib/rules/docx.ts` reads only `word/document.xml`, capped against a zip bomb), lists the shelf, and shows the twin:
+per channel, how many pieces, born or not, the eight level words, and the exemplars, each with an include box (the
+review step Twin Card asks producers for). It is read at a desk, so the ten-foot rules do not apply; it is plain.
+
+**The Workroom** (`essay/Workroom.tsx`, screen `workroom`) is Essay Master's home in Adult mode. Left: the pieces, one
+row each, in Specimen's language: the title in the serif, a format tag, version and paragraph counts, and the last
+version's change as pips (citron changed, a plus added, a minus removed, bone kept; `lib/rules/diff.ts` counts by LCS).
+Right: the twin panel, per channel "Born" in citron or "N more to keep", and the level words once born. One action, The
+lenses, leads to the family lens home. The TV never shows a sentence of the text: the session carries only what
+`lib/twin/workroom.ts` builds (titles, counts, marks, level words), and `workroom.set` is the desk's own event.
+
+**The twin is earned** (E3): a channel is born at three pieces of its kind (messages → chat, emails → email, anything
+else → generic). **The Twin Card** (`lib/twin/card.ts`, `/api/twin/card`) is pulled forward from T5 as a slice: Adult
+mode only, phone or PC only, once born. Identity is the name; voice holds the born channels with their measured dims,
+up to five exemplars (the latest version, cut at a word near 500 characters), and quality rules as data, with the
+spec's per-person allowances (dashes allowed when the person's own exemplars use them; a filler opener they use is not
+banned). Integrity is SHA-256 over each part's RFC 8785 form. The card id is stable across exports (`lib/twin/state.ts`,
+beside the pieces, so "Delete everything I kept" removes it too). The card validates against the vendored schema
+(`tools/twin-rules-test.cjs`).
+
+A derived title is never a message's own text: titles show on the TV, so an untitled message is "Untitled message"
+(`texts.ts`; a heading or a heading-like first line still names an essay).

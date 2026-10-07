@@ -10,7 +10,7 @@ remembered. To recheck a line, open the file it cites. The profile row and the M
 
 | What | Where |
 |---|---|
-| The screen ids (33) | `desk/src/lib/session/store.ts:23` (`Screen`) |
+| The screen ids (38) | `desk/src/lib/session/store.ts:23` (`Screen`) |
 | What a session event does to `screen` / `focus` / `back` | `reduce` in `desk/src/lib/session/store.ts` |
 | Which component draws a screen | `desk/src/app/tv/page.tsx` (the `essayOwns`, `mathsOwns` and `lingaOwns` tests are in `desk/src/tv/keys.ts`) |
 | The D-pad | `KEYMAP` and `tvKey` in `desk/src/tv/keys.ts`; Linga's own keys in `desk/src/english/LingaTV.tsx`, its actions in `lingaView` (`desk/src/lib/english/view.ts`) |
@@ -77,7 +77,7 @@ pauses the scene (`tvKey`). A work block is 25 minutes; when it runs out the TV 
 | Test | Draws | Screens |
 |---|---|---|
 | `screen === "landing"` | `LandingTV` (`desk/src/landing/LandingTV.tsx`) | `landing` |
-| `essayOwns` | `EssayTV` (`desk/src/essay/EssayTV.tsx`) | `essaytype`, `forensic`, `playbook`, `xray` |
+| `essayOwns` | `EssayTV` (`desk/src/essay/EssayTV.tsx`) | `essaytype`, `forensic`, `playbook`, `xray`, `workroom` (`desk/src/essay/Workroom.tsx`) |
 | `mathsOwns` | `MathsTV` (`desk/src/maths/MathsTV.tsx`) | `tonight` (unless Linga's), `topics`, `prepare`, `practice`, `sheet`, `walk`, `calendar`; and `page` / `hint` when the page is a maths page, `units` / `lesson` when the subject is maths |
 | `lingaOwns` | `LingaTV` (`desk/src/english/LingaTV.tsx`) | every `linga*` screen, and `tonight` when the subject is English (Linga's home) |
 | otherwise | `ScreenFor`, the shell (`desk/src/tv/screens.tsx`) | `pair`, `joined`, `learner`, `profile`, `break`, `recap`, `sentence`, `headtohead`; and `page`, `hint`, `lesson`, `units` for English and Essay Master |
@@ -243,6 +243,7 @@ coaching → `linga-coach`, else `linga-talk`) and `stageScreen` in `check.ts` (
 | `forensic` (`Forensic`) — one sentence | the paragraph as a rail of arrows, one sentence at a time: its verdict, the move that fixes it (hatched until a rewrite holds), one caption | `essay.set`; `essay.revised` (a rewrite from the phone); the last paragraph's card; the recap's essay tile | Up/Down walk the sentences; Left/Right the actions Rewrite on my phone / Why this matters / Next sentence / Back to the paragraph; Select Rewrite → the status line (the phone's Essay tab offers that sentence); Why this matters → `playbook` on this lens's structure; Next sentence → the next one (wraps); Back to the paragraph, or Back → `essaytype` on this lens. Menu opens the table of every sentence (Up/Down still walk; Select or Back close it) |
 | `playbook` (`Playbook`) | the four structures top to bottom | Menu on `essaytype`; Why this matters on `forensic`; Menu on essay `units`; Back from `xray` | Up/Down the structures; Select → `xray`; Back or Menu → `forensic` on Why this matters when it came from there, else `essaytype` |
 | `xray` (`Xray`) | one structure laid open | Select on `playbook`; Menu on an essay `lesson` | Back or Menu → `playbook` on that structure |
+| `workroom` (`WorkroomScreen`, Essay Master, Adult mode) | v2 T2: the learner's kept pieces (title, format tag, version and paragraph counts, change pips for the last version) and the twin panel (per channel: born or "N more to keep", the eight level words); never a sentence of the text (the curtain) | Select Essay Master on the landing as an adult with no reading on the desk (`/api/twin` `{open: true}` → `workroom.set` with `open`); the PC page's "Show the Workroom on the TV" | Up/Down the pieces; Right/Left to and from The lenses; Select on The lenses or Menu → `essaytype`; Back → `landing` on Essay Master |
 
 ## 6. The phone
 
