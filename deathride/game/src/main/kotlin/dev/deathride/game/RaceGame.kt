@@ -172,8 +172,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="lobby" && phase!="results")return
         if(!editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
         phase="career";server.phase=phase;accumulator=0.0
-        // The next career race switches course at its start: build it and bake its bins while this screen is read.
-        CoursePrewarm.submit(Career.events[profiles[0].careerRound].courseIndex)
+        // The next career race switches course at its start: build it, bake its bins and decode its region tiles while this screen is read.
+        val event=Career.events[profiles[0].careerRound]
+        CoursePrewarm.submit(event.courseIndex){art.prepareRegion(if(regionPresentation)regionOverride?:event.region else null,regionCandidates)}
         for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot])
         campaignAudio.careerOpened(profiles[0]);script.careerOpened(profiles[0]);rebuildUi()
     }
@@ -249,6 +250,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
+        // A picked course's region tiles are verified and decoded on the course worker; its switch then only uploads them.
+        server.prepareTrack={i->art.prepareRegion(if(regionPresentation)regionOverride?:courseCatalog[i].region else null,regionCandidates)}
         atlasEffects=AtlasEffects(art);scene=makeScene();effects.clear();atmosphere.select(if(regionPresentation)activeRegion else null);server.trackJson=courseCatalog[selectedTrack].json(activeRegion)
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {

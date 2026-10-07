@@ -89,8 +89,16 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
      *  (a phone's receive loop must keep acknowledging inputs through a 1-2 s Stick bake); a newer pick supersedes one still baking. */
     fun requestTrack(index: Int): java.util.concurrent.Future<*> {
         val ticket=trackTicket.incrementAndGet()
-        return CoursePrewarm.submit(index) { if(trackTicket.get()==ticket)trackRequest.set(index) }
+        return CoursePrewarm.submit(index) {
+            if(trackTicket.get()==ticket) {
+                try { prepareTrack?.invoke(index) } catch(e: Exception) { log("prepareTrack ${Courses.id(index)}: ${e.javaClass.simpleName}") }
+                if(trackTicket.get()==ticket)trackRequest.set(index)
+            }
+        }
     }
+    /** Further off-render-thread preparation of a picked course, run on the course worker after its bins and before it is
+     *  queued (the game decodes the course's region tiles here, so its switch only uploads them). */
+    @Volatile var prepareTrack: ((Int)->Unit)?=null
     @Volatile var trackJson=Courses.all[0].json
     val surfaceRequest=AtomicInteger(-1)
     @Volatile var surface=Surfaces.asphalt

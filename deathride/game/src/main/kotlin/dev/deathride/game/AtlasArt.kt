@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.*
+import com.badlogic.gdx.graphics.glutils.FileTextureData
 import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.JsonValue
 import dev.deathride.core.*
@@ -152,11 +153,67 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     }
     fun tile(key: String)=tiles[entries[key]?.id?:key]
     fun hasRegionVariant(slot: String)=slot in variantSlots
+    /** A region tile resolved, hash-verified, size-checked and decoded off the render thread; [selectRegion] only uploads it. */
+    private class PreparedTile(val slot: String,val file: FileHandle,val variant: Boolean,val bytes: Long,val pixmap: Pixmap) { @Volatile var consumed=false }
+    private class PreparedRegion(val selection: String,val tiles: List<PreparedTile>,val failures: List<Pair<String,Exception>>) {
+        fun dispose() { for(t in tiles)if(!t.consumed){t.consumed=true;t.pixmap.dispose()} }
+    }
+    private val prepared=java.util.concurrent.atomic.AtomicReference<PreparedRegion?>()
+    private fun selectionKey(region: RegionDefinition?,candidates: Boolean)=(region?.id?:"base")+":"+candidates
+    /** Any thread (the course worker): does the non-GL part of [selectRegion] for the region about to be selected - manifest,
+     *  candidate hash, PNG header and decode - so the render thread's switch is release and upload only (P9: selectRegion
+     *  65-116 ms wall, of which 4.8-7.6 ms GL upload). Only the newest preparation is kept; a superseded one is freed. */
+    fun prepareRegion(region: RegionDefinition?,candidates: Boolean=true) {
+        val failures=ArrayList<Pair<String,Exception>>();val ready=ArrayList<PreparedTile>()
+        try {
+            val regionRoot=root.sibling("regions")
+            val manifest=try { if(region!=null)RegionMaterials.manifest(regionRoot) else null }catch(e: Exception){failures.add("region materials" to e);null}
+            for((slot,key) in RegionMaterials.tileSlots) {
+                val entry=entries[key]?:continue
+                val candidate=manifest?.firstOrNull{region!=null && RegionMaterials.eligible(it,region,slot,candidates)}
+                var tile: PreparedTile?=null
+                if(candidate!=null)try { tile=decodeTile(slot,RegionMaterials.verifiedFile(regionRoot,candidate),true) }catch(e: Exception){failures.add("region $slot" to e)}
+                if(tile==null)try { tile=decodeTile(slot,root.child(entry.id+".png"),false) }catch(e: Exception){failures.add("base $slot" to e)}
+                tile?.let(ready::add)
+            }
+        } catch(e: Throwable) { for(t in ready)t.pixmap.dispose();throw e }
+        prepared.getAndSet(PreparedRegion(selectionKey(region,candidates),ready,failures))?.dispose()
+    }
+    // The IHDR size is checked before a pixel is decoded (I2): at most a TILE_EDGE square. Residency is checked at upload.
+    private fun decodeTile(slot: String,file: FileHandle,variant: Boolean): PreparedTile {
+        val bytes=file.read().use{TextureBudget.pngBytes(it,TextureBudget.TILE_EDGE)}
+        return PreparedTile(slot,file,variant,bytes,Pixmap(file))
+    }
+    /** The same managed, file-backed texture data Texture(FileHandle) builds, with its pixmap already decoded. */
+    private fun upload(tile: PreparedTile): Texture {
+        require(textureBytes+tile.bytes+extraBytes()<=minOf(TextureBudget.ART,residentLimit)){"resident texture budget"}
+        tile.consumed=true // the texture data disposes the preloaded pixmap after its upload
+        val t=Texture(FileTextureData(tile.file,tile.pixmap,null,false));t.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
+        textureBytes+=tile.bytes;return t
+    }
     /** Release the old slot BEFORE decoding its replacement. No five-region residency spike. */
     fun selectRegion(region: RegionDefinition?,candidates: Boolean=true) {
-        val selection=(region?.id?:"base")+":"+candidates
+        val selection=selectionKey(region,candidates)
         if(selection==selectedRegion)return
         selectedRegion=selection;variantSlots.clear()
+        val ready=prepared.get()?.takeIf{it.selection==selection && prepared.compareAndSet(it,null)}
+        if(ready!=null) {
+            try {
+                for((name,e) in ready.failures)failed(name,e)
+                for((slot,key) in RegionMaterials.tileSlots) {
+                    val entry=entries[key]?:continue
+                    tiles.remove(entry.id)?.let{textureBytes-=it.width.toLong()*it.height*4;it.dispose()}
+                    val tile=ready.tiles.firstOrNull{it.slot==slot}
+                    var replacement: Texture?=null
+                    if(tile!=null)try { replacement=upload(tile);if(tile.variant)variantSlots.add(slot) }catch(e: Exception){failed(if(tile.variant)"region $slot" else "base $slot",e)}
+                    // As below: a variant that cannot be made resident falls back to the base tile.
+                    if(replacement==null && tile?.variant==true)try { replacement=loadTexture(entry.id+".png",TextureBudget.TILE_EDGE) }catch(e: Exception){failed("base $slot",e)}
+                    replacement?.let{it.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);tiles[entry.id]=it}
+                }
+            } finally { ready.dispose() }
+            Gdx.app.log("DeathRide","regionMaterials $selection candidates=${variantSlots.size} bytes=$textureBytes prepared=true")
+            return
+        }
         val regionRoot=root.sibling("regions")
         val manifest=try { if(region!=null)RegionMaterials.manifest(regionRoot) else null }catch(e: Exception){failed("region materials",e);null}
         for((slot,key) in RegionMaterials.tileSlots) {
@@ -171,7 +228,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
             if(replacement==null)try { replacement=loadTexture(entry.id+".png",TextureBudget.TILE_EDGE) }catch(e: Exception){failed("base $slot",e)}
             replacement?.let{it.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);tiles[entry.id]=it}
         }
-        Gdx.app.log("DeathRide","regionMaterials $selection candidates=${variantSlots.size} bytes=$textureBytes")
+        Gdx.app.log("DeathRide","regionMaterials $selection candidates=${variantSlots.size} bytes=$textureBytes prepared=false")
     }
     fun draw(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float,degrees: Float=0f,seconds: Double=0.0): Boolean {
         val r=region(key,seconds)?:return false
@@ -209,7 +266,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         if(next.isNotEmpty())try { val id=entries[next]?.id?:return;backdrop=loadTexture("$id.png",TextureBudget.ART_PAGE_EDGE) } catch(e: Exception){failed(next,e)}
     }
     fun drawBackdrop(batch: Batch,x: Float,y: Float,width: Float,height: Float) { backdrop?.let{batch.setColor(.24f,.24f,.24f,1f);batch.draw(it,x,y,width,height);batch.color=Color.WHITE} }
-    fun dispose() { atlases.forEach{it.dispose()};tiles.values.forEach{it.dispose()};backdrop?.dispose() }
+    fun dispose() { atlases.forEach{it.dispose()};tiles.values.forEach{it.dispose()};backdrop?.dispose();prepared.getAndSet(null)?.dispose() }
     companion object {
         const val WIDTH_SLACK=1.25f
         fun fitScale(length: Float,width: Float,bodyLength: Float,bodyWidth: Float)=minOf(length/bodyLength,width/bodyWidth*WIDTH_SLACK)
