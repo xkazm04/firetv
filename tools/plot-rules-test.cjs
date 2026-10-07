@@ -1,5 +1,5 @@
 /**
- * Function graphs (v2 M4a): desk/src/maths/plot.ts and Plot.tsx.
+ * Function graphs (v2 M4a): desk/src/maths/plotting.ts and Plot.tsx.
  *   - a pole is never bridged: 1/x across 0 is two pieces, and no drawn step is taller than the box;
  *   - the tangent's slope is the numeric derivative the marking uses, through the point on the curve;
  *   - a definite integral shades between its bounds; a curve undefined there shades nothing;
@@ -15,7 +15,7 @@ const resolve = Module._resolveFilename;
 Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...args); };
 require.extensions['.ts'] = require.extensions['.tsx'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true, jsx: ts.JsxEmit.ReactJSX } }).outputText, file);
 const src = (f) => path.join(root, 'src', f);
-const P = require(src('maths/plot.ts'));
+const P = require(src('maths/plotting.ts'));
 const pts = (d) => d.split(/(?=[ML])/).map(s => s.slice(1).trim().split(' ').map(Number));
 
 test('a pole is never bridged: 1/x across 0 is two pieces, no drawn step taller than the box', () => {

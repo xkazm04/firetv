@@ -323,7 +323,7 @@ both tiers, four systems, 200 seeds): every one has a worked answer `check` conf
 
 ## Calculus graphs (v2 M4a, 2026-10-07)
 
-A Calculus item open on `walk` shows its graph under the card (`maths/plot.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),
+A Calculus item open on `walk` shows its graph under the card (`maths/plotting.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),
 on paper in Lamplight's hand: the axes in faint ink, the curve in ink, a tangent dashed in the desk's pen at the point a
 derivative-at item asks about, the area washed in amber between a definite integral's bounds, a dot at the point an
 evaluate or limit item is about. The window per shape comes from `plotFor`. The y range is the 5th-95th percentile,

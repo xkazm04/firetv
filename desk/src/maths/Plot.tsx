@@ -1,9 +1,9 @@
 /**
- * A Calculus graph in Lamplight's hand (v2 M4a; maths/plot.ts draws the numbers): the axes in ink, the curve in the
+ * A Calculus graph in Lamplight's hand (v2 M4a; maths/plotting.ts draws the numbers): the axes in ink, the curve in the
  * desk's pen, a tangent dashed in amber, an area washed in amber. It shows what the desk computed; it never marks.
  */
 import type { CalcSpec } from "@/lib/rules/calc";
-import { plotFor, plotModel } from "./plot";
+import { plotFor, plotModel } from "./plotting";
 
 export function Plot({ spec, w = 470, h = 280 }: { spec: CalcSpec; w?: number; h?: number }) {
   const ps = plotFor(spec), m = ps && plotModel(ps, w, h);
