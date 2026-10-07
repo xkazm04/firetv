@@ -402,6 +402,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       title = "It came back";
       hero = { kind: "comparison", before: { kicker: `Linga taught · ${rv.fromTitle}`, quote: rv.better }, after: { kicker: "You said it tonight", quote: rv.used }, note: "", art: "done", data: counts };
       caption = `You used it without help. Next, try ${recommended.name.toLowerCase()}.`;
+    } else if (c.coaching || moments.length) {
+      // One thing learned tonight, as the picture. A coaching change carries no time, so when the order is unknown it wins.
+      const m = moments.at(-1), co = c.coaching;
+      hero = co
+        ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
+        : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
     } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better } : {}) };
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
   } else if (c) {

@@ -1064,3 +1064,18 @@ test('a romance premise the model labels "all" never reaches a 12-year-old\'s pl
  getSession().check.topics.push({...romance,id:'plan-stale',why:'x',audience:'all'});
  await command('plan-agree',{checkId:k.id});assert(!getLearner('ema').english.plan.topics.some(t=>t.id==='plan-stale'));
 });
+
+// ---- MH-3: the TV recap shows one thing learned tonight ----
+test('the recap hero is the latest moment or coaching change as a picture; "It came back" wins, and with neither the track stays (MH-3)',()=>{
+ const V=view(),turns=[{id:'p1',role:'partner',text:'Hello. How can I help?'},{id:'l1',role:'learner',text:'I has booking',mode:'speech'},{id:'p2',role:'partner',text:'Which name is it under?'}];
+ const fix={id:'m1',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'l1',at:1},word={id:'m2',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'l1',at:2};
+ const recap=patch=>V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,...patch})})),{});
+ let v=recap({moments:[fix]});
+ assert.equal(v.hero.kind,'comparison');assert.deepEqual(v.hero.before,{kicker:'You said',quote:'I has booking'});assert.deepEqual(v.hero.after,{kicker:'Try',quote:'I have a booking'});
+ assert.equal(v.hero.note,'"I" goes with "have".');assert.equal(v.hero.art,'done');assert.match(v.hero.data,/1 spoken/);assert.match(v.hero.data,/1 moment to keep/);
+ v=recap({moments:[fix,word]});assert.deepEqual(v.hero.before,{kicker:'You wanted to say',quote:'rezervace'});assert.deepEqual(v.hero.after,{kicker:'In English',quote:'reservation'});
+ v=recap({moments:[fix],coaching:{before:'I want room',after:'Could I have a room, please?',note:'A polite request.'}});
+ assert.deepEqual(v.hero.before,{kicker:'You said',quote:'I want room'});assert.deepEqual(v.hero.after,{kicker:'One way to try it',quote:'Could I have a room, please?'});assert.equal(v.hero.note,'A polite request.');
+ v=recap({moments:[fix],review:{...REVIEW,used:REUSED,usedTurn:'l1'}});assert.equal(v.hero.kind,'comparison');assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:REUSED});
+ v=recap({});assert.equal(v.hero.kind,'track');
+});
