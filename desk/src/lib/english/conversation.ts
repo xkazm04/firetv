@@ -13,6 +13,7 @@ import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } 
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines, usedLine } from "./review";
 import { copiesShown } from "./credit";
+import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId } from "./types";
 
@@ -25,12 +26,18 @@ const line=(value:unknown,max=230)=>fit(value,max,()=>new Error("The tutor retur
 const helpSchema=schema({simpler:str(SIMPLER_MAX,0),meaning:str(MEANING_MAX,0),starter:str(STARTER_MAX,0)});
 const loose=(props:Record<string,unknown>)=>({...schema(props),properties:{...props,help:{}}});
 const openingProps={title:str(70),goal:str(120),opening:str(230),supportProvided:{type:"boolean"}};
-const openingSchema=schema({...openingProps,help:helpSchema}),openingAccept=loose(openingProps);
+// A scene with no authored steps asks the opening for two or three; mission.ts keeps them only if they fit, and a bad list never costs the scene.
+const stepsSchema={type:"array",maxItems:3,items:str(STEP_MAX)};
+const openingSchema=schema({...openingProps,help:helpSchema}),openingAccept={...loose(openingProps),properties:{...loose(openingProps).properties,steps:{}}};
+const openingWithSteps=schema({...openingProps,steps:stepsSchema,help:helpSchema});
 const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140}});
 // The turn is held to its reply; an over-long observation or moment is optional, and validateObservations and
 // parseMoment drop it rather than failing the turn.
-const turnAccept=loose({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array"},moment:{type:"object"}});
-const turnSchema=schema({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})},moment:momentSchema,help:helpSchema});
+const turnAccept=(()=>{const a=loose({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array"},moment:{type:"object"}});return {...a,properties:{...a.properties,step:{}}};})();
+const turnProps={reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})},moment:momentSchema};
+const turnSchema=schema({...turnProps,help:helpSchema});
+// While a mission has a step left the turn may claim it; the claim is parsed loosely (turnAccept) and held to the reply by mission.ts.
+const turnWithStep=schema({...turnProps,step:schema({reached:{type:"boolean"},quote:{type:"string",maxLength:240}}),help:helpSchema});
 const coachSchema=schema({before:str(180),after:str(180),note:str(220)});
 const replaySchema=schema({reply:str(230),help:helpSchema}),replayAccept=loose({reply:str(230)});
 // Every tutor call below (opening, turn, coach, replay) runs with thinking off: hidden reasoning cost 52-90 s a turn and
@@ -71,7 +78,8 @@ function context(c:Conversation,invite=true){
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
   const placement=learning.placement;
-  return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{})};
+  const step=c.mission&&currentStep(c.mission);
+  return {scene:{title:c.title,goal:c.goal},...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{})};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
@@ -142,11 +150,11 @@ export async function englishCommand(raw:unknown){
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};
     dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
     try{
-      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."}),schema:openingSchema,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)}),schema:scene.steps?.length?openingSchema:openingWithSteps,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
       checkCurrent(c,commandId);
       const opening={id:randomUUID(),role:"partner" as const,text:line(result.json.opening)};
       if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
-      commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(result.json.help,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],...(()=>{const m=missionOf(scene,result.json.steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(result.json.help,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:"The scene could not be prepared. Try again or choose another situation."});}catch{/* superseded */}throw e;}
   }
@@ -212,9 +220,10 @@ export async function englishCommand(raw:unknown){
     // The first LT run: 3 moments in 16 conversations, with clear errors in most learner turns. "Most turns are none"
     // read as "almost never"; the gap and cap in momentAllowed already keep a scene a scene.
     const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
+    const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
-    const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?turnSchema:action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+    const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?(stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
@@ -229,7 +238,7 @@ export async function englishCommand(raw:unknown){
       saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
+      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
