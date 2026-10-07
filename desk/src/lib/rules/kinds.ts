@@ -19,7 +19,7 @@
  */
 import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
 import { specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
-import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, type SchoolSpec } from "./school";
+import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
 import { slipsShown } from "./slips";
 import { pathOfTopic } from "../library/paths";
 import { degenerate, substitute, verify } from "../desk/verify";
@@ -39,6 +39,21 @@ export function readQuestion(text: unknown): Question {
 }
 /** The kind of a printed task: the kind of the spec its text reads as, linear when neither reader reads it. */
 export const kindOfQuestion = (text: unknown): ItemKind => readQuestion(text).kind;
+
+/**
+ * The unit a printed task reads as, when the desk can write six like it: the school unit its text reads as (rules/school
+ * unitOf) that has a code generator and is on the learner's own `path` (paths.ts pathOfTopic). Null for a linear task, a
+ * Calculus task (a shape belongs to several Calculus topics, so code names none), a school task on the Calculus path, and
+ * junk. Pure; never throws.
+ */
+export function likeTopic(text: unknown, path: unknown): string | null {
+  try {
+    const unit = unitOf(readQuestion(text).school);
+    return unit && generatorFor(unit) && pathOfTopic(unit) === path ? unit : null;
+  } catch {
+    return null;
+  }
+}
 
 /** The kind of item a topic's set is written as: Calculus on the Calculus path, school where a unit has a generator, else linear. */
 export function kindOfTopic(topicId: string): ItemKind {
