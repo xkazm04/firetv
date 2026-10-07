@@ -228,3 +228,13 @@ test('A5: the Linga age gate is unchanged by the mode: Adult mode on a 16-year-o
   assert.equal(modeOf(teen), 'family');
   assert.equal(audienceAllowed(teen, defaultPreferences(teen), 'adult'), false);
 });
+test('V2-O3: the profile\'s Adult (18+) is the one confirmation Linga needs; Family on the same profile is not', () => {
+  const { audienceAllowed, eligibleScenes } = require(src('lib/english/curriculum.ts'));
+  const other = { id: 'o', name: 'O', type: 'other', modules: ['english'] }, unticked = defaultPreferences(other);
+  assert.equal(audienceAllowed(other, unticked, 'adult'), false, 'no confirmation anywhere: no adult scenes, as before');
+  assert.equal(audienceAllowed({ ...other, mode: 'adult' }, unticked, 'adult'), true, 'Adult (18+) on the profile is enough');
+  assert(eligibleScenes({ ...other, mode: 'adult' }, unticked).some(s => s.id === 'date'));
+  assert.equal(audienceAllowed({ ...other, mode: 'family' }, unticked, 'adult'), false);
+  assert.equal(audienceAllowed({ ...other, mode: 'adult', age: 16 }, unticked, 'adult'), false, 'an age always decides first');
+  assert.equal(audienceAllowed({ id: 'h', name: 'H', type: 'high-school', mode: 'adult', modules: [] }, { ...unticked, adultConfirmed: true }, 'adult'), false, 'a school type with no age never');
+});

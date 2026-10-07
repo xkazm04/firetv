@@ -62,8 +62,8 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 8 | L1 | Linga: the Cambridge A2 Key / B1 PET for Schools map (data and coverage) | 2 | - | not started | | |
 | 9 | M1 | Math: teach a new topic, worked lessons for the 12 school units | 3 | - | not started | | |
 | 10 | M4a | Math: function graphs on the TV (pure SVG plotter) | 3 | - | not started | | |
-| 11 | M4b | Math: typesetting coverage (matrices, cases, aligned), per V2-O2 | 3 | V2-O2 | not started | | |
-| 12 | T1 | Twin: the style meter and the twin probe on email/chat (adult A4) | 3 | - | not started | | |
+| 11 | M4b | Math: typesetting coverage: the custom typesetter extended for `cases` and small matrices (KaTeX deferred, [concept](KATEX-TYPESETTING.md)) | 3 | - | not started | | |
+| 12 | T1 | Twin: the style meter and the **simulated** twin probe on email/chat (adult A4; V2-O1) | 3 | - | not started | | |
 | 13 | L2 | Linga: Speaking practice mode, Key/PET task shapes | 4 | L1 | not started | | |
 | 14 | M2a | Math: GCSE Foundation 1MA1 map and coverage | 4 | - | not started | | |
 | 15 | T2 | Twin: the Workroom for messages and emails, versions and diff (adult D2, D3) | 4 | P3, T1 pass | not started | | |
@@ -133,8 +133,9 @@ No live model call in a gate (stub at the provider seam). Never touch `desk/data
   curve, a tangent and a shaded area, in the Lamplight hand. It is used first on Calculus derivative and integral items.
 - Tests: sampling avoids discontinuities (no line drawn across a pole); the tangent at x matches the derivative numerically.
 
-**M4b. Typesetting coverage** (M, blocked by V2-O2)
-- Goal: matrices, `cases` as rows, aligned equations. Either KaTeX (a new dependency) or the custom typesetter extended.
+**M4b. Typesetting coverage** (M)
+- Goal: `cases` as rows and matrices up to 3 x 3 in the custom typesetter (`maths/typeset.ts`), tested in
+  `tools/maths-type-test.cjs`. KaTeX is deferred until the checks in [KATEX-TYPESETTING.md](KATEX-TYPESETTING.md) section 4 pass.
 
 **T1. Style meter and the twin probe, email and chat** (M; the kill test for T2-T5)
 - Goal: adult A4 retargeted to short messages. `lib/rules/style.ts` measures a writer's messages and maps onto Twin
@@ -161,7 +162,7 @@ No live model call in a gate (stub at the provider seam). Never touch `desk/data
 
 | Risk | Cheapest test | Result that drops or reshapes |
 |---|---|---|
-| The twin is a costume (T1) | the probe: at least 8 writers x 3 trials, each with about 20 of their own messages; a held-out message and two drafts (twin, plain model) on the same subject and length | the twin is not taken for the writer, or is not closer to them than the plain model, in at least 6 of 8 writers: T2-T5 are not built; the Workroom ships alone and the export becomes a "how you write" portrait |
+| The twin is a costume (T1) | the **simulated** probe (V2-O1): 8 synthetic writers with distinct measured styles, about 20 messages each, 3 trials; a held-out message and two drafts (twin, plain model) on the same subject and length; scored by the code style distance and a blind judge model | the twin's drafts are not closer to the writer than the plain model's in at least 6 of 8 writers, on both scores: T2-T5 are not built; the Workroom ships alone and the export becomes a "how you write" portrait. A simulated pass is recorded as simulated, never as proof with real people |
 | A worked lesson teaches a wrong step (M1) | every example checked by code | any shown example code does not confirm: the lesson is withheld for that topic, never shown "mostly right" |
 | The Cambridge claim (L1) | the coverage report | under 90% of A2 Key for Schools Speaking descriptors with at least one practice: no "mapped to Cambridge" wording anywhere |
 | Collectibles reward volume (R1) | the invariant test | any collectible reachable without its latch: R1 does not ship |
@@ -173,9 +174,9 @@ No live model call in a gate (stub at the provider seam). Never touch `desk/data
 
 | # | Question | Recommendation | Built if unanswered | Blocks |
 |---|---|---|---|---|
-| V2-O1 | The twin probe needs real writers (X5 said simulated only for content) | real writers for this one test: the owner and 7 volunteers; likeness to a real person cannot be simulated | probe tool built, run awaits the owner | T2-T5 |
-| V2-O2 | Typesetting: add KaTeX, or extend the custom typesetter? | KaTeX (mature coverage); check its fonts on a Fire TV first | custom typesetter extended for `cases` and matrices only | M4b |
-| V2-O3 | Should Mode "Adult (18+)" also count as Linga's adult confirmation? | yes: one confirmation, not two (changes `audienceAllowed` openly, with its parity test revised) | today: Linga's own adult box still needed | L3, L5 |
+| V2-O1 | ~~The twin probe needs real writers~~ **Answered: simulated** (decisions section 7) | | | |
+| V2-O2 | ~~KaTeX or the custom typesetter?~~ **Answered: KaTeX deferred to a concept until verified; custom typesetter extended** | | | |
+| V2-O3 | ~~Mode Adult as Linga's confirmation?~~ **Answered: yes** (built in batch 2) | | | |
 | V2-O4 | Collectible art: SVG drawn in each app's language, or generated images? | SVG (ten-foot crisp, no assets to host) | SVG | R1 |
 | V2-O5 | Whole-piece reading: one call per paragraph, or one call per piece? | per paragraph (verdicts stay anchored; a failure loses one paragraph); measure the time | per paragraph | E1 |
 | V2-O6 | GCSE board | Pearson Edexcel 1MA1 (S2) | Edexcel | M2a |

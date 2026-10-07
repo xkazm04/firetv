@@ -120,3 +120,13 @@ criteria in the v2 plan, the owner approves or edits them.
 T2-T5 keep the defaults proposed in section 3 until the owner says otherwise: the style sheet maps to the 8 dims plus
 an `extensions` block; integrity hashes in v2, with signing and sealing later; an exemplar review step before export;
 no import in the MVP.
+
+## 7. Answers to the plan's open decisions (same day)
+
+| # | Owner answer | Host reading |
+|---|---|---|
+| V2-O1 | **No real-writer test for now: push on with best guesses, tests and simulations** | The twin probe (T1) runs **simulated**. The tool builds synthetic writers with distinct, measured styles (from personas), holds out messages, and checks whether the twin's drafts sit closer to each writer's measured style than the plain model's, by code distance and a blind judge model. The kill criterion becomes the simulated one in the plan, section g. A simulated pass is **not** proof that a twin sounds like a real person; it is recorded as such. |
+| V2-O2 | **KaTeX goes into docs/concepts, deferred if it cannot be verified** | [KATEX-TYPESETTING.md](KATEX-TYPESETTING.md). It cannot be verified from the cloud session (no Fire TV, no emulator, no glyph to look at), so M4b's default stands: extend the custom typesetter for `cases` and small matrices. |
+| V2-O3 | **Yes: the 18+ confirmation once, in the profile, is enough** | `rules/mode.ts` `isAdult` counts the profile's "Adult (18+)" as the confirmation for type "other", so Linga's adult scenes open without its separate box. An age still decides first. The box stays for profiles that set no mode. |
+
+V2-O4 (SVG collectibles), V2-O5 (one call per paragraph) and V2-O6 (Edexcel) keep their defaults.

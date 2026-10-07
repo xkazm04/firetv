@@ -30,9 +30,13 @@ import type { EnglishPreferences } from "../english/types";
  */
 export type Mode = "family" | "adult";
 
-/** Age 18 or over, or - with no age - type "other" and the adult box ticked. Moved here from english/curriculum.ts, which re-exports it. */
+/**
+ * Age 18 or over, or - with no age - type "other" confirmed once: the profile's "Adult (18+)" (owner, 2026-10-07 V2-O3:
+ * one confirmation, in the profile, is enough) or, as before, Linga's adult box. Moved here from english/curriculum.ts,
+ * which re-exports it, so Linga's age gate (audienceAllowed) reads the profile's confirmation too.
+ */
 export function isAdult(p: Profile | undefined, prefs: EnglishPreferences | undefined): boolean {
-  return p?.age !== undefined ? p.age >= 18 : p?.type === "other" && !!prefs?.adultConfirmed;
+  return p?.age !== undefined ? p.age >= 18 : p?.type === "other" && (p.mode === "adult" || !!prefs?.adultConfirmed);
 }
 
 /** May this profile be put in Adult mode? 18 or over, or - with no age - type "other" (the Mode row is the confirmation). */
