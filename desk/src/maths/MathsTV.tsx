@@ -16,7 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
@@ -883,7 +883,7 @@ export function PageScreen({ s }: { s: Session }) {
     </div>
     <aside className="mb-side">
       <div className="mb-khead"><div className="mb-kick">The sheet you snapped</div></div>
-      <div className="mb-stitle"><Amber text={it ? `Number ${it.n}` : p.title} /></div>
+      <div className="mb-stitle"><Amber text={it ? itemTitle(it.n, it.text, s) : p.title} /></div>
       <div className="mb-facts">
         <span><b>{p.items.length}</b> problems</span>
         <span>{p.readMs ? <>read in <b>{Math.max(1, Math.round(p.readMs / 1000))} s</b></> : read?.phase === "failed" ? "not read" : "reading"}</span>
@@ -909,6 +909,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   const at = stopAt(HINT_STOPS, focus);
   const pick = s.jobs?.lesson?.key === h.key ? s.jobs.lesson : undefined;
   const pickFailed = pick?.phase === "failed" ? pick.error ?? "" : null;
+  const like = likePill(s);
   const noLesson = s.noLesson ? (pickFailed ? `${pickFailed} The hint is all there is this time.` : "No lesson in tonight’s library covers this one. The hint is all there is — and that is fine.") : null;
   return (<>
     <Top s={s} crumb={n !== undefined ? `Number ${n}` : p?.title} right={<Chips s={s} learner={false} />} />
@@ -930,12 +931,13 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
         <div className="hl"><span className="mb-lab">Hint</span><span className="pips"><i className="on" /><i className={h.stage === 2 ? "on" : undefined} /></span></div>
         <div className="ht">{hh ? prose(hh.hint) : "…"}</div>
         {hh?.next && <div className="nx">{ARROW}<span>{prose(hh.next)}</span></div>}
-        {noLesson && <div className="quiet">{noLesson}</div>}
+        {like ? like.failed && <div className="quiet">{like.failed}</div> : noLesson && <div className="quiet">{noLesson}</div>}
       </div>
     </aside>
     <div className="mb-acts">
       <Act icon={ICON.hint} label={h.stage === 2 ? "That’s both hints" : "Still stuck"} focused={at === "stuck"} primary pips={[h.stage, 2]} disabled={h.stage === 2} />
-      <Act icon={ICON.lesson} label={s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"} focused={at === "lesson"} disabled={!s.lesson} />
+      {like ? <Act icon={ICON.six} label={like.label} focused={at === "lesson"} disabled={like.busy} />
+        : <Act icon={ICON.lesson} label={s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"} focused={at === "lesson"} disabled={!s.lesson} />}
     </div>
   </>);
 }
