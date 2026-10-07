@@ -204,6 +204,30 @@ per the owner's 2026-10-07 evening ruling; carries the owner's M4 decision, "lon
   lines are withheld (the checker stays, nothing draws it). More than 5 of 50 slips missed (null): narrow the tags and
   record which.
 
+**T3. Twin: habit detectors (adult D5)** (M; batch 5, built locally per the owner's 2026-10-07 evening ruling)
+- Goal: a pure `lib/rules/habits.ts` of six detectors that find a writer's habits, so a planted habit and a proven move
+  are code's, not the model's. Each returns hits `{habit, n: number[], para, quote}` anchored to `splitSentences`
+  numbering (a hit always names its sentence, because D6 plants and D7 `proven` need it). The six: vague-opener (a
+  sentence opening with a vague This or It), hedge-stack (several hedges in one sentence), repeated-opener (one opener
+  used three times or more in a paragraph), long-run (a run of long sentences past the writer's own band from
+  `styleSheet` wps; no band or too few sentences measured gives nothing, it never guesses), filler (filler words), two-claims
+  (a paragraph with two claims by the first-pass roles; the roles tag every non-link, non-evidence sentence a claim,
+  so this one may not reach zero). Each states its exact rule beside it. English only. `SHIPPED` lists the detectors that
+  pass the gate; `openHabits(pieces, band?)` is the shipped habits seen in at least two different pieces, each with
+  the piece ids.
+- Files: new `lib/rules/habits.ts`; new `tools/habits-fixtures.cjs` (committed first, alone), `tools/habits-rules-test.cjs`
+  (appended at the end of `test:rules`).
+- Tests: at least 30 rows per detector, at least half clean, with the near-misses ('This essay argues', 'It is raining',
+  one hedge, an opener twice, one long sentence in the band, one claim with its evidence); chat messages, emails and
+  essay paragraphs mixed. The suite prints, per detector: planted rows found at their sentence, planted rows missed,
+  planted rows found at another sentence, clean rows flagged. `openHabits` rows: one piece is not open; two pieces are,
+  with both ids; the same id twice counts once; a withheld detector never opens a habit; long-run with no band is no hit.
+- Accept: the gate is zero false positives (a clean row flagged, or a planted row found at another sentence). A missed
+  planted row is recorded and does not fail. A detector that cannot reach zero is out of `SHIPPED`, its rows kept. After
+  the fixture commit a row changes only when it is wrong as English. Wired to nothing: no screen, route, store, event or
+  card constraints (open habits become constraints at the full T5). No model call. No capture is owed.
+- Kill: fewer than 3 detectors ship: stop after the table; row 19 says "N of 6 pass the gate".
+
 ## e. Batches
 
 - **Batch 1 (this PR):** G1, E0, P1, P2, the decisions doc, this plan, Twin Card 1.0 vendored.
