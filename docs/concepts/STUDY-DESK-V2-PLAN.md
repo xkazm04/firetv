@@ -71,7 +71,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 17 | L3 | Linga Adult: pitch a scene, Cut and three notes (adult A1 rest, A2) | 5 | G1, P1 | done, built locally on main (no PR, nothing pushed); captures and the company sim's live run owed to the owner's batch review | d29111c9..aa5ac64d | 2026-10-07 |
 | 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | done (built locally on main; kill test passed: clean chains rung 0 of 50, slips rung at their own line 50, left null 0, rung at another line 0; TV captures owed) | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
 | 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | done (built locally on main; 6 of 6 detectors pass the zero-false-positive gate; wired to nothing, no capture owed) | 267694f5, 79da4106 | 2026-10-08 |
-| 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | not started | | |
+| 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | done (built locally on main; kill test passed for both units: 0 not well formed, 0 not fair, 0 of 4000 worked answers not right, every slip reachable and detected; the path is 17 topics; 23 of 86 statements touched, claim off; TV captures owed) | f0f59399, 79777e2a, 510759b6, 1206a4ca, 667102a3 | 2026-10-08 |
 | 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | not started | | |
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
@@ -414,3 +414,58 @@ kill row keeps D1-D5 either way.
 Gate: `cd desk && npm run test:rules` green (habits-rules-test 12 rows: fixture, precision table, SHIPPED, hit shape, English
 only, long-run band, openHabits 5, detectAll); `tsc --noEmit --incremental false` clean. No existing assertion changed.
 Next: M2b (row 20).
+
+### 2026-10-08 · batch 5 · M2b · autopilot/accepted-idea-delivery-660977f0
+Built locally on main per the owner's 2026-10-07 evening ruling: batch 5 one slice per run in table order (L3, M4c and T3
+done, M2b now, the last), merged into local main through the gate; no PR, nothing pushed. Commits: f0f59399 (the card), 79777e2a
+(U1 Pythagoras' theorem, not yet on the path), 510759b6 (U2 the probability of an event), 1206a4ca (tools/gcse-units-test.cjs, the
+sweep, appended to test:rules), 667102a3 (the path grows to 17 topics, the pins, three docs).
+Sweep table (tools/gcse-units-test.cjs; seeds 1..500, tiers 1 and 2, systems uk us cz de; counts by the sweep's own integer
+arithmetic; 1000 specs a unit and 4000 worked answers a unit):
+| unit | not well formed | not fair | worked answer not right | slips, reachable / detected |
+| pythagoras | 0 | 0 | 0 of 4000 | pyth-sides-added 1000/1000, pyth-no-root 1000/1000, pyth-squares-added 500/500 |
+| probability | 0 | 0 | 0 of 4000 | prob-count-alone 833/833, prob-part-over-rest 833/833, prob-one-over-colours 833/833, prob-own 333/333 |
+Both units shipped (neither was killed). The counts were zero at the first run because the generators draw again for the
+conditions the sweep counts (an item whose slips are not all reachable is never drawn); controls in the same file prove the
+counts can fail. Reachable is 1000 of 1000 for the first two Pythagoras slips and 500 of 500 for the third (tier 2 only), 833 of
+1000 for probability's three bag slips (tier 1 and the NOT and either-of-two kinds), 333 for the fourth (the NOT kind and a stated
+probability's own).
+gcse-coverage before and after (node ../tools/gcse-coverage.cjs): 19 of 86 (22%) became 23 of 86 (27%), VERIFIED=false. By
+area: Number 6 of 16 and 6 of 16; Algebra 4 of 21 and 4 of 21; Ratio, proportion and rates of change 6 of 15 and 6 of 15; Geometry and
+measures 2 of 21 became 3 of 21 (G20, the Pythagoras part only); Probability 0 of 8 became 3 of 8 (P3, P4, P7); Statistics 1 of
+5 and 1 of 5. Still gaps in probability: P1, P2, P5, P6, P8 (P9 is higher tier). G6 also names Pythagoras' theorem ("use angle
+and shape facts, including Pythagoras") and is NOT claimed: the unit practises no angle facts (a question for the owner).
+Deviations and choices, stated: (1) tier 1 Pythagoras uses triples with the longest side at most 50 (tier 2 up to 100): easier
+numbers first, still inside the card's "at most 100". (2) The third Pythagoras slip, "squares added instead of subtracted", has
+no exact value when the root is taken (it is irrational on every item), so only its unrooted value, c squared plus b squared, is
+listed; the rooted version is dropped. (3) typeset.ts changed: a hyphen between two English words ("right-angled") stays a
+hyphen; it was set as a minus sign. (4) The bag and Pythagoras sentences are 80 to 110 characters: the single-line fit
+estimate is 19 px for Pythagoras and 17 px for probability (the earlier rows hold 35 px or more), so the sheet wraps them at
+its 28 px floor; the owner's captures decide whether to shorten them. (5) Probability is held later than usual in three systems
+(US 8, UK 9, DE 8; the comment on the unit says so); Pythagoras in none. Years are from memory and a teacher must check them.
+(6) Strand: both units are in "Geometry and data", a second bar after Equations (seven bars; three held at 189 px by their
+labels; "Decimals and percent" now wraps to two lines); rulerRows.ts is untouched.
+Pins revised openly, old -> new (no verdict of the fifteen existing units changed):
+- school-rules-test: the 'W7 SLIPS' unit list 12 units -> 14 (+ pythagoras, probability); 13 new rows.
+- maths-rules-test: path ids 15 -> 17; nextTopic after every old topic: undefined -> pythagoras, then probability, then undefined (+ a missing-area row); expectedIndex uk 13 and us 13: 15 -> 17 (added de 13 = 17, cz 13 = 16, cz 14 = 17).
+- tv-keys-test: Get ready for school stops 15 -> 17.
+- maths-tv-test: path ids 15 -> 17; 'One of 15 topics secure' -> 'One of 17'; Get ready for school groups and cards 15 -> 17 (the last strand group gains the two units), last card 14 -> 16; the strip segments 6 -> 7.
+- maths-paths-test: school topics 15 -> 17, unique ids 37 -> 39.
+- maths-course-test: school stops 15 -> 17, Right presses 16 -> 18, last focus 14 -> 16; the last stop's Select event gains stay:true (probability has a generator, so Select writes its set and stays on Topics).
+- maths-ruler-test: N 15 -> 17, strands 6 -> 7, span 111.7 -> 98.6 px.
+- school-ruler-test: path ids 15 -> 17; the all-secure ruler index 14 -> 16; the 'last topic secure' row (linear-both-sides: nothing after, 14, 0) -> pythagoras, 15, 15 (+ two rows); Tonight bars 6 -> 7; de's tick pill no longer turned inward (15 of 17 is mid-strip; a uk 13-year-old at 17 is); 'One of 15' -> 'One of 17'; strip widths now the measured 370, 189, 369, 189, 185, 189, 185 px; 'Decimals and percent' two lines (was one in 425 px); step-up ink list +1; names matched HTML-escaped (the apostrophe); 'Two of 15' -> 'Two of 17'.
+- school-practice-test: path ids 15 -> 17; the path blurb 'School maths from equivalent fractions to equations with brackets and x on both sides.' -> '... from equivalent fractions through equations to Pythagoras' theorem and the probability of an event.'; 1 new row.
+- week-rules-test: DO_IT for 15 school topics -> 17.
+- maths-aim-test: units with a generator 12 -> 14, slips 46 -> 53 (all show on a drawn spec). maths-like-test: units 12 -> 14.
+- gcse-rules-test: touched 19 -> 23, share bound 0.25 -> 0.3, probability touched 0 -> 3 (added G20, P4 and the probability gaps).
+New rows: school-rules-test 'M2b SPELLINGS Pythagoras' (81 written answers), 'M2b LEAKS Pythagoras' (23 leaks, 32 legit), 'M2b question and wellFormed Pythagoras',
+'M2b GENERATOR Pythagoras' (seeds 1..300), 'M2b Pythagoras' (withheld line, slips, slipValue), 'M2b PURITY Pythagoras', 'M2b typeset' (the hyphen);
+'M2b SPELLINGS probability' (133), 'M2b LEAKS probability' (34 leaks, 32 legit), 'M2b question and wellFormed probability' (28 bad specs, 13
+unreadable tasks), 'M2b GENERATOR probability', 'M2b probability', 'M2b PURITY probability'; school-practice-test 'M2b 1' (the path, years,
+prerequisites, worked method, act, sets, no exam named); gcse-units-test 'controls', 'sweep pythagoras', 'sweep probability', 'the table'.
+Owed to the owner's batch 5 review (captures, not made here): Topics with the new units, Tonight's ruler (seven bars), a Pythagoras
+paper and a probability paper, each at 1920 x 1080 and 1280 x 720; and a maths teacher's read of the two years, the three slip
+lines per unit, the worked methods and the two acts.
+Gate: `cd desk && npm run test:rules` green; `tsc --noEmit --incremental false` clean. This closes batch 5 (L3, M4c, T3, M2b).
+Next: the owner's batch 5 review, then batch 6 (L4, T4, T5, M3a). M5 (a failed paper read against the map) reads these units on
+School maths; whether they stay there or move to a path of their own is a question for the owner.
