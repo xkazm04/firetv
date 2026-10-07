@@ -8,6 +8,10 @@ import dev.deathride.core.*
  * most one dirty seat. A seat's JSON reaches the phone one or two frames after the request, built by the same builders
  * from the same profile and messages ([build]), so the bytes are those an immediate publish of that state would write.
  *
+ * P13d: a frame that runs its own request ([request]: car pick, purchase, track switch, start, launch, finish, lobby, garage,
+ * career) builds no seat; the seat waits for the next frame without one. RaceGame calls [beginFrame] first in render() and
+ * [endFrame] after the frame's requests and simulation, so a request anywhere in the frame holds the build.
+ *
  * The arrays are RaceGame's own (shared by reference). GL-free: [rebuildUi] is RaceGame's.
  */
 class FramePublish(
@@ -24,6 +28,7 @@ class FramePublish(
 
     private val dirty=BooleanArray(profiles.size)
     private var ui=false
+    private var requestFrame=false
     /** Seat [seat]'s JSON is stale: built by a later [frame] (or [flush]). Two marks before that build it once. */
     fun publish(seat: Int) { dirty[seat]=true }
     fun dirty(seat: Int)=dirty[seat]
@@ -33,12 +38,22 @@ class FramePublish(
     /** Any UI rebuild (the 10 Hz cadence included) covers a request made before it. */
     fun uiBuilt() { ui=false }
 
-    /** First in render(): the UI rebuild the previous frame asked for, then at most one dirty seat (lowest first). Returns the seat built, -1 for none. */
-    fun frame(): Int {
+    /** This frame runs its own request: its [endFrame] builds no seat. Holds for the current frame only. */
+    fun request() { requestFrame=true }
+    val requested get()=requestFrame
+    /** First in render(): the UI rebuild the previous frame asked for. */
+    fun beginFrame() {
         if(ui) { val started=System.nanoTime();rebuildUi();ui=false;logger("transition uiDeferred ms=${(System.nanoTime()-started)/1e6}") }
+    }
+    /** After the frame's requests: at most one dirty seat (lowest first), none in a frame that ran a [request]. Returns the seat built, -1 for none. */
+    fun endFrame(): Int {
+        val held=requestFrame;requestFrame=false
+        if(held)return -1
         for(seat in dirty.indices)if(dirty[seat]) { flush(seat);return seat }
         return -1
     }
+    /** [beginFrame] then [endFrame]: one frame with no request between them. Returns the seat built, -1 for none. */
+    fun frame(): Int { beginFrame();return endFrame() }
     /** Builds seat [seat] now if it is dirty: for a reader that needs its JSON within the frame it was published. */
     fun flush(seat: Int) {
         if(!dirty[seat])return

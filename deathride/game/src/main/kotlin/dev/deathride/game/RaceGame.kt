@@ -211,7 +211,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
     private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else c.aiStyle?.name?.uppercase()?:"RIVAL ${c.id+1}"
     private fun finishRace() {
-        val before=profiles[0]
+        val before=profiles[0];publishes.request()
         for(i in profiles.indices)if(raceTickets[i]>0 && raceProfiles[i]==profiles[i].id) {
             val c=world.cars[i]
             var message=""
@@ -327,7 +327,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     /** The rest of startRace, run once every ticket of [start] is on disk (at once when there is none). */
     private fun launchRace(start: ProfileSaves.Start) {
-        val started=System.nanoTime()
+        val started=System.nanoTime();publishes.request()
         campaignRace=start.career;server.raceMode=if(start.career)"career" else "practice";raceRound=start.round;raceDifficulty=start.difficulty
         raceTickets.fill(0)
         for(k in start.seats.indices)if(start.jobs[k]>0) { raceTickets[start.seats[k]]=start.tickets[k];raceProfiles[start.seats[k]]=start.profileIds[k] }
@@ -346,19 +346,20 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
         if(art.frame()>0 && glWindowEvent!="release")glWindow("release")
-        publishes.frame()
+        publishes.beginFrame()
         saves.pump()
         for(i in server.slots.indices) {
             if(server.slots[i].profileId!=profiles[i].id && phase!="race" && phase!="countdown")loadProfile(i)
             val choice=server.slots[i].carRequest.getAndSet(-1)
             if(choice>=0 && choice!=selectedCars[i] && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career")) {
+                publishes.request()
                 if(DeathDuel.seized(profiles[i])) { careerMessage[i]="Your car is seized. The Mechanic rig is supplied.";publishGarage(i) }
                 else if(!refusedWhileStarting(i)) { val started=System.nanoTime();if(editProfile(i,Kind.CHOICE){it.selectedCar=choice}>0) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() };logger("transition car seat=$i totalMs=${msSince(started)}") }
             }
             val purchase=server.slots[i].shopRequest.getAndSet(null)
-            if(purchase!=null && purchase.profileId==profiles[i].id)buyPart(i,purchase.part,purchase.tier,purchase.car)
+            if(purchase!=null && purchase.profileId==profiles[i].id) { publishes.request();buyPart(i,purchase.part,purchase.tier,purchase.car) }
             val market=server.slots[i].marketRequest.getAndSet(null)
-            if(market!=null && market.profileId==profiles[i].id)buyMarket(i,market)
+            if(market!=null && market.profileId==profiles[i].id) { publishes.request();buyMarket(i,market) }
         }
         // A pick still on the course worker holds the queued commands (start, lobby, garage, career) until it lands.
         val pickPending=server.trackPending
@@ -366,12 +367,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         // P13d EARLY arm (perf-only): upload the picked region's tiles now and run the switch itself EARLY_FRAMES frames later.
         if(switchArm==SwitchArm.EARLY) {
             if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start==null && earlyCourse<0 && courseIndex!=selectedTrack) {
-                art.stageRegion();glWindow("stage");earlyCourse=courseIndex;earlyFrames=SwitchArm.EARLY_FRAMES;courseIndex=-1
+                publishes.request();art.stageRegion();glWindow("stage");earlyCourse=courseIndex;earlyFrames=SwitchArm.EARLY_FRAMES;courseIndex=-1
             } else if(courseIndex<0 && earlyCourse>=0 && --earlyFrames<=0) { courseIndex=earlyCourse;earlyCourse=-1 }
         }
         if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start!=null)logger("transition refused track reason=\"${ProfileSaves.SAVING_TICKET}\"")
         else if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
-            val started=System.nanoTime();configureWorld(courseIndex,false);publishes.requestUi();logger("transition track totalMs=${msSince(started)}")
+            publishes.request();val started=System.nanoTime();configureWorld(courseIndex,false);publishes.requestUi();logger("transition track totalMs=${msSince(started)}")
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
         if(surfaceIndex>=0 && !campaignRace) { server.surface=Surfaces.practice[surfaceIndex]; world.track.surface=server.surface; world.track.surfaceOverride=true; logger("surface ${server.surface.json}") }
@@ -380,7 +381,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
-        if(!pickPending && earlyCourse<0)when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
+        val command=if(!pickPending && earlyCourse<0)server.command.getAndSet(0) else 0
+        if(command!=0)publishes.request()
+        when(command) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
         profiler?.mark(6,"DR.prepare")
         if(!scene.ready) {
             // P13d HOLDBAKE/FLUSH arms (perf-only): start the bake late, or submit each bake slice in its own frame.
@@ -425,6 +428,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         raceAudio.update(world,phase,scene.ready,countdown,actual.coerceAtLeast(0.0))
         script.frame(phase,campaignRace,profiles[0],raceRound,world,actual.coerceIn(0.0,.1))
         profiler?.mark(9,"DR.telemetry")
+        // P13d: at most one seat's JSON, built only in a frame that ran no request of its own (after finishRace above).
+        publishes.endFrame()
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps;server.eventType=world.eventType.name;server.raceEntrants=world.entrantCount
         if(uiStage==0 && uiTime>=.1) { uiTime=0.0;uiStage=1 }
         // The 10 Hz telemetry/UI refresh is split over three consecutive frames (stats JSON and slot HUD, traffic and pickup JSON, HUD text layout): same cadence, a third of the burst per frame.
