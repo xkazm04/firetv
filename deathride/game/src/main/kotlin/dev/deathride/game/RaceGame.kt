@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport
 import com.google.zxing.*
 import com.google.zxing.qrcode.QRCodeWriter
 import dev.deathride.core.*
+import dev.deathride.core.ProfileWriter.Kind
 import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
@@ -100,6 +101,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val uiBuilder=com.badlogic.gdx.utils.StringBuilder(512)
     private var rankOrder=IntArray(6)
     private lateinit var profileStore: ProfileStore
+    /** P13b: profile saves run on ProfileWriter's thread; this holds the pending start, settle and revert state. */
+    private lateinit var saves: ProfileSaves
+    private var startRefusal: String?=null
     private val profiles=Array(2){Profile("couch-$it")}
     private val saveStatus=Array(2){"New profile"}
     private val shopMessage=Array(2){"Parts stay with this car"}
@@ -115,22 +119,20 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val rivalPreviews=Array(Tuning.CAR_COUNT-1){i->Car(i,Track()).also{CarCatalog.apply(it,Career.rivals[i].carIndex)}}
 
     private fun loadProfile(i: Int) {
-        val loaded=runCatching{profileStore.load(server.slots[i].profileId)}
-        persistence[i]=loaded.isSuccess
-        profiles[i]=loaded.getOrNull()?.profile?:Profile(server.slots[i].profileId)
-        saveStatus[i]=loaded.getOrNull()?.status?:"Save damaged - persistence disabled"
+        val id=server.slots[i].profileId
+        saves.load(i,runCatching{profileStore.load(id)},id)
         selectedCars[i]=profiles[i].selectedCar;Garage.apply(profiles[i],world.cars[i]);publishGarage(i)
     }
-    private fun editProfile(i: Int,edit: (Profile)->Unit): Boolean {
-        if(!persistence[i]) { shopMessage[i]="Save unavailable - changes disabled";publishGarage(i);return false }
-        val updated=profiles[i].copy()
-        if(runCatching{edit(updated)}.isFailure) { shopMessage[i]="Profile change unavailable";publishGarage(i);return false }
-        val saveStarted=System.nanoTime()
-        if(runCatching{profileStore.save(updated)}.isFailure) { saveStatus[i]="Save failed - change cancelled";publishGarage(i);return false }
-        val published=System.nanoTime()
-        profiles[i]=updated;saveStatus[i]="Saved";publishGarage(i)
-        logger("transition profile seat=$i saveMs=${(published-saveStarted)/1e6} publishMs=${msSince(published)}");return true
+    /** Applies [edit] to seat [i]'s profile now and queues its save; returns the writer job id, 0 when refused. */
+    private fun editProfile(i: Int,kind: Kind,edit: (Profile)->Unit): Long=saves.edit(i,kind,change=edit)
+    private val saveHooks=object: ProfileSaves.Hooks {
+        override fun publish(seat: Int)=publishGarage(seat)
+        override fun reverted(seat: Int) { selectedCars[seat]=profiles[seat].selectedCar;Garage.apply(profiles[seat],world.cars[seat]);if(phase!="race" && phase!="countdown")world.reset();publishGarage(seat) }
+        override fun startReady(start: ProfileSaves.Start)=launchRace(start)
+        override fun changed() { if(::scene.isInitialized)rebuildUi() }
     }
+    /** A start waits for its tickets: car, purchase and track requests are refused until it lands. */
+    private fun refusedWhileStarting(i: Int)=saves.refuseWhileStarting(i)
     /** Diagnostic (P10): render-thread wall ms of a lobby, track, car or start request, one log line each (no per-frame cost). */
     private fun msSince(started: Long)=(System.nanoTime()-started)/1e6
     private fun publishGarage(i: Int) {
@@ -139,22 +141,22 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.slots[i].careerJson=Career.json(profiles[i],careerMessage[i]);if(i==0)server.hostCareerJson=server.slots[i].careerJson
     }
     private fun buyPart(i: Int,part: Int,tier: Int,car: Int) {
-        if(phase!="garage")return
+        if(phase!="garage" || refusedWhileStarting(i))return
         val offer=Garage.offer(profiles[i],part)
         val rejection=when { car!=profiles[i].selectedCar->"Car changed - check the selected car";tier!=offer.tier->"Offer changed - check the installed tier";!offer.available->offer.reason;else->"" }
         if(rejection.isNotEmpty()) { shopMessage[i]=rejection;publishGarage(i);if(::audio.isInitialized)audio.play("ui.denied");return }
         var message=""
-        if(editProfile(i){message=Garage.buy(it,part,tier,expectedCar=car)}) {
+        if(editProfile(i,Kind.CHOICE){message=Garage.buy(it,part,tier,expectedCar=car)}>0) {
             shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
             if(::audio.isInitialized)audio.play(if(message.startsWith("Installed"))"ui.purchase" else "ui.denied")
         }
     }
-    private fun openGarage() { if(phase=="lobby" || phase=="results" || phase=="career") { phase="garage";server.phase=phase;accumulator=0.0;audio.narrate("voice.mechanic.welcome");rebuildUi() } }
+    private fun openGarage() { if((phase=="lobby" || phase=="results" || phase=="career") && saves.start==null) { phase="garage";server.phase=phase;accumulator=0.0;audio.narrate("voice.mechanic.welcome");rebuildUi() } }
     private fun buyMarket(i: Int,request: dev.deathride.link.MarketRequest) {
-        if((phase!="garage" && !(phase=="career" && request.action=="ally" && i==0)) || request.car!=profiles[i].selectedCar)return
+        if((phase!="garage" && !(phase=="career" && request.action=="ally" && i==0)) || request.car!=profiles[i].selectedCar || refusedWhileStarting(i))return
         val revision=profiles[i].marketRevision
         var message=""
-        if(editProfile(i){message=Market.transact(it,request.action,request.id,request.revision)}) {
+        if(editProfile(i,Kind.CHOICE){message=Market.transact(it,request.action,request.id,request.revision)}>0) {
             selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;careerMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
             val purchased=profiles[i].marketRevision!=revision
             audio.play(if(purchased)"ui.purchase" else "ui.denied")
@@ -163,14 +165,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
     }
     private fun careerSelect() {
+        if(refusedForSaves("careerSelect"))return
         val p=profiles[0];val index=Campaign.pending(p)
         if(index<0){startRace(true);return}
         script.payoutChosen(p,index,Campaign.choices[selectedReward])
         buyMarket(0,dev.deathride.link.MarketRequest(p.id,p.selectedCar,"ally","${Campaign.allies[index].id}:${Campaign.choices[selectedReward]}",p.marketRevision))
     }
     private fun openCareer() {
-        if(phase!="lobby" && phase!="results")return
-        if(!editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
+        if(phase!="lobby" && phase!="results" || refusedForSaves("openCareer"))return
+        if(editProfile(0,Kind.CHOICE){RivalEconomy.prepare(it);DeathDuel.seize(it)}==0L)return
         phase="career";server.phase=phase;accumulator=0.0
         // The next career race switches course at its start: build it, bake its bins and decode its region tiles while this screen is read.
         val event=Career.events[profiles[0].careerRound]
@@ -211,11 +214,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(i in profiles.indices)if(raceTickets[i]>0 && raceProfiles[i]==profiles[i].id) {
             val c=world.cars[i]
             var message=""
-            if(editProfile(i){
+            if(saves.settle(i){
                 if(campaignRace && i==0)RivalEconomy.settle(it,raceTickets[i],world,raceRound)
                 if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0,Career.bossPosition(world,raceRound))?.message?:"Result already saved"
                 else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),rewardScale=if(campaignRace)CareerCurve.all[raceRound].rewardScale else 1.0,cash=world.combat.cashCollected[i],course=courseCatalog[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
-            }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
+            }>0) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
         }
         phase="results";server.phase=phase;stateTime=0.0;raceAudio.results(world)
@@ -246,7 +249,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server=RaceServer(assets,logger,port=serverPort,profileFrames=profiler?.trace,profileRuntime=profiler?.let{{it.platform.runtimeJson()}}); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         server.audioJson={statsSafe("audio"){audio.statsJson()}};server.artJson={statsSafe("art"){artJson()}};server.combatSummaryJson={statsSafe("combatSummary"){combatSummaryJson()}};server.trafficJson={statsSafe("traffic"){trafficJson()}};server.pickupsJson={statsSafe("pickups"){pickupsJson()}}
         for(i in server.slots.indices){val slot=server.slots[i];slot.combatFull={statsSafe("combat$i"){combatJson(i)}}}
-        profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
+        profileStore=ProfileStore(Gdx.files.local("profiles").file())
+        saves=ProfileSaves(ProfileWriter(profileStore),profiles,saveStatus,shopMessage,careerMessage,persistence,logger,saveHooks)
+        for(i in profiles.indices)loadProfile(i);world.reset()
         sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L});carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
@@ -292,8 +297,16 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun selectFeel(direction: Int) {
         server.feelRequest.set((FeelProfiles.all.indexOf(server.feel)+direction).mod(FeelProfiles.all.size))
     }
+    /** While a start waits for its tickets or a settle for its write, the next start and career requests are refused (logged once per reason). */
+    private fun refusedForSaves(what: String): Boolean {
+        val blocker=saves.startBlocker()
+        if(blocker==null) { startRefusal=null;return false }
+        if(blocker!=startRefusal) { logger("transition refused $what reason=\"$blocker\"");startRefusal=blocker }
+        return true
+    }
     private fun startRace(career: Boolean=false) {
         val started=System.nanoTime()
+        if(refusedForSaves("startRace"))return
         val finale=career && Career.events[profiles[0].careerRound].elimination
         if(career && !server.slots[0].claimed && !keyboard) { careerMessage[0]="Pair Player 1 before starting a career race";publishGarage(0);return }
         if(career && !finale && CarCatalog.all[selectedCars[0]].tierRank>Career.events[profiles[0].careerRound].playerTier) { careerMessage[0]="Choose a car in this division or a lower tier";publishGarage(0);return }
@@ -303,32 +316,40 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             (!profiles[1].owned[selectedCars[1]] || CarCatalog.all[selectedCars[1]].tierRank>Career.events[profiles[0].careerRound].playerTier)) {
             careerMessage[0]="Player 2: choose an owned car in this division or a lower tier";publishGarage(0);return
         }
-        if(career && !editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
-        campaignRace=career;server.raceMode=if(career)"career" else "practice";raceRound=profiles[0].careerRound;raceDifficulty=profiles[0].careerDifficulty
+        if(career && editProfile(0,Kind.CHOICE){RivalEconomy.prepare(it);DeathDuel.seize(it)}==0L)return
+        val round=profiles[0].careerRound
+        val seats=profiles.indices.filter{!(career && Career.events[round].duel && it==1) && (server.slots[it].claimed || it==0 && keyboard)}.toIntArray()
+        // Each seat's ticket is a MONEY save; the race itself starts in launchRace once every ticket is durable.
+        saves.beginStart(career,round,profiles[0].careerDifficulty,seats)
+        logger("transition startRace totalMs=${msSince(started)} pending=${saves.start!=null}")
+    }
+    /** The rest of startRace, run once every ticket of [start] is on disk (at once when there is none). */
+    private fun launchRace(start: ProfileSaves.Start) {
+        val started=System.nanoTime()
+        campaignRace=start.career;server.raceMode=if(start.career)"career" else "practice";raceRound=start.round;raceDifficulty=start.difficulty
         raceTickets.fill(0)
-        for(i in profiles.indices)if(activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)) {
-            var ticket=0L;if(editProfile(i){ticket=Economy.start(it)}) { raceTickets[i]=ticket;raceProfiles[i]=profiles[i].id }
-        }
-        configureWorld(if(career)Career.events[raceRound].courseIndex else selectedTrack,career,(profiles[0].startedRaces+raceRound).toInt())
+        for(k in start.seats.indices)if(start.jobs[k]>0) { raceTickets[start.seats[k]]=start.tickets[k];raceProfiles[start.seats[k]]=start.profileIds[k] }
+        configureWorld(if(start.career)Career.events[raceRound].courseIndex else selectedTrack,start.career,(profiles[0].startedRaces+raceRound).toInt())
         world.reset(); effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown mode=${server.raceMode}"); rebuildUi()
         audio.play("ui.confirm")
-        logger("transition startRace totalMs=${msSince(started)}")
+        logger("transition raceLaunch totalMs=${msSince(started)}")
     }
-    private fun lobby() { val started=System.nanoTime();raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi();logger("transition lobby totalMs=${msSince(started)}") }
+    private fun lobby() { val started=System.nanoTime();saves.dropStart();saves.clearResults();raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi();logger("transition lobby totalMs=${msSince(started)}") }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
-    override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); accumulator=0.0 }
+    override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); if(::saves.isInitialized)saves.pause(); accumulator=0.0 }
     override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=makeScene();if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         profiler?.begin(nanos,actual);profileGl?.reset()
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
+        saves.pump()
         for(i in server.slots.indices) {
             if(server.slots[i].profileId!=profiles[i].id && phase!="race" && phase!="countdown")loadProfile(i)
             val choice=server.slots[i].carRequest.getAndSet(-1)
             if(choice>=0 && choice!=selectedCars[i] && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career")) {
                 if(DeathDuel.seized(profiles[i])) { careerMessage[i]="Your car is seized. The Mechanic rig is supplied.";publishGarage(i) }
-                else { val started=System.nanoTime();if(editProfile(i){it.selectedCar=choice}) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() };logger("transition car seat=$i totalMs=${msSince(started)}") }
+                else if(!refusedWhileStarting(i)) { val started=System.nanoTime();if(editProfile(i,Kind.CHOICE){it.selectedCar=choice}>0) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() };logger("transition car seat=$i totalMs=${msSince(started)}") }
             }
             val purchase=server.slots[i].shopRequest.getAndSet(null)
             if(purchase!=null && purchase.profileId==profiles[i].id)buyPart(i,purchase.part,purchase.tier,purchase.car)
@@ -338,13 +359,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         // A pick still on the course worker holds the queued commands (start, lobby, garage, career) until it lands.
         val pickPending=server.trackPending
         val courseIndex=server.trackRequest.getAndSet(-1)
-        if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
+        if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results") && saves.start!=null)logger("transition refused track reason=\"${ProfileSaves.SAVING_TICKET}\"")
+        else if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
             val started=System.nanoTime();configureWorld(courseIndex,false);rebuildUi();logger("transition track totalMs=${msSince(started)}")
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
         if(surfaceIndex>=0 && !campaignRace) { server.surface=Surfaces.practice[surfaceIndex]; world.track.surface=server.surface; world.track.surfaceOverride=true; logger("surface ${server.surface.json}") }
         val difficulty=server.difficultyRequest.getAndSet(-1)
-        if(difficulty>=0 && phase=="career" && difficulty!=profiles[0].careerDifficulty)editProfile(0){it.careerDifficulty=difficulty}
+        if(difficulty>=0 && phase=="career" && difficulty!=profiles[0].careerDifficulty)editProfile(0,Kind.CHOICE){it.careerDifficulty=difficulty}
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
@@ -686,7 +708,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             title("DEATH RIDE",42f,699f)
             label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${courseCatalog[selectedTrack].name} / ${activeRegion.name} / ${world.raceLaps} LAPS"},42f,644f)
             label(if(phase=="lobby")"FEEL  /  ${server.feel.id.uppercase()}" else "BACK: LOBBY   /   ${server.feel.id}",810f,691f)
-            label(if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(scene.ready)muted else accent)
+            val notice=if(::saves.isInitialized)saves.notice else ""
+            label(if(notice.isNotEmpty())notice.uppercase() else if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(notice.startsWith("Save failed"))warning else if(scene.ready && notice.isEmpty())muted else accent)
         }
         if(phase=="race" || phase=="countdown" || phase=="results") {
             for(c in world.cars)if(c.entered) {
@@ -812,8 +835,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label("${rank+1} / ${driverName(c)}",291f,479f-rank*40,colors[c.id])
                     label(when {combatWrecked(c)->"WRECKED / ${world.combat.kills[c.id]} KILLS";c.finishKind==FinishKind.ELIMINATION->"LAST SURVIVOR";c.finishSeconds>=0->"${(c.finishSeconds*10).toInt()/10.0}s";else->if(world.eventType==EventType.ELIMINATION)"UNRESOLVED / RETRY" else "LAP ${c.lap.laps+1}/${world.raceLaps}"},737f,479f-rank*40)
                 }
-                val receipt=profiles[0].lastReceipt
-                if(receipt!=null) {
+                val receipt=profiles[0].lastReceipt;val outcome=saves.result(0)
+                if(outcome==ProfileSaves.Outcome.PENDING)label(ProfileSaves.SAVING_RESULT.uppercase(),291f,245f,accent)
+                else if(outcome==ProfileSaves.Outcome.FAILED)label(ProfileSaves.RESULT_NOT_COUNTED.uppercase(),291f,245f,warning)
+                else if(receipt!=null) {
                     label("PRIZE ${receipt.gross} / PIT ${receipt.repair} / DEBT + CAP ${receipt.net-receipt.banked}",291f,245f,accent)
                     label("BANKED +${receipt.banked} CR / BALANCE ${profiles[0].credits} CR",291f,220f,accent)
                 }
@@ -908,6 +933,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(y in 0 until 240)for(x in 0 until 240)pix.drawPixel(x,y,if(matrix[x,y])0x0b141eff else 0xffffffff.toInt())
         qr=Texture(pix); pix.dispose()
     }
-    override fun dispose() { if(::carSprites.isInitialized)logger("carSprites batched=${carSprites.groupedFrames} interleaved=${carSprites.interleavedFrames}");if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};server.stop(); storyArt.dispose();wheels.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
+    override fun dispose() { if(::carSprites.isInitialized)logger("carSprites batched=${carSprites.groupedFrames} interleaved=${carSprites.interleavedFrames}");if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};if(::saves.isInitialized)saves.close();server.stop(); storyArt.dispose();wheels.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
 }
 private const val LOBBY_PIXELS_PER_M=9.0
