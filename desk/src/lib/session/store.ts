@@ -5,6 +5,7 @@
  * work happens in the route handlers and lands as further events. Kept on globalThis so Next's
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
+import type { Workroom } from "../twin/workroom";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
@@ -23,20 +24,19 @@ import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
-import type { Mode } from "../rules/mode";
+import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
 /** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
 /**
- * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4). Optional and usually absent: unset means the mode
- * is derived (modeOf). Phase 1 honours only "family"; a stored "adult" is kept on disk but modeOf ignores it until the
- * Adult build (slice A5) adds its gate.
+ * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4; the gate since slice A5). Optional and usually absent:
+ * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
 export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
 /** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
@@ -46,13 +46,22 @@ function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
 }
 /**
  * Only "family" and "adult" are modes: any other `mode` (junk in a draft patch, a hand-edited session.json) is dropped, so the
- * profile is back to the derived default. `allowAdult` is false for a profile.draft patch: nothing may set Adult in Phase 1
- * (no screen reaches it, and the parent gate is built with the Adult build), so a patch may set only "family". session.json
- * load passes true: a stored "adult" is kept as data, and modeOf does not honour it.
+ * profile is back to the derived default. `allowAdult` false drops "adult" too. A profile.draft patch may set "adult" since
+ * slice A5, and the merged draft then passes adultGated; session.json load keeps a stored "adult" as data and modeOf
+ * honours it only while the gate holds.
  */
 export function modeChecked<T extends { mode?: unknown }>(p: T, allowAdult = true): T {
   if (p.mode === undefined || p.mode === "family" || (allowAdult && p.mode === "adult")) return p;
   const q = { ...p }; delete q.mode; return q;
+}
+/**
+ * A draft that may not be Adult (under 18, or a school type with no age) loses "adult": the gate is re-checked on every
+ * edit. A refused adult falls back to a "family" the draft already held, never erasing it.
+ */
+function adultGated(p: Profile, before?: Profile | null): Profile {
+  if (p.mode !== "adult" || adultAllowed(p)) return p;
+  const q = { ...p }; delete q.mode;
+  return before?.mode === "family" ? { ...q, mode: "family" } : q;
 }
 /**
  * A practice topic's name as the desk writes it, on whichever path it belongs to: topicIn(id)?.name ?? id. For every
@@ -128,6 +137,11 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
   return at;
 };
 /** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
+/**
+ * A worked lesson (v2 M1, lib/desk/worked.ts): the idea (the model's words when `own`, else the authored one), the three
+ * method steps, and examples written and answered by code. `owner` is the learner it was written for.
+ */
+export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 }[]; owner?: string; }
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
@@ -193,7 +207,7 @@ const shownPractice = (p: Practice | null | undefined): Practice | null => {
  * `key` is what the run is about (the topic of a practice set, the item key of a hint and of its lesson pick);
  * `error` is a sentence the desk would say, never an exception's text.
  */
-export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory";
+export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory" | "teach";
 export type JobPhase = "running" | "done" | "failed";
 /** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
 export type JobInput = Record<string, string | number>;
@@ -217,7 +231,11 @@ function settled(jobs: unknown): Jobs {
  * `was` is set only by a rewrite of this sentence (essay.revised): the sentence as first read, its verdict and the fix it was taught.
  */
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
-export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
+/**
+ * `piece` (v2 E1) is set on a whole-piece reading: how many paragraphs, which have been read and which failed (0-based),
+ * and the text store's id when the learner kept it. A one-paragraph reading has none.
+ */
+export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; pieceId?: string }; }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
@@ -245,6 +263,10 @@ export interface Session {
   check: LevelCheck | null;
   /** the open maths topic, the practice set on it, and where the walk has got to */
   topic: string | null; practice: Practice | null; walkIx: number;
+  /** The worked lesson on the desk (v2 M1); cleared when another learner sits down. */
+  worked?: Worked | null;
+  /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
+  workroom?: Workroom | null;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
   /** the same measured record per Essay Master lens, hydrated the same way */
@@ -284,7 +306,7 @@ export type Event =
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
   | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
@@ -466,9 +488,10 @@ export function reduce(s: Session, e: Event): Session {
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch, false) });
-      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
+    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch) });
+      // the age first (a type change may clear it), then the Adult gate on what is left
+      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = adultGated(d, s.draft); break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
       n.conversation = null; seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
@@ -517,6 +540,9 @@ export function reduce(s: Session, e: Event): Session {
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
     case "essay.set": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis, essayAt: null })); break; }
       n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    // a piece's later paragraphs (v2 E1): the reading grows where the learner is, without moving the screen or the sentence
+    case "essay.progress": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: e.analysis })); break; }
+      if (s.essay?.text !== e.analysis.text) break; n.essay = e.analysis; break;
     // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page;
     // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
@@ -542,6 +568,10 @@ export function reduce(s: Session, e: Event): Session {
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
+    // a worked lesson lands for the learner who asked, and only while they are at the desk
+    case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
+    // the Workroom summary for the learner at the desk; `open` also puts it on the TV
+    case "workroom.set": if (e.workroom.owner !== me) break; n.workroom = e.workroom; if (e.open) { n.screen = "workroom"; n.subject = "essay"; n.focus = 0; } break;
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at

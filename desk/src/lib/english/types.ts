@@ -22,6 +22,8 @@ export interface EnglishScene {
   /** two or three goals the learner reaches in the scene (mission.ts); absent on a plan topic, which gets generated ones */
   steps?: string[];
   premise: string; cue: string; quiz: { question: string; options: [string, string]; correct: number };
+  /** A Speaking-practice scene's task shape (v2 L2, speaking.ts): the paper and part it copies. Never displayed. */
+  practice?: { exam: string; part: number };
 }
 
 export type TaskKind = "say" | "listen" | "choose";

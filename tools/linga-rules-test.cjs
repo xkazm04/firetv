@@ -688,7 +688,9 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  // the conversation (wave S59: 4-6 s a turn instead of 52-90 s) and Calculus spec writing (2026-09-29, tools/calc-model-yield.cjs
  // on 6 topics: 7-14 s instead of 62-90 s with two engine timeouts; the desk checks every spec in code, so a hasty spec costs
  // one refused spec, never a wrong verdict). Hints, marking, the school question writer and the level check keep their thinking.
- assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/english/conversation.ts']);
+ // and the worked lesson's idea (v2 M1, 2026-10-07): its words are checked in code (lib/desk/worked.ts cleanIdea: no
+ // digit, three sentences) and fall back to the authored idea, so a hasty idea costs the model's wording, never a wrong number.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts']);
  const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');
@@ -697,7 +699,8 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
 // ---- Family mode, W1: three school situations, offered to learners under 18 and to no one else
 const {ENGLISH_SCENES,ENGLISH_SKILLS,audienceAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
 const SCHOOL=['teacher','project','lost'];
-const schoolIds=list=>list.filter(x=>x.audience==='school').map(x=>x.id);
+// the three free school situations; Speaking practice (v2 L2, speaking.ts) is school-audience too and has its own suite (cambridge-rules)
+const schoolIds=list=>list.filter(x=>x.audience==='school'&&!x.practice).map(x=>x.id);
 const prefsOf=p=>defaultPreferences(p);
 test('scene ids are unique, and the three school situations are authored to the scene contract',()=>{
  const ids=ENGLISH_SCENES.map(x=>x.id);assert.equal(new Set(ids).size,ids.length);

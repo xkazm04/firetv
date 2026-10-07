@@ -82,7 +82,8 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   door to the sentence that needs a look (`essay-specimen-card`).
 - **Rail** — the paragraph as arrows, the current sentence at full strength (`essay-rail`). A rewritten
   sentence keeps its old arrow as a faint ghost just under the new one (`essay-ghost`): a reversed ghost
-  under a forward arrow is the turn, drawn.
+  under a forward arrow is the turn, drawn. A text of several paragraphs keeps them: a gap opens before each
+  new paragraph and the label counts them ("3 paragraphs"; `data-para` on each row, `data-paragraphs` on the rail).
 - **The sentence** — the learner's words, the clause it ends on underlined in citron, a reversed arrow.
 - **The move** — line one solid, a citron hook and THEN, line two hatched with the caret (`essay-move`).
 - **The pattern** — literal words in 44 px around dashed slots (`essay-pattern`, `essay-slot`).
@@ -102,8 +103,23 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   sentence, and a rewrite is not another paragraph read: no writing episode, no lens attempt.
 - The paragraph comes in as text, never as a photo of handwriting: a `.txt` or `.md` file the learner sends, or a message typed,
   pasted or dictated on the phone. A text with several paragraphs is split on blank lines and read one paragraph at a time; the phone
-  steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core takes one paragraph, so one paragraph in reads
-  exactly as it always did; reading a whole piece is later work.
+  steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core keeps paragraphs (2026-10-07, adult plan D1):
+  `splitSentences` splits each paragraph on its own, numbers run on through the piece, every sentence of a longer text carries
+  `para`, a rewrite rebuilds with the breaks, and the prompt names each paragraph. One paragraph in reads exactly as it always
+  did (no `para`).
+- **A whole piece** (2026-10-07, v2 E1 and P3). With more than one paragraph on the phone, the Essay tab offers "Read the
+  whole piece on the TV" (POST /api/analyse kind `piece`) beside "This paragraph only". The desk reads one call per
+  paragraph, each with the whole piece as context, so the Structure lens sees the thesis while it judges a body
+  paragraph. The first paragraph back opens `forensic`; later ones grow the reading where the learner is
+  (`essay.progress`) and never move the screen. The specimen card says "Last piece · reading 2 of 4", draws a wider gap
+  between paragraphs, and outlines a paragraph still being read; on the rail it is dimmed. A failed paragraph is listed
+  and the rest still land. The record holds one reading per piece. Limits (`pieceProblem`): 30 paragraphs, 100 KB, and
+  each paragraph within the paragraph cap.
+- **The shelf** (P3) is the phone's, never the TV's. "Keep it on my shelf" (on by default) stores the piece with its
+  versions (`/api/texts`, `lib/session/texts.ts`). A one-time notice, before the first kept piece, says where the text
+  goes; "Read without keeping" skips it. The shelf lists titles and counts; Open loads the latest version, and the next
+  read of it is a new version. Delete one, or "Delete everything I kept" (a second press confirms), which also forgets
+  the notice.
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 
@@ -125,3 +141,59 @@ write). The frame words ("For example,", "This shows") are never on a plate and 
 Not a broadcast (no band, no ticker, no red), not a dashboard (no percentages, no marks out of ten),
 not a ghostwriter (no rewritten sentence, no example to copy), not a rainbow (one accent), and never
 motion that a sentence needs in order to be understood.
+
+## The collection (v2 R1, 2026-10-07)
+
+A specimen cabinet under the paragraph card on the lens home: four drawers, one per lens, in two rows. A lens latched
+Secure pins its specimen (Specimen's arrow, in citron, on a citron-framed drawer); an open drawer is a dashed outline. It
+appears once the first specimen is pinned. It is never counted, only Family mode shows it, and nothing earns a specimen
+but the lens's own latch (`lib/rules/collect.ts`). `data-role="essay-collection"`; `essay/EssayCabinet.tsx`.
+
+## The twin: the style meter and the simulated probe (v2 T1, 2026-10-07)
+
+`lib/rules/style.ts` measures how a person writes from their own messages. Every measure is an integer, as Twin Card 1.0
+requires: sentence and message lengths, openers, and rates of connectors, contractions, questions, exclamations, emoji,
+hedges, greetings, sign-offs, thanks, formal words, slang and lists. `twinDims` maps the measures onto the card's eight
+`twin-card.style/1` dimensions and keeps its coherence rules. The cut points are a first guess, to be tuned. `styleDistance`,
+`withinBands` and `copyRun` serve the probe and the twin's later validators.
+
+`tools/twin-probe.cjs` is the kill test for T2-T5, simulated by owner decision V2-O1:
+1. It invents eight synthetic writers (terse, formal, bubbly, hedger, storyteller, lister, dry, warm-direct) and has each
+   write about 20 messages.
+2. Three messages per writer are held out.
+3. For each held-out message, the twin (the eight dimensions in the card's level words, plus five exemplars) and the
+   plain model draft a message on the same subject.
+4. The drafts are scored by code distance and by a blind judge model. A twin draft that lifts eight words from the
+   corpus loses the trial.
+5. A writer passes with 2 of 3 trials won on both scores; the probe passes at 6 of 8 writers.
+
+Run it on the owner's PC (`node ../tools/twin-probe.cjs` from `desk/`); `--stub` is the gate's dry run. A pass is
+recorded as simulated. The synthetic writers are the model's own writing, so it shows the profile steers style, not that
+a twin sounds like a real person.
+
+## The Workroom, the PC page and the Twin Card (v2 T2, P4, T5-lite, 2026-10-07)
+
+**The PC page** (`/drop`, `app/drop/page.tsx`) is where an adult's writing comes in (E4: writing happens on a PC, the
+TV is the stage). It joins like a phone, keeps a message, an email or an essay by paste or by a .txt, .md or .docx file
+(`lib/rules/docx.ts` reads only `word/document.xml`, capped against a zip bomb), lists the shelf, and shows the twin:
+per channel, how many pieces, born or not, the eight level words, and the exemplars, each with an include box (the
+review step Twin Card asks producers for). It is read at a desk, so the ten-foot rules do not apply; it is plain.
+
+**The Workroom** (`essay/Workroom.tsx`, screen `workroom`) is Essay Master's home in Adult mode. Left: the pieces, one
+row each, in Specimen's language: the title in the serif, a format tag, version and paragraph counts, and the last
+version's change as pips (citron changed, a plus added, a minus removed, bone kept; `lib/rules/diff.ts` counts by LCS).
+Right: the twin panel, per channel "Born" in citron or "N more to keep", and the level words once born. One action, The
+lenses, leads to the family lens home. The TV never shows a sentence of the text: the session carries only what
+`lib/twin/workroom.ts` builds (titles, counts, marks, level words), and `workroom.set` is the desk's own event.
+
+**The twin is earned** (E3): a channel is born at three pieces of its kind (messages → chat, emails → email, anything
+else → generic). **The Twin Card** (`lib/twin/card.ts`, `/api/twin/card`) is pulled forward from T5 as a slice: Adult
+mode only, phone or PC only, once born. Identity is the name; voice holds the born channels with their measured dims,
+up to five exemplars (the latest version, cut at a word near 500 characters), and quality rules as data, with the
+spec's per-person allowances (dashes allowed when the person's own exemplars use them; a filler opener they use is not
+banned). Integrity is SHA-256 over each part's RFC 8785 form. The card id is stable across exports (`lib/twin/state.ts`,
+beside the pieces, so "Delete everything I kept" removes it too). The card validates against the vendored schema
+(`tools/twin-rules-test.cjs`).
+
+A derived title is never a message's own text: titles show on the TV, so an untitled message is "Untitled message"
+(`texts.ts`; a heading or a heading-like first line still names an essay).

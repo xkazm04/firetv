@@ -811,3 +811,47 @@ test('plan case 6: planText is the learner\'s sentences only and splits back int
  const own=plan3(CLAIM,'For example, sleep studies agree.',LINK);
  assert.match(planText(own),/^Schools should start later\. For example, sleep studies agree\./,'a frame word the learner wrote stays');
 });
+
+// ---- the reading core keeps paragraphs (adult plan D1; v2 decisions 2026-10-07 E1) ----
+{
+const R=require(path.join(root,'src/lib/rules/essay.ts'));
+const PIECE='# Sleep and school\n\nThe school day starts too early. Research found that teenagers fall asleep later.\n\nA later start would help.\nTherefore the start should move.\n\nIn conclusion, the bell should ring at nine.';
+test('D1: a one-paragraph text reads exactly as before: no para field, same numbers and texts',()=>{
+ const s=splitSentences(THREE);
+ assert(s.every(x=>!('para' in x)),'a single paragraph carries no para');
+ assert.deepEqual(s.map(x=>x.text),['The school day starts too early.','Research found that teenagers fall asleep later.','Therefore the start should move.']);
+ assert.deepEqual(splitSentences('One line.\nSame paragraph, next line.').map(x=>x.para),[undefined,undefined],'a single line break is not a new paragraph');
+ assert.equal(R.numberedLines(s).includes('Paragraph'),false,'the prompt for one paragraph is unchanged');
+});
+test('D1: a piece keeps its paragraphs; numbering runs on; no sentence crosses a break',()=>{
+ const s=splitSentences(PIECE);
+ assert.deepEqual(s.map(x=>x.n),[1,2,3,4,5,6]);
+ assert.deepEqual(s.map(x=>x.para),[0,1,1,2,2,3]);
+ assert.equal(s[0].text,'# Sleep and school','a heading is its own paragraph, never fused to the first sentence');
+ assert.equal(R.paragraphCount(s),4);
+ assert.equal(R.joinSentences(s),'# Sleep and school\n\nThe school day starts too early. Research found that teenagers fall asleep later.\n\nA later start would help. Therefore the start should move.\n\nIn conclusion, the bell should ring at nine.');
+ const lines=R.numberedLines(s);
+ assert.match(lines,/^Paragraph 1:\n1\. # Sleep/);assert.match(lines,/\n\nParagraph 2:\n2\. The school day/);assert.match(lines,/\nParagraph 4:\n6\. In conclusion/);
+ // before D1, a paragraph that ended with no full stop ran into the next one
+ assert.deepEqual(splitSentences('No full stop here\n\nNext paragraph starts.').map(x=>x.text),['No full stop here','Next paragraph starts.']);
+});
+test('D1: three paragraphs keep their breaks through a rewrite; a rewrite still must stay one sentence',()=>{
+ const reading={text:PIECE,type:'structure',sentences:splitSentences(PIECE),stats:{},verdicts:[],summary:''};
+ const r=R.revise(reading,4,'A start at nine would let them sleep.');
+ assert(r.ok,r.error);
+ assert.deepEqual(r.reading.sentences.map(x=>x.para),[0,1,1,2,2,3],'the rewritten sentence keeps its paragraph');
+ assert.equal(r.reading.text.split('\n\n').length,4,'the breaks survive the rebuild');
+ assert.equal(r.reading.sentences[3].text,'A start at nine would let them sleep.');
+ const twice=R.revise(r.reading,6,'The bell should ring at nine instead.');
+ assert(twice.ok);assert.equal(twice.reading.text.split('\n\n').length,4,'and a second rewrite');
+ assert.equal(R.revise(reading,2,'two. Sentences here.').ok,false);
+ assert.equal(R.revise(reading,5,'and so the start should move.').ok,false,'inside a paragraph a lowercase start would fuse with the sentence before it, as before D1');
+});
+test('D1: a piece is read with paragraphs named in the prompt; verdicts still anchor by number',async()=>{
+ seen=[];answer=reply({verdicts:[{n:6,verdict:'faulty',note:'Restates.'},{n:9,verdict:'faulty',note:'none'}],summary:'ok'});
+ const a=await analyseEssay(PIECE,'structure','ema',15);
+ assert.match(seen.at(-1).prompt,/piece, 4 paragraphs/);assert.match(seen.at(-1).prompt,/Paragraph 3:/);
+ assert.deepEqual(a.verdicts.map(v=>v.n),[6],'a number past the end is dropped, as before');
+ assert.deepEqual(a.sentences.map(x=>x.para),[0,1,1,2,2,3]);
+});
+}

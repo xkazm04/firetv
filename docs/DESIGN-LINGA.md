@@ -178,3 +178,29 @@ It isn't On Air: no charcoal, no red diagonal band, no condensed caps, no skew, 
 storybook either: text never sits on the picture except the name tag, and the picture never becomes a
 background. It isn't a dashboard: no tiles, no numbers without a picture. It isn't a slide: the arch changes
 the world on every screen, but the door stays where it is.
+
+## The collection (v2 R1, 2026-10-07)
+
+Keys in the footer of Linga's home and map (never inside a scene): **a key for every skill used on your own**
+("independent"), and **a golden key** once it was used elsewhere too ("transfer"). The Open Door's own object, in plum
+and the warm amber. It is derived from the achievements code already decides (`lib/rules/collect.ts`); a phrase picked or
+a helped reply never earns one. Never counted, Family mode only. `data-role="linga-collection"`; `english/LingaKeys.tsx`.
+
+## The Cambridge map (v2 L1, 2026-10-07)
+
+Owner decisions V2, L1, L2 and S3: Cambridge alignment is the goal; A2 Key for Schools and B1 Preliminary for Schools
+first; Speaking first; practice mode only. `lib/english/cambridge.ts` holds both Speaking papers (the parts, the language
+functions as descriptors, the assessment criteria and topic areas) in the host's own words, each mapped onto Linga's
+eight skills. `tools/cambridge-coverage.cjs [age]` reports which descriptors an authored scene practises for a learner
+of that age.
+
+Honest limits:
+- The table is transcribed from knowledge of the public 2020-format handbooks and is **unverified** (`VERIFIED = false`)
+  until a person checks it against them.
+- Coverage is counted at skill level, so it is generous. A2 Key at age 12 reads 15 of 16 (94%), but the "photograph"
+  and "longer answer" functions are only covered by the weekend chat. The task-shaped practice of L2 is what makes the
+  mapping real.
+- Real gaps today, for an 11-13-year-old: **no authored scene narrates the past** (the interview is 15+), and none
+  practises feelings (B1).
+- No screen may name Cambridge while `claimAllowed()` is false (verified, and A2 Key coverage at least 90%: the plan's
+  kill criterion). A test enforces it.

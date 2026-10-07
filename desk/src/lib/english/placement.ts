@@ -4,7 +4,8 @@
  * The tutor writes and judges each task; this file decides which band comes next and where the
  * learner stands. Same marks in, same band out.
  */
-import { BANDS, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
+import { BANDS, type Audience, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
+import { audienceOf, topicText } from "./gate";
 
 export const MAX_TASKS = 5;
 export const ABOUT_QUESTIONS = 3;
@@ -163,7 +164,11 @@ export function cleanTopic(value: unknown): PlanTopic | null {
   if (!text(t.id, 100) || !SKILLS.includes(t.skill as SkillId) || !["all", "school", "older", "adult"].includes(String(t.audience))) return null;
   for (const [key, max] of [["title", 70], ["goal", 160], ["why", 160], ["partner", 60], ["premise", 600], ["cue", 160]] as const) if (!text(t[key], max) || !(t[key] as string).trim()) return null;
   if (!text(q.question, 160) || !Array.isArray(q.options) || q.options.length !== 2 || !q.options.every(o => text(o, 160)) || ![0, 1].includes(q.correct as number)) return null;
-  return { id: t.id as string, title: t.title as string, goal: t.goal as string, why: t.why as string, skill: t.skill as SkillId, audience: t.audience as PlanTopic["audience"], partner: t.partner as string, premise: t.premise as string, cue: t.cue as string, quiz: { question: q.question as string, options: [q.options[0] as string, q.options[1] as string], correct: q.correct as number } };
+  // The model's audience is a claim; the topic's own words can raise it, and the never-list refuses it (gate.ts).
+  // Here, so a fresh proposal and a plan already stored on disk pass the same gate.
+  const audience = audienceOf(topicText(t as Parameters<typeof topicText>[0]), t.audience as Audience);
+  if (!audience) return null;
+  return { id: t.id as string, title: t.title as string, goal: t.goal as string, why: t.why as string, skill: t.skill as SkillId, audience, partner: t.partner as string, premise: t.premise as string, cue: t.cue as string, quiz: { question: q.question as string, options: [q.options[0] as string, q.options[1] as string], correct: q.correct as number } };
 }
 /**
  * Does a plan carry the learner's interest? The phone promises "conversations picked for your level and

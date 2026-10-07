@@ -10,8 +10,8 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
-import { audienceOf } from "./gate";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { audienceOf, keywordAudience, topicText } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
 import { ConversationError } from "./errors";
@@ -168,7 +168,11 @@ audience: "adult" for anything only adults should practise (dating, alcohol, adu
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
     return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
-      .map(t => t && { ...t, audience: audienceOf(`${t.title} ${t.goal} ${t.premise}`, t.audience) })
+      // cleanTopic already raised each topic's audience from its words (title, goal, why, partner, premise, cue) and
+      // dropped a never-list topic, so the earlier title/goal/premise re-gate here is folded into it.
+      // A topic in the learner's own words keeps what they asked for: their words are gated too, so a model that tones
+      // a pitch down for a child cannot carry an adult ask past the age filter (gate.ts).
+      .map(t => t && asked ? { ...t, audience: audienceOf(asked, t.audience) ?? "adult" } : t)
       .filter((t): t is PlanTopic => !!t && allowed.includes(t.audience) && !titles.has(t.title.toLowerCase()) && !!titles.add(t.title.toLowerCase()))
       .slice(0, count);
   };
@@ -334,11 +338,18 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     const asked = typeof input.text === "string" ? input.text.trim() : "";
     if (!asked) throw new ConversationError("Say what you would like to talk about.");
     if (asked.length > TOPIC_ASK_MAX) throw new ConversationError(`Describe the topic in up to ${TOPIC_ASK_MAX} characters.`);
+    const askedFor = keywordAudience(asked);
+    if (askedFor === null) throw new ConversationError("Linga can't practise that topic. Try another one.");
+    if (!allowedAudiences(ctx).includes(askedFor)) throw new ConversationError("That topic is for older learners. Try another one.");
     await propose(k, ctx, commandId, 1, null, "Linga could not shape that topic. Try again, or say it another way.", asked);
     return true;
   }
   if (action === "plan-agree") {
-    const allowed = allowedAudiences(ctx), topics = k.topics.map(t => ({ ...t, audience: audienceOf(`${t.title} ${t.goal} ${t.premise}`, t.audience) })).filter(t => allowed.includes(t.audience));
+    const allowed = allowedAudiences(ctx), topics = k.topics.flatMap(t => {
+      // Re-gated at agreement, so a plan kept on disk before the gate cannot carry a topic past it; null refuses it.
+      const audience = audienceOf(topicText(t), t.audience);
+      return audience && allowed.includes(audience) ? [{ ...t, audience }] : [];
+    });
     saveEnglish(learnerId, { ...getLearner(learnerId).english, plan: { at: Date.now(), band: learning.placement?.band ?? prefs.level, topics } });
     commit(null, "linga");
     return true;

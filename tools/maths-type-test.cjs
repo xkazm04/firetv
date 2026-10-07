@@ -423,3 +423,31 @@ test('12 (answer line per course): a Calculus item with no working shows its ans
  }
  assert.deepEqual(W.working({n:1,question:'3x - 7 = 11',studentWorking:'',studentAnswer:'6',verdict:'right'}).lines,['x = 6']);
 });
+
+// ---- v2 M4b (2026-10-07): environments set as rows and columns ----
+test('M4b: cases, the matrices and aligned are tables of typeset cells, with their delimiters',()=>{
+ const one=(s)=>{const n=T.parseMath(s);const t=[];T.walk(n,x=>{if(x.t==='table')t.push(x);});return {n,t};};
+ let r=one('f(x) = \\begin{cases} x^2 & x < 0 \\\\ \\sqrt{x} & x \\ge 0 \\end{cases}');
+ assert.equal(r.t.length,1);assert.equal(r.t[0].env,'cases');assert.equal(r.t[0].open,'{');assert.equal(r.t[0].close,undefined);
+ assert.equal(r.t[0].rows.length,2);assert.equal(r.t[0].rows[0].length,2);assert.equal(T.flatten(r.t[0].rows[1][0]),'√(x)');
+ assert.equal(T.isTall(r.n),true,'a table takes three squares');
+ r=one('\\begin{pmatrix} 1 & 2 \\\\ 3 & 4 \\end{pmatrix}');assert.deepEqual([r.t[0].open,r.t[0].close],['(',')']);assert.equal(T.flatten(r.n),'(1 2; 3 4)');
+ r=one('\\begin{bmatrix} a & b & c \\\\ d & e & f \\\\ g & h & i \\\\ \\end{bmatrix}');assert.equal(r.t[0].rows.length,3,'a trailing \\\\ is not a fourth row');assert.equal(r.t[0].rows[2].length,3);
+ r=one('\\begin{vmatrix} 1 & \\frac{1}{2} \\\\ 0 & 1 \\end{vmatrix}');assert.deepEqual([r.t[0].open,r.t[0].close],['|','|']);assert.equal(r.t[0].rows[0][1][0].t,'frac','a cell holds any typesetting');
+ r=one('\\begin{aligned} y &= x^2 \\\\ &= x \\cdot x \\end{aligned}');assert.equal(r.t[0].env,'aligned');assert.equal(r.t[0].rows.length,2);
+ r=one('\\begin{cases} \\begin{pmatrix} 1 \\\\ 2 \\end{pmatrix} & a \\\\ 0 & b \\end{cases}');assert.equal(r.t.length,2,'a matrix inside cases');assert.equal(r.t[0].rows.length,2,'its rows do not split the outer table');
+ r=one('\\begin{matrix} \\{1\\} & 2 \\end{matrix}');assert.equal(r.t[0].rows[0].length,2);
+});
+test('M4b: an environment the desk does not set as a table reads as it always did; a missing \\end does not throw',()=>{
+ assert.equal(T.flatten(T.parseMath('\\begin{weird} x \\end{weird}')),' x ');
+ assert.doesNotThrow(()=>T.parseMath('\\begin{pmatrix} 1 & 2'));
+ assert.equal(T.parseMath('\\begin{pmatrix} 1 & 2').some(n=>n.t==='table'),false,'no end: not a table');
+});
+test('M4b: a table renders as a grid with drawn delimiters, in both voices',()=>{
+ for(const voice of ['print','hand']){
+  const h=html('A = \\begin{bmatrix} 1 & 2 \\\\ 3 & 4 \\end{bmatrix}',voice);
+  assert.match(h,/data-role="maths-table"/);assert.match(h,/data-env="bmatrix"/);assert.match(h,/grid-template-columns:repeat\(2, auto\)/);
+  assert.equal((h.match(/class="mtab-d /g)||[]).length,2,'two delimiters');assert.equal((h.match(/class="mtab-c"/g)||[]).length,4);
+ }
+ assert.equal((html('\\begin{cases} 1 & a \\\\ 2 & b \\end{cases}').match(/class="mtab-d /g)||[]).length,1,'cases: a brace on the left only');
+});

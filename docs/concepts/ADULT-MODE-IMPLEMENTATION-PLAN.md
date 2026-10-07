@@ -7,6 +7,11 @@ throwaway script run against the real modules on 2026-09-30, not committed. "1u"
 template with its test rows, a twist deck, a format card, a habit detector with its fixture table). Sizes S and M are
 relative, not measured; nothing here is L (anything L was split).
 
+> **2026-10-07: superseded for ordering by [STUDY-DESK-V2-PLAN.md](STUDY-DESK-V2-PLAN.md).** The owner answered O1 (18+),
+> O3 (loosen for confirmed 18+) and O5 (yes, as proof), and retired Field Work (A3, B2-B7) for the owner's own adult Math
+> direction ([decisions](STUDY-DESK-V2-OWNER-DECISIONS-2026-10-07.md)). The slice cards below stay the spec where the v2
+> plan names them.
+
 ## a. How to use this file
 
 1. Every session starts by reading [ADULT-MODE-TAKE-TWO.md](ADULT-MODE-TAKE-TWO.md), then this file's status table
@@ -21,15 +26,15 @@ relative, not measured; nothing here is L (anything L was split).
 
 | # | Id | Slice | Size | Depends on | Status | Branch | Commit | Date |
 |---|---|---|---|---|---|---|---|---|
-| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | not started | | | |
+| 1 | A1 | Linga: pitch a scene, played now (+ mode read, keyword gate) | M | - | keyword gate done (v2 G1); pitch a scene not started (v2 L3) | claude/trusting-franklin-a8g19w | af47204 | 2026-10-07 |
 | 2 | A2 | Linga: Cut and three notes | M | A1 | not started | | | |
 | 3 | A3 | Math: Field Work, the first job | M | A1 (mode.ts) | not started | | | |
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
 | 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
 | 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | not started | | | |
-| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | not started; `Profile.mode`, `modeOf` and its sanitising are on main from Family W4, A5 adds only the gate and the switch | | | |
-| 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | not started | | | |
-| 9 | D1 | Essay: the reading core keeps paragraphs | M | - | not started | | | |
+| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | done (v2 P1; adopted W4; O1 = 18+) | claude/trusting-franklin-a8g19w | b160c50 | 2026-10-07 |
+| 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | store and route done (v2 P2); phone, curtain and notice not started (v2 P3) | claude/trusting-franklin-a8g19w | e9271eb | 2026-10-07 |
+| 9 | D1 | Essay: the reading core keeps paragraphs | M | - | done (v2 E0) | claude/trusting-franklin-a8g19w | 307d2ec | 2026-10-07 |
 | 10 | D2 | Essay: the Workroom, a whole piece | M | A6, D1 | not started | | | |
 | 11 | B2 | Math: jobs for the derivative strand | M | A3 | not started | | | |
 | 12 | A8 | Platform: voice on the LAN, a voice per speaker | M | - | not started | | | |

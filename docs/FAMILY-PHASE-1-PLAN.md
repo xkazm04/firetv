@@ -14,7 +14,7 @@ tutor-voice paragraph a person reads. Sizes S/M/L are relative to each other, no
 |---|---|---|
 | D1 | **Skip the parent lock or confirmation in Phase 1.** | W4 loses the parent code, `household.ts`, `api/mode` and the Parent-tab confirm. It keeps `Profile.mode`, `modeOf(p)` and the audience matrix, with the age default (Family under 18, and for "other" until confirmed). Adult mode is not reachable from any screen in Phase 1, so nothing under 18 can enter it. The gate returns with the Adult build. |
 | D2 | Keep the SCHOOL tick, hide the gap line until a placement exists. | As recommended. |
-| D3 | The step-up is a picture (second ink line), no number. | As recommended. |
+| D3 | The step-up is a picture (second ink line), no number. | As recommended. **Reversed 2026-10-07: rewards are in, as mastery collectibles in each app's own world, still never points or a printed count** ([v2 decisions](concepts/STUDY-DESK-V2-OWNER-DECISIONS-2026-10-07.md) V1, X1, S1). |
 | D4 | Typed evidence counts toward "on your own" and certificates, labelled on the plate. | As recommended. |
 | D5 | Extend the `school` path in place, rename it "School maths". | As recommended. |
 | D6 | **Start with ages 11-13.** Wider ages come once the modules are validated (a hackathon is part of that). | Phase 1 targets 11-13 only. W2 needs one young voice (11-13) instead of two bands. 6-10 and 14-15 are not promised and not tested. The unit list and year bands are still written for the whole span, but only the years a 11-13-year-old meets are validated. |

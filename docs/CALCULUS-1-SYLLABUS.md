@@ -108,7 +108,7 @@ degraded:
 | `slash` | c02-p1 | `sin(x)/cos(x)` keeps its slash, because the reader stacks over a number, letters or a bracket, but not over a function. |
 | `script-one-letter` | c22-p1 | Plain `f_avg` takes one letter as the subscript: f with subscript a, then v, then g. |
 | `unknown-tex` | c01-p2 | `\mathbb{R}` is set as the word "mathbb" and then R. |
-| `cases-one-line` | c06-q1 | `\begin{cases}` reads as one line, with no rows (a declared design choice, but still a degrade). |
+| `cases-one-line` | (none since 2026-10-07) | `\begin{cases}` read as one line, with no rows. Retired by v2 M4b: cases is set as a table; c06-q1's TeX now renders. |
 | `circ-as-degree` | c01-q1 | `f \circ g` draws the composition ring as a degree sign, °. |
 
 **The pen (found by `maths-calculus-live.cjs --dry`, fixed the same day).** `markLine` leaked raw TeX when the pen's
@@ -260,7 +260,7 @@ s5 calc1-limit-laws
   c05-p1   page     renders                            | renders                            | none
   c05-p2   page     renders                            | renders                            | none
 s6 calc1-continuity
-  c06-q1   question degrades:too-wide                  | degrades:cases-one-line,too-wide   | none
+  c06-q1   question degrades:too-wide                  | renders                            | none
   c06-w1   working  renders                            | renders                            | none
   c06-c1   caption  renders                            | -                                  | none
   c06-p1   page     renders                            | renders                            | none

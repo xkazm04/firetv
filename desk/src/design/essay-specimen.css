@@ -130,6 +130,8 @@
 .essay-tv .em-r { position: relative; height: var(--em-rh, 96px); display: flex; align-items: center; gap: 16px; padding-left: 30px; opacity: .42; transition: opacity .3s, background .3s; }
 .essay-tv .em-r .em-n { font-family: var(--em-mono); font-size: 30px; font-weight: 600; width: 34px; }
 .essay-tv .em-r svg { display: block; overflow: visible; }
+.essay-tv .em-r.para { margin-top: var(--em-para-gap, 18px); }
+.essay-tv .em-r[data-pending="true"] { opacity: .22; }
 .essay-tv .em-r.cur { opacity: 1; }
 .essay-tv .em-r.cur .em-n { color: var(--em-bone); }
 .essay-tv .em-r.bad .em-n { color: var(--em-cit); }
@@ -247,3 +249,38 @@
   .essay-tv .em-move.done .em-gink { --em-f: 100%; }
   .essay-tv .em-sent .em-land { --em-u: 100%; }
 }
+
+/* v2 R1: the specimen cabinet, a drawer per lens (essay/EssayCabinet.tsx) */
+.essay-tv .em-cabinet { margin-top: 24px; }
+.essay-tv .em-drawers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+.essay-tv .em-drawer { border: 2px solid var(--em-hair); padding: 10px 10px 8px; display: grid; gap: 8px; justify-items: start; min-height: 72px; }
+.essay-tv .em-drawer[data-pinned="true"] { border-color: var(--em-cit); }
+.essay-tv .em-drawer .em-lbl { font-size: 20px; }
+.essay-tv .em-drawer-empty { display: block; width: 64px; height: 28px; border: 2px dashed var(--em-faint); }
+
+/* v2 T2: the Workroom (essay/Workroom.tsx) - titles, counts, pips and level words; never the text */
+.essay-tv .em-wr { position: absolute; left: 96px; top: 200px; width: 1100px; }
+.essay-tv .em-wr-list { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 14px; }
+.essay-tv .em-wr-list li { display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; gap: 4px 24px; padding: 16px 22px; border: 2px solid var(--em-hair); border-radius: 4px; }
+.essay-tv .em-wr-list li[data-focused="true"] { border-color: var(--em-cit); }
+.essay-tv .em-wr-list .t { font-size: 40px; font-weight: 700; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.essay-tv .em-wr-list .m { grid-column: 1; font-size: 26px; color: var(--em-mute); display: flex; gap: 14px; align-items: center; }
+.essay-tv .em-tag { font-family: var(--em-mono); font-size: 18px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border: 2px solid var(--em-faint); border-radius: 3px; }
+.essay-tv .em-pips { grid-column: 2; grid-row: 1 / span 2; align-self: center; display: flex; gap: 6px; }
+.essay-tv .em-pips i { display: block; width: 16px; height: 16px; border-radius: 2px; background: var(--em-faint); }
+.essay-tv .em-pips i[data-m="c"] { background: var(--em-cit); }
+.essay-tv .em-pips i[data-m="a"] { background: transparent; border: 3px solid var(--em-cit); }
+.essay-tv .em-pips i[data-m="r"] { height: 4px; align-self: center; background: var(--em-mute); }
+.essay-tv .em-wr-empty { font-size: 30px; line-height: 1.35; color: var(--em-mute); margin-top: 18px; max-width: 1000px; }
+.essay-tv .em-twin { position: absolute; left: 1290px; top: 200px; width: 534px; }
+.essay-tv .em-twin-ch { margin-top: 20px; padding: 16px 22px; border: 2px solid var(--em-hair); border-radius: 4px; }
+.essay-tv .em-twin-ch[data-born="true"] { border-color: var(--em-cit); }
+.essay-tv .em-twin-ch .h { display: flex; justify-content: space-between; align-items: baseline; font-size: 32px; }
+.essay-tv .em-twin-ch .born, .essay-tv .em-twin-ch .wait { font-family: var(--em-mono); font-size: 20px; letter-spacing: .1em; text-transform: uppercase; color: var(--em-mute); }
+.essay-tv .em-twin-ch dl { margin: 12px 0 0; display: grid; gap: 4px; }
+.essay-tv .em-twin-ch dl div { display: flex; justify-content: space-between; font-size: 24px; }
+.essay-tv .em-twin-ch dt { font-family: var(--em-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--em-mute); font-size: 18px; align-self: center; }
+.essay-tv .em-wr-note { font-size: 24px; color: var(--em-mute); margin-top: 16px; line-height: 1.3; }
+.essay-tv .em-wr-acts { position: absolute; left: 96px; bottom: 70px; display: flex; gap: 18px; }
+.essay-tv .em-act { font-size: 32px; font-weight: 600; padding: 16px 28px; border: 2px solid var(--em-hair); border-radius: 4px; }
+.essay-tv .em-act[data-focused="true"] { border-color: var(--em-cit); background: var(--em-cit); color: var(--em-bg); }

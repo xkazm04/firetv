@@ -1,5 +1,6 @@
 import type { Profile, SchoolSystem, Session, StudentType, Subject } from "@/lib/session/store";
 import { PATHS, type MathPath } from "@/lib/library/paths";
+import { adultAllowed, type Mode } from "@/lib/rules/mode";
 
 const ALL: Subject[] = ["maths", "english", "essay"];
 /** What the learner at the desk is interested in. No profile row means everything stays on. */
@@ -40,19 +41,37 @@ export const TYPE_BLURB: Record<StudentType, string> = {
 };
 
 /** One focusable pick on the profile screen. */
-export interface Cell { kind: "type" | "age" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; system?: SchoolSystem; sub?: Subject; path?: MathPath }
+export interface Cell { kind: "type" | "age" | "mode" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; mode?: Mode; system?: SchoolSystem; sub?: Subject; path?: MathPath }
 export interface Row { title: string; cells: Cell[] }
+
+/** The Mode row (slice A5; O1 = 18+): shown only where rules/mode adultAllowed holds, with Family and Adult (18+). */
+export const MODE_WORDS: Record<Mode, string> = { family: "Family", adult: "Adult (18+)" };
+export const MODE_BLURB: Record<Mode, string> = {
+  family: "Guided learning: school syllabus, careful topics, a voice for your age.",
+  adult: "For 18 and over. Picking it says you are. Bolder scenes and harder material.",
+};
+export const ADULT_FLOOR_BLURB = "Adult mode is for 18 and over.";
+export function modeCells(d: Pick<Profile, "age" | "type"> | null): Cell[] {
+  const open = adultAllowed(d ?? undefined);
+  return [
+    { kind: "mode", label: MODE_WORDS.family, blurb: open ? MODE_BLURB.family : `${MODE_BLURB.family} ${ADULT_FLOOR_BLURB}`, mode: "family" },
+    ...(open ? [{ kind: "mode" as const, label: MODE_WORDS.adult, blurb: MODE_BLURB.adult, mode: "adult" as const }] : []),
+  ];
+}
 
 /** The Math courses a learner can be on, in the order the profile row shows them: the school path first (the default). */
 export const COURSES: MathPath[] = ["school", "calc1"];
 /**
- * The pick rows for a draft: type, age (school types only), school system, interests, the Maths course (only while
+ * The pick rows for a draft: type, age (school types only), mode, school system, interests, the Maths course (only while
  * Maths is on), actions. The TV and the D-pad share this.
  */
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
   if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
+  // the Mode row only where there is a choice to make (18+, or "other"): under 18 the mode is Family and the row would
+  // only cost the screen its room (the caption ran into Save/Back with it, 2026-10-07 capture)
+  if (adultAllowed(d ?? { type: t })) rows.push({ title: "Mode", cells: modeCells(d ?? { type: t }) });
   rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
   if ((d?.modules ?? ALL).includes("maths")) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });

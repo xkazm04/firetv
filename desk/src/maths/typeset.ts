@@ -30,6 +30,11 @@ export type MNode = Scripts & (
   | { t: "grp"; body: MNode[] }
   /** A root; `idx` is its index when it is not a square root (a cube root's 3). */
   | { t: "sqrt"; body: MNode[]; idx?: MNode[] }
+  /**
+   * An environment set as rows and columns (v2 M4b): cases (a left brace, two columns: value and condition), the
+   * matrices (matrix, pmatrix, bmatrix, vmatrix: their brackets), aligned/align (columns joined at the &), array.
+   */
+  | { t: "table"; env: string; rows: MNode[][][]; open?: string; close?: string }
 );
 
 // ------------------------------------------------------------------ shared vocabulary
@@ -172,8 +177,17 @@ export function parseTex(src: string): MNode[] {
       if (TEX_DELIM.has(n)) return delim(n);
       // \abs{x} and \norm{v}: the argument between its bars
       if (n === "abs" || n === "norm") { const b = n === "abs" ? "|" : "‖"; return { t: "grp", body: [{ t: "open", v: b }, ...arg(), { t: "close", v: b }] }; }
-      // an environment is read as its lines: cases opens a brace, the rows follow on one line (\\ a wide gap, & a space)
-      if (n === "begin") { const env = raw().replace(/\*$/, ""); if (env === "array") { ws(); if (s[i] === "{") raw(); } return env === "cases" ? { t: "open", v: "{", big: true } : { t: "sp", w: 0 }; }
+      // v2 M4b: an environment the desk knows is set as rows and columns; any other is read as its lines, as before
+      if (n === "begin") {
+        const env = raw().replace(/\*$/, "");
+        if (env === "array") { ws(); if (s[i] === "{") raw(); }
+        const shape = TABLE_ENVS[env];
+        if (shape) {
+          const end = envEnd(s, i, env);
+          if (end) { const body = s.slice(i, end.at); i = end.after; return { t: "table", env, rows: tableRows(body), ...shape }; }
+        }
+        return env === "cases" ? { t: "open", v: "{", big: true } : { t: "sp", w: 0 };
+      }
       if (n === "end") { raw(); return { t: "sp", w: 0 }; }
       // any other command keeps its name, as a word, where it stands - and the rest of the line is still typeset
       return { t: "text", v: n };
@@ -200,6 +214,40 @@ export function parseTex(src: string): MNode[] {
     return { t: "ord", v: ch };
   }
   return seq(false);
+}
+
+// ------------------------------------------------------------------ v2 M4b: environments as tables
+
+/** The environments set as a table, with their delimiters. */
+const TABLE_ENVS: Readonly<Record<string, { open?: string; close?: string }>> = {
+  cases: { open: "{" }, matrix: {}, pmatrix: { open: "(", close: ")" }, bmatrix: { open: "[", close: "]" }, vmatrix: { open: "|", close: "|" },
+  aligned: {}, align: {}, array: {},
+};
+/** Where `\end{env}` closes the environment opened just before `from`, counting nested ones of the same name; or null. */
+function envEnd(s: string, from: number, env: string): { at: number; after: number } | null {
+  const re = new RegExp(String.raw`\\(begin|end)\s*\{${env.replace(/[*]/g, "\\*")}\*?\}`, "g");
+  re.lastIndex = from; let depth = 0, m: RegExpExecArray | null;
+  while ((m = re.exec(s))) { if (m[1] === "begin") depth++; else if (depth-- === 0) return { at: m.index, after: m.index + m[0].length }; }
+  return null;
+}
+/** Split at top level (outside braces and nested environments) on `sep`, a string. */
+function splitTop(s: string, sep: string): string[] {
+  const out: string[] = []; let depth = 0, env = 0, last = 0;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === "\\" && s.startsWith("\\begin", i)) env++;
+    if (c === "\\" && s.startsWith("\\end", i)) env--;
+    if (c === "{") depth++; else if (c === "}") depth--;
+    else if (!depth && !env && s.startsWith(sep, i) && !(sep === "&" && s[i - 1] === "\\")) { out.push(s.slice(last, i)); last = i + sep.length; i += sep.length - 1; }
+  }
+  out.push(s.slice(last));
+  return out;
+}
+/** The rows, then the cells, each typeset; a trailing empty row (a final \\) is dropped. */
+function tableRows(body: string): MNode[][][] {
+  const rows = splitTop(body, "\\\\").map((r) => r.trim());
+  if (rows.length > 1 && !rows[rows.length - 1]) rows.pop();
+  return rows.map((r) => splitTop(r, "&").map((c) => parseTex(c.trim())));
 }
 
 // ------------------------------------------------------------------ plain notation
@@ -514,6 +562,7 @@ export function flatten(nodes: MNode[]): string {
       case "frac": out += `(${flatten(n.num)})/(${flatten(n.den)})`; break;
       case "grp": out += flatten(n.body); break;
       case "sqrt": out += `√${n.idx ? `[${flatten(n.idx)}]` : ""}(${flatten(n.body)})`; break;
+      case "table": out += `${n.open ?? ""}${n.rows.map((r) => r.map(flatten).join(" ")).join("; ")}${n.close ?? ""}`; break;
     }
     if (n.sub) out += `_(${flatten(n.sub)})`;
     if (n.sup) out += `^(${flatten(n.sup)})`;
@@ -528,6 +577,7 @@ export function walk(nodes: MNode[], fn: (n: MNode) => void): void {
     if (n.t === "frac") { walk(n.num, fn); walk(n.den, fn); }
     if (n.t === "grp" || n.t === "sqrt") walk(n.body, fn);
     if (n.t === "sqrt" && n.idx) walk(n.idx, fn);
+    if (n.t === "table") for (const r of n.rows) for (const c of r) walk(c, fn);
     if (n.sup) walk(n.sup, fn);
     if (n.sub) walk(n.sub, fn);
   }
@@ -538,7 +588,7 @@ export function walk(nodes: MNode[], fn: (n: MNode) => void): void {
  */
 export function isTall(nodes: MNode[]): boolean {
   let tall = false;
-  walk(nodes, (n) => { if (n.t === "frac" || n.t === "int" || n.t === "op" || (n.t === "fn" && n.v === "lim" && n.sub) || (n.sup && n.sub)) tall = true; });
+  walk(nodes, (n) => { if (n.t === "frac" || n.t === "int" || n.t === "op" || (n.t === "fn" && n.v === "lim" && n.sub) || (n.sup && n.sub) || n.t === "table") tall = true; });
   return tall;
 }
 

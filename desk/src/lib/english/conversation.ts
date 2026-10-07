@@ -6,7 +6,7 @@ import { addDigest, getLearner, saveEnglish } from "../session/learners";
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction } from "./check";
-import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, oldestDue } from "./curriculum";
+import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, isAdult, oldestDue } from "./curriculum";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
@@ -49,7 +49,7 @@ function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-rec
 function commit(c:Conversation,screen?:Screen,check?:LevelCheck){dispatch({type:"linga.changed",conversation:c,screen,...(check?{check}:{})});}
 function parkCheck(){const k=checkAt(getSession());return k?parked(k):undefined;}
 /** The scene contract this conversation runs: its own copy, or a built-in one for a conversation saved before copies. */
-function sceneOf(c:Conversation):EnglishScene|undefined{return c.scene??ENGLISH_SCENES.find(s=>s.id===c.sceneId);}
+function sceneOf(c:Conversation):EnglishScene|undefined{return c.scene??AUTHORED_SCENES.find(s=>s.id===c.sceneId);}
 function checkCurrent(c:Conversation,token?:string):Conversation{
   const s=getSession(),now=s.conversation;
   if(s.learner?.id!==c.learnerId||s.subject!=="english"||now?.id!==c.id||(token&&now.pending!==token))throw new ConversationError("This conversation has changed. Return to the current scene.",409);

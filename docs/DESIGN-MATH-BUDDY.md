@@ -299,3 +299,45 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 Not On Air: no charcoal, no red band, no condensed caps, no ticker, no rail. Not a textbook: the working is the
 learner's hand, not typeset solutions. Not a marker's red pen: the pen names a place and a kind, never the right
 answer, and never a position the data does not hold. Not a dashboard: no percentages; a set is ticks and rings.
+
+## The collection (v2 R1, 2026-10-07)
+
+Owner decisions V1 (D3 reversed), X1 and S1: rewards are a collection drawn in Lamplight's own world, earned only by
+latches the desk already keeps (`lib/rules/collect.ts`). On Tonight, a shelf beside the wordmark holds **a lit lamp for
+every topic latched secure**, and **a star over the lamp** when that topic's step-up record is latched too (the extra
+mile). The twelve most recent are shown, oldest on the left. Never a number, never for volume, never lost. Adult mode
+shows no shelf (X2: progress, not a game). `data-role="maths-collection"`; `maths/MathsCollection.tsx`.
+
+## The worked lesson (v2 M1, 2026-10-07)
+
+"Teach me something" now teaches before it practises. Select on a generated school unit (the twelve with a generator) opens
+`worked`, a new screen. **The paper** holds three worked examples: questions from the unit's own generator, and answers in
+the desk's pen. Each answer is built from the spec's truth (`rules/school` `workedAnswer`) and shown only when `check`
+marks it right for the learner's school system, so it uses a decimal comma in cz/de, money to the cent, and the unit
+kept. **The taped card** holds the idea and three method steps (`library/worked.ts`, authored, words only). The idea may be
+reworded by the model in the learner's voice (fast, thinking off); its words are kept only with no digit, at most three
+sentences and 320 characters, else the authored idea stands. **Try six** writes the usual set; **Back to the topics**
+returns. The linear and Calculus topics still go straight to their set. Measured over 19,200 generated items (12 units,
+both tiers, four systems, 200 seeds): every one has a worked answer `check` confirms. Route `/api/worked`, job kind
+`teach`.
+
+## Calculus graphs (v2 M4a, 2026-10-07)
+
+A Calculus item open on `walk` shows its graph under the card (`maths/plot.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),
+on paper in Lamplight's hand: the axes in faint ink, the curve in ink, a tangent dashed in the desk's pen at the point a
+derivative-at item asks about, the area washed in amber between a definite integral's bounds, a dot at the point an
+evaluate or limit item is about. The window per shape comes from `plotFor`. The y range is the 5th-95th percentile,
+padded, and it includes y = 0 when that is near. A pole is never bridged. The tangent's slope is `derivativeAt`, the same
+numeric derivative the marking uses. A graph shows what the desk computed; it never marks.
+
+## Tables in the typesetter (v2 M4b, 2026-10-07)
+
+The custom typesetter (`maths/typeset.ts`, `MathText.tsx`) now lays out `cases`, `matrix`, `pmatrix`, `bmatrix`,
+`vmatrix`, `aligned`, `align` and `array` as rows and columns (`{ t: "table" }`). Before, these were read as one line.
+- Cells are typeset like any other text.
+- Brackets are drawn as strokes that stretch to the table's height, so they work in both the print and hand voices.
+- `cases` has a brace on the left only; `aligned` sets its columns right then left around the `&`.
+- An environment the desk does not set as a table reads as it always did, and an unclosed one never throws.
+- A table counts as tall (three squares of paper).
+
+KaTeX stays deferred ([concept](concepts/KATEX-TYPESETTING.md)).

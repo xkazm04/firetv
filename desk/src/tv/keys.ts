@@ -6,6 +6,8 @@
  * list from here, so the screen that draws `data-focused` and the key that moves it share one list.
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
+import { hasWorked } from "@/lib/library/worked";
+import { modeOf } from "@/lib/rules/mode";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { planSlots, planText, rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
@@ -39,7 +41,7 @@ export interface Call { url: string; body: Record<string, unknown>; onFail?: Par
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
 
 /** Essay Master draws its own screens (essay/EssayTV.tsx, the Specimen design); the On Air shell steps aside for them. */
-export const ESSAY_SCREENS = ["essaytype", "essayplan", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
+export const ESSAY_SCREENS = ["essaytype", "essayplan", "forensic", "playbook", "xray", "workroom"] as const satisfies readonly Screen[];
 export function essayOwns(s: Session): boolean { return (ESSAY_SCREENS as readonly Screen[]).includes(s.screen); }
 
 /** Linga draws and drives its own screens (english/LingaTV.tsx); the TV's map stays out of them. */
@@ -48,7 +50,7 @@ export function lingaOwns(s: Session): boolean {
 }
 
 /** Math Buddy's own screens, whatever the subject says: its home and the practice loop, and the calendar of its lessons. */
-export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
+export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar", "worked"] as const satisfies readonly Screen[];
 /**
  * Math Buddy draws its screens (maths/MathsTV.tsx, the Lamplight design): its own, and the screens it shares
  * with the other modules while maths is what is on them - a maths page and its hint, the maths units and lesson.
@@ -61,6 +63,17 @@ export function mathsOwns(s: Session): boolean {
   if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
   return false;
 }
+
+/** Is the learner at the desk in Adult mode (rules/mode)? */
+export function isAdultHere(s: Pick<Session, "profiles" | "learner" | "englishLearning">): boolean {
+  const p = s.profiles.find((x) => x.id === s.learner?.id);
+  return modeOf(p, s.englishLearning?.preferences ?? undefined) === "adult";
+}
+/** The Workroom's stops: each piece, top to bottom, then the one action. */
+export function workroomStops(s: Pick<Session, "workroom">): (string)[] { return [...(s.workroom?.pieces ?? []).map((p) => p.id), "lenses"]; }
+
+/** The worked lesson's actions, left to right (v2 M1). */
+export const WORKED_STOPS = ["try", "back"] as const;
 
 // ---- the stop lists: one per screen, drawn by the module screens and walked by tvKey ----
 const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
@@ -199,6 +212,13 @@ class Out implements Step {
     this.calls.push({ url: "/api/practice", body: opts.stretch ? { topic, stretch: true } : { topic }, onFail: { busy: false } });
     this.local.busy = true;
   }
+  /** Ask for a worked lesson (v2 M1) unless one is already being written: the topic opens, the lesson lands on `worked`. */
+  teach(local: Local, topic: string) {
+    if (local.busy || running(this.s, "teach")) return;
+    this.ev({ type: "topic.open", topic, stay: true });
+    this.calls.push({ url: "/api/worked", body: { topic }, onFail: { busy: false }, onDone: { busy: false } });
+    this.local.busy = true;
+  }
   /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
   hint(local: Local, body: Record<string, unknown>) {
     if (local.hintInFlight || running(this.s, "hint")) return;
@@ -228,6 +248,8 @@ function openWaiting(s: Session, app: Subject, o: Out) {
   if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
   else if (cont) o.nav(cont.go, cont.focus);
   else if (app === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+  // Adult mode opens Essay Master on the Workroom (v2 T2): the desk puts the summary on the TV, never the text
+  else if (app === "essay" && isAdultHere(s)) o.calls.push({ url: "/api/twin", body: { open: true } });
   else if (app === "essay") o.nav(MODULE_HOME.essay, Math.max(0, LENS_STOPS.findIndex((t) => t.id === essayWaiting(s).lens)));
   else o.nav(MODULE_HOME[app]);
 }
@@ -286,13 +308,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath, mode: at.mode } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
-    // rows of picks (type, age when a school type, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
+    // rows of picks (type, age when a school type, mode, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
     const rows = profileRows(s.draft), at = locate(rows, s.focus), cell = rows[at.r].cells[at.c];
     if (k === "right") o.focus(flat(rows, at.r, at.c + 1)); if (k === "left") o.focus(flat(rows, at.r, at.c - 1));
     if (k === "down" && at.r < rows.length - 1) o.focus(flat(rows, at.r + 1, at.c)); if (k === "up" && at.r > 0) o.focus(flat(rows, at.r - 1, at.c));
     if (k === "select") {
       if (cell.kind === "type" && cell.type) o.ev({ type: "profile.draft", patch: { type: cell.type } });
       else if (cell.kind === "age") o.ev({ type: "profile.draft", patch: { age: cell.age } });
+      else if (cell.kind === "mode" && cell.mode) o.ev({ type: "profile.draft", patch: { mode: cell.mode } });
       else if (cell.kind === "system" && cell.system) o.ev({ type: "profile.draft", patch: { system: cell.system } });
       else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
       else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; o.ev({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
@@ -381,6 +404,14 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (open >= 0) o.focus(open); else o.calls.push({ url: "/api/analyse", body: { kind: "essay", text: planText(plan), type: plan.lens } });
     }
   },
+  // the Workroom (v2 T2, Adult mode): Up/Down the pieces, Right to the actions (the lenses), Back to the desk
+  workroom: (s, k, _, o) => {
+    const stops = workroomStops(s), at = stopAt(stops, s.focus);
+    if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
+    if (k === "right" || k === "left") o.focus(at === "lenses" ? 0 : stops.indexOf("lenses"));
+    if ((k === "select" && at === "lenses") || k === "menu") o.nav("essaytype", 0);
+    if (k === "back") o.nav("landing", landingFocus(s, "essay"));
+  },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
   forensic: (s, k, local, o) => {
     if (k === "menu") { o.local.table = !local.table; return; }
@@ -411,8 +442,17 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select") { const t = stopAt(stops, s.focus); if (t) o.set(local, t.id); }
+    // a school unit with a worked lesson (v2 M1) is taught first; the others go straight to a set, as before
+    if (k === "select") { const t = stopAt(stops, s.focus); if (t && hasWorked(t.id)) o.teach(local, t.id); else if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
+  },
+  // the worked lesson (v2 M1): two actions, Try six (the usual set on this unit) and Back to the topics
+  worked: (s, k, local, o) => {
+    const stops = WORKED_STOPS;
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
+    const at = stopAt(stops, s.focus);
+    if (k === "select" && at === "try" && s.worked) o.set(local, s.worked.topic);
+    if ((k === "select" && at === "back") || k === "back" || k === "up" || k === "menu") o.nav("topics");
   },
   // Get ready for school (Family W8): Left/Right walk the units strand by strand; Select asks "The usual" or "A step up"
   // (two cells, "The usual" lit), Left/Right between them, Select writes the set as Topics does - staying here while it is

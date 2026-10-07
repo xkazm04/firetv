@@ -22,6 +22,7 @@ import { ESSAY_FONTS } from "@/essay/fonts";
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
 import { BRAND, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
+import { modeOf } from "@/lib/rules/mode";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -409,13 +410,13 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- S2 Profile · the picks on the TV, the name on the phone ----
-/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the school system, the interests, the Maths course while Maths is on, the actions. */
+/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the mode, the school system, the interests, the Maths course while Maths is on, the actions. */
 export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const d = s.draft;
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
+  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "mode" && modeOf(d ?? undefined) === c.mode) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
   return (<>
     <div className="band band-right" />
     <main className="content-full">
@@ -425,11 +426,11 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
       {/* the rows take their width from the picks, so their rules stop short of the band */}
       <div className="guide" style={{ marginTop: 16, width: "fit-content" }}>
         {rows.slice(0, -1).map((row, r) => (
-          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: "6px 0" }}>
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: rows.length > 6 ? "2px 0" : "6px 0" }}>
             <div className="u">{row.title}</div>
             <div style={{ display: "flex", gap: row.cells.length > 3 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: rows.length > 6 ? "10px 18px" : "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
@@ -440,7 +441,8 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
         <span className="cap">{cell.label}</span>
         <div className="cap-text">{cell.blurb}</div>
       </div>}
-      <div className="actions">
+      {/* in the flow, under the caption: pinned to the bottom (on-air .actions) a two-line caption ran into them (2026-10-07 capture) */}
+      <div className="actions" style={{ position: "static", marginTop: 24 }}>
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>

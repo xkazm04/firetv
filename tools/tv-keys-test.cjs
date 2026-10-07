@@ -71,18 +71,21 @@ test('case 2: Select on the lens screen posts ESSAY_TYPES[f], and the keymap hol
  for(const t of ESSAY_TYPES)assert.doesNotMatch(src,new RegExp(`["'\`]${t.id}["'\`]`),`keys.ts spells the ${t.id} lens itself`);
 });
 
+// v2 M1 (2026-10-07) moved this case to a topic with no worked lesson: a generated school unit is now taught first
+// (tools/worked-rules-test.cjs pins that), and a linear topic still asks for its set at once, as this case always pinned.
 test('case 3: Select on a topic asks for a set once, and a failed set gives Select back',async()=>{
  const {tvKey,runStep}=keys();
- const s=session({screen:'topics',focus:1});
+ const L=SYLLABUS.findIndex(t=>t.id==='linear-one-step');assert(L>=0);
+ const s=session({screen:'topics',focus:L});
  const step=tvKey(s,'select',{...LOCAL,busy:false});
- assert.deepEqual(step.events,[{type:'topic.open',topic:SYLLABUS[1].id}]);
- assert.deepEqual(step.calls,[{url:'/api/practice',body:{topic:SYLLABUS[1].id},onFail:{busy:false}}]);
+ assert.deepEqual(step.events,[{type:'topic.open',topic:SYLLABUS[L].id}]);
+ assert.deepEqual(step.calls,[{url:'/api/practice',body:{topic:SYLLABUS[L].id},onFail:{busy:false}}]);
  assert.deepEqual(step.local,{busy:true});
  const busy=tvKey(s,'select',{...LOCAL,busy:true});assert.deepEqual([busy.events,busy.calls],[[],[]],'a second Select while the set is written does nothing');
  let local={...LOCAL};const posted=[],called=[];let during;
  await runStep(step,{post:async e=>{posted.push(e);during=local.busy;},call:async(url,body)=>{called.push([url,body]);return {ok:false,status:500};},apply:p=>{local={...local,...p};}});
  assert.equal(during,true,'the wait is on screen while the set is asked for');
- assert.deepEqual(posted,[{type:'topic.open',topic:SYLLABUS[1].id}]);assert.equal(called.length,1);
+ assert.deepEqual(posted,[{type:'topic.open',topic:SYLLABUS[L].id}]);assert.equal(called.length,1);
  assert.equal(local.busy,false,'a 500 from /api/practice clears the wait');
  local={...LOCAL};await runStep(step,{post:async()=>{},call:async()=>{throw new Error('offline');},apply:p=>{local={...local,...p};}});
  assert.equal(local.busy,false,'a network failure clears the wait too');
@@ -130,7 +133,7 @@ test('case 6: keyOf maps the keyboard to the remote, and Play is the clock excep
 
 test('maths 1: mathsOwns names Math Buddy\'s screens, the shared ones only while maths is on them, and the TV routes them to their own module',()=>{
  const {mathsOwns,lingaOwns,essayOwns,MATHS_SCREENS}=keys();
- assert.deepEqual([...MATHS_SCREENS],['tonight','topics','prepare','practice','sheet','walk','calendar'],'Family W8 adds Get ready for school');
+ assert.deepEqual([...MATHS_SCREENS],['tonight','topics','prepare','practice','sheet','walk','calendar','worked'],'Family W8 adds Get ready for school; v2 M1 the worked lesson');
  for(const screen of SCREENS)for(const subject of ['maths','english','essay']){
   const s=session({screen,subject,pages:[page(subject)]});
   const want=!lingaOwns(s)&&(MATHS_SCREENS.includes(screen)||(['page','hint','units','lesson'].includes(screen)&&subject==='maths'));
@@ -154,9 +157,9 @@ const SIXV=[{n:1,verdict:'strong',note:'clear'},{n:3,verdict:'neutral',note:''},
 const essay=(patch={})=>session({subject:'essay',essay:reading(SIXV),essayAt:null,...patch});
 const at=(s,step)=>{const e=step.events.filter(x=>x.type==='essay.at');return e.length?e.at(-1).n:undefined;};
 
-test('essay 1: essayOwns names exactly the five Essay Master screens, and the TV routes them to their own module',()=>{
+test('essay 1: essayOwns names exactly the Essay Master screens (the lenses, the Paragraph plan and, v2 T2, the Workroom), and the TV routes them to their own module',()=>{
  const {essayOwns,ESSAY_SCREENS}=keys();
- assert.deepEqual([...ESSAY_SCREENS],['essaytype','essayplan','forensic','playbook','xray']);
+ assert.deepEqual([...ESSAY_SCREENS],['essaytype','essayplan','forensic','playbook','xray','workroom']);
  for(const screen of SCREENS)assert.equal(essayOwns(session({screen,subject:'essay'})),ESSAY_SCREENS.includes(screen),screen);
  const page=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
  assert.match(page,/essayOwns\(s\)/,'page.tsx asks the keymap, not a list of its own');

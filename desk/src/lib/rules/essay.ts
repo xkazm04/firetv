@@ -7,7 +7,8 @@
  * a sentence that exists.
  */
 export type Role = "claim" | "evidence" | "link" | "context";
-export interface Sentence { n: number; text: string; words: number; connectors: string[]; role: Role; }
+/** `para` (0-based) is set only when the text has more than one paragraph; a one-paragraph text reads as it always did. */
+export interface Sentence { n: number; text: string; words: number; connectors: string[]; role: Role; para?: number; }
 
 const CONNECTORS = /\b(because|therefore|however|although|which means|so that|as a result|for example|for instance|but|since|whereas|in contrast|this suggests|which suggests)\b/gi;
 const EVIDENCE = /\b(\d+%?|per cent|percent|research|study|studies|report(ed|s)?|found|data|measured|according to|for example|for instance)\b/i;
@@ -22,6 +23,15 @@ const ABBREVIATION = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|etc|eg|ie|e\.g|i\.e|vs)\.$/i;
  * because a wrong split renumbers every sentence after it and every highlight is drawn on those numbers.
  */
 export function splitSentences(text: string): Sentence[] {
+  // Paragraphs first (paragraphsOf: a blank line ends one), so a sentence never runs across a paragraph break.
+  // Numbering runs on through the piece, so a highlight still lands by number alone.
+  const paras = paragraphsOf(text);
+  if (paras.length <= 1) return splitParagraph(text, 0);
+  const out: Sentence[] = [];
+  paras.forEach((p, para) => { for (const sn of splitParagraph(p, out.length)) out.push({ ...sn, para }); });
+  return out;
+}
+function splitParagraph(text: string, before: number): Sentence[] {
   const pieces = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?]["'”’)\]]?)\s+(?=[A-Z"“])/).filter(Boolean);
   const parts: string[] = [];
   for (const p of pieces) {
@@ -31,8 +41,23 @@ export function splitSentences(text: string): Sentence[] {
   return parts.map((t, i) => {
     const connectors = (t.match(CONNECTORS) || []).map((c) => c.toLowerCase());
     const role: Role = LINK.test(t) ? "link" : EVIDENCE.test(t) ? "evidence" : "claim";
-    return { n: i + 1, text: t, words: t.split(/\s+/).length, connectors, role };
+    return { n: before + i + 1, text: t, words: t.split(/\s+/).length, connectors, role };
   });
+}
+
+/** The text of a set of sentences: one space inside a paragraph, a blank line between paragraphs. */
+export function joinSentences(sentences: Pick<Sentence, "text" | "para">[]): string {
+  return sentences.map((s, i) => (i === 0 ? "" : s.para !== sentences[i - 1].para ? "\n\n" : " ") + s.text).join("");
+}
+
+/** How many paragraphs a reading holds: 1 unless the sentences carry `para`. */
+export const paragraphCount = (sentences: Pick<Sentence, "para">[]) => new Set(sentences.map((s) => s.para ?? 0)).size || 1;
+
+/** The numbered lines a reading prompt shows the model; a "Paragraph k" line opens each paragraph of a longer piece. */
+export function numberedLines(sentences: Sentence[]): string {
+  const many = paragraphCount(sentences) > 1;
+  return sentences.map((s, i) => (many && (i === 0 || s.para !== sentences[i - 1].para) ? `${i ? "\n" : ""}Paragraph ${(s.para ?? 0) + 1}:\n` : "") +
+    `${s.n}. ${s.text}  [${s.words} words, first-pass role: ${s.role}]`).join("\n");
 }
 
 // ---- text in: files and messages, one paragraph at a time ----
@@ -73,6 +98,24 @@ export const ESSAY_PARAGRAPH_MAX_CHARS = 4000;
 export function essayTooLong(text: unknown): string | null {
   if (typeof text !== "string" || text.length <= ESSAY_PARAGRAPH_MAX_CHARS) return null;
   return `That paragraph is too long to read in one go. Split it in two and send one part at a time (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters).`;
+}
+
+/**
+ * A whole piece (v2 E1) is read one call per paragraph, so its size is a count of calls. 30 paragraphs is a long
+ * school essay several times over; the cap is not measured (as the caps above) and is to be revisited after use.
+ */
+export const PIECE_PARAGRAPHS_MAX = 30;
+export const PIECE_MAX_CHARS = 100 * 1024;
+
+/** Why a whole piece cannot be read in one go, or null. Each paragraph must fit the paragraph cap; never truncates. */
+export function pieceProblem(text: unknown): string | null {
+  if (typeof text !== "string" || !text.trim()) return "There is nothing to read. Write or send a piece first.";
+  if (text.length > PIECE_MAX_CHARS) return `That piece is too long to read in one go. Keep it under ${PIECE_MAX_CHARS / 1024} KB.`;
+  const ps = paragraphsOf(text);
+  if (ps.length > PIECE_PARAGRAPHS_MAX) return `That is ${ps.length} paragraphs. The desk reads up to ${PIECE_PARAGRAPHS_MAX} at a time: send it in parts.`;
+  const long = ps.findIndex((p) => essayTooLong(p) !== null);
+  if (long >= 0) return `Paragraph ${long + 1} is too long to read in one go. Split it in two (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters each).`;
+  return null;
 }
 
 /**
@@ -175,10 +218,10 @@ export function revise<R extends ReadingLike>(reading: R, n: number, text: strin
   const one = splitSentences(t);
   if (one.length !== 1) return { ok: false, error: `That is ${one.length} sentences. Send sentence ${n} as one sentence.` };
   if (t.toLowerCase() === norm(reading.sentences[at].text).toLowerCase()) return { ok: false, error: `That is sentence ${n} as it was. Change it, then send it.` };
-  const sentences = reading.sentences.map((s, i) => (i === at ? { ...one[0], n: s.n } : s));
-  const rebuilt = sentences.map((s) => s.text).join(" ");
+  const sentences = reading.sentences.map((s, i) => (i === at ? { ...one[0], n: s.n, ...(s.para !== undefined ? { para: s.para } : {}) } : s));
+  const rebuilt = joinSentences(sentences);
   const again = splitSentences(rebuilt);
-  if (again.length !== sentences.length || again.some((s, i) => s.text !== sentences[i].text))
+  if (again.length !== sentences.length || again.some((s, i) => s.text !== sentences[i].text || s.para !== sentences[i].para))
     return { ok: false, error: `In the paragraph that would not stay one sentence. Start it with a capital and end it with a full stop.` };
   return { ok: true, reading: { ...reading, text: rebuilt, sentences, stats: paragraphStats(sentences) } };
 }

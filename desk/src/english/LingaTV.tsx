@@ -1,7 +1,8 @@
 "use client";
+import { LingaKeys } from "./LingaKeys";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
-import { ENGLISH_SCENES } from "@/lib/english/curriculum";
+import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
@@ -115,6 +116,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     </>}
     <footer className="lo-footer linga-footer">
       {v.tag&&<span className="lo-where">{v.tag}</span>}
+      <LingaKeys s={s}/>
       {dots&&<Dots dots={dots}/>}
       <span className="lo-status">{status}</span>
       <button onClick={()=>go(menuKey)}>{menuKey.label}</button>{repeat&&<button onClick={()=>go(repeat)}>{repeat.label}</button>}
@@ -135,7 +137,7 @@ function artFor(h:Hero,s:Session):ArtKey{
     case "heading":return "check";
     case "choices":{
       if(s.screen!=="linga-talk"||!c)return "check";
-      return artOf(c.sceneId,c.scene?.skill??ENGLISH_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill);
+      return artOf(c.sceneId,c.scene?.skill??AUTHORED_SCENES.find(x=>x.id===c.sceneId)?.skill??c.focusSkill);
     }
     default:return "start";
   }

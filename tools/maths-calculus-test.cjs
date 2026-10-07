@@ -169,7 +169,7 @@ function lineReasons(line,kind,tex){
  if(tex&&T.looksTex(line)){
   const cmds=new Set([...line.matchAll(/\\([a-zA-Z]+)/g)].map(m=>m[1]));
   if(ls.some(n=>n.t==='text'&&cmds.has(n.v)))degrades.add('unknown-tex');
-  if(/\\begin\{cases\}/.test(line))degrades.add('cases-one-line');
+  // v2 M4b (2026-10-07): cases is set as a table now (typeset.ts), no longer one line: not a degrade
   if(/(?<!\^\{?)\\circ(?![a-zA-Z])/.test(line))degrades.add('circ-as-degree');
  }
  if(!tex&&/[_^][A-Za-z]{2,}/.test(line))degrades.add('script-one-letter');

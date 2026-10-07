@@ -3035,3 +3035,63 @@ export function withheldSchool(spec: unknown): string {
   const u = unitOf(spec);
   return u && Object.prototype.hasOwnProperty.call(SCHOOL_WITHHELD, u) ? SCHOOL_WITHHELD[u as keyof typeof SCHOOL_WITHHELD] : SCHOOL_WITHHELD.any;
 }
+
+// ---- v2 M1: the worked answer a lesson shows ----
+
+/** A rational as plain candidates: whole, fraction, mixed, terminating decimal (up to 4 places), percent. */
+function writings(t: Q): string[] {
+  const neg = t.n < Z, n = neg ? -t.n : t.n, d = t.d, sign = neg ? "-" : "", out: string[] = [];
+  if (d === ONE) out.push(`${sign}${n}`);
+  else {
+    out.push(`${sign}${n}/${d}`);
+    if (n > d) out.push(`${sign}${n / d} ${n % d}/${d}`);
+  }
+  let dd = d; while (dd % BigInt(2) === Z) dd /= BigInt(2); while (dd % BigInt(5) === Z) dd /= BigInt(5);
+  if (dd === ONE) {
+    for (let places = 1; d !== ONE && places <= 4; places++) {
+      const scale = TEN ** BigInt(places);
+      if ((n * scale) % d === Z) { const v = (n * scale) / d, s = v.toString().padStart(places + 1, "0"); out.push(`${sign}${s.slice(0, -places)}.${s.slice(-places)}`); break; }
+    }
+    // a percent, whole or with up to 2 places (27/40 = 67.5%)
+    for (let places = 0; places <= 2; places++) {
+      const scale = BigInt(100) * TEN ** BigInt(places);
+      if ((n * scale) % d !== Z) continue;
+      const v = ((n * scale) / d).toString();
+      out.push(places ? `${sign}${v.padStart(places + 1, "0").slice(0, -places)}.${v.padStart(places + 1, "0").slice(-places)}%` : `${sign}${v}%`);
+      break;
+    }
+  }
+  return out;
+}
+
+/**
+ * The answer a worked example prints, decided by code twice: built from the spec's own truth (read), then kept only
+ * when `check` marks it right for this school system (so a lesson never shows an answer the desk would ring). The first
+ * writing `check` accepts wins, in the order whole, fraction, mixed, decimal, percent, each bare and then with the
+ * spec's unit; a ratio is written a:b. Null when no writing passes, and then the lesson withholds that example.
+ */
+export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYSTEM): string | null {
+  const r = read(spec);
+  if (!r.ok) return null;
+  const unit = specUnit(r.spec), K = r.kind;
+  let candidates: string[];
+  if (K.k === "ratio-simplify") candidates = [`${r.truth.n}:${r.truth.d}`];
+  else if (K.k === "ratio-share" && r.pair) candidates = [`${r.pair[0].n / r.pair[0].d} and ${r.pair[1].n / r.pair[1].d}`, `${r.pair[0].n / r.pair[0].d}:${r.pair[1].n / r.pair[1].d}`];
+  else candidates = writings(r.truth);
+  // the form the question speaks in comes first: a question with a decimal, a percent or a unit is answered as a
+  // decimal (31.2 litres, not 156/5); a fraction question keeps its fraction. `check` still decides which forms pass.
+  const expr = String((r.spec as { expr?: unknown }).expr ?? "");
+  if (unit || /[.%]/.test(expr) || ["percent-of", "percent-change", "rate", "area", "stat"].includes(r.spec.shape)) {
+    const dec = (c: string) => /^-?\d+\.\d+$/.test(c);
+    candidates = [...candidates.filter(dec), ...candidates.filter((c) => !dec(c))];
+  }
+  // money is written to the cent: £70.20, not £70.2
+  const cents = (c: string) => (/^-?\d+[.,]\d$/.test(c) ? `${c}0` : c);
+  const withUnit = (c: string) => (!unit ? [] : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
+  // a decimal is written the way the learner's school writes it: a comma first where the system uses one (cz, de)
+  const comma = system === "cz" || system === "de";
+  const local = (c: string) => (/\d\.\d/.test(c) ? (comma ? [c.replace(".", ","), c] : [c, c.replace(".", ",")]) : [c]);
+  // with its unit first where it has one (30 m2, not a bare 30), then bare
+  for (const c of candidates.flatMap(local).flatMap((c) => [...withUnit(c), c])) if (check(spec, c, system).verdict === "right") return c;
+  return null;
+}

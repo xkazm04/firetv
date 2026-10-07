@@ -9,13 +9,15 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks";
 import { ESSAY_FONTS } from "./fonts";
+import { EssayCabinet } from "./EssayCabinet";
+import { WorkroomScreen } from "./Workroom";
 
 const MUTE = "rgba(238,233,224,.5)";
 
@@ -27,7 +29,8 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
         : s.screen === "essayplan" ? <EssayPlan s={s} />
         : s.screen === "forensic" ? <Forensic s={s} table={table} />
         : s.screen === "playbook" ? <Playbook s={s} focus={s.focus} />
-        : s.screen === "xray" ? <Xray s={s} /> : null}
+        : s.screen === "xray" ? <Xray s={s} />
+        : s.screen === "workroom" ? <WorkroomScreen s={s} focus={s.focus} /> : null}
     </div>
   );
 }
@@ -137,7 +140,8 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
-  const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
+  const reading = a?.piece && a.piece.read.length + a.piece.failed.length < a.piece.paragraphs;
+  const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: a.summary }
@@ -185,6 +189,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
           <div className="em-door" data-role="essay-plan-door"><span>Start from the pattern</span>{at === "plan" && <span className="em-key">OK</span>}</div>
         </div>
       )}
+      <EssayCabinet s={s} />
     </aside>
     <div className="em-caption"><Caption label={cap.label} text={cap.text} /></div>
   </>);
@@ -246,13 +251,17 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   const first = a.sentences.find((x) => faulty.has(x.n));
   const w0 = (a.sentences[0]?.text ?? "").split(",")[0].split(/\s+/).filter(Boolean);
   const opening = (w0.length > 8 ? w0.slice(0, 6) : w0).join(" ");
-  const W = 432, gap = 8, n = a.sentences.length, tot = a.sentences.reduce((x, y) => x + y.words, 0) || 1, per = (W - gap * Math.max(0, n - 1)) / tot;
+  // a piece (v2 E1): a wider gap between paragraphs, and a paragraph still being read drawn as an outline
+  const breaks = a.sentences.filter((sn, i) => i > 0 && sn.para !== a.sentences[i - 1].para).length, PARA_GAP = 16;
+  const W = 432, gap = 8, n = a.sentences.length, tot = a.sentences.reduce((x, y) => x + y.words, 0) || 1, per = (W - gap * Math.max(0, n - 1) - (PARA_GAP - gap) * breaks) / tot;
+  const pending = (sn: (typeof a.sentences)[number]) => !!a.piece && !a.piece.read.includes(sn.para ?? 0);
   let x = 0;
-  const blocks = a.sentences.map((sn) => {
-    const bw = Math.max(4, sn.words * per), bad = faulty.has(sn.n), at = x; x += bw + gap;
+  const blocks = a.sentences.map((sn, i) => {
+    if (i > 0 && sn.para !== a.sentences[i - 1].para) x += PARA_GAP - gap;
+    const bw = Math.max(4, sn.words * per), bad = faulty.has(sn.n), at = x, wait = pending(sn); x += bw + gap;
     return (
-      <g key={sn.n}>
-        <rect x={at.toFixed(1)} y="28" width={bw.toFixed(1)} height="30" fill={bad ? CIT : "rgba(238,233,224,.3)"} />
+      <g key={sn.n} data-para={sn.para ?? 0} data-pending={wait}>
+        <rect x={at.toFixed(1)} y="28" width={bw.toFixed(1)} height="30" fill={wait ? "none" : bad ? CIT : "rgba(238,233,224,.3)"} stroke={wait ? "rgba(238,233,224,.45)" : "none"} strokeWidth={wait ? 2 : 0} strokeDasharray={wait ? "6 5" : undefined} />
         {bad && bw > 30 && <path d={`M${at + 12} 43 l14 -9 v18 z`} fill="#0B0B0D" />}
         {(bw >= 26 || bad) && <text x={(at + bw / 2).toFixed(1)} y="96" textAnchor="middle" fontFamily="var(--em-mono)" fontWeight="600" fontSize="28" fill={bad ? CIT : "rgba(238,233,224,.55)"}>{sn.n}</text>}
       </g>
@@ -260,7 +269,7 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   });
   return (
     <div className={`em-panel${focused ? " is-focused" : ""}`} data-role="essay-specimen-card" data-focused={focused}>
-      <div className="em-lbl">Last paragraph</div>
+      <div className="em-lbl">{a.piece ? `Last piece · ${a.piece.read.length < a.piece.paragraphs - a.piece.failed.length ? `reading ${a.piece.read.length + a.piece.failed.length + 1} of ${a.piece.paragraphs}` : `${a.piece.paragraphs} paragraphs`}` : "Last paragraph"}</div>
       <h2>“{opening}…”</h2>
       <svg className="em-strip" width={W} height="104" viewBox={`0 0 ${W} 104`} aria-hidden="true">
         {blocks}
@@ -341,15 +350,18 @@ const verdictOf = (m: Map<number, Verdict>, n: number) => m.get(n)?.verdict ?? "
 /** The paragraph as one arrow per sentence, as long as the sentence; faulty sentences point back, in citron. */
 function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<number, Verdict> }) {
   const maxW = Math.max(1, ...a.sentences.map((x) => x.words));
-  const rh = Math.max(44, Math.min(96, Math.floor(740 / a.sentences.length)));
+  // a longer piece keeps its paragraphs: a gap opens before each new one, and the rows give it the room
+  const paras = paragraphCount(a.sentences), PARA_GAP = 18;
+  const rh = Math.max(44, Math.min(96, Math.floor((740 - PARA_GAP * (paras - 1)) / a.sentences.length)));
   return (
-    <aside className="em-rail" data-role="essay-rail" style={{ "--em-rh": `${rh}px` } as CSSProperties}>
-      <div className="em-lbl">Paragraph</div>
+    <aside className="em-rail" data-role="essay-rail" data-paragraphs={paras} style={{ "--em-rh": `${rh}px`, "--em-para-gap": `${PARA_GAP}px` } as CSSProperties}>
+      <div className="em-lbl">{paras > 1 ? `${paras} paragraphs` : "Paragraph"}</div>
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
           const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
+          const opens = j > 0 && x.para !== a.sentences[j - 1].para, wait = !!a.piece && !a.piece.read.includes(x.para ?? 0);
           return (
-            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))}>
+            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0} data-pending={wait}>
               <span className="em-n">{x.n}</span>
               <Arrow len={Math.round(56 + (124 * x.words) / maxW)} against={bad} color={bad ? CIT : vd === "strong" ? BONE : MUTE} />
               {/* a rewritten sentence keeps its old arrow as a ghost under the new one: the before and after as one picture */}
