@@ -163,7 +163,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
-      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">Goal</span>{goal}</DataLine>}</>;
+      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;

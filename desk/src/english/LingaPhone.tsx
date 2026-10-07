@@ -6,6 +6,7 @@ import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PRO
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
+import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
@@ -63,7 +64,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       :panelOf==="moment"&&c?<MomentPanel c={c} run={run} busy={pending}/>
       :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")}/>
       :<>
-        <p><b>{c.title}</b><br/>{c.goal}</p>
+        <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
         <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
         {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
         {c.paused?<button className="pbtn" data-signal="true" disabled={refused("resume")} onClick={()=>run("resume")}>Resume conversation</button>:st==="coaching"?<>

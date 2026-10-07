@@ -12,6 +12,7 @@ import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
+import { currentStep, missionDone } from "./mission";
 import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
@@ -92,7 +93,9 @@ export type Hero =
   | { kind: "topics"; kicker: string; title: string; topics: Array<{ id: string; title: string; skill: string; why: string; art: SceneArt }>; selected: number }
   | { kind: "scene"; kicker: string; title: string; who: string; said: string; subtitle: string; art: string; small: boolean;
       /** the scene's partner, for the name tag; its cue as a sentence to take with you; its picture; the level and length */
-      partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string }
+      partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string;
+      /** the scene's mission, when it has one: the subtitle is then its current step (mission.ts), and the TV's data line reads "Now" */
+      steps?: Array<{ text: string; state: Dot }> }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string }
@@ -426,7 +429,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
     } else {
-      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? c.goal : "", art: c.sceneId, small: true,
+      hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? (c.mission ? currentStep(c.mission) ?? "Mission done" : c.goal) : "", art: c.sceneId, small: true,
+        ...(c.mission ? { steps: c.mission.steps.map((text, i) => ({ text, state: (i < c.mission!.reached.length ? "done" : i === c.mission!.reached.length ? "current" : "open") as Dot })) } : {}),
         partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
       const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") });
       const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }) : quiz;
@@ -435,6 +439,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       actions = st === "unprepared" ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })), chooseSituation("Choose a different situation.", "Choose another")]
         : st === "paused" ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"), { disabled: refused("finish") })]
         : [...(first ? [first] : []), second];
+      // The mission is done: the way on is the primary action, and the child may still keep talking (turn.ts takes a turn).
+      if (c.mission && missionDone(c.mission) && st === "your-turn") {
+        const done = "Mission done. See what you did tonight.";
+        actions = [act("finish", "See what you did", done, cmd("finish"), { disabled: refused("finish") }), ...actions.slice(0, 1)];
+        if (!c.cue && !c.capture && captionTag !== "Used again") caption = done;
+      }
     }
   } else { caption = "Choose a situation to begin."; actions = [chooseSituation(caption)]; }
 
@@ -551,6 +561,12 @@ export function progressDots(s: Session): Dot[] | null {
   const lc = activeCheck(s), l = s.englishLearning, home = s.screen === "linga" || s.screen === "tonight";
   const marks = (total: number, done: number): Dot[] => Array.from({ length: total }, (_, i) => i < done ? "done" : i === done ? "current" : "open");
   const state = home ? lingaHome(s) : null;
+  // a scene's mission (mission.ts): on the talk, moment, coach and recap screens; the recap shows how far the scene went
+  const m = s.conversation?.mission;
+  if (m && ["linga-talk", "linga-moment", "linga-coach", "linga-recap"].includes(s.screen)) {
+    const reached = Math.min(m.reached.length, m.steps.length);
+    return m.steps.map((_, i): Dot => i < reached ? "done" : i === reached && s.screen !== "linga-recap" ? "current" : "open");
+  }
   if (lc && (s.screen === "linga-check" || state === "check-part-way") && (lc.stage === "about" || lc.stage === "tasks"))
     return lc.stage === "about" ? marks(ABOUT_QUESTIONS, Math.min(lc.turns.filter(t => t.role === "learner").length, ABOUT_QUESTIONS)) : marks(MAX_TASKS, Math.min(lc.tasks.length, MAX_TASKS));
   const topics = l.plan?.topics ?? [];
@@ -576,7 +592,7 @@ export function viewText(v: LingaView): string {
     case "heading": out.push(h.kicker, h.title); break;
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
-    case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `Goal: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
+    case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `${h.steps ? "Now" : "Goal"}: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`, ...(h.steps ? [`Mission: ${h.steps.map(x => `${x.text} (${x.state === "done" ? "done" : x.state === "current" ? "now" : "to come"})`).join(" · ")}`] : [])); break;
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
