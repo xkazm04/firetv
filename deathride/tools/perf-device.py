@@ -91,6 +91,18 @@ def host_cpu(name):
     except (OSError, subprocess.SubprocessError) as e:
         (a.output / name).write_text(json.dumps({'error': repr(e)}))
 
+def device_counters(name):
+    # P11: Wi-Fi bytes and per-thread CPU ticks (utime+stime) of the threads that took the render thread's CPU in the
+    # trace (system_server's NetworkStats, the audio mixer and HAL writer, this app), read once before and once after
+    # the probe, never during it.
+    script = ('for p in $(pidof system_server) $(pidof audioserver) $(pidof fireos.hardware.audio.service) $(pidof ' + package + '); '
+              'do for t in /proc/$p/task/*; do echo "$p $(cat $t/stat)"; done; done; echo ==net; cat /proc/net/dev; echo ==uptime; cat /proc/uptime')
+    try:
+        (a.output / name).write_bytes(adb('shell', script))
+    except (OSError, subprocess.SubprocessError) as e:
+        (a.output / name).write_text(repr(e))
+
+device_counters('device-counters-start.txt')
 host_cpu('host-cpu-start.json')
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
@@ -109,5 +121,6 @@ with (a.output / 'logcat.txt').open('wb') as log:
         logcat.terminate()
         logcat.wait(timeout=10)
 host_cpu('host-cpu-end.json')
+device_counters('device-counters-end.txt')
 print(json.dumps({'output': str(a.output), 'returncode': result.returncode, **receipt}), flush=True)
 raise SystemExit(result.returncode)
