@@ -46,3 +46,40 @@ val extractNatives by tasks.registering {
     }
 }
 tasks.named("preBuild") { dependsOn(extractNatives) }
+
+// Release-only lossless PNG re-encode (owner ruling 2026-10-07). A generated asset dir wired into the release variant only:
+// it holds just the changed PACKAGED copies (re-encoded PNGs, catalog JSONs with their sha256 pins rewritten) and overrides
+// the same paths from assets/. Debug, desktop and tests keep reading assets/ unchanged. Tool pinned in release-assets/requirements.txt;
+// -PnoPngReencode=true ships the original bytes (like -PnoMinify) and logs it.
+val releaseAssetsDir = layout.projectDirectory.dir("release-assets")
+abstract class PngReencode @javax.inject.Inject constructor(private val execOps: org.gradle.process.ExecOperations) : DefaultTask() {
+    @get:Internal abstract val assetsRoot: DirectoryProperty
+    @get:InputFiles @get:PathSensitive(PathSensitivity.RELATIVE) abstract val assetInputs: ConfigurableFileCollection // PNGs of the shipped dirs + every JSON; audio changes do not rerun zopfli
+    @get:InputFiles @get:PathSensitive(PathSensitivity.RELATIVE) abstract val tooling: ConfigurableFileCollection
+    @get:Input abstract val python: Property<String>
+    @get:OutputDirectory abstract val outDir: DirectoryProperty
+    @get:OutputFile abstract val manifest: RegularFileProperty
+    @TaskAction fun run() {
+        project.delete(outDir)
+        val script = tooling.files.first { it.name.endsWith(".py") }
+        val req = tooling.files.first { it.name == "requirements.txt" }
+        execOps.exec {
+            commandLine(python.get(), "-I", script.path, assetsRoot.get().asFile.path, outDir.get().asFile.path, manifest.get().asFile.path, req.path)
+        }
+    }
+}
+val pngReencode = tasks.register<PngReencode>("pngReencode") {
+    assetsRoot.set(rootProject.layout.projectDirectory.dir("assets"))
+    assetInputs.from(rootProject.fileTree("assets") { include("phase2-states/**", "story-art/**", "regions/**", "**/*.json") })
+    tooling.from(releaseAssetsDir.file("reencode_release_assets.py"), releaseAssetsDir.file("requirements.txt"))
+    python.set(providers.gradleProperty("python").orElse("python"))
+    outDir.set(layout.buildDirectory.dir("generated/release-assets"))
+    manifest.set(layout.buildDirectory.file("outputs/png-reencode-manifest.json"))
+}
+if (providers.gradleProperty("noPngReencode").isPresent) {
+    logger.lifecycle("PNG re-encode: -PnoPngReencode set, the release ships the original asset bytes")
+} else {
+    androidComponents.onVariants(androidComponents.selector().withBuildType("release")) { variant ->
+        variant.sources.assets?.addGeneratedSourceDirectory(pngReencode, PngReencode::outDir)
+    }
+}
