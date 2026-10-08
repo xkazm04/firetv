@@ -72,7 +72,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 18 | M4c | Math: multi-step problems, the chain checker (adult B1) and checked working lines | 5 | - | done (built locally on main; kill test passed: clean chains rung 0 of 50, slips rung at their own line 50, left null 0, rung at another line 0; TV captures owed) | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
 | 19 | T3 | Twin: habit detectors (adult D5) | 5 | E0 | done (built locally on main; 6 of 6 detectors pass the zero-false-positive gate; wired to nothing, no capture owed) | 267694f5, 79da4106 | 2026-10-08 |
 | 20 | M2b | Math: the first GCSE Foundation units beyond the school path (generators, code-checked) | 5 | M2a | done (built locally on main; kill test passed for both units: 0 not well formed, 0 not fair, 0 of 4000 worked answers not right, every slip reachable and detected; the path is 17 topics; 23 of 86 statements touched, claim off; TV captures owed) | f0f59399, 79777e2a, 510759b6, 1206a4ca, 667102a3 | 2026-10-08 |
-| 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | not started | | |
+| 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | done (built locally on main, no PR, nothing pushed; heldOf table 41 rows: held 14, not held 12, null 15; a take writes nothing to the learner record; the TV and phone captures and one live take owed) | 6d90c429, fc9a1433, 23e11639, b2870aab | 2026-10-08 |
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
 | 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | not started | | |
@@ -514,3 +514,37 @@ lines per unit, the worked methods and the two acts.
 Gate: `cd desk && npm run test:rules` green; `tsc --noEmit --incremental false` clean. This closes batch 5 (L3, M4c, T3, M2b).
 Next: the owner's batch 5 review, then batch 6 (L4, T4, T5, M3a). M5 (a failed paper read against the map) reads these units on
 School maths; whether they stay there or move to a path of their own is a question for the owner.
+
+### 2026-10-08 · batch 6 · L4 · autopilot/accepted-idea-delivery-9ca5af6e
+Built locally on main per the owner's 2026-10-08 10:05 ruling: batch 6 one slice per run through the gate, L4 first, then
+M3a; merged into local main through the gate; no PR, nothing pushed. T4 and the full T5 wait for the T1 live probe.
+Commits: 6d90c429 (the card; the duplicate M2b card removed), fc9a1433 (take.ts heldOf and forkOf, the table), 23e11639
+(the Take record, the take-two state, take-two and take-end in the turn table and conversation.ts), b2870aab (the view,
+LingaTV, LingaPhone, DESIGN-LINGA.md, STUDY-DESK-SCREENS.md), and this entry.
+Gate: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit --incremental false` clean. No existing
+assertion changed; the thinking:false caller list (`linga-rules-test.cjs`, thinking case 2) is unchanged: every call of a
+take is in conversation.ts and take.ts is pure. New rows: `linga-rules-test` take cases 1-8 (1 the heldOf table, 2 forkOf,
+3 turnState/accepts/refusal for take-two and take-end in every state, 4 the full stubbed run, 5 refusals inside a take and
+Leave over a reply in flight, 6 the recap's marks and branch, 7 the phone's Take Two per note, 8 the take on linga-talk);
+`adult-rules-test` 'L4: Take Two in Family mode is refused ...' (a 13-year-old, a 16-year-old, an adult who chose Family).
+heldOf table (41 rows; held / not held / null): form 6 / 6 / 6, word 5 / 6 / 3, meaning 3 / 0 / 3, register 0 / 0 / 3;
+15 null in all. The parrot row: "Yesterday I booked a room, as you say. Yesterday I go to the bank." on the form note
+"Yesterday I book" is not held. The full run: two calls for the take (one per cast turn, fast, thinking off, the replay
+schema), none to start or end it; the learner record's english, the first take's turns and its cut notes deep-equal
+before and after.
+Choices, stated: (1) the names are `take-two` (action and state) and `take-end`; `replay` is untouched. (2) heldOf takes
+a third, optional argument, the noted turn's text, because the form rule needs the noted sentence's time marker; it is
+`heldOf(note, line, noted?)`. (3) A form note is decided by the tense rule with or without a better phrase; "a note with
+no better phrase: null" is applied to word and meaning notes (a question below). (4) C1's "take turns stored as
+supported" is replaced by the brief's rule: a take's lines never reach the evidence at all. (5) C1's `noteId` is `note`,
+the index in `cut.notes` (notes have no id). (6) The take ends by itself after the second cast turn and lands on the
+recap, so that last cast line is shown in the phone's transcript of the take while it runs but never spoken on the TV (a
+question below). (7) Inside a take the help ladder is not offered either, and Leave over a reply in flight cancels the
+reply and stays on the take; Back on the remote is Back to the notes. Leave outside a take is unchanged. (8)
+`design/linga.css` is outside this slice: the struck quote is an `<s>`, the branch borrows the data line's style.
+(9) phone-panel-test and linga-ui-test do not pin the Linga recap, so the UI rows are in linga-rules-test, read through
+the uat surface (no stray, nothing unrendered).
+Owed to the owner's batch 5+6 review: the TV take (the branch, a struck note and an open one) at 1920 x 1080 and 1280 x
+720; the phone recap at 390 px; one live take on the real engine; a branch and struck-note style in `design/linga.css` if
+the capture asks for one.
+Next: M3a (row 24), one slice per run.

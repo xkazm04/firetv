@@ -30,7 +30,7 @@ relative, not measured; nothing here is L (anything L was split).
 | 2 | A2 | Linga: Cut and three notes | M | A1 | done as v2 L3 (built locally on main; captures and the company sim's live run owed) | autopilot/accepted-idea-delivery-9d230b69 | c3649e60, 123ea27c, aa5ac64d | 2026-10-07 |
 | 3 | A3 | Math: Field Work, the first job | M | A1 (mode.ts) | not started | | | |
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
-| 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
+| 5 | C1 | Linga: Take Two | M | A2 | done as v2 L4 (built locally on main; a take is never evidence, heldOf 41 rows; captures and one live take owed) | autopilot/accepted-idea-delivery-9ca5af6e | fc9a1433, 23e11639, b2870aab | 2026-10-08 |
 | 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | done as v2 M4c (built locally on main; kill test passed: 0 of 50 clean rung, 50 of 50 slips at their own line) | autopilot/accepted-idea-delivery-857aadd8 | 1a00ec08, aaaee240, 1e33a656 | 2026-10-07 |
 | 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | done (v2 P1; adopted W4; O1 = 18+) | claude/trusting-franklin-a8g19w | b160c50 | 2026-10-07 |
 | 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | store and route done (v2 P2); phone, curtain and notice not started (v2 P3) | claude/trusting-franklin-a8g19w | e9271eb | 2026-10-07 |
@@ -244,7 +244,7 @@ screen doc (`docs/STUDY-DESK-SCREENS.md` and the module's `docs/DESIGN-*.md`) up
 - Accept: gate; TV capture of a take (the branch, the struck or open note).
 - Cost: +2-3 calls per take. Authoring: 0u.
 - Could go wrong: "held" by containment rewards parroting; the note stays a reading unless a rule or phrase stands behind it, and a take is never evidence.
-- Done: [ ] gate [ ] capture [ ] docs.
+- Done: [x] gate [ ] capture [x] docs. (Built as v2 L4, amended: the take's lines never reach the evidence, not "stored as supported"; see the v2 plan, row 21 and its log.)
 
 **B1. Math: the chain checker and the 100-chain fixture** (S)
 - Goal: a pure checker that rings the first line of calculus working that stops holding, measured on 50 clean and 50 planted chains before any screen uses it.
