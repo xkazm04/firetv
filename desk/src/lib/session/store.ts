@@ -22,6 +22,7 @@ import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
 import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
+import { isPartLabel, type PartLabel } from "../rules/calc-word";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
 import { adultAllowed, type Mode } from "../rules/mode";
@@ -121,6 +122,13 @@ export interface PracticeItem {
    * on the step-up record only (lib/session/learners.ts `stretch`), never on the usual one. Absent is a usual item.
    */
   stretch?: true;
+  /**
+   * A part of a multi-part Calculus question (v2 M3a, rules/calc-word): the parts are consecutive items, each with its own
+   * number, spec and printed line (`question`), judged as any item. Every part carries the same `stem` - the situation,
+   * written by code and printed once above the parts - and its letter. Neither holds a value a part's answer needs.
+   */
+  stem?: string;
+  part?: PartLabel;
 }
 /**
  * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
@@ -175,7 +183,9 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
   return out as unknown as CalcSpec;
 }
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch }: PracticeItem): PracticeItem {
+/** The longest stem a part may carry: a few sentences of a situation. */
+const STEM_MAX = 400;
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch, stem, part }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -192,6 +202,8 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (sp && (tier === 1 || tier === 2)) item.tier = tier;
   // the step-up flag is code's own and only ever true: anything else on an event or an older file is a usual item
   if (stretch === true) item.stretch = true;
+  // a part keeps its stem and letter together, or neither (junk on an event or an older file is a single item)
+  if (isPartLabel(part) && typeof stem === "string" && stem.trim() && stem.length <= STEM_MAX) { item.stem = stem; item.part = part; }
   return item;
 }
 /** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */

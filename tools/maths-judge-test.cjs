@@ -147,3 +147,19 @@ test('M4c-3: the verdict is checkAnswer\'s with or without working; a right or u
  const set=k.judgeSet({topic:'calc1-derivative',items:[item]},[{n:1,studentAnswer:'3x',studentWorking:working}],ctx);
  assert.deepEqual(set.items[0].slipAt,{line:1});assert.equal(set.items[0].verdict,'wrong');
 });
+
+test('M3a: judgeSet judges a word problem part by part - each part by its own spec, an attempt a settled part, the pen per part (rules/kinds)',()=>{
+ const k=kinds(),W=require(src('lib/rules/calc-word.ts'));
+ looked=throwing('vision');answerText=throwing('text');
+ const w=W.drawWord('cubic-max-min',1),[hi,lo]=W.workedWord('cubic-max-min',1);
+ const items=[{n:1,question:'Find f\'(2) for f(x) = x^3.',spec:{shape:'derivative-at',f:'x^3',at:2}},...W.wordItems(w,2)];
+ const reads=[{n:1,studentAnswer:'12'},{n:2,studentAnswer:hi},{n:3,studentAnswer:String(Number(lo)+1),studentWorking:`f(x) = ${w.fn}\nf'(x) = 3x^2 + 6x - 20`}];
+ const j=k.judgeSet({topic:'calc1-extrema',items},reads,{topic:'calc1-extrema',typed:true});
+ assert.deepEqual(j.items.map((i)=>i.verdict),['right','right','wrong']);
+ assert.equal(j.attempts.length,3,'one attempt per settled part');assert.equal(j.unsure,0);
+ assert.deepEqual(j.items[2].slipAt,{line:1},'the chain pen lands on the part\'s slipped line');
+ assert.deepEqual(j.items.map((i)=>[i.stem??null,i.part??null]),[[null,null],[w.stem,'a'],[w.stem,'b']],'judging keeps the parts');
+ // a part judged with no set, as any item
+ assert.equal(k.judgeItem(items[2],{studentAnswer:lo},{topic:'calc1-extrema'}).verdict,'right');
+ assert.equal(k.kindOfSheet(items),'calc');
+});

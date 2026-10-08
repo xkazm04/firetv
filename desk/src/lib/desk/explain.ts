@@ -26,6 +26,7 @@
 import { text } from "../engines/text";
 import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
+import { askedText } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
 import { kindOfSpec } from "../rules/kinds";
 import { slipsShown } from "../rules/slips";
@@ -196,7 +197,8 @@ export async function explainItem(
 ): Promise<Explained> {
   // the item's kind (rules/kinds) says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
   const kind = kindOfSpec(item.spec), calc = kind === "calc", school = kind === "school";
-  const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age) : await explain(item.question, transcript, topicId, learnerId, calc, age);
+  // a part of a multi-part question (v2 M3a) is explained with its stem: the part's line alone does not say the situation
+  const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age) : await explain(askedText(item), transcript, topicId, learnerId, calc, age);
   // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
   const verdict = !stillUnsure() ? null
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)

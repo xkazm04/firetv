@@ -285,3 +285,82 @@ test('6: the evening note names a Calculus topic by topicIn and a Calculus slip 
  assert.match(seenText[0].prompt,new RegExp(`^Topic worked on tonight: ${topicIn('linear-one-step').name}\\n`));
  assert.ok(seenText[0].prompt.includes(`(arithmetic-slip: ${school.says})`),'a shared id reads in the school words on a school topic');
 });
+
+// ------------------------------------------------------------------ M3a: a word problem's parts are marked as items
+
+const W=require(src('lib/rules/calc-word.ts'));
+/** A calc1-optimisation set of two single items and the rectangle word problem's two parts (items 3 and 4). */
+function wordSet(){
+ const w=W.drawWord('rectangle-perimeter',7),worked=W.workedWord('rectangle-perimeter',7);
+ const singles=[spec({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'}),spec({shape:'extremum',f:'x^2 - 6x + 13',on:[0,5],kind:'min'})];
+ const items=[...singles.map((s,i)=>({n:i+1,question:question(s),spec:s})),...W.wordItems(w,3)];
+ store.dispatch({type:'practice.set',practice:{topic:'calc1-optimisation',marked:false,items}});
+ return {w,worked,items};
+}
+
+test('M3a 1: a word problem on a snapped sheet - the stem is listed once, each part is read by its own number and marked by its own spec; one attempt a part',async()=>{
+ seat();
+ const {w,worked}=wordSet();
+ const s0=store.getSession().practice.items;
+ assert.deepEqual(s0.map((i)=>[i.n,i.part??null,i.stem===w.stem]),[[1,null,false],[2,null,false],[3,'a',true],[4,'b',true]],'the stem and the letter ride on the parts through practice.set');
+ const was=skill('calc1-optimisation');
+ // item 1 right, item 2 wrong, part (a) right, part (b) wrong (the side, not the diagonal)
+ const P=w.drawn[0];
+ const reads=[['25','x = 5\nA = 25'],['3','f(3) = 3'],[worked[0],`A = x(${P/2} - x)\nx = ${P/4}`],[String(P/4),'x = 7']];
+ stubVision(()=>({items:reads.map(([a,wk],i)=>({n:i+1,studentAnswer:a,studentWorking:wk,slip:'unclear'}))}));
+ const res=await post('mark',PHOTO);
+ assert.equal(res.status,200);
+ const items=store.getSession().practice.items;
+ assert.deepEqual(items.map((i)=>i.verdict),['right','wrong','right','wrong'],'each part judged by checkAnswer on its own spec');
+ assert.equal(C.checkAnswer(w.parts[1].spec,String(P/4)).verdict,'wrong');
+ assert.deepEqual(items.map((i)=>i.part??null),[null,null,'a','b'],'marking keeps the parts');
+ assert.ok(items.slice(2).every((i)=>i.stem===w.stem));
+ // the read prompt lists the stem once and names each part by its item number
+ const p=seenVision[0].prompt;
+ assert.equal(p.split(w.stem).length-1,1,'the stem is printed once');
+ for(const line of [`Question 3, in parts: ${w.stem}`,`3. Part (a) of question 3: ${w.parts[0].line}`,`4. Part (b) of question 3: ${w.parts[1].line}`,'part (a) of question 3 as item 3, part (b) of question 3 as item 4'])assert.ok(p.includes(line),line);
+ assert.match(p,/on these 4 Calculus items:/);
+ assert.ok(p.includes(`1. ${question({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'})}`),'a single item is listed as before');
+ // one attempt per part: four settled items, two right
+ const now=skill('calc1-optimisation');
+ assert.equal(now.seen-was.seen,4);assert.equal(now.right-was.right,2);
+ assert.equal(learners.getLearner(LEARNER).history.at(-1).detail,M.rightLine(items));
+ // no view carries a worked answer of a part
+ for(const v of [view(store.getSession(),'tv'),view(store.getSession(),'phone')]){
+  const strings=stringsIn(v.practice);
+  for(const [i,a] of worked.entries())assert.ok(!strings.some((x)=>x===a&&x!==items[2+i].studentAnswer),`${a} only as the learner's own answer`);
+  for(const it of items.slice(2))for(const x of [it.stem,it.question])assert.equal(C.leaksCalc(it.spec,x),false,x);
+ }
+});
+
+test('M3a 2: the same parts typed are judged as the photo judges them, with no model; a single-item set\'s read prompt is unchanged byte for byte',async()=>{
+ seat();
+ const {w,worked}=wordSet();
+ reg.useProvider('vision',{name:'stub',run:async()=>{throw new Error('no vision call on the typed path');}});
+ reg.useProvider('text',{name:'stub',run:async()=>{throw new Error('no text call on the typed path');}});
+ const P=w.drawn[0];
+ const res=await post('mark',{answers:['25','3',worked[0],String(P/4)]});
+ assert.equal(res.status,200);
+ const items=store.getSession().practice.items;
+ assert.deepEqual(items.map((i)=>i.verdict),['right','wrong','right','wrong']);
+ assert.deepEqual(items.map((i)=>i.studentAnswer),['25','3',worked[0],String(P/4)]);
+ // a part answered with its unit does not read: unsure, as any unreadable answer (the part line names the unit)
+ seat();wordSet();
+ await post('mark',{answers:['25','3',`${worked[0]} square metres`,worked[1]]});
+ assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['right','wrong','unsure','right']);
+ // a set with no parts: the read prompt is exactly the one before M3a
+ seat();
+ const fx=FIX[0];setOn(fx.topic,fx.spec,3);
+ stubVision(()=>({items:[]}));await post('mark',PHOTO);
+ const sheet=[1,2,3].map((n)=>`${n}. ${question(fx.spec)}`).join('\n');
+ assert.ok(seenVision[0].prompt.startsWith(`This is a photo of a student's handwritten working on these 3 Calculus questions:\n${sheet}\n\nRead the page. For each numbered item, report:\n`));
+ assert.doesNotMatch(seenVision[0].prompt,/in parts|Part \(/);
+});
+
+test('M3a 3: shown() keeps a part\'s stem and letter together or not at all - junk is a single item',()=>{
+ seat();
+ const s=spec({shape:'extremum',f:'x(10 - x)',on:[0,10],kind:'max'}),q=question(s);
+ const set=(extra)=>{store.dispatch({type:'practice.set',practice:{topic:'calc1-optimisation',marked:false,items:[{n:1,question:q,spec:s,...extra}]}});const it=store.getSession().practice.items[0];return [it.stem??null,it.part??null];};
+ assert.deepEqual(set({stem:'A rectangle has a perimeter of 20 metres.',part:'a'}),['A rectangle has a perimeter of 20 metres.','a']);
+ for(const junk of [{part:'a'},{stem:'A rectangle.'},{stem:'A rectangle.',part:'z'},{stem:'A rectangle.',part:1},{stem:'   ',part:'a'},{stem:'x'.repeat(401),part:'a'},{stem:42,part:'b'}])assert.deepEqual(set(junk),[null,null],JSON.stringify(junk).slice(0,60));
+});

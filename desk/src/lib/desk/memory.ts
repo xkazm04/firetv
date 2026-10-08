@@ -11,6 +11,7 @@ import { topicIn } from "../library/paths";
 import { addMemory, getLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
+import { askedText } from "../rules/calc-word";
 
 const SCHEMA = {
   type: "object",
@@ -28,7 +29,7 @@ export async function writeMemory(
 
   const rows = items.map((i) => {
     const s = i.slip ? slipById(i.slip, session.topic) : undefined;
-    return `${i.n}. ${i.question} — ${i.verdict ?? "not marked"}` +
+    return `${i.n}. ${askedText(i)} — ${i.verdict ?? "not marked"}` +
       (s ? ` (${s.id}: ${s.says})` : "") +
       (i.studentWorking ? ` — their working: ${i.studentWorking}` : "");
   }).join("\n");

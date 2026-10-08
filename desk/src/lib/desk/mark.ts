@@ -41,6 +41,7 @@ import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read
 import { addDigest, addHistory, recordAttempt } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
+import { partPlace } from "../rules/calc-word";
 import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
@@ -86,9 +87,30 @@ const CALC_SCHEMA = {
   required: ["items"],
 };
 
+/**
+ * The sheet as the Calculus reading prompt lists it: "n. question" per item, as always. A multi-part question (v2 M3a,
+ * rules/calc-word) shows its stem once, then each part by its own item number and its letter, and the prompt says how a
+ * part is reported: by that number. A set with no parts is listed, and asked, exactly as before.
+ */
+function calcSheet(items: readonly PracticeItem[]): { sheet: string; parts: string } {
+  const lines: string[] = [], asked: string[] = [];
+  items.forEach((it, i) => {
+    const at = partPlace(items, i);
+    if (!at) { lines.push(`${it.n}. ${it.question}`); return; }
+    if (at.first) lines.push(`Question ${at.q}, in parts: ${it.stem}`);
+    lines.push(`${it.n}. Part (${at.label}) of question ${at.q}: ${it.question}`);
+    asked.push(`part (${at.label}) of question ${at.q} as item ${it.n}`);
+  });
+  const parts = asked.length
+    ? `Some questions are in parts, which the student labels (a), (b) and so on. Report each part as its own item, by the item number listed before it: ${asked.join(", ")}.\n`
+    : "";
+  return { sheet: lines.join("\n"), parts };
+}
+
 function calcPrompt(practice: Practice, vocab: string): string {
-  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
-  return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus questions:\n${sheet}\n\n` +
+  const { sheet, parts } = calcSheet(practice.items);
+  return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus ${parts ? "items" : "questions"}:\n${sheet}\n\n` +
+    parts +
     `Read the page. For each numbered item, report:\n` +
     `- n: the item number.\n` +
     `- studentAnswer: the final answer the student wrote, as plain text: an expression in x using ^ for powers, sqrt(), e^, ln, sin, cos and so on, ` +
