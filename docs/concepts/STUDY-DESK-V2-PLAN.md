@@ -97,7 +97,8 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 43 | M3b-3d | Math: the convergence verdict (series-verdict, five families; six topics, Stewart 11.2-11.7) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 44 | M3b-3e | Math: the sum of a series (series-sum, geometric and telescoping; on calc2-series) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 45 | M3b-3f | Math: improper integrals (improper-integral, three families; calc2-improper, Stewart 7.8) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
-| 46 | M3b-3g | Math: absolute or conditional convergence (optional; the alternating p family's three-word verdict) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling); optional, only if ruled in | | |
+| 46 | M3b-3g | Math: absolute or conditional convergence (optional; the alternating p family's three-word verdict) | 7 | M3b-3d | not ruled in (ruling 18); revisited after M3b-3f | | |
+| 47 | M3b-3h | Math: the alias guard on Calculus 1's limit at infinity (a correctness fix: cos(pi x) at infinity is refused) | 7 | M3b-3a | not started (ruling 19; built second, after M3b-3a) | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -534,6 +535,43 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   (15) `maths-calculus-live --path calc2` walking the rulers only is accepted. Per-topic screens for calc2 wait for an example
   set. Owed to the owner: the three-cell course row captures and one live calc2 set.
   (16) The App Master checked the calc1 pins in calc2-path-test against items.ts and hint.ts at 37880327: byte-identical.
+  The App Master's rulings on M3b-3 step A's questions (2026-10-09):
+  (17) The M3b-3 card is accepted as complete: rulings (13)-(16) are in; every shape has its truth, comparison, leak rule,
+  marking prompt and n, with file:line, or a reason; the diff against 2db4d800 touched the two docs only; rows 40-46 are not
+  started; the not-buildable list is in MATH-COURSE-PATHS section 10. The App Master spot-checked the citations at 15937370 and
+  they hold: calc-expr.ts 139, 148, 478, 516 and 587-591; calc.ts 38, 50-58, 166-173, 227-236, 389-392, 433 and 529-566;
+  maths.ts 138-139; store.ts 156 and 176; paths.ts 39; calculus2.spine.ts 18.
+  (18) Order. One run at a time, each ruled after the previous one settles: M3b-3a (the seam), M3b-3h (row 47, ruling 19),
+  M3b-3b (approx-integral), M3b-3c (sequence-limit), M3b-3d (series-verdict), M3b-3e (series-sum), M3b-3f (improper-integral).
+  M3b-3a, 3h and 3b hold under any answer the owner gives on the descope (ruling 22); 3c-3f wait for that answer. M3b-3g is not
+  ruled in; it is revisited after 3f merges, if the 2026-10-23 deadline leaves room.
+  (19) The Calculus 1 aliasing defect gets its own slice, M3b-3h (row 47), built second. The rule: a Calculus 1 'limit' at inf or
+  -inf is well formed only if its limit along x*sqrt(2), with the sign kept, is the same value to LIMIT_SIDES, or the same
+  infinity; otherwise the spec is refused as dne. Today the desk marks 1 right for cos(pi x) at infinity, a limit that does not
+  exist. The guard refuses only specs whose truth is false: no word on a kept spec changes, so the every-M3b-slice rule holds.
+  The proof: the frozen table from 3a stays equal; if any corpus or sweep spec changes, the edit is made openly (OLD/NEW, with
+  the reason), as P6's line-50 pin was. One guard function, which 3c reuses. Rows: cos(pi*x), sin(pi*x)+1 and cos(2*pi*x) at
+  inf are refused; every corpus limit at infinity is kept.
+  (20) approx-integral's tolerance is accepted with one change: it is absolute. A decimal answer is right if and only if
+  abs(answer - value) <= 5e-5 (+1e-12 for floating point), at any size of value. An exact form (a fraction) is right to 1e-6,
+  relative. The degenerate rule is absolute at 1e-4, against the exact integral and against the other rules' values with the
+  same pieces. There is no 'unsure' band. Why: 'to four decimal places' means half a unit in the fourth place, whatever the
+  size; a tolerance relative to max(1, |value|) would accept a three-place answer once the value passes 1 (T_4 of x^2 on
+  [0, 4] is 22, so the band would be 1.1e-3). M3b-3b adds that row.
+  (21) Confirmed: the family lists, the verdict leak words, and the conditional verdict line on the reading and explain
+  prompts. One correction: the telescoping condition (k+p)(k+q) > 0 admits p = -5, q = -3, k = 0, whose terms at n = 3 and
+  n = 5 are undefined. The condition is k + p >= 1, so every n + p and n + q is positive for n >= k; and c != 0. M3b-3e adds
+  the refused spec as a row. The verdict leak table in M3b-3d carries two lines: a hint that names a test without its outcome
+  (not a leak), and a hint that states the deciding number against its threshold, such as '|r| = 1/2, which is less than 1'
+  (a leak).
+  (22) The not-buildable list goes to the owner as a descope (asked 2026-10-09; the answer is expected at 09:00): free terms
+  in n; sequences with no real extension; sums outside the two families; free improper integrands; power series (11.8-11.11).
+  Stewart 9e's section numbers stay cited from the book's structure and are unverified. The OpenStax numbers are verified.
+  (23) A gap in the card: it did not name every consumer of the shape lists. MathsTV.tsx:23 keeps its own CALC_SHAPES check and
+  draws a Plot at 825; maths/working.ts:49 sends every isCalcSpec item to chainChecks (chain.ts:303). M3b-3a lists every
+  importer of CALC_SHAPES and isCalcSpec in the card, with what each does with a calc2 spec and the slice that handles it.
+  M3b-3b makes chainChecks return no tick for a calc2 spec, with a row, and states that a calc2 item draws no plot on the TV
+  (owed in its captures). The seam does not change MathsTV.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
