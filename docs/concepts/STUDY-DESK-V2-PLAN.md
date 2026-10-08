@@ -91,7 +91,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
 | 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | done (built locally, no PR, nothing pushed; `calc2` judged 'calc', five topics, `PathInfo.calcWords`; suite `tools/calc2-path-test.cjs`, 7 rows; the kill test red; owed to the owner: the Maths course row with three cells at 1920 x 1080 and 1280 x 720, and one live calc2 set) | 18845498 (step 0), 6565c0f5, and the finish record | 2026-10-08 |
 | 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | card completed (step A); the build waits for the App Master's ruling (five candidate shapes: sequence-limit, series-sum (two families), series-verdict (five families), improper-integral (three families) and approx-integral buildable; free terms in n, free improper integrands and power series not buildable, descoped to the owner; n is never read by the engine; cut into M3b-3a to M3b-3g, rows 40-46) | 8132e184 (step 0), and the card with its finish record | 2026-10-09 |
-| 40 | M3b-3a | Math: the Calculus 2 shapes seam (rules/calc2.ts, rules/calc-read.ts, the dispatch; no behaviour change) | 7 | M3b-3 card | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 40 | M3b-3a | Math: the Calculus 2 shapes seam (rules/calc2.ts, rules/calc-read.ts, the dispatch; no behaviour change) | 7 | M3b-3 card | built (frozen table 9a96e73d at the base, then the seam 30528a07; calc2-seam-test, 5 rows; kill test red then green) | 9a96e73d, 30528a07 | 2026-10-09 |
 | 41 | M3b-3b | Math: approximate integration (approx-integral; calc2-approx, Stewart 7.7) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 42 | M3b-3c | Math: the limit of a sequence (sequence-limit, the alias guard; calc2-sequences, Stewart 11.1) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 43 | M3b-3d | Math: the convergence verdict (series-verdict, five families; six topics, Stewart 11.2-11.7) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
@@ -891,6 +891,27 @@ topics per ruling 3, and each new topic is a screen change on the calc2 ruler wh
 - Kill: route one Calculus 1 shape (`limit`) to calc2.ts, and the frozen table goes red.
 - Files: rules/calc.ts, rules/calc-read.ts (new), rules/calc2.ts (new), rules/maths.ts, session/store.ts,
   library/paths.ts, library/calculus2.spine.ts, tools/calc2-seam-test.cjs (new), desk/package.json (`rulesSuites`), docs.
+- Built (row 40, 30528a07). **The consumers of the shape lists** (ruling 23; grepped at 30528a07 for CALC_SHAPES, isCalcSpec,
+  kindOfSpec and every import of rules/calc), with what each does with a calc2 spec and the slice that handles it:
+  - rules/calc.ts wellFormed, question, checkAnswer, leaksCalc, slipsFor, withheldCalc: dispatch a calc2 spec to calc2.ts on
+    the first line (done; calc2.ts refuses everything until a shape slice). specFromQuestion and partsFromQuestion read
+    text and do not dispatch; each shape slice adds its own reader.
+  - rules/maths.ts:139 isCalcSpec: true for either list (done). maths.ts:159 settleSpec: reaches checkAnswer, which
+    dispatches. maths.ts:48-50 CALC_AS_SLIPS: built from CALC_SLIPS and each calc topic's `shapes` through calcSlipsFor, so a
+    calc2 slip or shape is invisible to it until its slice adds the list (the slice that adds a slip).
+  - rules/kinds.ts:32 and 75 (kindOfSpec, the kind of an item set): follow isCalcSpec, so a calc2 item is 'calc' (no change).
+    kinds.ts:22 specFromQuestion and partsFromQuestion: calc.ts's readers, per the first bullet.
+  - session/store.ts:176 specShown: keeps a calc2 shape by name with SPEC_KEYS (done); a shape slice adds any key its spec
+    carries that SPEC_KEYS lacks (`pieces`, `rule`, `family`, `n`, `p`, ...).
+  - desk/items.ts:39 (wellFormed, leaksCalc, printed question, CALC_SLIPS): dispatch through calc.ts; the schema's `f`
+    and the per-shape tables are each shape slice's (b above). desk/hint.ts and desk/explain.ts (leaksCalc, withheldCalc,
+    kindOfSpec): dispatch through calc.ts; the conditional verdict line is M3b-3d's. rules/calc-word.ts: Calculus 1 word
+    items only, not touched.
+  - maths/working.ts:49: sends every isCalcSpec item to chainChecks (rules/chain.ts:303), and tagLines reads `spec.f` (anchorOf,
+    chain.ts:212). M3b-3b makes chainChecks return no tick for a calc2 spec, with a row (ruling 23).
+  - maths/MathsTV.tsx:23 (its own CALC_SHAPES check) and :825 (a Plot, plotting.ts plotFor(spec) reads `spec.f`): a calc2
+    spec fails the TV's own check, so a calc2 item draws no plot; M3b-3b states that and owes the captures. The seam does
+    not change MathsTV, working.ts or chain.ts.
 
 **M3b-3b. Approximate integration** (M; row 41; shape (v); topic `calc2-approx`, Stewart 7.7 / OpenStax 3.6, after
 `calc2-strategy`, prerequisites none)
@@ -1678,3 +1699,50 @@ No `desk/data/` touched, no model call, no push.
 Next: the App Master rules on the card: the slices and their order; the tolerance of 5e-5 at four decimal places; the
 family lists; the leak words; whether M3b-3g is in; whether the x·√2 guard also goes onto Calculus 1's limit at infinity
 (the aliasing defect); and the descope that goes to the owner. L5 runs after the owner's review.
+
+### 2026-10-09 · batch 7 · M3b-3a · autopilot/accepted-idea-delivery-11556784
+The fourth part of M3b (row 40; the M3b-3 card): the Calculus 2 shapes seam. No behaviour change, no shape added.
+Local, nothing pushed. Commits, in order: 586c2f3e (step 0: the App Master's rulings (17)-(23) in the M3b card; row 47
+added, row 46 not ruled in), 9a96e73d (the frozen Calculus 1 table, written at the base before calc.ts moved), 30528a07
+(the seam and its suite), then this entry with row 40 and the consumers list.
+Order, a deliberate deviation: batch 7's order is M5, L5, M3b (section e). M3b-3a ran ahead of L5, as M3b-1 to M3b-3 step A did.
+What changed, by file:
+- `rules/calc-read.ts` (new): cleanAnswer, infinityOf, DNE, isDecimal, withinRel, spoken (with WORDS and NUMBER_WORD), escapeRe and
+  piecePattern, moved out of calc.ts with the code unchanged (only `export` added; one comment line about imports reworded).
+  calc.ts imports them back. No import in the file.
+- `rules/calc2.ts` (new): `CALC2_SHAPES` (empty), `Calc2SpecShape` (never; named so as not to clash with calculus2.spine.ts's
+  `Calc2Shape`), `Calc2Spec`, `isCalc2Spec`, and calc2WellFormed, calc2Question, calc2CheckAnswer, calc2LeaksCalc, calc2SlipsFor,
+  calc2Withheld with calc.ts's six signatures, each refusing every spec (not ok / null / unsure / false / [] / the generic
+  sentence). No import. The two fixed sentences it needs (calc.ts's WHY.badSpec and WITHHELD_ANY) are written again, not
+  imported: importing calc.ts would make a cycle.
+- `rules/calc.ts`: the six public functions dispatch a calc2 spec on their first line; a Calculus 1 spec runs today's lines.
+  Imports: calc-expr, calc-read, calc2 only. `rules/maths.ts` isCalcSpec and `session/store.ts` specShown accept both lists.
+  `library/paths.ts` PathTopic.shapes and `library/calculus2.spine.ts` Calc2Shape admit either list's ids (a type change; the spine
+  writes it as an inline type reference, `import("../rules/calc2").Calc2SpecShape`, because calc2-path-test and maths-paths-test pin
+  "the spine imports nothing" with `/import\s/`; the spine data is unchanged).
+- `tools/calc1-frozen-gen.cjs` and `tools/calc1-frozen.json`, `tools/calc2-seam-test.cjs` (5 rows), `desk/package.json` (the suite
+  before harness-rules-test.cjs).
+The frozen table (9a96e73d): 163 specs, 3690 calls. Sources: the object literals `{shape: '<one of the nine>' ...}` that evaluate
+alone in calc-rules-test (128), calc-course-test (45), calc-hint-test (56), calc-marking-test (13), calc-practice-test (2), calc-word-test
+(6), chain-rules-test (17), plot-rules-test (8), maths-judge-test (8), maths-rules-test (6), maths-tv-test (1), maths-type-test (3) and
+calc2-path-test (0), deduplicated by spec, plus calc-rules-test's CHECKS (115 pairs, each answer kept with its spec) and its SWEEP (22
+topic specs). Per spec: wellFormed; question plain and tex; checkAnswer on its paired answers and the 12 probes; leaksCalc on its
+plain question, on withheldCalc(spec) and on 3 probe lines; specFromQuestion on its plain question. Also slipsFor of each shape,
+CALC_SHAPES, TOLERANCE, CALC_WITHHELD and CALC_SLIPS. A literal that names a variable is skipped. The table is rewritten only by hand
+with `node tools/calc1-frozen-gen.cjs`, in the commit that changes a Calculus 1 word, with the reason in the log (M3b-3h will).
+Rows (calc2-seam-test): 1 the table recomputed from its own specs and answers equals the file byte for byte; 2 calc.ts imports only
+./calc-expr, ./calc-read and ./calc2; 3 calc2.ts and calc-read.ts import no store, session, desk, engine, TV, maths or React module
+(calc-read.ts nothing at all); 4 CALC2_SHAPES is empty, shares no id with CALC_SHAPES, and calc2 refuses every spec; 5 isCalcSpec is true
+for all nine shapes and false for a school spec and junk. No existing assertion changed.
+Kill test (on 30528a07, not committed): in calc.ts wellFormed's first line also sent `shape === "limit"` to calc2.ts: calc2-seam-test row 1
+red (the other four stayed green); `git restore desk/src/lib/rules/calc.ts`, rerun 5 of 5 green.
+Left in calc.ts: the window reader of leaksCalc (the tokens loop, `single` and `numberRight`): it closes over the spec's truth and
+the question's own pieces, so lifting it as a function could not be done without changing its shape; it stays, and a calc2 shape
+that needs a window reader writes its own beside its leak rule. Also left: `isShape`, `fin`, `num`, `tidy`, `isSum`, `numPlain` and
+the other spec-bound helpers, which the card did not name.
+The consumers of the shape lists are in the M3b-3a card (ruling 23).
+Gate: `cd desk && npm run test:rules` 70 green, 0 red (1174 tests; 69 / 1169 before) at 30528a07; `npx tsc --noEmit --incremental false`
+clean. No `desk/data/` touched, no model call, no push; MathsTV.tsx, working.ts, chain.ts, items.ts, hint.ts, explain.ts, mark.ts, kinds.ts,
+calc-word.ts, calculus1.ts, calculus1.spine.ts, calc-expr.ts, Linga, Essay and the twin unchanged.
+Next: M3b-3h (row 47), the alias guard on Calculus 1's limit at infinity (ruling 19), then M3b-3b, each ruled by the App Master after
+the previous one settles.
