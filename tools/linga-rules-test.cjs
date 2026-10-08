@@ -1303,3 +1303,80 @@ test('cut case 6: the view offers Cut in Adult mode only, and the Cut recap is a
  const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
  assert.match(tv,/h\.kind==="topics"\|\|h\.kind==="tape"\?"plan"/,'the tape takes the row-of-doors layout');assert.match(tv,/data-role="linga-tape"/);
 });
+
+// ---- v2 L4: Take Two (lib/english/take.ts heldOf and forkOf; turn.ts "take-two" and "take-end")
+const TAKES=()=>require(path.join(root,'src/lib/english/take.ts'));
+const FORM={turnId:'l1',quote:'Yesterday I book',kind:'form',note:'Yesterday asks for the past.',better:'Yesterday I booked'};
+const WORD={turnId:'l1',quote:'a account',kind:'word',note:'Say an before a vowel sound.',better:'an account'};
+const MEANING={turnId:'l2',quote:'I want check',kind:'meaning',note:'Say want to before another verb.',better:'I want to check',reading:true};
+const REGISTER={turnId:'l2',quote:'Give me the key',kind:'register',note:'Too blunt for a hotel desk.',better:'Could I have the key, please?'};
+/** [why, note, the learner's line in the take, the noted turn's text (form notes), heldOf's answer] */
+const HELD=[
+ // form: the tense rule decides, on the sentences that carry the noted sentence's own time marker
+ ['form · the past form now, with the same marker',FORM,'Yesterday I booked a room here.','Yesterday I book a room here.',true],
+ ['form · the same clash again',FORM,'Yesterday I book a room here.','Yesterday I book a room here.',false],
+ ['form · the better phrase parroted, and the clash still there in the next sentence',FORM,'Yesterday I booked a room, as you say. Yesterday I go to the bank.','Yesterday I book a room here.',false],
+ ['form · another clash with the same marker (present perfect with yesterday)',FORM,'Yesterday I have booked a room.','Yesterday I book a room here.',false],
+ ['form · an irregular past form',FORM,'Yesterday I went to the hotel and booked a room.','Yesterday I book a room here.',true],
+ ['form · two sentences with the marker, both agree',FORM,'Yesterday I booked it. Yesterday I paid for it.','Yesterday I book a room here.',true],
+ ['form · the marker in the middle of the sentence',{...FORM,quote:'We go',better:'We went'},'We went to the cinema last week.','We go to the cinema last week.',true],
+ ['form · the marker in the middle, the clash again',{...FORM,quote:'We go',better:'We went'},'We go to the cinema last week.','We go to the cinema last week.',false],
+ ['form · present perfect with yesterday, mended',{...FORM,quote:'has gone',better:'went'},'She went to Paris yesterday.','She has gone to Paris yesterday.',true],
+ ['form · present perfect with yesterday, again',{...FORM,quote:'has gone',better:'went'},'She has gone to Paris yesterday.','She has gone to Paris yesterday.',false],
+ ['form · since asks for the present perfect, and gets it',{...FORM,quote:'I live',better:'I have lived'},'I have lived here since 2019.','I live here since 2019.',true],
+ ['form · since, and the present simple again',{...FORM,quote:'I live',better:'I have lived'},'I live here since 2019.','I live here since 2019.',false],
+ ['form · no sentence carries the marker: code cannot tell which one is the line again',FORM,'I booked a room here.','Yesterday I book a room here.',null],
+ ['form · another marker is not the noted one',FORM,'Last week I book a room.','Yesterday I book a room here.',null],
+ ['form · the marker, but no verb form the rule reads',FORM,'Yesterday, the room.','Yesterday I book a room here.',null],
+ ['form · "every" is not the marker "ever"',{...FORM,quote:'Have you ever see',better:'Have you ever seen'},'Every day I see it.','Have you ever see a dragon?',null],
+ ['form · a noted sentence with no clash is no rule to hold',{...FORM,quote:'I like',better:'I love'},'I love tea.','I like tea.',null],
+ ['form · an empty line',FORM,'   ','Yesterday I book a room here.',null],
+ // word: the quoted words gone and the better phrase said
+ ['word · the better words, the quote gone',WORD,'My dragon wants an account.',undefined,true],
+ ['word · the better words in capitals and with punctuation',WORD,'AN ACCOUNT, for my dragon!',undefined,true],
+ ['word · the quote again',WORD,'My dragon wants a account.',undefined,false],
+ ['word · the better words said, and the quote too',WORD,'An account, please, not a account.',undefined,false],
+ ['word · the quote gone, but the better words not said',WORD,'My dragon wants a bank account.',undefined,null],
+ ['word · no better phrase on the note',{...WORD,better:undefined},'My dragon wants an account.',undefined,null],
+ ['word · the better phrase says the quote: looked for outside it',{...WORD,quote:'account',better:'an account'},'He wants an account.',undefined,true],
+ ['word · the better phrase says the quote, and the bare quote is said again outside it',{...WORD,quote:'account',better:'an account'},'He wants an account, and one more account.',undefined,false],
+ ['word · the bare quote, the better phrase not said',{...WORD,quote:'account',better:'an account'},'He wants account.',undefined,false],
+ ['word · a missing article mended',{...WORD,quote:'in hotel',better:'in a hotel'},'I work in a hotel.',undefined,true],
+ ['word · the missing article again',{...WORD,quote:'in hotel',better:'in a hotel'},'I work in hotel.',undefined,false],
+ ['word · something else said: code cannot tell',{...WORD,quote:'in hotel',better:'in a hotel'},'I work at the station.',undefined,null],
+ ['word · an own-language word gone, the English said',{...WORD,quote:'Bahnhof',better:'station'},'Where is the station?',undefined,true],
+ ['word · the own-language word again',{...WORD,quote:'Bahnhof',better:'station'},'Where is the Bahnhof?',undefined,false],
+ // meaning (a reading too): the better phrase contained, else not decided
+ ['meaning · the better phrase said',MEANING,'I want to check the date.',undefined,true],
+ ['meaning · the better phrase in another case',MEANING,'i WANT to check, please',undefined,true],
+ ['meaning · the same words again: no rule says it is wrong',MEANING,'I want check the date.',undefined,null],
+ ['meaning · something else said',MEANING,'Can I see the date?',undefined,null],
+ ['meaning · no better phrase on the note',{...MEANING,better:undefined},'I want to check the date.',undefined,null],
+ ['meaning · a note that was never a reading',{...MEANING,quote:'He live in a cave',better:'He lives in a cave',reading:undefined},'He lives in a cave, very cosy.',undefined,true],
+ // register: no rule reads register
+ ['register · the better phrase said',REGISTER,'Could I have the key, please?',undefined,null],
+ ['register · the same words again',REGISTER,'Give me the key.',undefined,null],
+ ['register · no better phrase',{...REGISTER,better:undefined},'Could you give me the key?',undefined,null],
+];
+test(`take case 1: heldOf, the table (${HELD.length} rows): held, not held, or null where code cannot tell`,()=>{
+ const {heldOf}=TAKES(),counts={};
+ assert(HELD.length>=30,'at least 30 rows');
+ for(const [why,n,line,noted,want] of HELD){
+  assert.equal(heldOf(n,line,noted),want,why);
+  const k=(counts[n.kind]??={held:0,'not held':0,null:0});k[want===true?'held':want===false?'not held':'null']++;
+ }
+ assert(HELD.filter(r=>r[4]===null).length>=8,'at least 8 null rows');
+ for(const kind of ['form','word','meaning','register'])assert(counts[kind],`rows of kind ${kind}`);
+ assert.equal(heldOf(FORM,'Yesterday I booked a room, as you say. Yesterday I go to the bank.','Yesterday I book a room here.'),false,'the parrot row: a form note is the rule\'s, never the phrase\'s');
+ console.log('# heldOf table, per kind (held / not held / null):',Object.entries(counts).map(([k,c])=>`${k} ${c.held}/${c['not held']}/${c.null}`).join(', '));
+});
+test('take case 2: forkOf is the partner line nearest before the noted learner turn',()=>{
+ const {forkOf}=TAKES();
+ assert.equal(forkOf({...WORD,turnId:'l1'},TAKE).id,'p1');
+ assert.equal(forkOf({...WORD,turnId:'l2'},TAKE).id,'p2');
+ assert.equal(forkOf({...WORD,turnId:'p2'},TAKE),null,'a partner turn is no noted turn');
+ assert.equal(forkOf({...WORD,turnId:'gone'},TAKE),null,'an unknown turn');
+ assert.equal(forkOf({...WORD,turnId:'l1'},TAKE.slice(1)),null,'no partner line before it');
+ const two=[TAKE[0],TAKE[1],{id:'l1b',role:'learner',text:'And a card.',mode:'text'}];
+ assert.equal(forkOf({...WORD,turnId:'l1b'},two).id,'p1','two learner turns in a row: the partner line before both');
+});
