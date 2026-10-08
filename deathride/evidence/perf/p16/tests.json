@@ -56,5 +56,5 @@
   "layer": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c (42833cd9)",
   "fonts-af1d860c": "5bed3d9a3d550c4f3fc2eecabe72a83333af0fa906ba6ca87c579738354dea33 (first card-1 proof only)"
  },
- "cardTests": "While built: FontPageTest 4 and HudDiffTest 3 passed (game 121 with them); reverted with their cards."
+ "cardTests": "While built: FontPageTest (4 cases) and HudDiffTest (3 cases) passed, run by class (gradlew :game:test --tests); the full gate was not run with them in place. Reverted with their cards."
 }
