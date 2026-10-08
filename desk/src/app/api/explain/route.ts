@@ -9,6 +9,7 @@ import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
 import { learnerAge } from "@/lib/rules/voice";
 import { learnerSystem } from "@/lib/rules/school";
+import { itemName } from "@/lib/rules/calc-word";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -26,11 +27,11 @@ export async function POST(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s));
+    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
     // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
     if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
     return x;
-  }, { key: String(item.n), start: "listening…", done: (x) => x.reply });
+  }, { key: String(item.n), start: "listening…", done: (x) => x.shown });
   if (!r.ok) return refused(r);
-  return NextResponse.json({ reply: r.value.reply, slip: r.value.slip, ...(r.value.settled ? { settled: r.value.settled.verdict } : {}) });
+  return NextResponse.json({ reply: r.value.shown, slip: r.value.slip, ...(r.value.settled ? { settled: r.value.settled.verdict } : {}) });
 }

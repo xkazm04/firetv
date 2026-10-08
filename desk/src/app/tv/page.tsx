@@ -13,6 +13,7 @@ import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, runSte
 import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
+import { spokenLine } from "@/lib/desk/spoken";
 import { LingaTestBar } from "@/english/LingaTestBar";
 
 /**
@@ -86,7 +87,7 @@ export default function TV() {
   // speak what is new: the hint, the explanation, the verdict
   useEffect(() => {
     if (!s || !voice) return;
-    const line = s.screen === "hint" ? (s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint) : s.screen === "sentence" ? s.english?.explanation : s.screen === "forensic" ? s.essay?.summary : s.screen === "walk" ? s.practice?.items[s.walkIx]?.said : s.screen === "break" ? "Time for a break." : "";
+        const line = spokenLine(s);
     if (!line || line === spoken.current) return;
     spoken.current = line;
     (async () => {

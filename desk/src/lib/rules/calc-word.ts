@@ -287,6 +287,14 @@ export function namedLine(line: string, n: number, name: string): string {
   return name === String(n) ? line : line.replace(new RegExp(`\\b([Nn])umber ${n}\\b`, "g"), `$1umber ${name}`);
 }
 
+/**
+ * A desk line for the item at `i`, as the learner sees or hears it: a part named as the paper names it. The one place an
+ * item number in a stored line is rewritten - the TV card, the walk's voice, the second go's sentences and the explain reply
+ * all come through here. A single item's line is returned as it is.
+ */
+export const deskLine = (items: readonly ({ n: number } & PartFields)[], i: number, line: string): string =>
+  items[i] ? namedLine(line, items[i].n, itemName(items, i)) : line;
+
 /** The whole task an item asks, for a prompt: the stem and the part's letter before a part's line; a single item's question. */
 export const askedText = (it: { question: string } & PartFields): string =>
   typeof it.stem === "string" && isPartLabel(it.part) ? `${it.stem} (${it.part}) ${it.question}` : it.question;

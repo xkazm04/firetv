@@ -115,11 +115,11 @@ export function typedAnswersProblem(answers: unknown, n: number): string | null 
  * The ONE typed second go (route /api/second): may this item take it? null when it may - a wrong item that has not had its go.
  * Otherwise the plain desk sentence for why not. One go, so it can never be guess-and-check; and never a value in the sentence.
  */
-export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second">): string | null {
+export function secondProblem(item: Pick<PracticeItem, "n" | "verdict" | "second">, name: string = String(item.n)): string | null {
   if (item.verdict === "wrong" && !item.second) return null;
-  if (item.verdict === "wrong") return `Number ${item.n} has had its second go. Look at where the pen is, or try a new set.`;
-  if (item.verdict === "right") return `Number ${item.n} came back right, so it needs no second go.`;
-  return `The desk is not sure about number ${item.n} yet. Tell it how you got there first.`;
+  if (item.verdict === "wrong") return `Number ${name} has had its second go. Look at where the pen is, or try a new set.`;
+  if (item.verdict === "right") return `Number ${name} came back right, so it needs no second go.`;
+  return `The desk is not sure about number ${name} yet. Tell it how you got there first.`;
 }
 
 export interface Settled { verdict: "right" | "wrong"; slip?: string; said: string; slipAt?: SlipAt; }

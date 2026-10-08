@@ -26,7 +26,7 @@
 import { text } from "../engines/text";
 import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
-import { askedText } from "../rules/calc-word";
+import { askedText, namedLine } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
 import { kindOfSpec } from "../rules/kinds";
 import { slipsShown } from "../rules/slips";
@@ -181,7 +181,7 @@ function heard(
  * vocabulary (the same `settled` rule marking uses): the item's shown slip and line follow the conversation.
  * Its verdict, its pen (`slipAt`) and the learner record are left as they were.
  */
-export interface Explained { reply: string; slip?: string; settled?: Settled; renamed?: { slip: string; said: string }; }
+export interface Explained { reply: string; /** the reply as the learner reads it: a part named as the paper names it (v2 M3a-2); `reply` is what the session stores */ shown: string; slip?: string; settled?: Settled; renamed?: { slip: string; said: string }; }
 
 export async function explainItem(
   item: PracticeItem,
@@ -194,6 +194,8 @@ export async function explainItem(
   age?: number,
   /** The seated profile's school system, for reading a school item's answer (the route reads it); UK when not given. */
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
+  /** The item's name on the paper (rules/calc-word itemName): '5(b)' for a part; its number when not given. */
+  name: string = String(item.n),
 ): Promise<Explained> {
   // the item's kind (rules/kinds) says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
   const kind = kindOfSpec(item.spec), calc = kind === "calc", school = kind === "school";
@@ -212,5 +214,5 @@ export async function explainItem(
   const own = verdict?.said ?? item.said ?? ASK(item.n);
   const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply);
   const reply = h.reply && !gives ? h.reply : own;
-  return { reply, slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
+  return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }
