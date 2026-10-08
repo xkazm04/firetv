@@ -1,0 +1,49 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[128,128],"rejected":[0,0],"hostPumpStalls":0}
+{"second":71,"accepted":[2142,2140],"rejected":[0,1],"hostPumpStalls":0}
+{"second":138,"accepted":[4154,4153],"rejected":[0,1],"hostPumpStalls":0}
+{"second":205,"accepted":[6163,6162],"rejected":[0,1],"hostPumpStalls":0}
+{"second":273,"accepted":[8196,8195],"rejected":[0,1],"hostPumpStalls":0}
+{"second":338,"accepted":[10152,10151],"rejected":[0,1],"hostPumpStalls":0}
+{"second":403,"accepted":[12106,12105],"rejected":[0,1],"hostPumpStalls":0}
+{"second":468,"accepted":[14055,14054],"rejected":[0,1],"hostPumpStalls":0}
+{"second":533,"accepted":[16008,16008],"rejected":[0,1],"hostPumpStalls":0}
+{"second":598,"accepted":[17959,17958],"rejected":[0,1],"hostPumpStalls":0}
+{"second":663,"accepted":[19910,19909],"rejected":[0,1],"hostPumpStalls":0}
+{"second":728,"accepted":[21851,21850],"rejected":[0,1],"hostPumpStalls":0}
+{"second":793,"accepted":[23807,23806],"rejected":[0,1],"hostPumpStalls":0}
+{"second":858,"accepted":[25755,25754],"rejected":[0,1],"hostPumpStalls":0}
+{"second":900,"accepted":[27007,27006],"rejected":[0,1],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/bef55c0f/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 900.2163396,
+  "rounds": 14,
+  "classUses": {
+    "Needle": 21,
+    "Line": 15,
+    "Bastion": 18,
+    "Comet": 15,
+    "Trail": 21,
+    "Flint": 21,
+    "Quill": 15,
+    "Vandal": 14,
+    "Kestrel": 12,
+    "Bulwark": 10
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27007,
+      "accepted": 27007,
+      "rejected": 0,
+      "hz": 30.000566321646893
+    },
+    {
+      "slot": 1,
+      "sent": 27007,
+      "accepted": 27006,
+      "rejected": 1,
+      "hz": 30.000566321646893
+    }
+  ]
+}
