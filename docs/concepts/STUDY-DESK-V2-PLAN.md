@@ -235,12 +235,57 @@ per the owner's 2026-10-07 evening ruling; carries the owner's M4 decision, "lon
 - Accept: the first three counts are 0 for a unit and every listed slip is reachable and detected; `cd desk && npm run test:rules` green at every commit; `tsc --noEmit` clean; no verdict of the fifteen existing units changes. A slip without an exact value is dropped and said. The path unit has honest prerequisites (Pythagoras needs area; probability needs frac-equivalent and dec-convert), years from memory with a teacher-must-check comment, no lessonId, no learner-visible string naming GCSE, 1MA1 or Edexcel (X5: 'mapped to', never 'certified'); VERIFIED stays false. Captures owed to the owner's batch 5 review: Topics with the new units, Tonight's ruler, a Pythagoras paper and a probability paper, each at 1920 x 1080 and 1280 x 720.
 - Kill: a unit with a non-zero count that cannot be fixed in its generator or check is withheld: it stays out of `SCHOOL_GENERATORS` and off the path, its code and rows kept, recorded in row 20 and the log. Both units fail: stop after the table.
 
-**M2b. Math: the first GCSE Foundation units beyond the school path (generators, code-checked)** (M; batch 5, built locally per the owner's 2026-10-07 evening ruling; the last slice of the batch)
-- Goal: two new units, each its own shape, set and marked by code with no model call, and a path that grows only by the units that pass the sweep. U1 Pythagoras' theorem (shape `pythagoras`; 1MA1 G20, the Pythagoras part only, no trig): tier 1 the longest side from the two shorter, tier 2 a shorter side from the longest and the other; all sides whole numbers (a scaled Pythagorean triple, sides at most 100), unit mm, cm or m; one plain sentence, no diagram; the truth recomputed from the spec with exact integer arithmetic (a bigint integer square root); slips: the two sides added, the squares added but the root not taken, for a shorter side the squares added instead of subtracted. U2 probability of an event (shape `probability`; 1MA1 P3, P4, P7, a single experiment): tier 1 one bag of 2-4 colours, at most 20 counters, the probability of a named colour; tier 2 by the seed: NOT a colour, one of two colours, or the complement of a stated probability given as a decimal or a percent; 0 and 1 are drawn again; any equal fraction, decimal (the system's mark) or percent is right; a ratio or words are unsure, never wrong; a value outside 0..1 is wrong; slips: the count alone, the part over the rest, one over the number of colours, for NOT the event's own probability, each used only where its value differs from the answer and from every other slip.
-- Files: `lib/rules/school.ts` (shapes, wellFormed, question, slips, check, leakProfile, generators, specFromQuestion, unitOf, withheld, SCHOOL_UNIT_SLIPS), `maths/typeset.ts` only if the tex needs it, `lib/library/syllabus.ts`, `paths.ts`, `worked.ts`, `lib/rules/week.ts`, `lib/library/gcse.ts` (touches), `tv/rulerRows.ts` only if a ruler test shows a clipped label; new `tools/gcse-units-test.cjs` appended at the end of `test:rules`; the three docs that list the school units.
-- Tests: rows in the school-* suites for each unit (spellings, slips, leaks, legit hints, printed questions, bad specs, the task reader); the sweep `tools/gcse-units-test.cjs`: each unit over tiers 1 and 2, systems uk, us, cz, de, at least 500 seeds, counting specs not well formed, specs not fair (the question prints its answer, or leaksSchool fails on the question), worked answers `check` does not mark right, and per slip the seeds where it is reachable and those where `check` returns it for its own value. It prints the table. Path pins revised openly, each with its old and new value.
-- Accept: the first three counts are 0 for a unit and every listed slip is reachable and detected; `cd desk && npm run test:rules` green at every commit; `tsc --noEmit` clean; no verdict of the fifteen existing units changes. A slip without an exact value is dropped and said. The path unit has honest prerequisites (Pythagoras needs area; probability needs frac-equivalent and dec-convert), years from memory with a teacher-must-check comment, no lessonId, no learner-visible string naming GCSE, 1MA1 or Edexcel (X5: 'mapped to', never 'certified'); VERIFIED stays false. Captures owed to the owner's batch 5 review: Topics with the new units, Tonight's ruler, a Pythagoras paper and a probability paper, each at 1920 x 1080 and 1280 x 720.
-- Kill: a unit with a non-zero count that cannot be fixed in its generator or check is withheld: it stays out of `SCHOOL_GENERATORS` and off the path, its code and rows kept, recorded in row 20 and the log. Both units fail: stop after the table.
+**L4. Linga Adult: Take Two (adult C1)** (M; batch 6, built locally per the owner's 2026-10-08 10:05 ruling: one slice per
+run through the gate, L4 first, then M3a)
+- Goal: from the recap of a take ended by Cut (`Conversation.cut`), in Adult mode only, the learner picks one note and
+  plays its beat again. A new turn action `take-two` (`{ note }`, the note's index in `cut.notes`) forks inside the same
+  conversation, never through `start` (which keeps no link to the cut): the scene goes back to the partner line just
+  before the noted turn (`forkOf`), that same line is re-delivered (its stored text, no model call, the audio by
+  bumping `audioNonce`), the learner re-delivers their line with `turn`, and up to two cast turns follow, each one fast,
+  thinking-off call in `conversation.ts` (the replay schema: a reply, no observations, no moment). After the second
+  cast turn the take ends by itself; `take-end` ("Back to the notes") ends it earlier. Both end on `linga-recap`. The
+  name is not `replay`, which is already a turn action, a phase and a view id.
+- The record: `Conversation.takes?: Take[]`, `Take { note, from, turns, held, at, endedAt? }` (types.ts): the note it
+  came from, the partner turnId of the first take it forked at, its own turns (the re-delivered line first), `held`
+  (`boolean | null`) and when. The first take's `turns` and `cut.notes` are never rewritten. At most one take per note.
+  A running take is the last one with no `endedAt`.
+- The turn table: a new state `take-two` (a finished conversation with a take running; a reply in flight inside it is
+  `waiting`). `finished` takes `repeat` and `take-two`; `take-two` takes `turn`, `capture`, `repeat` and `take-end`;
+  `waiting` keeps `leave` (inside a take it cancels the reply and stays on the take) and `repeat`. `accepts(c,
+  "take-two", mode, note)` reads the mode and the note. Refused with a plain reason and no call: Family mode, no cut, a
+  note out of range, a note that already had its take, a take already running, a reply in flight. Inside a take Cut,
+  the coach, replay, the quiz, the help ladder, pause and finish are not offered, and no moment is asked for.
+- Never evidence: a take writes no `EnglishEvidence`, no session entry, no digest, no certificate, no review reuse
+  (`markReused`), no collectible, and leaves `c.evidence` and `c.supported` alone; `endTake` is not called. (C1's
+  "stored as supported" is not enough: `rules.ts:51` still moves not-tried to with-help on supported evidence.)
+- `heldOf(note, line)` in a pure `lib/english/take.ts` (no model call; `conversation.ts` keeps every call, so the
+  thinking:false caller pin at `linga-rules-test.cjs:693` is unchanged): form, held when the sentences of the
+  re-delivered line that carry the noted sentence's time marker have a verb form and `resolveEnglish` finds no conflict
+  in any of them, not held when a conflict against that marker is still there, null when no sentence carries the marker
+  or none has a verb form; word, held when the quote is gone (`findPhrase`, outside the better phrase where the better
+  phrase says it) and the better phrase is contained, not held while the quote is still there, else null; meaning,
+  held when the better phrase is contained, else null; register, a word or meaning note with no better phrase, an
+  empty line, anything else: null. It never guesses. It is decided on the learner's first line of the take.
+- Screens: no new Screen, no Session field (the conversation travels whole through `linga.changed`). `linga-talk`
+  during a take: the partner's line, "Take Two" over it, Back to the notes (Cancel while a reply is on its way). The
+  recap's tape: a held note's quote struck, an open one plain, a null one says "Not decided"; the fork drawn as a
+  branch from the noted pin (the partner line it forked at, then the learner's line again). No count anywhere. Phone: a
+  Take Two button per note on the recap, disabled with the refusal text when refused; during a take, the take panel.
+- Files: new `lib/english/take.ts`; `lib/english/{types,turn,conversation,view}.ts`, `english/LingaTV.tsx`,
+  `english/LingaPhone.tsx`; `tools/linga-rules-test.cjs`, `tools/adult-rules-test.cjs`; `docs/DESIGN-LINGA.md`,
+  `docs/STUDY-DESK-SCREENS.md`; this plan and the adult plan's row C1.
+- Tests: linga-rules, the heldOf table (at least 30 rows over the four kinds, at least 8 null, one where the better
+  phrase is parroted inside a line that still carries the form conflict: not held) and forkOf rows; `turnState`,
+  `accepts` and `refusal` for `take-two` and `take-end` in every state; one full stubbed run (a scene, learner turns,
+  Cut, Take Two on one note, the re-delivery, two cast turns, the end) in which the learner record's english and the
+  first take's turns and notes are deep-equal before and after, the re-delivered line is the stored text with no call,
+  and the take makes at most 3 calls; view rows (the take on linga-talk, the struck, open and undecided pins, the
+  branch, the phone's Take Two disabled with its refusal). adult-rules: Family mode refuses `take-two` with no call.
+- Accept: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit` clean; no existing assertion changes;
+  no Family behaviour or event shape changes. Owed to the owner's batch 5+6 review: the TV take (the branch, a struck
+  note and an open one) at 1920 x 1080 and 1280 x 720, the phone recap at 390 px, one live take on the real engine.
+- Kill: a take that writes to the learner record, or a held note code cannot back with a rule or a contained phrase:
+  the take is withheld (the action refused), its code and rows kept.
 
 ## e. Batches
 
