@@ -88,7 +88,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
-| 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | not started | | |
+| 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc')\| 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
 | 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | not started (its questions go to the App Master first; see the M3b card) | | |
 | 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | not started (built only if its card names the kind of truth, comparison, leak rule and marking prompt; else listed in the honest limits and the descope goes to the owner) | | |
 
@@ -1120,3 +1120,46 @@ recovery.ts, gcse.ts, paths.ts, syllabus.ts, school.ts, read.ts, the engines and
 Owed to the owner: the live run from desk/ (`node ../tools/paper-probe.cjs`) with Ollama and the vision model up, and its figure
 recorded here and in row 36 (under 85% mapped: the photo path is not offered and typed entry stays the door); the M5b items still
 owed: the captures (the TV list at 1920 x 1080 and 1280 x 720, the Paper panel at 390 px), the caps check (8), and the TV door (9).
+
+### 2026-10-08 · batch 7 · M3b-1 · autopilot/accepted-idea-delivery-94f77512
+M3b's first slice (rows 27 and 37; the M3b card), architecture card 5 part a. Built locally, nothing pushed. Commits: 830ad522 (step 0:
+the App Master's rulings (12)-(13) on M5c's questions in the M5 card, row 25 built in three slices, the M3b card cut in three with
+rulings (1)-(4), rows 37-39), 08149848 (the judge and its rows), and this entry.
+Order, a deliberate deviation: batch 7's order is M5, L5, M3b (section e). M3b-1 ran ahead of L5 because L5's 18+ content waits for
+the owner's review at 09:00 on 2026-10-09, and M3b-1 needs no owner (a seam change with no behaviour or screen change).
+What changed, by file:
+- `lib/library/paths.ts`: `PathJudge` (`'school' | 'calc'`) and `PathInfo.judge` (school 'school', calc1 'calc'). A topic of a path
+  judged 'calc' carries its practice `shapes` on its `PathTopic` (a copy of the spine's list), so no site past paths.ts reads
+  `CALC1_SPINE`. New helpers: `isPath` (an own key of PATHS, never an inherited one such as `toString`), `judgeOf(path)` (the school
+  path's judge with no path), `judgeOfTopic(id)`, `calcTopics()` (every topic of every path judged 'calc', in path order) and
+  `shapesOfTopic(id)` (empty off a 'calc' path). `pathOf` accepts any key of PATHS. Still client-safe: the only runtime imports are
+  `./syllabus` and `./calculus1.spine` (test 12 unchanged and green).
+- `rules/kinds.ts` kindOfTopic reads `judgeOfTopic`; `rules/maths.ts` `CALC_AS_SLIPS` tags `calcTopics()` and `isCalcTopic` is
+  `judgeOfTopic(id) === 'calc'`; `desk/items.ts` `shapesOf` is `shapesOfTopic`; `desk/hint.ts` the stance and the voice read
+  `judgeOf(path)`; `app/api/hint/route.ts` the lesson skip reads `judgeOf(path)`; `session/store.ts` `pathChecked` keeps any
+  `isPath` value; `tv/profileRows.ts` `COURSES` is `Object.keys(PATHS)` (school, then calc1); `desk/explain.ts` names
+  `calcCourse(topicId)`: the topic's own path when it is judged 'calc', else the first path judged 'calc', so every Calculus 1
+  prompt is byte for byte as before (a Calculus item on a school topic still says Calculus 1).
+Choices, stated: (1) The field is `judge`, a string union, because the brief's rows read "school is 'school', calc1 is 'calc'" and
+`kindOfTopic` needs only the two values; a third kind of truth (M3b-3) would add a member, not a shape. (2) The shapes ride on
+`PathTopic` (optional, like `year`), not in a second record keyed by path, so a new path is one PATHS entry. (3) `isPath` uses an own-key
+check: `in` would have let `mathPath: 'toString'` through.
+Rows (7, tests 13-19 in `tools/maths-paths-test.cjs`, after test 12 so the client-safe cache check still sees no server module): every
+path has a judge (school 'school', calc1 'calc'), only a 'calc' path's topics carry shapes, and they are the spine's; for every topic of
+every path, kindOfTopic, the slips in their judge's own words, pathOf and pathOfTopic agree with the record; a stubbed set asks a
+Calculus topic for the record's shapes and a school topic for none; the hint's stance, voice and the route's lesson skip per path;
+explain names the topic's Calculus path, Calculus 1's words unchanged; the store keeps every PATHS key and drops junk (toString,
+constructor, __proto__, calc2, CALC1, '', 1, null, an object, an array), COURSES is the PATHS keys in order and the course row has one
+cell per path; the sweep finds no quoted 'calc1' in desk/src outside paths.ts, calculus1.ts and calculus1.spine.ts. Existing assertions:
+none changed.
+Kill test (run on 08149848, not committed): calc1's judge set to 'school' turned maths-paths 13 (the judge pin) and 17 (explain finds
+no Calculus course) red, and outside the suite calc-practice (1-7 and M3a 1 among its reds), calc-hint 8 (the route) and calc-course 3 (the whole
+course); restored with `git restore`, 19 of 19 green. Rows 14-16 stay green under the flip by design: they check that every site
+agrees with the record, and the flipped record is followed everywhere.
+Gate: `cd desk && npm run test:rules` 68 green, 0 red (1160 tests) at 08149848 (1153 at eb4d6750); `npx tsc --noEmit --incremental
+false` clean. No `desk/data/` touched, no model call, no push; calculus1.spine.ts, calculus1.ts, calc.ts, calc-expr.ts, the
+generators, syllabus.ts, school.ts, recovery.ts, paperRead.ts, paperScore.ts and the engines unchanged.
+Next: M3b-2 waits for the App Master's rulings on its questions (in the run's result.json): the third course cell and its captures,
+whether a Calculus 2 prompt names its own course (`CALC_SYSTEM` in items.ts says "a university Calculus 1 desk", and the hint's
+`CALC_STANCE` names Calculus I's rules), improper integrals and volumes or arc length (out, or M3b-3), the corpus or syllabus Calculus 2
+follows, and whether a slip new to integration techniques may be added. L5 runs after the owner's 09:00 review on 2026-10-09.

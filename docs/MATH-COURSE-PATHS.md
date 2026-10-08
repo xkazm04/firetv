@@ -29,26 +29,28 @@ The Calculus 1 course itself (its source, its 22 topics, the reader baseline and
 ## 1. What a path is
 
 `MathPath` is `"school" | "calc1"`. `PATHS` holds one `PathInfo` per path: an id, a name, a one-sentence blurb,
-`school` (true when its topics carry a school year) and its topics, in order. Each `PathTopic` has an id, a name, a
-strand, a blurb, its prerequisites (earlier topics of the same path) and, on the school path only, a lesson id and a
-`year` per school system.
+`school` (true when its topics carry a school year), `judge` and its topics, in order. `judge` (`PathJudge`, v2 M3b-1)
+says how the path's items are judged: `'school'` (a unit with a code generator is a school item, any other topic a
+linear one) or `'calc'` (every topic is a Calculus item on its own shapes). Each `PathTopic` has an id, a name, a
+strand, a blurb, its prerequisites (earlier topics of the same path), on the school path only a lesson id and a `year`
+per school system, and on a path judged `'calc'` only its practice `shapes` (the spine's own list).
 
-| path | name | topics | `school` | built from |
-|---|---|---|---|---|
-| `school` | School maths | 17 in five strands, seven bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations, Geometry and data) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, then Pythagoras' theorem and Probability of an event (v2 M2b, section 2f), with their US/UK/CZ/DE years |
-| `calc1` | Calculus 1 | 22 in six strands | false | `CALC1_SPINE`; no topic has a year |
+| path | name | topics | `school` | `judge` | built from |
+|---|---|---|---|---|---|
+| `school` | School maths | 17 in five strands, seven bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations, Geometry and data) | true | `'school'` | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, then Pythagoras' theorem and Probability of an event (v2 M2b, section 2f), with their US/UK/CZ/DE years |
+| `calc1` | Calculus 1 | 22 in six strands | false | `'calc'` | `CALC1_SPINE`; no topic has a year |
 
 Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 37 ids, none in two paths), so
 `topicIn(id)` finds a topic without knowing the path, and `pathOfTopic(id)` names the path it is on.
 
-**Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: only the
-string `"calc1"` is Calculus, and anything else, including nothing, is the school path, which is the default.
-`pathChecked` drops any other value when `session.json` loads and when a `profile.draft` arrives, so a junk path
+**Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: a key of
+`PATHS` (`isPath`, never an inherited one such as `toString`) is that path, and anything else, including nothing, is
+the school path, which is the default. `pathChecked` drops any value that is not a key of `PATHS` when `session.json` loads and when a `profile.draft` arrives, so a junk path
 never reaches a screen (`tools/maths-course-test.cjs` test 1). `learnerPath(session)` is the path of the learner at
 the desk, or the school path when no one is seated.
 
-**How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES = ["school",
-"calc1"]`) while Maths is among the draft's interests. Its two cells are the paths' names, School maths and
+**How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES`: the keys of
+`PATHS` in their declared order, today `school` then `calc1`) while Maths is among the draft's interests. Its two cells are the paths' names, School maths and
 Calculus 1. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
 draft with the other fields. Turning Maths off hides the row but leaves the draft's `mathPath` as it was.
 
@@ -542,7 +544,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 
 | file | what it pins |
 |---|---|
-| `tools/maths-paths-test.cjs` | 22 + 15 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
+| `tools/maths-paths-test.cjs` | 22 + 15 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports; the judge (v2 M3b-1, tests 13-19): every path has one, and `kindOfTopic`, the slips, the set's shapes, the hint's stance, voice and lesson skip, the course `explain` names, the store's path check and `COURSES` agree with the record; no quoted `'calc1'` outside the three library files |
 | `tools/calc-expr-test.cjs` | the engine's reading rules; formula strings copied from the corpus (at least 80, asserted); at least 40 edge cases; the numerics' stated tolerances; time budgets |
 | `tools/calc-rules-test.cjs` | `checkAnswer` on every shape; the named tolerances; `wellFormed` and its reasons; `question()` typesets; `leaksCalc`; the slip vocabulary; a sweep of all 22 topics; no answer field; never throws (3,000 mutations) |
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
@@ -584,23 +586,26 @@ stubbed replies.
 
 ## 9. How to add a path
 
-Take Calculus 2 as the example. Today most of the Calculus wiring is keyed to the id `calc1`, so a second course
-path is partly data and partly generalising those keys.
+Take Calculus 2 as the example. Since v2 M3b-1 the Calculus wiring asks the path's record (`judge`), not the id
+`calc1`, so a second course path on the nine shapes is data.
 
 1. **The spine.** Add `desk/src/lib/library/<course>.spine.ts` as plain data with no import. Give each topic an
    id unique across every path, a name, a strand, a one-sentence blurb, prerequisites that point only at earlier
    topics, and at least one `CalcShape`.
-2. **`paths.ts`.** Add the id to `MathPath` and a `PATHS` entry with its name, blurb and `school: false`.
+2. **`paths.ts`.** Add the id to `MathPath` and a `PATHS` entry with its name, blurb, `school: false` and
+   `judge: "calc"`, its topics each carrying the spine's `shapes`.
    `school: true` would make `expectedOn` call `expectedIndex`, which counts `SYLLABUS` topics. A second
    school-year path is a design change.
-3. **The profile.** Allow the id in `pathChecked` in `store.ts`, which accepts only `school` and `calc1` and drops
-   anything else. Add it to `COURSES` in `profileRows.ts`, which gives the Maths course row a third cell. `pathOf`
-   also knows only `calc1`.
-4. **Generalise what reads `calc1` by name:**
-   - `items.ts` `makeItems` (`pathOfTopic(...) === "calc1"`) and `shapesOf` (reads `CALC1_SPINE`);
-   - `rules/maths.ts` `isCalcTopic` and `CALC_AS_SLIPS` (read `CALC1_SPINE`);
-   - `hint.ts` `stanceOf`, and the lesson skip in `api/hint/route.ts`;
-   - `explain.ts` (names `PATHS.calc1`).
+3. **The profile.** Nothing to add: `pathChecked` in `store.ts` and `pathOf` accept any key of `PATHS`, and
+   `COURSES` in `profileRows.ts` is the keys of `PATHS` in order, so the Maths course row gets a third cell by
+   itself. That cell is a screen change: capture it.
+4. **The judge (done in v2 M3b-1; a new path sets its `judge`).** Every site that decided Calculus by the string
+   `calc1` asks the record: `kindOfTopic` (`rules/kinds.ts`, which `makeItems` follows), `shapesOf` (`items.ts`,
+   through `shapesOfTopic`), `isCalcTopic` and `CALC_AS_SLIPS` (`rules/maths.ts`, over `calcTopics()`, every path
+   judged `'calc'`), the hint's stance and voice (`hint.ts`, `judgeOf`), the lesson skip (`api/hint/route.ts`) and
+   the course `explain.ts` names (the topic's own path). The quoted `'calc1'` appears in `desk/src` only in
+   `paths.ts`, `calculus1.ts` and `calculus1.spine.ts`; `tools/maths-paths-test.cjs` test 19 sweeps for it, and
+   tests 13-18 check every site against the record for every topic of every path.
 
    Marking and explaining branch on `item.spec`, so they need no change.
 5. **The shapes.** If every question fits the nine shapes, the rest is data. A new shape touches every one of
