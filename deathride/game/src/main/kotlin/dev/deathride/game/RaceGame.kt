@@ -15,7 +15,7 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL, private val switchArm: SwitchArm=SwitchArm.OFF, private val bakeHash: Boolean=false) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null, private val cacheRoadMarks: Boolean=true, private val trackPreview: TrackPreview?=null, private val regionOverride: RegionDefinition?=null, private val regionPresentation: Boolean=true, private val regionCandidates: Boolean=true, private val audioArm: AudioArm=AudioArm.FULL, private val switchArm: SwitchArm=SwitchArm.OFF, private val bakeHash: Boolean=false, private val hudDiff: Boolean=false) : ApplicationAdapter() {
     private val courseCatalog=if(trackPreview==null)Courses.all else Courses.all+trackPreview.course
     private val profiler=profilePlatform?.let{FrameProfiler(it)}
     private var profileGl: ProfileGl?=null
@@ -37,6 +37,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val script=ScriptDirector()
     private lateinit var scriptLayer: GlyphLayer
     private var drawnScript=-1
+    /** P16 pixel proof (perf package, `hudDiff=on` only): twins of the live text layers over the old three font pages. */
+    private class OldFontLayers(val text: GlyphLayer,val headline: GlyphLayer,val detail: GlyphLayer,val captions: GlyphLayer,val script: GlyphLayer)
+    private var oldFonts: OldFontLayers?=null
+    private val diffDone=BooleanArray(HudDiff.POINTS.size)
     private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[Courses.playableIndices.first()]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
@@ -242,6 +246,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         captions=GlyphLayer(small);scriptLayer=GlyphLayer(small)
+        if(hudDiff && fontFactory!=null) {
+            // The pre-P16 fonts exactly as they were made: body and detail each rasterized to its own page, titles on their own.
+            val oldBody=fontFactory.invoke(HudTheme.BODY);val oldTitle=HandCutFont.create(HudTheme.TITLE);val oldDetail=fontFactory.invoke(HudTheme.BODY)
+            oldFonts=OldFontLayers(GlyphLayer(oldBody),GlyphLayer(oldTitle),GlyphLayer(oldDetail),GlyphLayer(oldDetail),GlyphLayer(oldDetail)).also {
+                text.twin=it.text;headline.twin=it.headline;detail.twin=it.detail;captions.twin=it.captions;scriptLayer.twin=it.script
+            }
+            logger("hudDiff on (P16 perf-only): old font pages ${listOf(oldBody,oldTitle,oldDetail).joinToString(","){"${it.region.texture.width}x${it.region.texture.height}"}}, points ${HudDiff.POINTS}")
+        }
         val cueManifest=runCatching{CueManifest.parse(Gdx.files.internal("audio/cues.json").readString("UTF-8"))}.getOrElse{logger("audio manifest unavailable; silent fallback");CueManifest.silent()}
         logger("audio musicMode=${cueManifest.musicMode}")
         for((id,gap) in cueManifest.gaps)logger("audio gap $id: $gap")
@@ -454,10 +466,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(scene.ready)drawWorld(elapsed)
         profiler?.mark(15,"DR.hud")
         val hudDraws=profileGl?.draws?:0
-        drawOverlay()
+        val diffTag=diffDue()
+        if(diffTag!=null)hudDiffFrame(diffTag) else drawOverlay()
         profiler?.hud((profileGl?.draws?:0)-hudDraws,batch.renderCalls,0.0)
         profiler?.mark(16,"DR.caption")
-        drawCaption();drawScriptCaption()
+        if(diffTag==null){drawCaption();drawScriptCaption()}
         profiler?.mark(17,"DR.tail")
         // Flash is a display event, consumed once after all other drawing.
         if(server.flash.getAndSet(false)) { Gdx.gl.glClearColor(1f,1f,1f,1f); Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); server.flashFrames++ }
@@ -573,7 +586,47 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true,viewBounds);shape.end()
         batch.begin();obstaclePainter.sprites(batch,world,art,true,viewBounds);batch.end()
     }
-    private fun drawOverlay() {
+    /** P16 pixel proof: the next capture point that is due (perf package, `hudDiff=on`), as its tag, or null. */
+    private fun diffDue(): String? {
+        if(oldFonts==null || !scene.ready)return null
+        for(i in HudDiff.POINTS.indices)if(!diffDone[i] && HudDiff.POINTS[i].first==phase && stateTime>=HudDiff.POINTS[i].second) { diffDone[i]=true;return "$phase-${i+1}" }
+        return null
+    }
+    /** P16 pixel proof: copy the world as drawn this frame, then draw it with each HUD variant into the real back buffer (2x MSAA on
+     *  the Stick) and read each back. The GL blend state the HUD met this frame is restored before every variant. The last variant
+     *  stays on screen. PNGs go to the app's files dir (hud-diff/); one log line carries every pair's comparison. */
+    private fun hudDiffFrame(tag: String) {
+        val started=System.nanoTime()
+        val w=Gdx.graphics.backBufferWidth;val h=Gdx.graphics.backBufferHeight
+        val blend=Gdx.gl.glIsEnabled(GL20.GL_BLEND)
+        val funcs=IntArray(4);val query=com.badlogic.gdx.utils.BufferUtils.newIntBuffer(16)
+        for((i,name) in intArrayOf(GL20.GL_BLEND_SRC_RGB,GL20.GL_BLEND_DST_RGB,GL20.GL_BLEND_SRC_ALPHA,GL20.GL_BLEND_DST_ALPHA).withIndex()) { query.clear();Gdx.gl.glGetIntegerv(name,query);funcs[i]=query.get(0) }
+        val world=Pixmap.createFromFrameBuffer(0,0,w,h)
+        val copy=Texture(world);copy.setFilter(Texture.TextureFilter.Nearest,Texture.TextureFilter.Nearest);world.dispose()
+        val screen=Matrix4().setToOrtho2D(0f,0f,w.toFloat(),h.toFloat())
+        val shots=HudDiff.VARIANTS.map { variant ->
+            Gdx.gl.glViewport(0,0,w,h)
+            batch.projectionMatrix=screen;batch.disableBlending();batch.begin();batch.color=Color.WHITE
+            batch.draw(copy,0f,0f,w.toFloat(),h.toFloat(),0,0,w,h,false,true);batch.end();batch.enableBlending()
+            view.apply()
+            if(blend)Gdx.gl.glEnable(GL20.GL_BLEND) else Gdx.gl.glDisable(GL20.GL_BLEND)
+            Gdx.gl.glBlendFuncSeparate(funcs[0],funcs[1],funcs[2],funcs[3])
+            val old=variant==HudDiff.BASE
+            drawOverlay(old);drawCaption(old);drawScriptCaption(old)
+            variant to Pixmap.createFromFrameBuffer(0,0,w,h)
+        }
+        copy.dispose()
+        val pairs=StringBuilder()
+        for(i in shots.indices)for(j in i+1 until shots.size) {
+            if(pairs.isNotEmpty())pairs.append(',')
+            pairs.append('"').append(shots[i].first).append('/').append(shots[j].first).append("\":").append(HudDiff.compare(shots[i].second.pixels,shots[j].second.pixels,w,h).json())
+        }
+        for((variant,shot) in shots) {
+            val writer=PixmapIO.PNG();writer.setFlipY(true);writer.write(Gdx.files.local("hud-diff/$tag-$variant.png"),shot);writer.dispose();shot.dispose()
+        }
+        logger("hudDiff tag=$tag phase=$phase w=$w h=$h blend=$blend funcs=${funcs.joinToString(",")} ms=${msSince(started)} pairs={$pairs}")
+    }
+    private fun drawOverlay(oldText: Boolean=false) {
         shape.projectionMatrix=view.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
         if(regionPresentation && scene.ready)atmosphere.draw(shape)
@@ -700,7 +753,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
         }
         if(phase=="lobby" && qr!=null)batch.draw(qr,64f,266f,150f,150f)
-        text.draw(batch);headline.draw(batch);detail.draw(batch);batch.end()
+        val old=if(oldText)oldFonts else null
+        (old?.text?:text).draw(batch);(old?.headline?:headline).draw(batch);(old?.detail?:detail).draw(batch);batch.end()
     }
     /** Atlas key for the lobby preview car (clean frame, seat 0 livery), or null for the procedural fallback. */
     private fun previewKey(): String? {
@@ -910,7 +964,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun combatWrecked(c: Car)=world.combat.wrecked(c.id)
     /** Timed script captions (pre/post-race scenes, barks); yields to a playing voice caption. No audio. */
-    private fun drawScriptCaption(){
+    private fun drawScriptCaption(oldText: Boolean=false){
         val value=script.caption
         if(value.isEmpty() || audio.caption.isNotEmpty())return
         val (bx,by)=when(phase){"career"->60f to 300f;"results"->190f to 84f;else->190f to 132f}
@@ -918,15 +972,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(script.serial!=drawnScript){scriptLayer.clear();scriptLayer.setColor(HudTheme.bone);scriptLayer.wrapped(value,bx+16f,by+38f,width-32f,24f);drawnScript=script.serial}
         shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=HudTheme.soot;shape.rect(bx,by,width,60f);shape.end()
-        batch.projectionMatrix=view.camera.combined;batch.begin();scriptLayer.draw(batch);batch.end()
+        batch.projectionMatrix=view.camera.combined;batch.begin();((if(oldText)oldFonts?.script else null)?:scriptLayer).draw(batch);batch.end()
     }
-    private fun drawCaption(){
+    private fun drawCaption(oldText: Boolean=false){
         val value=audio.caption
         if(value!=drawnCaption){captions.clear();captions.setColor(HudTheme.bone);captions.wrapped(value,190f,177f,900f,26f);captions.addText("N / X: SKIP VOICE",190f,117f);drawnCaption=value}
         if(value.isEmpty())return
         shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=HudTheme.soot;shape.rect(175f,98f,930f,105f);shape.end()
-        batch.projectionMatrix=view.camera.combined;batch.begin();captions.draw(batch);batch.end()
+        batch.projectionMatrix=view.camera.combined;batch.begin();((if(oldText)oldFonts?.captions else null)?:captions).draw(batch);batch.end()
     }
     /** Stats-only strings, built on the reader's thread. Reads race the render thread: a torn read serves the last good text instead of failing the request. */
     private val statsLock=Any();private val statsLast=HashMap<String,String>()

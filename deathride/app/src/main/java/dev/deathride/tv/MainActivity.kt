@@ -68,6 +68,7 @@ class MainActivity : AndroidApplication() {
         // P13e: and only it can hash every finished scenery bake (`bakeHash=on`, a 16 MiB readback per bake; ungraded runs only).
         val perfBuild=applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf"
         val switchArm=if(perfBuild)SwitchArm.parse(intent.getStringExtra("switchArm")) else SwitchArm.OFF
+        // P16: and only it can draw a few HUD frames several ways and diff them (`hudDiff=on`; ungraded runs only).
         // P14: silentTrack/silentDeep also hold one AudioTrack open, writing zeros from resume to pause.
         // P15: silentMmap holds one AAudio stream instead (mmapSharing=shared asks for SHARED). Its class and library
         // exist only in a debug build made with -PsilentMmap=true, so it is reached by name; without them the arm throws.
@@ -79,7 +80,7 @@ class MainActivity : AndroidApplication() {
             }
             else->SilentTrack(mode)
         }
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on"), config)
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on",hudDiff=perfBuild && intent.getStringExtra("hudDiff")=="on"), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
         if(paced)graphics.isContinuousRendering=false
