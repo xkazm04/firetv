@@ -275,7 +275,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- practice: specs from the model, printed, checked and ordered by code
   const want=expectedSet(topic);
   textPlan={practice:()=>({specs:specsFor(topic).map(rawOf)})};
-  let r=await step(`${topic} practice`,()=>post('practice',{topic}));
+  // word:false (v2 M3a): the walk pins the model's set; the route's word problem has its own rows (calc-practice-test M3a)
+  let r=await step(`${topic} practice`,()=>post('practice',{topic,word:false}));
   assert.equal(r.status,200,`${topic}: ${JSON.stringify(r.body)}`);
   let s=store.getSession();
   assert.equal(s.practice.topic,topic);
@@ -336,7 +337,7 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- mastery: four evenings of right work latch the topic
   for(let round=1;round<=4;round++){
    textPlan={practice:()=>({specs:specsFor(topic).map(rawOf)})};
-   r=await step(`${topic} practice ${round}`,()=>post('practice',{topic}));
+   r=await step(`${topic} practice ${round}`,()=>post('practice',{topic,word:false}));
    assert.equal(r.status,200);
    visionPlan=reading(want.map((w)=>w.right));
    r=await step(`${topic} mark ${round}`,()=>post('mark',PHOTO));

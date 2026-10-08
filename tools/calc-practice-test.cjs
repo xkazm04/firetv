@@ -236,3 +236,88 @@ test('8: the shape lines tell the model how to pick a spec the desk will keep',(
  assert.match(line('extremum'),/well inside/,'the turning point sits well inside the interval, not near an end');
  assert.match(line('critical-point'),/exactly one turning point.*well inside/,'one turning point, well inside');
 });
+
+// ------------------------------------------------------------------ M3a: a word problem in parts, drawn by code, last in the set
+
+const W=require(src('lib/rules/calc-word.ts'));
+const WORD_TOPICS=['calc1-related-rates','calc1-extrema','calc1-optimisation'];
+
+test('M3a 1: asked with word, a set on the three topics ends with a code-drawn word problem - its parts counted toward six, the model asked exactly as before, the single items in their order',async()=>{
+ seat();
+ for(const topic of WORD_TOPICS){
+  const fx=FIX.find((x)=>x.topic===topic);
+  stub({specs:nine(fx)});const plain=await makeItems(topic,LEARNER);const before=seen[0];
+  stub({specs:nine(fx)});const made=await makeItems(topic,LEARNER,6,{word:11});
+  assert.equal(seen.length,1,`${topic}: one model call, as before`);
+  for(const k of ['system','prompt','model','thinking'])assert.deepEqual(seen[0][k],before[k],`${topic}: the ${k} is unchanged`);
+  assert.deepEqual(seen[0].schema,before.schema,`${topic}: still n + 3 specs asked for`);
+  const w=W.drawWord(W.wordTemplateFor(topic).id,11);
+  assert.equal(made.items.length,6,`${topic}: six items`);
+  assert.deepEqual(made.items.slice(0,4),plain.items.slice(0,4),`${topic}: the first four single items, as the set without the word problem has them`);
+  assert.deepEqual(made.items.slice(4),W.wordItems(w,5),`${topic}: then the word problem's two parts, items 5 and 6`);
+  assert.deepEqual(made.items.map((i)=>i.n),[1,2,3,4,5,6]);
+  for(const it of made.items.slice(4)){
+   assert.ok(C.wellFormed(it.spec).ok&&shapesOf(topic).includes(it.spec.shape),`${topic}: a part is one of the topic's shapes`);
+   for(const t of [it.stem,...made.items.slice(4).map((x)=>x.question)])assert.equal(C.leaksCalc(it.spec,t),false,`${topic}: "${t}" gives (${it.part}) away`);
+  }
+  const keys=keysIn(made.items);for(const k of ['answer','solution','truth','value','worked'])assert.equal(keys.includes(k),false,`${topic}: a ${k} key`);
+ }
+});
+
+test('M3a 2: no word problem without the ask, on a topic with no template, with too few items for a single one, or with no single item kept',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-extrema');
+ stub({specs:nine(fx)});assert.equal((await makeItems('calc1-extrema',LEARNER)).items.some((i)=>i.stem),false,'not asked');
+ stub({specs:nine(fx)});assert.equal((await makeItems('calc1-extrema',LEARNER,6,{word:false})).items.some((i)=>i.stem),false,'asked not to');
+ stub({specs:nine(FIX[2])});const rules=await makeItems('calc1-rules',LEARNER,6,{word:3});
+ assert.equal(rules.items.length,6);assert.equal(rules.items.some((i)=>i.stem||i.part),false,'calc1-rules has no word template');
+ stub({specs:nine(fx)});const two=await makeItems('calc1-extrema',LEARNER,2,{word:3});
+ assert.equal(two.items.some((i)=>i.stem),false,'two items leave no room for a single item beside two parts');
+ // the model kept nothing: no set at all, and no word problem alone
+ const bad=fx.bad;stub({specs:bad},{specs:bad});
+ const none=await makeItems('calc1-extrema',LEARNER,6,{word:3});
+ assert.deepEqual(none.items,[]);
+ // a short model round: the singles it has, then the parts
+ stub({specs:[fx.good[0],fx.good[1]]},{specs:[]});
+ const short=await makeItems('calc1-extrema',LEARNER,6,{word:3});
+ assert.deepEqual(short.items.map((i)=>i.part??null),[null,null,'a','b']);assert.deepEqual(short.items.map((i)=>i.n),[1,2,3,4]);
+ // a step up is flagged on every item, the parts too
+ stub({specs:nine(fx)});const up=await makeItems('calc1-extrema',LEARNER,6,{word:3,stretch:true});
+ assert.ok(up.items.length===6&&up.items.every((i)=>i.stretch===true));
+});
+
+test('M3a 3: the route writes the word problem onto the desk; the TV, the phone and the saved session keep its stem and letters and no view gives a part away',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-optimisation');
+ stub({specs:nine(fx)});
+ const r=await post({topic:fx.topic});
+ assert.equal(r.status,200);
+ const s=store.getSession(),items=s.practice.items;
+ assert.equal(items.length,6);
+ assert.deepEqual(items.map((i)=>i.part??null),[null,null,null,null,'a','b']);
+ assert.ok(items[4].stem&&items[4].stem===items[5].stem);
+ assert.ok(/^A rectangle has a perimeter of \d+ metres\./.test(items[4].stem),items[4].stem);
+ const saved=JSON.parse(fs.readFileSync(path.join(data,'session.json'),'utf8'));
+ for(const [where,v] of [['tv',view(s,'tv')],['phone',view(s,'phone')],['session.json',saved]]){
+  assert.deepEqual(v.practice.items.map((i)=>i.part??null),[null,null,null,null,'a','b'],where);
+  const lines=stringsIn({practice:v.practice,jobs:v.jobs,status:v.status});
+  for(const it of items)for(const line of lines)assert.equal(C.leaksCalc(it.spec,line),false,`${where}: "${line}" states the result of ${it.question}`);
+ }
+ // a topic with no template: the route's set is as before
+ stub({specs:nine(FIX[8])});assert.equal((await post({topic:FIX[8].topic})).status,200);
+ assert.equal(store.getSession().practice.items.some((i)=>i.stem),false);
+});
+
+test('M3a 4: the route asks for the word problem unless the body says word: false (or 0) - which no screen sends',async()=>{
+ seat();
+ const fx=FIX.find((x)=>x.topic==='calc1-related-rates');
+ for(const [body,parts] of [[{topic:fx.topic},2],[{topic:fx.topic,word:true},2],[{topic:fx.topic,word:'no'},2],[{topic:fx.topic,word:false},0],[{topic:fx.topic,word:0},0]]){
+  stub({specs:nine(fx)});
+  assert.equal((await post(body)).status,200,JSON.stringify(body));
+  const items=store.getSession().practice.items;
+  assert.equal(items.filter((i)=>i.part).length,parts,JSON.stringify(body));
+  assert.equal(items.length,6);
+ }
+ // no screen or phone code sends word
+ for(const f of ['tv/keys.ts','tv/screens.tsx','maths/MathsTV.tsx','app/phone/page.tsx'])assert.doesNotMatch(fs.readFileSync(src(f),'utf8'),/word:\s*(false|0)/,f);
+});

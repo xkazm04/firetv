@@ -18,6 +18,11 @@
  * ahead of the learner's school year, one rung harder for "a step up"), prints each question itself and carries the spec
  * and the tier on the item (makeSchoolItems, provider "code").
  *
+ * A Calculus set on related rates, optimisation or maxima and minima, asked for with `word` (v2 M3a; the practice route
+ * asks so), ends with one word problem in parts that CODE draws from a seed with no model call (rules/calc-word): its parts
+ * count toward n, so six is four of the model's single items and two parts. The model is asked exactly as before, and the
+ * single items keep their order; the first n - parts are taken. A set with no single item carries no word problem.
+ *
  * A set asked for as "a step up" (`stretch`, Family W8) carries `stretch: true` on every item, whichever road wrote it,
  * so marking records its attempts on the step-up record only (lib/session/learners.ts). On a topic with no generator
  * (the three linear topics, Calculus 1) the step up changes nothing about how the set is written: the model road has no
@@ -33,6 +38,7 @@ import { topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
 import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 import { setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
@@ -109,7 +115,11 @@ function keep(cands: Candidate[] | undefined, have: PracticeItem[]): Candidate[]
  * system as the seated profile gives them (the practice route reads them), from which rules/stretch sets a school unit's
  * mix. All optional: a call without them writes the standard set, as every set was written before W8.
  */
-export interface SetAsk extends MixFor { stretch?: boolean }
+/**
+ * `word` (v2 M3a): a Calculus set on a topic with a shipped word template ends with one code-drawn word problem in parts -
+ * true for a fresh seed, a number for that seed (the tests). Absent or false: the set is written as before.
+ */
+export interface SetAsk extends MixFor { stretch?: boolean; word?: boolean | number }
 
 export async function makeItems(
   topicId: string,
@@ -122,7 +132,7 @@ export async function makeItems(
   const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
     stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
   const kind = kindOfTopic(topicId);
-  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n));
+  if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
   if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse());
   return flag(await makeLinearItems(topicId, learnerId, n));
@@ -278,7 +288,7 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
  * and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
  * { n, question: the printed question, spec } - the spec carries only what the question prints.
  */
-async function makeCalcItems(topicId: string, learnerId: string, n: number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   const slips = me.skills[topicId]?.slips ?? [];
@@ -310,7 +320,12 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number): Pro
   }
 
   const ordered = kept.slice().sort((a, b) => a.difficulty - b.difficulty || a.spec.f.length - b.spec.f.length);
-  return { items: ordered.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec })), provider, ms, tries };
+  // the word problem (v2 M3a): drawn by code, the last question of the set, its parts counted toward n
+  const template = word === true || typeof word === "number" ? wordTemplateFor(topicId) : undefined;
+  const problem = template ? drawWord(template.id, typeof word === "number" ? word : freshSeed()) : null;
+  const singles = problem && n - problem.parts.length >= 1 && ordered.length ? n - problem.parts.length : n;
+  const items: PracticeItem[] = ordered.slice(0, singles).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec }));
+  return { items: problem && singles < n ? [...items, ...wordItems(problem, items.length + 1)] : items, provider, ms, tries };
 }
 
 // ------------------------------------------------------------------ school units: written by code, no model call
