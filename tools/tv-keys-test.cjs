@@ -574,7 +574,7 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  const {tvKey}=keys();
  const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts'));
  const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s),N=stops.length;
- assert.equal(N,17,'every school unit is a stop');
+ assert.equal(N,require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length,'every school unit is a stop');
  assert.deepEqual(tvKey(s,'right',LOCAL).events,[{type:'focus',focus:1}]);
  assert.deepEqual(tvKey(s,'left',LOCAL).events,[],'clamped at the first unit');
  assert.deepEqual(tvKey({...s,focus:N-1},'right',LOCAL).events,[],'clamped at the last unit');

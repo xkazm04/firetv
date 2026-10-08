@@ -16,6 +16,8 @@ const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
 const {getLearner,recordAttempt,saveLearner,saveEnglish,addHistory}=require(path.join(root,'src/lib/session/learners.ts'));
 const {SYLLABUS,SYSTEM_START,topic,nextTopic,expectedIndex}=require(path.join(root,'src/lib/library/syllabus.ts'));
 const {LESSONS}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+/** The school path's length, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const N_SCHOOL=require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length;
 const storeFile=path.join(root,'src/lib/session/store.ts');
 let store=require(storeFile);
 after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
@@ -255,9 +257,9 @@ test("expectedIndex reads age against each system's own year: -1 before the path
  for(const [sys,first,n] of [['us',9,1],['uk',9,2],['cz',10,3],['de',10,5]]){
   assert.equal(expectedIndex(sys,first-1),-1,`${sys} age ${first-1}`);assert.equal(expectedIndex(sys,first),n,`${sys} age ${first}`);
  }
- assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),14);assert.equal(expectedIndex('uk',13),17);
- assert.equal(expectedIndex('de',11),14);assert.equal(expectedIndex('de',12),15);assert.equal(expectedIndex('de',13),17);
- assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),17);assert.equal(expectedIndex('cz',13),16);assert.equal(expectedIndex('cz',14),17);assert.equal(expectedIndex('cz',12),14);assert.equal(expectedIndex('us',12),14);assert.equal(expectedIndex('cz',11),6);
+ assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),14);assert.equal(expectedIndex('uk',13),N_SCHOOL);
+ assert.equal(expectedIndex('de',11),14);assert.equal(expectedIndex('de',12),15);assert.equal(expectedIndex('de',13),N_SCHOOL);
+ assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),N_SCHOOL);assert.equal(expectedIndex('cz',13),16);assert.equal(expectedIndex('cz',14),N_SCHOOL);assert.equal(expectedIndex('cz',12),14);assert.equal(expectedIndex('us',12),14);assert.equal(expectedIndex('cz',11),6);
  for(const sys of ['us','uk','cz','de'])for(const age of [0,5,SYSTEM_START[sys]])assert.equal(expectedIndex(sys,age),-1,`${sys} age ${age}`);
  for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
  assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');

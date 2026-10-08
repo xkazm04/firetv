@@ -115,7 +115,7 @@ test('2: a thin week (one unit) and the empty week',()=>{
 // ------------------------------------------------------------------ 3. the one act, per unit
 test('3: DO_IT has one everyday act for each of the 17 school topics (the real path); plain, short, no percent sign, no digit, no brand, no em dash',()=>{
  const ids=PATHS.school.topics.map((t)=>t.id);
- assert.equal(ids.length,17);
+ assert.equal(ids.length,PATHS.school.topics.length);
  assert.deepEqual(Object.keys(W.DO_IT).sort(),[...ids].sort(),'exactly the school path\'s ids');
  const BRANDS=/\b(ikea|tesco|lidl|aldi|walmart|amazon|coca|pepsi|lego|mcdonald|starbucks|nutella|nike|apple store|google|netflix|kaufland|albert|billa)\b/i;
  const all=[...Object.values(W.DO_IT),...Object.values(W.DO_IT_ELSE)];

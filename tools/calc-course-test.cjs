@@ -361,7 +361,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
 
  // ---- the end of the course
  const v=view(store.getSession(),'tv'),ps=pathSecure(v);
- assert.equal(ps.path,'calc1');assert.equal(ps.secure.length,22);assert.equal(ps.topics.length,22);
+ const N_CALC=P.PATHS.calc1.topics.length;
+ assert.equal(ps.path,'calc1');assert.equal(ps.secure.length,N_CALC);assert.equal(ps.topics.length,N_CALC);
  assert.equal(secureTitle(ps.secure.length,ps.topics.length,ps.first),'Every topic on the path is secure');
  assert.equal(topicsFocus(v),0,'every topic secure: the teach door opens Topics at 0, as designed');
  assert.ok(Object.values(topicStates(v)).every((x)=>x==='secure'));
@@ -376,10 +377,10 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
  let w=view(store.getSession(),'tv'),q=pathSecure(w);
  assert.equal(q.path,'school');assert.equal(q.secure.length,0,'the school path reads only school records');
  assert.deepEqual(Object.keys(topicStates(w)),P.topicsOf('school').map((t)=>t.id));
- assert.equal(Object.keys(learners.getLearner(CALC).skills).length,22,'the calc1 record is kept while on the school path');
+ assert.equal(Object.keys(learners.getLearner(CALC).skills).length,N_CALC,'the calc1 record is kept while on the school path');
  seat(CALC,'calc1');
  w=view(store.getSession(),'tv');q=pathSecure(w);
- assert.equal(q.secure.length,22,'back on calc1: every topic still secure');
+ assert.equal(q.secure.length,N_CALC,'back on calc1: every topic still secure');
  assert.equal(secureTitle(q.secure.length,q.topics.length,q.first),'Every topic on the path is secure');
  // and the school learner, seated again, finds their own record as they left it
  seat(SCHOOL);

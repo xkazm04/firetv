@@ -206,7 +206,7 @@ const observe=(ex)=>({render:renderStatus(ex.plain,ex.kind,false),renderTex:ex.t
 // ------------------------------------------------------------------ the corpus itself
 
 test('1: the spine - 22 topics, sessions 1-28 each exactly once, unique ids, a prerequisite DAG, one-sentence blurbs',()=>{
- assert.equal(TOPICS.length,22);
+ assert.equal(TOPICS.length,require(path.join(root,'src/lib/library/paths.ts')).PATHS.calc1.topics.length,'the Calculus 1 path (its one length pin is in tools/maths-paths-test.cjs)');
  assert.deepEqual(CALCULUS_1.nonTopicSessions,[8,9,21,22,28],'the review and midterm sessions');
  const seen=[...TOPICS.flatMap(t=>t.sessions),...CALCULUS_1.nonTopicSessions].sort((a,b)=>a-b);
  assert.deepEqual(seen,Array.from({length:28},(_,i)=>i+1),'sessions 1-28, each once');

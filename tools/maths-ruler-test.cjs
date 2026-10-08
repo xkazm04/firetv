@@ -14,6 +14,8 @@ const ROWS=path.join(root,'src/tv/rulerRows.ts');
 const RR=()=>require(ROWS);
 const paths=()=>require(path.join(root,'src/lib/library/paths.ts'));
 const school=()=>paths().topicsOf('school'),calc=()=>paths().topicsOf('calc1');
+/** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const nSchool=()=>paths().PATHS.school.topics.length,nCalc=()=>paths().PATHS.calc1.topics.length;
 /** States with the first `n` topics of the list latched secure, the rest later (the model reads only 'secure'). */
 const firstSecure=(topics,n)=>Object.fromEntries(topics.map((t,i)=>[t.id,i<n?'secure':'later']));
 
@@ -28,7 +30,7 @@ test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) 
  // v2 M2b put Pythagoras' theorem and probability after the equations, a second Geometry and data strand: seventeen topics, seven strands.
  // (1728 - 52) / 17 = 98.6 px (111.7 px at fifteen) is under MIN_SPAN (288), so the big ruler pans as Calculus 1 does; past STRIP_AFTER (8)
  // Tonight draws the strand strip, not the small ruler (tools/school-ruler-test.cjs draws it), so these formulas are the model's own
- const topics=school(),N=topics.length;assert.equal(N,17);assert.ok(N>STRIP_AFTER);
+ const topics=school(),N=topics.length;assert.equal(N,nSchool());assert.ok(N>STRIP_AFTER);
  const span=(1728-26*2)/N;
  const STRANDS=['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data','Equations','Geometry and data'],FROM=[0,4,5,9,11,13,15];
  assert.ok(span<MIN_SPAN,'seventeen boxes are narrower than the big ruler\'s minimum slot');
@@ -41,7 +43,7 @@ test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) 
   for(const g of m.strands)assert.equal(g.label,clampLabel(g.name,g.labelW),`${g.name}: its label fits its strand`);
   assert.equal(needleX(m,1,0.5),m.topics[1].sx+0.5*m.topics[1].sw,'the needle is part way through its slot');
  }
- for(const big of [false])for(const focus of [undefined,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16]){
+ for(const big of [false])for(const focus of [undefined,...Array.from({length:N},(_,i)=>i)]){
   const m=rulerModel(topics,firstSecure(topics,1),focus,big);
   assert.equal(m.span,span,'span = (1728 - 52) / N');
   assert.equal(m.trackWidth,1728);assert.equal(m.offset,0,'nothing to pan');assert.equal(m.pan,false);
@@ -56,7 +58,7 @@ test('ruler model 1: N = 17 (the school path since v2 M2b; 15 since W7 batch 3) 
   m.strands.forEach((g,i)=>{assert.equal(g.labelX,26+FROM[i]*span+20,`${g.name} starts at slot ${FROM[i]}`);assert.equal(g.label,clampLabel(g.name,g.labelW));});
   assert.equal(m.strands[0].label,'Fractions','the fractions strand over the first four slots, unclamped');
   for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1],[5,0.5],[6,1],[9,0.3],[10,1],[12,0.5],[14,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
-  for(const exp of [-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
+  for(const exp of Array.from({length:N+3},(_,i)=>i-1))assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
  }
  assert.equal(rulerModel(topics,{},0,true).topics[1].state,'later','a topic with no state is later');
  assert.equal(rulerModel(topics,firstSecure(topics,1),0,true).topics[0].state,'secure');
@@ -68,10 +70,10 @@ test('ruler model 2: N = 22 pans - offsets at focus 0, 10 and 21 clamp to 0, the
  const {rulerModel,MIN_SPAN,FOCUS_SPAN,HALF}=RR();
  assert.ok(MIN_SPAN>=288,'a name of up to three lines at >= 34 px fits a slot');
  assert.equal(HALF,864);
- const topics=calc(),N=topics.length;assert.equal(N,22);
+ const topics=calc(),N=topics.length;assert.equal(N,nCalc());
  const st=firstSecure(topics,0);
- const m0=rulerModel(topics,st,0,true),m10=rulerModel(topics,st,10,true),m21=rulerModel(topics,st,21,true);
- for(const m of [m0,m10,m21]){
+ const m0=rulerModel(topics,st,0,true),m10=rulerModel(topics,st,10,true),mLast=rulerModel(topics,st,N-1,true);
+ for(const m of [m0,m10,mLast]){
   assert.equal(m.pan,true);assert.equal(m.span,MIN_SPAN);
   assert.ok(m.trackWidth>1728);
   assert.equal(m.trackWidth,26*2+(N-1)*MIN_SPAN+FOCUS_SPAN,'every slot, the focused one wider, and the two end margins');
@@ -85,8 +87,8 @@ test('ruler model 2: N = 22 pans - offsets at focus 0, 10 and 21 clamp to 0, the
  assert.equal(m10.offset,f10.sx+f10.sw/2-864,'focus 10: the focused slot centred under the lamp');
  assert.ok(m10.offset>0&&m10.offset<m10.trackWidth-1728);
  assert.deepEqual(m10.more,{l:true,r:true});
- assert.equal(m21.offset,m21.trackWidth-1728,'focus 21: the end of the track, no gap after it');
- assert.deepEqual(m21.more,{l:true,r:false});
+ assert.equal(mLast.offset,mLast.trackWidth-1728,`focus ${N-1}: the end of the track, no gap after it`);
+ assert.deepEqual(mLast.more,{l:true,r:false});
  for(let f=0;f<N;f++){
   const m=rulerModel(topics,st,f,true),t=m.topics[f];
   assert.equal(t.sw,FOCUS_SPAN,`focus ${f}: the focused slot is the wide one`);
@@ -94,7 +96,7 @@ test('ruler model 2: N = 22 pans - offsets at focus 0, 10 and 21 clamp to 0, the
   assert.ok(m.offset>=0&&m.offset<=m.trackWidth-1728,`focus ${f}: no gap at either end`);
   assert.ok(t.x-m.offset>=0&&t.x+t.w-m.offset<=1728,`focus ${f}: the focused box is inside the ruler window (${t.x-m.offset}..${t.x+t.w-m.offset})`);
  }
- assert.equal(rulerModel(topics,st,99,true).offset,m21.offset,'a focus past the end is the last topic');
+ assert.equal(rulerModel(topics,st,99,true).offset,mLast.offset,'a focus past the end is the last topic');
  assert.equal(rulerModel(topics,st,undefined,false).pan,false,'the small ruler never pans');
 });
 
@@ -115,7 +117,7 @@ test('ruler model 3: strand labels sit at their strand\'s start and clamp to its
  assert.equal(m.strands.find(g=>g.name==='Derivatives').label,'Derivatives','a label that fits is left whole');
  for(let i=1;i<m.strands.length;i++)assert.ok(m.strands[i-1].labelX+m.strands[i-1].labelW<=m.strands[i].labelX,'labels do not overlap');
  // focused, the one-topic strand is wide enough for its whole name
- assert.equal(rulerModel(topics,{},21,true).strands.at(-1).label,'Applications of integrals');
+ assert.equal(rulerModel(topics,{},nCalc()-1,true).strands.at(-1).label,'Applications of integrals');
  assert.equal(clampLabel('Equations',1000),'Equations');
  assert.equal(clampLabel('Applications of derivatives',10*LABEL_CH),'Applicati…','ten characters\' room: nine and the ellipsis');
  assert.equal(clampLabel('Applications of derivatives',3*LABEL_CH),'Ap…');
@@ -176,9 +178,9 @@ test('strip 2: each segment fills by its share of secure topics, and the needle 
  const a=m15.segments[3];
  assert.equal(topics[m15.needle.index].id,'calc1-newton');
  assert.equal(m15.needle.x,a.x+a.w*3/4);
- const m22=at(22);
- assert.ok(m22.segments.every(g=>g.share===1));
- assert.deepEqual([m22.needle.index,m22.needle.x,m22.needle.at],[22,26+1676,'end'],'every topic secure: the end of the strip');
+ const N=nCalc(),mAll=at(N);
+ assert.ok(mAll.segments.every(g=>g.share===1));
+ assert.deepEqual([mAll.needle.index,mAll.needle.x,mAll.needle.at],[N,26+1676,'end'],'every topic secure: the end of the strip');
  // the frontier is read from the prerequisites, not the order: a later topic secure out of order does not move it
  const odd={...firstSecure(topics,0),'calc1-newton':'secure'};
  assert.equal(stripModel(topics,odd).needle.index,0);

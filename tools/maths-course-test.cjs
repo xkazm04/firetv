@@ -30,6 +30,8 @@ after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:tru
 
 const LOCAL={busy:false,table:false,hintInFlight:false};
 const CALC=P.topicsOf('calc1');
+/** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const N_CALC=P.PATHS.calc1.topics.length,N_SCHOOL=P.PATHS.school.topics.length;
 const CALC_P={id:'calc-a',name:'Calc A',type:'other',modules:['maths'],mathPath:'calc1'};
 const SCHOOL_P={id:'school-a',name:'School A',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']};
 /** A plain session (no store) with one learner at the desk. */
@@ -81,20 +83,20 @@ test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the la
  assert.equal(TOPIC_STOPS,SYLLABUS,'TOPIC_STOPS stays the school syllabus for the existing tests');
  let s=session(CALC_P,{screen:'topics',focus:0});
  assert.deepEqual(topicStops(s).map((t)=>t.id),CALC.map((t)=>t.id));
- assert.equal(topicStops(s).length,22);
- for(let i=0;i<21;i++){const f=focusAfter(s,tvKey(s,'right',LOCAL));assert.equal(f,i+1,`Right ${i+1}`);s={...s,focus:f};}
- assert.equal(focusAfter(s,tvKey(s,'right',LOCAL)),21,'Right on the last stop stays');
+ assert.equal(topicStops(s).length,N_CALC);
+ for(let i=0;i<N_CALC-1;i++){const f=focusAfter(s,tvKey(s,'right',LOCAL));assert.equal(f,i+1,`Right ${i+1}`);s={...s,focus:f};}
+ assert.equal(focusAfter(s,tvKey(s,'right',LOCAL)),N_CALC-1,'Right on the last stop stays');
  const sel=tvKey(s,'select',LOCAL);
  assert.deepEqual(sel.events,[{type:'topic.open',topic:'calc1-area-average'}]);
  assert.deepEqual(sel.calls.map((c)=>c.body),[{topic:'calc1-area-average'}]);
  let sc=session(SCHOOL_P,{screen:'topics',focus:0});
  // W5b: 'Add and subtract fractions' joined the school path first; W7 batch 1 added three more fractions units; W7 batch 2
  // the four decimals and percent units; W7 batch 3 ratio and rates and geometry and data: 15 stops; v2 M2b Pythagoras and probability: 17
- assert.equal(topicStops(sc).length,17,'a school learner has 17 stops');
- for(let i=0;i<18;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
- assert.equal(sc.focus,16);
- assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[16].id,stay:true}],'the last stop is now a unit with a generator: Select writes its set and stays on Topics');
- assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,17,'no mathPath is the school path');
+ assert.equal(topicStops(sc).length,N_SCHOOL,`a school learner has ${N_SCHOOL} stops`);
+ for(let i=0;i<N_SCHOOL+1;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
+ assert.equal(sc.focus,N_SCHOOL-1);
+ assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[N_SCHOOL-1].id,stay:true}],'the last stop is now a unit with a generator: Select writes its set and stays on Topics');
+ assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,N_SCHOOL,'no mathPath is the school path');
 });
 
 test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure on Calculus 1; 0 with nothing secure on school',()=>{

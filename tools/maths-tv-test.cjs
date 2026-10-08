@@ -403,6 +403,9 @@ const CALC=[{id:'ada',name:'Ada',type:'other',modules:['maths'],mathPath:'calc1'
 /** A session on a path: the learner at the desk and their skills. */
 const onPath=(profiles,skills,topic=null)=>({skills,topic,practice:null,profiles,learner:{id:profiles[0].id,name:profiles[0].name}});
 const calcIds=()=>require(path.join(root,'src/lib/library/paths.ts')).topicsOf('calc1').map(t=>t.id);
+/** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
+const nSchool=()=>require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length;
+const nCalc=()=>require(path.join(root,'src/lib/library/paths.ts')).PATHS.calc1.topics.length;
 
 test('path 1: on the calc1 path the states are the Calculus topics - a latched calc1-functions opens the topics whose only prereq it is',()=>{
  const {topicStates,stateWord}=R();
@@ -447,10 +450,10 @@ test('path 3: a topic is named by its path (topicIn), humanised only when no pat
 });
 
 test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every topic, or the path from the first step',()=>{
- const {secureTitle,pathFirst,pathSecure}=R();
- assert.equal(secureTitle(0,22,pathFirst('calc1')),'Calculus 1, from the first step');
- assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
- assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
+ const {secureTitle,pathFirst,pathSecure}=R();const NC=nCalc(),NS=nSchool();
+ assert.equal(secureTitle(0,NC,pathFirst('calc1')),'Calculus 1, from the first step');
+ assert.equal(secureTitle(7,NC,pathFirst('calc1')),`7 of ${NC} topics secure`);
+ assert.equal(secureTitle(NC,NC,pathFirst('calc1')),'Every topic on the path is secure');
  assert.equal(pathFirst('school'),'School maths','the school path reads by its own name, not its first topic (owner decision 2026-09-29; renamed in W5b, D5)');
  const rows=fs.readFileSync(path.join(root,'src/tv/mathsRows.ts'),'utf8');
  const at=rows.indexOf('export function pathFirst');
@@ -460,10 +463,10 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.match(said,/path's own name/,'the comment says what the function returns');
  const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
  const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
- assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
+ assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),`7 of ${NC} topics secure`,`a school record is not one of the ${NC}`);
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
  assert.equal(title(onPath(SCHOOL,seven)),'School maths, from the first step','calc1 records on a school profile count for nothing');
- assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 17 topics secure','v2 M2b: the school path has seventeen topics (fifteen since W7 batch 3)');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),`One of ${NS} topics secure`,'v2 M2b: the school path has seventeen topics (fifteen since W7 batch 3)');
  assert.equal(title({skills:{}}),'School maths, from the first step','no learner: the school path');
 });
 
@@ -534,7 +537,7 @@ test('W8 prepare 1: the units grouped by strand - strands in the order the path 
  const ids=prepareStops(onW8({})).map((u)=>u.id);
  assert.deepEqual([...ids].sort(),P.topicsOf('school').map((t)=>t.id).sort(),'every school unit, once');
  assert.deepEqual(prepareGroups(onW8({mathPath:'calc1',type:'other',age:19})),[]);assert.deepEqual(prepareStops(onW8({mathPath:'calc1'})),[]);
- assert.equal(prepareStops({skills:{}}).length,17,'no learner: the school path');
+ assert.equal(prepareStops({skills:{}}).length,nSchool(),'no learner: the school path');
 });
 
 test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year, ročník, Klasse - from its year in their system',()=>{
@@ -552,23 +555,23 @@ test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year
 
 test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card under the lamp, neither end showing a gap, strands apart',()=>{
  const {prepareGroups,prepareModel,WINDOW,CARD,CARD_GAP,GROUP_GAP,EDGE}=PR();
- const g=prepareGroups(onW8({}));
+ const g=prepareGroups(onW8({})),NS=nSchool();
  const m0=prepareModel(g,0);
- assert.equal(m0.cards.length,17);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
+ assert.equal(m0.cards.length,NS);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
  assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'seventeen cards pan');
  // a strand break is wider than a card gap; strand headings span their cards
  assert.equal(m0.cards[4].x-(m0.cards[3].x+CARD),GROUP_GAP,'Fractions to Equations');assert.equal(m0.cards[2].x-(m0.cards[1].x+CARD),CARD_GAP);
  m0.strands.forEach((s,i)=>{const cs=m0.cards.filter((c)=>c.group===i);assert.equal(s.x,cs[0].x);assert.equal(s.w,cs.at(-1).x+CARD-cs[0].x);});
- for(let f=0;f<17;f++){
+ for(let f=0;f<NS;f++){
   const m=prepareModel(g,f),c=m.cards[f];
   assert.ok(m.offset>=0&&m.offset<=m.trackWidth-WINDOW,`${f}: clamped`);
   assert.ok(c.x-m.offset>=0&&c.x+c.w-m.offset<=WINDOW,`${f}: the focused card is on the stage`);
   if(m.offset>0&&m.offset<m.trackWidth-WINDOW)assert.equal(c.x+c.w/2-m.offset,WINDOW/2,`${f}: under the lamp`);
  }
- const last=prepareModel(g,16);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
+ const last=prepareModel(g,NS-1);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
  // a strand heading: at its strand's start, or - when the strand starts off the stage - kept past the left fade while it fits over its cards
  const {FADE,HEAD_CH}=PR();
- for(let f=0;f<17;f++){const m=prepareModel(g,f);for(const s of m.strands){
+ for(let f=0;f<NS;f++){const m=prepareModel(g,f);for(const s of m.strands){
   assert.ok(s.labelX>=s.x&&s.labelX<=s.x+s.w,`${f} ${s.strand}: over its cards`);
   if(m.offset===0)assert.equal(s.labelX,s.x);
   else if(s.x<m.offset+FADE&&s.x+s.w-s.strand.length*HEAD_CH>=m.offset+FADE)assert.equal(s.labelX,m.offset+FADE,`${f} ${s.strand}: kept on the stage`);
