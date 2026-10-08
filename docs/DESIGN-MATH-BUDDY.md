@@ -385,3 +385,31 @@ Typed entry is the door that ships; the photo path is M5c's.
   phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
 - The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
   the text is the same as before for every item.
+- A paper whose rows were fine but could not be written to the learner file says so (v2 M5c, ruling 11): "That paper
+  was not saved: ...", never "The desk kept no question from that paper.", which is kept for a paper with no row left.
+  Either way nothing is kept and the TV stays where it was.
+
+## The photo path's reader and its probe (v2 M5c, 2026-10-08)
+
+**The photo path is not offered.** Typed entry stays the door until the probe below, run live on the owner's PC, maps at
+least 85% of items to the right unit (the M5 kill row, ruling 1). A stubbed or simulated pass never ships it. Nothing
+on the phone or the TV changed in M5c: no route, no event, no button reads the reader yet.
+- **The reader** (`desk/src/lib/desk/paperRead.ts`, `readPaper`): one vision call per photo, beside `read.ts`. The model
+  lists each question or part that has a mark beside it: the label as printed ('5(b)'), the marks the marker wrote, what
+  it is out of, and at most 3 statement codes chosen from a list in the prompt (each statement's code with its can
+  text), by the question's own words. It is asked to copy numbers and never to add, count, total or compare marks, and
+  the prompt names no board. The rows come back raw; `cleanPaper` decides what stands, exactly as for typed rows.
+- **The probe** (`tools/paper-probe.cjs`): 20 marked papers generated from a fixed seed. Each is an answer key (real
+  statement codes within the caps: parts like 3(a) and 3(b), items naming two statements, at least three items the desk
+  has no topic for, one past Foundation) and an A4 SVG of it: the question numbers and stems in print, the allocation
+  in brackets at the right, the marker's "2/3" in red beside it with a tick or a cross. The stems are a written pool; no
+  stem shares a run of four words with the can text of a code it keys, so a right code is read from the question, not
+  copied from the list. Live, each SVG becomes a PNG (sharp), is read, cleaned and scored.
+- **The score** (`desk/src/lib/rules/paperScore.ts`, pure): an item is mapped when the read has its label and the read
+  codes reach the same desk topics and the same not-on-the-desk statements as the key's, found by `recovery()` itself
+  (so R7 for R10 is still the same unit). The figure is mapped items over key items across the 20 papers. Labels read,
+  marks read exactly, codes read exactly, rows dropped and extra items are reported beside it and decide nothing; a pass
+  with marks read under 85% goes to the owner as a question, because the recovery list weighs topics by lost marks.
+- **What a pass would mean:** the papers are clean renders, not phone photos of handwriting, so a live pass is an upper
+  bound on a real photo. When it passes, the door (a Snap on the Paper panel feeding the same `paper.enter`) is its own
+  slice, with its captures.

@@ -87,7 +87,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | e6e6a569, 4df2d091 | |
 | 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
-| 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | not started | | |
+| 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -984,3 +984,48 @@ No `desk/data/` touched, no model call, no push; recovery.ts, gcse.ts, paths.ts,
 Owed to the owner: the TV list at 1920 x 1080 and 1280 x 720 (a paper with more than five topics, one with a secure topic, one with
 Not on the desk yet, and the empty screen), the phone's Paper panel at 390 px (a row of three boxes and the picker open, the Left out
 list), and the caps check (8): MAX_OUT_OF 6, MAX_ITEMS 80, PAPER_MARKS 80 against the specification. Nothing was captured or looked at in a browser.
+
+### 2026-10-08 · batch 7 · M5c · autopilot/accepted-idea-delivery-cb26ec0f
+M5's third slice (rows 25 and 36; the M5 card). Built locally, nothing pushed. Commits: 9b76fc0a (step 0: the App Master's rulings
+(9)-(11) in the card), d26ad5c5 (ruling 11), baa062d9 (the reader), 1177441c (the probe, the scorer and their rows), and this entry.
+What changed, by file:
+- `lib/session/store.ts` (ruling 11): `dispatch`'s `paper.enter` no longer swallows `addPaper`'s throw into the no-row status. A
+  failed write or an unreadable learners.json gives `PAPER_NOT_SAVED` ("That paper was not saved: the desk could not write it to the
+  learner file, so progress was not saved. Send it again."); a paper with no row left still gives `PAPER_NO_ROW` (the same words as
+  before). Nothing is kept and the TV stays put in both; the error is logged.
+- `lib/desk/paperRead.ts` (new, wired to nothing): `readPaper(imageBase64)` makes one vision call with `PAPER_SCHEMA` (items of
+  `{ q, marks, outOf, codes }`) and `paperPrompt()` = `PAPER_ASK` + the list (every STATEMENTS line as `code: can`, foundation false
+  included). It returns the rows raw. The ask copies numbers ("in 2/3 it is the 2") and chooses at most MAX_CODES codes by the
+  question's words; it asks for no sum, count, total or comparison, and the prompt names no board.
+- `lib/rules/paperScore.ts` (new, pure): `unitsOf(codes)` (the school-path topics and notOnDesk statements, from `recovery()` on a
+  one-item paper), `scorePaper(key, cleanRead)` (per key item: label, mapped, marks, codes; the paper's drops and extras), `scoreRun`
+  (sums, whole percents rounded down, `pass` = mapped x 100 >= 85 x items, `marksQuestion`), `KILL_PERCENT` 85.
+- `tools/paper-probe.cjs` (new): POOL (93 stems in 84 questions, 8 of them with parts), `makePapers(seed)`, `renderSvg`, `echoRun`,
+  `runProbe`. Live: sharp from desk/node_modules (loaded lazily; missing, it stops with a plain message), the vision engine's probe
+  first, then each PNG read, cleaned and scored; the SVGs and PNGs are kept in <out>/papers. `--stub`: the read is fed from each key
+  at the provider seam (`useProvider('vision')`), no image is made, and report.md's first line says STUBBED.
+- `tools/paper-probe-test.cjs` (new), in `rulesSuites` just before `harness-rules-test.cjs`; `desk/package.json`; `learners-save-test`
+  'papers 5'.
+Choices, stated: (1) A mixed item (a desk-topic statement and a gap one) is mapped only when the read reaches both the same topics and
+the same notOnDesk statements: missing the gap statement would leave it off the Not on the desk yet list. For an item of one kind
+this is the card's "or". (2) Units come from `recovery()` itself, so two codes reaching the same topics (R7, R10) are one unit; the
+codes-read figure tells them apart. (3) The schema puts no enum on the codes and no cap on any list: an unknown or a fourth code is
+cleanPaper's to drop, never a failed read. `marks` and `outOf` are integers in the schema (the validator has no union types), so an
+illegible mark comes back as a number; marks-read is what shows it. (4) A paper the engine fails on scores 0 of its items; the error
+is in the report. (5) Labels match without case or spaces, as cleanPaper compares them. (6) The papers keep 10 to 13 items and 16 to
+31 marks, so each fits one A4 page at a legible size; a key is a sample of a failed paper, not a whole one.
+The stubbed run (seed 1729): 234 items over 20 papers, all mapped (STUBBED, not a result).
+Rows (9): the keys deterministic, clean whole, within the caps, with the mix on every paper; no echo over every stem (and the check
+catches a stem that quotes A22); a stubbed read 100%; one code moved to another topic scores only that item down (the run loses one),
+while R7 for R10 stays mapped; one mark misread leaves the kill figure as it is and moves marks read down, and every mark misread
+puts the question to the owner; one label misread scores that item down (case and spaces do not); paperRead's request (schema, every
+statement line, no arithmetic words in the ask, no board in the prompt, the rows raw); each SVG's labels, allocations and marks, no
+code on the page; the --stub CLI run.
+Kill test (run on 1177441c, not committed): `scorePaper` counting an item mapped on its label alone turned 'paper probe 4' (the
+wrong-code row) red; restored with `git restore`, green. The ruling-11 row was red on the old `dispatch` and green on the new one.
+Gate: `cd desk && npm run test:rules` 68 green, 0 red (1153 tests) at 1177441c; 67 green (1144) at baa062d9 and d26ad5c5;
+`npx tsc --noEmit --incremental false` clean. No `desk/data/` touched, no model call, the probe never run without --stub, no push;
+recovery.ts, gcse.ts, paths.ts, syllabus.ts, school.ts, read.ts, the engines and the generators unchanged.
+Owed to the owner: the live run from desk/ (`node ../tools/paper-probe.cjs`) with Ollama and the vision model up, and its figure
+recorded here and in row 36 (under 85% mapped: the photo path is not offered and typed entry stays the door); the M5b items still
+owed: the captures (the TV list at 1920 x 1080 and 1280 x 720, the Paper panel at 390 px), the caps check (8), and the TV door (9).
