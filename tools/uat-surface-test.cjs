@@ -10,10 +10,7 @@ const data = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-surface-'));
 process.env.DESK_DATA_DIR = data;
 const surface = () => require(SURFACE);
 // the same require hooks the driver uses: @/ into desk/src, TS and TSX through desk's typescript
-let ts; try { ts = require(path.join(root, 'node_modules/typescript')); } catch { console.error('Run `npm install` in desk/ first.'); process.exit(1); }
-const Module = require('node:module'), resolve = Module._resolveFilename;
-Module._resolveFilename = function (id, ...rest) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...rest); };
-require.extensions['.ts'] ??= (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+require('./ts-load.cjs');
 
 let modelCalls = 0;
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));

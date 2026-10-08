@@ -2,7 +2,8 @@
  * The one loader of the rules suites: `const {root,src,transpile,ts}=require('./ts-load.cjs')`. It registers, once
  * per process, the '@/' alias to desk/src and require hooks for .ts and .tsx (CommonJS, ES2022, esModuleInterop,
  * jsx ReactJSX for .tsx, fileName = the real file so a .ts file parses as TS and a .tsx file as TSX), and returns
- * root (desk/), src (desk/src), transpile(source, transpileModuleOptions) and ts() (TypeScript, required lazily).
+ * root (desk/), src (desk/src), transpile(source, transpileModuleOptions), ts() (TypeScript, required lazily) and
+ * options / jsxOptions (the hooks' own transpile options, for a suite that transpiles a file itself).
  *
  * Every transpile goes through a disk cache: sha256 of the loader version, TypeScript's version, the options, the
  * fileName's extension and the source -> the output text. TypeScript itself is required only on a cache miss. The
@@ -67,4 +68,8 @@ if (!globalThis[Symbol.for('desk.ts-load.registered')]) {
   require.extensions['.tsx'] = hook;
 }
 
-module.exports = { root, src, transpile, ts };
+// The options the hooks use, for a suite that transpiles a file itself: options.compilerOptions, plus jsx ReactJSX.
+const options = { compilerOptions: { module: MODULE_COMMONJS, target: TARGET_ES2022, esModuleInterop: true } };
+const jsxOptions = { compilerOptions: { ...options.compilerOptions, jsx: JSX_REACTJSX } };
+
+module.exports = { root, src, transpile, ts, options, jsxOptions };

@@ -2,10 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require('./ts-load.cjs');
 const data=path.resolve(__dirname,'../artifacts/linga-rules',String(Date.now()));process.env.DESK_DATA_DIR=data;
 const {emptyEnglish}=require(path.join(root,'src/lib/english/types.ts'));
 const {eligibleScenes,defaultPreferences}=require(path.join(root,'src/lib/english/curriculum.ts'));
@@ -807,7 +804,6 @@ test('the speech routes answer a bad request with 400 and a failed engine with a
  }finally{console.error=orig;reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
 });
 test('the reply box stays closed until the scene is ready',()=>{
- require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
  const React=require(path.join(root,'node_modules/react'));
  const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
  const {ReplyBox}=require(path.join(root,'src/english/ReplyBox.tsx'));
@@ -820,7 +816,6 @@ test('the reply box stays closed until the scene is ready',()=>{
  assert.equal(open.includes('Not yet'),false);
 });
 test('MH-4: a finished capture pre-ticks the confirmation, an edit makes a typed reply',()=>{
- require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
  const {afterCapture,afterEdit}=require(path.join(root,'src/english/ReplyBox.tsx'));
  assert.deepEqual(afterCapture('which bridge do you mean'),{mode:'speech',confirmed:true,sendable:true});
  assert.deepEqual(afterCapture('   '),{mode:'speech',confirmed:false,sendable:false});

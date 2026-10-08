@@ -6,11 +6,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const {transpile,options:opts}=require('./ts-load.cjs');
 const KEYS=path.join(root,'src/tv/keys.ts'),ROWS=path.join(root,'src/tv/mathsRows.ts');
 // loaded per test, so a missing module fails each case on its own
 const keys=()=>require(KEYS);
@@ -274,7 +270,7 @@ test('GUARD: the profile screen moves exactly as its shared rows say',()=>{
 
 test('GUARD: the keymap and the maths rows stay free of the filesystem-backed session modules',()=>{
  for(const file of [KEYS,ROWS]){
-  const out=ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText;
+  const out=transpile(fs.readFileSync(file,'utf8'),opts).outputText;
   assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/,`${path.basename(file)} requires the store at runtime`);
  }
  keys();require(ROWS);
@@ -438,7 +434,7 @@ test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, 
 });
 
 test('GUARD: the landing rows stay free of the filesystem-backed session modules',()=>{
- const out=ts.transpileModule(fs.readFileSync(LROWS,'utf8'),opts).outputText;
+ const out=transpile(fs.readFileSync(LROWS,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
  rows();assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$/.test(k)),'loading the landing rows pulled the store in');
 });
