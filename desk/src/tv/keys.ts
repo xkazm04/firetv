@@ -20,6 +20,7 @@ import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { prepareStops } from "@/tv/prepareRows";
+import { paperTopicCount } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -63,6 +64,12 @@ export function mathsOwns(s: Session): boolean {
   if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
   return false;
 }
+
+/**
+ * The recovery from a paper (v2 M5b) is Math Buddy's, drawn by maths/MathsTV.tsx, but it is not one of `MATHS_SCREENS`
+ * (that list is pinned): the TV page asks this beside `mathsOwns`.
+ */
+export function paperOwns(s: Pick<Session, "screen">): boolean { return s.screen === "paper"; }
 
 /** Is the learner at the desk in Adult mode (rules/mode)? */
 export function isAdultHere(s: Pick<Session, "profiles" | "learner" | "englishLearning">): boolean {
@@ -472,6 +479,12 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "up" || k === "menu" || k === "back") { o.nav("tonight", Math.max(0, tonightStops(s).indexOf("prepare"))); return; }
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "select" && unit && !writing) o.local.prepareAsk = 0;
+  },
+  // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics; Back or Menu return to Get ready for school
+  paper: (s, k, _, o) => {
+    const n = paperTopicCount(s);
+    if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);
+    if (k === "back" || k === "menu") o.nav("prepare", 0);
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
   practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },

@@ -9,7 +9,7 @@ import { useSession, call } from "@/tv/useSession";
 import type { Event, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
-import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
+import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, paperOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
 import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
@@ -155,7 +155,7 @@ export default function TV() {
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0} data-display={shown}>
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
+          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && (mathsOwns(s) || paperOwns(s)) ? <MathsTV s={s} busy={loc.busy} ask={loc.prepareAsk} /> : <>
             <div className="grid" />
             <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
           </>}

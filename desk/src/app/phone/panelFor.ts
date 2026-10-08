@@ -40,6 +40,8 @@ function cueFor(s: Seen): Cue | null {
     }
     // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
     case "essaytype": case "forensic": return { panel: "paste", key: sc };
+    // "Type the marks of a paper you sat on the phone" (v2 M5b): the recovery list's screen, whose paper is typed on the Paper panel
+    case "paper": return { panel: "paper", key: sc };
     // "Say it on the phone": one sentence per slot of the plan, written on the Essay tab
     case "essayplan": return { panel: "paste", key: sc };
     // "Say one sentence on your phone": the sentence screen with nothing to check yet (Linga's Sentence help)

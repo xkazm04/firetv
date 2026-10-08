@@ -26,6 +26,7 @@ import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
+import { lostWord, paperCaption, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { MathsMark as Mark } from "@/tv/marks";
@@ -42,13 +43,14 @@ import { KIND_WORD, lookAt, working } from "./working";
 export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: 0 | 1 | null }) {
   const f = s.focus;
   const blank = s.screen === "tonight" && !continueCard(s);
-  const lamp = ["sheet", "walk", "page", "hint", "practice", "units", "worked"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "calendar" ? "wide" : "desk";
+  const lamp = ["sheet", "walk", "page", "hint", "practice", "units", "worked"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "paper" || s.screen === "calendar" ? "wide" : "desk";
   return (
     <div className={`maths-tv ${MATHS_FONTS}`} data-screen={s.screen} data-lamp={lamp}>
       <div className="mb-lamp" aria-hidden="true"><i /></div>
       {s.screen === "tonight" ? <Tonight s={s} focus={f} />
         : s.screen === "topics" ? <Topics s={s} focus={f} busy={busy} />
         : s.screen === "prepare" ? <Prepare s={s} focus={f} busy={busy} ask={ask} />
+        : s.screen === "paper" ? <PaperScreen s={s} focus={f} />
         : s.screen === "practice" ? <PracticeScreen s={s} />
         : s.screen === "sheet" ? <Sheet s={s} focus={f} />
         : s.screen === "walk" ? <Walk s={s} focus={f} />
@@ -673,6 +675,68 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
       {m.more.l && <div className="mb-rchev l" data-role="maths-more"><Chev dir="l" on /></div>}
       {m.more.r && <div className="mb-rchev r" data-role="maths-more"><Chev dir="r" on /></div>}
     </div>
+  </>);
+}
+
+// ---------------------------------------------------------------- M5b A paper you sat: where the marks were lost
+
+/** How many topic rows the list shows at once; the lamp walks the rest. */
+const PAPER_ROWS = 5;
+/** The off-desk statements the card has room for; the rest are counted. */
+const PAPER_OFF = 3;
+
+/**
+ * The recovery from a paper (v2 M5b): the topics where marks were lost, in the order rules/recovery gives them (biggest
+ * loss first, each after the base it needs), with the questions behind each; a topic the desk calls secure stays in the
+ * list and is marked beside it. What the desk has no topic for is apart, under "Not on the desk yet". The marks are typed
+ * on the phone (Type the marks of a paper you sat on the phone) - the paper is the learner's own record, read back.
+ */
+export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
+  const v = paperView(s);
+  const w = paperWindow(v.topics.length, focus, PAPER_ROWS);
+  const lamp = Math.min(Math.max(0, focus), Math.max(0, v.topics.length - 1));
+  return (<>
+    <Top s={s} crumb="A paper you sat" />
+    <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : "Where the marks went"} /></h1>
+    {v.empty ? <div className="mb-lede" data-role="maths-paper-empty"><div className="mb-kick">No paper yet</div><p>Type the marks of a paper you sat on the phone.</p></div> : (
+      <div className="mb-paperrec" data-role="maths-paper">
+        <div className="mb-ptopics" data-role="maths-paper-topics">
+          {v.topics.slice(w.from, w.to).map((t, i) => {
+            const ix = w.from + i;
+            return (
+              <div key={t.id} className="mb-prow" data-focused={ix === lamp || undefined} data-secure={t.secure || undefined} data-id={t.id}>
+                <span className="n">{ix + 1}</span>
+                <span className="nm">{t.name}</span>
+                <span className="lost">{lostWord(t.lost)} lost</span>
+                <span className="from">From {t.from}</span>
+                {t.secure && <span className="sec" data-role="maths-paper-secure">Secure on the desk</span>}
+              </div>
+            );
+          })}
+          {!v.topics.length && <div className="mb-prow mb-pnone">{v.off.length ? "Nothing on the desk yet covers these." : "No marks were lost."}</div>}
+          {w.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
+          {w.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
+        </div>
+        <aside className="mb-pside">
+          <div className="mb-pscore" data-role="maths-paper-score">
+            <div className="mb-kick">Your paper</div>
+            <div className="big">{v.marks} <small>of {v.outOf}</small></div>
+            <div className="sub">{scoreLine(v)}</div>
+          </div>
+          {(v.off.length > 0 || v.unmapped > 0) && (
+            <div className="mb-poff" data-role="maths-paper-off">
+              <div className="mb-kick">Not on the desk yet</div>
+              {v.off.slice(0, PAPER_OFF).map((o) => (
+                <div key={o.can} className="o"><span className="c">{o.can}</span><span className="m">{lostWord(o.lost)} lost · from {o.from}{o.beyond ? " · beyond a Foundation paper" : ""}</span></div>
+              ))}
+              {v.off.length > PAPER_OFF && <div className="o"><span className="m">and {v.off.length - PAPER_OFF} more</span></div>}
+              {v.unmapped > 0 && <div className="o"><span className="m">{v.unmapped === 1 ? "1 question" : `${v.unmapped} questions`} named no statement, so sit on no topic</span></div>}
+            </div>
+          )}
+        </aside>
+      </div>
+    )}
+    <Caption text={paperCaption(v)} top={930} />
   </>);
 }
 

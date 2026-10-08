@@ -11,8 +11,8 @@ import type { Event } from "@/lib/session/store";
 
 const CHOICES = statementChoices();
 
-export function PaperPanel({ rows, setRows, post, seated, status }: {
-  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string;
+export function PaperPanel({ rows, setRows, post, seated, status, kept }: {
+  rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept: boolean;
 }) {
   const e = entryOf(rows);
   const set = (i: number, patch: Partial<DraftRow>) => setRows(rows.map((r, k) => (k === i ? { ...r, ...patch } : r)));
@@ -47,6 +47,7 @@ export function PaperPanel({ rows, setRows, post, seated, status }: {
       ? <button className="pbtn" data-signal="true" disabled={e.kept === 0} onClick={() => void post({ type: "paper.enter", rows: rawOf(rows) })} data-role="paper-send">
         {e.kept ? `Send ${e.kept} ${e.kept === 1 ? "question" : "questions"} to the TV` : "Send to the TV"}</button>
       : <p>No one is at the desk yet: choose who on the TV first.</p>}
+    {seated && kept && <button className="pbtn" data-secondary="true" onClick={() => void post({ type: "nav", screen: "paper" })} data-role="paper-show">Show the last paper on the TV</button>}
     {status && <p style={{ fontSize: 12 }}>{status}</p>}
   </div>;
 }

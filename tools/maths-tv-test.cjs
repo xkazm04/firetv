@@ -751,3 +751,135 @@ test('M3a 3: a set with no parts draws as before - numbers, nowrap rows, no stem
  const walk=drawMaths('Walk',secondSession('wrong','walk'));
  assert.equal(walk.includes('data-part'),false);assert.match(walk,/<span>2<\/span>/);
 });
+
+// ---------------------------------------------------------------- v2 M5b: the recovery list (screen "paper")
+
+const PAPER=()=>require(path.join(root,'src/tv/paperRows.ts'));
+const REC=()=>require(path.join(root,'src/lib/rules/recovery.ts'));
+const STM=()=>require(path.join(root,'src/lib/library/gcse.ts'));
+/** The session the paper screen is drawn from: the learner's cleaned paper (what the record keeps) and their skills. */
+function paperSession(raw,skills={},focus=0){
+ const c=raw===null?null:(()=>{const x=REC().cleanPaper(raw);return {at:1,items:x.items,unmapped:x.unmapped};})();
+ return {...secondSession(null,'paper'),focus,practice:null,paper:c,skills};
+}
+const it=(q,marks,outOf,codes)=>({q,marks,outOf,codes});
+
+test('paper 1: the list is in recovery()\'s order - a prerequisite pulled ahead of a heavier loss - and is never re-sorted',()=>{
+ const {paperView}=PAPER(),{recovery}=REC(),{STATEMENTS}=STM();
+ // find a paper whose recovery order is NOT plain most-lost-first, so this row means something
+ let found=null;
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ outer:for(const a of codes)for(const b of codes){
+  if(a===b)continue;const raw=[it('1',0,2,[a]),it('2',0,5,[b])];const r=recovery(raw);
+  const byLost=[...r.topics].sort((x,y)=>y.lost-x.lost).map(t=>t.id).join();
+  if(r.topics.map(t=>t.id).join()!==byLost){found=raw;break outer;}
+ }
+ assert.ok(found,'some pair of statements pulls a prerequisite forward');
+ const v=paperView(paperSession(found));
+ assert.deepEqual(v.topics.map(t=>t.id),recovery(found).topics.map(t=>t.id),'the view is recovery()\'s order');
+ assert.deepEqual(v.topics.map(t=>t.lost),recovery(found).topics.map(t=>t.lost));
+ const html=drawMaths('PaperScreen',paperSession(found));
+ const ids=[...html.matchAll(/data-id="([^"]+)"/g)].map(m=>m[1]);
+ assert.deepEqual(ids,v.topics.slice(0,ids.length).map(t=>t.id),'the screen draws them in that order');
+});
+
+test('paper 2: each topic shows its lost marks and the questions behind it; the paper shows its marks, out of and lost',()=>{
+ const {paperView,scoreLine}=PAPER();
+ const raw=[it('5(b)',1,3,['N12']),it('7',0,2,['N12','N2']),it('9',4,4,['A1'])];
+ const v=paperView(paperSession(raw));
+ const t=v.topics.find(x=>x.id==='pct-of-amount');
+ assert.ok(t,'N12 leads to a topic on the path');assert.equal(t.lost,4);assert.equal(t.from,'5(b), 7');
+ assert.deepEqual([v.marks,v.outOf,v.lost],[5,9,4]);
+ const html=drawMaths('PaperScreen',paperSession(raw));
+ assert.match(html,/4 marks lost/);assert.match(html,/From 5\(b\), 7/);
+ assert.ok(html.includes(scoreLine(v))&&/5 of 9 marks · 4 marks lost/.test(html.replace(/<[^>]*>/g,'')),'the paper\'s marks, out of and lost');
+ assert.equal(v.topics.some(x=>x.from.includes('9')),false,'a full-marks question adds nothing');
+});
+
+test('paper 3: a topic the desk calls secure stays in the list, marked secure beside it - never dropped (ruling 2)',()=>{
+ const {paperView}=PAPER();
+ const raw=[it('1',0,3,['N12'])];
+ const plain=paperView(paperSession(raw)),sec=paperView(paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
+ assert.deepEqual(sec.topics.map(t=>t.id),plain.topics.map(t=>t.id),'the same list');
+ assert.equal(plain.topics.find(t=>t.id==='pct-of-amount').secure,false);
+ assert.equal(sec.topics.find(t=>t.id==='pct-of-amount').secure,true);
+ const html=drawMaths('PaperScreen',paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
+ assert.equal((html.match(/data-role="maths-paper-secure"/g)??[]).length,1,'marked once, beside the topic');
+ assert.match(html,/data-id="pct-of-amount"[^>]*>[\s\S]*?Secure on the desk/);
+ assert.equal(drawMaths('PaperScreen',paperSession(raw)).includes('maths-paper-secure'),false);
+});
+
+test('paper 4: what the desk has no topic for is apart, under "Not on the desk yet", with its can text - and a statement past Foundation is flagged, not hidden',()=>{
+ const {paperView}=PAPER(),{STATEMENTS}=STM();
+ const off=STATEMENTS.find(x=>!x.touches.length&&x.foundation),beyond=STATEMENTS.find(x=>!x.touches.length&&!x.foundation);
+ assert.ok(off&&beyond);
+ const raw=[it('1',0,2,[off.code]),it('2',1,3,[beyond.code]),it('3',0,1,['N12'])];
+ const v=paperView(paperSession(raw));
+ assert.ok(v.off.some(o=>o.can===off.can&&o.lost===2&&o.from==='1'&&!o.beyond));
+ assert.ok(v.off.some(o=>o.can===beyond.can&&o.beyond));
+ assert.equal(v.topics.some(t=>t.name===off.can),false,'never linked to a topic');
+ const html=drawMaths('PaperScreen',paperSession(raw));
+ const at=html.indexOf('data-role="maths-paper-off"');
+ assert.ok(at>0&&html.slice(at).includes('Not on the desk yet'),'its own block, headed plainly');
+ const esc=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+ assert.ok(html.slice(at).includes(esc(off.can)),'the can text is shown');
+ assert.match(html,/beyond a Foundation paper/);
+ assert.equal(html.slice(html.indexOf('maths-paper-topics'),at).includes(esc(off.can)),false,'not among the topics');
+ assert.equal(drawMaths('PaperScreen',paperSession([it('3',0,1,['N12'])])).includes('maths-paper-off'),false,'no block when nothing is off the desk');
+});
+
+test('paper 5: no paper - the screen asks for the marks on the phone, and a paper with no loss says so',()=>{
+ const {paperView,paperCaption}=PAPER();
+ const none=drawMaths('PaperScreen',paperSession(null));
+ assert.match(none,/data-role="maths-paper-empty"/);assert.match(none,/Type the marks of a paper you sat on the phone/);
+ assert.equal(paperView(paperSession(null)).empty,true);
+ const full=paperView(paperSession([it('1',3,3,['N12'])]));
+ assert.equal(full.topics.length,0);assert.match(paperCaption(full),/No marks were lost/);
+ assert.match(drawMaths('PaperScreen',paperSession([it('1',3,3,['N12'])])),/No marks were lost/);
+});
+
+test('paper 6: no string the recovery screen renders names the board, over a sweep of papers',()=>{
+ const {paperView,paperCaption}=PAPER(),{STATEMENTS}=STM();
+ const BAD=/GCSE|1MA1/i;
+ const papers=STATEMENTS.map((x,i)=>[it(String(i+1),0,2,[x.code])]);
+ papers.push(STATEMENTS.slice(0,40).map((x,i)=>it(String(i+1),i%3,2,[x.code,STATEMENTS[(i*7)%STATEMENTS.length].code])));
+ papers.push([it('1',2,2,['N1'])],[]);
+ for(const raw of papers){
+  const s=paperSession(raw),v=paperView(s);
+  const text=drawMaths('PaperScreen',s).replace(/<[^>]*>/g,' ')+paperCaption(v);
+  assert.doesNotMatch(text,BAD,JSON.stringify(raw).slice(0,80));
+ }
+ assert.doesNotMatch(drawMaths('PaperScreen',paperSession(null)).replace(/<[^>]*>/g,' '),BAD);
+});
+
+test('paper 7: the list shows five topics around the lamp and says when more lie either side',()=>{
+ const {paperWindow}=PAPER();
+ assert.deepEqual(paperWindow(3,0,5),{from:0,to:3,up:false,down:false});
+ assert.deepEqual(paperWindow(12,0,5),{from:0,to:5,up:false,down:true});
+ assert.deepEqual(paperWindow(12,6,5),{from:4,to:9,up:true,down:true});
+ assert.deepEqual(paperWindow(12,11,5),{from:7,to:12,up:true,down:false});
+ assert.deepEqual(paperWindow(0,0,5),{from:0,to:0,up:false,down:false});
+});
+
+test('paper 8: the D-pad - Down on Get ready for school opens the list, Right walks it, Back returns; the screen is Math Buddy\'s to draw',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts'));
+ const base=secondSession(null,'prepare',{practice:null,profiles:[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}],focus:0});
+ const navs=(st)=>st.events.filter(e=>e.type==='nav');
+ assert.deepEqual(K.tvKey(base,'down',K.LOCAL).events,[],'Down on the units list still does nothing');
+ const p=paperSession([it('1',0,2,['N12']),it('2',0,3,['N2'])],{},0);
+ assert.ok(PAPER().paperView(p).topics.length>=2);
+ assert.equal(K.tvKey(p,'right',K.LOCAL).events.find(e=>e.type==='focus')?.focus,1);
+ assert.deepEqual(navs(K.tvKey(p,'back',K.LOCAL)).map(e=>e.screen),['prepare']);
+ assert.equal(K.paperOwns(p),true);assert.equal(K.mathsOwns(p),false,'MATHS_SCREENS is unchanged');
+ assert.match(fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8'),/mathsOwns\(s\) \|\| paperOwns\(s\)\) \? <MathsTV/,'the TV page hands it to Math Buddy');
+});
+
+test('M5b step 4: the slip card says its line through deskLine - the same text for a single item and for a part',()=>{
+ const src=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.match(src,/const said = deskLine\(items, ix,/);
+ assert.doesNotMatch(src,/namedLine/);
+ const {deskLine,namedLine,itemName}=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const parts=[{n:1},{n:2,stem:'A story.',part:'a'},{n:3,stem:'A story.',part:'b'}];
+ for(let i=0;i<parts.length;i++){const line=`Number ${parts[i].n} is right. I got something different for number ${parts[i].n}.`;
+  assert.equal(deskLine(parts,i,line),namedLine(line,parts[i].n,itemName(parts,i)),'the same text, by construction');}
+});

@@ -104,6 +104,7 @@ const FIXTURES={
  essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
  sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
+ paper:{s:session({screen:'paper'}),panel:'paper',why:'Type the marks of a paper you sat on the phone'},
  essayplan:{s:session({screen:'essayplan',subject:'essay'}),panel:'paste',why:'Say it on the phone: the plan slot is sent from the Essay tab'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
@@ -404,4 +405,12 @@ test('paper 4: no string the Paper panel renders names the board, over a sweep o
  for(const p of papers){const e=entryOf(p);for(const t of [...e.drops,...e.notes])assert.doesNotMatch(t,BAD,t);}
  for(const g of statementChoices()){assert.doesNotMatch(g.name,BAD);for(const c of g.items)assert.doesNotMatch(c.can,BAD,c.code);}
  assert.doesNotMatch(code(PAPER_PANEL).replace(/\/\/.*$/gm,''),/["'`>][^"'`<>]*(GCSE|1MA1)/i,'no board name in the panel\'s own copy');
+});
+
+test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{
+ const src=code(PAPER_PANEL);
+ assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);
+ const {panelFor}=P();
+ assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel');
+ assert.equal(panelFor(session({joined:false,screen:'paper'})),'join','an unjoined phone is still asked for the code first');
 });

@@ -679,3 +679,27 @@
 .maths-tv .mx .mtab-g[data-align="rl"] .mtab-c:nth-child(even) { justify-self: start; margin-left: -.6em; }
 .maths-tv .mx .mtab-d { width: .42em; align-self: stretch; height: auto; flex: 0 0 .42em; overflow: visible; }
 .maths-tv .mx .mtab-d path { fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- M5b A paper you sat: the recovery list (screen "paper") ---------------------------------------------------- */
+.maths-tv .mb-paperrec { position: absolute; left: 96px; top: 290px; width: 1728px; height: 620px; z-index: 4; display: flex; gap: 56px; }
+.maths-tv .mb-ptopics { position: relative; flex: 0 0 1100px; display: flex; flex-direction: column; gap: 12px; }
+.maths-tv .mb-prow { position: relative; display: grid; grid-template-columns: 56px 1fr auto; grid-template-rows: auto auto; column-gap: 20px; row-gap: 2px; align-items: baseline; height: 104px; box-sizing: border-box; padding: 14px 28px; border-radius: 22px; background: rgba(245, 238, 223, .06); border: 2px solid rgba(245, 238, 223, .12); color: rgba(245, 238, 223, .9); }
+.maths-tv .mb-prow .n { grid-row: 1 / 3; align-self: center; font-family: var(--mb-serif); font-size: 40px; color: var(--mb-amber); }
+.maths-tv .mb-prow .nm { font-size: 34px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.maths-tv .mb-prow .lost { font-size: 30px; font-weight: 700; color: var(--mb-amber); white-space: nowrap; }
+.maths-tv .mb-prow .from { font-size: 24px; opacity: .75; }
+.maths-tv .mb-prow .sec { justify-self: end; font-size: 22px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--mb-navy); background: rgba(255, 197, 107, .9); border-radius: 999px; padding: 2px 16px; }
+.maths-tv .mb-prow[data-focused="true"] { background: rgba(255, 197, 107, .16); border-color: var(--mb-amber); color: var(--mb-cream-hi); }
+.maths-tv .mb-prow[data-secure="true"]:not([data-focused="true"]) { opacity: .8; }
+.maths-tv .mb-pnone { display: block; font-size: 30px; }
+.maths-tv .mb-ptopics .mb-rchev.u { right: 8px; top: -36px; transform: rotate(90deg); }
+.maths-tv .mb-ptopics .mb-rchev.d { right: 8px; top: auto; bottom: -48px; transform: rotate(90deg); }
+.maths-tv .mb-pside { flex: 1; display: flex; flex-direction: column; gap: 28px; }
+.maths-tv .mb-pscore, .maths-tv .mb-poff { border-radius: 22px; padding: 22px 30px; background: rgba(245, 238, 223, .06); border: 2px solid rgba(245, 238, 223, .12); }
+.maths-tv .mb-pscore .big { font-family: var(--mb-serif); font-size: 84px; line-height: 1.1; color: var(--mb-cream-hi); }
+.maths-tv .mb-pscore .big small { font-size: 36px; opacity: .7; }
+.maths-tv .mb-pscore .sub { font-size: 28px; opacity: .85; }
+.maths-tv .mb-poff .mb-kick { font-size: 20px; margin-bottom: 8px; }
+.maths-tv .mb-poff .o { display: flex; flex-direction: column; margin-top: 10px; }
+.maths-tv .mb-poff .c { font-size: 26px; font-weight: 600; line-height: 1.2; }
+.maths-tv .mb-poff .m { font-size: 22px; opacity: .75; }
