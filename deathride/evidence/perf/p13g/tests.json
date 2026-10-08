@@ -1,0 +1,42 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "commit": "db1ec55a (the cut; later commits are evidence and docs only)",
+ "result": "BUILD SUCCESSFUL",
+ "modules": {
+  "core": {
+   "tests": 261,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  },
+  "link": {
+   "tests": 29,
+   "skipped": 2,
+   "failures": 0,
+   "errors": 0
+  },
+  "game": {
+   "tests": 110,
+   "skipped": 0,
+   "failures": 0,
+   "errors": 0
+  }
+ },
+ "new": {
+  "StatsJsonTest": {
+   "cases": [
+    "replyBlocksAreTheUtf8OfTheText()",
+    "racingRepliesAreDistinctAndReturnToThePool()",
+    "aWarmReplyAllocatesNoReplySizedArray()",
+    "appendedStatsAreTheTemplatedTextByteForByte()",
+    "servedStatsAreTheOldRouteByteForByte()",
+    "reusedScratchDistributionMatchesTheFreshArrayOne()"
+   ],
+   "failures": 0
+  }
+ },
+ "note": "link 29 = 26 on the base + 4 new - 1 replaced (servedStatsAreTheTemplatedBytesWithTheSameHeaders, which compared bodies without their two clock fields, became servedStatsAreTheOldRouteByteForByte, which serves the old route at the same clocks and compares every byte and every header but Date); 2 skipped, as on the base; core 261 and game 110 unchanged. A one-byte mutation of the served and the encoded body is asserted to differ. Warm build allocation on the JVM: 8,856 B per reply against a 79,239 B reply.",
+ "logs": [
+  "p13g/708b5f31/gate1.log"
+ ]
+}
