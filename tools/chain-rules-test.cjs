@@ -83,6 +83,16 @@ test('tagger: a line in words, a bare expression and a two-sided equation are nu
   assert.deepEqual(chainChecks({shape:'newton-step',f:'x^2-2',x0:1,steps:1},['x1 = 1.5']),[null]);
   assert.ok(!chainChecks(spec,['x = 2']).includes(false));
 });
+test('tagger (M3a): a one-capital label is an antiderivative only on an integral shape; elsewhere it names the function, as f(x) = does',()=>{
+  // a story's working names its function by a capital (A for an area): a right first line is not rung on a wrong item
+  const area={shape:'extremum',f:'x(14 - x)',on:[0,14],kind:'max'};
+  assert.deepEqual(chainChecks(area,['A = x(14 - x)',"A' = 14 - 2x"]),[true,true]);
+  assert.deepEqual(chainChecks(area,['A = x(28 - x)']),[false],'the area set up from the whole perimeter is rung where it sits');
+  assert.deepEqual(chainChecks({shape:'derivative',f:'x^3'},['F(x) = x^3',"F'(x) = 3x^2"]),[true,true]);
+  // on the two integral shapes the label keeps its meaning
+  assert.deepEqual(chainChecks({shape:'antiderivative',f:'2x'},['F = x^2 + C']),[true]);
+  assert.deepEqual(chainChecks({shape:'definite-integral',f:'3x^2',a:0,b:2},['F = x^3']),[true]);
+});
 test('tagger: every shape with a chain reads its lines (antiderivative, derivative-at, evaluate, limit, critical-point)',()=>{
   assert.deepEqual(chainChecks({shape:'antiderivative',f:'3x^2+2x'},['F(x) = x^3 + x^2 + C']),[true]);
   assert.deepEqual(chainChecks({shape:'antiderivative',f:'3x^2+2x'},['F(x) = x^3 + x^2']),[false],'+C is required');

@@ -221,6 +221,9 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
   const from = anchorOf(spec);
   const definite = spec.shape === "definite-integral";
   const root = spec.shape === "critical-point" || spec.shape === "extremum";
+  // a one-capital label (F, F(x)) is an antiderivative only where the item integrates; elsewhere it names the function
+  // (A for an area, D for a diagonal, v2 M3a), as f(x) = does
+  const integrates = spec.shape === "antiderivative" || spec.shape === "definite-integral";
   const specAt: string | number | null = spec.shape === "limit" ? spec.at : null;
   const side = spec.shape === "limit" ? spec.side : undefined;
   const sameAt = (a: string): boolean => {
@@ -276,9 +279,11 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
       } else if (integral) {
         line = { tag: "int", text: rest, of: integral[1] };
         kind = "anti";
-      } else if (ANTI_LABEL.test(left)) {
+      } else if (ANTI_LABEL.test(left) && integrates) {
         if (kind === "fn") { line = { tag: "int", text: rest }; kind = "anti"; }
         else if (kind === "anti") line = { tag: "=", text: rest };
+      } else if (ANTI_LABEL.test(left)) {
+        if (kind === "fn") { line = { tag: "=", text: rest }; lastFn = rest; }
       } else if ((m = D1_AT_LABEL.exec(left))) {
         if (lastDeriv !== null && num(m[1]) !== null) { line = { tag: "at", text: rest, of: lastDeriv, x: m[1] }; kind = "value"; }
       } else if ((m = AT_LABEL.exec(left)) && m[1] !== "x") {
