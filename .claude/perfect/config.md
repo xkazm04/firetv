@@ -32,11 +32,11 @@ builder: cd desk && npm test
 ```
 
 Each gate runs in its own invocation, `&&`-chained, exit code asserted. `npm test` is `tsc --noEmit` and then every
-rules suite in `test:rules`; a new suite is appended at the END of that chain (shared surface, one owner at a time).
+rules suite in `test:rules`; a new suite is appended at the END of `rulesSuites` in desk/package.json (run by `test:rules`, `node ../tools/run-rules.cjs`) (shared surface, one owner at a time).
 
 ## Class B
 
-- `desk/package.json` `test:rules` chain (append a suite at the end, anchored on the last one)
+- `desk/package.json` `rulesSuites` list (append a suite at the end, anchored on the last one; run by `test:rules`, `node ../tools/run-rules.cjs`)
 - `.claude/scan-history/*.jsonl`
 
 ## Class C

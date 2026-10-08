@@ -35,7 +35,7 @@ Each runs in its own invocation, `&&`-chained, exit code asserted (SKILL.md sect
 
 **Full-tree before the last commit** (references/challenge.md section 7 step 4): `cd desk && npm
 test` always, and the gradle line whenever anything Kotlin changed. The rules suites are wired
-through `desk/package.json`'s `test:rules`; a new suite is appended at the END of that chain
+through `desk/package.json`'s `test:rules`; a new suite is appended at the END of `rulesSuites` in desk/package.json (run by `test:rules`, `node ../tools/run-rules.cjs`)
 under the shared-surface lock.
 
 A fresh worktree needs two gitignored files copied from the main checkout before the gradle

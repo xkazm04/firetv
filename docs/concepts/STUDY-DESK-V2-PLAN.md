@@ -81,7 +81,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
-| 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | not started | | |
+| 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
@@ -90,7 +90,7 @@ O3 = loosen for confirmed 18+ (L3), O5 = yes, as proof (E5).
 
 ## d. The slice cards (batches 2-3; later batches get their cards when their batch starts)
 
-Every slice: the gate is `cd desk && npm test`, green at its commit. A new suite is appended at the end of `test:rules`.
+Every slice: the gate is `cd desk && npm test`, green at its commit. A new suite is appended at the end of `rulesSuites` in desk/package.json (run by `test:rules`, `node ../tools/run-rules.cjs`).
 No live model call in a gate (stub at the provider seam). Never touch `desk/data/`. A screen change updates
 `docs/STUDY-DESK-SCREENS.md` and the app's `docs/DESIGN-*.md` in the same commit.
 
@@ -576,3 +576,29 @@ committed: essayPlan removed from GUEST_BLANK failed "Session.essayPlan must be 
 asserts `'away' in view(...)` is false.
 Owed to the owner's batch 5+6 review: only a glance at the unjoined phone at 390 px.
 Next: H1 (row 30), then M3a (row 24).
+
+### 2026-10-08 · batch 6 · H1 · autopilot/accepted-idea-delivery-44200e26
+Built locally on main per the owner's 2026-10-08 ruling: one slice per run, merged through the gate, no PR, nothing pushed.
+Commits: b2c1fccf (the runner: `rulesSuites` in desk/package.json, tools/run-rules.cjs, tools/harness-rules-test.cjs), 664fb809
+(tools/ts-load.cjs and its loader rows), 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c (the swap: 13, 13, 13, 13, 5 suites),
+and this entry (row 30, the append rule, the review's rank-2 card marked built).
+What: test:rules is `node ../tools/run-rules.cjs`. It runs the 64 suites of `rulesSuites` in list order, one at a time, each as
+`node --test-reporter=tap <suite>`, and never stops at the first red one. A suite is green only when it exits 0 by itself and its
+last TAP summary shows tests >= 1, fail 0, cancelled 0; a non-zero exit, a signal, a throw, no summary (an early process.exit(0)),
+0 tests, a missing file and a timeout (RULES_SUITE_TIMEOUT_MS, 600000) are red. A missing, empty or duplicated list is refused
+before anything runs. One table at the end: suite, verdict, tests, pass, fail, ms, why; then the totals and the wall time.
+tools/ts-load.cjs is the one loader: the '@/' alias, .ts and .tsx hooks (fileName = the real file), transpile() through a disk cache
+in os.tmpdir()/desk-ts-load (DESK_TS_CACHE_DIR, DESK_TS_CACHE=0), TypeScript required only on a miss. The 57 copies are gone.
+Equivalence: the 63 old suites show identical tests and pass counts before and after (1067 tests, 1067 pass); harness-rules-test
+is new, 9 rows for the runner at b2c1fccf and 15 with the six loader rows. Totals: 1076 before, 1082 after, 0 fail.
+No suite changed because of the fileName change (maths-aim, maths-like, collect-rules, plot-rules all green, same counts).
+Wall (test:rules, this machine, back to back): old && chain at 8a88b411 106 s (171 s on an earlier, busier run); the runner with
+the old loaders 133 s (111 s without harness-rules-test, which spawns its own runs); the runner with ts-load, cache emptied 98 s,
+warm 94 s. Sum of the suites' duration_ms 74 to 79 s after, 77 s before. The cache helps little cold because the first suite to
+transpile school.ts fills it for the 38 others in the same run.
+Left alone: the loader inside the child-process template of learners-save-test.cjs (lines 49-51; a separate node process); the six
+suites without a loader; every tools file outside rulesSuites.
+Not done: the by-hand run of the old && chain on the final tree, and the two kill tests on real suites. See the questions; the
+runner's red cases are proven on fixtures in harness-rules-test (failing assertion, throw, early exit, 0 tests, missing file, timeout,
+duplicate, empty list) and the next gate run covers the rest.
+Next: M3a (row 24).
