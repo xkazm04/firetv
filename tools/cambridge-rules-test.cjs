@@ -25,6 +25,9 @@ test('every part and descriptor names real skills and a checkable source; ids ar
   for (const c of C.CRITERIA) assert(C.EXAMS[c.exam]);
   assert(C.CRITERIA.some(c => c.id === 'pronunciation' && c.linga === null), 'what Linga cannot judge is said, not hidden');
 });
+test('P6: audiencesAt, re-expressed through audienceAllowed, equals the frozen age table for ages 0..99', () => {
+  for (let age = 0; age < 100; age++) assert.deepEqual(C.audiencesAt(age), age >= 18 ? ['all', 'older', 'adult'] : age >= 15 ? ['all', 'school', 'older'] : ['all', 'school'], String(age));
+});
 test('coverage is computed from the authored scenes and the age gate, the same gate the scenes use', () => {
   for (const age of [9, 12, 13, 15, 17, 18, 40]) {
     const allowed = new Set(C.audiencesAt(age)), p = { id: 'x', name: 'X', type: age >= 18 ? 'other' : age >= 15 ? 'high-school' : 'elementary', age, modules: [] };

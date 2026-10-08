@@ -337,3 +337,29 @@ test('L4: Take Two in Family mode is refused on the server with a plain reason a
   await command('take-two', { episodeId: c.id, note: 0 });
   assert.equal(calls, 0); assert.equal(getSession().conversation.takes.length, 1); assert.equal(getSession().screen, 'linga-talk');
 });
+
+// ------------------------------------------------------------------ v2 P6: mode decides adult content (owner V2-O7)
+test('P6: an adult who chose Family is not offered the date scene, is refused it with no model call, and is told Family; Adult mode brings it back', async () => {
+  const { eligibleScenes } = require(src('lib/english/curriculum.ts'));
+  await seat('martin', { type: 'other', age: 45, mode: 'family' });
+  const martin = () => getSession().profiles.find(p => p.id === 'martin');
+  assert(eligibleScenes(martin(), getSession().englishLearning.preferences ?? defaultPreferences(martin())).every(s => s.audience !== 'adult'), 'no adult-audience scene');
+  assert(!eligibleScenes(martin(), defaultPreferences(martin())).some(s => s.id === 'date'), 'the date scene is gone');
+  let calls = 0; answer = async () => { calls++; throw new Error('no model call expected'); };
+  await assert.rejects(command('start', { sceneId: 'date', replace: true }), e => e.status === 403);
+  assert.equal(calls, 0, 'no model call');
+  // the tutor's prompt for a booking start
+  let system = ''; answer = async req => { system = req.system; return { json: { title: 'Booking', goal: 'Fix a booking.', opening: 'Hello, can I help?' }, provider: 'test', ms: 1 }; };
+  await command('start', { sceneId: 'booking', replace: true });
+  assert.match(system, /This desk is in Family mode\. Never propose, agree to, plan or play dating, romance, flirting, alcohol, drugs, gambling or sexual content/);
+  assert.doesNotMatch(system, /not an adult/);
+  assert.doesNotMatch(system, /The learner is an adult\./);
+  // the level check's prompt
+  let checkSys = ''; answer = async req => { const p = JSON.parse(req.prompt); checkSys = req.system; return { json: { topics: [] }, provider: 'test', ms: 1 }; };
+  await command('plan-propose').catch(() => {});
+  assert.match(checkSys, /an adult in Family mode; keep everything appropriate for a family audience/);
+  assert.doesNotMatch(checkSys, /The learner is (age|of unspecified)/);
+  // the same learner in Adult mode sees the date scene again
+  await seat('martin', { type: 'other', age: 45, mode: 'adult' });
+  assert(eligibleScenes(martin(), defaultPreferences(martin())).some(s => s.id === 'date'), 'Adult mode: the date scene is back');
+});

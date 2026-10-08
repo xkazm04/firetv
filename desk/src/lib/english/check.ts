@@ -10,7 +10,8 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
-import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS } from "./curriculum";
+import { adultAllowed, adultContent } from "../rules/mode";
 import { audienceOf, keywordAudience, topicText } from "./gate";
 import { checkAccepts, checkRefusal, heldScene, isCheckCommand, liveScene } from "./activity";
 import { withCertificate } from "./cert";
@@ -35,7 +36,7 @@ const topicSchema = schema({ title: str(48), goal: str(120), why: str(120), skil
 const planSchema = (count: number) => schema({ topics: { type: "array", minItems: 1, maxItems: count, items: topicSchema } });
 
 function who(p: Profile | undefined, adult: boolean): string {
-  return adult ? "an adult" : p?.age ? `age ${p.age}` : "of unspecified age; keep everything appropriate for children";
+  return adult ? "an adult" : p?.mode === "family" && adultAllowed(p) ? "an adult in Family mode; keep everything appropriate for a family audience" : p?.age ? `age ${p.age}` : "of unspecified age; keep everything appropriate for children";
 }
 function checkSystem(p: Profile | undefined, adult: boolean): string {
   return `You are Linga, meeting a learner on a shared television to find their English level before any practice. Warm, brief and curious; never sound like an exam.
@@ -229,7 +230,7 @@ export const isCheckAction = (action: string) => action === "level-self" || acti
 export async function checkCommand(action: string, input: Record<string, unknown>, profile: Profile, commandId: string): Promise<boolean> {
   const s = getSession(), learnerId = profile.id, learning = getLearner(learnerId).english;
   const prefs = learning.preferences ?? defaultPreferences(profile);
-  const ctx: Ctx = { profile, learning, adult: isAdult(profile, prefs), commandId };
+  const ctx: Ctx = { profile, learning, adult: adultContent(profile, prefs), commandId };
   const open = s.check?.learnerId === learnerId ? s.check : null;
   if (open?.commands.includes(commandId)) return true;
   // the table's "reading" row, for every command: the ones that open a check (check-start, plan-propose) are not in the table

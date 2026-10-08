@@ -15,7 +15,8 @@
  * A TEACHER OR EXAMINER MUST READ THIS TABLE, as with the band tables (placement.ts, cert.ts).
  */
 import type { Audience, SkillId } from "./types";
-import { AUTHORED_SCENES } from "./curriculum";
+import type { Profile } from "../session/store";
+import { audienceAllowed, AUTHORED_SCENES, defaultPreferences } from "./curriculum";
 
 export type Exam = "a2-key-schools" | "b1-preliminary-schools";
 export const EXAMS: Record<Exam, { name: string; band: "A2" | "B1"; minutes: string; format: string; source: string }> = {
@@ -99,7 +100,8 @@ export const TOPIC_AREAS = ["clothes", "communication and technology", "daily li
 
 /** The audiences a learner of `age` may practise in (curriculum.ts audienceAllowed, by age alone, for a school-type profile). */
 export function audiencesAt(age: number): Audience[] {
-  return age >= 18 ? ["all", "older", "adult"] : age >= 15 ? ["all", "school", "older"] : ["all", "school"];
+  const p: Profile = { id: "audiencesAt", name: "", type: age >= 18 ? "other" : age >= 15 ? "high-school" : "elementary", age, modules: [] };
+  return (["all", "school", "older", "adult"] as Audience[]).filter((a) => audienceAllowed(p, defaultPreferences(p), a));
 }
 
 export interface Coverage { exam: Exam; total: number; practised: string[]; gaps: string[]; share: number; scenesFor: Record<string, string[]>; }

@@ -19,7 +19,7 @@ const data = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-mode-')); process.env.D
 const src = (f) => path.join(root, 'src', f);
 const storeFile = src('lib/session/store.ts');
 const { audienceAllowed, isAdult: isAdultViaCurriculum } = require(src('lib/english/curriculum.ts'));
-const { modeOf, isAdult } = require(src('lib/rules/mode.ts'));
+const { modeOf, isAdult, adultContent } = require(src('lib/rules/mode.ts'));
 let store = require(storeFile);
 const { tvKey } = require(src('tv/keys.ts'));
 after(() => { if (globalThis.__desk?.ticker) clearInterval(globalThis.__desk.ticker); fs.rmSync(data, { recursive: true, force: true }); });
@@ -47,7 +47,27 @@ test('parity: audienceAllowed answers every combination as it did before W4 (10 
   assert.equal(n, 240);
   // no profile at all, and the mode a profile carries does not move the answer either
   for (const adultConfirmed of [false, true]) for (const audience of AUDIENCES) assert.equal(audienceAllowed(undefined, prefs(adultConfirmed), audience), frozenAllowed(undefined, prefs(adultConfirmed), audience), 'no profile');
-  for (const mode of ['family', 'adult']) for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode }), prefs(false), audience), frozenAllowed(profile(25, 'other'), prefs(false), audience), `mode ${mode} is not read by audienceAllowed`);
+  // REVISED under the M2b protocol (v2 P6, owner V2-O7 2026-10-08: mode decides). OLD: a stored mode, family or adult, was
+  // not read by audienceAllowed - both answered as the frozen copy of the unset profile. NEW: stored 'adult' at 25 still
+  // equals the frozen value; stored 'family' at 25 equals it too except the 'adult' audience, which is refused.
+  for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode: 'adult' }), prefs(false), audience), frozenAllowed(profile(25, 'other', { mode: 'adult' }), prefs(true), audience), `mode adult ${audience}`);
+  for (const audience of AUDIENCES) assert.equal(audienceAllowed(profile(25, 'other', { mode: 'family' }), prefs(false), audience), audience === 'adult' ? false : frozenAllowed(profile(25, 'other'), prefs(false), audience), `mode family ${audience}`);
+});
+test('P6: stored Family at 25 refuses the adult audience and keeps all and older, whatever the box', () => {
+  for (const adultConfirmed of [false, true]) {
+    const p = profile(25, 'other', { mode: 'family' });
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'adult'), false);
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'all'), true);
+    assert.equal(audienceAllowed(p, prefs(adultConfirmed), 'older'), true);
+  }
+});
+test('P6: adultContent is modeOf === adult over every grid row, and false under 18 whatever mode is stored', () => {
+  for (const age of AGES) for (const type of TYPES) for (const c of [false, true]) for (const mode of [undefined, 'family', 'adult']) {
+    const p = profile(age, type, mode ? { mode } : {});
+    assert.equal(adultContent(p, prefs(c)), modeOf(p, prefs(c)) === 'adult', JSON.stringify({ age, type, c, mode }));
+    if (age !== undefined && age < 18) assert.equal(adultContent(p, prefs(c)), false, `under 18: ${JSON.stringify({ age, type, c, mode })}`);
+  }
+  assert.equal(adultContent(undefined, prefs(true)), false, 'no profile');
 });
 test('isAdult is one function: curriculum re-exports the one in rules/mode', () => { assert.equal(isAdultViaCurriculum, isAdult); });
 

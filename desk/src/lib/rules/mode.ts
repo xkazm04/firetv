@@ -24,9 +24,10 @@ import type { EnglishPreferences } from "../english/types";
  * session.json cannot move a 12-year-old into Adult, and a draft whose age drops under 18 loses it (session/store.ts).
  * Family is always allowed, at any age.
  *
- * audienceAllowed (english/curriculum.ts) is NOT re-expressed through this: its truth table is pinned by
- * tools/mode-rules-test.cjs against a frozen copy, and an explicit mode "family" on an adult would change its
- * "adult" answer. modeOf sits beside it.
+ * audienceAllowed (english/curriculum.ts) IS now re-expressed through adultContent below (v2 P6, owner V2-O7, 2026-10-08:
+ * mode decides). Before, its "adult" row read isAdult, so an 18+ learner who chose Family was still offered the date
+ * scene and called "an adult" by the tutor, while modeOf refused the same learner Cut, pitch and Take Two. Profiles
+ * with no stored mode keep the frozen truth table (tools/mode-rules-test.cjs, the 240-row parity test).
  */
 export type Mode = "family" | "adult";
 
@@ -48,4 +49,14 @@ export function modeOf(p: Profile | undefined, prefs?: EnglishPreferences): Mode
   if (p?.mode === "family") return "family";
   if (p?.mode === "adult" && adultAllowed(p)) return "adult";
   return isAdult(p, prefs) ? "adult" : "family";
+}
+
+/**
+ * The one adult-content and audience decision (v2 P6, owner V2-O7: mode decides). True exactly when modeOf(p, prefs)
+ * is "adult". Family mode hides adult content at any age: an 18+ learner who chose Family gets no adult-audience
+ * scenes, is not called "an adult" by the tutor prompt, and gets a family-safe level check. isAdult stays the age
+ * fact that modeOf and adultAllowed read; no audience or content decision calls isAdult directly.
+ */
+export function adultContent(p: Profile | undefined, prefs?: EnglishPreferences): boolean {
+  return modeOf(p, prefs) === "adult";
 }

@@ -1,5 +1,5 @@
 import type { Profile } from "../session/store";
-import { isAdult, modeOf } from "../rules/mode";
+import { adultContent, isAdult, modeOf } from "../rules/mode";
 import type { Audience, EnglishLearning, EnglishPreferences, EnglishScene, Progress, SkillId } from "./types";
 export type { EnglishScene } from "./types";
 import { SPEAKING_PRACTICE } from "./speaking";
@@ -72,7 +72,7 @@ export { isAdult };
  */
 export function audienceAllowed(p: Profile | undefined, prefs: EnglishPreferences, audience: Audience): boolean {
   if (audience === "school") return p?.type !== "other" && (p?.age !== undefined ? p.age < 18 : p?.type === "elementary" || p?.type === "high-school");
-  return audience === "adult" ? isAdult(p, prefs) : audience === "older" ? (p?.age ?? 0) >= 15 || p?.type === "other" : true;
+  return audience === "adult" ? adultContent(p, prefs) : audience === "older" ? (p?.age ?? 0) >= 15 || p?.type === "other" : true;
 }
 /** The agreed plan's topics, as scenes the conversation can run. */
 export function planScenes(l?: EnglishLearning | null): EnglishScene[] {
