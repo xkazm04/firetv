@@ -637,7 +637,8 @@ Calculus 2 is the example, and it now exists (v2 M3b-2: integration techniques, 
 - it needs a second variable. The engine reads x only, so a sequence in n, or a series, is not readable;
 - it needs a new tolerance rule, or an answer stored anywhere.
 
-Calculus 2's integration techniques fit the existing shapes (built). Its sequences and series do not.
+Calculus 2's integration techniques fit the existing shapes (built). Its sequences and series do not: the M3b-3 card
+(section 10) keeps n out of the engine by printing it from families and from a function in x.
 Linear algebra needs a different engine altogether.
 
 ## 10. Honest limits
@@ -658,8 +659,8 @@ Linear algebra needs a different engine altogether.
   Calculus 1 is not a prerequisite the desk checks. It has no lessons (ruling 4), no example corpus and no word templates.
   Listed out: volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: applications of integration, not the techniques
   the owner picked). Moved to M3b-3 as candidate shapes: improper integrals (7.8; a value or a 'diverges' verdict) and
-  approximate integration (7.7; a rule applied with n steps), built only if that card names their truth, comparison, leak
-  rule and prompt, else listed here and descoped to the owner with sequences and series. Follow-up: a technique slip
+  approximate integration (7.7; a rule applied with n steps). The M3b-3 card (the next item) names their truth,
+  comparison, leak rule and prompt. Follow-up: a technique slip
   (parts, substitution, partial fractions) needs slips keyed by topic; `CALC_AS_SLIPS` tags a slip by shape, so a new
   antiderivative slip would join every Calculus 1 antiderivative topic's list, a Calculus 1 change. Calculus 2 topics use
   the existing antiderivative and definite-integral slips (ruling 10).
@@ -667,6 +668,33 @@ Linear algebra needs a different engine altogether.
   calc2-trig-integrals, calc2-trig-sub and calc2-partial-fractions. OpenStax 3.5 is "Other Strategies for Integration", on
   tables of integrals and computer algebra (Stewart 7.6's matter), so it only partly matches calc2-strategy, and Stewart 9e
   7.5 is that topic's source of record. The spine still lists 3.5 beside 7.5 (its pins are unchanged).
+- **Sequences and series are not built yet, and some of them cannot be** (v2 M3b-3 step A, 2026-10-09; the card is in
+  the plan's M3b section, rows 39-46). The expression engine reads x only: `n` and `!` do not read (`calc-expr.ts` lines
+  139 and 148), so `(-1)^n`, `n!` and `r^n` have no reading. The card keeps it that way. A sequence's limit is a
+  function in x printed with n, judged by `limitInf` with a second run along x·√2. A series' sum, a convergence verdict
+  and an improper integral come from families whose parameters are whole numbers or fractions, printed from a template
+  and decided by a textbook rule (the geometric ratio, the p-series exponent, the degree gap, the ratio and root tests;
+  Stewart 9e 11.2-11.6, OpenStax Volume 2 5.2-5.6). Approximate integration (7.7) is a rule applied with n subintervals
+  to a function in x. Six build slices wait for the App Master's ruling. **Not buildable**, with the reason:
+  - a series or a sequence term written freely in n: the engine cannot read it, and the desk has no rule that decides an
+    arbitrary term's sum or convergence;
+  - a sequence with no real extension, such as (-1)^n/n or n!/n^n: Stewart's theorem that a_n = f(n) shares f's limit
+    needs f defined on the reals;
+  - the sum of a series outside the geometric and telescoping families: partial sums cannot separate a slowly convergent
+    series from a divergent one;
+  - an improper integral of a free integrand: `integrate` returns null on an infinite bound (`calc-expr.ts` line 478), and
+    the partial integrals of 1/x^1.01 (which converges to 100) and 1/x (which diverges) were 4.50 and 4.61 at t = 100, and
+    8.80 and 9.21 at t = 1e4, measured (so ∫_0^∞ x e^(-x) dx and ∫ 1/(1+x^2) over the whole line are out);
+  - power series (Stewart 11.8-11.11): the interval of convergence is a set answer with two endpoint verdicts, a power
+    series is a function with no closed form to sample, and a Taylor polynomial needs higher derivatives that
+    `derivativeAt` does not give.
+  The descope goes to the owner, who picked sequences and series.
+- **A limit at infinity is read at whole numbers only** (measured 2026-10-09). `limitInf` samples x = 100, 1000, ...,
+  1e8 (`calc-expr.ts` lines 516 and 587-591), so a function of period 1 or 2 is aliased. The spec
+  `{shape: 'limit', f: 'cos(pi*x)', at: 'inf'}` is well formed with truth 1, and `checkAnswer` marks 1 right, though the
+  limit does not exist. `sin(pi*x)+1` and `cos(2*pi*x)` behave the same way. Calculus 1 is unchanged by the card. The
+  second run along x·√2 that the card proposes for sequences would refuse all three, but adding it to the `limit` shape
+  is a Calculus 1 change, and the App Master decides it.
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of

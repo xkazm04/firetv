@@ -90,7 +90,14 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
 | 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
 | 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | done (built locally, no PR, nothing pushed; `calc2` judged 'calc', five topics, `PathInfo.calcWords`; suite `tools/calc2-path-test.cjs`, 7 rows; the kill test red; owed to the owner: the Maths course row with three cells at 1920 x 1080 and 1280 x 720, and one live calc2 set) | 18845498 (step 0), 6565c0f5, and the finish record | 2026-10-08 |
-| 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | not started (built only if its card names the kind of truth, comparison, leak rule and marking prompt; else listed in the honest limits and the descope goes to the owner) | | |
+| 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | card completed (step A); the build waits for the App Master's ruling (five candidate shapes: sequence-limit, series-sum (two families), series-verdict (five families), improper-integral (three families) and approx-integral buildable; free terms in n, free improper integrands and power series not buildable, descoped to the owner; n is never read by the engine; cut into M3b-3a to M3b-3g, rows 40-46) | 8132e184 (step 0), and the card with its finish record | 2026-10-09 |
+| 40 | M3b-3a | Math: the Calculus 2 shapes seam (rules/calc2.ts, rules/calc-read.ts, the dispatch; no behaviour change) | 7 | M3b-3 card | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 41 | M3b-3b | Math: approximate integration (approx-integral; calc2-approx, Stewart 7.7) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 42 | M3b-3c | Math: the limit of a sequence (sequence-limit, the alias guard; calc2-sequences, Stewart 11.1) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 43 | M3b-3d | Math: the convergence verdict (series-verdict, five families; six topics, Stewart 11.2-11.7) | 7 | M3b-3a | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 44 | M3b-3e | Math: the sum of a series (series-sum, geometric and telescoping; on calc2-series) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 45 | M3b-3f | Math: improper integrals (improper-integral, three families; calc2-improper, Stewart 7.8) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
+| 46 | M3b-3g | Math: absolute or conditional convergence (optional; the alternating p family's three-word verdict) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling); optional, only if ruled in | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -576,7 +583,8 @@ its questions)
   from the spine, listed in the honest limits with its reason, and its fixtures are kept. Under three topics left: the
   path is not wired, row 38 records it, and the owner is told.
 
-**M3b-3. Sequences and series** (row 39; a draft; built only if this card is completed)
+**M3b-3. Sequences and series** (row 39; card completed by M3b-3 step A on 2026-10-09; the build waits for the App
+Master's ruling on the slices M3b-3a to M3b-3f below)
 - Goal: the owner's "sequences and series" (Stewart 9e chapter 11), and the two shapes M3b-2 moved here (ruling 7): improper
   integrals (7.8; a value or a 'diverges' verdict) and approximate integration (7.7; a rule applied with n steps). They are
   built only if this card names their truth, comparison, leak rule and prompt; otherwise they go to section 10 and the
@@ -588,6 +596,317 @@ its questions)
 - Accept: as M3b-2, with the shape checklist of section 9 step 5 done for every new shape.
 - Kill: the card cannot name all four for a shape: that shape is not built. With no shape left, sequences and series
   go into MATH-COURSE-PATHS section 10 with the reason, and the descope goes to the owner (ruling 1).
+- Sources: Stewart 9e chapter 11, sections 11.1-11.7 (sequences; series; the integral test; the comparison tests;
+  alternating series; absolute convergence and the ratio and root tests; the strategy for testing series), and 7.7 and
+  7.8. OpenStax Calculus Volume 2, checked against openstax.org on 2026-10-09: chapter 5 is 5.1 Sequences, 5.2 Infinite
+  Series, 5.3 The Divergence and Integral Tests, 5.4 Comparison Tests, 5.5 Alternating Series, 5.6 Ratio and Root Tests;
+  chapter 3 has 3.6 Numerical Integration and 3.7 Improper Integrals. Topic names are our own words. **Power series
+  (Stewart 11.8-11.11) are out**: their answers are an interval of convergence (an interval whose two ends each carry a
+  verdict, which is a set answer, section 9's design-change list), a power series as a function (a sum of infinitely many
+  terms in x, so `sameFunction` has no closed form to sample), or a Taylor polynomial (needs derivatives of every order;
+  `derivativeAt` gives only the first, calc-expr.ts:433). The radius of convergence alone is one number and could become a
+  family shape later. That needs a card of its own and is not cut here. The descope goes to the owner (questions).
+
+**M3b-3 step A: the engine as it stands** (read and probed on 2026-10-09 at 2db4d800; a scratch script outside the repo
+loaded the TypeScript through `tools/ts-load.cjs`; no code changed)
+- The expression engine reads one variable, x. A letter outside its words is null (calc-expr.ts:139; the words at
+  101-111), and so is any other character, `!` included (calc-expr.ts:148). Probed: `compile` returns null for `n`, `2n`,
+  `n!`, `x!`, `(-1)^n`, `2^n`, `n^2+1` and `3^x/x!`. `(-1)^x` reads: `Math.pow` (calc-expr.ts:349) gives -1 at 3, 1 at
+  100 and NaN at 2.5. `r^x` reads for r > 0 on every real, and for r < 0 only at whole numbers.
+- `read()` requires a function in x on every shape: no `f`, a `+C` or no x is refused (calc.ts:170-173).
+- `limitInf` samples f at x = 1/t for t from 1e-2 down to 1e-8 (calc-expr.ts:516, 587-591): x = 100, 1000, ..., 1e8,
+  each a whole number (one is 99999.99999999999). A function of period 1 or 2 is therefore read only at its whole-number
+  points. **Probed, a latent Calculus 1 defect**: `wellFormed({shape:'limit', f:'cos(pi*x)', at:'inf'})` is ok,
+  `limitInf` says the value is 1, and `checkAnswer` marks `1` right, though the limit does not exist. The same holds for
+  `sin(pi*x)+1` (truth 1) and `cos(2*pi*x)`, while `x*sin(pi*x)` gives a value near 0. Nothing in this run changes it
+  (questions).
+- `integrate` returns null for an infinite bound (calc-expr.ts:478) and for an integrand that is not finite at a sample
+  (calc-expr.ts:484, 508). Calculus 1 therefore refuses every improper integral: `b: 'inf'` is "not a finite number"
+  (calc.ts:137-144, 215), and `1/sqrt(x)` on [0, 1] is "not finite on this interval" (calc.ts:218). Probed:
+  `limitInf(t -> integrate(f, 1, t))` is `dne` for 1/x^2, e^(-x), 1/x, 1/x^1.01 and 1/x^1.1 alike, because `integrate`
+  fails at t = 1e8. The partial integrals that do come back cannot tell a slowly convergent integral from a divergent one:
+  at t = 100 and 1e4, 1/x^1.01 gives 4.50 and 8.80, and 1/x gives 4.61 and 9.21, but the first converges to 100 and the
+  second diverges.
+- `checkAnswer` reads a verdict word as unreadable: "converges" on a limit spec is 'unsure' (calc.ts:433). `leaksCalc`
+  reads "it converges" as no leak, and "it converges to zero" as a leak only by the zero (calc.ts:549-554).
+- The typesetter already sets `\sum` with its limits (maths/typeset.ts:62, 353-354). The Fire TV glyph for ∑ is
+  unverified (MATH-COURSE-PATHS section 10).
+
+**M3b-3 step A: one rule for every shape.** n is never read by the expression engine. Each shape below takes one of two
+roads:
+- A function in x the engine already reads, which code prints with n in place of x. This is the sequence-limit shape.
+- A family: a closed list of term forms whose parameters are whole numbers or fractions. Code prints the term in n from
+  a template, and decides the truth by a rule on those numbers. This covers the series sum, the convergence verdict and
+  the improper integral.
+So `(-1)^n`, `n!` and `r^n` are printed by code and never parsed or evaluated. calc-expr.ts stays as it is, apart from
+one additive printer (slice c), and every comparison against a threshold (|r| < 1, p > 1, a degree gap of 2) is between
+whole numbers, with no floating-point edge. Reading n would need:
+- `n` as a second word and Node (calc-expr.ts:34-45, 101-111);
+- a postfix `!` (calc-expr.ts:148);
+- an `at(x, n)`;
+- a decision at every `usesX` site (calc.ts:141, 173, 305, 447, 550).
+That would change Calculus 1: a learner's answer or a prose window holding a lone n, unreadable today, would start to
+read and change which windows `leaksCalc` takes (calc.ts:555-566). The card does not propose it.
+
+**M3b-3 step A: where the new shapes live.** A new module, `rules/calc2.ts`, holds the five shapes below as
+`CALC2_SHAPES`, separate from `CALC_SHAPES` (calc.ts:38). The nine shapes therefore stay nine, and so do:
+- the `sign` and `arithmetic-slip` slips, whose shapes are `CALC_SHAPES` (calc.ts:580, 591);
+- `TOLERANCE` (calc.ts:50-58);
+- `CALC_WITHHELD` (calc.ts:889-899);
+- maths-paths-test line 86 (every one of the nine is practised on Calculus 1).
+calc.ts's public functions (`wellFormed`, `question`, `checkAnswer`, `leaksCalc`, `slipsFor`, `withheldCalc`,
+`specFromQuestion`) send a `CALC2_SHAPES` spec to calc2.ts on their first line. A Calculus 1 spec runs today's lines.
+`isCalcSpec` (maths.ts:138-139) and `specShown` (store.ts:176) accept both lists, so a calc2 spec is a 'calc' item
+(`kindOfSpec`, kinds.ts:32) and survives `shown()`. The shared reading helpers move out of calc.ts into `rules/calc-read.ts`
+so that calc2.ts can use them without a cycle:
+- `cleanAnswer` (calc.ts:378);
+- `infinityOf` (385);
+- `DNE` (389);
+- `isDecimal` (391);
+- `withinRel` (392);
+- `spoken` (476);
+- `piecePattern` (488);
+- the window reader (555-566).
+
+**The five candidate shapes** (each with its kind of truth, comparison, leak rule, marking prompt and how n is read; the
+tolerances named are the ones a build would add, none is added by this run)
+
+(i) **sequence-limit** - the limit of a sequence a_n = f(n) (Stewart 11.1, OpenStax 5.1). Spec `{shape, f}`, f in x.
+- Truth: `limitInf(f, 1)` (calc-expr.ts:587), as Calculus 1's limit at infinity does (calc.ts:227-229), because Stewart
+  11.1 Theorem 3 says: if f(x) -> L as x -> infinity and a_n = f(n), then a_n -> L. That theorem runs one way only, so
+  two guards apply:
+  - `dne` is refused (as calc.ts:236 does), since f may have no limit while a_n does (sin(pi x));
+  - the alias guard: the limit must also exist and agree, to `LIMIT_SIDES` (calc-expr.ts:520), along x·√2. That second
+    run is `limitInf` on `x -> f.raw(x·√2)`, with infinities kept (calc-expr.ts:56); `at` turns an overflow into NaN, and
+    the probe saw 2^x/x^3 come back null.
+  Probed: cos(pi x) gives 1, then `dne` under the guard (refused); sin(pi x)+1 gives 1, then `dne`; x·sin(pi x) gives 0,
+  then `dne`. These agree under the guard: (3x^2+1)/(x^2-4) at 3 and 3, (1+1/x)^x at e and e, x^(1/x) at 1 and 1,
+  (1/2)^x at 0 and 0, ln(x)/x at about 2e-8 both times (truth 0, inside 1e-6). `(-1)^x` is NaN off the whole numbers,
+  so the guard refuses it. An infinite limit is an infinity (2^x/x^3 gives inf).
+- Comparison: the `limit` row's numbers, `{exact: 1e-6, rounded: 5e-3}` (calc.ts:56), with the same reason. An infinite
+  limit is answered inf, infinity or ∞ with its sign (calc.ts:424-429), and "dne" is wrong (calc.ts:430).
+- Leak: the `limit` shape's rule (calc.ts:529, 549-554). Its own pieces (calc.ts:497-501) are printed in n:
+  `lim_(n->infinity)`, `n->infinity`, "n approaches infinity" (and tends to, goes to). On an infinite truth, any word for
+  infinity leaks (calc.ts:529), as on Calculus 1.
+- Marking prompt: the reading prompt (mark.ts:110-121) is unchanged, because the answer is a number or an infinity. The
+  set prompt's line: "sequence-limit: f, a function of x that the desk prints with n in place of x. The question is the
+  limit of a_n = f(n) as n grows. Pick one that is defined for every real x >= 1 and that has a limit or grows without
+  bound." The model is never told the limit, and no result key reaches the schema (items.ts:261, calc.ts:169).
+- How n is read: it never is. f is in x. A new printer writes it in n: a `v` argument on calc-expr's `tex()` (the x case
+  at calc-expr.ts:741), and a new node-to-plain printer that always writes n as a token of its own. `toTex(e)`
+  (calc-expr.ts:769) keeps its output. The page reader turns the desk's own printed question back into x by renaming only
+  an n that stands between non-letters, so `ln(n)` becomes `ln(x)`. An n inside a letter run ("en") is left as it is, and
+  the term then fails to read (null, conservative). Out of reach: a_n written with `(-1)^n` or `n!` (no real extension).
+  Those sequences (squeeze examples such as (-1)^n/n, and n!/n^n) go to the honest limits.
+- Kill: drop the alias guard, and `{f:'cos(pi*x)'}` becomes well formed with truth 1. The row that asserts it is refused
+  goes red.
+- Verdict: **buildable**.
+
+(ii) **series-sum** - the sum of a convergent series (Stewart 11.2, OpenStax 5.2). Spec `{shape, family, ...}`, two
+families.
+- Truth, by closed form:
+  - `geometric`: a·r^n from n = k (k is 0 or 1; a is a non-zero whole number or fraction; r is a fraction with
+    0 < |r| < 1, compared on its numerator and denominator). The sum is a·r^k/(1 - r).
+  - `telescoping`: c/((n+p)(n+q)) from n = k (whole numbers with p < q, q - p <= 6, and (k+p)(k+q) > 0 so that no term
+    is undefined). The sum is c/(q-p) · (1/(k+p) + ... + 1/(k+q-1)).
+  The desk decides every spec the schema allows: the parameters are whole numbers (JSON `integer`) or a fraction string
+  that `read()` takes apart into two whole numbers, and |r| = 1, a zero factor and q - p out of range are each refused.
+  Probed against partial sums: geometric (3, 1/2, 0) is 6 by both; (1, -1/3, 1) -0.25 by both; (5, 2/3, 1) 10 by both.
+  Telescoping (1, 0, 1, 1) is 1 against 0.999999 at 1e6 terms; (2, -1, 1, 2) 1.5; (3, 0, 3, 1) 11/6; (1, 1, 3, 0) 0.75.
+  Stewart's 1/(n(n+1)) is (1, 0, 1, 1).
+- Comparison: a number. The tolerance a build adds is `{exact: 1e-6, rounded: 5e-3}`, the definite-integral row's reason
+  (calc.ts:47): a learner who rounds to three figures lands within 5e-3. `judgeNumber` (calc.ts:396-402) rules, the sign
+  slip included.
+- Leak: the number rule (calc.ts:549-554). Its own pieces are the printed term, `sum_(n=k)^infinity`, and "n = k".
+- Marking prompt: the reading prompt is unchanged (a number). The set line names the families and their fields only:
+  "series-sum: family (geometric or telescoping) and its numbers. The question is the sum; pick one that converges." The
+  model is never told the sum or the formula. `sum` joins the refused result keys (items.ts:261, calc.ts:169).
+- How n is read: never. The term is printed from the template (`3(1/2)^n`, `1/(n(n+1))`). `r^n` and the alternating
+  sign of a negative r appear only in the printed text.
+- Kill: drop the 1/(q-p) factor, and Stewart's 3/(n(n+3)) (truth 11/6) goes red. Read the geometric sum from n = 0 when
+  k is 1, and (1, -1/3, 1) goes red.
+- Verdict: **buildable** for these two families. A free term in n is not, because the desk has no sum for it: partial
+  sums cannot tell a slowly convergent series from a divergent one (the probe in (iv) shows this for integrals).
+
+(iii) **series-verdict** - whether a series converges or diverges (Stewart 11.2-11.7, OpenStax 5.2-5.6). Spec
+`{shape, family, ...}`. Each family is decided by one textbook rule, on whole numbers:
+| family | term printed | parameters | the rule (Stewart) | why every allowed spec is decided |
+|---|---|---|---|---|
+| `geometric` | a·r^n | a != 0; r = u/v, u != 0, v > 0 | converges iff \|u\| < v (11.2) | a comparison of two whole numbers; r = ±1 is decided (diverges) |
+| `p` | c/n^p, or (-1)^n·c/n^p with `alt` | c != 0; p = u/v, v > 0 | plain: iff u > v (the p-series, 11.3); alternating: iff u > 0 (the alternating series test 11.5, else the divergence test 11.2) | whole numbers; p = 1 exactly is the harmonic series |
+| `rational` | P(n)/Q(n) from n = k | integer coefficients, degree 0-3 each, leading terms != 0, Q(n) != 0 for every whole n >= k | iff deg Q - deg P >= 2 (the limit comparison test with 1/n^(deg Q - deg P), 11.4; deg P >= deg Q fails the divergence test) | the terms keep one sign from some n on; Q has at most three whole roots, found exactly by the rational root theorem on its integer coefficients |
+| `ratio` | n^j·c^n·(n!)^m | j in 0..3; c = u/v != 0; m in {-1, 0, 1} | m = -1: converges; m = 1: diverges; m = 0: iff \|u\| < v (the ratio test, 11.6; for \|c\| >= 1 the term does not go to 0) | whole numbers and a three-valued m |
+| `root` | ((a·n + b)/(c·n + d))^n | whole numbers, c != 0, c·n + d != 0 for n >= 1 | iff \|a\| < \|c\| (the root test, 11.6; at \|a\| = \|c\| the term tends to e^((b-d)/c) or its sign-alternating twin, not 0: diverges) | whole numbers |
+- Comparison: a verdict matched exactly. The answer is read by a closed list: converges, convergent, it converges, the
+  series converges, conv; and the same for diverges. Anything else is 'unsure' (a number written for a verdict
+  included), never wrong, as an unreadable answer is today (calc.ts:433). A wrong verdict is 'wrong' with no slip of
+  code's own (`sign` does not apply). No tolerance.
+- Leak: a verdict shape leaks when the line names a verdict at all, either way, as an infinite limit leaks by naming
+  infinity (calc.ts:529). That covers any form of converg- or diverg-, "has a sum", "adds up to", "finite sum", "blows
+  up", "grows without bound", "goes to infinity", "infinite sum". It also leaks when one sentence states the deciding
+  comparison as a fact: the family's deciding number (|r|, p, the degree gap, |c|, |a|/|c|) beside a comparison word or
+  sign (<, >, less than, greater than, more than, at most, at least, smaller, bigger) and the threshold (1, or 2 for the
+  degree gap). Naming the test ("try the ratio test", "compare with a p-series") does not leak: it is the method, not
+  the outcome. The question's own pieces (the printed term, `sum_(n=k)^infinity`) are set aside first.
+- Marking prompt: the set line gives the families and their fields, and asks for a mix that converges and diverges. It
+  never says which spec does which, and never names a rule's threshold per spec. On the reading prompt (mark.ts:116) and
+  the explain prompt (explain.ts:161-164), a sheet or item with a verdict item gets one more line: "For a question that
+  asks whether a series converges, copy the word the student wrote (converges or diverges), as written." A sheet without
+  one is asked byte for byte as today. The model is never told the verdict, and `verdict`, `converges` and `diverges`
+  join the refused result keys.
+- How n is read: never. `(-1)^n`, `n!`, `r^n` and `((an+b)/(cn+d))^n` are printed from the family's template, and the
+  verdict comes from the rule on the parameters, so nothing in n is evaluated.
+- Absolute or conditional: **proposed as an optional slice** (M3b-3g, below), not in the first verdict slice. For the
+  alternating `p` family it is decided (absolutely iff u > v; conditionally iff 0 < u <= v), and it is a three-word
+  verdict matched exactly. It adds "absolute" and "conditional" to the leak words.
+- Kill: flip the `p` rule to u >= v, and the harmonic fixture (Σ 1/n, diverges) goes red. Flip the `rational` gap to
+  >= 1, and Σ n/(n^2+1) (diverges) goes red.
+- Verdict: **buildable** for the five families. A free term in n is not buildable (no decision procedure).
+
+(iv) **improper-integral** - a value or 'diverges' (Stewart 7.8, OpenStax 3.7). Spec `{shape, family, ...}`. The
+integrand is a function in x, printed by code from the family.
+- Truth, by closed form (c != 0; p = u/v, v > 0; a, b > 0 whole or fractions; k = u/v):
+  - `tail-power`: ∫_a^∞ c/x^p dx = c·a^(1-p)/(p-1) iff u > v, else it diverges;
+  - `end-power`: ∫_0^b c/x^p dx with 0 < p (p <= 0 is a proper integral and is refused) = c·b^(1-p)/(1-p) iff u < v,
+    else it diverges;
+  - `tail-exp`: ∫_a^∞ c·e^(-kx) dx = c·e^(-ka)/k iff k > 0, else it diverges.
+  Free integrands are **not buildable**, as probed above: `integrate` returns null on an infinite bound (calc-expr.ts:478),
+  and no partial-integral limit separates 1/x^1.01 (converges to 100) from 1/x (diverges) at any t the engine reaches.
+  Parts-based integrals (∫_0^∞ x e^(-x) dx) and 1/(1+x^2) on the whole line are out with them.
+- Comparison: a number to the definite-integral row's `{exact: 1e-6, rounded: 5e-3}`, or a verdict matched exactly as in
+  (iii). "diverges" (the closed list) is the verdict, and so is an infinity with the integral's sign, since every
+  divergent spec here diverges to c's sign times infinity. A number for a divergent integral, or a verdict for a
+  convergent one, is wrong.
+- Leak: a convergent spec uses the number rule. A divergent spec uses the verdict rule of (iii) plus any word for
+  infinity, applied after the question's own pieces (`int_a^infinity`, "from a to infinity") are set aside. Calculus 1's
+  infinite limit checks before its pieces (calc.ts:529, 536), and that order would make the question's own bound a leak.
+- Marking prompt: the set line gives the families. The reading and explain prompts get the verdict line of (iii) when
+  the sheet has such an item. The model is never told the value or the verdict.
+- How n is read: there is no n. x is the engine's own variable. The integrand is printed from the template, so `x^p`
+  and `e^(-kx)` print, and `wellFormed`'s Calculus 1 definite-integral path is untouched (it still refuses an improper
+  interval).
+- Kill: flip the tail-power rule to u >= v, and ∫_1^∞ 1/x dx (diverges) goes red. Drop the 1/k, and ∫_0^∞ e^(-2x) dx
+  (1/2) goes red.
+- Verdict: **buildable as the three families**. With free integrands it is not buildable (the reason above, which goes
+  in section 10).
+
+(v) **approx-integral** - a rule applied with n steps (Stewart 7.7, OpenStax 3.6). Spec
+`{shape, f, a, b, pieces, rule}`: f in x, `rule` is trapezoid, midpoint or simpson, and `pieces` is a whole number from
+2 to 10, even for Simpson. The parameter is `pieces`, not `n`, so it never meets the item's `n`.
+- Truth: the rule's finite sum over `f.at` at the grid points. That is pieces + 1 evaluations at most, all finite, and an
+  undefined point refuses the spec. Probed for 1/x on [1, 2] (Stewart's 7.7 example): T_5 = 0.6956349, M_5 = 0.6919079,
+  T_4 = 0.6970238, M_4 = 0.6912199, S_4 = 0.6932540, S_10 = 0.6931502; ln 2 = 0.6931472.
+- Comparison: a number. The tolerance a build adds is `{exact: 1e-6, rounded: 5e-5}`, with this reason: the question
+  asks for four decimal places, and 5e-5 is half a unit in the fourth place. Calculus 1's 5e-3 cannot work here: T_5's
+  error is 2.5e-3, so a learner who gave ln 2 would be marked right. The degenerate rule (as Newton's, calc.ts:265)
+  refuses a spec whose value is within 2 × 5e-5 (relative to max(1, |value|)) of the exact integral (`integrate`) or of
+  another rule's value with the same pieces. Measured: S_10 (error 3e-6) is refused, S_4 (error 1.1e-4) is kept,
+  T_5 and M_5 are kept. This shape has no 'unsure' band (calc.ts:400's 5e-3 would cover the exact integral): within
+  5e-5 is right, anything else that reads as a number is wrong, as the question asks for four decimal places.
+- Leak: the number rule (calc.ts:549-554) at 5e-5 for this shape. Its own pieces: `int_a^b`, "n = pieces", the rule's
+  name and [a, b]. The exact integral stated in a hint does not leak, because the degenerate rule keeps it more than
+  1e-4 away.
+- Marking prompt: the reading prompt is unchanged (a number). The set line: "approx-integral: f, a, b, pieces (2 to 10,
+  even for simpson) and rule (trapezoid, midpoint or simpson). The question is that rule with that many subintervals,
+  given to four decimal places." The model is never told the value. The printed question names the rule, "n = pieces"
+  and "to four decimal places".
+- How n is read: n is a whole-number parameter (JSON `integer`), printed as "n = 4" and never parsed. The word "n" in the
+  question is prose; a lone n token does not compile (calc-expr.ts:139), so it changes no leak window.
+- Kill: compute T_n as a left Riemann sum (dropping the half weights at the ends), and the T_5 fixture (0.6956) goes red.
+- Verdict: **buildable**.
+
+**What every build slice may change in Calculus 1, and the row that pins it unchanged.** These are the only Calculus 1
+files a slice touches. calc.ts gets the dispatch and the moved helpers (a). items.ts gets per-shape tables and the
+schema's `f` (b). calc-expr.ts gets the printer's variable (c). mark.ts and explain.ts get a conditional verdict line
+(d). store.ts gets keys. calculus1.spine.ts, calculus1.ts, calc-word.ts and kinds.ts are not touched. The pins:
+- calc-rules-test 1-9: checkAnswer, the tolerances, wellFormed, question(), leaksCalc, the slips, the sweep, the
+  mutations;
+- calc-expr-test 1-15, with 12 for toTex;
+- calc-hint-test 1-8: the readers and the fixed sentences;
+- calc-marking-test M3a 2: the reading prompt byte for byte;
+- school-marking-test line 304 and voice-rules-test line 44: the explain system;
+- calc2-path-test 6: calc1's set prompt and stance whole;
+- maths-paths-test 13-19;
+- calc-course-test: the whole course;
+- calc-practice-test;
+- a new frozen table in slice a: every Calculus 1 corpus spec and sweep spec through question(), checkAnswer on its
+  worked, wrong and slip answers, and leaksCalc on its question and its fixed sentence, written at the base and compared
+  byte for byte at every later slice.
+Assertions a build must edit, all forced by calc2 growing (as M3b-2's were):
+- calc2-path-test 1 (the five topic ids, the sections, the OpenStax numbers);
+- maths-paths-test 1 (calc2's length 5);
+- maths-paths-test 23 (`SHAPES`, the contract), with 82 and 215: a calc2 topic's shapes are checked against
+  `SHAPES ∪ CALC2_SHAPES`, while 86 (all nine practised on Calculus 1) is unchanged.
+
+**The build slices** (one shape of change each, in this order, each a run through the gate, built only after the App
+Master's ruling; the calc2 topics follow Stewart's order in `calculus2.spine.ts`, with prerequisites only on earlier calc2
+topics per ruling 3, and each new topic is a screen change on the calc2 ruler whose captures are owed)
+
+**M3b-3a. The Calculus 2 shapes seam** (S; row 40; no behaviour change, like M3b-1)
+- Goal: `rules/calc-read.ts` (the helpers moved out of calc.ts, unchanged); `rules/calc2.ts` with `CALC2_SHAPES = []`
+  and the dispatch API; calc.ts's public functions dispatch a `CALC2_SHAPES` spec on their first line; `isCalcSpec`
+  (maths.ts:139) and `specShown` (store.ts:176) read both lists; `PathTopic.shapes` (paths.ts:39) and `Calc2Shape`
+  (calculus2.spine.ts:18) take either list's ids.
+- Rows: the new suite `tools/calc2-seam-test.cjs` - the frozen Calculus 1 table (above), written at the base; calc.ts
+  imports only calc-expr.ts, calc-read.ts and calc2.ts; calc2.ts imports no store, engine or TV module. Existing
+  assertions: none changed.
+- Kill: route one Calculus 1 shape (`limit`) to calc2.ts, and the frozen table goes red.
+- Files: rules/calc.ts, rules/calc-read.ts (new), rules/calc2.ts (new), rules/maths.ts, session/store.ts,
+  library/paths.ts, library/calculus2.spine.ts, tools/calc2-seam-test.cjs (new), desk/package.json (`rulesSuites`), docs.
+
+**M3b-3b. Approximate integration** (M; row 41; shape (v); topic `calc2-approx`, Stewart 7.7 / OpenStax 3.6, after
+`calc2-strategy`, prerequisites none)
+- Goal: `approx-integral` in calc2.ts (read, truth, the degenerate rule, question, checkAnswer, the leak rule, the fixed
+  sentence, a reader for its own printed phrasing, the slips `arithmetic-slip` and `sign` by id); items.ts `PARAMS`,
+  `PARAM_SCHEMA` (`pieces` integer 2-10, `rule` enum) and `SHAPE_LINES` widened to both lists, and `calcSchema` adding
+  `f` only for a shape that has one (items.ts:215; calc1 topics' schemas unchanged, pinned by a frozen copy); store.ts
+  `SPEC_KEYS` (store.ts:156) gains `pieces` and `rule`; calc2's `calcWords.methods` (paths.ts:97) names the numerical
+  rules; the spine gains the topic.
+- Rows: `tools/calc2-approx-test.cjs` - Stewart's 7.7 figures as hand fixtures (T_5, M_5, S_4 on 1/x over [1, 2]; T_4
+  of x^2 over [0, 2] is 2.75), right at 4 decimal places, the exact integral 'wrong', the other rule's value 'wrong', S_10
+  refused as degenerate; the leak rows; the reader round trip; a stubbed set.
+- Kill: the left-Riemann trapezoid (above).
+
+**M3b-3c. The limit of a sequence** (M; row 42; shape (i); topic `calc2-sequences`, Stewart 11.1 / OpenStax 5.1)
+- Goal: `sequence-limit` in calc2.ts with the alias guard; calc-expr.ts gets the printer's variable (the `tex()` x case)
+  and a plain printer, both additive; the reader renames a lone n. No `n` word, no `!`.
+- Rows: `tools/calc2-sequence-test.cjs` - fixtures n/(n+1) at 1, ln(n)/n at 0, (1+1/n)^n at e, (n^2+1)/(2n^2) at 1/2,
+  2^n/n^3 at inf; cos(pi n), sin(pi n)+1 and (-1)^n refused; the printed n round trip; ln(n) not mangled; calc-expr-test
+  12 unchanged.
+- Kill: the alias guard dropped (above).
+
+**M3b-3d. The convergence verdict** (L; row 43; shape (iii); topics `calc2-series` 11.2/5.2, `calc2-integral-test`
+11.3/5.3, `calc2-comparison` 11.4/5.4, `calc2-alternating` 11.5/5.5, `calc2-ratio-root` 11.6/5.6, `calc2-series-strategy`
+11.7, each on the families its test decides)
+- Goal: the verdict kind of truth in calc2.ts (the answer reader, the exact match, the verdict leak rule); the five
+  families; the conditional verdict line in mark.ts `calcPrompt` and explain.ts; the refused result keys.
+- Rows: `tools/calc2-verdict-test.cjs` - hand fixtures per family from Stewart 11.2-11.6 (Σ 1/n diverges, Σ 1/n^2
+  converges, Σ (-1)^(n-1)/n converges, Σ n/(n^2+1) diverges, Σ 1/2^n converges, Σ ((2n+3)/(3n+2))^n
+  converges, Σ 2^n/n! converges (m = -1), Σ n!·2^n diverges (m = 1), Σ n^2(1/3)^n converges (m = 0)); for every convergent fixture, partial sums at 1e4 and 1e5 agree to the third figure (a sanity row, not
+  the truth); the leak table (either verdict word leaks, the test's name does not); the reading prompt byte for byte on a
+  sheet with no verdict item.
+- Kill: the `p` and `rational` flips (above).
+- Owed: the ∑ glyph on a real Fire TV.
+
+**M3b-3e. The sum of a series** (M; row 44; shape (ii); on `calc2-series`)
+- Rows: `tools/calc2-sum-test.cjs` - the geometric and telescoping fixtures with their partial-sum cross-checks (above).
+- Kill: the 1/(q-p) factor, and the k index (above).
+
+**M3b-3f. Improper integrals** (M; row 45; shape (iv) as three families; topic `calc2-improper`, Stewart 7.8 / OpenStax
+3.7, after `calc2-approx`; `calc2-integral-test` gains it as a prerequisite)
+- Rows: `tools/calc2-improper-test.cjs` - ∫_1^∞ 1/x^2 = 1, ∫_1^∞ 1/x diverges, ∫_0^1 1/sqrt(x) = 2, ∫_0^1 1/x diverges,
+  ∫_0^∞ e^(-2x) = 1/2; an infinity answer counts as the verdict; Calculus 1's definite integral still refuses `b: 'inf'`.
+- Kill: the tail-power flip and the 1/k (above).
+
+**M3b-3g. Absolute or conditional** (S; row 46; optional, only if the App Master rules it in) - the alternating `p`
+family's three-word verdict.
+
+Not buildable, listed in MATH-COURSE-PATHS section 10 with the reason (the descope goes to the owner):
+- a sequence or series term written freely in n;
+- a sequence with no real extension ((-1)^n/n, n!/n^n);
+- the sum of a series outside the two families;
+- improper integrals of free integrands;
+- power series (11.8-11.11).
 
 ## e. Batches
 
@@ -1258,3 +1577,66 @@ Owed to the owner: the Maths course row with three cells at 1920 x 1080 and 1280
 Next, M3b-3 (row 39) needs its card completed: for each of sequences and series, improper integrals (7.8) and approximate integration (7.7),
 the kind of truth, the comparison, the leak rule and the marking prompt, and how n is read. Otherwise the descope goes to the owner. Also open:
 a technique slip needs slips keyed by topic (a design change; ruling 10). L5 runs after the owner's 09:00 review on 2026-10-09.
+
+### 2026-10-09 · batch 7 · M3b-3 step A · autopilot/accepted-idea-delivery-b2f94ab8
+The third part of M3b (rows 27 and 39; the M3b card): the M3b-3 card completed. This is design only, and nothing is built.
+Local, nothing pushed. Commits: 8132e184 (step 0: the App Master's rulings (13)-(16) on M3b-2's questions in the M3b card,
+and ruling 14's source note in MATH-COURSE-PATHS section 10), then this entry with the card, the rows and section 10.
+Order, a deliberate deviation: batch 7's order is M5, L5, M3b (section e). M3b-3 step A ran ahead of L5, as M3b-1 and M3b-2
+did. L5's 18+ content waits for the owner's review at 09:00 on 2026-10-09, and a design card needs no owner. T4 and T5 wait
+for the T1 live probe.
+What changed, by file (docs only; no code, test, spine or package.json touched):
+- `docs/concepts/STUDY-DESK-V2-PLAN.md`:
+  - the M3b card: rulings (13)-(16); the M3b-3 card completed (sources, the engine as it stands, one rule for every shape,
+    where the shapes live, the five shapes with their truth, comparison, leak rule, marking prompt, how n is read, kill
+    test and verdict, what a build may change in Calculus 1 and the pins, the forced assertion edits);
+  - the slices M3b-3a to M3b-3g;
+  - row 39 card completed; rows 40-46 not started.
+- `docs/MATH-COURSE-PATHS.md`:
+  - section 10: ruling 14's source note, the sequences and series item (what is buildable, the five not buildable with
+    their reasons) and the measured aliasing of a limit at infinity;
+  - section 9: a pointer to the card.
+Sources checked against openstax.org (WebFetch, 2026-10-09):
+- chapter 3: 3.1 Integration by Parts to 3.7 Improper Integrals;
+- 3.5, Other Strategies for Integration: objectives are a table of integrals and a computer algebra system;
+- chapter 5: 5.1 Sequences, 5.2 Infinite Series, 5.3 The Divergence and Integral Tests, 5.4 Comparison Tests, 5.5
+  Alternating Series, 5.6 Ratio and Root Tests.
+The App Master's recall of 3.5 agrees with the source. The Stewart 9e numbers are cited from the book's known sections,
+not fetched.
+Probes (a scratch script under the OS temp directory, loading the TypeScript with `tools/ts-load.cjs`; not committed):
+- `compile` returns null for n, n!, (-1)^n, 2^n and x!;
+- `(-1)^x` is -1 at 3 and NaN at 2.5;
+- `limitInf` samples at x = 100 ... 1e8 and calls cos(pi x) 1, a latent Calculus 1 defect: the limit spec is well formed
+  and checkAnswer marks 1 right;
+- the x·√2 guard refuses cos(pi x), sin(pi x)+1 and x·sin(pi x), and keeps (3x^2+1)/(x^2-4), (1+1/x)^x, x^(1/x), (1/2)^x
+  and ln(x)/x;
+- every improper partial-integral limit is dne, and 1/x^1.01 cannot be told from 1/x at t = 100 or 1e4;
+- the geometric and telescoping closed forms agree with partial sums to 1e-6;
+- T_5, M_5, S_4 and S_10 for 1/x on [1, 2], with their errors against ln 2.
+Choices, stated:
+(1) n is never read by the engine. Families are printed from templates and decided on whole numbers, and the sequence
+shape is a function in x printed in n. Reading n would change which prose windows `leaksCalc` takes for Calculus 1.
+(2) The new shapes live in `rules/calc2.ts` as `CALC2_SHAPES`, apart from the nine. The `sign` and `arithmetic-slip`
+shape lists, `TOLERANCE`, `CALC_WITHHELD` and maths-paths 86 are unchanged.
+(3) A seam slice comes first (M3b-3a, no behaviour change, a frozen Calculus 1 table), as M3b-1 came before M3b-2.
+(4) Approximate integration gets 5e-5 at four decimal places and no 'unsure' band. Calculus 1's 5e-3 would mark ln 2
+right for T_5.
+(5) Absolute or conditional is an optional slice (M3b-3g).
+(6) Power series are out (a set answer, a function with no closed form to sample, higher derivatives).
+Verdicts:
+- sequence-limit: buildable;
+- series-sum: buildable as the geometric and telescoping families;
+- series-verdict: buildable as five families;
+- improper-integral: buildable as three families;
+- approx-integral: buildable;
+- not buildable: free terms in n, sequences with no real extension, sums outside the two families, free improper
+  integrands and power series. They are in section 10, and their descope goes to the owner.
+Kill test (the brief's): a shape the card could not name all four for would not be built. No candidate shape failed
+whole. The parts that failed are the not-buildable list. Each shape's own kill test is named in the card, for its build
+run.
+Gate: `cd desk && npm run test:rules` gave 69 green, 0 red (1169 tests) at the base 2db4d800, at 8132e184 and at this
+commit; `npx tsc --noEmit --incremental false` from desk/ was clean. `git diff --stat 2db4d800` shows the two docs only.
+No `desk/data/` touched, no model call, no push.
+Next: the App Master rules on the card: the slices and their order; the tolerance of 5e-5 at four decimal places; the
+family lists; the leak words; whether M3b-3g is in; whether the x·√2 guard also goes onto Calculus 1's limit at infinity
+(the aliasing defect); and the descope that goes to the owner. L5 runs after the owner's review.
