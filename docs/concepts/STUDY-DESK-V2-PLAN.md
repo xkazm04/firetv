@@ -380,6 +380,14 @@ run through the gate, M5a first and alone, because M5b and M5c read its contract
   slice that adds a GCSE unit.
   (4) M5b folds in the M3a-2 leftover: `maths/MathsTV.tsx` (about line 745) calls `deskLine` instead of `namedLine` +
   `itemName`.
+  (5) Order: a prerequisite is pulled forward by the heaviest listed topic that needs it, as `recovery()` does. M5b draws
+  the list in `recovery()`'s order and never re-sorts it (the learner meets the base of the biggest loss first).
+  (6) A topic's lost marks sum the distinct items behind it: one item reaching a topic through two codes counts once
+  there, while each statement takes the item in full (one question must not count twice on one topic).
+  (7) The drop reason `label-names-the-board` stays; M5b shows it like every other drop, in words that do not name the board.
+  (8) The caps (MAX_OUT_OF 6, MAX_ITEMS 80, PAPER_MARKS 80) stay as named, unverified constants. The check against the
+  specification is owed to the owner and does not block M5b. The out-of-over-cap drop tells the learner to enter the
+  parts one by one.
 - Every M5 slice: no string a screen shows says "GCSE" or "1MA1" while `gcseClaimAllowed()` is false (gcse.ts HONEST
   LIMITS); the screens say "a paper", "your paper". gcse.ts, paths.ts, syllabus.ts, school.ts and the generators are
   unchanged.
