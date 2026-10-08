@@ -7,11 +7,8 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const opts={module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true};
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:opts}).outputText,file);
+const {transpile,options}=require('./ts-load.cjs');
+const opts=options.compilerOptions;
 const ROWS=path.join(root,'src/tv/rulerRows.ts');
 // loaded per test, so a missing module fails each case on its own
 const RR=()=>require(ROWS);
@@ -191,7 +188,7 @@ test('strip 2: each segment fills by its share of secure topics, and the needle 
 // ---------------------------------------------------------------- 4. pure: no session module
 
 test('ruler model 5: rulerRows.ts imports no session module, no filesystem, and MathsTV draws its ruler from it',()=>{
- const out=ts.transpileModule(fs.readFileSync(ROWS,'utf8'),{compilerOptions:opts}).outputText;
+ const out=transpile(fs.readFileSync(ROWS,'utf8'),{compilerOptions:opts}).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\//,'no session module at runtime');
  assert.doesNotMatch(out,/require\([^)]*(node:)?fs['"]/,'no filesystem');
  assert.doesNotMatch(out,/require\([^)]*learners/);

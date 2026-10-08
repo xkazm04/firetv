@@ -9,12 +9,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
-require.extensions['.tsx']=require.extensions['.ts'];
+const {transpile,jsxOptions:opts}=require('./ts-load.cjs');
 // next/font runs only under Next: each face module answers with its class names
 for(const [f,e] of [['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}],['landing/themes/blueprint/fonts.ts',{BLUEPRINT_FONTS:'bp-fonts'}]]){
  const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
@@ -162,7 +157,7 @@ test('lock 2: the app cannot select it - the registry answers paper to any reque
 });
 
 test('GUARD: the landing view-model stays free of the filesystem-backed session modules',()=>{
- const out=ts.transpileModule(fs.readFileSync(src('landing/model.ts'),'utf8'),opts).outputText;
+ const out=transpile(fs.readFileSync(src('landing/model.ts'),'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
  model();assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$/.test(k)),'loading the view-model pulled the store in');
 });

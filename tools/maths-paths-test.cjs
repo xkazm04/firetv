@@ -7,11 +7,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-const opts={compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText,file);
+const {transpile,options:opts}=require('./ts-load.cjs');
 const LIB=path.join(root,'src/lib/library');
 const SPINE_FILE=path.join(LIB,'calculus1.spine.ts'),PATHS_FILE=path.join(LIB,'paths.ts');
 const {CALC1_SPINE}=require(SPINE_FILE);
@@ -173,7 +169,7 @@ test('12: the spine and paths.ts are client-safe - no Node module, no store, no 
   assert.doesNotMatch(src,/from\s+["'](node:|fs|path|os|child_process)/,`${name}: no Node import`);
   assert.doesNotMatch(src,/require\(/,`${name}: no require`);
   assert.doesNotMatch(src,/import\s+(?!type\b)[^;]*from\s+["'][^"']*(session\/|desk\/|engines?\/|rules\/|learners)/,`${name}: a runtime import of the store, learners, a job, an engine or a rule`);
-  const out=ts.transpileModule(fs.readFileSync(file,'utf8'),opts).outputText;
+  const out=transpile(fs.readFileSync(file,'utf8'),opts).outputText;
   assert.doesNotMatch(out,/require\(["'](?!\.\/(syllabus|calculus1\.spine)["'])/,`${name}: requires something other than the library files at runtime`);
  }
  assert.doesNotMatch(code(SPINE_FILE),/import\s/,'the spine imports nothing');
