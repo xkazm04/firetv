@@ -126,6 +126,7 @@ class AudioArmTest {
         private val budget get()=manifest.decodedBudgetBytes
         private val legacy by lazy{replay{LegacyGdxAudioBackend(budget)}}
         private val full by lazy{replay{clock->GdxAudioBackend(budget,AudioArm.FULL,clock)}}
+        private val muted by lazy{replay{clock->GdxAudioBackend(budget,AudioArm.MUTED,clock)}}
 
         private fun digest(lines: List<String>)=MessageDigest.getInstance("SHA-256").digest(lines.joinToString("\n").toByteArray()).joinToString(""){"%02x".format(it)}
         private fun report(name: String,r: Replay)=
@@ -145,6 +146,9 @@ class AudioArmTest {
         assertEquals(legacy.lines,default.lines)
         assertEquals(legacy.starts,full.starts)
         assertEquals("{}",full.stats,"FULL publishes nothing new")
+        // P14: the replay P12 recorded (7678bc90...) is still what the default arm gives the platform.
+        assertTrue(digest(full.lines).startsWith("7678bc90"),digest(full.lines))
+        assertEquals(digest(full.lines),digest(default.lines))
         val rows=listOf("legacy" to legacy,"full" to full)+AudioArm.entries.drop(1).map{arm->arm.id to replay{clock->GdxAudioBackend(budget,arm,clock)}}
         val out=File("build/reports/p12/audio-arms.json");out.parentFile.mkdirs()
         out.writeText("{\"script\":{\"seconds\":${"%.3f".format(steps.last().t)},\"prepare\":${steps.count{it.op=='P'}},\"start\":${steps.count{it.op=='S'}},"+
@@ -185,11 +189,36 @@ class AudioArmTest {
         }
     }
 
+    /** P14: both silent arms leave the platform exactly as MUTED does (no play, loop, setPitch, setPan or stop); their
+     * only difference is the app-side silent AudioTrack the perf launcher opens, which this JVM test cannot run. */
+    @ParameterizedTest @EnumSource(names=["SILENT_TRACK","SILENT_DEEP"])
+    fun eachSilentArmReplaysLikeMuted(arm: AudioArm) {
+        val r=replay{clock->GdxAudioBackend(budget,arm,clock)}
+        assertTrue(arm.silent)
+        assertEquals(muted.lines,r.lines)
+        assertEquals(muted.starts,r.starts)
+        assertEquals(0,r.count("play","loop","setPitch","setPan","stop","setVolume","setLooping"))
+        assertEquals(muted.stats.replace("\"arm\":\"muted\"","\"arm\":\"${arm.id}\""),r.stats)
+        assertTrue(r.stats.contains("\"silentStarts\":${full.starts.count{it}}"),r.stats)
+    }
+
+    @Test fun onlyTheSilentArmsAskForAnAppTrack() {
+        assertEquals(AppTrack.DEFAULT,AudioArm.SILENT_TRACK.appTrack)
+        assertEquals(AppTrack.POWER_SAVING,AudioArm.SILENT_DEEP.appTrack)
+        assertTrue(AppTrack.POWER_SAVING.minBufferMs>=100)
+        assertEquals(0,AppTrack.DEFAULT.minBufferMs)
+        for(arm in AudioArm.entries-AudioArm.SILENT_TRACK-AudioArm.SILENT_DEEP)assertNull(arm.appTrack,arm.id)
+        assertEquals(listOf(AudioArm.MUTED,AudioArm.SILENT_TRACK,AudioArm.SILENT_DEEP),AudioArm.entries.filter{it.silent})
+        assertEquals(listOf("full","muted","capped","still","silentTrack","silentDeep"),AudioArm.entries.map{it.id})
+    }
+
     @Test fun onlyAKnownArmNameParsesAndTheWorkerPublishesNothingNewForFull() {
         assertEquals(AudioArm.FULL,AudioArm.parse(null))
         for(arm in AudioArm.entries)assertEquals(arm,AudioArm.parse(arm.id))
         assertThrows(IllegalArgumentException::class.java){AudioArm.parse("loud")}
         assertThrows(IllegalArgumentException::class.java){AudioArm.parse("MUTED")}
+        for(name in listOf("silent","silenttrack","silent_deep","SILENT_TRACK","silentDeep "))
+            assertThrows(IllegalArgumentException::class.java){AudioArm.parse(name)}
         val plain=QueuedAudioBackend(GdxAudioBackend(1024))
         try {assertTrue(plain.statsJson().endsWith(",\"startAgeLimitMs\":100}"),plain.statsJson());assertFalse(plain.statsJson().contains("\"native\":"))}
         finally {plain.dispose()}

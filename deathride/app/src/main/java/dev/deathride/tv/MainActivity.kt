@@ -33,6 +33,8 @@ class MainActivity : AndroidApplication() {
         if(profiling)Trace.endSection()
     }
     private var foregroundWifi: ForegroundWifi?=null
+    // P14: a silent arm's app stream (perf package only; null in every other build and arm).
+    private var silentTrack: SilentTrack?=null
     private val frameCallback=object: Choreographer.FrameCallback {
         override fun doFrame(frameTimeNanos: Long) {
             if(!resumed || !paced)return
@@ -66,6 +68,8 @@ class MainActivity : AndroidApplication() {
         // P13e: and only it can hash every finished scenery bake (`bakeHash=on`, a 16 MiB readback per bake; ungraded runs only).
         val perfBuild=applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf"
         val switchArm=if(perfBuild)SwitchArm.parse(intent.getStringExtra("switchArm")) else SwitchArm.OFF
+        // P14: silentTrack/silentDeep also hold one AudioTrack open, writing zeros from resume to pause.
+        silentTrack=audioArm.appTrack?.let(::SilentTrack)
         initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on"), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
@@ -73,6 +77,6 @@ class MainActivity : AndroidApplication() {
         if(renderPriority=="display")postRunnable{Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)}
         Log.i("DeathRide","renderVariant pacing=$pacing slotNs=${if(aligned)frameOffsetNs else 0} spinNs=${if(aligned)finalSpinNs else 0} callbackPriority=${intent.getStringExtra("callbackPriority")?:"normal"} resolution=${intent.getStringExtra("resolution")?:"native"} priority=$renderPriority")
     }
-    override fun onResume(){super.onResume();resumed=true;foregroundWifi?.resume();if(paced)Choreographer.getInstance().postFrameCallback(frameCallback)}
-    override fun onPause(){resumed=false;Choreographer.getInstance().removeFrameCallback(frameCallback);foregroundWifi?.pause();super.onPause()}
+    override fun onResume(){super.onResume();resumed=true;foregroundWifi?.resume();silentTrack?.resume();if(paced)Choreographer.getInstance().postFrameCallback(frameCallback)}
+    override fun onPause(){resumed=false;Choreographer.getInstance().removeFrameCallback(frameCallback);foregroundWifi?.pause();silentTrack?.pause();super.onPause()}
 }
