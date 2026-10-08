@@ -9,7 +9,7 @@
 import { resolveEnglish } from "../rules/english";
 import { sentenceWith } from "./notes";
 import { findPhrase } from "./review";
-import type { ConversationTurn, SceneNote } from "./types";
+import type { Conversation, ConversationTurn, SceneNote, Take } from "./types";
 
 const sentences = (text: string) => text.split(/(?<=[.!?])\s+/).map(x => x.trim()).filter(Boolean);
 const said = (text: string, phrase: string) => findPhrase(text, phrase) !== null;
@@ -61,4 +61,12 @@ export function forkOf(note: SceneNote, turns: ConversationTurn[]): Conversation
   const at = turns.findIndex(t => t.id === note.turnId && t.role === "learner");
   for (let i = at - 1; i >= 0; i--) if (turns[i].role === "partner") return turns[i];
   return null;
+}
+
+/** The cast turns a take plays after the learner's line again; then it ends by itself. */
+export const TAKE_CAST_TURNS = 2;
+/** The take running on this conversation: the last one, while it has not ended. */
+export function runningTake(c: Conversation): Take | null {
+  const t = c.takes?.at(-1);
+  return t && t.endedAt === undefined ? t : null;
 }

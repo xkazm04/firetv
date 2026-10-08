@@ -19,7 +19,8 @@ import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines,
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
-import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId } from "./types";
+import { forkOf, heldOf, runningTake, TAKE_CAST_TURNS } from "./take";
+import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId, Take } from "./types";
 
 export { ConversationError };
 // The engine already holds each answer to its schema; these second checks fit a line to the screen.
@@ -130,6 +131,34 @@ const CUT_TASK=`Cut: this take is over. Give at most ${NOTES_MAX} notes on the l
 const cutSchema=schema({notes:{type:"array",maxItems:NOTES_MAX,items:schema({turnId:str(100),quote:str(QUOTE_MAX),kind:{type:"string",enum:[...NOTE_KINDS]},note:str(NOTE_MAX),better:str(BETTER_MAX,0)})}});
 // held to its list only: notes.ts drops a note that does not fit, rather than the whole cut failing
 const cutAccept=schema({notes:{type:"array"}});
+const TAKE_TASK="Take Two: the scene went back to your line just before one of the learner's replies, and you said it again. The learner is now saying their line again. Respond in character to submittedReply and carry the scene on from this new branch, as if the first version never happened. Do not correct, assess or coach the learner, and never mention a first take, notes or a retry.";
+
+/**
+ * A line of the learner's inside Take Two (v2 L4), and the cast's answer: one fast, thinking-off call with the replay
+ * schema (a reply, no observations, no moment), over the scene up to the fork and the take's own lines. heldOf is
+ * decided on the learner's first line of the take. Nothing is written to the learner record: no evidence, no review
+ * reuse, no session, digest or certificate. After the second cast turn the take ends by itself, on the recap.
+ */
+async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:string){
+  const take=runningTake(c)!,note=c.cut!.notes[take.note];
+  if(input.lastTurnId!==take.turns.at(-1)?.id)throw new ConversationError("A new line arrived. Hear it before you answer.",409);
+  const reply=required(input.text,"reply",1200);
+  if(!["speech","text"].includes(String(input.mode)))throw new ConversationError("Choose a speech or typed reply.");
+  const said={id:`${c.id}:${commandId}`,role:"learner" as const,text:reply,mode:input.mode as EvidenceMode};
+  const held=take.turns.some(t=>t.role==="learner")?take.held:heldOf(note,reply,c.turns.find(t=>t.id===note.turnId)?.text);
+  const lines=[...take.turns,said],before=c.turns.slice(0,c.turns.findIndex(t=>t.id===take.from)+1);
+  commit({...c,pending:commandId,capture:false,error:""});
+  try{
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...lines].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+    const current=checkCurrent(c,commandId);
+    if(runningTake(current)?.note!==take.note)throw new ConversationError("This take has changed. Return to the current scene.",409);
+    const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:line(result.json.reply)}];
+    const done=turns.filter(t=>t.role==="partner").length>TAKE_CAST_TURNS;
+    const takes=current.takes!.map((t):Take=>t.note===take.note?{...t,turns,held,...(done?{endedAt:Date.now()}:{})}:t);
+    commit({...current,takes,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms},done?"linga-recap":"linga-talk");
+    return getSession();
+  }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"Linga could not answer in this take. Say your line again."});}catch{/* newer episode owns the UI */}throw e;}
+}
 
 /** One validated command surface for both devices. No client can commit model evidence. */
 export async function englishCommand(raw:unknown){
@@ -218,8 +247,11 @@ export async function englishCommand(raw:unknown){
   if(action==="capture"&&input.active!==true){commit({...c,capture:false,captureAt:Date.now()});return getSession();}
   if(!isTurnAction(action))throw new ConversationError("Unknown conversation action.");
   // One guard for the whole turn (turn.ts): the table the view and both devices read decides what this state takes.
-  // Cut is Adult mode's (v2 L3): outside it, refused as not allowed, before any model call.
-  if(!accepts(c,action,deskMode))throw new ConversationError(refusal(c,action,deskMode),action==="cut"&&deskMode!=="adult"?403:409);
+  // Cut and Take Two are Adult mode's (v2 L3, L4): outside it, refused as not allowed, before any model call.
+  const note=typeof input.note==="number"?input.note:undefined;
+  if(!accepts(c,action,deskMode,note))throw new ConversationError(refusal(c,action,deskMode,note),(action==="cut"||action==="take-two")&&deskMode!=="adult"?403:409);
+  // inside Take Two, Leave only cancels the cast's reply in flight: the take stays where it was
+  if(action==="leave"&&runningTake(c)){commit({...c,pending:null,capture:false},"linga-talk");return getSession();}
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c),parkCheck());return getSession();}
   if(action==="moment-done") {commit({...c,moment:null},"linga-talk");return getSession();}
@@ -258,6 +290,19 @@ export async function englishCommand(raw:unknown){
       endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes},provider:result.provider,responseMs:result.ms},commandId);return getSession();
     }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:failed});}catch{/* newer episode owns the UI */}throw e;}
   }
+  if(action==="take-two"){
+    // Take Two (v2 L4, adult C1; the turn table took the mode, the note and the state): the scene goes back to the
+    // partner line before the noted turn and says it again: its stored text, no model call, the audio by a new nonce.
+    // It forks inside this conversation, never through start; the first take's turns and its notes stay as they are.
+    const fork=forkOf(c.cut!.notes[note!],c.turns)!;
+    const take:Take={note:note!,from:fork.id,turns:[{id:`${fork.id}:take`,role:"partner",text:fork.text}],held:null,at:Date.now()};
+    commit({...c,takes:[...(c.takes??[]),take],audioNonce:c.audioNonce+1,capture:false,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-talk");return getSession();
+  }
+  if(action==="take-end"){
+    // Back to the notes: the take ends where it stands. endTake is never called for a take: it writes nothing.
+    commit({...c,takes:c.takes!.map((t,i)=>i===c.takes!.length-1?{...t,endedAt:Date.now()}:t),pending:null,capture:false,error:"",commands:[...c.commands,commandId].slice(-100)},"linga-recap");return getSession();
+  }
+  if(action==="turn"&&runningTake(c))return takeTurn(c,input,commandId);
   // what is left is turn, coach or replay: each asks the model
   if(c.turns.filter(t=>t.role==="learner").length>=24&&action==="turn")throw new ConversationError("A good place to pause. Finish this rehearsal and start a new scene.");
   let reply="",mode:EvidenceMode="text";

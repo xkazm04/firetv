@@ -316,3 +316,27 @@ test('L3: no safety line loosens: the shaping call keeps the planning rules, and
   assert.equal(JSON.parse(seen[0].prompt).learnerAsked, 'A dragon wants to open a bank account', "the plan's learnerAsked seam");
   assert.match(seen[1].system, /you never express romantic or sexual attraction to the learner/);
 });
+
+// ------------------------------------------------------------------ v2 L4: Take Two is Adult mode's
+/** A finished take with one cut note on the desk for learner `id`, as the session would hold it. */
+const cutTake = (id) => ({ id: `take-${id}`, learnerId: id, sceneId: 'booking', title: 'A booking', goal: 'Fix the booking.', partner: 'Robin · Receptionist', focusSkill: 'request', reviewSkill: 'repair', preferences: defaultPreferences(), turns: [{ id: 'p1', role: 'partner', text: 'Hello. How can I help?' }, { id: 'l1', role: 'learner', text: 'Yesterday I book a room.', mode: 'text' }, { id: 'p2', role: 'partner', text: 'Which room?' }], coaching: null, moment: null, moments: [], phase: 'finished', pending: null, error: '', paused: false, capture: false, captureAt: 0, audioNonce: 0, supported: false, cue: '', quizOpen: false, commands: [], evidence: [], startedAt: 1, cut: { at: 2, notes: [{ turnId: 'l1', quote: 'Yesterday I book', kind: 'form', note: 'Yesterday asks for the past.', better: 'Yesterday I booked' }] } });
+test('L4: Take Two in Family mode is refused on the server with a plain reason and no model call: a 13-year-old, a 16-year-old, and an adult who chose Family', async () => {
+  const { accepts } = require(src('lib/english/turn.ts'));
+  for (const [id, patch] of [['klara', { type: 'elementary', age: 13 }], ['tom', { type: 'high-school', age: 16 }], ['martin', { type: 'other', age: 45, mode: 'family' }]]) {
+    await seat(id, patch);
+    const c = cutTake(id); dispatch({ type: 'linga.changed', conversation: c, screen: 'linga-recap' });
+    assert(accepts(c, 'take-two', 'adult', 0), `${id}: the same take would take Take Two in Adult mode`);
+    assert.equal(accepts(c, 'take-two', 'family', 0), false, `${id}: the table refuses it in Family mode`);
+    let calls = 0; answer = async () => { calls++; throw new Error('no model call expected'); };
+    await assert.rejects(command('take-two', { episodeId: c.id, note: 0 }), e => e.status === 403 && e.message === 'Take Two is part of Adult mode.', id);
+    assert.equal(calls, 0, `${id}: no model call`);
+    assert.equal(getSession().conversation.takes, undefined, `${id}: no take`);
+    assert.equal(getSession().screen, 'linga-recap', `${id}: the recap stays`);
+  }
+  // the same take for an adult in Adult mode starts, still with no call: the line again is its stored text
+  await seat('martin', { type: 'other', age: 45 });
+  const c = cutTake('martin'); dispatch({ type: 'linga.changed', conversation: c, screen: 'linga-recap' });
+  let calls = 0; answer = async () => { calls++; throw new Error('no model call expected'); };
+  await command('take-two', { episodeId: c.id, note: 0 });
+  assert.equal(calls, 0); assert.equal(getSession().conversation.takes.length, 1); assert.equal(getSession().screen, 'linga-talk');
+});

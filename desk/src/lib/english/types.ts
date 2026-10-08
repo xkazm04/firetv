@@ -128,6 +128,24 @@ export type NoteKind = "meaning" | "form" | "word" | "register";
 export interface SceneNote { turnId: string; quote: string; kind: NoteKind; note: string; better?: string; reading?: boolean; }
 /** A take ended by Cut: when, and its notes, kept with their turnIds (v2 L4 Take Two forks from a note). */
 export interface Cut { at: number; notes: SceneNote[]; }
+/**
+ * Take Two (v2 L4, adult C1, take.ts): one note's beat played again, forked inside the same conversation. The scene
+ * went back to `from`, the partner line before the noted turn, and said it again; the learner says their line again,
+ * and at most two cast turns follow. The first take's turns and its notes are never rewritten. Never evidence.
+ */
+export interface Take {
+  /** the note it came from, by its index in Cut.notes; at most one take per note */
+  note: number;
+  /** the partner turnId of the first take it forked at */
+  from: string;
+  /** its own lines: the partner line re-delivered first, then the learner's and the cast's */
+  turns: ConversationTurn[];
+  /** heldOf on the learner's first line of the take; null before it, and wherever code cannot tell */
+  held: boolean | null;
+  at: number;
+  /** when it ended; absent while it runs */
+  endedAt?: number;
+}
 /** A scene's steps and the replies that reached them, in order (mission.ts). Never evidence. */
 export interface Mission { steps: string[]; reached: Array<{ turnId: string; quote: string }>; }
 export interface Conversation {
@@ -149,6 +167,8 @@ export interface Conversation {
   mission?: Mission;
   /** absent unless the take was ended by Cut in Adult mode (v2 L3) */
   cut?: Cut;
+  /** absent until a Take Two (v2 L4) starts from one of the cut notes; oldest first, the running one last */
+  takes?: Take[];
   commands: string[]; evidence: EnglishEvidence[];
   provider?: string; responseMs?: number; startedAt: number;
 }

@@ -1380,3 +1380,123 @@ test('take case 2: forkOf is the partner line nearest before the noted learner t
  const two=[TAKE[0],TAKE[1],{id:'l1b',role:'learner',text:'And a card.',mode:'text'}];
  assert.equal(forkOf({...WORD,turnId:'l1b'},two).id,'p1','two learner turns in a row: the partner line before both');
 });
+/** Fixtures for Take Two's place in the turn table: a finished take with a Cut, one with a take running, one waiting inside it. */
+const CUT_NOTES=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'}];
+const RUNNING={note:0,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello. How can I help?'}],held:null,at:2};
+const TAKE_STATES={
+ 'finished, cut':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES}}),
+ 'take-two':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING]}),
+ 'waiting, in a take':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING],pending:'held'}),
+ 'paused, in a take (a reload pauses every conversation)':convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[RUNNING],paused:true}),
+};
+test('take case 3: turnState, accepts and refusal for "take-two" and "take-end" in every state',()=>{
+ const T=turn();
+ assert(T.TURN_ACTIONS.includes('take-two')&&T.TURN_ACTIONS.includes('take-end')&&T.TURN_STATES.includes('take-two'));
+ assert(!T.TURN_ACTIONS.includes('take'),'its own name');
+ assert.equal(T.turnState(TAKE_STATES['finished, cut']),'finished');
+ assert.equal(T.turnState(TAKE_STATES['take-two']),'take-two');
+ assert.equal(T.turnState(TAKE_STATES['waiting, in a take']),'waiting');
+ assert.equal(T.turnState(TAKE_STATES['paused, in a take (a reload pauses every conversation)']),'take-two','a take is not paused');
+ // the table: only a finished take starts one, only a running one ends one
+ for(const state of T.TURN_STATES){
+  assert.equal(T.ACCEPTS[state].includes('take-two'),state==='finished',`the table · take-two · ${state}`);
+  assert.equal(T.ACCEPTS[state].includes('take-end'),state==='take-two',`the table · take-end · ${state}`);
+ }
+ assert.deepEqual([...T.ACCEPTS['take-two']].sort(),['capture','repeat','take-end','turn'],'inside a take: a line, the microphone, the audio again, and back to the notes');
+ // every state of a live scene refuses both, in either mode, with a plain reason
+ for(const [name,[,c]] of Object.entries(TURN_STATES))for(const mode of ['adult','family',undefined]){
+  assert.equal(T.accepts(c,'take-two',mode,0),false,`take-two · ${name} · ${mode}`);assert.equal(T.accepts(c,'take-end',mode),false,`take-end · ${name} · ${mode}`);
+  assert(T.refusal(c,'take-two',mode,0).length>10,`a reason · ${name}`);
+ }
+ assert.equal(T.refusal(TURN_STATES['your-turn'][1],'take-two','adult',0),'Take Two starts from a note at Cut.');
+ assert.equal(T.refusal(TURN_STATES.finished[1],'take-two','adult',0),'Take Two starts from a note at Cut, and this take has none.','finished by Finish: no cut');
+ assert.equal(T.refusal(TURN_STATES.waiting[1],'take-two','adult',0),'The partner is preparing a reply. You can cancel and return later.','a reply in flight');
+ assert.equal(T.refusal(TURN_STATES['your-turn'][1],'take-end','adult'),'There is no take running.');
+ // a finished take with its notes: Adult mode, a note of this take's that has not had its take
+ const cut=TAKE_STATES['finished, cut'];
+ assert.equal(T.accepts(cut,'take-two','adult',0),true);assert.equal(T.accepts(cut,'take-two','adult',1),true);
+ for(const mode of ['family',undefined]){assert.equal(T.accepts(cut,'take-two',mode,0),false,`${mode}`);assert.equal(T.refusal(cut,'take-two',mode,0),'Take Two is part of Adult mode.');}
+ for(const bad of [2,-1,0.5,undefined,'0']){assert.equal(T.accepts(cut,'take-two','adult',bad),false,`note ${bad}`);assert.equal(T.refusal(cut,'take-two','adult',bad),'Choose one of the notes on this take.');}
+ const had=convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[{...RUNNING,endedAt:3}]});
+ assert.equal(T.turnState(had),'finished','an ended take leaves the rehearsal finished');
+ assert.equal(T.accepts(had,'take-two','adult',0),false);assert.equal(T.refusal(had,'take-two','adult',0),'This note has had its Take Two.');
+ assert.equal(T.accepts(had,'take-two','adult',1),true,'another note still can');
+ const orphan=convo({turns:[REPLIED[1],REPLIED[2]],phase:'finished',cut:{at:1,notes:CUT_NOTES}});
+ assert.equal(T.accepts(orphan,'take-two','adult',0),false);assert.equal(T.refusal(orphan,'take-two','adult',0),'This note has no line of the scene to go back to.');
+ // a take running: a second one is refused; inside it only its own four actions
+ const run=TAKE_STATES['take-two'];
+ assert.equal(T.accepts(run,'take-two','adult',1),false);assert.equal(T.refusal(run,'take-two','adult',1),'A take is already running. Finish it first.');
+ for(const a of T.TURN_ACTIONS.filter(x=>x!=='take-two'))assert.equal(T.accepts(run,a,'adult'),['turn','capture','repeat','take-end'].includes(a),`inside a take · ${a}`);
+ for(const a of ['cut','coach','replay','quiz','cue','pause','finish'])assert.equal(T.refusal(run,a,'adult'),'Say your line again on your phone, or go back to the notes.',a);
+ const wait=TAKE_STATES['waiting, in a take'];
+ assert.deepEqual(T.TURN_ACTIONS.filter(a=>T.accepts(wait,a,'adult',1)),['repeat','leave'],'a reply in flight inside a take: cancel it, or hear the line again');
+ assert.equal(T.refusal(wait,'take-two','adult',1),'The partner is preparing a reply. You can cancel and return later.');
+ // the mode still changes no other action, with a take in the fixtures too
+ for(const a of CONVERSATION_ACTIONS)for(const c of Object.values(TAKE_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a}`);
+});
+/** The adult's take with notes on both lines, cut; the stub answers the cast in a take as `Cast N.`; every call is listed. */
+async function cutTake(){
+ const calls=await adultTake(GOOD_NOTES);await command('cut');
+ let cast=0;answer=async req=>{const p=JSON.parse(req.prompt);calls.push({task:(p.task??'').slice(0,4),thinking:req.thinking,prompt:p,schema:req.schema});
+  if(/^Take Two:/.test(p.task??''))return {json:{reply:`Cast ${++cast}. And then?`,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1};
+  throw new Error('no other call expected');};
+ return calls;
+}
+test('take case 4: one full stubbed run - a scene, Cut, Take Two on one note, the line again with no call, two cast turns, the end; nothing reaches the learner record',async()=>{
+ const calls=await cutTake(),T=turn();
+ const c0=getSession().conversation,english0=JSON.parse(JSON.stringify(getLearner('jakub').english)),turns0=JSON.parse(JSON.stringify(c0.turns)),cut0=JSON.parse(JSON.stringify(c0.cut));
+ const evidence0=JSON.parse(JSON.stringify(c0.evidence)),before=calls.length;
+ assert.equal(c0.phase,'finished');assert.equal(getSession().screen,'linga-recap');assert.equal(c0.cut.notes[0].quote,'Yesterday I book');
+ // Take Two on the first note: the partner line before the noted turn, its stored text, no call, the audio again
+ await command('take-two',{note:0});
+ let c=getSession().conversation;const fork=c0.turns[c0.turns.findIndex(t=>t.id===c0.cut.notes[0].turnId)-1];
+ assert.equal(calls.length,before,'the line again is no model call');
+ assert.equal(getSession().screen,'linga-talk');assert.equal(T.turnState(c),'take-two');
+ assert.equal(c.takes.length,1);assert.equal(c.takes[0].from,fork.id);assert.equal(c.takes[0].note,0);assert.equal(c.takes[0].held,null);
+ assert.deepEqual(c.takes[0].turns.map(t=>[t.role,t.text]),[['partner',fork.text]],'the stored text, word for word');
+ assert.equal(fork.text,'Hello. How can I help?');assert.equal(c.audioNonce,c0.audioNonce+1,'the audio, by a new nonce');
+ // the learner says the line again, the cast answers; then a second line and a second cast turn, and the take ends
+ await command('turn',{text:'Yesterday I booked a room here.',mode:'speech',lastTurnId:c.takes[0].turns.at(-1).id});
+ c=getSession().conversation;assert.equal(T.turnState(c),'take-two');assert.equal(getSession().screen,'linga-talk');
+ assert.equal(c.takes[0].held,true,'the form note held: the past form with yesterday');
+ await assert.rejects(command('turn',{text:'Late.',mode:'text',lastTurnId:fork.id}),e=>e.status===409,'a line answered to an older line');
+ await command('turn',{text:'Yesterday I go there, I think.',mode:'text',lastTurnId:c.takes[0].turns.at(-1).id});
+ c=getSession().conversation;
+ assert.deepEqual(c.takes[0].turns.map(t=>[t.role,t.text]),[['partner',fork.text],['learner','Yesterday I booked a room here.'],['partner','Cast 1. And then?'],['learner','Yesterday I go there, I think.'],['partner','Cast 2. And then?']]);
+ assert.equal(c.takes[0].held,true,'held is decided on the first line of the take');
+ assert.equal(typeof c.takes[0].endedAt,'number','two cast turns: the take ends by itself');
+ assert.equal(T.turnState(c),'finished');assert.equal(getSession().screen,'linga-recap');
+ const take=calls.slice(before);
+ assert.equal(take.length,2,'two calls: one per cast turn');assert(take.length<=3,'at most 3 calls');
+ for(const x of take){assert.equal(x.thinking,false,'fast, thinking off');assert.equal(x.task,'Take');assert.equal(x.prompt.bringBack,undefined,'no taught phrase invited');assert.deepEqual(Object.keys(x.schema.properties).sort(),['help','reply'],'the replay schema: no observations, no moment');}
+ assert.deepEqual(take[0].prompt.transcript.map(t=>t.text),[fork.text,fork.text,'Yesterday I booked a room here.'],"the scene up to the fork, then the take: the first take's noted line is not in it");
+ // never evidence, and the first take is as it was
+ assert.deepEqual(getLearner('jakub').english,english0,"the learner record's english is deep-equal before and after");
+ assert.deepEqual(c.turns,turns0,"the first take's turns are unchanged");assert.deepEqual(c.cut,cut0,'and its notes');
+ assert.deepEqual(c.evidence,evidence0,'no evidence on the conversation either');
+ // at most one take per note; another note still can, and Back to the notes ends it early with no call
+ await assert.rejects(command('take-two',{note:0}),e=>e.status===409&&e.message==='This note has had its Take Two.');
+ await command('take-two',{note:1});c=getSession().conversation;
+ assert.equal(c.takes[1].from,c0.turns[c0.turns.findIndex(t=>t.id===c0.cut.notes[1].turnId)-1].id,'the second note forks at the partner line before its own turn');
+ await command('take-end');c=getSession().conversation;
+ assert.equal(typeof c.takes[1].endedAt,'number');assert.equal(c.takes[1].held,null,'ended before the line again: not decided');
+ assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2,'no call to start or end a take');
+ assert.deepEqual(getLearner('jakub').english,english0,'still nothing on the learner record');
+ await assert.rejects(command('take-two',{note:2}),e=>e.status===409&&/Choose one of the notes/.test(e.message));
+});
+test('take case 5: inside a take the server refuses Cut, the coach, the quiz, pause and finish; Leave cancels a reply in flight and keeps the take',async()=>{
+ await cutTake();await command('take-two',{note:0});
+ for(const action of ['cut','coach','quiz','cue','pause','finish','replay','resume'])
+  await assert.rejects(command(action),e=>e.status===409&&e.message==='Say your line again on your phone, or go back to the notes.',action);
+ let release;answer=()=>new Promise(r=>release=r);
+ const take=getSession().conversation.takes[0];
+ const inflight=command('turn',{text:'Yesterday I booked it.',mode:'text',lastTurnId:take.turns.at(-1).id,commandId:'held-take'});
+ assert.equal(turn().turnState(getSession().conversation),'waiting');
+ await assert.rejects(command('take-end'),e=>e.status===409,'not while the cast is answering');
+ await command('leave');
+ const c=getSession().conversation;
+ assert.equal(c.pending,null);assert.equal(turn().turnState(c),'take-two','the take stays');assert.equal(getSession().screen,'linga-talk');
+ release({json:{reply:'Too late.'},provider:'test',ms:1});
+ await assert.rejects(inflight,e=>e.status===409);
+ assert.deepEqual(getSession().conversation.takes[0].turns,take.turns,'the late reply is dropped');
+});
