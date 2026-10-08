@@ -276,12 +276,21 @@ def analyze(trace):
         j = bisect.bisect_right(link_t, f1)
         link_ms = sum(clip(s0, s1, f0, f1) for s0, s1 in link[max(0, j - 400):j]) * 1000
         deq = sum(v for kk, v in sleep_by.items() if re.search(r'dequeueBuffer|queueBuffer|eglSwapBuffers|DR\.clear', kk))
+        # The single largest contributor when the trace's cause is not running: a sleep (section <- waker, the vsync wait outside
+        # any section excluded) or a preemption (by whom). Lock names keep their kind, not their owner tid.
+        detail = 'running'
+        if top != 'running':
+            items = [(v, 'sleep: ' + re.sub(r' \(owner tid: \d+\)', '', kk.split(' <- ')[0])) for kk, v in sleep_by.items() if not kk.startswith('(none)')]
+            items += [(v, 'preempted by ' + kk) for kk, v in pre_by.items()]
+            if r['wakeupLatency'] > 1:
+                items.append((r['wakeupLatency'], 'wakeup latency'))
+            detail = max(items)[1] if items else top
         pc = profile_cause.get(k, {})
         active = k is not None and k - 1 in rows and rows[k][I['active']] == 1 and rows[k - 1][I['active']] == 1
         accounts.append({'trace': trace.parent.name, 'row': k, 'active': active, 'second': round(f0 - begins[0], 3), 'intervalMs': round(ms, 3),
             'presentIntervalMs': None if pres is None else round(pres, 3), 'classB': bool(b),
             'runningMs': round(r['running'], 2), 'preemptedMs': round(r['preempted'], 2), 'wakeupLatencyMs': round(r['wakeupLatency'], 2),
-            'sleepMs': round(r['sleep'], 2), 'traceCause': top,
+            'sleepMs': round(r['sleep'], 2), 'traceCause': top, 'traceDetail': detail,
             'preemptedBy': {kk: round(v, 2) for kk, v in pre_by.most_common(4)},
             'whileWaitingCpuHeldBy': {kk: round(v, 2) for kk, v in occ.most_common(5)},
             'sleepBy': {kk: round(v, 2) for kk, v in sleep_by.most_common(4)}, 'sleepInDequeueOrSwapMs': round(deq, 2),
@@ -380,6 +389,8 @@ summary = {'traces': [{k: v for k, v in r.items() if k != 'accounts'} for r in r
            'over20': collections.Counter(x['traceCause'] for x in allacc if x['intervalMs'] > 20 and x['active']),
            'classB': collections.Counter(x['traceCause'] for x in allacc if x['classB'] and x['active']),
            'notActive': sum(1 for x in allacc if not x['active']),
+           'over20Detail': collections.Counter(x['traceDetail'] for x in allacc if x['intervalMs'] > 20 and x['active']),
+           'over20WithGc': sum(1 for x in allacc if x['intervalMs'] > 20 and x['active'] and x['gc']),
            'limits': 'Intrusive trace: tracing adds work to every phase, so its frame counts are not I2 figures. Waiting = preempted + '
                      'wakeup latency. Preempted time is charged to the task that took the GL thread\'s CPU; sleep to the section open at '
                      'switch-out and the task that woke it. Link threads are the app\'s threads named DefaultDispatch*, deathride-link*, ktor* '
