@@ -11,6 +11,7 @@ import { emptyEnglish, type EnglishLearning } from "../english/types";
 import { cleanEnglish } from "../english/rules";
 import { DIGEST_CAP, cleanDigest, type DigestEntry } from "../rules/digest";
 import { stepSlips } from "../rules/slips";
+import { cleanPaper, type PaperItem } from "../rules/recovery";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
@@ -54,6 +55,14 @@ export interface HistoryEntry {
 
 const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing", "lesson"];
 
+/**
+ * A paper the learner sat, as kept (v2 M5b): the cleaned paper (rules/recovery cleanPaper: `items` with a known statement
+ * code, `unmapped` without) and the date it was entered. The recovery is recomputed from it, never stored.
+ */
+export interface StoredPaper { at: number; items: PaperItem[]; unmapped: PaperItem[]; }
+/** The papers kept per learner: the newest few. */
+export const PAPERS_CAP = 5;
+
 export interface Learner {
   id: string;
   english: EnglishLearning;
@@ -69,6 +78,8 @@ export interface Learner {
    * hydrated into the session (no screen is sent it). A learners.json written before W9 loads with none.
    */
   digest: DigestEntry[];
+  /** The papers entered (v2 M5b), newest last, capped at PAPERS_CAP; absent until the first paper, and on a learners.json written before it. */
+  papers?: StoredPaper[];
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
@@ -206,6 +217,24 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
   return skills;
 }
 
+/**
+ * A stored paper as the desk trusts it: it must read back CLEANLY through cleanPaper - every item kept, no code dropped,
+ * the same items and unmapped items as stored - and carry a date. Anything else is no paper at all, never a guess.
+ */
+export function cleanStoredPaper(raw: unknown): StoredPaper | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const { at, items, unmapped } = raw as Record<string, unknown>;
+  if (typeof at !== "number" || !Number.isFinite(at) || at < 0 || !Array.isArray(items) || !Array.isArray(unmapped)) return null;
+  const c = cleanPaper([...items, ...unmapped]);
+  if (c.dropped.length || c.droppedCodes.length || !c.items.length && !c.unmapped.length) return null;
+  const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+  return same(c.items, items) && same(c.unmapped, unmapped) ? { at, items: c.items, unmapped: c.unmapped } : null;
+}
+/** The stored papers that read back cleanly, in order, at most the newest PAPERS_CAP. */
+function cleanPapers(raw: unknown): StoredPaper[] {
+  return (Array.isArray(raw) ? raw : []).map(cleanStoredPaper).filter((p): p is StoredPaper => !!p).slice(-PAPERS_CAP);
+}
+
 /** Normalise whatever was on disk into a shape the rest of the module can trust. */
 function clean(id: string, l: unknown): Learner {
   const o = (l ?? {}) as Partial<Learner>;
@@ -222,9 +251,12 @@ function clean(id: string, l: unknown): Learner {
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
       ...(typeof h.ref === "string" && h.ref ? { ref: h.ref } : {}),
     }));
+  const papers = cleanPapers(o.papers);
   return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history),
     // the week's digest, whitelisted entry by entry (rules/digest cleanDigest); none on a file written before it existed
-    digest: cleanDigest(o.digest) };
+    digest: cleanDigest(o.digest),
+    // the papers entered, each read back through cleanPaper (a malformed one is none); the field is absent with none, as on a file written before M5b
+    ...(papers.length ? { papers } : {}) };
 }
 
 /**
@@ -247,7 +279,7 @@ export function getLearner(id: string): Learner {
 }
 
 export function saveLearner(l: Learner): void {
-  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP) });
+  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP), ...(l.papers?.length ? { papers: l.papers.slice(-PAPERS_CAP) } : {}) });
 }
 
 /** English commits (and saveLearner, the same way) report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
@@ -350,4 +382,18 @@ export function addDigest(id: string, e: DigestEntry): void {
 export function secureTopics(id: string): string[] {
   const l = getLearner(id);
   return Object.values(l.skills).filter((r) => r.secure).map((r) => r.topic);
+}
+
+/**
+ * A paper typed on the phone, kept (v2 M5b): the raw rows go through cleanPaper (the one validation) and what it keeps is
+ * stored with the date. Null, and nothing written, when no row survives. Throws when the file cannot be written.
+ */
+export function addPaper(id: string, raw: unknown, now = Date.now()): StoredPaper | null {
+  const c = cleanPaper(raw);
+  if (!c.items.length && !c.unmapped.length) return null;
+  const paper: StoredPaper = { at: now, items: c.items, unmapped: c.unmapped };
+  const l = getLearner(id);
+  l.papers = [...(l.papers ?? []), paper].slice(-PAPERS_CAP);
+  saveLearner(l);
+  return paper;
 }

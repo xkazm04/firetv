@@ -67,3 +67,55 @@ test('an unreadable learners.json makes saveLearner throw and is left as it is',
   assert.equal(fs.readFileSync(FILE,'utf8'),junk);
   assert.deepEqual(temps(),[]);
 });
+
+// ---------------------------------------------------------------- v2 M5b: the papers a learner sat
+
+const RAW=[{q:'1',marks:1,outOf:3,codes:['N2']},{q:'2(a)',marks:2,outOf:2,codes:['A1']},{q:'3',marks:0,outOf:4,codes:['ZZ9']},{q:'bad',marks:'x',outOf:2,codes:['N1']}];
+
+test('papers 1: a paper round-trips - the cleaned paper and its date, kept on the learner, the recovery not stored',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const p=L.addPaper('pam',RAW,1234);
+  assert.equal(p.at,1234);
+  assert.deepEqual(p.items.map(x=>x.q),['1','2(a)']);
+  assert.deepEqual(p.unmapped.map(x=>x.q),['3'],'an item with only an unknown code is kept apart');
+  const back=L.getLearner('pam');
+  assert.deepEqual(back.papers,[p]);
+  const stored=JSON.parse(fs.readFileSync(FILE,'utf8')).pam.papers;
+  assert.deepEqual(Object.keys(stored[0]).sort(),['at','items','unmapped'],'the paper and its date; no recovery beside them');
+  assert.equal(L.addPaper('pam',[{q:'x',marks:9,outOf:1,codes:[]}]),null,'a paper with no surviving row is not kept');
+  assert.equal(L.getLearner('pam').papers.length,1);
+  for(let i=0;i<7;i++)L.addPaper('pam',RAW,2000+i);
+  assert.equal(L.getLearner('pam').papers.length,L.PAPERS_CAP,'the newest few are kept');
+  assert.deepEqual(L.getLearner('pam').papers.at(-1).at,2006);
+});
+
+test('papers 2: a malformed stored paper is read as none, never guessed',()=>{
+  const good={at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']}],unmapped:[]};
+  const bad=[
+    {at:5,items:[{q:'1',marks:4,outOf:3,codes:['N2']}],unmapped:[]},            // marks over out of
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['NOPE']}],unmapped:[]},           // an unknown code
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:[]}],unmapped:[]},                 // an item with no code is not an item
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']},{q:'1',marks:0,outOf:1,codes:['N1']}],unmapped:[]}, // a repeated label
+    {at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2','N2']}],unmapped:[]},        // a code twice: not what cleanPaper keeps
+    {at:5,items:[],unmapped:[]},                                                 // nothing
+    {items:good.items,unmapped:[]},{at:'5',items:good.items,unmapped:[]},{at:5,items:'x',unmapped:[]},'junk',7,null,[],
+  ];
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[...bad,good]}}));
+  const l=L.getLearner('ann');
+  assert.deepEqual(l.papers,[good],'only the paper that reads back cleanly stays');
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:'not a list'}}));
+  assert.equal(L.getLearner('ann').papers,undefined);
+});
+
+test('papers 3: an older record without the field reads exactly as before',()=>{
+  const old={id:'old',skills:{},writing:{},memory:['a'],history:[],digest:[]};
+  fs.writeFileSync(FILE,JSON.stringify({old}));
+  const l=L.getLearner('old');
+  assert.equal('papers' in l,false,'no field until a paper is entered');
+  const rest=l;
+  assert.deepEqual(rest.memory,['a']);
+  assert.deepEqual(Object.keys(rest).sort(),['digest','english','history','id','memory','skills','writing']);
+  L.addMemory('old','b');
+  assert.deepEqual(L.getLearner('old').memory,['a','b']);
+  assert.equal('papers' in L.getLearner('old'),false);
+});
