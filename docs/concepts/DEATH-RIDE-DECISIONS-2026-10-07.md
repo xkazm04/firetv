@@ -130,3 +130,33 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
   3. **Goal 1's bar was put to the owner on 2026-10-08** with the P14 and P15 figures. Until the owner answers, section 8's ruling 2 holds: no frame-tail research run. Reason: changing a goal's bar is the owner's call, and P15 closed the sound-on lever that the answer depended on.
   4. **P15's lane-C card for the early-probe Wi-Fi stall enters the optimize ledger as an open card** with P14's figures. It is read again at the next goal-1 soak (section 8, ruling 4). Reason: the stall decides the zero-rejection line by chance, so it is tracked as its own card rather than by a rerun.
 - **Reverse:** a new output route on the device and the owner's say bring back the mixdown (ruling 1); a Fire OS update that may open an MMAP route is answered by rebuilding the arm with `-PsilentMmap=true` (ruling 2); the owner's ruling on goal 1's bar supersedes ruling 3.
+
+## 10. Goal 1's bar (the owner) and the P16 rulings
+
+### (a) The owner's ruling on goal 1's bar
+
+- **Who decided:** the owner, 2026-10-08 15:18Z, answering the App Master's ask (section 9, ruling 3).
+- **Rulings:**
+  1. **Goal 1 keeps its bar:** a 900 s Stick soak with active p95 at or under 16.7 ms and active max at or under 33 ms.
+  2. **With sound on, goal 1 is recorded as not met on the Stick.** P14's 900 s soak of f861f535 read worst active p95 27.419 ms, active max 84.728 ms and 1 rejected input. P15 found no output route that avoids the audio pair. Sound stays (N3, section 4).
+  3. **One research run (P17) traces the muted over-20 ms tail.** Reason: savings on the render side shrink the sound-on tail too.
+- **This lifts section 8 ruling 2 and section 9 ruling 3** (no frame-tail research run until the owner rules).
+
+### (b) The App Master's rulings on P16's questions
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of the three.
+- **Context:** P16 (935687ff, merged at a060a47e) built, measured and reverted both HUD cards. Card 1 (the font pages merge) met its own gate but not the hudMs rule fixed before its first graded run; card 2 (the static HUD layer) failed the pixel gate under the Stick's 2x MSAA. See `docs/concepts/deathride/P16-hud-layers.md`, whose questions these answer.
+- **Rulings:**
+  1. **Card 1 is not re-landed.** Its verdict stands under the rule fixed before the first graded run (2840bfc4).
+     - Reason: re-landing it over that rule would grade it after seeing the result.
+     - Its value is mostly memory (font textures 5 -> 2 MiB, next to the PSS line), not hudMs. So it comes back as a candidate card in P17's ledger, ranked by P17's attribution.
+     - If it is ranked, it is re-graded with a settled pair, under a new rule fixed before the first graded run that names PSS max beside hudMs.
+  2. **A pixel-exact form of card 2 goes in as an open card in P17's ledger**, not the 10-06 one. It retains the chrome's vertices: the same quads, the same atlas page and the same MSAA rasterization.
+     - Its ceiling is P16's -0.145 ms hudMs against base.
+     - Reason: the gain is real but small, about 1.4% of a 10 ms frame. It is worth building only if the attribution gives the HUD a share of the tail.
+  3. **base-run2's PSS samples (194.3 and 192.0 MiB, on unchanged main) go with goal 1.** P17 reads PSS in every run and finds its source. The next goal-1 soak grades the line.
+
+### (c) Reverse
+
+- The owner may overrule any of these.
+- A finding that the interval metric cannot reach 16.7 ms even when every frame presents on time goes to the owner as a question. It does not change the bar.
