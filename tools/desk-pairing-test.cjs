@@ -206,3 +206,56 @@ test('GUARD: an in-process caller with no proxy header keeps the whole session a
  const r=await post({type:'join'});assert.equal(r.status,200);assert.equal(store.getSession().joined,true);assert.equal((await r.json()).pin,store.getSession().pin);
  const first=await firstMessage(undefined);assert.equal(first.pin,store.getSession().pin);
 });
+
+/** Session's top-level keys, read from store.ts source: comments stripped, split at the `;` of depth 0, the name before the `:`. */
+const sessionKeys=()=>{const text=fs.readFileSync(src('lib/session/store.ts'),'utf8');const at=text.indexOf('export interface Session {');assert(at>=0,'interface Session is in store.ts');
+ let i=text.indexOf('{',at),depth=0,j=i;for(;j<text.length;j++){const c=text[j];if(c==='{')depth++;else if(c==='}'&&--depth===0)break;}
+ const body=text.slice(i+1,j).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/[^\n]*/g,'');
+ const keys=[];let d=0,start=0;for(let k=0;k<=body.length;k++){const c=body[k];if('{(['.includes(c))d++;else if('})]'.includes(c))d--;else if((c===';'&&d===0)||k===body.length){const m=/^\s*([A-Za-z_]\w*)\??\s*:/.exec(body.slice(start,k));if(m)keys.push(m[1]);start=k+1;}}
+ return keys;};
+const wire=(v)=>JSON.parse(JSON.stringify(v));
+
+test('GUARD (P5): every Session key is in LOBBY or GUEST_BLANK, not both - read from store.ts source, so a new field fails the gate without tsc',()=>{
+ const keys=sessionKeys();
+ assert(keys.length>=40,`the reader finds the Session keys (found ${keys.length})`);
+ for(const k of ['essayPlan','worked','workroom','week','away','watch','essayAt','back','pin','learner'])assert(keys.includes(k),`${k} is read from interface Session`);
+ const {LOBBY,GUEST_BLANK}=pairing(),blank=Object.keys(GUEST_BLANK);
+ for(const k of keys)assert(LOBBY.includes(k)!==blank.includes(k),`Session.${k} must be in exactly one of LOBBY and GUEST_BLANK (pairing.ts)`);
+ for(const k of [...LOBBY,...blank])assert(keys.includes(k),`${k} is in LOBBY/GUEST_BLANK but not on Session`);
+ for(const k of ['essayPlan','worked','workroom'])assert(blank.includes(k)&&!LOBBY.includes(k),`${k} is blanked for a guest`);
+});
+
+/** A desk where every Session key holds something a guest must not see. */
+function fullSession(){
+ const keys=sessionKeys(),s=evening('landing'),full={...s};
+ for(const k of keys)if(!pairing().LOBBY.includes(k))full[k]={secret:k,text:'dictated by the learner'};
+ full.back='hint';full.essayAt=3;full.watch={secret:'watch'};
+ globalThis.__desk.session=full;return {keys,full};
+}
+test('case 8 (P5): a guest handed a session with every key filled sees the LOBBY and every other key at its GUEST_BLANK value - by GET and by the stream',async()=>{
+ const {keys,full}=fullSession();const {LOBBY,GUEST_BLANK}=pairing();const blank=wire(GUEST_BLANK);
+ for(const [how,g] of [['GET',await (await get('guest')).json()],['stream',await firstMessage('guest')]]){
+  for(const k of keys){
+   if(LOBBY.includes(k))continue;
+   assert.deepEqual(g[k],blank[k],`${how}: ${k} is its GUEST_BLANK value`);
+  }
+  for(const k of ['essayPlan','worked','workroom','week','away','watch','essayAt','back'])assert(g[k]===undefined||g[k]===null,`${how}: ${k} is absent or empty`);
+  assert.equal(g.essayPlan,undefined,`${how}: essayPlan (the dictated sentences) is absent`);
+  assert.equal(g.worked,undefined,`${how}: worked is absent`);
+  assert.equal(g.workroom,undefined,`${how}: workroom is absent`);
+  assert.equal(g.viewer,'guest');assert.equal(g.pin,'');assert.equal(g.joined,false);
+  assert.equal(g.screen,full.screen);assert.equal(g.subject,full.subject);assert.deepEqual(g.learner,full.learner);assert.equal(g.phoneUrl,full.phoneUrl);assert.equal(g.updatedAt,full.updatedAt);
+  assert.equal(g.draft,null,`${how}: the draft is shown only on profile`);
+ }
+ globalThis.__desk.session={...full,screen:'profile',draft:{id:'p1',name:'Ada',type:'elementary',modules:['english']}};
+ assert.equal((await (await get('guest')).json()).draft.name,'Ada','on profile the guest still sees the name being typed');
+});
+
+test('case 9 (P5): the fix narrows only the guest - a joined phone and the TV still receive essayPlan, worked and workroom',async()=>{
+ evening('landing');
+ const extra={essayPlan:{slots:['I think'] },worked:{topic:'t',title:'Worked',idea:'i',own:false,steps:[],examples:[]},workroom:{titles:['x']}};
+ globalThis.__desk.session={...store.getSession(),...extra};
+ const t=await (await get('tv')).json(),p=await (await get('phone')).json();
+ for(const k of Object.keys(extra)){assert.deepEqual(t[k],extra[k],`the TV still receives ${k}`);assert.deepEqual(p[k],extra[k],`a joined phone still receives ${k}`);}
+ assert.equal(t.viewer,'tv');assert.equal(p.viewer,'phone');assert.equal(p.pin,'');
+});

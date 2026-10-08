@@ -95,27 +95,56 @@ export function liveRole(req?: Request | null): Role | null {
 }
 
 /**
+ * The Session keys a guest may see: the lobby - where the TV is, whose desk it is, and (on the profile screen only)
+ * the name being typed. This is the unjoined /phone page's whole read: `screen` and `subject` word the Join panel
+ * (page.tsx:377, :382), `learner` and `draft` the Profile panel (:390, :403), `phoneUrl` and `updatedAt` are the
+ * lobby's own. `viewer`, `pin` and `joined` are set by view() itself.
+ */
+export const LOBBY = ["viewer", "pin", "joined", "phoneUrl", "learner", "subject", "screen", "updatedAt", "draft"] as const satisfies readonly (keyof Session)[];
+export type LobbyKey = (typeof LOBBY)[number];
+
+/**
+ * Every other Session key, at its empty value. The type makes tsc fail when a Session key is in neither LOBBY nor
+ * here, so a new field is a guest-blank by decision, never by omission. focus, view and timer are here: the unjoined
+ * page reads none of them (its only read of the timer, page.tsx:598, is on the joined Tonight panel).
+ */
+export const GUEST_BLANK = {
+  profiles: [], tasks: [], back: undefined,
+  focus: 0, view: "band", timer: { left: 25 * 60, running: false, phase: "work" },
+  pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
+  hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,
+  english: null, essay: null, essayType: null, essayAt: null, essayPlan: undefined,
+  englishLearning: emptyEnglish(), conversation: null, check: null,
+  topic: null, practice: null, walkIx: 0, worked: undefined, workroom: undefined,
+  skills: {}, writing: {}, memory: [], history: [], week: undefined, jobs: {}, away: undefined,
+  status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null },
+} satisfies { [K in Exclude<keyof Session, LobbyKey>]-?: Session[K] };
+
+/**
  * The session as this caller may see it. The TV: all of it, pin included. A phone: all of it but the pin, and
  * joined - this device is. No caller is sent the Math Buddy work of learners not at the desk (`away`). The Sunday page's
- * lines (`week`, Family W9) go to a phone only: the Parent tab is where they are read; the TV and a guest are not sent them. A guest: the lobby - where the TV is, whose desk it is, and the name being typed while
- * the TV is on the profile; nothing of the learner's evening, and no pin. In-process (null): the session itself.
+ * lines (`week`, Family W9) go to a phone only: the Parent tab is where they are read; the TV and a guest are not sent them.
+ * A guest: an allowlist, never a copy - the LOBBY keys (where the TV is, whose desk it is, and the name being typed
+ * while the TV is on the profile) and every other key at its GUEST_BLANK value; nothing of the learner's evening, and no pin.
+ * In-process (null): the session itself.
  */
 export function view(s: Session, role: Role | null): Session {
   if (role === null) return s;
+  if (role === "guest") {
+    const guest: Session = {
+      ...structuredClone(GUEST_BLANK),
+      viewer: "guest", pin: "", joined: false,
+      phoneUrl: s.phoneUrl, learner: s.learner, subject: s.subject, screen: s.screen, updatedAt: s.updatedAt,
+      draft: s.screen === "profile" ? s.draft : null,
+    };
+    // an absent key is absent (away, week, back, essayPlan, worked, workroom), not sent as undefined
+    for (const k of Object.keys(guest) as (keyof Session)[]) if (guest[k] === undefined) delete guest[k];
+    return guest;
+  }
   // the other learners' Math Buddy work (store.ts MathsSlot) is theirs: no screen is sent it
   const { away: _away, week, ...seen } = s;
   if (role === "tv") return { ...seen, viewer: "tv" };
-  if (role === "phone") return { ...seen, ...(week !== undefined ? { week } : {}), pin: "", joined: true, viewer: "phone" };
-  return {
-    ...seen, viewer: "guest", pin: "", joined: false,
-    profiles: [], draft: s.screen === "profile" ? s.draft : null, tasks: [], back: undefined,
-    pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
-    hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,
-    english: null, essay: null, essayType: null, essayAt: null,
-    englishLearning: emptyEnglish(), conversation: null, check: null,
-    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [], jobs: {},
-    status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null },
-  };
+  return { ...seen, ...(week !== undefined ? { week } : {}), pin: "", joined: true, viewer: "phone" };
 }
 
 /**
