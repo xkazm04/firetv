@@ -685,3 +685,69 @@ test('second 4: the stylesheet draws the tick and the second ring, and adds no t
   const m=/font-size:\s*(\d+)px/.exec(rule);assert.ok(!m||Number(m[1])>=28,`a second-go rule sets text under the floor: ${rule.trim()}`);
  }
 });
+
+// ---------------------------------------------------------------- M3a: a word problem on the paper (the stem once, its parts by letter)
+
+const esc=(t)=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+/** A calc1 set of one single item and a word problem's two parts (items 2 and 3); marked: 1 right, 2(a) right, 2(b) wrong with the pen on its line 1. */
+function wordSession(template,screen,marked){
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const w=W.drawWord(template,1),[a]=W.workedWord(template,1);
+ const single={n:1,question:'Find f\'(2) for f(x) = x^3.',spec:{shape:'derivative-at',f:'x^3',at:2}};
+ const [pa,pb]=W.wordItems(w,2);
+ const items=marked?[{...single,studentAnswer:'12',verdict:'right',said:'Number 1 is right.'},{...pa,studentAnswer:a,verdict:'right',said:'Number 2 is right.'},
+  {...pb,studentAnswer:'1',studentWorking:'first line\nsecond line',verdict:'wrong',said:'I got something different for number 3. How did you get there?',slipAt:{line:1}}]:[single,pa,pb];
+ return {w,s:secondSession(null,screen,{practice:{topic:w.topic,marked,items},topic:w.topic,walkIx:2,focus:2})};
+}
+const count=(html,needle)=>html.split(needle).length-1;
+
+test('M3a 1: the Practice paper prints a word problem\'s stem once, as prose in the wrapping row, and its parts labelled (a) and (b), each a wrapped line',()=>{
+ const P=require(path.join(root,'src/maths/prose.ts'));
+ for(const t of ['sphere-rates','rectangle-perimeter','cubic-max-min']){
+  const {w,s}=wordSession(t,'practice',false);
+  const html=drawMaths('PracticeScreen',s);
+  assert.equal(count(html,esc(P.prose(w.stem))),1,`${t}: the stem once, through prose()`);
+  assert.equal(count(html,'<div class="mb-row q wrap" data-role="maths-stem">'),1,`${t}: in the wrapping row`);
+  assert.equal(count(html,'data-role="maths-part"'),2,`${t}: two part lines`);
+  for(const p of w.parts)assert.ok(html.includes(esc(P.prose(p.line))),`${t}: (${p.part}) printed as prose`);
+  assert.match(html,/<section class="mb-item" data-stem="2"><div class="num">2<\/div>/,`${t}: the stem carries the question's number`);
+  assert.match(html,/<section class="mb-item" data-part="a"><div class="num">\(a\)<\/div>/);assert.match(html,/<section class="mb-item" data-part="b"><div class="num">\(b\)<\/div>/);
+  // the nowrap question row holds the single item only: no sentence of the story is set in it
+  assert.equal(count(html,'<div class="mb-row q"'),1,`${t}: one nowrap question row, the single item's`);
+  assert.ok(html.indexOf('data-role="maths-stem"')<html.indexOf('data-part="a"'),'the stem sits above its parts');
+ }
+});
+
+test('M3a 2: the marked paper - each part its own answer line, tick and pen; the tally names 2a and 2b; the card names 2(b); a story draws no graph, the cubic does',()=>{
+ for(const t of ['rectangle-perimeter','cubic-max-min']){
+  const sheet=wordSession(t,'sheet',true),walk=wordSession(t,'walk',true);
+  const sh=drawMaths('Sheet',sheet.s),wk=drawMaths('Walk',walk.s);
+  for(const html of [sh,wk]){
+   assert.equal(count(html,'data-role="maths-stem"'),1,`${t}: the stem once`);
+   assert.ok(numOf(html,'\\(a\\)')&&numOf(html,'\\(b\\)'),`${t}: the parts by their letters`);
+   assert.match(numOf(html,'\\(b\\)').inner,/class="nr"/,`${t}: the wrong part's letter is ringed`);
+   assert.doesNotMatch(numOf(html,'\\(a\\)').inner,/class="nr"/,`${t}: the right part's is not`);
+   assert.ok(html.includes('<span>2a</span>')&&html.includes('<span>2b</span>')&&html.includes('<span>1</span>'),`${t}: the tally names the parts`);
+  }
+  // the right part's line is ticked on the folded sheet, on its own row
+  assert.match(sh,/data-part="a"[^>]*>[\s\S]*?data-role="maths-part"[\s\S]*?data-role="maths-tick"/,`${t}: part (a) ticked`);
+  // the walk is on part (b): its card names it as the paper does; the stored line is left alone
+  assert.match(cardOf(wk),/number 2\(b\)\. How did you get there\?/);
+  assert.match(wk,/Number 2\(b\) needs another <em>look<\/em>/);
+  assert.equal(walk.s.practice.items[2].said,'I got something different for number 3. How did you get there?');
+  // the pen sits in part (b)'s working: the open item shows its lines with the margin arrow
+  assert.match(wk,/data-part="b"[^>]*data-open="true"|data-open="true"[^>]*data-part="b"/,`${t}: part (b) is open under the lamp`);
+  assert.equal(wk.includes('data-role="maths-plot"'),t==='cubic-max-min',`${t}: a graph only where the stem prints the function`);
+ }
+});
+
+test('M3a 3: a set with no parts draws as before - numbers, nowrap rows, no stem, no part, the card says "Number 2"',()=>{
+ const items=[1,2,3].map((n)=>({n,question:`Find f'(${n}) for f(x) = x^3.`,spec:{shape:'derivative-at',f:'x^3',at:n}}));
+ const s=secondSession(null,'practice',{practice:{topic:'calc1-related-rates',marked:false,items},topic:'calc1-related-rates'});
+ const html=drawMaths('PracticeScreen',s);
+ assert.equal(count(html,'<div class="mb-row q"'),3);
+ for(const n of [1,2,3])assert.match(html,new RegExp(`<section class="mb-item"><div class="num">${n}</div><div class="mb-row q"`));
+ for(const r of ['maths-stem','maths-part','data-part','data-stem'])assert.equal(html.includes(r),false,r);
+ const walk=drawMaths('Walk',secondSession('wrong','walk'));
+ assert.equal(walk.includes('data-part'),false);assert.match(walk,/<span>2<\/span>/);
+});

@@ -17,6 +17,7 @@ import { forensicAt, planAt } from "@/tv/keys";
 import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
+import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
@@ -473,10 +474,15 @@ export default function Phone() {
                 <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b>. Type your answer to each question. Leave one empty if you skipped it.</p>
                 <div className="pasks" data-role="practice-typed">
                   {pr.items.map((it, i) => <div className="pask" key={it.n}>
-                    <label htmlFor={`ans-${it.n}`}><b>{it.n}.</b> {it.question}</label>
+                    {(() => {
+                      // a part of a multi-part question (v2 M3a): the stem once above its first part, then each part's own field
+                      const at = partPlace(pr.items, i);
+                      if (!at) return <label htmlFor={`ans-${it.n}`}><b>{it.n}.</b> {it.question}</label>;
+                      return <>{at.first && <p data-role="typed-stem"><b>{at.q}.</b> {it.stem}</p>}<label htmlFor={`ans-${it.n}`} data-part={at.label}><b>({at.label})</b> {it.question}</label></>;
+                    })()}
                     <input id={`ans-${it.n}`} data-role="typed-answer" ref={(el) => { boxes.current[i] = el; }} type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false}
                       enterKeyHint={i < n - 1 ? "next" : "done"} maxLength={TYPED_ANSWER_MAX} value={typed[i] ?? ""} disabled={phase === "sending"}
-                      aria-label={`Your answer to question ${it.n}`}
+                      aria-label={`Your answer to question ${itemName(pr.items, i)}`}
                       onChange={(e) => setTyped((t) => { const v = Array.from({ length: n }, (_, k) => t[k] ?? ""); v[i] = e.target.value; return v; })}
                       onKeyDown={(e) => { if (e.key !== "Enter") return; e.preventDefault(); if (i < n - 1) boxes.current[i + 1]?.focus(); else e.currentTarget.blur(); }} />
                   </div>)}
@@ -517,7 +523,7 @@ export default function Phone() {
                   <p>Work it on paper again, then type just your answer. You get one go.</p>
                   <div className="field">
                     <input type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} enterKeyHint="send"
-                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${item.n}`}
+                      maxLength={TYPED_ANSWER_MAX} value={again} disabled={busy} aria-label={`Your second go at question ${itemName(pr.items, s.walkIx)}`}
                       onChange={(e) => setAgain(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); void sendSecond(); } }} />
                     <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
                   </div>

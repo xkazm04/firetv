@@ -318,3 +318,19 @@ test('GUARD case 8 (second go): with item 2 fixed, Tonight\'s Marked hero still 
  const card=continueCard(session({screen:'tonight',topic:'linear-one-step',practice:p}));
  assert.match(card.d,/4 of 6 right/,'the same count a first-attempt reading gives');
 });
+
+test('M3a: the parts of a word problem are tiles and stops like any item - one per part, no stem and no part line on a tile; the store keeps the parts',()=>{
+ const {sheetTiles,sheetStops,firstToLook}=rows();
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts'));
+ const w=W.drawWord('sphere-rates',3);
+ const items=[{n:1,question:"Find f'(2) for f(x) = x^3.",spec:{shape:'derivative-at',f:'x^3',at:2},verdict:'right'},...W.wordItems(w,2).map((it,i)=>({...it,verdict:i?'wrong':'right'}))];
+ const p={topic:w.topic,marked:true,items};
+ assert.deepEqual(sheetTiles(p),[{n:1,verdict:'right'},{n:2,verdict:'right'},{n:3,verdict:'wrong'}]);
+ const flat=JSON.stringify(sheetTiles(p));assert.ok(!flat.includes(w.stem)&&!w.parts.some((x)=>flat.includes(x.line)),'no stem and no part line on a tile');
+ assert.deepEqual(sheetStops(p),['item0','item1','item2','more','away'],'a part is a stop of its own');
+ assert.equal(firstToLook(items),2,'part (b) is the first to look at');
+ // the real reducer lands the marked set with its parts, and every view keeps the stem and the letters
+ const s=after_(session({practice:{...p,marked:false,items:items.map(({verdict,...x})=>x)}}),[{type:'practice.marked',items}]);
+ assert.deepEqual(s.practice.items.map((i)=>[i.part??null,i.stem===w.stem]),[[null,false],['a',true],['b',true]]);
+ assert.equal(s.screen,'sheet');
+});

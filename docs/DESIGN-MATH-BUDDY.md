@@ -337,6 +337,25 @@ evaluate or limit item is about. The window per shape comes from `plotFor`. The 
 padded, and it includes y = 0 when that is near. A pole is never bridged. The tangent's slope is `derivativeAt`, the same
 numeric derivative the marking uses. A graph shows what the desk computed; it never marks.
 
+## A word problem on the paper (v2 M3a, 2026-10-08)
+
+A Calculus set on related rates, optimisation or maxima and minima may end with a question in parts that code drew
+(`lib/rules/calc-word.ts`): a situation in sentences, then (a) and (b). Each part is an ordinary item of the set, with its
+own spec, mark and record; the paper only groups them.
+- The stem is printed once, above its parts, beside the question's number (`data-stem`). It goes through `prose()` into
+  the wrapping row (`mb-row q wrap`, `data-role="maths-stem"`) and is never set in the nowrap question row, where a
+  sentence runs past the paper.
+- Each part is its own row under the stem. Its number box reads (a), (b) (`data-part`), its line is prose in the wrapping
+  row (`data-role="maths-part"`), and it has its own answer line, tick, ring and pen, exactly as a single item has.
+- The tally in the top bar names a part with its question's number and letter together (5a), so it fits the mark. The
+  card names it as the paper does ("Number 5(b) needs another look"); the stored line keeps its item number.
+- A part whose function the stem does not print, as in a story, shows no graph under the card, because the curve would be
+  one the learner never saw. The cubic of "the maximum and the minimum" prints its function and keeps its graph.
+- A story's working names its function by a capital letter (A for an area). The chain checker reads `A = x(14 - x)` as
+  that function, so a right first line is never rung. On the two integral shapes a capital letter is still an
+  antiderivative.
+- A set with no parts draws exactly as before. Nothing is counted on screen that was not counted before.
+
 ## Tables in the typesetter (v2 M4b, 2026-10-07)
 
 The custom typesetter (`maths/typeset.ts`, `MathText.tsx`) now lays out `cases`, `matrix`, `pmatrix`, `bmatrix`,

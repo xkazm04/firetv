@@ -194,7 +194,10 @@ way ("Finish the set"). Put the sheet away → `tonight`.
 explanation that settled an unsure item later) — the sheet never recomputes a verdict. A Calculus set is
 marked by code from each item's spec (`checkAnswer`, `desk/src/lib/rules/calc.ts`). The crumb and "Six more
 on ..." name its topic on the Calculus path, and a wrong item's pen is the answer line (a Calculus item carries no
-`slipAt`).
+`slipAt`). A word problem in parts (v2 M3a, `desk/src/lib/rules/calc-word.ts`) is the last question of its set: its stem
+is printed once as prose in the wrapping row above its parts, and each part is a tile, a stop and a mark of its own,
+labelled (a), (b) on the paper, 5a and 5b in the tally, and 5(b) on the card. The same layout is used on `practice` and
+`walk` ([DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md), "A word problem on the paper").
 *Code:* `desk/src/tv/sheetRows.ts` (tiles, stops, first to look at), the `sheet` entry of the
 keymap in `desk/src/tv/keys.ts`, `Sheet` / `Walk` in `desk/src/maths/MathsTV.tsx`, the pen in
 `desk/src/maths/working.ts`, `desk/src/design/maths-lamplight.css`. Tests: `tools/tv-sheet-test.cjs`.
@@ -263,7 +266,7 @@ the camera.
 | Joined | "On the desk": Snap the page, Set up tonight first, or Name the new learner | `joined`; where a fresh join lands | — (moves to a panel) |
 | Profile | the new or edited learner's name; Save / Cancel | `profile` (joined or not) | `profile.draft` (name), `profile.save` → `landing`, `profile.discard` → `learner` |
 | Capture | camera, a module picker (Math Buddy or Linga, or the module the TV asked for; Essay Master is not offered, an essay is text and never a snapped page), Snap / Use this page / Retake, samples (a maths and an English sheet); after a read: Add another page, Point & ask; Try again for a failed read | `tonight` while it waits for a photo (`awaiting`, never an essay: that goes to Essay); `page` when that page's read failed (a maths or English page) | `/api/read` → `page.reading` → `page`; `/api/session/retry` |
-| Practice | no set: "open Teach me something on the TV" (Get ready for school writes a set the same way); unmarked set: two routes side by side, "Snap the sheet" (snap the whole worked sheet, Send my working) and "Type my answers" (one numbered box per question with the plain question above it, Enter moves to the next box, a blank is left empty, Send my answers once a box has text; the camera stays off on this route); marked: "N right, M to look at", and on the walk "How did you get there?" (hold to talk, or type) | `practice`, `sheet`, `walk` | `/api/mark` (`image` or `answers`, exactly one) → `practice.marked` → `sheet`; `/api/explain` → `practice.settle` |
+| Practice | no set: "open Teach me something on the TV" (Get ready for school writes a set the same way); unmarked set: two routes side by side, "Snap the sheet" (snap the whole worked sheet, Send my working) and "Type my answers" (one numbered box per question with the plain question above it, and for a word problem in parts (v2 M3a) its stem once, numbered, then one box per part labelled (a), (b) above it; Enter moves to the next box, a blank is left empty, Send my answers once a box has text; the camera stays off on this route); marked: "N right, M to look at", and on the walk "How did you get there?" (hold to talk, or type) | `practice`, `sheet`, `walk` | `/api/mark` (`image` or `answers`, exactly one) → `practice.marked` → `sheet`; `/api/explain` → `practice.settle` |
 | Point & ask | the page mirror with the TV's band; tap a problem, a question (typed, preset or Mic), Ask the desk | — (picked by hand, or from Capture) | a tap → `item` and `nav page`; `/api/hint` → `hint.set` → `hint` |
 | Linga | `LingaPhone`, below | every Linga screen (`lingaOwns`) | `/api/english` commands |
 | Say it | an English sentence, typed, preset or Mic; Check it on the TV | `sentence` with nothing checked yet (Linga's Sentence help) | `/api/analyse` kind english → `english.set` → `sentence` |

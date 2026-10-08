@@ -326,3 +326,15 @@ test('plan case 7 (panel): the plan screen hands the phone to the Essay panel',(
  assert.equal(panelFor(session({screen:'essayplan',subject:'essay'})),'paste');
  assert.equal(panelFor(session({joined:false,screen:'essayplan',subject:'essay'})),'join','an unjoined phone is still asked for the code first');
 });
+
+test('M3a: the typed route gives each part of a word problem its own labelled field, with the stem once above the first part',()=>{
+ const src=code(PAGE);
+ const panel=src.slice(src.indexOf('{screen === "practice" && s'),src.indexOf('{screen === "point"'));
+ assert.match(panel,/const at = partPlace\(pr\.items, i\)/,'each box asks where its item sits');
+ assert.match(panel,/at\.first && <p data-role="typed-stem"><b>\{at\.q\}\.<\/b> \{it\.stem\}<\/p>/,'the stem once, numbered as the paper numbers it');
+ assert.match(panel,/<label htmlFor=\{`ans-\$\{it\.n\}`\} data-part=\{at\.label\}><b>\(\{at\.label\}\)<\/b> \{it\.question\}<\/label>/,'each part its own label, by letter, above its own box');
+ assert.match(panel,/aria-label=\{`Your answer to question \$\{itemName\(pr\.items, i\)\}`\}/,'read aloud as 5(a)');
+ // still one box per item, in item order: the answers go to the mark route one per part
+ assert.match(panel,/pr\.items\.map\(\(it, i\) => <div className="pask"/);
+ assert.match(src,/answers: Array\.from\(\{ length: n \}, \(_, i\) => typed\[i\] \?\? ""\)/);
+});

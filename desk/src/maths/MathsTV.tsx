@@ -9,7 +9,7 @@
  * (grid, band, rail, safe box) steps aside: this root is the whole 1920 x 1080 stage and keeps the 5% margins
  * itself. Stable `data-role` hooks (maths-*) name the parts a host checks.
  */
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Page, PracticeItem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicIn, topicsOf } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
@@ -19,6 +19,7 @@ import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, 
 import { MathsCollection } from "./MathsCollection";
 import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
+import { itemName, namedLine, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
@@ -250,6 +251,19 @@ function HandRow({ line, mark, tick, after, arrow }: { line: string; mark?: Para
 }
 function PrintRow({ text, tick, wrap }: { text: string; tick?: boolean; wrap?: boolean }) {
   return <div className={`mb-row q${wrap ? " wrap" : ""}`} data-tall={isTall(parseMath(text))}><span className="rin"><MathText text={text} voice="print" />{tick && <Tick />}</span></div>;
+}
+
+/**
+ * A sentence on the paper, printed as prose (v2 M3a): a word problem's stem and its part lines go through prose() into the
+ * wrapping row, never into the nowrap question row, where a sentence runs past the paper.
+ */
+function ProseRow({ text, tick, role }: { text: string; tick?: boolean; role: "maths-stem" | "maths-part" }) {
+  return <div className="mb-row q wrap" data-role={role}><span className="rin"><span className="mx print">{prose(text)}</span>{tick && <Tick />}</span></div>;
+}
+
+/** A multi-part question's stem, once, above its parts: the question's number and the situation in words. */
+function Stem({ at, text }: { at: PartPlace; text: string }) {
+  return <section className="mb-item" data-stem={at.q}><div className="num">{at.q}</div><ProseRow text={text} role="maths-stem" /></section>;
 }
 
 // ---------------------------------------------------------------- the ruler: the topic path
@@ -681,9 +695,12 @@ export function PracticeScreen({ s }: { s: Session }) {
     <div className="mb-practice" ref={pan}>
       <div className="mb-paper" data-role="maths-sheet">
         <header className="mb-sheethead"><span className="st">{name}</span><span className="who">{s.learner?.name}</span></header>
-        {p.items.map((it) => (
-          <section key={it.n} className="mb-item"><div className="num">{it.n}</div><PrintRow text={it.question} /></section>
-        ))}
+        {p.items.map((it, i) => {
+          // a part of a multi-part question (v2 M3a): the stem once, above its first part; the part by its letter, wrapped
+          const at = partPlace(p.items, i);
+          if (!at) return <section key={it.n} className="mb-item"><div className="num">{it.n}</div><PrintRow text={it.question} /></section>;
+          return <Fragment key={it.n}>{at.first && <Stem at={at} text={it.stem ?? ""} />}<section className="mb-item" data-part={at.label}><div className="num">({at.label})</div><ProseRow text={it.question} role="maths-part" /></section></Fragment>;
+        })}
       </div>
     </div>
     <aside className="mb-side">
@@ -705,29 +722,33 @@ const slipName = (id: string) => slipById(id)?.name ?? humanTopic(id);
 
 const TALLY_R = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M36 40 L42 47 L56 28" /></svg>;
 const TALLY_W = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M18 20 C 22 10, 42 10, 46 22 C 50 36, 40 52, 28 50 C 16 49, 11 38, 13 26 C 14 22, 17 19, 22 17" /></svg>;
+/** A tally mark's name: the item's number, or a part's question number and letter run together (5a), to fit the mark. */
+const tallyName = (items: PracticeItem[], i: number) => { const at = partPlace(items, i); return at ? `${at.q}${at.label}` : String(items[i].n); };
 /** The set as six numbers in the top bar: ticked, ringed, or dashed when the desk is not sure; the one in hand lit. */
 function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
   return (
     <div className="mb-tally" aria-label="the set">
       {items.map((it, i) => { const v = it.verdict ?? "unsure"; return (
-        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{it.n}</span></div>
+        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{tallyName(items, i)}</span></div>
       ); })}
     </div>
   );
 }
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
-function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?: JobLine | null }) {
+function SlipSide({ it, name, points, job }: { it: PracticeItem; name?: string; points?: string; job?: JobLine | null }) {
   const v = it.verdict ?? "unsure", w = working(it);
   const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
   const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
-  const said = it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one.");
+  // a part is named as the paper names it, 5(b) (v2 M3a); a single item's name is its number, so its lines are as before
+  const nm = name ?? String(it.n);
+  const said = namedLine(it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."), it.n, nm);
   const next = v === "wrong" ? secondLine(it) ?? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
       <div className="mb-khead"><div className="mb-kick">{KIND_ICON[kind]}{word}</div></div>
       <div className="mb-stitle" data-role="maths-slip">
-        <Amber text={v === "right" ? `Number ${it.n} came back right` : v === "unsure" ? "The desk is not sure" : it.slip ? slipName(it.slip) : `Number ${it.n} needs another look`} />
+        <Amber text={v === "right" ? `Number ${nm} came back right` : v === "unsure" ? "The desk is not sure" : it.slip ? slipName(it.slip) : `Number ${nm} needs another look`} />
       </div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">{it.reply ? "The desk replied" : "The desk says"}</span></div>
@@ -735,13 +756,14 @@ function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?
         {job ? <JobNote job={job} /> : next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
       </div>
       {/* v2 M4a: a Calculus item shows its graph under the card - the tangent at the point, the area between the bounds */}
-      {isCalcSpec(it.spec) && <Plot spec={it.spec} />}
+      {/* a part whose function the stem does not print (a story's, v2 M3a) draws no graph: a curve the learner never saw */}
+      {isCalcSpec(it.spec) && (it.stem === undefined || it.stem.includes(it.spec.f)) && <Plot spec={it.spec} />}
     </aside>
   );
 }
 
 /** An item on the marked paper. Open: the question and every line of working; folded: the question, and the line the pen is on. */
-function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
+function MarkedItem({ it, at, open, focused, cur, dim, okLabel }: { it: PracticeItem; at?: PartPlace | null; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
   const v = it.verdict ?? "unsure";
   const w = working(it);
   const rows: ReactNode[] = [];
@@ -761,9 +783,9 @@ function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem
     );
   }
   return (
-    <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined}>
-      <div className="num" data-second={it.second}>{it.n}{v !== "right" && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
-      <PrintRow text={it.question} tick={v === "right" && !open} />
+    <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined} data-part={at?.label}>
+      <div className="num" data-second={it.second}>{at ? `(${at.label})` : it.n}{v !== "right" && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
+      {at ? <ProseRow text={it.question} tick={v === "right" && !open} role="maths-part" /> : <PrintRow text={it.question} tick={v === "right" && !open} />}
       {rows}
       {focused && okLabel && <div className="ok"><b>OK</b><span className="mb-lab">{okLabel}</span></div>}
     </section>
@@ -791,11 +813,11 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{sheetHead(look, tiles.length)}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((it, i) => <MarkedItem key={it.n} it={it} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" />)}
+          {p.items.map((it, i) => { const at = partPlace(p.items, i); return <Fragment key={it.n}>{at?.first && <Stem at={at} text={it.stem ?? ""} />}<MarkedItem it={it} at={at} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" /></Fragment>; })}
         </div>
       </div>
     </div>
-    {tile && ix !== null ? <SlipSide it={p.items[ix]} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
+    {tile && ix !== null ? <SlipSide it={p.items[ix]} name={itemName(p.items, ix)} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
       <aside className="mb-side" key={String(at)}>
         <div className="mb-khead"><div className="mb-kick">{at === "more" ? <>{KIND_ICON.six}Six more</> : <>Put away</>}</div></div>
         <div className="mb-stitle" data-role="maths-slip"><Amber text={at === "more" ? `Six more on ${name}` : "The set leaves the desk"} /></div>
@@ -831,11 +853,11 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
           <header className="mb-sheethead"><span className="st" data-role="maths-title">{name}</span><span className="who">{s.learner?.name}</span></header>
-          {p.items.map((x, i) => <MarkedItem key={x.n} it={x} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} />)}
+          {p.items.map((x, i) => { const at = partPlace(p.items, i); return <Fragment key={x.n}>{at?.first && <Stem at={at} text={x.stem ?? ""} />}<MarkedItem it={x} at={at} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} /></Fragment>; })}
         </div>
       </div>
     </div>
-    <SlipSide it={it} points={sl?.points} job={explainLine(s, it.n)} />
+    <SlipSide it={it} name={itemName(p.items, s.walkIx)} points={sl?.points} job={explainLine(s, it.n)} />
     <div className="mb-acts">
       {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>
