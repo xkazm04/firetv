@@ -88,7 +88,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
-| 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc')\| 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
+| 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
 | 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | not started (its questions go to the App Master first; see the M3b card) | | |
 | 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | not started (built only if its card names the kind of truth, comparison, leak rule and marking prompt; else listed in the honest limits and the descope goes to the owner) | | |
 
@@ -485,6 +485,31 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   (3) A Calculus 2 topic's prerequisites point only at earlier Calculus 2 topics (`PathTopic`'s rule). The path's blurb
   says it follows Calculus 1. A cross-path prerequisite would be a design change.
   (4) M3b-2 has no Calculus 2 lessons. The honest limits say so, as they do for Calculus 1.
+- App Master's rulings on M3b-1's questions (2026-10-08):
+  (5) The course row's third cell: its captures at 1920x1080 and 1280x720 are owed to the owner at the batch review. They do
+  not gate M3b-2. The row lays out as '220px auto' with flowing cells, like the interests row.
+  (6) Prompt words: Calculus 2 gets its own words, chosen by the path record, and Calculus 1's text stays byte-identical. The
+  course name in `CALC_SYSTEM` and the Calculus stance (`CALC_STANCE`: the course name and its methods) are read off the record
+  of the set's or the learner's path. A path judged 'calc' carries its prompt name and its methods as data on `PathInfo`, so no
+  site names a path id. A 'calc'-kind question on the school path uses the first path judged 'calc', which gives today's words.
+  The words for calc2 name Calculus II and its methods: integration by parts, trigonometric integrals, trigonometric
+  substitution, partial fractions.
+  (7) Improper integrals (7.8) and approximate integration (7.7) move to the M3b-3 card as candidate shapes, beside sequences
+  and series. They raise the design question M3b-3 must answer anyway: an improper integral's answer is a value or a 'diverges'
+  verdict, as a series' convergence is; an approximation is a rule applied with n steps, a second variable as in a sequence.
+  They are built only if that card names their truth, comparison, leak rule and prompt. Otherwise they go to section 10, and
+  the descope goes to the owner with sequences and series.
+  (8) Volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2) are listed out in section 10, and M3b-2 adds no word templates
+  for them. They are applications of integration, not the techniques the owner picked.
+  (9) The source: no example corpus is required. Cite one public, openly licensed syllabus for the topic list: OpenStax Calculus
+  Volume 2, chapter 3, sections 3.1-3.5. Keep the Stewart 9e numbers beside it. Each fixture names its section. If the OpenStax
+  sections cannot be verified, cite Stewart alone and say so in questions.
+  (10) No new slip. `CALC_AS_SLIPS` tags a slip by shape, so a new antiderivative slip would join every Calculus 1 antiderivative
+  topic's closed list, and that is a Calculus 1 change. calc2 topics get the existing antiderivative and definite-integral slips.
+  A technique slip needs slips keyed by topic: a design change, noted in section 10 as a follow-up.
+  (11) The live tool: `tools/maths-calculus-live.cjs --path` takes every path judged 'calc' (calc1 and calc2). An unknown path is
+  still refused before anything starts. No live call in the build run; one live calc2 set is owed to the owner's PC.
+  (12) `explain.ts` `calcCourse`'s non-null assertion stays as it is. It holds while one path is judged 'calc', and row 17 guards it.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
@@ -515,12 +540,10 @@ its questions)
   each on `antiderivative` and `definite-integral` only: `calc2-parts` (7.1, integration by parts),
   `calc2-trig-integrals` (7.2), `calc2-trig-sub` (7.3, trigonometric substitution), `calc2-partial-fractions` (7.4) and
   `calc2-strategy` (7.5, choosing the technique). Prerequisites point only at earlier calc2 topics (ruling 3).
-- Listed out, with the reason, unless a ruling moves them: approximate integration (7.7: the answer is a rule applied
-  with n steps, not the integral, so it needs a new kind of truth and tolerance); improper integrals (7.8: an infinite
-  bound or a pole inside the interval, while `definite-integral` reads finite a and b and `integrate` gives null at a
-  pole, so it needs a new shape or a new tolerance rule); volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: the
-  question names a solid or a curve, and a `definite-integral` spec prints only the integral). Differential equations,
-  parametric and polar curves are not in the owner's pick.
+- Listed out (rulings 7 and 8): volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: applications of integration, and a
+  `definite-integral` spec prints only the integral; no word templates). Approximate integration (7.7) and improper integrals
+  (7.8) move to M3b-3 as candidate shapes (ruling 7). Differential equations, parametric and polar curves are not in the
+  owner's pick. Source (ruling 9): OpenStax Calculus Volume 2 chapter 3 (3.1-3.5), with Stewart 9e numbers beside it.
 - Wiring, by section 9 steps 1-8: MathPath, the spine, the record. The judge carries the rest (M3b-1): kindOfTopic,
   the slips, shapesOf, the hint stance, the store's check and the course row all follow it. The course row gets a third
   cell, which is a screen change, so its captures are owed. The length pin is in `maths-paths-test` (one per path).
@@ -537,7 +560,10 @@ its questions)
   path is not wired, row 38 records it, and the owner is told.
 
 **M3b-3. Sequences and series** (row 39; a draft; built only if this card is completed)
-- Goal: the owner's "sequences and series" (Stewart 9e chapter 11). The engine reads x only, so the card must first name,
+- Goal: the owner's "sequences and series" (Stewart 9e chapter 11), and the two shapes M3b-2 moved here (ruling 7): improper
+  integrals (7.8; a value or a 'diverges' verdict) and approximate integration (7.7; a rule applied with n steps). They are
+  built only if this card names their truth, comparison, leak rule and prompt; otherwise they go to section 10 and the
+  descope goes to the owner. The engine reads x only, so the card must first name,
   for each proposed shape: its kind of truth (a sequence's limit as n grows; a series' sum, a number; whether a series
   converges, a verdict and not a number), its comparison (a number within a tolerance, or a verdict matched exactly), its
   leak rule (`leaksCalc` reads numbers and functions in x, not a verdict word), its marking prompt, and how n is read
