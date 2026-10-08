@@ -277,7 +277,8 @@ def analyze(trace):
         link_ms = sum(clip(s0, s1, f0, f1) for s0, s1 in link[max(0, j - 400):j]) * 1000
         deq = sum(v for kk, v in sleep_by.items() if re.search(r'dequeueBuffer|queueBuffer|eglSwapBuffers|DR\.clear', kk))
         pc = profile_cause.get(k, {})
-        accounts.append({'trace': trace.parent.name, 'row': k, 'second': round(f0 - begins[0], 3), 'intervalMs': round(ms, 3),
+        active = k is not None and k - 1 in rows and rows[k][I['active']] == 1 and rows[k - 1][I['active']] == 1
+        accounts.append({'trace': trace.parent.name, 'row': k, 'active': active, 'second': round(f0 - begins[0], 3), 'intervalMs': round(ms, 3),
             'presentIntervalMs': None if pres is None else round(pres, 3), 'classB': bool(b),
             'runningMs': round(r['running'], 2), 'preemptedMs': round(r['preempted'], 2), 'wakeupLatencyMs': round(r['wakeupLatency'], 2),
             'sleepMs': round(r['sleep'], 2), 'traceCause': top,
@@ -338,8 +339,9 @@ def analyze(trace):
 res = [analyze(t) for t in traces]
 allacc = [x for r in res for x in r['accounts']]
 summary = {'traces': [{k: v for k, v in r.items() if k != 'accounts'} for r in res], 'accounts': allacc,
-           'over20': collections.Counter(x['traceCause'] for x in allacc if x['intervalMs'] > 20),
-           'classB': collections.Counter(x['traceCause'] for x in allacc if x['classB']),
+           'over20': collections.Counter(x['traceCause'] for x in allacc if x['intervalMs'] > 20 and x['active']),
+           'classB': collections.Counter(x['traceCause'] for x in allacc if x['classB'] and x['active']),
+           'notActive': sum(1 for x in allacc if not x['active']),
            'limits': 'Intrusive trace: tracing adds work to every phase, so its frame counts are not I2 figures. Waiting = preempted + '
                      'wakeup latency. Preempted time is charged to the task that took the GL thread\'s CPU; sleep to the section open at '
                      'switch-out and the task that woke it. Link threads are the app\'s threads named DefaultDispatch*, deathride-link*, ktor* '
