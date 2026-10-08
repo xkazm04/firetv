@@ -1,0 +1,25 @@
+{
+ "what": "One am dumpheap (no -g) of p13g.apk 35 s into the /stats phase of a lobby load run (tools/perf-p13g-lobby-ab.py --phases quiet,stats --dump-at 100), read by tools/perf-p13f-heap.py. Every unreachable array of 12 KiB or more (ART large-object threshold), grouped. The dump stalled the app past the load script's 5 s timeout, so that run has no rates.",
+ "heapUtc": "2026-10-07T23:52:03Z",
+ "objects": 340565,
+ "unreachable": 55103,
+ "unreachableBytes": 3386316,
+ "unreachableLargeCount": 65,
+ "unreachableLargeBytes": 1056842,
+ "unreachableLarge": [
+  {
+   "type": "char[]",
+   "bytes": 16384,
+   "count": 63,
+   "what": "ktor CIO request-header buffer"
+  },
+  {
+   "type": "byte[]",
+   "bytes": 12325,
+   "count": 2,
+   "what": "Career.json text (game publish, not /stats)"
+  }
+ ],
+ "statsAppArraysOver12KiB": 0,
+ "note": "No reply String, no UTF-8 copy, no {\"audio\": builder and no double[4096]: none of P13f's /stats arrays remain. Left: ktor CIO's char[8192] header buffers (16,384 B, one per request header line read; not app code) and two 12,325 B Career.json byte[] built by the game's publish."
+}
