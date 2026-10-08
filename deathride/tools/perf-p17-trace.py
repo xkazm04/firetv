@@ -94,6 +94,7 @@ def analyze(trace):
     text = gzip.decompress(trace.read_bytes()).decode(errors='replace')
     names, tgids, prios = {}, {}, {}
     running_on, cpu_slices, marks, events, wakeups = {}, [], collections.defaultdict(list), [], []
+    counters = collections.defaultdict(list)
     gl_tid = None
     for rawl in text.splitlines():
         m = LINE.match(rawl)
@@ -123,6 +124,8 @@ def analyze(trace):
                 wakeups.append((t, int(wm[2]), comm))
         elif event == 'tracing_mark_write':
             parts = body.split('|')
+            if parts[0] == 'C' and len(parts) >= 4:
+                counters[parts[2].strip()].append((t, tid, parts[3].strip()))
             if parts[0] == 'B' and len(parts) >= 3:
                 label = parts[2].strip()
                 marks[tid].append((t, 'B', label))
@@ -284,8 +287,48 @@ def analyze(trace):
             'gc': [{'name': lab, 'ms': round((x1 - x0) * 1000, 1)} for x0, x1, lab in g], 'linkThreadsCpuMs': round(link_ms, 2),
             'inNetworkStatsPoll': any(b0 < f1 and b1 > f0 for b0, b1 in bursts),
             'profileCause': pc.get('cause'), 'profileDominantPhase': pc.get('dominantPhase')})
+    # Where each render start sits after its vsync: SF's VSYNC-app tick (the timer that wakes Choreographer), the app's
+    # DR.vsyncLagUs counter (set in its Choreographer callback, profiled builds), the GL thread's wakeup and its first run.
+    vs = sorted(t for t, tid, v in counters.get('VSYNC-app', []))
+    cbs = sorted(t for t, tid, v in counters.get('DR.vsyncLagUs', []))
+    wk_gl = sorted(t for t, w, name in wakeups if w == gl_tid)
+    ins = sorted(t for t, kind, detail, cpu in events if kind == 'in' and detail == gl_tid)
+    def last(xs, t):
+        i = bisect.bisect_right(xs, t) - 1
+        return xs[i] if i >= 0 else None
+    starts_d = []
+    for t in begins:
+        v, cb, w, r = last(vs, t), last(cbs, t), last(wk_gl, t), last(ins, t)
+        if None in (v, cb, w, r) or not (v <= cb <= t) or t - v > .0167:
+            starts_d.append(None)
+            continue
+        # The GL thread was already running when the callback asked for the frame (busy) if its last run began before the callback.
+        busy = r < cb
+        starts_d.append({'vsyncToStartMs': (t - v) * 1000, 'callbackLagMs': (cb - v) * 1000,
+                         'callbackToWakeMs': None if busy or w < cb else (w - cb) * 1000,
+                         'wakeToRunMs': None if busy or w < cb else (r - w) * 1000, 'runToStartMs': (t - r) * 1000, 'busy': busy})
+    vper = None
+    if len(vs) > 100:
+        p0 = statistics.median(b - a for a, b in zip(vs, vs[1:]))
+        n = [round((x - vs[0]) / p0) for x in vs]
+        mn, mx = statistics.fmean(n), statistics.fmean(vs)
+        vper = sum((a - mn) * (b - mx) for a, b in zip(n, vs)) / sum((a - mn) ** 2 for a in n)
+    comp = ('vsyncToStartMs', 'callbackLagMs', 'callbackToWakeMs', 'wakeToRunMs', 'runToStartMs')
+    def dist(sel):
+        ds = [d for d in sel if d]
+        return {c: [round(statistics.median(x), 3), round(sorted(x)[int(len(x) * .95)], 3)] if (x := [d[c] for d in ds if d[c] is not None]) else None
+                for c in comp} | {'frames': len(ds), 'busy': sum(1 for d in ds if d['busy'])}
+    pairs_ = [(starts_d[i], starts_d[i + 1], (begins[i + 1] - begins[i]) * 1000) for i in range(len(begins) - 1)]
+    over = [(a_, b_) for a_, b_, ms in pairs_ if ms > 16.7 and a_ and b_]
+    # An interval's excess over the vsync period is the change in vsync-to-start between its two starts; split that change.
+    delta = {c: round(statistics.fmean((b_[c] - a_[c]) for a_, b_ in over if a_[c] is not None and b_[c] is not None), 3)
+             for c in comp} if over else None
+    start_delay = {'appVsyncPeriodMs': round(vper * 1000, 5) if vper else None, 'vsyncTicks': len(vs), 'callbacks': len(cbs),
+                   'allStarts': dist(starts_d), 'startsEndingIntervalsOver16_7': dist([b_ for a_, b_ in over]),
+                   'meanChangeAcrossIntervalsOver16_7Ms': delta, 'intervalsOver16_7WithBothStarts': len(over),
+                   'limit': '[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback.'}
     span = begins[-1] - begins[0]
-    return {'trace': str(trace.parent.name), 'glThread': gl_tid, 'frames': len(frames), 'framesOnRows': sum(1 for f in frames if f[1] in row_of),
+    return {'startDelay': start_delay,'trace': str(trace.parent.name), 'glThread': gl_tid, 'frames': len(frames), 'framesOnRows': sum(1 for f in frames if f[1] in row_of),
             'spanSeconds': round(span, 3), 'offsetSeconds': round(off, 6), 'medianSplitMs': {kk: round(v, 3) for kk, v in med.items()},
             'intervalsOver': {f'{x:g}': sum(1 for f0, f1 in frames if (f1 - f0) * 1000 > x) for x in (16.7, 20, 33)},
             'concurrentGcs': len(gcs), 'gcNames': dict(collections.Counter(lab for x0, x1, lab in gcs)),
