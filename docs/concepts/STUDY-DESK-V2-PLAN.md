@@ -77,9 +77,12 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
 | 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | not started | | |
 | 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | not started | | |
-| 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4 | not started | | |
+| 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4, P6 | not started | | |
 | 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
+| 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
+| 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | not started | | |
+| 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -291,7 +294,7 @@ run through the gate, L4 first, then M3a)
 
 - **Batch 1 (this PR):** G1, E0, P1, P2, the decisions doc, this plan, Twin Card 1.0 vendored.
 - **Batch 2:** P3, E1, R1, L1. **Batch 3:** M1, M4a, M4b, T1. **Batch 4:** L2, M2a, T2, P4.
-- **Batch 5:** L3, M4c, T3, M2b. **Batch 6:** L4, T4, T5, M3a. **Batch 7:** M5, L5, M3b. **Batch 8:** L6.
+- **Batch 5:** L3, M4c, T3, M2b. **Batch 6:** L4, P5, H1, M3a, T4, T5 (the first four run in that order). **Batch 7:** P6 first, before L5; then M5, L5, M3b. **Batch 8:** L6.
 
 ## f. Session protocol
 
@@ -325,6 +328,7 @@ run through the gate, L4 first, then M3a)
 | V2-O4 | Collectible art: SVG drawn in each app's language, or generated images? | SVG (ten-foot crisp, no assets to host) | SVG | R1 |
 | V2-O5 | Whole-piece reading: one call per paragraph, or one call per piece? | per paragraph (verdicts stay anchored; a failure loses one paragraph); measure the time | per paragraph | E1 |
 | V2-O6 | GCSE board | Pearson Edexcel 1MA1 (S2) | Edexcel | M2a |
+| V2-O7 | ~~Who sees adult-audience scenes, age or mode?~~ **Answered 2026-10-08: mode decides.** One `adultContent()` in `rules/mode.ts`, which every audience decision calls: `curriculum.ts:75` audienceAllowed, the tutor's "an adult" at `conversation.ts:68`, and `cambridge.ts:101`. Family mode hides adult-audience scenes at any age. Built as P6 before L5; L5's red-team tests against it. | | | P6, L5 |
 
 ## i. Stance check
 
@@ -548,3 +552,27 @@ Owed to the owner's batch 5+6 review: the TV take (the branch, a struck note and
 720; the phone recap at 390 px; one live take on the real engine; a branch and struck-note style in `design/linga.css` if
 the capture asks for one.
 Next: M3a (row 24), one slice per run.
+
+### 2026-10-08 · batch 6 · P5 · autopilot/accepted-idea-delivery-7596fca6
+Built locally on main per the owner's 2026-10-08 ruling: one slice per run, merged through the gate, no PR, nothing pushed.
+Order after L4: this guest fix, the test runner (H1), then M3a.
+Commits: 85446973 (pairing.ts view(), desk-pairing-test.cjs), and this entry (rows 29-31, batch 6 and 7, V2-O7, the
+review's rank-1 finding marked built).
+What: view(s, 'guest') copied the whole Session and blanked a hand-written list, so essayPlan (the learner's dictated
+sentences), worked and workroom reached a phone that had opened /phone without joining, by GET /api/session and by the
+stream. Now `LOBBY` (viewer, pin, joined, phoneUrl, learner, subject, screen, updatedAt, draft) is copied, draft only
+while the TV is on profile, and every other key takes its value from `GUEST_BLANK`, typed so tsc fails on a Session key in
+neither. The tv and phone branches, guestMay, roleFrom, liveRole and the cookies are unchanged.
+Moved out of the guest view: focus, view and timer (the unjoined page, page.tsx:377-410, reads none of them; its one read
+of timer is the joined Tonight panel, :598), and essayPlan, worked, workroom. A guest now sees the blank for each (0, "band",
+the 25-minute timer at rest).
+Gate: `cd desk && npm run test:rules` green; `tsc --noEmit --incremental false` clean. No existing assertion changed.
+New rows in desk-pairing-test.cjs: GUARD (P5) (Session's keys read from store.ts source, at least 40 found, essayPlan,
+worked and workroom among them, each in exactly one of LOBBY and GUEST_BLANK); case 8 (a session with every key filled,
+read as a guest by GET and by the stream: every non-LOBBY key deep-equals its GUEST_BLANK value, essayPlan, worked and
+workroom absent by name); case 9 (a joined phone and the TV still receive essayPlan, worked and workroom). Kill test, not
+committed: essayPlan removed from GUEST_BLANK failed "Session.essayPlan must be in exactly one of LOBBY and GUEST_BLANK
+(pairing.ts)" and tsc TS1360. A guest's absent keys are deleted, not sent as undefined, because tv-sheet-test case 12
+asserts `'away' in view(...)` is false.
+Owed to the owner's batch 5+6 review: only a glance at the unjoined phone at 390 px.
+Next: H1 (row 30), then M3a (row 24).
