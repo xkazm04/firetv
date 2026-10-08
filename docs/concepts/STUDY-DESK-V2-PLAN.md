@@ -85,7 +85,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | done (built locally on main, no PR, nothing pushed; adultContent() in rules/mode.ts, read by audienceAllowed, the tutor prompt, the level check and audiencesAt) | c5a6e081, and the finish record | 2026-10-08 |
 | 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
 | 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | e6e6a569, 4df2d091 | |
-| 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | not started | | |
+| 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | not started | | |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | not started | | |
 
@@ -883,3 +883,42 @@ New rows: mode-rules-test (stored Family at 25; adultContent = modeOf === adult 
 Kill tests (not committed): (a) adultContent returns isAdult: the mode-rules stored-Family and adultContent rows and the adult-rules Family 18+ row red. (b) isAdult back in audienceAllowed's adult row: the mode-rules stored-Family row and the adult-rules Family 18+ row red. Both restored. In both the 240-row parity test also reads red, because the revised stored-mode rows sit inside it.
 Note: a profile of type "other" stores no age, so the Family fixtures there are 18+ by the type, through the adult box.
 Gate: `cd desk && npm run test:rules` green (66 suites, 1117 tests); `npx tsc --noEmit --incremental false` clean. Not covered: no screenshot; no device run.
+
+### 2026-10-08 · batch 7 · M5a · autopilot/accepted-idea-delivery-35ac7024
+M5's step 0 and its first slice (rows 25 and 34; the M5 card). Built locally, nothing pushed. Commits: be9d2faf (step 0: the M5
+card cut into M5a, M5b and M5c, the App Master's four rulings, rows 34-36, row 33's commits), 45632b1b (code and tests), and this entry.
+What changed, by file:
+- `lib/rules/recovery.ts` (new, pure: gcse.ts STATEMENTS and gcseClaimAllowed, paths.ts topicsOf; no store, engine, fs or model).
+  `cleanPaper(raw)` drops a row with a reason (`not-an-item`, `no-label`, `label-too-long`, `label-names-the-board`,
+  `marks-not-whole`, `out-of-not-whole`, `out-of-under-one`, `out-of-over-cap`, `marks-under-zero`, `marks-over-out-of`,
+  `repeated-label`, `too-many-items`, `over-paper-total`), each with its row and a plain why; keeps only codes found in STATEMENTS
+  (trimmed, duplicates collapsed, the first 3), reports every other in `droppedCodes`; an item with no code left is in `unmapped`.
+  `recovery(raw)` returns the clean paper, `topics` (id, name, lost, items, codes), `notOnDesk` (code, can, lost, items,
+  foundation) and `totals` (marks, outOf, lost; `unmapped` included).
+- `tools/recovery-rules-test.cjs` (new), in `rulesSuites` just before `harness-rules-test.cjs`; `desk/package.json`.
+The caps and their source (JSDoc, unverified as gcse.ts is): the 1MA1 Foundation assessment overview, three papers of 80 marks
+each. PAPER_MARKS 80; MAX_OUT_OF 6 (the host believes no Foundation question or part is worth more than 5; 6 so a low guess never
+drops a real item); MAX_ITEMS 80 (every item is worth at least 1 mark); MAX_LABEL 12 characters.
+Choices, stated: (1) a topic's `lost` sums the distinct items behind it: an item reaching one topic through two of its codes counts
+once there, while each statement takes the item's lost marks in full (so the statements' sums can exceed the paper's loss; the
+JSDoc says so). (2) The order: a topic is placed once its listed prerequisites (followed through) are; of the free topics the
+heaviest goes next, a topic weighing its own lost marks or the most lost by any listed topic that needs it, then its own lost
+marks, then path order. So a prerequisite is pulled forward by the heaviest topic that needs it, and unrelated topics go by lost
+marks. (3) A label is compared to earlier kept labels without case or spaces ('5(b)', '5 (B)'); a repeat is dropped, the first
+kept. (4) A label or a code naming the board (/gcse|1ma1|edexcel/i) is never echoed while the claim is off: the label's row is
+dropped (`label-names-the-board`), and a dropped label or code that cannot be shown is "" (the row number stays). (5) Topics are the
+school path's: a `touches` id not on it would read as no desk topic, as gcseCoverage() does.
+Rows (8): validation, every drop reason and the caps (80 one-mark items, the 81st dropped; 14 six-mark items, the 14th past 80
+dropped and a 2-mark one after it kept); unknown codes ('n2', 'N 2', 'N99') dropped, not guessed, only-unknown items in `unmapped`
+with their lost marks in the total; a full-marks item adds nothing, two codes count against both; three statements on ratio-share
+give one entry with the sum; the prerequisite rule (frac-equivalent before unit-rate through ratio-share, area before pythagoras,
+dec-convert pulled forward by pct-of-amount; unrelated topics by lost marks, ties by path order; a 400-paper sweep never puts a
+topic before a listed prerequisite); notOnDesk (A13 flagged foundation false, P8 and N3 with their can text, no gap code on a topic,
+every higher-only statement flagged); the sweep over the 86 Foundation statements (topics equal gcseCoverage().topics, touched 23
+and gaps 63 in its order); no string /GCSE|1MA1|Edexcel/i over 300 noisy papers and every statement.
+Kill tests (not committed, run on 45632b1b): (a) the prerequisite rule dropped (sort by lost marks only, ties by path order): the
+prerequisite row red. (b) cleanPaper keeping an unknown code: the unknown-code validation row red, and the board row red too (an
+unknown code reaches recovery and throws). Both restored with git restore; the suite green after.
+Gate: `cd desk && npm run test:rules` green (67 suites, 1125 tests); `npx tsc --noEmit --incremental false` clean. Not covered: no
+screen, route or learner-record field (M5b); the photo path and its probe (M5c); the caps are not checked against the specification.
+Next: M5b (row 35), then L5 and M3b; M5c's live run is the owner's.
