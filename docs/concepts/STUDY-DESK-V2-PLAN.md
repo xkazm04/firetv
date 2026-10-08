@@ -290,6 +290,73 @@ run through the gate, L4 first, then M3a)
 - Kill: a take that writes to the learner record, or a held note code cannot back with a rule or a contained phrase:
   the take is withheld (the action refused), its code and rows kept.
 
+**M3a. Math: Calculus 1 completed - word problems and multi-part questions** (M; batch 6, built locally per the owner's
+2026-10-08 08:41Z order: the guest fix, then the runner, then M3a; one slice per run through the gate. The App Master's
+eight rulings stand as written; one change the code requires is the chain tagger's capital label, under Goal, the chain)
+- Step 0, first (architecture card 5 part b, no behaviour change): every suite that pinned a path length as a literal
+  derives it from the path's topic list in `paths.ts`; one explicit length pin per path stays in
+  `tools/maths-paths-test.cjs`; ruler geometry rows compute from N. Card 5 part a (the judge field) is M3b's.
+- Goal, parts: a multi-part question travels as consecutive `PracticeItem`s, one per part, each with its own `n`, its
+  own `CalcSpec` of the existing nine shapes and its own printed line (`question`), and two new optional fields shared
+  by the parts: `stem` (the situation, printed once) and `part` (`a`, `b`, `c`). Marking, typed answers, the snap read,
+  attempts, the leak check, `slipAt` and the chain pen work per part as on a single item; no nested item type (the flat
+  one is not wrong anywhere in the code). The word problem is the last question of its set, so the paper's numbers run
+  on: four single items, then question 5 with parts (a) and (b) (items 5 and 6).
+- Goal, the mark: code decides every mark, each part by `checkAnswer(part.spec, answer)`. No new shape, kind of truth or
+  tolerance; `calc-expr.ts`, `SAMPLES`, `TOLERANCE`, `FUNCTION_TOL` and `ROUNDED_CLOSE` are untouched. A word problem's
+  answers are numbers, so a rounded decimal is still 'unsure' (the desk asks for the exact value) and an answer written
+  with its unit does not read ('unsure', as any unreadable answer); each part line names its unit so the learner writes
+  the number alone.
+- Goal, templates: a new pure `lib/rules/calc-word.ts` draws a problem from a seed with no model call: the stem and part
+  lines are plain sentences the template writes, with their own units. Every number they print is one the code drew
+  (`drawn`) or sits inside the function the stem prints, which must be the parts' own `f` (`fn`); no number word
+  (`undrawn`, a tested rule). A draw is kept only when well formed and fair (`fairWord`: no part's answer in the stem,
+  in its own line or in another part's line, by `leaksCalc`); otherwise the template draws again. Three templates:
+  `sphere-rates` (calc1-related-rates, derivative-at, after c12-q1: air into a sphere at q cm^3/s; (a) dr/dt when r =
+  r0, (b) dS/dt then; each spec's f is the radius or the area as a function of the time since that moment, at 0);
+  `rectangle-perimeter` (calc1-optimisation, extremum, after c15-q1: (a) the largest area, (b) the shortest diagonal, of
+  a side x on [0, P/2]); `cubic-max-min` (calc1-extrema, extremum, after c13-q1 with no story: a cubic whose critical
+  points are four or six apart on an interval chosen so both extrema are strictly inside). The story's letter (r) is
+  printed; every part's answer is a number, so no part needs the letter. `SHIPPED` lists the templates whose sweep is
+  clean.
+- Goal, the chain (the change the code requires): `chain.ts` tagged a one-capital label (`A = x(14 - x)`) as an
+  antiderivative on every shape, so a right first line of a story's working (A for area, D for diagonal) rang false on a
+  wrong part. The tagger reads a capital label as an antiderivative only on the two integral shapes; on any other shape
+  it names the function, as `f(x) =` does. Every existing chain row keeps its result.
+- Goal, the reader: `partsFromQuestion` in `rules/calc.ts` reads "the (absolute) maximum and minimum of f on [a, b]" (in
+  either order) into two extremum specs, null unless both are well formed; `readQuestion` (rules/kinds) carries the parts
+  so a page task's hint is leak-checked against every part. `specFromQuestion` is unchanged: no question that reads today
+  changes its spec. The syllabus table is re-measured by a committed test that prints it.
+- Goal, the set (wired last): on the three topics, a calc1 set asked for by the practice route carries one code-drawn
+  word problem beside the model's single items, its parts counted toward n (6: four single items and two parts). The
+  model's prompt (still n + 3 specs), the single items and their order are unchanged; the first n - parts are taken. A
+  set with no single item carries no word problem (it fails as before). The route asks with `word: true`; a direct
+  `makeItems` call without it writes the set as before (the existing practice rows keep their meaning).
+- Screens: no new Screen, no Session field. The TV paper (Practice, Sheet, Walk) prints the stem once as prose, through
+  `prose()` in the wrapping row (`mb-row q wrap`), never in the nowrap question row; the parts sit below it labelled
+  (a), (b), each line wrapped, each with its own answer line, tick and pen; the tally and the side card name a part
+  5(a); a part whose function the stem does not print draws no graph. The phone's typed route shows the stem once and
+  one labelled field per part. The read prompt shows the stem once and reports each part by its own item number; a
+  single-item set's prompt is byte for byte as before. No new count is printed (X1, X2); one attempt per part.
+- Files: new `lib/rules/calc-word.ts`; `lib/rules/{calc,chain,kinds}.ts`, `lib/desk/{items,mark,explain,memory,hint}.ts`,
+  `lib/session/store.ts` (`stem`, `part`, kept by `shown`), `maths/MathsTV.tsx`, `app/phone/page.tsx`,
+  `app/api/practice/route.ts`; new `tools/calc-word-test.cjs` (appended last to `rulesSuites`); rows in the calc-*,
+  chain-rules, maths-judge, maths-tv and tv-sheet suites; `docs/CALCULUS-1-SYLLABUS.md`, `docs/MATH-COURSE-PATHS.md`
+  (section 10), `docs/DESIGN-MATH-BUDDY.md`, `docs/STUDY-DESK-SCREENS.md`.
+- Tests: the sweep `tools/calc-word-test.cjs`, per template 500 seeds, prints four counts: specs not well formed, items
+  not fair, worked answers `checkAnswer` does not mark right (the template's own and, for the two stories, the sweep's
+  own arithmetic), stem numbers the code did not draw; controls prove each count can fail; a right working on a part
+  rings nothing. Rows: a stubbed set with a word problem marked part by part on the typed path and on a stubbed snap
+  read (the read prompt shows the stem once); the paper's stem row and part labels; a single-item set unchanged; the
+  corpus table (13 of 31 single questions, and what reads into parts).
+- Accept: `cd desk && npm run test:rules` green at every commit; `tsc --noEmit --incremental false` clean; the sweep's
+  four counts 0 for every shipped template; no existing assertion changes its meaning; path pins move only in step 0.
+  Owed to the owner's batch 5+6 review: the TV paper with a word problem at 1920 x 1080 and 1280 x 720, and the phone's
+  part fields at 390 px.
+- Kill: a template with a non-zero count its generator or check cannot fix is withheld (out of `SHIPPED`, off the set,
+  its code and rows kept; row 24 and the log record it). No template passes: stop after the table. The screens not
+  finished in the run: the set stays unwired, row M3a-2 holds the rest, and the run reports partial.
+
 ## e. Batches
 
 - **Batch 1 (this PR):** G1, E0, P1, P2, the decisions doc, this plan, Twin Card 1.0 vendored.
