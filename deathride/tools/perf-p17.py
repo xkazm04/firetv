@@ -140,7 +140,7 @@ def read_run(run):
     joined = {}
     if pfile.exists():
         pres = parse_present(pfile)
-        joined, early = join_present(I, rows, pres)
+        joined, early = join_present(I, rows, pres)  # early: SF frames failing the mapping check
         period_ms = statistics.median(pres['periods']) / 1e6 if pres['periods'] else None
     def pinterval(k):
         """Present interval of row k's interval: present(k-1) - present(k-2), ms."""
@@ -176,6 +176,11 @@ def read_run(run):
              'clearMs': rnd(prev[I['clearMs']]), 'swapGapMs': rnd(iv[k] - prev[I['workMs']]), 'flushSwapMs': rnd(c['flushSwap']),
              'gc': [{'kind': x['kind'], 'totalMs': x['totalMs']} for x in g],
              'statsBuild': any_in(builds, t0, t1), 'profileRead': any_in(profile_reads, t0 - 1, t1)}
+        if joined.get(k - 1):  # added after muted-run1, descriptive only: frame k-1's GPU time and its queue-to-present time
+            qn, act_, rdy = joined[k - 1]
+            f['gpuMs'] = rnd((rdy - qn) / 1e6)
+            f['queueToPresentMs'] = rnd((act_ - qn) / 1e6)
+            f['startInRefreshMs'] = rnd(((t0 - act_) % (period_ms * 1e6)) / 1e6)
         if k in sched:
             run_, wait, sleep = sched[k]
             f.update({'runningMs': rnd(run_), 'runnableMs': rnd(wait), 'sleepMs': rnd(sleep)})
@@ -197,6 +202,9 @@ def read_run(run):
             f['cause'] = 'unattributed'
         return f
 
+    # Added after muted-run1, descriptive only (no class or cause changes): present intervals under half a refresh, i.e. two
+    # buffers given present times in one refresh (the earlier one never shown for a whole refresh).
+    under_half = sum(1 for k in act if pi.get(k) is not None and pi[k] < .5 * period_ms) if joined else None
     slow = [k for k in act if iv[k] > 20 or klass(k) == 'b']
     frames = [frame(k) for k in slow]
     def tally(fs):
@@ -258,11 +266,33 @@ def read_run(run):
         phase = statistics.median([(x % per) for x in pns[:2000]])
         lags = [((rows[k][I['startNs']] - phase) % per) / 1e6 for k in act]
         ivs = [iv[k] for k in act if pi.get(k) is not None and pi[k] < 1.5 * period_ms]
+        # Added after muted-run1: the render starts' position drifts through the refresh. Per 600 rows, the median position;
+        # unwrapped (steps over half a period are wraps), its slope is the render cadence against SF's present grid.
+        allrows = [k for k in idx if k in rows]
+        blocks = []
+        for b in range(0, len(allrows) - 600, 600):
+            ks = allrows[b:b + 600]
+            pos = sorted(((rows[k][I['startNs']] - phase) % per) / 1e6 for k in ks)
+            blocks.append(((rows[ks[0]][I['startNs']] - rows[allrows[0]][I['startNs']]) / 1e9, pos[len(pos) // 2]))
+        un, prev, shift = [], None, 0.0
+        for t, v in blocks:
+            if prev is not None and v - prev > period_ms / 2:
+                shift -= period_ms
+            elif prev is not None and prev - v > period_ms / 2:
+                shift += period_ms
+            un.append((t, v + shift))
+            prev = v
+        slope = None
+        if len(un) > 2:
+            mt, mv = statistics.fmean(t for t, v in un), statistics.fmean(v for t, v in un)
+            slope = sum((t - mt) * (v - mv) for t, v in un) / sum((t - mt) ** 2 for t, v in un)
         lag = {'p5Ms': rnd(q(lags, .05)), 'p50Ms': rnd(q(lags, .5)), 'p95Ms': rnd(q(lags, .95)),
+               'driftMsPerSecond': rnd(slope, 4), 'renderVsPresentGridPpm': rnd(slope / 1000 * 1e6, 1) if slope is not None else None,
+               'blockMedianMs': [[rnd(t, 1), rnd(v, 2)] for t, v in blocks],
                'onTimeIntervalP95Ms': rnd(q(ivs, .95)), 'onTimeIntervalP50Ms': rnd(q(ivs, .5)),
                'onTimeIntervalsOver16_7': sum(1 for v in ivs if v > 16.7), 'onTimeIntervals': len(ivs),
-               'limit': 'The vsync phase is the median of present fences modulo the period (a fence signals at a vsync, with HWC '
-                        'jitter); lag is a render start\'s position in its refresh.'}
+               'limit': 'The phase is the median of SF present times modulo the period; position is a render start\'s place in its '
+                        'refresh. A negative drift means renders start earlier in each refresh as time goes on.'}
 
     # PSS: the peak and the lowest sample, with their breakdowns.
     mem = [m for m in raw['memory'] if m.get('pssKb')]
@@ -278,6 +308,12 @@ def read_run(run):
     allv = list(iv.values())
     aw = s['activeWindows']
     present_info = None
+    grid_residual = None
+    if joined:
+        # Added after muted-run1: whether SF's present times are measured fences (jitter) or a model's grid (none).
+        pts = sorted(v[1] for v in joined.values())
+        per = round(period_ms * 1e6)
+        grid_residual = max(abs((x - pts[0]) - round((x - pts[0]) / per) * per) for x in pts)
     if pres:
         stt = json.loads((run / 'present-start.json').read_text())
         end = pres['end']
@@ -287,6 +323,11 @@ def read_run(run):
             'dumps': pres['dumps'], 'gaps': pres['gaps'], 'framesSeen': len(pres['entries']), 'framesJoined': len(joined),
             'joinChecksFailed': early, 'refreshPeriodsNs': pres['periods'],
             'activeIntervalsWithPresent': sum(1 for k in act if pi.get(k) is not None), 'activeIntervals': len(act),
+            'activePresentIntervalsByPeriods': dict(sorted(Counter(round(pi[k] / period_ms) for k in act if pi.get(k) is not None).items())),
+            'activePresentIntervalsUnderHalfPeriod': under_half,
+            'gpuMsP50P95': [rnd(q([(v[2] - v[0]) / 1e6 for v in joined.values()], x)) for x in (.5, .95)],
+            'queueToPresentMsP50P95': [rnd(q([(v[1] - v[0]) / 1e6 for v in joined.values()], x)) for x in (.5, .95)],
+            'presentGridResidualNsMax': grid_residual,
             'pollerCpuPercentOfOneCore': rnd(sum(end[2:6]) / secs, 2) if end and secs else None,
             'surfaceflingerCpuPercentOfOneCore': rnd(((sf1[0] + sf1[1]) - (sf0[0] + sf0[1])) / (stt['uptimeAtEnd'] - stt['uptimeAtStart']), 1) if sf0 and sf1 else None}
     # Device memory pressure (the run script's vm-start.txt / vm-end.txt around the run): reclaim and swap counters per second,

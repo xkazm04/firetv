@@ -62,24 +62,27 @@ def parse_present(path: Path):
 
 def join_present(I, rows, present):
     """Each SF frame belongs to the profile row whose render began last before the buffer was queued (one eglSwapBuffers
-    per render). Returns {rowIndex: (queueNs, presentNs, readyNs)} and the count of SF frames that fell before the work of
-    their row ended (a mapping check; expected 0)."""
+    per render). SF frames queued before the first row or after the last row's next start would have no row of their own
+    (the poller runs past the probe's last /profile read) and are left out. Returns {rowIndex: (queueNs, presentNs,
+    readyNs)} and the count of SF frames that fail the mapping check: queued before their row's work ended, or a second
+    buffer in one row's interval (expected 0)."""
     idx = sorted(rows)
     starts = [rows[k][I['startNs']] for k in idx]
-    out, early = {}, 0
-    for qn, (act, rdy) in present['entries'].items():
+    last_end = starts[-1] + 2 * rows[idx[-1]][I['workMs']] * 1e6 if starts else 0
+    out, bad = {}, 0
+    for qn, (act, rdy) in sorted(present['entries'].items()):
         j = bisect.bisect_right(starts, qn) - 1
-        if j < 0:
+        if j < 0 or (j == len(starts) - 1 and qn > last_end):
             continue
         k = idx[j]
         row = rows[k]
-        if qn < row[I['startNs']] + row[I['workMs']] * 1e6 - 1e5:
-            early += 1
-        if k in out:  # two buffers in one row's interval cannot happen with one swap per render; keep the first, count it
-            early += 1
+        if j + 1 < len(idx) and idx[j + 1] != k + 1:
+            continue  # a gap in the profile rows: the row after k is missing, so this interval is not one row's
+        if qn < row[I['startNs']] + row[I['workMs']] * 1e6 - 1e5 or k in out:
+            bad += 1
             continue
         out[k] = (qn, act, rdy)
-    return out, early
+    return out, bad
 
 
 def stats_origin(raw, rows, I):
