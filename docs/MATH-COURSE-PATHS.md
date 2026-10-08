@@ -663,6 +663,10 @@ Linear algebra needs a different engine altogether.
   (parts, substitution, partial fractions) needs slips keyed by topic; `CALC_AS_SLIPS` tags a slip by shape, so a new
   antiderivative slip would join every Calculus 1 antiderivative topic's list, a Calculus 1 change. Calculus 2 topics use
   the existing antiderivative and definite-integral slips (ruling 10).
+  Sources (ruling 14, checked against openstax.org on 2026-10-09): OpenStax Volume 2 3.1-3.4 match calc2-parts,
+  calc2-trig-integrals, calc2-trig-sub and calc2-partial-fractions. OpenStax 3.5 is "Other Strategies for Integration", on
+  tables of integrals and computer algebra (Stewart 7.6's matter), so it only partly matches calc2-strategy, and Stewart 9e
+  7.5 is that topic's source of record. The spine still lists 3.5 beside 7.5 (its pins are unchanged).
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of

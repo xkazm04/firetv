@@ -510,6 +510,23 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   (11) The live tool: `tools/maths-calculus-live.cjs --path` takes every path judged 'calc' (calc1 and calc2). An unknown path is
   still refused before anything starts. No live call in the build run; one live calc2 set is owed to the owner's PC.
   (12) `explain.ts` `calcCourse`'s non-null assertion stays as it is. It holds while one path is judged 'calc', and row 17 guards it.
+- App Master's rulings on M3b-2's questions (2026-10-09):
+  (13) The assertion edits beyond test 1's three are accepted: maths-paths 12 (the requires regex admits `calculus[12].spine`),
+  maths-paths 14 and 18 (the junk value 'calc2' became 'calc3'), maths-course 6 (three cells). Each was forced by calc2 becoming a
+  path, and none is weaker: row 12 admits one more library file and nothing else, rows 14 and 18 keep the same count of junk
+  values, and row 6 still pins the school and calc1 cells. The brief's "rows 13-19 need no edit" did not foresee junk lists that
+  named calc2.
+  (14) Sources: calc2-parts, calc2-trig-integrals, calc2-trig-sub and calc2-partial-fractions keep OpenStax Calculus Volume 2
+  sections 3.1-3.4 beside Stewart 9e 7.1-7.4. OpenStax 3.5 is "Other Strategies for Integration": tables of integrals and computer
+  algebra, Stewart 7.6's matter. It is a partial match for calc2-strategy, so Stewart 7.5 is that topic's source of record
+  (recorded in MATH-COURSE-PATHS section 10). The spine data and its pins (calc2-path-test line 70 and the fixture refs) stay as
+  they are. Checked by the M3b-3 step A run on 2026-10-09 against openstax.org (the chapter 3 navigation and the 3.5 page): 3.1
+  Integration by Parts, 3.2 Trigonometric Integrals, 3.3 Trigonometric Substitution, 3.4 Partial Fractions, 3.5 Other Strategies
+  for Integration (objectives: use a table of integrals; use a computer algebra system), 3.6 Numerical Integration, 3.7 Improper
+  Integrals. The App Master's recall agrees with the source.
+  (15) `maths-calculus-live --path calc2` walking the rulers only is accepted. Per-topic screens for calc2 wait for an example
+  set. Owed to the owner: the three-cell course row captures and one live calc2 set.
+  (16) The App Master checked the calc1 pins in calc2-path-test against items.ts and hint.ts at 37880327: byte-identical.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
