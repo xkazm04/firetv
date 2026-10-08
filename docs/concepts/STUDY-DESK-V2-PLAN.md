@@ -81,7 +81,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
-| 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c | 2026-10-08 |
+| 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
@@ -581,7 +581,7 @@ Next: H1 (row 30), then M3a (row 24).
 Built locally on main per the owner's 2026-10-08 ruling: one slice per run, merged through the gate, no PR, nothing pushed.
 Commits: b2c1fccf (the runner: `rulesSuites` in desk/package.json, tools/run-rules.cjs, tools/harness-rules-test.cjs), 664fb809
 (tools/ts-load.cjs and its loader rows), 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c (the swap: 13, 13, 13, 13, 5 suites),
-and this entry (row 30, the append rule, the review's rank-2 card marked built).
+cf0170ed (the fallback), and this entry (row 30, the append rule, the review's rank-2 card marked built).
 What: test:rules is `node ../tools/run-rules.cjs`. It runs the 64 suites of `rulesSuites` in list order, one at a time, each as
 `node --test-reporter=tap <suite>`, and never stops at the first red one. A suite is green only when it exits 0 by itself and its
 last TAP summary shows tests >= 1, fail 0, cancelled 0; a non-zero exit, a signal, a throw, no summary (an early process.exit(0)),
@@ -598,7 +598,23 @@ warm 94 s. Sum of the suites' duration_ms 74 to 79 s after, 77 s before. The cac
 transpile school.ts fills it for the 38 others in the same run.
 Left alone: the loader inside the child-process template of learners-save-test.cjs (lines 49-51; a separate node process); the six
 suites without a loader; every tools file outside rulesSuites.
-Not done: the by-hand run of the old && chain on the final tree, and the two kill tests on real suites. See the questions; the
-runner's red cases are proven on fixtures in harness-rules-test (failing assertion, throw, early exit, 0 tests, missing file, timeout,
-duplicate, empty list) and the next gate run covers the rest.
+Finish run (autopilot/accepted-idea-delivery-7ed05d75, a re-dispatch on the kept branch, fast-forwarded from 503d967b): cf0170ed adds
+the resolution fallback to tools/ts-load.cjs - desk/node_modules/typescript first; only if its package.json cannot be read,
+require.resolve('typescript/package.json', { paths: [desk] }) and that package's folder; the cache key's version and the module ts()
+requires both come from the folder found; still lazy; neither found prints the same message and exits 1. harness-rules-test gains 2
+rows (fallback with a stub typescript under an os.mkdtemp folder, neither), 17 in all; the gate is 64 suites, 1084 tests (1082 + 2).
+The proofs the first run owed, all on the final tree: (1) the old && chain from 8a88b411's package.json, run by hand from desk/, exit 0,
+184 s wall (the machine was busy; the runner's own wall times are below). (2) Kill tests in the worktree only: a failing assertion
+planted in maths-ruler-test (the middle of the list) and a top-level throw in school-ruler-test; test:rules exit 1, all 64 rows still
+printed, table lines "maths-ruler-test.cjs RED 8 7 1 240 exit 1" and "school-ruler-test.cjs RED - - - 713 exit 7", totals
+"62 green, 2 red; tests 1073, pass 1072, fail 1", "RED: maths-ruler-test.cjs (exit 1), school-ruler-test.cjs (exit 7)"; suites after
+them (school-stretch, school-marking, calc-marking...) ran green; both files put back with git restore, git status --short clean.
+(3) node tools/school-rules-test.cjs from the repo root, exit 0. (4) desk: npx tsc --noEmit --incremental false, exit 0. (5) Wall:
+test:rules with DESK_TS_CACHE_DIR at a fresh folder 115 s (duration_ms sum 91.5 s), warm 85 s (sum 67.4 s), 1084 tests, 64 green;
+the first-run tree before the fallback was 134 s (sum 109 s, 1082 tests). Wall times on this machine swing by 30 s with load.
+App Master's rulings: (1) the first run was right to install nothing - the Director restored desk/node_modules; builders do not
+create or remove worktrees. (2) The owed proofs are delivered by this run. (3) harness-rules-test's own ~22 s stays; no row is trimmed
+(a trim would be a separate card if the wall time ever matters). (4) The loader inside learners-save-test's child-process template
+stays; ts-load's extra options and jsxOptions exports stay.
+Nothing is pushed.
 Next: M3a (row 24).
