@@ -14,8 +14,12 @@
  * Client-safe: plain data, no import at all, so a TV screen, the phone and a pipeline may each read it.
  */
 
-/** The two practice shapes of an integration topic: ids of rules/calc.ts' nine, listed again in tools/maths-paths-test.cjs. */
-export type Calc2Shape = "antiderivative" | "definite-integral";
+/**
+ * The practice shapes a Calculus 2 topic may use: the two integral shapes of rules/calc.ts' nine (listed again in
+ * tools/maths-paths-test.cjs), or, from M3b-3, an id of rules/calc2.ts CALC2_SHAPES (a type only: this file stays data and
+ * pulls in no module at run time; the list is empty until a shape slice adds one).
+ */
+export type Calc2Shape = "antiderivative" | "definite-integral" | import("../rules/calc2").Calc2SpecShape;
 
 export interface Calc2SpineTopic {
   id: string;

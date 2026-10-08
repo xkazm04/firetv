@@ -12,6 +12,7 @@
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
+import { isCalc2Spec } from "./calc2";
 import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
@@ -134,9 +135,9 @@ export function settled(n: number, right: boolean, slipId: unknown, topicId: str
   return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : ASK(n) };
 }
 
-/** Is this a Calculus spec by its shape? A school spec never is (the shape lists share no name). */
+/** Is this a Calculus spec by its shape - a Calculus 1 shape or a Calculus 2 one (rules/calc2.ts)? A school spec never is (the shape lists share no name). */
 export const isCalcSpec = (spec: unknown): boolean =>
-  !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
+  !!spec && typeof spec === "object" && ((CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape) || isCalc2Spec(spec));
 
 /**
  * Settle an item with a spec from an answer as written or said, dispatched on the spec's shape - never both engines:

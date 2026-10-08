@@ -12,8 +12,11 @@
  * (`CALC_SLIPS`, `slipsFor`): the model never decides a verdict; on an item code already judged wrong it may only
  * pick a slip id from its shape's list, as the linear pipeline does (rules/maths.ts settled()).
  *
- * Pure: imports only calc-expr.ts - no engine, no session store, no TV module.
+ * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
+ * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
+import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2WellFormed, calc2Withheld, isCalc2Spec } from "./calc2";
+import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
 import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -276,6 +279,7 @@ function read(spec: unknown): Read {
  * at the shape's tolerance. A spec with an answer field is refused: the desk works the answer out itself.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
+  if (isCalc2Spec(spec)) return calc2WellFormed(spec);
   const r = read(spec);
   return r.ok ? { ok: true } : { ok: false, why: r.why };
 }
@@ -331,6 +335,7 @@ function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
  * has none, and the only numbers printed are the spec's own parameters.
  */
 export function question(spec: unknown): { plain: string; tex: string } | null {
+  if (isCalc2Spec(spec)) return calc2Question(spec);
   const p = printable(spec);
   if (!p) return null;
   const { s, f } = p;
@@ -374,23 +379,6 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
 
 export interface CalcVerdict { verdict: "right" | "wrong" | "unsure"; slip?: string; why: string; }
 
-/** The answer as written, without a leading 'f(x) =', 'x =', "y' =" or 'lim =' and without a closing full stop. */
-const cleanAnswer = (a: string) => {
-  let s = a.trim();
-  const eq = s.lastIndexOf("=");
-  if (eq >= 0) s = s.slice(eq + 1).trim();
-  return s.replace(/\.$/, "").trim();
-};
-/** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */
-const infinityOf = (s: string): 1 | -1 | null => {
-  const m = /^([+\-−]?)\s*(inf|infinity|∞)$/i.exec(s.replace(/\s+/g, " ").trim());
-  return m ? (m[1] === "-" || m[1] === "−" ? -1 : 1) : null;
-};
-const DNE = /^(dne|does not exist|no limit|undefined)$/i;
-/** A plain decimal numeral (0.333, 16.0, .5): the learner rounded. */
-const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
-const withinRel = (u: number, v: number, tol: number) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(v));
-
 const verdict = (v: CalcVerdict["verdict"], why: string, slip?: string): CalcVerdict => (slip ? { verdict: v, slip, why } : { verdict: v, why });
 
 function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, decimal: boolean): CalcVerdict {
@@ -415,6 +403,7 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, de
  * The `why` is a fixed sentence of the desk's, with no value in it.
  */
 export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict {
+  if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", WHY.badSpec);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
@@ -462,31 +451,6 @@ function comparable(a: (x: number) => number, b: (x: number) => number): boolean
 
 // ------------------------------------------------------------------ the leak check
 
-/**
- * Number words to ninety-nine, as rules/maths.ts said() reads them. Written again here, not imported: said() is
- * private to rules/maths.ts, and this module imports only calc-expr.ts (rules stay pure and small).
- */
-const WORDS: Record<string, string> = {
-  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
-};
-const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
-/** A line as it would be said, numbers in digits: 'minus sixteen' is -16, 'one and a half' is 1.5. */
-const spoken = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
-  .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
-    tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
-  .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")
-  .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
-  .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
-
-const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-/**
- * A piece of the question as a pattern: spacing free, '->' also as '→', and only as a whole - not inside a larger
- * expression (the function 'x' is not the x of 'x^2/2', 'x^2 + 1' is not the start of 'x^2 + 10').
- */
-const piecePattern = (p: string) => new RegExp(`(?<![\\w^*/.(|])${[...p.replace(/\s+/g, "")].map(escapeRe).join("\\s*").replace(/-\\s\*>/g, "(?:-\\s*>|→)")}(?![\\w^*/.)|(])`, "gi");
-
 /** The question's own notation that may be quoted back: never the answer (the spec's function aside, handled apart). */
 function ownPieces(s: CalcSpec): string[] {
   const out: string[] = ["f(x) ="];
@@ -521,6 +485,7 @@ const WINDOW = 6;
  *   - an infinite limit leaks by naming infinity.
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
+  if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
   if (typeof line !== "string" || !line.trim()) return false;
   const r = read(spec);
   if (!r.ok) return false;
@@ -593,6 +558,7 @@ export const CALC_SLIPS: readonly CalcSlip[] = [
 
 /** The slip ids the model may pick from for an item of this shape, already judged wrong by code. */
 export function slipsFor(shape: unknown): string[] {
+  if (isCalc2Spec({ shape })) return calc2SlipsFor(shape);
   return isShape(shape) ? CALC_SLIPS.filter((s) => s.shapes.includes(shape)).map((s) => s.id) : [];
 }
 
@@ -901,6 +867,7 @@ const WITHHELD_ANY = "Go back to the last step you are sure of and take the next
 
 /** The withheld line for a spec, chosen by its shape; a general line when there is no shape. */
 export function withheldCalc(spec: unknown): string {
+  if (isCalc2Spec(spec)) return calc2Withheld(spec);
   const shape = spec && typeof spec === "object" ? (spec as { shape?: unknown }).shape : undefined;
   return isShape(shape) ? CALC_WITHHELD[shape] : WITHHELD_ANY;
 }

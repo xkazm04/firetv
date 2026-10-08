@@ -13,6 +13,7 @@
 import type { SchoolSystem } from "@/lib/session/store";import { SYLLABUS, expectedIndex } from "./syllabus";
 import { CALC1_SPINE, type CalcShape } from "./calculus1.spine";
 import { CALC2_SPINE } from "./calculus2.spine";
+import type { Calc2SpecShape } from "../rules/calc2";
 
 export type MathPath = "school" | "calc1" | "calc2";
 
@@ -36,7 +37,7 @@ export interface PathTopic {
   /** The school year the topic is normally met in, per system - school topics only, so nothing reads a year off a course topic. */
   year?: { us: number; uk: number; cz: number; de: number };
   /** The practice shapes the Calculus engine may set - topics of a path judged 'calc' only, the spine's own list. */
-  shapes?: CalcShape[];
+  shapes?: (CalcShape | Calc2SpecShape)[];
 }
 
 /**

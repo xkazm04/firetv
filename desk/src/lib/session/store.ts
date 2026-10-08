@@ -22,6 +22,7 @@ import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
 import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
+import { isCalc2Spec } from "../rules/calc2";
 import { isPartLabel, type PartLabel } from "../rules/calc-word";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
@@ -173,7 +174,7 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
     for (const k of SCHOOL_SPEC_KEYS) if (o[k] !== undefined) out[k] = o[k];
     return schoolWellFormed(out).ok ? (out as SchoolSpec) : undefined;
   }
-  if (!(CALC_SHAPES as readonly unknown[]).includes(o.shape)) return undefined;
+  if (!(CALC_SHAPES as readonly unknown[]).includes(o.shape) && !isCalc2Spec({ shape: o.shape })) return undefined;
   const out: Record<string, unknown> = { shape: o.shape };
   for (const k of SPEC_KEYS) {
     const v = o[k];
