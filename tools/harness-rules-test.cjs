@@ -98,3 +98,70 @@ test('the real list in desk/package.json has 63+ unique suites, each a file, wit
 });
 
 after(() => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch {} });
+
+// ------------------------------------------------------------------ the one loader (tools/ts-load.cjs)
+const LOADER = path.join(__dirname, 'ts-load.cjs');
+const loaderRun = (script, cacheDir, extraEnv = {}) => {
+  const f = path.join(dir, `script-${Math.random().toString(36).slice(2)}.cjs`);
+  fs.writeFileSync(f, `const L=require(${JSON.stringify(LOADER)});\n${script}`);
+  const r = spawnSync(process.execPath, [f], { cwd: DESK, encoding: 'utf8',
+    env: { ...process.env, DESK_TS_CACHE_DIR: cacheDir, NODE_PATH: path.join(DESK, 'node_modules'), ...extraEnv } });
+  return { code: r.status, out: r.stdout.trim(), err: r.stderr };
+};
+const SRC = 'export const f=(a:number,b:number):number=>a+b;';
+const OPTS = '{compilerOptions:{module:1,target:9,esModuleInterop:true}}';
+const cacheCount = d => fs.existsSync(d) ? fs.readdirSync(d).filter(n => n.endsWith('.js')).length : 0;
+
+test('loader: a cache hit returns the same text as an uncached transpile', () => {
+  const c = path.join(dir, 'cache-hit');
+  const s = `const a=L.transpile(${JSON.stringify(SRC)},${OPTS}).outputText,b=L.transpile(${JSON.stringify(SRC)},${OPTS}).outputText,
+    c=L.ts().transpileModule(${JSON.stringify(SRC)},${OPTS}).outputText;console.log(JSON.stringify([a===b,b===c,a.length>10]));`;
+  const first = loaderRun(s, c), second = loaderRun(s, c);
+  assert.equal(first.out, '[true,true,true]', first.err);
+  assert.equal(second.out, '[true,true,true]', second.err);
+  assert.equal(cacheCount(c), 1);
+});
+
+test('loader: a hit never loads TypeScript, and DESK_TS_CACHE=0 writes nothing', () => {
+  const c = path.join(dir, 'cache-lazy');
+  loaderRun(`L.transpile(${JSON.stringify(SRC)},${OPTS});`, c);
+  const hit = loaderRun(`L.transpile(${JSON.stringify(SRC)},${OPTS});console.log(Object.keys(require.cache).some(k=>/typescript[\\/]lib[\\/]typescript\.js$/.test(k)));`, c);
+  assert.equal(hit.out, 'false', hit.err);
+  const off = path.join(dir, 'cache-off');
+  loaderRun(`L.transpile(${JSON.stringify(SRC)},${OPTS});`, off, { DESK_TS_CACHE: '0' });
+  assert.equal(cacheCount(off), 0);
+});
+
+test('loader: changing one character of the source changes the key', () => {
+  const c = path.join(dir, 'cache-key');
+  loaderRun(`L.transpile('export const a=1;',${OPTS});L.transpile('export const a=2;',${OPTS});`, c);
+  assert.equal(cacheCount(c), 2);
+  loaderRun(`L.transpile('export const a=1;',{compilerOptions:{module:1,target:7,esModuleInterop:true}});`, c);
+  assert.equal(cacheCount(c), 3, 'other options, other key');
+  loaderRun(`L.transpile('export const a=1;',{fileName:'x.ts',compilerOptions:{module:1,target:9,esModuleInterop:true}});`, c);
+  assert.equal(cacheCount(c), 4, 'another extension, another key');
+});
+
+test('loader: a .ts file with an angle-bracket type assertion loads', () => {
+  const f = path.join(dir, 'angle.ts');
+  fs.writeFileSync(f, 'export const num=(x:unknown)=><number>x;\nexport const id=<T,>(x:T)=>x;');
+  const r = loaderRun(`const m=require(${JSON.stringify(f)});console.log(m.num(7)+m.id(1));`, path.join(dir, 'cache-angle'));
+  assert.equal(r.out, '8', r.err);
+});
+
+test('loader: a .tsx file with JSX loads, and the @/ alias reaches desk/src', () => {
+  const f = path.join(dir, 'view.tsx');
+  fs.writeFileSync(f, 'export const el=<div className="a">hi</div>;');
+  const r = loaderRun(`const m=require(${JSON.stringify(f)});console.log(m.el.type+':'+m.el.props.children);`, path.join(dir, 'cache-tsx'));
+  assert.equal(r.out, 'div:hi', r.err);
+  const a = loaderRun(`console.log(typeof require('@/lib/rules/school.ts').readNumber);`, path.join(dir, 'cache-tsx'));
+  assert.equal(a.out, 'function', a.err);
+});
+
+test('loader: an unwritable cache folder still loads the module', () => {
+  const blocker = path.join(dir, 'a-file'); fs.writeFileSync(blocker, 'x');
+  const f = path.join(dir, 'plain.ts'); fs.writeFileSync(f, 'export const two:number=2;');
+  const r = loaderRun(`console.log(require(${JSON.stringify(f)}).two);`, path.join(blocker, 'sub'));
+  assert.equal(r.out, '2', r.err);
+  assert.equal(r.code, 0);
+});
