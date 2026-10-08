@@ -12,7 +12,7 @@ analyze <trace.txt.gz...> <run dir> <out>: perf-p11-trace.py's split of every fr
   GC sections of HeapTaskDaemon, by name), the app's link threads' CPU inside it, sleep in buffer dequeue/queue, and a
   NetworkStats poll. Its cause by the trace (the largest excess over the trace's own medians of running, waiting =
   preempted + wakeup latency, and sleep) is set beside the profile's cause (perf-p17.py) for the same row."""
-import argparse, bisect, collections, datetime, gzip, json, re, statistics, subprocess, sys, time, urllib.request, zlib
+import argparse, bisect, collections, datetime, gzip, json, math, re, statistics, subprocess, sys, time, urllib.request, zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -328,8 +328,46 @@ def analyze(trace):
                    'allStarts': dist(starts_d), 'startsEndingIntervalsOver16_7': dist([b_ for a_, b_ in over]),
                    'meanChangeAcrossIntervalsOver16_7Ms': delta, 'intervalsOver16_7WithBothStarts': len(over),
                    'limit': '[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback.'}
+    # The platform's own clock: SF's VSYNC-app tick intervals (the timer that wakes every Choreographer), and SF's own
+    # missed-frame counters (non-zero values of PrevFrameMissed / PrevHwcFrameMissed / PrevGpuFrameMissed).
+    def pq(xs, p_):
+        xs = sorted(xs)
+        return xs[max(0, math.ceil(len(xs) * p_) - 1)] if xs else None
+    tick_iv = [(b_ - a_) * 1000 for a_, b_ in zip(vs, vs[1:])]
+    ticks = {'intervals': len(tick_iv), 'p5Ms': round(pq(tick_iv, .05), 4), 'p50Ms': round(pq(tick_iv, .5), 4),
+             'p95Ms': round(pq(tick_iv, .95), 4), 'maxMs': round(max(tick_iv), 4),
+             'over16_7': sum(1 for x in tick_iv if x > 16.7), 'over16_7Share': round(sum(1 for x in tick_iv if x > 16.7) / len(tick_iv), 4)} if tick_iv else None
+    sf_missed = {name: sum(1 for t, tid, v in counters.get(name, []) if v not in ('0', '')) for name in
+                 ('PrevFrameMissed', 'PrevHwcFrameMissed', 'PrevGpuFrameMissed')} | {'compositions': len(counters.get('PrevFrameMissed', []))}
+    # The app's main thread from its VSYNC-app tick to the Choreographer callback that asks for the frame: tick -> wakeup
+    # -> first run -> callback; and who held the CPUs while it waited over 0.5 ms to run.
+    main_tid = next((tid for t, tid, v in counters.get('DR.vsyncLagUs', [])), None)
+    mw = sorted(t for t, w, name in wakeups if w == main_tid)
+    mi = sorted(t for t, kind, detail, cpu in events if kind == 'in' and detail == main_tid)
+    parts_, held = [], collections.Counter()
+    for cb in cbs:
+        i = bisect.bisect_right(vs, cb) - 1
+        if i < 0:
+            continue
+        v = vs[i]
+        w = mw[bisect.bisect_left(mw, v)] if bisect.bisect_left(mw, v) < len(mw) else None
+        if w is None or w > cb:
+            continue
+        j = bisect.bisect_left(mi, w)
+        if j >= len(mi) or mi[j] > cb:
+            continue
+        r = mi[j]
+        parts_.append(((w - v) * 1000, (r - w) * 1000, (cb - r) * 1000, (cb - v) * 1000))
+        if r - w > .0005:
+            held.update(occupancy(w, r))
+    main_cb = {name: [round(pq([x[n] for x in parts_], .5), 3), round(pq([x[n] for x in parts_], .95), 3)]
+               for n, name in enumerate(('tickToWakeMs', 'wakeToRunMs', 'runToCallbackMs', 'tickToCallbackMs'))} if parts_ else None
+    if main_cb:
+        main_cb['callbacks'] = len(parts_)
+        main_cb['waitsOverHalfMs'] = sum(1 for x in parts_ if x[1] > .5)
+        main_cb['cpuHeldDuringThoseWaitsMs'] = {k: round(v, 1) for k, v in held.most_common(8)}
     span = begins[-1] - begins[0]
-    return {'startDelay': start_delay,'trace': str(trace.parent.name), 'glThread': gl_tid, 'frames': len(frames), 'framesOnRows': sum(1 for f in frames if f[1] in row_of),
+    return {'vsyncAppTicks': ticks, 'sfMissedCounters': sf_missed, 'mainThreadCallback': main_cb, 'startDelay': start_delay,'trace': str(trace.parent.name), 'glThread': gl_tid, 'frames': len(frames), 'framesOnRows': sum(1 for f in frames if f[1] in row_of),
             'spanSeconds': round(span, 3), 'offsetSeconds': round(off, 6), 'medianSplitMs': {kk: round(v, 3) for kk, v in med.items()},
             'intervalsOver': {f'{x:g}': sum(1 for f0, f1 in frames if (f1 - f0) * 1000 > x) for x in (16.7, 20, 33)},
             'concurrentGcs': len(gcs), 'gcNames': dict(collections.Counter(lab for x0, x1, lab in gcs)),
