@@ -13,10 +13,7 @@
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
-let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
-const resolve=Module._resolveFilename;
-Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
-require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+const {transpile,options}=require('./ts-load.cjs');
 const data=path.join(os.tmpdir(),`desk-week-rules-${process.pid}-${Date.now()}`);process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
 
 const src=(f)=>path.join(root,'src',f);
@@ -254,7 +251,7 @@ test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s li
  assert.ok(phone.indexOf('data-role="phone-recap"')<phone.indexOf('<WeekPage'),'under tonight\'s recap');
  assert.match(phone,/WEEK_EMPTY/,'the empty week is the rule\'s own two words');
  assert.doesNotMatch(phone,/\.digest\b/,'the phone never reads a digest');
- const out=ts.transpileModule(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
+ const out=transpile(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),{compilerOptions:{module:options.compilerOptions.module,target:options.compilerOptions.target}}).outputText;
  assert.doesNotMatch(out,/require\([^)]*(session\/(store|learners)|engines\/|desk\/)/,'pure: no store, learners file, engine or pipeline at run time');
  assert.doesNotMatch(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),/—/,'no em dash in the page\'s copy');
 });
