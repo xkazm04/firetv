@@ -38,20 +38,19 @@ object HandCutFont {
         val texture=Texture(pixmap);pixmap.dispose();texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
         return BitmapFont(data,TextureRegion(texture),false).apply {setOwnsTexture(true);setUseIntegerPositions(false);data.setScale(size/42f)}
     }
-    /** P16: the same glyphs on another, unmanaged page: each 34x46 glyph cell of [create]'s page is copied unchanged into the page's
-     *  rows from [top] down, inside a [PAD]-texel transparent border, so linear filtering reads the same texels it reads on the own
-     *  page (whose neighbours are transparent too). Advances and scale are [create]'s. Null when the rows do not fit. */
+    /** P16: the same glyphs on another, unmanaged page at least [create]'s 1024 texels wide. Each 34x46 glyph cell of [create]'s page
+     *  is copied unchanged into the page's rows from [top] down, in the same column (so its u coordinates are bit-identical) and
+     *  inside a [PAD]-row transparent border (the 64-texel columns already leave 30 transparent texels beside each glyph), so
+     *  linear filtering reads the texels it reads on the own page. Advances and scale are [create]'s. Null when it does not fit. */
     fun createOn(size: Int,page: Texture,top: Int): BitmapFont? {
-        val cellWidth=GLYPH_WIDTH+2*PAD;val cellHeight=GLYPH_HEIGHT+2*PAD;val perRow=page.width/cellWidth
-        if(perRow<=0)return null
-        val lines=(alphabet.length+perRow-1)/perRow
-        if(top<0 || top+lines*cellHeight>page.height)return null
-        val source=paint();val block=Pixmap(perRow*cellWidth,lines*cellHeight,Pixmap.Format.RGBA8888)
+        val pitch=GLYPH_HEIGHT+2*PAD;val lines=(alphabet.length+15)/16
+        if(page.width<1024 || top<0 || top+lines*pitch>page.height)return null
+        val source=paint();val block=Pixmap(1024,lines*pitch,Pixmap.Format.RGBA8888)
         block.blending=Pixmap.Blending.None
         val data=metrics()
         for((index,ch) in alphabet.withIndex()) {
-            val x=index%perRow*cellWidth+PAD;val y=index/perRow*cellHeight+PAD
-            block.drawPixmap(source,index%16*64,index/16*64,GLYPH_WIDTH,GLYPH_HEIGHT,x,y,GLYPH_WIDTH,GLYPH_HEIGHT)
+            val x=index%16*64;val y=index/16*pitch+PAD
+            block.drawPixmap(source,x,index/16*64,GLYPH_WIDTH,GLYPH_HEIGHT,x,y,GLYPH_WIDTH,GLYPH_HEIGHT)
             data.setGlyph(ch.code,glyph(ch,x,top+y))
         }
         page.draw(block,0,top);block.dispose();source.dispose()

@@ -53,11 +53,11 @@ class FontPageTest {
         assertEquals(6*56,RuntimeFonts.usedRows(bodyFont(1024,512)))
     }
     @Test fun titlesRefuseAPageTheyDoNotFit() {
-        // Two rows of 26 cells (34x46 glyphs inside a 2-texel border) need 100 rows below the body glyphs.
+        // Three rows of 16 cells (the old page's 64-texel columns, 46-row glyphs inside a 2-row border) need 150 rows.
         val page=bodyFont(1024,512).region.texture
-        assertNull(HandCutFont.createOn(HudTheme.TITLE,page,513-100))
+        assertNull(HandCutFont.createOn(HudTheme.TITLE,page,513-150))
         assertNull(HandCutFont.createOn(HudTheme.TITLE,page,-1))
-        assertNull(HandCutFont.createOn(HudTheme.TITLE,Texture(SizeOnly(32,512)),0))
+        assertNull(HandCutFont.createOn(HudTheme.TITLE,Texture(SizeOnly(512,512)),0))
     }
 
     /** RuntimeFonts.atlas's metrics for size 20 (cell 56 px) over a texture that only records its size. */
