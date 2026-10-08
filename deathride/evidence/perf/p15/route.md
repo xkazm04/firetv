@@ -53,3 +53,8 @@ latency `new`. After each force-stop, both mixers were back in standby.
    the available output devices.** Fire OS exposes `Speaker` (id 2, `AUDIO_DEVICE_OUT_SPEAKER`) and a `Default Out`
    stub, and sends everything through `primary_out` (the MS12 primary stream, `AudioOut_D`). An app cannot choose an
    output device that the policy has not attached, so no request reaches the MMAP port.
+
+`route-ports.txt` lists every output mix port with the devices it serves. Only `primary_out` serves `Speaker`. Every
+DIRECT port (`mmap_no_irq_out`, the HDMI passthrough, tunnel and PCM-direct ports, and `avls_out`) serves `HDMI-Out`
+or `AVLS-Out`, and neither device is attached. So on this Stick, as configured, every app PCM stream lands on
+`primary_out`'s mixer thread, `AudioOut_D`.

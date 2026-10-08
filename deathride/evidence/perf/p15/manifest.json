@@ -1,0 +1,625 @@
+{
+ "generatedUtc": "2026-10-08T14:35:51.648218+00:00",
+ "committedBytes": 30408,
+ "committed": [
+  {
+   "path": "evidence/perf/p15/device-state.json",
+   "bytes": 1383,
+   "sha256": "70c225797626d2b16a20028d8ecb8850402e09daa03bfdf825c47a397fac01ea"
+  },
+  {
+   "path": "evidence/perf/p15/dumpsys-baseline-aaudio.txt",
+   "bytes": 411,
+   "sha256": "b29cb187fb8a4468334c8f720e9fd4784a2a9f28428eeecd177dee2a364f0eb1"
+  },
+  {
+   "path": "evidence/perf/p15/dumpsys-race-silentMmap-aaudio-60.txt",
+   "bytes": 482,
+   "sha256": "6cff141dca92706401434d8074ee905d0053e37f436d40057cfb6856fdcb7ecb"
+  },
+  {
+   "path": "evidence/perf/p15/dumpsys-silentMmap-lobby-aaudio.txt",
+   "bytes": 481,
+   "sha256": "4218675b0b20555a6b200834ba6031e055bd88caf7506490a820d61d8f38840f"
+  },
+  {
+   "path": "evidence/perf/p15/dumpsys-silentMmapShared-lobby-aaudio.txt",
+   "bytes": 482,
+   "sha256": "a03899257f9779d9954d02869e0a2dcade42ae1131592dfed54bc79f1a1beaf0"
+  },
+  {
+   "path": "evidence/perf/p15/release-proof.json",
+   "bytes": 1313,
+   "sha256": "76d77ca2d2a7e84074ea2381dc72ef62cec5dd915a84c56e8cfb277032ca448f"
+  },
+  {
+   "path": "evidence/perf/p15/route-policy.txt",
+   "bytes": 2868,
+   "sha256": "5d59b19878258768de7ea40cf5ba49c5665cd91deef6fcbf1b15a79fa477c06f"
+  },
+  {
+   "path": "evidence/perf/p15/route-ports.txt",
+   "bytes": 1936,
+   "sha256": "d8b6d5652876809365d8d790cbb6a959b8383af08af9ff47adfd3d2f0334e1d2"
+  },
+  {
+   "path": "evidence/perf/p15/route.json",
+   "bytes": 15141,
+   "sha256": "131d01975fab4467b71f89f395f2a1c0cd875b609c6986d5700eac3db8fad1bb"
+  },
+  {
+   "path": "evidence/perf/p15/route.md",
+   "bytes": 4696,
+   "sha256": "b234daeb02fdcb427a63dfefeae6606dd2f2dee3d2279337cad4a42cdc988285"
+  },
+  {
+   "path": "evidence/perf/p15/tests.json",
+   "bytes": 1215,
+   "sha256": "4b28c0a94daed2f9b683969b66d2f8f2e7a4f9d8d6ba66f294bdb5a82c20c5a0"
+  }
+ ],
+ "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence (outside git)",
+ "rawBytes": 113343580,
+ "raw": [
+  {
+   "path": "p15/arms.apk",
+   "bytes": 41872517,
+   "sha256": "d156d758c3c4dd07b098dbd670bbd4b6d6063069658185a5dd71b8c1222a832a"
+  },
+  {
+   "path": "p15/device-state-end.txt",
+   "bytes": 898,
+   "sha256": "2ca4184bcf13eddeb0cd705b552a87071baf754dab7faf774f4eca421978ed3e"
+  },
+  {
+   "path": "p15/device-state-start.txt",
+   "bytes": 554,
+   "sha256": "3d0772ec1508a19ef8a43ceda76f9469694659ad7cb40174e763d5b66fa46290"
+  },
+  {
+   "path": "p15/gate-final-commit.txt",
+   "bytes": 41,
+   "sha256": "3ca7402fa8536b4620764040db0f10c94222b1e6622d9025d1ed4b536bc70554"
+  },
+  {
+   "path": "p15/gate-final.log",
+   "bytes": 36695,
+   "sha256": "414f7fc92b0e6ea09e724e7098a594fe0f5d5f9b3a32751f032cc0c1752c64f7"
+  },
+  {
+   "path": "p15/race-silentMmap/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p15/race-silentMmap/device-counters-end.txt",
+   "bytes": 87881,
+   "sha256": "fa17d9928bba248b12947e3d18caac78023974c03bb17f83225e08c097cdccef"
+  },
+  {
+   "path": "p15/race-silentMmap/device-counters-start.txt",
+   "bytes": 86268,
+   "sha256": "d4a0b07a0ccd09d03f9817d26c3a0ae3d563093d98a7eed25c1c05015e30449a"
+  },
+  {
+   "path": "p15/race-silentMmap/host-cpu-end.json",
+   "bytes": 2548,
+   "sha256": "d5c65a794a8b58b19207d1b562d6412481c61f5a9b2b1532254c4ce1038d88a8"
+  },
+  {
+   "path": "p15/race-silentMmap/host-cpu-start.json",
+   "bytes": 2536,
+   "sha256": "81826aeb32e4f4ebf030ec87f9e4280e21fb4e91ec9b253158e29c5eb7fb3652"
+  },
+  {
+   "path": "p15/race-silentMmap/installed.json",
+   "bytes": 407,
+   "sha256": "773c9551e1313334565c2c1662b57703ac8b8ace98245f369c46d4c83d42af84"
+  },
+  {
+   "path": "p15/race-silentMmap/logcat.txt",
+   "bytes": 143474,
+   "sha256": "2e13af76af04b7d62408a56f1689d489a2e01cdb6562359de3a225ee0ffcb99e"
+  },
+  {
+   "path": "p15/race-silentMmap/probe.log",
+   "bytes": 1101,
+   "sha256": "7761f53566844a50dac7e133c693d816e48e66188a4de532f51d36d4c581be59"
+  },
+  {
+   "path": "p15/race-silentMmap/raw.json",
+   "bytes": 16916287,
+   "sha256": "768b3ffc9858b2bb33bd48eb75504925fee7a77b1d6891ed1350c051c279361a"
+  },
+  {
+   "path": "p15/race-silentMmap/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "0018abcc54e0e56ada6f9d261302d8a2c3d78a47f481c4a71b1cbbc65585ad14"
+  },
+  {
+   "path": "p15/race-silentMmap/startup-logcat.txt",
+   "bytes": 3381,
+   "sha256": "7bbffa4ca9d8c65a7c0d434ce3bc3269a6c1ce7b3747f60a0efb32795e2336d5"
+  },
+  {
+   "path": "p15/race-silentMmap/thread-priorities-before.txt",
+   "bytes": 1421,
+   "sha256": "ec43d24b9298bfe8253c858d3516500e2df19026be4b86e39314c26cf61bae73"
+  },
+  {
+   "path": "p15/race-silentMmap-a/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p15/race-silentMmap-a/device-counters-end.txt",
+   "bytes": 87871,
+   "sha256": "03596cf7def5ac794d61f03160b6577649492e6e7df7e51db1e7813b0db2d5ed"
+  },
+  {
+   "path": "p15/race-silentMmap-a/device-counters-start.txt",
+   "bytes": 86266,
+   "sha256": "85670bcea27bac43fca4c0896db54eb050e0c5f38ed87a8ce5c283ea9fec245d"
+  },
+  {
+   "path": "p15/race-silentMmap-a/host-cpu-end.json",
+   "bytes": 2560,
+   "sha256": "d9af326cf58041448394a593e25809d95cbab273a4a63774108090e253bb7a5f"
+  },
+  {
+   "path": "p15/race-silentMmap-a/host-cpu-start.json",
+   "bytes": 2558,
+   "sha256": "26b105a02e0adbed34854886b9c73a6e663707567ee0becb3089b20e6b6783e6"
+  },
+  {
+   "path": "p15/race-silentMmap-a/installed.json",
+   "bytes": 407,
+   "sha256": "773c9551e1313334565c2c1662b57703ac8b8ace98245f369c46d4c83d42af84"
+  },
+  {
+   "path": "p15/race-silentMmap-a/logcat.txt",
+   "bytes": 144586,
+   "sha256": "8fba1de887513fbff2ec15227c128e04e2b66887a972ae23187fe91736b385af"
+  },
+  {
+   "path": "p15/race-silentMmap-a/probe.log",
+   "bytes": 1101,
+   "sha256": "c8edea9e60b851a1d6abf3e7551c2068678c9985289b73c842b3a7ec2c03055f"
+  },
+  {
+   "path": "p15/race-silentMmap-a/raw.json",
+   "bytes": 17137619,
+   "sha256": "ebd46f8c89aa511b3c07d0a7df1aba422d59b150f670cc157bba0b1281aa348c"
+  },
+  {
+   "path": "p15/race-silentMmap-a/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "74dae82de156e4200fbb0f2c05392946da6bcb29dcbef5750208485b71188bca"
+  },
+  {
+   "path": "p15/race-silentMmap-a/startup-logcat.txt",
+   "bytes": 3379,
+   "sha256": "90ef4ad50e1707b73735ea86976fbfe1b6527cfb0afa7e8ac04feb039f730640"
+  },
+  {
+   "path": "p15/race-silentMmap-a/thread-priorities-before.txt",
+   "bytes": 1421,
+   "sha256": "131b4d9d4c87de91ac68adfcdfe9dbfe7ed950dc2fe3b557b4032bcae8b0a23c"
+  },
+  {
+   "path": "p15/race-silentMmap-a-device.out",
+   "bytes": 478,
+   "sha256": "d7fb7e8db679a0ec6e009b593469e6c8403f2d59191486eb9c5f59f5272facef"
+  },
+  {
+   "path": "p15/race-silentMmap-device.out",
+   "bytes": 478,
+   "sha256": "d7fb7e8db679a0ec6e009b593469e6c8403f2d59191486eb9c5f59f5272facef"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/device-counters-end.txt",
+   "bytes": 86270,
+   "sha256": "ea834c9fd49ce34a9d23b0e240ab145634fc5c17afaf0a8d898e9f4c4f2079a5"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/device-counters-start.txt",
+   "bytes": 86274,
+   "sha256": "367d1cbaa26b2abdaf74912419f729e5c20bc2d04c017e9b27d2296a341f76b7"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/host-cpu-end.json",
+   "bytes": 2555,
+   "sha256": "4e629044f53dc491c3fa5d37140dcaade6a318e761d012ac39fbf1ebe5410e37"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/host-cpu-start.json",
+   "bytes": 2552,
+   "sha256": "4c058d60452ad7ba2caa273960eeb71e4d2b65a39c8494561c7f4ae8cde82784"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/installed.json",
+   "bytes": 407,
+   "sha256": "773c9551e1313334565c2c1662b57703ac8b8ace98245f369c46d4c83d42af84"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/logcat.txt",
+   "bytes": 413,
+   "sha256": "942a0abb710b50c1f42ba37f505a44dc93ee550e47268dca380385e217070bae"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/probe.log",
+   "bytes": 1099,
+   "sha256": "9b9b6d9d364d070bc61ac8bcdc998eacd9f272ac020affcb2969c6cd3a045d51"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "4e88eb60cf857cd2f87b20977f7690c3ae4b597f91565cfc8dd079cf564a916f"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/startup-logcat.txt",
+   "bytes": 3294,
+   "sha256": "2e9ae28e6a5284bfa1fb520044aab74b5a984d928f3bc94192fabd51e64421ba"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs/thread-priorities-before.txt",
+   "bytes": 1421,
+   "sha256": "05eeecd8e12cdfb95771a4c5636ef56ea354ade3a98c88b4770218fb78594d5b"
+  },
+  {
+   "path": "p15/race-silentMmap-void-noWs-device.out",
+   "bytes": 478,
+   "sha256": "d7fb7e8db679a0ec6e009b593469e6c8403f2d59191486eb9c5f59f5272facef"
+  },
+  {
+   "path": "p15/release-build.log",
+   "bytes": 5448,
+   "sha256": "5487cbcae20b0d411fb9bf95fcd39df944f272e4de519d9c3ad0c5f363e8615c"
+  },
+  {
+   "path": "p15/release-silentMmap-property.apk",
+   "bytes": 35218377,
+   "sha256": "6e4c6b4722b23b1890a4e6f9dfe05d42b2e7225a83a46e638e1ea9bb2b4aed36"
+  },
+  {
+   "path": "p15/restore-start.txt",
+   "bytes": 155,
+   "sha256": "f1b88e67539271bf0fa95e5549744a6d678d156efac55ef479b943741fbee8de"
+  },
+  {
+   "path": "p15/route/baseline-aaudio.txt",
+   "bytes": 411,
+   "sha256": "b29cb187fb8a4468334c8f720e9fd4784a2a9f28428eeecd177dee2a364f0eb1"
+  },
+  {
+   "path": "p15/route/baseline-audio-flinger.txt",
+   "bytes": 29282,
+   "sha256": "08c1d038c2ca7790ba65045e395292b41dc8955b8b048d39b104fb9ec4fa6d22"
+  },
+  {
+   "path": "p15/route/baseline-audio-policy.txt",
+   "bytes": 55116,
+   "sha256": "07054414221062115a15dfa6499ca2784e7b8c81b5ca3e22b524d4b35e739b20"
+  },
+  {
+   "path": "p15/route/baseline-props.txt",
+   "bytes": 138,
+   "sha256": "6d4e37de480609766a0d598da1ca63ae8680e498916a15aa7267a0439e6a89c6"
+  },
+  {
+   "path": "p15/route/baseline-threads-1.txt",
+   "bytes": 2831,
+   "sha256": "ee2724ae0e8836a49f5888394da93773bb34208d7e48c3b62e642e1f74534aef"
+  },
+  {
+   "path": "p15/route/baseline-threads-2.txt",
+   "bytes": 2831,
+   "sha256": "0bebec4c8c35a8db6e38254f95190aa221e45339bd732cb303f319284481e416"
+  },
+  {
+   "path": "p15/route/baseline-threads.json",
+   "bytes": 60,
+   "sha256": "94734d813049eea3e076ba6404fdfc450b615741b1a566fc84079d72e9e31827"
+  },
+  {
+   "path": "p15/route/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-aaudio-30.txt",
+   "bytes": 482,
+   "sha256": "83abc6c4fcf6545fc75cc15c11a818a95e8b4d76a31d8cfa216c1f5b7bf35ca3"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-aaudio-60.txt",
+   "bytes": 482,
+   "sha256": "83abc6c4fcf6545fc75cc15c11a818a95e8b4d76a31d8cfa216c1f5b7bf35ca3"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-audio-flinger-30.txt",
+   "bytes": 29549,
+   "sha256": "972c08707a24c453483a2b07b434c21bde790468ae47f43656d25b763bd7a1ff"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-audio-flinger-60.txt",
+   "bytes": 29549,
+   "sha256": "318472a1d228e06d5dcf89bc12343900710f1209070d9462c272e640da172535"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-stats-30.json",
+   "bytes": 76683,
+   "sha256": "db592cd07df1fec8eef1c35eace0a604136968baf71d75c6cc2d4e0da239d4e7"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-stats-60.json",
+   "bytes": 77315,
+   "sha256": "3b7fe304929f745e32907d8be6443b27d84ed106c67d493cd4a3b2cca93f5148"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-threads-1.txt",
+   "bytes": 5593,
+   "sha256": "85fbf978df5c01c269abc5dc9834e6e8da1e13caabe6ab570ebd451f4ebad9a5"
+  },
+  {
+   "path": "p15/route/race-silentMmap-a-threads-2.txt",
+   "bytes": 6275,
+   "sha256": "29b08215b00a1f1e7b466321ec08f46a44ed5172082d8ec4ba9a57773665f37c"
+  },
+  {
+   "path": "p15/route/race-silentMmap-aaudio-30.txt",
+   "bytes": 482,
+   "sha256": "6cff141dca92706401434d8074ee905d0053e37f436d40057cfb6856fdcb7ecb"
+  },
+  {
+   "path": "p15/route/race-silentMmap-aaudio-60.txt",
+   "bytes": 482,
+   "sha256": "6cff141dca92706401434d8074ee905d0053e37f436d40057cfb6856fdcb7ecb"
+  },
+  {
+   "path": "p15/route/race-silentMmap-audio-flinger-30.txt",
+   "bytes": 29547,
+   "sha256": "70cdbd59c925a3223c5ed611778e0cc425452f50d67b088d6663dc1ebb46aded"
+  },
+  {
+   "path": "p15/route/race-silentMmap-audio-flinger-60.txt",
+   "bytes": 29547,
+   "sha256": "02b1901e0db64f99989e9925ec87e1860733bb924b099885c7023a28a9077866"
+  },
+  {
+   "path": "p15/route/race-silentMmap-stats-30.json",
+   "bytes": 76734,
+   "sha256": "969c76262ac1269cbc55b8966c88f7410ea8e1310271e698bbae0bf313674563"
+  },
+  {
+   "path": "p15/route/race-silentMmap-stats-60.json",
+   "bytes": 77213,
+   "sha256": "b63cfb6df4fbd241dc4c1a03fecea6b912439eac6c7e48fe91ccf365e075e36a"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-30-1.txt",
+   "bytes": 5598,
+   "sha256": "4bf1f58b380ce653c6917eeb641c15b95ff1066cfdad7f3ca038270c99aa3ce6"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-30-2.txt",
+   "bytes": 6056,
+   "sha256": "24a0a2bfe39794337d331d7d51305b0ec44f4236ed8086a7f350c420cf57bb18"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-30.json",
+   "bytes": 2696,
+   "sha256": "bece69f81ac53e86cea3e08ff703b273bdd8504cb4c187ff3cc9bf3660c62f44"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-60-1.txt",
+   "bytes": 6012,
+   "sha256": "29dc70f0455951be3b5719067466f2105880dbd821a793e346e85a5ccf4a3ff1"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-60-2.txt",
+   "bytes": 6013,
+   "sha256": "fc419f11e45bad5d344b801c9be6a2c5529ecfae447cf81b7d15361479479f3c"
+  },
+  {
+   "path": "p15/route/race-silentMmap-threads-60.json",
+   "bytes": 3169,
+   "sha256": "fb2414997a6dbcb81b8a8c219c7f52edd0eb7313db75342368dcb1ce5170ff97"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-aaudio-30.txt",
+   "bytes": 482,
+   "sha256": "6889732170458e1c30d1f1e70af6bef0ba63de7daa7570183dd1d9feb422ef8b"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-aaudio-60.txt",
+   "bytes": 482,
+   "sha256": "6889732170458e1c30d1f1e70af6bef0ba63de7daa7570183dd1d9feb422ef8b"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-audio-flinger-30.txt",
+   "bytes": 29551,
+   "sha256": "e70d80da5804277f1509756325e06cf68214ba93f6077c926c1b43005b7f5385"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-audio-flinger-60.txt",
+   "bytes": 29551,
+   "sha256": "d12adc16b1ba353d3ba7b0839f561e365a01f2b5756e59c120ee1560e15a1b89"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-stats-30.json",
+   "bytes": 76707,
+   "sha256": "4e74fc4f022962856fc49b0a705f01c20a3bed28dfbe65a72c86884fe935c913"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-stats-60.json",
+   "bytes": 76735,
+   "sha256": "df3164c55889496e1569645035820f0636b755eccc2c18dd9e3e123fbb68be86"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-threads-1.txt",
+   "bytes": 5594,
+   "sha256": "2604d6c677abcab5f5b976b76479bc04d0d3ac840422fa887d2e84eaf6486a3d"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-threads-2.txt",
+   "bytes": 5594,
+   "sha256": "9f668d291643f8aa0ff72c94fe0319e8a57f4f2b6aec117aa56468ac71a91789"
+  },
+  {
+   "path": "p15/route/race-silentMmap-void-noWs-threads.json",
+   "bytes": 828,
+   "sha256": "43619a992943b926cc72ca133a532cbb50271c429dd04250fd9ddf6b530cd6a9"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-aaudio.txt",
+   "bytes": 481,
+   "sha256": "4218675b0b20555a6b200834ba6031e055bd88caf7506490a820d61d8f38840f"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-after-stop-audio-flinger.txt",
+   "bytes": 29282,
+   "sha256": "f660714f01edd8110a01f4a699fd3e39b79cd4938a37540cecad23fa2fee71db"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-audio-flinger.txt",
+   "bytes": 29550,
+   "sha256": "5f5f4eefc38a1875e3bdd073d04505c39ed9e1536ededdbf391ede495ab2c72e"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-audio-policy.txt",
+   "bytes": 56052,
+   "sha256": "af3b652a70367ae2dbec28de79d62b00f359c62e87be1d92eb583c6449cf5d78"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-full-logcat.txt",
+   "bytes": 223005,
+   "sha256": "fa2a5961b875519e303cd8830a6a14a683dbd8b2e2cb80fb9e36d33e2f47d278"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-installed.txt",
+   "bytes": 157,
+   "sha256": "ae59eec11ed98a7c07ec55619741647d89afbac1c8df0ae50dfed56efebaca68"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-logcat.txt",
+   "bytes": 7731,
+   "sha256": "3db358c07f8446bf8b92121ec7b2d594a81205bc3eedd74b3bedb0c5cb2c15e9"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-start.txt",
+   "bytes": 88,
+   "sha256": "10a5d903ffd41a3cb81639a2229b0cb57fac55b3175bf3357e94038a36d5536d"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-threads-1.txt",
+   "bytes": 5234,
+   "sha256": "9155cf141c1ed7289dba94c7075889382eeb074a531ad29ed71e655ff7241c23"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-threads-2.txt",
+   "bytes": 5235,
+   "sha256": "a52be48388fc18ff9475b7fbbf5eab46622454997ead6693530df5e490915587"
+  },
+  {
+   "path": "p15/route/silentMmap-lobby-threads.json",
+   "bytes": 971,
+   "sha256": "c221e1cb51d125910b83ac0068668482343cbe2d3f366577f9bc6b95e0810a5d"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-aaudio.txt",
+   "bytes": 482,
+   "sha256": "a03899257f9779d9954d02869e0a2dcade42ae1131592dfed54bc79f1a1beaf0"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-after-stop-audio-flinger.txt",
+   "bytes": 29282,
+   "sha256": "591577fc5131e7d968aed2fc337747803c69b980f413152f0167edf8ac1523cb"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-audio-flinger.txt",
+   "bytes": 29551,
+   "sha256": "263d386c52aee428e55c12cab749e49b8adff0a0e9aaa099a1fb4a897ca8e099"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-audio-policy.txt",
+   "bytes": 56052,
+   "sha256": "00ef4694170e0b99f39013343a20fa27ab403cd56cb6f051b5590ebd71c01b34"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-installed.txt",
+   "bytes": 157,
+   "sha256": "ae59eec11ed98a7c07ec55619741647d89afbac1c8df0ae50dfed56efebaca68"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-logcat.txt",
+   "bytes": 8748,
+   "sha256": "1491fff780e5d339dc4d32481898b224240ccfef3b51f9856511d9fd02ffdc88"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-policy-lines.txt",
+   "bytes": 106,
+   "sha256": "50dbb3407d361d59f71655e4188ccb21aca491cbdf52a0cac480d110e02e1082"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-start.txt",
+   "bytes": 88,
+   "sha256": "10a5d903ffd41a3cb81639a2229b0cb57fac55b3175bf3357e94038a36d5536d"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-threads-1.txt",
+   "bytes": 5361,
+   "sha256": "718556afd6c46a26ec3ce1a0a33b676db14595895b8965bfdbbefee81d2b5a72"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-threads-2.txt",
+   "bytes": 5368,
+   "sha256": "98db9cb2c594d8c4971426d004c54e2f7dbb835ccb755b3b997d32d2a5335273"
+  },
+  {
+   "path": "p15/route/silentMmapShared-lobby-threads.json",
+   "bytes": 827,
+   "sha256": "48f1bc7b6758c5b05fa371355d2c202301835982df8fd424a732bccda907df3a"
+  },
+  {
+   "path": "p15/scripts/collect.py",
+   "bytes": 5840,
+   "sha256": "754f099e06d19a2dfee86f074beca4138731b73b4fb54fcbcf5154ef3b3ba5bc"
+  },
+  {
+   "path": "p15/scripts/manifest.py",
+   "bytes": 1804,
+   "sha256": "64257ce4b065fd70dcbbee4114609ee2b235e8e525d7db79f1cbc38cbc487256"
+  },
+  {
+   "path": "p15/scripts/race-route.sh",
+   "bytes": 1443,
+   "sha256": "dbe772ffd60878240560cc02398b91a1aa07963b41ce1901003d0a7016fbd54f"
+  },
+  {
+   "path": "p15/scripts/route.sh",
+   "bytes": 2348,
+   "sha256": "114d6416587bd3f951fa480b2a951f001f620a655326f22c10872703ca05caa2"
+  },
+  {
+   "path": "p15/scripts/settle.ps1",
+   "bytes": 757,
+   "sha256": "b81ca05e25fd1303f5355be8e0a5d9abeee382edd1381c0264aee001cb1f180f"
+  },
+  {
+   "path": "p15/scripts/threads.py",
+   "bytes": 978,
+   "sha256": "937fb71d6b719a9d9a76f36cf8f7c40bf20300ac157c0c5a25d8b7591f643aac"
+  }
+ ],
+ "apks": {
+  "p15/arms.apk": "steps 1-2: perf debug APK from 43e547e3 with -PsilentMmap=true (d156d758...)",
+  "p15/release-silentMmap-property.apk": "release build with -PsilentMmap=true -PnoPngReencode=true, perf identity: the no-library proof (6e4c6b47...)"
+ },
+ "rule": "Operator ruling 2026-10-07: summaries in git, raw files outside, bound here by SHA-256. No committed file over 512 KiB; no .gz, trace, hprof, APK or logcat in git."
+}
