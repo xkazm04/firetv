@@ -30,3 +30,24 @@ test('kept: the corpus limits at infinity read exactly as they did at the base',
  ];
  for(const [s,sg,want] of kept)assert.deepEqual(E.limitInf(c(s),sg),want,`${s} at ${sg}inf`);
 });
+
+const C=require(path.join(root,'src/lib/rules/calc.ts'));
+const {checkChain}=require(path.join(root,'src/lib/rules/chain.ts'));
+const lim=(f,at)=>({shape:'limit',f,at});
+
+test('refused: an aliased limit at infinity is not well formed, not marked, and limitInf says dne',()=>{
+ const specs=[lim('cos(pi*x)','inf'),lim('sin(pi*x)+1','inf'),lim('cos(2*pi*x)','inf'),lim('cos(pi*x)','-inf')];
+ for(const sp of specs){
+  const w=C.wellFormed(sp);
+  assert.equal(w.ok,false,`${sp.f} at ${sp.at} is refused`);
+  assert.equal(w.why,'The limit does not exist.',`${sp.f} at ${sp.at}`);
+  assert.equal(C.checkAnswer(sp,'1').verdict,'unsure',`${sp.f} at ${sp.at}: 1 is not marked`);
+  assert.deepEqual(E.limitInf(c(sp.f),sp.at==='inf'?1:-1),{kind:'dne'},`${sp.f} at ${sp.at}`);
+ }
+});
+
+test('chain: a working line claiming cos(pi*x) -> 1 at inf is not ticked; dne is',()=>{
+ const L=(t,x,o)=>({tag:'lim',text:t,x,...o});
+ assert.deepEqual(checkChain([L('1','inf')],{from:'cos(pi*x)',definite:false}),[false]);
+ assert.deepEqual(checkChain([L('dne','inf')],{from:'cos(pi*x)',definite:false}),[true]);
+});

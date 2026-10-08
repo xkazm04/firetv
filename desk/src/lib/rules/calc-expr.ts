@@ -583,11 +583,25 @@ export function limitAt(f: Fn, a: number, side?: "+" | "-"): Limit | null {
   return sameLimit(l, r);
 }
 
-/** The limit of f as x -> +infinity (sign 1) or -infinity (sign -1): the one-sided limit of f(sign/t) as t -> 0+. */
+/**
+ * The limit of f as x -> +infinity (sign 1) or -infinity (sign -1): the one-sided limit of f(sign/t) as t -> 0+, read on two
+ * lattices - run A at x = 10^k (the whole numbers) and run B at x = sqrt(2)*10^k - so a function of period 1 or 2 (cos(pi x)),
+ * which is constant on the whole numbers, is not read as converging. A null: null. A dne: dne. B null: dne. A and B both values
+ * within LIMIT_SIDES * max(1, |A|, |B|), or both infinite with one sign: A, unchanged (the same object, so a kept limit is
+ * bit-identical to the one-lattice reading). Otherwise dne.
+ */
 export function limitInf(f: Fn, sign: 1 | -1): Limit | null {
   if (!isFn(f) || (sign !== 1 && sign !== -1)) return null;
   const g = rawOf(f);
-  return seqLimit((t) => g(sign / t));
+  const a = seqLimit((t) => g(sign / t));
+  if (!a || a.kind === "dne") return a;
+  const b = seqLimit((t) => g(sign * Math.SQRT2 / t));
+  if (!b) return { kind: "dne" };
+  if (a.kind === "value" && b.kind === "value") {
+    return Math.abs(a.v - b.v) <= LIMIT_SIDES * Math.max(1, Math.abs(a.v), Math.abs(b.v)) ? a : { kind: "dne" };
+  }
+  if (a.kind === "inf" && b.kind === "inf" && a.sign === b.sign) return a;
+  return { kind: "dne" };
 }
 
 // ------------------------------------------------------------------ roots and extrema on an interval
