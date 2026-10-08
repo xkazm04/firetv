@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T15:52:46.8794759Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#32",
+                             "IDProcess":  9620,
+                             "PercentProcessorTime":  823
+                         },
+                         {
+                             "Name":  "rustc",
+                             "IDProcess":  51580,
+                             "PercentProcessorTime":  96
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  78
+                         },
+                         {
+                             "Name":  "find#1",
+                             "IDProcess":  45632,
+                             "PercentProcessorTime":  68
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  64
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  48088,
+                             "PercentProcessorTime":  59
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  50
+                         },
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  45
+                         },
+                         {
+                             "Name":  "node#34",
+                             "IDProcess":  2120,
+                             "PercentProcessorTime":  36
+                         },
+                         {
+                             "Name":  "grep#45",
+                             "IDProcess":  36312,
+                             "PercentProcessorTime":  32
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                65,
+                                65,
+                                81
+                            ]
+}

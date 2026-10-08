@@ -1,0 +1,1463 @@
+{
+  "rule": "Fixed before the first graded run (P12 rule, P16 arms). Arms: base = deathride/main d95166c8 plus the perf-only HUD counters (d6740d7f); fonts = base plus card 1 (one runtime font page); layer = fonts plus card 2 (the retained HUD layer). Each arm is its own APK of the perf package, identified by the APK SHA-256 in installed.json. Two profiled 360 s runs per arm by P14's procedure (P11's command: perf-device.py --profile --seconds 360, warm routes, five-course cycle, no extra), interleaved base, fonts, layer, base, fonts, layer. Readings per run over active race frames (profile column active = 1): hudMs mean (deciding), hudMs p95, hudFlushes mean (deciding for card 1), hudDraws mean, drawCalls mean, textureBinds mean, frames with a layer bake. Arm X beats arm Y on a reading when BOTH runs of X read lower than BOTH runs of Y; anything else is \"not shown\". Card 1 (fonts vs base) is built when fonts beats base on hudMs mean AND on hudFlushes mean. Card 2 (layer vs fonts) is built when layer beats fonts on hudMs mean and its hudFlushes mean is not higher than either fonts run (card 1 already leaves the HUD batch at its floor of two textures, the layer and the font page, so card 2 cannot lower the count further). Guards, judged per card against its reference with the same rule: active frames over 33 ms, active frames over 20 ms, worst active-window p95, PSS max and owned textures must not be worse, where worse means the reference beats the card on that reading; owned textures must also stay <= 52 MiB. A card that fails its deciding readings or a guard is declined with its figures and its code is reverted. A run is void and is rerun once when it has any rejected input (a rejection burst), when it fails functionally, or when its APK is not its arm's; the void run stays in the record.",
+  "apks": {
+    "base": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137",
+    "fonts": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e",
+    "layer": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c"
+  },
+  "runs": [
+    {
+      "arm": "base",
+      "run": "base-run1",
+      "apkSha256": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.2196972,
+      "functionalPass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/935687ff/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "activeFrames": 19013,
+      "hudMsMean": 1.2244,
+      "hudMsP50": 1.0709,
+      "hudMsP95": 1.8086,
+      "hudMsMax": 17.739,
+      "hudFlushesMean": 3.0,
+      "hudFlushesCounts": {
+        "3": 19013
+      },
+      "hudDrawsMean": 6.0,
+      "hudDrawsCounts": {
+        "6": 19013
+      },
+      "drawCallsMean": 18.207,
+      "textureBindsMean": 12.269,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 11.203,
+      "cpuMsMean": 8.0453,
+      "activeFramesOver33Ms": 112,
+      "activeFramesOver20Ms": 877,
+      "activeP95WorstMs": 25.618616,
+      "activeMaxMs": 62.830616000000006,
+      "activeP50RangeMs": [
+        16.663231,
+        16.704769000000002
+      ],
+      "pssRangeMiB": [
+        153.13671875,
+        174.8818359375
+      ],
+      "pssMaxMiB": 174.8818359375,
+      "ownedTextureMiB": 39.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "simulation": 52,
+        "cars": 41,
+        "hud": 7,
+        "flushSwap": 6,
+        "audio": 3,
+        "requests": 1,
+        "telemetry": 1,
+        "scenery": 1
+      },
+      "rejectedInputs": [
+        7,
+        7
+      ],
+      "inputStream": {
+        "hz": [
+          30.00113565139047,
+          30.00113565139047
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 23,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T16:35:41.1355024Z",
+          "totalPercentSamples": [
+            87,
+            70,
+            51
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "find",
+              105
+            ],
+            [
+              "node#7",
+              100
+            ],
+            [
+              "rustc#1",
+              100
+            ],
+            [
+              "rustc",
+              96
+            ],
+            [
+              "bash#51",
+              81
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T16:41:53.2690100Z",
+          "totalPercentSamples": [
+            100,
+            98,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "rustc",
+              468
+            ],
+            [
+              "chrome#40",
+              207
+            ],
+            [
+              "node#32",
+              94
+            ],
+            [
+              "node#7",
+              54
+            ],
+            [
+              "chrome",
+              54
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "fonts",
+      "run": "fonts-run1",
+      "apkSha256": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.1223085,
+      "functionalPass": false,
+      "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/935687ff/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+      "activeFrames": 19037,
+      "hudMsMean": 1.1065,
+      "hudMsP50": 0.9385,
+      "hudMsP95": 1.8199,
+      "hudMsMax": 26.328,
+      "hudFlushesMean": 2.0,
+      "hudFlushesCounts": {
+        "2": 19037
+      },
+      "hudDrawsMean": 5.0,
+      "hudDrawsCounts": {
+        "5": 19037
+      },
+      "drawCallsMean": 17.755,
+      "textureBindsMean": 11.82,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 10.4076,
+      "cpuMsMean": 7.5285,
+      "activeFramesOver33Ms": 108,
+      "activeFramesOver20Ms": 886,
+      "activeP95WorstMs": 24.237154,
+      "activeMaxMs": 63.77007699999999,
+      "activeP50RangeMs": [
+        16.646538,
+        16.698154
+      ],
+      "pssRangeMiB": [
+        160.1103515625,
+        177.546875
+      ],
+      "pssMaxMiB": 177.546875,
+      "ownedTextureMiB": 36.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 54,
+        "simulation": 37,
+        "flushSwap": 6,
+        "hud": 4,
+        "audio": 4,
+        "telemetry": 1,
+        "camera": 1,
+        "scenery": 1
+      },
+      "rejectedInputs": [
+        6,
+        6
+      ],
+      "inputStream": {
+        "hz": [
+          30.000918424080357,
+          30.000918424080357
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 21,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T16:43:00.0499210Z",
+          "totalPercentSamples": [
+            57,
+            62,
+            62
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "find",
+              102
+            ],
+            [
+              "node#7",
+              102
+            ],
+            [
+              "node#29",
+              102
+            ],
+            [
+              "bash#66",
+              51
+            ],
+            [
+              "bash#63",
+              51
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T16:49:13.0126909Z",
+          "totalPercentSamples": [
+            72,
+            44,
+            41
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#53",
+              122
+            ],
+            [
+              "svchost#72",
+              100
+            ],
+            [
+              "node#54",
+              96
+            ],
+            [
+              "node#56",
+              87
+            ],
+            [
+              "find",
+              82
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "layer",
+      "run": "layer-run1",
+      "apkSha256": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.2086951,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 19060,
+      "hudMsMean": 1.036,
+      "hudMsP50": 0.8886,
+      "hudMsP95": 1.6221,
+      "hudMsMax": 11.447,
+      "hudFlushesMean": 2.0,
+      "hudFlushesCounts": {
+        "2": 19060
+      },
+      "hudDrawsMean": 5.0,
+      "hudDrawsCounts": {
+        "5": 19060
+      },
+      "drawCallsMean": 17.314,
+      "textureBindsMean": 11.386,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 10.1732,
+      "cpuMsMean": 7.2683,
+      "activeFramesOver33Ms": 68,
+      "activeFramesOver20Ms": 720,
+      "activeP95WorstMs": 25.291,
+      "activeMaxMs": 62.716385,
+      "activeP50RangeMs": [
+        16.660999999999998,
+        16.699616
+      ],
+      "pssRangeMiB": [
+        173.9013671875,
+        183.3154296875
+      ],
+      "pssMaxMiB": 183.3154296875,
+      "ownedTextureMiB": 40.275299072265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 38,
+        "simulation": 22,
+        "flushSwap": 4,
+        "audio": 2,
+        "telemetry": 1,
+        "scenery": 1
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00205199655104,
+          30.00205199655104
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 22,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T16:50:34.6371135Z",
+          "totalPercentSamples": [
+            67,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#65",
+              153
+            ],
+            [
+              "node#59",
+              110
+            ],
+            [
+              "node#56",
+              97
+            ],
+            [
+              "svchost#72",
+              93
+            ],
+            [
+              "SearchIndexer",
+              80
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T16:56:52.8517949Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#55",
+              165
+            ],
+            [
+              "node#57",
+              148
+            ],
+            [
+              "node#56",
+              89
+            ],
+            [
+              "find",
+              84
+            ],
+            [
+              "rustc",
+              80
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "base",
+      "run": "base-run2",
+      "apkSha256": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.0588126,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 19053,
+      "hudMsMean": 1.1817,
+      "hudMsP50": 1.0482,
+      "hudMsP95": 1.7273,
+      "hudMsMax": 20.915,
+      "hudFlushesMean": 3.0,
+      "hudFlushesCounts": {
+        "3": 19053
+      },
+      "hudDrawsMean": 6.0,
+      "hudDrawsCounts": {
+        "6": 19053
+      },
+      "drawCallsMean": 18.102,
+      "textureBindsMean": 12.183,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 10.0678,
+      "cpuMsMean": 7.4147,
+      "activeFramesOver33Ms": 87,
+      "activeFramesOver20Ms": 786,
+      "activeP95WorstMs": 26.959461,
+      "activeMaxMs": 60.407462,
+      "activeP50RangeMs": [
+        16.665153,
+        16.695
+      ],
+      "pssRangeMiB": [
+        178.4130859375,
+        194.3115234375
+      ],
+      "pssMaxMiB": 194.3115234375,
+      "ownedTextureMiB": 39.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 46,
+        "simulation": 30,
+        "flushSwap": 7,
+        "hud": 2,
+        "scenery": 1,
+        "audio": 1
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.000654398647537,
+          30.000654398647537
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 22,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T16:58:09.6689010Z",
+          "totalPercentSamples": [
+            100,
+            98,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#49",
+              137
+            ],
+            [
+              "node#52",
+              124
+            ],
+            [
+              "node#38",
+              103
+            ],
+            [
+              "rustc",
+              94
+            ],
+            [
+              "node#46",
+              94
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T17:04:23.7336642Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#46",
+              102
+            ],
+            [
+              "node#26",
+              98
+            ],
+            [
+              "rustc",
+              93
+            ],
+            [
+              "find",
+              80
+            ],
+            [
+              "node#7",
+              80
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "fonts",
+      "run": "fonts-run2",
+      "apkSha256": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.0576522,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 18915,
+      "hudMsMean": 1.6163,
+      "hudMsP50": 1.4562,
+      "hudMsP95": 2.3092,
+      "hudMsMax": 15.426,
+      "hudFlushesMean": 2.0,
+      "hudFlushesCounts": {
+        "2": 18915
+      },
+      "hudDrawsMean": 5.0,
+      "hudDrawsCounts": {
+        "5": 18915
+      },
+      "drawCallsMean": 17.525,
+      "textureBindsMean": 11.567,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 11.3418,
+      "cpuMsMean": 8.9165,
+      "activeFramesOver33Ms": 139,
+      "activeFramesOver20Ms": 940,
+      "activeP95WorstMs": 29.182538,
+      "activeMaxMs": 92.63669300000001,
+      "activeP50RangeMs": [
+        16.660231,
+        16.697461999999998
+      ],
+      "pssRangeMiB": [
+        164.9091796875,
+        190.15625
+      ],
+      "pssMaxMiB": 190.15625,
+      "ownedTextureMiB": 36.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 76,
+        "simulation": 46,
+        "audio": 6,
+        "scenery": 4,
+        "hud": 3,
+        "flushSwap": 2,
+        "telemetry": 2
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.000751085273006,
+          30.000751085273006
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 19,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T17:05:33.4764244Z",
+          "totalPercentSamples": [
+            75,
+            38,
+            50
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "MsMpEng",
+              144
+            ],
+            [
+              "node#30",
+              130
+            ],
+            [
+              "node#7",
+              102
+            ],
+            [
+              "find",
+              97
+            ],
+            [
+              "personas-desktop",
+              97
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T17:11:43.5192563Z",
+          "totalPercentSamples": [
+            72,
+            53,
+            45
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#7",
+              103
+            ],
+            [
+              "find",
+              103
+            ],
+            [
+              "node#23",
+              103
+            ],
+            [
+              "icacls",
+              103
+            ],
+            [
+              "clippy-driver",
+              99
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "layer",
+      "run": "layer-run2",
+      "apkSha256": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.19834490000005,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 19053,
+      "hudMsMean": 1.0388,
+      "hudMsP50": 0.8868,
+      "hudMsP95": 1.5885,
+      "hudMsMax": 23.99,
+      "hudFlushesMean": 2.0,
+      "hudFlushesCounts": {
+        "2": 19053
+      },
+      "hudDrawsMean": 5.0,
+      "hudDrawsCounts": {
+        "5": 19053
+      },
+      "drawCallsMean": 17.169,
+      "textureBindsMean": 11.264,
+      "framesWithBake": 3,
+      "bakeMsMax": 1.094,
+      "workMsMean": 9.9557,
+      "cpuMsMean": 7.248,
+      "activeFramesOver33Ms": 79,
+      "activeFramesOver20Ms": 799,
+      "activeP95WorstMs": 25.716615,
+      "activeMaxMs": 73.34769200000001,
+      "activeP50RangeMs": [
+        16.660384,
+        16.699923
+      ],
+      "pssRangeMiB": [
+        171.9814453125,
+        190.787109375
+      ],
+      "pssMaxMiB": 190.787109375,
+      "ownedTextureMiB": 40.275299072265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 44,
+        "simulation": 18,
+        "hud": 5,
+        "flushSwap": 5,
+        "audio": 4,
+        "scenery": 2,
+        "telemetry": 1
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.00013784905095,
+          30.00013784905095
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 18,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T17:12:43.7594724Z",
+          "totalPercentSamples": [
+            28,
+            50,
+            35
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "clippy-driver",
+              100
+            ],
+            [
+              "find",
+              100
+            ],
+            [
+              "node#7",
+              95
+            ],
+            [
+              "claude#12",
+              57
+            ],
+            [
+              "dwm",
+              47
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T17:18:55.0006727Z",
+          "totalPercentSamples": [
+            57,
+            42,
+            50
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#24",
+              107
+            ],
+            [
+              "find",
+              102
+            ],
+            [
+              "node#7",
+              98
+            ],
+            [
+              "rustc",
+              98
+            ],
+            [
+              "node#25",
+              88
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "base",
+      "run": "base-run1r",
+      "apkSha256": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.175599,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 18918,
+      "hudMsMean": 1.183,
+      "hudMsP50": 1.0307,
+      "hudMsP95": 1.7584,
+      "hudMsMax": 19.215,
+      "hudFlushesMean": 3.0,
+      "hudFlushesCounts": {
+        "3": 18918
+      },
+      "hudDrawsMean": 6.0,
+      "hudDrawsCounts": {
+        "6": 18918
+      },
+      "drawCallsMean": 18.727,
+      "textureBindsMean": 12.791,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 10.4519,
+      "cpuMsMean": 7.4839,
+      "activeFramesOver33Ms": 151,
+      "activeFramesOver20Ms": 999,
+      "activeP95WorstMs": 39.093,
+      "activeMaxMs": 137.187846,
+      "activeP50RangeMs": [
+        16.656616,
+        16.706539
+      ],
+      "pssRangeMiB": [
+        165.38671875,
+        188.1005859375
+      ],
+      "pssMaxMiB": 188.1005859375,
+      "ownedTextureMiB": 39.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 75,
+        "simulation": 47,
+        "flushSwap": 13,
+        "audio": 5,
+        "hud": 3,
+        "scenery": 3,
+        "requests": 3,
+        "telemetry": 2
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          30.002032425300417,
+          30.002032425300417
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 22,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T17:20:36.0561214Z",
+          "totalPercentSamples": [
+            59,
+            61,
+            36
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#7",
+              102
+            ],
+            [
+              "find",
+              102
+            ],
+            [
+              "svchost#72",
+              63
+            ],
+            [
+              "claude#2",
+              58
+            ],
+            [
+              "claude#11",
+              53
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T17:26:54.2406044Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#45",
+              104
+            ],
+            [
+              "node#38",
+              100
+            ],
+            [
+              "bash#60",
+              91
+            ],
+            [
+              "node#34",
+              87
+            ],
+            [
+              "node#7",
+              87
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "arm": "fonts",
+      "run": "fonts-run1r",
+      "apkSha256": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e",
+      "apkMatchesArm": true,
+      "durationSeconds": 360.1684674,
+      "functionalPass": true,
+      "error": null,
+      "activeFrames": 19016,
+      "hudMsMean": 1.1662,
+      "hudMsP50": 0.9697,
+      "hudMsP95": 1.8741,
+      "hudMsMax": 14.234,
+      "hudFlushesMean": 2.0,
+      "hudFlushesCounts": {
+        "2": 19016
+      },
+      "hudDrawsMean": 5.0,
+      "hudDrawsCounts": {
+        "5": 19016
+      },
+      "drawCallsMean": 17.761,
+      "textureBindsMean": 11.822,
+      "framesWithBake": 0,
+      "bakeMsMax": 0,
+      "workMsMean": 10.5511,
+      "cpuMsMean": 7.5121,
+      "activeFramesOver33Ms": 124,
+      "activeFramesOver20Ms": 894,
+      "activeP95WorstMs": 27.289846,
+      "activeMaxMs": 71.537923,
+      "activeP50RangeMs": [
+        16.657924,
+        16.698
+      ],
+      "pssRangeMiB": [
+        168.244140625,
+        177.6826171875
+      ],
+      "pssMaxMiB": 177.6826171875,
+      "ownedTextureMiB": 36.9697265625,
+      "artMiB": 18.75,
+      "over33ByDominantCategory": {
+        "cars": 59,
+        "simulation": 43,
+        "flushSwap": 13,
+        "audio": 6,
+        "hud": 2,
+        "scenery": 1
+      },
+      "rejectedInputs": [
+        0,
+        0
+      ],
+      "inputStream": {
+        "hz": [
+          29.999850009079392,
+          29.999850009079392
+        ],
+        "pumpStalls": 0
+      },
+      "gcLines": 23,
+      "hostCpu": {
+        "host-cpu-start.json": {
+          "utc": "2026-10-08T17:28:30.0477690Z",
+          "totalPercentSamples": [
+            100,
+            100,
+            100
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#35",
+              148
+            ],
+            [
+              "node#32",
+              140
+            ],
+            [
+              "node#34",
+              114
+            ],
+            [
+              "node#45",
+              102
+            ],
+            [
+              "node#49",
+              89
+            ]
+          ]
+        },
+        "host-cpu-end.json": {
+          "utc": "2026-10-08T17:34:45.2107136Z",
+          "totalPercentSamples": [
+            65,
+            64,
+            70
+          ],
+          "logicalProcessors": 16,
+          "top": [
+            [
+              "node#41",
+              116
+            ],
+            [
+              "SearchIndexer",
+              102
+            ],
+            [
+              "node#7",
+              98
+            ],
+            [
+              "find",
+              98
+            ],
+            [
+              "svchost#72",
+              98
+            ]
+          ]
+        }
+      }
+    }
+  ],
+  "void": [
+    {
+      "run": "base-run1",
+      "reason": "functional failure: AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n"
+    },
+    {
+      "run": "fonts-run1",
+      "reason": "functional failure: AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n"
+    }
+  ],
+  "cards": {
+    "card 1: font pages merge": {
+      "arm": "fonts",
+      "reference": "base",
+      "deciding": {
+        "hudMsMean": "not shown",
+        "hudFlushesMean": "fonts beats base"
+      },
+      "guardsWorse": {},
+      "flushesNotHigher": true,
+      "ownedTexturesWithin52MiB": true,
+      "complete": true,
+      "disposition": "declined",
+      "readings": {
+        "hudMsMean": {
+          "verdict": "not shown",
+          "fonts": [
+            1.6163,
+            1.1662
+          ],
+          "base": [
+            1.1817,
+            1.183
+          ],
+          "meanChange": 0.2089,
+          "meanChangePercent": 17.7
+        },
+        "hudMsP95": {
+          "verdict": "base beats fonts",
+          "fonts": [
+            2.3092,
+            1.8741
+          ],
+          "base": [
+            1.7273,
+            1.7584
+          ],
+          "meanChange": 0.3488,
+          "meanChangePercent": 20.0
+        },
+        "hudFlushesMean": {
+          "verdict": "fonts beats base",
+          "fonts": [
+            2.0,
+            2.0
+          ],
+          "base": [
+            3.0,
+            3.0
+          ],
+          "meanChange": -1.0,
+          "meanChangePercent": -33.3
+        },
+        "hudDrawsMean": {
+          "verdict": "fonts beats base",
+          "fonts": [
+            5.0,
+            5.0
+          ],
+          "base": [
+            6.0,
+            6.0
+          ],
+          "meanChange": -1.0,
+          "meanChangePercent": -16.7
+        },
+        "drawCallsMean": {
+          "verdict": "fonts beats base",
+          "fonts": [
+            17.525,
+            17.761
+          ],
+          "base": [
+            18.102,
+            18.727
+          ],
+          "meanChange": -0.7715,
+          "meanChangePercent": -4.2
+        },
+        "textureBindsMean": {
+          "verdict": "fonts beats base",
+          "fonts": [
+            11.567,
+            11.822
+          ],
+          "base": [
+            12.183,
+            12.791
+          ],
+          "meanChange": -0.7925,
+          "meanChangePercent": -6.3
+        },
+        "workMsMean": {
+          "verdict": "base beats fonts",
+          "fonts": [
+            11.3418,
+            10.5511
+          ],
+          "base": [
+            10.0678,
+            10.4519
+          ],
+          "meanChange": 0.6866,
+          "meanChangePercent": 6.7
+        },
+        "activeFramesOver33Ms": {
+          "verdict": "not shown",
+          "fonts": [
+            139,
+            124
+          ],
+          "base": [
+            87,
+            151
+          ],
+          "meanChange": 12.5,
+          "meanChangePercent": 10.5
+        },
+        "activeFramesOver20Ms": {
+          "verdict": "not shown",
+          "fonts": [
+            940,
+            894
+          ],
+          "base": [
+            786,
+            999
+          ],
+          "meanChange": 24.5,
+          "meanChangePercent": 2.7
+        },
+        "activeP95WorstMs": {
+          "verdict": "not shown",
+          "fonts": [
+            29.182538,
+            27.289846
+          ],
+          "base": [
+            26.959461,
+            39.093
+          ],
+          "meanChange": -4.79,
+          "meanChangePercent": -14.5
+        },
+        "activeMaxMs": {
+          "verdict": "not shown",
+          "fonts": [
+            92.63669300000001,
+            71.537923
+          ],
+          "base": [
+            60.407462,
+            137.187846
+          ],
+          "meanChange": -16.7103,
+          "meanChangePercent": -16.9
+        },
+        "pssMaxMiB": {
+          "verdict": "not shown",
+          "fonts": [
+            190.15625,
+            177.6826171875
+          ],
+          "base": [
+            194.3115234375,
+            188.1005859375
+          ],
+          "meanChange": -7.2866,
+          "meanChangePercent": -3.8
+        },
+        "ownedTextureMiB": {
+          "verdict": "fonts beats base",
+          "fonts": [
+            36.9697265625,
+            36.9697265625
+          ],
+          "base": [
+            39.9697265625,
+            39.9697265625
+          ],
+          "meanChange": -3.0,
+          "meanChangePercent": -7.5
+        }
+      }
+    },
+    "card 2: static HUD layer": {
+      "arm": "layer",
+      "reference": "fonts",
+      "deciding": {
+        "hudMsMean": "layer beats fonts"
+      },
+      "guardsWorse": {
+        "ownedTextureMiB": true
+      },
+      "flushesNotHigher": true,
+      "ownedTexturesWithin52MiB": true,
+      "complete": true,
+      "disposition": "declined",
+      "readings": {
+        "hudMsMean": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            1.036,
+            1.0388
+          ],
+          "fonts": [
+            1.6163,
+            1.1662
+          ],
+          "meanChange": -0.3538,
+          "meanChangePercent": -25.4
+        },
+        "hudMsP95": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            1.6221,
+            1.5885
+          ],
+          "fonts": [
+            2.3092,
+            1.8741
+          ],
+          "meanChange": -0.4863,
+          "meanChangePercent": -23.3
+        },
+        "hudFlushesMean": {
+          "verdict": "not shown",
+          "layer": [
+            2.0,
+            2.0
+          ],
+          "fonts": [
+            2.0,
+            2.0
+          ],
+          "meanChange": 0.0,
+          "meanChangePercent": 0.0
+        },
+        "hudDrawsMean": {
+          "verdict": "not shown",
+          "layer": [
+            5.0,
+            5.0
+          ],
+          "fonts": [
+            5.0,
+            5.0
+          ],
+          "meanChange": 0.0,
+          "meanChangePercent": 0.0
+        },
+        "drawCallsMean": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            17.314,
+            17.169
+          ],
+          "fonts": [
+            17.525,
+            17.761
+          ],
+          "meanChange": -0.4015,
+          "meanChangePercent": -2.3
+        },
+        "textureBindsMean": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            11.386,
+            11.264
+          ],
+          "fonts": [
+            11.567,
+            11.822
+          ],
+          "meanChange": -0.3695,
+          "meanChangePercent": -3.2
+        },
+        "workMsMean": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            10.1732,
+            9.9557
+          ],
+          "fonts": [
+            11.3418,
+            10.5511
+          ],
+          "meanChange": -0.882,
+          "meanChangePercent": -8.1
+        },
+        "activeFramesOver33Ms": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            68,
+            79
+          ],
+          "fonts": [
+            139,
+            124
+          ],
+          "meanChange": -58.0,
+          "meanChangePercent": -44.1
+        },
+        "activeFramesOver20Ms": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            720,
+            799
+          ],
+          "fonts": [
+            940,
+            894
+          ],
+          "meanChange": -157.5,
+          "meanChangePercent": -17.2
+        },
+        "activeP95WorstMs": {
+          "verdict": "layer beats fonts",
+          "layer": [
+            25.291,
+            25.716615
+          ],
+          "fonts": [
+            29.182538,
+            27.289846
+          ],
+          "meanChange": -2.7324,
+          "meanChangePercent": -9.7
+        },
+        "activeMaxMs": {
+          "verdict": "not shown",
+          "layer": [
+            62.716385,
+            73.34769200000001
+          ],
+          "fonts": [
+            92.63669300000001,
+            71.537923
+          ],
+          "meanChange": -14.0553,
+          "meanChangePercent": -17.1
+        },
+        "pssMaxMiB": {
+          "verdict": "not shown",
+          "layer": [
+            183.3154296875,
+            190.787109375
+          ],
+          "fonts": [
+            190.15625,
+            177.6826171875
+          ],
+          "meanChange": 3.1318,
+          "meanChangePercent": 1.7
+        },
+        "ownedTextureMiB": {
+          "verdict": "fonts beats layer",
+          "layer": [
+            40.275299072265625,
+            40.275299072265625
+          ],
+          "fonts": [
+            36.9697265625,
+            36.9697265625
+          ],
+          "meanChange": 3.3056,
+          "meanChangePercent": 8.9
+        }
+      }
+    }
+  },
+  "perArmMeans": {
+    "base": {
+      "hudMsMean": 1.1824,
+      "hudMsP95": 1.7429,
+      "hudFlushesMean": 3.0,
+      "hudDrawsMean": 6.0,
+      "drawCallsMean": 18.4145,
+      "textureBindsMean": 12.487,
+      "workMsMean": 10.2599,
+      "activeFramesOver33Ms": 119.0,
+      "activeFramesOver20Ms": 892.5,
+      "activeP95WorstMs": 33.0262,
+      "activeMaxMs": 98.7977,
+      "pssMaxMiB": 191.2061,
+      "ownedTextureMiB": 39.9697
+    },
+    "fonts": {
+      "hudMsMean": 1.3912,
+      "hudMsP95": 2.0917,
+      "hudFlushesMean": 2.0,
+      "hudDrawsMean": 5.0,
+      "drawCallsMean": 17.643,
+      "textureBindsMean": 11.6945,
+      "workMsMean": 10.9464,
+      "activeFramesOver33Ms": 131.5,
+      "activeFramesOver20Ms": 917.0,
+      "activeP95WorstMs": 28.2362,
+      "activeMaxMs": 82.0873,
+      "pssMaxMiB": 183.9194,
+      "ownedTextureMiB": 36.9697
+    },
+    "layer": {
+      "hudMsMean": 1.0374,
+      "hudMsP95": 1.6053,
+      "hudFlushesMean": 2.0,
+      "hudDrawsMean": 5.0,
+      "drawCallsMean": 17.2415,
+      "textureBindsMean": 11.325,
+      "workMsMean": 10.0645,
+      "activeFramesOver33Ms": 73.5,
+      "activeFramesOver20Ms": 759.5,
+      "activeP95WorstMs": 25.5038,
+      "activeMaxMs": 68.032,
+      "pssMaxMiB": 187.0513,
+      "ownedTextureMiB": 40.2753
+    }
+  },
+  "limits": "Two profiled 360 s runs per arm on one Stick, interleaved, on a host shared with other builders (host CPU per run recorded); not settled (P12's procedure has no settle). hudMs is render-thread wall time of the HUD phase; GPU time is not in it and shows only in the frame readings."
+}

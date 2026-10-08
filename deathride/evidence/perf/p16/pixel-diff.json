@@ -1,0 +1,2397 @@
+{
+ "what": "P16 pixel proof: HUD variants drawn over one copy of the same world frame into the 2x MSAA back buffer and read back (RaceGame.hudDiffFrame); RGB decides, alpha is counted only (opaque window).",
+ "edges": {
+  "vertical": 42,
+  "horizontal": 42,
+  "scale": 1.5,
+  "shareOfBakeBoxWithinOnePixel": 0.06
+ },
+ "runs": [
+  {
+   "run": "diff-fonts",
+   "fontsLine": [
+    "fonts page=1024x512 pages=1 titleTop=336"
+   ],
+   "captures": [
+    {
+     "tag": "lobby-1",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 3069.2,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "lobby-2",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 2640.5,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-3",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 3677.1,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 31,
+       "maxChannelDiffRgb": 1,
+       "bins": {
+        "1": 31,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 2,
+       "bbox": [
+        639,
+        944,
+        639,
+        983
+       ]
+      }
+     },
+     "pngs": [
+      "base",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 31,
+       "maxChannelDiffRgb": 1,
+       "bins": {
+        "1": 31,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 2
+      }
+     }
+    },
+    {
+     "tag": "race-4",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 3479.8,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 15,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 15
+      }
+     }
+    }
+   ],
+   "sceneryHashes": [
+    "sceneryHash foundry-1-c d75b50c039a6bf963668fb1d1c6151b046dc924e3a9483b00788bb14907852ce",
+    "sceneryHash salt-1-b 1fe83af7aeb2bd00759eda8650259956266cf0381d068f3c6806f7e8d43447d7",
+    "sceneryHash scrap-1-c 5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8"
+   ]
+  },
+  {
+   "run": "diff-fonts2",
+   "fontsLine": [
+    "fonts page=1024x512 pages=1 titleTop=336"
+   ],
+   "captures": [
+    {
+     "tag": "lobby-1",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 5691.3,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "lobby-2",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 5332.1,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-3",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 6846.5,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-4",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 6927.4,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-5",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 6615.3,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-6",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 7257.2,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    }
+   ],
+   "sceneryHashes": [
+    "sceneryHash foundry-1-c d75b50c039a6bf963668fb1d1c6151b046dc924e3a9483b00788bb14907852ce",
+    "sceneryHash salt-1-b 1fe83af7aeb2bd00759eda8650259956266cf0381d068f3c6806f7e8d43447d7",
+    "sceneryHash scrap-1-c 5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+    "sceneryHash switchback-1-a 40dbb1682e360c60ee25d731e86c01111a13b6592938ac5f2a4346ce6223892a"
+   ]
+  },
+  {
+   "run": "diff-layer",
+   "fontsLine": [
+    "fonts page=1024x512 pages=1 titleTop=336"
+   ],
+   "captures": [
+    {
+     "tag": "lobby-1",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 9239.6,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "lobby-2",
+     "phase": "lobby",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 8827.6,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      }
+     }
+    },
+    {
+     "tag": "race-3",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 11274.1,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6803,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6438,
+        "2": 85,
+        "3-4": 87,
+        "5-8": 176,
+        "9-16": 6,
+        "17-255": 11
+       },
+       "differingAlphaOnly": 8871,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6803,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6438,
+        "2": 85,
+        "3-4": 87,
+        "5-8": 176,
+        "9-16": 6,
+        "17-255": 11
+       },
+       "differingAlphaOnly": 8871,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 6803,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6438,
+        "2": 85,
+        "3-4": 87,
+        "5-8": 176,
+        "9-16": 6,
+        "17-255": 11
+       },
+       "differingAlphaOnly": 8871,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 6803,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6438,
+        "2": 85,
+        "3-4": 87,
+        "5-8": 176,
+        "9-16": 6,
+        "17-255": 11
+       },
+       "differingAlphaOnly": 8871,
+       "oneLevel": {
+        "pixels": 6438,
+        "withinOnePixelOfABakedEdge": 2625
+       },
+       "over1": {
+        "pixels": 365,
+        "withinOnePixelOfABakedEdge": 365,
+        "clustersStage10": [
+         {
+          "stageX": 550,
+          "stageY": 650,
+          "pixels": 22
+         },
+         {
+          "stageX": 1210,
+          "stageY": 590,
+          "pixels": 17
+         },
+         {
+          "stageX": 1070,
+          "stageY": 400,
+          "pixels": 15
+         },
+         {
+          "stageX": 1040,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1050,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1060,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1070,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1180,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1190,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1200,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 560,
+          "stageY": 650,
+          "pixels": 15
+         },
+         {
+          "stageX": 570,
+          "stageY": 650,
+          "pixels": 15
+         }
+        ],
+        "worst": [
+         {
+          "diff": 30,
+          "px": [
+           1829,
+           893
+          ],
+          "stage": [
+           1219.33,
+           595.33
+          ]
+         },
+         {
+          "diff": 29,
+          "px": [
+           829,
+           980
+          ],
+          "stage": [
+           552.67,
+           653.33
+          ]
+         },
+         {
+          "diff": 26,
+          "px": [
+           1829,
+           892
+          ],
+          "stage": [
+           1219.33,
+           594.67
+          ]
+         },
+         {
+          "diff": 25,
+          "px": [
+           1856,
+           600
+          ],
+          "stage": [
+           1237.33,
+           400.0
+          ]
+         },
+         {
+          "diff": 23,
+          "px": [
+           1575,
+           600
+          ],
+          "stage": [
+           1050.0,
+           400.0
+          ]
+         },
+         {
+          "diff": 21,
+          "px": [
+           1104,
+           986
+          ],
+          "stage": [
+           736.0,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           1100,
+           986
+          ],
+          "stage": [
+           733.33,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           829,
+           986
+          ],
+          "stage": [
+           552.67,
+           657.33
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "tag": "race-4",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 11141.9,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6883,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6474,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8816,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6883,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6474,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8816,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 6883,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6474,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8816,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 6883,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6474,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8816,
+       "oneLevel": {
+        "pixels": 6474,
+        "withinOnePixelOfABakedEdge": 2608
+       },
+       "over1": {
+        "pixels": 409,
+        "withinOnePixelOfABakedEdge": 409,
+        "clustersStage10": [
+         {
+          "stageX": 1210,
+          "stageY": 590,
+          "pixels": 22
+         },
+         {
+          "stageX": 550,
+          "stageY": 650,
+          "pixels": 22
+         },
+         {
+          "stageX": 1070,
+          "stageY": 400,
+          "pixels": 15
+         },
+         {
+          "stageX": 1040,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1050,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1060,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1070,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1180,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1190,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1200,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 560,
+          "stageY": 650,
+          "pixels": 15
+         },
+         {
+          "stageX": 570,
+          "stageY": 650,
+          "pixels": 15
+         }
+        ],
+        "worst": [
+         {
+          "diff": 30,
+          "px": [
+           1829,
+           893
+          ],
+          "stage": [
+           1219.33,
+           595.33
+          ]
+         },
+         {
+          "diff": 29,
+          "px": [
+           829,
+           980
+          ],
+          "stage": [
+           552.67,
+           653.33
+          ]
+         },
+         {
+          "diff": 26,
+          "px": [
+           1829,
+           892
+          ],
+          "stage": [
+           1219.33,
+           594.67
+          ]
+         },
+         {
+          "diff": 25,
+          "px": [
+           1856,
+           600
+          ],
+          "stage": [
+           1237.33,
+           400.0
+          ]
+         },
+         {
+          "diff": 23,
+          "px": [
+           1575,
+           600
+          ],
+          "stage": [
+           1050.0,
+           400.0
+          ]
+         },
+         {
+          "diff": 21,
+          "px": [
+           1104,
+           986
+          ],
+          "stage": [
+           736.0,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           1100,
+           986
+          ],
+          "stage": [
+           733.33,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           829,
+           986
+          ],
+          "stage": [
+           552.67,
+           657.33
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "tag": "race-5",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 10954.7,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6921,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6512,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8791,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6921,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6512,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8791,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 6921,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6512,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8791,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 6921,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6512,
+        "2": 83,
+        "3-4": 100,
+        "5-8": 206,
+        "9-16": 7,
+        "17-255": 13
+       },
+       "differingAlphaOnly": 8791,
+       "oneLevel": {
+        "pixels": 6512,
+        "withinOnePixelOfABakedEdge": 2616
+       },
+       "over1": {
+        "pixels": 409,
+        "withinOnePixelOfABakedEdge": 409,
+        "clustersStage10": [
+         {
+          "stageX": 1210,
+          "stageY": 590,
+          "pixels": 22
+         },
+         {
+          "stageX": 550,
+          "stageY": 650,
+          "pixels": 22
+         },
+         {
+          "stageX": 1070,
+          "stageY": 400,
+          "pixels": 15
+         },
+         {
+          "stageX": 1040,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1050,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1060,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1070,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1180,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1190,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1200,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 560,
+          "stageY": 650,
+          "pixels": 15
+         },
+         {
+          "stageX": 570,
+          "stageY": 650,
+          "pixels": 15
+         }
+        ],
+        "worst": [
+         {
+          "diff": 30,
+          "px": [
+           1829,
+           893
+          ],
+          "stage": [
+           1219.33,
+           595.33
+          ]
+         },
+         {
+          "diff": 29,
+          "px": [
+           829,
+           980
+          ],
+          "stage": [
+           552.67,
+           653.33
+          ]
+         },
+         {
+          "diff": 26,
+          "px": [
+           1829,
+           892
+          ],
+          "stage": [
+           1219.33,
+           594.67
+          ]
+         },
+         {
+          "diff": 25,
+          "px": [
+           1856,
+           600
+          ],
+          "stage": [
+           1237.33,
+           400.0
+          ]
+         },
+         {
+          "diff": 23,
+          "px": [
+           1575,
+           600
+          ],
+          "stage": [
+           1050.0,
+           400.0
+          ]
+         },
+         {
+          "diff": 21,
+          "px": [
+           1104,
+           986
+          ],
+          "stage": [
+           736.0,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           1100,
+           986
+          ],
+          "stage": [
+           733.33,
+           657.33
+          ]
+         },
+         {
+          "diff": 20,
+          "px": [
+           829,
+           986
+          ],
+          "stage": [
+           552.67,
+           657.33
+          ]
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "tag": "race-6",
+     "phase": "race",
+     "size": [
+      1920,
+      1080
+     ],
+     "blendEnabled": false,
+     "blendFuncs": "770,771,770,771",
+     "frameMs": 11776.2,
+     "logged": {
+      "base/fonts": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "base/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6729,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6392,
+        "2": 87,
+        "3-4": 56,
+        "5-8": 128,
+        "9-16": 51,
+        "17-255": 15
+       },
+       "differingAlphaOnly": 8874,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "base/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "fonts/layer": {
+       "pixels": 2073600,
+       "differingRgb": 6729,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6392,
+        "2": 87,
+        "3-4": 56,
+        "5-8": 128,
+        "9-16": 51,
+        "17-255": 15
+       },
+       "differingAlphaOnly": 8874,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      },
+      "fonts/control": {
+       "pixels": 2073600,
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0,
+       "bbox": null
+      },
+      "layer/control": {
+       "pixels": 2073600,
+       "differingRgb": 6729,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6392,
+        "2": 87,
+        "3-4": 56,
+        "5-8": 128,
+        "9-16": 51,
+        "17-255": 15
+       },
+       "differingAlphaOnly": 8874,
+       "bbox": [
+        37,
+        592,
+        1864,
+        1053
+       ]
+      }
+     },
+     "pngs": [
+      "base",
+      "control",
+      "fonts",
+      "layer"
+     ],
+     "fromPng": {
+      "base/fonts": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "base/control": {
+       "differingRgb": 0,
+       "maxChannelDiffRgb": 0,
+       "bins": {
+        "1": 0,
+        "2": 0,
+        "3-4": 0,
+        "5-8": 0,
+        "9-16": 0,
+        "17-255": 0
+       },
+       "differingAlphaOnly": 0
+      },
+      "fonts/layer": {
+       "differingRgb": 6729,
+       "maxChannelDiffRgb": 30,
+       "bins": {
+        "1": 6392,
+        "2": 87,
+        "3-4": 56,
+        "5-8": 128,
+        "9-16": 51,
+        "17-255": 15
+       },
+       "differingAlphaOnly": 8874,
+       "oneLevel": {
+        "pixels": 6392,
+        "withinOnePixelOfABakedEdge": 2673
+       },
+       "over1": {
+        "pixels": 337,
+        "withinOnePixelOfABakedEdge": 337,
+        "clustersStage10": [
+         {
+          "stageX": 1210,
+          "stageY": 590,
+          "pixels": 22
+         },
+         {
+          "stageX": 550,
+          "stageY": 650,
+          "pixels": 22
+         },
+         {
+          "stageX": 1070,
+          "stageY": 400,
+          "pixels": 15
+         },
+         {
+          "stageX": 1040,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1050,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1060,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1070,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1180,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1190,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 1200,
+          "stageY": 590,
+          "pixels": 15
+         },
+         {
+          "stageX": 560,
+          "stageY": 650,
+          "pixels": 15
+         },
+         {
+          "stageX": 570,
+          "stageY": 650,
+          "pixels": 15
+         }
+        ],
+        "worst": [
+         {
+          "diff": 30,
+          "px": [
+           1829,
+           893
+          ],
+          "stage": [
+           1219.33,
+           595.33
+          ]
+         },
+         {
+          "diff": 29,
+          "px": [
+           829,
+           980
+          ],
+          "stage": [
+           552.67,
+           653.33
+          ]
+         },
+         {
+          "diff": 27,
+          "px": [
+           829,
+           986
+          ],
+          "stage": [
+           552.67,
+           657.33
+          ]
+         },
+         {
+          "diff": 26,
+          "px": [
+           1829,
+           892
+          ],
+          "stage": [
+           1219.33,
+           594.67
+          ]
+         },
+         {
+          "diff": 25,
+          "px": [
+           1856,
+           600
+          ],
+          "stage": [
+           1237.33,
+           400.0
+          ]
+         },
+         {
+          "diff": 25,
+          "px": [
+           829,
+           976
+          ],
+          "stage": [
+           552.67,
+           650.67
+          ]
+         },
+         {
+          "diff": 23,
+          "px": [
+           1575,
+           600
+          ],
+          "stage": [
+           1050.0,
+           400.0
+          ]
+         },
+         {
+          "diff": 21,
+          "px": [
+           1104,
+           986
+          ],
+          "stage": [
+           736.0,
+           657.33
+          ]
+         }
+        ]
+       }
+      }
+     }
+    }
+   ],
+   "sceneryHashes": []
+  },
+  {
+   "run": "hash-base",
+   "fontsLine": [],
+   "captures": [],
+   "sceneryHashes": [
+    "sceneryHash foundry-1-c d75b50c039a6bf963668fb1d1c6151b046dc924e3a9483b00788bb14907852ce",
+    "sceneryHash salt-1-b 1fe83af7aeb2bd00759eda8650259956266cf0381d068f3c6806f7e8d43447d7",
+    "sceneryHash scrap-1-c 5c78525306be7ce67de3e42edf96b33599a4f4dddc69ab1e4d87d4dc5b0a65f8",
+    "sceneryHash switchback-1-a 40dbb1682e360c60ee25d731e86c01111a13b6592938ac5f2a4346ce6223892a"
+   ]
+  }
+ ]
+}

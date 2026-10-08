@@ -1,0 +1,945 @@
+{
+  "sourceSha256": "2f5f814c7263af3eff5ae0ac6e2d37e560cb40b5b29dd5d3fe7aa8915b2df30e",
+  "apkSha256": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c",
+  "durationSeconds": 360.19834490000005,
+  "functionalPass": true,
+  "error": null,
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 10806,
+      "accepted": 10806,
+      "rejected": 0,
+      "hz": 30.00013784905095
+    },
+    {
+      "slot": 1,
+      "sent": 10806,
+      "accepted": 10806,
+      "rejected": 0,
+      "hz": 30.00013784905095
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [],
+  "allWindows": {
+    "count": 296,
+    "worstP95Ms": 28.997691999999997,
+    "maxMs": 87.786923,
+    "p50RangeMs": [
+      16.657307,
+      16.703692
+    ],
+    "stepWorstP95Ms": 9.154616
+  },
+  "activeWindows": {
+    "count": 239,
+    "worstP95Ms": 25.716615,
+    "maxMs": 73.34769200000001,
+    "p50RangeMs": [
+      16.660384,
+      16.699923
+    ],
+    "stepWorstP95Ms": 7.322461
+  },
+  "sixLiveWindows": {
+    "count": 57,
+    "worstP95Ms": 25.716615,
+    "maxMs": 73.34769200000001,
+    "p50RangeMs": [
+      16.660461,
+      16.692616
+    ],
+    "stepWorstP95Ms": 7.322461
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 19.900000000000002,
+    "max": 182.787769,
+    "count": 23228
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 127
+  },
+  "inputAgeWorstP95Ms": [
+    60.60777399998915,
+    54.505505000000994
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 72
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 51
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    171.9814453125,
+    190.787109375
+  ],
+  "warmPssGrowthMiB": 3.048828125,
+  "thermalStatuses": [
+    0
+  ],
+  "ownedTextureMiB": 40.275299072265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 3,
+    "highWater": 7,
+    "cap": 8,
+    "played": 1056,
+    "suppressed": 7520,
+    "stolen": 16,
+    "missing": 0,
+    "intentionalSilence": 18971,
+    "musicMode": "none",
+    "decodedBytes": 4881926,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "handoff": "spsc-mailboxes",
+      "nativeActive": 3,
+      "nativeHighWater": 7,
+      "starts": 1045,
+      "failedStarts": 0,
+      "staleStarts": 10,
+      "cancelledStarts": 1,
+      "overflow": 0,
+      "maxQueueMs": 139.539385,
+      "maxNativeCallMs": 107.002693,
+      "maxStartCompletionMs": 187.128308,
+      "maxParameterQueueMs": 221.235307,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 10,
+    "Line": 10,
+    "Bastion": 3,
+    "Comet": 5,
+    "Trail": 5,
+    "Flint": 7,
+    "Quill": 7,
+    "Vandal": 5,
+    "Kestrel": 6,
+    "Bulwark": 5
+  },
+  "rounds": 6,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "hostDiagnostics": {
+    "gcDurationMs": {
+      "count": 153,
+      "p50": 0.48240000009536743,
+      "p95": 1.6647000312805176,
+      "p99": 3.4632999897003174,
+      "max": 5.396899998188019,
+      "mean": 0.698643788013583
+    },
+    "heartbeatStalls": [],
+    "limit": "Independent host isolate and Node GC observations; they do not alter the fail-on-pump-stall gate."
+  },
+  "ackRttMs": {
+    "count": 21612,
+    "p50": 10.47219999996014,
+    "p95": 24.730500000005122,
+    "p99": 45.11469999997644,
+    "max": 199.11290000000008,
+    "mean": 12.585396992411411
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 21612,
+    "p50": 5.387933000005432,
+    "p95": 16.9887409999792,
+    "p99": 32.187833000018145,
+    "max": 168.24541699999827,
+    "mean": 7.126686726451437
+  },
+  "estimatedAckReturnMs": {
+    "count": 21612,
+    "p50": 4.478383000008762,
+    "p95": 11.665666999993846,
+    "p99": 18.47976699998253,
+    "max": 123.6480669999728,
+    "mean": 5.45871026595724
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": true,
+      "hudMessages": 2336,
+      "hudCharacters": 3557538,
+      "hudFullSnapshots": 22
+    },
+    {
+      "hudDelta": true,
+      "hudMessages": 2434,
+      "hudCharacters": 3621014,
+      "hudFullSnapshots": 22
+    }
+  ],
+  "lastLoadObservation": {
+    "second": 359.9776004,
+    "slots": [
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 55
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.213428000046406,
+            "p95": 42.04274300002726,
+            "max": 58.343051000032574,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 22.6,
+            "p95": 44.7,
+            "max": 193.86020399999688,
+            "count": 20123
+          }
+        }
+      },
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 34
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.901825000008103,
+            "p95": 42.251871999993455,
+            "max": 50.842241000034846,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 22.900000000000002,
+            "p95": 44.5,
+            "max": 175.68958899999416,
+            "count": 20123
+          }
+        }
+      }
+    ],
+    "frame": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.664,
+        "p95": 18.451999999999998,
+        "max": 37.485231,
+        "count": 596
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 19.900000000000002,
+        "max": 182.787769,
+        "count": 23185
+      }
+    }
+  },
+  "finalStatsLimit": "finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.",
+  "profile": {
+    "rows": 23091,
+    "gaps": [],
+    "active": {
+      "intervalMs": {
+        "count": 19053,
+        "p50": 16.677768999999998,
+        "p95": 19.213,
+        "p99": 27.235,
+        "max": 73.34769200000001,
+        "mean": 16.87145208402876
+      },
+      "workMs": {
+        "count": 19053,
+        "p50": 8.304462,
+        "p95": 17.166846,
+        "p99": 25.322231,
+        "max": 71.159077,
+        "mean": 9.955742339474098
+      },
+      "cpuMs": {
+        "count": 19053,
+        "p50": 7.031538,
+        "p95": 9.803936,
+        "p99": 11.828076,
+        "max": 22.319938,
+        "mean": 7.248037524379363
+      },
+      "requestsMs": {
+        "count": 19053,
+        "p50": 0.090538,
+        "p95": 0.286153,
+        "p99": 0.455,
+        "max": 7.852846,
+        "mean": 0.12659139720778878
+      },
+      "prepareMs": {
+        "count": 19053,
+        "p50": 0.004231,
+        "p95": 0.006,
+        "p99": 0.051462,
+        "max": 2.489615,
+        "mean": 0.0060465009184905265
+      },
+      "simulationMs": {
+        "count": 19053,
+        "p50": 1.717153,
+        "p95": 4.505308,
+        "p99": 7.969462,
+        "max": 29.912154,
+        "mean": 2.0972108397627673
+      },
+      "audioMs": {
+        "count": 19053,
+        "p50": 0.154615,
+        "p95": 0.62223,
+        "p99": 1.781077,
+        "max": 30.208308,
+        "mean": 0.2581605803285572
+      },
+      "telemetryMs": {
+        "count": 19053,
+        "p50": 0.007384,
+        "p95": 0.606308,
+        "p99": 1.229693,
+        "max": 19.222385,
+        "mean": 0.17817694420826116
+      },
+      "clearMs": {
+        "count": 19053,
+        "p50": 0.718077,
+        "p95": 9.506077,
+        "p99": 11.191616,
+        "max": 26.799154,
+        "mean": 2.2246468481079096
+      },
+      "cameraMs": {
+        "count": 19053,
+        "p50": 0.056,
+        "p95": 0.155846,
+        "p99": 0.28577,
+        "max": 5.096462,
+        "mean": 0.06969464766703407
+      },
+      "effectsUpdateMs": {
+        "count": 19053,
+        "p50": 0.036461,
+        "p95": 0.108846,
+        "p99": 0.235539,
+        "max": 3.535539,
+        "mean": 0.05140301291135255
+      },
+      "sceneryDrawMs": {
+        "count": 19053,
+        "p50": 0.880923,
+        "p95": 2.147846,
+        "p99": 3.975615,
+        "max": 20.398076,
+        "mean": 1.0425900595706712
+      },
+      "carsEffectsMs": {
+        "count": 19053,
+        "p50": 2.52023,
+        "p95": 4.490385,
+        "p99": 9.597692,
+        "max": 35.807538,
+        "mean": 2.8369134311656956
+      },
+      "hudMs": {
+        "count": 19053,
+        "p50": 0.886846,
+        "p95": 1.588615,
+        "p99": 3.689,
+        "max": 23.990462,
+        "mean": 1.0388106383246734
+      },
+      "captionMs": {
+        "count": 19053,
+        "p50": 0.009385,
+        "p95": 0.010769,
+        "p99": 0.01223,
+        "max": 4.497846,
+        "mean": 0.010401833884427648
+      },
+      "drawCalls": {
+        "count": 19053,
+        "p50": 16,
+        "p95": 25,
+        "p99": 26,
+        "max": 26,
+        "mean": 17.168897286516557
+      },
+      "textureBinds": {
+        "count": 19053,
+        "p50": 10,
+        "p95": 19,
+        "p99": 20,
+        "max": 20,
+        "mean": 11.2641578754002
+      },
+      "textureUploads": {
+        "count": 19053,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "mean": 0.0
+      },
+      "effectSlots": {
+        "count": 19053,
+        "p50": 22,
+        "p95": 41,
+        "p99": 52,
+        "max": 59,
+        "mean": 22.349971133154884
+      },
+      "requestsBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "prepareBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "simulationBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "audioBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "telemetryBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "clearBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "cameraBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "effectsUpdateBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "sceneryDrawBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "carsEffectsBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "hudBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "captionBytes": {
+        "count": 19053,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "drawIndices": {
+        "count": 19053,
+        "p50": 18072,
+        "p95": 21576,
+        "p99": 22716,
+        "max": 23202,
+        "mean": 18104.765706188
+      },
+      "hudDraws": {
+        "count": 19053,
+        "p50": 5,
+        "p95": 5,
+        "p99": 5,
+        "max": 5,
+        "mean": 5.0
+      },
+      "hudFlushes": {
+        "count": 19053,
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "max": 2,
+        "mean": 2.0
+      },
+      "hudBakeMs": {
+        "count": 19053,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 1.093846,
+        "mean": 0.00016529192253188473
+      }
+    },
+    "sixLive": {
+      "intervalMs": {
+        "count": 7223,
+        "p50": 16.67623,
+        "p95": 21.091462,
+        "p99": 30.278461999999998,
+        "max": 73.34769200000001,
+        "mean": 16.978433850339194
+      },
+      "workMs": {
+        "count": 7223,
+        "p50": 9.697385,
+        "p95": 18.600385,
+        "p99": 28.133076,
+        "max": 71.159077,
+        "mean": 11.320948395403573
+      },
+      "cpuMs": {
+        "count": 7223,
+        "p50": 8.045,
+        "p95": 10.683232,
+        "p99": 12.83569,
+        "max": 22.319938,
+        "mean": 8.208185591859339
+      },
+      "requestsMs": {
+        "count": 7223,
+        "p50": 0.090693,
+        "p95": 0.286693,
+        "p99": 0.515231,
+        "max": 7.852846,
+        "mean": 0.12741761539526514
+      },
+      "prepareMs": {
+        "count": 7223,
+        "p50": 0.004231,
+        "p95": 0.006,
+        "p99": 0.048231,
+        "max": 2.489615,
+        "mean": 0.006268954866399003
+      },
+      "simulationMs": {
+        "count": 7223,
+        "p50": 2.330923,
+        "p95": 5.513077,
+        "p99": 9.678538,
+        "max": 29.912154,
+        "mean": 2.7093988107434583
+      },
+      "audioMs": {
+        "count": 7223,
+        "p50": 0.163385,
+        "p95": 0.797461,
+        "p99": 2.308231,
+        "max": 30.208308,
+        "mean": 0.31121312335594625
+      },
+      "telemetryMs": {
+        "count": 7223,
+        "p50": 0.007539,
+        "p95": 0.632923,
+        "p99": 1.438384,
+        "max": 14.704308,
+        "mean": 0.1880562478194656
+      },
+      "clearMs": {
+        "count": 7223,
+        "p50": 0.805,
+        "p95": 9.053693,
+        "p99": 11.008154,
+        "max": 26.781692,
+        "mean": 2.420621039180396
+      },
+      "cameraMs": {
+        "count": 7223,
+        "p50": 0.057615,
+        "p95": 0.172846,
+        "p99": 0.305077,
+        "max": 5.096462,
+        "mean": 0.07359452845078222
+      },
+      "effectsUpdateMs": {
+        "count": 7223,
+        "p50": 0.037769,
+        "p95": 0.125,
+        "p99": 0.285692,
+        "max": 3.535539,
+        "mean": 0.05596286376851724
+      },
+      "sceneryDrawMs": {
+        "count": 7223,
+        "p50": 0.909077,
+        "p95": 2.369461,
+        "p99": 4.207615,
+        "max": 16.456923,
+        "mean": 1.1080377549494669
+      },
+      "carsEffectsMs": {
+        "count": 7223,
+        "p50": 2.914153,
+        "p95": 4.969,
+        "p99": 10.858,
+        "max": 35.807538,
+        "mean": 3.1896318054824864
+      },
+      "hudMs": {
+        "count": 7223,
+        "p50": 0.915846,
+        "p95": 1.735769,
+        "p99": 4.477923,
+        "max": 17.520846,
+        "mean": 1.105973328256957
+      },
+      "captionMs": {
+        "count": 7223,
+        "p50": 0.009462,
+        "p95": 0.010846,
+        "p99": 0.012385,
+        "max": 0.703846,
+        "mean": 0.010041731551986708
+      },
+      "drawCalls": {
+        "count": 7223,
+        "p50": 18,
+        "p95": 25,
+        "p99": 26,
+        "max": 26,
+        "mean": 19.10563477779316
+      },
+      "textureBinds": {
+        "count": 7223,
+        "p50": 12,
+        "p95": 19,
+        "p99": 20,
+        "max": 20,
+        "mean": 13.176104111864877
+      },
+      "textureUploads": {
+        "count": 7223,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "mean": 0.0
+      },
+      "effectSlots": {
+        "count": 7223,
+        "p50": 26,
+        "p95": 49,
+        "p99": 54,
+        "max": 59,
+        "mean": 26.91887027550879
+      },
+      "requestsBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "prepareBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "simulationBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "audioBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "telemetryBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "clearBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "cameraBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "effectsUpdateBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "sceneryDrawBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "carsEffectsBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "hudBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "captionBytes": {
+        "count": 7223,
+        "p50": -1,
+        "p95": -1,
+        "p99": -1,
+        "max": -1,
+        "mean": -1.0
+      },
+      "drawIndices": {
+        "count": 7223,
+        "p50": 18378,
+        "p95": 20919,
+        "p99": 22752,
+        "max": 23091,
+        "mean": 18424.106465457568
+      },
+      "hudDraws": {
+        "count": 7223,
+        "p50": 5,
+        "p95": 5,
+        "p99": 5,
+        "max": 5,
+        "mean": 5.0
+      },
+      "hudFlushes": {
+        "count": 7223,
+        "p50": 2,
+        "p95": 2,
+        "p99": 2,
+        "max": 2,
+        "mean": 2.0
+      },
+      "hudBakeMs": {
+        "count": 7223,
+        "p50": 0,
+        "p95": 0,
+        "p99": 0,
+        "max": 0,
+        "mean": 0.0
+      }
+    },
+    "runtimeFirst": {
+      "art.gc.blocking-gc-count": "0",
+      "art.gc.gc-time": "1807",
+      "art.gc.bytes-allocated": "403166872",
+      "art.gc.bytes-freed": "341040400",
+      "art.gc.gc-count-rate-histogram": "0:1,2:1,14:1,19:1",
+      "art.gc.blocking-gc-count-rate-histogram": "0:4",
+      "art.gc.gc-count": "38",
+      "art.gc.blocking-gc-time": "0"
+    },
+    "runtimeLast": {
+      "art.gc.blocking-gc-count": "0",
+      "art.gc.gc-time": "5363",
+      "art.gc.bytes-allocated": "1305752968",
+      "art.gc.bytes-freed": "1230018352",
+      "art.gc.gc-count-rate-histogram": "0:4,1:27,2:5,3:1,14:1,19:1",
+      "art.gc.blocking-gc-count-rate-histogram": "0:39",
+      "art.gc.gc-count": "74",
+      "art.gc.blocking-gc-time": "0"
+    },
+    "betweenRenderMs": {
+      "count": 19047,
+      "p50": 8.209692,
+      "p95": 11.231769,
+      "p99": 12.357769,
+      "max": 23.553154,
+      "mean": 6.915840434871634
+    },
+    "inputs": {
+      "ageMs": {
+        "count": 21510,
+        "p50": 5.382205000030808,
+        "p95": 16.99306899998919,
+        "p99": 32.183139000000665,
+        "max": 168.2456499999971,
+        "mean": 7.12393348415213
+      },
+      "parseMs": {
+        "count": 21510,
+        "p50": 0.107769,
+        "p95": 0.544307,
+        "p99": 2.355462,
+        "max": 57.050307,
+        "mean": 0.21311979144583915
+      },
+      "offerMs": {
+        "count": 21510,
+        "p50": 0.005385,
+        "p95": 0.01077,
+        "p99": 0.081538,
+        "max": 21.789308,
+        "mean": 0.01217506420269642
+      },
+      "ackEnqueueMs": {
+        "count": 21510,
+        "p50": 0.394462,
+        "p95": 3.211,
+        "p99": 7.847,
+        "max": 108.279308,
+        "mean": 0.923385229335193
+      },
+      "receiveGapMs": {
+        "count": 21510,
+        "p50": 32.038077,
+        "p95": 48.315154,
+        "p99": 55.408077,
+        "max": 186.565385,
+        "mean": 33.33004337712692
+      }
+    },
+    "rejectedInputRows": [],
+    "ackRttMs": {
+      "count": 21612,
+      "p50": 10.47219999996014,
+      "p95": 24.730500000005122,
+      "p99": 45.11469999997644,
+      "max": 199.11290000000008,
+      "mean": 12.585396992411411
+    }
+  },
+  "gates": {
+    "duration": false,
+    "zeroRejected": true,
+    "inputStream": true,
+    "functional": true,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

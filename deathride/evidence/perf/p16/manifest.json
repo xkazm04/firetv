@@ -1,0 +1,2548 @@
+{
+ "generatedUtc": "2026-10-08T18:18:02.464407+00:00",
+ "committedBytes": 2924271,
+ "committed": [
+  {
+   "path": "evidence/perf/p16/ab-log.txt",
+   "bytes": 658,
+   "sha256": "c68bad0a40ffc0fb1dcbb396f0e4f1f1d20c5b1c3c936a60289b0af5a7dd8035"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/device-counters-end.txt",
+   "bytes": 89975,
+   "sha256": "92d7793be3d916120121104ce1b5bf304d1b1691a5674ecd680eaa504116dc66"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/device-counters-start.txt",
+   "bytes": 87072,
+   "sha256": "93c99e7da3dd87981b5116d49598eeec2eca5d70de090a2f901d9f3ae0301809"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/device-start.txt",
+   "bytes": 271,
+   "sha256": "a9bbf0f914b24dc156c60d8f187c061f967c902b96d4dde72bda4ee5a24f4187"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/fonts-line.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/host-cpu-end.json",
+   "bytes": 2546,
+   "sha256": "f5cc629a73eed0f2ab4581cdac22f743fdba7f5352de15d351ee6ea809d9579e"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/host-cpu-start.json",
+   "bytes": 2531,
+   "sha256": "85b4b8b7dc0cf55a826e9f5205e7d65d7050847673cb256ddb1518d18641d26c"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/p11-readings.json",
+   "bytes": 75110,
+   "sha256": "f4bd2c12c0dc37c8f1c76d438034e249a28016238280cf9a5d22b6301fd7bd98"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/probe.log",
+   "bytes": 1481,
+   "sha256": "8fd235ed57921fd79036212f6ae4202758623663da42b1b9ec5181375ed1ac08"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "8cc401ae109365f0408982c81a7696b2c6bfe2d1925ac5fd859b38ca2ea9b018"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/summary.json",
+   "bytes": 30982,
+   "sha256": "b4fb221da414658e59e77ef9bbcdd6d1d451a4ec661a21d1a56cefac99033c2e"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "2deff4857d388c151c7c81d6be039a984cd3ec4ee498408d82c0b1de6ea22156"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/device-counters-end.txt",
+   "bytes": 90732,
+   "sha256": "f8b89bbd9a43f887ab49286252ccdb6d31931b84cff46d20d85e1035f082e07f"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/device-counters-start.txt",
+   "bytes": 87096,
+   "sha256": "5485bac199ea84c457e549c72ae41b7d024f90b8a7bc3b710bd68548c1edaeb7"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/device-start.txt",
+   "bytes": 271,
+   "sha256": "6c42df0bad0d1a97833fbd57e7262e31bb4fdbe174415217cf2eeebb6c0bfa2f"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/fonts-line.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/host-cpu-end.json",
+   "bytes": 2539,
+   "sha256": "66a46634734ce77a1db1e48dd3cc9dac567e2fe74687b967e2b4538088815061"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/host-cpu-start.json",
+   "bytes": 2566,
+   "sha256": "d5ec8b0317c61bec56359b6a307951c0e7dca468cbb3fe50eced1878a092f4b0"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/p11-readings.json",
+   "bytes": 97128,
+   "sha256": "e0c680067f50996e5b5732aa9fa0b4aaf3dcc9476149125d31efa0af3c1f6979"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/probe.log",
+   "bytes": 1117,
+   "sha256": "18e7b7c71f7fd661c14b798655beb50adbafee883349fef0d870dad7b326d79f"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "586a4f8738d3e08a0a8589dcaea54647092eb3e9c9ba67e72a3084713ea4297c"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/summary.json",
+   "bytes": 22077,
+   "sha256": "2867b381415b868ed735adef4df55fa0c2ce50fe7fbf25161620de756c441ecb"
+  },
+  {
+   "path": "evidence/perf/p16/base-run1r/thread-priorities-before.txt",
+   "bytes": 1430,
+   "sha256": "651e5e88e6af66ea7ab5790e7c6c546eb0970814334b913ad234ac9ef51b7870"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/device-counters-end.txt",
+   "bytes": 89733,
+   "sha256": "dec0cb47841567969e8b07219707bb40bc0a0db4657700b54e88e2e299607938"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/device-counters-start.txt",
+   "bytes": 86064,
+   "sha256": "76e6f575a3a7b87edd893a720ee74f0c510d9b5ad336ac356da92600ec8a26ea"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/device-start.txt",
+   "bytes": 271,
+   "sha256": "9f9206a3bdfb2d5c191a83d71b6c5843a6bda639b04eb51a6cd4a37daefc10ee"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/fonts-line.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/host-cpu-end.json",
+   "bytes": 2532,
+   "sha256": "edd8adaac5b0f44f17a1278e6675d6c2044d350db8b1b711b6133f9ab7f4c4e1"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/host-cpu-start.json",
+   "bytes": 2539,
+   "sha256": "0afe54aacdfbda31a0b40bdf40ebc228ce3a8fda01208eb284979c0e9596f0f5"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/p11-readings.json",
+   "bytes": 59670,
+   "sha256": "d4babb7acbb43949aad11452c859d44264363ae9f31c468ac59aa424ea187522"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "e234ff3490895827f4b68a30e94e114b87172f1cbf89e8e1c1795e7138326ce0"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "da5a2d2b65fa1184ebb3bfd140ffbed2d7d21499f8e1357e9c1854ce0ca0bcea"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/summary.json",
+   "bytes": 22063,
+   "sha256": "c01467e73504020eea3093b1987c84502ac4108cccc2f00859c63f3223a03b67"
+  },
+  {
+   "path": "evidence/perf/p16/base-run2/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "b40e28b96c6cd639e3bf6d19a63b71f29d1716114633f2a8d2a2e8d12ee3a0b7"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/device-counters-end.txt",
+   "bytes": 90475,
+   "sha256": "162e619514c8481aad2c2df79ab053b3c4dff44001719c47283fc5c94fd4a155"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/device-counters-start.txt",
+   "bytes": 86631,
+   "sha256": "da9223883a6e2dbce4602f1f7eb33753883d10247c76f8d5acc17739ac53187f"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/device-start.txt",
+   "bytes": 253,
+   "sha256": "1f17ab513baaed1c4761d90ee5ab3acb127e70262c40d1c626f993119e05ce73"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/fonts-line.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/host-cpu-end.json",
+   "bytes": 2528,
+   "sha256": "73ffedac42489a6f2c59ab390565cf478cda93d819303e3d738fbdcd296cafd4"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/host-cpu-start.json",
+   "bytes": 2546,
+   "sha256": "ad73a0f01c396ec26ca67f682eb4297ffa3376edec99c647c655e180e70f95cb"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/p11-readings.json",
+   "bytes": 63960,
+   "sha256": "ecbe03d676281151847628d460205fb08810f3f2ca62f4cf99acb24d97e10dae"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/probe.log",
+   "bytes": 1117,
+   "sha256": "53d6dedc37a11b49dcb2a7c5f1454af16617b02123d71ab1e1d592529bf746ac"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/routes-warmup.json",
+   "bytes": 133,
+   "sha256": "3c638987161dca8f3bd1d3eb96387a58b876f2f04361be526539edb91d24c22d"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/summary.json",
+   "bytes": 22127,
+   "sha256": "43a48ca68a5dadff17d90c4759449f54ad881afff0dd2eb0e34baeb666c255e5"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1a/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "74f3cc9e6865c98e33b49e300a3d02c431ced8e91a2699957f4b6cec47dcb818"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/device-counters-end.txt",
+   "bytes": 90426,
+   "sha256": "3310be16bff2d271786c5cccad88e383477d8a5aee350ec8db108d05ad086586"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/device-counters-start.txt",
+   "bytes": 86878,
+   "sha256": "ef4042bbf76fc5a12af752c93a507425330427c5156fc4709f71c2fc6bf6818c"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/device-start.txt",
+   "bytes": 271,
+   "sha256": "6991c1751886e553c6a5842d27552242a7be5f5615fae48b26216e757c1b56e2"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/fonts-line.txt",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/host-cpu-end.json",
+   "bytes": 2549,
+   "sha256": "c4fa032f2d169253f997197fcc6cfc97d6e79f40b74793b26615fbcdb620308d"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/host-cpu-start.json",
+   "bytes": 2535,
+   "sha256": "73beafb7a3626d41efff028f04e96d4a4f8d03ed0b30a2ec0e15308ec5fab0f7"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/p11-readings.json",
+   "bytes": 65926,
+   "sha256": "d4536b960b20568a72bc262d964f14a534aa852731ca424452255da34e3dc47c"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/probe.log",
+   "bytes": 1116,
+   "sha256": "be27e4284fd6b9d5c5928fa4ea3a00ef898f9808c08024182fed70c073b720be"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "e39bdc495ae8564d22ec875929b49a8c7f5aa4d55f6e09d52b442fae00556646"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/summary.json",
+   "bytes": 22191,
+   "sha256": "2c26e5e84ee677be3ec427dbda7137605475ddf02785b66ce4a1a12415bc089c"
+  },
+  {
+   "path": "evidence/perf/p16/base-step1b/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "1e2bdb7b48a3430a48f4f2f100aa06a007c8da25de7a78f47a9a46de296ae4d9"
+  },
+  {
+   "path": "evidence/perf/p16/comparison.json",
+   "bytes": 37175,
+   "sha256": "f571d7a48944115123f22c2a9c90bbf7b851139a64597095b0b11a6ea27fae45"
+  },
+  {
+   "path": "evidence/perf/p16/device-state.json",
+   "bytes": 1670,
+   "sha256": "8599580572fa56ba2a1579728ebf1da0e3db33e599959da533a9a648f296e263"
+  },
+  {
+   "path": "evidence/perf/p16/diff-fonts/diff-lines.txt",
+   "bytes": 2888,
+   "sha256": "e446fa52451f02b6767fdfa9321852cfc3f5431161576d344285d00d18c24765"
+  },
+  {
+   "path": "evidence/perf/p16/diff-fonts/installed.json",
+   "bytes": 419,
+   "sha256": "e186e8a4e91412925770d0ba7c45819faea4b33b8e2d3719abc8e16f6357142e"
+  },
+  {
+   "path": "evidence/perf/p16/diff-fonts2/diff-lines.txt",
+   "bytes": 5851,
+   "sha256": "9a7ab6b67b4db55c6249e8b7613cfea8ff45eedbdeefebd30d27f5dddf615f39"
+  },
+  {
+   "path": "evidence/perf/p16/diff-fonts2/installed.json",
+   "bytes": 419,
+   "sha256": "2c72c1b8a44e524011e99274028be42a0aa20d6b9b74bd6fe02faea4f1e2e81c"
+  },
+  {
+   "path": "evidence/perf/p16/diff-layer/diff-lines.txt",
+   "bytes": 7448,
+   "sha256": "b612b540127390c5e58dfe380698df11681b41053c67835fe419830e2e580572"
+  },
+  {
+   "path": "evidence/perf/p16/diff-layer/installed.json",
+   "bytes": 399,
+   "sha256": "2b3731cee66bc499a2a04bd12a0027bccd304a47d5c9b5b1b6faa8ed6a552a27"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/device-counters-end.txt",
+   "bytes": 90494,
+   "sha256": "72e681a97400c4242af8d8644a11867c9bd252d761eaf63f75829a458335ed8e"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/device-counters-start.txt",
+   "bytes": 86480,
+   "sha256": "933bb48b70c8d3dbd963856bfcfa9947df0772a553ab7ee4e369f7ffc5b438ed"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/device-start.txt",
+   "bytes": 271,
+   "sha256": "debda8f57d447dff7b99276277b51c836865abe55516ae407d6cc2f3138198fa"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/fonts-line.txt",
+   "bytes": 85,
+   "sha256": "97816e670bbf3b9b228e13c0d4862ea49c01fff759879250f2543fb2f6a63556"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/host-cpu-end.json",
+   "bytes": 2545,
+   "sha256": "7009bcecfcb33021e53b8800106c277a5c3e3d179a4513c6c5c3c4831ae631f0"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/host-cpu-start.json",
+   "bytes": 2559,
+   "sha256": "d614102fbe11df0a1253c1bddcca457ec9312eb3bc79b755441c732c8a5b3e2b"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/p11-readings.json",
+   "bytes": 72658,
+   "sha256": "762bde145fdb37778457fd075199b25cd98892ade0c1aa35ded481852ecbe2bf"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/probe.log",
+   "bytes": 1481,
+   "sha256": "ea259f3f572187ef5d375a5d624466d568a2480adb82aac4528efdb7dcc707f0"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "df14a52efed5dc421c2c9092a129669bfacf65fbf25ae60767f25389ec4b91e0"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/summary.json",
+   "bytes": 29725,
+   "sha256": "fbe11d1f598a73bf786dd7a08f5d2bce201ee01fa17816010cffb47472dd1afe"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "1c691a97f21c5518f4d49b7e87d8d4f13949bab0412cb410ba3f2957f07e98ba"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/device-counters-end.txt",
+   "bytes": 90281,
+   "sha256": "4012065380a1f0b4075f58e3832d9c192020caf64dbb24eca56ab60e225ee19a"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/device-counters-start.txt",
+   "bytes": 86422,
+   "sha256": "2e3492ce62015b889550e33a34219a29b18bf16c8faca5fd41ec2c6bf22d9346"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/device-start.txt",
+   "bytes": 271,
+   "sha256": "e1e003bd4d512f619b36e2e67d21c0bb3402bd9afcaf9ff910b3091a6652e3db"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/fonts-line.txt",
+   "bytes": 85,
+   "sha256": "e3186258f9ab9c52277a3801118a97dd78ab6e5d285dc1f0caf220974a833956"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/host-cpu-end.json",
+   "bytes": 2544,
+   "sha256": "ce6dc6817dc33b75db5d6d9d0c01e8757fa2a50471235ff420971aba085bd6b0"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/host-cpu-start.json",
+   "bytes": 2544,
+   "sha256": "ec1262bb071e1a56530e6b308df1879b138c62129aa94fdc86d2a6949c990826"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/p11-readings.json",
+   "bytes": 82302,
+   "sha256": "b189f1a3501d4ed81fb4b4046d370393a0260034c2d87ef5c191ca6a0d3e82af"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/probe.log",
+   "bytes": 1117,
+   "sha256": "a092fb404226047d503fa6344f831e5298de84d2fd46821fd776128688455ffd"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "39f98a47bdf903a7e0eb6b8a3e8f460bae148d71e87c3fb36856485764a88c72"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/summary.json",
+   "bytes": 22090,
+   "sha256": "453e5a506f8b4023becd3845dbdeb12494d8853175d3518bde80a1bb37ff4699"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run1r/thread-priorities-before.txt",
+   "bytes": 1363,
+   "sha256": "ad29b049ed3222aa4bd3111dd4696d4dd9e5f9c14ae9b586d6a751de0e649cca"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/device-counters-end.txt",
+   "bytes": 90461,
+   "sha256": "ea60368ac01e37ed1b96e8b05b6f936f15c331380f7f47ef68b721fba7e5f852"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/device-counters-start.txt",
+   "bytes": 87099,
+   "sha256": "5e071fb3a8e928352c3d29b4098ce7772f97c4a11d9fbd565ac7531fe5900389"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/device-start.txt",
+   "bytes": 271,
+   "sha256": "38a7016944d135ac12033084333d2194c4747f35b9268bc41a2be6c35036730d"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/fonts-line.txt",
+   "bytes": 85,
+   "sha256": "0bd678b496aff3fba508034f32558d9bbdfa988a1c6d61fbf4d2150cea6f0573"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/host-cpu-end.json",
+   "bytes": 2554,
+   "sha256": "605b4775cdeca234886835c9bb7264e8a947805c765ad5c789b9a0ba388711d4"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/host-cpu-start.json",
+   "bytes": 2547,
+   "sha256": "80ca45135cdf68d08ebf1042cb0fc594d4f8508ebd619d45ef74d1cf8552bbdf"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/p11-readings.json",
+   "bytes": 89767,
+   "sha256": "a0c280c8e3d7a864d983685a4719bb064dbf017dd1022f70fd403c5cec3f0dd5"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "50430228bf9559463665fb50f8367fef745f6abb8ec1274e8d1bbb1e2e1e9a0c"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "58b52048d638103957178aeac5887d71790c8f0c5c2d5768351098c8dad9848d"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/summary.json",
+   "bytes": 22112,
+   "sha256": "c36c4b55d55c36ce56daff4489c3c396d0f12a4b4dad18d40fdb5843906bb870"
+  },
+  {
+   "path": "evidence/perf/p16/fonts-run2/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "838fb9a691818e750f85299c9572df474632c594ca635609c5a86ee7c42d9a13"
+  },
+  {
+   "path": "evidence/perf/p16/hash-base/diff-lines.txt",
+   "bytes": 1721,
+   "sha256": "69e7adb2bae50c6d8c14f9a0bccb2f7632a2f9328771811322504f3ef039f8e5"
+  },
+  {
+   "path": "evidence/perf/p16/hash-base/installed.json",
+   "bytes": 400,
+   "sha256": "70c920929ab92c8f3e1f925e577639499fa9545c136157c5d4c915b03e2e361b"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/device-counters-end.txt",
+   "bytes": 90215,
+   "sha256": "2b9eb6e6cd81400c1486c0df443f4a9271ba57aa3bdc060bebbb22a7109d7ba5"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/device-counters-start.txt",
+   "bytes": 86686,
+   "sha256": "00dc5a95ce7c49a23ee21c58f0beeeedb4a867b109fe6ff4f702c8eba15ca3c3"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/device-start.txt",
+   "bytes": 271,
+   "sha256": "8ac97ac9e6a174c3bffd038589ccb189cda7d0ab18ca488b8e8a47108548f53f"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/fonts-line.txt",
+   "bytes": 85,
+   "sha256": "d65a578926a28183e07a2a559c4af5d38d5f244a597c26f58d6c576d6cff4260"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/host-cpu-end.json",
+   "bytes": 2545,
+   "sha256": "b97d5fe09d6ba4b99a27399209a1c63cf280108dfacd008c0755702d85428d8b"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/host-cpu-start.json",
+   "bytes": 2551,
+   "sha256": "015e8e2eeba65654061fc5668a6341a6e36689ad7ad79e3ac22e7d3b0d089df2"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/installed.json",
+   "bytes": 376,
+   "sha256": "2f5d32ff575e00ac7dd6b5ad99a819fc9f478a1439abd829e19b149c6daf892b"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/p11-readings.json",
+   "bytes": 48471,
+   "sha256": "0f370a450075b64e6d09686425ef643e75f02a5e86030b4d807fd159cfc97286"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/probe.log",
+   "bytes": 1116,
+   "sha256": "f76e775ba6670f6af674659499549372fd664caa70fac6dbaab233fcd68a3968"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "d76ba2e37e29d6b77f084bbb1f10bf21f330fa1f919de48e335ec29f308e3946"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/summary.json",
+   "bytes": 22082,
+   "sha256": "479b9681ce3ab99c31f2b44ecf2e9f877103c3db87f10054c3a1749c66ffe723"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run1/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "2f52a4bbf67b88ee39008b736c266510fe45e02c594a04faec25d60791b0c2de"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/device-counters-end.txt",
+   "bytes": 90512,
+   "sha256": "f281ecce8051eb8b3d48b0602d0bcdd3ccc81365b2da4b86cb120f55f1773b2b"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/device-counters-start.txt",
+   "bytes": 86667,
+   "sha256": "40a91a6e489ba0dc31ea1be38ce7619dc5c1006f3dc5ce903deef56c97c85731"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/device-start.txt",
+   "bytes": 271,
+   "sha256": "6b962f2c6e25de9a6f56938c21bd7fd484574dba6ec800edb42de66efc9c8aa1"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/fonts-line.txt",
+   "bytes": 85,
+   "sha256": "5e5bc1509e40463f5a006a8cb3cd59a099f760bf6b95fc00e48e84b6d3335646"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/host-cpu-end.json",
+   "bytes": 2550,
+   "sha256": "4af9bd8995fcf5171c72aeaf236b0c0ce1df65786852dd4f00f5817bf7cb7938"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/host-cpu-start.json",
+   "bytes": 2556,
+   "sha256": "2435d3231e752a314260fba427edb280811a5eccf3dcfbb13c14a8b49782ad26"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/installed.json",
+   "bytes": 376,
+   "sha256": "2f5d32ff575e00ac7dd6b5ad99a819fc9f478a1439abd829e19b149c6daf892b"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/p11-readings.json",
+   "bytes": 55261,
+   "sha256": "79bc6250d960e643e33b24b972893fa46c30f5d49e9ce69a673d8738e4076561"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/probe.log",
+   "bytes": 1124,
+   "sha256": "d1218607210441720c5f5a9c21b6d86d4089a5eaca69454b5deb057264e893e1"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "3f2fcd6acff1ed4a882c7fe18462a01e5fd299461c65b3e5816af6007f77cc3e"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/summary.json",
+   "bytes": 22136,
+   "sha256": "579ed486084fdc62a8bd4de01898fbb62eaa7188f0037cad0e6f1d64535358d3"
+  },
+  {
+   "path": "evidence/perf/p16/layer-run2/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "c1188bc4b45ac86e18c257c6868037b3f0e48811abab77c29e66c25c8191e96a"
+  },
+  {
+   "path": "evidence/perf/p16/pixel-diff.json",
+   "bytes": 47803,
+   "sha256": "9558378b9c21d20ee67eaab112f6cd6bba85d4b534bc52ae69f82444fc85b1c7"
+  },
+  {
+   "path": "evidence/perf/p16/step1-baseline.json",
+   "bytes": 14098,
+   "sha256": "3c4d21797edf05bd8e8eed5806325fa0f129d171e07c402e372c1edb0b48ba35"
+  }
+ ],
+ "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence (outside git)",
+ "rawBytes": 322575006,
+ "raw": [
+  {
+   "path": "p16/ab-final.out",
+   "bytes": 2132,
+   "sha256": "1d348c608b8cfc056237674b73beb4ad9388efb7c21ca5df816515554c2578ee"
+  },
+  {
+   "path": "p16/ab-partial.json",
+   "bytes": 28506,
+   "sha256": "3578be63c33f95ce834e2544313f8d5ae9d82f1afd8e5fe8a5967c7d6082d2b7"
+  },
+  {
+   "path": "p16/ab.log",
+   "bytes": 658,
+   "sha256": "c68bad0a40ffc0fb1dcbb396f0e4f1f1d20c5b1c3c936a60289b0af5a7dd8035"
+  },
+  {
+   "path": "p16/base-run1/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/base-run1/device-counters-end.txt",
+   "bytes": 89975,
+   "sha256": "92d7793be3d916120121104ce1b5bf304d1b1691a5674ecd680eaa504116dc66"
+  },
+  {
+   "path": "p16/base-run1/device-counters-start.txt",
+   "bytes": 87072,
+   "sha256": "93c99e7da3dd87981b5116d49598eeec2eca5d70de090a2f901d9f3ae0301809"
+  },
+  {
+   "path": "p16/base-run1/host-cpu-end.json",
+   "bytes": 2546,
+   "sha256": "f5cc629a73eed0f2ab4581cdac22f743fdba7f5352de15d351ee6ea809d9579e"
+  },
+  {
+   "path": "p16/base-run1/host-cpu-start.json",
+   "bytes": 2531,
+   "sha256": "85b4b8b7dc0cf55a826e9f5205e7d65d7050847673cb256ddb1518d18641d26c"
+  },
+  {
+   "path": "p16/base-run1/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/base-run1/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "p16/base-run1/logcat.txt",
+   "bytes": 193594,
+   "sha256": "cab821ed78c237177b960aa2cd05753c2b56876dc112a0c0d850b25618e786cb"
+  },
+  {
+   "path": "p16/base-run1/p11-readings.json",
+   "bytes": 75110,
+   "sha256": "f4bd2c12c0dc37c8f1c76d438034e249a28016238280cf9a5d22b6301fd7bd98"
+  },
+  {
+   "path": "p16/base-run1/probe.log",
+   "bytes": 1481,
+   "sha256": "8fd235ed57921fd79036212f6ae4202758623663da42b1b9ec5181375ed1ac08"
+  },
+  {
+   "path": "p16/base-run1/raw.json.gz",
+   "bytes": 3116881,
+   "sha256": "8e80ddc10e06caa8e6312b0081778b4c5416f77c602aed21ec1c3ae1cec58020"
+  },
+  {
+   "path": "p16/base-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "8cc401ae109365f0408982c81a7696b2c6bfe2d1925ac5fd859b38ca2ea9b018"
+  },
+  {
+   "path": "p16/base-run1/startup-logcat.txt",
+   "bytes": 2833,
+   "sha256": "91a5b19c32868bda89c9d7b8cee611561238ea29f0cd377e03d3a70799b24850"
+  },
+  {
+   "path": "p16/base-run1/summary.json",
+   "bytes": 30982,
+   "sha256": "b4fb221da414658e59e77ef9bbcdd6d1d451a4ec661a21d1a56cefac99033c2e"
+  },
+  {
+   "path": "p16/base-run1/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "2deff4857d388c151c7c81d6be039a984cd3ec4ee498408d82c0b1de6ea22156"
+  },
+  {
+   "path": "p16/base-run1-device.out",
+   "bytes": 451,
+   "sha256": "400e8c37c5db5f6708698388eb8bc3651612e86984686035cc413b76525f99d6"
+  },
+  {
+   "path": "p16/base-run1-p11.out",
+   "bytes": 2900,
+   "sha256": "5db9c1eeac450ada79fe7a603dc1b612b54fae71200ce64283f71a25dbb090b5"
+  },
+  {
+   "path": "p16/base-run1-start.txt",
+   "bytes": 271,
+   "sha256": "a9bbf0f914b24dc156c60d8f187c061f967c902b96d4dde72bda4ee5a24f4187"
+  },
+  {
+   "path": "p16/base-run1-summary.out",
+   "bytes": 976,
+   "sha256": "c4ff80138e8d93f7533e497b3aaae05e10bd592a73e68adbef2967396ad635d1"
+  },
+  {
+   "path": "p16/base-run1r/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/base-run1r/device-counters-end.txt",
+   "bytes": 90732,
+   "sha256": "f8b89bbd9a43f887ab49286252ccdb6d31931b84cff46d20d85e1035f082e07f"
+  },
+  {
+   "path": "p16/base-run1r/device-counters-start.txt",
+   "bytes": 87096,
+   "sha256": "5485bac199ea84c457e549c72ae41b7d024f90b8a7bc3b710bd68548c1edaeb7"
+  },
+  {
+   "path": "p16/base-run1r/host-cpu-end.json",
+   "bytes": 2539,
+   "sha256": "66a46634734ce77a1db1e48dd3cc9dac567e2fe74687b967e2b4538088815061"
+  },
+  {
+   "path": "p16/base-run1r/host-cpu-start.json",
+   "bytes": 2566,
+   "sha256": "d5ec8b0317c61bec56359b6a307951c0e7dca468cbb3fe50eced1878a092f4b0"
+  },
+  {
+   "path": "p16/base-run1r/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/base-run1r/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "p16/base-run1r/logcat.txt",
+   "bytes": 171894,
+   "sha256": "f56fbb16ad4e0a6ca14f41852055a95e22d6c8bccf98472db613249f24340e1a"
+  },
+  {
+   "path": "p16/base-run1r/p11-readings.json",
+   "bytes": 97128,
+   "sha256": "e0c680067f50996e5b5732aa9fa0b4aaf3dcc9476149125d31efa0af3c1f6979"
+  },
+  {
+   "path": "p16/base-run1r/probe.log",
+   "bytes": 1117,
+   "sha256": "18e7b7c71f7fd661c14b798655beb50adbafee883349fef0d870dad7b326d79f"
+  },
+  {
+   "path": "p16/base-run1r/raw.json.gz",
+   "bytes": 3133860,
+   "sha256": "3f01d3f5ee37769e331830f09b949dca3fb00b7643f86b3dd0d33d98b13b679b"
+  },
+  {
+   "path": "p16/base-run1r/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "586a4f8738d3e08a0a8589dcaea54647092eb3e9c9ba67e72a3084713ea4297c"
+  },
+  {
+   "path": "p16/base-run1r/startup-logcat.txt",
+   "bytes": 2817,
+   "sha256": "596d26017fa7527aa0e5e9c4456afc3f3d420de9c0f77365926afb1bab2001df"
+  },
+  {
+   "path": "p16/base-run1r/summary.json",
+   "bytes": 22077,
+   "sha256": "2867b381415b868ed735adef4df55fa0c2ce50fe7fbf25161620de756c441ecb"
+  },
+  {
+   "path": "p16/base-run1r/thread-priorities-before.txt",
+   "bytes": 1430,
+   "sha256": "651e5e88e6af66ea7ab5790e7c6c546eb0970814334b913ad234ac9ef51b7870"
+  },
+  {
+   "path": "p16/base-run1r-device.out",
+   "bytes": 452,
+   "sha256": "100b7792b5f350751cae68388a3607733b9768bc9fc8e6faa5aaf8ae4061af4e"
+  },
+  {
+   "path": "p16/base-run1r-p11.out",
+   "bytes": 2912,
+   "sha256": "bc7e677c8401d42434438b56c5e9f5dd45ac12a696b17accf2a4ed3b7bf7a2bf"
+  },
+  {
+   "path": "p16/base-run1r-start.txt",
+   "bytes": 271,
+   "sha256": "6c42df0bad0d1a97833fbd57e7262e31bb4fdbe174415217cf2eeebb6c0bfa2f"
+  },
+  {
+   "path": "p16/base-run1r-summary.out",
+   "bytes": 937,
+   "sha256": "ef2fe406fcc098ae72c65e8cc934f5352ec2c0d636c43669768298ce1e5561a3"
+  },
+  {
+   "path": "p16/base-run2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/base-run2/device-counters-end.txt",
+   "bytes": 89733,
+   "sha256": "dec0cb47841567969e8b07219707bb40bc0a0db4657700b54e88e2e299607938"
+  },
+  {
+   "path": "p16/base-run2/device-counters-start.txt",
+   "bytes": 86064,
+   "sha256": "76e6f575a3a7b87edd893a720ee74f0c510d9b5ad336ac356da92600ec8a26ea"
+  },
+  {
+   "path": "p16/base-run2/host-cpu-end.json",
+   "bytes": 2532,
+   "sha256": "edd8adaac5b0f44f17a1278e6675d6c2044d350db8b1b711b6133f9ab7f4c4e1"
+  },
+  {
+   "path": "p16/base-run2/host-cpu-start.json",
+   "bytes": 2539,
+   "sha256": "0afe54aacdfbda31a0b40bdf40ebc228ce3a8fda01208eb284979c0e9596f0f5"
+  },
+  {
+   "path": "p16/base-run2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/base-run2/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "p16/base-run2/logcat.txt",
+   "bytes": 194939,
+   "sha256": "94a16f12a923b796955c05081be3a5cd6cfd14f02544e1cc4196ea8efd2e895d"
+  },
+  {
+   "path": "p16/base-run2/p11-readings.json",
+   "bytes": 59670,
+   "sha256": "d4babb7acbb43949aad11452c859d44264363ae9f31c468ac59aa424ea187522"
+  },
+  {
+   "path": "p16/base-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "e234ff3490895827f4b68a30e94e114b87172f1cbf89e8e1c1795e7138326ce0"
+  },
+  {
+   "path": "p16/base-run2/raw.json.gz",
+   "bytes": 3152418,
+   "sha256": "5fda3fda89db935476d785953efc0160f86dde044b6201588393db109041305b"
+  },
+  {
+   "path": "p16/base-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "da5a2d2b65fa1184ebb3bfd140ffbed2d7d21499f8e1357e9c1854ce0ca0bcea"
+  },
+  {
+   "path": "p16/base-run2/startup-logcat.txt",
+   "bytes": 2840,
+   "sha256": "3e1b63c15250d97cb6a31989fb12ae05d1c4108533decd2806199b6b90fda381"
+  },
+  {
+   "path": "p16/base-run2/summary.json",
+   "bytes": 22063,
+   "sha256": "c01467e73504020eea3093b1987c84502ac4108cccc2f00859c63f3223a03b67"
+  },
+  {
+   "path": "p16/base-run2/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "b40e28b96c6cd639e3bf6d19a63b71f29d1716114633f2a8d2a2e8d12ee3a0b7"
+  },
+  {
+   "path": "p16/base-run2-device.out",
+   "bytes": 451,
+   "sha256": "c69885f46b351cc8820e132f0afcc68292f97dd63368a66a78ec9b68f1596ab1"
+  },
+  {
+   "path": "p16/base-run2-p11.out",
+   "bytes": 2875,
+   "sha256": "64104a326a63d8e4d27de3ab57e8d952277fddd86c620b743c45d08d02944f4d"
+  },
+  {
+   "path": "p16/base-run2-start.txt",
+   "bytes": 271,
+   "sha256": "9f9206a3bdfb2d5c191a83d71b6c5843a6bda639b04eb51a6cd4a37daefc10ee"
+  },
+  {
+   "path": "p16/base-run2-summary.out",
+   "bytes": 947,
+   "sha256": "19c6f7b1e2039535961b67f39a5d60dfb8b972600db2fae39591d67e7877139c"
+  },
+  {
+   "path": "p16/base-step1a/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/base-step1a/device-counters-end.txt",
+   "bytes": 90475,
+   "sha256": "162e619514c8481aad2c2df79ab053b3c4dff44001719c47283fc5c94fd4a155"
+  },
+  {
+   "path": "p16/base-step1a/device-counters-start.txt",
+   "bytes": 86631,
+   "sha256": "da9223883a6e2dbce4602f1f7eb33753883d10247c76f8d5acc17739ac53187f"
+  },
+  {
+   "path": "p16/base-step1a/host-cpu-end.json",
+   "bytes": 2528,
+   "sha256": "73ffedac42489a6f2c59ab390565cf478cda93d819303e3d738fbdcd296cafd4"
+  },
+  {
+   "path": "p16/base-step1a/host-cpu-start.json",
+   "bytes": 2546,
+   "sha256": "ad73a0f01c396ec26ca67f682eb4297ffa3376edec99c647c655e180e70f95cb"
+  },
+  {
+   "path": "p16/base-step1a/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/base-step1a/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "p16/base-step1a/logcat.txt",
+   "bytes": 174390,
+   "sha256": "c434497e0b34ce5ec90c46f5f07f39523053fe50658ef43ee24caee93517ea22"
+  },
+  {
+   "path": "p16/base-step1a/p11-readings.json",
+   "bytes": 63960,
+   "sha256": "ecbe03d676281151847628d460205fb08810f3f2ca62f4cf99acb24d97e10dae"
+  },
+  {
+   "path": "p16/base-step1a/probe.log",
+   "bytes": 1117,
+   "sha256": "53d6dedc37a11b49dcb2a7c5f1454af16617b02123d71ab1e1d592529bf746ac"
+  },
+  {
+   "path": "p16/base-step1a/raw.json.gz",
+   "bytes": 3247064,
+   "sha256": "2ab5b8b4fe6dc6f3e07bccd06444a207b2035e9ef4ed325a823d78ab75454c36"
+  },
+  {
+   "path": "p16/base-step1a/routes-warmup.json",
+   "bytes": 133,
+   "sha256": "3c638987161dca8f3bd1d3eb96387a58b876f2f04361be526539edb91d24c22d"
+  },
+  {
+   "path": "p16/base-step1a/startup-logcat.txt",
+   "bytes": 2861,
+   "sha256": "0370d66572e99962a9453b9a2bcc23f144ca5777b75c57cb09a8d60062096a7f"
+  },
+  {
+   "path": "p16/base-step1a/summary.json",
+   "bytes": 22127,
+   "sha256": "43a48ca68a5dadff17d90c4759449f54ad881afff0dd2eb0e34baeb666c255e5"
+  },
+  {
+   "path": "p16/base-step1a/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "74f3cc9e6865c98e33b49e300a3d02c431ced8e91a2699957f4b6cec47dcb818"
+  },
+  {
+   "path": "p16/base-step1a-device.out",
+   "bytes": 453,
+   "sha256": "a15cbda5187a88d9d646e11c98c186af9f00c074597422f2fd5c09751fb8ed24"
+  },
+  {
+   "path": "p16/base-step1a-p11.out",
+   "bytes": 2938,
+   "sha256": "e8d6d085048c8893f563c2386c4df3ffce408526b6ce7adb24253e896cdf7885"
+  },
+  {
+   "path": "p16/base-step1a-start.txt",
+   "bytes": 253,
+   "sha256": "1f17ab513baaed1c4761d90ee5ab3acb127e70262c40d1c626f993119e05ce73"
+  },
+  {
+   "path": "p16/base-step1a-summary.out",
+   "bytes": 941,
+   "sha256": "1ec49015d5ea236acc9146a6b63d5646eca015ebf2b9725f1dd5fcc5b759a4f9"
+  },
+  {
+   "path": "p16/base-step1b/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/base-step1b/device-counters-end.txt",
+   "bytes": 90426,
+   "sha256": "3310be16bff2d271786c5cccad88e383477d8a5aee350ec8db108d05ad086586"
+  },
+  {
+   "path": "p16/base-step1b/device-counters-start.txt",
+   "bytes": 86878,
+   "sha256": "ef4042bbf76fc5a12af752c93a507425330427c5156fc4709f71c2fc6bf6818c"
+  },
+  {
+   "path": "p16/base-step1b/host-cpu-end.json",
+   "bytes": 2549,
+   "sha256": "c4fa032f2d169253f997197fcc6cfc97d6e79f40b74793b26615fbcdb620308d"
+  },
+  {
+   "path": "p16/base-step1b/host-cpu-start.json",
+   "bytes": 2535,
+   "sha256": "73beafb7a3626d41efff028f04e96d4a4f8d03ed0b30a2ec0e15308ec5fab0f7"
+  },
+  {
+   "path": "p16/base-step1b/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/base-step1b/installed.json",
+   "bytes": 376,
+   "sha256": "1cd5a1ab95d765fd2aa9b311707411bc3242d1e27dbc5665d173ef0f09b3e22c"
+  },
+  {
+   "path": "p16/base-step1b/logcat.txt",
+   "bytes": 170009,
+   "sha256": "90b8d26a0f00717bb0ed306ca5dc7c531221d8f2d6e16c3b7f185bc3ba37b5d6"
+  },
+  {
+   "path": "p16/base-step1b/p11-readings.json",
+   "bytes": 65926,
+   "sha256": "d4536b960b20568a72bc262d964f14a534aa852731ca424452255da34e3dc47c"
+  },
+  {
+   "path": "p16/base-step1b/probe.log",
+   "bytes": 1116,
+   "sha256": "be27e4284fd6b9d5c5928fa4ea3a00ef898f9808c08024182fed70c073b720be"
+  },
+  {
+   "path": "p16/base-step1b/raw.json.gz",
+   "bytes": 3131689,
+   "sha256": "e05c651d33df748d25afbad4be43b86a6e68b2a5fa68ec972fdd303c5c1d690d"
+  },
+  {
+   "path": "p16/base-step1b/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "e39bdc495ae8564d22ec875929b49a8c7f5aa4d55f6e09d52b442fae00556646"
+  },
+  {
+   "path": "p16/base-step1b/startup-logcat.txt",
+   "bytes": 2930,
+   "sha256": "41b56e8717c845312baf08b457596fb3eb1336b8e88bdccfd6abca1386792d36"
+  },
+  {
+   "path": "p16/base-step1b/summary.json",
+   "bytes": 22191,
+   "sha256": "2c26e5e84ee677be3ec427dbda7137605475ddf02785b66ce4a1a12415bc089c"
+  },
+  {
+   "path": "p16/base-step1b/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "1e2bdb7b48a3430a48f4f2f100aa06a007c8da25de7a78f47a9a46de296ae4d9"
+  },
+  {
+   "path": "p16/base-step1b-device.out",
+   "bytes": 453,
+   "sha256": "3830dd8ac76eb7dacf2bc7cf86d7fe2f38829561bbdc7e8c0923634669ed1fba"
+  },
+  {
+   "path": "p16/base-step1b-p11.out",
+   "bytes": 2923,
+   "sha256": "40e3135b02357839e258a4941ed96f6186e6bbeb9ad5785e106a5dfe4e69d605"
+  },
+  {
+   "path": "p16/base-step1b-start.txt",
+   "bytes": 271,
+   "sha256": "6991c1751886e553c6a5842d27552242a7be5f5615fae48b26216e757c1b56e2"
+  },
+  {
+   "path": "p16/base-step1b-summary.out",
+   "bytes": 985,
+   "sha256": "b62b7c3bfaaf14481a7f611f385eaccf009a53e0237b12d630df46c04141abe2"
+  },
+  {
+   "path": "p16/base.apk",
+   "bytes": 41429991,
+   "sha256": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137"
+  },
+  {
+   "path": "p16/build-base.log",
+   "bytes": 3561,
+   "sha256": "beb9d7181a91edb95666dd342c70a42e1d0021701aaf02b8f2c58ece9b070c7b"
+  },
+  {
+   "path": "p16/build-fonts.log",
+   "bytes": 3471,
+   "sha256": "a715b15ec1fa11e55980d4aa30c290c447afa416d6083cb46b4d961f6e92a828"
+  },
+  {
+   "path": "p16/build-fonts2.log",
+   "bytes": 3446,
+   "sha256": "3d784549feebd06fb4b91f9a98eac48f9c91faa418b0388ffe3ee3514b256386"
+  },
+  {
+   "path": "p16/build-layer.log",
+   "bytes": 3479,
+   "sha256": "ff8f3cb5fe35a1037182a8e53688de208297d68f6731e7122d7e411c7f1bcb0f"
+  },
+  {
+   "path": "p16/build-release-8443a99f.log",
+   "bytes": 5037,
+   "sha256": "f64d5f2d2bfa59388db18cc2bb2628fbf8e1a82a756f5c928e4b3e0049354b98"
+  },
+  {
+   "path": "p16/device-after-runs-before-restore.txt",
+   "bytes": 164,
+   "sha256": "5f91fad41f2cce612915062346db42a085c28810d43062aa9cbe5f20af7db8eb"
+  },
+  {
+   "path": "p16/device-state-end.txt",
+   "bytes": 504,
+   "sha256": "fe17543aac3d913a34f2881d8dadc1b7a935768af63f9f5693251a90a74af009"
+  },
+  {
+   "path": "p16/device-state-start.txt",
+   "bytes": 327,
+   "sha256": "178c45f06f9435110504e7d7a9ecd8b8e8556a953449da3c64aa6ecdd6cecae1"
+  },
+  {
+   "path": "p16/diff-fonts/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/diff-fonts/device-counters-end.txt",
+   "bytes": 89740,
+   "sha256": "64217ba28df121a9a8a774a23e58e609c4677af64be40b7d9e37c66cf8c7cebd"
+  },
+  {
+   "path": "p16/diff-fonts/device-counters-start.txt",
+   "bytes": 86222,
+   "sha256": "ba5a8f8f0d84c1e55591cf22644526f6be4c45a86486eac54eb1b0caf7edb851"
+  },
+  {
+   "path": "p16/diff-fonts/diff-lines.txt",
+   "bytes": 2888,
+   "sha256": "e446fa52451f02b6767fdfa9321852cfc3f5431161576d344285d00d18c24765"
+  },
+  {
+   "path": "p16/diff-fonts/host-cpu-end.json",
+   "bytes": 2539,
+   "sha256": "1f506cc6060fe82c6ba73a4429a4812e3a0b0a142b2bfcf5b67732b74cd1f9e9"
+  },
+  {
+   "path": "p16/diff-fonts/host-cpu-start.json",
+   "bytes": 2544,
+   "sha256": "a3ef79f54e248e564c44f06858a8b430132fe7b8d5a5d84373432fe56f98e2d7"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/lobby-1-base.png",
+   "bytes": 848900,
+   "sha256": "fac2b50b1ab26a0e722ab55c7a40270ede3117400f921269aaa292bba3bdcd59"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/lobby-1-fonts.png",
+   "bytes": 848900,
+   "sha256": "fac2b50b1ab26a0e722ab55c7a40270ede3117400f921269aaa292bba3bdcd59"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/lobby-2-base.png",
+   "bytes": 751487,
+   "sha256": "d9b2364d553ae9f74b26cd42b7bd06bb2f363b8ea14a4c3162f47105a204baaf"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/lobby-2-fonts.png",
+   "bytes": 751487,
+   "sha256": "d9b2364d553ae9f74b26cd42b7bd06bb2f363b8ea14a4c3162f47105a204baaf"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/race-3-base.png",
+   "bytes": 1079046,
+   "sha256": "f3f9820cb350de1b2f19ee93da3f418e6e5cbe1c16b371e6b93c910e2768aa53"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/race-3-fonts.png",
+   "bytes": 1079052,
+   "sha256": "60da20303bdae31e08d30a4f27e318b38a78ef5dc85f954d42f77c863c4d97f9"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/race-4-base.png",
+   "bytes": 1055701,
+   "sha256": "e8c9364757d9796d69c207ea25ab333b92247307685ba4cbd7599fb7b2072118"
+  },
+  {
+   "path": "p16/diff-fonts/hud-diff/race-4-fonts.png",
+   "bytes": 1055701,
+   "sha256": "1ae72e6c27a2b66f91d0f074a62c5c7f487124550da9ae80ac46a2a850fe6399"
+  },
+  {
+   "path": "p16/diff-fonts/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/diff-fonts/installed.json",
+   "bytes": 419,
+   "sha256": "e186e8a4e91412925770d0ba7c45819faea4b33b8e2d3719abc8e16f6357142e"
+  },
+  {
+   "path": "p16/diff-fonts/logcat.txt",
+   "bytes": 145401,
+   "sha256": "43b2d5c61f1ac7d4e45fe34f846e09be42738c38b6e98d22c38d82286f74f91b"
+  },
+  {
+   "path": "p16/diff-fonts/probe.log",
+   "bytes": 1095,
+   "sha256": "bb3d0706577036a326dab1e597b466096e431af1b6445c1daa9fbd5a1c4154e7"
+  },
+  {
+   "path": "p16/diff-fonts/raw.json",
+   "bytes": 6215815,
+   "sha256": "bc7dc95b3a86c216e9c62a71a80d5b49c489bbe5f43bfeb9548f13116c7dfb4f"
+  },
+  {
+   "path": "p16/diff-fonts/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "d811b61e284944b45a831dab1e1b97e83a17c7efbee62f4cfefbdb1aa9d8ff4f"
+  },
+  {
+   "path": "p16/diff-fonts/startup-logcat.txt",
+   "bytes": 4424,
+   "sha256": "8b8153c2d229e4674476d4f7d17423df2cf681490ba3a7493e0352e37ee797c4"
+  },
+  {
+   "path": "p16/diff-fonts/thread-priorities-before.txt",
+   "bytes": 1364,
+   "sha256": "0cf6ecd65e70625da26935c6322ecf243215176457617eda495b2284b5c27b5d"
+  },
+  {
+   "path": "p16/diff-fonts-device.out",
+   "bytes": 598,
+   "sha256": "9e41657c4c5b0216dde8305b3afe45e790e34b4b52b568c64d32ef54226d65dd"
+  },
+  {
+   "path": "p16/diff-fonts2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/diff-fonts2/device-counters-end.txt",
+   "bytes": 89952,
+   "sha256": "d170e0209b0048625526640a07140ed8c4e3c05b03a3654094d78f3fb3452b92"
+  },
+  {
+   "path": "p16/diff-fonts2/device-counters-start.txt",
+   "bytes": 86603,
+   "sha256": "c5bf152cf83d1054cf9240f6a95bf8f04a026cc7c155946990b7946fc6b06e0b"
+  },
+  {
+   "path": "p16/diff-fonts2/diff-lines.txt",
+   "bytes": 5851,
+   "sha256": "9a7ab6b67b4db55c6249e8b7613cfea8ff45eedbdeefebd30d27f5dddf615f39"
+  },
+  {
+   "path": "p16/diff-fonts2/host-cpu-end.json",
+   "bytes": 2554,
+   "sha256": "3ee8a56981c8d42ac6c3e99eb48870c3145b9880cc9893bf210f567fef141969"
+  },
+  {
+   "path": "p16/diff-fonts2/host-cpu-start.json",
+   "bytes": 2551,
+   "sha256": "cf041f76c1893fd2cad9f42f8e4d0d461bdc74bfde38ec3e964e3d3ad05a0cd9"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-1-base.png",
+   "bytes": 849521,
+   "sha256": "f3ec78095e935b48db003a943331678fcfc373387b462e25d858830ae1a543af"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-1-control.png",
+   "bytes": 849521,
+   "sha256": "f3ec78095e935b48db003a943331678fcfc373387b462e25d858830ae1a543af"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-1-fonts.png",
+   "bytes": 849521,
+   "sha256": "f3ec78095e935b48db003a943331678fcfc373387b462e25d858830ae1a543af"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-2-base.png",
+   "bytes": 754172,
+   "sha256": "20eaac22a50fff8bac75f82804130f06efdf3a4f03419652eaaeaddf3a5b68a3"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-2-control.png",
+   "bytes": 754172,
+   "sha256": "20eaac22a50fff8bac75f82804130f06efdf3a4f03419652eaaeaddf3a5b68a3"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/lobby-2-fonts.png",
+   "bytes": 754172,
+   "sha256": "20eaac22a50fff8bac75f82804130f06efdf3a4f03419652eaaeaddf3a5b68a3"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-3-base.png",
+   "bytes": 1107837,
+   "sha256": "737380dc1b2ba75c05ee333f0fcb513ca469a032da81260b09d5f0116d228fc2"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-3-control.png",
+   "bytes": 1107837,
+   "sha256": "737380dc1b2ba75c05ee333f0fcb513ca469a032da81260b09d5f0116d228fc2"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-3-fonts.png",
+   "bytes": 1107837,
+   "sha256": "737380dc1b2ba75c05ee333f0fcb513ca469a032da81260b09d5f0116d228fc2"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-4-base.png",
+   "bytes": 1153837,
+   "sha256": "b5ce5af9af3c2bc6df744c889010ec794e9fecea6d9347bab3c386d0cdf22ff1"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-4-control.png",
+   "bytes": 1153837,
+   "sha256": "b5ce5af9af3c2bc6df744c889010ec794e9fecea6d9347bab3c386d0cdf22ff1"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-4-fonts.png",
+   "bytes": 1153837,
+   "sha256": "b5ce5af9af3c2bc6df744c889010ec794e9fecea6d9347bab3c386d0cdf22ff1"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-5-base.png",
+   "bytes": 1025648,
+   "sha256": "3528d0067aa60268d37929dd7f406a401d5448269267b5058ac0c6c96be87cfb"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-5-control.png",
+   "bytes": 1025648,
+   "sha256": "3528d0067aa60268d37929dd7f406a401d5448269267b5058ac0c6c96be87cfb"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-5-fonts.png",
+   "bytes": 1025648,
+   "sha256": "3528d0067aa60268d37929dd7f406a401d5448269267b5058ac0c6c96be87cfb"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-6-base.png",
+   "bytes": 1172831,
+   "sha256": "84018896b5be0c9eaa033602fdb6099eb9d5eeded6418711211cdb096bea9560"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-6-control.png",
+   "bytes": 1172831,
+   "sha256": "84018896b5be0c9eaa033602fdb6099eb9d5eeded6418711211cdb096bea9560"
+  },
+  {
+   "path": "p16/diff-fonts2/hud-diff/race-6-fonts.png",
+   "bytes": 1172831,
+   "sha256": "84018896b5be0c9eaa033602fdb6099eb9d5eeded6418711211cdb096bea9560"
+  },
+  {
+   "path": "p16/diff-fonts2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/diff-fonts2/installed.json",
+   "bytes": 419,
+   "sha256": "2c72c1b8a44e524011e99274028be42a0aa20d6b9b74bd6fe02faea4f1e2e81c"
+  },
+  {
+   "path": "p16/diff-fonts2/logcat.txt",
+   "bytes": 136452,
+   "sha256": "ed5e99b9cb42323481e22d1a50b3c48bc3cdc5c05e4721bf35d9d0e564032bcc"
+  },
+  {
+   "path": "p16/diff-fonts2/probe.log",
+   "bytes": 1201,
+   "sha256": "ec2f6e2b3be83893a54fcd7d4bee0fa225f0e82deb979d139ce91ba8a808bf1c"
+  },
+  {
+   "path": "p16/diff-fonts2/raw.json",
+   "bytes": 8092464,
+   "sha256": "9e6e5d4024268ad757aab8bfbc54cd936d75a1858aeba23beb3606e3dcd0b9c5"
+  },
+  {
+   "path": "p16/diff-fonts2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "8c4a82c8b5d7ad8161706d03b619307789ab765d326817b175356776df0fc458"
+  },
+  {
+   "path": "p16/diff-fonts2/startup-logcat.txt",
+   "bytes": 4439,
+   "sha256": "5cbaed5b3499a01ca579577a40d071c6962ce5ce1df195b89fea443ba105fef1"
+  },
+  {
+   "path": "p16/diff-fonts2/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "115703fd01bcba59e550b0438194247c1bbce09b42cd3fcd541713f85efd59df"
+  },
+  {
+   "path": "p16/diff-fonts2-device.out",
+   "bytes": 481,
+   "sha256": "bf885c3dd72f0f843ee8b290192751b55e18c15a9172e74963304d7c4425419f"
+  },
+  {
+   "path": "p16/diff-layer/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/diff-layer/device-counters-end.txt",
+   "bytes": 90604,
+   "sha256": "06c039de6cf0f23976b8e71dbe7116ad39a0405c7f399071674247d1f8d2b02e"
+  },
+  {
+   "path": "p16/diff-layer/device-counters-start.txt",
+   "bytes": 86621,
+   "sha256": "9901c2aa5a9b8fa015371cb8fca66ffa69f100ee604e1d4c81f9d5191261d0db"
+  },
+  {
+   "path": "p16/diff-layer/diff-lines.txt",
+   "bytes": 7448,
+   "sha256": "b612b540127390c5e58dfe380698df11681b41053c67835fe419830e2e580572"
+  },
+  {
+   "path": "p16/diff-layer/host-cpu-end.json",
+   "bytes": 2555,
+   "sha256": "c9cc73d279d7c6c545a3acc088d4a49b96a9cfdf3ff9d25a8aaae2868e34dab1"
+  },
+  {
+   "path": "p16/diff-layer/host-cpu-start.json",
+   "bytes": 2536,
+   "sha256": "c2d9a83ccd834cca97e9fafa23c418529338035a5ed045e931dba5a3344e38b8"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-1-base.png",
+   "bytes": 845565,
+   "sha256": "0faa7570d2f473327727e580712eac1262a4e842b843d40bf5d55e1bcb1ad759"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-1-control.png",
+   "bytes": 845565,
+   "sha256": "0faa7570d2f473327727e580712eac1262a4e842b843d40bf5d55e1bcb1ad759"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-1-fonts.png",
+   "bytes": 845565,
+   "sha256": "0faa7570d2f473327727e580712eac1262a4e842b843d40bf5d55e1bcb1ad759"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-1-layer.png",
+   "bytes": 845565,
+   "sha256": "0faa7570d2f473327727e580712eac1262a4e842b843d40bf5d55e1bcb1ad759"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-2-base.png",
+   "bytes": 749843,
+   "sha256": "3d1c24016f0bbdca6b91d19a1a64c3913c750652a1068b207124f37679ee4165"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-2-control.png",
+   "bytes": 749843,
+   "sha256": "3d1c24016f0bbdca6b91d19a1a64c3913c750652a1068b207124f37679ee4165"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-2-fonts.png",
+   "bytes": 749843,
+   "sha256": "3d1c24016f0bbdca6b91d19a1a64c3913c750652a1068b207124f37679ee4165"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/lobby-2-layer.png",
+   "bytes": 749843,
+   "sha256": "3d1c24016f0bbdca6b91d19a1a64c3913c750652a1068b207124f37679ee4165"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-3-base.png",
+   "bytes": 1095355,
+   "sha256": "ed3f3fa11cf6652ac543ff4871f77c46a85296f7c81a4797508fdf9d757c3403"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-3-control.png",
+   "bytes": 1095355,
+   "sha256": "ed3f3fa11cf6652ac543ff4871f77c46a85296f7c81a4797508fdf9d757c3403"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-3-fonts.png",
+   "bytes": 1095355,
+   "sha256": "ed3f3fa11cf6652ac543ff4871f77c46a85296f7c81a4797508fdf9d757c3403"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-3-layer.png",
+   "bytes": 1090880,
+   "sha256": "7895fd7f308ec21142d39886bdfeb11c00cf3830eafd61800785a35a90c999b9"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-4-base.png",
+   "bytes": 1208748,
+   "sha256": "28427d2d8708dae0cf43aad0f1ad888f09f930c9d0ee167ce500d21ea54bd496"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-4-control.png",
+   "bytes": 1208748,
+   "sha256": "28427d2d8708dae0cf43aad0f1ad888f09f930c9d0ee167ce500d21ea54bd496"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-4-fonts.png",
+   "bytes": 1208748,
+   "sha256": "28427d2d8708dae0cf43aad0f1ad888f09f930c9d0ee167ce500d21ea54bd496"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-4-layer.png",
+   "bytes": 1203124,
+   "sha256": "8c00b58d569bf420baa4326302015bc87dc656cfc96c56ac8a262b327308321e"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-5-base.png",
+   "bytes": 1136969,
+   "sha256": "3b8b663cd7b210a0a70c15c0c15b77c1b2db55fde411480aaee54554a407b452"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-5-control.png",
+   "bytes": 1136969,
+   "sha256": "3b8b663cd7b210a0a70c15c0c15b77c1b2db55fde411480aaee54554a407b452"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-5-fonts.png",
+   "bytes": 1136969,
+   "sha256": "3b8b663cd7b210a0a70c15c0c15b77c1b2db55fde411480aaee54554a407b452"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-5-layer.png",
+   "bytes": 1132804,
+   "sha256": "d37cc39cb23c6a3ba13f4a87327bf87bcf7c843167acc7450a9f6a83d1cb664f"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-6-base.png",
+   "bytes": 1299877,
+   "sha256": "79b3add7e519fb5e7dd7ec6a1d544bd1b69d22c98d268b06e9e95f6f667cd144"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-6-control.png",
+   "bytes": 1299877,
+   "sha256": "79b3add7e519fb5e7dd7ec6a1d544bd1b69d22c98d268b06e9e95f6f667cd144"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-6-fonts.png",
+   "bytes": 1299877,
+   "sha256": "79b3add7e519fb5e7dd7ec6a1d544bd1b69d22c98d268b06e9e95f6f667cd144"
+  },
+  {
+   "path": "p16/diff-layer/hud-diff/race-6-layer.png",
+   "bytes": 1295662,
+   "sha256": "6c36e02dd2560732756588be4ec877249e89f64d5cda211a10f4cf5b17734e18"
+  },
+  {
+   "path": "p16/diff-layer/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/diff-layer/installed.json",
+   "bytes": 399,
+   "sha256": "2b3731cee66bc499a2a04bd12a0027bccd304a47d5c9b5b1b6faa8ed6a552a27"
+  },
+  {
+   "path": "p16/diff-layer/logcat.txt",
+   "bytes": 135910,
+   "sha256": "fc0b16a1f19f1b6da15075159f69fe139933e3934aea484f74d3b1ad219cf798"
+  },
+  {
+   "path": "p16/diff-layer/probe.log",
+   "bytes": 1199,
+   "sha256": "917d7adbe289fb0f40fc218b90fb8bf516adc9e3d1e5a00c3c8d8eda8730bfec"
+  },
+  {
+   "path": "p16/diff-layer/raw.json",
+   "bytes": 8273550,
+   "sha256": "3c968451814501d5a6715a71804673f0593f08b40c8e1dd6400bc92cdd5f6e72"
+  },
+  {
+   "path": "p16/diff-layer/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "c6afbf41a4f3c188bd904430b247ad061b124205a2ec46a82244650f882bc1ac"
+  },
+  {
+   "path": "p16/diff-layer/startup-logcat.txt",
+   "bytes": 3100,
+   "sha256": "fb124cc5316fc69ddf633d4b17cce25da2eb7377f6a9e65af558a972abadda96"
+  },
+  {
+   "path": "p16/diff-layer/thread-priorities-before.txt",
+   "bytes": 1396,
+   "sha256": "c24a981a94c7f3a18509f39d407669a9a50f909a29d18f93a29ae1a1681ce282"
+  },
+  {
+   "path": "p16/diff-layer-device.out",
+   "bytes": 531,
+   "sha256": "10d63e5da8e0f797e6ae88fd732956a07fa741ed6554b207578d07af31f7c3f5"
+  },
+  {
+   "path": "p16/fonts-af1d860c.apk",
+   "bytes": 42559109,
+   "sha256": "5bed3d9a3d550c4f3fc2eecabe72a83333af0fa906ba6ca87c579738354dea33"
+  },
+  {
+   "path": "p16/fonts-run1/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/fonts-run1/device-counters-end.txt",
+   "bytes": 90494,
+   "sha256": "72e681a97400c4242af8d8644a11867c9bd252d761eaf63f75829a458335ed8e"
+  },
+  {
+   "path": "p16/fonts-run1/device-counters-start.txt",
+   "bytes": 86480,
+   "sha256": "933bb48b70c8d3dbd963856bfcfa9947df0772a553ab7ee4e369f7ffc5b438ed"
+  },
+  {
+   "path": "p16/fonts-run1/host-cpu-end.json",
+   "bytes": 2545,
+   "sha256": "7009bcecfcb33021e53b8800106c277a5c3e3d179a4513c6c5c3c4831ae631f0"
+  },
+  {
+   "path": "p16/fonts-run1/host-cpu-start.json",
+   "bytes": 2559,
+   "sha256": "d614102fbe11df0a1253c1bddcca457ec9312eb3bc79b755441c732c8a5b3e2b"
+  },
+  {
+   "path": "p16/fonts-run1/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/fonts-run1/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "p16/fonts-run1/logcat.txt",
+   "bytes": 194586,
+   "sha256": "d434cd7a1cd2f2030362f94e9cc8ce2dab70818c774c697c637e6bf1db76738e"
+  },
+  {
+   "path": "p16/fonts-run1/p11-readings.json",
+   "bytes": 72658,
+   "sha256": "762bde145fdb37778457fd075199b25cd98892ade0c1aa35ded481852ecbe2bf"
+  },
+  {
+   "path": "p16/fonts-run1/probe.log",
+   "bytes": 1481,
+   "sha256": "ea259f3f572187ef5d375a5d624466d568a2480adb82aac4528efdb7dcc707f0"
+  },
+  {
+   "path": "p16/fonts-run1/raw.json.gz",
+   "bytes": 3137812,
+   "sha256": "853f5b1677a02da50a0d08d8f86adaf4d57bffd295c754298829e321591f0b3f"
+  },
+  {
+   "path": "p16/fonts-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "df14a52efed5dc421c2c9092a129669bfacf65fbf25ae60767f25389ec4b91e0"
+  },
+  {
+   "path": "p16/fonts-run1/startup-logcat.txt",
+   "bytes": 2912,
+   "sha256": "fbcc5f329d3c9a55a5e693d067303e73217df7fad59783cb4e4d1c8e0cc5d05e"
+  },
+  {
+   "path": "p16/fonts-run1/summary.json",
+   "bytes": 29725,
+   "sha256": "fbe11d1f598a73bf786dd7a08f5d2bce201ee01fa17816010cffb47472dd1afe"
+  },
+  {
+   "path": "p16/fonts-run1/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "1c691a97f21c5518f4d49b7e87d8d4f13949bab0412cb410ba3f2957f07e98ba"
+  },
+  {
+   "path": "p16/fonts-run1-device.out",
+   "bytes": 452,
+   "sha256": "f44f9653eb14dc3b2435fa90d664d2f5bda864e273cd96fb3e8fadcbd99fcb15"
+  },
+  {
+   "path": "p16/fonts-run1-p11.out",
+   "bytes": 2876,
+   "sha256": "ee320dc4b0c9aaced04e62f4f3c9642498884eb5cb9f97e9fc7b5197ca047eed"
+  },
+  {
+   "path": "p16/fonts-run1-start.txt",
+   "bytes": 271,
+   "sha256": "debda8f57d447dff7b99276277b51c836865abe55516ae407d6cc2f3138198fa"
+  },
+  {
+   "path": "p16/fonts-run1-summary.out",
+   "bytes": 958,
+   "sha256": "34bd8397eedacd29facfbd4bfeba028b39ccfbbe1bc177762927075991a6d995"
+  },
+  {
+   "path": "p16/fonts-run1r/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/fonts-run1r/device-counters-end.txt",
+   "bytes": 90281,
+   "sha256": "4012065380a1f0b4075f58e3832d9c192020caf64dbb24eca56ab60e225ee19a"
+  },
+  {
+   "path": "p16/fonts-run1r/device-counters-start.txt",
+   "bytes": 86422,
+   "sha256": "2e3492ce62015b889550e33a34219a29b18bf16c8faca5fd41ec2c6bf22d9346"
+  },
+  {
+   "path": "p16/fonts-run1r/host-cpu-end.json",
+   "bytes": 2544,
+   "sha256": "ce6dc6817dc33b75db5d6d9d0c01e8757fa2a50471235ff420971aba085bd6b0"
+  },
+  {
+   "path": "p16/fonts-run1r/host-cpu-start.json",
+   "bytes": 2544,
+   "sha256": "ec1262bb071e1a56530e6b308df1879b138c62129aa94fdc86d2a6949c990826"
+  },
+  {
+   "path": "p16/fonts-run1r/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/fonts-run1r/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "p16/fonts-run1r/logcat.txt",
+   "bytes": 172127,
+   "sha256": "d5f61a8da194c04d21e73120d3750667b0935f8f2cab8e12eb7209b954a00a93"
+  },
+  {
+   "path": "p16/fonts-run1r/p11-readings.json",
+   "bytes": 82302,
+   "sha256": "b189f1a3501d4ed81fb4b4046d370393a0260034c2d87ef5c191ca6a0d3e82af"
+  },
+  {
+   "path": "p16/fonts-run1r/probe.log",
+   "bytes": 1117,
+   "sha256": "a092fb404226047d503fa6344f831e5298de84d2fd46821fd776128688455ffd"
+  },
+  {
+   "path": "p16/fonts-run1r/raw.json.gz",
+   "bytes": 3159769,
+   "sha256": "30fc821b3adedee7acca950c266edaf1567ae55845aec480686aa38875e29a87"
+  },
+  {
+   "path": "p16/fonts-run1r/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "39f98a47bdf903a7e0eb6b8a3e8f460bae148d71e87c3fb36856485764a88c72"
+  },
+  {
+   "path": "p16/fonts-run1r/startup-logcat.txt",
+   "bytes": 2994,
+   "sha256": "82fcf34b2f8223e934c1cfdc6537636789ed0783c0c98603d7ecc0d92d50e318"
+  },
+  {
+   "path": "p16/fonts-run1r/summary.json",
+   "bytes": 22090,
+   "sha256": "453e5a506f8b4023becd3845dbdeb12494d8853175d3518bde80a1bb37ff4699"
+  },
+  {
+   "path": "p16/fonts-run1r/thread-priorities-before.txt",
+   "bytes": 1363,
+   "sha256": "ad29b049ed3222aa4bd3111dd4696d4dd9e5f9c14ae9b586d6a751de0e649cca"
+  },
+  {
+   "path": "p16/fonts-run1r-device.out",
+   "bytes": 453,
+   "sha256": "478c47cc9fb6f825fed6e294f75f309c9dde9a5bf5a9334a92621bd460d511c4"
+  },
+  {
+   "path": "p16/fonts-run1r-p11.out",
+   "bytes": 2830,
+   "sha256": "0a2bbe77e35ad502729e7894459c396d3e548c5b914ce9c2bdf105fae6ec0c7c"
+  },
+  {
+   "path": "p16/fonts-run1r-start.txt",
+   "bytes": 271,
+   "sha256": "e1e003bd4d512f619b36e2e67d21c0bb3402bd9afcaf9ff910b3091a6652e3db"
+  },
+  {
+   "path": "p16/fonts-run1r-summary.out",
+   "bytes": 942,
+   "sha256": "34633eb18356a5ac0d5da558037e5471053270f153b585bb76fe1352434d8740"
+  },
+  {
+   "path": "p16/fonts-run2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/fonts-run2/device-counters-end.txt",
+   "bytes": 90461,
+   "sha256": "ea60368ac01e37ed1b96e8b05b6f936f15c331380f7f47ef68b721fba7e5f852"
+  },
+  {
+   "path": "p16/fonts-run2/device-counters-start.txt",
+   "bytes": 87099,
+   "sha256": "5e071fb3a8e928352c3d29b4098ce7772f97c4a11d9fbd565ac7531fe5900389"
+  },
+  {
+   "path": "p16/fonts-run2/host-cpu-end.json",
+   "bytes": 2554,
+   "sha256": "605b4775cdeca234886835c9bb7264e8a947805c765ad5c789b9a0ba388711d4"
+  },
+  {
+   "path": "p16/fonts-run2/host-cpu-start.json",
+   "bytes": 2547,
+   "sha256": "80ca45135cdf68d08ebf1042cb0fc594d4f8508ebd619d45ef74d1cf8552bbdf"
+  },
+  {
+   "path": "p16/fonts-run2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/fonts-run2/installed.json",
+   "bytes": 376,
+   "sha256": "a51cf5ffb1c149a257dbf3728ff77e8e2bf199738c4e394182e3c89e6b60e408"
+  },
+  {
+   "path": "p16/fonts-run2/logcat.txt",
+   "bytes": 193910,
+   "sha256": "d384410c417cfce4dc46419294ef6f27201f470ff24644ed84a80ebf2d899576"
+  },
+  {
+   "path": "p16/fonts-run2/p11-readings.json",
+   "bytes": 89767,
+   "sha256": "a0c280c8e3d7a864d983685a4719bb064dbf017dd1022f70fd403c5cec3f0dd5"
+  },
+  {
+   "path": "p16/fonts-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "50430228bf9559463665fb50f8367fef745f6abb8ec1274e8d1bbb1e2e1e9a0c"
+  },
+  {
+   "path": "p16/fonts-run2/raw.json.gz",
+   "bytes": 3114461,
+   "sha256": "c2a508d67a9e5ea3aeaa33f61928a301856d9785b7b084c521a2458295addc89"
+  },
+  {
+   "path": "p16/fonts-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "58b52048d638103957178aeac5887d71790c8f0c5c2d5768351098c8dad9848d"
+  },
+  {
+   "path": "p16/fonts-run2/startup-logcat.txt",
+   "bytes": 2937,
+   "sha256": "3832cfb6424befb06613808fd02a2a19967ba2ff0bf109747048292c960dc24a"
+  },
+  {
+   "path": "p16/fonts-run2/summary.json",
+   "bytes": 22112,
+   "sha256": "c36c4b55d55c36ce56daff4489c3c396d0f12a4b4dad18d40fdb5843906bb870"
+  },
+  {
+   "path": "p16/fonts-run2/thread-priorities-before.txt",
+   "bytes": 1431,
+   "sha256": "838fb9a691818e750f85299c9572df474632c594ca635609c5a86ee7c42d9a13"
+  },
+  {
+   "path": "p16/fonts-run2-device.out",
+   "bytes": 452,
+   "sha256": "9ce92e5b05bed46218e6d08ef1470ab8be40aa5cd772fe929958cfcf71919cf2"
+  },
+  {
+   "path": "p16/fonts-run2-p11.out",
+   "bytes": 2930,
+   "sha256": "d4e762cc4d68810de8a566a2f69da2e6add1a3f0cad5d74a7ea05ca664a7c914"
+  },
+  {
+   "path": "p16/fonts-run2-start.txt",
+   "bytes": 271,
+   "sha256": "38a7016944d135ac12033084333d2194c4747f35b9268bc41a2be6c35036730d"
+  },
+  {
+   "path": "p16/fonts-run2-summary.out",
+   "bytes": 963,
+   "sha256": "250dc24a8914ae3ae977bfa7ac951cca66aadbdc77cc544900bf02b2a1132e57"
+  },
+  {
+   "path": "p16/fonts.apk",
+   "bytes": 42559169,
+   "sha256": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e"
+  },
+  {
+   "path": "p16/gate-run1-link-results/binary/output.bin",
+   "bytes": 2154,
+   "sha256": "1e32dafeab86b6501ecbb90a21fb004afa44f5317abde09a6a4bbd2d27356dff"
+  },
+  {
+   "path": "p16/gate-run1-link-results/binary/output.bin.idx",
+   "bytes": 174,
+   "sha256": "c72645ff38d604e614d69b2b93108ef5dc805597280965fa46c572f3308f5632"
+  },
+  {
+   "path": "p16/gate-run1-link-results/binary/results.bin",
+   "bytes": 4253,
+   "sha256": "4fce98b0094af68c202adffe806c8249619607dafa063cfe19fc41fe9cf85e14"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.CompactLinkTest.xml",
+   "bytes": 670,
+   "sha256": "fd4398f91c447aaf2a38904ae31b1582ec0b58a5794be4e98d3559f86a036c07"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.HiddenPhoneTest.xml",
+   "bytes": 445,
+   "sha256": "6cb3d48746d8c59a9b152bd41d6193e4c64812c0e095992d4cbd6df523858d02"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.HudMetadataTest.xml",
+   "bytes": 586,
+   "sha256": "c84571b90e005417d1892d0543a80702eb3d47c879b8c0b57dbab6129ef0f0a1"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.HudPayloadTest.xml",
+   "bytes": 588,
+   "sha256": "36a5066ddef41d21e6b8d6e6899c38530ac76a1adc11db354a508dd98cdf6517"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.InputPacketTest.xml",
+   "bytes": 674,
+   "sha256": "fbb799c7a2758d07d99a0c18727897453fd8c74617a667e2b85de7ad1ceae49a"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.LinkBenchTest.xml",
+   "bytes": 1105,
+   "sha256": "4d0c5a9ead6e1fe195f6944ac1c8f8cf6b2d3c5e67b021690e1298196b637fd9"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.LinkTest.xml",
+   "bytes": 1252,
+   "sha256": "482ba65f8064985b3da6b2916af24e45e77fc28a5ebc3e6c415fde6f348c45f8"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.LinkThreadPriorityTest.xml",
+   "bytes": 1997,
+   "sha256": "a10fe051b893925869150f316f9cfafa96e599b2d89fd4e077faad353fb31bd4"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.PackedTest.xml",
+   "bytes": 456,
+   "sha256": "5b39824d2705fb092f9dee09edb616cdaede535e6cdb94f3ae35803a9d6cae0b"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.ParseBenchTest.xml",
+   "bytes": 1109,
+   "sha256": "1004cf73be0ef30827567d80d407cfd08620fe62caa9f3902322d6b8a0eeba78"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.PerfTraceTest.xml",
+   "bytes": 558,
+   "sha256": "63aa9aaa82004dca6dc94704c65091089727bab7f57155415e939f24e510d45a"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.RoutesReplyTest.xml",
+   "bytes": 805,
+   "sha256": "c3940ed775015cdf1ed76647db55ac5601ba46f3e3a5b93ab16939f9d44752ed"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.StatsJsonTest.xml",
+   "bytes": 1296,
+   "sha256": "0923d70e92f5ffbab4b9ae93aad5154090541b92ecae6a4e8e2eee93a8683a7d"
+  },
+  {
+   "path": "p16/gate-run1-link-results/TEST-dev.deathride.link.TrackRequestTest.xml",
+   "bytes": 643,
+   "sha256": "74dbad195647091b1d03f18902acd75d228cb4db2a4d427cac0c6211460efe05"
+  },
+  {
+   "path": "p16/gate-run2-game-results/binary/output.bin",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "p16/gate-run2-game-results/binary/output.bin.idx",
+   "bytes": 1,
+   "sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d"
+  },
+  {
+   "path": "p16/gate-run2-game-results/binary/results.bin",
+   "bytes": 16421,
+   "sha256": "0a1c7e2f1c8177d4394cd2e32b8231bd1b21105160f8361e6dbad1f6c049829d"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.AtlasArtTest.xml",
+   "bytes": 1170,
+   "sha256": "5dff1d23e9f443be217be7099413570184bd819cea384309fd14afbf6ad99703"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.AudioAllocationTest.xml",
+   "bytes": 480,
+   "sha256": "41359a0c028bc608f7202f2ae8bd4191de7f808262bbb3aea3a168239f49b3fc"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.AudioArmTest.xml",
+   "bytes": 1281,
+   "sha256": "b5a48b6657135f76fef79a3cbba5c7756873f69c82ee50dab9c19ea93c681fd2"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.AudioTest.xml",
+   "bytes": 2130,
+   "sha256": "25208fd0c8f718e4781382c9d28a65a2ae8a36acbadec9137b1951bbfc4dc717"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.BakePassesTest.xml",
+   "bytes": 823,
+   "sha256": "fa8c30ca13fe6fe981bccf09aef0f4b57a5ca53afc8b0dec493e1950a6114cfe"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.BakeShapeTest.xml",
+   "bytes": 851,
+   "sha256": "f842a85547c84445013efbc1edc5789982d1d3647501d57b430e13f36305b077"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.CodecWarmTest.xml",
+   "bytes": 460,
+   "sha256": "7c15eb3f4adbc06a22f05bea9100324f450d5b9fb111747f5d5907f188682151"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.CombatFireSourceTest.xml",
+   "bytes": 585,
+   "sha256": "b2e9efa69929b6990bd2624c23dfe13f6bb7e5d077cc3ae7355c99182ef1fec9"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.EnvironmentArtTest.xml",
+   "bytes": 574,
+   "sha256": "c0eb9005cd6974da997ab2593baa4ec4dd847d14b7d656d6e0c9c7714b766ed7"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.FaceArtTest.xml",
+   "bytes": 449,
+   "sha256": "1a39fa18f515d1fd692d34ab9e16520e038ee79c492e88a708861cbbc95f1e67"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.FramePublishRequestTest.xml",
+   "bytes": 897,
+   "sha256": "cacf414db5330f4a7f4d16040702a01930c63ddb52c49953c9b20e93ba1bb0cb"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.FramePublishTest.xml",
+   "bytes": 1203,
+   "sha256": "ba9919495b935ae15a4b33fa8ce92640db2613cd6d5126ce75e93465f7aa330e"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.GdxAudioBackendTest.xml",
+   "bytes": 476,
+   "sha256": "88f2d56c23da95faf0a5fe9edc3665207214dc190f001611ab6f807ea0549737"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.HudThemeTest.xml",
+   "bytes": 738,
+   "sha256": "4588d094eac585aaf162e9cf00e93f2c079c86358ef8a2e91e70f9509b5a70dd"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.MountAnimTest.xml",
+   "bytes": 1052,
+   "sha256": "7e6ab935e3b3c9837bfabab28caa92f687e43cfd9aa8f1b58364a4ba6b9fbd60"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.MountCatalogTest.xml",
+   "bytes": 935,
+   "sha256": "9e5103e417d403dc641b80c91ca9a0372fb70a456dca7952e83275d92a42f551"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.ObstacleArtTest.xml",
+   "bytes": 471,
+   "sha256": "da6ff66484423ffeb6d1a66aa65de60b75ef0bacc3edcd57f62ae51f2014ef85"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.ProfileSavesTest.xml",
+   "bytes": 3655,
+   "sha256": "47ce13a33f26cc6b89cec9a27cdbdbb407234b32283a4e8336090975d239a5fc"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.QueuedAudioTest.xml",
+   "bytes": 1210,
+   "sha256": "4b286e1eb90b192ef88ecfb3460461912501a894ab506b20f362f1704f471cd2"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.RegionPresentationTest.xml",
+   "bytes": 915,
+   "sha256": "445d67f6b4025158ba34457abd8b4f2bca719fc7ede35982519f877c8c07c9ed"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.RenderCullingTest.xml",
+   "bytes": 913,
+   "sha256": "d163f4716651a29271028d6aeedb002a3b1f8821aec47031d91ca904aee7547a"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.StoryArtTest.xml",
+   "bytes": 831,
+   "sha256": "98106a1099c25c2dc7fef773da3d5e5e5403478fc3c1e3c88a70cb39d44a8354"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.TileReleaseTest.xml",
+   "bytes": 924,
+   "sha256": "abbc4ea54e30746ca6853b5aa9edda9dcf767ccc3a87e9e1fb5eaac781fef34d"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.TrackPreviewTest.xml",
+   "bytes": 615,
+   "sha256": "d3f7cb14d6b44681b885dde4bff272c8a4b9a32c464797125cc8456c574614df"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.UnitRingTest.xml",
+   "bytes": 444,
+   "sha256": "f6a29a9b5484aa9d80577e036c9e40794fd3240be86a25c1492e84a741a3b952"
+  },
+  {
+   "path": "p16/gate-run2-game-results/TEST-dev.deathride.game.WheelSteerTest.xml",
+   "bytes": 1299,
+   "sha256": "b298d3563e565e24849d2fc264805151b15188fdcaa37e76b18d64d10851f105"
+  },
+  {
+   "path": "p16/gate-tests-8443a99f-run2.log",
+   "bytes": 37512,
+   "sha256": "ed8dd48823a9a0d28bc501d0c83b0e2b9b7e282b17c7e96c4fa61d7e1ff29bf9"
+  },
+  {
+   "path": "p16/gate-tests-8443a99f-run3.log",
+   "bytes": 37171,
+   "sha256": "a08d20f70ee1297a681bb22158f554f6c477cc9f28bd61b71b85559b7f31d19c"
+  },
+  {
+   "path": "p16/gate-tests-8443a99f.log",
+   "bytes": 37221,
+   "sha256": "d3ba2720c9af2100cbb2f8823a84ed4bfa5f3ffc2838a35c5fa777444efa840d"
+  },
+  {
+   "path": "p16/hash-base/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/hash-base/device-counters-end.txt",
+   "bytes": 89939,
+   "sha256": "f6da4ff510621e7215ade39c65d6da236b947507505121c173b1f7dbb3d408c6"
+  },
+  {
+   "path": "p16/hash-base/device-counters-start.txt",
+   "bytes": 86185,
+   "sha256": "4062a016e5b7922e742d29bcac3a5f0a71cfccafe8272d0837a4093aa26f60dc"
+  },
+  {
+   "path": "p16/hash-base/diff-lines.txt",
+   "bytes": 1721,
+   "sha256": "69e7adb2bae50c6d8c14f9a0bccb2f7632a2f9328771811322504f3ef039f8e5"
+  },
+  {
+   "path": "p16/hash-base/host-cpu-end.json",
+   "bytes": 2542,
+   "sha256": "5ae1b5ba451abe9de7369be54b0895e508fdf6d125ed3e1c558dc03ea4a1c7d7"
+  },
+  {
+   "path": "p16/hash-base/host-cpu-start.json",
+   "bytes": 2536,
+   "sha256": "51a360760af9f9cea0457c56d5be56a5484bca2300f2e4ef014e84d03a50a934"
+  },
+  {
+   "path": "p16/hash-base/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/hash-base/installed.json",
+   "bytes": 400,
+   "sha256": "70c920929ab92c8f3e1f925e577639499fa9545c136157c5d4c915b03e2e361b"
+  },
+  {
+   "path": "p16/hash-base/logcat.txt",
+   "bytes": 156454,
+   "sha256": "217ddf48781308abfeea84938778d115dbfeb1a2e4bdd98d53c3f44f1e9441e5"
+  },
+  {
+   "path": "p16/hash-base/probe.log",
+   "bytes": 1201,
+   "sha256": "5bbd2e45f99e4392c080300944c393ae51742188cc108e932aa2cf92366f8daa"
+  },
+  {
+   "path": "p16/hash-base/raw.json",
+   "bytes": 8345774,
+   "sha256": "dc6c82b384f5b12be8f006fd22e90f7ed9ea80fe6d0be76ceec982468ccec92a"
+  },
+  {
+   "path": "p16/hash-base/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "4a4ec17292c5d4c8c6ad86ed5620e9d3ebbfaa3ce84fcb6fdf31a073739fa4db"
+  },
+  {
+   "path": "p16/hash-base/startup-logcat.txt",
+   "bytes": 4120,
+   "sha256": "7362b33e32a1973114706a7b2e9612735b3910c66273faddbcd7d257a393e263"
+  },
+  {
+   "path": "p16/hash-base/thread-priorities-before.txt",
+   "bytes": 1330,
+   "sha256": "b196dcd69078e9e2016b0d90e6c3679469f86784b4e83e7c5a3c406b78a3b464"
+  },
+  {
+   "path": "p16/hash-base-device.out",
+   "bytes": 465,
+   "sha256": "76509e9180ebe92e50688b51519490d867216c4404a61c401003c5799ae1c1ba"
+  },
+  {
+   "path": "p16/layer-run1/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/layer-run1/device-counters-end.txt",
+   "bytes": 90215,
+   "sha256": "2b9eb6e6cd81400c1486c0df443f4a9271ba57aa3bdc060bebbb22a7109d7ba5"
+  },
+  {
+   "path": "p16/layer-run1/device-counters-start.txt",
+   "bytes": 86686,
+   "sha256": "00dc5a95ce7c49a23ee21c58f0beeeedb4a867b109fe6ff4f702c8eba15ca3c3"
+  },
+  {
+   "path": "p16/layer-run1/host-cpu-end.json",
+   "bytes": 2545,
+   "sha256": "b97d5fe09d6ba4b99a27399209a1c63cf280108dfacd008c0755702d85428d8b"
+  },
+  {
+   "path": "p16/layer-run1/host-cpu-start.json",
+   "bytes": 2551,
+   "sha256": "015e8e2eeba65654061fc5668a6341a6e36689ad7ad79e3ac22e7d3b0d089df2"
+  },
+  {
+   "path": "p16/layer-run1/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/layer-run1/installed.json",
+   "bytes": 376,
+   "sha256": "2f5d32ff575e00ac7dd6b5ad99a819fc9f478a1439abd829e19b149c6daf892b"
+  },
+  {
+   "path": "p16/layer-run1/logcat.txt",
+   "bytes": 170086,
+   "sha256": "ad35d14bc63e19ed84350089fe0eff19854bfa2ca20ea9a617592a941c10ae46"
+  },
+  {
+   "path": "p16/layer-run1/p11-readings.json",
+   "bytes": 48471,
+   "sha256": "0f370a450075b64e6d09686425ef643e75f02a5e86030b4d807fd159cfc97286"
+  },
+  {
+   "path": "p16/layer-run1/probe.log",
+   "bytes": 1116,
+   "sha256": "f76e775ba6670f6af674659499549372fd664caa70fac6dbaab233fcd68a3968"
+  },
+  {
+   "path": "p16/layer-run1/raw.json.gz",
+   "bytes": 3170143,
+   "sha256": "a88f7220c7bf03764fbb638bacca04691d3282c2033f8f213b0c0e44e4c10bef"
+  },
+  {
+   "path": "p16/layer-run1/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "d76ba2e37e29d6b77f084bbb1f10bf21f330fa1f919de48e335ec29f308e3946"
+  },
+  {
+   "path": "p16/layer-run1/startup-logcat.txt",
+   "bytes": 2898,
+   "sha256": "b5acd6a1c49781ba2754a7cd988fd5a01d9fe7942ec6a925ae3044e33f6ce517"
+  },
+  {
+   "path": "p16/layer-run1/summary.json",
+   "bytes": 22082,
+   "sha256": "479b9681ce3ab99c31f2b44ecf2e9f877103c3db87f10054c3a1749c66ffe723"
+  },
+  {
+   "path": "p16/layer-run1/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "2f52a4bbf67b88ee39008b736c266510fe45e02c594a04faec25d60791b0c2de"
+  },
+  {
+   "path": "p16/layer-run1-device.out",
+   "bytes": 452,
+   "sha256": "efffd85f7c125c9e8ee2b04616bcfc5c7ad3f2357e0f708367eef2358114c782"
+  },
+  {
+   "path": "p16/layer-run1-p11.out",
+   "bytes": 2875,
+   "sha256": "22fc02ab3fcc6ffa732168bfc51b28ff8366ffb76510acbec57e24b02a76864b"
+  },
+  {
+   "path": "p16/layer-run1-start.txt",
+   "bytes": 271,
+   "sha256": "8ac97ac9e6a174c3bffd038589ccb189cda7d0ab18ca488b8e8a47108548f53f"
+  },
+  {
+   "path": "p16/layer-run1-summary.out",
+   "bytes": 950,
+   "sha256": "32ec38630b830a01e6817e14dcff96f9a3ce09959589b679167fd9c2315f8c30"
+  },
+  {
+   "path": "p16/layer-run2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p16/layer-run2/device-counters-end.txt",
+   "bytes": 90512,
+   "sha256": "f281ecce8051eb8b3d48b0602d0bcdd3ccc81365b2da4b86cb120f55f1773b2b"
+  },
+  {
+   "path": "p16/layer-run2/device-counters-start.txt",
+   "bytes": 86667,
+   "sha256": "40a91a6e489ba0dc31ea1be38ce7619dc5c1006f3dc5ce903deef56c97c85731"
+  },
+  {
+   "path": "p16/layer-run2/host-cpu-end.json",
+   "bytes": 2550,
+   "sha256": "4af9bd8995fcf5171c72aeaf236b0c0ce1df65786852dd4f00f5817bf7cb7938"
+  },
+  {
+   "path": "p16/layer-run2/host-cpu-start.json",
+   "bytes": 2556,
+   "sha256": "2435d3231e752a314260fba427edb280811a5eccf3dcfbb13c14a8b49782ad26"
+  },
+  {
+   "path": "p16/layer-run2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p16/layer-run2/installed.json",
+   "bytes": 376,
+   "sha256": "2f5d32ff575e00ac7dd6b5ad99a819fc9f478a1439abd829e19b149c6daf892b"
+  },
+  {
+   "path": "p16/layer-run2/logcat.txt",
+   "bytes": 170502,
+   "sha256": "36b490de4c4303f6177d8adb862ab7a73c28e0f62459b386ec086b55ba641017"
+  },
+  {
+   "path": "p16/layer-run2/p11-readings.json",
+   "bytes": 55261,
+   "sha256": "79bc6250d960e643e33b24b972893fa46c30f5d49e9ce69a673d8738e4076561"
+  },
+  {
+   "path": "p16/layer-run2/probe.log",
+   "bytes": 1124,
+   "sha256": "d1218607210441720c5f5a9c21b6d86d4089a5eaca69454b5deb057264e893e1"
+  },
+  {
+   "path": "p16/layer-run2/raw.json.gz",
+   "bytes": 3119273,
+   "sha256": "87087feadff23c4e2d74775754145c5985c515058127848d79e88a6b2bd0d90c"
+  },
+  {
+   "path": "p16/layer-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "3f2fcd6acff1ed4a882c7fe18462a01e5fd299461c65b3e5816af6007f77cc3e"
+  },
+  {
+   "path": "p16/layer-run2/startup-logcat.txt",
+   "bytes": 2917,
+   "sha256": "02e91088c5f6fa58ff209528fee9bfb50fb715db539e34489884133e6f2c46e0"
+  },
+  {
+   "path": "p16/layer-run2/summary.json",
+   "bytes": 22136,
+   "sha256": "579ed486084fdc62a8bd4de01898fbb62eaa7188f0037cad0e6f1d64535358d3"
+  },
+  {
+   "path": "p16/layer-run2/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "c1188bc4b45ac86e18c257c6868037b3f0e48811abab77c29e66c25c8191e96a"
+  },
+  {
+   "path": "p16/layer-run2-device.out",
+   "bytes": 452,
+   "sha256": "46f6da9e550bed05c61b21f0e0a1f2a238f9567277661757e073ee1eb90da03f"
+  },
+  {
+   "path": "p16/layer-run2-p11.out",
+   "bytes": 2947,
+   "sha256": "df42ea2f2b2a3da02705fcae1b3f0377b98faa0fdeb08fe29591387166506497"
+  },
+  {
+   "path": "p16/layer-run2-start.txt",
+   "bytes": 271,
+   "sha256": "6b962f2c6e25de9a6f56938c21bd7fd484574dba6ec800edb42de66efc9c8aa1"
+  },
+  {
+   "path": "p16/layer-run2-summary.out",
+   "bytes": 961,
+   "sha256": "1ac876bc2e99f4dc31a79ff68ae4bd6dbbc505c16df86ca1122d4a84dc896e19"
+  },
+  {
+   "path": "p16/layer.apk",
+   "bytes": 42567549,
+   "sha256": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c"
+  },
+  {
+   "path": "p16/pixel-diff-check.json",
+   "bytes": 31345,
+   "sha256": "2ff69ba961f6d426c43ed610edd6b0ce63648449bd6169abc0f9dce596426935"
+  },
+  {
+   "path": "p16/release-8443a99f.apk",
+   "bytes": 33632781,
+   "sha256": "4c4a86a8f32294ec31f3e7e90955f25dc9a09447c8a8aceafe28b5bc6158ce68"
+  },
+  {
+   "path": "p16/scripts/ab.sh",
+   "bytes": 1182,
+   "sha256": "41b303a873c1d603bfbddd1902e7007a54509aa2faec2d3a97a98e84e3de406e"
+  },
+  {
+   "path": "p16/scripts/collect.sh",
+   "bytes": 1176,
+   "sha256": "535652ca166bcaf38111bb29b3b534ee26c0b1dadc68b96d7824b261f6745bd3"
+  },
+  {
+   "path": "p16/scripts/diff.sh",
+   "bytes": 991,
+   "sha256": "45fbae8eaf59f04d272b8a0acf48d2522c8f89bb010d58e626557335218be17f"
+  },
+  {
+   "path": "p16/scripts/manifest.py",
+   "bytes": 2149,
+   "sha256": "96bb170c1b3f401d133436f706f4a2c07b926d460f5b0d65b6855fe8573b73cc"
+  },
+  {
+   "path": "p16/step1-check.json",
+   "bytes": 14098,
+   "sha256": "3c4d21797edf05bd8e8eed5806325fa0f129d171e07c402e372c1edb0b48ba35"
+  },
+  {
+   "path": "p16/step1a-check.json",
+   "bytes": 10880,
+   "sha256": "42a10b12b4c7700af6835a22f11322e7a514d03c08f40ecd8e6853dce546cf5c"
+  },
+  {
+   "path": "p16/tmp.json",
+   "bytes": 31345,
+   "sha256": "2ff69ba961f6d426c43ed610edd6b0ce63648449bd6169abc0f9dce596426935"
+  }
+ ],
+ "apks": {
+  "p16/base.apk": "base arm: deathride/main d95166c8 + the perf-only HUD counters d6740d7f (8c3349ea...)",
+  "p16/fonts-af1d860c.apk": "first pixel proof of card 1 (titles in packed cells; 31 pixels off by 1 in one race frame) (5bed3d9a...)",
+  "p16/fonts.apk": "fonts arm: card 1 + pixel-proof harness, 177d5872 (bb8a8ce8...)",
+  "p16/layer.apk": "layer arm: card 1 + card 2, 42833cd9 (674253f1...)",
+  "p16/release-8443a99f.apk": "acceptance: assembleRelease at the last code commit 8443a99f (4c4a86a8...)"
+ },
+ "rule": "Operator ruling 2026-10-07: summaries in git, raw files outside, bound here by SHA-256. No committed file over 512 KiB; no .gz, trace, hprof, APK or logcat in git."
+}

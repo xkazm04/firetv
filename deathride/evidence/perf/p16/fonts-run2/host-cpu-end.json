@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T17:11:43.5192563Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  48088,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "node#23",
+                             "IDProcess":  2148,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "icacls",
+                             "IDProcess":  14636,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "clippy-driver",
+                             "IDProcess":  45208,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "OneDrive.Sync.Service",
+                             "IDProcess":  30916,
+                             "PercentProcessorTime":  51
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  51
+                         },
+                         {
+                             "Name":  "WmiPrvSE",
+                             "IDProcess":  5712,
+                             "PercentProcessorTime":  28
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  29748,
+                             "PercentProcessorTime":  23
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  23
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                72,
+                                53,
+                                45
+                            ]
+}
