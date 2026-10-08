@@ -64,12 +64,16 @@ const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, path?: MathPat
     : kind === "school" && unit ? unitStance(voice, unit)
     : path === "calc1" ? CALC_STANCE : STANCE.maths(voice);
 
-/** The specs a maths task reads as (rules/kinds readQuestion): a Calculus one and a school one; either may be null, and at most one reads. */
-type Specs = Pick<Question, "calc" | "school">;
+/**
+ * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
+ * Calculus task (v2 M3a); at most one of the three reads.
+ */
+type Specs = Pick<Question, "calc" | "school" | "parts">;
 
-/** Does this line give the item's answer away: the one leak rule, and each reader's own check when the item reads as its spec. */
+/** Does this line give the item's answer away: the one leak rule, and each reader's own check when the item reads as its spec (every part's, for parts). */
 const leaksLine = (problem: string, spec: Specs, line: string) =>
-  leaks(problem, line) || (spec.calc !== null && leaksCalc(spec.calc, line)) || (spec.school !== null && leaksSchool(spec.school, line));
+  leaks(problem, line) || (spec.calc !== null && leaksCalc(spec.calc, line)) || (spec.school !== null && leaksSchool(spec.school, line))
+  || (spec.parts !== null && spec.parts.some((p) => leaksCalc(p, line)));
 
 /** Which field of a maths hint gives the item's answer away, in words for the re-ask, or null when neither does. */
 function leakedIn(problem: string, spec: Specs, said: Said): string | null {
@@ -82,7 +86,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
   const voice = voiceOf(subject, subject === "maths" && opts.path === "calc1" ? undefined : opts.age);
   const read = subject === "maths" ? readQuestion(problem) : null;
-  const spec: Specs = { calc: read?.calc ?? null, school: read?.school ?? null };
+  const spec: Specs = { calc: read?.calc ?? null, school: read?.school ?? null, parts: read?.parts ?? null };
   // the unit a school task belongs to, by its path's name for it: the stance names it
   const unit = spec.school ? topicIn(unitOf(spec.school) ?? "")?.name : undefined;
   const system = withManner(
@@ -111,5 +115,5 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const again = await ask(`\n\nYour previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`).catch(() => null);
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
   if (again && !leakedIn(problem, spec, again.json)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
-  return { hint: spec.calc ? withheldCalc(spec.calc) : spec.school ? withheldSchool(spec.school) : withheldLine(problem), next: "", provider, ms };
+  return { hint: spec.calc ? withheldCalc(spec.calc) : spec.parts ? withheldCalc(spec.parts[0]) : spec.school ? withheldSchool(spec.school) : withheldLine(problem), next: "", provider, ms };
 }

@@ -849,6 +849,36 @@ export function specFromQuestion(text: unknown): CalcSpec | null {
   return null;
 }
 
+const MAX_WORDS = String.raw`(?:absolute\s+|global\s+)?(maximum|max|largest|greatest)`;
+const MIN_WORDS = String.raw`(?:absolute\s+|global\s+)?(minimum|min|smallest|least)`;
+/** The multi-part phrasings: the maximum and the minimum of one function on one interval, in either order. */
+const PART_READERS: [RegExp, boolean][] = [
+  [re(`${VERB}\\s+the\\s+${MAX_WORDS}\\s+and\\s+(?:the\\s+)?${MIN_WORDS}(?:\\s+values?)?\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), true],
+  [re(`${VERB}\\s+the\\s+${MIN_WORDS}\\s+and\\s+(?:the\\s+)?${MAX_WORDS}(?:\\s+values?)?\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), false],
+];
+
+/**
+ * The parts a printed multi-part Calculus task is, read in code from its text (v2 M3a) - or null. It knows one phrasing:
+ * 'Find the (absolute) maximum and minimum (values) of f(x) = ... on [a, b]' (either order), which is two extremum specs
+ * on the same function and interval, in the order asked. Null unless BOTH parts are well formed: a part the desk cannot
+ * judge (an extremum at an endpoint) makes the whole task one it does not claim, never half of it. specFromQuestion is
+ * untouched: no text it reads changes its spec. Pure and deterministic.
+ */
+export function partsFromQuestion(text: unknown): CalcSpec[] | null {
+  if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
+  const t = normalQuestion(text);
+  for (const [pattern, maxFirst] of PART_READERS) {
+    const m = pattern.exec(t);
+    if (!m) continue;
+    const f = fnOf(m[3], false), on = intervalOf(m[4]);
+    if (!f || !on) return null;
+    const kinds: ("max" | "min")[] = maxFirst ? ["max", "min"] : ["min", "max"];
+    const parts: CalcSpec[] = kinds.map((kind) => ({ shape: "extremum", f, on: [on[0], on[1]], kind }));
+    return parts.every((p) => wellFormed(p).ok) ? parts : null;
+  }
+  return null;
+}
+
 // ------------------------------------------------------------------ the line when a hint gave the answer away twice
 
 /**

@@ -248,6 +248,23 @@ test('5: a Calculus page\'s hint that states the derivative is re-asked once; a 
  assert.equal(seen.length,2);assert.match(seen[1].prompt,/what to try next/i);assert.equal(h.hint,clean.hint);
 });
 
+test('M3a: a two-part page task (the maximum and the minimum) is leak-checked against both parts; a second leak gets the extremum line',async()=>{
+ const TWO='Find the maximum and minimum of f(x) = x^3 - 12x on [-3, 3].';
+ assert.equal(C.specFromQuestion(TWO),null,'no single spec reads');assert.equal(C.partsFromQuestion(TWO).length,2);
+ const clean={hint:'Find where the derivative is zero inside the interval.',what_to_try_next:'Write the derivative on your paper.'};
+ // the minimum alone gives part (b) away: it is re-asked
+ stub({hint:'The minimum comes out at -16.',what_to_try_next:'Check the ends.'},clean);
+ let h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,2,'the leak of the second part is caught');assert.deepEqual([h.hint,h.next],[clean.hint,clean.what_to_try_next]);
+ // twice: the extremum's fixed line, next empty
+ stub({hint:'The largest value is 16.',what_to_try_next:'Check it.'},{hint:'You reach 16 at x = -2.',what_to_try_next:'Done.'});
+ h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,2);assert.deepEqual([h.hint,h.next],[C.CALC_WITHHELD.extremum,'']);
+ // a clean hint is one call, kept verbatim
+ stub(clean);h=await hint('maths',TWO,{path:'calc1'});
+ assert.equal(seen.length,1);assert.equal(h.hint,clean.hint);
+});
+
 test('6: a clean Calculus hint is kept verbatim in one call; a limit hint that says the limit is re-asked',async()=>{
  stub({hint:'Use the power rule on each term',what_to_try_next:'Write the first term\'s derivative.'});
  const h=await hint('maths',DIFF,{path:'calc1'});

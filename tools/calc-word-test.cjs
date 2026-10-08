@@ -141,3 +141,40 @@ test('M3a sweep: the table',()=>{
  console.log(['| template | topic | drawn | not well formed | not fair | worked answers not right | stem numbers not drawn | |','|---|---|---|---|---|---|---|---|',...rows].join('\n'));
  for(const t of W.WORD_TEMPLATES)assert.equal(W.SHIPPED.includes(t.id),passes(RESULTS[t.id]),`${t.id}: shipped exactly when it passes`);
 });
+
+// ---------------------------------------------------------------- the corpus table (docs/CALCULUS-1-SYLLABUS.md, "What a photographed page reads into")
+
+test('M3a corpus: what the printed questions read into - 13 of 31 single specs as before, and the multi-part reader (c13-q1 refused: its maximum is at an end)',()=>{
+ const {CALCULUS_1}=require(path.join(root,'src/lib/library/calculus1.ts'));
+ const all=CALCULUS_1.topics.flatMap((t)=>t.examples);
+ const qs=all.filter((e)=>e.kind==='question'),pages=all.filter((e)=>e.kind==='page');
+ const read=(e)=>{const one=C.specFromQuestion(e.plain);if(one)return {kind:'single',shape:one.shape};const parts=C.partsFromQuestion(e.plain);return parts?{kind:'parts',shape:parts.map((p)=>`${p.shape} ${p.kind}`).join(' + ')}:null;};
+ const rows=qs.map((e)=>({id:e.id,r:read(e)}));
+ const by=(k)=>rows.filter((x)=>x.r&&x.r.kind===k);
+ const shapes={};for(const x of by('single'))(shapes[x.r.shape]??=[]).push(x.id);
+ console.log(['| examples | read into a spec | read into parts | of which shape |','|---|---|---|---|',
+  `| ${qs.length} questions (plain) | ${by('single').length} | ${by('parts').length} | ${Object.entries(shapes).map(([s,ids])=>`${s} ${ids.length} (${ids.join(', ')})`).join(', ')} |`,
+  `| ${pages.length} page lines (plain) | ${pages.filter((e)=>C.specFromQuestion(e.plain)).length} | ${pages.filter((e)=>C.partsFromQuestion(e.plain)).length} | - |`,
+  `| ${[...qs,...pages].filter((e)=>e.tex).length} TeX forms of the above | ${[...qs,...pages].filter((e)=>e.tex&&C.specFromQuestion(e.tex)).length} | ${[...qs,...pages].filter((e)=>e.tex&&C.partsFromQuestion(e.tex)).length} | - |`].join('\n'));
+ // the single reads are exactly the thirteen the doc lists: no question that read before changes its spec
+ assert.equal(qs.length,31);
+ assert.deepEqual(by('single').map((x)=>x.id),['c04-q1','c05-q1','c05-q2','c05-q3','c07-q1','c08-q1','c09-q1','c10-q2','c11-q1','c11-q2','c14-q1','c20-q1','c21-q1']);
+ assert.deepEqual(Object.fromEntries(Object.entries(shapes).map(([s,ids])=>[s,ids.length])),{limit:5,derivative:6,'definite-integral':2});
+ assert.deepEqual(by('parts'),[],'no corpus question reads into parts today');
+ // c13-q1 is the multi-part phrasing, read and refused whole: its maximum (65) is at the end x = 5, which an extremum refuses
+ const c13=qs.find((e)=>e.id==='c13-q1');
+ assert.equal(C.partsFromQuestion(c13.plain),null);
+ assert.equal(C.wellFormed({shape:'extremum',f:'x^3 - 12x',on:[-3,5],kind:'max'}).why,'The extremum is at an endpoint, not where the derivative is zero.');
+ assert.ok(C.wellFormed({shape:'extremum',f:'x^3 - 12x',on:[-3,5],kind:'min'}).ok,'the minimum alone would read; the desk does not claim half a task');
+ assert.deepEqual(C.partsFromQuestion(c13.plain.replace('[-3, 5]','[-3, 3]')),[{shape:'extremum',f:'x^3 - 12x',on:[-3,3],kind:'max'},{shape:'extremum',f:'x^3 - 12x',on:[-3,3],kind:'min'}],'on [-3, 3] both are inside and it reads');
+ // the reader's phrasings: either order, 'values', 'largest and smallest', the interval words; never a single extremum, never junk
+ assert.deepEqual(C.partsFromQuestion('Find the minimum and maximum values of x^3 - 12x on [-3, 3]').map((p)=>p.kind),['min','max']);
+ assert.deepEqual(C.partsFromQuestion('Find the largest and smallest values of y = x^3 - 3x on the interval (-1.5, 1.5)').map((p)=>p.kind),['max','min']);
+ for(const t of ['Find the maximum value of f(x) = x^3 - 12x on [-3, 3].','Find the maximum and minimum of f(x) = x^3 - 12y on [-3, 3]','Find the maximum and minimum of f(x) = x^3 - 12x on [3, -3]',42,null,'','x'.repeat(400)])assert.equal(C.partsFromQuestion(t),null,String(t).slice(0,60));
+ assert.equal(C.specFromQuestion('Find the maximum and minimum of f(x) = x^3 - 12x on [-3, 3]'),null,'specFromQuestion does not read a two-part task as one of its parts');
+ // the kind reader carries the parts, so a page task's hint is leak-checked against both answers
+ const K=require(path.join(root,'src/lib/rules/kinds.ts'));
+ const q=K.readQuestion('Find the maximum and minimum of f(x) = x^3 - 12x on [-3, 3]');
+ assert.equal(q.kind,'calc');assert.equal(q.calc,null);assert.equal(q.school,null);assert.equal(q.parts.length,2);
+ assert.deepEqual(K.readQuestion('Find the maximum value of f(x) = x^3 - 12x on [-3, 3].').parts,null,'a single read carries no parts');
+});
