@@ -572,6 +572,22 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   importer of CALC_SHAPES and isCalcSpec in the card, with what each does with a calc2 spec and the slice that handles it.
   M3b-3b makes chainChecks return no tick for a calc2 spec, with a row, and states that a calc2 item draws no plot on the TV
   (owed in its captures). The seam does not change MathsTV.
+  The App Master's rulings on the M3b-3a run (2026-10-09):
+  (24) M3b-3a is accepted. Its commits: 586c2f3e, 9a96e73d, 30528a07, 32901a8f. The frozen table (9a96e73d, calc.ts untouched)
+  precedes the seam (30528a07). calc-read.ts holds the eight helpers with only export added. calc2.ts is empty and imports
+  nothing. The six public functions dispatch on their first line. isCalcSpec and specShown read both lists. No existing test file
+  changed. MathsTV.tsx, working.ts and chain.ts are untouched. The App Master ran tsc on main at 32901a8f (clean) and
+  calc2-seam-test (5 of 5). A note for M3b-3b: seam-test row 3's pattern /^\.\/calc(-expr|-read)?$/ also admits './calc', which
+  would be a cycle. M3b-3b gives calc2.ts its first import, so 3b also tightens that pattern to refuse './calc'. This is a
+  stronger assertion, made openly with OLD/NEW.
+  (25) Where the guard lives: inside calc-expr.ts limitInf itself, so every reader of a limit at infinity reads one guarded value:
+  calc.ts:232 (a spec's truth; an aliased spec is refused with REJECT.limitDne, 'The limit does not exist.'), chain.ts:115 (a
+  working line's limit), and later M3b-3c's sequence-limit. The rule, with run A today's run, f(sign/t) over LIMIT_STEPS, and
+  run B f(sign*Math.SQRT2/t) over the same steps: A null -> null, as today; A dne -> dne; B null -> dne; A and B both values
+  within LIMIT_SIDES * max(1, |A|, |B|), or both infinite with the same sign -> A UNCHANGED (the same object, not an average),
+  so a kept limit's value is bit-identical to today's; otherwise dne.
+  (26) chain.ts's code is not edited, but its behaviour on aliased lines is corrected: a 'lim' line claiming cos(pi*x) -> 1 at inf
+  is no longer ticked; a 'dne' body on that line is ticked. chain-rules-test stays green, unchanged.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
