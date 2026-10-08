@@ -83,6 +83,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
+| 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -90,7 +91,7 @@ O3 = loosen for confirmed 18+ (L3), O5 = yes, as proof (E5).
 
 ## d. The slice cards (batches 2-3; later batches get their cards when their batch starts)
 
-Every slice: the gate is `cd desk && npm test`, green at its commit. A new suite is appended at the end of `rulesSuites` in desk/package.json (run by `test:rules`, `node ../tools/run-rules.cjs`).
+Every slice: the gate is `cd desk && npm test`, green at its commit. A new suite goes just before harness-rules-test.cjs in `rulesSuites` in desk/package.json (harness-rules-test stays last: it spawns runs of its own) (run by `test:rules`, `node ../tools/run-rules.cjs`).
 No live model call in a gate (stub at the provider seam). Never touch `desk/data/`. A screen change updates
 `docs/STUDY-DESK-SCREENS.md` and the app's `docs/DESIGN-*.md` in the same commit.
 
@@ -737,3 +738,15 @@ Owed to the owner's batch 5+6 review (captures, not made here): the TV paper wit
 a maths teacher's read of the three templates' wording and units; one live set on a word topic (the model's four single items
 beside the parts).
 Next: T4 and T5 wait for the T1 live probe; batch 7 starts with P6.
+
+App Master's rulings on M3a's questions (2026-10-08):
+(1) The chain tagger change stands. A one-capital label is an antiderivative only on antiderivative and definite-integral; on
+every other shape it names the function. Reason: every existing chain row kept its result (clean chains rung 0 of 50, slips at
+their own line 50).
+(2) The append rule changes and the harness pin stays. A new suite goes just before harness-rules-test.cjs, which stays last
+because it spawns runs of its own. Section d's sentence is changed to say so.
+(3) word: false stays, as a test seam for the course walk only. No screen may send it, and the default carries the word problem.
+(4) No unit-stripping reading rule now. Each part line names its unit. The owner's live set on a word topic and a teacher's read
+decide whether learners write units; if they do, that is a reading card of its own.
+(5) A part is named as the paper names it wherever the learner sees or hears it. M3a-2 builds this (row 32).
+(6) The captures, the teacher's read and one live set stay owed to the owner's batch 5+6 review.
