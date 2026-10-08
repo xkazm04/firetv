@@ -1,6 +1,6 @@
 {
- "generatedUtc": "2026-10-08T18:18:02.464407+00:00",
- "committedBytes": 2924271,
+ "generatedUtc": "2026-10-08T18:23:27.459583+00:00",
+ "committedBytes": 2927055,
  "committed": [
   {
    "path": "evidence/perf/p16/ab-log.txt",
@@ -666,10 +666,15 @@
    "path": "evidence/perf/p16/step1-baseline.json",
    "bytes": 14098,
    "sha256": "3c4d21797edf05bd8e8eed5806325fa0f129d171e07c402e372c1edb0b48ba35"
+  },
+  {
+   "path": "evidence/perf/p16/tests.json",
+   "bytes": 2784,
+   "sha256": "cbc0f8ce085f68c9e32ce4e0d8d4abb609c1d7c2966dcf235695f101367ddaf7"
   }
  ],
  "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence (outside git)",
- "rawBytes": 322575006,
+ "rawBytes": 322611720,
  "raw": [
   {
    "path": "p16/ab-final.out",
@@ -2220,6 +2225,11 @@
    "path": "p16/gate-tests-8443a99f.log",
    "bytes": 37221,
    "sha256": "d3ba2720c9af2100cbb2f8823a84ed4bfa5f3ffc2838a35c5fa777444efa840d"
+  },
+  {
+   "path": "p16/gate-tests-d4bd97cf-run4.log",
+   "bytes": 36714,
+   "sha256": "f90fac55136e616136b30b2a2e7f29626b2a3f3049a65f043219f59d4a2e0920"
   },
   {
    "path": "p16/hash-base/badging.txt",

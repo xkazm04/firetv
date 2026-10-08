@@ -1,0 +1,60 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeUnderTest": "8443a99f (the last code commit; its game/app/desktop code equals 2840bfc4: deathride/main d95166c8 + the perf-only HUD counters d6740d7f)",
+ "runs": [
+  {
+   "run": 1,
+   "commit": "8443a99f",
+   "result": "fail",
+   "core": "261 passed",
+   "link": "29, 2 skipped, 1 failed: LinkTest.badPinMalformedInputAndLifecycleAreContained (IllegalStateException: no welcome, after suspendLink/start)",
+   "game": "114 passed",
+   "log": "raw p16/gate-tests-8443a99f.log"
+  },
+  {
+   "run": 2,
+   "commit": "8443a99f",
+   "result": "fail",
+   "core": "261 passed",
+   "link": "29, 2 skipped, 0 failed",
+   "game": "114, 2 failed: ProfileSavesTest.aProfileSwitchDrainsTheOldProfileAndIgnoresItsCompletions (expected 1 but was 0), ProfileSavesTest.pauseDrainsQueuedSavesAndNeverDropsThem (expected true)",
+   "host": "94-99% CPU from other sessions (node processes)",
+   "log": "raw p16/gate-tests-8443a99f-run2.log"
+  },
+  {
+   "run": 3,
+   "commit": "8443a99f",
+   "result": "fail",
+   "core": "261 passed",
+   "link": "29, 2 skipped, 1 failed: HiddenPhoneTest.hiddenPhoneReceivesNoHudAndResumesFull",
+   "game": "114 passed",
+   "log": "raw p16/gate-tests-8443a99f-run3.log"
+  },
+  {
+   "run": 4,
+   "commit": "d4bd97cf (code = 8443a99f, evidence committed)",
+   "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included, P16 evidence committed)",
+   "link": "29, 2 skipped (as on the base)",
+   "game": "114 passed",
+   "host": "75-87% CPU at start",
+   "log": "raw p16/gate-tests-d4bd97cf-run4.log"
+  }
+ ],
+ "reading": "Each failing test failed in one run only and passed in the other three; all four are timing tests in code P16 does not change (link/ untouched; ProfileSaves untouched). The last run is green.",
+ "releaseApk": {
+  "command": "gradlew.bat :app:assembleRelease",
+  "commit": "8443a99f",
+  "result": "pass (10 min 42 s)",
+  "sha256": "4c4a86a8f32294ec31f3e7e90955f25dc9a09447c8a8aceafe28b5bc6158ce68",
+  "log": "raw p16/build-release-8443a99f.log"
+ },
+ "desktop": "desktop/ not changed: :desktop:compileKotlin not required (it compiled with card 2 in place, at 42833cd9)",
+ "perfApks": {
+  "base": "8c3349ea716b17c5d654d9d29ed5e315bcd4a91de7818d17c1c303744f370137 (d6740d7f)",
+  "fonts": "bb8a8ce8af09739fd54f7cbf83b99626890c24b59d7cd411365b6d74dc3db54e (177d5872)",
+  "layer": "674253f1edff4022759aeb91e4bdcfd95e58e58404b1b4a2c8f962e3c32de55c (42833cd9)",
+  "fonts-af1d860c": "5bed3d9a3d550c4f3fc2eecabe72a83333af0fa906ba6ca87c579738354dea33 (first card-1 proof only)"
+ },
+ "cardTests": "While built: FontPageTest 4 and HudDiffTest 3 passed (game 121 with them); reverted with their cards."
+}
