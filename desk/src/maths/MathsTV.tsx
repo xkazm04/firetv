@@ -19,7 +19,7 @@ import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, 
 import { MathsCollection } from "./MathsCollection";
 import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
-import { itemName, namedLine, partPlace, type PartPlace } from "@/lib/rules/calc-word";
+import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
@@ -736,13 +736,14 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
 }
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
-function SlipSide({ it, name, points, job }: { it: PracticeItem; name?: string; points?: string; job?: JobLine | null }) {
+function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: number; points?: string; job?: JobLine | null }) {
+  const it = items[ix], name = itemName(items, ix);
   const v = it.verdict ?? "unsure", w = working(it);
   const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
   const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
   // a part is named as the paper names it, 5(b) (v2 M3a); a single item's name is its number, so its lines are as before
-  const nm = name ?? String(it.n);
-  const said = namedLine(it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."), it.n, nm);
+  const nm = name;
+  const said = deskLine(items, ix, it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."));
   const next = v === "wrong" ? secondLine(it) ?? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
@@ -817,7 +818,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    {tile && ix !== null ? <SlipSide it={p.items[ix]} name={itemName(p.items, ix)} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
+    {tile && ix !== null ? <SlipSide items={p.items} ix={ix} points={p.items[ix].slip ? slipById(p.items[ix].slip!)?.points : undefined} /> : (
       <aside className="mb-side" key={String(at)}>
         <div className="mb-khead"><div className="mb-kick">{at === "more" ? <>{KIND_ICON.six}Six more</> : <>Put away</>}</div></div>
         <div className="mb-stitle" data-role="maths-slip"><Amber text={at === "more" ? `Six more on ${name}` : "The set leaves the desk"} /></div>
@@ -857,7 +858,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    <SlipSide it={it} name={itemName(p.items, s.walkIx)} points={sl?.points} job={explainLine(s, it.n)} />
+    <SlipSide items={p.items} ix={s.walkIx} points={sl?.points} job={explainLine(s, it.n)} />
     <div className="mb-acts">
       {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>
