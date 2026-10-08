@@ -244,8 +244,9 @@ model call. Take Two forks inside the same conversation, never through a new sce
 line just before the noted turn again (its stored text, no call; the audio plays again by a new `audioNonce`), the
 kicker reads **Take Two**, and the data line under the line reads **Take Two of** the noted quote. The learner says
 their line again on the phone; the cast answers at most twice (one fast, thinking-off call each, `conversation.ts`),
-and then the take ends by itself on the recap. **Back to the notes** (the TV row, the phone, or Back on the remote)
-ends it earlier. Inside a take nothing else of the scene is offered: no help, quiz, coach, Cut, pause or finish, and
+and then the take is spent: it stays on the talk screen with the cast's last line shown and spoken, and only **Back to
+the notes** and Repeat audio are offered (no reply box, no microphone). **Back to the notes** (the TV row, the phone, or
+Back on the remote) ends a take, spent or not, and lands on the recap. Inside a take nothing else of the scene is offered: no help, quiz, coach, Cut, pause or finish, and
 no moment stops it; while the cast answers, Cancel only cancels that reply.
 
 Whether the note held is code's (`take.ts heldOf`), decided on the learner's first line of the take, and never a

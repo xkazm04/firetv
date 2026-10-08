@@ -84,6 +84,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
 | 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
+| 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -247,7 +248,7 @@ run through the gate, L4 first, then M3a)
   before the noted turn (`forkOf`), that same line is re-delivered (its stored text, no model call, the audio by
   bumping `audioNonce`), the learner re-delivers their line with `turn`, and up to two cast turns follow, each one fast,
   thinking-off call in `conversation.ts` (the replay schema: a reply, no observations, no moment). After the second
-  cast turn the take ends by itself; `take-end` ("Back to the notes") ends it earlier. Both end on `linga-recap`. The
+  cast turn the take ends by itself; `take-end` ("Back to the notes") ends it earlier. Both end on `linga-recap`. (L4b: after the second cast turn the take stays on linga-talk until Back to the notes.) The
   name is not `replay`, which is already a turn action, a phase and a view id.
 - The record: `Conversation.takes?: Take[]`, `Take { note, from, turns, held, at, endedAt? }` (types.ts): the note it
   came from, the partner turnId of the first take it forked at, its own turns (the re-delivered line first), `held`
@@ -769,3 +770,24 @@ Kill test (not committed): spokenLine's walk branch returning the stored said ma
 Gate: `cd desk && npm run test:rules` green (66 suites, 1112 tests); `npx tsc --noEmit --incremental false` clean.
 Not covered: the routes' wiring is read, not driven (the new rows call the pure functions; no marked set is seeded through
 /api/second or /api/explain); no screenshot.
+
+### 2026-10-08 · batch 6 · L4b · autopilot/accepted-idea-delivery-d5bb5783
+
+What changed, by file: lib/english/take.ts adds `takeSpent(take)` (partner lines > TAKE_CAST_TURNS). conversation.ts takeTurn no
+longer sets endedAt or goes to linga-recap after the second cast turn: it stores turns and held and stays on linga-talk, so the new
+partner line changes the spoken key and plays. turn.ts: a spent take stays in state take-two (no new TurnState); accepts refuses
+'turn' and 'capture' on it by a data guard (like hasReply), 'repeat' and 'take-end' stay; refusal() says "That was the take. Go
+back to the notes." (exported SPENT); the server's existing accepts guard gives it as a 409 with no model call; stopping the
+microphone is still never refused. view.ts: on a spent take the caption is "That was the take. Go back to the notes when you are
+ready.", captionTag "Take done", the action Back to the notes; the spoken line is the cast's last line, not blocked, audible.
+english/LingaPhone.tsx: the TakePanel's ReplyBox is ready only while accepts(c,'turn'). take-end, heldOf, forkOf, TAKE_CAST_TURNS,
+the 2 calls, prompts, schemas and the recap are unchanged.
+Rows (tools/linga-rules-test.cjs, no new suite): take case 4's tail changed to the new rule (endedAt undefined, take-two, linga-talk,
+spoken 'Cast 2. And then?' not blocked and audible, a third turn and capture 409 with the sentence and the call count unmoved, repeat
+bumps audioNonce, then take-end sets endedAt and lands on the recap with calls still before+2); take case 3 gains the spent rows
+(state, accepts per action, refusal); new take case 9 (hero.said, caption, captionTag, Back to the notes, answer null, repeat
+offered, surface has no strays).
+Kill tests (not committed): (a) endedAt and linga-recap put back at the second cast turn: take case 4 red. (b) the spent guard
+removed from accepts: take cases 3, 4 and 9 red. Both restored.
+Gate: `cd desk && npm run test:rules` green; `npx tsc --noEmit --incremental false` clean. Not covered: no screenshot; the TV audio
+is not device-played.
