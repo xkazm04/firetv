@@ -33,21 +33,46 @@ object HandCutFont {
         "00000/00100/00100/11111/00100/00100/00000", "00000/00000/00000/00000/00000/00110/00110"
     )
     fun create(size: Int): BitmapFont {
+        val pixmap=paint();val data=metrics()
+        for((index,ch) in alphabet.withIndex())data.setGlyph(ch.code,glyph(ch,index%16*64,index/16*64))
+        val texture=Texture(pixmap);pixmap.dispose();texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
+        return BitmapFont(data,TextureRegion(texture),false).apply {setOwnsTexture(true);setUseIntegerPositions(false);data.setScale(size/42f)}
+    }
+    /** P16: the same glyphs on another, unmanaged page: each 34x46 glyph cell of [create]'s page is copied unchanged into the page's
+     *  rows from [top] down, inside a [PAD]-texel transparent border, so linear filtering reads the same texels it reads on the own
+     *  page (whose neighbours are transparent too). Advances and scale are [create]'s. Null when the rows do not fit. */
+    fun createOn(size: Int,page: Texture,top: Int): BitmapFont? {
+        val cellWidth=GLYPH_WIDTH+2*PAD;val cellHeight=GLYPH_HEIGHT+2*PAD;val perRow=page.width/cellWidth
+        if(perRow<=0)return null
+        val lines=(alphabet.length+perRow-1)/perRow
+        if(top<0 || top+lines*cellHeight>page.height)return null
+        val source=paint();val block=Pixmap(perRow*cellWidth,lines*cellHeight,Pixmap.Format.RGBA8888)
+        block.blending=Pixmap.Blending.None
+        val data=metrics()
+        for((index,ch) in alphabet.withIndex()) {
+            val x=index%perRow*cellWidth+PAD;val y=index/perRow*cellHeight+PAD
+            block.drawPixmap(source,index%16*64,index/16*64,GLYPH_WIDTH,GLYPH_HEIGHT,x,y,GLYPH_WIDTH,GLYPH_HEIGHT)
+            data.setGlyph(ch.code,glyph(ch,x,top+y))
+        }
+        page.draw(block,0,top);block.dispose();source.dispose()
+        return BitmapFont(data,TextureRegion(page),false).apply {setOwnsTexture(false);setUseIntegerPositions(false);data.setScale(size/42f)}
+    }
+    private const val GLYPH_WIDTH=34
+    private const val GLYPH_HEIGHT=46
+    private const val PAD=2
+    private fun paint(): Pixmap {
         val pixmap=Pixmap(1024,256,Pixmap.Format.RGBA8888)
         pixmap.setColor(1f,1f,1f,1f)
-        val data=BitmapFont.BitmapFontData()
-        data.lineHeight=48f;data.capHeight=42f;data.ascent=0f;data.descent=-3f;data.down=-48f;data.spaceXadvance=18f
-        for((index,ch) in alphabet.withIndex()) {
+        for((index,_) in alphabet.withIndex()) {
             val x=index%16*64;val y=index/16*64
             for((row,bits) in rows[index].split('/').withIndex())for((col,bit) in bits.withIndex())if(bit=='1') {
                 pixmap.fillRectangle(x+col*6+2,y+row*6+2,6,6)
                 // Small fixed corner cuts; no random grain or damage inside glyph counters.
                 if((index+col+row)%4==0) {pixmap.setColor(0f,0f,0f,0f);pixmap.drawPixel(x+col*6+2,y+row*6+2);pixmap.setColor(1f,1f,1f,1f)}
             }
-            val glyph=BitmapFont.Glyph().apply { id=ch.code;srcX=x;srcY=y;width=34;height=46;xoffset=0;yoffset=-46;xadvance=if(ch==' ')18 else 36 }
-            data.setGlyph(ch.code,glyph)
         }
-        val texture=Texture(pixmap);pixmap.dispose();texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
-        return BitmapFont(data,TextureRegion(texture),false).apply {setOwnsTexture(true);setUseIntegerPositions(false);data.setScale(size/42f)}
+        return pixmap
     }
+    private fun metrics()=BitmapFont.BitmapFontData().apply { lineHeight=48f;capHeight=42f;ascent=0f;descent=-3f;down=-48f;spaceXadvance=18f }
+    private fun glyph(ch: Char,x: Int,y: Int)=BitmapFont.Glyph().apply { id=ch.code;srcX=x;srcY=y;width=GLYPH_WIDTH;height=GLYPH_HEIGHT;xoffset=0;yoffset=-GLYPH_HEIGHT;xadvance=if(ch==' ')18 else 36 }
 }
