@@ -388,6 +388,15 @@ run through the gate, M5a first and alone, because M5b and M5c read its contract
   (8) The caps (MAX_OUT_OF 6, MAX_ITEMS 80, PAPER_MARKS 80) stay as named, unverified constants. The check against the
   specification is owed to the owner and does not block M5b. The out-of-over-cap drop tells the learner to enter the
   parts one by one.
+- App Master's rulings on M5b's questions (2026-10-08):
+  (9) The TV door into the recovery list: the phone stays the only door for now (the Paper panel's send and "Show the
+  last paper on the TV"). A TV stop on Get ready for school would revise `tv-keys-test` 'W8 2'; it waits for the owner's
+  look at the list at 1920 x 1080 and 1280 x 720, so one review settles the list and its door together.
+  (10) `lib/rules/paperEntry.ts` stays where it is: it is pure and imports only `library/gcse` and `rules/recovery`, as
+  rules/ modules do. Its rows are in `phone-panel-test`.
+  (11) A paper that could not be saved is reported as not saved. `dispatch`'s `paper.enter` caught `addPaper`'s throw and
+  said "The desk kept no question from that paper.", which tells the learner their rows were all wrong when the disk
+  failed. M5c step 1 fixes it: a status of its own, distinct from the no-row-left one, and the TV stays put.
 - Every M5 slice: no string a screen shows says "GCSE" or "1MA1" while `gcseClaimAllowed()` is false (gcse.ts HONEST
   LIMITS); the screens say "a paper", "your paper". gcse.ts, paths.ts, syllabus.ts, school.ts and the generators are
   unchanged.
