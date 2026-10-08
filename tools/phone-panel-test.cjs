@@ -338,3 +338,70 @@ test('M3a: the typed route gives each part of a word problem its own labelled fi
  assert.match(panel,/pr\.items\.map\(\(it, i\) => <div className="pask"/);
  assert.match(src,/answers: Array\.from\(\{ length: n \}, \(_, i\) => typed\[i\] \?\? ""\)/);
 });
+
+// ---------------------------------------------------------------- v2 M5b: the Paper panel (typed entry)
+
+const ENTRY=()=>require(path.join(SRC,'lib/rules/paperEntry.ts'));
+const PAPER_PANEL=path.join(SRC,'app/phone/PaperPanel.tsx');
+const row=(q,marks,outOf,codes=[])=>({q,marks:String(marks),outOf:String(outOf),codes});
+
+test('paper 1: every row the desk would leave out is shown, with its reason in plain words',()=>{
+ const {entryOf}=ENTRY();
+ const cases=[
+  [[row('','1','2','N1'.split(','))],/Row 1 is left out: This question has no number\./],
+  [[row('1234567890123','1','2')],/left out: A question number is at most 12 characters\./],
+  [[row('GCSE 1','1','2')],/Row 1 is left out: A question number is the number the paper prints/],
+  [[row('1','x','2')],/Question 1 is left out: The marks scored are not a whole number\./],
+  [[row('1','1','2.5')],/Question 1 is left out: The marks the question is worth are not a whole number\./],
+  [[row('1','','2')],/Question 1 is left out: The marks scored are not a whole number\./],
+  [[row('1','0','0')],/Question 1 is left out: A question is worth at least 1 mark\./],
+  [[row('1','0','7')],/Question 1 is left out: No question on this paper is worth more than 6 marks\. Enter its parts one by one\./],
+  [[row('1','-1','2')],/Question 1 is left out: The marks scored cannot be below 0\./],
+  [[row('1','3','2')],/Question 1 is left out: The marks scored are more than the question is worth\./],
+  [[row('5(b)','1','2'),row('5 (B)','1','2')],/Question 5 \(B\) is left out: This question number is already on the paper\./],
+  [Array.from({length:81},(_,i)=>row(String(i+1),'0','1')),/Question 81 is left out: A paper has at most 80 questions\./],
+  [Array.from({length:14},(_,i)=>row(String(i+1),'0','6')),/Question 14 is left out: This question takes the paper past 80 marks\./],
+ ];
+ for(const [rows,re] of cases){const e=entryOf(rows);assert.ok(e.drops.some(d=>re.test(d)),`${re}\n${e.drops.join('\n')}`);}
+ const codes=entryOf([row('1','0','2',['N1','NOPE','N2','N3','N4'])]);
+ assert.ok(codes.drops.some(d=>/Question 1: The desk does not know this statement code\. \(NOPE\)/.test(d)),codes.drops.join('\n'));
+ assert.ok(codes.drops.some(d=>/Question 1: A question names at most 3 statements\./.test(d)));
+ assert.equal(codes.kept,1,'the question stays, with the codes the desk knows');
+ const none=entryOf([row('3','0','4',['NOPE'])]);
+ assert.equal(none.kept,1);assert.match(none.notes[0],/Question 3 names no statement the desk knows, so it counts in the marks but sits on no topic\./);
+ assert.equal(entryOf([]).kept,0,'nothing typed: nothing to send');
+});
+
+test('paper 2: typed text is read as a whole number or left as text for the desk to drop - never guessed',()=>{
+ const {rawOf,entryOf,blankRow,isBlank}=ENTRY();
+ assert.deepEqual(rawOf([blankRow(),row(' 5(b) ',' 2 ','3',['N1'])]),[{q:' 5(b) ',marks:2,outOf:3,codes:['N1']}],'a blank row is not part of the paper; numbers are numbers');
+ assert.ok(isBlank(blankRow())&&!isBlank(row('1','','')));
+ assert.deepEqual(rawOf([row('1','2.5','3')])[0].marks,'2.5','a decimal stays text');
+ assert.equal(entryOf([row('1','','3')]).clean.items.length+entryOf([row('1','','3')]).clean.unmapped.length,0,'an empty marks box is not 0 marks');
+});
+
+test('paper 3: statements are picked by their can text, never by a code alone',()=>{
+ const {statementChoices,canOf}=ENTRY();
+ const {STATEMENTS}=require(path.join(SRC,'lib/library/gcse.ts'));
+ const all=statementChoices().flatMap(g=>g.items);
+ assert.equal(all.length,STATEMENTS.length,'every statement can be picked');
+ for(const c of all){assert.ok(c.can.length>8,`${c.code} has its can text`);assert.equal(canOf(c.code),c.can);}
+ const src=code(PAPER_PANEL);
+ assert.match(src,/\{c\.can\}/,'the list prints the can text');
+ assert.doesNotMatch(src,/>\s*\{c\.code\}|\{c\.code\}\s*</,'a code is never printed on its own');
+ assert.match(src,/post\(\{ type: "paper\.enter"/,'the rows go through the session door the phone uses for its other actions');
+ assert.ok(!fs.existsSync(path.join(SRC,'app/api/paper')),'no new route');
+});
+
+test('paper 4: no string the Paper panel renders names the board, over a sweep of papers',()=>{
+ const {entryOf,statementChoices}=ENTRY();
+ const BAD=/GCSE|1MA1/i;
+ const papers=[
+  [row('GCSE 1','1','2')],[row('1MA1 2','1','2')],[row('1','x','2',['GCSE'])],[row('1','1','2',['1MA1','N1'])],
+  [row('','','')],[row('1','9','2')],[row('1','1','9',['NOPE'])],[row('2','0','4',['N1','N2','N3','N4'])],
+  Array.from({length:90},(_,i)=>row(String(i+1),'0','6',['N2'])),
+ ];
+ for(const p of papers){const e=entryOf(p);for(const t of [...e.drops,...e.notes])assert.doesNotMatch(t,BAD,t);}
+ for(const g of statementChoices()){assert.doesNotMatch(g.name,BAD);for(const c of g.items)assert.doesNotMatch(c.can,BAD,c.code);}
+ assert.doesNotMatch(code(PAPER_PANEL).replace(/\/\/.*$/gm,''),/["'`>][^"'`<>]*(GCSE|1MA1)/i,'no board name in the panel\'s own copy');
+});

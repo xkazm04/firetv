@@ -13,7 +13,7 @@ import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { addHistory, getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
+import { addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
 import { learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
@@ -29,7 +29,7 @@ import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -291,6 +291,12 @@ export interface Session {
    * itself never does - and only to a phone (lib/session/pairing.ts view). Null with no one seated.
    */
   week?: WeekLine[] | null;
+  /**
+   * The seated learner's latest paper (v2 M5b): the cleaned paper and its date, hydrated at the dispatch boundary from their
+   * record. The TV recomputes the recovery from it (rules/recovery); the recovery itself is never stored or sent. Absent with
+   * none, and never sent to a guest.
+   */
+  paper?: StoredPaper | null;
   /** the pipelines' runs, one per kind; see Job */
   jobs: Jobs;
   /**
@@ -322,6 +328,8 @@ export type Event =
   // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
   | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
+  // a paper typed on the phone (v2 M5b): the rows are as typed - the desk's own cleanPaper decides what stands (dispatch keeps it)
+  | { type: "paper.enter"; rows: unknown }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   // `stay`: the set is asked for from Get ready for school (Family W8), whose screen stays put while it is written
@@ -478,7 +486,7 @@ export function fresh(): Session {
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
   "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
-  "walk", "practice.clear", "session.end"]);
+  "walk", "practice.clear", "paper.enter", "session.end"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
@@ -581,6 +589,8 @@ export function reduce(s: Session, e: Event): Session {
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
     // a worked lesson lands for the learner who asked, and only while they are at the desk
+    // the paper is kept by dispatch (the reducer writes no file); the TV is then on its recovery list
+    case "paper.enter": n.subject = "maths"; n.screen = "paper"; n.focus = 0; break;
     case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
     // the Workroom summary for the learner at the desk; `open` also puts it on the TV
     case "workroom.set": if (e.workroom.owner !== me) break; n.workroom = e.workroom; if (e.open) { n.screen = "workroom"; n.subject = "essay"; n.focus = 0; } break;
@@ -657,6 +667,8 @@ if (!store.session.jobs) store.session.jobs = {};
 try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
 try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
+// the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
+try { store.session = { ...store.session, paper: store.session.learner ? getLearner(store.session.learner.id).papers?.at(-1) ?? null : null }; } catch {}
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
   if (watchDue(store.session.watch, Date.now())) dispatch({ type: "lesson.watched" });
@@ -670,7 +682,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "lesson.watched"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "lesson.watched", "paper.enter"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
@@ -703,6 +715,17 @@ export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
 }
 
 export function dispatch(e: Event): Session {
+  if (e.type === "paper.enter") {
+    // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put
+    const id = store.session.learner?.id;
+    let kept: StoredPaper | null = null;
+    if (id) try { kept = addPaper(id, e.rows); } catch { kept = null; }
+    if (!kept) {
+      store.session = { ...store.session, status: id ? "The desk kept no question from that paper." : NOBODY_AT_DESK, updatedAt: Date.now() };
+      store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
+      return store.session;
+    }
+  }
   const was = store.session.watch;
   store.session = reduce(store.session, e);
   if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
@@ -710,7 +733,7 @@ export function dispatch(e: Event): Session {
   if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
-    if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
+    if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null }; } catch {}
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end") try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}

@@ -16,7 +16,7 @@ const L=require(path.join(root,'src/lib/session/learners.ts'));
 const FILE=path.join(data,'learners.json');
 const quiet=(f)=>{const e=console.error;console.error=()=>{};try{return f();}finally{console.error=e;}};
 const temps=()=>fs.readdirSync(data).filter((f)=>f!=='learners.json');
-after(()=>fs.rmSync(base,{recursive:true,force:true}));
+after(()=>{if(globalThis.__desk)clearInterval(globalThis.__desk.ticker);fs.rmSync(base,{recursive:true,force:true});});
 
 test('a save writes a valid book and leaves no temp file behind',()=>{
   const l=L.getLearner('ann');l.memory=['likes fractions'];
@@ -118,4 +118,24 @@ test('papers 3: an older record without the field reads exactly as before',()=>{
   L.addMemory('old','b');
   assert.deepEqual(L.getLearner('old').memory,['a','b']);
   assert.equal('papers' in L.getLearner('old'),false);
+});
+
+test('papers 4: a paper typed on the phone goes through the session door - kept cleaned on the learner, the TV on its list, nothing kept for a paper with no row',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'paper.enter',rows:RAW});
+  assert.equal(S.getSession().screen==='paper',false,'no one at the desk: nothing is kept for no one');
+  S.dispatch({type:'profile.draft',patch:{id:'mia',name:'Mia',type:'elementary',age:12,system:'uk',modules:['maths'],}});S.dispatch({type:'profile.save'});
+  assert.equal(S.getSession().learner.id,'mia');
+  S.dispatch({type:'paper.enter',rows:[{q:'x',marks:9,outOf:1,codes:[]}]});
+  assert.notEqual(S.getSession().screen,'paper','a paper with no row left is not kept, and the TV stays put');
+  assert.match(S.getSession().status,/kept no question/);
+  assert.equal(L.getLearner('mia').papers,undefined);
+  S.dispatch({type:'paper.enter',rows:RAW});
+  const s=S.getSession();
+  assert.equal(s.screen,'paper');
+  assert.deepEqual(s.paper.items.map(x=>x.q),['1','2(a)']);
+  assert.deepEqual(s.paper,L.getLearner('mia').papers.at(-1),'the session carries the learner\'s latest paper');
+  assert.equal(JSON.stringify(s).includes('"topics"'),false,'the recovery is recomputed, never stored or sent');
 });

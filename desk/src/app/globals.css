@@ -134,3 +134,13 @@ button, input, textarea { font: inherit; }
 .drop .twin-ch dt { text-transform: capitalize; color: #666; } .drop .twin-ch ul { padding-left: 0; list-style: none; } .drop .twin-ch li { margin: 6px 0; white-space: pre-wrap; }
 .drop .pshelf .pbtn { padding: 6px 10px; }
 body:has(.drop) { background: #fff; }
+
+/* v2 M5b: the phone's Paper panel */
+.ppaper-row { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid #D7DEE5; background: #F7F9FB; }
+.ppaper-row .field input { min-width: 0; width: 0; padding: 10px 8px; }
+.ppaper-pick summary { cursor: pointer; font-size: 14px; color: #1B2632; line-height: 1.35; }
+.ppaper-pick fieldset { border: 0; margin: 10px 0 0; padding: 0; } .ppaper-pick legend { font-weight: 700; font-size: 13px; padding: 0 0 4px; }
+.ppaper-pick label { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; font-size: 14px; line-height: 1.3; }
+.ppaper-pick label[data-picked] { font-weight: 600; }
+.ppaper-drops, .ppaper-notes { border-left: 3px solid #E23D28; padding: 4px 12px; font-size: 14px; } .ppaper-notes { border-color: #D7DEE5; }
+.ppaper-drops ul, .ppaper-notes ul { margin: 4px 0 0; padding-left: 18px; }

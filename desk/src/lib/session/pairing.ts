@@ -116,7 +116,7 @@ export const GUEST_BLANK = {
   english: null, essay: null, essayType: null, essayAt: null, essayPlan: undefined,
   englishLearning: emptyEnglish(), conversation: null, check: null,
   topic: null, practice: null, walkIx: 0, worked: undefined, workroom: undefined,
-  skills: {}, writing: {}, memory: [], history: [], week: undefined, jobs: {}, away: undefined,
+  skills: {}, writing: {}, memory: [], history: [], week: undefined, paper: undefined, jobs: {}, away: undefined,
   status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null },
 } satisfies { [K in Exclude<keyof Session, LobbyKey>]-?: Session[K] };
 

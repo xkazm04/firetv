@@ -18,6 +18,8 @@ import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/rec
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
+import { PaperPanel } from "./PaperPanel";
+import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
@@ -31,7 +33,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", prepare: "getting ready for school", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
 export default function Phone() {
@@ -40,6 +42,8 @@ export default function Phone() {
   const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
   const [role, setRole] = useState<"student" | "parent">("student");
   const [screen, setScreen] = useState<PScreen>("join");
+  /** The Paper panel's rows, kept here so a tab picked and left again does not lose what was typed. */
+  const [paperRows, setPaperRows] = useState<DraftRow[]>(() => [blankRow()]);
   const [pin, setPin] = useState("");
   const [msg, setMsg] = useState("");
   const [subject, setSubject] = useState<Subject>("maths");
@@ -408,6 +412,8 @@ export default function Phone() {
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
+        {screen === "paper" && <PaperPanel rows={paperRows} setRows={setPaperRows} post={post} seated={!!s?.learner} status={s?.status ?? ""} />}
+
         {screen === "capture" && (() => {
           const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
           const done = phase === "sent" && !reading;
@@ -623,7 +629,7 @@ export default function Phone() {
         <div className="pstatus">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["paper", "Paper"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );
