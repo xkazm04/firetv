@@ -12,10 +12,7 @@ const fs = require('node:fs'), os = require('node:os'), path = require('node:pat
 const { test } = require('node:test');
 const { execFileSync } = require('node:child_process');
 const root = path.resolve(__dirname, '../desk');
-let ts; try { ts = require(path.join(root, 'node_modules/typescript')); } catch { console.error("This suite transpiles desk TypeScript with desk's own compiler. Run `npm install` in desk/ first, then `npm test` from desk/."); process.exit(1); }
-const resolve = Module._resolveFilename;
-Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith('@/') ? path.join(root, 'src', id.slice(2)) : id, ...args); };
-require.extensions['.ts'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+require('./ts-load.cjs');
 const S = require(path.join(root, 'src/lib/rules/style.ts'));
 
 const TERSE = ['ok', 'sure, 5pm works', 'yep done', 'cant today, tmrw?', 'got it thx', 'nope', 'on my way', 'fine by me'];
