@@ -33,8 +33,8 @@ class MainActivity : AndroidApplication() {
         if(profiling)Trace.endSection()
     }
     private var foregroundWifi: ForegroundWifi?=null
-    // P14: a silent arm's app stream (perf package only; null in every other build and arm).
-    private var silentTrack: SilentTrack?=null
+    // P14/P15: a silent arm's app stream (perf package only; null in every other build and arm).
+    private var appStream: AppStream?=null
     private val frameCallback=object: Choreographer.FrameCallback {
         override fun doFrame(frameTimeNanos: Long) {
             if(!resumed || !paced)return
@@ -69,7 +69,16 @@ class MainActivity : AndroidApplication() {
         val perfBuild=applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_DEBUGGABLE !=0 && packageName=="dev.deathride.perf"
         val switchArm=if(perfBuild)SwitchArm.parse(intent.getStringExtra("switchArm")) else SwitchArm.OFF
         // P14: silentTrack/silentDeep also hold one AudioTrack open, writing zeros from resume to pause.
-        silentTrack=audioArm.appTrack?.let(::SilentTrack)
+        // P15: silentMmap holds one AAudio stream instead (mmapSharing=shared asks for SHARED). Its class and library
+        // exist only in a debug build made with -PsilentMmap=true, so it is reached by name; without them the arm throws.
+        appStream=when(val mode=audioArm.appTrack){
+            null->null
+            dev.deathride.game.audio.AppTrack.MMAP->{
+                val type=try{Class.forName("dev.deathride.tv.SilentMmap")}catch(e: ClassNotFoundException){throw IllegalStateException("audioArm=${audioArm.id} needs a debug build made with -PsilentMmap=true",e)}
+                type.getConstructor(Boolean::class.javaPrimitiveType).newInstance(intent.getStringExtra("mmapSharing")!="shared") as AppStream
+            }
+            else->SilentTrack(mode)
+        }
         initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on"), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
@@ -77,6 +86,6 @@ class MainActivity : AndroidApplication() {
         if(renderPriority=="display")postRunnable{Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)}
         Log.i("DeathRide","renderVariant pacing=$pacing slotNs=${if(aligned)frameOffsetNs else 0} spinNs=${if(aligned)finalSpinNs else 0} callbackPriority=${intent.getStringExtra("callbackPriority")?:"normal"} resolution=${intent.getStringExtra("resolution")?:"native"} priority=$renderPriority")
     }
-    override fun onResume(){super.onResume();resumed=true;foregroundWifi?.resume();silentTrack?.resume();if(paced)Choreographer.getInstance().postFrameCallback(frameCallback)}
-    override fun onPause(){resumed=false;Choreographer.getInstance().removeFrameCallback(frameCallback);foregroundWifi?.pause();silentTrack?.pause();super.onPause()}
+    override fun onResume(){super.onResume();resumed=true;foregroundWifi?.resume();appStream?.resume();if(paced)Choreographer.getInstance().postFrameCallback(frameCallback)}
+    override fun onPause(){resumed=false;Choreographer.getInstance().removeFrameCallback(frameCallback);foregroundWifi?.pause();appStream?.pause();super.onPause()}
 }

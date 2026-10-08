@@ -7,15 +7,21 @@ import android.media.AudioTrack
 import android.util.Log
 import dev.deathride.game.audio.AppTrack
 
+/** P15: a silent arm's app stream, opened on resume and closed on pause (perf package only). */
+interface AppStream {
+    fun resume()
+    fun pause()
+}
+
 /** P14 (perf package only): one Android AudioTrack that writes zeros from resume to pause, so a silent arm can
  * tell whether any open app stream costs the platform audio pair, and whether a deep-buffer output avoids it.
  * Attributes are libGDX SoundPool's (USAGE_GAME, CONTENT_TYPE_SONIFICATION); nothing audible is ever written. */
-class SilentTrack(private val mode: AppTrack) {
+class SilentTrack(private val mode: AppTrack): AppStream {
     private var track: AudioTrack?=null
     private var writer: Thread?=null
     @Volatile private var running=false
 
-    fun resume() {
+    override fun resume() {
         if(track!=null)return
         val rate=AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_MUSIC)
         val channels=AudioFormat.CHANNEL_OUT_STEREO
@@ -45,7 +51,7 @@ class SilentTrack(private val mode: AppTrack) {
             "performanceMode=${t.performanceMode} requestedMode=$performance device=${t.routedDevice?.let{"${it.type}/${it.productName}"}} session=${t.audioSessionId}")
     }
 
-    fun pause() {
+    override fun pause() {
         val t=track?:return
         running=false
         t.pause();t.flush();t.stop() // stop() releases a blocked write

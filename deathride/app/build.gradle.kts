@@ -30,6 +30,16 @@ android {
     // are audit/test inputs (desktop AtlasAudit, tests read ../assets directly) and stay in the repo.
     androidResources { ignoreAssetsPattern = "!phase2-v1:!phase2-hud:!phase2-fusion" }
     packaging { resources.excludes += setOf("META-INF/INDEX.LIST", "META-INF/AL2.0", "META-INF/LGPL2.1") }
+    // P15 (perf only): -PsilentMmap=true builds the silentMmap arm's AAudio stream (src/main/cpp, NDK and CMake already in the
+    // SDK, nothing downloaded) and its Kotlin wrapper (src/main/mmap) into the debug build type only. The release build type
+    // gets neither: CMake builds no library without DR_SILENT_MMAP, and the wrapper is not in its sources. Without the
+    // property no build changes.
+    if (providers.gradleProperty("silentMmap").isPresent) {
+        ndkVersion = "28.2.13676358"
+        externalNativeBuild { cmake { path = file("src/main/cpp/CMakeLists.txt"); version = "3.22.1" } }
+        buildTypes.getByName("debug") { externalNativeBuild { cmake { arguments += "-DDR_SILENT_MMAP=ON" } } }
+        sourceSets["debug"].java.srcDir("src/main/mmap")
+    }
 }
 dependencies {
     implementation(project(":game"))
