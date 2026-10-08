@@ -611,7 +611,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             view.apply()
             if(blend)Gdx.gl.glEnable(GL20.GL_BLEND) else Gdx.gl.glDisable(GL20.GL_BLEND)
             Gdx.gl.glBlendFuncSeparate(funcs[0],funcs[1],funcs[2],funcs[3])
-            val old=variant==HudDiff.BASE
+            val old=variant==HudDiff.BASE || variant==HudDiff.CONTROL
             drawOverlay(old);drawCaption(old);drawScriptCaption(old)
             variant to Pixmap.createFromFrameBuffer(0,0,w,h)
         }
