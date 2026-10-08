@@ -1,0 +1,44 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeUnderTest": "Kotlin code of 60456219 (deathride/main a060a47e + the perf-only schedstat columns); later commits change tools, evidence, ledger and docs only",
+ "runs": [
+  {
+   "run": 1,
+   "commit": "b65085a7 (code = 60456219)",
+   "result": "fail",
+   "core": "261 passed",
+   "link": "29, 2 skipped, 3 failed: CompactLinkTest.compactHudReconnectionAndFreshnessUseActualSockets, HiddenPhoneTest.hiddenPhoneReceivesNoHudAndResumesFull, HudPayloadTest.anIdleSnapshotIsHeartbeatOnlyAndAChangeIsSentAtOnce (HudPayloadTest.kt:41)",
+   "game": "117 passed (114 + SchedProfileTest 3)",
+   "host": "100% CPU from other sessions",
+   "log": "raw p17/gate-tests-run1.log"
+  },
+  {
+   "run": 2,
+   "commit": "d220b38f (code = 60456219, P17 evidence committed)",
+   "result": "pass",
+   "core": "261 passed (EvidenceRuleTest 14 included, P17 evidence committed)",
+   "link": "29, 2 skipped (as on the base)",
+   "game": "117 passed (SchedProfileTest 3 included)",
+   "host": "99-100% CPU at start",
+   "log": "raw p17/gate-tests-run2.log"
+  }
+ ],
+ "reading": "Run 1's three failures are link socket-timing tests in code P17 does not touch (link/ is unchanged); each passed in run 2, which was rerun unchanged. The last run is green.",
+ "newTests": "SchedProfileTest (game, 3 cases): the schedstat line parser (fields, a 13-digit value, four malformed lines), the two columns over a row's begin-to-begin interval (9.5 and 2.25 ms from a fake platform, -1 on the first row), and -1 in every row when the platform does not read schedstat.",
+ "releaseApk": {
+  "command": "gradlew.bat :app:assembleRelease :desktop:compileKotlin --console=plain",
+  "commit": "fc59f4c0 (code = 60456219)",
+  "result": "pass (12 min 2 s); desktop compiled (warnings only)",
+  "sha256": "e9c3d12d3f9cdc50100cc3212add0d37d3de6665222df9693aef22673395a4ee",
+  "package": "dev.deathride.tracks (gradle.properties appId), not debuggable (aapt: no application-debuggable)",
+  "schedstatPath": "Carried inert, as P16's counters are: classes.dex holds the AndroidProfile class, the '/schedstat' path string and the schedRunMs/schedWaitMs column names. MainActivity passes schedstat=perfBuild, which is false unless the app is debuggable and its package is dev.deathride.perf, so a release build never opens the file and writes -1 in both columns when profiled. Removing the code from release would need a compile-time flag in app/build.gradle.kts or a debug source set, both outside this run's paths.",
+  "log": "raw p17/build-release.log"
+ },
+ "perfApk": {
+  "sha256": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66",
+  "commit": "60456219",
+  "package": "dev.deathride.perf (debuggable)",
+  "command": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772",
+  "log": "raw p17/build-perf.log"
+ }
+}
