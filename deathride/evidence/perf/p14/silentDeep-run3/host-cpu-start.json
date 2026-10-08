@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T11:39:09.1071025Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#9",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  100
+                         },
+                         {
+                             "Name":  "svchost#89",
+                             "IDProcess":  3080,
+                             "PercentProcessorTime":  100
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  100
+                         },
+                         {
+                             "Name":  "git#1",
+                             "IDProcess":  51048,
+                             "PercentProcessorTime":  95
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  25
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  39044,
+                             "PercentProcessorTime":  20
+                         },
+                         {
+                             "Name":  "claude",
+                             "IDProcess":  26804,
+                             "PercentProcessorTime":  15
+                         },
+                         {
+                             "Name":  "msedgewebview2#18",
+                             "IDProcess":  37388,
+                             "PercentProcessorTime":  15
+                         },
+                         {
+                             "Name":  "claude#8",
+                             "IDProcess":  24908,
+                             "PercentProcessorTime":  10
+                         },
+                         {
+                             "Name":  "dwm",
+                             "IDProcess":  1856,
+                             "PercentProcessorTime":  5
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                20,
+                                30,
+                                32
+                            ]
+}

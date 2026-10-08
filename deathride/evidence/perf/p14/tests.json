@@ -1,0 +1,10 @@
+{
+  "gates": [
+    {"what": "AudioArmTest alone after step 2's edits (before commit)", "command": "gradlew.bat :game:test --tests dev.deathride.game.AudioArmTest", "result": "pass", "tests": 8, "log": "raw p14/gate-audioarm.log"},
+    {"what": "mutation: SILENT_DEEP silent=false", "command": "gradlew.bat :game:test --tests dev.deathride.game.AudioArmTest", "result": "fails as it should: 2 of 8 (eachSilentArmReplaysLikeMuted[SILENT_DEEP], onlyTheSilentArmsAskForAnAppTrack); source restored", "log": "raw p14/mutation-silentdeep.log"},
+    {"what": "step 2 tree (committed as 3f388822)", "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain", "result": "pass", "core": 261, "link": "29 (2 skipped)", "game": 113, "log": "raw p14/gate-step2.log"},
+    {"what": "final, on 66de9683 (code identical to 3f388822, the last code commit)", "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain", "result": "pass", "core": 261, "link": "29 (2 skipped)", "game": 113, "log": "raw p14/gate-final.log"}
+  ],
+  "replay": "AudioArmTest pins the full arm's and the default constructor's replay SHA-256 to P12's 7678bc90... (16,890 calls, line for line as the pre-P12 backend). Both silent arms replay line for line like muted.",
+  "base": "deathride/main f861f535: P13g recorded core 261, link 29 (2 skipped), game 110 green; game 113 here = 110 + 3 new P14 cases (2 parameterized silent arms, 1 app-track case)."
+}
