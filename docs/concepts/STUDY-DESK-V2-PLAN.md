@@ -86,7 +86,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
 | 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | e6e6a569, 4df2d091 | |
 | 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
-| 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | not started | | |
+| 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
@@ -930,3 +930,48 @@ unknown code reaches recovery and throws). Both restored with git restore; the s
 Gate: `cd desk && npm run test:rules` green (67 suites, 1125 tests); `npx tsc --noEmit --incremental false` clean. Not covered: no
 screen, route or learner-record field (M5b); the photo path and its probe (M5c); the caps are not checked against the specification.
 Next: M5b (row 35), then L5 and M3b; M5c's live run is the owner's.
+
+### 2026-10-08 · batch 7 · M5b · autopilot/accepted-idea-delivery-772f5628
+M5's second slice (rows 25 and 35; the M5 card). Built locally, nothing pushed. Commits: e6472a1a (step 0: the App Master's rulings
+(5)-(8) in the card), b0bf1e10 (the M3a-2 leftover), 21c988de (the record), acc9f062 (typed entry), 36ab1056 (the TV list), and this entry.
+What changed, by file:
+- `lib/session/learners.ts`: `Learner.papers?: StoredPaper[]` (`{ at, items, unmapped }`, the cleaned paper and its date; newest
+  last, at most 5; absent with none, so a learners.json written before M5b loads, and `getLearner` returns, exactly as before).
+  `cleanStoredPaper` reads a stored paper back through `cleanPaper` and accepts it only if nothing is dropped and the items match
+  what was stored; anything else is read as none, never guessed. `addPaper(id, raw)` cleans, stores, and returns null (writing nothing)
+  when no row survives. The recovery is recomputed from the paper, never stored or sent.
+- `lib/session/store.ts`, `pairing.ts`: Screen `paper`; `Session.paper` (the latest, hydrated like `skills`; never sent to a guest);
+  Event `paper.enter { rows }` (in `NEEDS_LEARNER` and `REHYDRATE`): `dispatch` keeps the paper through `addPaper` BEFORE the reducer
+  runs, so a paper with no row left, or no one at the desk, changes nothing but the status line. No new route: the phone posts it on
+  `/api/session` as it does its other actions.
+- `lib/rules/paperEntry.ts` (new, pure): the draft rows, `rawOf` (a whole number is a number, anything else stays text for
+  `cleanPaper` to drop; an empty box is not 0), `entryOf` (drops worded as "Question 5(b) is left out: ..." or "Row 3 ...", dropped
+  codes, unmapped notes), `statementChoices` (every statement with its can text).
+- `app/phone/PaperPanel.tsx` (new), `page.tsx`, `panelFor.ts`, `globals.css`: the Paper tab; `panelFor` hands the TV's `paper` to it.
+- `tv/paperRows.ts` (new), `maths/MathsTV.tsx`, `tv/keys.ts`, `app/tv/page.tsx`, `design/maths-lamplight.css`: the list. Ruling (5):
+  `paperView` takes `recovery()`'s `topics` as they come. Ruling (6): `recovery()` already sums distinct items per topic; the view adds
+  nothing. Ruling (7): the board-name drop is shown as "A question number is the number the paper prints, like 5(b)." Ruling (8): the
+  caps are untouched; the out-of-over-cap drop says "Enter its parts one by one."
+- Step 4: `SlipSide` takes `items` and `ix` and says its line through `deskLine`. `deskLine(items, i, line)` is
+  `namedLine(line, items[i].n, itemName(items, i))` by its definition, so the text is identical for every case; no row pinned the old
+  call, so there is no OLD/NEW; a new row (`M5b step 4`) pins the new one.
+Choices, stated: (1) `MATHS_SCREENS` is pinned exactly by `tv-keys-test` 'maths 1', and `mathsOwns` is pinned for every screen, so
+`paper` is not in that list: `paperOwns` (keys.ts) is asked beside `mathsOwns` on the TV page. (2) Every key of Get ready for school's
+list is pinned by `tv-keys-test` 'W8 2' (Down "does nothing"), so the TV has NO key into the list; the phone is its door (the Paper panel's
+send and its "Show the last paper on the TV", which posts `nav`). Opening it from the TV would change an existing assertion: owed to the
+App Master. (3) The phone cleans the rows as they are typed and the server cleans them again; the TV never sees a drop (it shows the stored,
+clean paper), the phone shows every drop with its reason. (4) A secure topic is read from `Session.skills`; the paper still decides.
+Rows: `learners-save-test` papers 1-4 (round trip and cap; malformed read as none over a dozen malformed shapes; an older record has no
+`papers` key at all; the paper through `dispatch`), `phone-panel-test` paper 1-5 plus the `paper` hand-off fixture (every drop reason
+in words, text read as a whole number or left for the desk to drop, can text and never a code alone, no /GCSE|1MA1/ over a sweep, the
+panel's door), `maths-tv-test` paper 1-8 and `M5b step 4` (recovery()'s order with a pair that pulls a prerequisite forward, lost marks and
+item labels and the paper's marks, secure marked not dropped, notOnDesk apart, empty paper, no board name over one paper per statement,
+the window, the D-pad). Existing assertions: none changed. (`learners-save-test`'s `after` also stops the store's ticker, as
+`week-digest-test`'s does, now that the suite loads the store.)
+Kill test (run on committed code, then `git restore`): `cleanStoredPaper` returning the stored paper as it is turned `papers 2` (a
+malformed stored paper is read as none) red; restored, green.
+Gate: `cd desk && npm run test:rules` 67 green, 0 red (1143 tests) at the last code commit; `npx tsc --noEmit --incremental false` clean.
+No `desk/data/` touched, no model call, no push; recovery.ts, gcse.ts, paths.ts, syllabus.ts, school.ts and the generators unchanged.
+Owed to the owner: the TV list at 1920 x 1080 and 1280 x 720 (a paper with more than five topics, one with a secure topic, one with
+Not on the desk yet, and the empty screen), the phone's Paper panel at 390 px (a row of three boxes and the picker open, the Left out
+list), and the caps check (8): MAX_OUT_OF 6, MAX_ITEMS 80, PAPER_MARKS 80 against the specification. Nothing was captured or looked at in a browser.

@@ -367,3 +367,21 @@ The custom typesetter (`maths/typeset.ts`, `MathText.tsx`) now lays out `cases`,
 - A table counts as tall (three squares of paper).
 
 KaTeX stays deferred ([concept](concepts/KATEX-TYPESETTING.md)).
+
+## A paper you sat (v2 M5b, 2026-10-08)
+
+The recovery from a failed paper has its own screen (`paper`, `PaperScreen`), on the wide lamp (`data-lamp="wide"`).
+Typed entry is the door that ships; the photo path is M5c's.
+- Left, the topics where marks were lost, in the order `recovery()` gives them (the base of the biggest loss first) and
+  never re-sorted: five rows at a time (`mb-prow`, 104 px, the lit row amber-ruled), a number, the topic's name, "N marks
+  lost" in amber, "From 5(b), 7" under it. A topic the desk calls secure keeps its row and wears a "Secure on the desk"
+  pill (`data-role="maths-paper-secure"`): the paper decides, the desk only says what it knows.
+- Right, two cards. The paper's: the marks scored large, "of 80", and "N of M marks - K marks lost". Under it, only when
+  there is something to say, **Not on the desk yet** (`mb-poff`): the statements with no topic, set in their can text, three
+  at a time, then "and n more"; a statement past a Foundation paper says so, and questions that named no statement are counted.
+- The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. With no paper the screen asks
+  for the marks on the phone. The screens say "a paper", "your paper": nothing says the board's name while its claim is off.
+- The D-pad: Left/Up and Right/Down walk the topics, Back or Menu return to Get ready for school. The list is opened from the
+  phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
+- The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
+  the text is the same as before for every item.
