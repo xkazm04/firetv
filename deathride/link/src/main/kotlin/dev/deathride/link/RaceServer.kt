@@ -177,7 +177,8 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         if(profileFrames!=null)get("/profile") {
                             val frames=call.request.queryParameters["frames"]?.toLongOrNull()?:0
                             val inputs=call.request.queryParameters["inputs"]?.toLongOrNull()?:0
-                            call.respondText("{\"frames\":${profileFrames.json(frames)},\"inputs\":${profileInputs!!.json(inputs)},\"runtime\":${profileRuntime?.invoke()?:"{}"}}",ContentType.Application.Json)
+                            val reply=profileReply(frames,inputs)
+                            try { call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){reply.writeTo(this)} } finally { releaseProfile(reply) }
                         }
                         get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
@@ -334,6 +335,27 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val reply=statsPool.take(); reply.encode(appendStats(now,heapUsedMB),statsChars); reply
     }
     internal fun releaseStats(reply: StatsReply) { synchronized(statsBuffer) { statsPool.give(reply) } }
+    /** P18: /profile is the same text as before ("{\"frames\":<frames json>,\"inputs\":<inputs json>,\"runtime\":<runtime>}"),
+     *  served as UTF-8 blocks. The route used to build it as two PerfTrace Strings inside a template, then respondText's UTF-8
+     *  copy: 3.4-4.0 MB of large char and byte arrays per 10 s read on the Stick (P18's allocation audit), a fifth of a race's
+     *  allocation under the probe. Each PerfTrace piece of about [PerfTrace.PIECE] chars is encoded as it is formatted, so no
+     *  reply-sized text or array is made. [profileText], [profileChars] and [profilePool] share [profileText]'s lock;
+     *  [profileFlush] is made once. */
+    private val profileText=StringBuilder(PerfTrace.PIECE+1024)
+    private val profileChars=CharArray(StatsReply.WINDOW)
+    private val profilePool=StatsReply.Pool(keep=1,maxBlocks=64)
+    private var profileTarget: StatsReply?=null
+    private val profileFlush: (StringBuilder)->Unit={ text -> profileTarget!!.encode(text,profileChars);text.setLength(0) }
+    internal fun profileReply(frames: Long,inputs: Long): StatsReply = synchronized(profileText) {
+        val reply=profilePool.take(); profileTarget=reply
+        val text=profileText; text.setLength(0)
+        text.append("{\"frames\":"); profileFrames!!.writeJson(frames,text,profileFlush)
+        text.append(",\"inputs\":"); profileInputs!!.writeJson(inputs,text,profileFlush)
+        text.append(",\"runtime\":").append(profileRuntime?.invoke()?:"{}").append('}')
+        profileFlush(text); profileTarget=null; reply
+    }
+    internal fun releaseProfile(reply: StatsReply) { synchronized(profileText) { profilePool.give(reply) } }
+    internal val freeProfileReplies get()=synchronized(profileText) { profilePool.size }
     internal val freeStatsReplies get()=synchronized(statsBuffer) { statsPool.size }
     /** Call under statsBuffer's lock. */
     private fun appendStats(now: Double,heapUsedMB: Double): StringBuilder {

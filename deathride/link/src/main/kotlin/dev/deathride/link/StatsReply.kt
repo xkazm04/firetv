@@ -20,6 +20,8 @@ internal class StatsReply {
     var length=0L; private set
 
     fun clear() { used=BLOCK;current=-1;length=0 }
+    /** P18: drops blocks past the first [max], so a pooled reply keeps no more than that after an unusually long one. */
+    fun trim(max: Int) { while(blocks.size>max)blocks.removeAt(blocks.size-1) }
     private fun put(b: Int) {
         if(used==BLOCK) { current++;if(current==blocks.size)blocks.add(ByteArray(BLOCK));used=0 }
         blocks[current][used++]=b.toByte();length++
@@ -61,11 +63,12 @@ internal class StatsReply {
         while(left>0){val n=minOf(left,BLOCK);System.arraycopy(blocks[i],0,out,at,n);at+=n;left-=n;i++};return out }
     val blockCount get()=blocks.size
 
-    /** Free replies; guarded by its owner's lock. Keeps at most [KEEP]: a burst of racing reads past that allocates small blocks. */
-    class Pool {
+    /** Free replies; guarded by its owner's lock. Keeps at most [keep]: a burst of racing reads past that allocates small blocks.
+     *  P18: a kept reply holds at most [maxBlocks] blocks (/profile keeps one reply of up to 64 blocks, 512 KiB). */
+    class Pool(private val keep: Int=KEEP,private val maxBlocks: Int=Int.MAX_VALUE) {
         private val free=ArrayDeque<StatsReply>()
         fun take(): StatsReply=(free.removeLastOrNull()?:StatsReply()).also{it.clear()}
-        fun give(r: StatsReply) { if(free.size<KEEP)free.addLast(r) }
+        fun give(r: StatsReply) { if(free.size<keep) { r.trim(maxBlocks);free.addLast(r) } }
         val size get()=free.size
     }
     companion object {
