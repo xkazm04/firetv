@@ -38,8 +38,8 @@ The primary module declares these output mix ports, and no other:
 |---|---|
 | `primary_out` | `PRIMARY` |
 | `hdmi_pcm_passthrough_direct`, `hdmi_passthrough_direct`, `avls_out` | `DIRECT` |
-| `hdmi_passthrough_tunnel`, `avls_out_tunnel` | `DIRECT | HW_AV_SYNC` |
-| `mmap_no_irq_out` | `DIRECT | MMAP_NOIRQ` |
+| `hdmi_passthrough_tunnel`, `avls_out_tunnel` | `DIRECT` + `HW_AV_SYNC` |
+| `mmap_no_irq_out` | `DIRECT` + `MMAP_NOIRQ` |
 | `bt_sco_out` | `PRIMARY` |
 
 `primary_out` is PCM 16-bit, 48 kHz stereo only, on HDMI, speaker and AVLS. There is no `deep_buffer` (or
