@@ -17,6 +17,7 @@ fs.writeFileSync(path.join(data,'session.json'),JSON.stringify({learner:null,pro
  {id:'course-junk',name:'Junk',type:'other',modules:['maths'],mathPath:'algebra-2'},
  {id:'course-calc',name:'Calc',type:'other',modules:['maths'],mathPath:'calc1'},
  {id:'course-school',name:'School',type:'high-school',age:16,modules:['maths'],mathPath:'school'},
+ {id:'course-calc2',name:'Calc Two',type:'other',modules:['maths'],mathPath:'calc2'},
 ]}));
 
 const src=(f)=>path.join(root,'src',f);
@@ -28,6 +29,8 @@ const keys=()=>require(src('tv/keys.ts'));
 const {profileRows,locate,flat}=require(src('tv/profileRows.ts'));
 after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(data,{recursive:true,force:true});});
 
+/** The profiles as the desk loaded them from session.json, taken before any row changes the session (row 10). */
+const LOADED=store.getSession().profiles.map((p)=>({...p}));
 const LOCAL={busy:false,table:false,hintInFlight:false};
 const CALC=P.topicsOf('calc1');
 /** The path lengths, derived (the one pin per path is in tools/maths-paths-test.cjs). */
@@ -127,12 +130,12 @@ test('5: Menu-edit of an existing learner copies mathPath with the other fields'
  assert.equal(d.profiles.find((p)=>p.id==='calc-a').mathPath,'calc1','editing does not silently reset the path');
 });
 
-test('6: the profile has a Maths course row only with Maths on - two cells, the PATHS names and blurbs - and its cell posts the patch',()=>{
+test('6: the profile has a Maths course row only with Maths on - three cells, the PATHS names and blurbs - and its cell posts the patch',()=>{
  const {tvKey}=keys();
  const on={id:'n',name:'',type:'high-school',age:16,system:'uk',modules:['maths']};
  const rows=profileRows(on),r=rows.findIndex((x)=>x.title==='Maths course');
  assert.ok(r>=0,'the row is there with Maths on');
- assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','School maths',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1']]);
+ assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','School maths',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1'],['path','Calculus 2',P.PATHS.calc2.blurb,'calc2']]);
  assert.equal(profileRows({...on,modules:['english','essay']}).some((x)=>x.title==='Maths course'),false,'no row with Maths off');
  assert.equal(profileRows(null).some((x)=>x.title==='Maths course'),true,'a fresh draft has every module on, Maths too');
  const f=flat(rows,r,1),s=session(SCHOOL_P,{screen:'profile',draft:on,focus:f});
@@ -200,4 +203,22 @@ test('GUARD 9: keys.ts and mathsRows.ts import the store and learners for types 
  const seed='// import { getSession } from "@/lib/session/store";\nimport { getSession } from "@/lib/session/store";';
  assert.equal([...stripComments(seed).matchAll(/^\s*import\s+(?!type\b)([^;]*?)from\s+["']([^"']+)["']/gm)].filter((m)=>/session\/(store|learners)$/.test(m[2])).length,1);
  assert.equal([...stripComments('// import { x } from "@/lib/session/store";').matchAll(/^\s*import\s+(?!type\b)([^;]*?)from\s+["']([^"']+)["']/gm)].length,0);
+});
+
+// ---- v2 M3b-2: the Calculus 2 path ----
+test('10: a learner on calc2 is saved with the path, seated on it, and survives a load',()=>{
+ const s=seated({id:'calc-two',name:'Calc Two',type:'other',modules:['maths'],mathPath:'calc2'});
+ assert.equal(s.profiles.find((p)=>p.id==='calc-two').mathPath,'calc2','saved with the learner');
+ assert.equal(P.learnerPath(s),'calc2','the seated learner is on Calculus 2');
+ assert.equal(LOADED.find((p)=>p.id==='course-calc2').mathPath,'calc2','calc2 survives the load');
+});
+
+test('11: the Maths course row has three cells, calc2 third, and its cell posts the calc2 patch',()=>{
+ const {tvKey}=keys();
+ const on={id:'n2',name:'',type:'high-school',age:16,system:'uk',modules:['maths']};
+ const rows=profileRows(on),r=rows.findIndex((x)=>x.title==='Maths course');
+ assert.equal(rows[r].cells.length,3);
+ assert.deepEqual(rows[r].cells.map((c)=>c.path),['school','calc1','calc2']);
+ const s=session(SCHOOL_P,{screen:'profile',draft:on,focus:flat(rows,r,2)});
+ assert.deepEqual(tvKey(s,'select',LOCAL).events,[{type:'profile.draft',patch:{mathPath:'calc2'}}]);
 });

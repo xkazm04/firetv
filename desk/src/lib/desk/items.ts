@@ -34,7 +34,7 @@ import { getLearner } from "../session/learners";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
-import { shapesOfTopic, topicIn } from "../library/paths";
+import { calcWordsOf, pathOfTopic, shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
@@ -198,8 +198,9 @@ const SHAPE_LINES: Record<CalcShape, string> = {
   "newton-step": "newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.",
 };
 
-const CALC_SYSTEM =
-  "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. " +
+/** The Calculus set's system prompt; the course is named by the topic's own path's record (Calculus 1's text is unchanged). */
+const calcSystem = (topicId: string) =>
+  `You choose practice questions for a university ${calcWordsOf(pathOfTopic(topicId)).desk} desk, as specs the desk prints and checks itself. ` +
   "Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. " +
   "Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), " +
   "an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.";
@@ -242,7 +243,7 @@ function askCalc(topicId: string, shapes: CalcShape[], memory: string[], slips: 
     `- Do not work any question out: give the specs only.`;
   // thinking off: writing nine short specs is not a reasoning task and the desk checks every one in code. Measured live
   // (tools/calc-model-yield.cjs, 6 topics): on = 62-90 s a call with two engine timeouts, off = 7-14 s and every set made
-  return text<{ specs: unknown[] }>({ system: CALC_SYSTEM, prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false });
+  return text<{ specs: unknown[] }>({ system: calcSystem(topicId), prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false });
 }
 
 /** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */

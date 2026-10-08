@@ -31,7 +31,8 @@ test('1: 22 Calculus topics and 17 school topics, ids unique across paths and no
  // path is a deliberate, reviewed edit of this one line (v2 M3a step 0, architecture card 5 part b)
  assert.equal(P.PATHS.calc1.topics.length,22,'the Calculus 1 path length pin');
  assert.equal(CALC1_SPINE.length,P.PATHS.calc1.topics.length);
- assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','school']);
+ assert.equal(P.PATHS.calc2.topics.length,5,'the Calculus 2 path length pin (v2 M3b-2: integration techniques, 7.1-7.5)');
+ assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','calc2','school']);
  // W5b: 'Add and subtract fractions' joined the school path in place (owner decision D5); W7 batch 1 added three more
  // fractions units, equivalent fractions first (years never go down along the path)
  // W7 batch 2 added the decimals and percent strand, W7 batch 3 ratio and rates and geometry and data: fifteen
@@ -39,9 +40,9 @@ test('1: 22 Calculus topics and 17 school topics, ids unique across paths and no
  // the school path length pin (THE one; see above)
  assert.equal(P.PATHS.school.topics.length,17,'v2 M2b: Pythagoras and probability, two more (fifteen since W7 batch 3)');
  assert.equal(P.PATHS.school.topics[0].id,'frac-equivalent');
- const ids=[...P.PATHS.school.topics,...P.PATHS.calc1.topics].map(t=>t.id);
- assert.equal(new Set(ids).size,P.PATHS.school.topics.length+P.PATHS.calc1.topics.length,'every topic id is unique across both paths');
- for(const t of P.PATHS.school.topics)assert.ok(!P.PATHS.calc1.topics.some(c=>c.id===t.id),`${t.id} is in two paths`);
+ const ids=Object.values(P.PATHS).flatMap(p=>p.topics.map(t=>t.id));
+ assert.equal(new Set(ids).size,Object.values(P.PATHS).reduce((n,p)=>n+p.topics.length,0),'every topic id is unique across every path');
+ for(const t of P.PATHS.school.topics)assert.ok(!Object.values(P.PATHS).some(p=>p.id!=='school'&&p.topics.some(c=>c.id===t.id)),`${t.id} is in two paths`);
  assert.equal(P.PATHS.school.name,'School maths','renamed in W5b (owner decision D5)');assert.equal(P.PATHS.school.school,true);assert.equal(P.PATHS.school.id,'school');
  assert.equal(P.PATHS.calc1.name,'Calculus 1');assert.equal(P.PATHS.calc1.school,false);assert.equal(P.PATHS.calc1.id,'calc1');
  for(const p of Object.values(P.PATHS))assert.match(p.blurb,/^[A-Z][^.!?]*[.!?]$/,`${p.id}: the blurb is one sentence`);
@@ -173,7 +174,7 @@ test('12: the spine and paths.ts are client-safe - no Node module, no store, no 
   assert.doesNotMatch(src,/require\(/,`${name}: no require`);
   assert.doesNotMatch(src,/import\s+(?!type\b)[^;]*from\s+["'][^"']*(session\/|desk\/|engines?\/|rules\/|learners)/,`${name}: a runtime import of the store, learners, a job, an engine or a rule`);
   const out=transpile(fs.readFileSync(file,'utf8'),opts).outputText;
-  assert.doesNotMatch(out,/require\(["'](?!\.\/(syllabus|calculus1\.spine)["'])/,`${name}: requires something other than the library files at runtime`);
+  assert.doesNotMatch(out,/require\(["'](?!\.\/(syllabus|calculus[12]\.spine)["'])/,`${name}: requires something other than the library files at runtime`);
  }
  assert.doesNotMatch(code(SPINE_FILE),/import\s/,'the spine imports nothing');
  assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$|[\\/]engines?[\\/]|[\\/]rules[\\/]/.test(k)),'loading paths.ts pulled a server module in');
@@ -247,7 +248,7 @@ test('14: kindOfTopic, the Calculus slips and pathOf agree with the record for e
   assert.equal(P.pathOf({mathPath:p}),p,`${t.id}: pathOf its own path`);
   assert.equal(P.pathOfTopic(t.id),p);
  }
- for(const junk of ['toString','constructor','__proto__','hasOwnProperty','calc2',' calc1','calc1 ',''])assert.equal(P.pathOf({mathPath:junk}),'school',`${JSON.stringify(junk)} is no path`);
+ for(const junk of ['toString','constructor','__proto__','hasOwnProperty','calc3',' calc1','calc1 ',''])assert.equal(P.pathOf({mathPath:junk}),'school',`${JSON.stringify(junk)} is no path`);
  for(const k of Object.keys(P.PATHS))assert.equal(P.isPath(k),true);
 });
 
@@ -325,7 +326,7 @@ test('18: the store keeps a mathPath that is a key of PATHS and drops anything e
   const draft=d.store.reduce(d.store.fresh(),{type:'profile.draft',patch:{mathPath:k}}).draft;
   assert.equal(draft.mathPath,k,`${k} is kept`);
  }
- for(const junk of ['toString','constructor','__proto__','calc2','CALC1','',1,null,{},['calc1']]){
+ for(const junk of ['toString','constructor','__proto__','calc3','CALC1','',1,null,{},['calc1']]){
   const draft=d.store.reduce(d.store.fresh(),{type:'profile.draft',patch:{mathPath:junk}}).draft;
   assert.ok(!('mathPath' in draft),`${JSON.stringify(junk)} is dropped, key and all`);
  }

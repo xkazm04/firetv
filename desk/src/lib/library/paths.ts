@@ -4,7 +4,7 @@
  * rates units, two geometry and data units, then the other two linear-equation topics, fifteen in all, with their
  * school-year bands; Family W5b extended it in place and renamed it, owner decision D5, W7 batch 1 added three fractions
  * units, W7 batch 2 the decimals and percent strand and W7 batch 3 the last four); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
- * has no school year. Every screen and pipeline that needs "the" topic list asks here - for the learner's path - rather
+ * has no school year, and the 'calc2' path the integration-techniques course that follows it (CALC2_SPINE, v2 M3b-2). Every screen and pipeline that needs "the" topic list asks here - for the learner's path - rather
  * than reading SYLLABUS directly.
  *
  * Client-safe: only types and library data files are imported, never the store, the learners file, a job or an engine
@@ -12,8 +12,9 @@
  */
 import type { SchoolSystem } from "@/lib/session/store";import { SYLLABUS, expectedIndex } from "./syllabus";
 import { CALC1_SPINE, type CalcShape } from "./calculus1.spine";
+import { CALC2_SPINE } from "./calculus2.spine";
 
-export type MathPath = "school" | "calc1";
+export type MathPath = "school" | "calc1" | "calc2";
 
 /**
  * How a path's items are judged (architecture card 5 part a, v2 M3b-1): 'school' - a topic whose unit has a code
@@ -38,6 +39,19 @@ export interface PathTopic {
   shapes?: CalcShape[];
 }
 
+/**
+ * The words a prompt uses for a Calculus course (v2 M3b-2 ruling 6): the course as the set's prompt names it, as the
+ * hint's stance names it, and the methods the stance tells the tutor to use. Data on the path's record, so no site names a path id.
+ */
+export interface CalcWords {
+  /** The course in the set's prompt: "a university <desk> desk". */
+  desk: string;
+  /** The course in the hint's stance: "a first-year university student in {course}". */
+  course: string;
+  /** The course's methods, as a phrase: "Use the course's methods and notation - {methods} - and name the rule that applies". */
+  methods: string;
+}
+
 export interface PathInfo {
   id: MathPath;
   name: string;
@@ -47,6 +61,8 @@ export interface PathInfo {
   school: boolean;
   /** How the path's items are judged (PathJudge): kindOfTopic, the Calculus slips, the hint's stance and the set's shapes read it. */
   judge: PathJudge;
+  /** The prompt words of a path judged 'calc'; absent on any other path. */
+  calcWords?: CalcWords;
   topics: PathTopic[];
 }
 
@@ -69,7 +85,17 @@ export const PATHS: Record<MathPath, PathInfo> = {
     blurb: "A university first course in calculus, from functions and limits through derivatives to integrals.",
     school: false,
     judge: "calc",
+    calcWords: { desk: "Calculus 1", course: "Calculus I", methods: "limits, the derivative rules, antiderivatives and the Fundamental Theorem" },
     topics: CALC1_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice() })),
+  },
+  calc2: {
+    id: "calc2",
+    name: "Calculus 2",
+    blurb: "A second university course in calculus that follows Calculus 1, on the techniques of integration.",
+    school: false,
+    judge: "calc",
+    calcWords: { desk: "Calculus 2", course: "Calculus II", methods: "integration by parts, trigonometric integrals, trigonometric substitution and partial fractions" },
+    topics: CALC2_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice() })),
   },
 };
 
@@ -93,6 +119,16 @@ export function judgeOf(path?: MathPath): PathJudge {
 export function judgeOfTopic(id: string): PathJudge | undefined {
   const path = pathOfTopic(id);
   return path ? PATHS[path].judge : undefined;
+}
+
+/**
+ * The prompt words of the Calculus course a path stands for: its own when it is judged 'calc', else the first path judged
+ * 'calc' (a 'calc'-kind question met on the school path, or with no path, uses today's words).
+ */
+export function calcWordsOf(path?: MathPath): CalcWords {
+  const own = path ? PATHS[path] : undefined;
+  const p = own?.judge === "calc" ? own : Object.values(PATHS).find((x) => x.judge === "calc")!;
+  return p.calcWords!;
 }
 
 /** Every topic of every path judged 'calc', in path order: the Calculus topics, each with its shapes. */

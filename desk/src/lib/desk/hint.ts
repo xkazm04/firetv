@@ -26,7 +26,7 @@ import { leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
 import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
-import { judgeOf, topicIn, type MathPath } from "../library/paths";
+import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import type { Subject } from "../session/store";
 
@@ -49,10 +49,11 @@ const STANCE: Record<Subject, (v: Voice) => string> = {
 /** The withholding rule of every hint, in every voice and on every path. */
 export const HINT_WITHHOLD =
   "Socratic rules, absolute: never state the final answer, never write the completed solution, never fill in a blank, never state a verb form or an ending.";
-/** The maths stance on the Calculus 1 path: a university course, its methods and its notation. */
-const CALC_STANCE =
-  "a maths tutor for a first-year university student in Calculus I. Use the course's methods and notation - limits, " +
-  "the derivative rules, antiderivatives and the Fundamental Theorem - and name the rule that applies";
+/** The maths stance on a Calculus path: a university course, its methods and its notation, as the path's record words them. */
+const calcStance = (path?: MathPath) => {
+  const w = calcWordsOf(path);
+  return `a maths tutor for a first-year university student in ${w.course}. Use the course's methods and notation - ${w.methods} - and name the rule that applies`;
+};
 
 /** The maths stance on a school task that reads as a unit's (Family W5b): the sheet is that unit, named, never the linear-equations sheet. */
 const unitStance = (v: Voice, unit: string) => `a maths tutor for ${v.who}. This sheet is the unit "${unit}"; prefer the unit's methods over heavier ones.`;
@@ -60,9 +61,9 @@ const unitStance = (v: Voice, unit: string) => `a maths tutor for ${v.who}. This
 /** The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither. */
 const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, path?: MathPath, unit?: string) =>
   subject !== "maths" ? STANCE[subject](voice)
-    : kind === "calc" ? CALC_STANCE
+    : kind === "calc" ? calcStance(path)
     : kind === "school" && unit ? unitStance(voice, unit)
-    : judgeOf(path) === "calc" ? CALC_STANCE : STANCE.maths(voice);
+    : judgeOf(path) === "calc" ? calcStance(path) : STANCE.maths(voice);
 
 /**
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
