@@ -548,6 +548,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
 | `tools/calc-practice-test.cjs` | specs in, six checked items out, easy to hard; no truth on any item or view; the schema and prompt ask only for specs; a second round; all-bad rounds fail and keep the old set |
 | `tools/calc-marking-test.cjs` | calc1 slip lists; marking by `checkAnswer` on each shape; the model's verdict is never read or used as a fallback; explanation settling and leak replacement; the evening note's topic name |
+| `tools/calc-word-test.cjs` | v2 M3a: the sweep of the three word templates (500 seeds each; specs not well formed, problems not fair, worked answers not right, printed numbers not drawn - all 0, the table printed); controls; a right working on a part rings nothing; the corpus table of what reads into a spec and into parts |
 | `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
 | `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
 | `tools/maths-ruler-test.cjs` | the ruler model's formulas at the school path's fifteen topics (six strands) and its panning Topics ruler; the Calculus panning ruler; the strip, every label whole in at most two lines |
@@ -634,10 +635,16 @@ Linear algebra needs a different engine altogether.
 
 ## 10. Honest limits
 
-- **Word problems and multi-part questions are not practice items.** A spec is one shape with one answer. Related
-  rates, optimisation in words, "the absolute maximum and minimum", and "find c so that f is continuous" have no
-  spec, and `specFromQuestion` returns null for them. Of the corpus's 31 printed questions, 13 read into a spec
-  ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table).
+- **Word problems and multi-part questions are practice items only where code draws them** (v2 M3a). A set on
+  calc1-related-rates, calc1-optimisation or calc1-extrema ends with one question in parts drawn by code from a seed
+  (`lib/rules/calc-word.ts`: `sphere-rates`, `rectangle-perimeter`, `cubic-max-min`). Each part is an ordinary item:
+  one spec of the nine shapes, one answer, judged by `checkAnswer`. The model still writes only single specs. Three
+  templates are all there are, so no other topic and no other situation gets a word problem. A part's answer is a
+  number: written with its unit it does not read, and a rounded decimal is 'unsure', as on any item. On a page,
+  `specFromQuestion` reads no word problem, and `partsFromQuestion` reads one phrasing, the maximum and the minimum
+  of f on [a, b], only when both are inside the interval. "Find c so that f is continuous" still has no spec. Of the
+  corpus's 31 printed questions, 13 read into a spec and none into parts: c13-q1's maximum is at an end
+  ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table, printed by `tools/calc-word-test.cjs`).
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of

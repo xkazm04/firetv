@@ -75,7 +75,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 21 | L4 | Linga Adult: Take Two (adult C1) | 6 | L3 | done (built locally on main, no PR, nothing pushed; heldOf table 41 rows: held 14, not held 12, null 15; a take writes nothing to the learner record; the TV and phone captures and one live take owed) | 6d90c429, fc9a1433, 23e11639, b2870aab | 2026-10-08 |
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
-| 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | not started | | |
+| 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | done (built locally on main, no PR, nothing pushed; the sweep 0 / 0 / 0 / 0 for all three templates over 500 seeds, all shipped; a calc1 set on related rates, optimisation or extrema ends with one code-drawn word problem in two parts; 13 of 31 corpus questions read into a spec, 0 into parts; TV and phone captures owed) | 3dc0693a (step 0), f5d21d3a, 61aca774, 309c52ee, 29e86cda, 3772c23b, 81924e24, and the finish record | 2026-10-08 |
 | 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | not started | | |
 | 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4, P6 | not started | | |
 | 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
@@ -331,7 +331,9 @@ eight rulings stand as written; one change the code requires is the chain tagger
   word problem beside the model's single items, its parts counted toward n (6: four single items and two parts). The
   model's prompt (still n + 3 specs), the single items and their order are unchanged; the first n - parts are taken. A
   set with no single item carries no word problem (it fails as before). The route asks with `word: true`; a direct
-  `makeItems` call without it writes the set as before (the existing practice rows keep their meaning).
+  `makeItems` call without it writes the set as before (the existing practice rows keep their meaning). Built: the route
+  takes `word: false` (or `0`) in its body and then writes the model's set alone; no screen sends it, and the course walk
+  (`tools/calc-course-test.cjs`) does, so its 22-topic rows keep pinning the model's set unchanged.
 - Screens: no new Screen, no Session field. The TV paper (Practice, Sheet, Walk) prints the stem once as prose, through
   `prose()` in the wrapping row (`mb-row q wrap`), never in the nowrap question row; the parts sit below it labelled
   (a), (b), each line wrapped, each with its own answer line, tick and pen; the tally and the side card name a part
@@ -340,7 +342,8 @@ eight rulings stand as written; one change the code requires is the chain tagger
   single-item set's prompt is byte for byte as before. No new count is printed (X1, X2); one attempt per part.
 - Files: new `lib/rules/calc-word.ts`; `lib/rules/{calc,chain,kinds}.ts`, `lib/desk/{items,mark,explain,memory,hint}.ts`,
   `lib/session/store.ts` (`stem`, `part`, kept by `shown`), `maths/MathsTV.tsx`, `app/phone/page.tsx`,
-  `app/api/practice/route.ts`; new `tools/calc-word-test.cjs` (appended last to `rulesSuites`); rows in the calc-*,
+  `app/api/practice/route.ts`; new `tools/calc-word-test.cjs` (appended to `rulesSuites`, just before `harness-rules-test.cjs`,
+  which pins itself last at `harness-rules-test.cjs:97`); rows in the calc-*,
   chain-rules, maths-judge, maths-tv and tv-sheet suites; `docs/CALCULUS-1-SYLLABUS.md`, `docs/MATH-COURSE-PATHS.md`
   (section 10), `docs/DESIGN-MATH-BUDDY.md`, `docs/STUDY-DESK-SCREENS.md`.
 - Tests: the sweep `tools/calc-word-test.cjs`, per template 500 seeds, prints four counts: specs not well formed, items
@@ -685,3 +688,52 @@ create or remove worktrees. (2) The owed proofs are delivered by this run. (3) h
 stays; ts-load's extra options and jsxOptions exports stay.
 Nothing is pushed.
 Next: M3a (row 24).
+
+### 2026-10-08 · batch 6 · M3a · autopilot/accepted-idea-delivery-e731d8c2
+Built locally per the owner's 2026-10-08 08:41Z order (the guest fix, then the runner, then M3a), one slice per run through
+the gate; no PR, nothing pushed. Commits: 3dc0693a (step 0, card 5 part b), f5d21d3a (the card), 61aca774 (calc-word.ts, the
+three templates, the sweep, the chain's capital label), 309c52ee (partsFromQuestion, the hint over every part, the corpus table),
+29e86cda (stem and part on PracticeItem, the read prompt), 3772c23b (the TV paper and the phone), 81924e24 (the set wired), and
+this entry.
+Sweep table (tools/calc-word-test.cjs, seeds 1..500; the story templates' answers checked twice, the template's own and the
+sweep's own arithmetic):
+| template | topic | drawn | not well formed | not fair | worked answers not right | stem numbers not drawn |
+| sphere-rates | calc1-related-rates | 500 of 500 | 0 | 0 | 0 of 2000 | 0 |
+| rectangle-perimeter | calc1-optimisation | 500 of 500 | 0 | 0 | 0 of 2000 | 0 |
+| cubic-max-min | calc1-extrema | 500 of 500 | 0 | 0 | 0 of 1000 | 0 |
+All three ship (none withheld). The counts were zero at the first run because a template draws again for every condition the
+sweep counts; the controls in the same file prove each count can fail.
+The corpus table (calc-word-test 'M3a corpus', printed and pinned): 31 questions, 13 read into a spec (the same 13 ids as before;
+no spec changed), 0 into parts; 33 page lines 0 and 0; 64 TeX forms 0 and 0. c13-q1 is the multi-part phrasing, read and refused
+whole: its maximum, 65, is at the end x = 5 (an extremum at an endpoint is not well formed). On [-3, 3] the same text reads.
+Step 0, pins moved (old -> derived; NS = PATHS.school.topics.length, NC = PATHS.calc1.topics.length; the full list is in
+3dc0693a's message): maths-paths 22 -> NC, 39 -> NS + NC; maths-course 22/21 -> NC/NC-1, 17/18/16 -> NS/NS+1/NS-1; maths-ruler 17
+-> NS, 22 -> NC, the focus lists and the tick list from N, focus 21 -> N-1, the all-secure row from N; maths-tv the 22 totals and
+'7 of 22' -> NC, 'One of 17' -> NS, 17/16 -> NS/NS-1; school-ruler 16 -> length-1, 'One of 17' and 'Two of 17' and the past-all
+tick from the length; maths-rules expectedIndex past-all 17 -> NS; tv-keys 17 -> NS; week-rules 17 -> NS; calc-course 22 -> NC;
+maths-calculus 22 -> NC. The two pins kept, in maths-paths-test: calc1 22 and school 17. The ruler span was already computed
+from N (98.6 px was a comment). Gate before and after step 0: 64 suites green, 1084 tests.
+Choices and deviations, stated: (1) chain.ts tagged a one-capital label (A = ..., F(x) = ...) an antiderivative on every shape,
+so a right first line of a story's working rang false on a wrong part; it is an antiderivative only on the two integral shapes,
+and elsewhere names the function as f(x) = does. Every existing chain row kept its result (fixture: clean chains rung 0 of 50,
+slips at their own line 50, at another line 0). (2) calc-word-test sits just before harness-rules-test in rulesSuites, not after
+it: harness-rules-test.cjs:97 pins itself last. (3) The practice route takes word: false (or 0) and then writes the model's set
+alone. No screen sends it; the course walk's two practice posts do, so calc-course-test's assertions are unchanged. The default
+(every screen's post) carries the word problem. (4) The word problem is the last question of its set, so the paper's numbers run
+on (four items, then 5 with (a) and (b)). (5) A related-rates part's spec is the radius (or the area) as a function of the time
+since the moment asked about, at 0: derivative-at stays the only shape on that topic. (6) The TV's card and tally name a part 5(b)
+and 5a; the stored said line keeps its item number ('Number 6 is right.'), which the TV rewrites for display only (namedLine).
+The phone's second-go label does the same. (7) A part whose function the stem does not print (the two stories) draws no graph;
+the cubic keeps its graph. (8) A part's answer written with its unit does not read ('unsure'); each part line names its unit
+instead of a new reading rule. (9) The Calculus read prompt lists the stem once and each part by its item number; a set with no
+parts is asked byte for byte as before. explain.ts and memory.ts give the model a part with its stem.
+Gate: `cd desk && npm run test:rules` green at every commit (65 suites, 1108 tests at 81924e24); `npx tsc --noEmit --incremental
+false` clean at every code commit. New rows: calc-word-test (9 tests: controls, the draw's rules, three sweeps, the parts as
+items, a right working rings nothing, the table, the corpus), chain-rules-test 'tagger (M3a)', calc-hint-test 'M3a',
+calc-marking-test 'M3a 1-3', maths-judge-test 'M3a', maths-tv-test 'M3a 1-3', tv-sheet-test 'M3a', phone-panel-test 'M3a',
+calc-practice-test 'M3a 1-4'. No existing assertion changed its meaning; path pins moved only in step 0.
+Owed to the owner's batch 5+6 review (captures, not made here): the TV paper with a word problem on practice, sheet and walk at
+1920 x 1080 and 1280 x 720 (the stem wraps in the 52 px print row; usePaper fits the paper), and the phone's part fields at 390 px;
+a maths teacher's read of the three templates' wording and units; one live set on a word topic (the model's four single items
+beside the parts).
+Next: T4 and T5 wait for the T1 live probe; batch 7 starts with P6.
