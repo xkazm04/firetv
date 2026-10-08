@@ -165,3 +165,32 @@ test('loader: an unwritable cache folder still loads the module', () => {
   assert.equal(r.out, '2', r.err);
   assert.equal(r.code, 0);
 });
+
+// A loader copied into <tmp>/tools with an empty <tmp>/desk, so desk/node_modules/typescript is absent; the stub
+// (when asked for) sits at <tmp>/node_modules/typescript, where only require.resolve from desk/ can find it.
+function fallbackRun(stub) {
+  const t = fs.mkdtempSync(path.join(dir, 'fallback-'));
+  fs.mkdirSync(path.join(t, 'tools')); fs.mkdirSync(path.join(t, 'desk'));
+  fs.copyFileSync(LOADER, path.join(t, 'tools/ts-load.cjs'));
+  if (stub) {
+    const m = path.join(t, 'node_modules/typescript'); fs.mkdirSync(m, { recursive: true });
+    fs.writeFileSync(path.join(m, 'package.json'), JSON.stringify({ name: 'typescript', version: '0.0.1-stub', main: 'index.js' }));
+    fs.writeFileSync(path.join(m, 'index.js'), "exports.transpileModule=()=>({outputText:'STUB-MARKER'});");
+  }
+  const f = path.join(t, 'run.cjs');
+  fs.writeFileSync(f, "const L=require('./tools/ts-load.cjs');console.log(L.transpile('export const a=1;',{}).outputText);");
+  const r = spawnSync(process.execPath, [f], { cwd: t, encoding: 'utf8', env: { ...process.env, DESK_TS_CACHE: '0' } });
+  return { code: r.status, out: r.stdout.trim(), err: r.stderr };
+}
+
+test('loader: without desk/node_modules/typescript it falls back to the package Node resolves from desk/', () => {
+  const r = fallbackRun(true);
+  assert.equal(r.out, 'STUB-MARKER', r.err);
+  assert.equal(r.code, 0);
+});
+
+test('loader: with no TypeScript anywhere it prints the install message and exits 1', () => {
+  const r = fallbackRun(false);
+  assert.equal(r.code, 1);
+  assert.match(r.err, /Run `npm install` in desk\/ first/);
+});

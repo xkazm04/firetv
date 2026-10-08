@@ -18,11 +18,15 @@ const LOADER_VERSION = 1;
 // ts.ModuleKind.CommonJS, ts.ScriptTarget.ES2022, ts.JsxEmit.ReactJSX as numbers, so a cache hit never loads TypeScript.
 const MODULE_COMMONJS = 1, TARGET_ES2022 = 9, JSX_REACTJSX = 4;
 const root = path.resolve(__dirname, '../desk'), src = path.join(root, 'src');
-const modules = path.join(root, 'node_modules/typescript');
 
-let tsVersion;
-try { tsVersion = JSON.parse(fs.readFileSync(path.join(modules, 'package.json'), 'utf8')).version; }
-catch { console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.'); process.exit(1); }
+// desk/node_modules/typescript first; only if that cannot be read, wherever Node resolves 'typescript' from desk/.
+let modules = path.join(root, 'node_modules/typescript'), tsVersion;
+const readVersion = (dir) => JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8')).version;
+try { tsVersion = readVersion(modules); }
+catch {
+  try { modules = path.dirname(require.resolve('typescript/package.json', { paths: [root] })); tsVersion = readVersion(modules); }
+  catch { console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.'); process.exit(1); }
+}
 
 let tsModule;
 const ts = () => (tsModule ??= require(modules));
