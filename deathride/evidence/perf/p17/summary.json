@@ -1,0 +1,1694 @@
+{
+ "runs": [
+  {
+   "run": "muted-run1",
+   "windows": 240,
+   "periodMs": 16.68335,
+   "counterfactuals": {
+    "measured": {
+     "worstP95Ms": 19.044,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.148
+    },
+    "without preempted": {
+     "worstP95Ms": 18.871,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.147
+    },
+    "without running:cars": {
+     "worstP95Ms": 18.974,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.147
+    },
+    "without running:flushSwap": {
+     "worstP95Ms": 19.044,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.147
+    },
+    "without running:hud": {
+     "worstP95Ms": 19.044,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.148
+    },
+    "without running:simulation": {
+     "worstP95Ms": 19.044,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.147
+    },
+    "without sleep:dequeue": {
+     "worstP95Ms": 18.857,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.147
+    },
+    "without every frame over 20 ms": {
+     "worstP95Ms": 18.78,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.143
+    },
+    "on-time frames only (class b removed)": {
+     "worstP95Ms": 19.057,
+     "windowsOver16_7": 240,
+     "medianWindowP95Ms": 18.151
+    },
+    "class (a) set to one period (jitter-free clock)": {
+     "worstP95Ms": 16.689,
+     "windowsOver16_7": 0,
+     "medianWindowP95Ms": 16.683
+    }
+   },
+   "readings": {
+    "frames": {
+     "active": 19279,
+     "over16_7": 8832,
+     "over20": 38,
+     "over33": 0,
+     "p11Over20": 38,
+     "p11Over33": 0
+    },
+    "activeWindows": {
+     "count": 240,
+     "worstP95Ms": 19.043616,
+     "maxMs": 27.671615,
+     "p50RangeMs": [
+      16.668229999999998,
+      16.729923
+     ]
+    },
+    "pooledActive": {
+     "p50Ms": 16.679,
+     "p95Ms": 18.175,
+     "maxMs": 27.672
+    },
+    "present": {
+     "source": "dumpsys SurfaceFlinger --latency \"SurfaceView - dev.deathride.perf/dev.deathride.tv.MainActivity#0\"",
+     "pollSeconds": 1.5,
+     "dumps": 269,
+     "gaps": 1,
+     "framesSeen": 24993,
+     "framesJoined": 23624,
+     "joinChecksFailed": 0,
+     "refreshPeriodsNs": [
+      16683350
+     ],
+     "activeIntervalsWithPresent": 19274,
+     "activeIntervals": 19279,
+     "activePresentIntervalsByPeriods": {
+      "0": 94,
+      "1": 19090,
+      "2": 90
+     },
+     "activePresentIntervalsUnderHalfPeriod": 94,
+     "gpuMsP50P95": [
+      6.649,
+      11.324
+     ],
+     "queueToPresentMsP50P95": [
+      17.075,
+      25.178
+     ],
+     "presentGridResidualNsMax": 0,
+     "pollerCpuPercentOfOneCore": 3.57,
+     "surfaceflingerCpuPercentOfOneCore": 15.1
+    },
+    "vsyncLag": {
+     "p5Ms": 0.91,
+     "p50Ms": 9.728,
+     "p95Ms": 15.786,
+     "driftMsPerSecond": -0.1535,
+     "renderVsPresentGridPpm": -153.5,
+     "blockMedianMs": [
+      [
+       0.0,
+       9.4
+      ],
+      [
+       11.7,
+       11.98
+      ],
+      [
+       22.1,
+       10.95
+      ],
+      [
+       32.1,
+       8.78
+      ],
+      [
+       42.2,
+       15.2
+      ],
+      [
+       52.2,
+       13.46
+      ],
+      [
+       62.2,
+       11.22
+      ],
+      [
+       72.2,
+       8.98
+      ],
+      [
+       82.2,
+       6.48
+      ],
+      [
+       92.3,
+       4.02
+      ],
+      [
+       102.3,
+       2.29
+      ],
+      [
+       112.4,
+       15.15
+      ],
+      [
+       122.4,
+       13.75
+      ],
+      [
+       132.4,
+       11.47
+      ],
+      [
+       142.4,
+       9.22
+      ],
+      [
+       152.4,
+       6.67
+      ],
+      [
+       162.5,
+       4.47
+      ],
+      [
+       172.5,
+       2.23
+      ],
+      [
+       182.6,
+       15.18
+      ],
+      [
+       192.6,
+       14.08
+      ],
+      [
+       202.6,
+       11.53
+      ],
+      [
+       212.6,
+       9.52
+      ],
+      [
+       222.6,
+       8.78
+      ],
+      [
+       232.6,
+       10.81
+      ],
+      [
+       242.8,
+       2.43
+      ],
+      [
+       252.8,
+       1.9
+      ],
+      [
+       262.8,
+       14.28
+      ],
+      [
+       272.8,
+       12.24
+      ],
+      [
+       282.8,
+       9.74
+      ],
+      [
+       292.8,
+       7.6
+      ],
+      [
+       302.8,
+       9.8
+      ],
+      [
+       312.9,
+       2.72
+      ],
+      [
+       322.9,
+       1.97
+      ],
+      [
+       332.9,
+       14.62
+      ],
+      [
+       342.9,
+       12.56
+      ],
+      [
+       352.9,
+       9.99
+      ],
+      [
+       362.9,
+       7.65
+      ],
+      [
+       373.0,
+       5.38
+      ],
+      [
+       383.0,
+       3.24
+      ]
+     ],
+     "onTimeIntervalP95Ms": 18.175,
+     "onTimeIntervalP50Ms": 16.68,
+     "onTimeIntervalsOver16_7": 8806,
+     "onTimeIntervals": 19184,
+     "limit": "The phase is the median of SF present times modulo the period; position is a render start's place in its refresh. A negative drift means renders start earlier in each refresh as time goes on."
+    },
+    "windowCheck": {
+     "countMatches": 235,
+     "p95Matches": 235,
+     "windows": 240
+    },
+    "offCpu": {
+     "activeSeconds": 321.6,
+     "workMinusCpuMsPerSecond": 38.71,
+     "runnableMsPerSecond": 15.79,
+     "sleepMsPerSecond": 443.23,
+     "runningMsPerSecond": 540.99,
+     "medianIntervalSplitMs": [
+      8.926,
+      0.125,
+      7.488
+     ],
+     "intervalsWithSched": 19279
+    },
+    "gc": {
+     "gcCount": 35,
+     "gcTimeMs": 2510,
+     "blockingGcCount": 0,
+     "allocMBPerSecond": 2.589,
+     "loggedGcs": 17,
+     "loggedGcKinds": {
+      "Background young concurrent copying": 3,
+      "Background concurrent copying": 14
+     },
+     "activeIntervalsOverlappingLoggedGc": 0.0039
+    },
+    "deviceMemory": {
+     "seconds": 440.1,
+     "kswapdCpuPercentOfOneCore": 1.46,
+     "perSecond": {
+      "workingset_refault_anon": 54.6,
+      "workingset_refault_file": 195.2,
+      "pswpin": 54.6,
+      "pswpout": 130.6,
+      "allocstall_dma32": 0.0,
+      "allocstall_normal": 0.0,
+      "allocstall_movable": 0.5,
+      "pgmajfault": 59.0,
+      "pgsteal_kswapd": 393.4,
+      "pgsteal_direct": 25.8,
+      "pgscan_kswapd": 635.8,
+      "pgscan_direct": 46.2,
+      "pgscan_direct_throttle": 0.0,
+      "pgscan_anon": 353.2,
+      "pgscan_file": 328.8,
+      "pgsteal_anon": 134.8,
+      "pgsteal_file": 284.5
+     },
+     "memAvailableMiB": [
+      367.3,
+      272.0
+     ],
+     "memFreeMiB": [
+      56.0,
+      48.6
+     ]
+    },
+    "statsBuildShareOfActiveIntervals": 0.0151,
+    "hostCpu": {
+     "host-cpu-start.json": {
+      "utc": "2026-10-08T20:02:48.0919762Z",
+      "totalPercentSamples": [
+       79,
+       73,
+       82
+      ],
+      "logicalProcessors": 16,
+      "top": [
+       [
+        "node#17",
+        167
+       ],
+       [
+        "node#33",
+        162
+       ],
+       [
+        "node#34",
+        110
+       ],
+       [
+        "node#7",
+        100
+       ],
+       [
+        "node#22",
+        100
+       ]
+      ]
+     },
+     "host-cpu-end.json": {
+      "utc": "2026-10-08T20:08:59.6327452Z",
+      "totalPercentSamples": [
+       96,
+       63,
+       98
+      ],
+      "logicalProcessors": 16,
+      "top": [
+       [
+        "node#17",
+        155
+       ],
+       [
+        "node#22",
+        141
+       ],
+       [
+        "find",
+        103
+       ],
+       [
+        "node#7",
+        98
+       ],
+       [
+        "node#38",
+        98
+       ]
+      ]
+     }
+    },
+    "rejectedInputs": [
+     0,
+     0
+    ],
+    "durationSeconds": 360.2220308,
+    "functionalPass": true
+   },
+   "pss": {
+    "rangeMiB": [
+     159.93359375,
+     172.134765625
+    ],
+    "samples": [
+     172.1,
+     161.6,
+     166.4,
+     165.9,
+     167.1,
+     170.6,
+     159.9,
+     162.2
+    ],
+    "peak": {
+     "second": 0,
+     "breakdownMiB": {
+      "Java Heap": 66.67,
+      "Native Heap": 9.57,
+      "Code": 26.37,
+      "Stack": 1.02,
+      "Graphics": 51.95,
+      "Private Other": 7.57,
+      "System": 8.98,
+      "pss Dalvik Heap": 60.73,
+      "pss Dalvik Other": 3.8,
+      "pss GL mtrack": 51.95,
+      "pss Native Heap": 9.65,
+      "pss Ashmem": 4.88,
+      "pss Unknown": 0.36,
+      "TOTAL PSS": 172.13
+     },
+     "heapUsedMBNearest": 62.4
+    },
+    "lowest": {
+     "second": 335.8,
+     "breakdownMiB": {
+      "Java Heap": 59.33,
+      "Native Heap": 10.47,
+      "Code": 21.62,
+      "Stack": 1.33,
+      "Graphics": 52.13,
+      "Private Other": 7.67,
+      "System": 7.39,
+      "pss Dalvik Heap": 53.38,
+      "pss Dalvik Other": 5.07,
+      "pss GL mtrack": 52.13,
+      "pss Native Heap": 10.54,
+      "pss Ashmem": 4.88,
+      "pss Unknown": 0.36,
+      "TOTAL PSS": 159.93
+     },
+     "heapUsedMBNearest": 78.0
+    },
+    "peakMinusLowestMiB": {
+     "Java Heap": 7.34,
+     "Native Heap": -0.9,
+     "Code": 4.75,
+     "Stack": -0.31,
+     "Graphics": -0.18,
+     "Private Other": -0.1,
+     "System": 1.59,
+     "pss Dalvik Heap": 7.35,
+     "pss Dalvik Other": -1.27,
+     "pss GL mtrack": -0.18,
+     "pss Native Heap": -0.89,
+     "pss Ashmem": 0.0,
+     "pss Unknown": 0.0,
+     "TOTAL PSS": 12.2
+    }
+   },
+   "over20": {
+    "frames": 38,
+    "byCause": {
+     "sleep:dequeue": 12,
+     "preempted": 11,
+     "running:hud": 5,
+     "running:simulation": 4,
+     "running:cars": 3,
+     "running:flushSwap": 3
+    },
+    "byDominantPhase": {
+     "flushSwap": 23,
+     "hud": 5,
+     "cars": 4,
+     "simulation": 4,
+     "scenery": 2
+    },
+    "byClass": {
+     "a": 38
+    },
+    "withLoggedGc": 4,
+    "withStatsBuild": 3,
+    "withProfileRead": 0,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 21.803,
+     "workMs": 15.296,
+     "threadCpuMs": 10.276,
+     "offCpuMs": 5.02,
+     "runningMs": 11.101,
+     "runnableMs": 2.349,
+     "sleepMs": 8.353,
+     "flushSwapMs": 10.722
+    }
+   },
+   "classB": {
+    "frames": 90,
+    "byCause": {
+     "sleep:dequeue": 28,
+     "running:simulation": 23,
+     "running:cars": 19,
+     "sleep:other": 8,
+     "running:telemetry": 6,
+     "preempted": 4,
+     "running:hud": 2
+    },
+    "byDominantPhase": {
+     "simulation": 26,
+     "flushSwap": 25,
+     "cars": 24,
+     "telemetry": 11,
+     "hud": 4
+    },
+    "byClass": {
+     "b": 90
+    },
+    "withLoggedGc": 3,
+    "withStatsBuild": 0,
+    "withProfileRead": 1,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 16.612,
+     "workMs": 9.036,
+     "threadCpuMs": 8.693,
+     "offCpuMs": 0.344,
+     "runningMs": 9.412,
+     "runnableMs": 0.178,
+     "sleepMs": 7.022,
+     "flushSwapMs": 8.243
+    }
+   },
+   "worst3Windows": [
+    {
+     "second": 194.08,
+     "raceSeconds": 57.3,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 18.645,
+     "statsP95Ms": 18.645,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 25.227,
+     "over16_7": 308,
+     "classA": 307,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 18.64,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 195.08,
+     "raceSeconds": 58.3,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 18.832,
+     "statsP95Ms": 18.832,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 25.227,
+     "over16_7": 308,
+     "classA": 307,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 18.821,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 196.08,
+     "raceSeconds": 59.3,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.044,
+     "statsP95Ms": 19.044,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 25.227,
+     "over16_7": 305,
+     "classA": 304,
+     "classB": 1,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.057,
+     "aloneOverBar": true,
+     "worst3": true
+    }
+   ],
+   "windowsAloneOverBar": 240,
+   "presentP95RangeMs": [
+    16.683,
+    16.683
+   ],
+   "onTimeP95RangeMs": [
+    17.543,
+    19.057
+   ],
+   "renderP95RangeMs": [
+    17.543,
+    19.044
+   ]
+  },
+  {
+   "run": "muted-run2",
+   "windows": 248,
+   "periodMs": 16.68335,
+   "counterfactuals": {
+    "measured": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without preempted": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.184
+    },
+    "without running:cars": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without running:flushSwap": {
+     "worstP95Ms": 19.346,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without running:hud": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.184
+    },
+    "without running:scenery": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without running:simulation": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without sleep:dequeue": {
+     "worstP95Ms": 19.302,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without sleep:gc": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without sleep:other": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.185
+    },
+    "without every frame over 20 ms": {
+     "worstP95Ms": 19.199,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.178
+    },
+    "on-time frames only (class b removed)": {
+     "worstP95Ms": 19.388,
+     "windowsOver16_7": 248,
+     "medianWindowP95Ms": 18.187
+    },
+    "class (a) set to one period (jitter-free clock)": {
+     "worstP95Ms": 16.686,
+     "windowsOver16_7": 0,
+     "medianWindowP95Ms": 16.683
+    }
+   },
+   "readings": {
+    "frames": {
+     "active": 19269,
+     "over16_7": 8867,
+     "over20": 77,
+     "over33": 0,
+     "p11Over20": 77,
+     "p11Over33": 0
+    },
+    "activeWindows": {
+     "count": 248,
+     "worstP95Ms": 19.387692,
+     "maxMs": 27.141538,
+     "p50RangeMs": [
+      16.607384999999997,
+      16.711153
+     ]
+    },
+    "pooledActive": {
+     "p50Ms": 16.68,
+     "p95Ms": 18.275,
+     "maxMs": 27.142
+    },
+    "present": {
+     "source": "dumpsys SurfaceFlinger --latency \"SurfaceView - dev.deathride.perf/dev.deathride.tv.MainActivity#0\"",
+     "pollSeconds": 1.5,
+     "dumps": 268,
+     "gaps": 0,
+     "framesSeen": 24816,
+     "framesJoined": 23337,
+     "joinChecksFailed": 0,
+     "refreshPeriodsNs": [
+      16683350
+     ],
+     "activeIntervalsWithPresent": 19269,
+     "activeIntervals": 19269,
+     "activePresentIntervalsByPeriods": {
+      "0": 85,
+      "1": 19102,
+      "2": 82
+     },
+     "activePresentIntervalsUnderHalfPeriod": 85,
+     "gpuMsP50P95": [
+      6.216,
+      11.802
+     ],
+     "queueToPresentMsP50P95": [
+      16.758,
+      25.352
+     ],
+     "presentGridResidualNsMax": 0,
+     "pollerCpuPercentOfOneCore": 3.57,
+     "surfaceflingerCpuPercentOfOneCore": 14.8
+    },
+    "vsyncLag": {
+     "p5Ms": 0.701,
+     "p50Ms": 9.327,
+     "p95Ms": 15.986,
+     "driftMsPerSecond": -0.1098,
+     "renderVsPresentGridPpm": -109.8,
+     "blockMedianMs": [
+      [
+       0.0,
+       6.11
+      ],
+      [
+       12.0,
+       14.49
+      ],
+      [
+       22.3,
+       12.74
+      ],
+      [
+       32.3,
+       10.36
+      ],
+      [
+       42.4,
+       8.29
+      ],
+      [
+       52.4,
+       6.0
+      ],
+      [
+       62.5,
+       3.4
+      ],
+      [
+       72.5,
+       1.63
+      ],
+      [
+       82.5,
+       15.12
+      ],
+      [
+       92.5,
+       12.89
+      ],
+      [
+       102.7,
+       1.62
+      ],
+      [
+       112.7,
+       15.34
+      ],
+      [
+       122.7,
+       13.55
+      ],
+      [
+       132.7,
+       10.64
+      ],
+      [
+       142.7,
+       8.71
+      ],
+      [
+       152.7,
+       15.52
+      ],
+      [
+       162.7,
+       13.14
+      ],
+      [
+       172.8,
+       10.82
+      ],
+      [
+       182.8,
+       8.8
+      ],
+      [
+       192.8,
+       13.02
+      ],
+      [
+       202.9,
+       10.55
+      ],
+      [
+       212.9,
+       1.76
+      ],
+      [
+       222.9,
+       15.23
+      ],
+      [
+       232.9,
+       13.31
+      ],
+      [
+       243.0,
+       11.59
+      ],
+      [
+       253.0,
+       9.16
+      ],
+      [
+       263.0,
+       6.69
+      ],
+      [
+       273.1,
+       4.62
+      ],
+      [
+       283.1,
+       2.07
+      ],
+      [
+       293.1,
+       4.9
+      ],
+      [
+       303.2,
+       13.61
+      ],
+      [
+       313.2,
+       11.97
+      ],
+      [
+       323.2,
+       9.45
+      ],
+      [
+       333.2,
+       7.2
+      ],
+      [
+       343.2,
+       4.59
+      ],
+      [
+       353.2,
+       2.41
+      ],
+      [
+       363.3,
+       3.25
+      ],
+      [
+       373.4,
+       14.14
+      ]
+     ],
+     "onTimeIntervalP95Ms": 18.275,
+     "onTimeIntervalP50Ms": 16.681,
+     "onTimeIntervalsOver16_7": 8841,
+     "onTimeIntervals": 19187,
+     "limit": "The phase is the median of SF present times modulo the period; position is a render start's place in its refresh. A negative drift means renders start earlier in each refresh as time goes on."
+    },
+    "windowCheck": {
+     "countMatches": 244,
+     "p95Matches": 245,
+     "windows": 248
+    },
+    "offCpu": {
+     "activeSeconds": 321.4,
+     "workMinusCpuMsPerSecond": 105.56,
+     "runnableMsPerSecond": 13.63,
+     "sleepMsPerSecond": 422.16,
+     "runningMsPerSecond": 564.21,
+     "medianIntervalSplitMs": [
+      9.324,
+      0.114,
+      7.137
+     ],
+     "intervalsWithSched": 19269
+    },
+    "gc": {
+     "gcCount": 38,
+     "gcTimeMs": 2209,
+     "blockingGcCount": 0,
+     "allocMBPerSecond": 2.587,
+     "loggedGcs": 7,
+     "loggedGcKinds": {
+      "Background young concurrent copying": 2,
+      "Background concurrent copying": 5
+     },
+     "activeIntervalsOverlappingLoggedGc": 0.0014
+    },
+    "deviceMemory": {
+     "seconds": 442.4,
+     "kswapdCpuPercentOfOneCore": 0.79,
+     "perSecond": {
+      "workingset_refault_anon": 28.0,
+      "workingset_refault_file": 117.5,
+      "pswpin": 28.0,
+      "pswpout": 58.9,
+      "allocstall_dma32": 0.0,
+      "allocstall_normal": 0.0,
+      "allocstall_movable": 0.0,
+      "pgmajfault": 31.4,
+      "pgsteal_kswapd": 227.2,
+      "pgsteal_direct": 0.9,
+      "pgscan_kswapd": 390.8,
+      "pgscan_direct": 1.0,
+      "pgscan_direct_throttle": 0.0,
+      "pgscan_anon": 196.2,
+      "pgscan_file": 195.6,
+      "pgsteal_anon": 62.3,
+      "pgsteal_file": 165.8
+     },
+     "memAvailableMiB": [
+      290.1,
+      283.3
+     ],
+     "memFreeMiB": [
+      41.0,
+      48.7
+     ]
+    },
+    "statsBuildShareOfActiveIntervals": 0.0157,
+    "hostCpu": {
+     "host-cpu-start.json": {
+      "utc": "2026-10-08T20:40:13.4366662Z",
+      "totalPercentSamples": [
+       97,
+       82,
+       84
+      ],
+      "logicalProcessors": 16,
+      "top": [
+       [
+        "node#48",
+        305
+       ],
+       [
+        "find",
+        86
+       ],
+       [
+        "node#7",
+        73
+       ],
+       [
+        "node#55",
+        73
+       ],
+       [
+        "svchost#72",
+        68
+       ]
+      ]
+     },
+     "host-cpu-end.json": {
+      "utc": "2026-10-08T20:46:26.6082962Z",
+      "totalPercentSamples": [
+       78,
+       69,
+       65
+      ],
+      "logicalProcessors": 16,
+      "top": [
+       [
+        "node#17",
+        138
+       ],
+       [
+        "node#42",
+        106
+       ],
+       [
+        "find",
+        101
+       ],
+       [
+        "node#7",
+        101
+       ],
+       [
+        "dwm",
+        41
+       ]
+      ]
+     }
+    },
+    "rejectedInputs": [
+     4,
+     5
+    ],
+    "durationSeconds": 360.2121441,
+    "functionalPass": false
+   },
+   "pss": {
+    "rangeMiB": [
+     160.23046875,
+     184.796875
+    ],
+    "samples": [
+     166.1,
+     160.2,
+     170.0,
+     166.4,
+     171.3,
+     175.7,
+     184.8,
+     167.5
+    ],
+    "peak": {
+     "second": 336.4,
+     "breakdownMiB": {
+      "Java Heap": 77.16,
+      "Native Heap": 10.22,
+      "Code": 25.77,
+      "Stack": 1.35,
+      "Graphics": 52.09,
+      "Private Other": 7.86,
+      "System": 10.34,
+      "pss Dalvik Heap": 71.26,
+      "pss Dalvik Other": 5.23,
+      "pss GL mtrack": 52.09,
+      "pss Native Heap": 10.3,
+      "pss Ashmem": 4.88,
+      "pss Unknown": 0.37,
+      "TOTAL PSS": 184.8
+     },
+     "heapUsedMBNearest": 75.8
+    },
+    "lowest": {
+     "second": 3.6,
+     "breakdownMiB": {
+      "Java Heap": 50.1,
+      "Native Heap": 11.65,
+      "Code": 26.94,
+      "Stack": 1.31,
+      "Graphics": 51.97,
+      "Private Other": 7.76,
+      "System": 10.49,
+      "pss Dalvik Heap": 44.2,
+      "pss Dalvik Other": 4.22,
+      "pss GL mtrack": 51.97,
+      "pss Native Heap": 11.73,
+      "pss Ashmem": 4.88,
+      "pss Unknown": 0.37,
+      "TOTAL PSS": 160.23
+     },
+     "heapUsedMBNearest": 56.9
+    },
+    "peakMinusLowestMiB": {
+     "Java Heap": 27.06,
+     "Native Heap": -1.43,
+     "Code": -1.17,
+     "Stack": 0.04,
+     "Graphics": 0.12,
+     "Private Other": 0.1,
+     "System": -0.15,
+     "pss Dalvik Heap": 27.06,
+     "pss Dalvik Other": 1.01,
+     "pss GL mtrack": 0.12,
+     "pss Native Heap": -1.43,
+     "pss Ashmem": 0.0,
+     "pss Unknown": 0.0,
+     "TOTAL PSS": 24.57
+    }
+   },
+   "over20": {
+    "frames": 77,
+    "byCause": {
+     "running:cars": 30,
+     "sleep:dequeue": 21,
+     "preempted": 11,
+     "running:simulation": 6,
+     "running:hud": 2,
+     "running:scenery": 2,
+     "running:flushSwap": 2,
+     "sleep:gc": 2,
+     "sleep:other": 1
+    },
+    "byDominantPhase": {
+     "cars": 36,
+     "flushSwap": 28,
+     "simulation": 7,
+     "hud": 3,
+     "scenery": 3
+    },
+    "byClass": {
+     "a": 76,
+     "b": 1
+    },
+    "withLoggedGc": 5,
+    "withStatsBuild": 3,
+    "withProfileRead": 1,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 21.457,
+     "workMs": 19.216,
+     "threadCpuMs": 11.418,
+     "offCpuMs": 7.798,
+     "runningMs": 12.202,
+     "runnableMs": 1.79,
+     "sleepMs": 7.465,
+     "flushSwapMs": 8.485
+    }
+   },
+   "classB": {
+    "frames": 82,
+    "byCause": {
+     "sleep:dequeue": 29,
+     "running:simulation": 14,
+     "running:telemetry": 13,
+     "preempted": 12,
+     "running:cars": 10,
+     "running:scenery": 2,
+     "sleep:other": 1,
+     "running:hud": 1
+    },
+    "byDominantPhase": {
+     "flushSwap": 25,
+     "telemetry": 17,
+     "simulation": 17,
+     "cars": 13,
+     "hud": 6,
+     "scenery": 4
+    },
+    "byClass": {
+     "b": 82
+    },
+    "withLoggedGc": 1,
+    "withStatsBuild": 1,
+    "withProfileRead": 0,
+    "unattributed": 0,
+    "meanMs": {
+     "intervalMs": 16.712,
+     "workMs": 9.189,
+     "threadCpuMs": 8.587,
+     "offCpuMs": 0.602,
+     "runningMs": 9.327,
+     "runnableMs": 0.313,
+     "sleepMs": 7.073,
+     "flushSwapMs": 8.28
+    }
+   },
+   "worst3Windows": [
+    {
+     "second": 175.63,
+     "raceSeconds": 38.4,
+     "frames": 599,
+     "statsCount": 599,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 599,
+     "renderMaxMs": 22.724,
+     "over16_7": 293,
+     "classA": 293,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 176.63,
+     "raceSeconds": 39.4,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 22.17,
+     "over16_7": 293,
+     "classA": 293,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    },
+    {
+     "second": 177.7,
+     "raceSeconds": 40.4,
+     "frames": 600,
+     "statsCount": 600,
+     "renderP95Ms": 19.388,
+     "statsP95Ms": 19.388,
+     "presentP95Ms": 16.683,
+     "presentKnown": 600,
+     "renderMaxMs": 22.17,
+     "over16_7": 298,
+     "classA": 298,
+     "classB": 0,
+     "over16_7Unknown": 0,
+     "onTimeP95Ms": 19.388,
+     "aloneOverBar": true,
+     "worst3": true
+    }
+   ],
+   "windowsAloneOverBar": 248,
+   "presentP95RangeMs": [
+    16.683,
+    16.683
+   ],
+   "onTimeP95RangeMs": [
+    17.85,
+    19.388
+   ],
+   "renderP95RangeMs": [
+    17.85,
+    19.388
+   ]
+  }
+ ],
+ "trace": {
+  "traces": [
+   {
+    "vsyncAppTicks": {
+     "intervals": 1498,
+     "p5Ms": 16.624,
+     "p50Ms": 16.679,
+     "p95Ms": 16.739,
+     "maxMs": 16.816,
+     "over16_7": 411,
+     "over16_7Share": 0.2744
+    },
+    "sfMissedCounters": {
+     "PrevFrameMissed": 0,
+     "PrevHwcFrameMissed": 0,
+     "PrevGpuFrameMissed": 0,
+     "compositions": 1499
+    },
+    "mainThreadCallback": {
+     "tickToWakeMs": [
+      0.116,
+      0.162
+     ],
+     "wakeToRunMs": [
+      0.038,
+      2.013
+     ],
+     "runToCallbackMs": [
+      0.223,
+      2.106
+     ],
+     "tickToCallbackMs": [
+      0.398,
+      2.522
+     ],
+     "callbacks": 1499,
+     "waitsOverHalfMs": 181,
+     "cpuHeldDuringThoseWaitsMs": {
+      "surfaceflinger (RT)": 261.6,
+      "DefaultDispatch (nice 13)": 109.1,
+      "HwBinder:366_ (RT)": 75.2,
+      "m.amazon.tv.ime (nice -10)": 34.2,
+      "NetworkStats": 29.1,
+      "sf (RT)": 27.4,
+      "app (RT)": 15.3,
+      "surfaceflinger": 12.5
+     }
+    },
+    "startDelay": {
+     "appVsyncPeriodMs": 16.67947,
+     "vsyncTicks": 1499,
+     "callbacks": 1499,
+     "allStarts": {
+      "vsyncToStartMs": [
+       0.893,
+       9.869
+      ],
+      "callbackLagMs": [
+       0.398,
+       2.522
+      ],
+      "callbackToWakeMs": [
+       0.042,
+       8.729
+      ],
+      "wakeToRunMs": [
+       0.208,
+       0.382
+      ],
+      "runToStartMs": [
+       0.197,
+       0.477
+      ],
+      "frames": 1498,
+      "busy": 0
+     },
+     "startsEndingIntervalsOver16_7": {
+      "vsyncToStartMs": [
+       1.651,
+       10.811
+      ],
+      "callbackLagMs": [
+       0.444,
+       2.667
+      ],
+      "callbackToWakeMs": [
+       0.044,
+       9.595
+      ],
+      "wakeToRunMs": [
+       0.205,
+       0.441
+      ],
+      "runToStartMs": [
+       0.216,
+       0.487
+      ],
+      "frames": 695,
+      "busy": 0
+     },
+     "meanChangeAcrossIntervalsOver16_7Ms": {
+      "vsyncToStartMs": 0.739,
+      "callbackLagMs": 0.382,
+      "callbackToWakeMs": 0.244,
+      "wakeToRunMs": 0.101,
+      "runToStartMs": 0.015
+     },
+     "intervalsOver16_7WithBothStarts": 695,
+     "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+    },
+    "trace": "diag-muted-trace1",
+    "glThread": 9879,
+    "frames": 1497,
+    "framesOnRows": 1486,
+    "spanSeconds": 24.978,
+    "offsetSeconds": 0.000162,
+    "medianSplitMs": {
+     "running": 9.684,
+     "preempted": 0.122,
+     "wakeupLatency": 0.021,
+     "sleep": 6.739
+    },
+    "intervalsOver": {
+     "16.7": 695,
+     "20": 11,
+     "33": 0
+    },
+    "concurrentGcs": 4,
+    "gcNames": {
+     "ConcurrentGC": 4
+    },
+    "networkStatsPolls": 4,
+    "linkThreadsCpuPercent": 47.9
+   },
+   {
+    "vsyncAppTicks": {
+     "intervals": 1498,
+     "p5Ms": 16.622,
+     "p50Ms": 16.679,
+     "p95Ms": 16.736,
+     "maxMs": 16.808,
+     "over16_7": 409,
+     "over16_7Share": 0.273
+    },
+    "sfMissedCounters": {
+     "PrevFrameMissed": 0,
+     "PrevHwcFrameMissed": 0,
+     "PrevGpuFrameMissed": 0,
+     "compositions": 1499
+    },
+    "mainThreadCallback": {
+     "tickToWakeMs": [
+      0.12,
+      0.164
+     ],
+     "wakeToRunMs": [
+      0.042,
+      1.986
+     ],
+     "runToCallbackMs": [
+      0.208,
+      0.898
+     ],
+     "tickToCallbackMs": [
+      0.383,
+      2.437
+     ],
+     "callbacks": 1499,
+     "waitsOverHalfMs": 215,
+     "cpuHeldDuringThoseWaitsMs": {
+      "surfaceflinger (RT)": 306.4,
+      "DefaultDispatch (nice 13)": 108.2,
+      "HwBinder:366_ (RT)": 86.1,
+      "NetworkStats": 67.5,
+      "m.amazon.tv.ime (nice -10)": 37.2,
+      "sf (RT)": 31.2,
+      "app (RT)": 16.9,
+      "surfaceflinger": 15.2
+     }
+    },
+    "startDelay": {
+     "appVsyncPeriodMs": 16.67946,
+     "vsyncTicks": 1499,
+     "callbacks": 1499,
+     "allStarts": {
+      "vsyncToStartMs": [
+       0.755,
+       2.762
+      ],
+      "callbackLagMs": [
+       0.383,
+       2.437
+      ],
+      "callbackToWakeMs": [
+       0.039,
+       0.046
+      ],
+      "wakeToRunMs": [
+       0.23,
+       0.349
+      ],
+      "runToStartMs": [
+       0.111,
+       0.234
+      ],
+      "frames": 1499,
+      "busy": 0
+     },
+     "startsEndingIntervalsOver16_7": {
+      "vsyncToStartMs": [
+       0.873,
+       2.891
+      ],
+      "callbackLagMs": [
+       0.468,
+       2.522
+      ],
+      "callbackToWakeMs": [
+       0.04,
+       0.047
+      ],
+      "wakeToRunMs": [
+       0.245,
+       0.389
+      ],
+      "runToStartMs": [
+       0.11,
+       0.238
+      ],
+      "frames": 717,
+      "busy": 0
+     },
+     "meanChangeAcrossIntervalsOver16_7Ms": {
+      "vsyncToStartMs": 0.56,
+      "callbackLagMs": 0.481,
+      "callbackToWakeMs": 0.01,
+      "wakeToRunMs": 0.07,
+      "runToStartMs": -0.002
+     },
+     "intervalsOver16_7WithBothStarts": 717,
+     "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+    },
+    "trace": "diag-muted-trace2",
+    "glThread": 9879,
+    "frames": 1498,
+    "framesOnRows": 1495,
+    "spanSeconds": 24.986,
+    "offsetSeconds": 0.000256,
+    "medianSplitMs": {
+     "running": 9.93,
+     "preempted": 0.132,
+     "wakeupLatency": 0.021,
+     "sleep": 6.52
+    },
+    "intervalsOver": {
+     "16.7": 717,
+     "20": 1,
+     "33": 0
+    },
+    "concurrentGcs": 3,
+    "gcNames": {
+     "ConcurrentGC": 3
+    },
+    "networkStatsPolls": 4,
+    "linkThreadsCpuPercent": 44.5
+   },
+   {
+    "vsyncAppTicks": {
+     "intervals": 1498,
+     "p5Ms": 16.623,
+     "p50Ms": 16.678,
+     "p95Ms": 16.736,
+     "maxMs": 16.832,
+     "over16_7": 410,
+     "over16_7Share": 0.2737
+    },
+    "sfMissedCounters": {
+     "PrevFrameMissed": 0,
+     "PrevHwcFrameMissed": 0,
+     "PrevGpuFrameMissed": 0,
+     "compositions": 1498
+    },
+    "mainThreadCallback": {
+     "tickToWakeMs": [
+      0.118,
+      0.173
+     ],
+     "wakeToRunMs": [
+      0.045,
+      1.926
+     ],
+     "runToCallbackMs": [
+      0.202,
+      1.928
+     ],
+     "tickToCallbackMs": [
+      0.39,
+      2.362
+     ],
+     "callbacks": 1498,
+     "waitsOverHalfMs": 221,
+     "cpuHeldDuringThoseWaitsMs": {
+      "surfaceflinger (RT)": 302.0,
+      "DefaultDispatch (nice 13)": 110.2,
+      "HwBinder:366_ (RT)": 83.0,
+      "deathride-cours (nice 13)": 51.8,
+      "m.amazon.tv.ime (nice -10)": 37.3,
+      "sf (RT)": 32.3,
+      "NetworkStats": 30.7,
+      "Binder:424_": 18.5
+     }
+    },
+    "startDelay": {
+     "appVsyncPeriodMs": 16.67945,
+     "vsyncTicks": 1499,
+     "callbacks": 1498,
+     "allStarts": {
+      "vsyncToStartMs": [
+       7.64,
+       10.949
+      ],
+      "callbackLagMs": [
+       0.39,
+       2.358
+      ],
+      "callbackToWakeMs": [
+       5.78,
+       9.583
+      ],
+      "wakeToRunMs": [
+       0.008,
+       0.44
+      ],
+      "runToStartMs": [
+       0.375,
+       0.527
+      ],
+      "frames": 1491,
+      "busy": 0
+     },
+     "startsEndingIntervalsOver16_7": {
+      "vsyncToStartMs": [
+       8.299,
+       11.672
+      ],
+      "callbackLagMs": [
+       0.416,
+       2.416
+      ],
+      "callbackToWakeMs": [
+       6.36,
+       10.229
+      ],
+      "wakeToRunMs": [
+       0.01,
+       0.87
+      ],
+      "runToStartMs": [
+       0.382,
+       0.59
+      ],
+      "frames": 712,
+      "busy": 0
+     },
+     "meanChangeAcrossIntervalsOver16_7Ms": {
+      "vsyncToStartMs": 0.917,
+      "callbackLagMs": 0.167,
+      "callbackToWakeMs": 0.573,
+      "wakeToRunMs": 0.135,
+      "runToStartMs": 0.016
+     },
+     "intervalsOver16_7WithBothStarts": 712,
+     "limit": "[p50, p95] per component. callbackToWake and wakeToRun are absent when the GL thread was busy at the callback."
+    },
+    "trace": "diag-muted-trace3",
+    "glThread": 9879,
+    "frames": 1492,
+    "framesOnRows": 1481,
+    "spanSeconds": 24.979,
+    "offsetSeconds": 0.00014,
+    "medianSplitMs": {
+     "running": 9.795,
+     "preempted": 0.084,
+     "wakeupLatency": 0.018,
+     "sleep": 6.631
+    },
+    "intervalsOver": {
+     "16.7": 714,
+     "20": 42,
+     "33": 0
+    },
+    "concurrentGcs": 4,
+    "gcNames": {
+     "ConcurrentGC": 4
+    },
+    "networkStatsPolls": 4,
+    "linkThreadsCpuPercent": 46.5
+   }
+  ],
+  "over20ByTraceCause": {
+   "waiting": 1,
+   "sleep": 8,
+   "running": 7
+  },
+  "classBByTraceCause": {
+   "running": 18,
+   "sleep": 26,
+   "waiting": 4
+  },
+  "agreement": {
+   "preempted | trace waiting": 1,
+   "sleep:dequeue | trace sleep": 8,
+   "running:cars | trace running": 4,
+   "running:simulation | trace running": 1,
+   "running:hud | trace running": 1,
+   "running:scenery | trace running": 1,
+   "None | trace running": 7,
+   "None | trace waiting": 1,
+   "None | trace sleep": 30
+  }
+ }
+}

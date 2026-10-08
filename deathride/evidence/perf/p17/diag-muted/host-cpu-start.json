@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-08T20:47:44.3850600Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "chrome-headless-shell#31",
+                             "IDProcess":  13672,
+                             "PercentProcessorTime":  362
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#25",
+                             "IDProcess":  33272,
+                             "PercentProcessorTime":  113
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#8",
+                             "IDProcess":  36760,
+                             "PercentProcessorTime":  82
+                         },
+                         {
+                             "Name":  "chrome-headless-shell#28",
+                             "IDProcess":  52308,
+                             "PercentProcessorTime":  74
+                         },
+                         {
+                             "Name":  "node#38",
+                             "IDProcess":  34556,
+                             "PercentProcessorTime":  74
+                         },
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  74
+                         },
+                         {
+                             "Name":  "find",
+                             "IDProcess":  48088,
+                             "PercentProcessorTime":  69
+                         },
+                         {
+                             "Name":  "WmiPrvSE",
+                             "IDProcess":  5712,
+                             "PercentProcessorTime":  65
+                         },
+                         {
+                             "Name":  "node#50",
+                             "IDProcess":  59108,
+                             "PercentProcessorTime":  56
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  48
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                100,
+                                100,
+                                100
+                            ]
+}
