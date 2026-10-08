@@ -139,3 +139,23 @@ test('papers 4: a paper typed on the phone goes through the session door - kept 
   assert.deepEqual(s.paper,L.getLearner('mia').papers.at(-1),'the session carries the learner\'s latest paper');
   assert.equal(JSON.stringify(s).includes('"topics"'),false,'the recovery is recomputed, never stored or sent');
 });
+
+test('papers 5: a paper the disk could not take is reported as not saved, never as a paper with no row; nothing is kept and the TV stays put (ruling 11)',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'profile.draft',patch:{id:'noa',name:'Noa',type:'elementary',age:12,system:'uk',modules:['maths'],}});S.dispatch({type:'profile.save'});
+  assert.equal(S.getSession().learner.id,'noa');
+  const screen=S.getSession().screen,before=fs.readFileSync(FILE);
+  const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
+  try{quiet(()=>S.dispatch({type:'paper.enter',rows:RAW}));}finally{fs.renameSync=real;}
+  const s=S.getSession();
+  assert.equal(s.status,S.PAPER_NOT_SAVED);
+  assert.match(s.status,/not saved/);
+  assert.doesNotMatch(s.status,/kept no question/,'the rows were fine: the disk failed');
+  assert.notEqual(S.PAPER_NOT_SAVED,S.PAPER_NO_ROW);
+  assert.equal(s.screen,screen,'the TV stays put');
+  assert.ok(before.equals(fs.readFileSync(FILE)),'learners.json byte-identical');
+  assert.equal(L.getLearner('noa').papers,undefined,'no paper is kept');
+  assert.deepEqual(temps().filter((f)=>f.endsWith('.tmp')),[],'the temp file is removed');
+});

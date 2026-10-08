@@ -489,6 +489,10 @@ const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "
   "walk", "practice.clear", "paper.enter", "session.end"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
+/** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
+export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not write it to the learner file, so progress was not saved. Send it again.";
+/** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
+export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
@@ -716,12 +720,13 @@ export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
 
 export function dispatch(e: Event): Session {
   if (e.type === "paper.enter") {
-    // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put
+    // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put.
+    // A paper addPaper could not write is reported as not saved (ruling 11), never as a paper with no row left; the TV stays put too.
     const id = store.session.learner?.id;
-    let kept: StoredPaper | null = null;
-    if (id) try { kept = addPaper(id, e.rows); } catch { kept = null; }
+    let kept: StoredPaper | null = null, failed = false;
+    if (id) try { kept = addPaper(id, e.rows); } catch (err) { failed = true; console.error("A paper could not be saved:", err instanceof Error ? err.message : err); }
     if (!kept) {
-      store.session = { ...store.session, status: id ? "The desk kept no question from that paper." : NOBODY_AT_DESK, updatedAt: Date.now() };
+      store.session = { ...store.session, status: !id ? NOBODY_AT_DESK : failed ? PAPER_NOT_SAVED : PAPER_NO_ROW, updatedAt: Date.now() };
       store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
       return store.session;
     }
