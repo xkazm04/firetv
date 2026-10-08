@@ -98,7 +98,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 44 | M3b-3e | Math: the sum of a series (series-sum, geometric and telescoping; on calc2-series) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 45 | M3b-3f | Math: improper integrals (improper-integral, three families; calc2-improper, Stewart 7.8) | 7 | M3b-3d | not started (cut by M3b-3 step A; built after the App Master's ruling) | | |
 | 46 | M3b-3g | Math: absolute or conditional convergence (optional; the alternating p family's three-word verdict) | 7 | M3b-3d | not ruled in (ruling 18); revisited after M3b-3f | | |
-| 47 | M3b-3h | Math: the alias guard on Calculus 1's limit at infinity (a correctness fix: cos(pi x) at infinity is refused) | 7 | M3b-3a | not started (ruling 19; built second, after M3b-3a) | | |
+| 47 | M3b-3h | Math: the alias guard on Calculus 1's limit at infinity (a correctness fix: cos(pi x) at infinity is refused) | 7 | M3b-3a | built (ruling 19; commits df1f7320, 5e604e72, 46c6ab5b; local, unpushed) | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -1762,3 +1762,28 @@ clean. No `desk/data/` touched, no model call, no push; MathsTV.tsx, working.ts,
 calc-word.ts, calculus1.ts, calculus1.spine.ts, calc-expr.ts, Linga, Essay and the twin unchanged.
 Next: M3b-3h (row 47), the alias guard on Calculus 1's limit at infinity (ruling 19), then M3b-3b, each ruled by the App Master after
 the previous one settles.
+
+### 2026-10-09 · batch 7 · M3b-3h · autopilot/accepted-idea-delivery-886fb351
+The fifth part of M3b (row 47; ruling 19): the alias guard on Calculus 1's limit at infinity, a correctness fix. No shape, word,
+slip or topic added. Local, nothing pushed. Commits, in order: df1f7320 (step 0: rulings (24)-(26)), 5e604e72 (step 1: the base
+values, before calc-expr.ts changed), 46c6ab5b (the guard and its rows), then this entry with row 47 and MATH-COURSE-PATHS section 10.
+The rule (ruling 25), in `limitInf` in calc-expr.ts, so calc.ts's spec truth, chain.ts's limit line and M3b-3c all read one guarded
+value. Run A is the one-sided limit of f(sign/t) over LIMIT_STEPS (x = 10^k), run B of f(sign*sqrt(2)/t) (x = sqrt(2)*10^k). A null:
+null. A dne: dne. B null: dne. Both values within LIMIT_SIDES*max(1, |A|, |B|), or both infinite with one sign: A, the same object,
+so a kept limit is bit-identical. Otherwise dne. limitAt, seqLimit, sameLimit, LIMIT_STEPS and the other exports are unchanged.
+Rows (tools/calc-alias-test.cjs, in rulesSuites after calc2-seam-test): 'kept' (written at the base, step 1): limitInf for the five
+corpus limits at infinity of tools/calc1-frozen.json ((1+1/x)^x, (3x^2-x)/(2x^2+5), (3x^2+1)/(x^2+5), 1/x at inf, e^x-1-x at -inf)
+and the calc-expr-test cases (e^-x, x sin(1/x), (2x+1)/(x-3) at -inf, atan(x) at -inf, x^2 at -inf, e^x, ln(x), sin(x)), 13 literals
+compared with assert.deepEqual. How the literals were printed: a throwaway script (not committed) required calc-expr.ts through
+tools/ts-load.cjs at the base and wrote JSON.stringify([f, sign, limitInf(compile(f), sign)]) for each; they were pasted in as printed
+(e.g. 3x^2-x over 2x^2+5 is 1.5000000000000002, (1+1/x)^x is 2.718281828205865). 'refused': wellFormed refuses cos(pi*x),
+sin(pi*x)+1 and cos(2*pi*x) at inf and cos(pi*x) at -inf with why 'The limit does not exist.'; checkAnswer(spec, '1') is 'unsure';
+limitInf is {kind:'dne'}. 'chain': checkChain on the line L('1','inf') from cos(pi*x) is [false], L('dne','inf') is [true]. At the
+base the '1' line gave [true] (the defect); the 'dne' line gave [false]. chain.ts is untouched. The frozen table
+(tools/calc1-frozen.json) is unchanged and calc2-seam-test row 1 stays green: every corpus limit at infinity is kept.
+Kill test (on 46c6ab5b, not committed): limitInf made to return run A with no comparison ('return a;' ahead of the guard): 'refused' and
+'chain' red, 'kept' green; `git restore desk/src/lib/rules/calc-expr.ts`, rerun 3 of 3 green.
+Residual: a function aliased on both lattices would still pass; none is known in the grammar.
+Gate: `cd desk && npm run test:rules` 71 green, 0 red (1177 tests; 70 / 1174 before). tsc: not run in the worktree (a tsc check on
+the touched file is the App Master's). No `desk/data/` touched, no model call, no push.
+Next: M3b-3b (approx-integral), ruled by the App Master (ruling 18).

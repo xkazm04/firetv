@@ -689,12 +689,12 @@ Linear algebra needs a different engine altogether.
     series is a function with no closed form to sample, and a Taylor polynomial needs higher derivatives that
     `derivativeAt` does not give.
   The descope goes to the owner, who picked sequences and series.
-- **A limit at infinity is read at whole numbers only** (measured 2026-10-09). `limitInf` samples x = 100, 1000, ...,
-  1e8 (`calc-expr.ts` lines 516 and 587-591), so a function of period 1 or 2 is aliased. The spec
-  `{shape: 'limit', f: 'cos(pi*x)', at: 'inf'}` is well formed with truth 1, and `checkAnswer` marks 1 right, though the
-  limit does not exist. `sin(pi*x)+1` and `cos(2*pi*x)` behave the same way. Calculus 1 is unchanged by the card. The
-  second run along x·√2 that the card proposes for sequences would refuse all three, but adding it to the `limit` shape
-  is a Calculus 1 change, and the App Master decides it.
+- **A limit at infinity is read on two lattices** (fixed 2026-10-09, M3b-3h; measured before as whole numbers only). `limitInf`
+  reads f at x = 10^k and again at x = sqrt(2)*10^k, and keeps the first reading only when the two agree (calc-expr.ts, ruling 25).
+  `cos(pi*x)`, `sin(pi*x)+1` and `cos(2*pi*x)` at infinity are refused as 'The limit does not exist.', and a working line that claims
+  1 for them is no longer ticked. The residual: a function aliased on both lattices would still pass; none is known in the grammar.
+  What M3b-3c inherits: a sequence whose whole-number values converge while its real extension does not (cos(2 pi n) = 1) is
+  refused, never marked.
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of
