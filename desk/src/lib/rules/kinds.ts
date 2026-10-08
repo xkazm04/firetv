@@ -22,7 +22,7 @@ import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpe
 import { partsFromQuestion, specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
 import { slipsShown } from "./slips";
-import { pathOfTopic } from "../library/paths";
+import { judgeOfTopic, pathOfTopic } from "../library/paths";
 import { degenerate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 
@@ -61,10 +61,13 @@ export function likeTopic(text: unknown, path: unknown): string | null {
   }
 }
 
-/** The kind of item a topic's set is written as: Calculus on the Calculus path, school where a unit has a generator, else linear. */
+/**
+ * The kind of item a topic's set is written as, by its path's judge (paths.ts PathJudge): Calculus on a path judged
+ * 'calc', school where a unit on a path judged 'school' has a generator, else linear.
+ */
 export function kindOfTopic(topicId: string): ItemKind {
-  const path = pathOfTopic(topicId);
-  return path === "calc1" ? "calc" : path === "school" && generatorFor(topicId) ? "school" : "linear";
+  const judge = judgeOfTopic(topicId);
+  return judge === "calc" ? "calc" : judge === "school" && generatorFor(topicId) ? "school" : "linear";
 }
 
 /** The reading of a sheet that carries items of several kinds: the first kind with a spec on the sheet (school, then Calculus), else linear. */

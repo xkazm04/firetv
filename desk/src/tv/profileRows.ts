@@ -59,8 +59,8 @@ export function modeCells(d: Pick<Profile, "age" | "type"> | null): Cell[] {
   ];
 }
 
-/** The Math courses a learner can be on, in the order the profile row shows them: the school path first (the default). */
-export const COURSES: MathPath[] = ["school", "calc1"];
+/** The Math courses a learner can be on, in the order the profile row shows them: the PATHS keys as declared, the school path first (the default). */
+export const COURSES: MathPath[] = Object.keys(PATHS) as MathPath[];
 /**
  * The pick rows for a draft: type, age (school types only), mode, school system, interests, the Maths course (only while
  * Maths is on), actions. The TV and the D-pad share this.

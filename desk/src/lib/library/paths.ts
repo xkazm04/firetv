@@ -11,9 +11,17 @@
  * at runtime, so a TV screen, the phone and a server route may each read it.
  */
 import type { SchoolSystem } from "@/lib/session/store";import { SYLLABUS, expectedIndex } from "./syllabus";
-import { CALC1_SPINE } from "./calculus1.spine";
+import { CALC1_SPINE, type CalcShape } from "./calculus1.spine";
 
 export type MathPath = "school" | "calc1";
+
+/**
+ * How a path's items are judged (architecture card 5 part a, v2 M3b-1): 'school' - a topic whose unit has a code
+ * generator is a school item, any other a linear one; 'calc' - every topic is a Calculus item, set and checked by the
+ * expression engine on its own shapes. Every site that asks "is this Calculus?" of a path or a topic asks here, never the
+ * path's id.
+ */
+export type PathJudge = "school" | "calc";
 
 export interface PathTopic {
   id: string;
@@ -26,6 +34,8 @@ export interface PathTopic {
   lessonId?: string;
   /** The school year the topic is normally met in, per system - school topics only, so nothing reads a year off a course topic. */
   year?: { us: number; uk: number; cz: number; de: number };
+  /** The practice shapes the Calculus engine may set - topics of a path judged 'calc' only, the spine's own list. */
+  shapes?: CalcShape[];
 }
 
 export interface PathInfo {
@@ -35,6 +45,8 @@ export interface PathInfo {
   blurb: string;
   /** True for a school-year path (its topics carry a year); false for a course with no school year. */
   school: boolean;
+  /** How the path's items are judged (PathJudge): kindOfTopic, the Calculus slips, the hint's stance and the set's shapes read it. */
+  judge: PathJudge;
   topics: PathTopic[];
 }
 
@@ -44,6 +56,7 @@ export const PATHS: Record<MathPath, PathInfo> = {
     name: "School maths",
     blurb: "School maths from equivalent fractions through equations to Pythagoras' theorem and the probability of an event.",
     school: true,
+    judge: "school",
     topics: SYLLABUS.map((t): PathTopic => ({
       id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq,
       ...(t.lessonId ? { lessonId: t.lessonId } : {}),
@@ -55,13 +68,41 @@ export const PATHS: Record<MathPath, PathInfo> = {
     name: "Calculus 1",
     blurb: "A university first course in calculus, from functions and limits through derivatives to integrals.",
     school: false,
-    topics: CALC1_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq })),
+    judge: "calc",
+    topics: CALC1_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice() })),
   },
 };
 
-/** The path a profile follows: only the string 'calc1' is the Calculus course, anything else is the school path. */
+/** Is this a path's id: a key of PATHS itself (never one it inherits, like 'toString'). */
+export function isPath(x: unknown): x is MathPath {
+  return typeof x === "string" && Object.prototype.hasOwnProperty.call(PATHS, x);
+}
+
+/** The path a profile follows: a mathPath that is a key of PATHS, anything else is the school path. */
 export function pathOf(profile?: { mathPath?: unknown } | null): MathPath {
-  return profile?.mathPath === "calc1" ? "calc1" : "school";
+  const m = profile?.mathPath;
+  return isPath(m) ? m : "school";
+}
+
+/** How a path's items are judged; the school path's judge when no path is given. */
+export function judgeOf(path?: MathPath): PathJudge {
+  return PATHS[path ?? "school"].judge;
+}
+
+/** How a topic's items are judged, by the path it belongs to; undefined for a topic on no path. */
+export function judgeOfTopic(id: string): PathJudge | undefined {
+  const path = pathOfTopic(id);
+  return path ? PATHS[path].judge : undefined;
+}
+
+/** Every topic of every path judged 'calc', in path order: the Calculus topics, each with its shapes. */
+export function calcTopics(): PathTopic[] {
+  return Object.values(PATHS).filter((p) => p.judge === "calc").flatMap((p) => p.topics);
+}
+
+/** A Calculus topic's practice shapes (a copy); empty for a topic on no path judged 'calc'. */
+export function shapesOfTopic(id: string): CalcShape[] {
+  return judgeOfTopic(id) === "calc" ? (topicIn(id)?.shapes?.slice() ?? []) : [];
 }
 
 export function topicsOf(path: MathPath): PathTopic[] {

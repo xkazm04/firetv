@@ -34,9 +34,8 @@ import { getLearner } from "../session/learners";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
-import { topicIn } from "../library/paths";
+import { shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
-import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
@@ -205,8 +204,8 @@ const CALC_SYSTEM =
   "Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), " +
   "an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.";
 
-/** The topic's own practice shapes, from the spine. */
-const shapesOf = (topicId: string): CalcShape[] => CALC1_SPINE.find((t) => t.id === topicId)?.shapes.slice() ?? [];
+/** The topic's own practice shapes, from its path's record (paths.ts: a topic of a path judged 'calc'; none otherwise). */
+const shapesOf = (topicId: string): CalcShape[] => shapesOfTopic(topicId);
 /** True when a shape of the topic leaves a field of the shared schema unused (two shapes with different parameters). */
 const leavesUnused = (shapes: CalcShape[]) => { const all = new Set(shapes.flatMap((s) => PARAMS[s])); return shapes.some((s) => PARAMS[s].length < all.size); };
 

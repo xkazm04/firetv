@@ -32,7 +32,7 @@ import { kindOfSpec } from "../rules/kinds";
 import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
-import { PATHS, topicIn } from "../library/paths";
+import { PATHS, pathOfTopic, topicIn, type PathInfo } from "../library/paths";
 import { getLearner, recordAttempt } from "../session/learners";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 
@@ -124,7 +124,16 @@ export async function explainSchool(
   };
 }
 
-/** A Calculus item heard: the university stance, the calc1 topic from topicIn, the answer as an expression or a number. */
+/**
+ * The Calculus course the stance names: the topic's own path when it is judged 'calc' (a set is drawn from the learner's
+ * path), else the first path judged 'calc'.
+ */
+function calcCourse(topicId: string): PathInfo {
+  const path = pathOfTopic(topicId);
+  return path && PATHS[path].judge === "calc" ? PATHS[path] : Object.values(PATHS).find((p) => p.judge === "calc")!;
+}
+
+/** A Calculus item heard: the university stance, the Calculus topic from topicIn, the answer as an expression or a number. */
 async function explainCalc(
   itemQuestion: string,
   transcript: string,
@@ -135,7 +144,7 @@ async function explainCalc(
   const memory = getLearner(learnerId).memory;
 
   const system =
-    `You are a calculus tutor listening to a first-year university student on the ${PATHS.calc1.name} course explain their own working out loud. ` +
+    `You are a calculus tutor listening to a first-year university student on the ${calcCourse(topicId).name} course explain their own working out loud. ` +
     `${EXPLAIN_WITHHOLD} ` +
     `Point at the step they should look at again, or at the step that was the good one. ` +
     `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;

@@ -26,7 +26,7 @@ import { leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
 import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
-import { topicIn, type MathPath } from "../library/paths";
+import { judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
 import type { Subject } from "../session/store";
 
@@ -62,7 +62,7 @@ const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, path?: MathPat
   subject !== "maths" ? STANCE[subject](voice)
     : kind === "calc" ? CALC_STANCE
     : kind === "school" && unit ? unitStance(voice, unit)
-    : path === "calc1" ? CALC_STANCE : STANCE.maths(voice);
+    : judgeOf(path) === "calc" ? CALC_STANCE : STANCE.maths(voice);
 
 /**
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
@@ -84,7 +84,7 @@ function leakedIn(problem: string, spec: Specs, said: Said): string | null {
 export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number }) {
   // The voice names the learner and adds one manner paragraph; the rules below are shared by every band. A Calculus
   // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
-  const voice = voiceOf(subject, subject === "maths" && opts.path === "calc1" ? undefined : opts.age);
+  const voice = voiceOf(subject, subject === "maths" && judgeOf(opts.path) === "calc" ? undefined : opts.age);
   const read = subject === "maths" ? readQuestion(problem) : null;
   const spec: Specs = { calc: read?.calc ?? null, school: read?.school ?? null, parts: read?.parts ?? null };
   // the unit a school task belongs to, by its path's name for it: the stance names it

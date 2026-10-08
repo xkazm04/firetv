@@ -1,5 +1,5 @@
 /**
- * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics, and through
+ * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the topics of a path judged 'calc', and through
  * rules/school SCHOOL_SLIPS, for the school units that have them (Family W5b and W7: every school unit, fractions to mean and range) - decided in code.
  *
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
@@ -7,13 +7,13 @@
  * the next step, or the answer — the student produces those, or there was no point asking.
  *
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
- * It imports rules/calc, rules/school and the calc1 spine (all pure, client-safe) and nothing session-backed.
+ * It imports rules/calc, rules/school and library/paths (all pure, client-safe) and nothing session-backed.
  */
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
 import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
-import { CALC1_SPINE } from "../library/calculus1.spine";
+import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
 import type { SchoolSystem } from "../session/store";
 
@@ -40,15 +40,15 @@ export const SLIPS: Slip[] = [
 ];
 
 /**
- * The Calculus slips (rules/calc CALC_SLIPS) as Slips, each tagged with the calc1 topics whose practice shapes it
- * applies to (calculus1.spine: a topic's shapes; rules/calc slipsFor(shape), unioned over them). Their words are
+ * The Calculus slips (rules/calc CALC_SLIPS) as Slips, each tagged with the topics of every path judged 'calc' whose
+ * practice shapes it applies to (library/paths calcTopics: a topic's shapes; rules/calc slipsFor(shape), unioned over them). Their words are
  * rules/calc's own; like the school table, none carries a value.
  */
 const CALC_AS_SLIPS: Slip[] = CALC_SLIPS.map((c) => ({
   id: c.id, says: c.says, points: c.points, name: c.name,
-  topics: CALC1_SPINE.filter((t) => t.shapes.some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
+  topics: calcTopics().filter((t) => (t.shapes ?? []).some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
 }));
-const isCalcTopic = (topicId: string) => CALC1_SPINE.some((t) => t.id === topicId);
+const isCalcTopic = (topicId: string) => judgeOfTopic(topicId) === "calc";
 
 /**
  * The school units' slips (rules/school SCHOOL_SLIPS, Family W5b) as Slips, each tagged with the units whose closed
@@ -71,7 +71,7 @@ export function slip(id: string, topicId?: string): Slip | undefined {
 }
 
 /**
- * The closed list for a topic: the linear table for a linear id, the Calculus slips of its shapes for a calc1 id, the
+ * The closed list for a topic: the linear table for a linear id, the Calculus slips of its shapes for a topic of a path judged 'calc', the
  * unit's own list for a school unit (SCHOOL_UNIT_SLIPS). Nothing outside a topic's list can be named on its items.
  */
 export function slipsFor(topicId: string): Slip[] {

@@ -178,3 +178,172 @@ test('12: the spine and paths.ts are client-safe - no Node module, no store, no 
  assert.doesNotMatch(code(SPINE_FILE),/import\s/,'the spine imports nothing');
  assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$|[\\/]engines?[\\/]|[\\/]rules[\\/]/.test(k)),'loading paths.ts pulled a server module in');
 });
+
+// ------------------------------------------------------------------ v2 M3b-1: the path's judge on the PATHS record
+// (architecture card 5 part a). Every site that asks "is this Calculus?" reads the record's judge, never the string
+// 'calc1'. These rows run after 12 (node:test runs a file's tests in order), so the client-safe check above still sees
+// a require cache with no server module in it; the store, the rules and the desk jobs are required here, lazily.
+const {after:afterAll}=require('node:test');
+const os=require('node:os');
+const SRC=path.join(root,'src'),at=(f)=>path.join(SRC,f);
+let scratch=null;
+/** The desk modules these rows read, required once, on first use, against a disposable data directory (never desk/data). */
+function desk(){
+ if(scratch)return scratch;
+ process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-paths-judge-'));delete process.env.DESK_TEXT_ENGINE;
+ const reg=require(at('lib/engines/registry.ts'));
+ require(at('lib/engines/text.ts'));require(at('lib/engines/embed.ts'));
+ scratch={reg,kinds:require(at('lib/rules/kinds.ts')),maths:require(at('lib/rules/maths.ts')),calc:require(at('lib/rules/calc.ts')),
+  school:require(at('lib/rules/school.ts')),store:require(at('lib/session/store.ts')),items:require(at('lib/desk/items.ts')),
+  hint:require(at('lib/desk/hint.ts')).hint,explain:require(at('lib/desk/explain.ts')).explain,rows:require(at('tv/profileRows.ts'))};
+ return scratch;
+}
+afterAll(()=>{if(!scratch)return;if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
+/** The text engine stubbed at the provider seam: every request kept, each answered with `answer`. */
+function stubText(d,answer){const seen=[];d.reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);return {raw:JSON.stringify(answer)};}});return seen;}
+const JUDGES=['school','calc'];
+const everyTopic=()=>Object.values(P.PATHS).flatMap(p=>p.topics.map(t=>({path:p.id,judge:p.judge,t})));
+const CALC_STANCE_TEXT=/first-year university student in Calculus I/;
+
+test('13: every path has a judge - school is judged as school, calc1 as Calculus - and only a Calculus path\'s topics carry shapes',()=>{
+ assert.equal(P.PATHS.school.judge,'school');
+ assert.equal(P.PATHS.calc1.judge,'calc');
+ for(const p of Object.values(P.PATHS)){
+  assert.ok(JUDGES.includes(p.judge),`${p.id}: judge ${p.judge} is one of ${JUDGES}`);
+  for(const t of p.topics){
+   if(p.judge==='calc')assert.ok(Array.isArray(t.shapes)&&t.shapes.length>=1&&t.shapes.every(s=>SHAPES.includes(s)),`${p.id}/${t.id}: a Calculus topic carries its shapes`);
+   else assert.ok(!('shapes' in t),`${p.id}/${t.id}: a school topic carries no shapes`);
+   assert.equal(P.judgeOfTopic(t.id),p.judge,`${t.id}: judgeOfTopic`);
+  }
+  assert.equal(P.judgeOf(p.id),p.judge);
+ }
+ // the record's shapes are the spine's own lists, and the helpers hand out copies
+ for(const s of CALC1_SPINE){
+  assert.deepEqual(P.PATHS.calc1.topics.find(t=>t.id===s.id).shapes,s.shapes,`${s.id}: shapes from the spine`);
+  const a=P.shapesOfTopic(s.id);a.push('x');assert.deepEqual(P.shapesOfTopic(s.id),s.shapes,`${s.id}: shapesOfTopic is a copy`);
+ }
+ assert.equal(P.judgeOf(undefined),'school','no path is the school path');assert.equal(P.judgeOfTopic('nope'),undefined);
+ assert.deepEqual(P.shapesOfTopic('linear-two-step'),[]);assert.deepEqual(P.shapesOfTopic('nope'),[]);
+ assert.deepEqual(P.calcTopics().map(t=>t.id),Object.values(P.PATHS).filter(p=>p.judge==='calc').flatMap(p=>p.topics.map(t=>t.id)));
+});
+
+test('14: kindOfTopic, the Calculus slips and pathOf agree with the record for every topic of every path',()=>{
+ const d=desk();
+ const calcIds=new Set(d.calc.CALC_SLIPS.map(c=>c.id));
+ for(const {path:p,judge,t} of everyTopic()){
+  const kind=d.kinds.kindOfTopic(t.id);
+  if(judge==='calc')assert.equal(kind,'calc',`${t.id}: a topic on a Calculus path is a Calculus item`);
+  else assert.equal(kind,d.school.generatorFor(t.id)?'school':'linear',`${t.id}: a school path's topic is school with a generator, else linear`);
+  // isCalcTopic, through slipsFor: a Calculus topic's closed list is the Calculus slips of its own shapes, and only those
+  const slips=d.maths.slipsFor(t.id).map(s=>s.id);
+  if(judge==='calc'){
+   const want=[...new Set(t.shapes.flatMap(sh=>d.calc.slipsFor(sh)))];
+   assert.deepEqual([...slips].sort(),[...want].sort(),`${t.id}: the slips of its shapes`);
+   assert.ok(slips.length>=1&&slips.every(id=>calcIds.has(id)),`${t.id}: only Calculus slips`);
+  }
+  // the words decide whose slip it is ('arithmetic-slip' is an id in both the linear and the Calculus tables)
+  const own=judge==='calc'?d.calc.CALC_SLIPS:[...d.maths.SLIPS,...d.school.SCHOOL_SLIPS];
+  for(const s of d.maths.slipsFor(t.id))assert.ok(own.some(x=>x.id===s.id&&x.says===s.says),`${t.id}: ${s.id} is in its judge's own words`);
+  assert.equal(P.pathOf({mathPath:p}),p,`${t.id}: pathOf its own path`);
+  assert.equal(P.pathOfTopic(t.id),p);
+ }
+ for(const junk of ['toString','constructor','__proto__','hasOwnProperty','calc2',' calc1','calc1 ',''])assert.equal(P.pathOf({mathPath:junk}),'school',`${JSON.stringify(junk)} is no path`);
+ for(const k of Object.keys(P.PATHS))assert.equal(P.isPath(k),true);
+});
+
+test('15: shapesOf - a set on a Calculus path\'s topic asks for that topic\'s own shapes from the record; no school path\'s topic asks for a shape',async()=>{
+ const d=desk();
+ d.reg.useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(()=>[1,0])})});
+ try{
+  for(const p of Object.values(P.PATHS)){
+   const id=`paths-judge-${p.id}`;
+   d.store.dispatch({type:'reset'});
+   d.store.dispatch({type:'profile.draft',patch:{id,name:'Judge',type:'other',modules:['maths'],mathPath:p.id}});d.store.dispatch({type:'profile.save'});
+   for(const t of p.topics){
+    const seen=stubText(d,{specs:[],items:[]});
+    try{await d.items.makeItems(t.id,id,6,{word:false});}catch{/* an empty stubbed set may fail: only the request is read */}
+    const enums=seen.map(r=>r.schema?.properties?.specs?.items?.properties?.shape?.enum).filter(Boolean);
+    if(p.judge==='calc'){assert.ok(seen.length>=1,`${t.id}: a Calculus set asks the model`);assert.deepEqual(enums[0],t.shapes,`${t.id}: the shape enum is the record's list`);}
+    else assert.deepEqual(enums,[],`${t.id}: a school path's set asks for no Calculus shape`);
+   }
+  }
+ }finally{d.reg.resetProviders();}
+});
+
+test('16: the hint - the stance, the voice and the route\'s lesson skip follow the learner\'s path\'s judge',async()=>{
+ const d=desk();
+ const LINEAR='Solve for x:  3x − 7 = 11',reply={hint:'Undo the subtraction first.',what_to_try_next:'Write the new line.'};
+ try{
+  for(const p of Object.values(P.PATHS)){
+   let seen=stubText(d,reply);await d.hint('maths',LINEAR,{path:p.id});
+   const plain=seen[0].system;
+   if(p.judge==='calc')assert.match(plain,CALC_STANCE_TEXT,`${p.id}: a Calculus path's learner gets the Calculus stance on any maths task`);
+   else assert.doesNotMatch(plain,CALC_STANCE_TEXT,`${p.id}: the school stance`);
+   seen=stubText(d,reply);await d.hint('maths',LINEAR,{path:p.id,age:12});
+   if(p.judge==='calc')assert.equal(seen[0].system,plain,`${p.id}: a Calculus learner is spoken to as the course's student, whatever their age`);
+   else assert.notEqual(seen[0].system,plain,`${p.id}: the school voice follows the age`);
+   // the route: the path comes from the seated profile; a Calculus path has no lesson library, so no lesson pick
+   d.store.dispatch({type:'reset'});
+   d.store.dispatch({type:'profile.draft',patch:{id:`paths-hint-${p.id}`,name:'Scratch',type:'other',mathPath:p.id}});d.store.dispatch({type:'profile.save'});
+   const page={id:`maths-${p.id}`,subject:'maths',title:'Sheet',img:'',w:100,h:100};
+   d.store.dispatch({type:'page.reading',page});d.store.dispatch({type:'page.read',id:page.id,items:[{n:1,text:LINEAR,cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+   const calls={hint:0,lesson:0};
+   d.reg.useProvider('text',{name:'stub',run:async(req)=>{
+    if(Object.keys(req.schema?.properties??{}).includes('lesson')){calls.lesson++;return {raw:JSON.stringify({lesson:'none',why:'x'})};}
+    calls.hint++;return {raw:JSON.stringify(reply)};
+   }});
+   const res=await require(at('app/api/hint/route.ts')).POST(new Request('http://desk/api/hint',{method:'POST',body:JSON.stringify({})}));
+   assert.equal(res.status,200);
+   for(let i=0;i<40;i++)await new Promise((r)=>setImmediate(r));
+   assert.equal(calls.hint,1);
+   assert.equal(calls.lesson,p.judge==='calc'?0:1,`${p.id}: the lesson pick ${p.judge==='calc'?'skipped':'asked'}`);
+  }
+ }finally{d.reg.resetProviders();}
+});
+
+test('17: explain names the topic\'s own Calculus path, in Calculus 1\'s words unchanged',async()=>{
+ const d=desk();
+ try{
+  for(const t of P.calcTopics()){
+   const seen=stubText(d,{reply:'Look at the first step again.',slip:'unclear',value:''});
+   await d.explain('Differentiate x^2',"I think it's two x",t.id,'paths-explain',true);
+   const name=P.PATHS[P.pathOfTopic(t.id)].name;
+   assert.ok(seen[0].system.includes(`a first-year university student on the ${name} course explain`),`${t.id}: the course named is ${name}`);
+  }
+  // Calculus 1's words, byte for byte, and a Calculus item on a school topic still names Calculus 1, as it always has
+  for(const id of ['calc1-chain','linear-two-step']){
+   const seen=stubText(d,{reply:'Look again.',slip:'unclear',value:''});
+   await d.explain('Differentiate x^2','two x',id,'paths-explain',true);
+   assert.ok(seen[0].system.startsWith('You are a calculus tutor listening to a first-year university student on the Calculus 1 course explain their own working out loud. '),id);
+  }
+ }finally{d.reg.resetProviders();}
+});
+
+test('18: the store keeps a mathPath that is a key of PATHS and drops anything else; COURSES is the PATHS keys in order',()=>{
+ const d=desk();
+ for(const k of Object.keys(P.PATHS)){
+  const draft=d.store.reduce(d.store.fresh(),{type:'profile.draft',patch:{mathPath:k}}).draft;
+  assert.equal(draft.mathPath,k,`${k} is kept`);
+ }
+ for(const junk of ['toString','constructor','__proto__','calc2','CALC1','',1,null,{},['calc1']]){
+  const draft=d.store.reduce(d.store.fresh(),{type:'profile.draft',patch:{mathPath:junk}}).draft;
+  assert.ok(!('mathPath' in draft),`${JSON.stringify(junk)} is dropped, key and all`);
+ }
+ assert.deepEqual(d.rows.COURSES,Object.keys(P.PATHS),'COURSES: the PATHS keys as declared');
+ assert.equal(d.rows.COURSES[0],'school','the school path first (the default)');
+ const row=d.rows.profileRows({id:'p',name:'P',type:'other',modules:['maths']}).find(r=>r.title==='Maths course');
+ assert.deepEqual(row.cells.map(c=>[c.path,c.label,c.blurb]),Object.values(P.PATHS).map(p=>[p.id,p.name,p.blurb]),'the course row: one cell per path, its name and blurb');
+});
+
+test('19: no quoted \'calc1\' in desk/src outside paths.ts, calculus1.ts and calculus1.spine.ts (the topic-id prefix calc1- is not the literal)',()=>{
+ const allowed=new Set(['lib/library/paths.ts','lib/library/calculus1.ts','lib/library/calculus1.spine.ts']);
+ const walk=(dir)=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):/\.tsx?$/.test(e.name)?[path.join(dir,e.name)]:[]);
+ const hits=[];
+ for(const file of walk(SRC)){
+  const rel=path.relative(SRC,file).split(path.sep).join('/');
+  if(allowed.has(rel))continue;
+  fs.readFileSync(file,'utf8').split('\n').forEach((line,i)=>{if(/(["'`])calc1\1/.test(line))hits.push(`${rel}:${i+1}`);});
+ }
+ assert.deepEqual(hits,[],'a site that decides Calculus by the path\'s id: ask the record\'s judge');
+ assert.ok(walk(SRC).length>100,'the sweep read the tree');
+});

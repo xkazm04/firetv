@@ -14,7 +14,7 @@ import { LANDING_REST } from "@/tv/landingRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
 import { addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
-import { learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
+import { isPath, learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
@@ -40,9 +40,9 @@ export type SchoolSystem = "us" | "uk" | "cz" | "de";
  * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
 export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
-/** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
+/** Only a key of PATHS (library/paths isPath) is a path: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
 function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
-  if (p.mathPath === undefined || p.mathPath === "school" || p.mathPath === "calc1") return p;
+  if (p.mathPath === undefined || isPath(p.mathPath)) return p;
   const q = { ...p }; delete q.mathPath; return q;
 }
 /**
