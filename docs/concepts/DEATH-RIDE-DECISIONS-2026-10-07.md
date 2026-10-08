@@ -160,3 +160,26 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
 
 - The owner may overrule any of these.
 - A finding that the interval metric cannot reach 16.7 ms even when every frame presents on time goes to the owner as a question. It does not change the bar.
+
+## 11. P17 rulings
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of the six.
+- **Context:** P17 (c462db81, merged at 992c48a9) traced the muted over-20 ms tail. Goal 1's window p95 is start jitter on the platform's vsync tick, every slow frame is attributed, and the PSS peak is Java heap (+7.3 / +27.1 / +15.1 MiB above each run's lowest sample) while graphics and native heap stay flat. See `docs/concepts/deathride/P17-muted-tail.md`, whose questions these answer.
+- **Rulings:**
+  1. **P17's after-run commit 3e9f09dc is accepted as descriptive.**
+     - `perf-p17.py` only adds readings; `klass()` and the cause ladder are unchanged.
+     - The join fix in `perf_p17_lib.py` moves no class reading in the muted runs. Both read 0 failed mapping checks, and the frames it now leaves out lie past the last row or before a missing row, which no active interval reads.
+     - Both runs stay research readings (unsettled).
+  2. **The finding that goal 1's interval p95 cannot reach 16.7 ms on this Stick went to the owner as a question on 2026-10-08** (section 10(c)). The bar stays until the owner rules.
+  3. **Card 2 (requesting the frame from a display-priority looper) is within N3 and I2's clocks rule** as a perf-only arm in `dev.deathride.perf`. The vsync cadence, the game clock, the input rate and every threshold stay. It is not scheduled before the owner's answer: under any answer it cannot change goal 1's verdict, because the tick's own p95 is 16.736 ms.
+  4. **Card 7 is declined: no mute path outside the debuggable gate.**
+     - A mute that works in a non-debuggable build is a sound control in a build a player could run, which is N3's ground.
+     - The card's figure: 2 of 16 traced frames over 20 ms, none over 33 ms, no window moved.
+  5. **The inert schedstat path stays in release**, as P16's counters do (P17's `tests.json`: never opened, both columns -1).
+     - No run removes it on its own.
+     - A later run that adds a perf source set or a compile-time flag in `app/build.gradle.kts` for another reason moves both out.
+  6. **Card 5 goes before card 6.**
+     - Card 5 goes after the cause of the PSS peak. Card 6 is a fixed -3 MiB, about a ninth of run 2's swing.
+     - Card 6 follows under its own rule (section 10(b) ruling 1).
+     - Card 3 (back-pressure) stays research-first, behind both.
+- **Reverse:** the owner's answer on goal 1's measure supersedes rulings 2 and 3.
