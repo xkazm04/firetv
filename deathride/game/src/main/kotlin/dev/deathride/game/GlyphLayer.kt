@@ -19,11 +19,8 @@ class GlyphLayer(private val font: BitmapFont) {
     private var colors=IntArray(64)
     private var starts=IntArray(64)
     private var ends=IntArray(64)
-    /** P16 pixel proof (perf package, `hudDiff=on` only): a layer over another font that receives every clear, colour and
-     *  text call this one does, so the same HUD text can be drawn from the old font pages beside the new one. Null otherwise. */
-    var twin: GlyphLayer?=null
-    fun clear() { previousCalls=calls;calls=0;count=0;twin?.clear() }
-    fun setColor(value: Color) { color=value.toFloatBits();twin?.setColor(value) }
+    fun clear() { previousCalls=calls;calls=0;count=0 }
+    fun setColor(value: Color) { color=value.toFloatBits() }
     fun width(text: CharSequence): Float {
         var width=0f
         for(ch in text)width+=(font.data.getGlyph(ch)?.xadvance?:0)*font.data.scaleX
@@ -44,7 +41,6 @@ class GlyphLayer(private val font: BitmapFont) {
         return baseline
     }
     fun addText(text: CharSequence, originX: Float, originY: Float) {
-        twin?.addText(text,originX,originY)
         val slot=calls++
         if(slot>=texts.size)grow()
         val start=count;val bits=color.toRawBits()
