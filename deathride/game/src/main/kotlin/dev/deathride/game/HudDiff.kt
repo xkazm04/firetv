@@ -4,14 +4,12 @@ import java.nio.ByteBuffer
 
 /** P16 pixel proof (perf package, `hudDiff=on` only). On a few frames the HUD is drawn several ways over one copy of the same
  *  world frame, into the real (multisampled) back buffer, and each pair of read-backs is compared here.
- *  Variants: [BASE] the three old font pages, [FONTS] the shared page, [LAYER] the shared page and the retained race chrome,
- *  [CONTROL] the base drawn again (the GPU's own noise floor). */
+ *  Variants: [BASE] the three old font pages, [FONTS] the shared page, [CONTROL] the base drawn again (the GPU's own noise floor). */
 object HudDiff {
     const val BASE="base"
     const val FONTS="fonts"
-    const val LAYER="layer"
     const val CONTROL="control"
-    val VARIANTS=listOf(BASE,FONTS,LAYER,CONTROL)
+    val VARIANTS=listOf(BASE,FONTS,CONTROL)
     /** Capture points: phase, seconds in that phase. One capture each, in order. */
     val POINTS=listOf("lobby" to 8.0,"lobby" to 20.0,"race" to 8.0,"race" to 16.0,"race" to 24.0,"race" to 32.0)
     /** Differing-pixel bins by the largest channel difference: 1, 2, 3-4, 5-8, 9-16, 17-255. */

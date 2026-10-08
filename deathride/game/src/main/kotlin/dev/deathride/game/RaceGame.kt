@@ -41,9 +41,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private class OldFontLayers(val text: GlyphLayer,val headline: GlyphLayer,val detail: GlyphLayer,val captions: GlyphLayer,val script: GlyphLayer)
     private var oldFonts: OldFontLayers?=null
     private val diffDone=BooleanArray(HudDiff.POINTS.size)
-    /** P16 card 2: the race HUD's fixed frames and icons, retained (see [HudLayer]); [hudBakeMs] is this frame's bake time. */
-    private val hudLayer=HudLayer()
-    private var hudBakeMs=0.0
     private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[Courses.playableIndices.first()]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
@@ -275,9 +272,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         saves=ProfileSaves(ProfileWriter(profileStore),profiles,saveStatus,shopMessage,careerMessage,persistence,logger,saveHooks)
         for(i in profiles.indices)loadProfile(i);publishes.flushAll();world.reset()
         CodecWarm.start(profiles.toList(),logger)
-        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes+HudLayer.MAX_BYTES,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L},switchArm);carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
+        sceneryCanvas=SceneryCanvas(cacheRoadMarks);art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4),{if(::storyArt.isInitialized)storyArt.textureBytes else 0L},switchArm);carSprites=CarSprites(art,wheels);mountPainter=MountPainter(art,{wheels.pixelTexture})
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
-            TextureBudget.remainingArt(fontTextureBytes+HudLayer.MAX_BYTES,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
+            TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
         // A picked course's region tiles are verified and decoded on the course worker; its switch then only uploads them.
         server.prepareTrack={i->if(i!=selectedTrack)art.prepareRegion(if(regionPresentation)regionOverride?:courseCatalog[i].region else null,regionCandidates)}
@@ -360,7 +357,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun lobby() { val started=System.nanoTime();saves.dropStart();saves.clearResults();raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi();logger("transition lobby totalMs=${msSince(started)}") }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
     override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); if(::saves.isInitialized)saves.pause(); accumulator=0.0 }
-    override fun resume() { hudLayer.invalidate();if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=makeScene();if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
+    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=makeScene();if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         profiler?.begin(nanos,actual);profileGl?.reset()
@@ -464,8 +461,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             uiStage=0
         }
         profiler?.mark(10,"DR.clear")
-        // P16 card 2: bake the race chrome before the frame's own drawing starts (countdown first, so a race starts baked).
-        hudBakeMs=if(scene.ready && (phase=="race" || phase=="countdown"))prepareRaceLayer() else 0.0
         view.apply(); ScreenUtils.clear(bg)
         profiler?.mark(11,"DR.camera")
         if(scene.ready)drawWorld(elapsed)
@@ -473,7 +468,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val hudDraws=profileGl?.draws?:0
         val diffTag=diffDue()
         if(diffTag!=null)hudDiffFrame(diffTag) else drawOverlay()
-        profiler?.hud((profileGl?.draws?:0)-hudDraws,batch.renderCalls,hudBakeMs)
+        profiler?.hud((profileGl?.draws?:0)-hudDraws,batch.renderCalls,0.0)
         profiler?.mark(16,"DR.caption")
         if(diffTag==null){drawCaption();drawScriptCaption()}
         profiler?.mark(17,"DR.tail")
@@ -617,7 +612,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(blend)Gdx.gl.glEnable(GL20.GL_BLEND) else Gdx.gl.glDisable(GL20.GL_BLEND)
             Gdx.gl.glBlendFuncSeparate(funcs[0],funcs[1],funcs[2],funcs[3])
             val old=variant==HudDiff.BASE || variant==HudDiff.CONTROL
-            drawOverlay(old,variant==HudDiff.LAYER);drawCaption(old);drawScriptCaption(old)
+            drawOverlay(old);drawCaption(old);drawScriptCaption(old)
             variant to Pixmap.createFromFrameBuffer(0,0,w,h)
         }
         copy.dispose()
@@ -631,22 +626,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         logger("hudDiff tag=$tag phase=$phase w=$w h=$h blend=$blend funcs=${funcs.joinToString(",")} ms=${msSince(started)} pairs={$pairs}")
     }
-    private fun raceLayerKey(draw: (Int,Int,String?,Boolean)->Boolean): Boolean { val c=activeDriver();return draw(c.id,world.combat.selectedWeapon[c.id],c.ability.definition?.id,Presentation.FOLLOW_CAMERA && scene.ready) }
-    private fun prepareRaceLayer(): Double { var ms=0.0;raceLayerKey { d,w,a,dial -> ms=hudLayer.prepare(view,batch,d,w,a,dial){drawRaceChrome()};true };return ms }
-    /** The race HUD's fixed frames and icons: everything [hudLayer] retains, drawn directly when it does not hold them. */
-    private fun drawRaceChrome() {
-        fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument",corner: Float=0f) {art.frame(batch,key,x,y,w,h,corner)}
-        frame(24f,562f,156f,146f);frame(184f,562f,185f,146f);frame(373f,562f,160f,146f)
-        frame(539f,562f,208f,146f);frame(752f,562f,238f,146f);frame(994f,562f,250f,146f)
-        val c=activeDriver();val a=c.ability
-        art.draw(batch,Weapons.all[world.combat.selectedWeapon[c.id]].id,777f,680f,32f,32f)
-        art.draw(batch,"pickups/mine",777f,636f,32f,32f)
-        a.definition?.let{art.draw(batch,abilityHudKeys.of(it.id),1017f,644f,32f,32f)}
-        art.frame(batch,"hud/frame-meter",548f,643f,190f,26f)
-        art.frame(batch,"hud/frame-meter",1033f,585f,192f,26f)
-        if(Presentation.FOLLOW_CAMERA && scene.ready)frame(1044f,394f,200f,150f,"hud/frame-dial")
-    }
-    private fun drawOverlay(oldText: Boolean=false,layered: Boolean=true) {
+    private fun drawOverlay(oldText: Boolean=false) {
         shape.projectionMatrix=view.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
         if(regionPresentation && scene.ready)atmosphere.draw(shape)
@@ -760,7 +740,17 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "results" -> {frame(260f,96f,760f,506f,"hud/frame-panel");frame(281f,123f,718f,54f,"hud/frame-button");storyArt.draw(batch,storyPanel,60f,300f,176f,176f)}
             "countdown" -> if(scene.ready) {frame(542f,268f,196f,172f,"hud/frame-dial");storyArt.draw(batch,storyPanel,767f,281f,148f,148f)}
-            "race" -> if(layered && raceLayerKey{d,w,a,dial->hudLayer.holds(view,d,w,a,dial)})hudLayer.composite(batch,view) else drawRaceChrome()
+            "race" -> {
+                frame(24f,562f,156f,146f);frame(184f,562f,185f,146f);frame(373f,562f,160f,146f)
+                frame(539f,562f,208f,146f);frame(752f,562f,238f,146f);frame(994f,562f,250f,146f)
+                val c=activeDriver();val a=c.ability
+                art.draw(batch,Weapons.all[world.combat.selectedWeapon[c.id]].id,777f,680f,32f,32f)
+                art.draw(batch,"pickups/mine",777f,636f,32f,32f)
+                a.definition?.let{art.draw(batch,abilityHudKeys.of(it.id),1017f,644f,32f,32f)}
+                art.frame(batch,"hud/frame-meter",548f,643f,190f,26f)
+                art.frame(batch,"hud/frame-meter",1033f,585f,192f,26f)
+                if(Presentation.FOLLOW_CAMERA && scene.ready)frame(1044f,394f,200f,150f,"hud/frame-dial")
+            }
         }
         if(phase=="lobby" && qr!=null)batch.draw(qr,64f,266f,150f,150f)
         val old=if(oldText)oldFonts else null
@@ -999,8 +989,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
         val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
         val artBytes=art.textureBytes+storyArt.textureBytes
-        val layerBytes=hudLayer.textureBytes;val owned=artBytes+sceneryBytes+fontTextureBytes+qrBytes+layerBytes
-        return "{\"regions\":${art.regionCount},\"textureBytes\":$artBytes,\"storyTextureBytes\":${storyArt.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"hudLayerBytes\":$layerBytes,\"hudLayerBakes\":${hudLayer.bakes},\"ownedTextureBytes\":$owned,\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(artBytes,fontTextureBytes,sceneryBytes,qrBytes) && owned<=TextureBudget.TOTAL},\"failures\":${art.failures+storyArt.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"region\":\"${activeRegion.id}\",\"regionPresentation\":$regionPresentation,\"regionCandidates\":$regionCandidates,\"weatherLive\":${atmosphere.activeCount},\"weatherCap\":${activeRegion.weatherCap},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
+        return "{\"regions\":${art.regionCount},\"textureBytes\":$artBytes,\"storyTextureBytes\":${storyArt.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${artBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(artBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures+storyArt.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"region\":\"${activeRegion.id}\",\"regionPresentation\":$regionPresentation,\"regionCandidates\":$regionCandidates,\"weatherLive\":${atmosphere.activeCount},\"weatherCap\":${activeRegion.weatherCap},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
     }
     private fun combatSummaryJson(): String {
         val combat=world.combat
@@ -1055,6 +1044,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(y in 0 until 240)for(x in 0 until 240)pix.drawPixel(x,y,if(matrix[x,y])0x0b141eff else 0xffffffff.toInt())
         qr=Texture(pix); pix.dispose()
     }
-    override fun dispose() { if(::carSprites.isInitialized)logger("carSprites batched=${carSprites.groupedFrames} interleaved=${carSprites.interleavedFrames}");if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};if(::saves.isInitialized)saves.close();server.stop(); storyArt.dispose();wheels.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose(); hudLayer.dispose() }
+    override fun dispose() { if(::carSprites.isInitialized)logger("carSprites batched=${carSprites.groupedFrames} interleaved=${carSprites.interleavedFrames}");if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};if(::saves.isInitialized)saves.close();server.stop(); storyArt.dispose();wheels.dispose();art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
 }
 private const val LOBBY_PIXELS_PER_M=9.0
