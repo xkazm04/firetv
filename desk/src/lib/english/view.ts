@@ -16,7 +16,8 @@ import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
 import { modeOf } from "../rules/mode";
-import { accepts, turnState } from "./turn";
+import { accepts, refusal, turnState } from "./turn";
+import { runningTake } from "./take";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -62,6 +63,8 @@ export const VIEW_ACTION_IDS = [
   "pitch-scene",
   // Adult mode (v2 L3): Cut ends a take with up to three notes, and the recap's tape walks them one pin at a time
   "cut", "note",
+  // Adult mode (v2 L4): Take Two of one cut note, from the phone's recap, and Back to the notes inside the take
+  "take-two", "take-end",
 ] as const;
 export type ActionId = typeof VIEW_ACTION_IDS[number];
 
@@ -104,7 +107,9 @@ export type Hero =
       /** the scene's mission, when it has one: the subtitle is then its current step (mission.ts), and the TV's data line reads "Now" */
       steps?: Array<{ text: string; state: Dot }>;
       /** a scene this learner pitched (v2 L3): the situation card says it is their own */
-      own?: boolean }
+      own?: boolean;
+      /** inside Take Two (v2 L4): the subtitle is the noted quote, and the TV's data line reads "Take Two of" */
+      take?: boolean }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
       sentence?: string }
@@ -112,8 +117,11 @@ export type Hero =
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
-  /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot */
-  | { kind: "tape"; kicker: string; title: string; pins: Array<{ label: string; quote: string; better: string; note: string }>; selected: number; data: string }
+  /** the recap of a take ended by Cut (v2 L3): the notes as a tape strip, one pin each, the focused pin's note in the caption slot.
+   * A pin whose note had its Take Two (v2 L4) carries a mark: held (its quote struck), open, or undecided ("Not decided");
+   * the branch is that take drawn from its pin: the partner line it forked at, and the learner's line again. Never a count. */
+  | { kind: "tape"; kicker: string; title: string; pins: Array<{ label: string; quote: string; better: string; note: string; mark?: TakeMark }>; selected: number; data: string;
+      branch?: { pin: number; partner: string; from: string; again: string } }
   /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote.
    * With none held it is the plate in outline (cert.ts certGap): the skills shown so far, and `open`, the skills still to show, as empty slots. */
   | { kind: "cert"; kicker: string; title: string; band: Band; issued: string; topics: string[];
@@ -121,6 +129,10 @@ export type Hero =
   /** every certificate held, newest first, one door each */
   | { kind: "certs"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
+/** A cut note after its Take Two: held (struck), open (not held), or undecided (code could not tell). */
+export type TakeMark = "held" | "open" | "undecided";
+export const markOf = (held: boolean | null): TakeMark => held === true ? "held" : held === false ? "open" : "undecided";
+
 export interface LingaView {
   /** the TV's data-view: "menu", the picker's "linga-verdict", else the session screen */
   screen: string;
@@ -218,7 +230,7 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
     if (lc.stage === "plan" && lc.askGoal) return { id: "answer", action: "plan-goal", label: "Say what to practise" };
   }
   // The phone keeps its reply box during the recognition quiz, and a turn is accepted there: the turn table decides.
-  const said = c?.turns.at(-1);
+  const said = c ? (runningTake(c)?.turns ?? c.turns).at(-1) : undefined;
   if (panel === "talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
   return null;
 }
@@ -231,7 +243,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const scenes = eligibleScenes(p, prefs, l), recommended = recommendFor(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;
   const isHome = s.screen === "linga" || s.screen === "tonight", onCheck = CHECK_SCREENS.includes(s.screen);
-  const last = c?.turns.at(-1), asked = lc?.turns.at(-1);
+  // inside Take Two (v2 L4) the line on screen and on the speaker is the take's own last line
+  const take = c ? runningTake(c) : null, last = (take?.turns ?? c?.turns)?.at(-1), asked = lc?.turns.at(-1);
   const waiting = !!input.busy || (onCheck ? !!lc?.pending : !!c?.pending);
   /** where the conversation stands in its turn (turn.ts), and whether a conversation command is refused there */
   const st = c ? turnState(c) : null, inFlight = st === "preparing" || st === "waiting";
@@ -407,6 +420,17 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     hero = { kind: "comparison", before: { kicker: "You said", quote: c.coaching.before }, after: { kicker: "One way to try it", quote: c.coaching.after }, note: c.coaching.note };
     caption = "Replay the moment with a new question, or finish for today."; captionTag = "Coach";
     actions = [act("replay", "Replay the moment", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }), act("finish", "Finish for today", "Save this rehearsal and see what you practised.", cmd("finish"), { disabled: refused("finish") })];
+  } else if (c && take && s.screen === "linga-talk") {
+    // Take Two (v2 L4): the partner's line again, then the cast's; the learner answers on the phone. Nothing else of the
+    // scene is offered here (turn.ts): no help, quiz, coach, Cut, pause or finish. Back to the notes ends the take.
+    const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!, note = c.cut?.notes[take.note];
+    const said = last?.role === "partner" ? last.text : "", again = take.turns.some(t => t.role === "learner");
+    tag = "Take Two"; captionTag = inFlight ? "Preparing" : "Your line again";
+    caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
+    hero = { kind: "scene", kicker: `Take Two · ${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: note ? `“${note.quote}”` : "", art: c.sceneId, small: true, take: true,
+      partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
+    actions = [inFlight ? act("cancel", "Cancel", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })
+      : act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") })];
   } else if (c && s.screen === "linga-recap") {
     tag = "Your rehearsal"; title = "Take it somewhere new";
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
@@ -420,7 +444,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       const at = s.focus >= 0 && s.focus < notes.length ? s.focus : 0, label = (i: number) => notes[i].reading ? "A reading" : NOTE_LABEL[notes[i].kind];
       title = notes.length === 1 ? "A note on your take" : "Notes on your take";
       caption = notes[at].note; captionTag = s.focus >= notes.length ? "What next" : label(at);
-      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => ({ label: label(i), quote: n.quote, better: n.better ?? "", note: n.note })), selected: s.focus < notes.length ? s.focus : -1, data: counts };
+      // Take Two (v2 L4): a note that had its take is marked on its pin, and the take is drawn as a branch from its pin:
+      // the focused pin's take, or else the latest one. The verdict is the picture: a struck quote, never a count.
+      const takes = c.takes ?? [], taken = (i: number) => takes.find(t => t.note === i), shown = taken(at) ?? takes.at(-1);
+      const branch = shown && { pin: shown.note, partner: c.partner, from: shown.turns[0]?.text ?? "", again: shown.turns.find(t => t.role === "learner")?.text ?? "" };
+      hero = { kind: "tape", kicker: `Cut · ${c.title}`, title, pins: notes.map((n, i) => { const t = taken(i); return { label: label(i), quote: n.quote, better: n.better ?? "", note: n.note, ...(t ? { mark: markOf(t.held) } : {}) }; }), selected: s.focus < notes.length ? s.focus : -1, data: counts, ...(branch ? { branch } : {}) };
     } else if (rv?.used) {
       // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
       title = "It came back";
@@ -531,6 +559,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (s.screen === "linga-scenes" && !menu && !picking) details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
     // Adult mode only (v2 L3): a scene in the learner's own words, shaped and started at once (conversation.ts "pitch")
     if (modeOf(p, prefs) === "adult") phone.push(act("pitch-scene", "Pitch a scene in your own words on the phone", "Linga shapes the scene you describe and starts it now.", cmd("pitch"), { needs: "text" }));
+    // Take Two (v2 L4), Adult mode: one per note of a take ended by Cut; a refused one is drawn disabled, with its reason
+    if (c?.phase === "finished" && c.cut?.notes.length && mode === "adult") c.cut.notes.forEach((n, i) => {
+      const ok = accepts(c, "take-two", mode, i);
+      phone.push(act("take-two", `Take Two · note ${i + 1}`, ok ? `Play “${n.quote}” again, from the line before it.` : refusal(c, "take-two", mode, i), cmd("take-two", { note: i }), { disabled: waiting || !ok }));
+    });
     if (h === "no-placement") onPhone(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
   }
   if (panel === "check" && lc) {
@@ -556,7 +589,12 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   }
   if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") }));
   // the phone's live conversation: Resume while the learner paused, the coach's replay, else the reply helpers
-  if (panel === "talk" && c) {
+  if (panel === "talk" && c && take) {
+    // inside Take Two: Back to the notes, and Repeat audio or Cancel; the reply box takes the line (answerOf)
+    onPhone(act("take-end", "Back to the notes", "End this take and go back to the notes on your take.", cmd("take-end"), { disabled: refused("take-end") }));
+    onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })
+      : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
+  } else if (panel === "talk" && c) {
     if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
     else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }));
     else {
@@ -603,6 +641,9 @@ export function progressDots(s: Session): Dot[] | null {
   return null;
 }
 
+/** A Take Two mark in words, for a reader who cannot see the struck quote. */
+const TAKE_MARK_WORDS: Record<TakeMark, string> = { held: "held, the quote struck through", open: "still open", undecided: "not decided" };
+
 /** Every action a person at the desk can take on this view: the TV row, the footer and the phone. */
 export function offeredActions(v: LingaView): ViewAction[] { return [...v.actions, ...v.footer, ...v.phone]; }
 
@@ -622,7 +663,8 @@ export function viewText(v: LingaView): string {
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
-    case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}`), h.data); break;
+    case "tape": out.push(h.kicker, h.title, ...h.pins.map((x, i) => `  pin ${i + 1} · ${x.label}: "${x.quote}"${x.better ? ` → "${x.better}"` : ""}\n      note: ${x.note}${x.mark ? `\n      Take Two: ${TAKE_MARK_WORDS[x.mark]}` : ""}`),
+      ...(h.branch ? [`  Take Two of pin ${h.branch.pin + 1}, a branch from it: ${h.branch.partner} says "${h.branch.from}"${h.branch.again ? `; you again: "${h.branch.again}"` : ""}`] : []), h.data); break;
     case "cert": out.push(h.kicker, ...(h.issued ? [`${h.issued}.`] : []), ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), ...(h.skills.length ? [`Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`] : []), ...(h.open?.length ? [`Still to show, empty slots: ${h.open.join(", ")}`] : []), ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
     case "certs": out.push(`${h.kicker} · ${h.title}`); break;
     case "plain": out.push(h.title); break;

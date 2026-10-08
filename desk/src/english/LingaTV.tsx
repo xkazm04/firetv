@@ -5,6 +5,7 @@ import type { Event, Screen, Session } from "@/lib/session/store";
 import { AUTHORED_SCENES } from "@/lib/english/curriculum";
 import { ownerOf } from "@/lib/english/activity";
 import { accepts } from "@/lib/english/turn";
+import { runningTake } from "@/lib/english/take";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
@@ -51,7 +52,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
         else if(s.screen==="linga-check"&&lc)cmd("check-leave");
-        else if(c&&s.screen==="linga-talk")cmd("leave");
+        else if(c&&s.screen==="linga-talk")cmd(runningTake(c)&&!c.pending?"take-end":"leave");
         else if(c&&s.screen==="linga-moment")cmd("moment-done");
         else{patch({menu:false});post({type:"nav",screen:"linga",focus:0});}
         return;
@@ -114,9 +115,15 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     {layout==="plan"&&h.kind==="tape"&&<>
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {/* three pins at most, the learner's own words on each; the focused pin's note is the one caption above */}
-      <div className="lo-doors linga-topics linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="lo-topic" data-selected={i===h.selected}>
-        <small>{x.label}</small><b>“{x.quote}”</b>{x.better&&<small>{x.better}</small>}
+      {/* Take Two (v2 L4): a held note's quote is struck, an open one stays as it was, an undecided one says so; no count */}
+      <div className="lo-doors linga-topics linga-tape" data-role="linga-tape" data-count={h.pins.length} data-selecting={h.selected>=0}>{h.pins.map((x,i)=><div key={i} className="lo-topic" data-selected={i===h.selected} data-mark={x.mark}>
+        <small>{x.label}</small><b>{x.mark==="held"?<s data-role="linga-struck">“{x.quote}”</s>:<>“{x.quote}”</>}</b>{x.better&&<small>{x.better}</small>}{x.mark==="undecided"&&<small>Not decided</small>}
       </div>)}</div>
+      {/* the take, drawn as a branch from its pin: the line it forked at, then the learner's line again */}
+      {h.branch&&<div className="linga-branch" data-role="linga-branch" data-pin={h.branch.pin}>
+        <DataLine><span className="lo-data-key">Take Two · {h.pins[h.branch.pin]?.label}</span>{h.branch.partner.split(" · ")[0]}: “{h.branch.from}”</DataLine>
+        {h.branch.again&&<DataLine><span className="lo-data-key">You again</span>“{h.branch.again}”</DataLine>}
+      </div>}
       <DataLine>{h.data}</DataLine>
       {nav}
     </>}
@@ -176,7 +183,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.own?"Your own scene · ":""}${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
-      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
+      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">{h.take?"Take Two of":h.kind==="scene"&&h.steps?"Now":"Goal"}</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;

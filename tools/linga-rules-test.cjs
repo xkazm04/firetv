@@ -1500,3 +1500,73 @@ test('take case 5: inside a take the server refuses Cut, the coach, the quiz, pa
  await assert.rejects(inflight,e=>e.status===409);
  assert.deepEqual(getSession().conversation.takes[0].turns,take.turns,'the late reply is dropped');
 });
+/** The adult's recap after Cut, with `takes` on it, and the same take on the talk screen; as the view and the surface read them. */
+const TAKE_NOTES=[{turnId:'l1',quote:'I am work',kind:'form',note:'Say I work, with no am.',better:'I work'},{turnId:'l1',quote:'in hotel',kind:'word',note:'Say in a hotel.',better:'in a hotel'},{turnId:'l1',quote:'work in hotel',kind:'meaning',note:'Clear enough to be understood.',reading:true}];
+const ENDED=(note,held,again)=>({note,from:'p1',turns:[{id:`p1:take${note}`,role:'partner',text:'Hello. How can I help?'},...(again?[{id:`c1:t${note}`,role:'learner',text:again,mode:'text'},{id:`c1:r${note}`,role:'partner',text:'Nice. Which one?'}]:[])],held,at:2+note,endedAt:3+note});
+function takeView(screen,patch,ui={},mode='adult'){
+ const prefs={...defaultPreferences({type:'other'}),adultConfirmed:mode==='adult'};
+ const s=sessionOf(fixture(screen,{placement:placed(),preferences:prefs,conversation:convo({learnerId:'jakub',turns:REPLIED,phase:'finished',cut:{at:1,notes:TAKE_NOTES},...patch})}));
+ const at={...s,learner:{...s.learner,id:'jakub',name:'Jakub'},...ui};
+ if(mode==='family')at.profiles=at.profiles.map(p=>p.id==='jakub'?{...p,mode:'family'}:p);
+ return at;
+}
+test('take case 6: the recap marks each note that had its take - struck when held, open, or "Not decided" - and draws the take as a branch; no count',()=>{
+ const V=view();
+ const s=takeView('linga-recap',{takes:[ENDED(0,true,'I work in a hotel.'),ENDED(1,null,''),ENDED(2,false,'I work in hotel.')]});
+ const v=V.lingaView(s);
+ assert.equal(v.hero.kind,'tape');
+ assert.deepEqual(v.hero.pins.map(x=>x.mark),['held','undecided','open']);
+ assert.deepEqual(v.hero.branch,{pin:0,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in a hotel.'},'at rest the first pin: its take, from the line it forked at');
+ assert.deepEqual(V.lingaView({...s,focus:2}).hero.branch,{pin:2,partner:'Robin · Receptionist',from:'Hello. How can I help?',again:'I work in hotel.'},'the focused pin\'s take');
+ assert.deepEqual(v.actions.map(a=>a.id),['note','note','note','choose-situation','learning-map'],'the TV row is the tape\'s, as before');
+ const text=V.viewText(v);
+ assert.match(text,/pin 1 · Form: "I am work" → "I work"\n      note: Say I work, with no am\.\n      Take Two: held, the quote struck through/);
+ assert.match(text,/Take Two: not decided/);assert.match(text,/Take Two: still open/);
+ assert.match(text,/Take Two of pin 1, a branch from it: Robin · Receptionist says "Hello. How can I help\?"; you again: "I work in a hotel\."/);
+ assert.doesNotMatch(text,/\d+ (of|out of) \d+|held \d|\d+ held/,'no count of held notes anywhere');
+ // a note with no take carries no mark, and with no take at all there is no branch
+ const one=V.lingaView(takeView('linga-recap',{takes:[ENDED(1,true,'I work in a hotel.')]}));
+ assert.deepEqual(one.hero.pins.map(x=>x.mark),[undefined,'held',undefined]);assert.equal(one.hero.branch.pin,1,'the latest take, when the focused pin has none');
+ assert.equal(V.lingaView(takeView('linga-recap',{})).hero.branch,undefined);
+ // the TV draws the mark and the branch; the phone strikes the held quote and says Not decided
+ const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs')),sf=S.surfaceOf(s);
+ assert.match(sf.tv,/Not decided/);assert.match(sf.tv,/You again/);assert.match(sf.tv,/Take Two · Form/);assert.match(sf.phone,/Not decided/);assert.match(sf.phone,/Take Two, you said: “I work in a hotel\.”/);
+ assert.doesNotMatch(sf.shown,/\d+ (of|out of) \d+ (notes|held)/,'no count on either device');
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8'),phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8');
+ assert.match(tv,/<s data-role="linga-struck">/);assert.match(tv,/data-role="linga-branch"/);assert.match(phone,/t\?\.held===true\?<s>/);
+});
+test('take case 7: the phone\'s recap offers Take Two per note in Adult mode, disabled with the refusal where refused; Family is offered none',()=>{
+ const V=view(),S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
+ const s=takeView('linga-recap',{takes:[ENDED(0,true,'I work in a hotel.')]});
+ const offers=V.lingaView(s).phone.filter(a=>a.id==='take-two');
+ assert.deepEqual(offers.map(a=>[a.label,a.disabled,a.run.command]),[['Take Two · note 1',true,{action:'take-two',extra:{note:0}}],['Take Two · note 2',false,{action:'take-two',extra:{note:1}}],['Take Two · note 3',false,{action:'take-two',extra:{note:2}}]]);
+ assert.equal(offers[0].help,'This note has had its Take Two.','the refusal, as the server says it');
+ const sf=S.surfaceOf(s);
+ assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/This note has had its Take Two\./,'the phone shows the refusal');
+ assert.deepEqual(sf.controls.filter(c=>c.side==='phone'&&c.label.startsWith('Take Two')).map(c=>[c.label,c.disabled]),[['Take Two · note 1',true],['Take Two · note 2',false],['Take Two · note 3',false]]);
+ assert.deepEqual(sf.offered.filter(o=>o.id==='take-two').map(o=>o.run.command.extra.note),[1,2],'the enabled ones are offered to pick');
+ // a take running elsewhere would make every note wait; Family mode is offered none
+ assert(!V.offeredActions(V.lingaView(takeView('linga-recap',{},{},'family'))).some(a=>a.id==='take-two'),'Family: no Take Two');
+ assert(!V.offeredActions(V.lingaView(takeView('linga-recap',{cut:undefined}))).some(a=>a.id==='take-two'),'finished by Finish: no notes, no Take Two');
+});
+test('take case 8: inside a take the TV shows the line again and Back to the notes, and nothing else of the scene is offered',()=>{
+ const V=view(),S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
+ const running={note:1,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello. How can I help?'}],held:null,at:2};
+ const s=takeView('linga-talk',{takes:[running],audioNonce:1});
+ const v=V.lingaView(s);
+ assert.equal(v.tag,'Take Two');assert.equal(v.hero.kind,'scene');assert.equal(v.hero.take,true);
+ assert.equal(v.hero.said,'Hello. How can I help?');assert.equal(v.hero.subtitle,'“in hotel”','the noted quote under the line');
+ assert.equal(v.spoken.line,'Hello. How can I help?');assert.equal(v.spoken.blocked,false);assert.match(v.spoken.key,/p1:take:1$/,'a new key: the line plays again');
+ assert.deepEqual(v.actions.map(a=>[a.id,a.run.command?.action,!!a.disabled]),[['take-end','take-end',false]]);
+ assert.equal(v.answer.action,'turn');assert.equal(v.answer.lastTurnId,'p1:take','the reply box answers the take\'s line');
+ const ids=V.offeredActions(v).map(a=>a.id);
+ for(const id of ['cut','coach','quiz','cue','replay','finish','resume','pick-phrase'])assert(!ids.includes(id),`no ${id} inside a take`);
+ const sf=S.surfaceOf(s);assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
+ assert.match(sf.phone,/Take Two · A booking/);assert.match(sf.phone,/Your note: “in hotel” → “in a hotel”/);
+ // the cast answering: Cancel on the TV row, the take stays
+ const wait=V.lingaView(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
+ assert.deepEqual(wait.actions.map(a=>[a.id,a.run.command?.action]),[['cancel','leave']]);assert.equal(wait.answer,null);
+ const sw=S.surfaceOf(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
+ assert.deepEqual(sw.strays,[]);assert.deepEqual(sw.unrendered,[]);
+});

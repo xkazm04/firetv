@@ -233,3 +233,28 @@ Another situation and Learning map. A call that fails or keeps no note makes up 
 its error line, and Cut can be pressed again. Notes write no evidence and move no skill. They stay on the conversation
 with their turn ids, for Take Two (v2 L4). The tape's styling uses the topics' classes as they are; a tape-specific
 style in `design/linga.css`, and the capture at 1920 x 1080 and 1280 x 720, are owed.
+
+## The Company: Take Two (v2 L4, Adult mode, 2026-10-08)
+
+Owner decision L4 (Cut & Take Two), its second half. On the recap of a take ended by Cut, the phone lists the notes
+with a **Take Two · note n** button under each (Adult mode only). It is drawn disabled, with the reason under it, where
+the turn table refuses it (`turn.ts`): a note that already had its take, a take already running, a reply in flight;
+the server also refuses Family mode, a take with no Cut and a note out of range, each with a plain sentence and no
+model call. Take Two forks inside the same conversation, never through a new scene: `linga-talk` shows the partner
+line just before the noted turn again (its stored text, no call; the audio plays again by a new `audioNonce`), the
+kicker reads **Take Two**, and the data line under the line reads **Take Two of** the noted quote. The learner says
+their line again on the phone; the cast answers at most twice (one fast, thinking-off call each, `conversation.ts`),
+and then the take ends by itself on the recap. **Back to the notes** (the TV row, the phone, or Back on the remote)
+ends it earlier. Inside a take nothing else of the scene is offered: no help, quiz, coach, Cut, pause or finish, and
+no moment stops it; while the cast answers, Cancel only cancels that reply.
+
+Whether the note held is code's (`take.ts heldOf`), decided on the learner's first line of the take, and never a
+guess: a form note by the tense rule on the sentences that carry the noted time marker; a word note when the quoted
+words are gone and the better phrase is said; a meaning note when the better phrase is said; anything else, a register
+note included, is not decided. On the recap's tape a held note's quote is **struck through**, an open one stays as it
+was, and an undecided one says **Not decided**; the take is drawn as a **branch** under the tape from its pin (the
+focused pin's take, else the latest): the partner line it forked at, then **You again** and the learner's line. No
+count anywhere ("2 of 3 held" is never printed). A take is never evidence: it writes nothing to the learner record (no
+evidence, session, digest, certificate, review reuse or collectible), and the first take's lines and notes are never
+rewritten. The branch borrows the data line's style; a branch style in `design/linga.css` and the captures (the
+branch, a struck note and an open one, at 1920 x 1080 and 1280 x 720; the phone recap at 390 px) are owed.

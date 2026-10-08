@@ -4,12 +4,13 @@ import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
-import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
+import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
 import { NOTE_LABEL } from "@/lib/english/notes";
 import { currentStep } from "@/lib/english/mission";
 import { accepts, turnState } from "@/lib/english/turn";
+import { runningTake } from "@/lib/english/take";
 import { activeCheck, helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
@@ -37,6 +38,8 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const cue=offer("cue"),quiz=offer("quiz"),cut=offer("cut"),panelOf=phonePanel(s);
   // where the conversation stands in its turn, and what the server takes there (lib/english/turn.ts)
   const st=c?turnState(c):null,inFlight=st==="preparing"||st==="waiting",refused=(action:string)=>busy||!c||!accepts(c,action);
+  // Take Two (v2 L4): the take running holds the talk panel; on the recap, one Take Two per cut note, as the view offers it
+  const take=c?runningTake(c):null,takeTwo=offered.filter(a=>a.id==="take-two");
   return <div className="pscreen linga-phone">
     <h3>Linga · {s.learner?.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
@@ -65,7 +68,8 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
     {panel==="talk"&&<>
       {panelOf==="check"&&lc?<CheckPanel lc={lc} run={run} busy={busy} hasPlan={!!learning.plan} leave={offered.find(a=>a.run.command?.action==="check-leave")}/>
       :panelOf==="moment"&&c?<MomentPanel c={c} run={run} busy={pending}/>
-      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")} pitch={!!offer("pitch-scene")}/>
+      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")} pitch={!!offer("pitch-scene")} takeTwo={takeTwo}/>
+      :take?<TakePanel c={c} take={take} run={run} busy={pending} inFlight={inFlight} end={offer("take-end")}/>
       :<>
         <p><b>{c.title}</b><br/>{c.goal}{c.mission&&currentStep(c.mission)&&<><br/>Now: {currentStep(c.mission)}</>}</p>
         <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
@@ -195,7 +199,7 @@ function PitchBox({run,busy}:{run:Run;busy:boolean}){
   </>;
 }
 
-function StartPanel({s,learning,run,busy,list,pitch}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean}){
+function StartPanel({s,learning,run,busy,list,pitch,takeTwo}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean;pitch:boolean;takeTwo:ViewAction[]}){
   const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
   const next=recommendFor(profile,learning),placement=learning.placement,home=lingaHome(s);
   const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}{isPitchId(x.id)?" · your own":""}</option>)}</select></label>;
@@ -242,11 +246,34 @@ function StartPanel({s,learning,run,busy,list,pitch}:{s:Session;learning:English
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
       {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
-      {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map(n=><p key={`${n.turnId}:${n.quote}`}><b>{n.reading?"A reading":NOTE_LABEL[n.kind]}</b>“{n.quote}”{n.better&&<> → “{n.better}”</>}<br/><small>{n.note}</small></p>)}</div>}
+      {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map((n,i)=>{
+        // Take Two (v2 L4): a held note is struck, an undecided one says so, an open one stays as it was; never a count
+        const t=c.takes?.find(x=>x.note===i),again=t?.turns.find(x=>x.role==="learner"),a=takeTwo.find(x=>x.run.command?.extra?.note===i);
+        return <p key={`${n.turnId}:${n.quote}`}><b>{n.reading?"A reading":NOTE_LABEL[n.kind]}</b>{t?.held===true?<s>“{n.quote}”</s>:<>“{n.quote}”</>}{n.better&&<> → “{n.better}”</>}<br/><small>{n.note}</small>
+          {t&&t.held===null&&<><br/><small>Not decided</small></>}{again&&<><br/><small>Take Two, you said: “{again.text}”</small></>}
+          {a&&<><br/><button className="pbtn" data-secondary="true" disabled={busy||a.disabled} onClick={()=>run("take-two",{note:i})}>{a.label}</button>{a.disabled&&<small className="linga-note" data-role="linga-take-refusal">{a.help}</small>}</>}
+        </p>;})}</div>}
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}
     {pitch&&<PitchBox run={run} busy={busy}/>}
+  </>;
+}
+
+/**
+ * Take Two (v2 L4) on the phone: the noted quote, the line on the TV, the reply box for the learner's line again, Back to
+ * the notes and Repeat audio (Cancel while the cast answers). A take is practice only: it records nothing.
+ */
+function TakePanel({c,take,run,busy,inFlight,end}:{c:Conversation;take:Take;run:Run;busy:boolean;inFlight:boolean;end?:ViewAction}){
+  const note=c.cut?.notes[take.note],line=take.turns.at(-1);
+  return <>
+    <p><b>Take Two · {c.title}</b>{note&&<><br/>Your note: “{note.quote}”{note.better&&<> → “{note.better}”</>}</>}</p>
+    <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":line?.text}</div>
+    {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
+    <ReplyBox ready={line?.role==="partner"} busy={busy} question={line?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+      onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="A take is practice: nothing in it is recorded."/>
+    <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button>{end&&<button className="pbtn" data-secondary="true" disabled={busy||end.disabled} onClick={()=>run("take-end")}>{end.label}</button>}</div>
+    <details><summary>This take</summary><div className="linga-transcript">{take.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?"You":c.partner}</b>{t.text}</p>)}</div></details>
   </>;
 }
 
