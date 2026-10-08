@@ -135,7 +135,7 @@ whatever should glow.
 
 ## Who sees which situation
 
-Eleven situations are built in, and age decides which of them a learner is offered (`audienceAllowed`, `lib/english/curriculum.ts`);
+Eleven situations are built in, and age and mode decide which of them a learner is offered (`audienceAllowed`, `lib/english/curriculum.ts`; Family mode hides the adult-audience scenes at any age, through `adultContent` in `rules/mode.ts`);
 English level never does. Five are for everyone; two are for 15 and over; one is for adults only; the three school
 situations are for a learner under 18 (or, with no age set, an elementary or high-school profile) and never for
 type Other or for an adult. Model-written plan topics may not be school situations in Phase 1. So a 12-year-old is

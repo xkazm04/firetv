@@ -82,7 +82,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
-| 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
+| 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | done (built locally on main, no PR, nothing pushed; adultContent() in rules/mode.ts, read by audienceAllowed, the tutor prompt, the level check and audiencesAt) | c5a6e081, and the finish record | 2026-10-08 |
 | 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
 | 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | | |
 
@@ -400,7 +400,7 @@ eight rulings stand as written; one change the code requires is the chain tagger
 | V2-O4 | Collectible art: SVG drawn in each app's language, or generated images? | SVG (ten-foot crisp, no assets to host) | SVG | R1 |
 | V2-O5 | Whole-piece reading: one call per paragraph, or one call per piece? | per paragraph (verdicts stay anchored; a failure loses one paragraph); measure the time | per paragraph | E1 |
 | V2-O6 | GCSE board | Pearson Edexcel 1MA1 (S2) | Edexcel | M2a |
-| V2-O7 | ~~Who sees adult-audience scenes, age or mode?~~ **Answered 2026-10-08: mode decides.** One `adultContent()` in `rules/mode.ts`, which every audience decision calls: `curriculum.ts:75` audienceAllowed, the tutor's "an adult" at `conversation.ts:68`, and `cambridge.ts:101`. Family mode hides adult-audience scenes at any age. Built as P6 before L5; L5's red-team tests against it. | | | P6, L5 |
+| V2-O7 | ~~Who sees adult-audience scenes, age or mode?~~ **Answered 2026-10-08: mode decides.** One `adultContent()` in `rules/mode.ts`, which every audience decision calls: `curriculum.ts:75` audienceAllowed, the tutor's "an adult" at `conversation.ts:68`, and `cambridge.ts:101`. Family mode hides adult-audience scenes at any age. Built as P6 before L5; L5's red-team tests against it. **Built as P6 (c5a6e081).** | | | P6, L5 |
 
 ## i. Stance check
 
@@ -791,3 +791,19 @@ Kill tests (not committed): (a) endedAt and linga-recap put back at the second c
 removed from accepts: take cases 3, 4 and 9 red. Both restored.
 Gate: `cd desk && npm run test:rules` green; `npx tsc --noEmit --incremental false` clean. Not covered: no screenshot; the TV audio
 is not device-played.
+
+### 2026-10-08 · batch 7 · P6 · autopilot/accepted-idea-delivery-b0c53a6f
+One `adultContent()` in `rules/mode.ts`; mode decides adult content (row 31, review card 4, V2-O7). Built locally, nothing pushed.
+Commits: c5a6e081 (code and tests), and this entry.
+What changed, by file:
+- `rules/mode.ts`: `adultContent(p, prefs?)` = `modeOf(p, prefs) === "adult"`, with the V2-O7 JSDoc. The paragraph saying audienceAllowed is not re-expressed through modeOf is rewritten: it now is, through adultContent. `isAdult` stays the age fact modeOf and adultAllowed read. No second mode concept, no new stored field.
+- `curriculum.ts`: audienceAllowed's 'adult' row calls adultContent; 'school' and 'older' unchanged; eligibleScenes and the plan filter inherit.
+- `conversation.ts`: tutorSystem's "The learner is ..." and the never-line read adultContent. An 18+ learner in Family mode is told "an adult in Family mode; keep every exchange appropriate for a family audience", and the never-line opens "This desk is in Family mode." then the unchanged sentence. Under 18 ("This learner is not an adult. Never propose ...") and Adult mode are byte-identical to before. pitchAsk takes adultContent (value unchanged: pitch is refused outside Adult mode).
+- `check.ts`: ctx.adult reads adultContent; who() gives a Family-mode adult "an adult in Family mode; keep everything appropriate for a family audience" (stored mode family and adultAllowed), never "age N" alone. Under 18 and Adult mode unchanged.
+- `cambridge.ts`: audiencesAt(age) goes through audienceAllowed with the synthetic profile (other at 18+, high-school 15-17, elementary under 15, no stored mode, default preferences); output equal for ages 0..99, coverage numbers did not move.
+Every other isAdult caller in desk/src: `rules/mode.ts` modeOf and adultContent's inputs (age fact); `curriculum.ts` re-export (age fact); `conversation.ts` tutorSystem, chooses only which Family wording an adultContent-false learner gets, 18+ or not (age fact); `tv/keys.ts` isAdultHere (feature gate, reads modeOf, untouched). No content decision calls isAdult directly any more.
+Revised pin (M2b, openly): mode-rules-test 'mode ${mode} is not read by audienceAllowed'. OLD: a stored mode 'family' or 'adult' on a 25-year-old 'other' answered every audience as the frozen unset profile. NEW: stored 'adult' still equals the frozen value; stored 'family' equals it except the 'adult' audience, which is refused. The 240-row parity rows are unchanged (no stored mode).
+New rows: mode-rules-test (stored Family at 25; adultContent = modeOf === adult over the grids and false under 18 for every stored mode), adult-rules-test (an adult who chose Family: no date scene, start 'date' 403 with no model call, tutor prompt has the Family clause and the never-line and no "not an adult", level check has the family line, Adult mode brings the date scene back), cambridge-rules-test (audiencesAt 0..99 equals the frozen table). linga-rules-test ~207-215 unchanged and green.
+Kill tests (not committed): (a) adultContent returns isAdult: the mode-rules stored-Family and adultContent rows and the adult-rules Family 18+ row red. (b) isAdult back in audienceAllowed's adult row: the mode-rules stored-Family row and the adult-rules Family 18+ row red. Both restored. In both the 240-row parity test also reads red, because the revised stored-mode rows sit inside it.
+Note: a profile of type "other" stores no age, so the Family fixtures there are 18+ by the type, through the adult box.
+Gate: `cd desk && npm run test:rules` green (66 suites, 1117 tests); `npx tsc --noEmit --incremental false` clean. Not covered: no screenshot; no device run.

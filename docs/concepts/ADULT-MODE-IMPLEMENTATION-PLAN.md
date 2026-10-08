@@ -165,6 +165,7 @@ and not re-verified.
   It holds: `Profile.mode?: "family" | "adult"` and `modeChecked` in `store.ts` (junk dropped on load; a `profile.draft` patch may set only "family"), `modeOf(p, prefs?)` and `isAdult` in `lib/rules/mode.ts`, `mode` in the `tv/keys.ts` edit copy list, and `tools/mode-rules-test.cjs`. `modeOf` does NOT honour a stored "adult" yet, and `audienceAllowed` is not re-expressed through it. Its spec after owner decision D1 was: `Profile.mode?: "family" | "adult"`, `modeOf(p)` in
   `lib/rules/mode.ts`, a `profile.draft` patch cannot set mode, the edit copy list at `tv/keys.ts:242` keeps it, age
   default (Family under 18, and for "other" until confirmed), no parent code.
+  v2 P6 closes the gap between audience and mode: `audienceAllowed`'s adult row, the tutor prompt and the level check read `adultContent` (= `modeOf === "adult"`), so Family hides adult scenes at any age (commit c5a6e081).
 - **W4 is merged now, so A1 imports the existing `modeOf` and does not create `lib/rules/mode.ts` (line 189 below is superseded); the paragraph that follows applies only if that changes.**
 - **If W4 is not merged when Adult starts**: A1 creates only the read, `lib/rules/mode.ts` `modeOf(p, prefs)`, with
   W4's names and W4's age default and no stored field. Every adult door reads it. A5 then either adopts merged W4 or
