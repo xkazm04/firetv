@@ -76,9 +76,9 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
 | 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | done (built locally on main, no PR, nothing pushed; the sweep 0 / 0 / 0 / 0 for all three templates over 500 seeds, all shipped; a calc1 set on related rates, optimisation or extrema ends with one code-drawn word problem in two parts; 13 of 31 corpus questions read into a spec, 0 into parts; TV and phone captures owed) | 3dc0693a (step 0), f5d21d3a, 61aca774, 309c52ee, 29e86cda, 3772c23b, 81924e24, and the finish record | 2026-10-08 |
-| 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | cut in three by the App Master (2026-10-08): M5a (row 34), M5b (row 35), M5c (row 36); see the M5 card | | |
+| 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | built in three slices: M5a (row 34), M5b (row 35), M5c (row 36); the probe's live run awaits the owner's PC; see the M5 card (cut in three by the App Master, 2026-10-08) | | |
 | 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4, P6 | not started | | |
-| 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
+| 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | cut in three by the App Master (2026-10-08): M3b-1 (row 37), M3b-2 (row 38), M3b-3 (row 39); see the M3b card | | |
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
@@ -88,6 +88,9 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | done (built locally, no PR, nothing pushed; lib/rules/recovery.ts cleanPaper and recovery, wired to nothing; 8 rows in tools/recovery-rules-test.cjs; both kill tests red; no capture owed) | be9d2faf (step 0), 45632b1b, and the finish record | 2026-10-08 |
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
+| 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | not started | | |
+| 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | not started (its questions go to the App Master first; see the M3b card) | | |
+| 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | not started (built only if its card names the kind of truth, comparison, leak rule and marking prompt; else listed in the honest limits and the descope goes to the owner) | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -397,6 +400,13 @@ run through the gate, M5a first and alone, because M5b and M5c read its contract
   (11) A paper that could not be saved is reported as not saved. `dispatch`'s `paper.enter` caught `addPaper`'s throw and
   said "The desk kept no question from that paper.", which tells the learner their rows were all wrong when the disk
   failed. M5c step 1 fixes it: a status of its own, distinct from the no-row-left one, and the TV stays put.
+- App Master's rulings on M5c's questions (2026-10-08):
+  (12) A mixed item (one desk-topic statement and one gap statement) counts as mapped only when the read reaches the same
+  topics AND the same notOnDesk statements. The builder's choice stands: a read that missed the gap statement would leave
+  it off the Not on the desk yet list.
+  (13) The probe papers are samples of a failed paper (10 to 13 items, 16 to 31 marks), drawn as clean renders, not phone
+  photos of handwriting. A live pass is an upper bound on what a real photo gives, and the owner reads the live figure as
+  that.
 - Every M5 slice: no string a screen shows says "GCSE" or "1MA1" while `gcseClaimAllowed()` is false (gcse.ts HONEST
   LIMITS); the screens say "a paper", "your paper". gcse.ts, paths.ts, syllabus.ts, school.ts and the generators are
   unchanged.
@@ -454,6 +464,87 @@ run through the gate, M5a first and alone, because M5b and M5c read its contract
   scores 100%, a wrong code scores it down); the live run of the 20 papers on the owner's PC, recorded with its figure.
   Under 85% of items mapped to the right unit: the photo path is not offered and typed entry stays the door (ruling 1).
   A simulated or stubbed pass is recorded as such and never ships the photo path.
+
+**M3b. Math: the Calculus 2 spine** (batch 7; cut in three by the App Master on 2026-10-08, one slice per run through
+the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
+- Why three: the owner's pick (decisions M3) is "integration techniques, sequences and series". Integration fits the nine
+  `CalcShape`s. Sequences and series do not: they need a second variable, n ([MATH-COURSE-PATHS.md](../MATH-COURSE-PATHS.md)
+  section 9). Today the string 'calc1' decides Calculus at 8 sites in 6 files (architecture review card 5,
+  `.claude/scan-sweep/runs/architecture-2026-10-08-desk/REVIEW.md`), so a third path would be judged as linear and dropped
+  on load. The seam comes first (M3b-1, card 5 part a; M3a step 0 built part b, the path lengths). The integration path
+  follows on it (M3b-2), and sequences and series get a card of their own (M3b-3).
+- Order (a deliberate deviation, recorded in the batch 7 M3b-1 log entry): M3b-1 runs before L5. L5's 18+ content waits
+  for the owner's review at 09:00 on 2026-10-09, and M3b-1 needs no owner.
+- App Master's rulings (2026-10-08):
+  (1) M3b-1 is the judge field: no behaviour change, no screen change. M3b-2 is the Calculus 2 path. It takes only the
+  topics whose questions fit the nine existing shapes (the owner's integration techniques), wired as a third path with
+  `school: false`. M3b-3 is sequences and series. Section 9 calls them a design change (a second variable, n), so they
+  get their own card. They are built only if that card names their kind of truth, comparison, leak rule and marking
+  prompt. Otherwise they are listed in the honest limits, and the descope goes to the owner, because he picked them.
+  (2) M3b-2 adds no new `CalcShape`. A topic that needs one goes to M3b-3, or is listed out with its reason.
+  (3) A Calculus 2 topic's prerequisites point only at earlier Calculus 2 topics (`PathTopic`'s rule). The path's blurb
+  says it follows Calculus 1. A cross-path prerequisite would be a design change.
+  (4) M3b-2 has no Calculus 2 lessons. The honest limits say so, as they do for Calculus 1.
+- Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
+  changes (a Calculus 1 learner sees and is sent byte-identical words).
+
+**M3b-1. The path's judge** (S; row 37; architecture card 5 part a)
+- Goal: one field on `PathInfo` in `library/paths.ts`, `judge: PathJudge` (`'school' | 'calc'`): the kind of truth a
+  path's items are judged by. school is 'school' (a unit with a generator is a school item, any other topic a linear
+  one) and calc1 is 'calc'. A Calculus topic's practice shapes ride on its `PathTopic` (`shapes`, on a 'calc' path only,
+  the spine's own list), so no site reads `CALC1_SPINE` past `paths.ts`. Every site that decides Calculus by the string
+  'calc1', or by reading `CALC1_SPINE` directly, asks the record instead: `rules/kinds.ts` kindOfTopic,
+  `session/store.ts` pathChecked (any key of PATHS), `paths.ts` pathOf (any key of PATHS), `tv/profileRows.ts` COURSES
+  (the PATHS keys in their declared order), `desk/hint.ts` (the stance and the voice), `app/api/hint/route.ts` (the
+  lesson skip), `desk/items.ts` shapesOf, `rules/maths.ts` isCalcTopic and CALC_AS_SLIPS (every path judged 'calc'),
+  and `desk/explain.ts` (the topic's path's name, not `PATHS.calc1`'s).
+- `paths.ts` stays client-safe: types and library data only. After the change, the quoted 'calc1' literal appears in
+  `desk/src` only in `paths.ts`, `calculus1.ts` and `calculus1.spine.ts`.
+- Tests: rows added to `tools/maths-paths-test.cjs`, no existing assertion changed: every path has a judge; for every
+  topic of every path, kindOfTopic, the Calculus slips, shapesOf, the hint stance and pathOf agree with the record; the
+  store keeps a mathPath that is a PATHS key and drops anything else; COURSES equals the PATHS keys in order; a sweep
+  finds no quoted 'calc1' in `desk/src` outside the three files. Kill test, not committed: calc1's judge set to
+  'school' turns a Calculus row red.
+- Accept: `cd desk && npm run test:rules` green at every commit; `npx tsc --noEmit --incremental false` clean; no
+  existing assertion changes; no screen or prompt text changes for school or calc1.
+
+**M3b-2. The Calculus 2 path: integration techniques** (M; row 38; a draft, dispatched after the App Master rules on
+its questions)
+- Goal: a new `library/calculus2.spine.ts` (plain data, no import, `CalcSpineTopic`s) and a `calc2` entry in PATHS:
+  `judge: 'calc'`, `school: false`, a blurb that says it follows Calculus 1. Proposed topics (Stewart 9e chapter 7),
+  each on `antiderivative` and `definite-integral` only: `calc2-parts` (7.1, integration by parts),
+  `calc2-trig-integrals` (7.2), `calc2-trig-sub` (7.3, trigonometric substitution), `calc2-partial-fractions` (7.4) and
+  `calc2-strategy` (7.5, choosing the technique). Prerequisites point only at earlier calc2 topics (ruling 3).
+- Listed out, with the reason, unless a ruling moves them: approximate integration (7.7: the answer is a rule applied
+  with n steps, not the integral, so it needs a new kind of truth and tolerance); improper integrals (7.8: an infinite
+  bound or a pole inside the interval, while `definite-integral` reads finite a and b and `integrate` gives null at a
+  pole, so it needs a new shape or a new tolerance rule); volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: the
+  question names a solid or a curve, and a `definite-integral` spec prints only the integral). Differential equations,
+  parametric and polar curves are not in the owner's pick.
+- Wiring, by section 9 steps 1-8: MathPath, the spine, the record. The judge carries the rest (M3b-1): kindOfTopic,
+  the slips, shapesOf, the hint stance, the store's check and the course row all follow it. The course row gets a third
+  cell, which is a screen change, so its captures are owed. The length pin is in `maths-paths-test` (one per path).
+  `maths-calculus-live.cjs --path` takes calc2.
+- Tests: a fixture per topic, hand-written specs with their worked antiderivative or value (a by-parts x e^x and
+  x sin(x), ln(x); a partial-fraction 1/(x^2 - 1); a trig substitution with sqrt(4 - x^2)). Each spec is well formed, and
+  `checkAnswer` marks its own worked answer right and a named slip's answer wrong. The M3b-1 rows extend to calc2 with
+  no edit. A stubbed calc2 set is judged 'calc', and its prompt asks only for the topic's shapes.
+- Accept: the gate green at every commit; tsc clean; no school or Calculus 1 text changes; the honest limits name what is
+  listed out, and that Calculus 2 has no lessons (ruling 4). Owed to the owner: the Maths course row with three cells at
+  1920 x 1080 and 1280 x 720, and one live calc2 set.
+- Kill: a topic whose fixtures `checkAnswer` cannot mark (a right answer not 'right', a slip not 'wrong') is withheld
+  from the spine, listed in the honest limits with its reason, and its fixtures are kept. Under three topics left: the
+  path is not wired, row 38 records it, and the owner is told.
+
+**M3b-3. Sequences and series** (row 39; a draft; built only if this card is completed)
+- Goal: the owner's "sequences and series" (Stewart 9e chapter 11). The engine reads x only, so the card must first name,
+  for each proposed shape: its kind of truth (a sequence's limit as n grows; a series' sum, a number; whether a series
+  converges, a verdict and not a number), its comparison (a number within a tolerance, or a verdict matched exactly), its
+  leak rule (`leaksCalc` reads numbers and functions in x, not a verdict word), its marking prompt, and how n is read
+  (n! and (-1)^n have no x reading).
+- Accept: as M3b-2, with the shape checklist of section 9 step 5 done for every new shape.
+- Kill: the card cannot name all four for a shape: that shape is not built. With no shape left, sequences and series
+  go into MATH-COURSE-PATHS section 10 with the reason, and the descope goes to the owner (ruling 1).
 
 ## e. Batches
 
