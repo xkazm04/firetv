@@ -1784,6 +1784,6 @@ base the '1' line gave [true] (the defect); the 'dne' line gave [false]. chain.t
 Kill test (on 46c6ab5b, not committed): limitInf made to return run A with no comparison ('return a;' ahead of the guard): 'refused' and
 'chain' red, 'kept' green; `git restore desk/src/lib/rules/calc-expr.ts`, rerun 3 of 3 green.
 Residual: a function aliased on both lattices would still pass; none is known in the grammar.
-Gate: `cd desk && npm run test:rules` 71 green, 0 red (1177 tests; 70 / 1174 before). tsc: not run in the worktree (a tsc check on
-the touched file is the App Master's). No `desk/data/` touched, no model call, no push.
+Gate: `cd desk && npm run test:rules` 71 green, 0 red (1177 tests; 70 / 1174 before). `npx tsc --noEmit --incremental false` clean
+(run from desk/ in the worktree). No `desk/data/` touched, no model call, no push.
 Next: M3b-3b (approx-integral), ruled by the App Master (ruling 18).
