@@ -79,7 +79,7 @@ class MainActivity : AndroidApplication() {
             }
             else->SilentTrack(mode)
         }
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on"), config)
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile(schedstat=perfBuild) else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate",trackPreview=preview,regionOverride=region,regionPresentation=!regionDebug || intent.getStringExtra("regions")!="off",regionCandidates=!regionDebug || intent.getStringExtra("regionCandidates")!="off",audioArm=audioArm,switchArm=switchArm,bakeHash=perfBuild && intent.getStringExtra("bakeHash")=="on"), config)
         // Apply after the GL thread is created, keeping its startup priority independent.
         if(intent.getStringExtra("callbackPriority")=="display")Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)
         if(paced)graphics.isContinuousRendering=false
