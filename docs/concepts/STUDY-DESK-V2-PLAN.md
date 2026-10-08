@@ -83,7 +83,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 29 | P5 | Platform: the guest view is an allowlist (review card 1) | 6 | - | done (built locally on main, no PR, nothing pushed; essayPlan, worked and workroom no longer reach an unjoined phone; focus, view and timer moved out of the guest view) | 85446973 | 2026-10-08 |
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | not started | | |
-| 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | not started | | |
+| 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -750,3 +750,22 @@ because it spawns runs of its own. Section d's sentence is changed to say so.
 decide whether learners write units; if they do, that is a reading card of its own.
 (5) A part is named as the paper names it wherever the learner sees or hears it. M3a-2 builds this (row 32).
 (6) The captures, the teacher's read and one live set stay owed to the owner's batch 5+6 review.
+
+### 2026-10-08 · batch 6 · M3a-2 · autopilot/accepted-idea-delivery-fd1b53c7
+Built locally; the App Master's ruling (5) on M3a's questions. A part is named as the paper names it (5(b)) on every exit the
+learner sees or hears; the stored said and reply, the attempt record, the read prompt, the numbering n and the verdicts are
+unchanged, and a single item's lines are byte for byte as before.
+What changed, by exit: calc-word.ts `deskLine(items, i, line)` (namedLine + itemName) is the one rewrite. (1) The TV voice:
+the speak effect's choice of line moved out of app/tv/page.tsx into the pure `spokenLine(session)` in lib/desk/spoken.ts; on walk
+it returns deskLine of items[walkIx].said, every other branch returns what it returned. (2) rules/maths.ts `secondProblem(item,
+name)` names the part in its three sentences; app/api/second/route.ts passes itemName. (3) lib/desk/explain.ts `explainItem(...,
+name)` returns `shown` (the reply, whether the model's or the said/ASK fallback, through namedLine) beside the stored `reply`;
+app/api/explain/route.ts passes itemName and answers with `shown` (the phone shows it as it comes; the job's done line too).
+The TV card (MathsTV namedLine at the card) already used namedLine and itemName and is unchanged. docs/STUDY-DESK-SCREENS.md says so.
+New rows: tools/part-names-test.cjs (4 tests: the voice on part (b) equals the card's line, has 5(b), not Number 6; single item
+and hint/sentence/forensic/break/no-set unchanged; secondProblem in its three states on a part and on a single item; explain
+reply from a model reply and from the said/ASK fallback, stored reply untouched), in rulesSuites just before harness-rules-test.
+Kill test (not committed): spokenLine's walk branch returning the stored said made test 1 red; restored, green.
+Gate: `cd desk && npm run test:rules` green (66 suites, 1112 tests); `npx tsc --noEmit --incremental false` clean.
+Not covered: the routes' wiring is read, not driven (the new rows call the pure functions; no marked set is seeded through
+/api/second or /api/explain); no screenshot.
