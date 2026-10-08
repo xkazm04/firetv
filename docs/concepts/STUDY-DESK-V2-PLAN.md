@@ -76,7 +76,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 22 | T4 | Twin: born, the Sitting, Spot yourself (adult D6, D7, D8) | 6 | T2, T3, T1 pass | not started | | |
 | 23 | T5 | Twin: the Twin Card 1.0 export (adult E5, retargeted) | 6 | T4 | a slice pulled forward in batch 4 (T5-lite: export from the Workroom's portrait, adult only); the full T5 still follows T4 | c108f63 | 2026-10-07 |
 | 24 | M3a | Math: Calculus 1 completed (word problems, multi-part) | 6 | M4a, M4c | done (built locally on main, no PR, nothing pushed; the sweep 0 / 0 / 0 / 0 for all three templates over 500 seeds, all shipped; a calc1 set on related rates, optimisation or extrema ends with one code-drawn word problem in two parts; 13 of 31 corpus questions read into a spec, 0 into parts; TV and phone captures owed) | 3dc0693a (step 0), f5d21d3a, 61aca774, 309c52ee, 29e86cda, 3772c23b, 81924e24, and the finish record | 2026-10-08 |
-| 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | not started | | |
+| 25 | M5 | Math: recovery from a failed GCSE paper | 7 | M2b | cut in three by the App Master (2026-10-08): M5a (row 34), M5b (row 35), M5c (row 36); see the M5 card | | |
 | 26 | L5 | Linga Adult: genres and twist decks; 18+ romance and nightlife (adult C3, C4) | 7 | L4, P6 | not started | | |
 | 27 | M3b | Math: the Calculus 2 spine | 7 | M3a | not started | | |
 | 28 | L6 | Linga: Listening practice | 8 | L2 | not started | | |
@@ -84,7 +84,10 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 30 | H1 | Harness: the test:rules runner and a shared loader (review card 2) | 6 | - | done (built locally on main, no PR, nothing pushed; test:rules is tools/run-rules.cjs over `rulesSuites`, every suite runs and a table names the red ones; 57 suites load through tools/ts-load.cjs) | b2c1fccf, 664fb809, 735dd0c2, 4c2bcfbe, 0669b708, 7c85a360, 7dbaa42c, cf0170ed (fallback), the finish record | 2026-10-08 |
 | 31 | P6 | Platform: one adultContent() in rules/mode.ts; mode decides adult content (review card 4) | 7 | - | done (built locally on main, no PR, nothing pushed; adultContent() in rules/mode.ts, read by audienceAllowed, the tutor prompt, the level check and audiencesAt) | c5a6e081, and the finish record | 2026-10-08 |
 | 32 | M3a-2 | Math: a part is called by its paper name on every surface | 6 | M3a | done (built locally, no PR, nothing pushed; the TV voice, the second go's sentences and the explain reply name a part 5(b); stored lines unchanged) | 6f533814 (step 0), ffbc577e, and the finish record | 2026-10-08 |
-| 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | | |
+| 33 | L4b | Linga Adult: the take's last cast line is heard; the take stays on linga-talk until Back to the notes | 6 | L4 | done (built locally, no PR, nothing pushed; e6e6a569 and the docs commit) | e6e6a569, 4df2d091 | |
+| 34 | M5a | Math: the recovery core, pure (a failed paper's lost marks, by desk topic, in an order the prerequisites allow) | 7 | M2b | not started | | |
+| 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | not started | | |
+| 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | not started | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
 on as M4c. E1/E2 (the step line, Talk it through) stay in the backlog as experiments. **Answered:** O1 = 18+ (V5),
@@ -361,6 +364,79 @@ eight rulings stand as written; one change the code requires is the chain tagger
 - Kill: a template with a non-zero count its generator or check cannot fix is withheld (out of `SHIPPED`, off the set,
   its code and rows kept; row 24 and the log record it). No template passes: stop after the table. The screens not
   finished in the run: the set stays unwired, row M3a-2 holds the rest, and the run reports partial.
+
+**M5. Math: recovery from a failed paper** (batch 7, after P6; cut in three by the App Master on 2026-10-08, one slice per
+run through the gate, M5a first and alone, because M5b and M5c read its contract)
+- Why three: the kill row (section g) is 20 rendered marked papers read by a live vision model, and no builder may make a
+  live model call. So the pure core lands first (M5a), the surfaces on typed entry follow (M5b), and the photo path and
+  its probe come last (M5c), with the live run owed to the owner's PC, as T1's was.
+- App Master's rulings (2026-10-08):
+  (1) Typed entry is the door that ships until M5c's probe passes the kill row. The photo path never ships on a
+  simulated pass.
+  (2) The paper decides, not the desk. A topic the desk calls secure that lost marks on the paper is still in the
+  recovery: M5a reads no learner record, and M5b may mark a topic as secure on the desk beside it, never drop it.
+  (3) M5 does not build review card 6 (the `SchoolUnit` contract,
+  `.claude/scan-sweep/runs/architecture-2026-10-08-desk/REVIEW.md`). M5 adds no unit, so card 6 waits for the first
+  slice that adds a GCSE unit.
+  (4) M5b folds in the M3a-2 leftover: `maths/MathsTV.tsx` (about line 745) calls `deskLine` instead of `namedLine` +
+  `itemName`.
+- Every M5 slice: no string a screen shows says "GCSE" or "1MA1" while `gcseClaimAllowed()` is false (gcse.ts HONEST
+  LIMITS); the screens say "a paper", "your paper". gcse.ts, paths.ts, syllabus.ts, school.ts and the generators are
+  unchanged.
+
+**M5a. The recovery core** (S; row 34)
+- Goal: a new pure `lib/rules/recovery.ts` (types and data from `library/gcse.ts` and `library/paths.ts`; no store, no
+  engine, no fs, no model). A paper is a list of items `{ q, marks, outOf, codes }`: `q` a label as the paper prints it
+  ('5(b)'), `marks` and `outOf` integers, `codes` statement codes from gcse.ts.
+- `cleanPaper(raw)` is the one validation, and it never guesses. An item is dropped, with a reason, when its label is
+  empty or too long, `marks` or `outOf` is not an integer, `outOf` is under 1 or over the cap, `marks` is under 0 or over
+  `outOf`, or its label repeats an earlier one; items past the item cap or past the paper's mark total are dropped too.
+  Codes: only codes found in `STATEMENTS` are kept, duplicates collapsed, at most 3 per item; every code not kept is
+  reported. An item left with no valid code goes to `unmapped`, and its lost marks still count in the paper's lost
+  total. The caps (marks per item, items, the paper's total) are what a Foundation paper allows; the JSDoc names their
+  source and marks them unverified, as gcse.ts is.
+- `recovery(paper)`: an item's lost marks are `outOf - marks` (a full-marks item adds nothing), counted in full against
+  every code it names (a question that tests two statements was lost on both). Each statement leads to the desk topics
+  its `touches` names on the school path; each topic appears once, with its summed lost marks, the item labels and the
+  codes behind it. Order: most lost marks first, except that a topic never comes before one of its own prerequisites
+  (`prereq`, followed through) that is also in the list; ties by path order. A statement with no desk topic goes to
+  `notOnDesk` with its code, its `can` text, its lost marks and its item labels, by lost marks; a `foundation: false`
+  statement is flagged there, never dropped. The paper's totals: marks, outOf, lost.
+- Files: new `lib/rules/recovery.ts`; new `tools/recovery-rules-test.cjs` (in `rulesSuites` just before
+  `harness-rules-test.cjs`); `desk/package.json`; this plan.
+- Tests: validation (every drop reason; an unknown code dropped, not guessed; an item with only unknown codes in
+  `unmapped`, its lost marks in the total); a full-marks item adds nothing; two codes on one item count against both;
+  two statements on one topic give one entry with the sum; the prerequisite rule (a later topic with more lost marks
+  still comes after its own prerequisite; unrelated topics by lost marks); `notOnDesk` (a gap statement with its `can`
+  text, never linked to a topic; a `foundation: false` statement flagged); a sweep over every Foundation statement (a
+  one-item paper gives a school-path topic or a `notOnDesk` entry, and the counts agree with `gcseCoverage()`); no
+  returned string matches /GCSE|1MA1/ over a sweep of papers. Two kill tests, not committed: the prerequisite rule
+  dropped (sort by lost marks only) turns the prerequisite row red; `cleanPaper` keeping an unknown code turns a
+  validation row red.
+- Accept: `cd desk && npm run test:rules` green at every commit; `npx tsc --noEmit --incremental false` clean; no
+  existing assertion changes. No screen, route, phone, TV or learner-record change.
+
+**M5b. The recovery surfaces** (M; row 35; reads M5a's contract unchanged)
+- Goal: typed entry of a paper's results on the phone (one row per item: the label, marks, out of, and the statements
+  picked from a list that shows each statement's `can` text, never a code alone), sent through `cleanPaper`, every drop
+  shown with its reason; the recovery list on the TV (topics in M5a's order with their lost marks and item labels, the
+  `notOnDesk` statements apart and plainly "not on the desk yet"); the result kept on the learner record (the cleaned
+  paper and the date; the recovery recomputed from it, never stored). A secure topic stays in the list (ruling 2). The
+  M3a-2 leftover in `MathsTV.tsx` (ruling 4).
+- Proves done by: phone-panel and maths-tv rows (the entry, the drops, the list, no /GCSE|1MA1/ on any new surface),
+  a learners-save row (the paper round-trips, a malformed stored paper is read as none); `tsc` clean; the screens docs
+  and `docs/DESIGN-MATH-BUDDY.md` in the same commit. Owed to the owner: the TV list at 1920 x 1080 and 1280 x 720, the
+  phone entry at 390 px.
+
+**M5c. The photo path and its probe** (M; row 36; the kill row in section g)
+- Goal: a photo of a marked paper read by the vision engine into the same raw paper `cleanPaper` takes (the label, the
+  marks, out of; the statements by the question text), behind typed entry. The probe: 20 rendered marked papers with a
+  known answer key, read, cleaned and scored by code (an item is right when its codes reach the key's desk topics, or
+  its `notOnDesk` statements).
+- Proves done by: the renderer, the stubbed read and the scorer committed with rows (a stubbed read of a rendered paper
+  scores 100%, a wrong code scores it down); the live run of the 20 papers on the owner's PC, recorded with its figure.
+  Under 85% of items mapped to the right unit: the photo path is not offered and typed entry stays the door (ruling 1).
+  A simulated or stubbed pass is recorded as such and never ships the photo path.
 
 ## e. Batches
 
