@@ -448,7 +448,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         profiler?.mark(11,"DR.camera")
         if(scene.ready)drawWorld(elapsed)
         profiler?.mark(15,"DR.hud")
+        val hudDraws=profileGl?.draws?:0
         drawOverlay()
+        profiler?.hud((profileGl?.draws?:0)-hudDraws,batch.renderCalls,0.0)
         profiler?.mark(16,"DR.caption")
         drawCaption();drawScriptCaption()
         profiler?.mark(17,"DR.tail")

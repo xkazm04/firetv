@@ -18,7 +18,8 @@ class FrameProfiler(val platform: ProfilePlatform) {
         "cameraMs", "effectsUpdateMs", "sceneryDrawMs", "carsEffectsMs", "hudMs", "captionMs",
         "drawCalls", "textureBinds", "textureUploads", "effectSlots",
         "requestsBytes", "prepareBytes", "simulationBytes", "audioBytes", "telemetryBytes", "clearBytes",
-        "cameraBytes", "effectsUpdateBytes", "sceneryDrawBytes", "carsEffectsBytes", "hudBytes", "captionBytes", "drawIndices"))
+        "cameraBytes", "effectsUpdateBytes", "sceneryDrawBytes", "carsEffectsBytes", "hudBytes", "captionBytes", "drawIndices",
+        "hudDraws", "hudFlushes", "hudBakeMs"))
     private val row = DoubleArray(trace.columns.size)
     private var start = 0L
     private var cpu = 0L
@@ -39,6 +40,10 @@ class FrameProfiler(val platform: ProfilePlatform) {
         if (section) platform.end()
         platform.begin(next); section = true
     }
+    /** P16: GL draw calls issued inside the HUD phase (ProfileGl delta across drawOverlay), the HUD SpriteBatch's own flushes
+     *  (SpriteBatch.renderCalls between its begin and end in drawOverlay: one per texture change, blend change or full buffer,
+     *  plus the final flush at end) and the time this frame spent baking a retained HUD layer (0 when none is baked). */
+    fun hud(draws: Int, flushes: Int, bakeMs: Double) { row[35] = draws.toDouble(); row[36] = flushes.toDouble(); row[37] = bakeMs }
     fun finish(active: Boolean, live: Int, draws: Int, binds: Int, uploads: Int, effects: Int, indices: Int = 0) {
         if (section) platform.end()
         section = false
