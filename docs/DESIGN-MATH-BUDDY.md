@@ -233,7 +233,7 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
   tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
   (`expectedOn` is null). The learner picks the path on the profile's Maths course row (the shell's profile
-  screen). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
+  screen; three cells since v2 M3b-2: School maths, Calculus 1, Calculus 2, laid out as the interests row is, `220px auto` with the cells flowing; its captures are owed). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
   something opens Topics at the learner's **frontier** (`topicsFocus` in `desk/src/tv/keys.ts`, `frontierOn` in
   `paths.ts`: the needle's rule on the school path, the first topic not latched secure whose prerequisites all are on
   a course), and at the first stop when nothing is secure or nothing is left.

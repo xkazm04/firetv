@@ -89,7 +89,7 @@ multi-part calculus problem with a graph on the TV and every working line checke
 | 35 | M5b | Math: the recovery surfaces (typed entry on the phone, the recovery list on the TV, the result on the learner record) | 7 | M5a | done (built locally, no PR, nothing pushed; `papers` on the learner record, the phone's Paper panel and `paper.enter`, screen `paper` on the TV, the M3a-2 leftover; rows in learners-save, phone-panel and maths-tv tests; the kill test red; the owner's captures and the caps check owed) | e6472a1a (step 0), b0bf1e10, 21c988de, acc9f062, 36ab1056, and the finish record | 2026-10-08 |
 | 36 | M5c | Math: the photo path and its probe (20 rendered marked papers; the live run on the owner's PC) | 7 | M5a, M5b | built; the probe's live run awaits the owner's PC (built locally, no PR, nothing pushed; lib/desk/paperRead.ts and lib/rules/paperScore.ts wired to nothing, tools/paper-probe.cjs with --stub, 9 rows in tools/paper-probe-test.cjs, the ruling-11 status; the kill test red; the photo path not offered) | 9b76fc0a (step 0), d26ad5c5, baa062d9, 1177441c, and the finish record | 2026-10-08 |
 | 37 | M3b-1 | Math: the path's judge on the PATHS record (architecture card 5 part a; no behaviour or screen change) | 7 | M3a | done (built locally, no PR, nothing pushed; `PathInfo.judge` ('school' or 'calc') and a Calculus topic's `shapes` on its PathTopic; every 'calc1' site asks the record; 7 rows in tools/maths-paths-test.cjs; the kill test red; no capture owed) | 830ad522 (step 0), 08149848, and the finish record | 2026-10-08 |
-| 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | not started (its questions go to the App Master first; see the M3b card) | | |
+| 38 | M3b-2 | Math: the Calculus 2 path, integration techniques on the nine shapes (`school: false`, no lessons) | 7 | M3b-1 | done (built locally, no PR, nothing pushed; `calc2` judged 'calc', five topics, `PathInfo.calcWords`; suite `tools/calc2-path-test.cjs`, 7 rows; the kill test red; owed to the owner: the Maths course row with three cells at 1920 x 1080 and 1280 x 720, and one live calc2 set) | 18845498 (step 0), 6565c0f5, and the finish record | 2026-10-08 |
 | 39 | M3b-3 | Math: sequences and series (a design change: a second variable, n) | 7 | M3b-2 | not started (built only if its card names the kind of truth, comparison, leak rule and marking prompt; else listed in the honest limits and the descope goes to the owner) | | |
 
 **Retired by V4:** adult A3, B2-B7 (Field Work jobs, Beyond, the mock paper as a job). B1 (the chain checker) lives
@@ -1189,3 +1189,55 @@ Next: M3b-2 waits for the App Master's rulings on its questions (in the run's re
 whether a Calculus 2 prompt names its own course (`CALC_SYSTEM` in items.ts says "a university Calculus 1 desk", and the hint's
 `CALC_STANCE` names Calculus I's rules), improper integrals and volumes or arc length (out, or M3b-3), the corpus or syllabus Calculus 2
 follows, and whether a slip new to integration techniques may be added. L5 runs after the owner's 09:00 review on 2026-10-09.
+
+### 2026-10-08 · batch 7 · M3b-2 · autopilot/accepted-idea-delivery-c2af55db
+M3b's second slice (rows 27 and 38; the M3b card), the Calculus 2 path: integration techniques on the two integral shapes. Built locally,
+nothing pushed. Commits: 18845498 (step 0: the App Master's rulings (5)-(12) on M3b-1's questions in the M3b card, the M3b-2 and M3b-3
+drafts updated to rulings 7 and 8, row 37's garbled cell fixed), 6565c0f5 (the path, its prompt words and its rows), and this entry with
+the docs.
+Order, a deliberate deviation: batch 7's order is M5, L5, M3b (section e). M3b-2 ran ahead of L5, as M3b-1 did, because L5's 18+ content
+waits for the owner's review at 09:00 on 2026-10-09 and M3b-2 needs no owner.
+What changed, by file:
+- `lib/library/calculus2.spine.ts` (new, plain data, no import): `CALC2_SPINE`, five topics - `calc2-parts` (Stewart 9e 7.1 / OpenStax
+  Volume 2 3.1), `calc2-trig-integrals` (7.2 / 3.2), `calc2-trig-sub` (7.3 / 3.3), `calc2-partial-fractions` (7.4 / 3.4),
+  `calc2-strategy` (7.5 / 3.5) - each with name, strand, one-sentence blurb, prerequisites only on earlier calc2 topics (ruling 3) and
+  the shapes `antiderivative` and `definite-integral`. The OpenStax section numbers were NOT verified in this run (no fetch was made): 3.1-3.5 are cited from the
+  author's recall of chapter 3 (3.6 numerical integration and 3.7 improper integrals follow it), and the Stewart numbers are the anchor. The App Master
+  should confirm them (ruling 9: otherwise cite Stewart alone).
+- `lib/library/paths.ts`: `MathPath` gains `'calc2'`; the `calc2` entry (name "Calculus 2", `judge: 'calc'`, `school: false`, a blurb that
+  says it follows Calculus 1); `PathInfo.calcWords` ({ desk, course, methods }, ruling 6) on both Calculus paths, calc1's values
+  reproducing today's words; `calcWordsOf(path)` (the path's own words when judged 'calc', else the first path judged 'calc').
+- `desk/hint.ts`: `calcStance(path)` replaces the constant `CALC_STANCE`; `desk/items.ts`: `calcSystem(topicId)` replaces `CALC_SYSTEM`,
+  naming the topic's own path. No site names a path id.
+- `tools/maths-calculus-live.cjs`: `--path` takes every path judged 'calc' (read off the record; an unknown path is refused before
+  anything starts); the Tonight stops follow the path's length; with calc2 (no example corpus) it walks the rulers alone. Dry run: calc1
+  22 topics x 7 screens + rulers, 0 failed; calc2 rulers, 0 failed. No live call.
+- Not touched: kinds.ts, maths.ts, store.ts, profileRows.ts, explain.ts, the hint route, screens.tsx (all follow the judge).
+Choices, stated: (1) `calcWords` has three fields because the set's prompt says "Calculus 1" while the stance says "Calculus I". (2) The
+spine imports nothing, so `Calc2Shape` is a local two-member union, not `CalcShape`; its ids are rules/calc.ts' own and the suite checks
+them against `CALC_SHAPES`. (3) No new slip (ruling 10): calc2 topics use the antiderivative and definite-integral slips.
+Rows: the new suite `tools/calc2-path-test.cjs` (registered before harness-rules-test.cjs; 7 rows): the spine; the record; 20 hand-worked
+fixtures (by parts on x e^x, x sin(x), ln(x); sin^2, cos^3; sqrt(4 - x^2), 1/(x^2 + 4); 1/(x^2 - 1), 1/(x(x+1)); x e^(x^2), x^2 ln(x)),
+each well formed, each with its section named, `checkAnswer` marking its worked answer 'right', a wrong answer 'wrong', and the
+lost-constant and sign slips as those slips; a stubbed calc2 set judged 'calc' whose prompt asks only for the topic's shapes in
+Calculus 2's words; Calculus 1's set prompt and stance pinned whole (text at 37880327) with Calculus 2 naming Calculus II and its methods; the
+sweep for the quoted 'calc2'. `tools/maths-course-test.cjs` rows 10-11 (a calc2 learner saved and surviving a load; the course row has
+three cells, calc2 third, posting its patch). The kill's fixtures: no shape or topic was withheld, every fixture marked.
+Edited existing assertions (the brief allowed test 1 only; the others were forced by calc2 becoming a path, and are listed for review):
+- maths-paths 1: `deepEqual(keys.sort(),['calc1','school'])` -> `['calc1','calc2','school']`; added `PATHS.calc2.topics.length === 5`; the three
+  uniqueness lines (ids of school + calc1; their count; "school topic not in calc1") -> over every path (never weaker).
+- maths-paths 12 (forced): the transpiled-require pattern `(syllabus|calculus1.spine)` -> `(syllabus|calculus[12].spine)` (paths.ts now requires both spines).
+- maths-paths 14 and 18 (forced): the junk `mathPath` lists named 'calc2' as no path; 'calc2' -> 'calc3' in both.
+- maths-course 6 (forced): "two cells" and the expected cell list gained `['path','Calculus 2',P.PATHS.calc2.blurb,'calc2']`; the session.json fixture gained a
+  `course-calc2` profile (added, nothing edited).
+Rows 13-19 of maths-paths-test pass for calc2 with no edit.
+Kill test (run on 6565c0f5, not committed): calc2's judge set to 'school' turned calc2-path 2-6 red (5 of 7) and maths-paths 13 (the judge pin)
+red, restored with `git restore`; maths-course stays green under the flip by design (it checks the row and the save, not the judge).
+Gate: `cd desk && npm run test:rules` 69 green, 0 red (1169 tests; 68 / 1160 before) at 6565c0f5; `npx tsc --noEmit --incremental false` clean.
+No `desk/data/` touched, no model call, no push; calculus1.spine.ts, calculus1.ts, calc.ts, calc-expr.ts, calc-word.ts, the generators,
+syllabus.ts, school.ts, recovery.ts, paperRead.ts, paperScore.ts, screens.tsx and the engines unchanged.
+Owed to the owner: the Maths course row with three cells at 1920 x 1080 and 1280 x 720 (ruling 5), and one live calc2 set on the PC
+(`node tools/maths-calculus-live.cjs --path calc2` for the rulers, a live set for the model's yield on the five topics).
+Next, M3b-3 (row 39) needs its card completed: for each of sequences and series, improper integrals (7.8) and approximate integration (7.7),
+the kind of truth, the comparison, the leak rule and the marking prompt, and how n is read. Otherwise the descope goes to the owner. Also open:
+a technique slip needs slips keyed by topic (a design change; ruling 10). L5 runs after the owner's 09:00 review on 2026-10-09.

@@ -28,7 +28,7 @@ The Calculus 1 course itself (its source, its 22 topics, the reader baseline and
 
 ## 1. What a path is
 
-`MathPath` is `"school" | "calc1"`. `PATHS` holds one `PathInfo` per path: an id, a name, a one-sentence blurb,
+`MathPath` is `"school" | "calc1" | "calc2"`. `PATHS` holds one `PathInfo` per path: an id, a name, a one-sentence blurb,
 `school` (true when its topics carry a school year), `judge` and its topics, in order. `judge` (`PathJudge`, v2 M3b-1)
 says how the path's items are judged: `'school'` (a unit with a code generator is a school item, any other topic a
 linear one) or `'calc'` (every topic is a Calculus item on its own shapes). Each `PathTopic` has an id, a name, a
@@ -50,8 +50,8 @@ never reaches a screen (`tools/maths-course-test.cjs` test 1). `learnerPath(sess
 the desk, or the school path when no one is seated.
 
 **How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES`: the keys of
-`PATHS` in their declared order, today `school` then `calc1`) while Maths is among the draft's interests. Its two cells are the paths' names, School maths and
-Calculus 1. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
+`PATHS` in their declared order, today `school`, `calc1`, then `calc2`) while Maths is among the draft's interests. Its three cells are the paths' names, School maths,
+Calculus 1 and Calculus 2. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
 draft with the other fields. Turning Maths off hides the row but leaves the draft's `mathPath` as it was.
 
 **What "first-class" means here.** No screen or pipeline reads a global topic list for Calculus. Each one asks
@@ -492,7 +492,7 @@ because it is the fallback. No test pins this case.
 ## 7. The TV
 
 - **Profile.** The Maths course row appears after "Interested in" while Maths is on. Its cells are **School
-  maths** and **Calculus 1**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
+  maths**, **Calculus 1** and **Calculus 2**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
   chosen. The one caption under the rows is the focused cell's label and its path's blurb, for example "Calculus 1"
   over "A university first course in calculus, from functions and limits through derivatives to integrals."
 - **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**
@@ -552,7 +552,8 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/calc-marking-test.cjs` | calc1 slip lists; marking by `checkAnswer` on each shape; the model's verdict is never read or used as a fallback; explanation settling and leak replacement; the evening note's topic name |
 | `tools/calc-word-test.cjs` | v2 M3a: the sweep of the three word templates (500 seeds each; specs not well formed, problems not fair, worked answers not right, printed numbers not drawn - all 0, the table printed); controls; a right working on a part rings nothing; the corpus table of what reads into a spec and into parts |
 | `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
-| `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
+| `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row (three cells since v2 M3b-2); a calc2 learner saved and surviving a load; set names on the landing and the phone |
+| `tools/calc2-path-test.cjs` | v2 M3b-2, the Calculus 2 path: the five-topic spine (Stewart 9e 7.1-7.5, OpenStax Volume 2 3.1-3.5, the two integral shapes, prerequisites on earlier calc2 topics only); the record (judged `'calc'`, no school year, no lessons); 20 hand-worked fixtures that are well formed and that `checkAnswer` marks right, wrong, and as the named `lost-constant` and `sign` slips; a stubbed set judged Calculus whose prompt asks only for the topic's shapes; Calculus 1's set prompt and stance pinned whole and Calculus 2 naming Calculus II and its methods; the quoted `'calc2'` only in `paths.ts` and `calculus2.spine.ts` |
 | `tools/maths-ruler-test.cjs` | the ruler model's formulas at the school path's fifteen topics (six strands) and its panning Topics ruler; the Calculus panning ruler; the strip, every label whole in at most two lines |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
 | `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions; test 7b: the W7 generators' questions render, fractions and the gap stacked, every number and unit kept; test 7c: the W7 batch-2 generators' questions render, every number, point, % and unit kept; test 7d: the W7 batch-3 generators' questions render or fit a row at 34 px or more (estimated), every number, ratio and unit kept |
@@ -586,19 +587,19 @@ stubbed replies.
 
 ## 9. How to add a path
 
-Take Calculus 2 as the example. Since v2 M3b-1 the Calculus wiring asks the path's record (`judge`), not the id
+Calculus 2 is the example, and it now exists (v2 M3b-2: integration techniques, `calculus2.spine.ts`). Since v2 M3b-1 the Calculus wiring asks the path's record (`judge`), not the id
 `calc1`, so a second course path on the nine shapes is data.
 
 1. **The spine.** Add `desk/src/lib/library/<course>.spine.ts` as plain data with no import. Give each topic an
    id unique across every path, a name, a strand, a one-sentence blurb, prerequisites that point only at earlier
    topics, and at least one `CalcShape`.
 2. **`paths.ts`.** Add the id to `MathPath` and a `PATHS` entry with its name, blurb, `school: false` and
-   `judge: "calc"`, its topics each carrying the spine's `shapes`.
+   `judge: "calc"`, its `calcWords` (the course name the set's prompt uses, the name and the methods the hint's stance uses; v2 M3b-2 ruling 6) and its topics each carrying the spine's `shapes`.
    `school: true` would make `expectedOn` call `expectedIndex`, which counts `SYLLABUS` topics. A second
    school-year path is a design change.
 3. **The profile.** Nothing to add: `pathChecked` in `store.ts` and `pathOf` accept any key of `PATHS`, and
    `COURSES` in `profileRows.ts` is the keys of `PATHS` in order, so the Maths course row gets a third cell by
-   itself. That cell is a screen change: capture it.
+   itself. That cell is a screen change: capture it (calc2's captures are owed, v2 M3b-2 ruling 5).
 4. **The judge (done in v2 M3b-1; a new path sets its `judge`).** Every site that decided Calculus by the string
    `calc1` asks the record: `kindOfTopic` (`rules/kinds.ts`, which `makeItems` follows), `shapesOf` (`items.ts`,
    through `shapesOfTopic`), `isCalcTopic` and `CALC_AS_SLIPS` (`rules/maths.ts`, over `calcTopics()`, every path
@@ -623,7 +624,8 @@ Take Calculus 2 as the example. Since v2 M3b-1 the Calculus wiring asks the path
 7. **The test tables.** Update the counts in `maths-paths-test.cjs` (22, 3, 25) and the tables in
    `calc-rules-test.cjs` (checks, well-formed specs, the sweep). `calc-hint-test.cjs` follows them. The fixtures in
    `calc-practice-test.cjs` and `calc-marking-test.cjs` need one per shape (marking test 2 asserts it). Update
-   `maths-course-test.cjs`, and `maths-calculus-live.cjs` `--path`, which accepts only `calc1`.
+   `maths-course-test.cjs`. `maths-calculus-live.cjs` `--path` takes every path judged `'calc'` (an unknown path is refused first); calc2 has no example corpus, so it walks the rulers only.
+   The pins that name a path (the key list, the length, the junk list of `mathPath` values) are edited by hand: `maths-paths-test.cjs` tests 1, 12, 14 and 18, `maths-course-test.cjs` test 6 (M3b-2's edits are listed in the plan's log).
 8. **The docs.** This page, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md), and
    [STUDY-DESK-SCREENS.md](STUDY-DESK-SCREENS.md).
 
@@ -635,7 +637,7 @@ Take Calculus 2 as the example. Since v2 M3b-1 the Calculus wiring asks the path
 - it needs a second variable. The engine reads x only, so a sequence in n, or a series, is not readable;
 - it needs a new tolerance rule, or an answer stored anywhere.
 
-Calculus 2's integrals, limits in x and derivatives fit the existing shapes. Its sequences and series do not.
+Calculus 2's integration techniques fit the existing shapes (built). Its sequences and series do not.
 Linear algebra needs a different engine altogether.
 
 ## 10. Honest limits
@@ -650,6 +652,17 @@ Linear algebra needs a different engine altogether.
   of f on [a, b], only when both are inside the interval. "Find c so that f is continuous" still has no spec. Of the
   corpus's 31 printed questions, 13 read into a spec and none into parts: c13-q1's maximum is at an end
   ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table, printed by `tools/calc-word-test.cjs`).
+- **Calculus 2 is integration techniques only, and has no lessons** (v2 M3b-2). It has five topics (by parts, trigonometric
+  integrals, trigonometric substitution, partial fractions, choosing a technique; Stewart 9e 7.1-7.5, OpenStax Volume 2
+  3.1-3.5), each on `antiderivative` and `definite-integral`; its prerequisites point only at earlier Calculus 2 topics, so
+  Calculus 1 is not a prerequisite the desk checks. It has no lessons (ruling 4), no example corpus and no word templates.
+  Listed out: volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: applications of integration, not the techniques
+  the owner picked). Moved to M3b-3 as candidate shapes: improper integrals (7.8; a value or a 'diverges' verdict) and
+  approximate integration (7.7; a rule applied with n steps), built only if that card names their truth, comparison, leak
+  rule and prompt, else listed here and descoped to the owner with sequences and series. Follow-up: a technique slip
+  (parts, substitution, partial fractions) needs slips keyed by topic; `CALC_AS_SLIPS` tags a slip by shape, so a new
+  antiderivative slip would join every Calculus 1 antiderivative topic's list, a Calculus 1 change. Calculus 2 topics use
+  the existing antiderivative and definite-integral slips (ruling 10).
 - **Only the nine shapes.** Inflection points, inverses, equations to solve, implicit differentiation, Riemann sums
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of
