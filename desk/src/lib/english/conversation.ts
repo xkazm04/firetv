@@ -19,7 +19,7 @@ import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines,
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
-import { forkOf, heldOf, runningTake, TAKE_CAST_TURNS } from "./take";
+import { forkOf, heldOf, runningTake, takeSpent } from "./take";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId, Take } from "./types";
 
 export { ConversationError };
@@ -137,7 +137,7 @@ const TAKE_TASK="Take Two: the scene went back to your line just before one of t
  * A line of the learner's inside Take Two (v2 L4), and the cast's answer: one fast, thinking-off call with the replay
  * schema (a reply, no observations, no moment), over the scene up to the fork and the take's own lines. heldOf is
  * decided on the learner's first line of the take. Nothing is written to the learner record: no evidence, no review
- * reuse, no session, digest or certificate. After the second cast turn the take ends by itself, on the recap.
+ * reuse, no session, digest or certificate. After the second cast turn the take is spent: it stays on linga-talk, its last line heard, until Back to the notes.
  */
 async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:string){
   const take=runningTake(c)!,note=c.cut!.notes[take.note];
@@ -153,9 +153,8 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
     const current=checkCurrent(c,commandId);
     if(runningTake(current)?.note!==take.note)throw new ConversationError("This take has changed. Return to the current scene.",409);
     const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:line(result.json.reply)}];
-    const done=turns.filter(t=>t.role==="partner").length>TAKE_CAST_TURNS;
-    const takes=current.takes!.map((t):Take=>t.note===take.note?{...t,turns,held,...(done?{endedAt:Date.now()}:{})}:t);
-    commit({...current,takes,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms},done?"linga-recap":"linga-talk");
+    const takes=current.takes!.map((t):Take=>t.note===take.note?{...t,turns,held}:t);
+    commit({...current,takes,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms},"linga-talk");
     return getSession();
   }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"Linga could not answer in this take. Say your line again."});}catch{/* newer episode owns the UI */}throw e;}
 }

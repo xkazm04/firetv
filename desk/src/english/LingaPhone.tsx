@@ -270,7 +270,7 @@ function TakePanel({c,take,run,busy,inFlight,end}:{c:Conversation;take:Take;run:
     <p><b>Take Two · {c.title}</b>{note&&<><br/>Your note: “{note.quote}”{note.better&&<> → “{note.better}”</>}</>}</p>
     <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":line?.text}</div>
     {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
-    <ReplyBox ready={line?.role==="partner"} busy={busy} question={line?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
+    <ReplyBox ready={line?.role==="partner"&&accepts(c,"turn")} busy={busy} question={line?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
       onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="A take is practice: nothing in it is recorded."/>
     <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button>{end&&<button className="pbtn" data-secondary="true" disabled={busy||end.disabled} onClick={()=>run("take-end")}>{end.label}</button>}</div>
     <details><summary>This take</summary><div className="linga-transcript">{take.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?"You":c.partner}</b>{t.text}</p>)}</div></details>

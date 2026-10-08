@@ -1426,6 +1426,12 @@ test('take case 3: turnState, accepts and refusal for "take-two" and "take-end" 
  const wait=TAKE_STATES['waiting, in a take'];
  assert.deepEqual(T.TURN_ACTIONS.filter(a=>T.accepts(wait,a,'adult',1)),['repeat','leave'],'a reply in flight inside a take: cancel it, or hear the line again');
  assert.equal(T.refusal(wait,'take-two','adult',1),'The partner is preparing a reply. You can cancel and return later.');
+ // a spent take (both cast turns played): still take-two, and only Back to the notes and Repeat are taken
+ const SPENT_TURNS=[{id:'p1:take',role:'partner',text:'Hello.'},{id:'s1',role:'learner',text:'Yesterday I booked it.',mode:'text'},{id:'s2',role:'partner',text:'Cast 1.'},{id:'s3',role:'learner',text:'Yes.',mode:'text'},{id:'s4',role:'partner',text:'Cast 2.'}];
+ const spentC=convo({turns:REPLIED,phase:'finished',cut:{at:1,notes:CUT_NOTES},takes:[{...RUNNING,turns:SPENT_TURNS}]});
+ assert.equal(T.turnState(spentC),'take-two','a spent take is still in the take');
+ for(const a of T.TURN_ACTIONS.filter(x=>x!=='take-two'))assert.equal(T.accepts(spentC,a,'adult'),['repeat','take-end'].includes(a),`spent take · ${a}`);
+ assert.equal(T.refusal(spentC,'turn','adult'),'That was the take. Go back to the notes.');assert.equal(T.refusal(spentC,'capture','adult'),'That was the take. Go back to the notes.');
  // the mode still changes no other action, with a take in the fixtures too
  for(const a of CONVERSATION_ACTIONS)for(const c of Object.values(TAKE_STATES))assert.equal(T.accepts(c,a,'adult'),T.accepts(c,a),`the mode changes no other action: ${a}`);
 });
@@ -1459,9 +1465,18 @@ test('take case 4: one full stubbed run - a scene, Cut, Take Two on one note, th
  c=getSession().conversation;
  assert.deepEqual(c.takes[0].turns.map(t=>[t.role,t.text]),[['partner',fork.text],['learner','Yesterday I booked a room here.'],['partner','Cast 1. And then?'],['learner','Yesterday I go there, I think.'],['partner','Cast 2. And then?']]);
  assert.equal(c.takes[0].held,true,'held is decided on the first line of the take');
- assert.equal(typeof c.takes[0].endedAt,'number','two cast turns: the take ends by itself');
- assert.equal(T.turnState(c),'finished');assert.equal(getSession().screen,'linga-recap');
+ assert.equal(c.takes[0].endedAt,undefined,'two cast turns: the take is spent but does not end by itself');
+ assert.equal(T.turnState(c),'take-two');assert.equal(getSession().screen,'linga-talk');
+ const spentView=view().lingaView(getSession());
+ assert.equal(spentView.spoken.line,'Cast 2. And then?');assert.equal(spentView.spoken.blocked,false);assert.equal(spentView.audible,true,'the last cast line is heard');
  const take=calls.slice(before);
+ await assert.rejects(command('turn',{text:'More.',mode:'text',lastTurnId:c.takes[0].turns.at(-1).id}),e=>e.status===409&&e.message==='That was the take. Go back to the notes.');
+ await assert.rejects(command('capture',{active:true}),e=>e.status===409&&e.message==='That was the take. Go back to the notes.');
+ assert.equal(calls.length,before+2,'a third turn makes no call');
+ await command('repeat');assert.equal(getSession().conversation.audioNonce,c.audioNonce+1,'repeat bumps the nonce');
+ await command('take-end');c=getSession().conversation;
+ assert.equal(typeof c.takes[0].endedAt,'number','Back to the notes ends the spent take');
+ assert.equal(T.turnState(c),'finished');assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2);
  assert.equal(take.length,2,'two calls: one per cast turn');assert(take.length<=3,'at most 3 calls');
  for(const x of take){assert.equal(x.thinking,false,'fast, thinking off');assert.equal(x.task,'Take');assert.equal(x.prompt.bringBack,undefined,'no taught phrase invited');assert.deepEqual(Object.keys(x.schema.properties).sort(),['help','reply'],'the replay schema: no observations, no moment');}
  assert.deepEqual(take[0].prompt.transcript.map(t=>t.text),[fork.text,fork.text,'Yesterday I booked a room here.'],"the scene up to the fork, then the take: the first take's noted line is not in it");
@@ -1478,6 +1493,17 @@ test('take case 4: one full stubbed run - a scene, Cut, Take Two on one note, th
  assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2,'no call to start or end a take');
  assert.deepEqual(getLearner('jakub').english,english0,'still nothing on the learner record');
  await assert.rejects(command('take-two',{note:2}),e=>e.status===409&&/Choose one of the notes/.test(e.message));
+});
+test('take case 9: a spent take on the TV shows the last cast line, the spent caption and Back to the notes; the phone takes no reply',()=>{
+ const V=view();
+ const spentTake={note:1,from:'p1',turns:[{id:'p1:take',role:'partner',text:'Hello.'},{id:'s1',role:'learner',text:'I work in a hotel.',mode:'text'},{id:'s2',role:'partner',text:'Cast 1.'},{id:'s3',role:'learner',text:'Yes.',mode:'text'},{id:'s4',role:'partner',text:'Cast 2. And then?'}],held:true,at:2};
+ const v=V.lingaView(takeView('linga-talk',{takes:[spentTake]}));
+ assert.equal(v.hero.said,'Cast 2. And then?');assert.equal(v.captionTag,'Take done');assert.equal(v.caption,'That was the take. Go back to the notes when you are ready.');
+ assert.deepEqual(v.actions.map(a=>[a.id,a.run.command?.action,!!a.disabled]),[['take-end','take-end',false]]);assert.equal(v.answer,null);
+ assert.equal(v.spoken.line,'Cast 2. And then?');assert.equal(v.spoken.blocked,false);assert.equal(v.audible,true);
+ const ids=V.offeredActions(v).map(a=>a.id);assert(ids.includes('take-end')&&ids.includes('repeat'),'Back to the notes and Repeat audio stay');
+ for(const id of ['turn','capture','answer'])assert(!ids.includes(id),`no ${id}`);
+ const sf=require(path.resolve(__dirname,'../uat/driver/surface.cjs')).surfaceOf(takeView('linga-talk',{takes:[spentTake]}));assert.deepEqual(sf.strays,[]);assert.deepEqual(sf.unrendered,[]);
 });
 test('take case 5: inside a take the server refuses Cut, the coach, the quiz, pause and finish; Leave cancels a reply in flight and keeps the take',async()=>{
  await cutTake();await command('take-two',{note:0});

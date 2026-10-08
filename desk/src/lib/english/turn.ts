@@ -9,7 +9,7 @@
  * Pure data, no React and no filesystem: the server, the view, the TV and the phone all import it.
  */
 import type { Mode } from "../rules/mode";
-import { forkOf, runningTake } from "./take";
+import { forkOf, runningTake, takeSpent } from "./take";
 import type { Conversation } from "./types";
 
 /**
@@ -67,6 +67,9 @@ export const ACCEPTS: Record<TurnState, readonly TurnAction[]> = {
 /** Coaching and Cut work on a reply the learner gave: the one guard the table needs from the data. */
 const hasReply = (c: Conversation) => c.turns.some(t => t.role === "learner");
 
+/** A running take that has had all its cast turns takes no more lines (take.ts takeSpent): only Back to the notes and Repeat. */
+const spent = (c: Conversation) => { const t = runningTake(c); return !!t && takeSpent(t); };
+
 /**
  * Why cut note `note` cannot have its Take Two, the state aside, or "" when it can: a take ended without a Cut, a note
  * that is not one of its notes, a note that already had its take, or one with no partner line before it.
@@ -86,11 +89,14 @@ function noteRefusal(c: Conversation, note: unknown): string {
  */
 export function accepts(c: Conversation, action: string, mode?: Mode, note?: number): boolean {
   if (!isTurnAction(action) || !ACCEPTS[turnState(c)].includes(action)) return false;
+  if ((action === "turn" || action === "capture") && spent(c)) return false;
   if (action === "cut") return mode === "adult" && hasReply(c);
   if (action === "take-two") return mode === "adult" && !noteRefusal(c, note);
   return action !== "coach" || hasReply(c);
 }
 
+/** The sentence for a line or a microphone on a take that has had its cast turns. */
+export const SPENT = "That was the take. Go back to the notes.";
 const BY_STATE: Record<TurnState, string> = {
   finished: "This rehearsal has finished. Start a new situation.",
   "take-two": "Say your line again on your phone, or go back to the notes.",
@@ -121,6 +127,7 @@ export function refusal(c: Conversation, action: string, mode?: Mode, note?: num
     if (state === "finished") return noteRefusal(c, note) || BY_STATE.finished;
     return state === "preparing" || state === "waiting" ? BY_STATE[state] : "Take Two starts from a note at Cut.";
   }
+  if ((action === "turn" || action === "capture") && spent(c)) return SPENT;
   if (action === "take-end" && !runningTake(c)) return "There is no take running.";
   if (action === "cut" && state === "paused") return BY_ACTION.cut!;
   return (state === "quiz" || state === "your-turn") && BY_ACTION[action as TurnAction] || BY_STATE[state];

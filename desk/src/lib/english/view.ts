@@ -17,7 +17,7 @@ import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
 import { modeOf } from "../rules/mode";
 import { accepts, refusal, turnState } from "./turn";
-import { runningTake } from "./take";
+import { runningTake, takeSpent } from "./take";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
@@ -422,11 +422,13 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     actions = [act("replay", "Replay the moment", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }), act("finish", "Finish for today", "Save this rehearsal and see what you practised.", cmd("finish"), { disabled: refused("finish") })];
   } else if (c && take && s.screen === "linga-talk") {
     // Take Two (v2 L4): the partner's line again, then the cast's; the learner answers on the phone. Nothing else of the
-    // scene is offered here (turn.ts): no help, quiz, coach, Cut, pause or finish. Back to the notes ends the take.
+    // scene is offered here (turn.ts): no help, quiz, coach, Cut, pause or finish. Back to the notes ends the take. A take that
+    // has had its cast turns (takeSpent) stays here with the cast's last line spoken, until Back to the notes.
     const scene = c.scene ?? AUTHORED_SCENES.find(x => x.id === c.sceneId)!, note = c.cut?.notes[take.note];
     const said = last?.role === "partner" ? last.text : "", again = take.turns.some(t => t.role === "learner");
-    tag = "Take Two"; captionTag = inFlight ? "Preparing" : "Your line again";
-    caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
+    const over = takeSpent(take);
+    tag = "Take Two"; captionTag = inFlight ? "Preparing" : over ? "Take done" : "Your line again";
+    caption = over ? "That was the take. Go back to the notes when you are ready." : inFlight ? "Take a moment. Your partner is preparing the next turn." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : again ? "Carry on on your phone, or go back to the notes." : "Say your line again on your phone.";
     hero = { kind: "scene", kicker: `Take Two · ${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: note ? `“${note.quote}”` : "", art: c.sceneId, small: true, take: true,
       partner: c.partner, sentence: sentenceOf(scene.cue), illustration: artOf(c.sceneId, scene.skill), band: isBand(c.preferences.level) ? c.preferences.level : level, minutes: scene.minutes };
     actions = [inFlight ? act("cancel", "Cancel", "Cancel the reply on its way. The take stays where it was.", cmd("leave"), { disabled: refused("leave") })

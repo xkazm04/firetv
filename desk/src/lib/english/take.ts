@@ -63,10 +63,12 @@ export function forkOf(note: SceneNote, turns: ConversationTurn[]): Conversation
   return null;
 }
 
-/** The cast turns a take plays after the learner's line again; then it ends by itself. */
+/** The cast turns a take plays after the learner's line again; then it is spent and waits for Back to the notes. */
 export const TAKE_CAST_TURNS = 2;
 /** The take running on this conversation: the last one, while it has not ended. */
 export function runningTake(c: Conversation): Take | null {
   const t = c.takes?.at(-1);
   return t && t.endedAt === undefined ? t : null;
 }
+/** Whether the take has had all its cast turns: it takes no more lines, and stays until Back to the notes. */
+export const takeSpent = (take: Take): boolean => take.turns.filter(t => t.role === "partner").length > TAKE_CAST_TURNS;
