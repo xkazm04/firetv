@@ -83,7 +83,7 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  r=await fetch(base+'/api/english',json({action:'start',learnerId:'linga-browser-child',sceneId:'date',commandId:'forbidden-date'}));assert.equal(r.status,403);
  }
  const browser=await chromium.launch({headless:true,args:['--autoplay-policy=no-user-gesture-required']});try{
- const tv=await browser.newPage({viewport:{width:1920,height:1150}}),phone=await browser.newPage({viewport:{width:390,height:844}});tvPage=tv;
+ const tv=await browser.newPage({viewport:{width:1920,height:1150}}),phone=await (await browser.newContext({viewport:{width:390,height:844}})).newPage();tvPage=tv;
  for(const page of [tv,phone])page.on('pageerror',e=>errors.push(e.message));
  await phone.addInitScript(()=>{class FakeRecognition{start(){setTimeout(()=>this.onresult?.({results:[{isFinal:true,0:{transcript:'Where you saw the rover last time?'}}]}),60);}stop(){this.onend?.();}abort(){this.onend?.();}}window.SpeechRecognition=FakeRecognition;});
  // the phone pairs first, as it would from the Pair screen's QR: a join takes the TV to its confirmation, so the desk is walked back to the landing after it
