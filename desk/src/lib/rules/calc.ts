@@ -17,7 +17,7 @@
  */
 import { readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, placesOf, roundsTo, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
 import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -48,9 +48,10 @@ export const CALC_SHAPES: readonly CalcShape[] = ["evaluate", "derivative", "der
  * (a fraction, sqrt(2)/2, pi/4, ln 2), `rounded` for one written as a decimal (0.333).
  *   - evaluate, derivative-at, critical-point, extremum: exact shapes - the truth is computed to 1e-9 or better, so a
  *     right exact answer agrees far inside 1e-6; a decimal is held to the same line (the item asks for the value).
- *   - definite-integral, limit: exact 1e-6 as above. A decimal is right only as the exact value correctly rounded at the
- *     decimals it is written to (2.718 for e, 3.00 for 3), and only inside `rounded` 5e-3; any other decimal that close
- *     is 'unsure' (a calculator estimate at x = 0.01 is not the limit). A false tick is a blocker (MB-B28).
+ *   - definite-integral, limit: exact 1e-6 as above. A decimal that is the exact value correctly rounded at the decimals
+ *     it is written to is never wrong: right with two significant figures or more (2.7 and 2.718 for e, 0.38 for 3/8, 3.0
+ *     for 3), 'unsure' with fewer (0.3 for 1/3). Any other decimal inside `rounded` 5e-3 is 'unsure' (a calculator
+ *     estimate at x = 0.01 is not the limit). A false tick is a blocker (MB-B28); the rule is calc-read's decimalCall (D2 R1a).
  *   - newton-step: 5e-3 either way - an iterate is usually worked on a calculator and written rounded.
  */
 export const TOLERANCE: Readonly<Record<Exclude<CalcShape, "derivative" | "antiderivative">, { exact: number; rounded: number }>> = {
@@ -385,13 +386,16 @@ export interface CalcVerdict { verdict: "right" | "wrong" | "unsure"; slip?: str
 
 const verdict = (v: CalcVerdict["verdict"], why: string, slip?: string): CalcVerdict => (slip ? { verdict: v, slip, why } : { verdict: v, why });
 
-function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, decimal: boolean, places = 0): CalcVerdict {
+/** decimalCall's word as a verdict. */
+const called = (c: ReturnType<typeof decimalCall>): CalcVerdict =>
+  c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
+
+function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, written: string): CalcVerdict {
+  const decimal = isDecimal(written);
+  // a limit or an integral: a decimal is decided by the one rule calc2's sequence limit also calls (MB-B28, D2 R1a)
+  if (decimal && (shape === "limit" || shape === "definite-integral")) return called(decimalCall(written, s, truth, { ...TOLERANCE[shape], close: ROUNDED_CLOSE }));
   const tol = decimal ? TOLERANCE[shape].rounded : TOLERANCE[shape].exact;
-  if (withinRel(s, truth, tol)) {
-    // a limit or an integral: a decimal is right only as the exact value rounded where it stops
-    if (decimal && (shape === "limit" || shape === "definite-integral") && !withinRel(s, truth, TOLERANCE[shape].exact) && !roundsTo(s, truth, places)) return verdict("unsure", WHY.rounded);
-    return verdict("right", WHY.right);
-  }
+  if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
   if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
   if (decimal && withinRel(s, truth, ROUNDED_CLOSE)) return verdict("unsure", WHY.rounded);
   return verdict("wrong", WHY.wrong);
@@ -445,7 +449,7 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   const s = e.at();
   if (!fin(s)) return verdict("unsure", WHY.notFinite);
   if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
-  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, isDecimal(ans), placesOf(ans));
+  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, ans);
 }
 
 /** Can two functions be compared at all: at least three samples where both are defined? */
@@ -497,7 +501,8 @@ const WINDOW = 6;
  * whitespace-separated tokens, taking at each place the longest window the engine can read (so the 4 in 'x^2 - 4' is
  * part of an expression, not a number standing alone):
  *   - a number shape leaks by any window whose value is the truth to ROUNDED_CLOSE (a fraction, a decimal, sqrt, pi
- *     or ln forms, 3^2), or a negative number whose size is the truth ('minus sixteen' gives the size away);
+ *     or ln forms, 3^2), or a negative number whose size is the truth ('minus sixteen' gives the size away); a limit or
+ *     an integral also by a decimal the judge would call right (0.38 for 3/8, 2.7 for e: D2 R1a);
  *   - a function shape leaks by any window that checkAnswer would call right (an antiderivative with or without +C);
  *   - an infinite limit leaks by naming infinity.
  */
@@ -525,11 +530,15 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
     const open = (t.match(/\(/g) ?? []).length, close = (t.match(/\)/g) ?? []).length;
     return open > close ? compile(t.replace(/^\(+/, "")) : close > open ? compile(t.replace(/\)+$/, "")) : null;
   };
-  const numberRight = (e: Expr, first: string): boolean => {
+  /** A limit or an integral is also given away by any decimal the judge calls right (D2 R1a: 0.38 for 3/8, 2.7 for e). */
+  const rounds = s.shape === "limit" || s.shape === "definite-integral";
+  const numberRight = (e: Expr, first: string, said: string): boolean => {
     if (truth.kind !== "number" || e.usesX || e.constant) return false;
     const v = e.at();
     if (!fin(v)) return false;
-    return withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE));
+    if (withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE))) return true;
+    const bare = said.replace(/^\(+|\)+$/g, "");
+    return rounds && (roundingRight(bare, v, truth.v) || (bare.startsWith("-") && roundingRight(bare.slice(1), -v, truth.v)));
   };
   /** Most distinct factors a line is searched for a product pair in. */
   const MAX_FACTORS = 14;
@@ -563,7 +572,7 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
         const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
         if (!e) continue;
         took = n;
-        hit = truth.kind === "number" ? numberRight(e, tokens[i]) : fnRight(e);
+        hit = truth.kind === "number" ? numberRight(e, tokens[i], tokens.slice(i, i + n).join(" ")) : fnRight(e);
         break;
       }
       if (hit) return true;

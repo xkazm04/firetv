@@ -61,14 +61,15 @@ const CHECKS=[
  [{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln(x) + C','unsure'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln|x| + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4 ln(x)','wrong','lost-constant'],
  [{shape:'antiderivative',f:'cos(x)'},'sin(x) + C','right'],[{shape:'antiderivative',f:'cos(x)'},'-sin(x) + C','wrong','sign'],[{shape:'antiderivative',f:'cos(x)'},'sin x','wrong','lost-constant'],
  [{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4/4 + C','right'],[{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4 + C','wrong'],
- [DI,'1/3','right'],[DI,'0.333','right'],[DI,'0.3','wrong'],[DI,'-1/3','wrong','sign'],[DI,'1/2','wrong'],[DI,'','unsure'],
+ // [DI,'0.3']: OLD wrong -> NEW unsure (D2 R1a: 0.3 is 1/3 correctly rounded, one significant figure)
+ [DI,'1/3','right'],[DI,'0.333','right'],[DI,'0.3','unsure'],[DI,'-1/3','wrong','sign'],[DI,'1/2','wrong'],[DI,'','unsure'],
  [{shape:'definite-integral',f:'2x + 1/sqrt(x)',a:1,b:4},'17','right'],[{shape:'definite-integral',f:'sin(x)',a:0,b:'pi'},'2','right'],
  [{shape:'definite-integral',f:'sin(x)',a:0,b:'pi'},'-2','wrong','sign'],[{shape:'definite-integral',f:'x^2',a:1,b:0},'-1/3','right'],
  [LS,'1','right'],[LS,'0','wrong'],[LS,'-1','wrong','sign'],[LS,'inf','wrong'],[LS,'dne','wrong'],[LS,'1.0','right'],
  [{shape:'limit',f:'(x^2 - 4)/(x - 2)',at:2},'4','right'],[{shape:'limit',f:'(x^2 - 4)/(x - 2)',at:2},'4.00','right'],
  [LI,'inf','right'],[LI,'infinity','right'],[LI,'∞','right'],[LI,'+∞','right'],[LI,'-inf','wrong','sign'],[LI,'100000','wrong'],[LI,'Infinity','right'],
  [{shape:'limit',f:'1/x',at:0,side:'-'},'-infinity','right'],[{shape:'limit',f:'1/x',at:0,side:'-'},'infinity','wrong','sign'],
- [{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'e','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.718','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.7','wrong'],
+ [{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'e','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.718','right'],[{shape:'limit',f:'(1 + 1/x)^x',at:'inf'},'2.7','right'],
  [{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},'3/2','right'],[{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},'1.5','right'],
  [{shape:'limit',f:'(e^x - 1 - x)/x^2',at:0},'1/2','right'],[{shape:'limit',f:'(sqrt(x + 1) - 2)/(x - 3)',at:3},'1/4','right'],
  [CP,'2','right'],[CP,'x = 2','right'],[CP,'-2','wrong','sign'],[CP,'3','wrong'],[CP,'2.0001','unsure'],
@@ -424,6 +425,39 @@ test('HL3 leaksCalc: the derivative of x^3 + x^2 said in words leaks; the item\'
  assert.deepEqual(bad,[]);
 });
 
+test('D2-1 (R1a): a correct rounding of a limit or an integral at its own decimals is never wrong - right with two significant figures, not sure with fewer',()=>{
+ const lim=(f)=>({shape:'limit',f,at:0}),v=(spec,a)=>C.checkAnswer(spec,a);
+ const L38=lim('3/8 + x'),L13=lim('1/3 + x'),L32=lim('1/32 + x'),LE={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},L3={shape:'limit',f:'sin(3x)/x',at:0};
+ const I38={shape:'definite-integral',f:'3x/4',a:0,b:1};
+ // must-address 2: the halfway 3/8 rounded at two places is right, as a limit and as an integral
+ for(const spec of [L38,I38])for(const a of ['0.38','0.37','0.375','0.3750'])assert.equal(v(spec,a).verdict,'right',`3/8: ${a}`);
+ for(const a of ['2.7','2.72','2.718'])assert.equal(v(LE,a).verdict,'right',`e: ${a}`);
+ assert.equal(v(L3,'3.0').verdict,'right');
+ // fewer than two significant figures: not sure, with the rounded line
+ for(const [spec,a] of [[L13,'0.3'],[L32,'0.0'],[L38,'0.4'],[I38,'0.4']]){const r=v(spec,a);assert.equal(r.verdict,'unsure',`${spec.f} ${a}`);assert.match(r.why,/rounded decimal/);}
+ // not a correct rounding: today's path
+ assert.equal(v(LE,'2.8').verdict,'wrong');assert.equal(v(L3,'2.999').verdict,'unsure');assert.equal(v(L38,'0.39').verdict,'wrong');
+ // the leak check refuses every decimal the judge now calls right
+ assert.equal(C.leaksCalc(L38,'It comes to 0.38.'),true);assert.equal(C.leaksCalc(I38,'about 0.38'),true);
+ assert.equal(C.leaksCalc(LE,'roughly 2.7'),true);assert.equal(C.leaksCalc(L38,'minus 0.38'),true);
+ assert.equal(C.leaksCalc(L38,'it is near 0.39'),false,'a decimal that is not a rounding is not the answer');
+});
+
+test('D2-1: the two judges (calc.ts judgeNumber, calc2.ts judgeLimit) give the same verdict on a fixed grid of truths and decimals',()=>{
+ // f in x with the limit at infinity as truth; the same f as a Calculus 1 limit at inf and as a sequence limit
+ const truths=['3/8 + 1/x','1/3 + 1/x','1/32 + 1/x','(1 + 1/x)^x','3 + 1/x','1/2 + 1/x','107/40 + 1/x','62/5 + 1/x','-3/8 + 1/x','1/x','2/3 + 1/x','1/8 + 1/x'];
+ const decimals=['0.38','0.37','0.375','0.4','0.39','0.3','0.33','0.333','0.334','0.0','0.03','0.031','0.032','2.7','2.72','2.718','2.71','2.8','3.0','3.00','2.999','3.01','0.5','0.50','0.4996','0.502','2.67','2.68','2.671','2.675','-0.38','-0.375','-0.4','12.4','12.0','12.40','0.1','0.13','0.12','0.67','0.6667','0.7','0.00','-0.0','.38','.5'];
+ const diff=[];
+ for(const f of truths)for(const a of decimals){
+  const one=C.checkAnswer({shape:'limit',f,at:'inf'},a),two=C.checkAnswer({shape:'sequence-limit',f},a);
+  if(one.verdict!==two.verdict||one.slip!==two.slip)diff.push(`${f} ${a}: ${one.verdict}/${two.verdict}`);
+ }
+ assert.deepEqual(diff,[]);
+ // the grid is not trivial: each verdict occurs
+ const seen=new Set(truths.flatMap((f)=>decimals.map((a)=>C.checkAnswer({shape:'sequence-limit',f},a).verdict)));
+ assert.deepEqual([...seen].sort(),['right','unsure','wrong']);
+});
+
 test('MB-B27: an antiderivative undefined where the integrand is defined is not sure, with a domain line; the absolute value is right',()=>{
  const S={shape:'antiderivative',f:'1/x'},dom=/not defined everywhere/;
  for(const a of ['ln x + C','ln(x) + C','ln(x)+C']){const r=C.checkAnswer(S,a);assert.equal(r.verdict,'unsure',a);assert.match(r.why,dom);assert.ok(!/abs|absolute|\|/.test(r.why)&&!/ln/.test(r.why),'the line names neither the absolute value nor the answer');}
@@ -445,7 +479,8 @@ test('MB-B28: a decimal for a limit or a definite integral is right only as the 
  for(const a of ['2.717','2.71'])assert.equal(v(LE,a),'unsure',`e: ${a}`);
  for(const a of ['8.99','9.04'])assert.equal(v(NINE,a),'unsure',`9: ${a}`);
  assert.match(C.checkAnswer(L3,'3.01').why,/rounded decimal/);
- assert.equal(v(LE,'2.7'),'wrong','2.7 for e stays out');
+ // OLD wrong -> NEW right (D2 R1a): 2.7 is e correctly rounded at one decimal, two significant figures
+ assert.equal(v(LE,'2.7'),'right','2.7 for e is a correct rounding');assert.equal(v(LE,'2.8'),'wrong');
  // halfway: either neighbour is right
  const HALFWAY={shape:'definite-integral',f:'5.35x',a:0,b:1};   // 2.675
  assert.equal(v(HALFWAY,'2.67'),'right');assert.equal(v(HALFWAY,'2.68'),'right');assert.equal(v(HALFWAY,'2.671'),'unsure');

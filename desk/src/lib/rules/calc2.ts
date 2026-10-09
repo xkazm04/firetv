@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
-import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, placesOf, roundsTo, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
 
 /** The ids of the Calculus 2 shapes (not calculus2.spine.ts's Calc2Shape: that is a topic's list, which also holds Calculus 1's two integral shapes). */
 export type Calc2SpecShape = "approx-integral" | "sequence-limit";
@@ -474,24 +474,23 @@ function sequenceQuestion(spec: SequenceSpec): { plain: string; tex: string } | 
   };
 }
 
-/** Calculus 1's limit comparison (calc.ts judgeNumber, limit row), copied. */
-function judgeLimit(truth: number, s: number, decimal: boolean, places = 0): Calc2Verdict {
-  const tol = decimal ? LIMIT_ROUNDED : LIMIT_EXACT;
-  if (withinRel(s, truth, tol)) {
-    // as calc.ts judgeNumber: a decimal is right only as the limit rounded at the decimals it is written to (MB-B28)
-    if (decimal && !withinRel(s, truth, LIMIT_EXACT) && !roundsTo(s, truth, places)) return verdict("unsure", WHY.rounded);
-    return verdict("right", WHY.right);
+/** Calculus 1's limit comparison (calc.ts judgeNumber, limit row): a decimal goes to the one rule both call, calc-read's decimalCall (MB-B28, D2 R1a). */
+function judgeLimit(truth: number, s: number, written: string): Calc2Verdict {
+  if (isDecimal(written)) {
+    const c = decimalCall(written, s, truth, { exact: LIMIT_EXACT, rounded: LIMIT_ROUNDED, close: ROUNDED_CLOSE });
+    return c === "right" ? verdict("right", WHY.right) : c === "rounded" ? verdict("unsure", WHY.rounded) : c === "sign" ? verdict("wrong", WHY.sign, "sign") : verdict("wrong", WHY.wrong);
   }
-  if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
-  if (decimal && withinRel(s, truth, ROUNDED_CLOSE)) return verdict("unsure", WHY.rounded);
+  if (withinRel(s, truth, LIMIT_EXACT)) return verdict("right", WHY.right);
+  if (!withinRel(0, truth, LIMIT_EXACT) && withinRel(-s, truth, LIMIT_EXACT)) return verdict("wrong", WHY.sign, "sign");
   return verdict("wrong", WHY.wrong);
 }
 
 /**
  * The verdict on a learner's answer, as Calculus 1 gives it for a limit at infinity (calc.ts checkAnswer, copied; a parity
  * row in tools/calc2-sequence-test.cjs holds the two equal): an infinity (inf, infinity, ∞, with its sign) is right only for an
- * infinite limit of that sign, the opposite sign is slip 'sign'; 'dne' is wrong; a number is right within 1e-6 (5e-3 when it
- * is a decimal), its negation is slip 'sign', a decimal that close but outside is 'unsure'; an empty, unreadable or non-finite
+ * infinite limit of that sign, the opposite sign is slip 'sign'; 'dne' is wrong; a number is right within 1e-6, its negation
+ * is slip 'sign'; a decimal is calc-read's decimalCall (a correct rounding at its own decimals is right with two significant
+ * figures or more, 'unsure' with fewer; any other decimal within 5e-3 is 'unsure'); an empty, unreadable or non-finite
  * answer, an answer in x, or a spec the desk cannot work out, is 'unsure'.
  */
 function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown): Calc2Verdict {
@@ -514,7 +513,7 @@ function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown): Calc2Verdict
   const s = e.at();
   if (!fin(s)) return verdict("unsure", WHY.notFinite);
   if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
-  return judgeLimit(truth.v, s, isDecimal(ans), placesOf(ans));
+  return judgeLimit(truth.v, s, ans);
 }
 
 /** The question's own notation, printed in n, that may be quoted back (calc.ts ownPieces' limit case): never the limit. */
@@ -529,7 +528,8 @@ function sequencePieces(s: SequenceSpec, f: Expr): string[] {
 /**
  * Does this hint or explanation line state the limit? Calculus 1's rule for a limit (calc.ts leaksCalc, copied): an infinite
  * limit leaks by naming infinity at all; a finite one by any window of up to six tokens, after the question's own notation is
- * set aside, that reads as a number within 5e-3 of the limit (or a negative number whose size is the limit).
+ * set aside, that reads as a number within 5e-3 of the limit (or a negative number whose size is the limit), or as a decimal
+ * the judge would call right (D2 R1a).
  */
 function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
@@ -548,11 +548,14 @@ function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
     const open = (t.match(/\(/g) ?? []).length, close = (t.match(/\)/g) ?? []).length;
     return open > close ? compile(t.replace(/^\(+/, "")) : close > open ? compile(t.replace(/\)+$/, "")) : null;
   };
-  const numberRight = (e: Expr, first: string): boolean => {
+  const numberRight = (e: Expr, first: string, said: string): boolean => {
     if (e.usesX || e.constant) return false;
     const v = e.at();
     if (!fin(v)) return false;
-    return withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE));
+    if (withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE))) return true;
+    // a decimal the judge calls right gives the limit away too (D2 R1a: 2.7 for e)
+    const bare = said.replace(/^\(+|\)+$/g, "");
+    return roundingRight(bare, v, truth.v) || (bare.startsWith("-") && roundingRight(bare.slice(1), -v, truth.v));
   };
   for (let i = 0; i < tokens.length;) {
     let took = 0, hit = false;
@@ -560,7 +563,7 @@ function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
       const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
       if (!e) continue;
       took = n;
-      hit = numberRight(e, tokens[i]);
+      hit = numberRight(e, tokens[i], tokens.slice(i, i + n).join(" "));
       break;
     }
     if (hit) return true;

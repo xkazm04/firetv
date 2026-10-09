@@ -27,6 +27,31 @@ export const placesOf = (s: string) => /[.,](\d*)$/.exec(s.replace(/\s+/g, ""))?
 /** Is `s` the `truth` correctly rounded at `places` decimals (halfway: either neighbour; a hair of slack for the truth's own numerics)? */
 export const roundsTo = (s: number, truth: number, places: number) => Math.abs(s - truth) <= 0.5 * 10 ** -places * (1 + 1e-6);
 export const withinRel = (u: number, v: number, tol: number) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(v));
+/** The significant figures a decimal is written to: its digits from the first non-zero one, trailing zeros counted (0.38 is 2, 3.0 is 2, 0.3 is 1, 0.0 is 0). */
+export const figuresOf = (s: string) => s.replace(/\D/g, "").replace(/^0+/, "").length;
+/** A correct rounding the desk calls right (D2 R1a): `written` is a decimal, its value `s` is `truth` rounded at its own decimals, to two significant figures or more. */
+export const roundingRight = (written: string, s: number, truth: number) =>
+  isDecimal(written) && roundsTo(s, truth, placesOf(written)) && figuresOf(written) >= 2;
+
+/** The tolerances of a limit or a definite integral: exact, the rounded window, and the 'unsure' band around it. */
+export interface DecimalTol { exact: number; rounded: number; close: number; }
+/**
+ * A decimal answer to a limit or a definite integral, the one rule both judges call (calc.ts judgeNumber, calc2.ts
+ * judgeLimit; MB-B28 and D2 R1a):
+ *   - the exact value to `exact` is right (0.375 for 3/8, 0.5 for 1/2);
+ *   - a correct rounding of the exact value at its own written decimals (roundsTo, with its slack) is never wrong: right
+ *     with two significant figures or more (2.7 for e, 0.38 for 3/8, 3.0 for 3), 'rounded' with fewer (0.3 for 1/3, 0.0
+ *     for 1/32);
+ *   - any other decimal keeps the MB-B28 path: 'rounded' inside the `rounded` window (2.999 for 3, a calculator estimate),
+ *     'sign' for the negated truth, 'rounded' inside `close`, else 'wrong' (2.8 for e).
+ */
+export function decimalCall(written: string, s: number, truth: number, tol: DecimalTol): "right" | "rounded" | "sign" | "wrong" {
+  if (withinRel(s, truth, tol.exact)) return "right";
+  if (roundsTo(s, truth, placesOf(written))) return figuresOf(written) >= 2 ? "right" : "rounded";
+  if (withinRel(s, truth, tol.rounded)) return "rounded";
+  if (!withinRel(0, truth, tol.rounded) && withinRel(-s, truth, tol.rounded)) return "sign";
+  return withinRel(s, truth, tol.close) ? "rounded" : "wrong";
+}
 
 /** Number words to ninety-nine, from the one table (numberWords) the three leak checks share. */
 const WORDS: Record<string, string> = Object.fromEntries(Object.entries(EN_CARD).map(([w, n]) => [w, String(n)]));
