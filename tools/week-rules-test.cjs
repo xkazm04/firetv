@@ -371,6 +371,31 @@ test('7: the store assembles the seated learner\'s page on the server; a phone g
  assert.equal(calls,0,'no model call anywhere in the page');
 });
 
+// ------------------------------------------------------------------ W9-refresh (robustness-1): a refresh that throws is said, not swallowed
+test('W9-refresh: a week refresh that throws is logged and set to the authored line - never null, never the lines of the learner before',()=>{
+ store.dispatch({type:'reset'});
+ for(const [id,name] of [['rf-a','Ada'],['rf-b','Ben']]){store.dispatch({type:'profile.draft',patch:{id,name,type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});}
+ learners.addDigest('rf-a',{at:Date.now(),kind:'maths',topic:'area',right:5,notSure:0,total:6});
+ store.dispatch({type:'learner.set',id:'rf-a'});
+ const ada=store.getSession().week;assert.equal(ada[0].text,'Ada worked on one evening.');
+ assert.equal(W.WEEK_UNREAD,'The week could not be read just now.');
+ assert.ok(W.wordsIn(W.WEEK_UNREAD)<=W.LINE_WORDS);assert.doesNotMatch(W.WEEK_UNREAD,/[—–]/);
+ const real=W.sundayPage,logged=[],err=console.error;
+ W.sundayPage=()=>{throw new Error('the learner file is unreadable');};console.error=(...a)=>logged.push(a.join(' '));
+ try{store.dispatch({type:'learner.set',id:'rf-b'});}finally{W.sundayPage=real;console.error=err;}
+ const s=store.getSession();
+ assert.equal(s.learner.id,'rf-b');
+ assert.deepEqual(s.week,[{section:'week',text:W.WEEK_UNREAD}],'the authored line');
+ assert.notEqual(s.week,null,'never null: the phone draws null as the empty week');
+ assert.ok(!JSON.stringify(s.week).includes('Ada')&&!s.week.some((l)=>/Area/.test(l.text)),'never the lines of the learner before');
+ assert.equal(logged.length,1,'logged once');assert.match(logged[0],/week could not be read.*unreadable/);
+ // the next refresh that reads draws the page again
+ store.dispatch({type:'session.end'});assert.equal(store.getSession().week[0].text,'Nothing this week.');
+ // GUARD: no refresh of the week swallows its error any more
+ const src_=fs.readFileSync(src('lib/session/store.ts'),'utf8');
+ assert.doesNotMatch(src_,/weekOf\([^)]*\)[^;]*;\s*\} catch \{\}/,'no week refresh in a bare catch');
+});
+
 // ------------------------------------------------------------------ 8. the phone draws it, and rules/week stays pure
 test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s lines under tonight\'s recap; rules/week imports no session module at run time and no engine',()=>{
  const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');

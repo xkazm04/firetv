@@ -21,7 +21,7 @@ import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
-import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
+import { WEEK_UNREAD, sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { isCalc2Spec, type Calc2Spec } from "../rules/calc2";
 import { isPartLabel, type PartLabel } from "../rules/calc-word";
@@ -695,7 +695,7 @@ if (!store.session.jobs) store.session.jobs = {};
 // ...and one whose Math Buddy work has no owner yet (settleOwners)
 try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
-try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
+store.session = { ...store.session, week: weekRead(store.session) };
 // the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
 try { store.session = { ...store.session, paper: store.session.learner ? getLearner(store.session.learner.id).papers?.at(-1) ?? null : null }; } catch {}
 if (!store.ticker) store.ticker = setInterval(() => {
@@ -759,6 +759,18 @@ export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
   return sundayWords(sundayPage(getLearner(id), s.profiles.find((p) => p.id === id), now));
 }
 
+/**
+ * weekOf as the session holds it: a page that could not be read is logged and said in one authored line (WEEK_UNREAD) -
+ * never null, which the phone draws as the empty week, and never the lines held before, which after a switch are another
+ * learner's page.
+ */
+function weekRead(s: Session): WeekLine[] | null {
+  try { return weekOf(s); } catch (err) {
+    console.error("The week could not be read:", err instanceof Error ? err.message : err);
+    return [{ section: "week", text: WEEK_UNREAD }];
+  }
+}
+
 export function dispatch(e: Event): Session {
   if (e.type === "paper.enter") {
     // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put.
@@ -785,7 +797,7 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null }; } catch {}
   }
-  if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
+  if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
   return store.session;

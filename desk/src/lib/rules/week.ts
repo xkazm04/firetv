@@ -33,6 +33,8 @@ import { SCHOOL_SLIPS } from "./school";
 
 /** The empty week, whole: the desk's rule that an empty state is two words. */
 export const WEEK_EMPTY = "Nothing this week.";
+/** The page when the learner's record could not be read: one line, never the empty week (it is not known to be empty). */
+export const WEEK_UNREAD = "The week could not be read just now.";
 /** The most words on one line, and on the whole page: its lines, not counting the fixed section headings the phone draws. */
 export const LINE_WORDS = 14;
 export const PAGE_WORDS = 90;
