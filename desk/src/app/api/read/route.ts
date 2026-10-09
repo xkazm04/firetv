@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   if (body.id && !held) return NextResponse.json({ error: "That page is no longer on the desk." }, { status: 409 });
   const { img: image, subject, title, w, h } = held ?? { img: body.image ?? "", subject: body.subject ?? "maths", title: body.title ?? "Page", w: body.w ?? 0, h: body.h ?? 0 };
   if (!image) return NextResponse.json({ error: "Photograph a page first." }, { status: 400 });
+  if (!["maths", "english", "essay"].includes(subject)) return NextResponse.json({ error: "The desk reads Math Buddy, Linga and Essay Master pages. Pick one of them." }, { status: 400 });
   // a new page needs the size of its photo: every position on it is a fraction of that size
   if (!held && !(Number.isFinite(w) && w > 0 && Number.isFinite(h) && h > 0)) return NextResponse.json({ error: "The desk could not tell how big that photo is. Snap the page again." }, { status: 400 });
   const id = held?.id ?? `${subject}-${Date.now()}`;

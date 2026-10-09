@@ -596,6 +596,15 @@ test('craft-2: an item\'s key is its page and printed number, not its text; two 
  assert.equal(store.getSession().pages[0].items[0].key,'k-old');
 });
 
+test('robustness-3: a read for a subject the desk does not have is refused with a 400; a page that is gone is a 409 in the desk\'s words',async()=>{
+ blank();let asked=0;stubVision(()=>{asked++;return READ3;});
+ for(const subject of ['history','',7]){const r=await post('read',{...SNAP,subject});assert.equal(r.status,400,String(subject));deskWorded((await r.json()).error);}
+ assert.equal(asked,0,'no vision call for a subject the desk does not have');assert.equal(store.getSession().pages.length,0);
+ blank();asked=0;
+ const gone=await post('read',{id:'maths-gone'});assert.equal(gone.status,409);assert.equal((await gone.json()).error,'That page is no longer on the desk.');
+ assert.equal(store.getSession().pages.length,0);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
