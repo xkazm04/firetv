@@ -20,6 +20,7 @@ import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
+import { recogniserLang } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
@@ -291,7 +292,7 @@ export default function Phone() {
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
     if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
-    const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
+    const r = new SR(); r.lang = recogniserLang(s); r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
     r.start(); hearing.current = true; setMsg("listening…");
     return r; // the caller may hold the button and stop it on release
   };

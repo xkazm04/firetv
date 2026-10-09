@@ -422,3 +422,12 @@ test('MB-B43: the Paper panel\'s heading and its Send button name the seated lea
  assert.match(page,/<PaperPanel [^>]*name=\{s\?\.learner\?\.name\}/,'the panel is given the seated learner\'s name');
  assert.doesNotMatch(src,/<h3>A paper you sat<\/h3>/,'no unnamed heading is left');
 });
+
+test('MB-B33 mic: the recogniser language follows the seated learner\'s school system (cs-CZ for cz, en-US otherwise) and the page uses the helper',()=>{
+ const {recogniserLang}=require(path.join(SRC,'app/phone/recogniserLang.ts'));
+ const profiles=[{id:'a',name:'A',type:'high-school',system:'cz',modules:[]},{id:'b',name:'B',type:'high-school',system:'us',modules:[]},{id:'c',name:'C',type:'high-school',modules:[]}];
+ assert.equal(recogniserLang({learner:{id:'a',name:'A'},profiles}),'cs-CZ');
+ for(const id of ['b','c','nobody'])assert.equal(recogniserLang({learner:{id,name:'x'},profiles}),'en-US',id);
+ assert.equal(recogniserLang({learner:null,profiles}),'en-US');assert.equal(recogniserLang(null),'en-US');assert.equal(recogniserLang(undefined),'en-US');
+ const page=code(PAGE);assert.match(page,/r\.lang = recogniserLang\(s\)/);assert.doesNotMatch(page,/r\.lang = "en-US"/);
+});
