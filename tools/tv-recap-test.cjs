@@ -295,6 +295,18 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
  }finally{reg().resetProviders();}
 });
 
+test('M3: the phone\'s What the desk noticed has four states, and a failed write never reads as an empty evening',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ assert.match(phone,/Nothing new to note tonight\./,'the model was asked and returned none');
+ assert.match(phone,/Nothing worked on tonight\./,'nothing was asked');
+ assert.doesNotMatch(phone,/Nothing written down tonight/,'the old catch-all is gone');
+ assert.match(phone,/asked: j\.asked !== false/,'the route says which case it is');
+ assert.match(phone,/\{ error: j\.error \?\? /,'a non-ok answer shows the desk\'s own sentence');
+ assert.match(phone,/catch \{ setMemory\(\{ error: /,'a thrown fetch is a failure too, not an empty evening');
+ assert.doesNotMatch(phone,/memory\.map\(\(l\) => <li key=\{l\}>/,'a list key is never the line text');
+ assert.match(phone,/memory\.lines\.map\(\(l, i\) => <li key=\{i\}>/);
+});
+
 test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
  try{
   seat();engine(lined);

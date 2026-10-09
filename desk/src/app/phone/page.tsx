@@ -93,8 +93,11 @@ export default function Phone() {
   const [reply, setReply] = useState("");
   /** The ringed item's one typed second go (route /api/second): what is typed. The desk never says on the phone how it went. */
   const [again, setAgain] = useState("");
-  /** What the desk noticed tonight, read once on the way out. */
-  const [memory, setMemory] = useState<string[] | null>(null);
+  /**
+   * What the desk noticed tonight, read once on the way out: the lines written, whether the model was asked (an evening
+   * with no work asks nothing), or the desk's own sentence for a write that failed.
+   */
+  const [memory, setMemory] = useState<{ lines: string[]; asked: boolean } | { error: string } | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
   /**
@@ -353,8 +356,11 @@ export default function Phone() {
   /** Memory is written on the way out — and is never allowed to hold the door shut. */
   const endSession = async () => {
     setBusy(true);
-    try { const r = await call("/api/memory", {}); const j = await r.json().catch(() => ({} as { lines?: string[] })); setMemory(r.ok && Array.isArray(j.lines) ? j.lines : []); }
-    catch { setMemory([]); }
+    try {
+      const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; error?: string }));
+      setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false }
+        : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
+    } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
     finally { setBusy(false); await post({ type: "session.end" }); }
   };
 
@@ -609,8 +615,10 @@ export default function Phone() {
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
           <button className="pbtn" onClick={() => post({ type: s.timer.running ? "timer.pause" : "timer.start" })}>{s.timer.running ? `Pause · ${fmt(s.timer.left)}` : `Start · ${fmt(s.timer.left)}`}</button>
           <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Closing…" : "End session"}</button>
-          {memory && <div className="precap"><b>What the desk noticed</b>
-            {memory.length ? <ul>{memory.map((l) => <li key={l}>{l}</li>)}</ul> : <ul><li>Nothing written down tonight.</li></ul>}</div>}</div>}
+          {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
+            <ul>{"error" in memory ? <li>{memory.error}</li>
+              : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
+              : <li>{memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
           {s.screen === "recap" || s.log.problems.length ? (() => {
