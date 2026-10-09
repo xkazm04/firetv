@@ -40,6 +40,25 @@ const SCHEMA = {
 };
 type Said = { hint: string; what_to_try_next: string };
 
+/** A maths hint line is short enough to read on the TV and hear aloud: 25 words or fewer each (MB-B33). */
+export const MAX_HINT_WORDS = 25;
+const LIMIT = ` ${MAX_HINT_WORDS} words or fewer.`;
+/** The maths schema: the same two fields, each described with the length limit. English and Essay keep SCHEMA as it was. */
+const MATHS_SCHEMA = {
+  ...SCHEMA,
+  properties: {
+    hint: { ...SCHEMA.properties.hint, description: SCHEMA.properties.hint.description + LIMIT },
+    what_to_try_next: { ...SCHEMA.properties.what_to_try_next, description: SCHEMA.properties.what_to_try_next.description + LIMIT },
+  },
+};
+const wordCount = (s: unknown) => (typeof s === "string" ? s.trim().split(/\s+/).filter(Boolean).length : 0);
+
+/** Which field of a maths hint is over the word limit, in words for the re-ask, or null when neither is. */
+function longIn(said: Said): string | null {
+  const inHint = wordCount(said.hint) > MAX_HINT_WORDS, inNext = wordCount(said.what_to_try_next) > MAX_HINT_WORDS;
+  return inHint && inNext ? "the hint and what to try next" : inHint ? "the hint" : inNext ? "what to try next" : null;
+}
+
 /** Who the tutor is for, by subject: the words naming the learner come from the voice (rules/voice), the rest is the same at every age. */
 const STANCE: Record<Subject, (v: Voice) => string> = {
   maths: (v) => `a maths tutor for ${v.who}. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.`,
@@ -114,14 +133,21 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const stage = opts.previous
     ? `The learner already had this hint and pressed "still stuck":\n«${opts.previous}»\nGive the NEXT hint. It must go ONE STEP FURTHER than the previous one — do not repeat it — and still stop short of the answer.`
     : `Give the FIRST hint: the smallest push that gets the learner moving.`;
-  const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}`;
-  const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: SCHEMA, model: "fast" });
+  const maths = subject === "maths";
+  const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}` +
+    (maths ? `\nKeep the hint and what_to_try_next to${LIMIT} each.` : "");
+  const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast" });
   const first = await ask("");
-  const leaked = subject === "maths" ? leakedIn(problem, spec, first.json) : null;
-  if (!leaked) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
-  // the leaked line is not handed back; the model is told where it leaked and asked again, once
-  const again = await ask(`\n\nYour previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`).catch(() => null);
+  const leaked = maths ? leakedIn(problem, spec, first.json) : null, long = maths ? longIn(first.json) : null;
+  if (!leaked && !long) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
+  // the faulty line is not handed back; the model is told where, and asked again, once. A leak and a length are named together.
+  const told = leaked && !long ? `Your previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`
+    : `Your previous hint ${[leaked && `gave the answer away (in ${leaked})`, long && `was over ${MAX_HINT_WORDS} words (in ${long})`].filter(Boolean).join(" and ")}. ` +
+      `Write it again: one step, ${leaked ? "stop short of the answer, " : ""}and keep the hint and what_to_try_next to${LIMIT} each.`;
+  const again = await ask(`\n\n${told}`).catch(() => null);
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
+  // after the re-ask a leak is still withheld (a safety rule); a line only too long is shown (length is a value rule)
   if (again && !leakedIn(problem, spec, again.json)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
+  if (!again && !leaked) return { hint: first.json.hint, next: first.json.what_to_try_next, provider, ms };
   return { hint: spec.calc ? withheldCalc(spec.calc) : spec.parts ? withheldCalc(spec.parts[0]) : spec.school ? withheldSchool(spec.school) : withheldLine(problem), next: "", provider, ms };
 }

@@ -176,3 +176,35 @@ test('HL2 case 1: a maths task no reader reads gets the neutral stance, never th
  const calc=await ask('Find the 10th term of the arithmetic sequence 3, 7, 11, ...',{path:'calc1'});
  assert.match(calc.system,/Calculus I/,'a Calculus path keeps its stance');
 });
+
+const words=(n)=>Array.from({length:n},(_,i)=>i%2?'step':'look').join(' ');
+const sequence=(...answers)=>{let n=0;answerText=async()=>({json:answers[Math.min(n++,answers.length-1)],provider:'test',ms:1});};
+
+test('MB-B33 length 1: a 40-word hint then a 20-word one shows the second; the user prompt and the schema carry the limit, the system prompt does not',async()=>{
+ const Q='Solve for x: 2x + 3 = 11';
+ seenText=[];sequence({hint:words(40),what_to_try_next:'Write the question.'},{hint:words(20),what_to_try_next:'Write the question.'});
+ const r=await hint('maths',Q,{path:'school',age:13});
+ assert.equal(seenText.length,2);assert.equal(r.hint,words(20));
+ assert.match(seenText[1].prompt,/over 25 words \(in the hint\)/);
+ assert.match(seenText[0].prompt,/25 words or fewer/);assert.match(seenText[0].schema.properties.hint.description,/25 words or fewer/);
+ assert.doesNotMatch(seenText[0].system,/25 words/,'the system prompt of an equation task is unchanged');
+ seenText=[];sequence({hint:'Look at the first term.',what_to_try_next:'Write it.'});
+ await hint('english','Past simple of go',{});
+ assert.doesNotMatch(seenText[0].prompt,/25 words/);assert.doesNotMatch(JSON.stringify(seenText[0].schema),/25 words/,'English is byte for byte');
+});
+
+test('MB-B33 length 2: a 40-word hint twice is shown on the second answer, not withheld',async()=>{
+ seenText=[];sequence({hint:words(40),what_to_try_next:'Write the question.'},{hint:words(38),what_to_try_next:'Write it.'});
+ const r=await hint('maths','Solve for x: 2x + 3 = 11',{path:'school',age:13});
+ assert.equal(seenText.length,2,'one re-ask');assert.equal(r.hint,words(38));assert.equal(r.next,'Write it.');
+});
+
+test('MB-B33 length 3: a leak plus a length is named together; a leak that stays is withheld, a length that stays is shown',async()=>{
+ const Q='Solve for x: 2x + 3 = 11';
+ seenText=[];sequence({hint:'The answer is x = 4 '+words(40),what_to_try_next:'Write the question.'},{hint:words(10),what_to_try_next:'Write it.'});
+ const r=await hint('maths',Q,{path:'school',age:13});
+ assert.match(seenText[1].prompt,/gave the answer away \(in the hint\) and was over 25 words \(in the hint\)/);assert.equal(r.hint,words(10));
+ seenText=[];sequence({hint:words(40),what_to_try_next:'Write the question.'},{hint:'x = 4',what_to_try_next:'Write it.'});
+ const w=await hint('maths',Q,{path:'school',age:13});
+ assert.equal(w.hint,withheldLine(Q));assert.equal(w.next,'');
+});

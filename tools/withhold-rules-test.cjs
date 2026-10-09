@@ -104,16 +104,17 @@ test('case 5: expression items leak by form - an equivalent product or polynomia
 test('case 6 GUARD: the 24 recorded real maths hint stages pass the gate - 0 flagged, 0 re-asks',async()=>{
  const recorded=Object.entries(corpus.hints).filter(([,h])=>h.subject==='math');
  assert.equal(recorded.length,12);
- let flagged=0,calls=0;
+ let flagged=0,calls=0,tooLong=0;
  for(const [key,h] of recorded){
   const text=(page.items.find((i)=>i.key===key)??{text:h.q}).text;
-  for(const st of [h.hint1,h.hint2])for(const f of [st.hint,st.what_to_try_next])if(maths.leaks(text,f))flagged++;
+  for(const st of [h.hint1,h.hint2]){for(const f of [st.hint,st.what_to_try_next])if(maths.leaks(text,f))flagged++;if([st.hint,st.what_to_try_next].some((f)=>f.trim().split(/\s+/).length>25))tooLong++;}
   stub(h.hint1);const a=await hint('maths',text,{});calls+=seen.length;
   stub(h.hint2);const b=await hint('maths',text,{previous:a.hint});calls+=seen.length;
   assert.deepEqual([a.hint,a.next,b.hint,b.next],[h.hint1.hint,h.hint1.what_to_try_next,h.hint2.hint,h.hint2.what_to_try_next],key);
  }
  assert.equal(flagged,0,'the PoC judged 0/12 leaked (STUDY-DESK-POC-RESULTS.md:66)');
- assert.equal(calls,24,'no re-asks');
+ // MB-B33: a line over 25 words is re-asked once (the stub answers the same line, which is then shown); no stage is re-asked for a leak
+ assert.equal(calls,24+tooLong,'no leak re-asks; one length re-ask per stage over 25 words');
 });
 
 test('case 7 GUARD: method numbers are not answers, and a clean hint is still exactly one prompt',async()=>{
