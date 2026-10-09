@@ -562,6 +562,25 @@ test('rewrite case 5: POST /api/analyse kind rewrite lands on the desk as essay.
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
+test('recap M1: a rewrite restates the reading\'s own history line - one reading, "1 of 5 to fix" and "1 fixed"',async()=>{
+ const {recapRows,recapLine}=require(path.join(root,'src/tv/recapRows.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const id=getSession().learner.id,FIVE='The school day starts too early. Research found that teenagers fall asleep later. Teenagers are just lazy. A 2019 study measured their sleep. Therefore the start should move.';
+ answer=faults([2,3]);
+ const first=await analyseEssay(FIVE,'evidence',id);dispatch({type:'essay.set',analysis:first});
+ const essayLines=()=>getLearner(id).history.filter(h=>h.kind==='writing'),was=essayLines().length;
+ const tile=()=>({...recapRows(getSession(),Date.now()).find(t=>t.app==='essay')}),last=()=>{const t=tile();return {...t,readings:t.readings.slice(-1)};};
+ assert.deepEqual(last().readings.map(r=>[r.against,r.of,r.fixed]),[[2,5,undefined]],'read: 2 of 5');
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'It names its source now.'}]});
+ assert.equal((await analyse({kind:'rewrite',n:2,text:STUDY})).status,200);
+ assert.equal(essayLines().length,was,'the history holds one essay line for the reading');
+ assert.equal(essayLines().at(-1).detail,'1 of 5 sentences to fix, 1 fixed');
+ assert.deepEqual(last().readings.map(r=>[r.against,r.of,r.fixed]),[[1,5,1]],'1 of 5 and 1 fixed');
+ assert.match(recapLine(last()),/1 of 5 sentences to fix, 1 fixed tonight/);
+ assert.equal(getSession().history.filter(h=>h.kind==='writing').length,was,'the session reads the restated line');
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+});
+
 test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move from it, not from the status line',()=>{
  const {rewriteState}=rules();
  assert.equal(typeof rewriteState,'function');

@@ -16,7 +16,7 @@ export const RECAP_EMPTY = "Not tonight";
 /** A marked set: `right` ticks, then `of - right - unsure` slips, then `unsure` items the desk could not decide. */
 export interface MathsTile { app: "maths"; empty: string | null; sets: Array<{ right: number; of: number; unsure?: number }>; pages: number; hints: number; second: number }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
-export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number }> }
+export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
 
 /**
@@ -24,7 +24,7 @@ export type RecapTile = MathsTile | LingaTile | EssayTile;
  * A practice line is "k of n right" (rules/maths rightLine), with ", u not sure" when the desk could not decide u
  * items; a line without it (every line written before it existed) gives no unsure count and draws as it always did.
  */
-export interface Detail { right?: number; of?: number; unsure?: number; pages?: number; problems?: number; against?: number }
+export interface Detail { right?: number; of?: number; unsure?: number; pages?: number; problems?: number; against?: number; fixed?: number }
 export function parseDetail(kind: string, detail: string): Detail {
   const d = (detail ?? "").trim();
   if (kind === "practice") {
@@ -32,7 +32,10 @@ export function parseDetail(kind: string, detail: string): Detail {
     if (m && +m[1] + u <= +m[2]) return u ? { right: +m[1], of: +m[2], unsure: u } : { right: +m[1], of: +m[2] };
   }
   if (kind === "homework") { const m = /^(\d+) problems? read$/.exec(d); if (m) return { pages: 1, problems: +m[1] }; }
-  if (kind === "writing") { const m = /^(\d+) of (\d+) sentences? to fix$/.exec(d); if (m && +m[1] <= +m[2]) return { against: +m[1], of: +m[2] }; }
+  if (kind === "writing") {
+    const m = /^(\d+) of (\d+) sentences? to fix(?:, \d+ paragraphs)?(?:, (\d+) fixed)?$/.exec(d);
+    if (m && +m[1] <= +m[2]) return m[3] ? { against: +m[1], of: +m[2], fixed: +m[3] } : { against: +m[1], of: +m[2] };
+  }
   return {};
 }
 
@@ -62,7 +65,7 @@ export function recapRows(s: Session, now: number): RecapTile[] {
     }
     const mine = lines.filter((h) => h.kind === "writing");
     const readings: EssayTile["readings"] = [];
-    for (const h of mine) { const c = parseDetail(h.kind, h.detail); if (c.against !== undefined && c.of !== undefined) readings.push({ lens: h.label, against: c.against, of: c.of }); }
+    for (const h of mine) { const c = parseDetail(h.kind, h.detail); if (c.against !== undefined && c.of !== undefined) readings.push({ lens: h.label, against: c.against, of: c.of, ...(c.fixed ? { fixed: c.fixed } : {}) }); }
     return { app, empty: mine.length ? null : RECAP_EMPTY, readings };
   });
 }
@@ -120,7 +123,8 @@ export function recapLine(t: RecapTile): string {
   }
   const lenses = Array.from(new Set(t.readings.map((x) => x.lens)));
   const against = t.readings.reduce((a, x) => a + x.against, 0), of = t.readings.reduce((a, x) => a + x.of, 0);
-  return `${name} - ${times(t.readings.length, "reading")}${lenses.length ? ` (${lenses.join(", ")})` : ""}: ${against} of ${counted(of, "sentence")} to fix`;
+  const fixed = t.readings.reduce((a, x) => a + (x.fixed ?? 0), 0);
+  return `${name} - ${times(t.readings.length, "reading")}${lenses.length ? ` (${lenses.join(", ")})` : ""}: ${against} of ${counted(of, "sentence")} to fix${fixed ? `, ${fixed} fixed tonight` : ""}`;
 }
 
 /**

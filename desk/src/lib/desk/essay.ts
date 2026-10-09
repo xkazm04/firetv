@@ -8,7 +8,7 @@
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, JOBS, numberedLines, observationOk, paragraphCount, paragraphStats, revise, SIDES, splitSentences, SUPPORTS, taught, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
-import { addDigest, addHistory, recordWriting } from "../session/learners";
+import { addDigest, addHistory, getLearner, recordWriting, saveLearner } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
@@ -153,9 +153,11 @@ const reviseSchema = (lens: Lens) => { return { type: "object", properties: { ob
  * its paragraph, through the reading's lens, against the move the page taught - and decideVerdicts rules on it,
  * with the other sentences' first-pass roles as context. Every other verdict is kept by code, not asked again.
  * The new verdict remembers the sentence it replaced (`was`, from the first reading).
- * Nothing is written to the learner record: the paragraph was read once, and a rewrite is not another reading.
+ * A rewrite is not another reading: no new history line, no new attempt. With `learnerId` the reading's own history
+ * line is restated in place (restateReading), so the recap counts the sentences still to fix as the reading now
+ * stands, and how many a rewrite fixed.
  */
-export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number): Promise<EssayAnalysis> {
+export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number, learnerId?: string): Promise<EssayAnalysis> {
   const voice = voiceOf("essay", age);
   const r = revise(reading, n, rewrite);
   if (!r.ok) throw new Error(r.error);
@@ -187,5 +189,25 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
   const verdict: Verdict = { ...decided, was };
   const verdicts = next.sentences.flatMap((s) => (s.n === n ? [verdict] : reading.verdicts.filter((v) => v.n === s.n)));
+  if (learnerId) try { restateReading(learnerId, lens.name, reading.verdicts, verdicts); } catch {}
   return { ...next, verdicts, provider };
+}
+
+const faultyIn = (vs: Pick<Verdict, "verdict">[]) => vs.filter((v) => v.verdict === "faulty").length;
+const LINE = /^(\d+) of (\d+) (sentences?) to fix(, \d+ paragraphs)?(, \d+ fixed)?$/;
+
+/**
+ * The history line record() wrote for this reading (the learner's last writing line under the lens that states the
+ * reading's faulty count before the rewrite) is restated from the verdicts as they now stand: the count still to fix,
+ * and ", k fixed" for the sentences a rewrite moved from faulty to strong. It stays one line, one reading.
+ */
+function restateReading(learnerId: string, label: string, before: Verdict[], after: Verdict[]): void {
+  const l = getLearner(learnerId), was = faultyIn(before);
+  const at = l.history.findLastIndex((h) => h.kind === "writing" && h.label === label && LINE.exec(h.detail)?.[1] === String(was));
+  if (at < 0) return;
+  const m = LINE.exec(l.history[at].detail)!;
+  const fixed = after.filter((v) => v.was?.verdict === "faulty" && v.verdict !== "faulty").length;
+  const detail = `${faultyIn(after)} of ${m[2]} ${m[3]} to fix${m[4] ?? ""}${fixed ? `, ${fixed} fixed` : ""}`;
+  if (detail === l.history[at].detail) return;
+  saveLearner({ ...l, history: l.history.map((h, i) => (i === at ? { ...h, detail } : h)) });
 }

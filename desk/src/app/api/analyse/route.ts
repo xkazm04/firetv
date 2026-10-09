@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     const ok = revise(a, n, typeof body.text === "string" ? body.text : "");
     if (!ok.ok) return NextResponse.json({ error: ok.error }, { status: 400 });
     const r = await runJob("analyse", async () => {
-      const next = await reviseSentence(a, n, body.text, age);
+      const next = await reviseSentence(a, n, body.text, age, who.id);
       // a paragraph read or a reset since the rewrite was asked leaves the desk as it is now
       if (getSession().essay === a) dispatch({ type: "essay.revised", analysis: next, n });
       return next;
