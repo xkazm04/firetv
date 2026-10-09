@@ -612,3 +612,17 @@ test('MB-B2 reader: tasks that read as nothing now read as a kind and a spec, an
  let h;try{h=await hint('maths','Řeš rovnici 3(x - 2) = 2x + 5',{system:'cz'});}finally{engine.text=was;}
  assert.ok(!/11/.test(h.hint+h.next),`the leaking hint is withheld: ${h.hint}`);
 });
+
+// ------------------------------------------------------------------ MB-B2: the stricter fallback for an item no reader reads
+test('MB-B2 fallback: on an item no reader reads, a line stating a solution is refused; a plain method line passes; a read item is untouched',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const word='Sara has some sweets. She gives away 7 and has 12 left. How many did she start with?';
+ assert.equal(M.equationOf(word),null);
+ for(const l of ['Takže x = 11.','The answer is 42.','Výsledek je 19.','x = 5','So the result is 3/4.'])assert.equal(M.leaks(word,l),true,l);
+ for(const l of ['Draw a diagram first.','Write down what you know and what you need to find.','Let x be the number she started with.','Add 7 and 12 to see what the start was.','Think about 3x = 180 as a balance.'])assert.equal(M.leaks(word,l),false,l);
+ // an item a reader reads keeps its own rule: the fallback never reaches it
+ assert.equal(M.unreadLeaks('Solve for x:  3x − 7 = 11','Takže x = 11.'),false);
+ // a decimal comma and a number word are read as the leak rule reads them
+ assert.equal(M.leaks(word,'Odpověď je 19,5.'),true);
+ assert.equal(M.leaks(word,'The answer is forty two.'),true);
+});

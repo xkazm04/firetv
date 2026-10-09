@@ -14,10 +14,10 @@ import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
 import { isCalc2Spec } from "./calc2";
-import { EN_CARD, figuresOfCzech } from "./numberWords";
-import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
+import { EN_CARD, figuresOfCzech, fold } from "./numberWords";
+import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
-import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
+import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
@@ -234,8 +234,36 @@ export function leaks(question: string, line: string, system?: SchoolSystem): bo
   // "12-7" reads as -7 here, so a signed number is checked with and without its sign
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
     .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
-    || leaksByForm(question, line, system);
+    || leaksByForm(question, line, system)
+    || unreadLeaks(question, line, system);
 }
+
+// ---- the stricter fallback: an item no reader reads (MB-B2) ----
+/**
+ * A solution said as one: a lone letter = a number ('x = 11', 'Takže x = 11.'), or 'the answer is <number>' / 'výsledek je <number>'.
+ * Not '3x = 180' (a letter beside a figure is an equation), and not 'y = 2x + 1' (a number that goes on into an expression).
+ */
+const SOLUTION = new RegExp(
+  String.raw`(?<![\w)\]^.+*/-])(?<![+*/^-]\s)[a-z]\s*=\s*-?\s*\d+(?:[.,]\d+)?(?:\/\d+)?(?![\w(^]|\s*[-+*/^×÷]\s*[\d(a-z])` +
+  String.raw`|(?:answer|result|solution|vysledek|odpoved|reseni)\s*(?:is|are|je|jsou|=|:)?\s*-?\s*\d`,
+);
+
+/** Does the item read as nothing: no equation, no expression, no Calculus or school spec, no parts? */
+function readsAsNothing(question: string, system?: SchoolSystem): boolean {
+  return !equationOf(question, system) && !expressionOf(question, system) && !calcSpecOf(question, system) && !calcPartsOf(question, system) && !schoolSpecOf(question, system);
+}
+
+/**
+ * The fallback for an item nothing reads (a word problem, a sheet in a notation the readers do not know). No spec says what
+ * the answer is, so a line is refused for what it states: a solution, a letter = a number or 'the answer is <number>'. The
+ * wider half of the ruling - any number the item's own text lacks - refused 5 of the 24 recorded real hint stages, past the
+ * 3 the brief allows, and is not built. Only for an item that reads as nothing; the rest of the leak rule never reaches it.
+ */
+export function unreadLeaks(question: string, line: string, system?: SchoolSystem): boolean {
+  if (typeof question !== "string" || typeof line !== "string" || !line || !readsAsNothing(question, system)) return false;
+  return SOLUTION.test(fold(decimalComma(said(line))));
+}
+
 
 // ---- the pen: where the learner's working broke, found in code from their own lines ----
 /**
