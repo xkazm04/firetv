@@ -32,10 +32,10 @@ test('2: calc.ts imports only calc-expr, calc-read and calc2',()=>{
 test('3: calc2.ts and calc-read.ts import no store, session, desk, engine, TV, maths or React module',()=>{
  for(const f of ['calc2.ts','calc-read.ts']){
   const imps=importsOf(f);
-  assert.deepEqual(imps.filter(i=>!/^\.\/calc-(expr|read)$/.test(i)),[],`${f} imports only calc-expr and calc-read, never calc (a cycle)`);
+  assert.deepEqual(imps.filter(i=>!/^\.\/(calc-(expr|read)|numberWords)$/.test(i)),[],`${f} imports only calc-expr, calc-read and the numberWords leaf, never calc (a cycle)`);
   assert.ok(!imps.some(i=>/session|store|desk|engine|maths\/|MathsTV|react/i.test(i)),`${f}: no store, session, desk, engine, TV, maths or React`);
  }
- assert.deepEqual(importsOf('calc-read.ts'),[],'calc-read.ts imports nothing');
+ assert.deepEqual(importsOf('calc-read.ts'),['./numberWords'],'calc-read.ts imports only the numberWords leaf (X1b: the one number-word table)');
 });
 
 test('4: CALC2_SHAPES is [approx-integral, sequence-limit] and shares no id with CALC_SHAPES; calc2 refuses a spec of no shape and a malformed approx-integral',()=>{

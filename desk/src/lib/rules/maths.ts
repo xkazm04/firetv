@@ -13,6 +13,7 @@ import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
 import { isCalc2Spec } from "./calc2";
+import { EN_CARD, figuresOfCzech } from "./numberWords";
 import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
@@ -196,11 +197,7 @@ export function restatedLine(detail: string, items: readonly { verdict?: string 
 
 /** Every number written in a line: 7, -3, 3.5, 7/2. */
 const NUMBERS = /[-−]?\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/g;
-const WORDS: Record<string, string> = {
-  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
-};
+const WORDS: Record<string, string> = Object.fromEntries(Object.entries(EN_CARD).map(([w, n]) => [w, String(n)]));
 /** A number word, a tens word with its unit ('twenty-one', 'twenty one') read first so it is never 20 then 1. */
 const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
 
@@ -210,7 +207,7 @@ const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?
  * ('x = - 3') joined to it - only where no number, x or bracket stands before it, so 'x - 3' stays a subtraction.
  * A word is a number only as WORDS' own key: 'constructor' is a word, never Object's function spliced in as text.
  */
-const said = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
+const said = (line: string) => figuresOfCzech(line.toLowerCase()).replace(/[−–—‐‑]/g, "-")
   .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
     tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
   .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")

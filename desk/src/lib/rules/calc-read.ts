@@ -3,8 +3,9 @@
  * unchanged so a Calculus 2 shape (rules/calc2.ts) reads an answer and a hint line exactly as Calculus 1 does. No
  * behaviour moved: calc.ts imports them back.
  *
- * Pure: imports nothing - no engine, no session store, no TV module.
+ * Pure: imports nothing but the number-word table - no engine, no session store, no TV module.
  */
+import { EN_CARD, figuresOfCzech } from "./numberWords";
 
 /** The answer as written, without a leading 'f(x) =', 'x =', "y' =" or 'lim =' and without a closing full stop. */
 export const cleanAnswer = (a: string) => {
@@ -23,18 +24,11 @@ export const DNE = /^(dne|does not exist|no limit|undefined)$/i;
 export const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
 export const withinRel = (u: number, v: number, tol: number) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(v));
 
-/**
- * Number words to ninety-nine, as rules/maths.ts said() reads them. Written again here, not imported: said() is
- * private to rules/maths.ts (rules stay pure and small).
- */
-const WORDS: Record<string, string> = {
-  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
-  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
-};
+/** Number words to ninety-nine, from the one table (numberWords) the three leak checks share. */
+const WORDS: Record<string, string> = Object.fromEntries(Object.entries(EN_CARD).map(([w, n]) => [w, String(n)]));
 const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
 /** A line as it would be said, numbers in digits: 'minus sixteen' is -16, 'one and a half' is 1.5. */
-export const spoken = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
+export const spoken = (line: string) => figuresOfCzech(line.toLowerCase()).replace(/[−–—‐‑]/g, "-")
   .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
     tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
   .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")

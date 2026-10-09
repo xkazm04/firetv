@@ -1926,3 +1926,27 @@ test('M2b PURITY probability: random strings through check and leaksSchool never
   const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
  }
 });
+
+// ------------------------------------------------------------------ X1b / X1c: number words, read by the leak checks only
+const QW=pb('bag red 3, blue 10 ask red');   // 3/13
+test('X1b number words: Czech fraction words leak on a 3/13 item, with and without diacritics; a clean Czech line passes',()=>{
+ for (const h of ['Pravdepodobnost je tri trinactiny.','Pravděpodobnost je tři třináctiny.','Je to tri trinactiny.','Pravděpodobnost je 3 třináctiny.','Probability is three thirteenths.'])
+  assert.equal(S.leaksSchool(QW,h),true,h);
+ for (const h of ['Spočítej všechny kuličky v pytlíku.','Nejdřív spočítej červené kuličky: jsou tři.','V pytlíku je třináct kuliček.','Pravděpodobnost je podíl červených kuliček a všech kuliček.'])
+  assert.equal(S.leaksSchool(QW,h),false,h);
+});
+test('X1b number words: the closed table reads Czech cardinals, tens, genders and fraction words',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts'));
+ const rows=[['jedna',"1"],['jeden',"1"],['jedno',"1"],['dva',"2"],['dvě',"2"],['dve',"2"],['čtyři',"4"],['dvacet',"20"],['dvacet jedna',"21"],['devadesát',"90"],['tři čtvrtiny',"3/4"],['tri ctvrtiny',"3/4"],
+  ['dvě třetiny',"2/3"],['pět šestin',"5/6"],['sedm dvacetin',"7/20"],['polovina',"1/2"],['jedna třetina',"1/3"],['Čtvrtina',"1/4"]];
+ for (const [w,f] of rows) assert.equal(N.figuresOfCzech(w),f,w);
+ assert.equal(N.figuresOfCzech('Draw a diagram first.'),'Draw a diagram first.');
+ assert.equal(N.EN_CARD.twenty,20);assert.equal(N.EN_ORD.twentieth,20);
+});
+test('X1c number words: three quarters, tři čtvrtiny and tri ctvrtiny given as the answer to a 3/4 item settle nothing',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ for (const sys of ['uk','cz'])for (const w of ['three quarters','tři čtvrtiny','tri ctvrtiny','3 čtvrtiny','three-quarters']){
+  assert.equal(S.check(C,w,sys).verdict,'unsure',`${sys}: ${w}`);
+  const j=M.settleSpec(1,C,w,undefined,'t',sys);assert.ok(j===null||j.verdict==='unsure',`${sys}: ${w} settleSpec`);
+ }
+});

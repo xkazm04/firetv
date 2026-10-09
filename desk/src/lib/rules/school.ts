@@ -81,6 +81,7 @@
  * Pure: no React, no filesystem, no model, no network; imports only a type from the store.
  */
 import type { SchoolSystem } from "@/lib/session/store";
+import { EN_CARD, EN_ORD, figuresOfCzech } from "./numberWords";
 
 // ------------------------------------------------------------------ exact rationals
 
@@ -1803,14 +1804,10 @@ export const slipShows = (spec: unknown, slipId: unknown): boolean => slipValue(
 
 // ------------------------------------------------------------------ the leak check
 
-const SMALL: Record<string, number> = { zero: 0, nought: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19 };
-const TENS: Record<string, number> = { twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+const SMALL: Record<string, number> = { nought: 0, ...Object.fromEntries(Object.entries(EN_CARD).filter(([, n]) => n < 20)) };
+const TENS: Record<string, number> = Object.fromEntries(Object.entries(EN_CARD).filter(([, n]) => n >= 20));
 const UNIT_ORD: Record<string, number> = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9 };
-const ORD: Record<string, number> = {
-  half: 2, third: 3, quarter: 4, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10, eleventh: 11, twelfth: 12,
-  thirteenth: 13, fourteenth: 14, fifteenth: 15, sixteenth: 16, seventeenth: 17, eighteenth: 18, nineteenth: 19, twentieth: 20,
-  thirtieth: 30, fortieth: 40, fiftieth: 50, sixtieth: 60, seventieth: 70, eightieth: 80, ninetieth: 90, hundredth: 100,
-};
+const ORD = EN_ORD;
 const own = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
 /** A fraction word's denominator ('twelfths' 12, 'halves' 2, 'twenty-fourths' 24), or null. 'second' alone is time. */
@@ -1925,7 +1922,7 @@ const RUN = /(?<![\w.,/:])(?:[.,]\d|\d)(?:[\d.,]|\s(?=\d)|\s*[/:]\s*(?=\d))*(?:\
 const SUP: Record<string, string> = { "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9" };
 const SUB: Record<string, string> = { "₀": "0", "₁": "1", "₂": "2", "₃": "3", "₄": "4", "₅": "5", "₆": "6", "₇": "7", "₈": "8", "₉": "9" };
 function leakText(line: string): string {
-  let t = line.toLowerCase()
+  let t = figuresOfCzech(line.toLowerCase())
     .replace(/([⁰¹²³⁴⁵⁶⁷⁸⁹]+)\s*[⁄∕/]\s*([₀₁₂₃₄₅₆₇₈₉]+)/g, (_, a: string, b: string) => `${[...a].map((c) => SUP[c]).join("")}/${[...b].map((c) => SUB[c]).join("")}`)
     .replace(VULGAR_RE, (c) => ` ${VULGAR[c]}`).replace(/[−–—‐‑]/g, "-").replace(/[⁄∕]/g, "/").replace(/[    ]/g, " ").replace(/[×*]/g, " x ").replace(/÷/g, " divided by ");
   t = t.replace(/(\d+)(?:\s+|\s*\/\s*)(\d+)(?:st|nd|rd|th)s?\b/g, "$1/$2").replace(/(\d)(?:st|nd|rd|th)s?\b/g, "$1");
