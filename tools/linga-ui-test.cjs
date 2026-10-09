@@ -31,7 +31,7 @@ let tvCookie='';
 async function asTheTV(){const r=await fetch(base+'/tv?key='+encodeURIComponent(key),{redirect:'manual'});tvCookie=(r.headers.getSetCookie?.()??[]).map(c=>c.split(';')[0]).filter(c=>c.startsWith('desk-tv=')).join('; ');assert.ok(tvCookie,'the desk took its key');}
 const json=(b)=>({method:'POST',headers:{'Content-Type':'application/json',cookie:tvCookie},body:JSON.stringify(b)});
 const out=path.resolve(__dirname,'../artifacts/linga-integration');fs.mkdirSync(out,{recursive:true});
-const timings=[],errors=[],moments=[];
+const timings=[],errors=[],moments=[],entrances=[];
 const SCENE='The missing moon rover',SAID='[data-role="linga-said"] .lo-card-text',STATUS='.linga-footer .lo-status',VOICE_WAIT=15000,LINE_WAIT=120000;
 let tvPage;
 async function event(b){const r=await fetch(base+'/api/session',json(b));assert.equal(r.status,200);return r.json();}
@@ -68,6 +68,16 @@ async function takeMoment(phone,after){
  moments.push({after,fired:true,kind:m.kind,said:m.said,better:m.better,why:m.why});
  await tvPage.screenshot({path:path.join(out,moments.filter(x=>x.fired).length===1?'tv-moment.png':`tv-moment-${moments.filter(x=>x.fired).length}.png`)});
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Back to the conversation',exact:true}).click(),'moment-done',{expectLine:false,noLine:'taking a moment gives no new partner line'});
+}
+/** An entrance from the landing: nav to the stop, press Enter with no click, poll the session every 100 ms for up to 5 s; only if it did not arrive,
+ * click the stage (as the first entrance does), press Enter again and poll again. Records {entrance,click,ms,reached}; fails only if neither attempt arrived. */
+async function entrance(name,focus,arrived){
+ await event({type:'nav',screen:'landing',focus});await tvPage.waitForSelector('[data-role="desk-object"]');
+ const attempt=async click=>{const t=Date.now();if(click)await tvPage.locator('.stage').click({position:{x:10,y:10}});await tvPage.keyboard.press('Enter');
+  let reached=false;while(Date.now()-t<5000){if(arrived(await current())){reached=true;break;}await new Promise(r=>setTimeout(r,100));}
+  const rec={entrance:name,click,ms:Date.now()-t,reached};entrances.push(rec);console.log(JSON.stringify(rec));return reached;};
+ if(!(await attempt(false)))await attempt(true);
+ assert.ok(entrances.at(-1).reached,'the '+name+' entrance was reached');
 }
 const num=a=>a.filter(x=>typeof x==='number'&&Number.isFinite(x));
 const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,median:v.length%2?v[(v.length-1)/2]:Math.round((v[v.length/2-1]+v[v.length/2])/2),max:v.at(-1)}:{n:0,median:null,max:null};};
@@ -139,11 +149,12 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  await phone.getByRole('button',{name:'My map',exact:true}).click();assert.equal(await phone.locator('.linga-skill').count(),8);
  const print=await phone.context().newPage();await print.goto(base+'/english/print?learner=linga-browser-child');await print.waitForSelector('.linga-print table');assert.equal(await print.locator('tbody tr').count(),8);await print.pdf({path:path.join(out,'learning-map.pdf'),format:'A4',preferCSSPageSize:true});
  assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- await event({type:'nav',screen:'landing',focus:0});await tv.waitForSelector('[data-role="desk-object"]');await tv.keyboard.press('Enter');await tv.waitForFunction(()=>!document.querySelector('.linga-tv'));assert.equal((await current()).subject,'maths');
- await event({type:'nav',screen:'landing',focus:2});await tv.waitForSelector('[data-role="desk-object"]');await tv.keyboard.press('Enter');await tv.waitForFunction(async()=>{const s=await(await fetch('/api/session')).json();return s.screen==='essaytype';});assert.equal((await current()).subject,'essay');
+ // the landing Select runs after ZOOM_MS (app/tv/page.tsx:127-131), so each entrance polls the session instead of asserting at once (R1)
+ await entrance('maths',0,s=>s.subject==='maths');
+ await entrance('essay',2,s=>s.screen==='essaytype'&&s.subject==='essay');
  assert.deepEqual(errors,[]);
  const turnTiming={ms:stat(timings.map(t=>t.ms)),sendToLineMs:stat(timings.map(t=>t.sendToLineMs)),modelMs:stat(timings.map(t=>t.modelMs)),lineToVoiceMs:stat(timings.map(t=>t.lineToVoiceMs))};
- fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({timings,turnTiming,moments,errors,checks:['E2 level: no placement offers the level check, not a scene; A2 seated with level-self through the UI','E3 scene: Choose a situation, The missing moon rover, started','E4 real model: typed and spoken replies; typed turn stored as text, spoken as speech and supported','E4 moments: taken with Back to the conversation if one fired, recorded either way','picked phrase stored as choice evidence','real model: coach, replay, finish','MH-4 one tap: tick pre-checked after Stop, spoken reply sent with one tap','simulated speech: capture, transcript confirmation, supported modality','E8 turn timing: ms, modelMs, sendToLineMs, lineToVoiceMs (the footer event, not heard audio)','E9 age-restricted API rejected (403)','TV/phone session sync','D-pad entry/menu/back','eight-chapter actual evidence print','mobile width','Math and Essay entrances'],speechLimit:'Recognition events are simulated; no physical microphone or room audio tested. Voice is the TV footer event, not heard audio.'},null,2));
- console.log(JSON.stringify({passed:true,timings,turnTiming,moments,errors,artifacts:out}));
+ fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({timings,turnTiming,moments,entrances,errors,checks:['E2 level: no placement offers the level check, not a scene; A2 seated with level-self through the UI','E3 scene: Choose a situation, The missing moon rover, started','E4 real model: typed and spoken replies; typed turn stored as text, spoken as speech and supported','E4 moments: taken with Back to the conversation if one fired, recorded either way','picked phrase stored as choice evidence','real model: coach, replay, finish','MH-4 one tap: tick pre-checked after Stop, spoken reply sent with one tap','simulated speech: capture, transcript confirmation, supported modality','E8 turn timing: ms, modelMs, sendToLineMs, lineToVoiceMs (the footer event, not heard audio)','E9 age-restricted API rejected (403)','TV/phone session sync','D-pad entry/menu/back','eight-chapter actual evidence print','mobile width','Math and Essay entrances'],speechLimit:'Recognition events are simulated; no physical microphone or room audio tested. Voice is the TV footer event, not heard audio.'},null,2));
+ console.log(JSON.stringify({passed:true,timings,turnTiming,moments,entrances,errors,artifacts:out}));
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
