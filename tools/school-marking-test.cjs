@@ -1019,3 +1019,29 @@ test('HL6: every frac-* withheld line is 25 words or fewer, keeps the closing se
   for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=gen(seed,tier);assert.equal(S.unitOf(sp),unit);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);}
  }
 });
+
+// ------------------------------------------------------------------ X1: the explain reply goes through the same leak checks
+test('X1: explainItem replaces a reply the shared leak checks refuse - Czech fraction words, a rooted squared total, a split product, a Czech solution - and shows a clean one',async()=>{
+ seat('cz');
+ const own='This one is yours to finish.';
+ const items=[
+  {name:'3/13 item',topic:'probability',item:{n:1,question:'A bag has 3 red and 10 blue counters. Find the probability that one taken at random is red.',spec:{shape:'probability',expr:'bag red 3, blue 10 ask red'}},
+   leak:'Pravděpodobnost je tři třináctiny.',leak2:'Pravdepodobnost je tri trinactiny.',clean:'Count the red counters, then all the counters.'},
+  {name:'16/30 mm item',topic:'pythagoras',item:{n:1,question:'A right-angled triangle has shorter sides 16 mm and 30 mm. Find the longest side.',spec:{shape:'pythagoras',expr:'longest 16 30',unit:'mm'}},
+   leak:'The longest side is the square root of 1156.',leak2:'c² = 16² + 30² = 1156, teď odmocni.',clean:'Square both shorter sides and add them.'},
+  {name:'sin(x^2) item',topic:'calc1-rules',item:{n:1,question:'Differentiate f(x) = sin(x^2).',spec:{shape:'derivative',f:'sin(x^2)'}},
+   leak:'Multiply cos(x^2) by 2x.',leak2:'Differentiate the outside to get cos(x^2), then multiply by 2x, the derivative of the inside.',clean:'Use the chain rule: differentiate the outside, then multiply by the derivative of the inside.'},
+  {name:'Czech equation item',topic:'linear-two-step',item:{n:1,question:'Řeš rovnici 3(x - 2) = 2x + 5'},
+   leak:'Takže x = 11.',leak2:'x = 11.',clean:'Rozlož závorku a převeď členy s x na jednu stranu.'},
+ ];
+ for(const t of items){
+  for(const line of [t.leak,t.leak2]){
+   stubText(()=>({reply:line,value:'',slip:'unclear'}));
+   const r=await X.explainItem({...t.item,verdict:'unsure',said:own},'I did it in my head',t.topic,LEARNER,()=>false,12,'cz');
+   assert.equal(r.reply,own,`${t.name}: replaced: ${line}`);
+  }
+  stubText(()=>({reply:t.clean,value:'',slip:'unclear'}));
+  const r=await X.explainItem({...t.item,verdict:'unsure',said:own},'I did it in my head',t.topic,LEARNER,()=>false,12,'cz');
+  assert.equal(r.reply,t.clean,`${t.name}: a clean reply is shown`);
+ }
+});
