@@ -1003,3 +1003,17 @@ test('essay-master-A case 8 (GUARD): observations that cannot be read are neutra
  const b=await analyseEssay(THREE,'argument','oa-8');
  assert.deepEqual(b.verdicts.map(v=>[v.n,v.verdict,'fix' in v]),[[1,'strong',false],[2,'faulty',true],[3,'neutral',false]]);
 });
+test('a note never carries a verdict label: the verdict is code\'s',async()=>{
+ const one=async(lens,o)=>{answer=obsReply([{n:1,...o}]);const a=await analyseEssay('Sleep matters a lot.',lens,'oa-label');return [a.verdicts[0].verdict,a.verdicts[0].note];};
+ assert.deepEqual(await one('evidence',{support:'context',note:'Strong: a named place, year, start times and 34 minutes make this easy to check.'}),['neutral','A named place, year, start times and 34 minutes make this easy to check.']);
+ for(const [said,kept] of [['faulty - it says x','It says x'],['NEUTRAL — y','Y'],['Weak: z','Z'],['ok: w','W']])
+  assert.deepEqual(await one('argument',{side:'pushes',note:said}),['strong',kept],said);
+ assert.deepEqual(await one('argument',{side:'wanders',note:'Strong:'}),['faulty','This sentence wanders from the side the paragraph takes.']);
+ assert.deepEqual(await one('argument',{side:'pushes',note:'Strong:'}),['strong','']);
+ for(const note of ['Strongly worded, but no source.','Good use of a number.','Strong evidence: the study names its year.','This is a strong claim.','Fine-grained detail would help.'])
+  assert.equal((await one('argument',{side:'pushes',note}))[1],note,note);
+ const {reviseSentence}=deskEssay();
+ answer=obsReply([{n:2,support:'checkable',note:'Strong: names the study.'}]);
+ const r=await reviseSentence(R3(),2,STUDY);
+ assert.equal(r.verdicts.find(v=>v.n===2).note,'Names the study.');
+});

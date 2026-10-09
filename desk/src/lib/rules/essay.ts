@@ -239,6 +239,14 @@ const CHECKS = {
   word: (word: string) => `'${word}' is doing too little here; say what you mean.`,
 };
 
+const NOTE_LABEL = /^\s*(?:strong|faulty|neutral|weak|good|great|excellent|solid|fine|ok|okay)\s*(?::|[-–—](?=\s))\s*/i;
+
+/** The model's note without a leading verdict label ('Strong: ...'): the verdict is code's, so a note never carries one. Only the leading label goes. */
+export function cleanNote(note: string): string {
+  const rest = note.replace(NOTE_LABEL, "");
+  return rest === note ? note : rest.replace(/^./, (c) => c.toUpperCase());
+}
+
 /**
  * The verdicts of a reading, decided here from the model's observations (one per sentence, by number) and the text.
  * The model never says strong or faulty. Only sentences in `judged` get a verdict; an observation for any other
@@ -299,7 +307,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     }
     if (lens === "language" && verdict !== "faulty" && s.words > LONG_SENTENCE_WORDS) { verdict = "faulty"; check = CHECKS.long(s.words); }
     if (!o && verdict === "neutral") return;
-    const said = typeof o?.note === "string" ? o.note : "";
+    const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
     const note = verdict === "faulty" && !said.trim() ? check : said;
     const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
     out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}) });
