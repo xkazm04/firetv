@@ -197,11 +197,16 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   return page;
 }
 
-/** The detail a busy week is trimmed by, rung by rung, until the page fits PAGE_WORDS: fewer units named, then no scene names, then a shorter step-up line. */
-interface Trim { units: number; scenes: boolean; stepNames: boolean }
+/**
+ * The detail a busy week is trimmed by, rung by rung, until the page fits PAGE_WORDS: fewer units named, then no scene
+ * names, then a shorter step-up line, then the homework line without its hint counts (the sheets are still said). No
+ * rung drops a section, or a line whose absence would read as nothing done.
+ */
+interface Trim { units: number; scenes: boolean; stepNames: boolean; hints: boolean }
 const LADDER: Trim[] = [
-  { units: 3, scenes: true, stepNames: true }, { units: 2, scenes: true, stepNames: true }, { units: 1, scenes: true, stepNames: true },
-  { units: 1, scenes: false, stepNames: true }, { units: 1, scenes: false, stepNames: false },
+  { units: 3, scenes: true, stepNames: true, hints: true }, { units: 2, scenes: true, stepNames: true, hints: true }, { units: 1, scenes: true, stepNames: true, hints: true },
+  { units: 1, scenes: false, stepNames: true, hints: true }, { units: 1, scenes: false, stepNames: false, hints: true },
+  { units: 1, scenes: false, stepNames: false, hints: false },
 ];
 
 /** Scene names that fit a line after `head`: as many as fit, then "and N more"; none when not even one fits. */
@@ -214,9 +219,9 @@ function namesLine(head: string, names: string[]): string {
   return `${head}.`;
 }
 
-/** "Two homework sheets, 5 hints, 2 needed a second.": the sheets, then the hints and the second hints when each is above 0. */
-function homeworkLine(h: NonNullable<SundayPage["homework"]>): string {
-  return [cap(times(h.sheets, "homework sheet")), h.hints ? `${h.hints} ${h.hints === 1 ? "hint" : "hints"}` : "", h.second ? `${h.second} needed a second` : ""].filter(Boolean).join(", ") + ".";
+/** "Two homework sheets, 5 hints, 2 needed a second.": the sheets, then the hints and the second hints when each is above 0 (the sheets alone on the ladder's last rung). */
+function homeworkLine(h: NonNullable<SundayPage["homework"]>, hints: boolean): string {
+  return [cap(times(h.sheets, "homework sheet")), hints && h.hints ? `${h.hints} ${h.hints === 1 ? "hint" : "hints"}` : "", hints && h.second ? `${h.second} needed a second` : ""].filter(Boolean).join(", ") + ".";
 }
 
 function linesOf(page: SundayPage, t: Trim): WeekLine[] {
@@ -226,7 +231,7 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   const out: WeekLine[] = [{ section: "week", text: wordsIn(said(page.name)) <= LINE_WORDS ? said(page.name) : said(page.name.split(/\s+/)[0]) }];
   const head = (section: Exclude<WeekSection, "week">) => out.push({ section, head: true, text: WEEK_HEADS[section] });
   if (page.homework || page.units.length || page.papers) head("maths");
-  if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework) });
+  if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework, t.hints) });
   if (page.units.length) {
     const shown = page.units.slice(0, t.units);
     for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right${u.notSure ? `, ${u.notSure} not sure` : ""}, last set.` });

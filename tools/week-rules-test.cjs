@@ -284,6 +284,60 @@ test('W9-lines (craft-1): a profile name that would carry the week line past LIN
  const ten='a b c d e f g h i j'.toUpperCase();assert.equal(words(WEEK,{name:ten})[0].text,`${ten} worked on seven evenings.`);
 });
 
+/**
+ * The busiest week: a ten-word name (the longest the week line keeps whole), the unit worked most with a five-word Sunday
+ * name and a fourteen-word act, three units with two-digit not-sure counts and more units, one step up (a five-word name),
+ * homework with two-digit hints, two papers, an eight-word slip, Linga with every scene, Essay with every lens and pieces.
+ */
+const TEN={name:'Maria Antonia Josefa Johanna Gabriela of the House of Habsburg'};
+const BUSIEST=[
+ ...[21,22,23,24].map((d)=>M(d,15,'linear-both-sides',10,25,{notSure:12})),
+ ...[21,22,23].map((d)=>M(d,17,'frac-equivalent',10,25,{notSure:12,slip:'added-same',slipN:4})),
+ M(22,18,'frac-of-amount',10,25,{notSure:12}),M(23,18,'frac-of-amount',11,25,{notSure:11}),
+ M(24,18,'calc1-log-derivative',10,25,{notSure:12}),M(25,18,'calc1-rules',10,25,{notSure:12,stretch:true}),
+ M(26,18,'calc1-limit-idea',10,25,{notSure:12}),M(27,18,'calc1-extrema',10,25,{notSure:12}),
+ H(21,19,12,24,10),H(22,19,12,20,9),H(23,19,12,30,11),P(24,20,40),P(25,20,40),
+ ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),10+(i%7),s.id,s.skill,12)),
+ ...['structure','argument','evidence','language'].map((x,i)=>R(21+i,16,x,5,2)),...['structure','argument'].map((x,i)=>R(25+i,16,x,20,3)),
+];
+test('W9-lines: the busiest week stays within PAGE_WORDS after the ladder (88 words); no section and no "nothing done" line is dropped; the last rung drops only the hint counts',()=>{
+ assert.equal(W.wordsIn(TEN.name),10);
+ const lines=words(BUSIEST,TEN),t=texts(lines);
+ assert.equal(W.pageWords(lines),88,'the busiest week, pinned');
+ assert.ok(W.pageWords(lines)<=W.PAGE_WORDS,`${W.pageWords(lines)} words`);
+ assert.equal(t[0],`${TEN.name} worked on seven evenings.`,'a ten-word name is kept whole');
+ assert.ok(t.includes('Three homework sheets.'),'on the last rung the homework line keeps its sheets, without the hint counts');
+ assert.ok(t.includes('Equations, x on both sides: 10 of 25 right, 12 not sure, last set.'));
+ assert.ok(t.includes(W.DO_IT['linear-both-sides']));
+ // a short name: the page fits a rung earlier, and the hint counts stay
+ const short=texts(words(BUSIEST));assert.ok(short.includes('Three homework sheets, 74 hints, 30 needed a second.'),short.join(' | '));
+ assert.ok(W.pageWords(words(BUSIEST))<=W.PAGE_WORDS);
+ for(const s of ['week','maths','look','english','essay','try'])assert.ok(lines.some((l)=>l.section===s&&!l.head),`${s} kept`);
+ assert.ok(t.includes('Two practice papers typed in.'),'the paper line kept');
+ assert.ok(t.some((x)=>/12 not sure, last set\.$/.test(x)),'a unit line with its not-sure count');assert.ok(t.some((x)=>/^And \w+ more units?\.$/.test(x)));
+ assert.ok(t.some((x)=>/^A step up taken/.test(x)));
+ for(const l of lines)assert.ok(W.wordsIn(l.text)<=W.LINE_WORDS,l.text);
+});
+
+// ------------------------------------------------------------------ craft-2: a week across a daylight-saving change
+test('W9-lines (craft-2): a week across the October 2026 clock change reads seven evenings; local midnight six days back is the edge',()=>{
+ const was=process.env.TZ;
+ try{
+  for(const tz of ['Europe/Prague','Europe/London']){
+   process.env.TZ=tz;
+   assert.notEqual(new Date(2026,9,24,12).getTimezoneOffset(),new Date(2026,9,25,12).getTimezoneOffset(),`${tz}: the clocks change on 25 October 2026`);
+   const noon=(d)=>new Date(2026,9,d,12).getTime(),now=new Date(2026,9,25,21).getTime();
+   const week=[19,20,21,22,23,24,25].map((d,i)=>i%2?{at:noon(d),kind:'homework',problems:3,hints:0,second:0}:{at:noon(d),kind:'maths',topic:'area',right:3,notSure:0,total:6});
+   const page=W.sundayPage(learnerOf(week),MIA,now);
+   assert.equal(page.evenings,7,tz);
+   assert.equal(W.sundayWords(page)[0].text,'Mia worked on seven evenings.',tz);
+   assert.equal(W.weekStart(now),new Date(2026,9,19).getTime(),`${tz}: the week starts at local midnight on the 19th`);
+   const edge=[{at:new Date(2026,9,19,0,30).getTime(),kind:'paper',questions:5},{at:new Date(2026,9,18,23,30).getTime(),kind:'paper',questions:5}];
+   assert.equal(W.sundayPage(learnerOf(edge),MIA,now).papers,1,`${tz}: half past midnight on the 19th is in, half past eleven on the 18th is out`);
+  }
+ }finally{if(was===undefined)delete process.env.TZ;else process.env.TZ=was;}
+});
+
 // ------------------------------------------------------------------ 7. through the store: this learner's only, lines only, phone only
 test('7: the store assembles the seated learner\'s page on the server; a phone gets only its lines, never the digest; the TV and a guest get none; another learner\'s week never shows',()=>{
  store.dispatch({type:'reset'});
