@@ -330,3 +330,60 @@ test('case 24: GET /api/smoke is a probe round for the TV and in-process callers
  for(const k of ['text','vision','embed','speak'])assert.equal(n.run[k],1,`${k} ran live`);
  assert.equal(n.run.listen,0);
 });
+
+// ---- HINT-1 HL4 / HL5: the lesson library's vectors and the pick's menu check
+const LESSON2='bAerID24QJ0';
+const freshLessons=()=>{
+ for(const k of Object.keys(require.cache))if(/library.lessons\.ts$|desk.pick\.ts$/.test(k))delete require.cache[k];
+ fs.rmSync(path.join(data,'embeddings.json'),{force:true});
+ fs.writeFileSync(path.join(data,'lessons',`${LESSON2}.en.vtt`),['WEBVTT\n',cue(0,'linear equations'),cue(50,'distribute first'),cue(100,'collect like terms')].join('\n'));
+ return load('library/lessons.ts');
+};
+/** An embed stub: a window's vector is a unit vector by position, a query's is the unit vector at `want`. */
+const embedStub=(want,log)=>reg().useProvider('embed',{name:'stub',run:async({texts})=>{log.push(texts.length);return {raw:texts.length===1?[[0,0,0,1].map((_,i)=>i===want?1:0)]:texts.map((_,i)=>[0,0,0,1].map((__,j)=>j===i?1:0))};}});
+
+test('HL4 case 1: one failed embed call is not remembered - the next call asks the engine again and finds the nearest window',async()=>{
+ const L=freshLessons();const log=[];let fail=true;
+ reg().useProvider('embed',{name:'stub',run:async({texts})=>{log.push(texts.length);if(fail){fail=false;throw new Error('ollama is down');}return {raw:texts.length===1?[[0,0,1,0]]:texts.map((_,i)=>[0,0,0,0].map((__,j)=>j===i?1:0))};}});
+ await assert.rejects(L.bestWindow(LESSON,'q'),/ollama is down/);
+ assert.equal(fs.existsSync(path.join(data,'embeddings.json')),false,'a failed build caches nothing');
+ const w=L.lessonWindows(LESSON);
+ const b=await L.bestWindow(LESSON,'q');
+ assert.equal(b.t,w[2].t);assert.notEqual(b.t,0,'not 0:00');
+ const b2=await L.bestWindow(LESSON2,'q');assert.ok(b2&&b2.score>0,'another lesson works too');
+});
+
+test('HL4 case 2: a truncated embeddings.json is rebuilt, and the pick works',async()=>{
+ const L=freshLessons();const log=[];embedStub(2,log);
+ fs.writeFileSync(path.join(data,'embeddings.json'),'{"v":2,"model":"nomic-emb');
+ const w=L.lessonWindows(LESSON);
+ assert.equal((await L.bestWindow(LESSON,'q')).t,w[2].t);
+ assert.ok(log.length>0,'the engine was asked');
+ JSON.parse(fs.readFileSync(path.join(data,'embeddings.json'),'utf8'));
+ assert.deepEqual(fs.readdirSync(data).filter((n)=>n.endsWith('.tmp')),[],'no temp file is left');
+});
+
+test('HL4 case 3: a cache written under another model, or for other text, or of the wrong length, is rebuilt',async()=>{
+ let L=freshLessons();let log=[];embedStub(1,log);
+ await L.bestWindow(LESSON,'q');const f=path.join(data,'embeddings.json');
+ const good=JSON.parse(fs.readFileSync(f,'utf8'));assert.equal(good.model,load('engines/embed.ts').EMBED_MODEL);
+ const reload=()=>{for(const k of Object.keys(require.cache))if(/library.lessons\.ts$/.test(k))delete require.cache[k];log.length=0;return load('library/lessons.ts');};
+ // another model
+ fs.writeFileSync(f,JSON.stringify({...good,model:'some-other-model'}));
+ L=reload();await L.bestWindow(LESSON,'q');assert.ok(log.length>0,'another model: rebuilt');
+ // a changed digest
+ const g2=JSON.parse(fs.readFileSync(f,'utf8'));g2.lessons[LESSON].digest='stale';fs.writeFileSync(f,JSON.stringify(g2));
+ L=reload();await L.bestWindow(LESSON,'q');assert.ok(log.length>1,'a changed digest: that lesson is embedded again');
+ // a vector of the wrong length is never used
+ const g3=JSON.parse(fs.readFileSync(f,'utf8'));g3.lessons[LESSON].vectors=g3.lessons[LESSON].vectors.slice(0,1);fs.writeFileSync(f,JSON.stringify(g3));
+ L=reload();const w=L.lessonWindows(LESSON);assert.equal((await L.bestWindow(LESSON,'q')).t,w[1].t);
+ assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).lessons[LESSON].vectors.length,w.length);
+});
+
+test('HL4 case 4: two concurrent calls embed once',async()=>{
+ const L=freshLessons();const log=[];embedStub(0,log);
+ const [a,b]=await Promise.all([L.ensureVectors(),L.ensureVectors()]);
+ assert.equal(a,b);
+ const windows=L.lessonWindows(LESSON).length?2:0; // two lessons have transcripts here
+ assert.equal(log.length,windows,'one embed call per lesson, shared by both callers');
+});

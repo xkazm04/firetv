@@ -12,6 +12,8 @@ import { EngineError, type EmbedRequest, type EngineResult, type Provider } from
 
 const HOST = (process.env.OLLAMA_HOST || "http://127.0.0.1:11434").replace(/\/$/, "");
 const MODEL = process.env.OLLAMA_EMBED_MODEL || "nomic-embed-text";
+/** The model that places the vectors: a vector cache written under another model is not reused (library/lessons). */
+export const EMBED_MODEL = MODEL;
 
 export const ollamaEmbed: Provider<EmbedRequest, unknown> = {
   name: "ollama",
