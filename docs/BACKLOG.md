@@ -167,4 +167,24 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
 
 ## Essay Master
 
+Drained from `2026-10-09-essay-w-run` (L2 on the claude CLI, `claude-cli/sonnet`; one scripted learner and the builder's reading; analysis in `docs/uat-insights/2026-10-09-essay-w-run.md`). Paths are under `desk/src/`, checked against main dfb12cc1. The run has no finding ids, so it is cited as `<run>/<step>`.
+
+- **EM-B1** — The recap counts a sentence the student rewrote to strong as still to fix
+  - origin: 2026-10-09-essay-w-run/W5-W6 (results.json: 2 faulty before the rewrite, 1 after, sentence 4 faulty to strong with the rest kept; the recap and the history then read "2 of 5 sentences to fix")
+  - recommendation: build — root cause verified in code: the history line is written once, at the reading (`lib/desk/essay.ts:93-101`, called at `:110`); a rewrite writes nothing by design (`essay.ts:156`); the recap parses that line (`tv/recapRows.ts:35`, `:63-65`). The count must follow the reading's last state while the record stays one reading. Serves the council's must-address (1): "value: The Essay recap counts a sentence the student fixed as still to fix (Barbora C2 fails; observed)"
+  - owner: end-of-session-memory-recap council rework
+  - status: open
+  - ceiling: a right count still does not say which sentence improved
+- **EM-B2** — An Essay evening writes no memory: End session asks for none
+  - origin: 2026-10-09-essay-w-run/W6 (End session 1,896 ms, "no model call, nothing marked and no hints", SUMMARY *Model calls*)
+  - recommendation: build — verified in code: `/api/memory` returns early for an evening with no practice item and no hint (`app/api/memory/route.ts:28`), and `writeMemory` reads Maths practice items only (`lib/desk/memory.ts:24`, `:30-35`). The run confirms the first half of the council's must-address (2), "value: The memory half never fires for a Linga or Essay evening, and the phone then says 'Nothing written down tonight.'"; the phone line itself (`app/phone/page.tsx:612-613`) was not captured, so the second half is undecided. Must-address (3) is undecidable here: no model call ran
+  - owner: end-of-session-memory-recap council rework
+  - status: open
+  - ceiling: an essay memory line rests on a lens and two counts; the notes a student struggled with are not kept
+- **EM-B3** — A rewrite re-judges only its own sentence: sentence 5 stays faulty after sentence 4 supplies what it asked for
+  - origin: 2026-10-09-essay-w-run/W5 (builder's reading: "Sentence 5 stays faulty by design (the other verdicts are kept), even though the rewrite of sentence 4 adds the learning evidence it asked for")
+  - recommendation: decline-with-reason (each verdict is about its own sentence, and sentence 5 still asserts on its own; keeping the others identical is the rewrite contract, `lib/desk/essay.ts:156`, and W5's acceptance; a fresh reading is Analyse again. Returns with a learner's or the owner's reading that the kept note misleads, or a lens that judges links between sentences)
+  - status: open
+  - ceiling: the TV still shows sentence 5's note asking for grades the paragraph now holds one sentence earlier
+
 ## Math Buddy
