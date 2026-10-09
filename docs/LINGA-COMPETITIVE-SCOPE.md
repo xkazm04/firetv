@@ -312,6 +312,23 @@ Rulings of the App Master for the third run (R1-R4):
 - **R3** The typed and spoken replies left no evidence row. Run 3 traces this read-only.
 - **R4** The replay line ("fuzzy robot voice", a repeat rather than a new question) waits on the owner's reading, then a prompt fix if he agrees.
 
+Result (evidence: `uat/runs/2026-10-09-linga-run-3/`; one harness run, `passed: true`, no page errors, one 403, no 5xx):
+
+| Step | Verdict |
+|---|---|
+| R1 harness fix | built: the Maths and Essay entrances poll the session (`tools/linga-ui-test.cjs`). Both arrived with no click: Maths 605 ms, Essay 647 ms (the W-run: 744 ms after a click). The fallback click never ran |
+| E1-E3 | pass; the footer read "Partner speaking" this time (opening line to voice 1817 ms; the browser's synthesis voice, as `/api/speak` answered 503) |
+| E4-E7 | pass; a fix moment fired after the spoken reply; the recap drew |
+| E8 | modelMs median 8460 ms, max 10405 ms (run 1: 9960 / 11578; run 2: 13295 / 19515); five calls, 43.95 s |
+| E9 | pass (one 403) |
+| After E7 | My map (8 chapters), the print page (1 page, 25150 bytes), mobile width, the Maths and Essay entrances and the page-errors check: all pass |
+| R2 | a bare haiku call through the CLI: wall 6.3-7.8 s, `duration_api_ms` 0.6-0.8 s, `duration_ms` 1.1-2.3 s; about 5-6 s is CLI start-up outside both timers, so most of a ~8.5 s turn is fixed start-up, not model time (one machine, three calls) |
+| R3 | no evidence row for the typed or the spoken reply, as in run 2. Both are 4+ word questions that copy no shown line, so `creditOf` (`credit.ts:43-46`) would not drop them; the absence fits the model returning no observation or one dropped at `rules.ts:69` (skill not allowed, confidence not "clear", quote not a substring, field missing or too long). Not decidable without the raw model output, which the desk does not keep. Open question: log dropped observations |
+
+R4 evidence, not a ruling: this run's replay line was a new question with no "fuzzy robot voice" excuse; one run does not settle it.
+
+Still owed: a real phone's microphone over Wi-Fi, heard audio, and the owner's reading of the three transcripts and of R4.
+
 ## 4. Declined and deferred, in one place
 
 | | What | Why, for the sofa |
