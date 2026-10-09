@@ -83,6 +83,22 @@ def hud(I, rows):
             'workMsMean': round(statistics.fmean(col('workMs')), 4), 'cpuMsMean': round(statistics.fmean(col('cpuMs')), 4)}
 
 
+REJECTION_ASSERT = 'c.accepted===c.sent&&c.rejected===0&&c.hz>29'
+
+
+def functional(d, raw):
+    """The rule's void test: the probe failed functionally (rounds or input rate). The probe exits 1 on its rejection assertion
+    too, and its functionalPass is then false; by the rule rejected inputs are recorded and do not void a run. So a run is
+    functional when the probe passed, or when the only failing assertion is the rejection one and every client sent above
+    29 Hz with every input either accepted or rejected, no host pump stall, and at least one round."""
+    if d.get('functionalPass'):
+        return True
+    clients = raw.get('clients') or []
+    return bool(REJECTION_ASSERT in (d.get('error') or '') and clients
+                and all(c['hz'] > 29 and c['accepted'] + c['rejected'] == c['sent'] for c in clients)
+                and not raw.get('pumpStalls') and raw.get('rounds'))
+
+
 def read_run(run, apks):
     s = json.loads((run / 'summary.json').read_text())
     d = json.loads((run / 'p11-readings.json').read_text())
@@ -102,7 +118,7 @@ def read_run(run, apks):
     settled = (run / 'settled.txt').read_text().strip() if (run / 'settled.txt').exists() else 'n/a'
     return {'run': run.name, 'apkSha256': sha, 'arm': next((arm for arm, h in apks.items() if h == sha), None),
             'settled': settled.startswith('yes'), 'settledNote': settled,
-            'durationSeconds': d['durationSeconds'], 'functionalPass': d['functionalPass'], 'error': d.get('error'),
+            'durationSeconds': d['durationSeconds'], 'functionalPass': functional(d, raw), 'probeFunctionalPass': d['functionalPass'], 'error': d.get('error'),
             'rounds': len(raw.get('rounds') or []), 'hostCpu': d.get('hostCpu'),
             'ownedTextureMiB': {'max': rnd(max(owned), 3) if owned else None, 'min': rnd(min(owned), 3) if owned else None,
                                 'summaryMax': s.get('ownedTextureMiB'), 'fontMiBMax': rnd(max(font), 3) if font else None,
