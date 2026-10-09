@@ -235,3 +235,12 @@ missing size of the change, stays for the owner's reading; the verdict rule for 
 unchanged. (c) Why sentence 3 was neutral is not traced. Under the Evidence rule a checkable sentence with a number is
 strong, so the model must have reported a support other than checkable; the harness does not keep the raw observation, so
 this is inferred, not shown.
+
+
+## Open questions (10-09 L1 drain)
+
+From `docs/uat-insights/2026-10-09-essay-l1.md` (five Characters read the surface in code, no model call). Two rulings are applied and not open: R3 (an untitled piece is "Untitled <format>"; a typed title and a `# heading` stay) and R4 (Essay Master reads English writing, so a paragraph that is not English is said to be so before any verdict or count).
+
+1. **Adult mode on a shared TV (EM-B30).** A reading of a kept email draws each sentence whole on the forensic page and its first words on the lens home (`essay/EssayTV.tsx:415`); neither the phone nor the PC page shows verdicts. The curtain covers the Workroom, the recap and the Sunday page, not the reading, so this is a design tension and not a count. Options: the sentences and verdicts sit on the PC page with only marks on the TV; the TV asks before showing text; or it stays as it is for a living room with one reader. Opposing reads of one surface; one Character (Helena, 46).
+2. **What an untitled piece is called after R3.** Every untitled piece now reads "Untitled <format>", so the shelf and the Workroom will list identical cards (Daniel already has three "Untitled essay" cards). Is a date or an ordinal allowed in the title, and does a typed title field belong on the phone's Essay tab? A title line pasted above a paragraph stays a paragraph unless it is a `# heading` or the typed title.
+3. **Grammar and spelling.** The four lenses read structure, argument, evidence and word choice. The build is one line saying so; whether Essay Master ever reads grammar, which Daniel says is what he loses marks for, is a scope question for the owner.
