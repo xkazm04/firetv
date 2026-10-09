@@ -64,6 +64,30 @@ export const DO_IT: Readonly<Record<string, string>> = {
   "linear-two-step": "Think of a number, double it, add three, and let them find your number.",
   "linear-both-sides": "Ask when two plans, each a fee plus a monthly charge, cost the same.",
 };
+/**
+ * A unit's name on the Sunday page, where the library's would carry a unit line past LINE_WORDS (two-digit counts, a
+ * not-sure count and "last set" leave five words for the name). Closed and authored: exactly the library topics whose
+ * own name is longer, each in plain words with no abbreviation. The step-up line says the same name. The library's names
+ * are unchanged; every other unit keeps its own.
+ */
+export const SUNDAY_NAMES: Readonly<Record<string, string>> = {
+  "area": "Area of rectangles and triangles",
+  "linear-both-sides": "Equations, x on both sides",
+  "calc1-functions": "Functions, new from old",
+  "calc1-limit-idea": "The idea of a limit",
+  "calc1-limit-laws": "Limit laws, the squeeze theorem",
+  "calc1-derivative": "The derivative as a limit",
+  "calc1-rules": "Polynomial, product and quotient rules",
+  "calc1-chain": "Chain rule, implicit differentiation",
+  "calc1-log-derivative": "Derivative of the logarithm",
+  "calc1-extrema": "Maxima, minima, mean value theorem",
+  "calc1-shape": "Second derivative, curve sketching",
+  "calc1-ftc": "The fundamental theorem, net change",
+  "calc1-area-average": "Areas between curves, average values",
+};
+/** A unit's name as the page says it: its Sunday name when the table has one, else the library's. */
+const unitName = (id: string): string | undefined => (Object.prototype.hasOwnProperty.call(SUNDAY_NAMES, id) ? SUNDAY_NAMES[id] : topicIn(id)?.name);
+
 /** The act for a week with no school unit worked: by what was done. */
 export const DO_IT_ELSE = {
   english: "Ask them to teach you one English phrase they used this week.",
@@ -133,7 +157,7 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   const maths = week.filter((e): e is MathsDigest => e.kind === "maths" && !!topicIn(e.topic));
   const byUnit = new Map<string, WeekUnit>();
   maths.forEach((e) => {
-    const u = byUnit.get(e.topic) ?? { id: e.topic, name: topicIn(e.topic)!.name, sets: 0, right: 0, total: 0, stretch: false, latest: -1 };
+    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, total: 0, stretch: false, latest: -1 };
     u.sets++; if (e.stretch) u.stretch = true;
     if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.total = e.total; }
     byUnit.set(e.topic, u);
@@ -196,7 +220,9 @@ function homeworkLine(h: NonNullable<SundayPage["homework"]>): string {
 
 function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.empty) return [{ section: "week", text: WEEK_EMPTY }];
-  const out: WeekLine[] = [{ section: "week", text: `${page.name} worked on ${times(page.evenings, "evening")}.` }];
+  // a profile name long enough to carry the week line past LINE_WORDS is said by its first word
+  const said = (name: string) => `${name} worked on ${times(page.evenings, "evening")}.`;
+  const out: WeekLine[] = [{ section: "week", text: wordsIn(said(page.name)) <= LINE_WORDS ? said(page.name) : said(page.name.split(/\s+/)[0]) }];
   const head = (section: Exclude<WeekSection, "week">) => out.push({ section, head: true, text: WEEK_HEADS[section] });
   if (page.homework || page.units.length || page.papers) head("maths");
   if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework) });

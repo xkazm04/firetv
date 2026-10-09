@@ -65,7 +65,9 @@ const FULL=[
  '# Math Buddy',
  'Add and subtract fractions: 5 of 6 right, last set.',
  'Mean and range: 2 of 6 right, last set.',
- 'And two more units.',
+ // OLD 'And two more units.' (W9-lines: the shorter Sunday name for Area brings the first rung, three units, within PAGE_WORDS)
+ 'Area of rectangles and triangles: 6 of 6 right, last set.',
+ 'And one more unit.',
  'A step up taken in Ratio and sharing.',
  '# One thing to look at',
  'The most common slip, three times: added the tops and the bottoms.',
@@ -96,7 +98,8 @@ test('2: a thin week (one unit) and the empty week',()=>{
  assert.deepEqual(texts(words(thin)),[
   'Mia worked on one evening.',
   '# Math Buddy',
-  'Area of rectangles, triangles and composite shapes: 4 of 6 right, last set.',
+  // OLD 'Area of rectangles, triangles and composite shapes: ...' (W9-lines: its Sunday name, so the not-sure count fits LINE_WORDS)
+  'Area of rectangles and triangles: 4 of 6 right, last set.',
   '# One thing to look at',
   'The most common slip, twice: the half left out.',
   '# One thing to try together',
@@ -160,7 +163,8 @@ test('4: the slip line only for a slip seen twice or more; at most three units t
  const two=[M(24,18,'area',6,6,{stretch:true}),M(25,18,'ratio-share',6,6,{stretch:true})];
  assert.ok(words(two).some((l)=>l.text==='A step up taken in two units.'));
  assert.equal(words([M(24,18,'area',6,6,{stretch:true})]).filter((l)=>/step up/i.test(l.text)).length,1);
- assert.ok(words([M(24,18,'linear-both-sides',6,6,{stretch:true})]).some((l)=>l.text==='A step up taken in Equations with brackets and x on both sides.'));
+ // OLD 'A step up taken in Equations with brackets and x on both sides.' (W9-lines: the step-up line says the unit's Sunday name)
+ assert.ok(words([M(24,18,'linear-both-sides',6,6,{stretch:true})]).some((l)=>l.text==='A step up taken in Equations, x on both sides.'));
  assert.ok(!words([M(24,18,'area',6,6,{stretch:true}),M(25,18,'area',6,6)]).some((l)=>/step up taken this week/.test(l.text)),'one unit: named');
 });
 
@@ -228,6 +232,41 @@ test('MB-B14: the homework line comes first in Math Buddy, the paper line last; 
  // counts only: no percent, no praise, no em dash
  for(const l of words([H(21,18,9,40,9),H(22,18,9,0,0),P(23,18,30)]))assert.doesNotMatch(l.text,/%|[—–]|\b(great|well done|good job|score|percent)\b/i,l.text);
  assert.equal(calls,0);
+});
+
+// ------------------------------------------------------------------ W9-lines: LINE_WORDS stays 14, long names are shortened
+/** Every topic of the library, on every path, once. */
+const ALL_TOPICS=[...new Map(Object.values(PATHS).flatMap((p)=>p.topics).map((t)=>[t.id,t])).values()];
+test('W9-lines: SUNDAY_NAMES is closed - exactly the library topics whose longest unit line would pass LINE_WORDS - in plain words; every unit line on every path fits',()=>{
+ assert.equal(W.LINE_WORDS,14,'LINE_WORDS is not raised');assert.equal(W.PAGE_WORDS,90);
+ const longest=(name)=>W.wordsIn(`${name}: 10 of 12 right, 10 not sure, last set.`);
+ const need=ALL_TOPICS.filter((t)=>longest(t.name)>W.LINE_WORDS).map((t)=>t.id).sort();
+ assert.ok(need.includes('calc1-log-derivative')&&need.includes('area'),'the council probe and a school unit');
+ assert.deepEqual(Object.keys(W.SUNDAY_NAMES).sort(),need,'the table covers exactly those topics');
+ for(const [id,name] of Object.entries(W.SUNDAY_NAMES)){
+  assert.ok(longest(name)<=W.LINE_WORDS,`${id}: ${name}`);
+  assert.doesNotMatch(name,/\d|[—–]|\.|\b(eqn|eq|deriv|calc|approx|fn|ftc|thm|diff)\b/i,`${id}: plain words, no abbreviation`);assert.doesNotMatch(name,/\b[A-Z]{2,}\b/,`${id}: no initialism`);
+  assert.notEqual(name,PATHS.calc1.topics.concat(PATHS.school.topics).find((t)=>t.id===id)?.name,`${id}: shorter than the library's`);
+ }
+ // the library itself is unchanged: a unit without a Sunday name keeps the library's
+ for(const t of ALL_TOPICS){
+  const line=words([M(24,18,t.id,10,12)]).find((l)=>l.section==='maths'&&/last set\.$/.test(l.text));
+  assert.ok(line,`${t.id}: a unit line`);
+  assert.ok(W.wordsIn(line.text)<=W.LINE_WORDS,`${t.id}: ${W.wordsIn(line.text)} words: ${line.text}`);
+  assert.ok(line.text.startsWith(`${W.SUNDAY_NAMES[t.id]??t.name}: `),line.text);
+  const up=words([M(24,18,t.id,10,12,{stretch:true})]).find((l)=>/^A step up taken in /.test(l.text));
+  assert.equal(up.text,`A step up taken in ${W.SUNDAY_NAMES[t.id]??t.name}.`,'the step-up line says the same name');
+ }
+});
+
+test('W9-lines (craft-1): a profile name that would carry the week line past LINE_WORDS is said by its first word; a short one whole',()=>{
+ const long={name:'Maria Antonia Josefa Johanna of the House of Habsburg Lorraine Vienna Austria'};
+ assert.equal(W.wordsIn(long.name),12);
+ const first=words(WEEK,long)[0].text;
+ assert.equal(first,'Maria worked on seven evenings.');assert.ok(W.wordsIn(first)<=W.LINE_WORDS);
+ assert.equal(words(WEEK,{name:'Anna Marie Novakova'})[0].text,'Anna Marie Novakova worked on seven evenings.');
+ // ten words still fit whole with "seven evenings"
+ const ten='a b c d e f g h i j'.toUpperCase();assert.equal(words(WEEK,{name:ten})[0].text,`${ten} worked on seven evenings.`);
 });
 
 // ------------------------------------------------------------------ 7. through the store: this learner's only, lines only, phone only
