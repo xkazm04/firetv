@@ -414,3 +414,11 @@ test('paper 5: a paper kept can be shown on the TV from the panel - the TV has n
  assert.equal(panelFor(session({screen:'paper'})),'paper','the TV on the list hands the phone to the panel');
  assert.equal(panelFor(session({joined:false,screen:'paper'})),'join','an unjoined phone is still asked for the code first');
 });
+
+test('MB-B43: the Paper panel\'s heading and its Send button name the seated learner',()=>{
+ const src=fs.readFileSync(PAPER_PANEL,'utf8'),page=fs.readFileSync(PAGE,'utf8');
+ assert.match(src,/<h3>\{paperHeading\(name\)\}<\/h3>/);assert.match(src,/\{paperSend\(e\.kept, name\)\}/);
+ assert.match(src,/`A paper \$\{name\} sat`/);assert.match(src,/to \$\{name \? `\$\{name\}'s record` : "the TV"\}/);
+ assert.match(page,/<PaperPanel [^>]*name=\{s\?\.learner\?\.name\}/,'the panel is given the seated learner\'s name');
+ assert.doesNotMatch(src,/<h3>A paper you sat<\/h3>/,'no unnamed heading is left');
+});
