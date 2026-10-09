@@ -1009,3 +1009,13 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  await post('explain',{transcript:'twenty-eight square centimetres',n:1});
  const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(2),'the leaking reply is not shown');
 });
+
+test('HL6: every frac-* withheld line is 25 words or fewer, keeps the closing sentence, names no number, and leaks nothing on its unit',()=>{
+ const gens={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount,'frac-add-sub':S.gen,'frac-mul-div':S.genMulDiv};
+ for(const [unit,gen] of Object.entries(gens)){
+  const line=S.SCHOOL_WITHHELD[unit];
+  assert.ok(line.split(/\s+/).length<=25,`${unit}: ${line.split(/\s+/).length} words`);
+  assert.match(line,/The answer is yours to work out\.$/);assert.doesNotMatch(line,/\d/);
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=gen(seed,tier);assert.equal(S.unitOf(sp),unit);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);}
+ }
+});

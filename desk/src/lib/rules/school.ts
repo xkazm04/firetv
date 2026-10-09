@@ -3330,10 +3330,10 @@ export function unitOf(spec: unknown): string | null {
  * reads words as numbers), so nothing on it can be the answer.
  */
 export const SCHOOL_WITHHELD = {
-  "frac-equivalent": "Find what the bottom was multiplied or divided by to make the new bottom, and do exactly the same to the top. To simplify, divide the top and the bottom by the biggest number that goes into both. The answer is yours to work out.",
-  "frac-of-amount": "Divide the amount by the bottom number to find the size of a single part, then multiply by the top number to take that many parts. The answer is yours to work out.",
-  "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
-  "frac-mul-div": "To multiply, multiply the tops together and the bottoms together. To divide, turn the fraction you divide by upside down and multiply instead. Simplify at the end. The answer is yours to work out.",
+  "frac-equivalent": "Multiply or divide top and bottom by the same number. To simplify, divide both by a common factor. The answer is yours to work out.",
+  "frac-of-amount": "Divide the amount by the bottom number to find a single part, then multiply by the top number. The answer is yours to work out.",
+  "frac-add-sub": "Make the bottoms the same first by rewriting each fraction. Then combine only the tops. The answer is yours to work out.",
+  "frac-mul-div": "To multiply, multiply tops and bottoms. To divide, flip the last fraction and multiply. Simplify at the end. The answer is yours to work out.",
   "dec-convert": "A fraction is its top divided by its bottom, so dividing gives the decimal. A percentage counts hundredths, so a decimal is written as a percentage by finding how many hundredths it makes, and a percentage as a decimal the other way. To make a fraction, write the decimal as tenths, hundredths or thousandths and simplify. The answer is yours to work out.",
   "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
   "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
