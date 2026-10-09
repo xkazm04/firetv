@@ -413,3 +413,13 @@ on the phone or the TV changed in M5c: no route, no event, no button reads the r
 - **What a pass would mean:** the papers are clean renders, not phone photos of handwriting, so a live pass is an upper
   bound on a real photo. When it passes, the door (a Snap on the Paper panel feeding the same `paper.enter`) is its own
   slice, with its captures.
+
+
+## Open questions (10-09 L1 drain)
+
+From `docs/uat-insights/2026-10-09-maths-l1.md` (five Characters read the surface in code, no model call, no vision call). Rulings applied and not open: R1 (a decimal for a limit or a definite integral is right only as a correct rounding of the exact value at its own written precision, otherwise "not sure" and asks for the exact value; `lib/rules/calc.ts:53-61`), R2 ("ln x + C" is not right for the antiderivative of 1/x) and R5 (Czech in Math Buddy is in scope: Czech school units and the maturita).
+
+1. **The paper map.** "A paper you sat" maps questions onto 97 statements in GCSE Foundation wording (an owner decision). Radka (a parent with a CERMAT mock) and Vojtěch (a maturita paper) meet it as UK exam language, and 74 of the 97 statements have no desk topic. The backlog builds the wording and the way in (an area-level choice first, Czech task-shaped statements, no "Foundation paper" words for a cz learner). Whether the desk grows a Czech or a maturita statement map of its own is the open decision.
+2. **Marking a learner's own sheet.** The page route reads and hints; `/api/mark` marks only the desk's own sets. Matyáš's first job is "which of my ten did I get wrong and where". Two parents ask the opposite of the desk: that it never claim a check nobody made. Should a snapped page whose items read as Calculus specs be markable from a photo of working, by the same code judge, with items that do not read being "not sure"? It waits on the vision host.
+3. **Unsimplified answers.** "6/4" for 4/5 + 7/10 is ticked right because the question does not ask for simplest form, while the worked lesson teaches "then simplify". Either the add and subtract questions say "simplest form", or the lesson drops the step. A right value is right, and a teacher who wants lowest terms marks it down.
+4. **A path past 9. ročník.** The path ends at 9. ročník and no maturita path exists by design, yet an 18-year-old is welcomed to "what school is teaching next" and handed school-level sets as "a step up". The backlog builds the honest ceiling (a caption, the opening focus, the year labels). Whether to build content beyond the path is a scope decision.
