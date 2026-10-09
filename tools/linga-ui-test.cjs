@@ -66,6 +66,7 @@ async function takeMoment(phone,after){
  const m=(await current()).conversation?.moment;
  if(!m){moments.push({after,fired:false});return;}
  moments.push({after,fired:true,kind:m.kind,said:m.said,better:m.better,why:m.why});
+ await tvPage.screenshot({path:path.join(out,moments.filter(x=>x.fired).length===1?'tv-moment.png':`tv-moment-${moments.filter(x=>x.fired).length}.png`)});
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Back to the conversation',exact:true}).click(),'moment-done',{expectLine:false,noLine:'taking a moment gives no new partner line'});
 }
 const num=a=>a.filter(x=>typeof x==='number'&&Number.isFinite(x));
@@ -113,11 +114,11 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  assert.equal(await tv.locator('[data-role="linga-title"]').first().textContent(),SCENE);
  await waitCommand(tv,()=>tv.getByRole('button',{name:'Start this situation',exact:true}).click(),'start',{match:b=>b.sceneId==='rover'});
  }
- await tv.waitForSelector('.linga-speaker');
+ await tv.waitForSelector('.linga-speaker');await tv.screenshot({path:path.join(out,'tv-scene.png')});
  // E4: a typed reply
  await phone.getByLabel('Your reply',{exact:true}).fill('Where is the rover?');
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Send reply',exact:true}).click(),'turn');
- let s=await current();assert.equal(s.conversation.turns.at(-2).mode,'text');
+ let s=await current();assert.equal(s.conversation.turns.at(-2).mode,'text');await tv.screenshot({path:path.join(out,'tv-reply.png')});
  await takeMoment(phone,'typed reply');
  await tv.locator('.stage').click({position:{x:10,y:10}});await tv.keyboard.press('m');await tv.waitForSelector('.linga-menu-list');await tv.keyboard.press('Escape');
  await phone.getByRole('button',{name:'Choose a phrase',exact:true}).click();await tv.waitForSelector('.linga-choices');await phone.getByRole('button',{name:'Which bridge do you mean?',exact:true}).click();
@@ -134,7 +135,7 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  await phone.screenshot({path:path.join(out,'phone-replay.png')});await tv.screenshot({path:path.join(out,'tv-replay.png')});
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Finish rehearsal',exact:true}).click(),'finish',{expectLine:false,noLine:'finishing ends the scene: no new partner line'});
  // the TV is on the recap when the session says so, then when the TV draws it: .linga-tv carries data-view=<screen> (LingaTV.tsx:93, view.ts:618). The hero varies (tape, comparison or track), so the wait holds on the screen, not on a hero part
- for(let i=0;i<240&&(await current()).screen!=='linga-recap';i++)await new Promise(r=>setTimeout(r,250));assert.equal((await current()).screen,'linga-recap');await tv.waitForSelector('.linga-tv[data-view="linga-recap"]');
+ for(let i=0;i<240&&(await current()).screen!=='linga-recap';i++)await new Promise(r=>setTimeout(r,250));assert.equal((await current()).screen,'linga-recap');await tv.waitForSelector('.linga-tv[data-view="linga-recap"]');await tv.screenshot({path:path.join(out,'tv-recap.png')});await phone.screenshot({path:path.join(out,'phone-recap.png')});
  await phone.getByRole('button',{name:'My map',exact:true}).click();assert.equal(await phone.locator('.linga-skill').count(),8);
  const print=await phone.context().newPage();await print.goto(base+'/english/print?learner=linga-browser-child');await print.waitForSelector('.linga-print table');assert.equal(await print.locator('tbody tr').count(),8);await print.pdf({path:path.join(out,'learning-map.pdf'),format:'A4',preferCSSPageSize:true});
  assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
