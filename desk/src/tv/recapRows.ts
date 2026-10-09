@@ -83,15 +83,25 @@ export function toLook(tiles: RecapTile[]): number {
   }
   return n;
 }
-/** The caption slot's one sentence. The picture carries the rest. */
+/**
+ * The caption slot's one sentence. The picture carries the rest. "All of it right" is said only of an evening where at
+ * least one item was marked and none is wrong or unsure; an evening with nothing marked says what it was instead.
+ */
 export function recapCaption(tiles: RecapTile[]): string {
   if (tiles.every((t) => t.empty)) return "A quiet evening.";
   const n = toLook(tiles);
-  return n ? `Good evening's work - ${NUMBER[n] ?? n} to look at together.` : "Good evening's work - all of it right.";
+  if (n) return `Good evening's work - ${NUMBER[n] ?? n} to look at together.`;
+  const maths = tiles.find((t): t is MathsTile => t.app === "maths"), linga = tiles.find((t): t is LingaTile => t.app === "english");
+  if (maths?.sets.length) return "Good evening's work - all of it right.";
+  if (maths?.hints) return `Worked through with ${counted(maths.hints, "hint")}; nothing was marked.`;
+  if (maths?.pages) return `Read ${counted(maths.pages, "page")}; nothing was marked.`;
+  if (linga?.talks.length) return `${cap(times(linga.talks.length, "conversation"))} in English; nothing to mark.`;
+  return "Read through; nothing to fix.";
 }
 
 /** "1 hint", "3 hints": a count and its noun, the plural when it is not one. */
 export function counted(n: number, one: string, many = `${one}s`): string { return `${n} ${n === 1 ? one : many}`; }
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
 const times = (n: number, one: string, many = `${one}s`) => `${NUMBER[n] ?? n} ${n === 1 ? one : many}`;
 
 /**

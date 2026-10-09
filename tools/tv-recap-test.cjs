@@ -350,6 +350,18 @@ test('M5: the evening log belongs to one evening - the first event of a later da
  }finally{Date.now=real;}
 });
 
+test('M6: "all of it right" needs a marked item; a hints-only, a homework-only and a Linga-only evening each say what they were',()=>{
+ const {recapRows,recapCaption}=recap(),cap=(s)=>recapCaption(recapRows(s,NOW));
+ const bare={practice:null,history:[],englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0}};
+ assert.equal(cap(session({...bare,history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'6 of 6 right'}]})),'Good evening\'s work - all of it right.');
+ assert.equal(cap(session({...bare,log:{...bare.log,hints:3}})),'Worked through with 3 hints; nothing was marked.');
+ assert.equal(cap(session({...bare,log:{...bare.log,hints:1}})),'Worked through with 1 hint; nothing was marked.');
+ assert.equal(cap(session({...bare,history:[{at:TODAY(18),kind:'homework',label:'Sheet one',detail:'8 problems read'}]})),'Read 1 page; nothing was marked.');
+ assert.equal(cap(session({...bare,englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'cafe',title:'x',at:TODAY(17),turns:7},{id:'b',sceneId:'station',title:'y',at:TODAY(18),turns:4}]}})),'Two conversations in English; nothing to mark.');
+ for(const c of [session({...bare,log:{...bare.log,hints:3}}),session({...bare,history:[{at:TODAY(18),kind:'homework',label:'Sheet one',detail:'8 problems read'}]})])assert.doesNotMatch(cap(c),/all of it right/);
+ assert.equal(cap(session({...bare,history:[{at:TODAY(19),kind:'writing',label:'Argument',detail:'2 of 5 sentences to fix'}]})),'Good evening\'s work - two to look at together.');
+});
+
 test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
  try{
   seat();engine(lined);
