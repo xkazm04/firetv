@@ -1,0 +1,144 @@
+{
+  "id": "2026-10-09-maths-l1",
+  "started": "2026-10-09T18:02:57Z",
+  "finished": "2026-10-09T19:00:44.647Z",
+  "cert_level": "L1",
+  "module": "Math Buddy",
+  "base_commit": "12592a71837af4a41124d8a9ee539fe55032fe75",
+  "cast": [
+    "matyas-19",
+    "nela-12",
+    "owen-17",
+    "radka-41",
+    "vojtech-18"
+  ],
+  "journeys": [
+    "MB1",
+    "MB2",
+    "MB3",
+    "MB4",
+    "MB5"
+  ],
+  "pairs": [
+    {
+      "character": "matyas-19",
+      "journey": "MB1"
+    },
+    {
+      "character": "matyas-19",
+      "journey": "MB3"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB1"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB2"
+    },
+    {
+      "character": "nela-12",
+      "journey": "MB5"
+    },
+    {
+      "character": "owen-17",
+      "journey": "MB2"
+    },
+    {
+      "character": "owen-17",
+      "journey": "MB4"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB1"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB4"
+    },
+    {
+      "character": "radka-41",
+      "journey": "MB5"
+    },
+    {
+      "character": "vojtech-18",
+      "journey": "MB1"
+    },
+    {
+      "character": "vojtech-18",
+      "journey": "MB2"
+    },
+    {
+      "character": "vojtech-18",
+      "journey": "MB4"
+    }
+  ],
+  "recertify": null,
+  "instrument": {
+    "level": "L1 theoretical (uat skill v1.11.1, Phase L1)",
+    "walkers": "one subagent per Character (claude-opus-5-5, the orchestrator session's own subagents), at most 4 at a time, walking blind of docs/BACKLOG.md, docs/uat-insights/, .personas/ and uat/runs/",
+    "model_calls": "none: no desk engine, no Ollama, no codex, no paid API; rule functions executed with node via tools/ts-load.cjs on scratch DESK_DATA_DIRs outside the repo",
+    "grounding_denominators": "SUMMARY.md, Grounding denominators (fixed once by the orchestrator, shared by every walker)",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  },
+  "product": {
+    "commit": "12592a71837af4a41124d8a9ee539fe55032fe75",
+    "dirty": false,
+    "source": "desk/src files cited in this run's evidence, blobs at the base commit",
+    "files": {
+      "desk/src/app/api/hint/route.ts": "6360f0043a97c3674b57d8824d857019cfdac8d5",
+      "desk/src/app/api/mark/route.ts": "cdc2ba16ffd4d92c1935779dea869c42dd171e6e",
+      "desk/src/app/api/memory/route.ts": "bf7e82b0e5e0c43a0dc623405ec3feaaeac1f34f",
+      "desk/src/app/api/practice/route.ts": "13d53ab0e6f85ddca80f19c27714321cbb684e4b",
+      "desk/src/app/api/read/route.ts": "27b0056b96da8de0d6103d2c65b9a9f7532f5733",
+      "desk/src/app/api/second/route.ts": "a1a77910e33c3011e32668915fcdc02c7e92d802",
+      "desk/src/app/phone/PaperPanel.tsx": "2767ebb840b391a3e0b9150f607b1cd28b5b6bb9",
+      "desk/src/app/phone/page.tsx": "a4844dc79e0252524a9b07df5b1369a8f9944839",
+      "desk/src/app/tv/page.tsx": "70d48e5c1b5101e15f03cff8254ad03e1093f62e",
+      "desk/src/lib/desk/essay.ts": "cbeb73ccde1c09c117bd207d50de1509cec333d8",
+      "desk/src/lib/desk/explain.ts": "87512ce933498c708a4af0fcbaa877c192dfed11",
+      "desk/src/lib/desk/hint.ts": "b8f9c3b2bfe458272c31d4f1e17deaa40e13c89c",
+      "desk/src/lib/desk/items.ts": "1b2a76ee75b47b51367156d0c006e03c808cfbca",
+      "desk/src/lib/desk/mark.ts": "364d58f737ea9fb47443fa5297cf336d017db385",
+      "desk/src/lib/desk/pick.ts": "55badc2a0a8acca094a3487acdb4b54e8b65422d",
+      "desk/src/lib/desk/read.ts": "9c69fb3dce00a4140aafe7de39412c8dfe8c11ff",
+      "desk/src/lib/desk/verify.ts": "8513b6b35a6344eb4481080e4f64dffdd8c74cd6",
+      "desk/src/lib/desk/worked.ts": "26beebe754372000a4f42b80861cc9f3da420dc9",
+      "desk/src/lib/english/conversation.ts": "5023d01c840ba461940f54d2c71258401acbcdb8",
+      "desk/src/lib/library/calculus1.spine.ts": "c5f3ab35e8da28c599270ea97fce0667a5c29937",
+      "desk/src/lib/library/gcse.ts": "bd3ab730507f63ad754373c0b3e4dbb18efdcbea",
+      "desk/src/lib/library/paths.ts": "67ad11de3f7faab1b3552bba2b345f9c1710c47d",
+      "desk/src/lib/library/syllabus.ts": "b9080d8e55ef2f96e74e00b15e6ee0585efc5458",
+      "desk/src/lib/library/worked.ts": "0ae878d44c4d618c2c2abd0727e52d8b7a776062",
+      "desk/src/lib/rules/calc-expr.ts": "f2be786621a4eed9b6b58449c2f97e7f9fb3b509",
+      "desk/src/lib/rules/calc-read.ts": "58e07d5b122b5348224647f8002088388a5ca70f",
+      "desk/src/lib/rules/calc.ts": "dfd51bae806019acf21566be1026590506a60f32",
+      "desk/src/lib/rules/chain.ts": "f6694300f1a0ec25c3008a59e7506a650cf5448c",
+      "desk/src/lib/rules/digest.ts": "47e37c53d7b466ae205e6b3bc5d7c58790e9000e",
+      "desk/src/lib/rules/kinds.ts": "27e79f15425ef997dd1bf345280aba2cde59df73",
+      "desk/src/lib/rules/maths.ts": "517acb15a4f0db70aff67cafb18a24d744648d77",
+      "desk/src/lib/rules/paperEntry.ts": "ea3092210585750800f3d3ecf863c7328bd26804",
+      "desk/src/lib/rules/recovery.ts": "676197373d0fa46290648848213991d48a5390ab",
+      "desk/src/lib/rules/school.ts": "8a2cba227225e7b7f2b736c675928bf58c015788",
+      "desk/src/lib/rules/stretch.ts": "adc56452d15c77bd5c7ef22fd52621ad049f33e3",
+      "desk/src/lib/rules/voice.ts": "d16fe541845d37d97a4637d5a1ddb09f91400cbe",
+      "desk/src/lib/rules/week.ts": "204f23997cb9e79ef3ac0d98bda25e5ec2d8376b",
+      "desk/src/lib/session/learners.ts": "0ccab0fe06961e03b5cce0fc24c2c3d8faac7585",
+      "desk/src/lib/session/store.ts": "00d103ee4df385fb678d5d7d2ca0d694acdaf0da",
+      "desk/src/maths/MathsTV.tsx": "f1c115922973429045e95c938a1a2d3343d31d1a",
+      "desk/src/tv/keys.ts": "ad56e54920073857cf801c16f4ef83b54e678008",
+      "desk/src/tv/mathsRows.ts": "2ed08665d0c4dc70e13c763ef7dbd4996898d7f9",
+      "desk/src/tv/paperRows.ts": "1cfe0bbe433692a26818461bad68f58afc0ef78d",
+      "desk/src/tv/prepareRows.ts": "b21f3f34ea5ece9fdc3a18399d54ac1548aad5db",
+      "desk/src/tv/profileRows.ts": "778ff3b9bf9d7d91aea2175a3ec6b44f5f4389ab",
+      "desk/src/tv/recapRows.ts": "7f70f922d4b418c28337eb289920ecbe14551897",
+      "desk/src/tv/screens.tsx": "000b4b4c65ce529df1816dd9f1d78c66c9a8df4d",
+      "desk/src/tv/sheetRows.ts": "6a97ffae42ef627701f7f5a177da23f1463493eb"
+    }
+  }
+}
