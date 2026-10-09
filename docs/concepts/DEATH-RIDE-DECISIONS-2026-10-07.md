@@ -231,3 +231,50 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
      - No run installs, uninstalls, clears or force-stops `dev.deathride.tracks` or `dev.deathride.tv`.
      - Whether the tracks stream reinstalls its own build is the owner's call. It has been reported to the owner.
 - **Reverse:** the owner may overrule any of these.
+
+## 14. P20 rulings and the owner's goal-1 line
+
+### (a) The owner's ruling on goal 1's measure
+
+- **Who decided:** the owner, 2026-10-09 06:34Z, answering the App Master's ask ec436b62 ("Grade what the screen shows").
+- **What it replaces:** the p95 clause of section 10(a) ruling 1. It supersedes section 11 rulings 2 and 3.
+- **Goal 1's measure now reads:** "A 900 s sound-on Stick soak summary of the deathride/main APK is committed under
+  deathride/evidence/perf/: in every active 10 s window the p95 frame reaches the screen one refresh (16.68 ms) after the one
+  before; active max <= 33 ms, median 16-18 ms, PSS < 192 MiB, zero rejected inputs, each pass or fail against I2."
+- **Unchanged:** the max, median, PSS and zero-rejection lines.
+- **The line's limit:** screen times are the system's own schedule, so the line catches missed refreshes, not small jitter.
+- **With sound on, the max line still fails on the platform's audio.** Section 10(a) ruling 2 stands.
+
+### (b) The App Master's rulings
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of them.
+- **Context:** P20 (8313c7f9, merged at 4f05315e) audited what survives a full GC. See
+  `docs/concepts/deathride/P20-retention-audit.md`, whose questions these answer.
+- **Rulings:**
+  1. **Cards 2 and 3 wait on the soak's figures.**
+     - Card 2 (the display-priority looper) is scheduled only if the sound-on soak fails the new p95 line on missed
+       refreshes. P17's muted runs put every frame but one on the next refresh.
+     - Card 3 (back-pressure) is also ruled by the soak's figures.
+  2. **P20 is accepted.**
+     - Section 13 is the first commit (daebee5d).
+     - `perf-p20-retained.py` and the dominator test (66bcd515, 36868014) precede the dump runs (22669306).
+     - The reconciliation is -5.7 to -6.4% against ART's own figures, within 10%.
+     - No app code changed.
+     - The perf APK was aapt-checked before install.
+     - `tests.json` holds two green gate runs.
+     - The device was left with `dev.deathride.tv` in front, perf force-stopped and no hprof on it.
+  3. **P20's five questions.**
+     - (a) **Cards 14 and 15 are built before the next goal-1 soak, in P21.** P19's cut-run2 PSS peak (195.19 MiB) is above
+       the line, and 31.5 MiB of survivors are the probe's.
+     - (b) **The graded soak stays on the perf build**, as P14's did, so goal 1's lines stay comparable. The soak run reads
+       the release build's Code line once, ungraded, without replacing the installed `dev.deathride.tv`. If it cannot, it
+       lists the reading as owed.
+     - (c) **Card 16 comes after the soak**, under its race-start guard (M1 goal 2's line: no frame over 100 ms at the
+       lobby-to-race transition).
+     - (d) **The stand-in for dump (c)**, ART's logged full GCs over 7 runs, is accepted for the leak question. No further
+       diagnostic run.
+     - (e) **Amending an unpushed commit that nothing cites is accepted.** Once a hash is cited in a doc or the ledger, a fix
+       is a new commit.
+  4. **Order:** P21 (cards 14 and 15), then P22 (the 900 s sound-on soak, graded on every goal-1 line), then card 16. Cards 2
+     and 3 run only if the soak's figures call for them.
+- **Reverse:** the owner may overrule any of these.
