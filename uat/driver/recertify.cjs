@@ -243,6 +243,7 @@ function renderRecertify(prior, rerun) {
     `Rerun: \`${id}\`: ${A.map(r => `${r.character} ${r.journeys.map(j => j.id).join(', ')}`).join(' · ') || 'no Character finished'}. Only the pairs with open findings were rerun; each judge was shown that pair's open finding ids and answered each one.`, '',
     `**Level reached: LT only.** The skill keeps \`resolved-verified\` for live L2 evidence, so a finding the rerun no longer shows is \`fixed\` in \`${P}/findings.json\`, with \`recertify_run\` and \`recertify_evidence\`. Rerun finding ids are positional, so they are written \`${id}/<id>\`.`, '',
     '## Fixed (LT evidence)', '',
+    ...(cf.confounds.some(c => c.kind === 'instrument') ? ['**The instrument changed between these runs (see Confounded below).** A gap not seen here may be the new engine, not a fix: read nothing below as a fix until L2 or a rerun on the same instrument shows it.', ''] : []),
     ...table('| Finding | Title | Rerun evidence | Run pair |', fixed.map(f => `| ${f.id} | ${cell(f.title)} | ${cell(f.recertify_evidence)} | ${pair} |`)), '',
     '## Still open', '',
     ...table('| Finding | Status | Title | Rerun evidence | Run pair |', still.map(f => `| ${f.id} | ${f.recertify_status === 'recurs' ? `recurs (recurrence ${f.recurrence}${f.recurred_as ? `, as ${q(f.recurred_as)}` : ''})` : 'not-evaluable'} | ${cell(f.title)} | ${cell(f.recertify_evidence)} | ${pair} |`)), '',

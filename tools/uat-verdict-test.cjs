@@ -7,8 +7,8 @@
  *
  * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to the OS temp dir,
  * and the suite asserts the committed files are byte-identical at the end. No model call: the tutor is stubbed at
- * the registry, codexText is replaced in the require cache (the judge answers from a queue, through the engine's own
- * shape rule; anything else, the synthesis included, throws), and the codex process launcher throws.
+ * the registry, the driver's claude seam is replaced (the judge answers from a queue, through the engine's own
+ * shape rule; anything else, the synthesis included, throws), and claudeCli.run throws.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
 const { test, after } = require('node:test');
@@ -31,10 +31,10 @@ require(path.join(UAT, 'driver/surface.cjs')).install();
 const calls = { tutor: 0, synthesis: 0 }, judgeReplies = [];
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
 registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; throw new Error('no tutor call in this suite'); } });
-const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
-codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
+const claudeText = require(path.join(root, 'src/lib/engines/text.ts'));
+claudeText.claudeCli.run = async () => { throw new Error('claude must never be launched by this suite'); };
 const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
-codex.codexText = async req => {
+require(DRIVER).claude.call = async req => {
   if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   calls.synthesis++;
   throw new Error('stub: no model call in this suite');
@@ -147,7 +147,7 @@ test('case 5: how the journey ended decides first; a D row answered twice, left 
     assert.ok(v.why.some(w => w.kind === 'ended' && w.text.includes(`ended ${how} before done`)), JSON.stringify(v.why));
   }
   for (const how of ['setup-failed', 'character-model-failure']) assert.equal(V().verdictOf(recordOf('J4', ok, { endedBy: how }), ctx).verdict, 'not-reached', how);
-  const unjudged = V().verdictOf(recordOf('J4', null, { judgeError: 'codex timed out' }), ctx);
+  const unjudged = V().verdictOf(recordOf('J4', null, { judgeError: 'claude timed out' }), ctx);
   assert.equal(unjudged.verdict, 'not-reached'); assert.equal(unjudged.judgeVerdict, null); assert.ok(unjudged.why.length);
   const rows = ok.done;
   const cases = {
@@ -253,4 +253,22 @@ test('case 8 (guard): a judge reply with no done[] is taken by the engine\'s sha
   assert.equal(rec.judgeError, undefined);
   assert.equal(rec.judge.verdict, 'pass');
   assert.equal(rec.verdict, 'conditional', 'asked for done[] and given none: not-evaluable, never pass');
+});
+
+test('the driver is on the claude CLI only: no codexText, no DESK_TEXT_ENGINE set to codex, the child env drops it, the parent refuses it', () => {
+  const src = fs.readFileSync(DRIVER, 'utf8');
+  assert.equal(src.includes('codexText'), false, 'the driver source names codexText');
+  assert.equal(/DESK_TEXT_ENGINE['"]?\s*(?::|=(?!=))\s*['"]codex['"]/.test(src), false, "the driver source sets DESK_TEXT_ENGINE to 'codex'");
+  assert.equal(D().childEnv({ DESK_TEXT_ENGINE: 'codex', KEEP: '1' }).DESK_TEXT_ENGINE, undefined, 'a Character child gets no DESK_TEXT_ENGINE');
+  assert.equal(D().childEnv({ DESK_TEXT_ENGINE: 'codex', KEEP: '1' }).KEEP, '1');
+  assert.throws(() => D().refuseCodexEngine({ DESK_TEXT_ENGINE: 'codex' }), /claude CLI/);
+  assert.doesNotThrow(() => D().refuseCodexEngine({}));
+  assert.ok(src.indexOf('refuseCodexEngine();') < src.indexOf('spawn(process.execPath'), 'parent() refuses before it spawns');
+  // the roles: Character thinking off, judge thinking on, both best
+  assert.deepEqual(D().ROLES, { character: { model: 'best', thinking: false }, judge: { model: 'best', thinking: true } });
+  const req = D().judgeRequest(recordOf('J4'), ctxOf('petra-38', 'J4'));
+  assert.equal(req.model, 'best'); assert.equal(req.thinking, true); assert.equal(req.effort, undefined);
+  assert.deepEqual(D().parseArgs(['--parallel', '2'], { characters: [] }).parallel, 2);
+  assert.equal(D().parseArgs([], { characters: [] }).parallel, 3);
+  assert.throws(() => D().parseArgs(['--parallel', '0'], { characters: [] }), /--parallel/);
 });

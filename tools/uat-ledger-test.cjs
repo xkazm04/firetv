@@ -7,8 +7,8 @@
  *
  * Reads the committed runs under uat/runs/ as fixtures and never writes there: every write goes to a copy in the OS
  * temp dir, and the suite asserts the committed tree is byte-identical at the end (no OPEN.md appears in it either).
- * No model call: the tutor is stubbed at the registry, codexText is replaced in the require cache (the judge answers
- * from a queue through the engine's own shape rule; anything else throws), the codex launcher throws, and the one
+ * No model call: the tutor is stubbed at the registry, the driver's claude seam is replaced (the judge answers
+ * from a queue through the engine's own shape rule; anything else throws), claudeCli.run throws, and the one
  * spawned CLI runs with an empty PATH.
  */
 const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), crypto = require('node:crypto'), assert = require('node:assert/strict');
@@ -35,14 +35,14 @@ const digest = () => {
 const before = digest();
 
 require(path.join(UAT, 'driver/surface.cjs')).install();
-const calls = { tutor: 0, codex: 0 }, judgeReplies = [], seen = [];
+const calls = { tutor: 0, claude: 0 }, judgeReplies = [], seen = [];
 const registry = require(path.join(root, 'src/lib/engines/registry.ts'));
 registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; throw new Error('no tutor call in this suite'); } });
-const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
-codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
+const claudeText = require(path.join(root, 'src/lib/engines/text.ts'));
+claudeText.claudeCli.run = async () => { throw new Error('claude must never be launched by this suite'); };
 const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
-codex.codexText = async req => {
-  calls.codex++; seen.push(req);
+require(DRIVER).claude.call = async req => {
+  calls.claude++; seen.push(req);
   if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   throw new Error('stub: no model call in this suite');
 };
@@ -138,8 +138,8 @@ test('case 4: --recertify with no run asks the judge about all 13 of the pair\'s
   // the command line: no run after --recertify is the ledger; a run after it is today's per-run recertify
   const runs = copyRuns(), ids = ['tomas-9', 'petra-38'];
   assert.deepEqual(D().parseArgs(['--recertify'], { runs, characters: ids }).mode, 'ledger');
-  assert.deepEqual(D().parseArgs(['--recertify', 'tomas-9'], { runs, characters: ids }), { mode: 'ledger', only: ['tomas-9'], runs, journeys: null, run: null, recertify: null });
-  assert.deepEqual(D().parseArgs(['--recertify', BEGINNERS, 'tomas-9'], { runs, characters: ids }), { mode: 'recertify', only: ['tomas-9'], runs, journeys: null, run: null, recertify: BEGINNERS });
+  assert.deepEqual(D().parseArgs(['--recertify', 'tomas-9'], { runs, characters: ids }), { mode: 'ledger', only: ['tomas-9'], runs, journeys: null, run: null, recertify: null, parallel: 3 });
+  assert.deepEqual(D().parseArgs(['--recertify', BEGINNERS, 'tomas-9'], { runs, characters: ids }), { mode: 'recertify', only: ['tomas-9'], runs, journeys: null, run: null, recertify: BEGINNERS, parallel: 3 });
   assert.equal(D().parseArgs(['--status', '--runs', runs], { characters: ids }).mode, 'status');
 
   const p = R().planLedger(L().ledger(runs), { characters: ['tomas-9'] }), shown = p.prior['tomas-9'].J4;
@@ -237,12 +237,12 @@ test('case 6: statusOf() renders the operator view; --status prints it and write
   }
   assert.ok(rows.find(l => l.startsWith(`- \`${LT}/LT-tomas-9-J3-3\``)).includes(`unasked since ${RECERT}`));
 
-  // the command, in process with codexText counting: no model call, OPEN.md beside the runs
-  const n = calls.codex, out = D().statusCommand({ runs });
-  assert.equal(calls.codex, n, 'no model call');
+  // the command, in process with the claude seam counting: no model call, OPEN.md beside the runs
+  const n = calls.claude, out = D().statusCommand({ runs });
+  assert.equal(calls.claude, n, 'no model call');
   assert.equal(out.file, path.join(runs, 'OPEN.md'));
   assert.equal(fs.readFileSync(out.file, 'utf8'), md);
-  // and from the command line, with no PATH so no codex could start
+  // and from the command line, with no PATH so no claude could start
   fs.rmSync(out.file);
   const empty = path.join(tmp, 'no-path'); fs.mkdirSync(empty, { recursive: true });
   const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => k.toUpperCase() !== 'PATH'));
@@ -381,8 +381,8 @@ test('product case 6: OPEN.md leads with the split and every aged row ends with 
   const now = lines2.find(l => l.includes('seen just now'));
   assert.ok(now && !now.includes('product:'), now);
   // --status: files only, no model call, OPEN.md written beside the runs and carrying the split
-  const n = calls.codex, out = D().statusCommand({ runs, product: opts });
-  assert.equal(calls.codex, n, 'no model call');
+  const n = calls.claude, out = D().statusCommand({ runs, product: opts });
+  assert.equal(calls.claude, n, 'no model call');
   assert.equal(fs.readFileSync(out.file, 'utf8'), md2);
   assert.ok(asked.every(a => a === 'log' || a === 'ls-tree'));
 });
