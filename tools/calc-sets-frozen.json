@@ -1,0 +1,1493 @@
+{
+ "topics": 27,
+ "rows": [
+  {
+   "topic": "calc1-functions",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Functions, and new functions from old\nA function gives each input one output, and shifting, stretching and combining known graphs builds new ones.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- evaluate: f and at - the question is to find f(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "evaluate"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-trig",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Trigonometric functions\nSine, cosine and tangent read an angle in radians as a point on the unit circle, and their graphs repeat.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- evaluate: f and at - the question is to find f(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "evaluate"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-exp-log",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Exponentials, inverse functions and logarithms\nThe logarithm undoes the exponential, so an equation with x in the exponent is solved by taking logs.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- evaluate: f and at - the question is to find f(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "evaluate"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-limit-idea",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The tangent problem and the idea of a limit\nSecant slopes over shrinking intervals approach the tangent slope, and that approach is what a limit names.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "limit"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "side": {
+         "type": "string",
+         "enum": [
+          "",
+          "+",
+          "-"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "side",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-limit-laws",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Limit laws and the squeeze theorem\nLimits of sums, products and quotients follow from the limits of their parts, and a function trapped between two with the same limit shares it.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "limit"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "side": {
+         "type": "string",
+         "enum": [
+          "",
+          "+",
+          "-"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "side",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-continuity",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Continuity and asymptotes\nA function is continuous where its graph has no break, and its behaviour far out or near a blow-up shows as asymptotes.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "limit"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "side": {
+         "type": "string",
+         "enum": [
+          "",
+          "+",
+          "-"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "side",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-derivative",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The derivative as a limit and as a function\nThe derivative is the limit of difference quotients, and read at every point it becomes a new function.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative: f - the question is to differentiate f.\n- derivative-at: f and at - the question is to find f'(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative",
+          "derivative-at"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-rules",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Derivatives of polynomials, and the product and quotient rules\nA power differentiates by bringing its exponent down, and products and quotients have rules built from their parts.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative: f - the question is to differentiate f.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-trig-derivatives",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Derivatives of trigonometric functions\nSine and cosine differentiate into each other, and the rest of the trig family follows from the quotient rule.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative: f - the question is to differentiate f.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-chain",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The chain rule and implicit differentiation\nThe chain rule differentiates a function inside a function, and implicit differentiation applies it to y as a function of x.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative: f - the question is to differentiate f.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-log-derivative",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The derivative of the logarithm, and rates in the world\nThe logarithm differentiates to one over x, which opens logarithmic differentiation and models of growth and decay.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative: f - the question is to differentiate f.\n- derivative-at: f and at - the question is to find f'(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative",
+          "derivative-at"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-related-rates",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Related rates and linear approximation\nWhen quantities are tied by an equation their rates are tied too, and a tangent line gives a close value near its point.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- derivative-at: f and at - the question is to find f'(at).\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "derivative-at"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-extrema",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Maxima, minima and the mean value theorem\nExtreme values sit at critical numbers or at the ends of an interval, and the mean value theorem promises a tangent parallel to any secant.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one turning point of f lies in the interval, well inside it and not near either end.\n- extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "critical-point",
+          "extremum"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "on": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "kind": {
+         "type": "string",
+         "enum": [
+          "max",
+          "min"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "on",
+        "kind",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-shape",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The second derivative, L'Hospital's rule and curve sketching\nThe second derivative shows where a graph bends up or down, L'Hospital's rule settles 0/0 limits, and together they draw the curve.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "limit"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "at": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "side": {
+         "type": "string",
+         "enum": [
+          "",
+          "+",
+          "-"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "at",
+        "side",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-optimisation",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Optimisation\nAn optimisation problem becomes one function of one variable, and its best value sits where the derivative is zero or at an end.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "extremum"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "on": {
+         "type": "array",
+         "items": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 24
+         },
+         "minItems": 2,
+         "maxItems": 2
+        },
+        "kind": {
+         "type": "string",
+         "enum": [
+          "max",
+          "min"
+         ]
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "on",
+        "kind",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-newton",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Newton's method\nNewton's method follows tangent lines to where they cross the axis, and each step usually doubles the correct digits.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "newton-step"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "x0": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "steps": {
+         "type": "integer"
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "x0",
+        "steps",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-antiderivatives",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Antiderivatives\nAn antiderivative runs differentiation backwards, and any two of them differ by a constant.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-definite-integral",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The definite integral\nAdding thin rectangles under a curve and letting their width shrink defines the area as a definite integral.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-area-so-far",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The area-so-far function\nLetting the upper limit of an integral move turns the area under a curve into a function of that limit.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-ftc",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The fundamental theorem and net change\nThe fundamental theorem ties the two halves of calculus together: an area function differentiates back to its integrand, and an antiderivative evaluates a definite integral.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-substitution",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: The substitution rule\nSubstitution runs the chain rule backwards by naming an inner function u, so the integral becomes one in u.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc1-area-average",
+   "system": "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Areas between curves and average values\nThe area between two curves integrates the top minus the bottom, and a function's average value is its integral over the interval's length.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc2-parts",
+   "system": "You choose practice questions for a university Calculus 2 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Integration by parts\nA product that is hard to integrate directly is traded for a simpler integral by choosing which factor to differentiate and which to integrate.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc2-trig-integrals",
+   "system": "You choose practice questions for a university Calculus 2 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Trigonometric integrals\nPowers and products of sine and cosine are integrated by peeling off a factor, or by an identity that lowers the power.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc2-trig-sub",
+   "system": "You choose practice questions for a university Calculus 2 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Trigonometric substitution\nA square root of a sum or difference of squares is cleared by letting x be a multiple of a sine, tangent or secant.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc2-partial-fractions",
+   "system": "You choose practice questions for a university Calculus 2 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Partial fractions\nA rational function is split into simpler fractions, one for each factor of its denominator, and each is integrated on its own.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  },
+  {
+   "topic": "calc2-strategy",
+   "system": "You choose practice questions for a university Calculus 2 desk, as specs the desk prints and checks itself. Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.",
+   "prompt": "Topic: Choosing a technique\nFaced with an integral and no label, you read its form and pick substitution, parts, a trig method or partial fractions.\n\nThe desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\nWrite 6 specs for practice questions on this topic, using only these shapes:\n- antiderivative: f - the question is to find the indefinite integral of f.\n- definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.\nRules:\n- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n- Every question must be workable by hand in a few minutes.\n- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n- A field the shape does not use is left as an empty string (0 for steps).\n- Do not work any question out: give the specs only.",
+   "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+     "specs": {
+      "type": "array",
+      "maxItems": 6,
+      "items": {
+       "type": "object",
+       "additionalProperties": false,
+       "properties": {
+        "shape": {
+         "type": "string",
+         "enum": [
+          "antiderivative",
+          "definite-integral"
+         ]
+        },
+        "f": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 80
+        },
+        "a": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "b": {
+         "type": "string",
+         "minLength": 1,
+         "maxLength": 24
+        },
+        "difficulty": {
+         "type": "integer",
+         "minimum": 1,
+         "maximum": 5
+        }
+       },
+       "required": [
+        "shape",
+        "f",
+        "a",
+        "b",
+        "difficulty"
+       ]
+      }
+     }
+    },
+    "required": [
+     "specs"
+    ]
+   }
+  }
+ ]
+}
