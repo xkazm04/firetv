@@ -193,7 +193,9 @@ test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema 
 
 test('GUARD: the phone still receives the recap, and its End session still posts session.end',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- assert.match(phone,/s\.screen === "recap"/,'the phone\'s Recap panel opens while the TV is on the recap');
+ assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
+ assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
+ assert.match(phone,/tiles\.some\(\(t\) => t\.app === "maths" && !t\.empty\) && <ul>\{s\.log\.hard\.length/,'M7: the second-hint line only when the maths tile is not empty');
  assert.match(phone,/post\(\{ type: "session\.end" \}\)/,'End session on the phone');
 });
 

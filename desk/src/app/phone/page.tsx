@@ -14,7 +14,7 @@ import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
 import { forensicAt, planAt } from "@/tv/keys";
-import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
+import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
@@ -625,16 +625,19 @@ export default function Phone() {
               : <li>{memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
-          {s.screen === "recap" || s.log.problems.length ? (() => {
+          {(() => {
             // the TV's recap in words: the same tiles (tv/recapRows.ts), a line each, then the TV's caption sentence
-            // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line
-            const tiles = recapRows(s, Date.now()), mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
+            // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line.
+            // It shows whenever tonight has a tile with work, or the evening ended since local midnight - whatever the TV shows.
+            const now = Date.now(), tiles = recapRows(s, now);
+            if (!(tiles.some((t) => !t.empty) || (s.endedAt ?? 0) >= startOfDay(now))) return <p>Arrives when the session ends.</p>;
+            const mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
             const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
             return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
               <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
-              <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div>;
-          })() : <p>Arrives when the session ends.</p>}
+              {tiles.some((t) => t.app === "maths" && !t.empty) && <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul>}</div>;
+          })()}
           <WeekPage lines={s.learner ? s.week : null} />
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
