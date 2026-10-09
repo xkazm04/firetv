@@ -573,6 +573,29 @@ test('craft-7: the English and Essay reads order and band like the maths one',as
  }
 });
 
+test('craft-2: an item\'s key is its page and printed number, not its text; two items with the same text get two identities and a hint retry on the second reaches the second',async()=>{
+ blank();
+ stubVision(()=>({items:[row(1,'2x+3=11',0.5,0.2),row(2,'2x+3=11',0.5,0.5),row(3,'x-5=2',0.5,0.8)]}));
+ assert.equal((await post('read',SNAP)).status,200);
+ let s=store.getSession();const [a,b,c]=s.pages[0].items;
+ assert.equal(a.fingerprint,b.fingerprint,'the content fingerprint is the normalised text');
+ assert.notEqual(a.key,b.key);assert.equal(new Set([a.key,b.key,c.key]).size,3);
+ assert.equal(a.key,`${s.pages[0].id}:1`);
+ const {itemKey}=require(src('lib/desk/read.ts'));const seen=new Map();
+ assert.deepEqual([itemKey('p',1,seen),itemKey('p',1,seen),itemKey('p',2,seen)],['p:1','p:1#2','p:2'],'a repeated number takes a suffix');
+ // a hint on the second twin, failed, then asked again: the retry match reaches the second item
+ stubText({hint:()=>{throw new Error('boom');}});
+ store.dispatch({type:'item',itemIx:1});
+ assert.equal((await post('hint',{askedQ:'',itemIx:1})).status,502);
+ assert.equal(store.getSession().jobs.hint.key,b.key);
+ let asked='';stubText({hint:(req)=>{asked=req.prompt;return {hint:'Undo the +3.',what_to_try_next:'Subtract 3.'};},lesson:()=>({lesson:'none',why:'x'})});
+ assert.equal((await retry({kind:'hint'})).status,200);await drain();
+ s=store.getSession();assert.equal(s.hint.key,b.key,'the second twin, not the first');assert.equal(s.jobs.hint.phase,'done');
+ // a session that already holds items keeps the keys it stored them with
+ store.dispatch({type:'page.read',id:s.pages[0].id,items:[{...a,key:'k-old'}],readMs:1,provider:'t'});
+ assert.equal(store.getSession().pages[0].items[0].key,'k-old');
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();

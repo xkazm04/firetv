@@ -21,7 +21,16 @@ const WHAT: Record<Subject, string> = {
 
 export const key = (s: string) => s.toLowerCase().replace(/²/g, "^2").replace(/³/g, "^3").replace(/[−–]/g, "-").replace(/\s+/g, "").replace(/[.:]+$/, "");
 
-export async function readPage(imageBase64: string, subject: Subject, w: number, h: number) {
+/**
+ * An item's identity is the page and its printed number, with a suffix for a repeated number - never its text, which two items
+ * can share. The normalised text stays on the item as `fingerprint`. Items already in a session keep the key they were stored with.
+ */
+export const itemKey = (pageId: string, n: number, seen: Map<string, number>) => {
+  const base = `${pageId}:${n}`, again = (seen.get(base) ?? 0) + 1; seen.set(base, again);
+  return again > 1 ? `${base}#${again}` : base;
+};
+
+export async function readPage(imageBase64: string, subject: Subject, w: number, h: number, pageId = "page") {
   const { json, provider, ms } = await vision<{ items: Array<{ number: number; text: string; y: number; x: number }> }>({
     imageBase64,
     prompt: `This is a photo of a printed page. Transcribe every numbered item exactly as printed: ${WHAT[subject]}. ` +
@@ -38,7 +47,9 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
   // printed order, never height alone: a two-column sheet keeps 1, 2, 3 (the sort is stable, so one number keeps the model's order)
   const items: PageItem[] = (json.items || []).filter((i) => i && typeof i.text === "string" && finite(i.x) && finite(i.y)).map((i) => {
     const x = unit(i.x), y = unit(i.y), lo = at(y - half, h), hi = at(y + half, h);
-    return { n: i.number, text: i.text.trim(), cx: at(x, w), cy: at(y, h), band: [Math.min(lo, hi), Math.max(lo, hi)] as [number, number], key: key(i.text) };
+    return { n: i.number, text: i.text.trim(), cx: at(x, w), cy: at(y, h), band: [Math.min(lo, hi), Math.max(lo, hi)] as [number, number], key: "", fingerprint: key(i.text) };
   }).sort((a, b) => (num(a.n) === num(b.n) ? 0 : num(a.n) < num(b.n) ? -1 : 1));
+  const seen = new Map<string, number>();
+  for (const it of items) it.key = itemKey(pageId, it.n, seen);
   return { items, provider, ms };
 }

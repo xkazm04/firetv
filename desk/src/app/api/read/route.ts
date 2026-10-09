@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const b64 = image.replace(/^data:image\/\w+;base64,/, "");
   const r = await runJob("read", async () => {
     dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h, owner } });
-    const { items, provider, ms } = await readPage(b64, subject, w, h);
+    const { items, provider, ms } = await readPage(b64, subject, w, h, id);
     // a read with no item is not a read: the job fails with the desk's reason, so Try again reads this page again in place
     if (!items.length) throw new DeskSaid(EMPTY_READ);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written
