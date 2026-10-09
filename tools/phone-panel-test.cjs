@@ -292,7 +292,7 @@ test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, ty
  assert.match(src,/call\("\/api\/mark", \{ answers:/,'to the mark route, with no image');
  assert.match(src,/document\.activeElement\.blur\(\)/,'the box in hand is let go before sending, so the phone can follow the TV');
  // the camera is on for the snap route only
- assert.match(src,/camWanted = \(screen === "capture" && !failed\("read"\)\) \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
+ assert.match(src,/camWanted = \(screen === "capture" && !readAgain\) \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
  // the box's own cap is the rule's: the one number
  const rules=fs.readFileSync(path.join(SRC,'lib/rules/maths.ts'),'utf8');
  assert.match(rules,/export const TYPED_ANSWER_MAX = 40;/);assert.match(src,/TYPED_ANSWER_MAX/);

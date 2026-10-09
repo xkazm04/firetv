@@ -539,7 +539,7 @@ test('HW3: an empty read fails for English and Essay too, and the TV and the pho
  const cue=follow(undefined,failed,{panel:'join',role:'student',busy:false});
  assert.equal(cue.key,`page:retry:${page.id}`);assert.equal(cue.to,'capture','a phone arriving on a failed read lands where Try again is, and opensCamera is off there');
  const ph=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
- assert.match(ph,/screen === "capture" && !failed\("read"\)/,'the camera stays off while Try again is offered');
+ assert.match(ph,/screen === "capture" && !readAgain/,'the camera stays off while Try again is offered');
 });
 
 // ---- robustness-2 / craft-7: readPage itself, vision stubbed; the shared reader for maths, English and Essay ----
