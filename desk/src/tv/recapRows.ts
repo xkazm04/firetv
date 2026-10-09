@@ -149,3 +149,21 @@ export function recapStops(s: Session): RecapStop[] { return [...landingModules(
  * sentences, Select on the essay tile opens it; else the lens home.
  */
 export function ownReading(s: Session): boolean { return !!s.essay?.sentences?.length; }
+
+/**
+ * What Essay and Linga did tonight, as the counts the memory is written from (api/memory): the same history lines and
+ * conversations recapRows reads, since local midnight, whatever apps the profile lists. Lens names and counts only -
+ * never a sentence, a reply or a scene.
+ */
+export interface Evening { essay: Array<{ lens: string; sentences: number; before: number; after: number }>; linga: { conversations: number; replies: number } }
+export function eveningOf(s: Session, now: number): Evening {
+  const from = startOfDay(now), tonight = (at: number) => at >= from && at <= now;
+  const essay: Evening["essay"] = [];
+  for (const h of s.history ?? []) {
+    if (h.kind !== "writing" || !tonight(h.at)) continue;
+    const c = parseDetail(h.kind, h.detail);
+    if (c.against !== undefined && c.of !== undefined) essay.push({ lens: h.label, sentences: c.of, before: c.against + (c.fixed ?? 0), after: c.against });
+  }
+  const talks = (s.englishLearning?.sessions ?? []).filter((x) => tonight(x.at));
+  return { essay, linga: { conversations: talks.length, replies: talks.reduce((a, x) => a + x.turns, 0) } };
+}

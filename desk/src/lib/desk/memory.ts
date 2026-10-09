@@ -12,6 +12,7 @@ import { addMemory, getLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
+import type { Evening } from "../../tv/recapRows";
 
 const SCHEMA = {
   type: "object",
@@ -21,7 +22,7 @@ const SCHEMA = {
 
 export async function writeMemory(
   learnerId: string,
-  session: { topic?: string; items?: PracticeItem[]; hintsUsed?: number },
+  session: { topic?: string; items?: PracticeItem[]; hintsUsed?: number } & Partial<Evening>,
 ): Promise<string[]> {
   const existing = getLearner(learnerId).memory;
   const items = session.items ?? [];
@@ -44,15 +45,26 @@ export async function writeMemory(
     "Plain sentences that will be read back to you later, not JSON, not bullet points, no headings, no numbers or scores. " +
     "No LaTeX. Never write the student's name; call them 'they'. Say only what tonight actually showed.";
 
+  // one section per app that had work tonight; counts, lens names and the closed slip vocabulary only
+  const maths = items.length || session.hintsUsed
+    ? `Math Buddy tonight. Topic worked on: ${t?.name ?? session.topic ?? "unknown"}\n` +
+      `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
+      `Hints asked for: ${session.hintsUsed ?? 0}\n\n` + (rows ? `The set:\n${rows}\n\n` : "")
+    : "";
+  const essay = (session.essay ?? []).length
+    ? `Essay Master tonight:\n${session.essay!.map((e) => `- a reading through the ${e.lens} lens: ${e.sentences} sentences read, ${e.before} to fix when read` +
+      (e.after !== e.before ? `, ${e.after} after rewrites` : "")).join("\n")}\n\n`
+    : "";
+  const linga = session.linga?.conversations
+    ? `Linga tonight: ${session.linga.conversations} English conversation${session.linga.conversations === 1 ? "" : "s"}, ${session.linga.replies} replies from them.\n\n`
+    : "";
+
   const prompt =
-    `Topic worked on tonight: ${t?.name ?? session.topic ?? "unknown"}\n` +
-    `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
-    `Hints asked for: ${session.hintsUsed ?? 0}\n\n` +
-    (rows ? `The set:\n${rows}\n\n` : "") +
+    maths + essay + linga +
     (existing.length ? `What you already noted about them — do not repeat any of it:\n${existing.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
     `Write what tonight added. If tonight added nothing new, return an empty list.`;
 
-  const { json } = await text<{ lines: string[] }>({ system, prompt, schema: SCHEMA, model: "fast" });
+  const { json } = await text<{ lines: string[] }>({ system, prompt, schema: SCHEMA, model: "fast", thinking: false });
   const lines = (Array.isArray(json?.lines) ? json.lines : [])
     .filter((l): l is string => typeof l === "string")
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))

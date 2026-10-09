@@ -213,9 +213,9 @@ const {createElement}=require(path.join(root,'node_modules/react'));
 function draw(s,now){const {Recap}=require(path.join(root,'src/tv/screens.tsx'));const real=Date.now;if(now)Date.now=()=>now;
  try{return renderToStaticMarkup(createElement(Recap,{s,focus:0}));}finally{Date.now=real;}}
 /** The text engine, stubbed at the provider seam; `asked` counts the calls that reached it. */
-let asked=0;
-function engine(answer){asked=0;delete process.env.DESK_TEXT_ENGINE;require(path.join(root,'src/lib/desk/memory.ts'));
- reg().useProvider('text',{name:'stub',run:async()=>{asked++;return {raw:answer()};}});}
+let asked=0,lastReq=null;
+function engine(answer){asked=0;lastReq=null;delete process.env.DESK_TEXT_ENGINE;require(path.join(root,'src/lib/desk/memory.ts'));
+ reg().useProvider('text',{name:'stub',run:async(req)=>{asked++;lastReq=req;return {raw:answer()};}});}
 const SCRATCH='recap-scratch',DAYS2=2*86400000;
 /** Ema's evening at the real clock (the routes read the store, not a fixed now), on a scratch learner id. */
 function seat(patch={}){
@@ -262,10 +262,36 @@ test('follow-up 2: two opens of the same evening -> at most one engine call',asy
 
 test('follow-up 3: an evening with nothing to note (no marked set, no hint) opens with no engine call',async()=>{
  try{
-  seat({practice:null,topic:null,log:{started:null,minutes:0,problems:[],hard:[],hints:0}});engine(lined);
+  seat({practice:null,topic:null,history:[],englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0}});engine(lined);
   const r=await require(path.join(root,'src/app/api/memory/route.ts')).POST(new Request('http://desk/api/memory',{method:'POST',body:'{}'}));
-  assert.equal(r.status,200);assert.deepEqual(await r.json(),{lines:[]});
+  assert.equal(r.status,200);assert.deepEqual(await r.json(),{lines:[],asked:false});
   assert.equal(asked,0,`engine calls: ${asked}`);
+ }finally{reg().resetProviders();}
+});
+
+const memoryPost=async()=>{const r=await require(path.join(root,'src/app/api/memory/route.ts')).POST(new Request('http://desk/api/memory',{method:'POST',body:'{}'}));return {status:r.status,body:await r.json()};};
+const noMaths={practice:null,topic:null,log:{started:null,minutes:0,problems:[],hard:[],hints:0}};
+
+test('M2: an Essay-only evening and a Linga-only evening are written down too; the prompt carries counts and lens names, never a learner text',async()=>{
+ try{
+  seat({...noMaths,englishLearning:noEnglish,history:[{at:Date.now()-1000,kind:'writing',label:'Argument',detail:'1 of 5 sentences to fix, 1 fixed'}]});engine(lined);
+  let r=await memoryPost();
+  assert.equal(r.status,200);assert.deepEqual(r.body,{lines:['They undo the constant first once they see it.'],asked:true});
+  assert.equal(asked,1,'an Essay line is work');
+  assert.match(lastReq.prompt,/Essay Master tonight/);assert.match(lastReq.prompt,/Argument lens: 5 sentences read, 2 to fix when read, 1 after rewrites/);
+  assert.doesNotMatch(lastReq.prompt,/Math Buddy tonight/,'no maths section for an evening with no maths');
+  assert.doesNotMatch(lastReq.prompt,/Linga tonight/);
+  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:true},'the same evening is not written twice');assert.equal(asked,1);
+  // a new Essay line is new work: the evening key covers it
+  globalThis.__desk.session={...store().getSession(),history:[...store().getSession().history,{at:Date.now()-500,kind:'writing',label:'Evidence',detail:'2 of 4 sentences to fix'}]};
+  await memoryPost();assert.equal(asked,2,'a new reading is new work');
+  seat({...noMaths,history:[],englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'cafe',title:'At the cafe',at:Date.now()-1000,turns:7},{id:'b',sceneId:'station',title:'At the station',at:Date.now()-900,turns:4}]}});engine(lined);
+  r=await memoryPost();assert.equal(r.body.asked,true);assert.equal(asked,1,'a Linga conversation is work');
+  assert.match(lastReq.prompt,/Linga tonight: 2 English conversations, 11 replies/);
+  assert.doesNotMatch(lastReq.prompt,/cafe|station|Essay Master tonight|Math Buddy tonight/i,'no scene, no other app');
+  // yesterday's work is not tonight's
+  seat({...noMaths,englishLearning:noEnglish,history:[{at:YESTERDAY,kind:'writing',label:'Argument',detail:'2 of 5 sentences to fix'}]});engine(lined);
+  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:false});assert.equal(asked,0);
  }finally{reg().resetProviders();}
 });
 
