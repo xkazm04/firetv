@@ -279,6 +279,30 @@ said "speaking". **B5** held: recognition was simulated.
 Still owed: a real phone's microphone over Wi-Fi, heard audio, the owner's reading of the transcript (the builder's reading is in
 the evidence folder), and one more harness run after the recap selector is fixed.
 
+### Run 2 of 2026-10-09
+
+Two more runs of `tools/linga-ui-test.cjs`, same isolated setup. Evidence: `uat/runs/2026-10-09-linga-e-run-2/`. The harness got
+four fixes (the recap wait, a spoken line that fits the rover scene and carries a slip, screenshots, and the phone in its own
+browser context for the print page). Run 1 of the pair stopped at the print page on that last defect; run 2 went through the recap
+and stopped at the Maths entrance. `results.json` was not written (the harness writes it last).
+
+| Step | Verdict |
+|---|---|
+| E1 Seat and pair, E2 Level, E3 Scene | pass (the footer never read "Partner speaking": headless, no voice) |
+| E4 Live replies | pass; **a moment fired** after the spoken reply: a fix, `said` the learner's exact words ("Where you saw the rover last time?" to "Where did you see the rover last time?") |
+| E5 Coaching note | pass; the praise rests on a premise the transcript holds (run 1's did not) |
+| E6 Replay | pass (it asks the learner to say the line again rather than a new question) |
+| E7 Recap | **pass**, drawn with no workaround ("1 spoken . 1 written replies . 1 moment to keep") |
+| E8 Timing | modelMs median 13.3 s, max 19.5 s (run 1: 9.96 s and 11.58 s; prediction 4.7 s and 6.2 s); five calls, 68.8 s. The engine passes no effort or thinking flag (haiku, `MAX_THINKING_TOKENS=0`, `text.ts:46-53`) |
+| E9 Boundary | pass (one 403) |
+| After E7 | My map (8 chapters), the print page (8 rows, a one-page PDF) and mobile width pass; the **Maths entrance fails** (subject stayed `english` after Enter on the landing); the Essay entrance and the page-errors check were not reached. Cause undecided: harness or product |
+
+Observations: the typed and spoken replies left no evidence row (only the picked phrase did), so every ability still reads "not
+tried"; the replay line carries a "fuzzy robot voice" excuse that no voice made true.
+
+Still owed: a real phone's microphone over Wi-Fi, heard audio, the owner's reading of both transcripts, and the Maths and Essay
+entrances once the key press is explained.
+
 ## 4. Declined and deferred, in one place
 
 | | What | Why, for the sofa |
