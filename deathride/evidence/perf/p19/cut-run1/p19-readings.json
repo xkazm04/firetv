@@ -1,0 +1,160 @@
+{
+ "run": "cut-run1",
+ "apkSha256": "522b73c14a669868595b1546abe7d765d4dd53acea556e4babc889e0f3aefa89",
+ "arm": "cut",
+ "settled": false,
+ "settledNote": "no (no wait)",
+ "durationSeconds": 360.0382158,
+ "functionalPass": true,
+ "probeFunctionalPass": false,
+ "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/.personas/headless-masters/worktrees/firetv/a4123307/deathride/tools/ability-stick-probe.mjs:128:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-09T02:10:03.5937117Z",
+   "totalPercentSamples": [
+    98,
+    100,
+    95
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "msedgewebview2#27",
+     215
+    ],
+    [
+     "node#33",
+     123
+    ],
+    [
+     "node#36",
+     96
+    ],
+    [
+     "svchost#72",
+     96
+    ],
+    [
+     "node#17",
+     91
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-09T02:16:20.3366510Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#47",
+     175
+    ],
+    [
+     "node#50",
+     142
+    ],
+    [
+     "node#56",
+     100
+    ],
+    [
+     "svchost#72",
+     92
+    ],
+    [
+     "node#51",
+     92
+    ]
+   ]
+  }
+ },
+ "ownedTextureMiB": {
+  "max": 36.97,
+  "min": 36.97,
+  "summaryMax": 36.9697265625,
+  "fontMiBMax": 2.0,
+  "windows": 300
+ },
+ "glMtrackMiB": {
+  "line": "GL mtrack",
+  "max": 49.06,
+  "min": 48.88,
+  "samples": 8,
+  "graphicsSummaryMax": 49.06,
+  "eglMtrackRows": 0
+ },
+ "pss": {
+  "minMiB": 151.06,
+  "maxMiB": 164.96,
+  "samples": 8,
+  "peakSecond": 338.5,
+  "lowestSecond": 206.0,
+  "peakBreakdownMiB": {
+   "Java Heap": 69.5,
+   "Native Heap": 10.06,
+   "Code": 17.06,
+   "Stack": 1.49,
+   "Graphics": 49.04,
+   "Private Other": 7.89,
+   "System": 9.93,
+   "pss Dalvik Heap": 63.62,
+   "pss Dalvik Other": 5.37,
+   "pss GL mtrack": 49.04,
+   "pss Native Heap": 10.11,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.37,
+   "TOTAL PSS": 164.96
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 56.08,
+   "Native Heap": 10.24,
+   "Code": 16.83,
+   "Stack": 1.43,
+   "Graphics": 49.05,
+   "Private Other": 7.56,
+   "System": 9.87,
+   "pss Dalvik Heap": 50.2,
+   "pss Dalvik Other": 5.05,
+   "pss GL mtrack": 49.05,
+   "pss Native Heap": 10.29,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.37,
+   "TOTAL PSS": 151.06
+  }
+ },
+ "hud": {
+  "activeFrames": 19008,
+  "hudMsMean": 1.1643,
+  "hudMsP95": 1.8692,
+  "hudFlushesMean": 2.0,
+  "hudFlushesCounts": {
+   "2": 19008
+  },
+  "hudDrawsMean": 5.0,
+  "drawCallsMean": 17.769,
+  "textureBindsMean": 11.824,
+  "workMsMean": 10.5287,
+  "cpuMsMean": 7.7478
+ },
+ "allocation": {
+  "MBps": 2.1695,
+  "gcCount": 32,
+  "gcTimeMs": 2821
+ },
+ "guards": {
+  "activeFrames": 19002,
+  "over33": 130,
+  "worstActiveWindowP95Ms": 26.326769,
+  "activeMaxMs": 100.308923,
+  "pooledActiveP95Ms": 19.75,
+  "rejectedInputs": [
+   4,
+   4
+  ]
+ }
+}

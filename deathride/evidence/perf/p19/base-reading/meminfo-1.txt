@@ -1,0 +1,38 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 2746449480 Realtime: 2746449480
+
+** MEMINFO in pid 14006 [dev.deathride.perf] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap     9469     9376       72       10     9940        0        0        0
+  Dalvik Heap    17982    17868       28       91    18580        0        0        0
+ Dalvik Other     3835     2524        0        4     5412                           
+        Stack      880      880        0        0      880                           
+       Ashmem     4996     4876        0        0     6064                           
+    Other dev       25        4       20        0      300                           
+     .so mmap    13036      220    10348        1    27544                           
+    .jar mmap     6315        0     3704        0    19796                           
+    .apk mmap    17975        8    17304        0    24956                           
+    .ttf mmap      160        0      160        0      160                           
+    .dex mmap       21        0        0        0       68                           
+    .oat mmap      207        0      108        0     1360                           
+    .art mmap     6640     6064      160       92    14092                           
+   Other mmap      267        4      260        0      788                           
+    GL mtrack    53198    53198        0        0    53198                           
+      Unknown      366      312       12        1      584                           
+        TOTAL   135571    95334    32176      199   183722        0        0        0
+ 
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:    24092                          32672
+         Native Heap:     9376                           9940
+                Code:    31900                          76576
+               Stack:      880                            880
+            Graphics:    53198                          53198
+       Private Other:     8064
+              System:     8061
+             Unknown:                                   10456
+ 
+           TOTAL PSS:   135571            TOTAL RSS:   183722       TOTAL SWAP PSS:      199

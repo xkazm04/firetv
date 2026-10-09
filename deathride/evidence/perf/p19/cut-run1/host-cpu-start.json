@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-09T02:10:03.5937117Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "msedgewebview2#27",
+                             "IDProcess":  13904,
+                             "PercentProcessorTime":  215
+                         },
+                         {
+                             "Name":  "node#33",
+                             "IDProcess":  13424,
+                             "PercentProcessorTime":  123
+                         },
+                         {
+                             "Name":  "node#36",
+                             "IDProcess":  53760,
+                             "PercentProcessorTime":  96
+                         },
+                         {
+                             "Name":  "svchost#72",
+                             "IDProcess":  15040,
+                             "PercentProcessorTime":  96
+                         },
+                         {
+                             "Name":  "node#17",
+                             "IDProcess":  49968,
+                             "PercentProcessorTime":  91
+                         },
+                         {
+                             "Name":  "bash#64",
+                             "IDProcess":  58856,
+                             "PercentProcessorTime":  87
+                         },
+                         {
+                             "Name":  "bash#61",
+                             "IDProcess":  50416,
+                             "PercentProcessorTime":  87
+                         },
+                         {
+                             "Name":  "SearchIndexer",
+                             "IDProcess":  12836,
+                             "PercentProcessorTime":  87
+                         },
+                         {
+                             "Name":  "com.docker.backend#1",
+                             "IDProcess":  16696,
+                             "PercentProcessorTime":  87
+                         },
+                         {
+                             "Name":  "node#7",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  68
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                98,
+                                100,
+                                95
+                            ]
+}
