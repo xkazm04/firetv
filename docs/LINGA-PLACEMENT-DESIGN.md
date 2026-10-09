@@ -138,3 +138,12 @@ Raised by the 2026-09-15 LT runs (codex played and judged them). Backlog: `docs/
 - Should two partials in a row at one band step down, or end the check at the lower band with medium confidence?
 - At A1, may a listening task ask its question in the learner's language (LG-14) without changing what it measures?
 - A say task is judged by the model and mapped by code (at band = pass, one below = partial). Should the verdict quote the words that earned the band, as the summary will (LG-8)?
+
+## Open questions (10-09 drain)
+
+Raised by `2026-10-09-lt`, the first LT run on the claude CLI (one Character, Tomáš, 9, true band A1, J1). Backlog: `docs/BACKLOG.md` LG-18 (and LG-10, a build). Evidence: `docs/uat-insights/2026-10-09-lt.md`. No question is answered here.
+
+**LG-18 · Where the upward lean comes from.** The near placement sits one band **above** again (A2 against A1), now on claude. This time the say judge did not lift it. Two code-scored tasks did. A two-option choose task passed on a guess (*"I'll just guess the second one"*), and a listen task passed on one keyword (*"red? dog... red"*). A choose pass is the option index, and a listen pass needs only `answered: yes` with some English.
+- Should a two-option pick count toward a band at all above A1, or count toward the band but never toward `high` confidence?
+- Is a listening answer that is a single keyword a pass, a partial, or a pass only at A1?
+- When the ladder climbs on a guess, the next task is pitched at the band above, and here it was a B1 say task for a nine-year-old. Should a climb on a choose pass alone wait for a second kind of evidence first?

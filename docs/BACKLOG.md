@@ -20,6 +20,8 @@ The tracked backlog `/uat drain` writes into (homes: `uat/README.md`, *Drain hom
 
 Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis in `docs/uat-insights/2026-09-15-*.md`). Paths are under `desk/src/`, checked against main b8558e80. A root cause marked *hypothesis* was not verified against the run's stored artifacts.
 
+The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append their origins to these entries and continue at LG-26. They were checked against main dfb12cc1. `2026-10-09-lt` is LT on the claude CLI; the three `2026-10-09-linga-*` browser runs are L2 with a scripted learner and the builder's reading, and have no finding ids, so they are cited as `<run>/<step>`.
+
 - **LG-1** — Swaps forget what the learner turned down
   - origin: 2026-09-15-lt/LT-oksana-34-J2-1, 2026-09-15-lt/LT-ondrej-16-J2-2, 2026-09-15-lt-recert/LT-ondrej-16-J2-2, 2026-09-15-lt-recert2-goal/LT-ondrej-16-J2-4; "I swapped photos and got cake, swapped cake and got photos. How many times do I have to say no?" (ondrej-16, 2026-09-15-lt-recert)
   - recommendation: build — the swap's `avoid` holds only the current titles (`lib/english/check.ts:192`) and a swapped-out topic is forgotten (`check.ts:220`). Keep the rejected titles and premises on the plan and send them; let Swap take a few words of "instead" (`english/LingaPhone.tsx:159`). That this causes the recycling is a hypothesis
@@ -56,7 +58,7 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - status: open
   - ceiling: rests on the model's Czech; a wrong gloss is taught with confidence
 - **LG-8** — The verdict's summary and next focus never see the learner's answers
-  - origin: 2026-09-15-lt/LT-martin-45-J1-1, 2026-09-15-lt/LT-klara-13-J1-2, 2026-09-15-lt/LT-adela-17-J1-4, 2026-09-15-lt/LT-viktor-67-J1-1, 2026-09-15-lt-j1b/LT-lukas-24-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-2; "Show me the repeated mistakes and explain how they separate my English from C1." (martin-45, 2026-09-15-lt)
+  - origin: 2026-09-15-lt/LT-martin-45-J1-1, 2026-09-15-lt/LT-klara-13-J1-2, 2026-09-15-lt/LT-adela-17-J1-4, 2026-09-15-lt/LT-viktor-67-J1-1, 2026-09-15-lt-j1b/LT-lukas-24-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-2; "Show me the repeated mistakes and explain how they separate my English from C1." (martin-45, 2026-09-15-lt); 2026-10-09-lt/LT-tomas-9-J1-3 (claude CLI; the focus copies task 5's note, "like: The ball was red")
   - recommendation: build — the summary step gets each task's band, kind, verdict and note, never the answer (`lib/english/check.ts:123`), and only the focus length is checked (`check.ts:124`). Pass the quoted answers; the focus quotes one answer and gives one better sentence, the quote code-checked against the answers
   - status: open
   - ceiling: a grounded verdict still does not earn acceptance from a learner who rates himself higher; accuracy and acceptance stay separate
@@ -66,7 +68,7 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - status: open
   - ceiling: a learner who adds nothing still meets the model's order
 - **LG-10** — Placement confidence counts a skip as evidence
-  - origin: 2026-09-15-lt/LT-viktor-67-J1-3 (verified: two skipped A1 tasks, `confidence: "high"` in the stored placement), 2026-09-15-lt/LT-jana-29-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-1, 2026-09-15-lt-j1b/LT-tomas-9-J1-3
+  - origin: 2026-09-15-lt/LT-viktor-67-J1-3 (verified: two skipped A1 tasks, `confidence: "high"` in the stored placement), 2026-09-15-lt/LT-jana-29-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-1, 2026-09-15-lt-j1b/LT-tomas-9-J1-3; 2026-10-09-lt/LT-tomas-9-J1-2 (claude CLI; verified: `high` rests on the B1 skip as the fail above A2, and on a guessed choose pass and a keyword listen pass); "I guessed the 'took' one, so I don't quite believe it." (tomas-9, 2026-10-09-lt)
   - recommendation: build — a skip settles as a fail (`lib/english/check.ts:311`); two A1 fails set `floored`, which reads "high" (`lib/english/placement.ts:96`, `:104`); partials never touch confidence. A floor reached by skips reads "low", and repeated partials cap at "medium". A certificate needs medium or high (`lib/english/cert.ts:69`), so this now gates certificates
   - status: open
   - ceiling: a lucky guess on a choose task still reads as a pass
@@ -86,7 +88,7 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - status: open
   - ceiling: ordering cannot create a scene the library lacks (no hospitality work scene exists)
 - **LG-14** — The level check addresses an A1 child or pensioner in adult English
-  - origin: 2026-09-15-lt/LT-viktor-67-J1-2, 2026-09-15-lt-j1b/LT-tomas-9-J1-1
+  - origin: 2026-09-15-lt/LT-viktor-67-J1-2, 2026-09-15-lt-j1b/LT-tomas-9-J1-1; 2026-10-09-lt/LT-tomas-9-J1-1 (claude CLI; a B1 say task asks a nine-year-old for "two or three sentences", `lib/english/check.ts:54`); "the long Minecraft one, 'two or three sentences', nevím, I wanted to stop" (tomas-9, 2026-10-09-lt)
   - recommendation: build — instructions are not shortened by band (`lib/english/check.ts:44`, `:52-54`), captions are fixed English (`lib/english/view.ts:347`), and *Show the words* reveals English only (`view.ts:346`). At A1, ask the task question in the learner's language and keep captions to a few words (the measurement question is LG-18)
   - status: open
   - ceiling: a child who cannot yet read relies on the TV voice
@@ -107,7 +109,7 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - status: open
   - ceiling: a judged pitch is one model reading another's English
 - **LG-18** — Say-task credit and the ladder: opposing errors
-  - origin: 2026-09-15-lt/LT-martin-45-J1-2, 2026-09-15-lt-j1b/LT-ondrej-16-J1-1, against 2026-09-15-lt-j1b/LT-oksana-34-J1-1 and `2026-09-15-lt/VERIFY.md` (three near placements, all one band above; three C1 partials held the band)
+  - origin: 2026-09-15-lt/LT-martin-45-J1-2, 2026-09-15-lt-j1b/LT-ondrej-16-J1-1, against 2026-09-15-lt-j1b/LT-oksana-34-J1-1 and `2026-09-15-lt/VERIFY.md` (three near placements, all one band above; three C1 partials held the band); 2026-10-09-lt/LT-tomas-9-J1-2 (informs: a near placement one band above again, on claude, lifted by code-scored tasks, not the say judge)
   - recommendation: concept-doc — `docs/LINGA-PLACEMENT-DESIGN.md`, *Open questions (09-15 drain)*. Say tasks are model-judged and code-mapped (`lib/english/placement.ts:79-81`), and a partial holds the band with no repeated-partial rule (`placement.ts:94`)
   - status: open
   - ceiling: four exact and three near placements are a codex sample; the claude engine was never measured
