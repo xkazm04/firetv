@@ -11,14 +11,14 @@ The skill defines two levels. For Linga this overlay adds a third between them, 
 | Level | What runs | Engine | Cost | Status |
 |---|---|---|---|---|
 | **L1 — theoretical** (Linga) | A walker reads the code and walks the journey on paper | none | cheap | available through the skill |
-| **LT — text-live** | The real server command surface (`englishCommand`) with a real model as the tutor, a model playing the Character, and a model judging the transcript | codex-cli (`gpt-6-astra` by default) | medium, parallel | **this overlay's workhorse** |
+| **LT — text-live** | The real server command surface (`englishCommand`) with a real model as the tutor, a model playing the Character, and a model judging the transcript | claude CLI: Character and judge on `best` (Character thinking off, judge and synthesis thinking on); the desk picks the tutor's model per request | medium, parallel (`--parallel N`, default 3) | **this overlay's workhorse** |
 | **L2 — empirical** (Linga) | A real browser on the TV and phone pages | claude (manual, with the owner) | expensive, serial | not scaffolded yet |
 | **L1 — theoretical** (Essay Master) | A walker reads the code and walks EM1–EM5 on paper | none | cheap | available through the skill |
 | **L2 — empirical** (Essay Master) | `tools/essay-ui-test.cjs`: a real browser on `/tv` and `/phone` against an isolated server, one writing episode (W1–W8) | claude CLI, sonnet (model `best`) | expensive, serial, 2 model calls | one run, 2026-10-09 (`runs/2026-10-09-essay-w-run`); fixed learner and paragraph, so a Character-specific run needs the harness extended; EM3 and EM5 not reachable |
 | **L1 — theoretical** (Math Buddy) | A walker reads the code and walks MB1–MB5 on paper | none | cheap | available through the skill |
 | **L2 — empirical** (Math Buddy) | A real browser on `/tv` and `/phone`; a snapped page or sheet is read by the vision engine | vision: local Ollama qwen 27B (`qwen3.8:27b`); text: claude CLI | expensive, serial | **not run**: precondition is the vision host (env.md, *Math Buddy*); no Math harness yet |
 
-**LT is deliberately not claude.** Claude models are kept for manual testing with the owner; LT runs codex for all three roles (tutor, Character, judge). A model judging its own tutor output is a known bias — every LT verdict names the engine, and anything that matters is re-checked at L2.
+**LT runs on the claude CLI, for all three roles** (tutor, Character, judge) and for the run synthesis: the operator's rule of 2026-10-09 is that live model calls go only through the claude CLI on the subscription, never codex and never a paid API. A model judging its own tutor output is still a known bias — every LT verdict names the engine (`claude-cli/<model>`, taken from the provider's own answer), and anything that matters is re-checked at L2. Runs of 2026-09-15 were produced on codex-cli (`gpt-6-astra`) and keep their records; a recertify across the move lists the engine change as a confound (env.md, *Instrument*).
 
 LT certifies what the prompts and server logic do for a user: the level the check lands on, the topics it proposes, how the partner pitches its English, whether moments are correct, whether boundaries hold. It cannot see layout, audio, speech recognition or latency on the real engine — those stay L2's.
 
@@ -50,13 +50,16 @@ uat/
 ## Run
 
 ```bash
-node uat/driver/linga-text.cjs                       # every Character, their bound journeys, in parallel
+node uat/driver/linga-text.cjs                       # every Character, their bound journeys, three at a time
+node uat/driver/linga-text.cjs --parallel 1 viktor-67   # cap concurrent Character processes (default 3; every role shares the subscription and this machine's memory)
 node uat/driver/linga-text.cjs viktor-67 adela-17    # only these Characters
 node uat/driver/linga-text.cjs --journeys J1,J2      # only these journeys
 node uat/driver/linga-text.cjs --recertify 2026-09-15-lt-recert2-beginners   # after a fix: rerun only what that run left open
 node uat/driver/linga-text.cjs --status              # what is open now across every run (writes runs/OPEN.md; no model call)
 node uat/driver/linga-text.cjs --recertify           # rerun every pair with an open row in any run
 ```
+
+`--parallel N` works with every run command above.
 
 See `env.md` for the engine switches. A run writes `uat/runs/<date>-lt/`. A recertify writes into the run it recertifies (see env.md, *Recertify*); a recertify with no run stamps each answer into the run that owns the row (env.md, *The open ledger*). Start a drain from `--status`: it lists every open row by its run-qualified id `<run>/<id>` and how many later runs passed it by unasked.
 
@@ -94,4 +97,5 @@ Every Character file has the prose the skill asks for (an Essay or Math Characte
 ## Skill improvement log
 
 - 2026-09-15 — Adopted for Linga with an added **LT (text-live)** level on codex-cli. Proposal for the method, not applied: the skill has no level for AI products whose value is prompt output reachable through a server command surface without a browser; LT fills it and should be judged on whether its findings survive L2.
+- 2026-10-09 — LT moved off codex onto the claude CLI for all three roles and the synthesis (operator rule of 2026-10-09: claude CLI on the subscription only). Tutor through the desk registry, Character (best, thinking off), judge and synthesis (best, thinking on) through the desk's claude-cli provider under the shape rule; `--parallel N` added. The 09-15 codex runs are unchanged, and a recertify across the move reports the engine change as a confound, never a fix.
 - 2026-10-09 — `/uat update` for Essay Master and Math Buddy (mode update, not init: the Linga overlay is unchanged). Five Characters and five journeys each, at L1, Essay also at L2 through `tools/essay-ui-test.cjs`, Math L2 waiting on the vision host. Proposal for the skill, not applied: the overlay layout assumes one flat `characters/` and `journeys/` per app, and a per-module driver that requires its own block in every file there breaks when a second module joins; module subdirectories (or a driver that skips files without its block) should be the documented shape for a multi-module app.

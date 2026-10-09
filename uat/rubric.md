@@ -108,5 +108,5 @@ As the skill defines it, with `cert_level: "LT"` for this overlay:
 `{ id, journey, character, cert_level, type, severity, impact, dimension, title, expected, got, evidence[], code_check, verdict, resolution, ceiling, recurrence, suggested_acceptance, engine }`
 
 - `evidence[]` at LT: a transcript quote with its step number, plus `file:line` of the prompt or rule that produced it when the judge can name it.
-- `engine`: the model and role that produced the output under judgement, e.g. `codex/gpt-6-astra tutor`.
+- `engine`: the model and role that produced the output under judgement, e.g. `claude-cli/sonnet (tutor)`.
 - A finding may be a **strength** (`type: "strength"`) — those protect what works.
