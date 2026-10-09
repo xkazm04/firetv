@@ -1,0 +1,89 @@
+[
+  {
+    "action": "level-self",
+    "ms": 326,
+    "initialStatus": 200,
+    "status": 200,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "seating a level gives no partner line"
+  },
+  {
+    "action": "start",
+    "ms": 13845,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 13781,
+    "sendToLineMs": 13852,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "turn",
+    "ms": 13484,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 13295,
+    "sendToLineMs": 13490,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "turn",
+    "ms": 19563,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 19515,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "the partner line did not change within 120 s"
+  },
+  {
+    "action": "moment-done",
+    "ms": 35,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 19515,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "taking a moment gives no new partner line"
+  },
+  {
+    "action": "coach",
+    "ms": 11545,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 11491,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "a coaching note is not a partner line"
+  },
+  {
+    "action": "replay",
+    "ms": 10785,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10746,
+    "sendToLineMs": 10808,
+    "lineToVoiceMs": null,
+    "voiceStatus": "Select Repeat audio to enable speech, or use captions.",
+    "reason": "no \"<partner> speaking\" in the footer within 15 s (headless: no server voice or no synthesis voice, or blocked)"
+  },
+  {
+    "action": "finish",
+    "ms": 143,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10746,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "finishing ends the scene: no new partner line"
+  }
+]
