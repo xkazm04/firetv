@@ -1,0 +1,1114 @@
+{
+ "dev.deathride.core.Course": {
+  "count": 39,
+  "retained": 22647464,
+  "rows": [
+   {
+    "retained": 2593304,
+    "shallow": 208,
+    "idom": "(root)",
+    "id": "salt-1-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 2244512,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": false
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 17616,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 35224,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 2051360,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-1-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 1735904,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 15936,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 31864,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 1697488,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-1-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 1371512,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 16496,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 32984,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 583816,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-7-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 29536,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 59064,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 570024,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-2-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 28896,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 57784,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 565440,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-6-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 28656,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 57304,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 562296,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-7-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 28496,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 56984,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 562296,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-4-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 28496,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 56984,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 560728,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-5-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 28416,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 56824,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 544944,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-3-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 27616,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 55224,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 542824,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-3-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 27456,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 54904,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 537744,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-6-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 27216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 54424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 537080,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-3-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 27216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 54424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 536656,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-7-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 27136,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 54264,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 516712,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-2-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 26176,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 52344,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 505704,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-5-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 25616,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 51224,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 497848,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-2-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 25216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 50424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 497848,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-6-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 25216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 50424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 495304,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-4-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 25056,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 50104,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 468920,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-5-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 23696,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 47384,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 459984,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-2-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 23296,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 46584,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 458408,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-6-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 23216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 46424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 455264,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-4-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 23056,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 46104,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 444264,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-3-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 22496,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 44984,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 439264,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-2-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 22256,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 44504,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 433856,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "salt-2-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21936,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 43864,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 430248,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-4-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21776,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 43544,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 428680,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-5-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21696,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 43384,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 422392,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-4-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21376,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 42744,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 420752,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-1-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21296,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 42584,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 419184,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-5-c",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 21216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 42424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 414160,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "crown-7-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 20976,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 41944,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 405032,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-6-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 20496,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 40984,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 401816,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-3-b",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 80,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 20336,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 40664,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 396824,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "scrap-7-e",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 20096,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 40184,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 379944,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry-5-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 216,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 19216,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 38424,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 375168,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "switchback-1-a",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 152,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 18976,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 37944,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 19304,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "runoff",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 352,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 896,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 1784,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 14584,
+    "shallow": 208,
+    "idom": "dev.deathride.core.Course[]",
+    "id": "foundry",
+    "candidateBins": {
+     "class": "kotlin.SynchronizedLazyImpl",
+     "retained": 40,
+     "idomIsThis": true
+    },
+    "obstacles": {
+     "class": "dev.deathride.core.TrackObstacle[]",
+     "retained": 352,
+     "idomIsThis": true
+    },
+    "surfaces": {
+     "class": "dev.deathride.core.Surface[]",
+     "retained": 656,
+     "idomIsThis": true
+    },
+    "x": {
+     "class": "double[]",
+     "retained": 1304,
+     "idomIsThis": true
+    }
+   }
+  ]
+ },
+ "dev.deathride.link.RoutesReply": {
+  "count": 1,
+  "retained": 17569456,
+  "rows": [
+   {
+    "retained": 17569456,
+    "shallow": 16,
+    "idom": "kotlin.SynchronizedLazyImpl",
+    "blocks": {
+     "class": "java.util.ArrayList",
+     "retained": 17569440,
+     "idomIsThis": true
+    }
+   }
+  ]
+ },
+ "dev.deathride.link.Distribution": {
+  "count": 4,
+  "retained": 1993792,
+  "rows": [
+   {
+    "retained": 498448,
+    "shallow": 72,
+    "idom": "dev.deathride.link.Metrics",
+    "histogram": {
+     "class": "long[]",
+     "retained": 400024,
+     "idomIsThis": true
+    },
+    "window": null
+   },
+   {
+    "retained": 498448,
+    "shallow": 72,
+    "idom": "dev.deathride.link.Metrics",
+    "histogram": {
+     "class": "long[]",
+     "retained": 400024,
+     "idomIsThis": true
+    },
+    "window": null
+   },
+   {
+    "retained": 498448,
+    "shallow": 72,
+    "idom": "dev.deathride.link.Distribution[]",
+    "histogram": {
+     "class": "long[]",
+     "retained": 400024,
+     "idomIsThis": true
+    },
+    "window": null
+   },
+   {
+    "retained": 498448,
+    "shallow": 72,
+    "idom": "dev.deathride.link.Distribution[]",
+    "histogram": {
+     "class": "long[]",
+     "retained": 400024,
+     "idomIsThis": true
+    },
+    "window": null
+   }
+  ]
+ },
+ "dev.deathride.link.PerfTrace": {
+  "count": 2,
+  "retained": 1605952,
+  "rows": [
+   {
+    "retained": 1310944,
+    "shallow": 32,
+    "idom": "(root)",
+    "rows": {
+     "class": "double[]",
+     "retained": 1310736,
+     "idomIsThis": true
+    }
+   },
+   {
+    "retained": 295008,
+    "shallow": 32,
+    "idom": "dev.deathride.link.RaceServer",
+    "rows": {
+     "class": "double[]",
+     "retained": 294928,
+     "idomIsThis": true
+    }
+   }
+  ]
+ }
+}

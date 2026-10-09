@@ -1,0 +1,5295 @@
+{
+ "what": "P20 (card 13, research; no verdict reads it): the meminfo Code line, row by row, and the smaps files behind it.",
+ "meminfo": {
+  "a1-before": {
+   ".so mmap": {
+    "pssTotal": 11521,
+    "privateDirty": 220,
+    "privateClean": 8536,
+    "swapPssDirty": 1,
+    "rssTotal": 26852
+   },
+   ".jar mmap": {
+    "pssTotal": 5779,
+    "privateDirty": 0,
+    "privateClean": 3320,
+    "swapPssDirty": 0,
+    "rssTotal": 19252
+   },
+   ".apk mmap": {
+    "pssTotal": 18019,
+    "privateDirty": 8,
+    "privateClean": 16884,
+    "swapPssDirty": 0,
+    "rssTotal": 26180
+   },
+   ".ttf mmap": {
+    "pssTotal": 160,
+    "privateDirty": 0,
+    "privateClean": 160,
+    "swapPssDirty": 0,
+    "rssTotal": 160
+   },
+   ".dex mmap": {
+    "pssTotal": 20,
+    "privateDirty": 0,
+    "privateClean": 12,
+    "swapPssDirty": 0,
+    "rssTotal": 36
+   },
+   ".oat mmap": {
+    "pssTotal": 172,
+    "privateDirty": 0,
+    "privateClean": 120,
+    "swapPssDirty": 0,
+    "rssTotal": 1340
+   },
+   ".art mmap": {
+    "pssTotal": 6655,
+    "privateDirty": 6064,
+    "privateClean": 188,
+    "swapPssDirty": 96,
+    "rssTotal": 14096
+   },
+   "Other mmap": {
+    "pssTotal": 273,
+    "privateDirty": 4,
+    "privateClean": 240,
+    "swapPssDirty": 0,
+    "rssTotal": 880
+   },
+   "Dalvik Heap": {
+    "pssTotal": 57949,
+    "privateDirty": 57800,
+    "privateClean": 88,
+    "swapPssDirty": 91,
+    "rssTotal": 58508
+   },
+   "GL mtrack": {
+    "pssTotal": 50099,
+    "privateDirty": 50099,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50099
+   },
+   "Native Heap": {
+    "pssTotal": 9458,
+    "privateDirty": 9380,
+    "privateClean": 52,
+    "swapPssDirty": 18,
+    "rssTotal": 9940
+   },
+   "Code": {
+    "pss": 29280,
+    "rss": 77052
+   },
+   "TOTAL PSS": 170527,
+   "Java Heap": 64052
+  },
+  "a1": {
+   ".so mmap": {
+    "pssTotal": 9336,
+    "privateDirty": 224,
+    "privateClean": 6584,
+    "swapPssDirty": 1,
+    "rssTotal": 24496
+   },
+   ".jar mmap": {
+    "pssTotal": 9248,
+    "privateDirty": 0,
+    "privateClean": 7092,
+    "swapPssDirty": 0,
+    "rssTotal": 21932
+   },
+   ".apk mmap": {
+    "pssTotal": 12211,
+    "privateDirty": 8,
+    "privateClean": 11328,
+    "swapPssDirty": 0,
+    "rssTotal": 19840
+   },
+   ".ttf mmap": {
+    "pssTotal": 76,
+    "privateDirty": 0,
+    "privateClean": 76,
+    "swapPssDirty": 0,
+    "rssTotal": 76
+   },
+   ".dex mmap": {
+    "pssTotal": 20,
+    "privateDirty": 0,
+    "privateClean": 12,
+    "swapPssDirty": 0,
+    "rssTotal": 36
+   },
+   ".oat mmap": {
+    "pssTotal": 159,
+    "privateDirty": 0,
+    "privateClean": 112,
+    "swapPssDirty": 0,
+    "rssTotal": 1296
+   },
+   ".art mmap": {
+    "pssTotal": 8899,
+    "privateDirty": 6064,
+    "privateClean": 2272,
+    "swapPssDirty": 35,
+    "rssTotal": 16684
+   },
+   "Other mmap": {
+    "pssTotal": 272,
+    "privateDirty": 4,
+    "privateClean": 240,
+    "swapPssDirty": 0,
+    "rssTotal": 880
+   },
+   "Dalvik Heap": {
+    "pssTotal": 45686,
+    "privateDirty": 41624,
+    "privateClean": 3928,
+    "swapPssDirty": 5,
+    "rssTotal": 46432
+   },
+   "GL mtrack": {
+    "pssTotal": 50101,
+    "privateDirty": 50101,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50101
+   },
+   "Native Heap": {
+    "pssTotal": 20102,
+    "privateDirty": 20024,
+    "privateClean": 52,
+    "swapPssDirty": 18,
+    "rssTotal": 20584
+   },
+   "Code": {
+    "pss": 25456,
+    "rss": 70916
+   },
+   "TOTAL PSS": 166378,
+   "Java Heap": 49960
+  },
+  "b1-before": {
+   ".so mmap": {
+    "pssTotal": 8626,
+    "privateDirty": 228,
+    "privateClean": 6188,
+    "swapPssDirty": 1,
+    "rssTotal": 22952
+   },
+   ".jar mmap": {
+    "pssTotal": 7913,
+    "privateDirty": 0,
+    "privateClean": 5992,
+    "swapPssDirty": 0,
+    "rssTotal": 19904
+   },
+   ".apk mmap": {
+    "pssTotal": 12353,
+    "privateDirty": 8,
+    "privateClean": 12092,
+    "swapPssDirty": 0,
+    "rssTotal": 14908
+   },
+   ".ttf mmap": {
+    "pssTotal": 76,
+    "privateDirty": 0,
+    "privateClean": 76,
+    "swapPssDirty": 0,
+    "rssTotal": 76
+   },
+   ".dex mmap": {
+    "pssTotal": 4,
+    "privateDirty": 0,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 16
+   },
+   ".oat mmap": {
+    "pssTotal": 125,
+    "privateDirty": 0,
+    "privateClean": 84,
+    "swapPssDirty": 0,
+    "rssTotal": 1184
+   },
+   ".art mmap": {
+    "pssTotal": 8888,
+    "privateDirty": 6068,
+    "privateClean": 2240,
+    "swapPssDirty": 33,
+    "rssTotal": 16688
+   },
+   "Other mmap": {
+    "pssTotal": 173,
+    "privateDirty": 4,
+    "privateClean": 156,
+    "swapPssDirty": 0,
+    "rssTotal": 752
+   },
+   "Dalvik Heap": {
+    "pssTotal": 59529,
+    "privateDirty": 55476,
+    "privateClean": 3920,
+    "swapPssDirty": 0,
+    "rssTotal": 60272
+   },
+   "GL mtrack": {
+    "pssTotal": 50097,
+    "privateDirty": 50097,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50097
+   },
+   "Native Heap": {
+    "pssTotal": 11326,
+    "privateDirty": 11248,
+    "privateClean": 52,
+    "swapPssDirty": 18,
+    "rssTotal": 11808
+   },
+   "Code": {
+    "pss": 24692,
+    "rss": 63436
+   },
+   "TOTAL PSS": 170765,
+   "Java Heap": 63784
+  },
+  "b1": {
+   ".so mmap": {
+    "pssTotal": 8486,
+    "privateDirty": 228,
+    "privateClean": 6100,
+    "swapPssDirty": 1,
+    "rssTotal": 22716
+   },
+   ".jar mmap": {
+    "pssTotal": 7588,
+    "privateDirty": 0,
+    "privateClean": 5744,
+    "swapPssDirty": 0,
+    "rssTotal": 19396
+   },
+   ".apk mmap": {
+    "pssTotal": 12353,
+    "privateDirty": 8,
+    "privateClean": 12092,
+    "swapPssDirty": 0,
+    "rssTotal": 14908
+   },
+   ".ttf mmap": {
+    "pssTotal": 72,
+    "privateDirty": 0,
+    "privateClean": 72,
+    "swapPssDirty": 0,
+    "rssTotal": 72
+   },
+   ".dex mmap": {
+    "pssTotal": 4,
+    "privateDirty": 0,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 16
+   },
+   ".oat mmap": {
+    "pssTotal": 123,
+    "privateDirty": 0,
+    "privateClean": 84,
+    "swapPssDirty": 0,
+    "rssTotal": 1164
+   },
+   ".art mmap": {
+    "pssTotal": 8892,
+    "privateDirty": 6072,
+    "privateClean": 2240,
+    "swapPssDirty": 33,
+    "rssTotal": 16688
+   },
+   "Other mmap": {
+    "pssTotal": 173,
+    "privateDirty": 4,
+    "privateClean": 156,
+    "swapPssDirty": 0,
+    "rssTotal": 748
+   },
+   "Dalvik Heap": {
+    "pssTotal": 49197,
+    "privateDirty": 45144,
+    "privateClean": 3920,
+    "swapPssDirty": 0,
+    "rssTotal": 49940
+   },
+   "GL mtrack": {
+    "pssTotal": 50167,
+    "privateDirty": 50167,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50167
+   },
+   "Native Heap": {
+    "pssTotal": 21146,
+    "privateDirty": 21072,
+    "privateClean": 52,
+    "swapPssDirty": 18,
+    "rssTotal": 21620
+   },
+   "Code": {
+    "pss": 24368,
+    "rss": 62700
+   },
+   "TOTAL PSS": 170324,
+   "Java Heap": 53456
+  },
+  "a2-before": {
+   ".so mmap": {
+    "pssTotal": 11483,
+    "privateDirty": 220,
+    "privateClean": 7692,
+    "swapPssDirty": 1,
+    "rssTotal": 28224
+   },
+   ".jar mmap": {
+    "pssTotal": 7888,
+    "privateDirty": 0,
+    "privateClean": 3800,
+    "swapPssDirty": 0,
+    "rssTotal": 23860
+   },
+   ".apk mmap": {
+    "pssTotal": 18400,
+    "privateDirty": 8,
+    "privateClean": 17260,
+    "swapPssDirty": 0,
+    "rssTotal": 25880
+   },
+   ".ttf mmap": {
+    "pssTotal": 160,
+    "privateDirty": 0,
+    "privateClean": 160,
+    "swapPssDirty": 0,
+    "rssTotal": 160
+   },
+   ".dex mmap": {
+    "pssTotal": 51,
+    "privateDirty": 0,
+    "privateClean": 44,
+    "swapPssDirty": 0,
+    "rssTotal": 68
+   },
+   ".oat mmap": {
+    "pssTotal": 304,
+    "privateDirty": 0,
+    "privateClean": 148,
+    "swapPssDirty": 0,
+    "rssTotal": 1520
+   },
+   ".art mmap": {
+    "pssTotal": 6648,
+    "privateDirty": 6068,
+    "privateClean": 160,
+    "swapPssDirty": 99,
+    "rssTotal": 14120
+   },
+   "Other mmap": {
+    "pssTotal": 206,
+    "privateDirty": 4,
+    "privateClean": 180,
+    "swapPssDirty": 0,
+    "rssTotal": 800
+   },
+   "Dalvik Heap": {
+    "pssTotal": 49823,
+    "privateDirty": 49676,
+    "privateClean": 84,
+    "swapPssDirty": 93,
+    "rssTotal": 50384
+   },
+   "GL mtrack": {
+    "pssTotal": 50047,
+    "privateDirty": 50047,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50047
+   },
+   "Native Heap": {
+    "pssTotal": 8728,
+    "privateDirty": 8652,
+    "privateClean": 52,
+    "swapPssDirty": 10,
+    "rssTotal": 9212
+   },
+   "Code": {
+    "pss": 29348,
+    "rss": 82964
+   },
+   "TOTAL PSS": 164353,
+   "Java Heap": 55904
+  },
+  "a2": {
+   ".so mmap": {
+    "pssTotal": 8450,
+    "privateDirty": 224,
+    "privateClean": 5492,
+    "swapPssDirty": 1,
+    "rssTotal": 23528
+   },
+   ".jar mmap": {
+    "pssTotal": 8348,
+    "privateDirty": 0,
+    "privateClean": 5296,
+    "swapPssDirty": 0,
+    "rssTotal": 22016
+   },
+   ".apk mmap": {
+    "pssTotal": 18078,
+    "privateDirty": 8,
+    "privateClean": 17260,
+    "swapPssDirty": 0,
+    "rssTotal": 22524
+   },
+   ".ttf mmap": {
+    "pssTotal": 76,
+    "privateDirty": 0,
+    "privateClean": 76,
+    "swapPssDirty": 0,
+    "rssTotal": 76
+   },
+   ".dex mmap": {
+    "pssTotal": 43,
+    "privateDirty": 0,
+    "privateClean": 36,
+    "swapPssDirty": 0,
+    "rssTotal": 60
+   },
+   ".oat mmap": {
+    "pssTotal": 190,
+    "privateDirty": 0,
+    "privateClean": 96,
+    "swapPssDirty": 0,
+    "rssTotal": 1292
+   },
+   ".art mmap": {
+    "pssTotal": 8862,
+    "privateDirty": 6068,
+    "privateClean": 2192,
+    "swapPssDirty": 37,
+    "rssTotal": 16692
+   },
+   "Other mmap": {
+    "pssTotal": 203,
+    "privateDirty": 4,
+    "privateClean": 180,
+    "swapPssDirty": 0,
+    "rssTotal": 784
+   },
+   "Dalvik Heap": {
+    "pssTotal": 45873,
+    "privateDirty": 41816,
+    "privateClean": 3924,
+    "swapPssDirty": 6,
+    "rssTotal": 46624
+   },
+   "GL mtrack": {
+    "pssTotal": 50067,
+    "privateDirty": 50067,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50067
+   },
+   "Native Heap": {
+    "pssTotal": 9252,
+    "privateDirty": 9176,
+    "privateClean": 52,
+    "swapPssDirty": 18,
+    "rssTotal": 9736
+   },
+   "Code": {
+    "pss": 28504,
+    "rss": 72748
+   },
+   "TOTAL PSS": 159801,
+   "Java Heap": 50076
+  },
+  "d2-before": {
+   ".so mmap": {
+    "pssTotal": 1627,
+    "privateDirty": 80,
+    "privateClean": 680,
+    "swapPssDirty": 94,
+    "rssTotal": 12440
+   },
+   ".jar mmap": {
+    "pssTotal": 6198,
+    "privateDirty": 0,
+    "privateClean": 4280,
+    "swapPssDirty": 0,
+    "rssTotal": 15104
+   },
+   ".apk mmap": {
+    "pssTotal": 7056,
+    "privateDirty": 4,
+    "privateClean": 6644,
+    "swapPssDirty": 4,
+    "rssTotal": 11468
+   },
+   ".dex mmap": {
+    "pssTotal": 4,
+    "privateDirty": 0,
+    "privateClean": 4,
+    "swapPssDirty": 0,
+    "rssTotal": 12
+   },
+   ".oat mmap": {
+    "pssTotal": 49,
+    "privateDirty": 0,
+    "privateClean": 12,
+    "swapPssDirty": 0,
+    "rssTotal": 1020
+   },
+   ".art mmap": {
+    "pssTotal": 2462,
+    "privateDirty": 1736,
+    "privateClean": 200,
+    "swapPssDirty": 4101,
+    "rssTotal": 10104
+   },
+   "Other mmap": {
+    "pssTotal": 8,
+    "privateDirty": 4,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 540
+   },
+   "Dalvik Heap": {
+    "pssTotal": 31058,
+    "privateDirty": 29928,
+    "privateClean": 1004,
+    "swapPssDirty": 39936,
+    "rssTotal": 33384
+   },
+   "GL mtrack": {
+    "pssTotal": 50189,
+    "privateDirty": 50189,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50189
+   },
+   "Native Heap": {
+    "pssTotal": 6405,
+    "privateDirty": 6312,
+    "privateClean": 68,
+    "swapPssDirty": 5822,
+    "rssTotal": 6892
+   },
+   "Code": {
+    "pss": 11748,
+    "rss": 45004
+   },
+   "TOTAL PSS": 161181,
+   "Java Heap": 31864
+  },
+  "d2": {
+   ".so mmap": {
+    "pssTotal": 1677,
+    "privateDirty": 88,
+    "privateClean": 748,
+    "swapPssDirty": 87,
+    "rssTotal": 12252
+   },
+   ".jar mmap": {
+    "pssTotal": 10854,
+    "privateDirty": 0,
+    "privateClean": 8360,
+    "swapPssDirty": 0,
+    "rssTotal": 20640
+   },
+   ".apk mmap": {
+    "pssTotal": 7925,
+    "privateDirty": 4,
+    "privateClean": 7524,
+    "swapPssDirty": 4,
+    "rssTotal": 12216
+   },
+   ".dex mmap": {
+    "pssTotal": 4,
+    "privateDirty": 0,
+    "privateClean": 4,
+    "swapPssDirty": 0,
+    "rssTotal": 12
+   },
+   ".oat mmap": {
+    "pssTotal": 44,
+    "privateDirty": 0,
+    "privateClean": 8,
+    "swapPssDirty": 0,
+    "rssTotal": 992
+   },
+   ".art mmap": {
+    "pssTotal": 4978,
+    "privateDirty": 1820,
+    "privateClean": 2568,
+    "swapPssDirty": 3919,
+    "rssTotal": 12688
+   },
+   "Other mmap": {
+    "pssTotal": 8,
+    "privateDirty": 4,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 536
+   },
+   "Dalvik Heap": {
+    "pssTotal": 51548,
+    "privateDirty": 16436,
+    "privateClean": 34944,
+    "swapPssDirty": 0,
+    "rssTotal": 53824
+   },
+   "GL mtrack": {
+    "pssTotal": 50189,
+    "privateDirty": 50189,
+    "privateClean": 0,
+    "swapPssDirty": 0,
+    "rssTotal": 50189
+   },
+   "Native Heap": {
+    "pssTotal": 8887,
+    "privateDirty": 8832,
+    "privateClean": 36,
+    "swapPssDirty": 5119,
+    "rssTotal": 9344
+   },
+   "Code": {
+    "pss": 16780,
+    "rss": 51072
+   },
+   "TOTAL PSS": 151285,
+   "Java Heap": 20824
+  }
+ },
+ "runs": {
+  "p19-base-run1": [
+   {
+    "second": 0,
+    ".so mmap": {
+     "pssTotal": 14554,
+     "privateDirty": 220,
+     "privateClean": 10092,
+     "swapPssDirty": 1,
+     "rssTotal": 31756
+    },
+    ".jar mmap": {
+     "pssTotal": 9022,
+     "privateDirty": 0,
+     "privateClean": 4012,
+     "swapPssDirty": 0,
+     "rssTotal": 26240
+    },
+    ".apk mmap": {
+     "pssTotal": 19154,
+     "privateDirty": 8,
+     "privateClean": 16808,
+     "swapPssDirty": 0,
+     "rssTotal": 26188
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 45,
+     "privateDirty": 0,
+     "privateClean": 36,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 333,
+     "privateDirty": 0,
+     "privateClean": 88,
+     "swapPssDirty": 0,
+     "rssTotal": 1764
+    },
+    ".art mmap": {
+     "pssTotal": 6725,
+     "privateDirty": 6064,
+     "privateClean": 188,
+     "swapPssDirty": 104,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 200,
+     "privateDirty": 4,
+     "privateClean": 152,
+     "swapPssDirty": 0,
+     "rssTotal": 804
+    },
+    "Dalvik Heap": {
+     "pssTotal": 44576,
+     "privateDirty": 44416,
+     "privateClean": 88,
+     "swapPssDirty": 99,
+     "rssTotal": 45116
+    },
+    "GL mtrack": {
+     "pssTotal": 53239,
+     "privateDirty": 53239,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53239
+    },
+    "Native Heap": {
+     "pssTotal": 9787,
+     "privateDirty": 9700,
+     "privateClean": 48,
+     "swapPssDirty": 15,
+     "rssTotal": 10264
+    },
+    "Code": {
+     "pss": 31380,
+     "rss": 89408
+    },
+    "TOTAL PSS": 168703,
+    "Java Heap": 50668
+   },
+   {
+    "second": 3.8,
+    ".so mmap": {
+     "pssTotal": 14367,
+     "privateDirty": 224,
+     "privateClean": 10012,
+     "swapPssDirty": 1,
+     "rssTotal": 31320
+    },
+    ".jar mmap": {
+     "pssTotal": 8455,
+     "privateDirty": 0,
+     "privateClean": 3648,
+     "swapPssDirty": 0,
+     "rssTotal": 25304
+    },
+    ".apk mmap": {
+     "pssTotal": 19154,
+     "privateDirty": 8,
+     "privateClean": 16808,
+     "swapPssDirty": 0,
+     "rssTotal": 26188
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 45,
+     "privateDirty": 0,
+     "privateClean": 36,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 322,
+     "privateDirty": 0,
+     "privateClean": 88,
+     "swapPssDirty": 0,
+     "rssTotal": 1728
+    },
+    ".art mmap": {
+     "pssTotal": 6729,
+     "privateDirty": 6068,
+     "privateClean": 188,
+     "swapPssDirty": 104,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 200,
+     "privateDirty": 4,
+     "privateClean": 152,
+     "swapPssDirty": 0,
+     "rssTotal": 804
+    },
+    "Dalvik Heap": {
+     "pssTotal": 48964,
+     "privateDirty": 48804,
+     "privateClean": 88,
+     "swapPssDirty": 99,
+     "rssTotal": 49504
+    },
+    "GL mtrack": {
+     "pssTotal": 53219,
+     "privateDirty": 53219,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53219
+    },
+    "Native Heap": {
+     "pssTotal": 10983,
+     "privateDirty": 10896,
+     "privateClean": 48,
+     "swapPssDirty": 15,
+     "rssTotal": 11460
+    },
+    "Code": {
+     "pss": 30920,
+     "rss": 88668
+    },
+    "TOTAL PSS": 174154,
+    "Java Heap": 55060
+   },
+   {
+    "second": 71.4,
+    ".so mmap": {
+     "pssTotal": 12344,
+     "privateDirty": 224,
+     "privateClean": 8544,
+     "swapPssDirty": 1,
+     "rssTotal": 28468
+    },
+    ".jar mmap": {
+     "pssTotal": 7563,
+     "privateDirty": 0,
+     "privateClean": 3264,
+     "swapPssDirty": 0,
+     "rssTotal": 23456
+    },
+    ".apk mmap": {
+     "pssTotal": 19020,
+     "privateDirty": 8,
+     "privateClean": 16688,
+     "swapPssDirty": 0,
+     "rssTotal": 26024
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 45,
+     "privateDirty": 0,
+     "privateClean": 36,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 322,
+     "privateDirty": 0,
+     "privateClean": 88,
+     "swapPssDirty": 0,
+     "rssTotal": 1724
+    },
+    ".art mmap": {
+     "pssTotal": 6732,
+     "privateDirty": 6068,
+     "privateClean": 192,
+     "swapPssDirty": 103,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 201,
+     "privateDirty": 4,
+     "privateClean": 152,
+     "swapPssDirty": 0,
+     "rssTotal": 804
+    },
+    "Dalvik Heap": {
+     "pssTotal": 48400,
+     "privateDirty": 48240,
+     "privateClean": 88,
+     "swapPssDirty": 99,
+     "rssTotal": 48940
+    },
+    "GL mtrack": {
+     "pssTotal": 53479,
+     "privateDirty": 53479,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53479
+    },
+    "Native Heap": {
+     "pssTotal": 11371,
+     "privateDirty": 11284,
+     "privateClean": 48,
+     "swapPssDirty": 15,
+     "rssTotal": 11848
+    },
+    "Code": {
+     "pss": 28948,
+     "rss": 85208
+    },
+    "TOTAL PSS": 171870,
+    "Java Heap": 54500
+   },
+   {
+    "second": 138.4,
+    ".so mmap": {
+     "pssTotal": 12342,
+     "privateDirty": 224,
+     "privateClean": 8544,
+     "swapPssDirty": 1,
+     "rssTotal": 28468
+    },
+    ".jar mmap": {
+     "pssTotal": 7102,
+     "privateDirty": 0,
+     "privateClean": 2904,
+     "swapPssDirty": 0,
+     "rssTotal": 22792
+    },
+    ".apk mmap": {
+     "pssTotal": 19020,
+     "privateDirty": 8,
+     "privateClean": 16688,
+     "swapPssDirty": 0,
+     "rssTotal": 26024
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 45,
+     "privateDirty": 0,
+     "privateClean": 36,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 322,
+     "privateDirty": 0,
+     "privateClean": 88,
+     "swapPssDirty": 0,
+     "rssTotal": 1724
+    },
+    ".art mmap": {
+     "pssTotal": 6732,
+     "privateDirty": 6068,
+     "privateClean": 192,
+     "swapPssDirty": 103,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 200,
+     "privateDirty": 4,
+     "privateClean": 152,
+     "swapPssDirty": 0,
+     "rssTotal": 804
+    },
+    "Dalvik Heap": {
+     "pssTotal": 53740,
+     "privateDirty": 53580,
+     "privateClean": 88,
+     "swapPssDirty": 99,
+     "rssTotal": 54280
+    },
+    "GL mtrack": {
+     "pssTotal": 53342,
+     "privateDirty": 53342,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53342
+    },
+    "Native Heap": {
+     "pssTotal": 11835,
+     "privateDirty": 11748,
+     "privateClean": 48,
+     "swapPssDirty": 19,
+     "rssTotal": 12312
+    },
+    "Code": {
+     "pss": 28572,
+     "rss": 84920
+    },
+    "TOTAL PSS": 177185,
+    "Java Heap": 59840
+   },
+   {
+    "second": 205.3,
+    ".so mmap": {
+     "pssTotal": 11908,
+     "privateDirty": 224,
+     "privateClean": 8220,
+     "swapPssDirty": 1,
+     "rssTotal": 27836
+    },
+    ".jar mmap": {
+     "pssTotal": 6092,
+     "privateDirty": 0,
+     "privateClean": 2412,
+     "swapPssDirty": 0,
+     "rssTotal": 20960
+    },
+    ".apk mmap": {
+     "pssTotal": 19020,
+     "privateDirty": 8,
+     "privateClean": 16688,
+     "swapPssDirty": 0,
+     "rssTotal": 26024
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 45,
+     "privateDirty": 0,
+     "privateClean": 36,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 312,
+     "privateDirty": 0,
+     "privateClean": 88,
+     "swapPssDirty": 0,
+     "rssTotal": 1724
+    },
+    ".art mmap": {
+     "pssTotal": 6732,
+     "privateDirty": 6068,
+     "privateClean": 192,
+     "swapPssDirty": 103,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 200,
+     "privateDirty": 4,
+     "privateClean": 152,
+     "swapPssDirty": 0,
+     "rssTotal": 804
+    },
+    "Dalvik Heap": {
+     "pssTotal": 56864,
+     "privateDirty": 56712,
+     "privateClean": 80,
+     "swapPssDirty": 99,
+     "rssTotal": 57404
+    },
+    "GL mtrack": {
+     "pssTotal": 53358,
+     "privateDirty": 53358,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53358
+    },
+    "Native Heap": {
+     "pssTotal": 12243,
+     "privateDirty": 12156,
+     "privateClean": 48,
+     "swapPssDirty": 19,
+     "rssTotal": 12708
+    },
+    "Code": {
+     "pss": 27756,
+     "rss": 82456
+    },
+    "TOTAL PSS": 179423,
+    "Java Heap": 62972
+   },
+   {
+    "second": 273.2,
+    ".so mmap": {
+     "pssTotal": 8864,
+     "privateDirty": 224,
+     "privateClean": 6132,
+     "swapPssDirty": 1,
+     "rssTotal": 24116
+    },
+    ".jar mmap": {
+     "pssTotal": 2537,
+     "privateDirty": 0,
+     "privateClean": 632,
+     "swapPssDirty": 0,
+     "rssTotal": 15164
+    },
+    ".apk mmap": {
+     "pssTotal": 11496,
+     "privateDirty": 8,
+     "privateClean": 10440,
+     "swapPssDirty": 0,
+     "rssTotal": 19360
+    },
+    ".ttf mmap": {
+     "pssTotal": 72,
+     "privateDirty": 0,
+     "privateClean": 72,
+     "swapPssDirty": 0,
+     "rssTotal": 72
+    },
+    ".dex mmap": {
+     "pssTotal": 36,
+     "privateDirty": 0,
+     "privateClean": 32,
+     "swapPssDirty": 0,
+     "rssTotal": 60
+    },
+    ".oat mmap": {
+     "pssTotal": 85,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1280
+    },
+    ".art mmap": {
+     "pssTotal": 6604,
+     "privateDirty": 6068,
+     "privateClean": 136,
+     "swapPssDirty": 102,
+     "rssTotal": 13948
+    },
+    "Other mmap": {
+     "pssTotal": 168,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 784
+    },
+    "Dalvik Heap": {
+     "pssTotal": 64095,
+     "privateDirty": 63884,
+     "privateClean": 148,
+     "swapPssDirty": 1447,
+     "rssTotal": 64636
+    },
+    "GL mtrack": {
+     "pssTotal": 53479,
+     "privateDirty": 53479,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53479
+    },
+    "Native Heap": {
+     "pssTotal": 11195,
+     "privateDirty": 11124,
+     "privateClean": 48,
+     "swapPssDirty": 140,
+     "rssTotal": 11652
+    },
+    "Code": {
+     "pss": 17548,
+     "rss": 65812
+    },
+    "TOTAL PSS": 172752,
+    "Java Heap": 70088
+   },
+   {
+    "second": 338.0,
+    ".so mmap": {
+     "pssTotal": 8844,
+     "privateDirty": 204,
+     "privateClean": 6132,
+     "swapPssDirty": 21,
+     "rssTotal": 24096
+    },
+    ".jar mmap": {
+     "pssTotal": 2731,
+     "privateDirty": 0,
+     "privateClean": 740,
+     "swapPssDirty": 0,
+     "rssTotal": 15572
+    },
+    ".apk mmap": {
+     "pssTotal": 8772,
+     "privateDirty": 8,
+     "privateClean": 7716,
+     "swapPssDirty": 0,
+     "rssTotal": 16636
+    },
+    ".ttf mmap": {
+     "pssTotal": 72,
+     "privateDirty": 0,
+     "privateClean": 72,
+     "swapPssDirty": 0,
+     "rssTotal": 72
+    },
+    ".dex mmap": {
+     "pssTotal": 36,
+     "privateDirty": 0,
+     "privateClean": 32,
+     "swapPssDirty": 0,
+     "rssTotal": 60
+    },
+    ".oat mmap": {
+     "pssTotal": 85,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1280
+    },
+    ".art mmap": {
+     "pssTotal": 2464,
+     "privateDirty": 1924,
+     "privateClean": 140,
+     "swapPssDirty": 4241,
+     "rssTotal": 9812
+    },
+    "Other mmap": {
+     "pssTotal": 168,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 784
+    },
+    "Dalvik Heap": {
+     "pssTotal": 59995,
+     "privateDirty": 59780,
+     "privateClean": 152,
+     "swapPssDirty": 1443,
+     "rssTotal": 60536
+    },
+    "GL mtrack": {
+     "pssTotal": 53338,
+     "privateDirty": 53338,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53338
+    },
+    "Native Heap": {
+     "pssTotal": 11235,
+     "privateDirty": 11164,
+     "privateClean": 48,
+     "swapPssDirty": 176,
+     "rssTotal": 11692
+    },
+    "Code": {
+     "pss": 14912,
+     "rss": 63476
+    },
+    "TOTAL PSS": 166060,
+    "Java Heap": 61844
+   },
+   {
+    "second": 360.1,
+    ".so mmap": {
+     "pssTotal": 8836,
+     "privateDirty": 196,
+     "privateClean": 6132,
+     "swapPssDirty": 29,
+     "rssTotal": 24088
+    },
+    ".jar mmap": {
+     "pssTotal": 2731,
+     "privateDirty": 0,
+     "privateClean": 740,
+     "swapPssDirty": 0,
+     "rssTotal": 15572
+    },
+    ".apk mmap": {
+     "pssTotal": 8832,
+     "privateDirty": 8,
+     "privateClean": 7776,
+     "swapPssDirty": 0,
+     "rssTotal": 16696
+    },
+    ".ttf mmap": {
+     "pssTotal": 72,
+     "privateDirty": 0,
+     "privateClean": 72,
+     "swapPssDirty": 0,
+     "rssTotal": 72
+    },
+    ".dex mmap": {
+     "pssTotal": 36,
+     "privateDirty": 0,
+     "privateClean": 32,
+     "swapPssDirty": 0,
+     "rssTotal": 60
+    },
+    ".oat mmap": {
+     "pssTotal": 85,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1280
+    },
+    ".art mmap": {
+     "pssTotal": 2465,
+     "privateDirty": 1924,
+     "privateClean": 140,
+     "swapPssDirty": 4241,
+     "rssTotal": 9812
+    },
+    "Other mmap": {
+     "pssTotal": 168,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 784
+    },
+    "Dalvik Heap": {
+     "pssTotal": 54827,
+     "privateDirty": 54612,
+     "privateClean": 152,
+     "swapPssDirty": 1447,
+     "rssTotal": 55368
+    },
+    "GL mtrack": {
+     "pssTotal": 53338,
+     "privateDirty": 53338,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53338
+    },
+    "Native Heap": {
+     "pssTotal": 11651,
+     "privateDirty": 11580,
+     "privateClean": 48,
+     "swapPssDirty": 220,
+     "rssTotal": 12108
+    },
+    "Code": {
+     "pss": 14964,
+     "rss": 63528
+    },
+    "TOTAL PSS": 161245,
+    "Java Heap": 56676
+   }
+  ],
+  "p19-cut-run1": [
+   {
+    "second": 0,
+    ".so mmap": {
+     "pssTotal": 15388,
+     "privateDirty": 220,
+     "privateClean": 12496,
+     "swapPssDirty": 1,
+     "rssTotal": 30592
+    },
+    ".jar mmap": {
+     "pssTotal": 8077,
+     "privateDirty": 0,
+     "privateClean": 4856,
+     "swapPssDirty": 0,
+     "rssTotal": 21592
+    },
+    ".apk mmap": {
+     "pssTotal": 18323,
+     "privateDirty": 8,
+     "privateClean": 17392,
+     "swapPssDirty": 0,
+     "rssTotal": 25044
+    },
+    ".ttf mmap": {
+     "pssTotal": 92,
+     "privateDirty": 0,
+     "privateClean": 92,
+     "swapPssDirty": 0,
+     "rssTotal": 92
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 512,
+     "privateDirty": 0,
+     "privateClean": 424,
+     "swapPssDirty": 0,
+     "rssTotal": 1692
+    },
+    ".art mmap": {
+     "pssTotal": 6687,
+     "privateDirty": 6064,
+     "privateClean": 180,
+     "swapPssDirty": 100,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 218,
+     "privateDirty": 4,
+     "privateClean": 192,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 44805,
+     "privateDirty": 44656,
+     "privateClean": 76,
+     "swapPssDirty": 92,
+     "rssTotal": 45356
+    },
+    "GL mtrack": {
+     "pssTotal": 50049,
+     "privateDirty": 50049,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50049
+    },
+    "Native Heap": {
+     "pssTotal": 9194,
+     "privateDirty": 9108,
+     "privateClean": 56,
+     "swapPssDirty": 24,
+     "rssTotal": 9668
+    },
+    "Code": {
+     "pss": 35572,
+     "rss": 82532
+    },
+    "TOTAL PSS": 164111,
+    "Java Heap": 50900
+   },
+   {
+    "second": 3.8,
+    ".so mmap": {
+     "pssTotal": 15597,
+     "privateDirty": 224,
+     "privateClean": 12692,
+     "swapPssDirty": 1,
+     "rssTotal": 30820
+    },
+    ".jar mmap": {
+     "pssTotal": 8077,
+     "privateDirty": 0,
+     "privateClean": 4856,
+     "swapPssDirty": 0,
+     "rssTotal": 21592
+    },
+    ".apk mmap": {
+     "pssTotal": 18323,
+     "privateDirty": 8,
+     "privateClean": 17392,
+     "swapPssDirty": 0,
+     "rssTotal": 25044
+    },
+    ".ttf mmap": {
+     "pssTotal": 92,
+     "privateDirty": 0,
+     "privateClean": 92,
+     "swapPssDirty": 0,
+     "rssTotal": 92
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 512,
+     "privateDirty": 0,
+     "privateClean": 424,
+     "swapPssDirty": 0,
+     "rssTotal": 1692
+    },
+    ".art mmap": {
+     "pssTotal": 6691,
+     "privateDirty": 6068,
+     "privateClean": 180,
+     "swapPssDirty": 100,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 218,
+     "privateDirty": 4,
+     "privateClean": 192,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 47113,
+     "privateDirty": 46964,
+     "privateClean": 76,
+     "swapPssDirty": 92,
+     "rssTotal": 47664
+    },
+    "GL mtrack": {
+     "pssTotal": 50096,
+     "privateDirty": 50096,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50096
+    },
+    "Native Heap": {
+     "pssTotal": 9978,
+     "privateDirty": 9892,
+     "privateClean": 56,
+     "swapPssDirty": 16,
+     "rssTotal": 10452
+    },
+    "Code": {
+     "pss": 35756,
+     "rss": 83336
+    },
+    "TOTAL PSS": 168303,
+    "Java Heap": 53212
+   },
+   {
+    "second": 71.3,
+    ".so mmap": {
+     "pssTotal": 14592,
+     "privateDirty": 224,
+     "privateClean": 11780,
+     "swapPssDirty": 1,
+     "rssTotal": 29620
+    },
+    ".jar mmap": {
+     "pssTotal": 6325,
+     "privateDirty": 0,
+     "privateClean": 3900,
+     "swapPssDirty": 0,
+     "rssTotal": 18720
+    },
+    ".apk mmap": {
+     "pssTotal": 18323,
+     "privateDirty": 8,
+     "privateClean": 17392,
+     "swapPssDirty": 0,
+     "rssTotal": 25044
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 485,
+     "privateDirty": 0,
+     "privateClean": 412,
+     "swapPssDirty": 0,
+     "rssTotal": 1640
+    },
+    ".art mmap": {
+     "pssTotal": 6690,
+     "privateDirty": 6068,
+     "privateClean": 180,
+     "swapPssDirty": 100,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 218,
+     "privateDirty": 4,
+     "privateClean": 192,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 47757,
+     "privateDirty": 47608,
+     "privateClean": 76,
+     "swapPssDirty": 91,
+     "rssTotal": 48308
+    },
+    "GL mtrack": {
+     "pssTotal": 50160,
+     "privateDirty": 50160,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50160
+    },
+    "Native Heap": {
+     "pssTotal": 10434,
+     "privateDirty": 10348,
+     "privateClean": 56,
+     "swapPssDirty": 16,
+     "rssTotal": 10908
+    },
+    "Code": {
+     "pss": 33852,
+     "rss": 80588
+    },
+    "TOTAL PSS": 167311,
+    "Java Heap": 53856
+   },
+   {
+    "second": 138.8,
+    ".so mmap": {
+     "pssTotal": 13924,
+     "privateDirty": 224,
+     "privateClean": 11180,
+     "swapPssDirty": 1,
+     "rssTotal": 28768
+    },
+    ".jar mmap": {
+     "pssTotal": 5430,
+     "privateDirty": 0,
+     "privateClean": 3240,
+     "swapPssDirty": 0,
+     "rssTotal": 17468
+    },
+    ".apk mmap": {
+     "pssTotal": 18311,
+     "privateDirty": 8,
+     "privateClean": 17392,
+     "swapPssDirty": 0,
+     "rssTotal": 24932
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 483,
+     "privateDirty": 0,
+     "privateClean": 412,
+     "swapPssDirty": 0,
+     "rssTotal": 1632
+    },
+    ".art mmap": {
+     "pssTotal": 6690,
+     "privateDirty": 6068,
+     "privateClean": 180,
+     "swapPssDirty": 100,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 210,
+     "privateDirty": 4,
+     "privateClean": 188,
+     "swapPssDirty": 0,
+     "rssTotal": 788
+    },
+    "Dalvik Heap": {
+     "pssTotal": 49805,
+     "privateDirty": 49656,
+     "privateClean": 76,
+     "swapPssDirty": 91,
+     "rssTotal": 50356
+    },
+    "GL mtrack": {
+     "pssTotal": 50148,
+     "privateDirty": 50148,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50148
+    },
+    "Native Heap": {
+     "pssTotal": 10678,
+     "privateDirty": 10592,
+     "privateClean": 56,
+     "swapPssDirty": 16,
+     "rssTotal": 11152
+    },
+    "Code": {
+     "pss": 32584,
+     "rss": 78716
+    },
+    "TOTAL PSS": 168110,
+    "Java Heap": 55904
+   },
+   {
+    "second": 206.0,
+    ".so mmap": {
+     "pssTotal": 11126,
+     "privateDirty": 224,
+     "privateClean": 8308,
+     "swapPssDirty": 1,
+     "rssTotal": 25812
+    },
+    ".jar mmap": {
+     "pssTotal": 3295,
+     "privateDirty": 0,
+     "privateClean": 896,
+     "swapPssDirty": 0,
+     "rssTotal": 15596
+    },
+    ".apk mmap": {
+     "pssTotal": 8850,
+     "privateDirty": 8,
+     "privateClean": 7668,
+     "swapPssDirty": 0,
+     "rssTotal": 15904
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 51,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 64
+    },
+    ".oat mmap": {
+     "pssTotal": 88,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1204
+    },
+    ".art mmap": {
+     "pssTotal": 6562,
+     "privateDirty": 6068,
+     "privateClean": 76,
+     "swapPssDirty": 100,
+     "rssTotal": 13960
+    },
+    "Other mmap": {
+     "pssTotal": 179,
+     "privateDirty": 4,
+     "privateClean": 132,
+     "swapPssDirty": 0,
+     "rssTotal": 788
+    },
+    "Dalvik Heap": {
+     "pssTotal": 51409,
+     "privateDirty": 51280,
+     "privateClean": 60,
+     "swapPssDirty": 90,
+     "rssTotal": 51960
+    },
+    "GL mtrack": {
+     "pssTotal": 50224,
+     "privateDirty": 50224,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50224
+    },
+    "Native Heap": {
+     "pssTotal": 10534,
+     "privateDirty": 10484,
+     "privateClean": 20,
+     "swapPssDirty": 60,
+     "rssTotal": 11004
+    },
+    "Code": {
+     "pss": 17232,
+     "rss": 64428
+    },
+    "TOTAL PSS": 154684,
+    "Java Heap": 57424
+   },
+   {
+    "second": 273.6,
+    ".so mmap": {
+     "pssTotal": 11100,
+     "privateDirty": 224,
+     "privateClean": 8288,
+     "swapPssDirty": 1,
+     "rssTotal": 25780
+    },
+    ".jar mmap": {
+     "pssTotal": 3293,
+     "privateDirty": 0,
+     "privateClean": 896,
+     "swapPssDirty": 0,
+     "rssTotal": 15592
+    },
+    ".apk mmap": {
+     "pssTotal": 8882,
+     "privateDirty": 8,
+     "privateClean": 7708,
+     "swapPssDirty": 0,
+     "rssTotal": 15928
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 51,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 64
+    },
+    ".oat mmap": {
+     "pssTotal": 88,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1204
+    },
+    ".art mmap": {
+     "pssTotal": 6562,
+     "privateDirty": 6068,
+     "privateClean": 76,
+     "swapPssDirty": 100,
+     "rssTotal": 13960
+    },
+    "Other mmap": {
+     "pssTotal": 179,
+     "privateDirty": 4,
+     "privateClean": 132,
+     "swapPssDirty": 0,
+     "rssTotal": 788
+    },
+    "Dalvik Heap": {
+     "pssTotal": 56427,
+     "privateDirty": 56300,
+     "privateClean": 60,
+     "swapPssDirty": 90,
+     "rssTotal": 56976
+    },
+    "GL mtrack": {
+     "pssTotal": 50240,
+     "privateDirty": 50240,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50240
+    },
+    "Native Heap": {
+     "pssTotal": 10248,
+     "privateDirty": 10200,
+     "privateClean": 20,
+     "swapPssDirty": 56,
+     "rssTotal": 10716
+    },
+    "Code": {
+     "pss": 17252,
+     "rss": 64416
+    },
+    "TOTAL PSS": 159712,
+    "Java Heap": 62444
+   },
+   {
+    "second": 338.5,
+    ".so mmap": {
+     "pssTotal": 11129,
+     "privateDirty": 224,
+     "privateClean": 8296,
+     "swapPssDirty": 1,
+     "rssTotal": 25780
+    },
+    ".jar mmap": {
+     "pssTotal": 3554,
+     "privateDirty": 0,
+     "privateClean": 1084,
+     "swapPssDirty": 0,
+     "rssTotal": 15948
+    },
+    ".apk mmap": {
+     "pssTotal": 8902,
+     "privateDirty": 8,
+     "privateClean": 7728,
+     "swapPssDirty": 0,
+     "rssTotal": 15948
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 51,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 64
+    },
+    ".oat mmap": {
+     "pssTotal": 88,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1204
+    },
+    ".art mmap": {
+     "pssTotal": 6562,
+     "privateDirty": 6068,
+     "privateClean": 76,
+     "swapPssDirty": 98,
+     "rssTotal": 13964
+    },
+    "Other mmap": {
+     "pssTotal": 179,
+     "privateDirty": 4,
+     "privateClean": 132,
+     "swapPssDirty": 0,
+     "rssTotal": 788
+    },
+    "Dalvik Heap": {
+     "pssTotal": 65151,
+     "privateDirty": 65024,
+     "privateClean": 60,
+     "swapPssDirty": 90,
+     "rssTotal": 65700
+    },
+    "GL mtrack": {
+     "pssTotal": 50212,
+     "privateDirty": 50212,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50212
+    },
+    "Native Heap": {
+     "pssTotal": 10348,
+     "privateDirty": 10300,
+     "privateClean": 20,
+     "swapPssDirty": 52,
+     "rssTotal": 10816
+    },
+    "Code": {
+     "pss": 17468,
+     "rss": 64792
+    },
+    "TOTAL PSS": 168920,
+    "Java Heap": 71168
+   },
+   {
+    "second": 360.0,
+    ".so mmap": {
+     "pssTotal": 11129,
+     "privateDirty": 224,
+     "privateClean": 8296,
+     "swapPssDirty": 1,
+     "rssTotal": 25780
+    },
+    ".jar mmap": {
+     "pssTotal": 3554,
+     "privateDirty": 0,
+     "privateClean": 1084,
+     "swapPssDirty": 0,
+     "rssTotal": 15948
+    },
+    ".apk mmap": {
+     "pssTotal": 8906,
+     "privateDirty": 8,
+     "privateClean": 7732,
+     "swapPssDirty": 0,
+     "rssTotal": 15952
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 51,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 64
+    },
+    ".oat mmap": {
+     "pssTotal": 88,
+     "privateDirty": 0,
+     "privateClean": 4,
+     "swapPssDirty": 0,
+     "rssTotal": 1204
+    },
+    ".art mmap": {
+     "pssTotal": 6562,
+     "privateDirty": 6068,
+     "privateClean": 76,
+     "swapPssDirty": 98,
+     "rssTotal": 13964
+    },
+    "Other mmap": {
+     "pssTotal": 179,
+     "privateDirty": 4,
+     "privateClean": 132,
+     "swapPssDirty": 0,
+     "rssTotal": 788
+    },
+    "Dalvik Heap": {
+     "pssTotal": 57371,
+     "privateDirty": 57244,
+     "privateClean": 60,
+     "swapPssDirty": 90,
+     "rssTotal": 57920
+    },
+    "GL mtrack": {
+     "pssTotal": 50212,
+     "privateDirty": 50212,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50212
+    },
+    "Native Heap": {
+     "pssTotal": 10308,
+     "privateDirty": 10260,
+     "privateClean": 20,
+     "swapPssDirty": 52,
+     "rssTotal": 10776
+    },
+    "Code": {
+     "pss": 17472,
+     "rss": 64796
+    },
+    "TOTAL PSS": 160964,
+    "Java Heap": 63388
+   }
+  ],
+  "p19-base-run2": [
+   {
+    "second": 0,
+    ".so mmap": {
+     "pssTotal": 14976,
+     "privateDirty": 220,
+     "privateClean": 11520,
+     "swapPssDirty": 1,
+     "rssTotal": 30344
+    },
+    ".jar mmap": {
+     "pssTotal": 9541,
+     "privateDirty": 0,
+     "privateClean": 5044,
+     "swapPssDirty": 0,
+     "rssTotal": 24436
+    },
+    ".apk mmap": {
+     "pssTotal": 18953,
+     "privateDirty": 8,
+     "privateClean": 18028,
+     "swapPssDirty": 0,
+     "rssTotal": 25800
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 547,
+     "privateDirty": 0,
+     "privateClean": 392,
+     "swapPssDirty": 0,
+     "rssTotal": 1784
+    },
+    ".art mmap": {
+     "pssTotal": 6695,
+     "privateDirty": 6064,
+     "privateClean": 200,
+     "swapPssDirty": 97,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 51960,
+     "privateDirty": 51796,
+     "privateClean": 104,
+     "swapPssDirty": 89,
+     "rssTotal": 52496
+    },
+    "GL mtrack": {
+     "pssTotal": 53158,
+     "privateDirty": 53158,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53158
+    },
+    "Native Heap": {
+     "pssTotal": 9546,
+     "privateDirty": 9464,
+     "privateClean": 48,
+     "swapPssDirty": 12,
+     "rssTotal": 10020
+    },
+    "Code": {
+     "pss": 35376,
+     "rss": 85884
+    },
+    "TOTAL PSS": 176604,
+    "Java Heap": 58060
+   },
+   {
+    "second": 3.7,
+    ".so mmap": {
+     "pssTotal": 15058,
+     "privateDirty": 224,
+     "privateClean": 11592,
+     "swapPssDirty": 1,
+     "rssTotal": 30440
+    },
+    ".jar mmap": {
+     "pssTotal": 9307,
+     "privateDirty": 0,
+     "privateClean": 4852,
+     "swapPssDirty": 0,
+     "rssTotal": 24156
+    },
+    ".apk mmap": {
+     "pssTotal": 18953,
+     "privateDirty": 8,
+     "privateClean": 18028,
+     "swapPssDirty": 0,
+     "rssTotal": 25800
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 55,
+     "privateDirty": 0,
+     "privateClean": 52,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 547,
+     "privateDirty": 0,
+     "privateClean": 392,
+     "swapPssDirty": 0,
+     "rssTotal": 1784
+    },
+    ".art mmap": {
+     "pssTotal": 6699,
+     "privateDirty": 6068,
+     "privateClean": 200,
+     "swapPssDirty": 97,
+     "rssTotal": 14104
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 51036,
+     "privateDirty": 50872,
+     "privateClean": 104,
+     "swapPssDirty": 89,
+     "rssTotal": 51572
+    },
+    "GL mtrack": {
+     "pssTotal": 53167,
+     "privateDirty": 53167,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53167
+    },
+    "Native Heap": {
+     "pssTotal": 10854,
+     "privateDirty": 10772,
+     "privateClean": 48,
+     "swapPssDirty": 12,
+     "rssTotal": 11328
+    },
+    "Code": {
+     "pss": 35248,
+     "rss": 86320
+    },
+    "TOTAL PSS": 177271,
+    "Java Heap": 57140
+   },
+   {
+    "second": 70.5,
+    ".so mmap": {
+     "pssTotal": 14764,
+     "privateDirty": 224,
+     "privateClean": 11396,
+     "swapPssDirty": 1,
+     "rssTotal": 30044
+    },
+    ".jar mmap": {
+     "pssTotal": 9111,
+     "privateDirty": 0,
+     "privateClean": 4728,
+     "swapPssDirty": 0,
+     "rssTotal": 24056
+    },
+    ".apk mmap": {
+     "pssTotal": 17633,
+     "privateDirty": 8,
+     "privateClean": 16736,
+     "swapPssDirty": 0,
+     "rssTotal": 24452
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 53,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 542,
+     "privateDirty": 0,
+     "privateClean": 392,
+     "swapPssDirty": 0,
+     "rssTotal": 1772
+    },
+    ".art mmap": {
+     "pssTotal": 6699,
+     "privateDirty": 6068,
+     "privateClean": 200,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 61139,
+     "privateDirty": 60976,
+     "privateClean": 104,
+     "swapPssDirty": 89,
+     "rssTotal": 61672
+    },
+    "GL mtrack": {
+     "pssTotal": 53432,
+     "privateDirty": 53432,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53432
+    },
+    "Native Heap": {
+     "pssTotal": 11010,
+     "privateDirty": 10928,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11484
+    },
+    "Code": {
+     "pss": 33624,
+     "rss": 85904
+    },
+    "TOTAL PSS": 186817,
+    "Java Heap": 67244
+   },
+   {
+    "second": 137.6,
+    ".so mmap": {
+     "pssTotal": 14764,
+     "privateDirty": 224,
+     "privateClean": 11396,
+     "swapPssDirty": 1,
+     "rssTotal": 30044
+    },
+    ".jar mmap": {
+     "pssTotal": 9135,
+     "privateDirty": 0,
+     "privateClean": 4752,
+     "swapPssDirty": 0,
+     "rssTotal": 24080
+    },
+    ".apk mmap": {
+     "pssTotal": 17633,
+     "privateDirty": 8,
+     "privateClean": 16736,
+     "swapPssDirty": 0,
+     "rssTotal": 24452
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 53,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 542,
+     "privateDirty": 0,
+     "privateClean": 392,
+     "swapPssDirty": 0,
+     "rssTotal": 1772
+    },
+    ".art mmap": {
+     "pssTotal": 6699,
+     "privateDirty": 6068,
+     "privateClean": 200,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 59035,
+     "privateDirty": 58872,
+     "privateClean": 104,
+     "swapPssDirty": 89,
+     "rssTotal": 59568
+    },
+    "GL mtrack": {
+     "pssTotal": 53424,
+     "privateDirty": 53424,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53424
+    },
+    "Native Heap": {
+     "pssTotal": 11454,
+     "privateDirty": 11372,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11928
+    },
+    "Code": {
+     "pss": 33640,
+     "rss": 86272
+    },
+    "TOTAL PSS": 185373,
+    "Java Heap": 65140
+   },
+   {
+    "second": 204.8,
+    ".so mmap": {
+     "pssTotal": 14566,
+     "privateDirty": 224,
+     "privateClean": 11204,
+     "swapPssDirty": 1,
+     "rssTotal": 29840
+    },
+    ".jar mmap": {
+     "pssTotal": 8816,
+     "privateDirty": 0,
+     "privateClean": 4572,
+     "swapPssDirty": 0,
+     "rssTotal": 23532
+    },
+    ".apk mmap": {
+     "pssTotal": 17633,
+     "privateDirty": 8,
+     "privateClean": 16736,
+     "swapPssDirty": 0,
+     "rssTotal": 24452
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 53,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 531,
+     "privateDirty": 0,
+     "privateClean": 384,
+     "swapPssDirty": 0,
+     "rssTotal": 1756
+    },
+    ".art mmap": {
+     "pssTotal": 6711,
+     "privateDirty": 6068,
+     "privateClean": 224,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 54236,
+     "privateDirty": 54072,
+     "privateClean": 108,
+     "swapPssDirty": 89,
+     "rssTotal": 54768
+    },
+    "GL mtrack": {
+     "pssTotal": 53392,
+     "privateDirty": 53392,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53392
+    },
+    "Native Heap": {
+     "pssTotal": 11246,
+     "privateDirty": 11164,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11720
+    },
+    "Code": {
+     "pss": 33260,
+     "rss": 85504
+    },
+    "TOTAL PSS": 179868,
+    "Java Heap": 60364
+   },
+   {
+    "second": 272.2,
+    ".so mmap": {
+     "pssTotal": 14500,
+     "privateDirty": 224,
+     "privateClean": 11168,
+     "swapPssDirty": 1,
+     "rssTotal": 29740
+    },
+    ".jar mmap": {
+     "pssTotal": 8784,
+     "privateDirty": 0,
+     "privateClean": 4572,
+     "swapPssDirty": 0,
+     "rssTotal": 23464
+    },
+    ".apk mmap": {
+     "pssTotal": 17633,
+     "privateDirty": 8,
+     "privateClean": 16736,
+     "swapPssDirty": 0,
+     "rssTotal": 24452
+    },
+    ".ttf mmap": {
+     "pssTotal": 84,
+     "privateDirty": 0,
+     "privateClean": 84,
+     "swapPssDirty": 0,
+     "rssTotal": 84
+    },
+    ".dex mmap": {
+     "pssTotal": 53,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 529,
+     "privateDirty": 0,
+     "privateClean": 384,
+     "swapPssDirty": 0,
+     "rssTotal": 1748
+    },
+    ".art mmap": {
+     "pssTotal": 6711,
+     "privateDirty": 6068,
+     "privateClean": 224,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 63960,
+     "privateDirty": 63796,
+     "privateClean": 108,
+     "swapPssDirty": 89,
+     "rssTotal": 64492
+    },
+    "GL mtrack": {
+     "pssTotal": 53456,
+     "privateDirty": 53456,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53456
+    },
+    "Native Heap": {
+     "pssTotal": 11042,
+     "privateDirty": 10960,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11516
+    },
+    "Code": {
+     "pss": 33224,
+     "rss": 85328
+    },
+    "TOTAL PSS": 189552,
+    "Java Heap": 70088
+   },
+   {
+    "second": 337.1,
+    ".so mmap": {
+     "pssTotal": 14730,
+     "privateDirty": 224,
+     "privateClean": 11572,
+     "swapPssDirty": 1,
+     "rssTotal": 29688
+    },
+    ".jar mmap": {
+     "pssTotal": 8700,
+     "privateDirty": 0,
+     "privateClean": 4484,
+     "swapPssDirty": 0,
+     "rssTotal": 23520
+    },
+    ".apk mmap": {
+     "pssTotal": 17626,
+     "privateDirty": 8,
+     "privateClean": 16736,
+     "swapPssDirty": 0,
+     "rssTotal": 24400
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 529,
+     "privateDirty": 0,
+     "privateClean": 384,
+     "swapPssDirty": 0,
+     "rssTotal": 1748
+    },
+    ".art mmap": {
+     "pssTotal": 6711,
+     "privateDirty": 6068,
+     "privateClean": 224,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 63812,
+     "privateDirty": 63648,
+     "privateClean": 108,
+     "swapPssDirty": 89,
+     "rssTotal": 64344
+    },
+    "GL mtrack": {
+     "pssTotal": 53440,
+     "privateDirty": 53440,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53440
+    },
+    "Native Heap": {
+     "pssTotal": 11200,
+     "privateDirty": 11120,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11672
+    },
+    "Code": {
+     "pss": 33532,
+     "rss": 85272
+    },
+    "TOTAL PSS": 189688,
+    "Java Heap": 69940
+   },
+   {
+    "second": 360.1,
+    ".so mmap": {
+     "pssTotal": 14253,
+     "privateDirty": 224,
+     "privateClean": 11208,
+     "swapPssDirty": 1,
+     "rssTotal": 29096
+    },
+    ".jar mmap": {
+     "pssTotal": 8335,
+     "privateDirty": 0,
+     "privateClean": 4240,
+     "swapPssDirty": 0,
+     "rssTotal": 22988
+    },
+    ".apk mmap": {
+     "pssTotal": 17603,
+     "privateDirty": 8,
+     "privateClean": 16724,
+     "swapPssDirty": 0,
+     "rssTotal": 24348
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 514,
+     "privateDirty": 0,
+     "privateClean": 384,
+     "swapPssDirty": 0,
+     "rssTotal": 1700
+    },
+    ".art mmap": {
+     "pssTotal": 6711,
+     "privateDirty": 6068,
+     "privateClean": 224,
+     "swapPssDirty": 96,
+     "rssTotal": 14108
+    },
+    "Other mmap": {
+     "pssTotal": 187,
+     "privateDirty": 4,
+     "privateClean": 136,
+     "swapPssDirty": 0,
+     "rssTotal": 800
+    },
+    "Dalvik Heap": {
+     "pssTotal": 60364,
+     "privateDirty": 60200,
+     "privateClean": 108,
+     "swapPssDirty": 89,
+     "rssTotal": 60896
+    },
+    "GL mtrack": {
+     "pssTotal": 53440,
+     "privateDirty": 53440,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 53440
+    },
+    "Native Heap": {
+     "pssTotal": 11380,
+     "privateDirty": 11300,
+     "privateClean": 48,
+     "swapPssDirty": 24,
+     "rssTotal": 11852
+    },
+    "Code": {
+     "pss": 32912,
+     "rss": 84048
+    },
+    "TOTAL PSS": 185360,
+    "Java Heap": 66492
+   }
+  ],
+  "p19-cut-run2": [
+   {
+    "second": 0,
+    ".so mmap": {
+     "pssTotal": 15870,
+     "privateDirty": 220,
+     "privateClean": 12964,
+     "swapPssDirty": 1,
+     "rssTotal": 30600
+    },
+    ".jar mmap": {
+     "pssTotal": 12916,
+     "privateDirty": 0,
+     "privateClean": 9524,
+     "swapPssDirty": 0,
+     "rssTotal": 26200
+    },
+    ".apk mmap": {
+     "pssTotal": 20626,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27868
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 660,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1788
+    },
+    ".art mmap": {
+     "pssTotal": 6746,
+     "privateDirty": 6064,
+     "privateClean": 264,
+     "swapPssDirty": 97,
+     "rssTotal": 14132
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 56488,
+     "privateDirty": 56320,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 57016
+    },
+    "GL mtrack": {
+     "pssTotal": 50098,
+     "privateDirty": 50098,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50098
+    },
+    "Native Heap": {
+     "pssTotal": 9470,
+     "privateDirty": 9380,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 9944
+    },
+    "Code": {
+     "pss": 41320,
+     "rss": 90044
+    },
+    "TOTAL PSS": 183893,
+    "Java Heap": 62648
+   },
+   {
+    "second": 3.8,
+    ".so mmap": {
+     "pssTotal": 15515,
+     "privateDirty": 224,
+     "privateClean": 12664,
+     "swapPssDirty": 1,
+     "rssTotal": 30196
+    },
+    ".jar mmap": {
+     "pssTotal": 12915,
+     "privateDirty": 0,
+     "privateClean": 9524,
+     "swapPssDirty": 0,
+     "rssTotal": 26196
+    },
+    ".apk mmap": {
+     "pssTotal": 20626,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27868
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 97,
+     "rssTotal": 14132
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 53947,
+     "privateDirty": 53780,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 54472
+    },
+    "GL mtrack": {
+     "pssTotal": 50145,
+     "privateDirty": 50145,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50145
+    },
+    "Native Heap": {
+     "pssTotal": 10242,
+     "privateDirty": 10152,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 10716
+    },
+    "Code": {
+     "pss": 41024,
+     "rss": 90208
+    },
+    "TOTAL PSS": 182516,
+    "Java Heap": 60112
+   },
+   {
+    "second": 70.8,
+    ".so mmap": {
+     "pssTotal": 15431,
+     "privateDirty": 224,
+     "privateClean": 12584,
+     "swapPssDirty": 1,
+     "rssTotal": 30108
+    },
+    ".jar mmap": {
+     "pssTotal": 12919,
+     "privateDirty": 0,
+     "privateClean": 9528,
+     "swapPssDirty": 0,
+     "rssTotal": 26200
+    },
+    ".apk mmap": {
+     "pssTotal": 20626,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27868
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 96,
+     "rssTotal": 14136
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 53863,
+     "privateDirty": 53696,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 54388
+    },
+    "GL mtrack": {
+     "pssTotal": 50204,
+     "privateDirty": 50204,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50204
+    },
+    "Native Heap": {
+     "pssTotal": 10714,
+     "privateDirty": 10624,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11184
+    },
+    "Code": {
+     "pss": 40952,
+     "rss": 91520
+    },
+    "TOTAL PSS": 183628,
+    "Java Heap": 60028
+   },
+   {
+    "second": 137.6,
+    ".so mmap": {
+     "pssTotal": 15431,
+     "privateDirty": 224,
+     "privateClean": 12584,
+     "swapPssDirty": 1,
+     "rssTotal": 30108
+    },
+    ".jar mmap": {
+     "pssTotal": 12923,
+     "privateDirty": 0,
+     "privateClean": 9532,
+     "swapPssDirty": 0,
+     "rssTotal": 26204
+    },
+    ".apk mmap": {
+     "pssTotal": 20626,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27868
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 96,
+     "rssTotal": 14136
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 56443,
+     "privateDirty": 56276,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 56968
+    },
+    "GL mtrack": {
+     "pssTotal": 50192,
+     "privateDirty": 50192,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50192
+    },
+    "Native Heap": {
+     "pssTotal": 11046,
+     "privateDirty": 10956,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11516
+    },
+    "Code": {
+     "pss": 40936,
+     "rss": 91864
+    },
+    "TOTAL PSS": 186836,
+    "Java Heap": 62608
+   },
+   {
+    "second": 204.4,
+    ".so mmap": {
+     "pssTotal": 15431,
+     "privateDirty": 224,
+     "privateClean": 12584,
+     "swapPssDirty": 1,
+     "rssTotal": 30108
+    },
+    ".jar mmap": {
+     "pssTotal": 12923,
+     "privateDirty": 0,
+     "privateClean": 9532,
+     "swapPssDirty": 0,
+     "rssTotal": 26204
+    },
+    ".apk mmap": {
+     "pssTotal": 20626,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27868
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 52,
+     "privateDirty": 0,
+     "privateClean": 48,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 96,
+     "rssTotal": 14136
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 66743,
+     "privateDirty": 66576,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 67268
+    },
+    "GL mtrack": {
+     "pssTotal": 50216,
+     "privateDirty": 50216,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50216
+    },
+    "Native Heap": {
+     "pssTotal": 11118,
+     "privateDirty": 11028,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11588
+    },
+    "Code": {
+     "pss": 40936,
+     "rss": 91864
+    },
+    "TOTAL PSS": 197256,
+    "Java Heap": 72908
+   },
+   {
+    "second": 271.7,
+    ".so mmap": {
+     "pssTotal": 15334,
+     "privateDirty": 224,
+     "privateClean": 12500,
+     "swapPssDirty": 1,
+     "rssTotal": 29996
+    },
+    ".jar mmap": {
+     "pssTotal": 11738,
+     "privateDirty": 0,
+     "privateClean": 8400,
+     "swapPssDirty": 0,
+     "rssTotal": 24908
+    },
+    ".apk mmap": {
+     "pssTotal": 20619,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27844
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 50,
+     "privateDirty": 0,
+     "privateClean": 44,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 96,
+     "rssTotal": 14136
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 58639,
+     "privateDirty": 58472,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 59164
+    },
+    "GL mtrack": {
+     "pssTotal": 50245,
+     "privateDirty": 50245,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50245
+    },
+    "Native Heap": {
+     "pssTotal": 10626,
+     "privateDirty": 10536,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11096
+    },
+    "Code": {
+     "pss": 39716,
+     "rss": 90432
+    },
+    "TOTAL PSS": 187622,
+    "Java Heap": 64804
+   },
+   {
+    "second": 336.4,
+    ".so mmap": {
+     "pssTotal": 15630,
+     "privateDirty": 224,
+     "privateClean": 12996,
+     "swapPssDirty": 1,
+     "rssTotal": 29996
+    },
+    ".jar mmap": {
+     "pssTotal": 11793,
+     "privateDirty": 0,
+     "privateClean": 8436,
+     "swapPssDirty": 0,
+     "rssTotal": 25004
+    },
+    ".apk mmap": {
+     "pssTotal": 20619,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27844
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 50,
+     "privateDirty": 0,
+     "privateClean": 44,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 657,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1776
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 96,
+     "rssTotal": 14136
+    },
+    "Other mmap": {
+     "pssTotal": 256,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 70383,
+     "privateDirty": 70216,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 70908
+    },
+    "GL mtrack": {
+     "pssTotal": 50217,
+     "privateDirty": 50217,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50217
+    },
+    "Native Heap": {
+     "pssTotal": 11096,
+     "privateDirty": 11008,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11564
+    },
+    "Code": {
+     "pss": 40248,
+     "rss": 90528
+    },
+    "TOTAL PSS": 199872,
+    "Java Heap": 76548
+   },
+   {
+    "second": 360.1,
+    ".so mmap": {
+     "pssTotal": 15595,
+     "privateDirty": 224,
+     "privateClean": 12968,
+     "swapPssDirty": 1,
+     "rssTotal": 29944
+    },
+    ".jar mmap": {
+     "pssTotal": 11859,
+     "privateDirty": 0,
+     "privateClean": 8520,
+     "swapPssDirty": 0,
+     "rssTotal": 24984
+    },
+    ".apk mmap": {
+     "pssTotal": 20619,
+     "privateDirty": 8,
+     "privateClean": 17908,
+     "swapPssDirty": 0,
+     "rssTotal": 27844
+    },
+    ".ttf mmap": {
+     "pssTotal": 76,
+     "privateDirty": 0,
+     "privateClean": 76,
+     "swapPssDirty": 0,
+     "rssTotal": 76
+    },
+    ".dex mmap": {
+     "pssTotal": 50,
+     "privateDirty": 0,
+     "privateClean": 44,
+     "swapPssDirty": 0,
+     "rssTotal": 68
+    },
+    ".oat mmap": {
+     "pssTotal": 656,
+     "privateDirty": 0,
+     "privateClean": 556,
+     "swapPssDirty": 0,
+     "rssTotal": 1772
+    },
+    ".art mmap": {
+     "pssTotal": 6750,
+     "privateDirty": 6068,
+     "privateClean": 264,
+     "swapPssDirty": 94,
+     "rssTotal": 14140
+    },
+    "Other mmap": {
+     "pssTotal": 255,
+     "privateDirty": 4,
+     "privateClean": 232,
+     "swapPssDirty": 0,
+     "rssTotal": 816
+    },
+    "Dalvik Heap": {
+     "pssTotal": 64127,
+     "privateDirty": 63960,
+     "privateClean": 116,
+     "swapPssDirty": 89,
+     "rssTotal": 64652
+    },
+    "GL mtrack": {
+     "pssTotal": 50217,
+     "privateDirty": 50217,
+     "privateClean": 0,
+     "swapPssDirty": 0,
+     "rssTotal": 50217
+    },
+    "Native Heap": {
+     "pssTotal": 10856,
+     "privateDirty": 10768,
+     "privateClean": 60,
+     "swapPssDirty": 12,
+     "rssTotal": 11324
+    },
+    "Code": {
+     "pss": 40304,
+     "rss": 90452
+    },
+    "TOTAL PSS": 193415,
+    "Java Heap": 70292
+   }
+  ]
+ },
+ "smaps": {
+  "a1": {
+   "pssByKind": {
+    ".art": 8899,
+    ".oat": 159,
+    ".vdex": 20,
+    ".apk": 12235,
+    ".so": 9333,
+    ".odex": 0,
+    ".ttf": 76,
+    ".jar": 9248
+   },
+   "privateByKind": {
+    ".art": 8336,
+    ".oat": 112,
+    ".vdex": 12,
+    ".apk": 11360,
+    ".so": 6808,
+    ".odex": 0,
+    ".ttf": 76,
+    ".jar": 7092
+   },
+   "filePrivateTotal": 33796,
+   "files": [
+    {
+     "file": "/data/app/~~90Kb5M_Znz-DJGdgmpwt-A==/dev.deathride.perf-iLMAtbr2N1DN81h-vmEnXA==/base.apk",
+     "kind": ".apk",
+     "pss": 11384,
+     "private": 11328,
+     "privateClean": 11320,
+     "privateDirty": 8,
+     "sharedClean": 200,
+     "rss": 11528,
+     "mappings": 13
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-framework.art]",
+     "kind": ".art",
+     "pss": 5106,
+     "private": 4724,
+     "privateClean": 1136,
+     "privateDirty": 3588,
+     "sharedClean": 4436,
+     "rss": 9516,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/framework.jar",
+     "kind": ".jar",
+     "pss": 5188,
+     "private": 3644,
+     "privateClean": 3644,
+     "privateDirty": 0,
+     "sharedClean": 9248,
+     "rss": 12892,
+     "mappings": 5
+    },
+    {
+     "file": "/vendor/lib/libusc.so",
+     "kind": ".so",
+     "pss": 1503,
+     "private": 1444,
+     "privateClean": 1444,
+     "privateDirty": 0,
+     "sharedClean": 152,
+     "rss": 1596,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libhwui.so",
+     "kind": ".so",
+     "pss": 1502,
+     "private": 1012,
+     "privateClean": 1000,
+     "privateDirty": 12,
+     "sharedClean": 1456,
+     "rss": 2468,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot.art]",
+     "kind": ".art",
+     "pss": 991,
+     "private": 948,
+     "privateClean": 72,
+     "privateDirty": 876,
+     "sharedClean": 748,
+     "rss": 1960,
+     "mappings": 1
+    },
+    {
+     "file": "/vendor/lib/libglslcompiler.so",
+     "kind": ".so",
+     "pss": 832,
+     "private": 828,
+     "privateClean": 828,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 836,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/telephony-common.jar",
+     "kind": ".jar",
+     "pss": 835,
+     "private": 828,
+     "privateClean": 828,
+     "privateDirty": 0,
+     "sharedClean": 140,
+     "rss": 968,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-fosframework.art]",
+     "kind": ".art",
+     "pss": 808,
+     "private": 736,
+     "privateClean": 328,
+     "privateDirty": 408,
+     "sharedClean": 864,
+     "rss": 1724,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-telephony-common.art]",
+     "kind": ".art",
+     "pss": 691,
+     "private": 680,
+     "privateClean": 264,
+     "privateDirty": 416,
+     "sharedClean": 376,
+     "rss": 1084,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-icu4j.art]",
+     "kind": ".art",
+     "pss": 377,
+     "private": 360,
+     "privateClean": 104,
+     "privateDirty": 256,
+     "sharedClean": 292,
+     "rss": 700,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/apache-xml.jar",
+     "kind": ".jar",
+     "pss": 343,
+     "private": 340,
+     "privateClean": 340,
+     "privateDirty": 0,
+     "sharedClean": 36,
+     "rss": 376,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-oj.jar",
+     "kind": ".jar",
+     "pss": 568,
+     "private": 340,
+     "privateClean": 340,
+     "privateDirty": 0,
+     "sharedClean": 2536,
+     "rss": 2876,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.wifi/javalib/framework-wifi.jar",
+     "kind": ".jar",
+     "pss": 338,
+     "private": 336,
+     "privateClean": 336,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 356,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-icu4j.jar",
+     "kind": ".jar",
+     "pss": 423,
+     "private": 324,
+     "privateClean": 324,
+     "privateDirty": 0,
+     "sharedClean": 432,
+     "rss": 756,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/fosframework.jar",
+     "kind": ".jar",
+     "pss": 410,
+     "private": 304,
+     "privateClean": 304,
+     "privateDirty": 0,
+     "sharedClean": 1044,
+     "rss": 1348,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/android.hardware.media.c2@1.0.so",
+     "kind": ".so",
+     "pss": 282,
+     "private": 276,
+     "privateClean": 276,
+     "privateDirty": 0,
+     "sharedClean": 16,
+     "rss": 292,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-voip-common.art]",
+     "kind": ".art",
+     "pss": 264,
+     "private": 260,
+     "privateClean": 116,
+     "privateDirty": 144,
+     "sharedClean": 148,
+     "rss": 428,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libharfbuzz_ng.so",
+     "kind": ".so",
+     "pss": 264,
+     "private": 256,
+     "privateClean": 256,
+     "privateDirty": 0,
+     "sharedClean": 24,
+     "rss": 280,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/lib/libart.so",
+     "kind": ".so",
+     "pss": 502,
+     "private": 244,
+     "privateClean": 240,
+     "privateDirty": 4,
+     "sharedClean": 3180,
+     "rss": 3456,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libsfplugin_ccodec.so",
+     "kind": ".so",
+     "pss": 238,
+     "private": 228,
+     "privateClean": 224,
+     "privateDirty": 4,
+     "sharedClean": 32,
+     "rss": 260,
+     "mappings": 4
+    },
+    {
+     "file": "/vendor/lib/egl/libGLESv2_powervr.so",
+     "kind": ".so",
+     "pss": 477,
+     "private": 224,
+     "privateClean": 220,
+     "privateDirty": 4,
+     "sharedClean": 764,
+     "rss": 988,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/voip-common.jar",
+     "kind": ".jar",
+     "pss": 226,
+     "private": 224,
+     "privateClean": 224,
+     "privateDirty": 0,
+     "sharedClean": 56,
+     "rss": 280,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/bouncycastle.jar",
+     "kind": ".jar",
+     "pss": 259,
+     "private": 180,
+     "privateClean": 180,
+     "privateDirty": 0,
+     "sharedClean": 256,
+     "rss": 436,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.media/javalib/updatable-media.jar",
+     "kind": ".jar",
+     "pss": 176,
+     "private": 172,
+     "privateClean": 172,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 192,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/ims-common.jar",
+     "kind": ".jar",
+     "pss": 166,
+     "private": 164,
+     "privateClean": 164,
+     "privateDirty": 0,
+     "sharedClean": 28,
+     "rss": 192,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-libart.art]",
+     "kind": ".art",
+     "pss": 163,
+     "private": 160,
+     "privateClean": 0,
+     "privateDirty": 160,
+     "sharedClean": 36,
+     "rss": 288,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libft2.so",
+     "kind": ".so",
+     "pss": 159,
+     "private": 156,
+     "privateClean": 156,
+     "privateDirty": 0,
+     "sharedClean": 12,
+     "rss": 168,
+     "mappings": 3
+    },
+    {
+     "file": "/system/lib/libstagefright.so",
+     "kind": ".so",
+     "pss": 202,
+     "private": 136,
+     "privateClean": 132,
+     "privateDirty": 4,
+     "sharedClean": 188,
+     "rss": 324,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-bouncycastle.art]",
+     "kind": ".art",
+     "pss": 132,
+     "private": 120,
+     "privateClean": 64,
+     "privateDirty": 56,
+     "sharedClean": 92,
+     "rss": 236,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libcodec2_vndk.so",
+     "kind": ".so",
+     "pss": 113,
+     "private": 104,
+     "privateClean": 100,
+     "privateDirty": 4,
+     "sharedClean": 24,
+     "rss": 128,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libprotobuf-cpp-full.so",
+     "kind": ".so",
+     "pss": 88,
+     "private": 88,
+     "privateClean": 88,
+     "privateDirty": 0,
+     "sharedClean": 0,
+     "rss": 88,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libcodec2_client.so",
+     "kind": ".so",
+     "pss": 92,
+     "private": 84,
+     "privateClean": 80,
+     "privateDirty": 4,
+     "sharedClean": 24,
+     "rss": 108,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/ext.jar",
+     "kind": ".jar",
+     "pss": 108,
+     "private": 84,
+     "privateClean": 84,
+     "privateDirty": 0,
+     "sharedClean": 96,
+     "rss": 180,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-apache-xml.art]",
+     "kind": ".art",
+     "pss": 81,
+     "private": 80,
+     "privateClean": 40,
+     "privateDirty": 40,
+     "sharedClean": 20,
+     "rss": 116,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-okhttp.art]",
+     "kind": ".art",
+     "pss": 78,
+     "private": 76,
+     "privateClean": 28,
+     "privateDirty": 48,
+     "sharedClean": 60,
+     "rss": 152,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.vndk.v30/lib/libz.so",
+     "kind": ".so",
+     "pss": 80,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 84,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/android.hardware.media.bufferpool@2.0.so",
+     "kind": ".so",
+     "pss": 81,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 16,
+     "rss": 92,
+     "mappings": 4
+    },
+    {
+     "file": "/system/fonts/Roboto-Regular.ttf",
+     "kind": ".ttf",
+     "pss": 76,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 0,
+     "rss": 76,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libstagefright_bufferpool@2.0.1.so",
+     "kind": ".so",
+     "pss": 87,
+     "private": 76,
+     "privateClean": 72,
+     "privateDirty": 4,
+     "sharedClean": 32,
+     "rss": 108,
+     "mappings": 4
+    }
+   ]
+  },
+  "b1": {
+   "pssByKind": {
+    ".art": 8896,
+    ".oat": 123,
+    ".vdex": 4,
+    ".apk": 12381,
+    ".so": 8482,
+    ".odex": 0,
+    ".ttf": 72,
+    ".jar": 7592
+   },
+   "privateByKind": {
+    ".art": 8316,
+    ".oat": 84,
+    ".vdex": 0,
+    ".apk": 12128,
+    ".so": 6328,
+    ".odex": 0,
+    ".ttf": 72,
+    ".jar": 5748
+   },
+   "filePrivateTotal": 32676,
+   "files": [
+    {
+     "file": "/data/app/~~90Kb5M_Znz-DJGdgmpwt-A==/dev.deathride.perf-iLMAtbr2N1DN81h-vmEnXA==/base.apk",
+     "kind": ".apk",
+     "pss": 12182,
+     "private": 12100,
+     "privateClean": 12092,
+     "privateDirty": 8,
+     "sharedClean": 200,
+     "rss": 12300,
+     "mappings": 13
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-framework.art]",
+     "kind": ".art",
+     "pss": 5105,
+     "private": 4720,
+     "privateClean": 1132,
+     "privateDirty": 3588,
+     "sharedClean": 4444,
+     "rss": 9520,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/framework.jar",
+     "kind": ".jar",
+     "pss": 4182,
+     "private": 2840,
+     "privateClean": 2840,
+     "privateDirty": 0,
+     "sharedClean": 8524,
+     "rss": 11364,
+     "mappings": 5
+    },
+    {
+     "file": "/vendor/lib/libusc.so",
+     "kind": ".so",
+     "pss": 1503,
+     "private": 1444,
+     "privateClean": 1444,
+     "privateDirty": 0,
+     "sharedClean": 152,
+     "rss": 1596,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot.art]",
+     "kind": ".art",
+     "pss": 999,
+     "private": 956,
+     "privateClean": 72,
+     "privateDirty": 884,
+     "sharedClean": 740,
+     "rss": 1960,
+     "mappings": 1
+    },
+    {
+     "file": "/vendor/lib/libglslcompiler.so",
+     "kind": ".so",
+     "pss": 832,
+     "private": 828,
+     "privateClean": 828,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 836,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libhwui.so",
+     "kind": ".so",
+     "pss": 1249,
+     "private": 808,
+     "privateClean": 796,
+     "privateDirty": 12,
+     "sharedClean": 1344,
+     "rss": 2152,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-fosframework.art]",
+     "kind": ".art",
+     "pss": 806,
+     "private": 732,
+     "privateClean": 324,
+     "privateDirty": 408,
+     "sharedClean": 868,
+     "rss": 1724,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-telephony-common.art]",
+     "kind": ".art",
+     "pss": 691,
+     "private": 680,
+     "privateClean": 264,
+     "privateDirty": 416,
+     "sharedClean": 376,
+     "rss": 1084,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/telephony-common.jar",
+     "kind": ".jar",
+     "pss": 611,
+     "private": 604,
+     "privateClean": 604,
+     "privateDirty": 0,
+     "sharedClean": 140,
+     "rss": 744,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-oj.jar",
+     "kind": ".jar",
+     "pss": 652,
+     "private": 444,
+     "privateClean": 444,
+     "privateDirty": 0,
+     "sharedClean": 2384,
+     "rss": 2828,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-icu4j.art]",
+     "kind": ".art",
+     "pss": 377,
+     "private": 360,
+     "privateClean": 104,
+     "privateDirty": 256,
+     "sharedClean": 292,
+     "rss": 700,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.wifi/javalib/framework-wifi.jar",
+     "kind": ".jar",
+     "pss": 338,
+     "private": 336,
+     "privateClean": 336,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 356,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/fosframework.jar",
+     "kind": ".jar",
+     "pss": 380,
+     "private": 292,
+     "privateClean": 292,
+     "privateDirty": 0,
+     "sharedClean": 948,
+     "rss": 1240,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-voip-common.art]",
+     "kind": ".art",
+     "pss": 264,
+     "private": 260,
+     "privateClean": 116,
+     "privateDirty": 144,
+     "sharedClean": 148,
+     "rss": 428,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libharfbuzz_ng.so",
+     "kind": ".so",
+     "pss": 263,
+     "private": 256,
+     "privateClean": 256,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 276,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-icu4j.jar",
+     "kind": ".jar",
+     "pss": 317,
+     "private": 232,
+     "privateClean": 232,
+     "privateDirty": 0,
+     "sharedClean": 388,
+     "rss": 620,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/android.hardware.media.c2@1.0.so",
+     "kind": ".so",
+     "pss": 238,
+     "private": 232,
+     "privateClean": 232,
+     "privateDirty": 0,
+     "sharedClean": 12,
+     "rss": 244,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libsfplugin_ccodec.so",
+     "kind": ".so",
+     "pss": 233,
+     "private": 228,
+     "privateClean": 224,
+     "privateDirty": 4,
+     "sharedClean": 20,
+     "rss": 248,
+     "mappings": 4
+    },
+    {
+     "file": "/vendor/lib/egl/libGLESv2_powervr.so",
+     "kind": ".so",
+     "pss": 467,
+     "private": 220,
+     "privateClean": 216,
+     "privateDirty": 4,
+     "sharedClean": 752,
+     "rss": 972,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/voip-common.jar",
+     "kind": ".jar",
+     "pss": 186,
+     "private": 184,
+     "privateClean": 184,
+     "privateDirty": 0,
+     "sharedClean": 56,
+     "rss": 240,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/bouncycastle.jar",
+     "kind": ".jar",
+     "pss": 222,
+     "private": 180,
+     "privateClean": 180,
+     "privateDirty": 0,
+     "sharedClean": 168,
+     "rss": 348,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.media/javalib/updatable-media.jar",
+     "kind": ".jar",
+     "pss": 176,
+     "private": 172,
+     "privateClean": 172,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 192,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-libart.art]",
+     "kind": ".art",
+     "pss": 167,
+     "private": 164,
+     "privateClean": 0,
+     "privateDirty": 164,
+     "sharedClean": 36,
+     "rss": 288,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/apache-xml.jar",
+     "kind": ".jar",
+     "pss": 163,
+     "private": 160,
+     "privateClean": 160,
+     "privateDirty": 0,
+     "sharedClean": 36,
+     "rss": 196,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libstagefright.so",
+     "kind": ".so",
+     "pss": 202,
+     "private": 136,
+     "privateClean": 132,
+     "privateDirty": 4,
+     "sharedClean": 188,
+     "rss": 324,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libft2.so",
+     "kind": ".so",
+     "pss": 135,
+     "private": 132,
+     "privateClean": 132,
+     "privateDirty": 0,
+     "sharedClean": 12,
+     "rss": 144,
+     "mappings": 3
+    },
+    {
+     "file": "/system/lib/libandroid_runtime.so",
+     "kind": ".so",
+     "pss": 184,
+     "private": 124,
+     "privateClean": 120,
+     "privateDirty": 4,
+     "sharedClean": 620,
+     "rss": 760,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-bouncycastle.art]",
+     "kind": ".art",
+     "pss": 132,
+     "private": 120,
+     "privateClean": 64,
+     "privateDirty": 56,
+     "sharedClean": 92,
+     "rss": 236,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/lib/libartbase.so",
+     "kind": ".so",
+     "pss": 114,
+     "private": 112,
+     "privateClean": 108,
+     "privateDirty": 4,
+     "sharedClean": 116,
+     "rss": 236,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libcodec2_vndk.so",
+     "kind": ".so",
+     "pss": 113,
+     "private": 104,
+     "privateClean": 100,
+     "privateDirty": 4,
+     "sharedClean": 24,
+     "rss": 128,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/lib/libart.so",
+     "kind": ".so",
+     "pss": 203,
+     "private": 84,
+     "privateClean": 80,
+     "privateDirty": 4,
+     "sharedClean": 2720,
+     "rss": 2836,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/ext.jar",
+     "kind": ".jar",
+     "pss": 91,
+     "private": 84,
+     "privateClean": 84,
+     "privateDirty": 0,
+     "sharedClean": 44,
+     "rss": 128,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-apache-xml.art]",
+     "kind": ".art",
+     "pss": 81,
+     "private": 80,
+     "privateClean": 40,
+     "privateDirty": 40,
+     "sharedClean": 20,
+     "rss": 116,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libaudioclient.so",
+     "kind": ".so",
+     "pss": 194,
+     "private": 80,
+     "privateClean": 76,
+     "privateDirty": 4,
+     "sharedClean": 288,
+     "rss": 368,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-okhttp.art]",
+     "kind": ".art",
+     "pss": 78,
+     "private": 76,
+     "privateClean": 28,
+     "privateDirty": 48,
+     "sharedClean": 60,
+     "rss": 152,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.vndk.v30/lib/libz.so",
+     "kind": ".so",
+     "pss": 80,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 84,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libcodec2_client.so",
+     "kind": ".so",
+     "pss": 81,
+     "private": 76,
+     "privateClean": 72,
+     "privateDirty": 4,
+     "sharedClean": 16,
+     "rss": 92,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/android.hardware.media.bufferpool@2.0.so",
+     "kind": ".so",
+     "pss": 77,
+     "private": 72,
+     "privateClean": 72,
+     "privateDirty": 0,
+     "sharedClean": 16,
+     "rss": 88,
+     "mappings": 4
+    },
+    {
+     "file": "/system/fonts/Roboto-Regular.ttf",
+     "kind": ".ttf",
+     "pss": 72,
+     "private": 72,
+     "privateClean": 72,
+     "privateDirty": 0,
+     "sharedClean": 0,
+     "rss": 72,
+     "mappings": 1
+    }
+   ]
+  },
+  "a2": {
+   "pssByKind": {
+    ".art": 8862,
+    ".oat": 190,
+    ".vdex": 37,
+    ".apk": 18078,
+    ".so": 8449,
+    ".odex": 6,
+    ".ttf": 76,
+    ".jar": 8348
+   },
+   "privateByKind": {
+    ".art": 8260,
+    ".oat": 96,
+    ".vdex": 36,
+    ".apk": 17268,
+    ".so": 5716,
+    ".odex": 0,
+    ".ttf": 76,
+    ".jar": 5296
+   },
+   "filePrivateTotal": 36748,
+   "files": [
+    {
+     "file": "/data/app/~~jfVDbTQkMGqwV3RLuT7z6A==/dev.deathride.perf-wGqRfoqIyzWPU2v7QsTAYQ==/base.apk",
+     "kind": ".apk",
+     "pss": 16742,
+     "private": 16660,
+     "privateClean": 16652,
+     "privateDirty": 8,
+     "sharedClean": 200,
+     "rss": 16860,
+     "mappings": 13
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-framework.art]",
+     "kind": ".art",
+     "pss": 5079,
+     "private": 4672,
+     "privateClean": 1080,
+     "privateDirty": 3592,
+     "sharedClean": 4496,
+     "rss": 9524,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/framework.jar",
+     "kind": ".jar",
+     "pss": 4818,
+     "private": 2544,
+     "privateClean": 2544,
+     "privateDirty": 0,
+     "sharedClean": 10940,
+     "rss": 13484,
+     "mappings": 5
+    },
+    {
+     "file": "/vendor/lib/libusc.so",
+     "kind": ".so",
+     "pss": 1507,
+     "private": 1424,
+     "privateClean": 1424,
+     "privateDirty": 0,
+     "sharedClean": 216,
+     "rss": 1640,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot.art]",
+     "kind": ".art",
+     "pss": 991,
+     "private": 944,
+     "privateClean": 68,
+     "privateDirty": 876,
+     "sharedClean": 752,
+     "rss": 1960,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-fosframework.art]",
+     "kind": ".art",
+     "pss": 803,
+     "private": 724,
+     "privateClean": 316,
+     "privateDirty": 408,
+     "sharedClean": 876,
+     "rss": 1724,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-telephony-common.art]",
+     "kind": ".art",
+     "pss": 691,
+     "private": 680,
+     "privateClean": 264,
+     "privateDirty": 416,
+     "sharedClean": 376,
+     "rss": 1084,
+     "mappings": 1
+    },
+    {
+     "file": "/vendor/lib/libglslcompiler.so",
+     "kind": ".so",
+     "pss": 670,
+     "private": 628,
+     "privateClean": 628,
+     "privateDirty": 0,
+     "sharedClean": 84,
+     "rss": 712,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/framework-res.apk",
+     "kind": ".apk",
+     "pss": 1295,
+     "private": 608,
+     "privateClean": 608,
+     "privateDirty": 0,
+     "sharedClean": 4756,
+     "rss": 5364,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/telephony-common.jar",
+     "kind": ".jar",
+     "pss": 627,
+     "private": 604,
+     "privateClean": 604,
+     "privateDirty": 0,
+     "sharedClean": 200,
+     "rss": 804,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libhwui.so",
+     "kind": ".so",
+     "pss": 1268,
+     "private": 556,
+     "privateClean": 544,
+     "privateDirty": 12,
+     "sharedClean": 2176,
+     "rss": 2732,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-icu4j.art]",
+     "kind": ".art",
+     "pss": 374,
+     "private": 352,
+     "privateClean": 96,
+     "privateDirty": 256,
+     "sharedClean": 300,
+     "rss": 700,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/apache-xml.jar",
+     "kind": ".jar",
+     "pss": 342,
+     "private": 340,
+     "privateClean": 340,
+     "privateDirty": 0,
+     "sharedClean": 36,
+     "rss": 376,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-icu4j.jar",
+     "kind": ".jar",
+     "pss": 384,
+     "private": 312,
+     "privateClean": 312,
+     "privateDirty": 0,
+     "sharedClean": 344,
+     "rss": 656,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libsfplugin_ccodec.so",
+     "kind": ".so",
+     "pss": 300,
+     "private": 296,
+     "privateClean": 292,
+     "privateDirty": 4,
+     "sharedClean": 8,
+     "rss": 304,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libharfbuzz_ng.so",
+     "kind": ".so",
+     "pss": 287,
+     "private": 272,
+     "privateClean": 272,
+     "privateDirty": 0,
+     "sharedClean": 32,
+     "rss": 304,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-voip-common.art]",
+     "kind": ".art",
+     "pss": 264,
+     "private": 260,
+     "privateClean": 116,
+     "privateDirty": 144,
+     "sharedClean": 148,
+     "rss": 428,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/bouncycastle.jar",
+     "kind": ".jar",
+     "pss": 269,
+     "private": 256,
+     "privateClean": 256,
+     "privateDirty": 0,
+     "sharedClean": 116,
+     "rss": 372,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/fosframework.jar",
+     "kind": ".jar",
+     "pss": 472,
+     "private": 216,
+     "privateClean": 216,
+     "privateDirty": 0,
+     "sharedClean": 1300,
+     "rss": 1516,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.wifi/javalib/framework-wifi.jar",
+     "kind": ".jar",
+     "pss": 223,
+     "private": 204,
+     "privateClean": 204,
+     "privateDirty": 0,
+     "sharedClean": 80,
+     "rss": 284,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libstagefright.so",
+     "kind": ".so",
+     "pss": 259,
+     "private": 192,
+     "privateClean": 188,
+     "privateDirty": 4,
+     "sharedClean": 184,
+     "rss": 376,
+     "mappings": 4
+    },
+    {
+     "file": "/vendor/lib/egl/libGLESv2_powervr.so",
+     "kind": ".so",
+     "pss": 449,
+     "private": 176,
+     "privateClean": 172,
+     "privateDirty": 4,
+     "sharedClean": 852,
+     "rss": 1028,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/ext.jar",
+     "kind": ".jar",
+     "pss": 172,
+     "private": 172,
+     "privateClean": 172,
+     "privateDirty": 0,
+     "sharedClean": 24,
+     "rss": 196,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-libart.art]",
+     "kind": ".art",
+     "pss": 163,
+     "private": 160,
+     "privateClean": 0,
+     "privateDirty": 160,
+     "sharedClean": 36,
+     "rss": 288,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/android.hardware.media.c2@1.0.so",
+     "kind": ".so",
+     "pss": 166,
+     "private": 160,
+     "privateClean": 160,
+     "privateDirty": 0,
+     "sharedClean": 12,
+     "rss": 172,
+     "mappings": 4
+    },
+    {
+     "file": "/system/framework/voip-common.jar",
+     "kind": ".jar",
+     "pss": 174,
+     "private": 160,
+     "privateClean": 160,
+     "privateDirty": 0,
+     "sharedClean": 104,
+     "rss": 264,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-oj.jar",
+     "kind": ".jar",
+     "pss": 425,
+     "private": 140,
+     "privateClean": 140,
+     "privateDirty": 0,
+     "sharedClean": 2576,
+     "rss": 2716,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libft2.so",
+     "kind": ".so",
+     "pss": 137,
+     "private": 136,
+     "privateClean": 136,
+     "privateDirty": 0,
+     "sharedClean": 4,
+     "rss": 140,
+     "mappings": 3
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-bouncycastle.art]",
+     "kind": ".art",
+     "pss": 132,
+     "private": 120,
+     "privateClean": 64,
+     "privateDirty": 56,
+     "sharedClean": 92,
+     "rss": 236,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.media/javalib/updatable-media.jar",
+     "kind": ".jar",
+     "pss": 138,
+     "private": 112,
+     "privateClean": 112,
+     "privateDirty": 0,
+     "sharedClean": 64,
+     "rss": 176,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/ims-common.jar",
+     "kind": ".jar",
+     "pss": 117,
+     "private": 112,
+     "privateClean": 112,
+     "privateDirty": 0,
+     "sharedClean": 40,
+     "rss": 152,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libcodec2_vndk.so",
+     "kind": ".so",
+     "pss": 108,
+     "private": 104,
+     "privateClean": 100,
+     "privateDirty": 4,
+     "sharedClean": 16,
+     "rss": 120,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libmedia.so",
+     "kind": ".so",
+     "pss": 126,
+     "private": 104,
+     "privateClean": 104,
+     "privateDirty": 0,
+     "sharedClean": 72,
+     "rss": 176,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/android.hardware.media.bufferpool@2.0.so",
+     "kind": ".so",
+     "pss": 86,
+     "private": 84,
+     "privateClean": 84,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 92,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-apache-xml.art]",
+     "kind": ".art",
+     "pss": 81,
+     "private": 80,
+     "privateClean": 40,
+     "privateDirty": 40,
+     "sharedClean": 20,
+     "rss": 116,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-okhttp.art]",
+     "kind": ".art",
+     "pss": 78,
+     "private": 76,
+     "privateClean": 28,
+     "privateDirty": 48,
+     "sharedClean": 60,
+     "rss": 152,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.vndk.v30/lib/libz.so",
+     "kind": ".so",
+     "pss": 80,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 84,
+     "mappings": 4
+    },
+    {
+     "file": "/system/fonts/Roboto-Regular.ttf",
+     "kind": ".ttf",
+     "pss": 76,
+     "private": 76,
+     "privateClean": 76,
+     "privateDirty": 0,
+     "sharedClean": 0,
+     "rss": 76,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libstagefright_bufferpool@2.0.1.so",
+     "kind": ".so",
+     "pss": 78,
+     "private": 76,
+     "privateClean": 72,
+     "privateDirty": 4,
+     "sharedClean": 8,
+     "rss": 84,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/javalib/okhttp.jar",
+     "kind": ".jar",
+     "pss": 71,
+     "private": 68,
+     "privateClean": 68,
+     "privateDirty": 0,
+     "sharedClean": 52,
+     "rss": 120,
+     "mappings": 2
+    }
+   ]
+  },
+  "d2": {
+   "pssByKind": {
+    ".art": 4982,
+    ".oat": 44,
+    ".vdex": 4,
+    ".apk": 7925,
+    ".so": 1692,
+    ".odex": 0,
+    ".ttf": 0,
+    ".jar": 10886
+   },
+   "privateByKind": {
+    ".art": 4392,
+    ".oat": 8,
+    ".vdex": 4,
+    ".apk": 7528,
+    ".so": 840,
+    ".odex": 0,
+    ".ttf": 0,
+    ".jar": 8392
+   },
+   "filePrivateTotal": 21164,
+   "files": [
+    {
+     "file": "/data/app/~~jfVDbTQkMGqwV3RLuT7z6A==/dev.deathride.perf-wGqRfoqIyzWPU2v7QsTAYQ==/base.apk",
+     "kind": ".apk",
+     "pss": 7544,
+     "private": 7528,
+     "privateClean": 7524,
+     "privateDirty": 4,
+     "sharedClean": 32,
+     "rss": 7560,
+     "mappings": 13
+    },
+    {
+     "file": "/system/framework/framework.jar",
+     "kind": ".jar",
+     "pss": 6197,
+     "private": 4320,
+     "privateClean": 4320,
+     "privateDirty": 0,
+     "sharedClean": 7536,
+     "rss": 11856,
+     "mappings": 5
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-framework.art]",
+     "kind": ".art",
+     "pss": 2561,
+     "private": 2196,
+     "privateClean": 1360,
+     "privateDirty": 836,
+     "sharedClean": 4144,
+     "rss": 6860,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/telephony-common.jar",
+     "kind": ".jar",
+     "pss": 864,
+     "private": 856,
+     "privateClean": 856,
+     "privateDirty": 0,
+     "sharedClean": 112,
+     "rss": 968,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot.art]",
+     "kind": ".art",
+     "pss": 775,
+     "private": 724,
+     "privateClean": 100,
+     "privateDirty": 624,
+     "sharedClean": 732,
+     "rss": 1780,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-icu4j.jar",
+     "kind": ".jar",
+     "pss": 610,
+     "private": 580,
+     "privateClean": 580,
+     "privateDirty": 0,
+     "sharedClean": 132,
+     "rss": 712,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-oj.jar",
+     "kind": ".jar",
+     "pss": 715,
+     "private": 540,
+     "privateClean": 540,
+     "privateDirty": 0,
+     "sharedClean": 2012,
+     "rss": 2552,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/fosframework.jar",
+     "kind": ".jar",
+     "pss": 716,
+     "private": 532,
+     "privateClean": 532,
+     "privateDirty": 0,
+     "sharedClean": 1040,
+     "rss": 1572,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-fosframework.art]",
+     "kind": ".art",
+     "pss": 595,
+     "private": 508,
+     "privateClean": 332,
+     "privateDirty": 176,
+     "sharedClean": 844,
+     "rss": 1500,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/javalib/apache-xml.jar",
+     "kind": ".jar",
+     "pss": 345,
+     "private": 344,
+     "privateClean": 344,
+     "privateDirty": 0,
+     "sharedClean": 28,
+     "rss": 372,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-telephony-common.art]",
+     "kind": ".art",
+     "pss": 291,
+     "private": 280,
+     "privateClean": 276,
+     "privateDirty": 4,
+     "sharedClean": 364,
+     "rss": 672,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/voip-common.jar",
+     "kind": ".jar",
+     "pss": 218,
+     "private": 216,
+     "privateClean": 216,
+     "privateDirty": 0,
+     "sharedClean": 64,
+     "rss": 280,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/javalib/bouncycastle.jar",
+     "kind": ".jar",
+     "pss": 245,
+     "private": 192,
+     "privateClean": 192,
+     "privateDirty": 0,
+     "sharedClean": 212,
+     "rss": 404,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/ext.jar",
+     "kind": ".jar",
+     "pss": 176,
+     "private": 176,
+     "privateClean": 176,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 196,
+     "mappings": 2
+    },
+    {
+     "file": "/system/framework/ims-common.jar",
+     "kind": ".jar",
+     "pss": 168,
+     "private": 168,
+     "privateClean": 168,
+     "privateDirty": 0,
+     "sharedClean": 24,
+     "rss": 192,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.wifi/javalib/framework-wifi.jar",
+     "kind": ".jar",
+     "pss": 208,
+     "private": 160,
+     "privateClean": 160,
+     "privateDirty": 0,
+     "sharedClean": 152,
+     "rss": 312,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-libart.art]",
+     "kind": ".art",
+     "pss": 155,
+     "private": 148,
+     "privateClean": 4,
+     "privateDirty": 144,
+     "sharedClean": 36,
+     "rss": 280,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.media/javalib/updatable-media.jar",
+     "kind": ".jar",
+     "pss": 155,
+     "private": 148,
+     "privateClean": 148,
+     "privateDirty": 0,
+     "sharedClean": 28,
+     "rss": 176,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/lib/libart.so",
+     "kind": ".so",
+     "pss": 246,
+     "private": 136,
+     "privateClean": 132,
+     "privateDirty": 4,
+     "sharedClean": 2584,
+     "rss": 2752,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-core-icu4j.art]",
+     "kind": ".art",
+     "pss": 166,
+     "private": 132,
+     "privateClean": 100,
+     "privateDirty": 32,
+     "sharedClean": 292,
+     "rss": 516,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-voip-common.art]",
+     "kind": ".art",
+     "pss": 136,
+     "private": 132,
+     "privateClean": 128,
+     "privateDirty": 4,
+     "sharedClean": 136,
+     "rss": 288,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/lib/libicuuc.so",
+     "kind": ".so",
+     "pss": 150,
+     "private": 128,
+     "privateClean": 128,
+     "privateDirty": 0,
+     "sharedClean": 384,
+     "rss": 512,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libandroid_runtime.so",
+     "kind": ".so",
+     "pss": 128,
+     "private": 100,
+     "privateClean": 100,
+     "privateDirty": 0,
+     "sharedClean": 428,
+     "rss": 548,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/javalib/core-libart.jar",
+     "kind": ".jar",
+     "pss": 117,
+     "private": 80,
+     "privateClean": 80,
+     "privateDirty": 0,
+     "sharedClean": 364,
+     "rss": 444,
+     "mappings": 2
+    },
+    {
+     "file": "/system/lib/libaudioclient.so",
+     "kind": ".so",
+     "pss": 212,
+     "private": 76,
+     "privateClean": 72,
+     "privateDirty": 4,
+     "sharedClean": 288,
+     "rss": 364,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-bouncycastle.art]",
+     "kind": ".art",
+     "pss": 81,
+     "private": 64,
+     "privateClean": 64,
+     "privateDirty": 0,
+     "sharedClean": 92,
+     "rss": 184,
+     "mappings": 1
+    },
+    {
+     "file": "/system/lib/libsoundpool.so",
+     "kind": ".so",
+     "pss": 56,
+     "private": 52,
+     "privateClean": 52,
+     "privateDirty": 0,
+     "sharedClean": 8,
+     "rss": 60,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/lib/libprofile.so",
+     "kind": ".so",
+     "pss": 53,
+     "private": 52,
+     "privateClean": 52,
+     "privateDirty": 0,
+     "sharedClean": 64,
+     "rss": 116,
+     "mappings": 4
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-ext.art]",
+     "kind": ".art",
+     "pss": 50,
+     "private": 48,
+     "privateClean": 48,
+     "privateDirty": 0,
+     "sharedClean": 84,
+     "rss": 164,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-apache-xml.art]",
+     "kind": ".art",
+     "pss": 41,
+     "private": 40,
+     "privateClean": 40,
+     "privateDirty": 0,
+     "sharedClean": 20,
+     "rss": 80,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/lib/libopenjdk.so",
+     "kind": ".so",
+     "pss": 44,
+     "private": 40,
+     "privateClean": 40,
+     "privateDirty": 0,
+     "sharedClean": 92,
+     "rss": 136,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.mediaprovider/javalib/framework-mediaprovider.jar",
+     "kind": ".jar",
+     "pss": 40,
+     "private": 40,
+     "privateClean": 40,
+     "privateDirty": 0,
+     "sharedClean": 0,
+     "rss": 40,
+     "mappings": 2
+    },
+    {
+     "file": "/apex/com.android.art/lib/libart-compiler.so",
+     "kind": ".so",
+     "pss": 79,
+     "private": 36,
+     "privateClean": 36,
+     "privateDirty": 0,
+     "sharedClean": 1308,
+     "rss": 1344,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.art/lib/libartbase.so",
+     "kind": ".so",
+     "pss": 38,
+     "private": 36,
+     "privateClean": 36,
+     "privateDirty": 0,
+     "sharedClean": 116,
+     "rss": 164,
+     "mappings": 4
+    },
+    {
+     "file": "/apex/com.android.os.statsd/javalib/framework-statsd.jar",
+     "kind": ".jar",
+     "pss": 33,
+     "private": 32,
+     "privateClean": 32,
+     "privateDirty": 0,
+     "sharedClean": 32,
+     "rss": 64,
+     "mappings": 2
+    },
+    {
+     "file": "[anon:dalvik-/apex/com.android.art/javalib/boot-okhttp.art]",
+     "kind": ".art",
+     "pss": 30,
+     "private": 28,
+     "privateClean": 28,
+     "privateDirty": 0,
+     "sharedClean": 60,
+     "rss": 108,
+     "mappings": 1
+    },
+    {
+     "file": "[anon:dalvik-/system/framework/boot-ims-common.art]",
+     "kind": ".art",
+     "pss": 29,
+     "private": 28,
+     "privateClean": 28,
+     "privateDirty": 0,
+     "sharedClean": 28,
+     "rss": 72,
+     "mappings": 1
+    },
+    {
+     "file": "/system/framework/arm/boot-framework.art",
+     "kind": ".art",
+     "pss": 21,
+     "private": 20,
+     "privateClean": 20,
+     "privateDirty": 0,
+     "sharedClean": 52,
+     "rss": 72,
+     "mappings": 1
+    },
+    {
+     "file": "/apex/com.android.art/lib/libvixl.so",
+     "kind": ".so",
+     "pss": 24,
+     "private": 16,
+     "privateClean": 16,
+     "privateDirty": 0,
+     "sharedClean": 156,
+     "rss": 176,
+     "mappings": 4
+    },
+    {
+     "file": "/system/lib/libandroidfw.so",
+     "kind": ".so",
+     "pss": 19,
+     "private": 16,
+     "privateClean": 12,
+     "privateDirty": 4,
+     "sharedClean": 152,
+     "rss": 168,
+     "mappings": 4
+    }
+   ]
+  }
+ }
+}

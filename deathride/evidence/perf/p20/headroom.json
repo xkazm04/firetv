@@ -1,0 +1,46 @@
+{
+ "what": "P20 step 3: ART's 24 MB, read in AOSP android-11 ART against the Stick's settings. A reading of the source, not a trace.",
+ "source": "https://android.googlesource.com/platform/art/+/refs/heads/android11-release and platform/frameworks/base android11-release; copies kept outside git (raw p20/aosp/)",
+ "stick": {
+  "dalvik.vm.heapmaxfree": "8m",
+  "dalvik.vm.heapminfree": "512k",
+  "dalvik.vm.heaptargetutilization": "0.75",
+  "dalvik.vm.heapgrowthlimit": "192m",
+  "dalvik.vm.foreground-heap-growth-multiplier": "(unset)",
+  "ro.config.low_ram": "(unset)",
+  "abi": "armeabi-v7a",
+  "android": "11 (device-state-start.txt)"
+ },
+ "chain": [
+  {
+   "cite": "frameworks/base core/jni/AndroidRuntime.cpp:792-801",
+   "reads": "dalvik.vm.heapminfree/heapmaxfree/heaptargetutilization/foreground-heap-growth-multiplier become -XX:HeapMinFree/-XX:HeapMaxFree/-XX:HeapTargetUtilization/-XX:ForegroundHeapGrowthMultiplier, only when the property is set"
+  },
+  {
+   "cite": "art runtime/runtime_options.def:57 and runtime/gc/heap.h:146",
+   "reads": "ForegroundHeapGrowthMultiplier defaults to kDefaultHeapGrowthMultiplier = 2.0"
+  },
+  {
+   "cite": "art runtime/runtime.cc:195 and :1365-1373",
+   "reads": "outside low-memory mode the multiplier is the option + kExtraDefaultHeapGrowthMultiplier, which is 1.0 when kUseReadBarrier (the concurrent copying collector): 2.0 + 1.0 = 3.0. Low-memory mode (-XX:LowMemoryMode, from ro.config.low_ram) would use 1.0; the Stick does not set it"
+  },
+  {
+   "cite": "art runtime/gc/heap.cc:3506-3512",
+   "reads": "HeapGrowthMultiplier() is that 3.0 while the process cares about pause times (foreground), else 1.0"
+  },
+  {
+   "cite": "art runtime/gc/heap.cc:3525-3533",
+   "reads": "after a non-sticky (full) GC: delta = used x (1/0.75 - 1) = used/3; grow = min(delta, max_free 8 MB), then max(grow, min_free 512 KB); target = used + grow x 3"
+  },
+  {
+   "cite": "art runtime/gc/heap.cc:3562-3570",
+   "reads": "after a sticky (young) GC the target only shrinks, to used + max_free x 3, when that is below the current target"
+  }
+ ],
+ "answer": "For survivors of 24 MB or more, used/3 >= 8 MB, so grow = 8 MB and the headroom is 8 MB x 3 = 24 MB, fixed: it does not scale with the survivors. Below 24 MB of survivors it would scale (used/3 x 3 = used). In the background (multiplier 1.0) it would be 8 MB. The 192 MB growth limit caps the footprint.",
+ "checks": [
+  "P18/P19: 24 MB after every logged full GC in 7 runs read here and all 5 of P18, survivors 41-59 MB (survivors.json, P18 gc-headroom.json)",
+  "P20: the explicit GCs of am dumpheap -g read 46MB/70MB, 48MB/72MB, 46MB/70MB and 51MB/75MB: +24 MB after an explicit full GC too"
+ ],
+ "soWhat": "Every MB of survivors cut lowers the footprint the Java heap refills to by one MB; the 24 MB above it is set by system properties the app does not own (and this run may not change)."
+}
