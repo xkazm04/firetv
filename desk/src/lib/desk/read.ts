@@ -59,6 +59,34 @@ export const itemKey = (pageId: string, n: number, seen: Map<string, number>, la
   return again > 1 ? `${base}#${again}` : base;
 };
 
+/**
+ * The order a read page's items keep (HW5). With no printed number repeated on the page it is the printed order, never height
+ * alone, so a two-column sheet keeps 1, 2, 3 (the sort is stable, so a tie keeps the model's order). A repeat - a number that
+ * comes again with the same label, or again with none; 1a and 1b are not one - means a sheet whose sections restart at 1:
+ * walk the items top to bottom by band and left to right inside a band, start a new section at the first item whose number and
+ * label the current section already holds, keep the sections in that page order, and print-sort inside each. One band is the
+ * band of its first item: the items sorted by cy, an item is in the row when its cy is not below the end of the row's first item's
+ * band; on an equal cx the upper item comes first. Two sections side by side in two columns are not split (a known limit).
+ */
+export function orderItems<T extends { n: number; label?: string; cx: number; cy: number; band: [number, number] }>(items: T[]): T[] {
+  const n = (v: number) => (Number.isFinite(v) ? v : Infinity);
+  const byPrint = (a: T, b: T) => (n(a.n) === n(b.n) ? (a.label ?? "").localeCompare(b.label ?? "") : n(a.n) < n(b.n) ? -1 : 1);
+  const id = (i: T) => `${n(i.n)}|${i.label ?? ""}`;
+  if (new Set(items.map(id)).size === items.length) return [...items].sort(byPrint);
+  const down = [...items].sort((a, b) => a.cy - b.cy), walk: T[] = [];
+  for (let i = 0; i < down.length;) {
+    const end = down[i].band[1]; let j = i + 1;
+    while (j < down.length && down[j].cy <= end) j++;
+    walk.push(...down.slice(i, j).sort((a, b) => a.cx - b.cx || a.cy - b.cy));
+    i = j;
+  }
+  const out: T[] = []; let section: T[] = [], held = new Set<string>();
+  const close = () => { out.push(...section.sort(byPrint)); section = []; held = new Set(); };
+  for (const it of walk) { if (held.has(id(it))) close(); section.push(it); held.add(id(it)); }
+  close();
+  return out;
+}
+
 export async function readPage(imageBase64: string, subject: Subject, w: number, h: number, pageId = "page", who?: ReadWho) {
   const { json, provider, ms } = await vision<{ items: Array<{ number: number; text: string; y: number; x: number; label?: string }> }>({
     imageBase64,
@@ -74,12 +102,11 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
   const finite = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
   const num = (n: number) => (finite(n) ? n : Infinity);
   const at = (v: number, size: number) => Math.min(size, Math.max(0, Math.round(v * size)));
-  // printed order, never height alone: a two-column sheet keeps 1, 2, 3 (the sort is stable, so one number keeps the model's order)
-  const items: PageItem[] = (json.items || []).filter((i) => i && typeof i.text === "string" && finite(i.x) && finite(i.y)).map((i) => {
+  const items: PageItem[] = orderItems((json.items || []).filter((i) => i && typeof i.text === "string" && finite(i.x) && finite(i.y)).map((i) => {
     const x = unit(i.x), y = unit(i.y), lo = at(y - half, h), hi = at(y + half, h);
     const label = typeof i.label === "string" && i.label.trim() ? i.label.trim() : undefined;
     return { n: i.number, ...(label ? { label } : {}), text: i.text.trim(), cx: at(x, w), cy: at(y, h), band: [Math.min(lo, hi), Math.max(lo, hi)] as [number, number], key: "", fingerprint: key(i.text) };
-  }).sort((a, b) => (num(a.n) === num(b.n) ? (a.label ?? "").localeCompare(b.label ?? "") : num(a.n) < num(b.n) ? -1 : 1));
+  }));
   const seen = new Map<string, number>();
   for (const it of items) it.key = itemKey(pageId, it.n, seen, it.label);
   return { items, provider, ms };

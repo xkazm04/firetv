@@ -552,9 +552,46 @@ test('robustness-2: an item with a position that is not a finite number is dropp
  for(const i of r.items){assert(i.cx>=0&&i.cx<=1000,`cx ${i.cx}`);assert(i.cy>=0&&i.cy<=2000,`cy ${i.cy}`);assert(i.band[0]>=0&&i.band[1]<=2000&&i.band[0]<=i.band[1],`band ${i.band}`);}
  const p=r.items.find(i=>i.n===6);assert.deepEqual([p.cx,p.cy],[1000,2000],'a pixel position is clamped to the page edge');
 });
-test('robustness-2: a two-column sheet keeps 1, 2, 3; two items with the same number keep the model\'s order',async()=>{
+test('robustness-2: a two-column sheet with distinct numbers keeps 1, 2, 3',async()=>{
+ const r=await readOf([row(2,'two',0.7,0.1),row(1,'one',0.2,0.6),row(3,'three',0.2,0.1)]);
+ assert.deepEqual(r.items.map(i=>i.text),['one','two','three'],'printed number first, never height alone');
+});
+test('HW5: a number that repeats with no label means sections that restart; the old pin\'s repeat half reads in the HW5 order',async()=>{
+ // OLD (printed number, ties stable): one, two, two again, three. NEW (sections): two, three | one, two again
  const r=await readOf([row(2,'two',0.7,0.1),row(1,'one',0.2,0.6),row(3,'three',0.2,0.1),row(2,'two again',0.7,0.2)]);
- assert.deepEqual(r.items.map(i=>i.text),['one','two','two again','three'],'printed number first, never height alone; ties stable');
+ assert.deepEqual(r.items.map(i=>i.text),['two','three','one','two again']);
+ assert.deepEqual(r.items.map(i=>i.key.replace(/^.*?:/,'')),['2','3','1','2#2'],'itemKey still gives the second 2 its #2');
+});
+const shuffle=(rows,order)=>order.map((k)=>rows.find((r)=>r.text===k));
+test('HW5: two stacked sections numbered 1 to 3 read A1 A2 A3 B1 B2 B3, given in any order, for maths, English and Essay',async()=>{
+ const rows=[row(1,'A1',0.3,0.1),row(2,'A2',0.3,0.2),row(3,'A3',0.3,0.3),row(1,'B1',0.3,0.5),row(2,'B2',0.3,0.6),row(3,'B3',0.3,0.7)];
+ for(const subject of ['maths','english','essay'])for(const order of [['B1','A2','B3','A1','B2','A3'],['A1','B1','A2','B2','A3','B3'],['B3','B2','B1','A3','A2','A1']]){
+  const r=await readOf(shuffle(rows,order),subject,1000,1000);
+  assert.deepEqual(r.items.map(i=>i.text),['A1','A2','A3','B1','B2','B3'],`${subject}: ${order}`);
+ }
+ const r=await readOf(rows,'maths',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.key.replace(/^.*?:/,'')),['1','2','3','1#2','2#2','3#2'],'keys come from itemKey');
+});
+test('HW5: lettered parts split by the label, and a page of 1a 1b 2 alone is not split',async()=>{
+ const lab=(number,label,text,y)=>({number,label,text,x:0.3,y});
+ const r=await readOf([lab(1,'a','S1a',0.1),lab(1,'b','S1b',0.2),row(2,'S2',0.3,0.3),lab(1,'b','T1b',0.6),lab(1,'a','T1a',0.5)],'maths',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.text),['S1a','S1b','S2','T1a','T1b']);
+ const one=await readOf([row(2,'S2',0.3,0.3),lab(1,'b','S1b',0.2),lab(1,'a','S1a',0.1)],'maths',1000,1000);
+ assert.deepEqual(one.items.map(i=>i.text),['S1a','S1b','S2'],'no repeat: the printed sort');
+});
+test('HW5: an Essay page whose items all carry the same number reads top to bottom',async()=>{
+ const r=await readOf([row(1,'third',0.5,0.8),row(1,'first',0.5,0.1),row(1,'second',0.5,0.45)],'essay',1000,1000);
+ assert.deepEqual(r.items.map(i=>i.text),['first','second','third']);
+});
+test('HW5: one band is the band of its first item, read left to right; an equal x puts the upper item first',()=>{
+ const {orderItems}=require(src('lib/desk/read.ts'));
+ const it=(n,t,cx,cy)=>({n,t,cx,cy,band:[cy-50,cy+50]});
+ // 1 and 2 sit in one band (cy 100 and 140): the right one is higher on the page, but the band reads left to right
+ const o=orderItems([it(1,'right',500,100),it(1,'left',100,140),it(1,'low',100,400)]);
+ assert.deepEqual(o.map(i=>i.t),['left','right','low']);
+ const tie=orderItems([it(1,'lower',100,140),it(1,'upper',100,100)]);
+ assert.deepEqual(tie.map(i=>i.t),['upper','lower']);
+ assert.equal(orderItems([]).length,0);
 });
 test('robustness-2: w or h of 0 is refused with a 400 in the desk\'s words, no page is added',async()=>{
  blank();
