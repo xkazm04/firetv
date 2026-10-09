@@ -132,6 +132,16 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - recommendation: method-commitment — no drain stamps a row resolved from a code reading; the rows stay `open`, so the ledger's `--recertify` re-asks each one on the claude CLI. Trigger: the next `node uat/driver/linga-text.cjs --recertify`
   - status: open
   - ceiling: a claude-CLI recertify is still LT, not L2
+- **LG-23** — Correction stops: interruption cost against coverage
+  - origin: 2026-09-15-lt-recert/LT-ondrej-16-J5-3, 2026-09-15-lt-recert/LT-ondrej-16-J3-3, 2026-09-15-lt-recert/LT-oksana-34-J3-4, 2026-09-15-lt-recert/LT-klara-13-J3-2, 2026-09-15-lt-recert2-beginners/LT-tomas-9-J4-4; "But stopping the whole conversation twice in four replies? Let me finish talking." (ondrej-16, 2026-09-15-lt-recert)
+  - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (09-15 drain)*. Opposing verdicts: Adéla and Petra find 2.5 stops per ten turns right; the gap and cap (`lib/english/conversation.ts:99`) are one rate for everyone, and the preference is on or off
+  - status: open
+  - ceiling: any single rate is wrong for someone in a shared household
+- **LG-24** — A taught error repeated in the same scene is not followed up
+  - origin: 2026-09-15-lt-recert/LT-ondrej-16-J3-4, 2026-09-15-lt-recert/LT-martin-45-J3-4, 2026-09-15-lt-recert/LT-petra-38-J3-2, 2026-09-15-lt-recert2-beginners/LT-viktor-67-J3-3; "I said 'five euro' straight after learning 'four euros' and nobody helped me catch it again." (petra-38, 2026-09-15-lt-recert)
+  - recommendation: build (hypothesis: the model cannot see what it already taught; prompts were not stored) — the prompt asks for repeated errors (`lib/english/conversation.ts:322`), but `context()` omits this scene's moments (`conversation.ts:83-90`), and review skips the same episode (`lib/english/review.ts:23`). Pass the scene's moments into the turn context; a repeated taught error gets the right form modelled in the partner's next line, with no extra stop
+  - status: open
+  - ceiling: a follow-up in the partner's line is modelling, not teaching, and easy to miss
 
 ## Essay Master
 

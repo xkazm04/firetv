@@ -210,3 +210,9 @@ Raised by the five 2026-09-15 LT runs (codex played and judged them, so they are
 - Inside the adult date scene, what may the partner reciprocate: polite interest and compliments on what was said, never attraction to the learner?
 - Does a refusal vary and move the scene on, rather than repeat?
 - Where does this line sit against LG-20, the code check for minors, so that loosening it for adults cannot reach a child?
+
+**LG-23 · How often a scene stops to teach, and for whom.** Six Characters found the stops too many: *"stopping the whole conversation twice in four replies? Let me finish talking."* (Ondřej, 16). Adéla and Petra found 2.5 per ten turns right. Klára's own criterion passed while the rubric's density target failed. Today there is one rate (B1+: one stop in any three turns, four a rehearsal; A1–A2: one in four, two), and the preference is on or off.
+- Is there a third preference, *save fixes for the end*, that lists fixes on the recap instead of stopping?
+- Should a stop be kept for meaning-blurring errors, with everything else held for the recap, whatever the preference?
+- Should *Not now* on a moment lower that learner's rate, and does that rate persist across scenes?
+- How does this trade against LG-24, following up a repeated error without adding a stop?
