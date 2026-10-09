@@ -9,6 +9,25 @@ import { slip as slipById } from "@/lib/rules/maths";
 import { SCHOOL_UNIT_SLIPS } from "@/lib/rules/school";
 import { likeTopic } from "@/lib/rules/kinds";
 
+/** The local day a moment falls in, as the evening log and a snapped page are stamped with it (store.ts dayed/stamped, page.reading). */
+export const dayOf = (at: number): string => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+
+/**
+ * Tonight's sheet: the seated learner's newest maths page snapped today that is being read now or was read with at
+ * least one problem. A page with no day stamp (an older session) is not tonight's; a failed or empty page is not
+ * either. The homework door opens this page, and its caption says so by the same answer; with none, the door asks
+ * for a photo. Older pages stay on the desk.
+ */
+export function tonightsSheet(s: Pick<Session, "pages" | "pageIx" | "reading">, now = Date.now()): { page: Session["pages"][number]; ix: number } | null {
+  const today = dayOf(now);
+  for (let ix = s.pages.length - 1; ix >= 0; ix--) {
+    const page = s.pages[ix];
+    if (page.subject !== "maths" || page.day !== today) continue;
+    if (page.items.length > 0 || (s.reading && s.pages[s.pageIx]?.id === page.id)) return { page, ix };
+  }
+  return null;
+}
+
 /** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
 export type TopicState = "secure" | "here" | "next" | "later";
 

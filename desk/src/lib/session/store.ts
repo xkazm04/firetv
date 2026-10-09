@@ -11,6 +11,7 @@ import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
+import { dayOf } from "@/tv/mathsRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
 import { addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
@@ -80,7 +81,7 @@ export interface PageItem { n: number; text: string; cx: number; cy: number; ban
  * when it is made - by the route that asked, else by the reducer from the learner at the desk. Older sessions have none:
  * settleOwners gives each the learner the desk's own record names.
  */
-export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; }
+export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; }
 export interface Task { id: string; sub: Subject; name: string; min: number; done: boolean; }
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; owner?: string; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; owner?: string; }
@@ -498,7 +499,6 @@ export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
 /** The local day a moment falls in, as the log is stamped with it. */
-const dayOf = (at: number): string => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
 const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !!(l.problems.length || l.hints || l.hard.length);
 
 /**
@@ -546,7 +546,8 @@ function step(s: Session, e: Event): Session {
     case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
-      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
+      // `day` is the local day it was snapped, kept when the same page is read again in place (an older page without one stays without)
+      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me, ...(ix >= 0 ? (s.pages[ix].day ? { day: s.pages[ix].day } : {}) : { day: dayOf(Date.now()) }) }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
       n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; n.awaiting = null; break; }
     // the desk asks for a page and stays where it is; the phone answers with page.reading
     case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;

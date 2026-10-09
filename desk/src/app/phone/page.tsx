@@ -14,6 +14,7 @@ import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
 import { forensicAt, planAt } from "@/tv/keys";
+import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
@@ -174,8 +175,8 @@ export default function Phone() {
     const w = 1280, h = Math.round((sh / sw) * 1280); const c = document.createElement("canvas"); c.width = w; c.height = h;
     c.getContext("2d")!.drawImage(src, 0, 0, w, h); return { url: c.toDataURL("image/jpeg", 0.85), w, h };
   };
-  /** How many pages of this module are already on the desk — a sheet has more than one side. */
-  const pagesOf = (sub: Subject) => s?.pages.filter((p) => p.subject === sub).length ?? 0;
+  /** How many pages of this module were snapped tonight — a sheet has more than one side. */
+  const pagesOf = (sub: Subject) => { const today = dayOf(Date.now()); return s?.pages.filter((p) => p.subject === sub && p.day === today).length ?? 0; };
   const titleFor = (sub: Subject, base: string) => { const n = pagesOf(sub); return n >= 1 ? `${base} · page ${n + 1}` : base; };
   // a snap is a shot, not a send
   const snap = () => { const v = video.current; if (!v || !v.videoWidth) return setMsg("camera not ready"); const { url, w, h } = toJpeg(v, v.videoWidth, v.videoHeight);

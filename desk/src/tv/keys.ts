@@ -15,7 +15,7 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
-import { continueCard, likeUnit } from "@/tv/mathsRows";
+import { continueCard, likeUnit, tonightsSheet } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
@@ -303,8 +303,9 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     else if (at === "teach") o.nav("topics", topicsFocus(s));
     // Get ready for school opens on its list, the question closed
     else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", 0); }
-    else { const pi = s.pages.findIndex((p) => p.subject === "maths");
-      if (pi >= 0) { o.ev({ type: "page.select", pageIx: pi }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
+    // tonight's sheet opens; anything else (nothing, an older sheet, a failed read) asks for tonight's photo
+    else { const sheet = tonightsSheet(s);
+      if (sheet) { o.ev({ type: "page.select", pageIx: sheet.ix }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
   },
   learner: (s, k, _, o) => {
     const stops = learnerStops(s), at = stopAt(stops, s.focus);

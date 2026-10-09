@@ -477,3 +477,39 @@ test('case 7: a job saved as running is not running after the desk restarts',()=
  assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
  assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
 });
+
+// ---- HW2: the homework door opens tonight's sheet, never the oldest page on the desk ----
+test('HW2: the door opens a maths page snapped tonight with problems; yesterday\'s, a failed one and an unstamped one ask for a photo',()=>{
+ const {tvKey,LOCAL}=require(src('tv/keys.ts'));const {tonightsSheet,dayOf}=require(src('tv/mathsRows.ts'));
+ const door=(s)=>tvKey({...s,screen:'tonight',focus:s.pages.length?1:0},'select',LOCAL).events;
+ const asks=[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'}];
+ onPage();
+ let s=store.getSession();
+ assert.equal(s.pages[0].day,dayOf(Date.now()),'a page is stamped with the day it was snapped');
+ assert.equal(tonightsSheet(s)?.ix,0);
+ assert.deepEqual(door(s).slice(0,2),[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0}],'tonight\'s page with problems: the door opens it');
+ const old={...s.pages[0],id:'old',day:'2000-1-1'},bare={...s.pages[0],id:'bare',day:undefined};
+ assert.deepEqual(door({...s,pages:[old]}),[...asks],'yesterday\'s page and nothing tonight: the door asks');
+ assert.deepEqual(door({...s,pages:[bare]}),asks,'a page with no day stamp is not tonight\'s');
+ const failed={...s.pages[0],id:'f',items:[],provider:'error'};
+ assert.deepEqual(door({...s,pages:[old,failed]}),asks,'tonight\'s failed page: the door asks');
+ const pi=door({...s,pages:[failed,old,s.pages[0]]}).find(e=>e.type==='page.select');
+ assert.equal(pi.pageIx,2,'the newest page with problems, not the oldest');
+});
+
+test('HW2: a learner\'s first sheet tonight is not titled page N+1',()=>{
+ const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(phone,/p\.subject === sub && p\.day === today/,'the title counts only tonight\'s pages of the subject');
+ onPage();
+ const {dayOf}=require(src('tv/mathsRows.ts'));
+ const s=store.getSession();const today=dayOf(Date.now());
+ const count=(pages)=>pages.filter(p=>p.subject==='maths'&&p.day===today).length;
+ assert.equal(count([{...s.pages[0],day:'2000-1-1'}]),0,'an older page does not make tonight\'s first sheet "page 2"');
+ assert.equal(count(s.pages),1);
+});
+test('HW2: the door and its caption use the one predicate',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8'),keys=fs.readFileSync(src('tv/keys.ts'),'utf8');
+ assert.match(tv.split('function doorCaption')[1].split('\n}')[0],/tonightsSheet\(s\)/);
+ assert.match(keys,/tonightsSheet\(s\)/);
+ assert.doesNotMatch(keys,/s\.pages\.findIndex\(\(p\) => p\.subject === "maths"\)/,'the oldest-page lookup is gone');
+});
