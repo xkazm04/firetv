@@ -142,6 +142,11 @@ Drained from the five 2026-09-15 LT runs (codex played and judged them; analysis
   - recommendation: build (hypothesis: the model cannot see what it already taught; prompts were not stored) — the prompt asks for repeated errors (`lib/english/conversation.ts:322`), but `context()` omits this scene's moments (`conversation.ts:83-90`), and review skips the same episode (`lib/english/review.ts:23`). Pass the scene's moments into the turn context; a repeated taught error gets the right form modelled in the partner's next line, with no extra stop
   - status: open
   - ceiling: a follow-up in the partner's line is modelling, not teaching, and easy to miss
+- **LG-25** — Situations named in the goal are dropped from the first plan: the goal is cut at 160 characters
+  - origin: 2026-09-15-lt-recert2-goal/LT-adela-17-J2-3, 2026-09-15-lt-recert2-goal/LT-jana-29-J2-1, 2026-09-15-lt-recert2-goal/LT-lukas-24-J2-3, 2026-09-15-lt-recert2-goal/LT-martin-45-J2-2, 2026-09-15-lt-recert2-goal/LT-oksana-34-J2-3, 2026-09-15-lt-recert2-goal/LT-petra-38-J2-3; "I asked for stakeholder disagreement at the start, and I still had to reject two suggestions and type it again." (martin-45, 2026-09-15-lt-recert2-goal)
+  - recommendation: build — root cause verified against the stored goal answers: the goal question accepts 400 characters (`lib/english/check.ts:346`) but saves `said.slice(0, 160)` (`check.ts:349`), and the plan reads `prefs.goal || k.goal` (`check.ts:192`), so the truncated copy wins. All six repeated situations sit past character 160; the three goals under 160 lost nothing. XS: plan from the whole answer, or keep the preference at 400 (`lib/english/rules.ts:15`, `english/LingaPhone.tsx:51`). Then, only if a re-run still drops situations, extend the ef1dcb40 coverage check from the interest to the goal
+  - status: open
+  - ceiling: a situation can be present in a title and still be practised thinly; coverage is not fit
 
 ## Essay Master
 
