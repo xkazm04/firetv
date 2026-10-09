@@ -207,13 +207,7 @@ object Courses {
             Content.table("tracks/$id").map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),Surfaces.all.first { s->s.id==it.getValue("surface") },it.number("aiLaneM")) },
             Content.table("tracks/$id-spots").map { TrackSpot(it.getValue("kind"),it.number("fraction"),it.number("laneM")) })
     }
-    /** Course [index], built once and kept: a selection (the game's catalogue, [CoursePrewarm]) goes through here. */
     fun course(index: Int): Course = synchronized(built) { built[index]?:build(index).also { built[index]=it } }
-    /** Course [index] if a selection built it, else a build that is not kept (P21 card 15). Built outside the lock, so a
-     *  walk of [playable] never holds up a selection. */
-    private fun peek(index: Int): Course = synchronized(built) { built[index] }?:build(index)
-    /** The indices of the courses kept: tests only. */
-    internal fun kept(): List<Int> = synchronized(built) { built.indices.filter { built[it]!=null } }
     /** Same order and stable legacy indices as before; elements materialise on access. */
     val all: List<Course> = object: AbstractList<Course>(),RandomAccess {
         override val size get()=ids.size
@@ -227,12 +221,9 @@ object Courses {
     val playableIndices=Content.table("active-tracks").map { row->
         ids.indexOf(row.getValue("id")).also{require(it>=0){"Unknown active course"}}
     }.also{require(it.isNotEmpty() && it.distinct().size==it.size)}
-    /** Every playable course, for a walk of the whole list (only /routes walks it). P20: walking it once kept all of them,
-     *  14.76 MiB of courses the probe never races. A course a selection built is the kept one; any other is built for the
-     *  walk and not kept. A course to race is taken from [all] or [course]. */
     val playable: List<Course> = object: AbstractList<Course>(),RandomAccess {
         override val size get()=playableIndices.size
-        override fun get(index: Int)=peek(playableIndices[index])
+        override fun get(index: Int)=course(playableIndices[index])
     }
     fun nextPlayable(index:Int)=playableIndices[(playableIndices.indexOf(index)+1).mod(playableIndices.size)]
     /** Catalogue metadata straight from the tables, byte-identical to Course.json, without baking any geometry. */
