@@ -128,3 +128,13 @@ Each persona takes 10–17 minutes with six running at once. Under that load a f
 ## 9. Not yet
 
 Word practice and games built on what moments collect. Writing Linga sessions to the shared history so the parent recap shows them. Re-checking the level automatically after a number of sessions. Showing the record of checks as a picture of growth over terms (it is kept, not yet drawn).
+
+## Open questions (09-15 drain)
+
+Raised by the 2026-09-15 LT runs (codex played and judged them). Backlog: `docs/BACKLOG.md` LG-18. Evidence: `docs/uat-insights/2026-09-15-lt.md` and `2026-09-15-lt-j1b.md`. Confidence (LG-10) and the verdict's grounding (LG-8) are build items and are not repeated here.
+
+**LG-18 · Say-task credit and the ladder.** Two of the errors run in opposite directions. Martin's successful B1 answer and Ondřej's B1 narration got a partial, while Oksana's summary credited a story she never told. All three near placements across both runs sit one band **above** the true band. Lukáš spent three of five tasks on C1 partials, because a partial holds the band.
+- Is the upward lean the judge, or the Character model playing learners above their level? Answering that needs runs where the learner's answers are fixed text, not model-written.
+- Should two partials in a row at one band step down, or end the check at the lower band with medium confidence?
+- At A1, may a listening task ask its question in the learner's language (LG-14) without changing what it measures?
+- A say task is judged by the model and mapped by code (at band = pass, one below = partial). Should the verdict quote the words that earned the band, as the summary will (LG-8)?

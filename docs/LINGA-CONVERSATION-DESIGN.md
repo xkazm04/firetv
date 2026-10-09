@@ -190,3 +190,23 @@ Release gates: no spoken-credit from taps or copied model phrases; uncertain aud
 The credit rules behind that gate are enforced in code, in `desk/src/lib/english/credit.ts`: a formula (a yes, a thanks, a greeting) earns nothing, each skill's quote must have its shape (a repair asks to repeat or clarify, a request asks for something, the rest need three words), and a quote that repeats four or more consecutive words the scene already showed is stored as supported. The prompt is no longer the only guard; the lists are data a teacher can widen.
 
 The central design question for testing is concrete: **Does replaying one meaningful moment help people speak more independently the next time?**
+
+## Open questions (09-15 drain)
+
+Raised by the five 2026-09-15 LT runs (codex played and judged them, so they are leads). Each question has a backlog id in `docs/BACKLOG.md` and its evidence in `docs/uat-insights/`. No question is answered here.
+
+**LG-4 · The independent retry after coaching.** Every Character tested in J4, across three runs, finished without trying the coached thing again unaided: *"Then let me try by myself! It stopped after three answers."* (Tomáš, 9). Today replay asks a *new* question and marks the reply supported. Take Two re-asks the same line, but only in Adult mode, only from Cut notes, and it writes nothing.
+- In Family mode, is the retry Take Two from a coaching note, or a later partner line that re-asks the coached target with the help hidden?
+- Does an unaided retry write evidence (on your own) when it lands, and does a miss write anything?
+- How many retries before the scene moves on, so that a beginner is not drilled?
+- The coach sometimes works on an older answer than the one the learner is stuck on (hypothesis, unverified). Does coaching always take the latest reply?
+
+**LG-15 · What a learner with no mistakes takes home.** Jana (C1) and Lukáš (B2) finished rehearsals with nothing to keep: *"Give me one register distinction or a sharper alternative I wouldn't have reached myself."* Moments are for errors and for words reached for in another language. Cut's notes rule out "a valid alternative, a style choice".
+- Should a word moment at B2+ offer a register choice, an idiom the scene wants, or a sharper alternative, and how is it kept from inventing a mistake?
+- Should it be a stop, or a line on the recap only?
+- What does the TV recap show when there is no moment and no reviewed phrase? Today it shows progress stones and counts.
+
+**LG-21 · Interest the date partner may show an adult.** Lukáš asked to practise showing interest respectfully. The partner answered "I'll keep things friendly" three times. The adult rule says "never flirt explicitly … Decline warmly", and the scene says it is "not a personal relationship".
+- Inside the adult date scene, what may the partner reciprocate: polite interest and compliments on what was said, never attraction to the learner?
+- Does a refusal vary and move the scene on, rather than repeat?
+- Where does this line sit against LG-20, the code check for minors, so that loosening it for adults cannot reach a child?
