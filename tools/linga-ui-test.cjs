@@ -132,7 +132,9 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Pause & coach',exact:true}).click(),'coach',{expectLine:false,noLine:'a coaching note is not a partner line'});await tv.waitForSelector('.linga-comparison');await tv.screenshot({path:path.join(out,'tv-coach.png')});
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Replay with a new question',exact:true}).click(),'replay');await tv.waitForSelector('.linga-speaker');
  await phone.screenshot({path:path.join(out,'phone-replay.png')});await tv.screenshot({path:path.join(out,'tv-replay.png')});
- await waitCommand(phone,()=>phone.getByRole('button',{name:'Finish rehearsal',exact:true}).click(),'finish',{expectLine:false,noLine:'finishing ends the scene: no new partner line'});await tv.waitForSelector('.linga-track');
+ await waitCommand(phone,()=>phone.getByRole('button',{name:'Finish rehearsal',exact:true}).click(),'finish',{expectLine:false,noLine:'finishing ends the scene: no new partner line'});
+ // the TV is on the recap when the session says so, then when the TV draws it: .linga-tv carries data-view=<screen> (LingaTV.tsx:93, view.ts:618). The hero varies (tape, comparison or track), so the wait holds on the screen, not on a hero part
+ for(let i=0;i<240&&(await current()).screen!=='linga-recap';i++)await new Promise(r=>setTimeout(r,250));assert.equal((await current()).screen,'linga-recap');await tv.waitForSelector('.linga-tv[data-view="linga-recap"]');
  await phone.getByRole('button',{name:'My map',exact:true}).click();assert.equal(await phone.locator('.linga-skill').count(),8);
  const print=await phone.context().newPage();await print.goto(base+'/english/print?learner=linga-browser-child');await print.waitForSelector('.linga-print table');assert.equal(await print.locator('tbody tr').count(),8);await print.pdf({path:path.join(out,'learning-map.pdf'),format:'A4',preferCSSPageSize:true});
  assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
