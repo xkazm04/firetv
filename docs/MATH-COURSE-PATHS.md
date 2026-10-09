@@ -39,6 +39,7 @@ per school system, and on a path judged `'calc'` only its practice `shapes` (the
 |---|---|---|---|---|---|
 | `school` | School maths | 17 in five strands, seven bars (Fractions, Equations, Decimals and percent, Ratio and rates, Geometry and data, Equations, Geometry and data) | true | `'school'` | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), Ratio and sharing, Unit rates and direct proportion, Area of rectangles, triangles and composite shapes, Mean and range (W7 batch 3), then two-step equations and equations with brackets and x on both sides, then Pythagoras' theorem and Probability of an event (v2 M2b, section 2f), with their US/UK/CZ/DE years |
 | `calc1` | Calculus 1 | 22 in six strands | false | `'calc'` | `CALC1_SPINE`; no topic has a year |
+| `calc2` | Calculus 2 | 6 in one strand (v2 M3b-2: by parts, trigonometric integrals, trigonometric substitution, partial fractions, choosing a technique; v2 M3b-3b: `calc2-approx`, approximate integration, Stewart 9e 7.7, OpenStax Volume 2 3.6) | false | `'calc'` | `CALC2_SPINE`; no topic has a year, and `calc2-approx` carries the first Calculus 2 shape, `approx-integral` (`rules/calc2.ts`), while the other five use the two integral shapes |
 
 Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 37 ids, none in two paths), so
 `topicIn(id)` finds a topic without knowing the path, and `pathOfTopic(id)` names the path it is on.
@@ -553,7 +554,8 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/calc-word-test.cjs` | v2 M3a: the sweep of the three word templates (500 seeds each; specs not well formed, problems not fair, worked answers not right, printed numbers not drawn - all 0, the table printed); controls; a right working on a part rings nothing; the corpus table of what reads into a spec and into parts |
 | `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
 | `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row (three cells since v2 M3b-2); a calc2 learner saved and surviving a load; set names on the landing and the phone |
-| `tools/calc2-path-test.cjs` | v2 M3b-2, the Calculus 2 path: the five-topic spine (Stewart 9e 7.1-7.5, OpenStax Volume 2 3.1-3.5, the two integral shapes, prerequisites on earlier calc2 topics only); the record (judged `'calc'`, no school year, no lessons); 20 hand-worked fixtures that are well formed and that `checkAnswer` marks right, wrong, and as the named `lost-constant` and `sign` slips; a stubbed set judged Calculus whose prompt asks only for the topic's shapes; Calculus 1's set prompt and stance pinned whole and Calculus 2 naming Calculus II and its methods; the quoted `'calc2'` only in `paths.ts` and `calculus2.spine.ts` |
+| `tools/calc2-path-test.cjs` | v2 M3b-2, the Calculus 2 path: the five-topic spine (Stewart 9e 7.1-7.5, OpenStax Volume 2 3.1-3.5, the two integral shapes, prerequisites on earlier calc2 topics only); the record (judged `'calc'`, no school year, no lessons); 20 hand-worked fixtures that are well formed and that `checkAnswer` marks right, wrong, and as the named `lost-constant` and `sign` slips; a stubbed set judged Calculus whose prompt asks only for the topic's shapes; Calculus 1's set prompt and stance pinned whole and Calculus 2 naming Calculus II and its methods; the quoted `'calc2'` only in `paths.ts` and `calculus2.spine.ts` (six topics since v2 M3b-3b: the `calc2-approx` fixtures, T_5 and S_4 on 1/x over [1, 2], and the methods phrase naming the three rules) |
+| `tools/calc2-approx-test.cjs` | v2 M3b-3b, approximate integration: the frozen set requests (`tools/calc-sets-frozen.json`, 27 topics, written at the base) equal byte for byte; `approx-integral` by Stewart 7.7's hand values (T_5 0.6956349, M_5 0.6919079, S_4 0.6932540 on 1/x over [1, 2]; T_4 of x^2 over [0, 2] 2.75): right, wrong (the exact integral, another rule, off in the fourth place), absolute (22 on [0, 4]), sign, unsure, degenerate, refused, the printed question, the reader (six page phrasings), the leak rule, no chain for a calc2 spec, the dispatch; a stubbed calc2-approx set; `pieces` and `rule` kept on the screen |
 | `tools/maths-ruler-test.cjs` | the ruler model's formulas at the school path's fifteen topics (six strands) and its panning Topics ruler; the Calculus panning ruler; the strip, every label whole in at most two lines |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
 | `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions; test 7b: the W7 generators' questions render, fractions and the gap stacked, every number and unit kept; test 7c: the W7 batch-2 generators' questions render, every number, point, % and unit kept; test 7d: the W7 batch-3 generators' questions render or fit a row at 34 px or more (estimated), every number, ratio and unit kept |
@@ -653,13 +655,13 @@ Linear algebra needs a different engine altogether.
   of f on [a, b], only when both are inside the interval. "Find c so that f is continuous" still has no spec. Of the
   corpus's 31 printed questions, 13 read into a spec and none into parts: c13-q1's maximum is at an end
   ([CALCULUS-1-SYLLABUS.md](CALCULUS-1-SYLLABUS.md) has the table, printed by `tools/calc-word-test.cjs`).
-- **Calculus 2 is integration techniques only, and has no lessons** (v2 M3b-2). It has five topics (by parts, trigonometric
+- **Calculus 2 is integration techniques and approximate integration, and has no lessons** (v2 M3b-2, M3b-3b). It has six topics (by parts, trigonometric
   integrals, trigonometric substitution, partial fractions, choosing a technique; Stewart 9e 7.1-7.5, OpenStax Volume 2
-  3.1-3.5), each on `antiderivative` and `definite-integral`; its prerequisites point only at earlier Calculus 2 topics, so
+  3.1-3.5; and approximate integration, 7.7 and 3.6, on `approx-integral`), the first five on `antiderivative` and `definite-integral`; its prerequisites point only at earlier Calculus 2 topics, so
   Calculus 1 is not a prerequisite the desk checks. It has no lessons (ruling 4), no example corpus and no word templates.
   Listed out: volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2: applications of integration, not the techniques
   the owner picked). Moved to M3b-3 as candidate shapes: improper integrals (7.8; a value or a 'diverges' verdict) and
-  approximate integration (7.7; a rule applied with n steps). The M3b-3 card (the next item) names their truth,
+  approximate integration (7.7; a rule applied with n steps; built in M3b-3b). The M3b-3 card names their truth,
   comparison, leak rule and prompt. Follow-up: a technique slip
   (parts, substitution, partial fractions) needs slips keyed by topic; `CALC_AS_SLIPS` tags a slip by shape, so a new
   antiderivative slip would join every Calculus 1 antiderivative topic's list, a Calculus 1 change. Calculus 2 topics use
@@ -689,6 +691,16 @@ Linear algebra needs a different engine altogether.
     series is a function with no closed form to sample, and a Taylor polynomial needs higher derivatives that
     `derivativeAt` does not give.
   The descope goes to the owner, who picked sequences and series.
+- **Approximate integration has a leak residual and no plot on the TV** (v2 M3b-3b, 2026-10-09). `approx-integral` (the trapezoid, midpoint
+  or Simpson's rule with n = 2 to 10 pieces, `rules/calc2.ts`) is marked to four decimal places: a decimal is right within 5e-5 of the
+  value, absolutely, and any other form (a fraction, a constant) within 1e-6, relative; there is no 'unsure' band. The leak rule reads
+  a line as leaking when it states a number within 5e-5 of the value or its negation, so **a hint that rounds the value to fewer than
+  four places does not leak by this rule** (T_5 is 0.6956349, so "about 0.696" passes). The degenerate rule refuses a spec whose value
+  is within 1e-4 of the exact integral or of another rule's value with the same pieces, so Simpson's rule on a cubic or less, and the
+  trapezoid and midpoint rules on a line, are never set; S_10 of 1/x on [1, 2] is refused and S_4, T_5 and M_5 are kept. A calc2 item
+  draws **no plot on the TV** (`MathsTV.tsx` keeps its own check on Calculus 1's shapes), and its working lines are not ticked
+  (`chainChecks` returns null for a calc2 spec); the TV captures of a `calc2-approx` item are owed to the owner. The page reader
+  (`specFromQuestion`) reads the desk's own question and five other phrasings of it, after Calculus 1's reading, which is unchanged.
 - **A limit at infinity is read on two lattices** (fixed 2026-10-09, M3b-3h; measured before as whole numbers only). `limitInf`
   reads f at x = 10^k and again at x = sqrt(2)*10^k, and keeps the first reading only when the two agree (calc-expr.ts, ruling 25).
   `cos(pi*x)`, `sin(pi*x)+1` and `cos(2*pi*x)` at infinity are refused as 'The limit does not exist.', and a working line that claims
