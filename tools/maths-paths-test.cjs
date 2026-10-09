@@ -14,7 +14,6 @@ const {CALC1_SPINE}=require(SPINE_FILE);
 const P=require(PATHS_FILE);
 const {SYLLABUS,expectedIndex}=require(path.join(LIB,'syllabus.ts'));
 const {CALCULUS_1}=require(path.join(LIB,'calculus1.ts'));
-
 /**
  * The practice shapes a Calculus topic may use. THIS LIST IS THE CONTRACT WITH desk/src/lib/rules/calc.ts (the
  * expression engine that generates and checks each shape): a shape added here needs a generator there, and a shape
@@ -31,7 +30,7 @@ test('1: 22 Calculus topics and 17 school topics, ids unique across paths and no
  // path is a deliberate, reviewed edit of this one line (v2 M3a step 0, architecture card 5 part b)
  assert.equal(P.PATHS.calc1.topics.length,22,'the Calculus 1 path length pin');
  assert.equal(CALC1_SPINE.length,P.PATHS.calc1.topics.length);
- assert.equal(P.PATHS.calc2.topics.length,5,'the Calculus 2 path length pin (v2 M3b-2: integration techniques, 7.1-7.5)');
+ assert.equal(P.PATHS.calc2.topics.length,6,'the Calculus 2 path length pin (v2 M3b-3b: integration techniques 7.1-7.5, then approximate integration 7.7)');
  assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','calc2','school']);
  // W5b: 'Add and subtract fractions' joined the school path in place (owner decision D5); W7 batch 1 added three more
  // fractions units, equivalent fractions first (years never go down along the path)
@@ -207,12 +206,14 @@ const everyTopic=()=>Object.values(P.PATHS).flatMap(p=>p.topics.map(t=>({path:p.
 const CALC_STANCE_TEXT=/first-year university student in Calculus I/;
 
 test('13: every path has a judge - school is judged as school, calc1 as Calculus - and only a Calculus path\'s topics carry shapes',()=>{
+ // required here, not at the top: test 12 asserts that loading paths.ts pulls in no rules module
+ const {CALC2_SHAPES}=require(path.join(root,'src/lib/rules/calc2.ts'));
  assert.equal(P.PATHS.school.judge,'school');
  assert.equal(P.PATHS.calc1.judge,'calc');
  for(const p of Object.values(P.PATHS)){
   assert.ok(JUDGES.includes(p.judge),`${p.id}: judge ${p.judge} is one of ${JUDGES}`);
   for(const t of p.topics){
-   if(p.judge==='calc')assert.ok(Array.isArray(t.shapes)&&t.shapes.length>=1&&t.shapes.every(s=>SHAPES.includes(s)),`${p.id}/${t.id}: a Calculus topic carries its shapes`);
+   if(p.judge==='calc')assert.ok(Array.isArray(t.shapes)&&t.shapes.length>=1&&t.shapes.every(s=>SHAPES.includes(s)||(p.id==='calc2'&&CALC2_SHAPES.includes(s))),`${p.id}/${t.id}: a Calculus topic carries its shapes`);
    else assert.ok(!('shapes' in t),`${p.id}/${t.id}: a school topic carries no shapes`);
    assert.equal(P.judgeOfTopic(t.id),p.judge,`${t.id}: judgeOfTopic`);
   }

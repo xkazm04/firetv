@@ -20,6 +20,7 @@ const store=require(src('lib/session/store.ts'));
 const kinds=require(src('lib/rules/kinds.ts'));
 const maths=require(src('lib/rules/maths.ts'));
 const C=require(src('lib/rules/calc.ts'));
+const C2=require(src('lib/rules/calc2.ts'));
 const items=require(src('lib/desk/items.ts'));
 const {hint,HINT_WITHHOLD}=require(src('lib/desk/hint.ts'));
 const P=require(src('lib/library/paths.ts'));
@@ -28,7 +29,7 @@ after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);
 
 const stubText=(answer)=>{const seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);return {raw:JSON.stringify(answer)};}});return seen;};
 const code=(file)=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
-const A=(f)=>({shape:'antiderivative',f}),D=(f,a,b)=>({shape:'definite-integral',f,a,b});
+const A=(f)=>({shape:'antiderivative',f}),D=(f,a,b)=>({shape:'definite-integral',f,a,b}),AI=(f,a,b,pieces,rule)=>({shape:'approx-integral',f,a,b,pieces,rule});
 
 /**
  * One worked answer per spec, by hand (not by the engine): `right` is the antiderivative with its constant, or the value;
@@ -61,18 +62,21 @@ const FIXTURES=[
  {topic:'calc2-strategy',ref:'7.5/3.5',spec:A('x*e^(x^2)'),right:'e^(x^2)/2 + C',wrong:'e^(x^2) + C'},
  {topic:'calc2-strategy',ref:'7.5/3.5',spec:A('x^2*ln(x)'),right:'x^3*ln(x)/3 - x^3/9 + C',wrong:'x^3*ln(x)/3 + C'},
  {topic:'calc2-strategy',ref:'7.5/3.5',spec:D('x^2*e^x',0,1),right:'e - 2',wrong:'e - 1'},
+ // 7.7 / 3.6 approximate integration (v2 M3b-3b): Stewart's 1/x over [1, 2], to four decimal places
+ {topic:'calc2-approx',ref:'7.7/3.6',spec:AI('1/x',1,2,5,'trapezoid'),right:'0.6956',wrong:'0.6931'},
+ {topic:'calc2-approx',ref:'7.7/3.6',spec:AI('1/x',1,2,4,'simpson'),right:'0.6933',wrong:'0.6931'},
 ];
 const NO_C=(r)=>r.replace(/\s*\+\s*C$/,'');
 
-test('1: the spine - five topics, plain data, our own blurbs, sections cited, shapes only the two integral shapes, prerequisites only earlier calc2 topics',()=>{
- assert.deepEqual(CALC2_SPINE.map(t=>t.id),['calc2-parts','calc2-trig-integrals','calc2-trig-sub','calc2-partial-fractions','calc2-strategy']);
- assert.deepEqual(CALC2_SPINE.map(t=>t.sections),[['7.1'],['7.2'],['7.3'],['7.4'],['7.5']],'Stewart 9e chapter 7');
- assert.deepEqual(CALC2_SPINE.map(t=>t.openstax),[['3.1'],['3.2'],['3.3'],['3.4'],['3.5']],'OpenStax Calculus Volume 2 chapter 3');
+test('1: the spine - six topics, plain data, our own blurbs, sections cited, shapes only the two integral shapes or a Calculus 2 shape, prerequisites only earlier calc2 topics',()=>{
+ assert.deepEqual(CALC2_SPINE.map(t=>t.id),['calc2-parts','calc2-trig-integrals','calc2-trig-sub','calc2-partial-fractions','calc2-strategy','calc2-approx']);
+ assert.deepEqual(CALC2_SPINE.map(t=>t.sections),[['7.1'],['7.2'],['7.3'],['7.4'],['7.5'],['7.7']],'Stewart 9e chapter 7');
+ assert.deepEqual(CALC2_SPINE.map(t=>t.openstax),[['3.1'],['3.2'],['3.3'],['3.4'],['3.5'],['3.6']],'OpenStax Calculus Volume 2 chapter 3');
  const seen=new Set();
  for(const t of CALC2_SPINE){
   assert.deepEqual(Object.keys(t).sort(),['blurb','id','name','openstax','prereq','sections','shapes','strand'],`${t.id}: the spine fields and nothing else`);
   assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${t.id}: the blurb is one sentence`);
-  assert.ok(t.shapes.length>=1&&t.shapes.every(s=>['antiderivative','definite-integral'].includes(s)&&C.CALC_SHAPES.includes(s)),`${t.id}: only the two integral shapes`);
+  assert.ok(t.shapes.length>=1&&t.shapes.every(s=>(['antiderivative','definite-integral'].includes(s)&&C.CALC_SHAPES.includes(s))||C2.CALC2_SHAPES.includes(s)),`${t.id}: only the two integral shapes or a CALC2_SHAPES id`);
   assert.ok(t.prereq.every(p=>seen.has(p)),`${t.id}: a prerequisite that is not an earlier calc2 topic`);
   seen.add(t.id);
  }
@@ -93,7 +97,7 @@ test('2: the record - calc2 is judged Calculus, has no school year, says it foll
  assert.equal(P.expectedOn('calc2','us',17),null);
 });
 
-test('3: every fixture is well formed, prints a question, and belongs to a shape its topic may use; every topic has both shapes worked',()=>{
+test('3: every fixture is well formed, prints a question, and belongs to a shape its topic may use; every topic has each of its shapes worked',()=>{
  for(const f of FIXTURES){
   const w=C.wellFormed(f.spec);assert.ok(w.ok,`${f.topic} ${JSON.stringify(f.spec)}: ${w.why}`);
   assert.ok(C.question(f.spec),`${JSON.stringify(f.spec)} prints a question`);
@@ -130,7 +134,7 @@ test('5: a stubbed calc2 set is judged Calculus and its prompt asks only for the
   store.dispatch({type:'reset'});
   store.dispatch({type:'profile.draft',patch:{id:'calc2-learner',name:'Two',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
   for(const t of CALC2_SPINE){
-   const specs=FIXTURES.filter(f=>f.topic===t.id).map((f,i)=>({shape:f.spec.shape,f:f.spec.f,at:'',a:String(f.spec.a??''),b:String(f.spec.b??''),difficulty:1+i%3}));
+   const specs=FIXTURES.filter(f=>f.topic===t.id).map((f,i)=>({shape:f.spec.shape,f:f.spec.f,at:'',a:String(f.spec.a??''),b:String(f.spec.b??''),...(f.spec.pieces!==undefined?{pieces:f.spec.pieces,rule:f.spec.rule}:{}),difficulty:1+i%3}));
    const seen=stubText({specs});
    const got=await items.makeItems(t.id,'calc2-learner',3,{word:false});
    assert.equal(kinds.kindOfTopic(t.id),'calc');
@@ -171,7 +175,7 @@ test('6: Calculus 1\'s assembled set prompt and Calculus stance equal their exac
   }
   // Calculus 2: its own words, from its record
   seen=stubText(reply);await hint('maths',LINEAR,{path:'calc2'});
-  const methods='integration by parts, trigonometric integrals, trigonometric substitution and partial fractions';
+  const methods='integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and the trapezoid, midpoint and Simpson\'s rules';
   assert.ok(seen[0].system.includes(`You are a maths tutor for a first-year university student in Calculus II. Use the course's methods and notation - ${methods} - and name the rule that applies. `));
   assert.doesNotMatch(seen[0].system,/Calculus I(?!I)/,'Calculus II, not Calculus I');
   assert.doesNotMatch(seen[0].system,/the Fundamental Theorem/);

@@ -1,15 +1,14 @@
 /**
- * The Calculus 2 spine: the five integration-technique topics of a university Calculus II course as the desk names them -
+ * The Calculus 2 spine: the integration-technique topics of a university Calculus II course as the desk names them -
  * id, the Stewart 9e and OpenStax sections they take, name, strand, a one-sentence blurb, prerequisites, and the practice
  * shapes each topic may use. NOTHING else: no example, no answer, no lesson (Calculus 2 has none, v2 M3b ruling 4).
  *
  * The topic list follows one public, openly licensed syllabus, cited and never quoted: OpenStax Calculus Volume 2, chapter 3
- * (Techniques of Integration), sections 3.1-3.5; the Stewart 9e numbers (chapter 7, sections 7.1-7.5) sit beside them.
- * Topic names and blurbs are OUR OWN WORDS. Improper integrals (7.8) and approximate integration (7.7) are M3b-3's
- * candidates; volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2) are listed out (docs/MATH-COURSE-PATHS.md section 10).
+ * (Techniques of Integration), sections 3.1-3.5 and, from M3b-3b, 3.6 (Numerical Integration); the Stewart 9e numbers (chapter 7, sections 7.1-7.5 and 7.7) sit beside them.
+ * Topic names and blurbs are OUR OWN WORDS. Improper integrals (7.8) are an M3b-3 candidate (approximate integration, 7.7, was built in M3b-3b); volumes, arc length and surface area (6.2, 6.3, 8.1, 8.2) are listed out (docs/MATH-COURSE-PATHS.md section 10).
  *
- * Only the two integral shapes are used: no shape is added (ruling 2), so every topic is set and checked by the existing
- * Calculus expression engine. A prerequisite points only at an earlier topic of THIS spine (ruling 3).
+ * The five technique topics use only the two integral shapes (ruling 2), set and checked by the existing Calculus expression
+ * engine; M3b-3b adds the first Calculus 2 shape (approx-integral, rules/calc2.ts) and its topic. A prerequisite points only at an earlier topic of THIS spine (ruling 3).
  *
  * Client-safe: plain data, no import at all, so a TV screen, the phone and a pipeline may each read it.
  */
@@ -17,7 +16,7 @@
 /**
  * The practice shapes a Calculus 2 topic may use: the two integral shapes of rules/calc.ts' nine (listed again in
  * tools/maths-paths-test.cjs), or, from M3b-3, an id of rules/calc2.ts CALC2_SHAPES (a type only: this file stays data and
- * pulls in no module at run time; the list is empty until a shape slice adds one).
+ * pulls in no module at run time; M3b-3b put approx-integral there).
  */
 export type Calc2Shape = "antiderivative" | "definite-integral" | import("../rules/calc2").Calc2SpecShape;
 
@@ -72,5 +71,12 @@ export const CALC2_SPINE: Calc2SpineTopic[] = [
     blurb: "Faced with an integral and no label, you read its form and pick substitution, parts, a trig method or partial fractions.",
     prereq: ["calc2-trig-sub", "calc2-partial-fractions"],
     shapes: ["antiderivative", "definite-integral"],
+  },
+  {
+    id: "calc2-approx", sections: ["7.7"], openstax: ["3.6"],
+    name: "Approximate integration", strand: "Techniques of integration",
+    blurb: "When an integral has no closed form, its value is estimated by cutting the interval into equal pieces and combining the function's values with the trapezoid, midpoint or Simpson's rule.",
+    prereq: [],
+    shapes: ["approx-integral"],
   },
 ];

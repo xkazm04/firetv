@@ -155,3 +155,50 @@ test('dispatch: isCalcSpec is true, kindOfSpec is calc, and calc.ts gives calc2\
  assert.equal(C.withheldCalc(T5),C2.calc2Withheld(T5));
  assert.equal(C.CALC_SHAPES.includes('approx-integral'),false,'Calculus 1\'s list is unchanged');
 });
+
+// ------------------------------------------------------------------ the topic: a stubbed set, and the spec on the screen
+
+const reg=require(src('lib/engines/registry.ts'));
+const store=require(src('lib/session/store.ts'));
+const items=require(src('lib/desk/items.ts'));
+const P=require(src('lib/library/paths.ts'));
+const stubText=(answer)=>{const seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);return {raw:JSON.stringify(answer)};}});return seen;};
+const asSpec=(s,difficulty)=>({shape:s.shape,f:s.f,a:String(s.a),b:String(s.b),pieces:s.pieces,rule:s.rule,difficulty});
+
+test('set: a stubbed calc2-approx set asks for approx-integral alone, in Calculus 2\'s words, and keeps only the well-formed specs',async()=>{
+ reg.useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(()=>[1,0])})});
+ try{
+  const t=P.topicIn('calc2-approx');
+  assert.deepEqual([P.pathOfTopic('calc2-approx'),t.prereq,t.shapes,t.sections],['calc2',[],['approx-integral'],undefined]);
+  assert.deepEqual(P.shapesOfTopic('calc2-approx'),['approx-integral']);
+  assert.equal(P.topicsOf('calc2').map(x=>x.id).at(-1),'calc2-approx','after calc2-strategy');
+  assert.equal(P.PATHS.calc2.calcWords.methods,"integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and the trapezoid, midpoint and Simpson's rules");
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{id:'approx-learner',name:'Approx',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
+  // T_5, M_5 and S_4 are well formed; S_10 is degenerate; Simpson with 5 pieces is malformed
+  const seen=stubText({specs:[asSpec(T5,1),asSpec(M5,2),asSpec(S4,3),asSpec(AI('1/x',1,2,10,'simpson'),2),asSpec(AI('1/x',1,2,5,'simpson'),2)]});
+  const got=await items.makeItems('calc2-approx','approx-learner',3,{word:false});
+  assert.equal(seen.length,1,'one round is enough');
+  const req=seen[0];
+  assert.deepEqual(req.schema.properties.specs.items.properties.shape.enum,['approx-integral']);
+  const props=req.schema.properties.specs.items.properties;
+  assert.deepEqual(props.pieces,{type:'integer',minimum:2,maximum:10});
+  assert.deepEqual(props.rule,{type:'string',enum:['trapezoid','midpoint','simpson']});
+  assert.deepEqual([...req.prompt.matchAll(/^- ([a-z-]+): /gm)].map(m=>m[1]),['approx-integral'],'only its own line');
+  assert.match(req.prompt,/- approx-integral: f, a, b, pieces \(2 to 10, even for simpson\) and rule \(trapezoid, midpoint or simpson\) - the question is that rule with that many subintervals, given to four decimal places\./);
+  assert.ok(req.system.includes('a university Calculus 2 desk'));assert.doesNotMatch(req.system,/Calculus 1/);
+  assert.doesNotMatch(req.prompt+req.system,/0\.69/,'no value is ever in the prompt');
+  assert.equal(got.items.length,3);
+  assert.deepEqual(got.items.map(i=>i.spec).map(s=>[s.shape,s.pieces,s.rule]).sort(),[['approx-integral',4,'simpson'],['approx-integral',5,'midpoint'],['approx-integral',5,'trapezoid']]);
+  for(const i of got.items){assert.equal(C.wellFormed(i.spec).ok,true);assert.equal(i.question,C.question(i.spec).plain);}
+ }finally{reg.resetProviders();}
+});
+
+test('specShown: a practice set on the screen keeps pieces and rule, and still no answer field',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'shown-learner',name:'Shown',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
+ store.dispatch({type:'practice.set',practice:{topic:'calc2-approx',marked:false,items:[{n:1,question:C.question(T5).plain,spec:{...T5,answer:'0.6956',value:0.6956}}]}});
+ const spec=store.getSession().practice.items[0].spec;
+ assert.deepEqual(spec,T5,'pieces and rule kept; answer and value dropped');
+ assert.equal(C.checkAnswer(spec,'0.6956').verdict,'right');
+});
