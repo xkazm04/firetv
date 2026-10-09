@@ -225,3 +225,13 @@ says the size of the change is missing.
 
 **Owed:** a real phone, heard audio (the voice call answered 503: no voice configured), and the owner's reading of the
 transcript. The reread kept session.json across the restart, so the disk proof is the direct read of learners.json in W7.
+
+**Follow-up.** (a) A note never carries a verdict label: `decideVerdicts` now strips a leading label (strong, faulty,
+neutral, weak, good, great, excellent, solid, fine, ok, okay, then `:` or a spaced dash) from the model's note on every
+verdict, through `cleanNote` in `rules/essay.ts`; a verdict word anywhere else stays. The test is 'a note never carries a
+verdict label: the verdict is code's' in `tools/essay-rules-test.cjs`. Kill test (not committed): with `cleanNote`
+returning its input, that test alone went red (79 pass, 1 fail). (b) Sentence 4's strong verdict, whose note names the
+missing size of the change, stays for the owner's reading; the verdict rule for checkable evidence is his call and is
+unchanged. (c) Why sentence 3 was neutral is not traced. Under the Evidence rule a checkable sentence with a number is
+strong, so the model must have reported a support other than checkable; the harness does not keep the raw observation, so
+this is inferred, not shown.
