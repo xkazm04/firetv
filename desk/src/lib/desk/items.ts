@@ -37,6 +37,7 @@ import type { PracticeItem } from "../session/store";
 import { calcWordsOf, pathOfTopic, shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
@@ -166,11 +167,12 @@ async function makeLinearItems(topicId: string, learnerId: string, n: number): P
 
 // ------------------------------------------------------------------ Calculus 1: specs, printed and checked by code
 
-type Param = "at" | "a" | "b" | "side" | "on" | "kind" | "x0" | "steps";
+type Param = "at" | "a" | "b" | "side" | "on" | "kind" | "x0" | "steps" | "pieces" | "rule";
 /** The parameters each shape takes beyond its function: what its question prints, nothing more. */
-const PARAMS: Record<CalcShape, readonly Param[]> = {
+const PARAMS: Record<CalcShape | Calc2SpecShape, readonly Param[]> = {
   evaluate: ["at"], derivative: [], "derivative-at": ["at"], antiderivative: [], "definite-integral": ["a", "b"],
   limit: ["at", "side"], "critical-point": ["on"], extremum: ["on", "kind"], "newton-step": ["x0", "steps"],
+  "approx-integral": ["a", "b", "pieces", "rule"],
 };
 /**
  * A point is a string in the plain notation, because it may be a constant (pi/4) or, for a limit, inf - and the
@@ -184,9 +186,11 @@ const PARAM_SCHEMA: Record<Param, JSONSchema> = {
   on: { type: "array", items: POINT, minItems: 2, maxItems: 2 },
   kind: { type: "string", enum: ["max", "min"] },
   steps: { type: "integer" },
+  pieces: { type: "integer", minimum: 2, maximum: 10 },
+  rule: { type: "string", enum: ["trapezoid", "midpoint", "simpson"] },
 };
 /** What each shape asks, and what its parameters mean - for the prompt. */
-const SHAPE_LINES: Record<CalcShape, string> = {
+const SHAPE_LINES: Record<CalcShape | Calc2SpecShape, string> = {
   evaluate: "evaluate: f and at - the question is to find f(at).",
   derivative: "derivative: f - the question is to differentiate f.",
   "derivative-at": "derivative-at: f and at - the question is to find f'(at).",
@@ -196,6 +200,7 @@ const SHAPE_LINES: Record<CalcShape, string> = {
   "critical-point": "critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one turning point of f lies in the interval, well inside it and not near either end.",
   extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.",
   "newton-step": "newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.",
+  "approx-integral": "approx-integral: f, a, b, pieces (2 to 10, even for simpson) and rule (trapezoid, midpoint or simpson) - the question is that rule with that many subintervals, given to four decimal places.",
 };
 
 /** The Calculus set's system prompt; the course is named by the topic's own path's record (Calculus 1's text is unchanged). */
@@ -206,12 +211,12 @@ const calcSystem = (topicId: string) =>
   "an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.";
 
 /** The topic's own practice shapes, from its path's record (paths.ts: a topic of a path judged 'calc'; none otherwise). */
-const shapesOf = (topicId: string): CalcShape[] => shapesOfTopic(topicId);
+const shapesOf = (topicId: string): (CalcShape | Calc2SpecShape)[] => shapesOfTopic(topicId);
 /** True when a shape of the topic leaves a field of the shared schema unused (two shapes with different parameters). */
-const leavesUnused = (shapes: CalcShape[]) => { const all = new Set(shapes.flatMap((s) => PARAMS[s])); return shapes.some((s) => PARAMS[s].length < all.size); };
+const leavesUnused = (shapes: (CalcShape | Calc2SpecShape)[]) => { const all = new Set(shapes.flatMap((s) => PARAMS[s])); return shapes.some((s) => PARAMS[s].length < all.size); };
 
 /** One schema: the shape restricted to the topic's own list, every parameter typed, a difficulty, and no other field. */
-function calcSchema(shapes: CalcShape[], want: number): JSONSchema {
+function calcSchema(shapes: (CalcShape | Calc2SpecShape)[], want: number): JSONSchema {
   const props: Record<string, JSONSchema> = { shape: { type: "string", enum: shapes }, f: { type: "string", minLength: 1, maxLength: 80 } };
   for (const k of new Set(shapes.flatMap((s) => PARAMS[s]))) props[k] = PARAM_SCHEMA[k];
   props.difficulty = { type: "integer", minimum: 1, maximum: 5 };
@@ -221,7 +226,7 @@ function calcSchema(shapes: CalcShape[], want: number): JSONSchema {
 /** The reply is held only to "a list of objects": one spec off its shape is dropped by code, not the whole round. */
 const CALC_ACCEPT: JSONSchema = { type: "object", properties: { specs: { type: "array", items: { type: "object" } } }, required: ["specs"] };
 
-function askCalc(topicId: string, shapes: CalcShape[], memory: string[], slips: string[], want: number, avoid: string[]) {
+function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory: string[], slips: string[], want: number, avoid: string[]) {
   const t = topicIn(topicId);
   // the slips as the desk would say them, never as ids
   const said = slips.map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
@@ -261,22 +266,22 @@ function point(v: unknown, limit = false): number | string | undefined {
 const RESULT_KEYS = ["answer", "solution", "truth", "value", "result"];
 
 /** A raw spec from the model as a CalcSpec holding only its shape's parameters, or null when it is off the topic's list. */
-function toSpec(raw: unknown, shapes: CalcShape[]): { spec: CalcSpec; difficulty: number } | null {
+function toSpec(raw: unknown, shapes: (CalcShape | Calc2SpecShape)[]): { spec: CalcSpec | Calc2Spec; difficulty: number } | null {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
   const r = raw as Record<string, unknown>;
   if (RESULT_KEYS.some((k) => k in r)) return null;
-  const shape = r.shape as CalcShape;
+  const shape = r.shape as CalcShape | Calc2SpecShape;
   if (!shapes.includes(shape) || typeof r.f !== "string" || !r.f.trim()) return null;
   const out: Record<string, unknown> = { shape, f: r.f.trim() };
   for (const k of PARAMS[shape]) {
     const v = r[k];
     if (k === "side") { if (v === "+" || v === "-") out.side = v; }
-    else if (k === "kind" || k === "steps") out[k] = v;
+    else if (k === "kind" || k === "steps" || k === "pieces" || k === "rule") out[k] = v;
     else if (k === "on") out.on = Array.isArray(v) ? v.map((x) => point(x)) : v;
     else out[k] = point(v, shape === "limit" && k === "at");
   }
   const d = Number(r.difficulty);
-  return { spec: out as unknown as CalcSpec, difficulty: Number.isFinite(d) ? Math.min(5, Math.max(1, Math.round(d))) : 3 };
+  return { spec: out as unknown as CalcSpec | Calc2Spec, difficulty: Number.isFinite(d) ? Math.min(5, Math.max(1, Math.round(d))) : 3 };
 }
 
 const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
@@ -293,7 +298,7 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
   const memory = me.memory;
   const slips = me.skills[topicId]?.slips ?? [];
   const shapes = shapesOf(topicId);
-  const kept: { spec: CalcSpec; question: string; difficulty: number }[] = [];
+  const kept: { spec: CalcSpec | Calc2Spec; question: string; difficulty: number }[] = [];
   const seen = new Set<string>();
   let provider = "";
   let ms = 0;

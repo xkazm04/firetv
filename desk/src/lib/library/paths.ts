@@ -138,7 +138,7 @@ export function calcTopics(): PathTopic[] {
 }
 
 /** A Calculus topic's practice shapes (a copy); empty for a topic on no path judged 'calc'. */
-export function shapesOfTopic(id: string): CalcShape[] {
+export function shapesOfTopic(id: string): (CalcShape | Calc2SpecShape)[] {
   return judgeOfTopic(id) === "calc" ? (topicIn(id)?.shapes?.slice() ?? []) : [];
 }
 

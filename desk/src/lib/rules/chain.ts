@@ -19,6 +19,7 @@
  */
 import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, type Expr } from "./calc-expr";
 import { FUNCTION_TOL, ROUNDED_CLOSE, type CalcSpec } from "./calc";
+import { isCalc2Spec } from "./calc2";
 
 export interface ChainLine {
   tag: string;
@@ -299,9 +300,12 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
   return { lines: out, from, definite };
 }
 
-/** Each working line of a Calculus item checked against its own spec: true, false or null per line. */
+/**
+ * Each working line of a Calculus item checked against its own spec: true, false or null per line. A Calculus 2 spec
+ * (rules/calc2) has no chain: every line is null, so its working stays bare (v2 M3b-3b ruling 32).
+ */
 export function chainChecks(spec: unknown, working: readonly string[]): ChainResult[] {
-  if (!spec || typeof spec !== "object" || !working.length) return working.map(() => null);
+  if (!spec || typeof spec !== "object" || !working.length || isCalc2Spec(spec)) return working.map(() => null);
   try {
     const tagged = tagLines(spec as CalcSpec, working);
     return checkChain(tagged.lines, { from: tagged.from ?? undefined, definite: tagged.definite });

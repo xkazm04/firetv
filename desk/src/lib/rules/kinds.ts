@@ -20,6 +20,7 @@
 import { chainPen } from "./chain";
 import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
 import { partsFromQuestion, specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
+import type { Calc2Spec } from "./calc2";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
 import { slipsShown } from "./slips";
 import { judgeOfTopic, pathOfTopic } from "../library/paths";
@@ -36,7 +37,7 @@ export const kindOfSpec = (spec: unknown): ItemKind => (isSchoolSpec(spec) ? "sc
  * Calculus task (v2 M3a, rules/calc partsFromQuestion: the maximum and the minimum on an interval), its parts' specs,
  * read only where no single spec reads. Pure; never throws.
  */
-export interface Question { kind: ItemKind; calc: CalcSpec | null; school: SchoolSpec | null; parts: CalcSpec[] | null }
+export interface Question { kind: ItemKind; calc: CalcSpec | Calc2Spec | null; school: SchoolSpec | null; parts: CalcSpec[] | null }
 export function readQuestion(text: unknown): Question {
   const calc = calcSpecFromQuestion(text);
   const parts = calc ? null : partsFromQuestion(text);

@@ -22,7 +22,7 @@ import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
 import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
-import { isCalc2Spec } from "../rules/calc2";
+import { isCalc2Spec, type Calc2Spec } from "../rules/calc2";
 import { isPartLabel, type PartLabel } from "../rules/calc-word";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
@@ -115,7 +115,7 @@ export interface PracticeItem {
    * question does not already print - no result. Which engine reads it is decided by `spec.shape` alone: a Calculus
    * shape is never read by school code, a school shape never by Calculus code.
    */
-  spec?: CalcSpec | SchoolSpec;
+  spec?: CalcSpec | Calc2Spec | SchoolSpec;
   /** A school item's tier (1 or 2), as the generator that wrote it was asked for: computed by code, never a model's number. */
   tier?: 1 | 2;
   /**
@@ -154,7 +154,7 @@ export interface Worked { topic: string; title: string; idea: string; own: boole
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
-const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
+const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps", "pieces", "rule"] as const;
 /**
  * A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag,
  * and the form a conversion asks for (`to`, Family W7 batch 2: "Write 3/8 as a decimal").
@@ -166,7 +166,7 @@ const plainValue = (v: unknown) => typeof v === "string" || (typeof v === "numbe
  * Dispatched on `shape`: a Calculus shape keeps SPEC_KEYS, a school shape keeps SCHOOL_SPEC_KEYS and must still be
  * well formed by rules/school (a spec that is not is dropped, so no school code ever reads one it cannot judge).
  */
-function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
+function specShown(x: unknown): CalcSpec | Calc2Spec | SchoolSpec | undefined {
   const o = x as Record<string, unknown> | null;
   if (!o || typeof o !== "object") return undefined;
   if ((SCHOOL_SHAPES as readonly unknown[]).includes(o.shape)) {
