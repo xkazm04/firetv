@@ -201,3 +201,27 @@ beside the pieces, so "Delete everything I kept" removes it too). The card valid
 
 A derived title is never a message's own text: titles show on the TV, so an untitled message is "Untitled message"
 (`texts.ts`; a heading or a heading-like first line still names an essay).
+
+## Run of 2026-10-09: one writing episode end to end
+
+One writing episode run in the browser with the real model (`tools/essay-ui-test.cjs`, outside every gate; evidence in
+`uat/runs/2026-10-09-essay-w-run/`). Learner Sam, 15, Evidence lens, the claude CLI (`claude-cli/sonnet`, model `best`).
+
+| Step | Verdict | Time |
+|---|---|---|
+| W1 Seat and pair | pass | |
+| W2 Enter to the lens home | pass | 744 ms, past the 560 ms zoom |
+| W3 Paragraph read (5 sentences) | pass | 27.6 s |
+| W4 Coached: two faulty (4, 5), each with a move and a slotted pattern | pass | |
+| W5 Sentence 4 rewritten on the phone, judged again: faulty to strong, the other four kept | pass | 23.1 s |
+| W6 End session to the recap, which names Essay Master: one reading, 2 of 5 sentences to fix | pass | 1.9 s |
+| W7 learners.json: one `writing` history entry and `writing.evidence` (seen 1) | pass | |
+| W8 No page errors | pass | |
+| Reread after a server restart: the lens home shows Evidence read today | pass | |
+
+No coaching text restated a learner sentence (the "not a ghostwriter" rule held in this run). Two things to read in the
+transcript: sentence 3's note says "Strong" on a neutral verdict, and the rewritten sentence 4 is strong while its note
+says the size of the change is missing.
+
+**Owed:** a real phone, heard audio (the voice call answered 503: no voice configured), and the owner's reading of the
+transcript. The reread kept session.json across the restart, so the disk proof is the direct read of learners.json in W7.
