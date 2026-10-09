@@ -87,6 +87,8 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  await phone.addInitScript(()=>{class FakeRecognition{start(){setTimeout(()=>this.onresult?.({results:[{isFinal:true,0:{transcript:'Could you tell me which bridge you mean, please?'}}]}),60);}stop(){this.onend?.();}abort(){this.onend?.();}}window.SpeechRecognition=FakeRecognition;});
  // the phone pairs first, as it would from the Pair screen's QR: a join takes the TV to its confirmation, so the desk is walked back to the landing after it
  await phone.goto(base+'/phone?pin='+(await current()).pin);await phone.waitForFunction(async()=>(await(await fetch('/api/session')).json()).viewer==='phone');
+ // the phone's cookie is set before its join event lands; a nav sent in between is overwritten by the join (store.ts:507-508), so wait for the join itself
+ for(let i=0;i<200&&!(await current()).joined;i++)await new Promise(r=>setTimeout(r,50));assert.ok((await current()).joined,'the phone joined');
  await event({type:'nav',screen:'landing',focus:1});
  await tv.goto(base+'/tv?key='+encodeURIComponent(key));await tv.waitForSelector('[data-role="desk-object"]');await tv.locator('.stage').click({position:{x:20,y:20}});await tv.keyboard.press('Enter');await tv.waitForSelector('.linga-tv');assert.equal((await current()).subject,'english');
  await phone.waitForSelector('.linga-phone');
