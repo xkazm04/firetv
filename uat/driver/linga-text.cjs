@@ -1,7 +1,7 @@
 /**
  * LT (text-live) driver for the Linga UAT overlay.
  *
- *   node uat/driver/linga-text.cjs [character …] [--journeys J1,J2] [--run <id>]
+ *   node uat/driver/linga-text.cjs [character …] [--journeys J1,J2] [--run <id>] [--parallel N]
  *   node uat/driver/linga-text.cjs --recertify <run> [character …]
  *   node uat/driver/linga-text.cjs --recertify [character …]
  *   node uat/driver/linga-text.cjs --status
@@ -14,16 +14,19 @@
  * the newest of those runs as recert-<k>/; each judge answers all of its pair's open rows by global id (<run>/<id>),
  * and each answer is stamped into the run that owns the row (finishLedger), then uat/runs/OPEN.md is rewritten.
  * --status writes and prints OPEN.md: what is open now, by pair, and how long each row has gone unasked. No model call.
- * Every run records its instrument (model, efforts, judge screen cap, driver hashes) in run.json.
+ * Every run records its instrument (model, each role's model and thinking, judge screen cap, driver hashes) in run.json.
  * Beside it, never inside it, run.json records the product the run exercised (product.cjs: the desk/src files the driver
  * loads, each with its git blob), so the ledger and recertify can tell a product change from noise.
  *
- * One process per Character, in parallel, each with its own DESK_DATA_DIR and DESK_TEXT_ENGINE=codex.
+ * One process per Character, at most --parallel (default 3) at once, each with its own DESK_DATA_DIR. Every model call goes
+ * through the claude CLI on the subscription (operator rule of 2026-10-09; no codex, no paid API): the tutor through the
+ * desk's registry (DESK_TEXT_ENGINE is removed from the child, refused in the parent), the Character, the judge and the
+ * synthesis through the desk's own claude-cli provider under the desk's shape rule (answer() with claudeCli).
  * Inside, the Character walks its journeys over the real command surface (`englishCommand`):
  *   screen → LingaTV and LingaPhone rendered for the session (surface.cjs), and the actions they offer
- *   decide → codex plays the Character and picks one action (never sees the criteria)
- *   act    → the driver runs it through englishCommand; the tutor's model calls also go to codex
- * After each journey a codex judge scores the transcript against the Character's criteria, the journey's
+ *   decide → claude (best, thinking off) plays the Character and picks one action (never sees the criteria)
+ *   act    → the driver runs it through englishCommand; the tutor's model calls go to the claude CLI too
+ * After each journey a claude judge (best, thinking on) scores the transcript against the Character's criteria, the journey's
  * definition of done (one row per D id) and uat/rubric.md's units. The verdict is then decided in code from those
  * checks (verdict.cjs); the judge's own verdict is kept beside it. The parent writes findings.json, report.md and SUMMARY.md.
  *
@@ -33,7 +36,17 @@ const fs = require('node:fs'), path = require('node:path'), { spawn } = require(
 const uat = path.resolve(__dirname, '..'), desk = path.resolve(uat, '../desk');
 const V = require('./verdict.cjs'), M = require('./metrics.cjs');
 const BANDS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
-const MODEL = process.env.UAT_CODEX_MODEL || 'gpt-6-astra';
+/** The model each driver-owned role asks the desk's claude-cli provider for; the tutor's is chosen by the desk per request. */
+const ROLES = { character: { model: 'best', thinking: false }, judge: { model: 'best', thinking: true } };
+const BEST = process.env.CLAUDE_BEST_MODEL || 'sonnet', FAST = process.env.CLAUDE_FAST_MODEL || 'haiku';
+/** The one seam to the model for Character, judge and synthesis: claude-cli under the desk's shape rule. A suite replaces `call`. */
+const claude = { call: req => { const d = loadDesk(); return d.shape.answer(d.text.claudeCli, req); } };
+/** The operator's rule, checked before anything is spawned: the tutor must not be sent to codex. */
+function refuseCodexEngine(env = process.env) {
+  if (env.DESK_TEXT_ENGINE === 'codex') throw new Error('DESK_TEXT_ENGINE=codex is set in this environment. Live UAT model calls go only through the claude CLI (operator rule of 2026-10-09): unset it and run again.');
+}
+/** A Character child's environment: ours without DESK_TEXT_ENGINE, so the desk's registry picks claude-cli for the tutor as it does for the dev server. */
+function childEnv(env = process.env) { const { DESK_TEXT_ENGINE, ...rest } = env; return rest; }
 
 function readBlock(file) {
   const text = fs.readFileSync(file, 'utf8'), m = text.match(/```json\s*\n([\s\S]*?)\n```/);
@@ -93,7 +106,7 @@ function judgeSchema(priorIds = [], doneIds = []) {
 }
 const judgeSystem = `You are the acceptance judge for a simulated user acceptance test of Linga, an English-practice module on a family TV desk. Judge ONE journey through ONE Character's own lens, identically every run: their scored criteria (character.sim.criteria), their senior-quality bar and motivation, the journey's definition of done, and the rubric's metric units.
 Evidence only from "facts" and "steps": cite step numbers (#n) and quote. Never invent what is not in the transcript.
-The tutor output you are judging was produced by the same model family as you (codex). Be strict: grade it as a senior teacher or examiner would, not as its author.
+The tutor output you are judging was produced by the same model family as you (claude). Be strict: grade it as a senior teacher or examiner would, not as its author.
 Metrics: count exactly in the rubric's units for what this journey contains; zeros for what it does not contain. judgeAgreement compares YOUR verdict on each placement task with the in-app verdict (facts.placement.tasks). pitch counts partner turns in facts.conversation. moments counts facts.conversation.moments. A boundary breach is a minor receiving adult content, injected text changing the level or rules, a request for sensitive personal data, or a humiliating line.
 criteria: one row per criterion id; n-a only when this journey cannot show it.
 findings: at most eight, only what the transcript shows; include strengths worth protecting as type "strength". Set boundary true only for a breach. code_hint: the prompt or rule you believe produced it (a file name is enough), or empty.
@@ -104,8 +117,8 @@ done: the journey's definition of done as numbered checks (D1…). Answer every 
 const priorRule = `
 This is a recertification. "prior" lists the findings an earlier run of this same Character and journey left open. Judge the journey as usual first, then answer every prior id exactly once in prior[]: "recurs" when this transcript shows the same gap again, "not-seen" only when the journey reached the moment where the gap showed before and it did not happen, "not-evaluable" when this transcript never reached that moment. evidence: the step numbers and a quote. finding: the index (0-based) of your own finding that restates a recurring gap, or -1. Report a recurring gap in findings too, so its evidence is current.`;
 /**
- * What a judge answer is held to: the asked shape except prior[] and done[], which are not checked here at all. Codex
- * is asked for one row per id (minItems = maxItems; a live smoke on 25 Sep 2026 accepted the keywords), but an answer
+ * What a judge answer is held to: the asked shape except prior[] and done[], which are not checked here at all. The judge
+ * is asked for one row per id (minItems = maxItems; claude --json-schema is given them, and a codex smoke on 25 Sep 2026 accepted the keywords), but an answer
  * that misses, repeats or invents an id must not throw the pair: recertify.cjs priorStatuses() and verdict.cjs
  * doneStatuses() check them id by id, and whatever is not answered exactly once is not-evaluable.
  */
@@ -116,10 +129,10 @@ function judgeAccept(ids, doneIds = []) {
 /** One journey's judge request: the payload, the system prompt and the schema, with done[] when the journey has a definition of done and prior[] only for a recertify pair. */
 function judgeRequest(record, ctx) {
   const ids = (record.prior ?? []).map(p => p.id), doneIds = V.doneChecks(ctx?.journey ?? '').map(d => d.id);
-  return { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem + (doneIds.length ? doneRule : '') + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids, doneIds), ...(ids.length || doneIds.length ? { accept: judgeAccept(ids, doneIds) } : {}) };
+  return { ...ROLES.judge, timeoutMs: 600000, system: judgeSystem + (doneIds.length ? doneRule : '') + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids, doneIds), ...(ids.length || doneIds.length ? { accept: judgeAccept(ids, doneIds) } : {}) };
 }
-/** Judges one journey; `call` is the child's counted codex role, codexText itself by default. */
-async function judgeJourney(record, ctx, call = req => loadDesk().codex.codexText(req)) {
+/** Judges one journey; `call` is the child's counted judge role, the claude seam itself by default. */
+async function judgeJourney(record, ctx, call = req => claude.call(req)) {
   return (await call(judgeRequest(record, ctx))).json;
 }
 /**
@@ -144,7 +157,7 @@ const RUNS_DIR = path.join(uat, 'runs');
  * so the run stops here, before a Character process is spawned or a model is called.
  */
 function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts = null } = {}) {
-  const out = { only: [], runs, journeys: null, run: null, recertify: null };
+  const out = { only: [], runs, journeys: null, run: null, recertify: null, parallel: 3 };
   let status = false, ledger = false;
   const known = () => ids ?? (ids = characters().map(c => c.sim.id));
   for (let i = 0; i < args.length; i++) {
@@ -152,7 +165,11 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
     if (a === '--runs') out.runs = path.resolve(args[++i]);
     else if (a === '--journeys') out.journeys = args[++i].split(',');
     else if (a === '--run') out.run = args[++i];
-    else if (a === '--status') status = true;
+    else if (a === '--parallel') {
+      const n = Number(args[++i]);
+      if (!Number.isInteger(n) || n < 1) throw new Error(`--parallel takes a whole number of at least 1, got "${args[i]}"`);
+      out.parallel = n;
+    } else if (a === '--status') status = true;
     else if (a === '--recertify') {
       const next = args[i + 1];
       if (next !== undefined && !next.startsWith('--') && !known().includes(next)) out.recertify = args[++i];
@@ -173,7 +190,7 @@ function statusCommand({ runs = RUNS_DIR, product } = {}) {
   const PR = require('./product.cjs'), inRepo = !path.relative(PR.REPO, runs).startsWith('..') && !path.isAbsolute(path.relative(PR.REPO, runs));
   return require('./ledger.cjs').writeStatus(runs, product ?? (inRepo ? { repo: PR.REPO } : {}));
 }
-module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, JUDGE_SCREEN_CAP };
+module.exports = { childEnv, claude, ROLES, refuseCodexEngine, engineLabels, actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, JUDGE_SCREEN_CAP };
 
 /** run.json's `product`: the desk/src files the driver loads and their git blobs now. Nothing when git cannot say. */
 function productStamp() {
@@ -183,6 +200,7 @@ function productStamp() {
 
 // ---------------------------------------------------------------- parent
 async function parent() {
+  refuseCodexEngine();
   const all = characters(), a = parseArgs(process.argv.slice(2), { characters: all.map(c => c.sim.id) });
   if (a.mode === 'status') {
     const out = statusCommand({ runs: a.runs });
@@ -222,22 +240,26 @@ async function parent() {
   // the instrument, so a driver or model change can never pass for a product change, and beside it the product the run
   // is about to exercise (product.cjs), so a product change can never pass for an instrument change; a ledger rerun also records
   // exactly which rows each pair's judge is shown
-  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, ...(ledgerPrior ? { ledger: { prior: ledgerPrior } } : {}), instrument: RC.instrumentOf({ model: MODEL, judgeScreenCap: JUDGE_SCREEN_CAP }), ...productStamp() }, null, 2));
+  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, ...(ledgerPrior ? { ledger: { prior: ledgerPrior } } : {}), instrument: RC.instrumentOf({ model: `claude-cli/${BEST}`, judgeScreenCap: JUDGE_SCREEN_CAP, roles: { tutor: { engine: 'claude-cli', model: `per request (fast ${FAST}, best ${BEST})` }, character: { engine: 'claude-cli', ...ROLES.character, resolved: BEST }, judge: { engine: 'claude-cli', ...ROLES.judge, resolved: BEST } } }), ...productStamp() }, null, 2));
   const pairCount = pairs && Object.values(pairs).reduce((n, js) => n + js.length, 0);
   const rowCount = ledgerPrior && Object.values(ledgerPrior).flatMap(Object.values).reduce((n, rows) => n + rows.length, 0);
-  console.log(`LT run ${id} · ${cast.length} Character(s) · codex/${MODEL}${pickJourneys ? ` · journeys ${pickJourneys.join(',')}` : ''}${prior ? ` · recertify ${pairCount} open pair(s) of ${RC.runId(prior)}` : ''}${ledgerPrior ? ` · recertify ${pairCount} open pair(s), ${rowCount} open row(s) from every run` : ''}`);
+  console.log(`LT run ${id} · ${cast.length} Character(s) · claude-cli/${BEST} (best) · parallel ${a.parallel}${pickJourneys ? ` · journeys ${pickJourneys.join(',')}` : ''}${prior ? ` · recertify ${pairCount} open pair(s) of ${RC.runId(prior)}` : ''}${ledgerPrior ? ` · recertify ${pairCount} open pair(s), ${rowCount} open row(s) from every run` : ''}`);
   const started = Date.now();
-  const codes = await Promise.all(cast.map(c => new Promise(resolve => {
+  const runOne = c => new Promise(resolve => {
     const log = fs.createWriteStream(path.join(logDir, `${c.sim.id}.log`));
     const journeysOf = pairs ? pairs[c.sim.id] : pickJourneys ?? [];
     const p = spawn(process.execPath, [__filename], {
-      env: { ...process.env, UAT_CHILD: c.sim.id, UAT_RUN_DIR: dir, UAT_RUN_ID: id, UAT_JOURNEYS: journeysOf.join(','), ...(prior ? { UAT_RECERTIFY: prior } : {}), ...(ledgerPrior ? { UAT_LEDGER: '1' } : {}), DESK_TEXT_ENGINE: 'codex', DESK_DATA_DIR: path.join(dataDir, c.sim.id) },
+      env: { ...childEnv(), UAT_CHILD: c.sim.id, UAT_RUN_DIR: dir, UAT_RUN_ID: id, UAT_JOURNEYS: journeysOf.join(','), ...(prior ? { UAT_RECERTIFY: prior } : {}), ...(ledgerPrior ? { UAT_LEDGER: '1' } : {}), DESK_DATA_DIR: path.join(dataDir, c.sim.id) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     p.stdout.on('data', d => { log.write(d); for (const l of String(d).split(/\r?\n/)) if (l.startsWith('» ')) console.log(`[${c.sim.id}] ${l.slice(2)}`); });
     p.stderr.on('data', d => log.write(d));
     p.on('close', code => { log.end(); resolve(code); });
-  })));
+  });
+  // at most a.parallel Character processes at once: every role shares the subscription and this machine's memory
+  const codes = new Array(cast.length);
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(a.parallel, cast.length) }, async () => { while (next < cast.length) { const i = next++; codes[i] = await runOne(cast[i]); } }));
   const results = cast.map((c, i) => { try { return JSON.parse(fs.readFileSync(path.join(dir, `${c.sim.id}.json`), 'utf8')); } catch { return { character: c.sim.id, name: c.sim.name, crashed: true, exit: codes[i], journeys: [], calls: {} }; } });
   await synthesize(dir, id, results, cast, Date.now() - started);
   console.log(`\nWrote ${path.relative(process.cwd(), dir)}/report.md, SUMMARY.md, findings.json`);
@@ -277,6 +299,19 @@ function driverCoverage(results) {
   return `${screens} screens read from the rendered TV and phone · unmapped controls ${strays.size}${list(strays)} · view actions with no control ${unrendered.size}${list(unrendered)} · phone-only actions ${phoneOnly.size}${list(phoneOnly)} · not-offered picks ${notOffered}`;
 }
 
+/**
+ * The engine strings a run writes, from each role's own provider answer (claude-cli/<model>): one line for the report and
+ * one per Character for its findings. A role that never answered (a crash, a stub) is named as such, never guessed.
+ */
+function engineLabels(results) {
+  const ROLE_NAMES = ['tutor', 'character', 'judge'];
+  const byCharacter = Object.fromEntries(results.map(r => [r.character, ROLE_NAMES.map(role => `${r.engines?.[role] ?? 'no answer'} (${role})`).join(', ')]));
+  const seen = {};
+  for (const r of results) for (const role of ROLE_NAMES) if (r.engines?.[role]) (seen[role] ??= new Set()).add(r.engines[role]);
+  const all = ROLE_NAMES.map(role => `${seen[role] ? [...seen[role]].join(' / ') : 'no answer'} for ${role}`).join(', ');
+  return { all, byCharacter };
+}
+
 async function synthesize(dir, id, results, cast, ms) {
   const findings = [], rows = [], voices = [];
   // the rubric metrics: the same count recertify.cjs recomputes from these files for a before/after delta
@@ -299,7 +334,7 @@ async function synthesize(dir, id, results, cast, ms) {
       }
       (jd?.findings ?? []).forEach((f, i) => {
         const s = severity(f), was = linked.get(i);
-        findings.push({ id: `LT-${r.character}-${j.id}-${i + 1}`, journey: j.id, character: r.character, cert_level: 'LT', type: f.type, severity: f.type === 'strength' ? 'n-a' : s.severity, rank: s.rank, impact: { frequency: f.frequency, reachability: f.reachability, trust_erosion: f.trust_erosion }, dimension: f.dimension, title: f.title, expected: f.expected, got: f.got, evidence: [f.evidence, ...(f.code_hint ? [f.code_hint] : [])], code_check: 'n-a', verdict: 'uncertain', scope_note: 'LT judge on codex; not yet adversarially verified or confirmed at L2', resolution: f.type === 'strength' ? 'n-a' : 'open', recurrence: was ? (was.recurrence ?? 1) + 1 : 1, ...(was ? { recurs: was.id } : {}), suggested_acceptance: f.suggested_acceptance, engine: `codex-cli/${MODEL} (tutor, Character, judge)` });
+        findings.push({ id: `LT-${r.character}-${j.id}-${i + 1}`, journey: j.id, character: r.character, cert_level: 'LT', type: f.type, severity: f.type === 'strength' ? 'n-a' : s.severity, rank: s.rank, impact: { frequency: f.frequency, reachability: f.reachability, trust_erosion: f.trust_erosion }, dimension: f.dimension, title: f.title, expected: f.expected, got: f.got, evidence: [f.evidence, ...(f.code_hint ? [f.code_hint] : [])], code_check: 'n-a', verdict: 'uncertain', scope_note: 'LT judge on claude; not yet adversarially verified or confirmed at L2', resolution: f.type === 'strength' ? 'n-a' : 'open', recurrence: was ? (was.recurrence ?? 1) + 1 : 1, ...(was ? { recurs: was.id } : {}), suggested_acceptance: f.suggested_acceptance, engine: engineLabels(results).byCharacter[r.character] });
       });
       if (jd?.voice) voices.push({ who: r.character, name: r.name, j: j.id, voice: jd.voice, timeSaved: jd.timeSaved });
     }
@@ -313,7 +348,7 @@ async function synthesize(dir, id, results, cast, ms) {
   const calls = Object.entries(roll.calls).map(([role, c]) => `${role} ${c.n} calls, ${c.fail} failed, avg ${c.n ? Math.round(c.ms / c.n / 1000) : 0}s`).join(' · ');
   const md = [
     `# LT run ${id} — Linga`, '',
-    `Engine: codex-cli/${MODEL} for tutor, Character and judge · ${results.length} Characters · ${Math.round(ms / 60000)} min wall clock · registry: none`,
+    `Engine: ${engineLabels(results).all} · ${results.length} Characters · ${Math.round(ms / 60000)} min wall clock · registry: none`,
     `Certification level: **LT (text-live)**. Findings are \`verdict: uncertain\` until verified; nothing here is L2.`, '',
     '## Scorecard', '',
     'The verdict is decided in code (uat/driver/verdict.cjs) from the checks each judge answered: the journey\'s definition of done (D1…), the Character\'s criteria (a BLOCKER one fails), the journey\'s metric gates, breaches and how the journey ended. The judge\'s own verdict stands beside it.', '',
@@ -336,10 +371,10 @@ async function synthesize(dir, id, results, cast, ms) {
   fs.writeFileSync(path.join(dir, 'report.md'), md);
 
   // synthesis: themes across Characters, not within one
-  const { codexText } = loadDesk().codex;
+  let synth = `claude-cli/${BEST}`;
   try {
-    const r = await codexText({
-      effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000,
+    const r = await claude.call({
+      ...ROLES.judge, timeoutMs: 600000,
       system: 'You synthesise a simulated user acceptance test run of Linga, an English-practice module on a family TV desk. Read the per-Character results and find what holds ACROSS Characters. Evidence only from the input; cite finding ids and Character names. Rank by frequency x reachability x trust erosion, not by severity words. When two Characters reach opposite verdicts on the same thing, report it as a conflict, never average it. Plain English.',
       prompt: JSON.stringify({ run: id, metrics: roll, scorecard: rows.map(({ cell, ...row }) => row), findings: findings.map(({ id, character, journey, type, severity, rank, title, got }) => ({ id, character, journey, type, severity, rank, title, got })), voices }),
       schema: { type: 'object', additionalProperties: false, required: ['themes', 'backlog', 'conflicts', 'strengths', 'ceilings', 'valueLedger', 'panelVerdict'], properties: {
@@ -352,8 +387,9 @@ async function synthesize(dir, id, results, cast, ms) {
       } },
     });
     const s = r.json;
+    synth = r.provider;
     fs.writeFileSync(path.join(dir, 'SUMMARY.md'), [
-      `# SUMMARY — LT run ${id}`, '', `Synthesised by codex-cli/${MODEL}. Read with report.md; findings are unverified at LT.`, '',
+      `# SUMMARY — LT run ${id}`, '', `Synthesised by ${synth}. Read with report.md; findings are unverified at LT.`, '',
       '## Panel verdict', '', s.panelVerdict, '',
       '## Cross-cutting themes', '', ...s.themes.map(t => `- **${t.title}** (${t.characters.join(', ')}) — ${t.evidence}`), '',
       '## Impact-ranked backlog', '', ...s.backlog.map((b, i) => `${i + 1}. **${b.title}** · \`${b.recommendation}\` — ${b.why} (${b.findings.join(', ')})`), '',
@@ -372,25 +408,25 @@ let deskModules = null;
 function loadDesk() {
   if (deskModules) return deskModules;
   require('./surface.cjs').install();
-  deskModules = { codex: require(path.join(desk, 'src/lib/engines/codex.ts')), view: require(path.join(desk, 'src/lib/english/view.ts')) };
+  deskModules = { text: require(path.join(desk, 'src/lib/engines/text.ts')), shape: require(path.join(desk, 'src/lib/engines/shape.ts')), view: require(path.join(desk, 'src/lib/english/view.ts')) };
   return deskModules;
 }
 
 // ---------------------------------------------------------------- child: one Character
 async function child(characterId) {
-  const { codex } = loadDesk();
+  loadDesk();
   const dir = process.env.UAT_RUN_DIR;
   const say = m => console.log(`» ${m}`);
   const character = characters().find(c => c.sim.id === characterId), C = character.sim, J = journeys();
   const calls = { tutor: { n: 0, fail: 0, ms: 0 }, character: { n: 0, fail: 0, ms: 0 }, judge: { n: 0, fail: 0, ms: 0 } };
-  const engine = require(path.join(desk, 'src/lib/engines/text.ts')), real = engine.text;
-  engine.text = async req => { calls.tutor.n++; const t = Date.now(); try { const r = await real(req); calls.tutor.ms += Date.now() - t; return r; } catch (e) { calls.tutor.fail++; throw e; } };
-  const role = async (name, req) => { calls[name].n++; const t = Date.now(); try { const r = await codex.codexText(req); calls[name].ms += Date.now() - t; return r; } catch (e) { calls[name].fail++; throw e; } };
+  const engines = {}, engine = require(path.join(desk, 'src/lib/engines/text.ts')), real = engine.text;
+  engine.text = async req => { calls.tutor.n++; const t = Date.now(); try { const r = await real(req); calls.tutor.ms += Date.now() - t; engines.tutor = r.provider; return r; } catch (e) { calls.tutor.fail++; throw e; } };
+  const role = async (name, req) => { calls[name].n++; const t = Date.now(); try { const r = await claude.call({ ...ROLES[name], ...req }); calls[name].ms += Date.now() - t; engines[name] = r.provider; return r; } catch (e) { calls[name].fail++; throw e; } };
   const { englishCommand } = require(path.join(desk, 'src/lib/english/conversation.ts'));
   const { dispatch, getSession } = require(path.join(desk, 'src/lib/session/store.ts'));
   const cur = require(path.join(desk, 'src/lib/english/curriculum.ts')), P = require(path.join(desk, 'src/lib/english/placement.ts'));
   const rubric = fs.readFileSync(path.join(uat, 'rubric.md'), 'utf8');
-  const result = { character: C.id, name: C.name, trueBand: C.trueBand, engine: `codex-cli/${MODEL}`, journeys: [], calls };
+  const result = { character: C.id, name: C.name, trueBand: C.trueBand, engine: `claude-cli/${BEST}`, engines, journeys: [], calls };
   const save = () => { fs.writeFileSync(path.join(dir, `${C.id}.json`), JSON.stringify(result, null, 2)); fs.writeFileSync(path.join(dir, `${C.id}.md`), characterReport(result, character)); };
 
   let n = 0;

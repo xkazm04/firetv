@@ -320,11 +320,13 @@ function finishLedger(rerun, { runs = RUNS } = {}) {
 }
 
 /** What produced a run: every run writes this into run.json so a driver change cannot pass for a product change. */
-function instrumentOf({ model, judgeScreenCap }) {
+function instrumentOf({ model, judgeScreenCap, roles }) {
   const sha = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, f))).digest('hex').slice(0, 16);
   return {
     model, judgeScreenCap,
-    efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
+    // each role's engine, model and thinking setting (claude-cli era); runs before 2026-10-09 recorded `efforts` (codex) instead,
+    // so a recertify across the move reads as an instrument change, never as a product change or a fix
+    ...(roles ? { roles } : {}),
     driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs', 'metrics.cjs', 'product.cjs'].map(f => [f, sha(f)])),
   };
 }
