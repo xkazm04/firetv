@@ -287,9 +287,132 @@
    "arithmetic-slip"
   ]
  },
- "specs": 163,
- "calls": 3690,
+ "specs": 166,
+ "calls": 3756,
  "rows": [
+  {
+   "spec": {
+    "shape": "antiderivative",
+    "f": "1/x"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find int 1/x dx.",
+    "tex": "\\text{Find } \\int \\frac{1}{x}\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Name the rule that undoes each term's derivative, and remember the arbitrary constant. The antiderivative is yours to write.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "antiderivative",
+    "f": "1/x"
+   }
+  },
   {
    "spec": {
     "shape": "antiderivative",
@@ -820,8 +943,8 @@
     [
      "x^3 - 4ln(x) + C",
      {
-      "verdict": "right",
-      "why": "It agrees with what the desk worked out for itself."
+      "verdict": "unsure",
+      "why": "Your answer is not defined everywhere the function is. Check where it holds."
      }
     ],
     [
@@ -1461,6 +1584,129 @@
     ]
    },
    "fromQuestion": null
+  },
+  {
+   "spec": {
+    "shape": "antiderivative",
+    "f": "x e^(x^2)"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find int x e^(x^2) dx.",
+    "tex": "\\text{Find } \\int xe^{x^{2}}\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Name the rule that undoes each term's derivative, and remember the arbitrary constant. The antiderivative is yours to write.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "antiderivative",
+    "f": "x e^(x^2)"
+   }
   },
   {
    "spec": {
@@ -7470,6 +7716,129 @@
    "fromQuestion": {
     "shape": "derivative",
     "f": "e^x"
+   }
+  },
+  {
+   "spec": {
+    "shape": "derivative",
+    "f": "ln(x)"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Differentiate f(x) = ln(x).",
+    "tex": "\\text{Differentiate } f(x) = \\ln(x)."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Name the rule the expression is built with, then say the first step out loud.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "derivative",
+    "f": "ln(x)"
    }
   },
   {

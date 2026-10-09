@@ -55,7 +55,7 @@ const FIXTURES=[
  {topic:'calc2-trig-sub',ref:'7.3/3.3',spec:D('1/sqrt(4 - x^2)',0,1),right:'pi/6',wrong:'pi/3'},
  // 7.4 / 3.4 partial fractions
  {topic:'calc2-partial-fractions',ref:'7.4/3.4',spec:A('1/(x^2 - 1)'),right:'ln(abs(x - 1))/2 - ln(abs(x + 1))/2 + C',wrong:'ln(abs(x - 1))/2 + ln(abs(x + 1))/2 + C'},
- {topic:'calc2-partial-fractions',ref:'7.4/3.4',spec:A('1/(x*(x+1))'),right:'ln(x) - ln(x+1) + C',wrong:'ln(x) + ln(x+1) + C'},
+ {topic:'calc2-partial-fractions',ref:'7.4/3.4',spec:A('1/(x*(x+1))'),right:'ln|x| - ln|x+1| + C',wrong:'ln|x| + ln|x+1| + C'},
  {topic:'calc2-partial-fractions',ref:'7.4/3.4',spec:D('1/(x^2 - 1)',2,3),right:'ln(3/2)/2',wrong:'ln(3/2)'},
  {topic:'calc2-partial-fractions',ref:'7.4/3.4',spec:D('1/(x*(x+1))',1,2),right:'ln(4/3)',wrong:'ln(3/4) + 1'},
  // 7.5 / 3.5 choosing a technique

@@ -58,7 +58,7 @@ const CHECKS=[
  [EVS,'sqrt(2)/2','right'],[EVS,'1/sqrt(2)','right'],[EVS,'√2/2','right'],[EVS,'0.7071','unsure'],[EVS,'-sqrt(2)/2','wrong','sign'],
  [AD,'x^2/2 + C','right'],[AD,'x^2/2','wrong','lost-constant'],[AD,'0.5x^2 + c','right'],[AD,'-x^2/2 + C','wrong','sign'],[AD,'x^2 + C','wrong'],[AD,'x^2/2 + 5','wrong','lost-constant'],
  [AD,'','unsure'],[AD,"F(x) = x^2/2 + C",'right'],[AD,'x^2/2 +','unsure'],
- [{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln(x) + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln|x| + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4 ln(x)','wrong','lost-constant'],
+ [{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln(x) + C','unsure'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4ln|x| + C','right'],[{shape:'antiderivative',f:'3x^2 - 4/x'},'x^3 - 4 ln(x)','wrong','lost-constant'],
  [{shape:'antiderivative',f:'cos(x)'},'sin(x) + C','right'],[{shape:'antiderivative',f:'cos(x)'},'-sin(x) + C','wrong','sign'],[{shape:'antiderivative',f:'cos(x)'},'sin x','wrong','lost-constant'],
  [{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4/4 + C','right'],[{shape:'antiderivative',f:'2x (x^2 + 1)^3'},'(x^2 + 1)^4 + C','wrong'],
  [DI,'1/3','right'],[DI,'0.333','right'],[DI,'0.3','wrong'],[DI,'-1/3','wrong','sign'],[DI,'1/2','wrong'],[DI,'','unsure'],
@@ -422,4 +422,15 @@ test('HL3 leaksCalc: the derivative of x^3 + x^2 said in words leaks; the item\'
  ];
  const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
  assert.deepEqual(bad,[]);
+});
+
+test('MB-B27: an antiderivative undefined where the integrand is defined is not sure, with a domain line; the absolute value is right',()=>{
+ const S={shape:'antiderivative',f:'1/x'},dom=/not defined everywhere/;
+ for(const a of ['ln x + C','ln(x) + C','ln(x)+C']){const r=C.checkAnswer(S,a);assert.equal(r.verdict,'unsure',a);assert.match(r.why,dom);assert.ok(!/abs|absolute|\|/.test(r.why)&&!/ln/.test(r.why),'the line names neither the absolute value nor the answer');}
+ for(const a of ['ln|x| + C','ln(abs(x)) + C'])assert.equal(C.checkAnswer(S,a).verdict,'right',a);
+ // one direction only: an answer defined where the truth is not stays right
+ assert.equal(C.checkAnswer({shape:'derivative',f:'ln(x)'},'1/x').verdict,'right');
+ // an answer that is wrong anyway is still wrong, not softened to unsure
+ assert.equal(C.checkAnswer(S,'ln x').verdict,'wrong');
+ assert.equal(C.checkAnswer(S,'-ln|x| + C').slip,'sign');
 });

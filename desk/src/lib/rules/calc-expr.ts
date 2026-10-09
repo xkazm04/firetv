@@ -728,6 +728,17 @@ export function sameFunction(a: Fn, b: Fn, tol: number = SAME_REL): boolean {
   return !!p && p.every(([u, v]) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(u), Math.abs(v)));
 }
 
+/**
+ * Is `answer` undefined at a sample where `truth` is defined? One direction only: an answer defined where the truth is
+ * not (1/x for the derivative of ln x) is not a gap. pairs() skips a negative sample where either side is undefined, so
+ * "ln x" passes for the integrand 1/x there; a caller that knows which side is the answer asks this as well.
+ */
+export function undefinedWhereTrue(answer: Fn, truth: Fn): boolean {
+  if (!isFn(answer) || !isFn(truth)) return false;
+  const f = fnOf(answer), g = fnOf(truth);
+  return SAMPLES.some((x) => Number.isFinite(g(x)) && !Number.isFinite(f(x)));
+}
+
 /** Do a and b differ by a constant? Their difference at every compared sample is the same, to `tol` relative. */
 export function sameUpToConstant(a: Fn, b: Fn, tol: number = SAME_REL): boolean {
   const p = pairs(a, b);

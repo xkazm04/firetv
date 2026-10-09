@@ -18,7 +18,7 @@
 import { readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
 import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
-import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, toTex, type Expr, type Limit } from "./calc-expr";
+import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
 
@@ -91,6 +91,7 @@ const WHY = {
   notNumber: "The answer should be a number, and this one depends on x.",
   notFinite: "This answer has no finite value to compare.",
   rounded: "This is a rounded decimal; the desk asks for the exact value.",
+  domain: "Your answer is not defined everywhere the function is. Check where it holds.",
   noCompare: "The desk cannot compare this answer where the question's function is defined.",
   badSpec: "The desk cannot work this question out for itself, so it does not judge the answer.",
 } as const;
@@ -423,13 +424,13 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   if (!e) return verdict("unsure", WHY.unreadable);
   if (truth.kind === "derivative") {
     const g = (x: number) => truth.at.get(x) ?? NaN;
-    if (sameFunction(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : verdict("right", WHY.right);
+    if (sameFunction(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : undefinedWhereTrue(e, g) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
     if (sameFunction(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
     return comparable((x) => e.at(x), g) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (truth.kind === "antiderivative") {
     const d = (x: number) => derivativeAt(e, x) ?? NaN;
-    if (sameFunction(d, truth.f, FUNCTION_TOL)) return e.constant ? verdict("right", WHY.right) : verdict("wrong", WHY.lostConstant, "lost-constant");
+    if (sameFunction(d, truth.f, FUNCTION_TOL)) return e.constant ? (undefinedWhereTrue(d, truth.f) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right)) : verdict("wrong", WHY.lostConstant, "lost-constant");
     if (sameFunction(d, (x) => -truth.f.at(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
     return comparable(d, (x) => truth.f.at(x)) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
