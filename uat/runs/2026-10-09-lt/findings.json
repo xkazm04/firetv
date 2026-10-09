@@ -1,0 +1,145 @@
+[
+  {
+    "id": "LT-tomas-9-J1-1",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "blocker",
+    "rank": 18,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "clarity",
+    "title": "Task 4 prompt too long for a nine-year-old",
+    "expected": "A prompt of 15 words or fewer, such as 'What do you build in Minecraft?'",
+    "got": "A 24-word, three-part open prompt asking for two or three sentences.",
+    "evidence": [
+      "#8 \"Think about your last game of Minecraft. What did you build or find, and why was it fun? Tell me in two or three sentences.\" Tomáš: \"Too long and hard, I don't understand\".",
+      "check task generation prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "For elementary profiles every task prompt is 15 words or fewer, one question.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-2",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "major",
+    "rank": 12,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "med"
+    },
+    "dimension": "senior-quality",
+    "title": "A2 placement is inflated by guessing and keyword spotting",
+    "expected": "A1 for a child who gets only single words.",
+    "got": "A2, from a 50/50 choice pass and a listening pass on 'red'.",
+    "evidence": [
+      "#6 \"I'll just guess the second one\"; #9 \"red? dog... red\" scored pass; #10 \"A2 · Everyday basics\".",
+      "placement scoring"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Two-option choice passes get lower weight, and a lone keyword is scored partial.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-3",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "quality-gap",
+    "severity": "minor",
+    "rank": 6,
+    "impact": {
+      "frequency": "med",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "senior-quality",
+    "title": "Next focus uses past tense beyond his level",
+    "expected": "A focus sentence using only 'like' or 'is', such as 'I like dogs.'",
+    "got": "\"The ball was red\" and \"The dog broke the wall\" as models.",
+    "evidence": [
+      "#10 focus \"like 'The ball was red' or 'I like dogs.'\"",
+      "verdict focus prompt"
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "open",
+    "recurrence": 1,
+    "suggested_acceptance": "Focus examples match the pre-A2 grammar of the child's actual answers.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-4",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "trust",
+    "title": "Skips and Czech answers are met kindly",
+    "expected": "No feeling of failure.",
+    "got": "Warm, non-judging notes.",
+    "evidence": [
+      "#8 \"Skipped. That tells Linga something too.\"; #3 \"Creeper! Nice one.\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep the wording.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  },
+  {
+    "id": "LT-tomas-9-J1-5",
+    "journey": "J1",
+    "character": "tomas-9",
+    "cert_level": "LT",
+    "type": "strength",
+    "severity": "n-a",
+    "rank": 9,
+    "impact": {
+      "frequency": "high",
+      "reachability": "high",
+      "trust_erosion": "low"
+    },
+    "dimension": "clarity",
+    "title": "Minecraft and dog themes keep a child engaged",
+    "expected": "Content he cares about.",
+    "got": "Tasks and questions were about Minecraft and dogs.",
+    "evidence": [
+      "#5 and #6 about a dog and a Minecraft castle; #3 \"Cool, Minecraft!\""
+    ],
+    "code_check": "n-a",
+    "verdict": "uncertain",
+    "scope_note": "LT judge on claude; not yet adversarially verified or confirmed at L2",
+    "resolution": "n-a",
+    "recurrence": 1,
+    "suggested_acceptance": "Keep interest-themed tasks.",
+    "engine": "claude-cli/haiku (tutor), claude-cli/sonnet (character), claude-cli/sonnet (judge)"
+  }
+]
