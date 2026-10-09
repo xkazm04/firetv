@@ -470,6 +470,15 @@ function ownPieces(s: CalcSpec): string[] {
   return out;
 }
 
+/**
+ * An answer said in words as its symbols (HL3): 'x squared' is x^2, 'x cubed' x^3, 'to the power of 4' ^4, 'plus' +, 'minus' -
+ * (a minus before a figure is already read), 'times' *. 'three x squared plus two x' is then '3 x^2 + 2 x', a window the engine reads.
+ */
+const algebraSaid = (t: string) => t
+  .replace(/\s+(?:to\s+the\s+power\s+of|to\s+the)\s+(-?\d+)\b/g, "^$1")
+  .replace(/\s+squared\b/g, "^2").replace(/\s+cubed\b/g, "^3")
+  .replace(/\s+plus\s+/g, " + ").replace(/\s+minus\s+/g, " - ").replace(/\s+times\s+/g, " * ");
+
 /** Most tokens a window of the line may span. */
 const WINDOW = 6;
 
@@ -490,7 +499,7 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
   const r = read(spec);
   if (!r.ok) return false;
   const { truth, f } = r, s = r.spec;
-  let text = spoken(line);
+  let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
   const fnRight = (e: Expr): boolean => {
     if (truth.kind === "derivative") return sameFunction(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);

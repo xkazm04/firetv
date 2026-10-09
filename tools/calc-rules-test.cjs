@@ -407,3 +407,19 @@ test('MB-B16 leaksCalc: a line naming both factors of the answer, or the answer 
  const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
  assert.deepEqual(bad,[]);
 });
+
+// ------------------------------------------------------------------ HL3: a function-shape answer said in words
+test('HL3 leaksCalc: the derivative of x^3 + x^2 said in words leaks; the item\'s own function said in words passes',()=>{
+ const rows=[
+  [D,'three x squared plus two x',true],
+  [D,'The derivative is three x squared plus two x.',true],
+  [D,'It is 3 x to the power of 2 plus 2 x.',true],
+  [D,'x cubed plus x squared',false],
+  [D,'Differentiate x cubed plus x squared term by term.',false],
+  [D,'Bring each power down and lower it by one.',false],
+  [{shape:'derivative',f:'x^2'},'two times x',true],
+  [{shape:'derivative',f:'x^2'},'x squared is the function you start from',false],
+ ];
+ const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
+ assert.deepEqual(bad,[]);
+});
