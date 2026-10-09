@@ -208,3 +208,36 @@ test('MB-B33 length 3: a leak plus a length is named together; a leak that stays
  const w=await hint('maths',Q,{path:'school',age:13});
  assert.equal(w.hint,withheldLine(Q));assert.equal(w.next,'');
 });
+
+// ---- MB-B26: a mixed number on a linear item is a + b/c on every route through verify.ts, never the product of two numbers ----
+test('MB-B26: a mixed number is judged as a + b/c, typed, on the second go and by substitute; two bare numbers are not sure',()=>{
+ const k=kinds(),{substitute}=require(src('lib/desk/verify.ts')),{settle}=require(src('lib/rules/maths.ts'));
+ const ctx={topic:'linear-two-step'};
+ const typed=(q,a)=>{const j=k.judgeSet({topic:'linear-two-step',items:[{n:1,question:q}]},[{n:1,studentAnswer:a}],{...ctx,typed:true}).items[0];return j.verdict;};
+ const photo=(q,a)=>{const j=k.judgeSet({topic:'linear-two-step',items:[{n:1,question:q}]},[{n:1,studentAnswer:a}],ctx).items[0];return j.verdict;};
+ const second=(q,a)=>{const s=settle({n:1,question:q},a,undefined,ctx.topic);return s?s.verdict:'unsure';};
+ const sub=(q,a)=>{const s=substitute(q,a);return s===null?'unsure':s?'right':'wrong';};
+ for(const [name,route] of [['typed',typed],['photo',photo],['second go',second],['substitute',sub]])for(const [q,a,want] of [
+  ['4x + 2 = 5','1 3/4','wrong'],['2x = 1','1 1/2','wrong'],['3x = 2','1 2/3','wrong'],['2x = -1','-1 1/2','wrong'],
+  ['x = 6','2 3','unsure'],['7 - 2x = 3x + 1','1 1/5','right'],['2x = -3','-1 1/2','right'],['4x + 2 = 5','3/4','right'],['2x = 3','1 3/2','unsure'],
+ ])assert.equal(route(q,a),want,`${name}: ${a} on ${q}`);
+});
+test('MB-B26: the linear battery - every form of a right answer is right, every slip is not ticked, no false ring',()=>{
+ const {substitute}=require(src('lib/desk/verify.ts'));
+ let judged=0,falseRings=0,falseTicks=0;
+ const forms=(n,d)=>{ // n/d in lowest terms, as a learner might write it
+  const out=[d===1?`${n}`:`${n}/${d}`];
+  if(d>1){const w=Math.trunc(Math.abs(n)/d),r=Math.abs(n)%d;if(w>0&&r>0)out.push(`${n<0?'-':''}${w} ${r}/${d}`);}
+  return out;};
+ const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+ for(let a=2;a<=9;a++)for(let b=-9;b<=9;b++)for(let c=-12;c<=12;c++){
+  // a x + b = c ; x = (c-b)/a
+  const num=c-b,g=gcd(num,a)||a,n=num/g,d=a/g,q=`${a}x ${b<0?'-':'+'} ${Math.abs(b)} = ${c}`;
+  for(const f of forms(n,d)){judged++;if(substitute(q,f)!==true)falseRings++;}
+  // the sign slip: the answer with the wrong sign, or the whole part and fraction taken from the wrong fraction
+  if(num!==0)for(const f of forms(-n,d)){judged++;if(substitute(q,f)===true)falseTicks++;}
+  if(d>1&&Math.abs(n)>d){const w=Math.trunc(Math.abs(n)/d);judged++;if(substitute(q,`${w} ${Math.abs(n)%d||1}/${d}`.replace(/^/,n<0?'-':''))===true&&Math.abs(n)%d===0)falseTicks++;}
+ }
+ console.log(`linear battery: ${judged} answers judged, ${falseRings} false rings, ${falseTicks} false ticks`);
+ assert.ok(judged>1000);assert.equal(falseRings,0);assert.equal(falseTicks,0);
+});

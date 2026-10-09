@@ -150,6 +150,18 @@ export function evaluate(expr: string, x: number): number | null {
 }
 
 /**
+ * A linear answer written as a mixed number ("1 3/4", "-1 1/2": a whole number, one space, a proper fraction; the minus
+ * belongs to the whole) is the value a + b/c, never the product the equation grammar makes of two juxtaposed numbers.
+ * Two bare numbers with a space between them ("2 3") are no one value: null. Anything else comes back as written.
+ */
+function mixedNumber(value: string): string | null {
+  const v = normalise(value).trim();
+  const m = /^([-+]?)(\d+) (\d+)\s*\/\s*(\d+)$/.exec(v);
+  if (m) return Number(m[3]) < Number(m[4]) ? `${m[1] === "-" ? "-" : ""}(${m[2]}+${m[3]}/${m[4]})` : null;
+  return /\d\s+[\d.]/.test(v) || /\.\s+\d/.test(v) ? null : value;
+}
+
+/**
  * Substitute `value` into `equation`: true when it holds, false when it plainly fails, and null when the
  * substitution cannot be made at all - the value does not read as a number, or the equation is not one
  * equation of arithmetic. Both sides compared within 1e-9 relative tolerance.
@@ -158,7 +170,9 @@ export function substitute(equation: unknown, value: unknown): boolean | null {
   if (typeof equation !== "string" || typeof value !== "string") return null;
   // the value may itself be an expression (-3, 7/2) but never one in x: '5x' or a bare 'x' is not a value of x
   if (lex(value)?.some((t) => t.k === "x")) return null;
-  const x = evaluate(value, 0);
+  const mixed = mixedNumber(value);
+  if (mixed === null) return null;
+  const x = evaluate(mixed, 0);
   if (x === null) return null;
   const sides = normalise(equation).split("=");
   if (sides.length !== 2) return null;
