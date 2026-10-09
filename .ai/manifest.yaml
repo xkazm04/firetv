@@ -1,0 +1,43 @@
+# .ai/manifest.yaml - the agent-facing contract for this repo (ai-manifest spec; the
+# capability blocks can be added later - unknown/missing fields are ignored by readers).
+schema: ai-manifest
+schemaVersion: 0.1.0
+generatedAt: "2026-10-09"
+
+repo:
+  name: firetv
+  # From README.md: a Fire TV app driven by a phone companion over the local network, first
+  # proved as a telestrator feasibility PoC; the use case that followed is the Study Desk
+  # (desk/: Linga, Essay Master, Math Buddy, the phone as the instrument, the TV as the page).
+  purpose: "Fire TV apps driven by a phone companion: a telestrator feasibility PoC, then the Study Desk (Linga, Essay Master, Math Buddy) for a parent and child on the sofa"
+
+# What an agent runs to verify a change. A worktree has no desk/node_modules, so the desk
+# gate there is the rule suites alone; tsc needs the main checkout's install.
+capabilities:
+  test: cd desk && npm run test:rules
+
+boundaries:
+  # Real learners' records. No agent, test or UAT run writes here; an isolated run seeds
+  # its own DESK_DATA_DIR outside the repo.
+  neverTouch: [desk/data/]
+
+# The organization's AI registry - knowledge bundles this repo consumes and the skill
+# marketplace it installs from. Unknown fields MUST be ignored by a reader.
+registry:
+  remote: github:xkazm04/ai-registry
+  local: ../ai-registry
+knowledge:
+  domains: [software-engineering, localization, llm-observability]
+
+# Shared skills this project uses, from the registry's skills/ lane. The LINK is machine
+# state (gitignored, made by ai-registry/scripts/link-registry.mjs); THIS list is the
+# reviewable declaration. A skill not listed here is project-owned and lives in
+# .claude/skills/ as a real directory.
+skills:
+  - contest
+  - council
+  - cx
+  - leonardo
+  - scan-sweep
+  - spark
+  - uat

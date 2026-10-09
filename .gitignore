@@ -82,3 +82,22 @@ deathride/art/reports/p4-draft-location.json
 /deathride/evidence/perf/**/*.atrace
 /deathride/evidence/perf/**/simpleperf-callgraph.txt
 /deathride/evidence/perf/**/simpleperf-report.txt
+
+# link-registry writes the skill listing tiers here: machine state beside the links
+/.claude/settings.local.json
+
+# BEGIN ai-registry linked skills (managed by ai-registry/scripts/link-registry.mjs)
+# Links are machine state; the declarations live in .ai/manifest.yaml (`skills:` and `knowledge.domains`).
+/.claude/skills/contest
+/.claude/skills/council
+/.claude/skills/cx
+/.claude/skills/leonardo
+/.claude/skills/scan-sweep
+/.claude/skills/spark
+/.claude/skills/uat
+/.claude/rules/ai-registry-access.md
+/.claude/rules/ai-registry-software-engineering.md
+/.claude/rules/ai-registry-localization.md
+/.claude/rules/ai-registry-llm-observability.md
+/.ai/skill-runs.local.jsonl
+# END ai-registry linked skills
