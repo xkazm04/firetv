@@ -334,3 +334,31 @@ test('M3a: the parts of a word problem are tiles and stops like any item - one p
  assert.deepEqual(s.practice.items.map((i)=>[i.part??null,i.stem===w.stem]),[[null,false],['a',true],['b',true]]);
  assert.equal(s.screen,'sheet');
 });
+
+test('HF3: a learner holds at most PAGES_KEPT pages, the newest, in order; the page being read is never the one dropped; a read in place adds nothing',()=>{
+ const {PAGES_KEPT}=store();assert.equal(PAGES_KEPT,8);
+ const photo='data:image/jpeg;base64,'+'A'.repeat(1000);
+ const snap=(i)=>({type:'page.reading',page:{id:`maths-${i}`,subject:'maths',title:`P${i}`,img:photo,w:100,h:100}});
+ const item=(i)=>({n:1,text:'x',cx:0,cy:0,band:[0,10],key:`maths-${i}:1`});
+ const bare=JSON.stringify(session()).length;
+ let s=session();
+ for(let i=1;i<=20;i++){s=after_(s,[snap(i),{type:'page.read',id:`maths-${i}`,items:[item(i)],readMs:1,provider:'t'}]);}
+ assert.deepEqual(s.pages.map((p)=>p.id),[13,14,15,16,17,18,19,20].map((i)=>`maths-${i}`),'the newest 8, in order');
+ assert.equal(s.pageIx,7,'pageIx is on the newest page');assert.equal(s.pages[7].items.length,1);
+ assert.ok(JSON.stringify(s).length<bare+8*(photo.length+600),'the session is bounded by 8 photos');
+ const again=after_(s,[snap(15)]);
+ assert.equal(again.pages.length,8);assert.equal(again.pages[0].id,'maths-13','a read in place drops nothing');assert.equal(again.pageIx,2);
+ // a page for a dropped id has nothing to land on
+ const late=after_(s,[{type:'page.read',id:'maths-1',items:[item(1)],readMs:1,provider:'t'}]);assert.equal(late.pages.length,8);
+});
+test('HF3: an away learner who sits down and reads obeys the same cap',()=>{
+ const photo='data:image/jpeg;base64,AAAA';
+ const pages=Array.from({length:8},(_,i)=>({id:`old-${i}`,subject:'maths',title:'o',img:photo,w:100,h:100,items:[],owner:'ana'}));
+ const s0=session({profiles:[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths']},{id:'ana',name:'Ana',type:'high-school',age:16,system:'uk',modules:['maths']}],
+  away:{ana:{pages,pageIx:7,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,log:{problems:[],hints:0,hard:[]},tasks:[]}}});
+ let s=after_(s0,[{type:'learner.set',id:'ana'}]);
+ assert.equal(s.pages.length,8);
+ for(let i=0;i<3;i++)s=after_(s,[{type:'page.reading',page:{id:`new-${i}`,subject:'maths',title:'n',img:photo,w:100,h:100}}]);
+ assert.deepEqual(s.pages.map((p)=>p.id),['old-3','old-4','old-5','old-6','old-7','new-0','new-1','new-2']);
+ assert.equal(s.pageIx,7);
+});

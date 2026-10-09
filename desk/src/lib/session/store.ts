@@ -493,6 +493,8 @@ const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
 /** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
 export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not write it to the learner file, so progress was not saved. Send it again.";
+/** The most pages a learner holds, in the session and in each away slot (HF3): every page carries its photo, and every event rewrites the whole session. A new page past it drops the oldest whole. */
+export const PAGES_KEPT = 8;
 /** The status when a page was read but the learner file could not be written (HF2): the page is on the desk, tonight's record and the week do not have it. */
 export const READ_NOT_SAVED = "That page was read, but the desk could not write it to the learner file, so tonight's record and the week do not have it.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
@@ -549,7 +551,7 @@ function step(s: Session, e: Event): Session {
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
       // `day` is the local day it was snapped, kept when the same page is read again in place (an older page without one stays without)
-      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me, ...(ix >= 0 ? (s.pages[ix].day ? { day: s.pages[ix].day } : {}) : { day: dayOf(Date.now()) }) }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
+      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me, ...(ix >= 0 ? (s.pages[ix].day ? { day: s.pages[ix].day } : {}) : { day: dayOf(Date.now()) }) }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page].slice(-PAGES_KEPT);
       n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; n.awaiting = null; break; }
     // the desk asks for a page and stays where it is; the phone answers with page.reading
     case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;
