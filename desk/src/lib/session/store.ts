@@ -493,6 +493,8 @@ const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
 /** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
 export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not write it to the learner file, so progress was not saved. Send it again.";
+/** The status when a page was read but the learner file could not be written (HF2): the page is on the desk, tonight's record and the week do not have it. */
+export const READ_NOT_SAVED = "That page was read, but the desk could not write it to the learner file, so tonight's record and the week do not have it.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */

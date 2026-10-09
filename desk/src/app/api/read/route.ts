@@ -4,7 +4,7 @@
  * the same page id, its image from the session, so a retry never adds a second page.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK, READ_NOT_SAVED } from "@/lib/session/store";
 import { missingNumbers, readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
@@ -41,21 +41,26 @@ export async function POST(req: Request) {
     // before the event, because `page.read` is what re-hydrates the record onto the session.
     // The week's digest is told too (MB-B14), for the same owner: the problems read, as a count; the evening's hints are
     // counted onto this entry as they land (session/store.ts, learners.ts addHints). No title, no page id, no problem text.
+    // A write that fails keeps the read: the page lands with its items and the job ends done, so no Try again is offered
+    // (the same photo would be read, and paid for, again to fail the same way); the status says the page was not saved.
+    let saved = true;
     if (subject === "maths") {
-      const at = Date.now();
-      addHistory(owner, {
-        at, kind: "homework", label: title,
-        detail: `${items.length} problem${items.length === 1 ? "" : "s"} read`,
-      });
-      addDigest(owner, { at, kind: "homework", problems: items.length, hints: 0, second: 0 });
+      try {
+        const at = Date.now();
+        addHistory(owner, {
+          at, kind: "homework", label: title,
+          detail: `${items.length} problem${items.length === 1 ? "" : "s"} read`,
+        });
+        addDigest(owner, { at, kind: "homework", problems: items.length, hints: 0, second: 0 });
+      } catch (e) { saved = false; console.error("desk read: the page was read but could not be written to the learner file:", e instanceof Error ? e.message : e); }
     }
     // which printed numbers the read left out: the page and the answer carry it, so a partial read is never taken for a whole one
     const missing = missingNumbers(items);
     if (missing?.length) console.warn(`desk read: page ${id} left out printed numbers ${missing.join(", ")}`);
     dispatch({ type: "page.read", id, items, readMs: ms, provider, missing });
-    return { id, items: items.length, ms, provider, missing };
+    return { id, items: items.length, ms, provider, missing, saved };
   }, {
-    key: id, input: { id }, start: "reading the page…", done: (x) => `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s${x.missing?.length ? `. ${missingLine(x.missing)}` : ""}`,
+    key: id, input: { id }, start: "reading the page…", done: (x) => !x.saved ? READ_NOT_SAVED : `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s${x.missing?.length ? `. ${missingLine(x.missing)}` : ""}`,
     // the page stays on the desk, empty, so the TV stops saying "reading"
     onFail: () => dispatch({ type: "page.read", id, items: [], readMs: 0, provider: "error" }),
   });

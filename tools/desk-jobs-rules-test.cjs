@@ -717,6 +717,23 @@ test('HF1: the read route carries the missing numbers on the page, the answer, t
  assert.equal(store.getSession().pages[0].missing,null);
 });
 
+// ---- HF2: a good read is kept when the learner file cannot be written ----
+test('HF2: with the learner file unwritable a read of 2 items is kept: 200, saved false, the items on the page, the job done, READ_NOT_SAVED said',async()=>{
+ blank();
+ const {READ_NOT_SAVED}=store;
+ const file=path.join(data,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:2,text:'x-5=2',y:0.6,x:0.5}]}));
+ const errs=[];const e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.error=e0;if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(r.status,200);const j=await r.json();assert.equal(j.saved,false);assert.equal(j.items,2);
+ const s=store.getSession();
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,2);assert.equal(s.reading,false);
+ assert.equal(s.jobs.read.phase,'done');assert.notEqual(s.jobs.read.phase,'failed');
+ assert.equal(s.status,READ_NOT_SAVED);deskWorded(READ_NOT_SAVED);
+ assert(errs.some((l)=>/learner file/.test(l)),'the error is logged');
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
