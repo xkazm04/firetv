@@ -680,3 +680,12 @@ test('HW4: the continue card opens the sheet of tonight, never an older one; no 
  assert.equal(continueCard(both,tomorrow),null,'now is a parameter: the same pages a day on offer no card');
  assert.equal(both.pages.length,2,'older pages stay on the desk');
 });
+test('HW6: a failed read says Try again on the phone for maths and English; an essay page names the paste panel',()=>{
+ const {failedReadLine}=require(path.join(root,'src/tv/pageLines.ts'));
+ const maths=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.ok(maths.includes('The desk could not read this page. Open Try again on the phone.'));
+ for(const subject of ['maths','english'])assert.equal(failedReadLine(subject),'The desk could not read this page. Open Try again on the phone.',subject);
+ assert.match(failedReadLine('essay'),/Paste or type it on the phone/);
+ for(const subject of ['maths','english','essay'])assert.ok(!/—|snap it again/.test(failedReadLine(subject)),subject);
+ assert.match(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/failedReadLine\(p\.subject\)/,'the page screen uses it');
+});
