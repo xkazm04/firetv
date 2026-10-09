@@ -28,7 +28,11 @@ import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
 import { calcWordsOf, judgeOf, topicIn, type MathPath } from "../library/paths";
 import { voiceOf, withManner, type Voice } from "../rules/voice";
-import type { Subject } from "../session/store";
+import { SCHOOL_SLIPS } from "../rules/school";
+import { WORKED_METHODS } from "../library/worked";
+import { getLearner } from "../session/learners";
+import { SYSTEM_WORDS } from "@/tv/profileRows";
+import type { SchoolSystem, Subject } from "../session/store";
 
 const SCHEMA = {
   type: "object",
@@ -108,7 +112,33 @@ function leakedIn(problem: string, spec: Specs, said: Said): string | null {
   return inHint && inNext ? "the hint and what to try next" : inHint ? "the hint" : inNext ? "what to try next" : null;
 }
 
-export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number }) {
+/**
+ * What a maths hint is told about this learner and this task (MB-B8), as sentences for the user prompt - never the system
+ * prompt, and never the leak checks' business: the school system's notation when it differs from the desk's own (cz, de;
+ * the wording of the maths read, desk/read mathsContext), the slips recorded for the task's school unit (the desk's own line
+ * for each, rules/school SCHOOL_SLIPS) and the unit's worked method (library/worked). A task that reads as no unit, from
+ * a learner with no record and the default system, gets the empty string, so its prompt is what it was.
+ */
+export function groundFor(problem: string, who: { id: string; system: SchoolSystem }): string {
+  const parts: string[] = [];
+  if (who.system === "cz" || who.system === "de") {
+    const note = who.system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot" : "a decimal comma (3,5) and division written with a colon";
+    parts.push(`The learner is in the ${SYSTEM_WORDS[who.system]} school system, whose notation uses ${note}.`);
+  }
+  const school = readQuestion(problem).school;
+  const unit = school ? unitOf(school) : null;
+  if (unit) {
+    let seen: string[] = [];
+    try { seen = getLearner(who.id).skills[unit]?.slips ?? []; } catch { /* no record is no slips */ }
+    const said = seen.map((id) => SCHOOL_SLIPS.find((s) => s.id === id)?.says).filter((x): x is string => !!x);
+    if (said.length) parts.push(`This learner has made these slips on this kind of task before: ${said.join(" ")}`);
+    const m = Object.prototype.hasOwnProperty.call(WORKED_METHODS, unit) ? WORKED_METHODS[unit] : null;
+    if (m) parts.push(`The method this unit teaches: ${m.idea} Its steps: ${m.steps.join("; ")}.`);
+  }
+  return parts.join(" ");
+}
+
+export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number; ground?: string }) {
   // The voice names the learner and adds one manner paragraph; the rules below are shared by every band. A Calculus
   // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
   const voice = voiceOf(subject, subject === "maths" && judgeOf(opts.path) === "calc" ? undefined : opts.age);
@@ -135,7 +165,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     : `Give the FIRST hint: the smallest push that gets the learner moving.`;
   const maths = subject === "maths";
   const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}` +
-    (maths ? `\nKeep the hint and what_to_try_next to${LIMIT} each.` : "");
+    (maths ? `\nKeep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.` : "") + (maths && opts.ground ? `\n${opts.ground}` : "");
   const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast" });
   const first = await ask("");
   const leaked = maths ? leakedIn(problem, spec, first.json) : null, long = maths ? longIn(first.json) : null;
@@ -143,7 +173,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   // the faulty line is not handed back; the model is told where, and asked again, once. A leak and a length are named together.
   const told = leaked && !long ? `Your previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`
     : `Your previous hint ${[leaked && `gave the answer away (in ${leaked})`, long && `was over ${MAX_HINT_WORDS} words (in ${long})`].filter(Boolean).join(" and ")}. ` +
-      `Write it again: one step, ${leaked ? "stop short of the answer, " : ""}and keep the hint and what_to_try_next to${LIMIT} each.`;
+      `Write it again: one step, ${leaked ? "stop short of the answer, " : ""}and keep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.`;
   const again = await ask(`\n\n${told}`).catch(() => null);
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
   // after the re-ask a leak is still withheld (a safety rule); a line only too long is shown (length is a value rule)

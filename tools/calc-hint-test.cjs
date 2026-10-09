@@ -332,3 +332,38 @@ test('8: the route - no lesson pick on the calc1 path (the lesson job ends as "n
  assert.ok(calls.prompts[0].startsWith(SCHOOL_STANCE));
  assert.equal(s.jobs?.lesson?.phase,'done');assert.equal(s.noLesson,true,'the stub answered none');
 });
+
+test('MB-B8 ground: a cz learner with a recorded fractions slip gets notation, slip and method in the user prompt; a learner with none gets nothing',async()=>{
+ const {recordAttempt}=require(src('lib/session/learners.ts'));
+ const {WORKED_METHODS}=require(src('lib/library/worked.ts'));
+ const S=require(src('lib/rules/school.ts'));
+ const prompts=[];
+ const run=async(text,patch)=>{
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{name:'Scratch',type:'other',...patch}});store.dispatch({type:'profile.save'});
+  const page={id:'g-page',subject:'maths',title:'Sheet',img:'',w:100,h:100};
+  store.dispatch({type:'page.reading',page});store.dispatch({type:'page.read',id:page.id,items:[{n:1,text,cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+  const id=store.getSession().learner.id;
+  return id;
+ };
+ reg.useProvider('text',{name:'stub',run:async(req)=>{const p=Object.keys(req.schema?.properties??{});if(p.includes('lesson'))return {raw:JSON.stringify({lesson:'none',why:'x'})};prompts.push(req);return {raw:JSON.stringify({hint:'Look at the bottoms.',what_to_try_next:'Write them down.'})};}});
+ // a cz learner, a recorded fractions slip
+ let id=await run('3/4 + 1/6',{id:'ground-cz',system:'cz'});
+ recordAttempt(id,'frac-add-sub',false,'tops-and-bottoms');
+ assert.equal((await post('hint',{})).status,200);await drain();
+ const sent=prompts.at(-1);
+ assert.match(sent.prompt,/Czech.*decimal comma \(3,5\)/);
+ assert.match(sent.prompt,new RegExp(S.SCHOOL_SLIPS.find((x)=>x.id==='tops-and-bottoms').says.slice(0,40)));
+ assert.ok(sent.prompt.includes(WORKED_METHODS['frac-add-sub'].idea),'the unit\'s worked method');
+ assert.doesNotMatch(sent.system,/decimal comma|made these slips|The method this unit teaches/,'in the user prompt, not the system prompt');
+ // no record, a task that reads as no unit: none of the three, and the prompt is the plain one
+ prompts.length=0;
+ id=await run('Solve for x: 3x - 7 = 11',{id:'ground-none'});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert.equal(prompts.at(-1).prompt,'Problem: Solve for x: 3x - 7 = 11\n\nGive the FIRST hint: the smallest push that gets the learner moving.\nKeep the hint and what_to_try_next to 25 words or fewer each.');
+ // a fractions task with no record gets the method but no slip line and, on the default system, no notation
+ prompts.length=0;
+ id=await run('3/4 + 1/6',{id:'ground-fresh'});
+ assert.equal((await post('hint',{})).status,200);await drain();
+ assert.doesNotMatch(prompts.at(-1).prompt,/made these slips|decimal comma/);assert.match(prompts.at(-1).prompt,/The method this unit teaches/);
+});

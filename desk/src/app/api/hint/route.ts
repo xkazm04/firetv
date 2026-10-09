@@ -8,13 +8,14 @@
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
-import { hint } from "@/lib/desk/hint";
+import { groundFor, hint } from "@/lib/desk/hint";
 import { pickLesson } from "@/lib/desk/pick";
 import { BUSY, refused, runJob } from "@/lib/desk/job";
 import { resolveEnglish } from "@/lib/rules/english";
 import { judgeOf, learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
 import { kindOfQuestion } from "@/lib/rules/kinds";
+import { learnerSystem } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -30,9 +31,11 @@ export async function POST(req: Request) {
 
   const path = learnerPath(s), age = learnerAge(s);
   const prev = s.hint;
+  // a maths hint is also told the learner's notation, their recorded slips on the task's unit and its worked method (MB-B8)
+  const ground = page.subject === "maths" ? groundFor(item.text, { id: who.id, system: learnerSystem(s) }) : "";
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
-      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age });
+      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age, ground });
       dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? who.id } });
       dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? who.id });
       return h2;
@@ -41,7 +44,7 @@ export async function POST(req: Request) {
   }
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
-    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age });
+    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age, ground });
     dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: who.id } });
     return h1;
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });

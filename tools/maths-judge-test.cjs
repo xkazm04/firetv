@@ -186,7 +186,7 @@ test('MB-B33 length 1: a 40-word hint then a 20-word one shows the second; the u
  const r=await hint('maths',Q,{path:'school',age:13});
  assert.equal(seenText.length,2);assert.equal(r.hint,words(20));
  assert.match(seenText[1].prompt,/over 25 words \(in the hint\)/);
- assert.match(seenText[0].prompt,/25 words or fewer/);assert.match(seenText[0].schema.properties.hint.description,/25 words or fewer/);
+ assert.match(seenText[0].prompt,/to 25 words or fewer each./);assert.match(seenText[0].schema.properties.hint.description,/25 words or fewer/);
  assert.doesNotMatch(seenText[0].system,/25 words/,'the system prompt of an equation task is unchanged');
  seenText=[];sequence({hint:'Look at the first term.',what_to_try_next:'Write it.'});
  await hint('english','Past simple of go',{});
