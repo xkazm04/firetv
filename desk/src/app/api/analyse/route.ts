@@ -66,12 +66,16 @@ export async function POST(req: Request) {
     let first = true;
     const r = await runJob("analyse", async (run) => {
       dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
-      return analysePiece(body.text, body.type, who.id, age, (a) => {
+      const done = await analysePiece(body.text, body.type, who.id, age, (a) => {
         if (!run.current()) return;
         // the first paragraph back opens the reading; the rest grow it where the learner is
         dispatch(first ? { type: "essay.set", analysis: a, owner: who.id } : { type: "essay.progress", analysis: a, owner: who.id });
         first = false;
       }, pieceId);
+      // the piece is recorded once it is all read, after the last paragraph's progress: say so, so the session's history
+      // and the Sunday page are read again (store.ts REHYDRATE)
+      if (run.current()) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
+      return done;
     }, { key: "essay", start: `reading your piece, ${paragraphs} paragraphs — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }

@@ -36,6 +36,8 @@ export const LINE_WORDS = 14;
 export const PAGE_WORDS = 90;
 /** The most units named before "and N more". */
 export const UNITS_SHOWN = 3;
+/** A reading of this many sentences or more is a piece on the Sunday page (the digest keeps no paragraph count; a lone paragraph is far shorter). */
+export const PIECE_SENTENCES = 12;
 
 /**
  * One thing to try together, per school unit: an everyday act a parent can ask for with no expertise, where the child
@@ -86,7 +88,7 @@ export interface SundayPage {
   stepUps: string[];
   slip: { id: string; name: string; times: number } | null;
   english: { conversations: number; scenes: string[] } | null;
-  essay: { readings: number; lenses: string[] } | null;
+  essay: { readings: number; pieces: number; lenses: string[] } | null;
   tryIt: string | null;
 }
 /** One line of the page: a section's heading, or one of its lines. What the phone is sent; never the digest. */
@@ -151,7 +153,7 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   }
   // e. Essay Master: the readings, and the lenses in the desk's own order
   const reads = week.filter((e): e is EssayDigest => e.kind === "essay");
-  if (reads.length) page.essay = { readings: reads.length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
+  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => r.sentences >= PIECE_SENTENCES).length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
 
   // f. one act: the unit worked most (the first row) when the table has it, else by what was done
   const top = page.units.find((u) => DO_IT[u.id]);
@@ -200,7 +202,9 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.essay) {
     head("essay");
     const lenses = page.essay.lenses, list = lenses.length > 1 ? `${lenses.slice(0, -1).join(", ")} and ${lenses.at(-1)}` : lenses[0];
-    out.push({ section: "essay", text: `${cap(times(page.essay.readings, "paragraph reading"))}${list ? `, through ${list}` : ""}.` });
+    const { readings, pieces } = page.essay, paras = readings - pieces;
+    const said = [paras ? times(paras, "paragraph reading") : "", pieces ? times(pieces, "piece") : ""].filter(Boolean).join(" and ");
+    out.push({ section: "essay", text: `${cap(said)}${list ? `, through ${list}` : ""}.` });
   }
   if (page.tryIt) { head("try"); out.push({ section: "try", text: page.tryIt }); }
   return out;

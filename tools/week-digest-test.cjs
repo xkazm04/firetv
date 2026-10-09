@@ -163,6 +163,32 @@ test('7: an Essay Master reading writes one essay entry - the lens and the two c
  assert.ok(!JSON.stringify(d).includes('Homework')&&!JSON.stringify(d).includes('One to fix'),'no text of the paragraph or the reading');
 });
 
+test('M8 (EM-B20): a piece evening - the history is read again once the piece is recorded, the recap row reads the ", N paragraphs" line, the Sunday line says piece',async()=>{
+ seat();
+ answer=async()=>({json:{observations:[],summary:'Read.'},provider:'test',ms:1});
+ const para=(k)=>Array.from({length:5},(_,i)=>`Teenagers sleep better with a later start number ${k}${i}.`).join(' ');
+ const piece=[para(1),para(2),para(3)].join('\n\n');
+ const res=await post('analyse',{kind:'piece',text:piece,type:'evidence'});
+ assert.equal(res.status,200);
+ const s=store.getSession(),line=s.history.filter((h)=>h.kind==='writing').at(-1);
+ assert.ok(line&&/^\d+ of 15 sentences to fix, 3 paragraphs$/.test(line.detail),`the session's history holds the piece's line: ${JSON.stringify(line)}`);
+ const {recapRows,parseDetail}=require(src('tv/recapRows.ts'));
+ assert.deepEqual(parseDetail('writing','2 of 15 sentences to fix, 3 paragraphs'),{against:2,of:15});
+ assert.deepEqual(parseDetail('writing','1 of 15 sentences to fix, 3 paragraphs, 1 fixed'),{against:1,of:15,fixed:1});
+ const tile=recapRows(s,Date.now()).find((t)=>t.app==='essay');
+ assert.equal(tile.empty,null,'the essay tile is lit by the piece');assert.equal(tile.readings.at(-1).of,15);
+ const text=(s.week??[]).map((l)=>l.text).join(' ');
+ assert.match(text,/One piece/,`the Sunday line says piece: ${text}`);assert.doesNotMatch(text,/paragraph reading/);
+});
+test('M8 (EM-B20): the Sunday line counts paragraph readings and pieces apart',()=>{
+ const {sundayWords,sundayPage}=require(src('lib/rules/week.ts'));
+ const now=Date.UTC(2026,8,24,18);
+ const mk=(entries)=>sundayWords(sundayPage({...learners.getLearner('nobody-week'),digest:entries.map((e,i)=>({at:now-i*1000,kind:'essay',lens:'evidence',faulty:0,...e}))},{name:'Mia'},now)).filter((l)=>l.section==='essay'&&!l.head).map((l)=>l.text);
+ assert.deepEqual(mk([{sentences:3},{sentences:4}]),['Two paragraph readings, through Evidence.']);
+ assert.deepEqual(mk([{sentences:15}]),['One piece, through Evidence.']);
+ assert.deepEqual(mk([{sentences:3},{sentences:15},{sentences:20}]),['One paragraph reading and two pieces, through Evidence.']);
+});
+
 test('6 (essay-master-A case 6): the digest counts codes verdicts - observations that decide 2 of 3 faulty beat legacy verdicts that say none',async()=>{
  seat();
  answer=async()=>({json:{observations:[{n:1,side:'wanders',verdict:'strong',note:'a'},{n:2,side:'wanders',verdict:'strong',note:'b'},{n:3,side:'pushes',verdict:'strong',note:'c'}],summary:'s'},provider:'test',ms:1});

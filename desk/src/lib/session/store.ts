@@ -712,7 +712,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "essay.revised", "lesson.watched", "paper.enter"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "essay.progress", "essay.revised", "lesson.watched", "paper.enter"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
