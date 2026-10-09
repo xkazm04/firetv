@@ -98,7 +98,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - status: open
   - ceiling: an enrichment line can be right and still be no use to the learner
 - **LG-16** — A turn's learning evidence is decided by provenance, not substance
-  - origin: 2026-09-15-lt-recert/LT-tomas-9-J4-7, 2026-09-15-lt/LT-adela-17-J4-7, ceiling of 2026-09-15-lt/LT-viktor-67-J4-1
+  - origin: 2026-09-15-lt-recert/LT-tomas-9-J4-7, 2026-09-15-lt/LT-adela-17-J4-7, ceiling of 2026-09-15-lt/LT-viktor-67-J4-1; 2026-10-09-linga-e-run/E4 (L2, builder's reading: of three replies only the repair-shaped one left a row; the typed "Where is the rover?" left none)
   - recommendation: build — `validateObservations` keeps a quote found in the reply that passes word-pattern `creditOf` (`lib/english/rules.ts:69`, `lib/english/credit.ts:35-46`) and drops the rest silently (`rules.ts:67-69`); the turn schema is loose (`lib/english/conversation.ts:42`)
   - owner: linga-conversation-turn council rework
   - status: open
@@ -149,6 +149,16 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - recommendation: build — root cause verified against the stored goal answers: the goal question accepts 400 characters (`lib/english/check.ts:346`) but saves `said.slice(0, 160)` (`check.ts:349`), and the plan reads `prefs.goal || k.goal` (`check.ts:192`), so the truncated copy wins. All six repeated situations sit past character 160; the three goals under 160 lost nothing. XS: plan from the whole answer, or keep the preference at 400 (`lib/english/rules.ts:15`, `english/LingaPhone.tsx:51`). Then, only if a re-run still drops situations, extend the ef1dcb40 coverage check from the interest to the goal
   - status: open
   - ceiling: a situation can be present in a title and still be practised thinly; coverage is not fit
+- **LG-26** — Coaching praised a premise the scene never held
+  - origin: 2026-10-09-linga-e-run/E5 (L2, builder's reading: "Clear repair move: you asked Pip to explain the word bridge", and Pip never said "bridge")
+  - recommendation: decline-with-reason (harness-made: the premise came from the harness's fixed sentence, which 78709e24 replaced; in 2026-10-09-linga-e-run-2 and -run-3 the premise held; the move praised, a clarification request, was a repair. Returns with a Character's or a real learner's off-scene reply praised as fact)
+  - status: open
+  - ceiling: nothing checks a coaching note's claims against the transcript; only its `before` is checked (`lib/english/conversation.ts:343`)
+- **LG-27** — The rover partner names the question it wants next
+  - origin: 2026-10-09-linga-e-run/E4 (L2, turn 2: "Can you ask me where I saw it last?", read by the builder as the partner doing its job)
+  - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (10-09 drain)*. Opposing readings of one move: scaffolding at A2, or the mission step given away. The step check credits the learner's own words (`lib/english/conversation.ts:323`); nothing in the prompt says whether the partner may state the step's question
+  - status: open
+  - ceiling: any rule here is prompt-held, and three scripted runs of one scene at A2 cannot say what a real child needs
 
 ## Essay Master
 

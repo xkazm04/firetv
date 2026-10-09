@@ -216,3 +216,12 @@ Raised by the five 2026-09-15 LT runs (codex played and judged them, so they are
 - Should a stop be kept for meaning-blurring errors, with everything else held for the recap, whatever the preference?
 - Should *Not now* on a moment lower that learner's rate, and does that rate persist across scenes?
 - How does this trade against LG-24, following up a repeated error without adding a stop?
+
+## Open questions (10-09 drain)
+
+Raised by the three 2026-10-09 browser runs of `tools/linga-ui-test.cjs`. They are L2 on the claude CLI (`claude-cli/haiku`), with one scripted learner (Mia, A2, *The missing moon rover*) and the builder's reading; the owner's reading is owed. Each question has a backlog id in `docs/BACKLOG.md` and its evidence in `docs/uat-insights/2026-10-09-linga-*.md`. No question is answered here.
+
+**LG-27 · Whether the partner names the learner's next question.** In every run, Pip's second line told the learner what to ask next: *"Can you ask me where I saw it last?"*. At that moment the TV already shows the mission step, *"Find out where Pip saw it"*. Run 1's reading called it the partner doing its job ("hands the next question back, as the scene's goal asks"). Runs 2 and 3 read it as the step given away.
+- At A1–A2, is naming the question scaffolding that a child needs, or does it do the step for them? Does the answer change with age, or between Family and Adult mode?
+- If the partner may name it, should a learner who then asks it in the partner's words reach the step, or reach it as supported?
+- Should the partner draw the question out instead (*"I saw it somewhere… what could you ask me?"*), and after how many turns without it may it say the question outright?
