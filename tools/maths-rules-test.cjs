@@ -579,3 +579,36 @@ test('answer line per course: workingLines decides x = from the item alone - a s
  // settle on a school item still locates from the x = line it always read
  assert.deepEqual(settle({n:1,question:'x + 3 = 7',studentWorking:'',studentAnswer:'5'},'5','arithmetic-slip','linear-one-step').slipAt,{line:0});
 });
+
+// ------------------------------------------------------------------ MB-B2: the reader strips an instruction, reads · : and the decimal comma
+test('MB-B2 reader: tasks that read as nothing now read as a kind and a spec, and the answer lines on them leak',async()=>{
+ const K=require(path.join(root,'src/lib/rules/kinds.ts')),M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const Sc=require(path.join(root,'src/lib/rules/school.ts')),Ca=require(path.join(root,'src/lib/rules/calc.ts'));
+ const leakAny=(q,line,sys)=>{const r=K.readQuestion(q,sys);return M.leaks(q,line,sys)||(r.calc?Ca.leaksCalc(r.calc,line):false)||(r.school?Sc.leaksSchool(r.school,line):false);};
+ // [task, system, kind, a line that must leak]
+ const rows=[
+  ['Řeš rovnici 3(x - 2) = 2x + 5',undefined,'linear','x = 11.'],
+  ['Řeš rovnici 3(x - 2) = 2x + 5',undefined,'linear','Takže x = 11.'],
+  ['Vypočítej: 3/4 + 1/6 =',undefined,'school','The answer is 11/12.'],
+  ['2/3 · 9/4 =',undefined,'school','The answer is 3/2.'],
+  ['0,3 × 0,4','cz','school','The answer is 0,12.'],
+  ['Solve 3(x - 2) = 2x + 5',undefined,'linear','x = 11.'],
+  ['Vypočtěte lim x→0 sin(3x)/x',undefined,'calc','The limit is 3.'],
+  ['Derivujte: y = sin(x^2)',undefined,'calc','The derivative is 2x cos(x^2).'],
+ ];
+ for(const [q,sys,kind,line] of rows){
+  const r=K.readQuestion(q,sys);
+  assert.equal(r.kind,kind,q);
+  if(kind==='linear')assert.ok(M.equationOf(q,sys),`${q}: its equation is read`);else assert.ok(r.calc||r.school,`${q}: a spec is read`);
+  assert.equal(leakAny(q,line,sys),true,`${q} | ${line}`);
+ }
+ // with no system the decimal comma reads as it did: not at all
+ assert.equal(K.readQuestion('0,3 × 0,4').kind,'linear');
+ assert.equal(K.readQuestion('0,3 × 0,4','uk').kind,'linear');
+ // a task read as written is read as it was
+ for(const q of ['Find lim_(x->0) sin(3x)/x','Work out 3/4 + 1/6','Solve for x:  3x − 7 = 11'])assert.equal(K.readQuestion(q).kind===K.readQuestion(q,'cz').kind,true,q);
+ // the hint takes the system: on a Czech sheet the equation leaks, and the stance is the linear sheet's
+ const was=engine.text;engine.text=async()=>({json:{hint:'Takže x = 11.',what_to_try_next:'Write x = 11.'},provider:'test',ms:1});
+ let h;try{h=await hint('maths','Řeš rovnici 3(x - 2) = 2x + 5',{system:'cz'});}finally{engine.text=was;}
+ assert.ok(!/11/.test(h.hint+h.next),`the leaking hint is withheld: ${h.hint}`);
+});

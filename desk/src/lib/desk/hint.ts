@@ -88,12 +88,12 @@ const neutralStance = (v: Voice) => `a maths tutor for ${v.who}. This is a schoo
  * The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither.
  * A task the linear rule reads (an equation or an expression, rules/maths) keeps the linear-equations sheet; any other maths task is neutral.
  */
-const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: string, path?: MathPath, unit?: string) =>
+const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: string, path?: MathPath, unit?: string, system?: SchoolSystem) =>
   subject !== "maths" ? STANCE[subject](voice)
     : kind === "calc" ? calcStance(path)
     : kind === "school" && unit ? unitStance(voice, unit)
     : judgeOf(path) === "calc" ? calcStance(path)
-    : equationOf(problem) || expressionOf(problem) ? STANCE.maths(voice) : neutralStance(voice);
+    : equationOf(problem, system) || expressionOf(problem, system) ? STANCE.maths(voice) : neutralStance(voice);
 
 /**
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
@@ -102,13 +102,13 @@ const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: strin
 type Specs = Pick<Question, "calc" | "school" | "parts">;
 
 /** Does this line give the item's answer away: the one leak rule, and each reader's own check when the item reads as its spec (every part's, for parts). */
-const leaksLine = (problem: string, spec: Specs, line: string) =>
-  leaks(problem, line) || (spec.calc !== null && leaksCalc(spec.calc, line)) || (spec.school !== null && leaksSchool(spec.school, line))
+const leaksLine = (problem: string, spec: Specs, line: string, system?: SchoolSystem) =>
+  leaks(problem, line, system) || (spec.calc !== null && leaksCalc(spec.calc, line)) || (spec.school !== null && leaksSchool(spec.school, line))
   || (spec.parts !== null && spec.parts.some((p) => leaksCalc(p, line)));
 
 /** Which field of a maths hint gives the item's answer away, in words for the re-ask, or null when neither does. */
-function leakedIn(problem: string, spec: Specs, said: Said): string | null {
-  const inHint = leaksLine(problem, spec, said.hint), inNext = leaksLine(problem, spec, said.what_to_try_next);
+function leakedIn(problem: string, spec: Specs, said: Said, system?: SchoolSystem): string | null {
+  const inHint = leaksLine(problem, spec, said.hint, system), inNext = leaksLine(problem, spec, said.what_to_try_next, system);
   return inHint && inNext ? "the hint and what to try next" : inHint ? "the hint" : inNext ? "what to try next" : null;
 }
 
@@ -125,7 +125,7 @@ export function groundFor(problem: string, who: { id: string; system: SchoolSyst
     const note = who.system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot" : "a decimal comma (3,5) and division written with a colon";
     parts.push(`The learner is in the ${SYSTEM_WORDS[who.system]} school system, whose notation uses ${note}.`);
   }
-  const school = readQuestion(problem).school;
+  const school = readQuestion(problem, who.system).school;
   const unit = school ? unitOf(school) : null;
   if (unit) {
     let seen: string[] = [];
@@ -138,16 +138,16 @@ export function groundFor(problem: string, who: { id: string; system: SchoolSyst
   return parts.join(" ");
 }
 
-export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number; ground?: string }) {
+export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number; ground?: string; system?: SchoolSystem }) {
   // The voice names the learner and adds one manner paragraph; the rules below are shared by every band. A Calculus
   // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
   const voice = voiceOf(subject, subject === "maths" && judgeOf(opts.path) === "calc" ? undefined : opts.age);
-  const read = subject === "maths" ? readQuestion(problem) : null;
+  const read = subject === "maths" ? readQuestion(problem, opts.system) : null;
   const spec: Specs = { calc: read?.calc ?? null, school: read?.school ?? null, parts: read?.parts ?? null };
   // the unit a school task belongs to, by its path's name for it: the stance names it
   const unit = spec.school ? topicIn(unitOf(spec.school) ?? "")?.name : undefined;
   const system = withManner(
-    `You are ${stanceOf(subject, voice, read?.kind ?? "linear", problem, opts.path, unit)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
+    `You are ${stanceOf(subject, voice, read?.kind ?? "linear", problem, opts.path, unit, opts.system)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
     `Never refer to the learner in the third person and never write instructions for a teacher, parent or tutor. ` +
@@ -168,7 +168,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     (maths ? `\nKeep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.` : "") + (maths && opts.ground ? `\n${opts.ground}` : "");
   const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast" });
   const first = await ask("");
-  const leaked = maths ? leakedIn(problem, spec, first.json) : null, long = maths ? longIn(first.json) : null;
+  const leaked = maths ? leakedIn(problem, spec, first.json, opts.system) : null, long = maths ? longIn(first.json) : null;
   if (!leaked && !long) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
   // the faulty line is not handed back; the model is told where, and asked again, once. A leak and a length are named together.
   const told = leaked && !long ? `Your previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`
@@ -177,7 +177,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const again = await ask(`\n\n${told}`).catch(() => null);
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
   // after the re-ask a leak is still withheld (a safety rule); a line only too long is shown (length is a value rule)
-  if (again && !leakedIn(problem, spec, again.json)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
+  if (again && !leakedIn(problem, spec, again.json, opts.system)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
   if (!again && !leaked) return { hint: first.json.hint, next: first.json.what_to_try_next, provider, ms };
-  return { hint: spec.calc ? withheldCalc(spec.calc) : spec.parts ? withheldCalc(spec.parts[0]) : spec.school ? withheldSchool(spec.school) : withheldLine(problem), next: "", provider, ms };
+  return { hint: spec.calc ? withheldCalc(spec.calc) : spec.parts ? withheldCalc(spec.parts[0]) : spec.school ? withheldSchool(spec.school) : withheldLine(problem, opts.system), next: "", provider, ms };
 }

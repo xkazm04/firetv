@@ -537,9 +537,9 @@ const W7_TASKS={
   ['Calculate 2/3 × 3/4',cs('2/3 × 3/4')],['What is 2/3 × 3/4?',cs('2/3 × 3/4')],['Multiply 2/3 by 3/4',cs('2/3 × 3/4')],['Multiply 2/3 and 3/4',cs('2/3 × 3/4')],
   ['Find the product of 2/3 and 3/4',cs('2/3 × 3/4')],['3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['Work out 3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['3/4 divided by 1/2',cs('3/4 ÷ 1/2')],
   ['Divide 3/4 by 1/2',cs('3/4 ÷ 1/2')],['Work out 2/3 × 3/4. Give your answer in its simplest form.',cs('2/3 × 3/4',{form:'simplest'})],['2/3 × 3/4 =',cs('2/3 × 3/4')],
-  ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],
+  ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],['3/4 : 1/2',cs('3/4 ÷ 1/2')],
   // refused
-  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2/3',null],['2/3 × 3/4 = 1/2',null],['3/4 : 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
+  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2/3',null],['2/3 × 3/4 = 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
   ['2x/3 × 3/4',null],['(2/3) × (3/4)',null],['2/3 × 3/4 please',null],['Multiply 2/3 by 3/4 by 1/2',null],['2/3 ÷ 3/1',null],['Find the quotient of 3/4 and 1/2',null],['2/3 of 3/4',null],
  ],
 };

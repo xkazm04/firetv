@@ -15,6 +15,7 @@
  * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
  * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
+import { readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
 import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
 import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, toTex, type Expr, type Limit } from "./calc-expr";
@@ -859,11 +860,14 @@ function calc1SpecFromQuestion(text: unknown): CalcSpec | null {
  * The spec a printed Calculus task is: Calculus 1's reading first and unchanged (above); only a text that reading returns
  * null for is offered to rules/calc2 (v2 M3b-3b ruling 31), on the same normalised text.
  */
-export function specFromQuestion(text: unknown): CalcSpec | Calc2Spec | null {
+function specOnce(text: unknown): CalcSpec | Calc2Spec | null {
   const own = calc1SpecFromQuestion(text);
   if (own || typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return own;
   return calc2SpecFromQuestion(normalQuestion(text));
 }
+
+/** The spec a printed Calculus task is. `system` is the learner's school system: with it a decimal comma reads as a point; an instruction in front ('Derivujte:', 'Vypočtěte') is set aside (MB-B2). */
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | Calc2Spec | null => readTask(text, system, specOnce);
 
 const MAX_WORDS = String.raw`(?:absolute\s+|global\s+)?(maximum|max|largest|greatest)`;
 const MIN_WORDS = String.raw`(?:absolute\s+|global\s+)?(minimum|min|smallest|least)`;
@@ -880,7 +884,7 @@ const PART_READERS: [RegExp, boolean][] = [
  * judge (an extremum at an endpoint) makes the whole task one it does not claim, never half of it. specFromQuestion is
  * untouched: no text it reads changes its spec. Pure and deterministic.
  */
-export function partsFromQuestion(text: unknown): CalcSpec[] | null {
+function partsOnce(text: unknown): CalcSpec[] | null {
   if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
   const t = normalQuestion(text);
   for (const [pattern, maxFirst] of PART_READERS) {
@@ -894,6 +898,9 @@ export function partsFromQuestion(text: unknown): CalcSpec[] | null {
   }
   return null;
 }
+
+/** The parts a printed multi-part Calculus task is, read as specFromQuestion reads (MB-B2). */
+export const partsFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec[] | null => readTask(text, system, partsOnce);
 
 // ------------------------------------------------------------------ the line when a hint gave the answer away twice
 

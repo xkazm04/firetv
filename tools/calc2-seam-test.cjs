@@ -25,8 +25,8 @@ test('1: the frozen Calculus 1 table is equal, byte for byte',()=>{
  assert.equal(now===onDisk,true,'tools/calc1-frozen.json differs from what calc.ts now says: a Calculus 1 word moved');
 });
 
-test('2: calc.ts imports only calc-expr, calc-read and calc2',()=>{
- assert.deepEqual(importsOf('calc.ts').sort(),['./calc-expr','./calc-read','./calc2']);
+test('2: calc.ts imports only calc-expr, calc-read, calc2 and the taskText leaf',()=>{
+ assert.deepEqual(importsOf('calc.ts').sort(),['./calc-expr','./calc-read','./calc2','./taskText']);
 });
 
 test('3: calc2.ts and calc-read.ts import no store, session, desk, engine, TV, maths or React module',()=>{

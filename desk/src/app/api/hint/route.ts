@@ -29,13 +29,13 @@ export async function POST(req: Request) {
   if (getSession().jobs?.hint?.phase === "running") return refused({ status: 409, error: BUSY });
   if (typeof body.itemIx === "number") dispatch({ type: "item", itemIx: body.itemIx });
 
-  const path = learnerPath(s), age = learnerAge(s);
+  const path = learnerPath(s), age = learnerAge(s), system = learnerSystem(s);
   const prev = s.hint;
   // a maths hint is also told the learner's notation, their recorded slips on the task's unit and its worked method (MB-B8)
-  const ground = page.subject === "maths" ? groundFor(item.text, { id: who.id, system: learnerSystem(s) }) : "";
+  const ground = page.subject === "maths" ? groundFor(item.text, { id: who.id, system }) : "";
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
-      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age, ground });
+      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age, ground, system });
       dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? who.id } });
       dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? who.id });
       return h2;
@@ -44,14 +44,14 @@ export async function POST(req: Request) {
   }
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
-    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age, ground });
+    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age, ground, system });
     dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: who.id } });
     return h1;
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });
   if (!r.ok) return refused(r);
   // the lesson behind the hint, keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
   void runJob("lesson", async (run) => {
-    const noLibrary = page.subject === "maths" && (judgeOf(path) === "calc" || kindOfQuestion(item.text) === "school");
+    const noLibrary = page.subject === "maths" && (judgeOf(path) === "calc" || kindOfQuestion(item.text, system) === "school");
     const l = noLibrary ? null : await pickLesson(page.subject, item.text);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
     return l;

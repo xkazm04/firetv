@@ -38,14 +38,14 @@ export const kindOfSpec = (spec: unknown): ItemKind => (isSchoolSpec(spec) ? "sc
  * read only where no single spec reads. Pure; never throws.
  */
 export interface Question { kind: ItemKind; calc: CalcSpec | Calc2Spec | null; school: SchoolSpec | null; parts: CalcSpec[] | null }
-export function readQuestion(text: unknown): Question {
-  const calc = calcSpecFromQuestion(text);
-  const parts = calc ? null : partsFromQuestion(text);
-  const school = calc || parts ? null : schoolSpecFromQuestion(text);
+export function readQuestion(text: unknown, system?: SchoolSystem): Question {
+  const calc = calcSpecFromQuestion(text, system);
+  const parts = calc ? null : partsFromQuestion(text, system);
+  const school = calc || parts ? null : schoolSpecFromQuestion(text, system);
   return { kind: calc || parts ? "calc" : school ? "school" : "linear", calc, school, parts };
 }
 /** The kind of a printed task: the kind of the spec its text reads as, linear when neither reader reads it. */
-export const kindOfQuestion = (text: unknown): ItemKind => readQuestion(text).kind;
+export const kindOfQuestion = (text: unknown, system?: SchoolSystem): ItemKind => readQuestion(text, system).kind;
 
 /**
  * The unit a printed task reads as, when the desk can write six like it: the school unit its text reads as (rules/school
@@ -53,9 +53,9 @@ export const kindOfQuestion = (text: unknown): ItemKind => readQuestion(text).ki
  * Calculus task (a shape belongs to several Calculus topics, so code names none), a school task on the Calculus path, and
  * junk. Pure; never throws.
  */
-export function likeTopic(text: unknown, path: unknown): string | null {
+export function likeTopic(text: unknown, path: unknown, system?: SchoolSystem): string | null {
   try {
-    const unit = unitOf(readQuestion(text).school);
+    const unit = unitOf(readQuestion(text, system).school);
     return unit && generatorFor(unit) && pathOfTopic(unit) === path ? unit : null;
   } catch {
     return null;

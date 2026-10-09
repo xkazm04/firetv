@@ -221,7 +221,7 @@ export async function explainItem(
   const named = !verdict && !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
   const own = verdict?.said ?? item.said ?? ASK(item.n);
-  const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply);
+  const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply, system);
   const reply = h.reply && !gives ? h.reply : own;
   return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

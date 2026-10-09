@@ -9,6 +9,7 @@
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
  * It imports rules/calc, rules/school and library/paths (all pure, client-safe) and nothing session-backed.
  */
+import { readTask } from "./taskText";
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
@@ -226,14 +227,14 @@ const decimalComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?
  * gives it ('Solve for x:  3x − 7 = 11' is its equation, `equationOf`), and an expression item leaks by form as
  * well (`leaksByForm`): the lab's oracle (vision/poc_hints.py) derived, not hand-listed.
  */
-export function leaks(question: string, line: string): boolean {
+export function leaks(question: string, line: string, system?: SchoolSystem): boolean {
   if (typeof line !== "string" || !line) return false;
-  const eq = equationOf(question) ?? question;
+  const eq = equationOf(question, system) ?? question;
   const found = [...(decimalComma(said(line)).match(NUMBERS) ?? [])];
   // "12-7" reads as -7 here, so a signed number is checked with and without its sign
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
     .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
-    || leaksByForm(question, line);
+    || leaksByForm(question, line, system);
 }
 
 // ---- the pen: where the learner's working broke, found in code from their own lines ----
@@ -366,18 +367,24 @@ const afterLabel = (text: string) => {
  * The one single-variable equation an item asks about, as printed: 'Solve for x:  3x − 7 = 11' is '3x − 7 = 11'.
  * A system, a word problem or a slope item has none (null) - no oracle, so the desk claims nothing about it.
  */
-export function equationOf(itemText: unknown): string | null {
+function equationOnce(itemText: unknown): string | null {
   if (typeof itemText !== "string") return null;
   const e = afterLabel(itemText);
   return /x/i.test(e) && readsAsArithmetic(e) ? e : null;
 }
 
+/** The one equation an item asks about; `system` reads a decimal comma, and a leading instruction ('Řeš rovnici', 'Solve') is set aside (MB-B2). */
+export const equationOf = (itemText: unknown, system?: SchoolSystem): string | null => readTask(itemText, system, equationOnce);
+
 /** The one-variable expression an item works on ('Factor completely:  x² + 7x + 12'), or null. */
-export function expressionOf(itemText: unknown): string | null {
+function expressionOnce(itemText: unknown): string | null {
   if (typeof itemText !== "string") return null;
   const e = afterLabel(itemText);
   return e && !e.includes("=") && /x/i.test(e) && evaluate(e, 0.37) !== null ? e : null;
 }
+
+/** The one-variable expression an item works on, read as equationOf reads (MB-B2). */
+export const expressionOf = (itemText: unknown, system?: SchoolSystem): string | null => readTask(itemText, system, expressionOnce);
 
 /** How a line is written, for comparison: no spaces, ² as ^2, one minus. */
 const compact = (s: string) => s.toLowerCase().replace(/\s+/g, "").replace(/²/g, "^2").replace(/[−–—‐‑]/g, "-");
@@ -408,9 +415,9 @@ function linearRoot(c: string): number | null {
  * reordered or quoted, and its own brackets are not the answer; nor is the method's pair ('multiplies to 12 and adds
  * to 7'), nor an expand item's own numbers.
  */
-export function leaksByForm(question: string, line: string): boolean {
+export function leaksByForm(question: string, line: string, system?: SchoolSystem): boolean {
   if (typeof question !== "string" || typeof line !== "string" || !line) return false;
-  const eq = equationOf(question), ex = eq ? null : expressionOf(question);
+  const eq = equationOf(question, system), ex = eq ? null : expressionOf(question, system);
   if (!eq && !ex) return false;
   const own = compact(question), masked = maskWords(line);
   const answers = (r: number) => (eq ? holds(sidesOf(eq)!, r) === true : (() => { const v = evaluate(ex!, r); return v !== null && close(v, 0); })());
@@ -434,9 +441,9 @@ export function leaksByForm(question: string, line: string): boolean {
  * The line the TV shows and speaks when the model's hint gave the answer away twice: written here, never by a model,
  * per kind of item. It points at the method and carries no number - nothing on it can be the answer.
  */
-export function withheldLine(itemText: string): string {
-  if (equationOf(itemText)) return "Undo what is done to x, step by step, the same on both sides. The value of x is yours to find.";
-  if (expressionOf(itemText) && /^\s*factor/i.test(itemText)) return "Look for a pair of numbers that multiply to the last term and add to the middle coefficient. Finding them is yours.";
-  if (expressionOf(itemText) && /^\s*expand/i.test(itemText)) return "Multiply every term in the first bracket by every term in the second, then collect the like terms.";
+export function withheldLine(itemText: string, system?: SchoolSystem): string {
+  if (equationOf(itemText, system)) return "Undo what is done to x, step by step, the same on both sides. The value of x is yours to find.";
+  if (expressionOf(itemText, system) && /^\s*factor/i.test(itemText)) return "Look for a pair of numbers that multiply to the last term and add to the middle coefficient. Finding them is yours.";
+  if (expressionOf(itemText, system) && /^\s*expand/i.test(itemText)) return "Multiply every term in the first bracket by every term in the second, then collect the like terms.";
   return "Go back to the last step you are sure of and take the next. The answer stays yours to find.";
 }

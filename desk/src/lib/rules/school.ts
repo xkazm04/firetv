@@ -80,6 +80,7 @@
  *
  * Pure: no React, no filesystem, no model, no network; imports only a type from the store.
  */
+import { readTask } from "./taskText";
 import type { SchoolSystem } from "@/lib/session/store";
 import { EN_CARD, EN_ORD, figuresOfCzech } from "./numberWords";
 
@@ -3293,7 +3294,7 @@ function readProbability(t0: string): SchoolSpec | null {
  * fraction already in lowest terms or not proper, a missing number that is not whole). The printed question of every
  * practice item (`question`) reads back to its own spec. Pure; never throws.
  */
-export function specFromQuestion(text: unknown): SchoolSpec | null {
+function specOnce(text: unknown): SchoolSpec | null {
   if (typeof text !== "string" || !text.trim() || text.length > MAX_TASK) return null;
   try {
     let t = normalise(text);
@@ -3304,6 +3305,9 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
     return null;
   }
 }
+
+/** The spec a worksheet task is, read as written first, then with the middle dot, the fraction colon, the system's decimal comma and a leading instruction read (MB-B2). */
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): SchoolSpec | null => readTask(text, system, specOnce);
 
 /**
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
