@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "steps": {
+    "W1": {
+      "verdict": "pass",
+      "learner": "essay-browser-teen"
+    },
+    "W2": {
+      "verdict": "pass",
+      "enterToEssaytypeMs": 744,
+      "zoomMs": 560,
+      "exceededZoom": true
+    },
+    "W3": {
+      "verdict": "pass",
+      "analyseMs": 27551,
+      "provider": "claude-cli/sonnet",
+      "lens": "evidence",
+      "sentences": 5
+    },
+    "W4": {
+      "verdict": "pass",
+      "reading": {
+        "type": "evidence",
+        "provider": "claude-cli/sonnet",
+        "summary": "Sentences 2 and 3 give checkable support, but sentences 4 and 5 only assert, so add a real number linking sleep to learning.",
+        "sentences": [
+          {
+            "n": 1,
+            "text": "Schools should start later in the morning."
+          },
+          {
+            "n": 2,
+            "text": "During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm."
+          },
+          {
+            "n": 3,
+            "text": "When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night."
+          },
+          {
+            "n": 4,
+            "text": "Also it is just better and everyone knows it."
+          },
+          {
+            "n": 5,
+            "text": "That is why a later start would help students learn."
+          }
+        ],
+        "verdicts": [
+          {
+            "n": 1,
+            "verdict": "neutral",
+            "note": "This is your claim, so it needs no proof itself, but the rest must back it up.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 2,
+            "verdict": "neutral",
+            "note": "You name a mechanism, body clocks shifting in puberty, and a 11 pm figure a reader could look up.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 3,
+            "verdict": "neutral",
+            "note": "Strong: a named place, year, start times and 34 minutes make this easy to check.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 4,
+            "verdict": "faulty",
+            "note": "This only asserts; 'everyone knows it' and 'better' give nothing a reader can check.",
+            "fix": {
+              "move": "Replace assertion with a result",
+              "pattern": "Also, [a specific measured benefit] in [place or study]."
+            },
+            "was": null
+          },
+          {
+            "n": 5,
+            "verdict": "faulty",
+            "note": "This links sleep to learning, but gives no grades, test scores or attendance to show learning improved.",
+            "fix": {
+              "move": "Add a learning measurement",
+              "pattern": "After the change, [grades, attendance or test result] [rose or fell] by [amount]."
+            },
+            "was": null
+          }
+        ]
+      },
+      "tvTextFirstScreen": "Study Desk · TV\n←↑↓→ D-pad · Enter Select · Backspace Back · M Menu · Space Play/Pause\nVoice\nClock ×60\nReset session\nFake phone\nDesk display\nFullscreen\nSentences 2 and 3 give checkable support, but sentences 4 and 5 only assert, so add a real number linking sleep to learn\nESSAYMASTER\nMENU\nTable\nFOCUS\n25:00\nPhone joined\nS\nSam\nPARAGRAPH\n1\n2\n3\n4\n5\nEVIDENCE\n· SENTENCE 4 OF 5 · CLAIM\n“\nAlso it is just better and everyone knows it.\nLOOK AGAIN · THE PROBLEM\n\nThis only asserts; 'everyone knows it' and 'better' give nothing a reader can check.\n\nTHE MOVE\nREPLACE ASSERTION WITH A RESULT\nREPLACE ASSERTION WITH A RESULT\nTHE PATTERN\nAlso,\na specific measured benefit\nin\nplace or study\n.\nRewrite on my phone\nWhy this matters\nNext sentence\nBack to the paragraph",
+      "textsThatContainAWholeLearnerSentence": []
+    },
+    "W5": {
+      "verdict": "pass",
+      "rewriteMs": 23057,
+      "provider": "claude-cli/sonnet",
+      "sentence4": {
+        "before": {
+          "verdict": "faulty",
+          "note": "This only asserts; 'everyone knows it' and 'better' give nothing a reader can check.",
+          "fix": {
+            "move": "Replace assertion with a result",
+            "pattern": "Also, [a specific measured benefit] in [place or study]."
+          }
+        },
+        "after": {
+          "verdict": "strong",
+          "note": "This names a measurable result (grades in first class went up) and a source (the same study), but gives no size of the change, so a reader can't tell how big it was.",
+          "fix": null,
+          "was": {
+            "text": "Also it is just better and everyone knows it.",
+            "verdict": "faulty",
+            "fix": {
+              "move": "Replace assertion with a result",
+              "pattern": "Also, [a specific measured benefit] in [place or study]."
+            }
+          }
+        }
+      },
+      "everyOtherVerdictKept": true
+    },
+    "W6": {
+      "verdict": "pass",
+      "endSessionMs": 1896,
+      "phoneRecap": "Sam, tonight\nMath Buddy - not tonight\nLinga - not tonight\nEssay Master - one reading (Evidence): 2 of 5 sentences to fix\n\nGood evening's work - two to look at together.\n\nNothing needed a second hint."
+    },
+    "W7": {
+      "verdict": "pass",
+      "history": [
+        {
+          "kind": "writing",
+          "label": "Evidence",
+          "detail": "2 of 5 sentences to fix"
+        }
+      ],
+      "writingEvidence": {
+        "topic": "evidence",
+        "seen": 1,
+        "right": 0,
+        "estimate": 0,
+        "secure": false,
+        "lastSeen": 1791526273695,
+        "slips": []
+      }
+    },
+    "W8": {
+      "verdict": "pass",
+      "pageErrors": []
+    }
+  },
+  "errors": [],
+  "note": "No model judgement is asserted; verdicts are recorded for a reader. A physical phone, heard audio and the owner's reading are not covered."
+}
