@@ -65,6 +65,18 @@ test('chain: a rounded decimal is not rung, a wrong value is',()=>{
   assert.deepEqual(checkChain([{tag:'at',text:'0.5',x:1}],{from:'1/3'}),[false]);
 });
 
+test('D2-4: one-way defined-ness - a line undefined where the line before is defined is null, never true; one defined where it is not is compared',()=>{
+  const one=(from,tag,text)=>checkChain([{tag,text}],{from})[0];
+  // the moved fixture pin: OLD true -> NEW null
+  assert.equal(one('1/x','int','ln(x) + C'),null);assert.equal(one('1/x','int','ln|x| + C'),true);
+  assert.equal(one('1/(1-x)','int','-ln(1-x) + C'),null);assert.equal(one('ln(x^2)','=','2ln(x)'),null);assert.equal(one('x','=','sqrt(x)^2'),null);
+  assert.equal(one('ln(1-x)','d/dx','-1/(1-x)'),true);assert.equal(one('(x^2-4)/(x-2)','=','x + 2'),true);assert.equal(one('2ln(x)','=','ln(x^2)'),true);
+  // a line that disagrees where both are defined is still rung, gap or not
+  assert.equal(one('1/(2x+1)','int','ln(2x+1) + C'),false);assert.equal(one('1/x','int','ln(2x) + x + C'),false);
+  // the accepted ceiling, as in the judge: a gap left of every sample is not seen
+  assert.equal(one('1/(x+4)','int','ln(x+4) + C'),true);
+});
+
 // ---- the tagger: a Calculus item's own working lines, read from its spec
 test('tagger: line 0 is anchored to the spec, a derivative working is checked line by line',()=>{
   const spec={shape:'derivative',f:'x^2 sin x'};

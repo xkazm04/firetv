@@ -37,7 +37,8 @@ const clean = [
   c('anti', '3x^2 + 2x', [I('x^3 + x^2 + C')]),
   c('anti', 'cos x', [I('sin x + C')]),
   c('anti', 'e^(2x)', [I('e^(2x)/2 + C')]),
-  c('anti', '1/x', [I('ln(x) + C')]),
+  // D2-4: OLD I('ln(x) + C') (checked true) -> ln|x| + C; ln(x) + C is undefined where 1/x is defined, so it checks null (chain-rules-test)
+  c('anti', '1/x', [I('ln|x| + C')]),
   c('anti', 'sin(3x)', [I('-cos(3x)/3 + C')]),
   c('anti', 'x^5 - 4x', [I('x^6/6 - 2x^2 + C')]),
   c('anti', '2x e^(x^2)', [I('e^(x^2) + C')]),

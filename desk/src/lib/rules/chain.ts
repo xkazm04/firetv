@@ -4,14 +4,15 @@
  * nothing here throws, and a line it cannot read or cannot decide is null - the desk never rings what it did not check.
  *
  * A line is `{ tag, text }`, the tag naming how the line follows the one before it:
- *   - `=`     the same function (agreeing at every SAMPLES point), or equal values for two constants;
+ *   - `=`     the same function (agreeing at every SAMPLES point where both are defined), or equal values for two constants;
  *   - `d/dx`  the derivative of the line before (`derivativeAt` at the samples);
  *   - `int`   an antiderivative of the line before (its derivative is that line); the last indefinite line needs +C;
  *   - `at`    the value of the line before at `x`;
  *   - `lim`   the limit of the line before as x -> `x` (a number, 'inf' or '-inf'; `side` for one side);
  *   - `solve0` a line `x = c` (or `c`) where the line before is zero at c.
  * `of` names the line a line follows when it is not the one before (a root found from an earlier derivative). A line
- * with two sides (`x^2 = 1`) is null; a one-sided label ('f(x) =', "f'(x) =", 'y =') or a leading '=' is allowed.
+ * with two sides (`x^2 = 1`) is null; a one-sided label ('f(x) =', "f'(x) =", 'y =') or a leading '=' is allowed. The
+ * function relations compare one way (D2): a line undefined where what it follows is defined is null, never true.
  * The first line follows `opts.from` (the item's own function, code's) and is null when there is none.
  *
  * The second half reads a Calculus item's own working lines and tags them from the item's spec (`tagLines`), so the
@@ -85,27 +86,34 @@ const constantValue = (src: unknown): number | null => {
   return Number.isFinite(v) ? v : null;
 };
 
+/**
+ * The working line against what the line before makes it, one way (D2, as the judge's agreesWhereBoth): compared where
+ * both are defined, so a line defined where the line before is not is fine (x + 2 after (x^2 - 4)/(x - 2)). A line that
+ * agrees there but is undefined where the line before is defined is not a clean step - a domain question the desk does
+ * not decide - so null, not true (ln(x) + C as the integral of 1/x); one that disagrees where both are defined is false.
+ */
+function oneWay(line: (x: number) => number | null, before: (x: number) => number | null, tol: number): ChainResult {
+  const pairs: Pair[] = [];
+  let gap = false;
+  for (const x of SAMPLES) {
+    const u = line(x), v = before(x), du = u !== null && Number.isFinite(u), dv = v !== null && Number.isFinite(v);
+    if (dv && !du) gap = true;
+    if (du && dv) pairs.push([u, v]);
+  }
+  const r = verdictOf(pairs, tol);
+  return r === true && gap ? null : r;
+}
+
 /** `=`: the same function (or the same value) as the line before. */
 function equals(a: Expr, b: Expr, written: string): ChainResult {
   if (!a.usesX && !b.usesX) return sameValue(a.at(), b.at(), written, SAME_REL);
-  const pairs: Pair[] = [];
-  for (const x of SAMPLES) {
-    const u = a.at(x), v = b.at(x), du = Number.isFinite(u), dv = Number.isFinite(v);
-    if (x > 0 && du !== dv) return null; // defined on one only: a domain question the desk does not decide
-    if (du && dv) pairs.push([u, v]);
-  }
-  return verdictOf(pairs, SAME_REL);
+  return oneWay((x) => b.at(x), (x) => a.at(x), SAME_REL);
 }
 
-/** `d/dx` (b is the derivative of a) and `int` (a is the derivative of b). */
-function derivesTo(a: Expr, b: Expr): ChainResult {
-  const pairs: Pair[] = [];
-  for (const x of SAMPLES) {
-    const d = derivativeAt(a, x), v = b.at(x);
-    if (d !== null && Number.isFinite(v)) pairs.push([d, v]);
-  }
-  return verdictOf(pairs, FUNCTION_TOL);
-}
+/** `d/dx`: the line b is the derivative of the line before, a. */
+const derivativeOf = (a: Expr, b: Expr): ChainResult => oneWay((x) => b.at(x), (x) => derivativeAt(a, x), FUNCTION_TOL);
+/** `int`: the line b is an antiderivative of the line before, a (b's derivative is a). */
+const antiderivativeOf = (a: Expr, b: Expr): ChainResult => oneWay((x) => derivativeAt(b, x), (x) => a.at(x), FUNCTION_TOL);
 
 const INF = /^\s*([+-]?)\s*(?:inf|infinity|∞)\s*$/i;
 const DNE = /^\s*(?:dne|does not exist)\s*$/i;
@@ -127,8 +135,8 @@ function relate(line: ChainLine, a: Expr, bodySrc: string, letter: string): Chai
   const b = compile(withLetter(bodySrc, letter));
   switch (line.tag) {
     case "=": return b ? equals(a, b, bodySrc) : null;
-    case "d/dx": return b ? derivesTo(a, b) : null;
-    case "int": return b ? derivesTo(b, a) : null;
+    case "d/dx": return b ? derivativeOf(a, b) : null;
+    case "int": return b ? antiderivativeOf(a, b) : null;
     case "at": {
       const x = constantValue(line.x);
       if (x === null || !b || b.usesX) return null;
