@@ -208,14 +208,14 @@ round.
    - `perf-p20-code.py` (968909f2), written after the dumps, which reads meminfo and smaps only.
    - The reader was checked for format and speed on P13f's old dump (13 s) before this run's dumps existed. That dump is not
      evidence here.
-2. **The runs (286df277).**
+2. **The runs (22669306).**
    - `perf.apk` was built with P19's perf command (`-PappId=dev.deathride.perf "-PappLabel=Death Ride Perf" -PracePort=8772`),
      at 36868014 (deathride/main code), from the build cache.
    - `aapt badging`: `package: name='dev.deathride.perf'`, debuggable. SHA-256 `bf07c732...`.
    - Its 576 entries are CRC-identical to P19's cut.apk (9c20b2b4, the same code) (`apk-diff.txt`).
    - perf-device.py checked the badging again and installed it. The installed `base.apk` hash equals the built one.
    - Two diagnostic runs (`runs-log.txt`); see Failures.
-3. **The reading (a488957b), the ledger (24fd4810), this doc and the PERF-SESSION row.**
+3. **The reading (9ff03104), the ledger (24fd4810), this doc and the PERF-SESSION row.**
 
 ## Failures and limits
 
