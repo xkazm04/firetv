@@ -938,7 +938,7 @@ export function PageScreen({ s }: { s: Session }) {
   const pan = usePaper(`${s.pageIx}|${s.itemIx}|${p?.items.length}|${s.view}`);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const line = s.reading ? "Reading the page… the problems appear here as they are read."
+  const line = s.reading ? "Reading the page… the problems appear here all at once when it is read."
     : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
     : hj?.phase === "failed" ? "No hint that time. Select to try again."

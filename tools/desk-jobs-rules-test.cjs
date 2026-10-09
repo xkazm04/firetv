@@ -605,6 +605,11 @@ test('robustness-3: a read for a subject the desk does not have is refused with 
  assert.equal(store.getSession().pages.length,0);
 });
 
+test('value-4 / craft-5: the reading caption says the read is one call, not that problems arrive as they are read',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.doesNotMatch(tv,/as they are read/);assert.match(tv,/Reading the page… the problems appear here all at once when it is read\./);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
