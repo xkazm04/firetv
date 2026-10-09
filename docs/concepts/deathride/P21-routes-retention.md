@@ -217,8 +217,12 @@ after the first graded run.
     parallel build on a loaded host. That test passed alone.
   - The second full run was green: core 261, link 37 (2 skipped, as on the base), game 121.
 - **At the card 15 commit (10170a82):** green, core 262, link 37 (2 skipped), game 121.
-- **At the last code commit (0f04dc49, card 14's code): two green runs**, in `evidence/perf/p21/tests.json`. The second ran
-  after the evidence was committed (`EvidenceRuleTest`).
+- **At the last code commit (0f04dc49, card 14's code): two green runs and one red**, in `evidence/perf/p21/tests.json`.
+  - Run 1 at 0f04dc49 was green: core 261, link 37 (2 skipped), game 121.
+  - Run 2 at 1e23e5d3 (evidence, ledger and docs committed; the same code) failed two `ProfileSavesTest` timing assertions with
+    the host at 100%. No P21 commit touches `game/` or `app/`. The class passed alone (9 tests).
+  - Run 3 at 1e23e5d3 was green, with the same counts as run 1. Runs 2 and 3 ran after the evidence was committed
+    (`EvidenceRuleTest`).
 - **`assembleRelease` with `:desktop:compileKotlin` passed** at 0f04dc49 in 10 min 46 s: `5dc4ecd8...`, package
   `dev.deathride.tracks`, not debuggable (`release-badging.txt`).
 - **What did not change:**
