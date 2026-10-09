@@ -1,0 +1,36 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeCommits": {
+  "ab6b0d51 (card 14)": [
+   {"run": 1, "result": "fail", "failed": "link HudPayloadTest.anIdleSnapshotIsHeartbeatOnlyAndAChangeIsSentAtOnce (a websocket change within 500 ms; no /routes)", "host": "started 2026-10-09T07:39:42Z", "duration": "4 min 38 s", "log": "raw p21/gate-c14.log", "then": "the class passed alone (2 tests)"},
+   {"run": 2, "result": "pass", "core": "261 passed", "link": "37, 2 skipped (as on the base)", "game": "121 passed", "host": "hostCpu 68-94% at 07:45:41Z", "duration": "4 min 18 s", "log": "raw p21/gate-c14-run2.log"}
+  ],
+  "10170a82 (card 15, reverted)": [
+   {"run": 1, "result": "pass", "core": "262 passed (CoursesKeptTest included)", "link": "37, 2 skipped", "game": "121 passed", "host": "hostCpu 70-89% at 07:52:50Z", "duration": "4 min 14 s", "log": "raw p21/gate-c15-run1.log"}
+  ],
+  "0f04dc49 (the revert: card 14's code, the last code commit)": [
+   {"run": 1, "commit": "0f04dc49", "result": "pass", "core": "261 passed", "link": "37, 2 skipped", "game": "121 passed", "host": "hostCpu 91-100% at 09:35:34Z", "duration": "4 min 42 s", "log": "raw p21/gate-tests-run1.log"},
+   {"run": 2, "commit": "1e23e5d3 (evidence, ledger and docs committed; same code)", "result": "fail", "failed": "game ProfileSavesTest.aProfileSwitchDrainsTheOldProfileAndIgnoresItsCompletions and .pauseDrainsQueuedSavesAndNeverDropsThem (timing; no P21 commit touches game/ or app/)", "host": "hostCpu 100% at 09:58:34Z", "duration": "5 min", "log": "raw p21/gate-tests-run2.log", "then": "the class passed alone (9 tests, raw p21/profilesaves-alone.txt)"},
+   {"run": 3, "commit": "1e23e5d3", "result": "pass", "core": "261 passed (EvidenceRuleTest included, P21 evidence committed)", "link": "37, 2 skipped", "game": "121 passed", "host": "hostCpu 90-100% at 10:05:50Z", "duration": "4 min 16 s", "log": "raw p21/gate-tests-run3.log"}
+  ]
+ },
+ "reading": "Green at each code commit. At the last code, two green runs (1 and 3) and one red (2) on a game timing test under a 100% host; the red run is kept, not hidden.",
+ "servedBytesTests": {
+  "c14": "junit-c14/: RoutesReplyTest 3 (unchanged) and RoutesServedTest 3, green at ab6b0d51",
+  "c15": "junit-c15/: RoutesReplyTest 3, RoutesServedTest 3, CoursesKeptTest 1 and CoursePrewarmTest 3 (unchanged), green at 10170a82",
+  "controlsRed": "c14-control-red.txt (old server: heap +18,752,680 B, static-field test failed); c15-control-red.txt (old cache: 38 courses kept after the walk)"
+ },
+ "perfApks": {
+  "command": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 --console=plain (P19's)",
+  "base": {"code": "0c3ac3b4 (deathride/main 4f05315e code)", "sha256": "840bc7b06df91bd024bd1178fe75a4a9eb8c1b4d08f882838fdf4f29af0b8256", "sameEntriesAs": "P20 perf.apk bf07c732... (576 entries, apk-diff-p20-vs-base.txt)"},
+  "c14": {"code": "ab6b0d51", "sha256": "bc2222561d6caf4d325c2ae4a27e1f0dc945f14cac5498fc2bc694a5dabb04b1", "differsFromBase": "classes4.dex only"},
+  "c15": {"code": "10170a82", "sha256": "e191b04ce76a937930a9c78a9019fceba1e50d42a18c9fc61cb5b2524b29e640", "differsFromC14": "classes2.dex only"},
+  "aapt": "package dev.deathride.perf, debuggable, for each, before any install (base-badging.txt, c14-badging.txt, c15-badging.txt); perf-device.py asserts it again"
+ },
+ "release": {
+  "command": "gradlew.bat :app:assembleRelease :desktop:compileKotlin --console=plain",
+  "commit": "0f04dc49", "result": "BUILD SUCCESSFUL in 10 min 46 s", "sha256": "5dc4ecd8cd7fe11d0d796588126e4de496ecdcdbd65d1549e30cea71afb7b9a6",
+  "package": "dev.deathride.tracks, not debuggable (release-badging.txt)", "log": "raw p21/build-release.log"
+ },
+ "skipped": {"typecheck": "no command configured", "lint": "no command configured"}
+}
