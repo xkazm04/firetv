@@ -210,13 +210,16 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val hidden=java.util.concurrent.atomic.AtomicBoolean(false);val resume=java.util.concurrent.atomic.AtomicBoolean(false)
         val inputPacket=InputPacket();val ack=StringBuilder(96)
         try {
-            withTimeout(10000) {
+            // Only the read is bounded: withTimeout may fire after its block has finished, so a claim inside it could leave a seat
+            // claimed for a phone that never gets the welcome (and the cleanup below would not release it).
+            val greeting=withTimeout(10000) {
                 val frame=socket.incoming.receive() as? Frame.Text ?: error("Expected hello")
-                val msg=Json.parseToJsonElement(frame.readText()).jsonObject
-                if(msg.text("t")!="hello") error("Expected hello")
-                deltaHud=msg["hudDelta"]?.jsonPrimitive?.intOrNull==1
-                slot=claim(msg.text("token"),msg.text("pin"),msg.text("profile"))
+                val hello=Json.parseToJsonElement(frame.readText()).jsonObject
+                if(hello.text("t")!="hello") error("Expected hello")
+                hello
             }
+            deltaHud=greeting["hudDelta"]?.jsonPrimitive?.intOrNull==1
+            slot=claim(greeting.text("token"),greeting.text("pin"),greeting.text("profile"))
             val s=slot
             if(s==null) { socket.send("{\"t\":\"error\",\"message\":\"Pair from the lobby and check the PIN. Two cars may already be reserved; press REWIND in the TV lobby to reset pairing.\"}"); socket.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"pairing")); return }
             generation=s.generation
