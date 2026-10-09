@@ -222,7 +222,10 @@ test('case 6: statusOf() renders the operator view; --status prints it and write
   const runs = copyRuns(), led = L().ledger(runs), md = L().statusOf(led);
   assert.ok(md.split('\n').includes('186 open in 36 pairs across 5 runs'), md.slice(0, 400));
   assert.ok(md.includes('node uat/driver/linga-text.cjs --recertify'));
-  assert.ok(md.split('\n').includes('drained 0 of 5 runs'), 'no docs/uat-insights/<run>.md exists');
+  // an insights home with no <run>.md in it drains nothing; the real home, docs/uat-insights/, holds all five
+  const none = path.join(tmp, 'no-insights'); fs.mkdirSync(none, { recursive: true });
+  assert.ok(L().statusOf(led, { insights: none }).split('\n').includes('drained 0 of 5 runs'), 'an empty insights home');
+  assert.ok(md.split('\n').includes('drained 5 of 5 runs'), 'docs/uat-insights/ holds the five 2026-09-15 drains');
   const sections = md.split('\n').filter(l => l.startsWith('## '));
   assert.equal(sections.length, 36);
   const tops = sections.map(s => Number(s.match(/top rank (\d+)/)[1]));
