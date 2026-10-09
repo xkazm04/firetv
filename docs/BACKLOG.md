@@ -98,7 +98,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - status: open
   - ceiling: an enrichment line can be right and still be no use to the learner
 - **LG-16** — A turn's learning evidence is decided by provenance, not substance
-  - origin: 2026-09-15-lt-recert/LT-tomas-9-J4-7, 2026-09-15-lt/LT-adela-17-J4-7, ceiling of 2026-09-15-lt/LT-viktor-67-J4-1; 2026-10-09-linga-e-run/E4 (L2, builder's reading: of three replies only the repair-shaped one left a row; the typed "Where is the rover?" left none); 2026-10-09-linga-e-run-2/E4 (L2: neither the typed nor the spoken reply left a row; neither is a repair, the rover's only allowed skill)
+  - origin: 2026-09-15-lt-recert/LT-tomas-9-J4-7, 2026-09-15-lt/LT-adela-17-J4-7, ceiling of 2026-09-15-lt/LT-viktor-67-J4-1; 2026-10-09-linga-e-run/E4 (L2, builder's reading: of three replies only the repair-shaped one left a row; the typed "Where is the rover?" left none); 2026-10-09-linga-e-run-2/E4 (L2: neither the typed nor the spoken reply left a row; neither is a repair, the rover's only allowed skill); 2026-10-09-linga-run-3/R3 (traced read-only: a drop or no observation is undecidable, the desk keeps no raw output; open question: log dropped observations)
   - recommendation: build — `validateObservations` keeps a quote found in the reply that passes word-pattern `creditOf` (`lib/english/rules.ts:69`, `lib/english/credit.ts:35-46`) and drops the rest silently (`rules.ts:67-69`); the turn schema is loose (`lib/english/conversation.ts:42`)
   - owner: linga-conversation-turn council rework
   - status: open
@@ -155,12 +155,12 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - status: open
   - ceiling: nothing checks a coaching note's claims against the transcript; only its `before` is checked (`lib/english/conversation.ts:343`)
 - **LG-27** — The rover partner names the question it wants next
-  - origin: 2026-10-09-linga-e-run/E4 (L2, turn 2: "Can you ask me where I saw it last?", read by the builder as the partner doing its job); 2026-10-09-linga-e-run-2/E4 (turn 2 gives the place and names the next question: "so the next answer will not be new", builder's reading)
+  - origin: 2026-10-09-linga-e-run/E4 (L2, turn 2: "Can you ask me where I saw it last?", read by the builder as the partner doing its job); 2026-10-09-linga-e-run-2/E4 (turn 2 gives the place and names the next question: "so the next answer will not be new", builder's reading); 2026-10-09-linga-run-3/E4 (turn 2: "I saw it near a big rocket. Can you ask me where I saw it?" with the step "Find out where Pip saw it" on screen: "handed over, not drawn out", builder's reading)
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (10-09 drain)*. Opposing readings of one move: scaffolding at A2, or the mission step given away. The step check credits the learner's own words (`lib/english/conversation.ts:323`); nothing in the prompt says whether the partner may state the step's question
   - status: open
   - ceiling: any rule here is prompt-held, and three scripted runs of one scene at A2 cannot say what a real child needs
 - **LG-28** — Pause & coach repeats the fix the moment just taught, and calls it optional
-  - origin: 2026-10-09-linga-e-run-2/E5 (L2, builder's reading: "the learner meets the same correction twice, and 'also say' makes it sound optional"); the moment said "ONE THING TO FIX", the coach "you could also say" the same sentence
+  - origin: 2026-10-09-linga-e-run-2/E5 (L2, builder's reading: "the learner meets the same correction twice, and 'also say' makes it sound optional"); the moment said "ONE THING TO FIX", the coach "you could also say" the same sentence; 2026-10-09-linga-run-3/E5 ("A smoother option is 'Where did you see the rover last time?'" after the moment taught that fix)
   - recommendation: build — root cause verified in code: the coach call sends `context(c, false)` and the last reply (`lib/english/conversation.ts:325-326`), and `context()` omits this scene's moments (`conversation.ts:83-90`), so the coach cannot know the fix was taught. XS, built with LG-24 (the same omission): pass the scene's moments to the coach; on a reply that already has a moment, coach a different change or confirm the fix as a fix. That this alone stops the repeat is a hypothesis
   - status: open
   - ceiling: the TV recap shows one comparison and coaching wins (`lib/english/view.ts:459-462`), so once coaching and moment differ the moment is only a count
