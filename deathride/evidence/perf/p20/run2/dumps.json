@@ -1,0 +1,25 @@
+{
+ "run": "run2",
+ "plan": [
+  "a",
+  "c",
+  "d"
+ ],
+ "startedUtc": "2026-10-09T03:50:29.011Z",
+ "dumps": [
+  {
+   "label": "a",
+   "remote": "/data/local/tmp/p20-run2-a.hprof",
+   "hostStartUtc": "2026-10-09T03:51:07.675Z",
+   "amSeconds": 8.046,
+   "amOutput": "File: /data/local/tmp/p20-run2-a.hprof\r\nWaiting for dump to finish...",
+   "hprofStart": "10-09 05:51:09.469  3186  3186 I .deathride.per: hprof: heap dump \"/data/local/tmp/p20-run2-a.hprof\" starting...",
+   "hprofCompleted": "10-09 05:51:16.623  3186  3186 I .deathride.per: hprof: heap dump completed (69MB) in 7.153s objects 467278 objects with stack traces 0",
+   "hostDoneUtc": "2026-10-09T03:51:16.354Z",
+   "remoteLs": "-rwxrwx--- 1 shell shell 72805505 2026-10-09 05:51 /data/local/tmp/p20-run2-a.hprof",
+   "probeAlive": true
+  }
+ ],
+ "notes": [],
+ "pid": "3186"
+}

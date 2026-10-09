@@ -1,0 +1,21 @@
+P20 step 2: two diagnostic runs of perf.apk (bf07c732..., deathride/main code), perf-p20-dumps.py over perf-device.py --install --profile --seconds 360 (P18's arm, default sound arm, no settle wait). Nothing is graded.
+Times UTC; device logcat times are CEST (UTC+2).
+
+run1  plan a,b,c,d  started 03:44:05Z
+  a  03:44:40.957Z  lobby after the scenery and the /routes warm-up, before the probe (probe seen 03:45:00.3Z). hprof 69 MB in 7.222 s, 467,244 objects. am dumpheap 8.555 s.
+  b  03:45:30.991Z  mid-race round 1, 25 s after the first raceLaunch (probe second ~31). hprof 71 MB in 7.461 s, 476,890 objects.
+     The dump's stall passed the probe's 5 s request timeout: the probe ended (TimeoutError, 1 round). perf-device exit 1.
+  c, d not taken (no last round; d's lobby would not be the one after the last round).
+  Both dumps pulled after the probe, hprof-conv'd, deleted from the device (rm then ls: No such file).
+run2  plan a,c,d  started 03:50:29Z (allowed: run1 did not produce all four)
+  a2 03:51:09Z     lobby before the probe, as run1's a. hprof 69 MB in 7.153 s, 467,278 objects.
+  The host stopped between 03:53:48Z and 05:55Z: the app's logcat streams (written every few seconds) were last written 03:53:48Z,
+  the probe's probe.log at 05:55:06Z with "TimeoutError: The operation was aborted due to timeout" after 3 rounds (round 3, salt-1-b,
+  phase race at 03:53:48Z), and the harness then stopped perf-p20-dumps.py. No dump was being taken. c was not taken.
+  d2 05:58:11Z     recovered from run2's still-running process (pid 3186): /stats read phase results (salt-1-b, phones disconnected);
+                   one BACK key to dev.deathride.perf (its own remote action, back to the lobby); lobby and scenery ready at 05:57:28Z;
+                   am dumpheap -g by hand with the script's steps (meminfo before and after, smaps via run-as, logcat -d).
+                   hprof 74 MB in 7.704 s, 489,562 objects. So d2 is the lobby after run2's last round (round 3), ~2 h after it.
+  a2 and d2 pulled 05:58Z, hprof-conv'd, deleted from the device (ls: No such file; 0 hprof left).
+No third run (the brief allows two). (c), mid-race in the last round, was never taken: the growth (b)->(c) is replaced by ART's own
+logged full GCs over every round of seven earlier runs (survivors.json) and by a2->d2 (three rounds).

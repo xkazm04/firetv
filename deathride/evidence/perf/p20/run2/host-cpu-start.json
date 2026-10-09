@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-09T03:51:22.8850083Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#14",
+                             "IDProcess":  49968,
+                             "PercentProcessorTime":  135
+                         },
+                         {
+                             "Name":  "node#4",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  101
+                         },
+                         {
+                             "Name":  "node#32",
+                             "IDProcess":  59876,
+                             "PercentProcessorTime":  86
+                         },
+                         {
+                             "Name":  "System",
+                             "IDProcess":  4,
+                             "PercentProcessorTime":  38
+                         },
+                         {
+                             "Name":  "grep#49",
+                             "IDProcess":  35224,
+                             "PercentProcessorTime":  28
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  34016,
+                             "PercentProcessorTime":  24
+                         },
+                         {
+                             "Name":  "java#2",
+                             "IDProcess":  44880,
+                             "PercentProcessorTime":  24
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  19
+                         },
+                         {
+                             "Name":  "bash#39",
+                             "IDProcess":  14244,
+                             "PercentProcessorTime":  9
+                         },
+                         {
+                             "Name":  "msedgewebview2#27",
+                             "IDProcess":  13904,
+                             "PercentProcessorTime":  9
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                56,
+                                51,
+                                52
+                            ]
+}

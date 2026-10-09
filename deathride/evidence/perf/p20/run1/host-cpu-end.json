@@ -1,0 +1,62 @@
+{
+    "logicalProcessors":  16,
+    "utc":  "2026-10-09T03:45:46.2532939Z",
+    "topProcesses":  [
+                         {
+                             "Name":  "node#14",
+                             "IDProcess":  49968,
+                             "PercentProcessorTime":  271
+                         },
+                         {
+                             "Name":  "node#36",
+                             "IDProcess":  11608,
+                             "PercentProcessorTime":  131
+                         },
+                         {
+                             "Name":  "node#26",
+                             "IDProcess":  42732,
+                             "PercentProcessorTime":  126
+                         },
+                         {
+                             "Name":  "MsMpEng",
+                             "IDProcess":  5584,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "node#31",
+                             "IDProcess":  45408,
+                             "PercentProcessorTime":  103
+                         },
+                         {
+                             "Name":  "node#4",
+                             "IDProcess":  56392,
+                             "PercentProcessorTime":  99
+                         },
+                         {
+                             "Name":  "bash#48",
+                             "IDProcess":  44760,
+                             "PercentProcessorTime":  67
+                         },
+                         {
+                             "Name":  "bash#47",
+                             "IDProcess":  59768,
+                             "PercentProcessorTime":  31
+                         },
+                         {
+                             "Name":  "WmiPrvSE#2",
+                             "IDProcess":  29228,
+                             "PercentProcessorTime":  27
+                         },
+                         {
+                             "Name":  "chrome-headless-shell",
+                             "IDProcess":  38720,
+                             "PercentProcessorTime":  22
+                         }
+                     ],
+    "limit":  "Process percentages are per logical processor (can exceed 100)",
+    "totalPercentSamples":  [
+                                99,
+                                88,
+                                81
+                            ]
+}
