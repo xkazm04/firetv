@@ -1,0 +1,86 @@
+[
+  {
+    "action": "level-self",
+    "ms": 324,
+    "initialStatus": 200,
+    "status": 200,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "seating a level gives no partner line"
+  },
+  {
+    "action": "start",
+    "ms": 8547,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8460,
+    "sendToLineMs": 8553,
+    "lineToVoiceMs": 1817,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "turn",
+    "ms": 8555,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8343,
+    "sendToLineMs": 8562,
+    "lineToVoiceMs": 79,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "turn",
+    "ms": 8281,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8218,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "the partner line did not change within 120 s"
+  },
+  {
+    "action": "moment-done",
+    "ms": 47,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8218,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "taking a moment gives no new partner line"
+  },
+  {
+    "action": "coach",
+    "ms": 10471,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 10405,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "a coaching note is not a partner line"
+  },
+  {
+    "action": "replay",
+    "ms": 8576,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8526,
+    "sendToLineMs": 8579,
+    "lineToVoiceMs": 62,
+    "voiceStatus": "Partner speaking"
+  },
+  {
+    "action": "finish",
+    "ms": 118,
+    "initialStatus": 200,
+    "status": 200,
+    "modelMs": 8526,
+    "sendToLineMs": null,
+    "lineToVoiceMs": null,
+    "voiceStatus": null,
+    "reason": "finishing ends the scene: no new partner line"
+  }
+]
