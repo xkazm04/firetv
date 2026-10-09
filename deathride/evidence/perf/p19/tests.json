@@ -1,0 +1,52 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeUnderTest": "Kotlin code of 9c20b2b4 (deathride/main afc4d4cc + the re-land of P16 card 1, git revert 8443a99f); later commits change tools, evidence, ledger and docs only",
+ "runs": [
+  {
+   "run": 1,
+   "commit": "45a159d8 (code = 9c20b2b4; perf-p19.py and its reader fix, before the A/B evidence)",
+   "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included)",
+   "link": "34, 2 skipped (as on the base)",
+   "game": "121 passed (117 + FontPageTest 4)",
+   "host": "38-74% CPU at start (2026-10-09T02:32:54Z)",
+   "duration": "3 min 51 s",
+   "log": "raw p19/gate-tests-run1.log"
+  },
+  {
+   "run": 2,
+   "commit": "3fab6cd7 (code = 9c20b2b4; P19 A/B evidence and ledger committed)",
+   "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included, P19 evidence committed)",
+   "link": "34, 2 skipped (as on the base)",
+   "game": "121 passed",
+   "host": "66-83% CPU at start (2026-10-09T02:51:37Z)",
+   "duration": "4 min 27 s",
+   "log": "raw p19/gate-tests-run2.log"
+  }
+ ],
+ "reading": "Both runs are green. No run failed, so nothing was rerun.",
+ "fontPageTest": {
+  "when": "run by class before the rule (gradlew.bat :game:test --tests dev.deathride.game.FontPageTest --rerun-tasks), at 9c20b2b4",
+  "result": "4 tests, 0 failures, 0 errors, 0 skipped (timestamp 2026-10-09T01:22:31Z)",
+  "committedAs": "FontPageTest.xml",
+  "readBy": "perf-p19.py's keep rule",
+  "cases": "P16's four: the sibling's metrics and u/v bit-identical, independence under rescale, usedRows, titles refusing a page they do not fit"
+ },
+ "releaseApk": {
+  "command": "gradlew.bat :app:assembleRelease :desktop:compileKotlin --console=plain",
+  "commit": "3fab6cd7 (code = 9c20b2b4)",
+  "result": "pass",
+  "duration": "9 min 20 s (2026-10-09T02:37:37Z - 02:46:58Z)",
+  "apkSha256": "f6c5bbc042fba8588e1ab0057c65a7e728150a670b0b18b106e162d0c5063525",
+  "bytes": 33632781,
+  "package": "dev.deathride.tracks (gradle.properties default), not debuggable (aapt badging, raw p19/release-badging.txt)",
+  "log": "raw p19/build-release.log"
+ },
+ "perfApks": {
+  "command": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772 --console=plain",
+  "base": "9253fc9fcaf569d31311608e11a24ed5de32bd4b492f2801d4ff33cebe6ede6e (built at 2664c6e4 = afc4d4cc code)",
+  "cut": "522b73c14a669868595b1546abe7d765d4dd53acea556e4babc889e0f3aefa89 (built at 9c20b2b4)",
+  "differ": "classes2.dex only"
+ }
+}
