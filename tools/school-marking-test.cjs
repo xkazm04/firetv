@@ -232,7 +232,7 @@ test('6: a hint that gives a fractions answer away twice becomes the unit\'s fix
  stubText(()=>({hint:'Think about 17/12 as a check.',what_to_try_next:'Add them in pairs.'}));
  h=await H.hint('maths','Work out 3/4 + 1/6 + 1/2',{path:'school'});
  assert.equal(seenText.length,1);assert.equal(h.hint,'Think about 17/12 as a check.');
- assert.match(seenText[0].system,/factoring and linear-equations unit/,'an unread task keeps today\'s stance');
+ assert.match(seenText[0].system,/This is a school maths task; prefer the simplest method/,'an unread task gets the neutral stance (HL2)');assert.doesNotMatch(seenText[0].system,/factoring/);
  // a linear task: today's stance and fallback, untouched
  stubText(()=>({hint:'x is 6.',what_to_try_next:'Write x = 6.'}));
  h=await H.hint('maths','Solve for x:  3x − 7 = 11',{path:'school'});

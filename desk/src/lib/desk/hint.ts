@@ -22,7 +22,7 @@
  */
 import { text } from "../engines/text";
 import { cardText, type RuleCard } from "../rules/english";
-import { leaks, withheldLine } from "../rules/maths";
+import { equationOf, expressionOf, leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
 import { leaksSchool, unitOf, withheldSchool } from "../rules/school";
 import { readQuestion, type ItemKind, type Question } from "../rules/kinds";
@@ -58,12 +58,19 @@ const calcStance = (path?: MathPath) => {
 /** The maths stance on a school task that reads as a unit's (Family W5b): the sheet is that unit, named, never the linear-equations sheet. */
 const unitStance = (v: Voice, unit: string) => `a maths tutor for ${v.who}. This sheet is the unit "${unit}"; prefer the unit's methods over heavier ones.`;
 
-/** The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither. */
-const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, path?: MathPath, unit?: string) =>
+/** The maths stance on a task no reader reads and no Calculus path claims: it names no unit (HL2), so it never steers a method the task does not use. */
+const neutralStance = (v: Voice) => `a maths tutor for ${v.who}. This is a school maths task; prefer the simplest method a school course would use over heavier ones.`;
+
+/**
+ * The stance: a maths task's own kind first (Calculus, or the school unit it belongs to), the learner's path only where the text reads as neither.
+ * A task the linear rule reads (an equation or an expression, rules/maths) keeps the linear-equations sheet; any other maths task is neutral.
+ */
+const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: string, path?: MathPath, unit?: string) =>
   subject !== "maths" ? STANCE[subject](voice)
     : kind === "calc" ? calcStance(path)
     : kind === "school" && unit ? unitStance(voice, unit)
-    : judgeOf(path) === "calc" ? calcStance(path) : STANCE.maths(voice);
+    : judgeOf(path) === "calc" ? calcStance(path)
+    : equationOf(problem) || expressionOf(problem) ? STANCE.maths(voice) : neutralStance(voice);
 
 /**
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
@@ -91,7 +98,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   // the unit a school task belongs to, by its path's name for it: the stance names it
   const unit = spec.school ? topicIn(unitOf(spec.school) ?? "")?.name : undefined;
   const system = withManner(
-    `You are ${stanceOf(subject, voice, read?.kind ?? "linear", opts.path, unit)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
+    `You are ${stanceOf(subject, voice, read?.kind ?? "linear", problem, opts.path, unit)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
     `Never refer to the learner in the third person and never write instructions for a teacher, parent or tutor. ` +
