@@ -17,7 +17,7 @@
  */
 import { readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, placesOf, roundsTo, spoken, withinRel } from "./calc-read";
 import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -48,7 +48,9 @@ export const CALC_SHAPES: readonly CalcShape[] = ["evaluate", "derivative", "der
  * (a fraction, sqrt(2)/2, pi/4, ln 2), `rounded` for one written as a decimal (0.333).
  *   - evaluate, derivative-at, critical-point, extremum: exact shapes - the truth is computed to 1e-9 or better, so a
  *     right exact answer agrees far inside 1e-6; a decimal is held to the same line (the item asks for the value).
- *   - definite-integral, limit: exact 1e-6 as above; a learner who rounds to three figures lands within 5e-3.
+ *   - definite-integral, limit: exact 1e-6 as above. A decimal is right only as the exact value correctly rounded at the
+ *     decimals it is written to (2.718 for e, 3.00 for 3), and only inside `rounded` 5e-3; any other decimal that close
+ *     is 'unsure' (a calculator estimate at x = 0.01 is not the limit). A false tick is a blocker (MB-B28).
  *   - newton-step: 5e-3 either way - an iterate is usually worked on a calculator and written rounded.
  */
 export const TOLERANCE: Readonly<Record<Exclude<CalcShape, "derivative" | "antiderivative">, { exact: number; rounded: number }>> = {
@@ -383,9 +385,13 @@ export interface CalcVerdict { verdict: "right" | "wrong" | "unsure"; slip?: str
 
 const verdict = (v: CalcVerdict["verdict"], why: string, slip?: string): CalcVerdict => (slip ? { verdict: v, slip, why } : { verdict: v, why });
 
-function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, decimal: boolean): CalcVerdict {
+function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, decimal: boolean, places = 0): CalcVerdict {
   const tol = decimal ? TOLERANCE[shape].rounded : TOLERANCE[shape].exact;
-  if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
+  if (withinRel(s, truth, tol)) {
+    // a limit or an integral: a decimal is right only as the exact value rounded where it stops
+    if (decimal && (shape === "limit" || shape === "definite-integral") && !withinRel(s, truth, TOLERANCE[shape].exact) && !roundsTo(s, truth, places)) return verdict("unsure", WHY.rounded);
+    return verdict("right", WHY.right);
+  }
   if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
   if (decimal && withinRel(s, truth, ROUNDED_CLOSE)) return verdict("unsure", WHY.rounded);
   return verdict("wrong", WHY.wrong);
@@ -439,7 +445,7 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   const s = e.at();
   if (!fin(s)) return verdict("unsure", WHY.notFinite);
   if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
-  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, isDecimal(ans));
+  return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, isDecimal(ans), placesOf(ans));
 }
 
 /** Can two functions be compared at all: at least three samples where both are defined? */

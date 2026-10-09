@@ -251,3 +251,8 @@ test('specShown: a practice set on the screen keeps f, and still no answer field
  assert.deepEqual(spec,NN,'f kept; answer and value dropped');
  assert.equal(C.checkAnswer(spec,'1').verdict,'right');
 });
+
+test('MB-B28: a decimal for a sequence limit is right only as the limit correctly rounded at its own precision (the declared copy of calc.ts judgeNumber)',()=>{
+ assert.equal(verdict(EN,'2.718'),'right');assert.equal(verdict(EN,'2.717'),'unsure');assert.equal(verdict(EN,'2.71'),'unsure');
+ assert.equal(verdict(HALF,'0.5'),'right');assert.equal(verdict(HALF,'0.4996'),'unsure');assert.equal(verdict(EN,'2.7'),'wrong');
+});

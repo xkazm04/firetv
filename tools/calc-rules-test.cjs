@@ -434,3 +434,22 @@ test('MB-B27: an antiderivative undefined where the integrand is defined is not 
  assert.equal(C.checkAnswer(S,'ln x').verdict,'wrong');
  assert.equal(C.checkAnswer(S,'-ln|x| + C').slip,'sign');
 });
+
+test('MB-B28: a decimal for a limit or a definite integral is right only as the exact value correctly rounded at its own written precision',()=>{
+ const L3={shape:'limit',f:'sin(3x)/x',at:0},LH={shape:'limit',f:'(x^2 + 1)/(2x^2 + 3)',at:'inf'},LE={shape:'limit',f:'(1 + 1/x)^x',at:'inf'};
+ const IE={shape:'definite-integral',f:'e^x/2',a:0,b:1},NINE={shape:'definite-integral',f:'x^2',a:0,b:3};
+ const v=(spec,a)=>C.checkAnswer(spec,a).verdict;
+ for(const [spec,a] of [[L3,'3'],[L3,'3.00'],[L3,'3.0'],[LH,'0.5'],[LH,'0.50'],[LE,'2.718'],[LE,'2.72'],[LE,'2.7183'],[IE,'0.859'],[IE,'0.86'],[IE,'0.8591'],[NINE,'9.00']])assert.equal(v(spec,a),'right',`${spec.f} ${a}`);
+ for(const a of ['2.999','3.01','3.014','2.986','2.9996','3.0004'])assert.equal(v(L3,a),'unsure',`3: ${a}`);
+ for(const a of ['0.4996','0.498','0.502','0.4975'])assert.equal(v(LH,a),'unsure',`1/2: ${a}`);
+ for(const a of ['2.717','2.71'])assert.equal(v(LE,a),'unsure',`e: ${a}`);
+ for(const a of ['8.99','9.04'])assert.equal(v(NINE,a),'unsure',`9: ${a}`);
+ assert.match(C.checkAnswer(L3,'3.01').why,/rounded decimal/);
+ assert.equal(v(LE,'2.7'),'wrong','2.7 for e stays out');
+ // halfway: either neighbour is right
+ const HALFWAY={shape:'definite-integral',f:'5.35x',a:0,b:1};   // 2.675
+ assert.equal(v(HALFWAY,'2.67'),'right');assert.equal(v(HALFWAY,'2.68'),'right');assert.equal(v(HALFWAY,'2.671'),'unsure');
+ // exact answers and the exact shapes are unchanged
+ assert.equal(v(LE,'e'),'right');assert.equal(v(LH,'1/2'),'right');assert.equal(v(IE,'(e - 1)/2'),'right');
+ assert.equal(v({shape:'derivative-at',f:'x^2',at:6},'12.01'),'unsure');
+});

@@ -22,6 +22,10 @@ export const infinityOf = (s: string): 1 | -1 | null => {
 export const DNE = /^(dne|does not exist|no limit|undefined)$/i;
 /** A plain decimal numeral (0.333, 16.0, .5): the learner rounded. */
 export const isDecimal = (s: string) => /^[+\-−]?(\d+\.\d*|\.\d+)$/.test(s.replace(/\s+/g, ""));
+/** The digits a decimal is written to, trailing zeros counted (2.718 is 3, 3.00 is 2); a point or a comma; 0 for a numeral with neither. */
+export const placesOf = (s: string) => /[.,](\d*)$/.exec(s.replace(/\s+/g, ""))?.[1].length ?? 0;
+/** Is `s` the `truth` correctly rounded at `places` decimals (halfway: either neighbour; a hair of slack for the truth's own numerics)? */
+export const roundsTo = (s: number, truth: number, places: number) => Math.abs(s - truth) <= 0.5 * 10 ** -places * (1 + 1e-6);
 export const withinRel = (u: number, v: number, tol: number) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(v));
 
 /** Number words to ninety-nine, from the one table (numberWords) the three leak checks share. */
