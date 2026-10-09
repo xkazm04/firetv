@@ -130,7 +130,7 @@ const PAGE_EMA={id:'maths-100',subject:'maths',title:'Algebra - Exercise 4.2',im
 const HINT_EMA={key:'k1',problem:'2x+3=11',stage:1,hint1:{hint:'Undo the +3 first.',next:'What is left?'},hint2:null,askedQ:'',owner:'ema'};
 function emaEvening(patch={}){
  return session({profiles:TWO,screen:'sheet',focus:1,topic:'linear-one-step',practice:{...marked(['right','wrong','right','unsure','right','right']),owner:'ema'},
-  pages:[PAGE_EMA],hint:HINT_EMA,log:{started:1,minutes:12,problems:['k1'],hard:[],hints:1},...patch});
+  pages:[PAGE_EMA],hint:HINT_EMA,log:{started:Date.now(),minutes:12,problems:['k1'],hard:[],hints:1},...patch});
 }
 
 test('case 8 (S82): a set owned by Ema is not on Tom\'s landing, Tonight or sheet; switching back gives her all of it untouched',()=>{

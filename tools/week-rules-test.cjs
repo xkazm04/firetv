@@ -82,7 +82,7 @@ test('1: a fixed full week gives fixed words, in the page\'s order; the rows beh
  assert.deepEqual(page.units.map((u)=>[u.id,u.sets,u.right,u.total,u.stretch]),[['frac-add-sub',2,5,6,false],['mean-range',1,2,6,false],['area',1,6,6,false],['ratio-share',1,4,6,true]],'most sets first, then the most recent; the last set\'s count');
  assert.deepEqual(page.slip,{id:'tops-and-bottoms',name:'Added the tops and the bottoms',times:3});
  assert.deepEqual(page.english,{conversations:2,scenes:['The lost jacket','Say that again, please']});
- assert.deepEqual(page.essay,{readings:3,lenses:['Structure','Argument']});
+ assert.deepEqual(page.essay,{readings:3,pieces:0,lenses:['Structure','Argument']});
  assert.equal(page.tryIt,W.DO_IT['frac-add-sub'],'the unit worked most');
  assert.deepEqual(texts(W.sundayWords(page)),FULL);
  assert.ok(W.pageWords(W.sundayWords(page))<=W.PAGE_WORDS);

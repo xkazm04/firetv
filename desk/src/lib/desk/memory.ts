@@ -47,7 +47,7 @@ export async function writeMemory(
 
   // one section per app that had work tonight; counts, lens names and the closed slip vocabulary only
   const maths = items.length || session.hintsUsed
-    ? `Math Buddy tonight. Topic worked on: ${t?.name ?? session.topic ?? "unknown"}\n` +
+    ? `Topic worked on tonight: ${t?.name ?? session.topic ?? "unknown"}\n` +
       `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
       `Hints asked for: ${session.hintsUsed ?? 0}\n\n` + (rows ? `The set:\n${rows}\n\n` : "")
     : "";

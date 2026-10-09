@@ -305,9 +305,7 @@ export interface Session {
    * (lib/session/pairing.ts view); the seated learner's own is in the fields above.
    */
   away?: Record<string, MathsSlot>;
-  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written (YYYY-MM-DD): it is one evening's, see staleLog */ day?: string };
-  /** When the evening was last ended (session.end): the phone's recap shows for an evening that ended since local midnight. */
-  endedAt?: number;
+  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written: it is one evening's, see dayed */ day?: string; /** when the evening was last ended (session.end): the phone's recap shows for an evening ended since local midnight */ endedAt?: number };
   updatedAt: number;
   /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
   viewer?: "tv" | "phone" | "guest";
@@ -642,7 +640,7 @@ function step(s: Session, e: Event): Session {
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
-    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.endedAt = Date.now(); break;
+    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.log = { ...s.log, endedAt: Date.now() }; break;
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id

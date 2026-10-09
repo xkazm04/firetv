@@ -687,7 +687,8 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  // one refused spec, never a wrong verdict). Hints, marking, the school question writer and the level check keep their thinking.
  // and the worked lesson's idea (v2 M1, 2026-10-07): its words are checked in code (lib/desk/worked.ts cleanIdea: no
  // digit, three sentences) and fall back to the authored idea, so a hasty idea costs the model's wording, never a wrong number.
- assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts']);
+ // and the evening's memory note (M4, 2026-10-09): a few plain sentences from counts, as the TV's recap also asks for it, held to nothing by the phone's End session.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/desk/memory.ts','src/lib/desk/worked.ts','src/lib/english/conversation.ts']);
  const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');

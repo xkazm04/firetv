@@ -193,7 +193,7 @@ test('case 6: Back, and Select on the desk, go to the landing at rest - for Ema 
 
 test('GUARD: the phone still receives the recap, and its End session still posts session.end',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
- assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
+ assert.match(phone,/tiles\.some\(\(t\) => !t\.empty\) \|\| \(s\.log\.endedAt \?\? 0\) >= startOfDay\(now\)/,'M7: the phone\'s Recap shows for a tile with work or an evening ended since local midnight, whatever the TV shows');
  assert.doesNotMatch(phone,/s\.screen === "recap" \|\| s\.log\.problems\.length/,'M7: not tied to the TV\'s screen or the log');
  assert.match(phone,/tiles\.some\(\(t\) => t\.app === "maths" && !t\.empty\) && <ul>\{s\.log\.hard\.length/,'M7: the second-hint line only when the maths tile is not empty');
  assert.match(phone,/post\(\{ type: "session\.end" \}\)/,'End session on the phone');
@@ -281,7 +281,7 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
   assert.equal(r.status,200);assert.deepEqual(r.body,{lines:['They undo the constant first once they see it.'],asked:true});
   assert.equal(asked,1,'an Essay line is work');
   assert.match(lastReq.prompt,/Essay Master tonight/);assert.match(lastReq.prompt,/Argument lens: 5 sentences read, 2 to fix when read, 1 after rewrites/);
-  assert.doesNotMatch(lastReq.prompt,/Math Buddy tonight/,'no maths section for an evening with no maths');
+  assert.doesNotMatch(lastReq.prompt,/Topic worked on tonight/,'no maths section for an evening with no maths');
   assert.doesNotMatch(lastReq.prompt,/Linga tonight/);
   r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:true},'the same evening is not written twice');assert.equal(asked,1);
   // a new Essay line is new work: the evening key covers it
@@ -290,7 +290,7 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
   seat({...noMaths,history:[],englishLearning:{...noEnglish,sessions:[{id:'a',sceneId:'cafe',title:'At the cafe',at:Date.now()-1000,turns:7},{id:'b',sceneId:'station',title:'At the station',at:Date.now()-900,turns:4}]}});engine(lined);
   r=await memoryPost();assert.equal(r.body.asked,true);assert.equal(asked,1,'a Linga conversation is work');
   assert.match(lastReq.prompt,/Linga tonight: 2 English conversations, 11 replies/);
-  assert.doesNotMatch(lastReq.prompt,/cafe|station|Essay Master tonight|Math Buddy tonight/i,'no scene, no other app');
+  assert.doesNotMatch(lastReq.prompt,/cafe|station|Essay Master tonight|Topic worked on tonight/i,'no scene, no other app');
   // yesterday's work is not tonight's
   seat({...noMaths,englishLearning:noEnglish,history:[{at:YESTERDAY,kind:'writing',label:'Argument',detail:'2 of 5 sentences to fix'}]});engine(lined);
   r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:false});assert.equal(asked,0);
@@ -334,7 +334,7 @@ test('M5: the evening log belongs to one evening - the first event of a later da
   assert.equal(s.log.hints,1);assert.deepEqual(s.log.hard,['3x + 7 = 1']);assert.equal(s.log.day,'2026-9-24','stamped with the local day on the first write');
   Date.now=()=>at(24,23);
   s=reduce(s,{type:'session.end'});
-  assert.equal(s.log.hints,1,'session.end clears nothing: the recap still reads it');assert.equal(s.away.jakub.log.hints,2);assert.equal(s.endedAt,at(24,23));
+  assert.equal(s.log.hints,1,'session.end clears nothing: the recap still reads it');assert.equal(s.away.jakub.log.hints,2);assert.equal(s.log.endedAt,at(24,23));
   const same=reduce(s,{type:'focus',focus:0});assert.equal(same.log.hints,1,'later the same evening: kept');
   Date.now=()=>at(25,17);
   const next=reduce(s,{type:'focus',focus:0});

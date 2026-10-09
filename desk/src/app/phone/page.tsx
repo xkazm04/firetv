@@ -630,7 +630,7 @@ export default function Phone() {
             // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line.
             // It shows whenever tonight has a tile with work, or the evening ended since local midnight - whatever the TV shows.
             const now = Date.now(), tiles = recapRows(s, now);
-            if (!(tiles.some((t) => !t.empty) || (s.endedAt ?? 0) >= startOfDay(now))) return <p>Arrives when the session ends.</p>;
+            if (!(tiles.some((t) => !t.empty) || (s.log.endedAt ?? 0) >= startOfDay(now))) return <p>Arrives when the session ends.</p>;
             const mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
             const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
             return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
