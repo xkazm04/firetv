@@ -72,9 +72,16 @@ Every Character file has the prose the skill asks for (background, voice, jobs-t
 
 ## Drain homes
 
-- Analysis documents: `docs/uat-insights/<run-id>.md`
-- Backlog: `docs/BACKLOG.md` (section `## Linga`)
-- Concept documents: `docs/` beside `LINGA-PLACEMENT-DESIGN.md`
+`/uat drain` writes here, per module. The format of each home is stated in the home itself.
+
+- Analysis documents, every module: `docs/uat-insights/<run-id>.md` (one per drained run; the three sections are in `docs/uat-insights/README.md`)
+- Backlog: `docs/BACKLOG.md`, one section per module (entry format at the top of the file)
+
+| Module | Backlog section | Concept documents |
+|---|---|---|
+| Linga | `## Linga` | `docs/`, beside `LINGA-PLACEMENT-DESIGN.md` |
+| Essay Master | `## Essay Master` | `docs/`, beside `DESIGN-ESSAY-MASTER.md` |
+| Math Buddy | `## Math Buddy` | `docs/`, beside `DESIGN-MATH-BUDDY.md` and `MATH-COURSE-PATHS.md` |
 
 ## Skill improvement log
 
