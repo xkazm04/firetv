@@ -501,9 +501,6 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
   const pieces = ownPieces(s);
   if (!fnRight(f)) pieces.push(s.f);
   for (const p of pieces) text = text.replace(piecePattern(p.toLowerCase()), " ");
-  const tokens = text.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
-    .map((t) => t.replace(/\.+$/, ""))
-    .filter(Boolean);
   /** One token alone, also without a bracket it does not close ('(16', '16)'): prose wraps numbers in brackets. */
   const single = (t: string): Expr | null => {
     const e = compile(t);
@@ -517,17 +514,51 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
     if (!fin(v)) return false;
     return withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE));
   };
-  for (let i = 0; i < tokens.length;) {
-    let took = 0, hit = false;
-    for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
-      const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
-      if (!e) continue;
-      took = n;
-      hit = truth.kind === "number" ? numberRight(e, tokens[i]) : fnRight(e);
-      break;
+  /** Most distinct factors a line is searched for a product pair in. */
+  const MAX_FACTORS = 14;
+  /** Does the line name two factors whose product is the answer ('Multiply cos(x^2) by 2x.')? */
+  const productRight = (toks: string[]): boolean => {
+    if (truth.kind === "number") return false;
+    const cands: { t: string; s: number; e: number; x: boolean }[] = [];
+    for (let i = 0; i < toks.length && cands.length < MAX_FACTORS; i++) {
+      for (let n = 1; n <= Math.min(3, toks.length - i); n++) {
+        const t = toks.slice(i, i + n).join(" "), e = n === 1 ? single(toks[i]) : compile(t);
+        // a bare number is a factor only of an antiderivative (the 1/2 of (1/2)e^(x^2)), and not 0 or 1
+        if (!e || (!e.usesX && !(truth.kind === "antiderivative" && n === 1 && !/^[01]$/.test(t)))) continue;
+        if (cands.some((c) => c.t === t)) continue;
+        cands.push({ t: n === 1 && !compile(t) ? t.replace(/^\(+|\)+$/g, "") : t, s: i, e: i + n, x: e.usesX });
+      }
     }
-    if (hit) return true;
-    i += Math.max(1, took);
+    for (const a of cands) for (const b of cands) {
+      if (!a.x || (a.s < b.e && b.s < a.e)) continue;
+      const e = compile(`(${a.t})*(${b.t})`);
+      if (e && fnRight(e)) return true;
+    }
+    return false;
+  };
+  const scan = (t: string): boolean => {
+    const tokens = t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+      .map((w) => w.replace(/\.+$/, ""))
+      .filter(Boolean);
+    for (let i = 0; i < tokens.length;) {
+      let took = 0, hit = false;
+      for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
+        const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
+        if (!e) continue;
+        took = n;
+        hit = truth.kind === "number" ? numberRight(e, tokens[i]) : fnRight(e);
+        break;
+      }
+      if (hit) return true;
+      i += Math.max(1, took);
+    }
+    return productRight(tokens);
+  };
+  if (scan(text)) return true;
+  // a substitution said in the line ('u = x^2'): the line is read again with the letter put back as its inside
+  for (const m of text.matchAll(/\b([uvw])\s*=\s*([^\s,;=…]+)/g)) {
+    const inner = single(m[2]);
+    if (inner?.usesX && scan(text.replace(new RegExp(`(?<![a-z])${m[1]}(?![a-z])`, "g"), `(${m[2].replace(/^\(+|\)+$/g, "")})`))) return true;
   }
   return false;
 }

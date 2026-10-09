@@ -387,3 +387,23 @@ test('9: never throws - every public function on malformed and randomly mutated 
  if(failures.length)console.log(failures.slice(0,15).map(f=>`# FAIL ${f}`).join('\n'));
  assert.deepEqual(failures.slice(0,15),[],`${failures.length} failures`);
 });
+
+// ------------------------------------------------------------------ MB-B16, the Calculus half: two factors, or a product split across words
+test('MB-B16 leaksCalc: a line naming both factors of the answer, or the answer as a product split across words, leaks; one factor alone passes',()=>{
+ const CH={shape:'derivative',f:'sin(x^2)'};                 // cos(x^2) * 2x
+ const SUBST={shape:'antiderivative',f:'x e^(x^2)'};         // (1/2)e^(x^2) + C
+ const rows=[
+  [CH,'Differentiate the outside to get cos(x^2), then multiply by 2x, the derivative of the inside.',true],
+  [CH,'Multiply cos(x^2) by 2x.',true],
+  [SUBST,'Substitute u = x^2 … = (1/2)e^u + C.',true],
+  [CH,'Use the chain rule: differentiate the outside, then multiply by the derivative of the inside.',false],
+  [CH,'The inside function is x^2.',false],
+  [CH,'The outer derivative is cos(x^2).',false],
+  [CH,'The derivative of the inside is 2x.',false],
+  [SUBST,'Let u = x^2, then du = 2x dx.',false],
+  [SUBST,'Substitute u = x^2.',false],
+  [SUBST,'Try a substitution for the inside of the exponent.',false],
+ ];
+ const bad=rows.filter(([s,l,want])=>C.leaksCalc(s,l)!==want).map(([s,l,want])=>`${s.f}: ${l} should ${want?'':'not '}leak`);
+ assert.deepEqual(bad,[]);
+});
