@@ -1,0 +1,135 @@
+{
+ "run": "base-run2",
+ "apkSha256": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66",
+ "arm": "base",
+ "settled": false,
+ "settledNote": "no (no wait)",
+ "durationSeconds": 360.1372825,
+ "functionalPass": true,
+ "error": null,
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-08T23:30:01.5149255Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#59",
+     148
+    ],
+    [
+     "node#52",
+     107
+    ],
+    [
+     "node#55",
+     107
+    ],
+    [
+     "git",
+     103
+    ],
+    [
+     "node#56",
+     98
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-08T23:36:17.1545512Z",
+   "totalPercentSamples": [
+    96,
+    96,
+    54
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#17",
+     163
+    ],
+    [
+     "node#52",
+     110
+    ],
+    [
+     "rustc",
+     101
+    ],
+    [
+     "SearchIndexer",
+     101
+    ],
+    [
+     "com.docker.backend#1",
+     101
+    ]
+   ]
+  }
+ },
+ "pss": {
+  "minMiB": 156.92,
+  "maxMiB": 168.06,
+  "samples": 8,
+  "peakSecond": 3.7,
+  "lowestSecond": 0,
+  "peakBreakdownMiB": {
+   "Java Heap": 59.27,
+   "Native Heap": 10.29,
+   "Code": 25.37,
+   "Stack": 1.32,
+   "Graphics": 51.97,
+   "Private Other": 7.59,
+   "System": 12.25,
+   "pss Dalvik Heap": 53.34,
+   "pss Dalvik Other": 4.13,
+   "pss GL mtrack": 51.97,
+   "pss Native Heap": 10.37,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.42,
+   "TOTAL PSS": 168.06
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 48.82,
+   "Native Heap": 9.48,
+   "Code": 25.32,
+   "Stack": 0.97,
+   "Graphics": 51.96,
+   "Private Other": 7.71,
+   "System": 12.66,
+   "pss Dalvik Heap": 42.88,
+   "pss Dalvik Other": 3.99,
+   "pss GL mtrack": 51.96,
+   "pss Native Heap": 9.56,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.42,
+   "TOTAL PSS": 156.92
+  },
+  "javaHeapAtPeakMiB": 59.27,
+  "javaHeapPeakMinusLowestMiB": 10.45
+ },
+ "allocation": {
+  "MBps": 2.5764,
+  "gcCount": 35,
+  "gcTimeMs": 3213,
+  "blockingGcCount": 1,
+  "seconds": 343.8
+ },
+ "profileReads": 33,
+ "noRegression": {
+  "activeFrames": 19047,
+  "over33": 96,
+  "worstActiveWindowP95Ms": 26.887923,
+  "activeMaxMs": 65.663539,
+  "pooledActiveP95Ms": 19.022,
+  "rejectedInputs": [
+   0,
+   0
+  ]
+ }
+}

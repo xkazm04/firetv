@@ -1,2 +1,7 @@
 start 2026-10-08T22:12:07Z audit
 audit 2026-10-08T22:19:33Z exit 1
+start-ab 2026-10-08T22:38:25Z rule=70fe350c base=be571718543b cut=dd2d9754f7d9
+base-run1 base 2026-10-08T23:15:40Z exit 0 settled=no
+cut-run1 cut 2026-10-08T23:29:03Z exit 0 settled=no (no wait)
+base-run2 base 2026-10-08T23:36:31Z exit 0 settled=no (no wait)
+cut-run2 cut 2026-10-08T23:43:53Z exit 0 settled=no (no wait)
