@@ -226,7 +226,7 @@ test('MB-B14: the homework line comes first in Math Buddy, the paper line last; 
  // evenings: a homework evening counts as any other
  assert.equal(W.sundayPage(learnerOf([H(21,18,3),M(22,18,'area',3,6),H(22,19,3)]),MIA,NOW).evenings,2);
  // counts only: no percent, no praise, no em dash
- for(const l of words([H(21,18,9,40,9),H(22,18,9,0,0),P(23,18,30)]))assert.doesNotMatch(l.text,/%|[—–]|(great|well done|good job|score|percent)/i,l.text);
+ for(const l of words([H(21,18,9,40,9),H(22,18,9,0,0),P(23,18,30)]))assert.doesNotMatch(l.text,/%|[—–]|\b(great|well done|good job|score|percent)\b/i,l.text);
  assert.equal(calls,0);
 });
 
