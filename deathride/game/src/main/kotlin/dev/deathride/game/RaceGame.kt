@@ -232,8 +232,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(profiler!=null) { profileGl=ProfileGl(Gdx.gl20);Gdx.gl20=profileGl;Gdx.gl=profileGl }
         shape=ShapeRenderer(10000); batch=SpriteBatch(); wheels.init()
         font=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
-        large=HandCutFont.create(HudTheme.TITLE)
-        small=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
+        // P16: the HUD's text draws from one page. The detail font is the body font's sibling (its own metrics, the same texture)
+        // and the hand-cut titles are copied into the page's free rows, so the HUD batch flushes once for all text, not three times.
+        val sharedPage=fontFactory!=null
+        val titleTop=RuntimeFonts.usedRows(font)
+        large=(if(sharedPage)runCatching{HandCutFont.createOn(HudTheme.TITLE,font.region.texture,titleTop)}.onFailure{logger("fonts titles keep their own page: ${it.message}")}.getOrNull() else null)?:HandCutFont.create(HudTheme.TITLE)
+        small=if(sharedPage)RuntimeFonts.sibling(font) else BitmapFont().apply { data.setScale(1.6f) }
+        logger("fonts page=${font.region.texture.width}x${font.region.texture.height} pages=${listOf(font,large,small).map{it.region.texture}.distinct().size} titleTop=$titleTop")
         fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         captions=GlyphLayer(small);scriptLayer=GlyphLayer(small)
