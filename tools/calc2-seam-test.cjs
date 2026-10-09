@@ -2,7 +2,7 @@
  * The Calculus 2 seam (v2 M3b-3a; rules/calc2.ts, rules/calc-read.ts): the dispatch from calc.ts to calc2.ts exists and
  * moves nothing. The frozen Calculus 1 table (tools/calc1-frozen.json, written at the base by tools/calc1-frozen-gen.cjs
  * before calc.ts changed) is recomputed from the same specs and answers and must be equal byte for byte; the new modules stay
- * pure (calc2.ts never imports calc.ts); CALC2_SHAPES holds the shapes built so far (M3b-3b: approx-integral) and shares no id with CALC_SHAPES. A change to a Calculus 1 word is made openly: regenerate
+ * pure (calc2.ts never imports calc.ts); CALC2_SHAPES holds the shapes built so far (M3b-3b: approx-integral; M3b-3c: sequence-limit) and shares no id with CALC_SHAPES. A change to a Calculus 1 word is made openly: regenerate
  * the table in the commit that changes it, with the reason in the log. Pure: no network, no model.
  * Run with npm run test:rules in desk/ (directly: node tools/calc2-seam-test.cjs).
  */
@@ -38,8 +38,8 @@ test('3: calc2.ts and calc-read.ts import no store, session, desk, engine, TV, m
  assert.deepEqual(importsOf('calc-read.ts'),[],'calc-read.ts imports nothing');
 });
 
-test('4: CALC2_SHAPES is [approx-integral] and shares no id with CALC_SHAPES; calc2 refuses a spec of no shape and a malformed approx-integral',()=>{
- assert.deepEqual([...C2.CALC2_SHAPES],['approx-integral']);
+test('4: CALC2_SHAPES is [approx-integral, sequence-limit] and shares no id with CALC_SHAPES; calc2 refuses a spec of no shape and a malformed approx-integral',()=>{
+ assert.deepEqual([...C2.CALC2_SHAPES],['approx-integral','sequence-limit']);
  assert.deepEqual(C2.CALC2_SHAPES.filter(s=>C.CALC_SHAPES.includes(s)),[]);
  // a calc2 spec wellFormed refuses: no f, no interval, no pieces, no rule
  for(const spec of [{shape:'limit',f:'x'},{shape:'approx-integral',f:'1/x',a:1,b:2,pieces:1,rule:'trapezoid'},null,'x',{}]){

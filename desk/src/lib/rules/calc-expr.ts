@@ -749,37 +749,76 @@ const paren = (s: string) => `(${s})`;
 /** Does this node's TeX start with a digit (so juxtaposing it after another factor would run two numbers together)? */
 const startsNumber = (n: Node): boolean => n.k === "num" || ((n.k === "pow" || n.k === "mul" || n.k === "div") && startsNumber(n.a));
 
-function tex(n: Node): string {
+/** `v` is the variable's name: TeX of a sequence term prints n where the engine reads x. */
+function tex(n: Node, v = "x"): string {
+  const t = (m: Node) => tex(m, v);
   switch (n.k) {
     case "num": return n.s;
-    case "x": return "x";
+    case "x": return v;
     case "const": return n.name === "pi" ? "\\pi" : "e";
-    case "neg": return `-${isSum(n.a) || n.a.k === "neg" ? paren(tex(n.a)) : tex(n.a)}`;
-    case "add": return `${tex(n.a)} + ${n.b.k === "neg" ? paren(tex(n.b)) : tex(n.b)}`;
-    case "sub": return `${tex(n.a)} - ${isSum(n.b) || n.b.k === "neg" ? paren(tex(n.b)) : tex(n.b)}`;
+    case "neg": return `-${isSum(n.a) || n.a.k === "neg" ? paren(t(n.a)) : t(n.a)}`;
+    case "add": return `${t(n.a)} + ${n.b.k === "neg" ? paren(t(n.b)) : t(n.b)}`;
+    case "sub": return `${t(n.a)} - ${isSum(n.b) || n.b.k === "neg" ? paren(t(n.b)) : t(n.b)}`;
     case "mul": {
-      const a = isSum(n.a) ? paren(tex(n.a)) : tex(n.a);
-      const b = isSum(n.b) || n.b.k === "neg" ? paren(tex(n.b)) : tex(n.b);
+      const a = isSum(n.a) ? paren(t(n.a)) : t(n.a);
+      const b = isSum(n.b) || n.b.k === "neg" ? paren(t(n.b)) : t(n.b);
       if (!n.implicit || startsNumber(n.b) || n.a.k === "div" || n.b.k === "div") return `${a} \\cdot ${b}`;
       return /\\[a-zA-Z]+$/.test(a) && /^[a-zA-Z]/.test(b) ? `${a} ${b}` : `${a}${b}`;
     }
-    case "div": return `\\frac{${tex(n.a)}}{${tex(n.b)}}`;
+    case "div": return `\\frac{${t(n.a)}}{${t(n.b)}}`;
     case "pow": {
-      const e = `^{${tex(n.b)}}`;
-      if (n.a.k === "fn" && !n.a.base && n.a.name !== "sqrt" && n.a.name !== "cbrt" && n.a.name !== "abs") return `${TEX_FN[n.a.name]}${e}(${tex(n.a.arg)})`;
+      const e = `^{${t(n.b)}}`;
+      if (n.a.k === "fn" && !n.a.base && n.a.name !== "sqrt" && n.a.name !== "cbrt" && n.a.name !== "abs") return `${TEX_FN[n.a.name]}${e}(${t(n.a.arg)})`;
       const simple = n.a.k === "x" || n.a.k === "const" || (n.a.k === "num" && n.a.v >= 0) || (n.a.k === "fn" && (n.a.name === "sqrt" || n.a.name === "cbrt" || n.a.name === "abs"));
-      return `${simple ? tex(n.a) : paren(tex(n.a))}${e}`;
+      return `${simple ? t(n.a) : paren(t(n.a))}${e}`;
     }
     case "fn": {
-      if (n.name === "sqrt" || n.name === "cbrt") return `${TEX_FN[n.name]}{${tex(n.arg)}}`;
-      if (n.name === "abs") return `\\lvert ${tex(n.arg)} \\rvert`;
-      if (n.base) return `\\log_{${tex(n.base)}}(${tex(n.arg)})`;
-      return `${TEX_FN[n.name]}(${tex(n.arg)})`;
+      if (n.name === "sqrt" || n.name === "cbrt") return `${TEX_FN[n.name]}{${t(n.arg)}}`;
+      if (n.name === "abs") return `\\lvert ${t(n.arg)} \\rvert`;
+      if (n.base) return `\\log_{${t(n.base)}}(${t(n.arg)})`;
+      return `${TEX_FN[n.name]}(${t(n.arg)})`;
     }
   }
 }
 
-/** The TeX the typesetter reads for an expression (maths/typeset.ts parseTex), with its + C when one was written. */
-export function toTex(e: Expr): string {
-  return tex(e.node) + (e.constant ? " + C" : "");
+/** The TeX the typesetter reads for an expression (maths/typeset.ts parseTex), with its + C when one was written. `v` names the variable (n for a sequence's term); with one argument the output is the same as ever. */
+export function toTex(e: Expr, v = "x"): string {
+  return tex(e.node, v) + (e.constant ? " + C" : "");
+}
+
+/** Does this node print as one unit (so a power, a product or a quotient needs no bracket round it)? */
+const plainAtom = (n: Node): boolean => n.k === "x" || n.k === "const" || (n.k === "num" && n.v >= 0) || (n.k === "fn" && (n.name === "sqrt" || n.name === "cbrt" || n.name === "abs"));
+/** A number then the variable, or a power of it, is written as it is said (2n, 3n^2). */
+const numberThenVariable = (a: Node, b: Node) => a.k === "num" && a.v >= 0 && (b.k === "x" || (b.k === "pow" && b.a.k === "x"));
+
+function plain(n: Node, v: string): string {
+  const p = (m: Node) => plain(m, v);
+  const group = (m: Node, bracket: boolean) => (bracket ? paren(p(m)) : p(m));
+  switch (n.k) {
+    case "num": return n.s;
+    case "x": return v;
+    case "const": return n.name;
+    case "neg": return `-${group(n.a, isSum(n.a) || n.a.k === "neg" || n.a.k === "mul" || n.a.k === "div")}`;
+    case "add": return `${p(n.a)} + ${group(n.b, n.b.k === "neg")}`;
+    case "sub": return `${p(n.a)} - ${group(n.b, isSum(n.b) || n.b.k === "neg")}`;
+    case "mul": {
+      const b = group(n.b, isSum(n.b) || n.b.k === "neg" || n.b.k === "div" || n.b.k === "mul");
+      return `${group(n.a, isSum(n.a) || n.a.k === "neg")}${numberThenVariable(n.a, n.b) ? "" : "*"}${b}`;
+    }
+    case "div": return `${group(n.a, isSum(n.a) || n.a.k === "neg")}/${group(n.b, isSum(n.b) || n.b.k === "neg" || n.b.k === "mul" || n.b.k === "div")}`;
+    case "pow": return `${group(n.a, !plainAtom(n.a))}^${group(n.b, !plainAtom(n.b))}`;
+    case "fn": {
+      if (n.base) return `${n.name}_${n.base.k === "num" ? n.base.s : paren(p(n.base))}(${p(n.arg)})`;
+      return `${n.name}(${p(n.arg)})`;
+    }
+  }
+}
+
+/**
+ * An expression as plain text with the variable named `v` (n for a sequence's term): every product but a number then the
+ * variable is written with a *, so the variable is a token of its own - pi*n, never pin - and the text reads back, with
+ * the variable renamed to x, as the same function. Its + C is not printed.
+ */
+export function toPlain(e: Expr, v = "x"): string {
+  return plain(e.node, v);
 }

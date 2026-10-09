@@ -1,5 +1,5 @@
 /**
- * The Calculus 2 shapes, beside Calculus 1's nine (v2 M3b-3a: the seam; M3b-3b: the first shape). Each slice
+ * The Calculus 2 shapes, beside Calculus 1's nine (v2 M3b-3a: the seam; M3b-3b and M3b-3c: the first two shapes). Each slice
  * (docs/concepts/STUDY-DESK-V2-PLAN.md rows 41-46) puts one shape here: its reading of the spec, its truth, its question,
  * its verdict, its leak rule and its slips. rules/calc.ts sends a spec whose shape is in this list to the functions below
  * on the first line of wellFormed, question, checkAnswer, leaksCalc, slipsFor and withheldCalc, and offers a printed
@@ -11,14 +11,17 @@
  * Shape: approx-integral (M3b-3b; Stewart 9e 7.7, OpenStax Calculus Volume 2 3.6) - the trapezoid, midpoint or Simpson's rule
  * with n = `pieces` subintervals applied to f on [a, b], asked to four decimal places.
  *
+ * Shape: sequence-limit (M3b-3c; Stewart 9e 11.1, OpenStax Calculus Volume 2 5.1) - the limit of a_n = f(n) as n grows, f a
+ * function of x that the desk prints with n in place of x. Its truth is calc-expr's guarded limitInf(f, 1).
+ *
  * Pure: imports at most calc-expr.ts and calc-read.ts - no engine, no session store, no TV module, no React, and not
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
-import { compile, integrate, toTex, type Expr } from "./calc-expr";
-import { cleanAnswer, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
+import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
+import { DNE, cleanAnswer, infinityOf, isDecimal, piecePattern, spoken, withinRel } from "./calc-read";
 
 /** The ids of the Calculus 2 shapes (not calculus2.spine.ts's Calc2Shape: that is a topic's list, which also holds Calculus 1's two integral shapes). */
-export type Calc2SpecShape = "approx-integral";
+export type Calc2SpecShape = "approx-integral" | "sequence-limit";
 
 export type ApproxRule = "trapezoid" | "midpoint" | "simpson";
 
@@ -26,9 +29,14 @@ export type ApproxRule = "trapezoid" | "midpoint" | "simpson";
 type Num = number | string;
 
 /** A Calculus 2 spec: a shape and its parameters, never an answer field (as CalcSpec). */
-export type Calc2Spec = { shape: "approx-integral"; f: string; a: Num; b: Num; pieces: number; rule: ApproxRule };
+type ApproxSpec = { shape: "approx-integral"; f: string; a: Num; b: Num; pieces: number; rule: ApproxRule };
+/** The limit of a_n = f(n): f is a function of x, which the desk prints in n. */
+type SequenceSpec = { shape: "sequence-limit"; f: string };
+export type Calc2Spec = ApproxSpec | SequenceSpec;
 
-export const CALC2_SHAPES: readonly Calc2SpecShape[] = ["approx-integral"];
+export const CALC2_SHAPES: readonly Calc2SpecShape[] = ["approx-integral", "sequence-limit"];
+
+const isSequence = (spec: unknown): spec is SequenceSpec => isCalc2Spec(spec) && spec.shape === "sequence-limit";
 
 /** Is this a Calculus 2 spec by its shape? (Calculus 1 and school shapes share no name with it.) */
 export const isCalc2Spec = (spec: unknown): spec is Calc2Spec =>
@@ -67,6 +75,7 @@ const WHY = {
   notNumber: "The answer should be a number, and this one depends on x.",
   notFinite: "This answer has no finite value to compare.",
   badSpec: "The desk cannot work this question out for itself, so it does not judge the answer.",
+  rounded: "This is a rounded decimal; the desk asks for the exact value.",
 } as const;
 const BAD_SPEC = WHY.badSpec;
 
@@ -83,9 +92,13 @@ const REJECT = {
   pieces: "The number of pieces must be a whole number from two to ten, and even for Simpson's rule.",
   rule: "The rule must be the trapezoid rule, the midpoint rule or Simpson's rule.",
   degenerate: "The rule's value cannot be told from the exact integral or from another rule's value, so the question would not test the rule.",
+  limitDne: "The limit does not exist.",
+  limitUndefined: "The function is not defined near that point.",
+  sequenceUndefined: "The sequence is not defined at every whole n from 1 to 100.",
 } as const;
 
 /** The fixed line when a hint gave the value away twice: it names the method and carries no number and no number word. */
+const WITHHELD_SEQUENCE = "Say what the terms do as n grows, then name the step that makes it clear. The limit is yours to find.";
 const WITHHELD = "List the points the rule uses, evaluate the function at each, then weight and add them as the rule says. The decimal is yours to find.";
 
 // ------------------------------------------------------------------ reading a spec
@@ -122,12 +135,12 @@ function ruleValue(f: Expr, a: number, b: number, n: number, rule: ApproxRule): 
   }
 }
 
-type Read = { ok: true; spec: Calc2Spec; f: Expr; a: number; b: number; value: number } | { ok: false; why: string };
+type Read = { ok: true; spec: ApproxSpec; f: Expr; a: number; b: number; value: number } | { ok: false; why: string };
 
 /** The structure of a spec when every field is there and of its type; else the reason. Never the truth. */
-function structure(spec: unknown): { s: Calc2Spec; f: Expr; a: number; b: number } | string {
-  if (!spec || typeof spec !== "object" || !isCalc2Spec(spec)) return REJECT.shape;
-  const s = spec as Calc2Spec & Record<string, unknown>;
+function structure(spec: unknown): { s: ApproxSpec; f: Expr; a: number; b: number } | string {
+  if (!spec || typeof spec !== "object" || !isCalc2Spec(spec) || spec.shape !== "approx-integral") return REJECT.shape;
+  const s = spec as ApproxSpec & Record<string, unknown>;
   if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
   const f = typeof s.f === "string" ? compile(s.f) : null;
   if (!f) return REJECT.read;
@@ -160,6 +173,7 @@ function read(spec: unknown): Read {
 }
 
 export function calc2WellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
+  if (isSequence(spec)) { const q = readSequence(spec); return q.ok ? { ok: true } : { ok: false, why: q.why }; }
   const r = read(spec);
   return r.ok ? { ok: true } : { ok: false, why: r.why };
 }
@@ -180,6 +194,7 @@ const RULE_PLAIN: Record<ApproxRule, string> = { trapezoid: "the trapezoid rule"
  * the places and never the value: the only numbers printed are the spec's own parameters.
  */
 export function calc2Question(spec: unknown): { plain: string; tex: string } | null {
+  if (isSequence(spec)) return sequenceQuestion(spec);
   const st = structure(spec);
   if (typeof st === "string") return null;
   const { s, f } = st;
@@ -229,6 +244,7 @@ function readsAsDecimal(ans: string): boolean {
  * The `why` is a fixed sentence of the desk's, with no value in it.
  */
 export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown): Calc2Verdict {
+  if (isSequence(spec)) return sequenceCheck(spec, studentAnswer);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", BAD_SPEC);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
@@ -250,7 +266,7 @@ export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown): Calc2Ve
 // ------------------------------------------------------------------ the leak check
 
 /** The question's own notation that may be quoted back: never the value. */
-function ownPieces(s: Calc2Spec): string[] {
+function ownPieces(s: ApproxSpec): string[] {
   const a = numPlain(s.a), b = numPlain(s.b);
   const name = s.rule === "simpson" ? "simpson's" : s.rule;
   const out = ["f(x) =", `int_${script(s.a)}^${script(s.b)}`, `from ${a} to ${b}`, `[${a}, ${b}]`, `n = ${s.pieces}`, `${name} rule`, name];
@@ -266,6 +282,7 @@ function ownPieces(s: Calc2Spec): string[] {
  * four places does not leak by this rule: a residual (docs/MATH-COURSE-PATHS.md section 10).
  */
 export function calc2LeaksCalc(spec: unknown, line: unknown): boolean {
+  if (isSequence(spec)) return sequenceLeaks(spec, line);
   if (typeof line !== "string" || !line.trim()) return false;
   const r = read(spec);
   if (!r.ok) return false;
@@ -305,11 +322,11 @@ export function calc2LeaksCalc(spec: unknown, line: unknown): boolean {
 
 /** The slip ids the model may pick from for an item of this shape, already judged wrong by code (their words are calc.ts CALC_SLIPS'). */
 export function calc2SlipsFor(shape: unknown): string[] {
-  return shape === "approx-integral" ? ["arithmetic-slip", "sign"] : [];
+  return shape === "approx-integral" || shape === "sequence-limit" ? ["arithmetic-slip", "sign"] : [];
 }
 
-export function calc2Withheld(_spec: unknown): string {
-  return WITHHELD;
+export function calc2Withheld(spec: unknown): string {
+  return isSequence(spec) ? WITHHELD_SEQUENCE : WITHHELD;
 }
 
 // ------------------------------------------------------------------ reading a printed question back into a spec
@@ -378,13 +395,22 @@ const READERS: [RegExp, (m: RegExpExecArray) => { rule: string; n: string; integ
 ];
 
 /**
- * The spec a printed approximate-integration task is, read in code from its text - or null (v2 M3b-3b ruling 31). It reads
- * calc2Question's own plain text and the phrasings a page uses ('Use the Trapezoidal Rule with n = 5 to approximate the
- * integral from 1 to 2 of 1/x dx', 'Approximate int_1^2 1/x dx using the trapezoid rule with n = 4', 'Estimate ... with the
- * midpoint rule, n = 4'). `text` is the question as calc.ts normalises it (normalQuestion). Conservative: a phrasing it does not
- * know, a part that does not read, or a spec calc2WellFormed refuses, is null. Pure and deterministic: a fresh object per call.
+ * The spec a printed Calculus 2 task is, read in code from its text - or null (v2 M3b-3b ruling 31, M3b-3c ruling 39): an
+ * approximate-integration task first, then a sequence's limit. `text` is the question as calc.ts normalises it
+ * (normalQuestion). Conservative: a phrasing it does not know, a part that does not read, or a spec calc2WellFormed refuses,
+ * is null. Pure and deterministic: a fresh object per call.
  */
 export function calc2SpecFromQuestion(text: string): Calc2Spec | null {
+  return approxFromQuestion(text) ?? sequenceFromQuestion(text);
+}
+
+/**
+ * The spec a printed approximate-integration task is, or null. It reads calc2Question's own plain text and the phrasings a
+ * page uses ('Use the Trapezoidal Rule with n = 5 to approximate the integral from 1 to 2 of 1/x dx', 'Approximate int_1^2
+ * 1/x dx using the trapezoid rule with n = 4', 'Estimate ... with the midpoint rule, n = 4').
+ */
+
+function approxFromQuestion(text: string): ApproxSpec | null {
   for (const [pattern, make] of READERS) {
     const m = pattern.exec(text);
     if (!m) continue;
@@ -395,7 +421,213 @@ export function calc2SpecFromQuestion(text: string): Calc2Spec | null {
     const word = g.rule.toLowerCase();
     const rule: ApproxRule = word.startsWith("trap") ? "trapezoid" : word.startsWith("mid") ? "midpoint" : "simpson";
     if (!f || a === null || b === null) return null;
-    const spec: Calc2Spec = { shape: "approx-integral", f, a, b, pieces: Number(g.n), rule };
+    const spec: ApproxSpec = { shape: "approx-integral", f, a, b, pieces: Number(g.n), rule };
+    return calc2WellFormed(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+// ================================================================== sequence-limit (v2 M3b-3c)
+
+/** a_n must be finite at every whole n from 1 to this: a sequence is defined at its terms. */
+const TERMS = 100;
+/** Calculus 1's limit row, copied (calc.ts TOLERANCE.limit and ROUNDED_CLOSE): exact 1e-6, a rounded decimal 5e-3, and a decimal this close to the limit is 'unsure'. */
+const LIMIT_EXACT = 1e-6, LIMIT_ROUNDED = 5e-3, ROUNDED_CLOSE = 5e-3;
+
+type SeqTruth = { kind: "number"; v: number } | { kind: "inf"; sign: 1 | -1 };
+type SeqRead = { ok: true; spec: SequenceSpec; f: Expr; truth: SeqTruth } | { ok: false; why: string };
+
+/** The spec's function when every field is there and of its type - an expression in x the engine reads, no +C, no answer key - else the reason. Never the truth. */
+function sequenceStructure(spec: unknown): { s: SequenceSpec; f: Expr } | string {
+  if (!isSequence(spec)) return REJECT.shape;
+  const s = spec as SequenceSpec & Record<string, unknown>;
+  if (["answer", "solution", "truth", "value", "result"].some((k) => k in s)) return REJECT.answer;
+  const f = typeof s.f === "string" ? compile(s.f) : null;
+  if (!f) return REJECT.read;
+  if (f.constant) return REJECT.constant;
+  if (!f.usesX) return REJECT.noX;
+  return { s, f };
+}
+
+/** The truth is calc-expr's limitInf(f, 1), which carries the alias guard (ruling 25); a null or a dne is refused. */
+function readSequence(spec: unknown): SeqRead {
+  const st = sequenceStructure(spec);
+  if (typeof st === "string") return { ok: false, why: st };
+  const { s, f } = st;
+  for (let n = 1; n <= TERMS; n++) if (!fin(f.at(n))) return { ok: false, why: REJECT.sequenceUndefined };
+  const L = limitInf(f, 1);
+  if (!L) return { ok: false, why: REJECT.limitUndefined };
+  if (L.kind === "dne") return { ok: false, why: REJECT.limitDne };
+  return { ok: true, spec: s, f, truth: L.kind === "inf" ? { kind: "inf", sign: L.sign } : { kind: "number", v: L.v } };
+}
+
+/** The term as the question prints it: f with n in the place of x. */
+const termPlain = (f: Expr) => toPlain(f, "n");
+
+function sequenceQuestion(spec: SequenceSpec): { plain: string; tex: string } | null {
+  const st = sequenceStructure(spec);
+  if (typeof st === "string") return null;
+  const { f } = st;
+  return {
+    plain: `Find lim_(n->infinity) a_n, where a_n = ${termPlain(f)}.`,
+    tex: `\\text{Find } \\lim_{n \\to \\infty} a_n \\text{, where } a_n = ${toTex(f, "n")}.`,
+  };
+}
+
+/** Calculus 1's limit comparison (calc.ts judgeNumber, limit row), copied. */
+function judgeLimit(truth: number, s: number, decimal: boolean): Calc2Verdict {
+  const tol = decimal ? LIMIT_ROUNDED : LIMIT_EXACT;
+  if (withinRel(s, truth, tol)) return verdict("right", WHY.right);
+  if (!withinRel(0, truth, tol) && withinRel(-s, truth, tol)) return verdict("wrong", WHY.sign, "sign");
+  if (decimal && withinRel(s, truth, ROUNDED_CLOSE)) return verdict("unsure", WHY.rounded);
+  return verdict("wrong", WHY.wrong);
+}
+
+/**
+ * The verdict on a learner's answer, as Calculus 1 gives it for a limit at infinity (calc.ts checkAnswer, copied; a parity
+ * row in tools/calc2-sequence-test.cjs holds the two equal): an infinity (inf, infinity, ∞, with its sign) is right only for an
+ * infinite limit of that sign, the opposite sign is slip 'sign'; 'dne' is wrong; a number is right within 1e-6 (5e-3 when it
+ * is a decimal), its negation is slip 'sign', a decimal that close but outside is 'unsure'; an empty, unreadable or non-finite
+ * answer, an answer in x, or a spec the desk cannot work out, is 'unsure'.
+ */
+function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown): Calc2Verdict {
+  const r = readSequence(spec);
+  if (!r.ok) return verdict("unsure", BAD_SPEC);
+  if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
+  const ans = cleanAnswer(studentAnswer);
+  if (!ans) return verdict("unsure", WHY.empty);
+  const { truth } = r;
+  const inf = infinityOf(ans);
+  if (inf !== null) {
+    if (truth.kind !== "inf") return verdict("wrong", WHY.wrong);
+    return inf === truth.sign ? verdict("right", WHY.right) : verdict("wrong", WHY.sign, "sign");
+  }
+  if (DNE.test(ans)) return verdict("wrong", WHY.wrong);
+  const e = compile(ans);
+  if (!e) return verdict("unsure", WHY.unreadable);
+  if (e.constant) return verdict("unsure", WHY.unreadable);
+  if (e.usesX) return verdict("unsure", WHY.notNumber);
+  const s = e.at();
+  if (!fin(s)) return verdict("unsure", WHY.notFinite);
+  if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
+  return judgeLimit(truth.v, s, isDecimal(ans));
+}
+
+/** The question's own notation, printed in n, that may be quoted back (calc.ts ownPieces' limit case): never the limit. */
+function sequencePieces(s: SequenceSpec, f: Expr): string[] {
+  const out = ["lim_(n->infinity)", "n->infinity", "a_n"];
+  for (const verb of ["approaches", "tends to", "goes to", "gets close to", "near"]) out.push(`n ${verb} infinity`);
+  // the term, also as the question ends on it: 'a_n = n/(n + 1).' is quoted, not a one
+  out.push(`${termPlain(f)}.`, termPlain(f), s.f);
+  return out;
+}
+
+/**
+ * Does this hint or explanation line state the limit? Calculus 1's rule for a limit (calc.ts leaksCalc, copied): an infinite
+ * limit leaks by naming infinity at all; a finite one by any window of up to six tokens, after the question's own notation is
+ * set aside, that reads as a number within 5e-3 of the limit (or a negative number whose size is the limit).
+ */
+function sequenceLeaks(spec: SequenceSpec, line: unknown): boolean {
+  if (typeof line !== "string" || !line.trim()) return false;
+  const r = readSequence(spec);
+  if (!r.ok) return false;
+  const { truth } = r;
+  let text = spoken(line);
+  if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
+  for (const p of sequencePieces(r.spec, r.f)) text = text.replace(piecePattern(p.toLowerCase()), " ");
+  const tokens = text.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+    .map((t) => t.replace(/\.+$/, ""))
+    .filter(Boolean);
+  const single = (t: string): Expr | null => {
+    const e = compile(t);
+    if (e) return e;
+    const open = (t.match(/\(/g) ?? []).length, close = (t.match(/\)/g) ?? []).length;
+    return open > close ? compile(t.replace(/^\(+/, "")) : close > open ? compile(t.replace(/\)+$/, "")) : null;
+  };
+  const numberRight = (e: Expr, first: string): boolean => {
+    if (e.usesX || e.constant) return false;
+    const v = e.at();
+    if (!fin(v)) return false;
+    return withinRel(v, truth.v, ROUNDED_CLOSE) || (first.startsWith("-") && withinRel(-v, truth.v, ROUNDED_CLOSE));
+  };
+  for (let i = 0; i < tokens.length;) {
+    let took = 0, hit = false;
+    for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
+      const e = n === 1 ? single(tokens[i]) : compile(tokens.slice(i, i + n).join(" "));
+      if (!e) continue;
+      took = n;
+      hit = numberRight(e, tokens[i]);
+      break;
+    }
+    if (hit) return true;
+    i += Math.max(1, took);
+  }
+  return false;
+}
+
+// ------------------------------------------------------------------ reading a printed sequence question back into a spec
+
+const SEQ_VERB = String.raw`(?:find|evaluate|compute|calculate|determine|what\s+is)`;
+const A_N = String.raw`\{?a_n\}?`;
+const AS_N_GOES = String.raw`n\s*(?:approaches|tends\s+to|goes\s+to|->)\s*infinity`;
+const TO_INFINITY = /^n\s*->\s*\+?infinity$/i;
+const reSeq = (x: string) => new RegExp(`^${x}$`, "i");
+
+/** The term as a function in x, or null: only an n that stands between non-letters is renamed (ln(n), sin(n) read; 'pin' keeps its n and fails to read), and a term that already has an x is not in n alone. */
+function termOf(t: string): string | null {
+  let s = tidy(t);
+  if (!s || s.includes("=") || /(?<![A-Za-z])x(?![A-Za-z])/.test(s)) return null;
+  s = s.replace(/(?<![A-Za-z])n(?![A-Za-z])/g, "x");
+  if (s.startsWith("(") && wrapped(s)) {
+    const inner = compile(s.slice(1, -1));
+    if (inner && isSum(inner)) s = tidy(s.slice(1, -1));
+  }
+  const e = compile(s);
+  return e && e.usesX && !e.constant ? s : null;
+}
+
+/** The term's text after 'a_n =' or 'a_n, where a_n =' in a line, or the whole line when it does not start with a_n; null for an a_n with no term. */
+function afterA(rest: string): string | null {
+  const m = reSeq(`${A_N}\\s*(?:,\\s*where\\s+${A_N}\\s*)?=\\s*(.+)`).exec(rest);
+  return m ? m[1] : new RegExp(`^${A_N}(\\s|$)`, "i").test(rest) ? null : rest;
+}
+
+const SEQ_READERS: [RegExp, (m: RegExpExecArray) => string | null][] = [
+  // Find the limit of the sequence a_n = n/(n+1)
+  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+of\\s+the\\s+sequence\\s+(.+)`), (m) => afterA(tidy(m[1]))],
+  // Determine whether the sequence a_n = ln(n)/n converges or diverges. If it converges, find the limit
+  [reSeq(`determine\\s+whether\\s+the\\s+sequence\\s+${A_N}\\s*=\\s*(.+?)\\s+(?:converges|is\\s+convergent)\\s+or\\s+(?:diverges|is\\s+divergent)(?:\\.\\s*if\\s+it\\s+(?:converges|is\\s+convergent),?\\s+find\\s+(?:its|the)\\s+limit)?`), (m) => m[1]],
+  // Find the limit as n approaches infinity of (n^2+1)/(2n^2)
+  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+as\\s+${AS_N_GOES}\\s+of\\s+(.+)`), (m) => afterA(tidy(m[1]))],
+  // Find the limit of a_n = n/(n+1) as n approaches infinity
+  [reSeq(`${SEQ_VERB}\\s+the\\s+limit\\s+of\\s+(.+?)\\s+as\\s+${AS_N_GOES}`), (m) => afterA(tidy(m[1]))],
+  // Find lim_(n->infinity) a_n, where a_n = ...   /   Find lim_(n->infinity) (1+1/n)^n
+  [reSeq(`(?:${SEQ_VERB}\\s+)?lim\\s*_?\\s*(.+)`), (m) => {
+    const rest = tidy(m[1]);
+    if (CLOSING[rest[0]]) {
+      const end = closeAt(rest, 0);
+      return end >= 0 && TO_INFINITY.test(tidy(rest.slice(1, end))) ? afterA(tidy(rest.slice(end + 1))) : null;
+    }
+    const b = /^(n\s*->\s*\+?infinity)\s+(.+)$/i.exec(rest);
+    return b ? afterA(tidy(b[2])) : null;
+  }],
+];
+
+/**
+ * The spec a printed sequence-limit task is, read in code from its text - or null (ruling 39). It reads calc2Question's own
+ * plain text and the phrasings a page uses: 'Find the limit of the sequence a_n = n/(n+1)', 'Determine whether the sequence
+ * a_n = ln(n)/n converges or diverges. If it converges, find the limit', 'Find lim_(n->infinity) (1+1/n)^n', 'Find the limit
+ * as n approaches infinity of (n^2+1)/(2n^2)'. The frame is matched first; inside the term only an n between non-letters is
+ * renamed to x (termOf). Conservative: a term that does not read, or a spec calc2WellFormed refuses, is null.
+ */
+function sequenceFromQuestion(text: string): SequenceSpec | null {
+  for (const [pattern, make] of SEQ_READERS) {
+    const m = pattern.exec(text);
+    if (!m) continue;
+    const t = make(m);
+    const f = t === null ? null : termOf(t);
+    if (!f) continue;
+    const spec: SequenceSpec = { shape: "sequence-limit", f };
     return calc2WellFormed(spec).ok ? spec : null;
   }
   return null;
