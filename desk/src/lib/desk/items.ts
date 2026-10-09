@@ -172,7 +172,7 @@ type Param = "at" | "a" | "b" | "side" | "on" | "kind" | "x0" | "steps" | "piece
 const PARAMS: Record<CalcShape | Calc2SpecShape, readonly Param[]> = {
   evaluate: ["at"], derivative: [], "derivative-at": ["at"], antiderivative: [], "definite-integral": ["a", "b"],
   limit: ["at", "side"], "critical-point": ["on"], extremum: ["on", "kind"], "newton-step": ["x0", "steps"],
-  "approx-integral": ["a", "b", "pieces", "rule"],
+  "approx-integral": ["a", "b", "pieces", "rule"], "sequence-limit": [],
 };
 /**
  * A point is a string in the plain notation, because it may be a constant (pi/4) or, for a limit, inf - and the
@@ -201,6 +201,7 @@ const SHAPE_LINES: Record<CalcShape | Calc2SpecShape, string> = {
   extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.",
   "newton-step": "newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.",
   "approx-integral": "approx-integral: f, a, b, pieces (2 to 10, even for simpson) and rule (trapezoid, midpoint or simpson) - the question is that rule with that many subintervals, given to four decimal places.",
+  "sequence-limit": "sequence-limit: f, a function of x that the desk prints with n in place of x. The question is the limit of a_n = f(n) as n grows. Pick one that is defined for every real x >= 1 and that has a limit or grows without bound.",
 };
 
 /** The Calculus set's system prompt; the course is named by the topic's own path's record (Calculus 1's text is unchanged). */

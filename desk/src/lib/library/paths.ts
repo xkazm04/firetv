@@ -95,7 +95,7 @@ export const PATHS: Record<MathPath, PathInfo> = {
     blurb: "A second university course in calculus that follows Calculus 1, on the techniques of integration.",
     school: false,
     judge: "calc",
-    calcWords: { desk: "Calculus 2", course: "Calculus II", methods: "integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and the trapezoid, midpoint and Simpson's rules" },
+    calcWords: { desk: "Calculus 2", course: "Calculus II", methods: "integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, the trapezoid, midpoint and Simpson's rules, and limits of sequences" },
     topics: CALC2_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice() })),
   },
 };

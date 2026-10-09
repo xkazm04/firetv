@@ -29,7 +29,7 @@ after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);
 
 const stubText=(answer)=>{const seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);return {raw:JSON.stringify(answer)};}});return seen;};
 const code=(file)=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
-const A=(f)=>({shape:'antiderivative',f}),D=(f,a,b)=>({shape:'definite-integral',f,a,b}),AI=(f,a,b,pieces,rule)=>({shape:'approx-integral',f,a,b,pieces,rule});
+const A=(f)=>({shape:'antiderivative',f}),D=(f,a,b)=>({shape:'definite-integral',f,a,b}),AI=(f,a,b,pieces,rule)=>({shape:'approx-integral',f,a,b,pieces,rule}),SQ=(f)=>({shape:'sequence-limit',f});
 
 /**
  * One worked answer per spec, by hand (not by the engine): `right` is the antiderivative with its constant, or the value;
@@ -65,13 +65,16 @@ const FIXTURES=[
  // 7.7 / 3.6 approximate integration (v2 M3b-3b): Stewart's 1/x over [1, 2], to four decimal places
  {topic:'calc2-approx',ref:'7.7/3.6',spec:AI('1/x',1,2,5,'trapezoid'),right:'0.6956',wrong:'0.6931'},
  {topic:'calc2-approx',ref:'7.7/3.6',spec:AI('1/x',1,2,4,'simpson'),right:'0.6933',wrong:'0.6931'},
+ // 11.1 / 5.1 sequences (v2 M3b-3c): a_n = n/(n+1) tends to 1; 2^n/n^3 grows without bound
+ {topic:'calc2-sequences',ref:'11.1/5.1',spec:SQ('x/(x+1)'),right:'1',wrong:'0'},
+ {topic:'calc2-sequences',ref:'11.1/5.1',spec:SQ('2^x/x^3'),right:'infinity',wrong:'dne'},
 ];
 const NO_C=(r)=>r.replace(/\s*\+\s*C$/,'');
 
-test('1: the spine - six topics, plain data, our own blurbs, sections cited, shapes only the two integral shapes or a Calculus 2 shape, prerequisites only earlier calc2 topics',()=>{
- assert.deepEqual(CALC2_SPINE.map(t=>t.id),['calc2-parts','calc2-trig-integrals','calc2-trig-sub','calc2-partial-fractions','calc2-strategy','calc2-approx']);
- assert.deepEqual(CALC2_SPINE.map(t=>t.sections),[['7.1'],['7.2'],['7.3'],['7.4'],['7.5'],['7.7']],'Stewart 9e chapter 7');
- assert.deepEqual(CALC2_SPINE.map(t=>t.openstax),[['3.1'],['3.2'],['3.3'],['3.4'],['3.5'],['3.6']],'OpenStax Calculus Volume 2 chapter 3');
+test('1: the spine - seven topics, plain data, our own blurbs, sections cited, shapes only the two integral shapes or a Calculus 2 shape, prerequisites only earlier calc2 topics',()=>{
+ assert.deepEqual(CALC2_SPINE.map(t=>t.id),['calc2-parts','calc2-trig-integrals','calc2-trig-sub','calc2-partial-fractions','calc2-strategy','calc2-approx','calc2-sequences']); // OLD: six ids, ending calc2-approx
+ assert.deepEqual(CALC2_SPINE.map(t=>t.sections),[['7.1'],['7.2'],['7.3'],['7.4'],['7.5'],['7.7'],['11.1']],'Stewart 9e chapter 7, then 11.1' /* OLD: six sections, ending 7.7 */);
+ assert.deepEqual(CALC2_SPINE.map(t=>t.openstax),[['3.1'],['3.2'],['3.3'],['3.4'],['3.5'],['3.6'],['5.1']],'OpenStax Calculus Volume 2 chapter 3, then 5.1' /* OLD: six sections, ending 3.6 */);
  const seen=new Set();
  for(const t of CALC2_SPINE){
   assert.deepEqual(Object.keys(t).sort(),['blurb','id','name','openstax','prereq','sections','shapes','strand'],`${t.id}: the spine fields and nothing else`);
@@ -121,7 +124,7 @@ test('4: checkAnswer marks each fixture\'s own worked answer right, a wrong answ
    const neg=C.checkAnswer(f.spec,`-(${NO_C(f.right)}) + C`);
    assert.deepEqual([neg.verdict,neg.slip],['wrong','sign'],`${tag}: negated`);
   }else{
-   const neg=C.checkAnswer(f.spec,`-(${f.right})`);
+   const neg=C.checkAnswer(f.spec,/^[a-z]+$/.test(f.right)?`-${f.right}`:`-(${f.right})`); // OLD: always -(right); an infinity is written -infinity
    assert.deepEqual([neg.verdict,neg.slip],['wrong','sign'],`${tag}: negated`);
   }
   assert.ok(closed.includes('sign'));
@@ -175,7 +178,7 @@ test('6: Calculus 1\'s assembled set prompt and Calculus stance equal their exac
   }
   // Calculus 2: its own words, from its record
   seen=stubText(reply);await hint('maths',LINEAR,{path:'calc2'});
-  const methods='integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and the trapezoid, midpoint and Simpson\'s rules';
+  const methods='integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, the trapezoid, midpoint and Simpson\'s rules, and limits of sequences'; // OLD: '... partial fractions, and the trapezoid, midpoint and Simpson rules'
   assert.ok(seen[0].system.includes(`You are a maths tutor for a first-year university student in Calculus II. Use the course's methods and notation - ${methods} - and name the rule that applies. `));
   assert.doesNotMatch(seen[0].system,/Calculus I(?!I)/,'Calculus II, not Calculus I');
   assert.doesNotMatch(seen[0].system,/the Fundamental Theorem/);

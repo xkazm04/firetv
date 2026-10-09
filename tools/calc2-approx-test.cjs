@@ -171,8 +171,8 @@ test('set: a stubbed calc2-approx set asks for approx-integral alone, in Calculu
   const t=P.topicIn('calc2-approx');
   assert.deepEqual([P.pathOfTopic('calc2-approx'),t.prereq,t.shapes,t.sections],['calc2',[],['approx-integral'],undefined]);
   assert.deepEqual(P.shapesOfTopic('calc2-approx'),['approx-integral']);
-  assert.equal(P.topicsOf('calc2').map(x=>x.id).at(-1),'calc2-approx','after calc2-strategy');
-  assert.equal(P.PATHS.calc2.calcWords.methods,"integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and the trapezoid, midpoint and Simpson's rules");
+  {const ids=P.topicsOf('calc2').map(x=>x.id);assert.equal(ids.indexOf('calc2-approx'),ids.indexOf('calc2-strategy')+1,'after calc2-strategy');} // OLD: .at(-1) was calc2-approx; calc2-sequences (M3b-3c) comes after it
+  assert.equal(P.PATHS.calc2.calcWords.methods,"integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, the trapezoid, midpoint and Simpson's rules, and limits of sequences"); // OLD: '... partial fractions, and the trapezoid, midpoint and Simpson's rules'
   store.dispatch({type:'reset'});
   store.dispatch({type:'profile.draft',patch:{id:'approx-learner',name:'Approx',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
   // T_5, M_5 and S_4 are well formed; S_10 is degenerate; Simpson with 5 pieces is malformed

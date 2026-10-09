@@ -6,7 +6,8 @@
  * disposable. Run with npm run test:rules in desk/ (directly: node tools/calc2-sequence-test.cjs).
  */
 const path=require('node:path'),assert=require('node:assert/strict');
-const {test}=require('node:test');
+const {test,after}=require('node:test');
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);require('node:fs').rmSync(data,{recursive:true,force:true});});
 
 const root=path.resolve(__dirname,'../desk'),src=(f)=>path.join(root,'src',f);
 require('./ts-load.cjs');
@@ -201,4 +202,52 @@ test('dispatch: isCalcSpec is true, kindOfSpec is calc, and calc.ts gives calc2\
  assert.deepEqual(C2.CALC2_SHAPES,['approx-integral','sequence-limit']);
  assert.equal(C.CALC_SHAPES.includes('sequence-limit'),false,'Calculus 1\'s list is unchanged');
  assert.equal(C2.isCalc2Spec(NN),true);
+});
+
+// ------------------------------------------------------------------ the topic: a stubbed set, and the spec on the screen
+
+const fs=require('node:fs'),os=require('node:os');
+const data=fs.mkdtempSync(path.join(os.tmpdir(),'desk-calc2-seq-'));process.env.DESK_DATA_DIR=data;delete process.env.DESK_TEXT_ENGINE;
+const reg=require(src('lib/engines/registry.ts'));
+require(src('lib/engines/text.ts'));require(src('lib/engines/embed.ts'));
+const store=require(src('lib/session/store.ts'));
+const items=require(src('lib/desk/items.ts'));
+const P=require(src('lib/library/paths.ts'));
+const stubText=(answer)=>{const seen=[];reg.useProvider('text',{name:'stub',run:async(req)=>{seen.push(req);return {raw:JSON.stringify(answer)};}});return seen;};
+
+test('set: a stubbed calc2-sequences set asks for sequence-limit alone, in Calculus 2\'s words, and keeps only the well-formed specs',async()=>{
+ reg.useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(()=>[1,0])})});
+ try{
+  const t=P.topicIn('calc2-sequences');
+  assert.deepEqual([P.pathOfTopic('calc2-sequences'),t.prereq,t.shapes,t.sections],['calc2',[],['sequence-limit'],undefined]);
+  assert.deepEqual(P.shapesOfTopic('calc2-sequences'),['sequence-limit']);
+  const ids=P.topicsOf('calc2').map(x=>x.id);
+  assert.equal(ids.indexOf('calc2-sequences'),ids.indexOf('calc2-approx')+1,'after calc2-approx');
+  assert.equal(P.PATHS.calc2.calcWords.methods,"integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, the trapezoid, midpoint and Simpson's rules, and limits of sequences");
+  store.dispatch({type:'reset'});
+  store.dispatch({type:'profile.draft',patch:{id:'seq-learner',name:'Seq',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
+  // n/(n+1) is well formed; cos(pi*x) has no limit (the alias guard); 1/(x-2) is not defined at n = 2
+  const seen=stubText({specs:[{shape:'sequence-limit',f:'x/(x+1)',difficulty:1},{shape:'sequence-limit',f:'cos(pi*x)',difficulty:2},{shape:'sequence-limit',f:'1/(x-2)',difficulty:2}]});
+  const got=await items.makeItems('calc2-sequences','seq-learner',3,{word:false});
+  assert.equal(seen.length>=1,true);
+  const req=seen[0];
+  assert.deepEqual(req.schema.properties.specs.items.properties.shape.enum,['sequence-limit']);
+  assert.deepEqual(Object.keys(req.schema.properties.specs.items.properties).sort(),['difficulty','f','shape'],'f is always in the schema; the shape adds no parameter');
+  assert.deepEqual([...req.prompt.matchAll(/^- ([a-z-]+): /gm)].map(m=>m[1]),['sequence-limit'],'only its own line');
+  assert.match(req.prompt,/- sequence-limit: f, a function of x that the desk prints with n in place of x\. The question is the limit of a_n = f\(n\) as n grows\. Pick one that is defined for every real x >= 1 and that has a limit or grows without bound\./);
+  assert.ok(req.system.includes('a university Calculus 2 desk'));assert.doesNotMatch(req.system,/Calculus 1/);
+  assert.doesNotMatch(req.prompt+req.system,/(limit is|equals|converges to)/,'no limit is ever in the prompt');
+  assert.equal(got.items.length,1);
+  assert.deepEqual(got.items.map(i=>i.spec),[{shape:'sequence-limit',f:'x/(x+1)'}]);
+  for(const i of got.items){assert.equal(C.wellFormed(i.spec).ok,true);assert.equal(i.question,C.question(i.spec).plain);}
+ }finally{reg.resetProviders();}
+});
+
+test('specShown: a practice set on the screen keeps f, and still no answer field',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'shown-seq-learner',name:'Shown',type:'other',modules:['maths'],mathPath:'calc2'}});store.dispatch({type:'profile.save'});
+ store.dispatch({type:'practice.set',practice:{topic:'calc2-sequences',marked:false,items:[{n:1,question:C.question(NN).plain,spec:{...NN,answer:'1',value:1}}]}});
+ const spec=store.getSession().practice.items[0].spec;
+ assert.deepEqual(spec,NN,'f kept; answer and value dropped');
+ assert.equal(C.checkAnswer(spec,'1').verdict,'right');
 });

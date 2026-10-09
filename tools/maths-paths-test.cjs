@@ -30,7 +30,7 @@ test('1: 22 Calculus topics and 17 school topics, ids unique across paths and no
  // path is a deliberate, reviewed edit of this one line (v2 M3a step 0, architecture card 5 part b)
  assert.equal(P.PATHS.calc1.topics.length,22,'the Calculus 1 path length pin');
  assert.equal(CALC1_SPINE.length,P.PATHS.calc1.topics.length);
- assert.equal(P.PATHS.calc2.topics.length,6,'the Calculus 2 path length pin (v2 M3b-3b: integration techniques 7.1-7.5, then approximate integration 7.7)');
+ assert.equal(P.PATHS.calc2.topics.length,7,'the Calculus 2 path length pin (v2 M3b-3c: integration techniques 7.1-7.5, approximate integration 7.7, then sequences 11.1)');
  assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','calc2','school']);
  // W5b: 'Add and subtract fractions' joined the school path in place (owner decision D5); W7 batch 1 added three more
  // fractions units, equivalent fractions first (years never go down along the path)
