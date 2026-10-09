@@ -1,4 +1,6 @@
-# Environment — Linga
+# Environment — Linga, Essay Master, Math Buddy
+
+Linga's levels come first (LT, then L2); Essay Master and Math Buddy have their own sections at the end.
 
 ## LT — text-live (no server, no browser)
 
@@ -52,3 +54,73 @@ None beyond the Character files: every LT run builds its own profile and state f
 ## L2 — empirical (not scaffolded)
 
 Would run against `npm run dev` in `desk/` at `http://localhost:3000` (`/tv` for the TV, `/phone` for the phone; the phone joins with the PIN on the pair screen; no auth). **An L2 run must not use the owner's running dev server**: its data dir holds the real learners. Start a second server with its own `DESK_DATA_DIR` (worktrees need `next dev --webpack`, see the repo notes).
+
+## Essay Master
+
+Characters in `uat/characters/essay/`, journeys EM1–EM5 in `uat/journeys/essay/`. They sit in subdirectories, without `sim` blocks, because the LT driver reads every top-level `.md` in `characters/` and `journeys/` and throws on a file with no json block (`uat/driver/linga-text.cjs:38-44`).
+
+### L1 — theoretical
+
+Needs nothing. A walker reads `desk/src` (each Character's Surface binding names the files and lines) and the journeys. No server, no model, no data.
+
+### L2 — empirical, `tools/essay-ui-test.cjs`
+
+One writing episode, end to end in a real browser with the real model. Steps W1–W8: seat and pair, Enter, one paragraph read, coached, one rewrite, End session to the recap, the learner record on disk, no page errors. Then `--reread` after a restart. The recipe is the script's header (`tools/essay-ui-test.cjs:3-11`):
+
+1. An isolated desk: a fresh directory outside every repo, seeded with `pairing.json` `{"key":"<48 hex chars>"}`. Never `desk/data/`; the script refuses it (`:19-22`).
+2. In `desk/`: `DESK_DATA_DIR=<dir> npx next dev --webpack -p 3241`, with `ANTHROPIC_API_KEY`, `CLAUDECODE`, `CLAUDE_CODE_*`, `ELEVENLABS_*`, `PIPER_*`, `DESK_TEXT_ENGINE`, `CLAUDE_FAST_MODEL` and `CLAUDE_BEST_MODEL` unset. The `claude` CLI must be on PATH and signed in.
+3. `ESSAY_TEST_ALLOW_WRITES=1 DESK_DATA_DIR=<the same dir> [ESSAY_TEST_URL=http://localhost:3241] node tools/essay-ui-test.cjs`. Then stop the server, start it again on the same dir and port, and run the same command with `--reread`.
+
+Playwright comes from `tools/node_modules` (or `NODE_PATH`). Output goes to `artifacts/essay-integration/`: `timings.json` after every step, `results.json` last, `results-reread.json`, and screenshots. Copy the evidence into `uat/runs/<date>-essay-<slug>/`, as `2026-10-09-essay-w-run` did. Never use the owner's running dev server, and stop yours by PID.
+
+**Model.** Both essay calls ask for model `best`: the claude CLI with `--model sonnet` (`desk/src/lib/engines/text.ts:25`, `:47`). The reading records `provider: claude-cli/sonnet`. With `DESK_TEXT_ENGINE` unset the text engine stays on claude, never codex. Cost: two model calls a run, about 25 s each (W-run: 27.6 s read, 23.1 s rewrite). A whole piece would be one call per paragraph.
+
+**Fixed inputs.** The script fixes all of these:
+- the learner: Sam, `high-school`, 15, all modules (`:27`);
+- one English paragraph (`:28`);
+- one rewrite, of sentence 4 (`:29`);
+- the Evidence lens (`:103`);
+- the kind: `essay` only (`:106`).
+
+A Character-specific L2 needs these made into parameters: the profile (type, age, system, mode), the text, the lens, the rewrite and the sentence index.
+
+**What it cannot see:**
+- a physical phone, a real keyboard, dictation or speech (the textarea is only filled, `:14`);
+- heard audio (the W-run's voice call answered 503);
+- whether the model's judgement is right: nothing asserts it (`:15-16`), so a person reads `results.json` and the transcript;
+- a newly written sentence in a note: its echo check (`:120-122`) finds only a learner sentence repeated;
+- the Parent role and the Sunday page's lines;
+- a whole piece, the notice, the shelf, or the plan;
+- Adult mode, the Workroom, `/drop` and the Twin Card.
+
+EM3 and EM5 have no L2 today.
+
+**Reread caveat.** `session.json` survives the restart, so `--reread` proves only that the restarted desk serves the record, not that the record came from `learners.json`. W7's direct read of `learners.json` is the disk proof.
+
+**Fixtures.** None beyond `pairing.json`; the run creates its own learner.
+
+## Math Buddy
+
+Characters in `uat/characters/maths/`, journeys MB1–MB5 in `uat/journeys/maths/`. They are in subdirectories for the same reason as Essay Master's.
+
+### L1 — theoretical
+
+Needs nothing: no server, no browser, no model call. A walker reads `desk/src` and the Character and journey files: MathsTV, the `tv/` rows, the phone page and panels, the `lib/desk` pipelines, `lib/library` and `lib/rules`.
+
+### L2 — empirical (precondition not met; not run)
+
+**Environment precondition:** vision on local Ollama, with the qwen 27B model pulled. Until that host exists, Math L2 is not run, and a journey part that needs vision resolves `uncertain` with that reason: never pass, never refuted.
+
+| Switch | Default | Where |
+|---|---|---|
+| `OLLAMA_HOST` | `http://127.0.0.1:11434` | `desk/src/lib/engines/vision.ts:15` |
+| `OLLAMA_VISION_MODEL` | `qwen3.8:27b`: one call to `POST /api/chat`, with `format` set to the schema | `desk/src/lib/engines/vision.ts:16`, `:41` |
+
+- **Preflight.** The vision probe (`GET {OLLAMA_HOST}/api/tags`, model pulled; `desk/src/lib/engines/vision.ts:22`), which `GET /api/smoke` surfaces on the TV (`desk/src/app/api/smoke/route.ts:2`). Run it before any browser time.
+- **What calls vision.** Two things: reading a snapped page (`desk/src/lib/desk/read.ts:25`), and marking a snapped worked sheet (`desk/src/lib/desk/mark.ts:194`). The marked-paper reader (`desk/src/lib/desk/paperRead.ts:52`) has no caller in `desk/src`, so it is out of L2.
+- **What does not call vision:**
+  - Typed answers: code marks them (`desk/src/app/api/mark/route.ts:7`).
+  - Hints, explain replies and Calculus sets: these use the text engine, the claude CLI (`CLAUDE_FAST_MODEL` haiku, `CLAUDE_BEST_MODEL` sonnet; `desk/src/lib/engines/text.ts:25`).
+  - So MB4 and the typed route of MB2 could run at L2 without the vision host. They still need a Math harness, which does not exist yet.
+- **Data.** A second `next dev --webpack` with its own `DESK_DATA_DIR` (read at `desk/src/lib/session/learners.ts:86`), outside every repo. Never `desk/data`, and never the owner's running server.
+- **Profiles.** Each Character's profile is created in that isolated data dir from its Surface binding: type, age, system and Maths course.
