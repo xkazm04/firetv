@@ -303,6 +303,15 @@ tried"; the replay line carries a "fuzzy robot voice" excuse that no voice made 
 Still owed: a real phone's microphone over Wi-Fi, heard audio, the owner's reading of both transcripts, and the Maths and Essay
 entrances once the key press is explained.
 
+### Run 3 of 2026-10-09
+
+Rulings of the App Master for the third run (R1-R4):
+
+- **R1** Run 2's Maths entrance failure is a harness race, by the App Master's reading of the code. `desk/src/app/tv/page.tsx:127-131` runs the landing Select after `ZOOM_MS` (560 ms). `tools/linga-ui-test.cjs:142` waits for `.linga-tv` to vanish, which is already true on the landing, and asserts at once. The throw reaches `browser.close()` in the `finally` block, which drops the pending timer, so the session stayed on the landing. The fix: the entrance checks poll the session.
+- **R2** Latency: no action. Two runs of the same code differ by a third, and P19 ran beside run 2. Streaming stays the owner's call (MH-4 LATER, O7). Run 3 times a bare haiku call through the CLI, to separate CLI start-up from model time.
+- **R3** The typed and spoken replies left no evidence row. Run 3 traces this read-only.
+- **R4** The replay line ("fuzzy robot voice", a repeat rather than a new question) waits on the owner's reading, then a prompt fix if he agrees.
+
 ## 4. Declined and deferred, in one place
 
 | | What | Why, for the sofa |
