@@ -182,7 +182,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         }
                         get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
-                        get("/routes") { val reply=routesReply;call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){for(i in 0 until reply.blockCount)writeFully(reply.block(i),0,reply.size(i))} }
+                        get("/routes") { val reply=routesFile.open();try { call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){val buffer=ByteArray(RoutesReply.CHUNK);while(true){val n=reply.stream.read(buffer);if(n<0)break;writeFully(buffer,0,n)}} } finally { reply.stream.close() } }
                         webSocket("/ws") { handle(this) }
                     }
                 }
@@ -396,9 +396,9 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     }
     fun stop() { suspendLink(); scope.cancel();linkDispatcher.close() }
     companion object {
-        // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car. Built on the first
-        // request, on the link side; P13e: UTF-8 blocks, no reply-sized String (see RoutesReply).
-        private val routesReply by lazy { RoutesReply.of(Courses.playable) }
+        // Read-only authored route telemetry for reproducible LAN driving probes. It cannot move a car. Written on the first
+        // request, on the link side, to a file the heap does not keep; each request streams it (P21 card 14, see RoutesFile).
+        private val routesFile=RoutesFile(java.io.File(System.getProperty("java.io.tmpdir"))) { Courses.playable }
         const val HUD_HEARTBEAT_MS=1000.0
         fun lanAddress(): String = runCatching {
             val interfaces=NetworkInterface.getNetworkInterfaces().toList().filter{it.isUp && !it.isLoopback}

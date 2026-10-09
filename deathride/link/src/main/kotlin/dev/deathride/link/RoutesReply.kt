@@ -12,6 +12,9 @@ import java.io.OutputStreamWriter
  * every request encoded it to a second array of the same size. On the Stick a background GC cleared that ~36 MB of large
  * objects during the probe's first requests (P13d). Here each point is written straight to the blocks: no reply-sized
  * String or array exists, and a request copies the blocks to the socket. The bytes are exactly the old reply's.
+ *
+ * P21: the server no longer keeps these blocks. It streams [RoutesFile], which [write] fills with the same text; [of] stays
+ * as the blocks RoutesReplyTest proves byte for byte.
  */
 internal class RoutesReply private constructor(private val blocks: List<ByteArray>,private val tail: Int) {
     val length: Long get()=if(blocks.isEmpty())0L else (blocks.size-1).toLong()*CHUNK+tail
