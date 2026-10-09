@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.link.RoutesServedTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-09T07:53:31.222Z" hostname="KAZIHO" time="1.324">
+  <properties/>
+  <testcase name="theFileHoldsTheReplyAndIsWrittenAgainWhenItHasGone()" classname="dev.deathride.link.RoutesServedTest" time="0.045"/>
+  <testcase name="noFieldCanHoldTheReply()" classname="dev.deathride.link.RoutesServedTest" time="0.001"/>
+  <testcase name="twoRequestsServeTheSameBytesAndTheHeapKeepsNoReply()" classname="dev.deathride.link.RoutesServedTest" time="1.278"/>
+  <system-out><![CDATA[routes served bytes=17540087 heapAfterGcGrewBytes=47264
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

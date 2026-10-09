@@ -1,0 +1,283 @@
+{
+ "run": "base-run1",
+ "apkSha256": "840bc7b06df91bd024bd1178fe75a4a9eb8c1b4d08f882838fdf4f29af0b8256",
+ "arm": "base",
+ "settled": false,
+ "settledNote": "no",
+ "durationSeconds": 360.1177452,
+ "functionalPass": true,
+ "probeFunctionalPass": true,
+ "error": null,
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-09T08:34:14.5978567Z",
+   "totalPercentSamples": [
+    78,
+    100,
+    94
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#18",
+     165
+    ],
+    [
+     "node#12",
+     165
+    ],
+    [
+     "node#27",
+     139
+    ],
+    [
+     "node#26",
+     130
+    ],
+    [
+     "node#4",
+     100
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-09T08:40:46.6900949Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#91",
+     162
+    ],
+    [
+     "node#85",
+     104
+    ],
+    [
+     "node#83",
+     100
+    ],
+    [
+     "svchost#72",
+     96
+    ],
+    [
+     "node#92",
+     88
+    ]
+   ]
+  }
+ },
+ "ownedTextureMiB": {
+  "max": 36.97,
+  "min": 36.97,
+  "summaryMax": 36.9697265625,
+  "fontMiBMax": 2.0,
+  "windows": 299
+ },
+ "glMtrackMiB": {
+  "line": "GL mtrack",
+  "max": 49.09,
+  "min": 48.87,
+  "samples": 8,
+  "graphicsSummaryMax": 49.09,
+  "eglMtrackRows": 0
+ },
+ "pss": {
+  "minMiB": 157.1,
+  "maxMiB": 166.28,
+  "samples": 8,
+  "peakSecond": 360.1,
+  "lowestSecond": 3.7,
+  "peakBreakdownMiB": {
+   "Java Heap": 64.05,
+   "Native Heap": 9.48,
+   "Code": 21.05,
+   "Stack": 1.29,
+   "Graphics": 49.06,
+   "Private Other": 7.19,
+   "System": 14.16,
+   "pss Dalvik Heap": 62.17,
+   "pss Dalvik Other": 4.88,
+   "pss GL mtrack": 49.06,
+   "pss Native Heap": 9.56,
+   "pss Ashmem": 4.72,
+   "pss Unknown": 0.26,
+   "TOTAL PSS": 166.28
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 50.9,
+   "Native Heap": 9.54,
+   "Code": 30.05,
+   "Stack": 1.35,
+   "Graphics": 48.87,
+   "Private Other": 7.61,
+   "System": 8.79,
+   "pss Dalvik Heap": 44.96,
+   "pss Dalvik Other": 4.12,
+   "pss GL mtrack": 48.87,
+   "pss Native Heap": 9.62,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.37,
+   "TOTAL PSS": 157.1
+  }
+ },
+ "hud": {
+  "activeFrames": 18986,
+  "hudMsMean": 1.1287,
+  "hudMsP95": 1.7871,
+  "hudFlushesMean": 2.0,
+  "hudFlushesCounts": {
+   "2": 18986
+  },
+  "hudDrawsMean": 5.0,
+  "drawCallsMean": 17.733,
+  "textureBindsMean": 11.791,
+  "workMsMean": 10.9651,
+  "cpuMsMean": 7.6891
+ },
+ "allocation": {
+  "MBps": 2.221,
+  "gcCount": 31,
+  "gcTimeMs": 2858
+ },
+ "guards": {
+  "activeFrames": 18980,
+  "over33": 107,
+  "worstActiveWindowP95Ms": 27.195615,
+  "activeMaxMs": 72.070077,
+  "pooledActiveP95Ms": 19.666,
+  "rejectedInputs": [
+   0,
+   0
+  ]
+ },
+ "raceLaunches": 6,
+ "fullGcs": 11,
+ "survivorsPerRound": {
+  "1": {
+   "lowestMB": 49,
+   "highestMB": 49,
+   "gcs": 1
+  },
+  "2": {
+   "lowestMB": 50,
+   "highestMB": 50,
+   "gcs": 1
+  },
+  "3": {
+   "lowestMB": 52,
+   "highestMB": 54,
+   "gcs": 3
+  },
+  "4": {
+   "lowestMB": 55,
+   "highestMB": 55,
+   "gcs": 2
+  },
+  "5": {
+   "lowestMB": 58,
+   "highestMB": 58,
+   "gcs": 3
+  },
+  "6": {
+   "lowestMB": 58,
+   "highestMB": 58,
+   "gcs": 1
+  }
+ },
+ "headroomMB": [
+  24
+ ],
+ "transition": {
+  "1": {
+   "trackMs": [
+    10.227077
+   ],
+   "configureWorldMs": [
+    10.025154
+   ],
+   "course": [
+    "scrap-1-c"
+   ],
+   "changed": [
+    false
+   ]
+  },
+  "2": {
+   "trackMs": [
+    65.105
+   ],
+   "configureWorldMs": [
+    64.824231
+   ],
+   "course": [
+    "foundry-1-c"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "3": {
+   "trackMs": [
+    27.908538
+   ],
+   "configureWorldMs": [
+    27.649308
+   ],
+   "course": [
+    "salt-1-b"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "4": {
+   "trackMs": [
+    24.139462
+   ],
+   "configureWorldMs": [
+    23.882538
+   ],
+   "course": [
+    "switchback-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "5": {
+   "trackMs": [
+    24.175077
+   ],
+   "configureWorldMs": [
+    23.926539
+   ],
+   "course": [
+    "crown-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  }
+ },
+ "trackMsMax": 65.105,
+ "configureWorldMsMax": 64.824231,
+ "transitionRoundsRead": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "routesWarmup": {
+  "seconds": 15.817173999967054,
+  "bytes": 17540089,
+  "limit": "One untimed-out GET before the probe; includes LAN transfer."
+ }
+}

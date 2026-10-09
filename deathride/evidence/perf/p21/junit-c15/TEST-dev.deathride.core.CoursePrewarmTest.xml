@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.core.CoursePrewarmTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-09T07:54:09.890Z" hostname="KAZIHO" time="0.284">
+  <properties/>
+  <testcase name="reportsTheBinFootprintOfTheSoakCourses()" classname="dev.deathride.core.CoursePrewarmTest" time="0.05"/>
+  <testcase name="prewarmedProjectionEqualsTheLazyPathOnFixedPoints()" classname="dev.deathride.core.CoursePrewarmTest" time="0.189"/>
+  <testcase name="prewarmRunsOnTheCourseWorkerAndThenRunsAfterTheBake()" classname="dev.deathride.core.CoursePrewarmTest" time="0.014"/>
+  <system-out><![CDATA[P10 bins scrap-1-c ints=332538 arrays=2304 branches=0 intBytes=1330152 desktopBakeMs=5.2
+P10 bins foundry-1-c ints=421862 arrays=2688 branches=0 intBytes=1687448 desktopBakeMs=6.0
+P10 bins salt-1-b ints=545012 arrays=3584 branches=0 intBytes=2180048 desktopBakeMs=7.7
+P10 bins switchback-1-a ints=555683 arrays=3584 branches=0 intBytes=2222732 desktopBakeMs=7.9
+P10 bins crown-1-a ints=730393 arrays=4480 branches=0 intBytes=2921572 desktopBakeMs=10.8
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

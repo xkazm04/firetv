@@ -1,0 +1,300 @@
+{
+ "base-run1": {
+  "arm": "base",
+  "loggedFullGcs": 11,
+  "loggedYoungGcs": 4,
+  "artGcCount": 31,
+  "allocMBps": 2.221,
+  "perRound": {
+   "1": {
+    "lowestMB": 49,
+    "highestMB": 49,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   },
+   "2": {
+    "lowestMB": 50,
+    "highestMB": 50,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   },
+   "3": {
+    "lowestMB": 52,
+    "highestMB": 54,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "4": {
+    "lowestMB": 55,
+    "highestMB": 55,
+    "gcs": 2,
+    "headroomMB": [
+     24
+    ]
+   },
+   "5": {
+    "lowestMB": 58,
+    "highestMB": 58,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "6": {
+    "lowestMB": 58,
+    "highestMB": 58,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ },
+ "c14-run1": {
+  "arm": "c14",
+  "loggedFullGcs": 13,
+  "loggedYoungGcs": 6,
+  "artGcCount": 31,
+  "allocMBps": 2.2346,
+  "perRound": {
+   "1": {
+    "lowestMB": 31,
+    "highestMB": 32,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "2": {
+    "lowestMB": 32,
+    "highestMB": 32,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   },
+   "3": {
+    "lowestMB": 35,
+    "highestMB": 35,
+    "gcs": 2,
+    "headroomMB": [
+     24
+    ]
+   },
+   "4": {
+    "lowestMB": 37,
+    "highestMB": 40,
+    "gcs": 4,
+    "headroomMB": [
+     24
+    ]
+   },
+   "5": {
+    "lowestMB": 40,
+    "highestMB": 40,
+    "gcs": 2,
+    "headroomMB": [
+     24
+    ]
+   },
+   "6": {
+    "lowestMB": 40,
+    "highestMB": 40,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ },
+ "c15-run1": {
+  "arm": "c15",
+  "loggedFullGcs": 10,
+  "loggedYoungGcs": 5,
+  "artGcCount": 39,
+  "allocMBps": 2.2129,
+  "perRound": {
+   "0": {
+    "lowestMB": 14,
+    "highestMB": 14,
+    "gcs": 1,
+    "headroomMB": [
+     14
+    ]
+   },
+   "2": {
+    "lowestMB": 16,
+    "highestMB": 16,
+    "gcs": 2,
+    "headroomMB": [
+     16,
+     17
+    ]
+   },
+   "3": {
+    "lowestMB": 18,
+    "highestMB": 18,
+    "gcs": 1,
+    "headroomMB": [
+     19
+    ]
+   },
+   "4": {
+    "lowestMB": 21,
+    "highestMB": 21,
+    "gcs": 2,
+    "headroomMB": [
+     22
+    ]
+   },
+   "5": {
+    "lowestMB": 24,
+    "highestMB": 25,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "6": {
+    "lowestMB": 24,
+    "highestMB": 24,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ },
+ "base-run2": {
+  "arm": "base",
+  "loggedFullGcs": 9,
+  "loggedYoungGcs": 3,
+  "artGcCount": 31,
+  "allocMBps": 2.2339,
+  "perRound": {
+   "1": {
+    "lowestMB": 48,
+    "highestMB": 48,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   },
+   "3": {
+    "lowestMB": 52,
+    "highestMB": 52,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "4": {
+    "lowestMB": 55,
+    "highestMB": 55,
+    "gcs": 3,
+    "headroomMB": [
+     24
+    ]
+   },
+   "5": {
+    "lowestMB": 57,
+    "highestMB": 57,
+    "gcs": 2,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ },
+ "c14-run2": {
+  "arm": "c14",
+  "loggedFullGcs": 2,
+  "loggedYoungGcs": 3,
+  "artGcCount": 38,
+  "allocMBps": 2.2654,
+  "perRound": {
+   "4": {
+    "lowestMB": 37,
+    "highestMB": 37,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   },
+   "5": {
+    "lowestMB": 40,
+    "highestMB": 40,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ },
+ "c15-run2": {
+  "arm": "c15",
+  "loggedFullGcs": 17,
+  "loggedYoungGcs": 9,
+  "artGcCount": 37,
+  "allocMBps": 2.1302,
+  "perRound": {
+   "1": {
+    "lowestMB": 13,
+    "highestMB": 15,
+    "gcs": 5,
+    "headroomMB": [
+     14,
+     16
+    ]
+   },
+   "2": {
+    "lowestMB": 16,
+    "highestMB": 16,
+    "gcs": 4,
+    "headroomMB": [
+     16,
+     17
+    ]
+   },
+   "3": {
+    "lowestMB": 19,
+    "highestMB": 21,
+    "gcs": 2,
+    "headroomMB": [
+     19,
+     21
+    ]
+   },
+   "4": {
+    "lowestMB": 21,
+    "highestMB": 21,
+    "gcs": 3,
+    "headroomMB": [
+     22
+    ]
+   },
+   "5": {
+    "lowestMB": 25,
+    "highestMB": 25,
+    "gcs": 2,
+    "headroomMB": [
+     24
+    ]
+   },
+   "6": {
+    "lowestMB": 25,
+    "highestMB": 25,
+    "gcs": 1,
+    "headroomMB": [
+     24
+    ]
+   }
+  }
+ }
+}

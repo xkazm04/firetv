@@ -1,0 +1,263 @@
+{
+ "run": "c14-run2",
+ "apkSha256": "bc2222561d6caf4d325c2ae4a27e1f0dc945f14cac5498fc2bc694a5dabb04b1",
+ "arm": "c14",
+ "settled": false,
+ "settledNote": "no (no wait)",
+ "durationSeconds": 360.0420357,
+ "functionalPass": true,
+ "probeFunctionalPass": true,
+ "error": null,
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-09T09:06:18.2118596Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "MsMpEng",
+     143
+    ],
+    [
+     "node#12",
+     119
+    ],
+    [
+     "node#57",
+     111
+    ],
+    [
+     "svchost#72",
+     98
+    ],
+    [
+     "node#52",
+     78
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-09T09:12:35.8196703Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#57",
+     521
+    ],
+    [
+     "headless_shell#7",
+     122
+    ],
+    [
+     "node#12",
+     105
+    ],
+    [
+     "node#4",
+     93
+    ],
+    [
+     "MsMpEng",
+     85
+    ]
+   ]
+  }
+ },
+ "ownedTextureMiB": {
+  "max": 36.97,
+  "min": 36.97,
+  "summaryMax": 36.9697265625,
+  "fontMiBMax": 2.0,
+  "windows": 296
+ },
+ "glMtrackMiB": {
+  "line": "GL mtrack",
+  "max": 49.13,
+  "min": 48.91,
+  "samples": 8,
+  "graphicsSummaryMax": 49.13,
+  "eglMtrackRows": 0
+ },
+ "pss": {
+  "minMiB": 132.31,
+  "maxMiB": 153.14,
+  "samples": 8,
+  "peakSecond": 205.0,
+  "lowestSecond": 0,
+  "peakBreakdownMiB": {
+   "Java Heap": 49.84,
+   "Native Heap": 10.24,
+   "Code": 24.17,
+   "Stack": 1.48,
+   "Graphics": 49.12,
+   "Private Other": 7.94,
+   "System": 10.35,
+   "pss Dalvik Heap": 43.91,
+   "pss Dalvik Other": 5.33,
+   "pss GL mtrack": 49.12,
+   "pss Native Heap": 10.32,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.37,
+   "TOTAL PSS": 153.14
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 30.17,
+   "Native Heap": 8.89,
+   "Code": 25.53,
+   "Stack": 0.95,
+   "Graphics": 48.91,
+   "Private Other": 7.56,
+   "System": 10.31,
+   "pss Dalvik Heap": 24.24,
+   "pss Dalvik Other": 3.82,
+   "pss GL mtrack": 48.91,
+   "pss Native Heap": 8.96,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.37,
+   "TOTAL PSS": 132.31
+  }
+ },
+ "hud": {
+  "activeFrames": 19063,
+  "hudMsMean": 1.1466,
+  "hudMsP95": 1.6581,
+  "hudFlushesMean": 2.0,
+  "hudFlushesCounts": {
+   "2": 19063
+  },
+  "hudDrawsMean": 5.0,
+  "drawCallsMean": 17.821,
+  "textureBindsMean": 11.885,
+  "workMsMean": 10.1328,
+  "cpuMsMean": 7.6525
+ },
+ "allocation": {
+  "MBps": 2.2654,
+  "gcCount": 38,
+  "gcTimeMs": 2173
+ },
+ "guards": {
+  "activeFrames": 19057,
+  "over33": 84,
+  "worstActiveWindowP95Ms": 25.325077,
+  "activeMaxMs": 75.748231,
+  "pooledActiveP95Ms": 18.913,
+  "rejectedInputs": [
+   0,
+   0
+  ]
+ },
+ "raceLaunches": 6,
+ "fullGcs": 2,
+ "survivorsPerRound": {
+  "4": {
+   "lowestMB": 37,
+   "highestMB": 37,
+   "gcs": 1
+  },
+  "5": {
+   "lowestMB": 40,
+   "highestMB": 40,
+   "gcs": 1
+  }
+ },
+ "headroomMB": [
+  24
+ ],
+ "transition": {
+  "1": {
+   "trackMs": [
+    9.336307
+   ],
+   "configureWorldMs": [
+    9.180923
+   ],
+   "course": [
+    "scrap-1-c"
+   ],
+   "changed": [
+    false
+   ]
+  },
+  "2": {
+   "trackMs": [
+    67.728923
+   ],
+   "configureWorldMs": [
+    67.309385
+   ],
+   "course": [
+    "foundry-1-c"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "3": {
+   "trackMs": [
+    28.844769
+   ],
+   "configureWorldMs": [
+    28.639616
+   ],
+   "course": [
+    "salt-1-b"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "4": {
+   "trackMs": [
+    27.513846
+   ],
+   "configureWorldMs": [
+    27.265231
+   ],
+   "course": [
+    "switchback-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "5": {
+   "trackMs": [
+    32.438846
+   ],
+   "configureWorldMs": [
+    32.193692
+   ],
+   "course": [
+    "crown-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  }
+ },
+ "trackMsMax": 67.728923,
+ "configureWorldMsMax": 67.309385,
+ "transitionRoundsRead": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "routesWarmup": {
+  "seconds": 9.660620299982838,
+  "bytes": 17540089,
+  "limit": "One untimed-out GET before the probe; includes LAN transfer."
+ }
+}

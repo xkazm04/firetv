@@ -1,0 +1,250 @@
+{
+ "run": "c15-run1",
+ "apkSha256": "e191b04ce76a937930a9c78a9019fceba1e50d42a18c9fc61cb5b2524b29e640",
+ "arm": "c15",
+ "settled": false,
+ "settledNote": "no (no wait)",
+ "durationSeconds": 360.1608686,
+ "functionalPass": true,
+ "probeFunctionalPass": true,
+ "error": null,
+ "rounds": 6,
+ "hostCpu": {
+  "host-cpu-start.json": {
+   "utc": "2026-10-09T08:50:47.8604799Z",
+   "totalPercentSamples": [
+    100,
+    100,
+    85
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "node#54",
+     150
+    ],
+    [
+     "node#12",
+     130
+    ],
+    [
+     "chrome#49",
+     126
+    ],
+    [
+     "node#16",
+     126
+    ],
+    [
+     "node#66",
+     98
+    ]
+   ]
+  },
+  "host-cpu-end.json": {
+   "utc": "2026-10-09T08:57:09.7020001Z",
+   "totalPercentSamples": [
+    99,
+    100,
+    100
+   ],
+   "logicalProcessors": 16,
+   "top": [
+    [
+     "chrome#42",
+     161
+    ],
+    [
+     "chrome#38",
+     74
+    ],
+    [
+     "node#22",
+     74
+    ],
+    [
+     "node#49",
+     66
+    ],
+    [
+     "node#55",
+     62
+    ]
+   ]
+  }
+ },
+ "ownedTextureMiB": {
+  "max": 36.97,
+  "min": 36.97,
+  "summaryMax": 36.9697265625,
+  "fontMiBMax": 2.0,
+  "windows": 299
+ },
+ "glMtrackMiB": {
+  "line": "GL mtrack",
+  "max": 48.99,
+  "min": 48.92,
+  "samples": 8,
+  "graphicsSummaryMax": 48.99,
+  "eglMtrackRows": 0
+ },
+ "pss": {
+  "minMiB": 139.28,
+  "maxMiB": 158.31,
+  "samples": 8,
+  "peakSecond": 338.2,
+  "lowestSecond": 3.8,
+  "peakBreakdownMiB": {
+   "Java Heap": 40.75,
+   "Native Heap": 10.42,
+   "Code": 38.38,
+   "Stack": 1.52,
+   "Graphics": 48.92,
+   "Private Other": 8.04,
+   "System": 10.27,
+   "pss Dalvik Heap": 34.79,
+   "pss Dalvik Other": 5.22,
+   "pss GL mtrack": 48.92,
+   "pss Native Heap": 10.52,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.41,
+   "TOTAL PSS": 158.31
+  },
+  "lowestBreakdownMiB": {
+   "Java Heap": 19.91,
+   "Native Heap": 9.56,
+   "Code": 41.5,
+   "Stack": 1.31,
+   "Graphics": 48.92,
+   "Private Other": 7.84,
+   "System": 10.24,
+   "pss Dalvik Heap": 13.94,
+   "pss Dalvik Other": 4.21,
+   "pss GL mtrack": 48.92,
+   "pss Native Heap": 9.66,
+   "pss Ashmem": 4.88,
+   "pss Unknown": 0.41,
+   "TOTAL PSS": 139.28
+  }
+ },
+ "hud": {
+  "activeFrames": 18917,
+  "hudMsMean": 1.5894,
+  "hudMsP95": 2.2846,
+  "hudFlushesMean": 2.0,
+  "hudFlushesCounts": {
+   "2": 18917
+  },
+  "hudDrawsMean": 5.0,
+  "drawCallsMean": 17.288,
+  "textureBindsMean": 11.364,
+  "workMsMean": 11.272,
+  "cpuMsMean": 8.579
+ },
+ "allocation": {
+  "MBps": 2.2129,
+  "gcCount": 39,
+  "gcTimeMs": 3459
+ },
+ "guards": {
+  "activeFrames": 18911,
+  "over33": 135,
+  "worstActiveWindowP95Ms": 30.138308,
+  "activeMaxMs": 80.926231,
+  "pooledActiveP95Ms": 20.643,
+  "rejectedInputs": [
+   0,
+   0
+  ]
+ },
+ "raceLaunches": 6,
+ "fullGcs": 0,
+ "survivorsPerRound": {},
+ "headroomMB": [],
+ "transition": {
+  "1": {
+   "trackMs": [
+    20.364769
+   ],
+   "configureWorldMs": [
+    20.074154
+   ],
+   "course": [
+    "scrap-1-c"
+   ],
+   "changed": [
+    false
+   ]
+  },
+  "2": {
+   "trackMs": [
+    58.29577
+   ],
+   "configureWorldMs": [
+    58.007769
+   ],
+   "course": [
+    "foundry-1-c"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "3": {
+   "trackMs": [
+    27.110923
+   ],
+   "configureWorldMs": [
+    26.846615
+   ],
+   "course": [
+    "salt-1-b"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "4": {
+   "trackMs": [
+    25.189846
+   ],
+   "configureWorldMs": [
+    24.890846
+   ],
+   "course": [
+    "switchback-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  },
+  "5": {
+   "trackMs": [
+    25.512616
+   ],
+   "configureWorldMs": [
+    25.259769
+   ],
+   "course": [
+    "crown-1-a"
+   ],
+   "changed": [
+    true
+   ]
+  }
+ },
+ "trackMsMax": 58.29577,
+ "configureWorldMsMax": 58.007769,
+ "transitionRoundsRead": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "routesWarmup": {
+  "seconds": 21.795605199993588,
+  "bytes": 17540089,
+  "limit": "One untimed-out GET before the probe; includes LAN transfer."
+ }
+}

@@ -1,0 +1,33 @@
+{
+ "run": "diag",
+ "plan": [
+  "a"
+ ],
+ "startedUtc": "2026-10-09T09:24:03.475Z",
+ "dumps": [
+  {
+   "label": "a",
+   "remote": "/data/local/tmp/p20-diag-a.hprof",
+   "hostStartUtc": "2026-10-09T09:24:49.413Z",
+   "amSeconds": 6.725,
+   "amOutput": "File: /data/local/tmp/p20-diag-a.hprof\r\nWaiting for dump to finish...",
+   "hprofStart": "10-09 11:24:51.088 13621 13621 I .deathride.per: hprof: heap dump \"/data/local/tmp/p20-diag-a.hprof\" starting...",
+   "hprofCompleted": "10-09 11:24:57.375 13621 13621 I .deathride.per: hprof: heap dump completed (36MB) in 6.287s objects 438960 objects with stack traces 0",
+   "hostDoneUtc": "2026-10-09T09:24:57.422Z",
+   "remoteLs": "-rwxrwx--- 1 shell shell 38071423 2026-10-09 11:24 /data/local/tmp/p20-diag-a.hprof",
+   "probeAlive": true,
+   "probeStartedBeforeDone": false,
+   "pull": "",
+   "rm": "ls: /data/local/tmp/p20-diag-a.hprof: No such file or directory",
+   "localBytes": 38071423,
+   "hprofConv": 0
+  }
+ ],
+ "notes": [],
+ "pid": "13621",
+ "probeSeenUtc": "2026-10-09T09:25:05.687Z",
+ "deviceExit": 0,
+ "deviceEndedUtc": "2026-10-09T09:31:28.012Z",
+ "endedUtc": "2026-10-09T09:31:35.554Z",
+ "leftOnDevice": ""
+}
