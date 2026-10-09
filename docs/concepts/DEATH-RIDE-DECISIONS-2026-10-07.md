@@ -207,3 +207,27 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
      - It comes after card 6 and before card 3.
      - It may force a GC and take a heap dump in a diagnostic run only, never in a graded run (I2).
 - **Reverse:** the owner may overrule any of these. His answer on goal 1's measure leaves them standing, because every option keeps the 192 MiB PSS line.
+
+## 13. P19 rulings
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of the five.
+- **Context:** P19 (a4123307, merged at 059d1982) re-landed card 6, the HUD font page, and graded it for memory under the rule fixed at ca323907. See `docs/concepts/deathride/P19-font-page-memory.md`, whose questions these answer.
+- **Rulings:**
+  1. **P19 is accepted. Card 6 is kept** by the rule fixed at ca323907.
+     - The re-land 9c20b2b4 is the exact inverse of 8443a99f: the same patch-id, and four blobs identical to 8443a99f~1.
+     - Owned textures went from 39.97 / 39.97 to 36.97 / 36.97 MiB, and GL mtrack max from 52.23 / 52.20 to 49.06 / 49.07 MiB.
+     - hudFlushes went from 3 to 2, no guard is worse, and `FontPageTest` is green (4 tests).
+     - PSS was not graded (unsettled). cut-run2's 195.19 MiB goes to the next goal-1 soak.
+  2. **45a159d8 is accepted as descriptive** (P19 question 3), as section 11 ruling 1 accepted 3e9f09dc.
+     - ca323907's rule already said that rejected inputs are recorded and do not void a run. The reader had taken the probe's `functionalPass`, which the rejection assertion also clears.
+     - The fix applies to both arms alike (base-run1 had 11 rejects, cut-run1 had 8). It was committed at 02:14:28Z, before cut-run1 finished at 02:16:40Z.
+     - The keep rests on owned textures and GL mtrack, which read the same in every run of an arm, so the verdict does not depend on the fix.
+     - From now on, a reader change made after an A/B's first graded run has started cites the rule's words it applies, and is committed before the next run ends.
+  3. **Card 13 runs before the next goal-1 soak** (P19 question 2). It is P20. The soak waits on the owner's answer on goal 1's measure.
+  4. **Card 13 also reads the `Code` line** (P19 question 4): which file-backed mappings make it up, and why it moves 14.6-40.1 MiB between runs.
+  5. **The tracks package** (P19 question 1).
+     - P19's first builds omitted `-PappId` and were installed over `dev.deathride.tracks` three times. It now holds `e7280368...` (deathride/main code), with its data kept.
+     - From now on, every Stick build passes `-PappId=dev.deathride.perf`, and its package is checked with `aapt badging` before any install.
+     - No run installs, uninstalls, clears or force-stops `dev.deathride.tracks` or `dev.deathride.tv`.
+     - Whether the tracks stream reinstalls its own build is the owner's call. It has been reported to the owner.
+- **Reverse:** the owner may overrule any of these.
