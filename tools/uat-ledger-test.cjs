@@ -61,7 +61,7 @@ const FIVE = [LT, J1B, RECERT, BEGINNERS, GOAL];
 /** A copy of every committed run's top-level files, under the same run names, in the OS temp dir. */
 function copyRuns() {
   const dst = path.join(tmp, `runs-${crypto.randomUUID().slice(0, 8)}`);
-  for (const run of fs.readdirSync(RUNS)) {
+  for (const run of fs.readdirSync(RUNS).filter(d => d.startsWith('2026-09-15-'))) {   // the five codex-era fixtures; a later run (the claude-era smoke) is not one of them
     const src = path.join(RUNS, run);
     if (!fs.statSync(src).isDirectory()) continue;
     fs.mkdirSync(path.join(dst, run), { recursive: true });

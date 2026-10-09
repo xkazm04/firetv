@@ -171,7 +171,7 @@ test('case 5: how the journey ended decides first; a D row answered twice, left 
 });
 
 // ---- case 6
-const RUN_IDS = fs.readdirSync(RUNS).filter(d => fs.existsSync(path.join(RUNS, d, 'findings.json'))).sort();
+const RUN_IDS = fs.readdirSync(RUNS).filter(d => d.startsWith('2026-09-15-') && fs.existsSync(path.join(RUNS, d, 'findings.json'))).sort();
 const resultsOf = run => fs.readdirSync(path.join(RUNS, run)).filter(f => f.endsWith('.json') && f !== 'findings.json' && f !== 'run.json').sort().map(f => readJson(path.join(RUNS, run, f)));
 test('case 6: over the 84 judged journeys on disk the code agrees with the judge on 42, every other verdict names its reasons, and report.md prints both', async () => {
   let judged = 0, agree = 0, unexplained = 0;
