@@ -1,0 +1,110 @@
+{
+  "id": "2026-10-09-essay-l1",
+  "started": "2026-10-09T18:02:57Z",
+  "finished": "2026-10-09T18:32:55.239Z",
+  "cert_level": "L1",
+  "module": "Essay Master",
+  "base_commit": "12592a71837af4a41124d8a9ee539fe55032fe75",
+  "cast": [
+    "barbora-43",
+    "daniel-15",
+    "eliska-12",
+    "helena-46",
+    "kristyna-17"
+  ],
+  "journeys": [
+    "EM1",
+    "EM2",
+    "EM3",
+    "EM4",
+    "EM5"
+  ],
+  "pairs": [
+    {
+      "character": "barbora-43",
+      "journey": "EM1"
+    },
+    {
+      "character": "barbora-43",
+      "journey": "EM4"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM2"
+    },
+    {
+      "character": "daniel-15",
+      "journey": "EM3"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM1"
+    },
+    {
+      "character": "eliska-12",
+      "journey": "EM2"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM1"
+    },
+    {
+      "character": "helena-46",
+      "journey": "EM5"
+    },
+    {
+      "character": "kristyna-17",
+      "journey": "EM1"
+    },
+    {
+      "character": "kristyna-17",
+      "journey": "EM3"
+    }
+  ],
+  "recertify": null,
+  "instrument": {
+    "level": "L1 theoretical (uat skill v1.11.1, Phase L1)",
+    "walkers": "one subagent per Character (claude-opus-5-5, the orchestrator session's own subagents), at most 4 at a time, walking blind of docs/BACKLOG.md, docs/uat-insights/, .personas/ and uat/runs/",
+    "model_calls": "none: no desk engine, no Ollama, no codex, no paid API; rule functions executed with node via tools/ts-load.cjs on scratch DESK_DATA_DIRs outside the repo",
+    "grounding_denominators": "SUMMARY.md, Grounding denominators (fixed once by the orchestrator, shared by every walker)",
+    "overlay": [
+      "uat/README.md",
+      "uat/env.md",
+      "uat/rubric.md",
+      "uat/accepted-gaps.md"
+    ]
+  },
+  "product": {
+    "commit": "12592a71837af4a41124d8a9ee539fe55032fe75",
+    "dirty": false,
+    "source": "desk/src files cited in this run's evidence, blobs at the base commit",
+    "files": {
+      "desk/src/app/api/analyse/route.ts": "10950cce6b3c07225827bf2b7b1b7aefe98546ab",
+      "desk/src/app/api/texts/route.ts": "de589748d97b0f63a5a4d8d056b9531468c5c3c8",
+      "desk/src/app/api/twin/card/route.ts": "9609de321ca26fea38dad1fb01938b4de30203ad",
+      "desk/src/app/drop/page.tsx": "e8d35706f7ae6c705b41a428d16fd361670854dd",
+      "desk/src/app/phone/EssayShelf.tsx": "a0d95598edcb8837224dd26ce95484c8f15d68a9",
+      "desk/src/app/phone/page.tsx": "a4844dc79e0252524a9b07df5b1369a8f9944839",
+      "desk/src/app/tv/page.tsx": "70d48e5c1b5101e15f03cff8254ad03e1093f62e",
+      "desk/src/essay/EssayTV.tsx": "d4c3ca34814b144f59f7064cb5d4421d264116b0",
+      "desk/src/essay/Workroom.tsx": "e6c275df0ac15b74fe84a83980eb30a32fccdf9d",
+      "desk/src/lib/desk/essay.ts": "cbeb73ccde1c09c117bd207d50de1509cec333d8",
+      "desk/src/lib/desk/memory.ts": "f694cd6ec03547c00cce789c43d8665fee0e4ef5",
+      "desk/src/lib/library/lessons.data.ts": "360d293bbb999ec295a813d44b8939c9084c228a",
+      "desk/src/lib/rules/digest.ts": "47e37c53d7b466ae205e6b3bc5d7c58790e9000e",
+      "desk/src/lib/rules/essay.ts": "975a5451e76f7e59aa1a01a83e4daeeda433a0d2",
+      "desk/src/lib/rules/style.ts": "1b19f7177c1321ce8d6221b4e030f9c146cde4b6",
+      "desk/src/lib/rules/voice.ts": "d16fe541845d37d97a4637d5a1ddb09f91400cbe",
+      "desk/src/lib/rules/week.ts": "204f23997cb9e79ef3ac0d98bda25e5ec2d8376b",
+      "desk/src/lib/session/pairing.ts": "ff68623d4dcda29f561438c0ccc5028925a3a546",
+      "desk/src/lib/session/store.ts": "00d103ee4df385fb678d5d7d2ca0d694acdaf0da",
+      "desk/src/lib/session/texts.ts": "4d66c482b7c8d30c0a38e469e320adefbae346d1",
+      "desk/src/lib/twin/card.ts": "e7b20c0b19acbf79f310cf208edd5f0261d98b13",
+      "desk/src/tv/keys.ts": "ad56e54920073857cf801c16f4ef83b54e678008",
+      "desk/src/tv/landingRows.ts": "19eba94ceadfeb3d1ac83fe5ddbfa4cd27324596",
+      "desk/src/tv/profileRows.ts": "778ff3b9bf9d7d91aea2175a3ec6b44f5f4389ab",
+      "desk/src/tv/recapRows.ts": "7f70f922d4b418c28337eb289920ecbe14551897",
+      "desk/src/tv/screens.tsx": "000b4b4c65ce529df1816dd9f1d78c66c9a8df4d"
+    }
+  }
+}
