@@ -707,25 +707,38 @@ export const SAME_REL = 1e-7;
 /** Fewest samples at which both must be defined before any claim is made. */
 const SAME_MIN = 3;
 
-/** The values of a and b where both are defined, or null when their defined-ness differs on a positive sample. */
-function pairs(a: Fn, b: Fn): [number, number][] | null {
+/**
+ * The values of a and b where both are defined, or null when fewer than SAME_MIN compare. `twoWay`: also null when their
+ * defined-ness differs on a positive sample (sameFunction, sameUpToConstant); one way (agreesWhereBoth) it may differ.
+ */
+function pairs(a: Fn, b: Fn, twoWay = true): [number, number][] | null {
   if (!isFn(a) || !isFn(b)) return null;
   const f = fnOf(a), g = fnOf(b), out: [number, number][] = [];
   for (const x of SAMPLES) {
     const u = f(x), v = g(x), du = Number.isFinite(u), dv = Number.isFinite(v);
-    if (x > 0 && du !== dv) return null;
+    if (twoWay && x > 0 && du !== dv) return null;
     if (du && dv) out.push([u, v]);
   }
   return out.length >= SAME_MIN ? out : null;
 }
+const agree = (p: [number, number][] | null, tol: number) => !!p && p.every(([u, v]) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(u), Math.abs(v)));
 
 /**
  * Are a and b the same function? At every sample where both are defined their values agree to `tol` relative
  * (SAME_REL by default), they are defined at the same positive samples, and at least SAME_MIN samples compare.
  */
 export function sameFunction(a: Fn, b: Fn, tol: number = SAME_REL): boolean {
-  const p = pairs(a, b);
-  return !!p && p.every(([u, v]) => Math.abs(u - v) <= tol * Math.max(1, Math.abs(u), Math.abs(v)));
+  return agree(pairs(a, b), tol);
+}
+
+/**
+ * Does `answer` agree with `truth` wherever both are defined (to `tol` relative, at least SAME_MIN samples)? One direction
+ * (D2): an answer defined where the truth is not is not a gap (-1/(1-x) for the derivative of ln(1-x)), so only the
+ * samples where both are defined are compared. An answer undefined where the truth is defined is not refused here: the
+ * caller asks undefinedWhereTrue, which reads not sure (ln(x-2) + C for 1/(x-2)). Agrees whenever sameFunction does.
+ */
+export function agreesWhereBoth(answer: Fn, truth: Fn, tol: number = SAME_REL): boolean {
+  return agree(pairs(answer, truth, false), tol);
 }
 
 /**

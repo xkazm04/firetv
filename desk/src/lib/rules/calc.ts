@@ -18,7 +18,7 @@
 import { readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
 import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
-import { compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, sameFunction, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
+import { agreesWhereBoth, compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
 
@@ -407,6 +407,9 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, wr
  *     negation is 'wrong' with slip 'sign'; a +C on a derivative is 'wrong'.
  *   - antiderivative: the answer's numeric derivative is the integrand at the samples; right needs the arbitrary
  *     constant - a correct function with no +C is 'wrong' with slip 'lost-constant'; the negation is slip 'sign'.
+ *   - both compare one way (agreesWhereBoth, D2): only where answer and truth are both defined, so an answer defined
+ *     where the truth is not is right (-1/(1-x) for ln(1-x)); one undefined where the truth is defined is 'unsure' with
+ *     the domain line (ln(x) + C for 1/x, MB-B27). A gap outside every sample is not seen: ln(x+4) + C for 1/(x+4).
  *   - number shapes: within the shape's TOLERANCE (exact or rounded); fractions, sqrt, pi and ln forms read; a
  *     negated truth is slip 'sign'; a rounded decimal close to an exact shape's truth is 'unsure'. An infinite limit
  *     is answered by inf, infinity or ∞ (with its sign); 'dne' is wrong for a limit that exists.
@@ -434,14 +437,14 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict 
   if (!e) return verdict("unsure", WHY.unreadable);
   if (truth.kind === "derivative") {
     const g = (x: number) => truth.at.get(x) ?? NaN;
-    if (sameFunction(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : undefinedWhereTrue(e, g) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
-    if (sameFunction(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (agreesWhereBoth(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : undefinedWhereTrue(e, g) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
+    if (agreesWhereBoth(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
     return comparable((x) => e.at(x), g) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (truth.kind === "antiderivative") {
     const d = (x: number) => derivativeAt(e, x) ?? NaN;
-    if (sameFunction(d, truth.f, FUNCTION_TOL)) return e.constant ? (undefinedWhereTrue(d, truth.f) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right)) : verdict("wrong", WHY.lostConstant, "lost-constant");
-    if (sameFunction(d, (x) => -truth.f.at(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (agreesWhereBoth(d, truth.f, FUNCTION_TOL)) return e.constant ? (undefinedWhereTrue(d, truth.f) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right)) : verdict("wrong", WHY.lostConstant, "lost-constant");
+    if (agreesWhereBoth(d, (x) => -truth.f.at(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
     return comparable(d, (x) => truth.f.at(x)) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (e.constant) return verdict("unsure", WHY.unreadable);
@@ -515,8 +518,9 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
   let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
   const fnRight = (e: Expr): boolean => {
-    if (truth.kind === "derivative") return sameFunction(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);
-    if (truth.kind === "antiderivative") return sameFunction((x) => derivativeAt(e, x) ?? NaN, truth.f, FUNCTION_TOL);
+    // one way, as the judge compares (D2): every answer it can call right is refused
+    if (truth.kind === "derivative") return agreesWhereBoth(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);
+    if (truth.kind === "antiderivative") return agreesWhereBoth((x) => derivativeAt(e, x) ?? NaN, truth.f, FUNCTION_TOL);
     return false;
   };
   // the question's own pieces, and its function unless the function is the answer

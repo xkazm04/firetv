@@ -229,6 +229,15 @@ test('11: sameFunction and sameUpToConstant - irrational samples, defined-ness o
  assert.equal(sf('x^2/2 + C','x^2/2'),true,'the constant is not a value');
  assert.equal(su('-cos(x)','1 - cos(x)'),true);assert.equal(su('sin(x)^2','-cos(x)^2'),true);
  assert.equal(su('x^2','x^2 + x'),false);assert.equal(su('ln(x)','ln(3x)'),true);
+ // D2: agreesWhereBoth(answer, truth) compares one way - only where both are defined; sameFunction keeps its two-way meaning
+ const ab=(a,b)=>E.agreesWhereBoth(c(a),c(b));
+ assert.equal(sf('-1/(1-x)','-1/(1-x) + 0*ln(1-x)'),false,'sameFunction: defined-ness differs on a positive sample');
+ assert.equal(ab('-1/(1-x)','-1/(1-x) + 0*ln(1-x)'),true,'one way: the answer may be defined where the truth is not');
+ assert.equal(ab('-1/(1-x) + 0*ln(1-x)','-1/(1-x)'),true,'and undefined where the truth is defined: undefinedWhereTrue says that');
+ assert.equal(E.undefinedWhereTrue(c('-1/(1-x) + 0*ln(1-x)'),c('-1/(1-x)')),true);
+ assert.equal(ab('ln(x)','ln(-x)'),false,'no sample where both are defined: fewer than SAME_MIN compare');
+ assert.equal(ab('1/(x-1)','1/(x-1) + 0*ln(x-4)'),false,'one sample (sqrt 23) where both are defined is fewer than SAME_MIN');
+ for(const [a,b] of [['(x^2 - 4)/(x - 2)','x + 2'],['ln(x^2)','2ln(x)'],['2sin(x)cos(x)','sin(2x)'],['x^3','x^3 + 0.001']])assert.equal(ab(a,b),sf(a,b),`${a} ~ ${b}: one way agrees whenever two way does`);
 });
 
 test('12: toTex - the typesetter\'s TeX for an expression',()=>{

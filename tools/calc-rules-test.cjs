@@ -469,6 +469,25 @@ test('MB-B27: an antiderivative undefined where the integrand is defined is not 
  assert.equal(C.checkAnswer(S,'-ln|x| + C').slip,'sign');
 });
 
+test('D2-2: one-direction defined-ness - an answer defined where the truth is not is right, one undefined where the truth is defined is not sure',()=>{
+ const D=(f)=>({shape:'derivative',f}),A=(f)=>({shape:'antiderivative',f}),dom=/not defined everywhere/;
+ const v=(spec,a)=>{const r=C.checkAnswer(spec,a);return r.verdict+(r.slip?'/'+r.slip:'');};
+ // must-address 1: the right derivatives of ln(1-x), ln(2-x), ln(4-x^2) were wrong (their truths are undefined at samples where the answer is defined)
+ for(const [f,a] of [['ln(1-x)','-1/(1-x)'],['ln(1-x)','1/(x-1)'],['ln(2-x)','-1/(2-x)'],['ln(4-x^2)','-2x/(4-x^2)'],['ln(x-2)','1/(x-2)']])assert.equal(v(D(f),a),'right',`d/dx ${f}: ${a}`);
+ assert.equal(v(D('ln(1-x)'),'1/(1-x)'),'wrong/sign','the negation is the sign slip, one way too');
+ assert.equal(v(D('ln(1-x)'),'1/(1-x)^2'),'wrong');
+ // an antiderivative undefined where the integrand is defined: not sure, with the domain line
+ for(const [f,a] of [['1/(1-x)','-ln(1-x) + C'],['1/(x-2)','ln(x-2) + C'],['1/x','ln(x) + C']]){const r=C.checkAnswer(A(f),a);assert.equal(r.verdict,'unsure',`int ${f}: ${a}`);assert.match(r.why,dom);}
+ for(const [f,a] of [['1/x','ln|x| + C'],['1/(1-x)','-ln|1-x| + C'],['1/(x-2)','ln|x-2| + C']])assert.equal(v(A(f),a),'right',`int ${f}: ${a}`);
+ assert.equal(v(A('1/(1-x)'),'-ln(1-x)'),'wrong/lost-constant');
+ // the accepted ceiling: the gap of ln(x+4) lies left of every sample (SAMPLES spans about -3.32 to 4.80), so it reads right
+ assert.equal(v(A('1/(x+4)'),'ln(x+4) + C'),'right','named limit: a gap outside every sample is not seen');
+ // leaks stay at least as strict: an answer the judge calls right, stated in a hint, is refused
+ assert.equal(C.leaksCalc(D('ln(1-x)'),'The derivative is -1/(1-x).'),true);
+ assert.equal(C.leaksCalc(D('ln(4-x^2)'),'so it comes to -2x/(4-x^2)'),true);
+ assert.equal(C.leaksCalc(A('1/(x+4)'),'it is ln(x+4) + C'),true);
+});
+
 test('MB-B28: a decimal for a limit or a definite integral is right only as the exact value correctly rounded at its own written precision',()=>{
  const L3={shape:'limit',f:'sin(3x)/x',at:0},LH={shape:'limit',f:'(x^2 + 1)/(2x^2 + 3)',at:'inf'},LE={shape:'limit',f:'(1 + 1/x)^x',at:'inf'};
  const IE={shape:'definite-integral',f:'e^x/2',a:0,b:1},NINE={shape:'definite-integral',f:'x^2',a:0,b:3};
