@@ -322,6 +322,34 @@ test('M4: the phone End session ends the evening first, then writes it down, as 
  assert.match(fs.readFileSync(path.join(root,'src/lib/desk/memory.ts'),'utf8'),/model: "fast", thinking: false/,'writeMemory does not think');
 });
 
+test('M5: the evening log belongs to one evening - the first event of a later day clears it, session.end does not',()=>{
+ const {reduce}=store(),real=Date.now,at=(d,h)=>new Date(2026,8,d,h,0,0).getTime();
+ const hint=(key,stage=1)=>({type:'hint.set',hint:{key,problem:'3x + 7 = 1',stage,hint1:null,hint2:null,askedQ:'',owner:'ema'}});
+ try{
+  Date.now=()=>at(24,19);
+  let s=session({timer:{running:false,left:1500,phase:'work'},away:{jakub:{pages:[],pageIx:0,itemIx:0,reading:false,hint:null,lesson:null,noLesson:false,lessonPaused:false,topic:null,practice:null,walkIx:0,tasks:[],log:{problems:['j1'],hints:2,hard:['j-hard']}}}});
+  s=reduce(s,hint('k1'));s=reduce(s,{type:'hint.stage',stage:2});
+  assert.equal(s.log.hints,1);assert.deepEqual(s.log.hard,['3x + 7 = 1']);assert.equal(s.log.day,'2026-9-24','stamped with the local day on the first write');
+  Date.now=()=>at(24,23);
+  s=reduce(s,{type:'session.end'});
+  assert.equal(s.log.hints,1,'session.end clears nothing: the recap still reads it');assert.equal(s.away.jakub.log.hints,2);assert.equal(s.endedAt,at(24,23));
+  const same=reduce(s,{type:'focus',focus:0});assert.equal(same.log.hints,1,'later the same evening: kept');
+  Date.now=()=>at(25,17);
+  const next=reduce(s,{type:'focus',focus:0});
+  assert.deepEqual([next.log.hints,next.log.problems,next.log.hard,next.log.minutes,next.log.started],[0,[],[],0,null],'the first event of the next day clears the seated log');
+  assert.deepEqual(next.away.jakub.log,{problems:[],hints:0,hard:[]},'and every away slot\'s');
+  const {recapRows,recapCaption}=recap();
+  const tiles=recapRows(next,at(25,18));
+  assert.equal(recapCaption(tiles),'A quiet evening.');
+  assert.equal(tiles.find((t)=>t.app==='maths').hints,0);
+  // the second evening's own work is its own
+  const again=reduce(next,hint('k9'));assert.equal(again.log.hints,1);assert.equal(again.log.day,'2026-9-25');
+  // a log from before the stamp is dated by the day its timer started
+  const old=reduce(session({log:{started:at(23,16),minutes:30,problems:['a'],hard:[],hints:2}}),{type:'focus',focus:0});
+  assert.equal(old.log.hints,0);
+ }finally{Date.now=real;}
+});
+
 test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
  try{
   seat();engine(lined);

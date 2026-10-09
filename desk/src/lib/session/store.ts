@@ -305,7 +305,9 @@ export interface Session {
    * (lib/session/pairing.ts view); the seated learner's own is in the fields above.
    */
   away?: Record<string, MathsSlot>;
-  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
+  status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null; /** the local day the log was first written (YYYY-MM-DD): it is one evening's, see staleLog */ day?: string };
+  /** When the evening was last ended (session.end): the phone's recap shows for an evening that ended since local midnight. */
+  endedAt?: number;
   updatedAt: number;
   /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
   viewer?: "tv" | "phone" | "guest";
@@ -497,7 +499,30 @@ export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
-export function reduce(s: Session, e: Event): Session {
+/** The local day a moment falls in, as the log is stamped with it. */
+const dayOf = (at: number): string => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !!(l.problems.length || l.hints || l.hard.length);
+
+/**
+ * The evening log (problems, hints, hard, minutes, started) belongs to one evening: stamped with the server's local day
+ * when it is first written, and cleared by the first event of a later day - the seated learner's and every away slot's.
+ * session.end clears nothing, because the recap still reads the log it ends. A log from before the stamp is dated by
+ * the day its timer started.
+ */
+function dayed(s: Session, e: Event, now = Date.now()): Session {
+  const today = dayOf(now), was = s.log.day ?? (s.log.started ? dayOf(s.log.started) : undefined);
+  if (e.type === "session.end" || !was || was === today) return s;
+  const away = s.away ? Object.fromEntries(Object.entries(s.away).map(([k, x]) => [k, { ...x, log: { problems: [], hints: 0, hard: [] } }])) : undefined;
+  return { ...s, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, ...(away ? { away } : {}) };
+}
+function stamped(n: Session, now = Date.now()): Session {
+  if (n.log.day || !(loggedIn(n.log) || n.log.minutes || n.log.started || Object.values(n.away ?? {}).some((x) => loggedIn(x.log)))) return n;
+  return { ...n, log: { ...n.log, day: dayOf(now) } };
+}
+
+export function reduce(s: Session, e: Event): Session { return stamped(step(dayed(s, e), e)); }
+
+function step(s: Session, e: Event): Session {
   if (!s.learner && NEEDS_LEARNER.has(e.type)) return s;
   const n: Session = { ...s, updatedAt: Date.now() }, me = s.learner?.id ?? "";
   switch (e.type) {
@@ -617,7 +642,7 @@ export function reduce(s: Session, e: Event): Session {
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
-    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; break;
+    case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; n.endedAt = Date.now(); break;
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
