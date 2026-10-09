@@ -64,10 +64,10 @@ const FULL=[
  'Mia worked on seven evenings.',
  '# Math Buddy',
  'Add and subtract fractions: 5 of 6 right, last set.',
- 'Mean and range: 2 of 6 right, last set.',
- // OLD 'And two more units.' (W9-lines: the shorter Sunday name for Area brings the first rung, three units, within PAGE_WORDS)
- 'Area of rectangles and triangles: 6 of 6 right, last set.',
- 'And one more unit.',
+ // OLD 'Mean and range: 2 of 6 right, last set.' (MB5-8: its last set has one not sure)
+ 'Mean and range: 2 of 6 right, 1 not sure, last set.',
+ // W9-lines moved this to Area's line and 'And one more unit.'; MB5-8's three words take the page back to the second rung
+ 'And two more units.',
  'A step up taken in Ratio and sharing.',
  '# One thing to look at',
  'The most common slip, three times: added the tops and the bottoms.',
@@ -98,8 +98,8 @@ test('2: a thin week (one unit) and the empty week',()=>{
  assert.deepEqual(texts(words(thin)),[
   'Mia worked on one evening.',
   '# Math Buddy',
-  // OLD 'Area of rectangles, triangles and composite shapes: ...' (W9-lines: its Sunday name, so the not-sure count fits LINE_WORDS)
-  'Area of rectangles and triangles: 4 of 6 right, last set.',
+  // OLD 'Area of rectangles, triangles and composite shapes: 4 of 6 right, last set.' (W9-lines: its Sunday name; MB5-8: the last set's not sure)
+  'Area of rectangles and triangles: 4 of 6 right, 1 not sure, last set.',
   '# One thing to look at',
   'The most common slip, twice: the half left out.',
   '# One thing to try together',
@@ -194,7 +194,10 @@ test('6: privacy and the stance - no percent sign, no praise, ranking or compari
  const fixtures=[WEEK,[M(24,18,'area',3,6)],[],[E(24,18,'teacher','repair',3)],[R(24,18,'structure',3,1)],
   // a worst case: every school unit, step ups everywhere, every lens, every scene, slips
   [...PATHS.school.topics.map((t,i)=>M(21+(i%7),8+i,t.id,i%7,6,{stretch:true,...(S.SCHOOL_UNIT_SLIPS[t.id]?{slip:S.SCHOOL_UNIT_SLIPS[t.id][0],slipN:3}:{})})),
-   ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),9+i,s.id,s.skill,3)),...['structure','argument','evidence','language'].map((x,i)=>R(22+i,20,x,5,2))]];
+   ...ENGLISH_SCENES.map((s,i)=>E(21+(i%7),9+i,s.id,s.skill,3)),...['structure','argument','evidence','language'].map((x,i)=>R(22+i,20,x,5,2))],
+  // widened (MB5-8, W9-lines): every library topic on every path, two-digit counts and a not-sure count, one at a time and all at once
+  ...Object.values(PATHS).flatMap((p)=>p.topics).map((t)=>[M(24,18,t.id,10,25,{notSure:12,stretch:true})]),
+  Object.values(PATHS).flatMap((p)=>p.topics).map((t,i)=>M(21+(i%7),8+(i%12),t.id,10,25,{notSure:12,stretch:i%2===0}))];
  for(const f of fixtures){
   const lines=words(f),all=lines.map((l)=>l.text).join('\n');
   assert.doesNotMatch(all,/%/,'no percent sign anywhere');
@@ -234,6 +237,18 @@ test('MB-B14: the homework line comes first in Math Buddy, the paper line last; 
  assert.equal(calls,0);
 });
 
+// ------------------------------------------------------------------ MB5-8: the not-sure count on the unit line
+test('MB5-8: the unit line names the not-sure count of the last set when above 0, and reads as before at 0',()=>{
+ const line=(l)=>words(l).find((x)=>x.section==='maths'&&/last set\.$/.test(x.text)).text;
+ assert.equal(line([M(24,18,'linear-one-step',3,6,{notSure:2})]),'One-step equations: 3 of 6 right, 2 not sure, last set.');
+ assert.equal(line([M(24,18,'linear-one-step',4,6,{notSure:1})]),'One-step equations: 4 of 6 right, 1 not sure, last set.');
+ assert.equal(line([M(24,18,'linear-one-step',3,6,{notSure:0})]),'One-step equations: 3 of 6 right, last set.','0: exactly as before');
+ // from the latest set, as right and total are
+ assert.equal(line([M(23,18,'linear-one-step',1,6,{notSure:4}),M(24,18,'linear-one-step',5,6)]),'One-step equations: 5 of 6 right, last set.');
+ assert.equal(line([M(23,18,'linear-one-step',5,6),M(24,18,'linear-one-step',2,6,{notSure:3})]),'One-step equations: 2 of 6 right, 3 not sure, last set.');
+ assert.equal(W.sundayPage(learnerOf([M(24,18,'area',2,6,{notSure:3})]),MIA,NOW).units[0].notSure,3);
+});
+
 // ------------------------------------------------------------------ W9-lines: LINE_WORDS stays 14, long names are shortened
 /** Every topic of the library, on every path, once. */
 const ALL_TOPICS=[...new Map(Object.values(PATHS).flatMap((p)=>p.topics).map((t)=>[t.id,t])).values()];
@@ -250,10 +265,10 @@ test('W9-lines: SUNDAY_NAMES is closed - exactly the library topics whose longes
  }
  // the library itself is unchanged: a unit without a Sunday name keeps the library's
  for(const t of ALL_TOPICS){
-  const line=words([M(24,18,t.id,10,12)]).find((l)=>l.section==='maths'&&/last set\.$/.test(l.text));
+  const line=words([M(24,18,t.id,10,25,{notSure:12})]).find((l)=>l.section==='maths'&&/last set\.$/.test(l.text));
   assert.ok(line,`${t.id}: a unit line`);
   assert.ok(W.wordsIn(line.text)<=W.LINE_WORDS,`${t.id}: ${W.wordsIn(line.text)} words: ${line.text}`);
-  assert.ok(line.text.startsWith(`${W.SUNDAY_NAMES[t.id]??t.name}: `),line.text);
+  assert.equal(line.text,`${W.SUNDAY_NAMES[t.id]??t.name}: 10 of 25 right, 12 not sure, last set.`);
   const up=words([M(24,18,t.id,10,12,{stretch:true})]).find((l)=>/^A step up taken in /.test(l.text));
   assert.equal(up.text,`A step up taken in ${W.SUNDAY_NAMES[t.id]??t.name}.`,'the step-up line says the same name');
  }

@@ -7,7 +7,8 @@
  * `sundayWords(page)` turns the rows into short lines, in a fixed order, only where there is something true to say:
  *   a. the week: how many evenings had work;
  *   b. Math Buddy: the homework sheets read, with the hints and the second hints that evening (MB-B14); per unit worked
- *      (three at most, then "and N more"), the last set's count right; a step up in words; the practice papers typed in;
+ *      (three at most, then "and N more"), the last set's count right and, when above 0, not sure (MB5-8); a step up in
+ *      words; the practice papers typed in;
  *   c. one thing to look at: the week's most frequent code-detected slip, by its plain name, only when it came twice;
  *   d. Linga: how many conversations, and the situations' names (authored scene names, or a plan topic's own title);
  *   e. Essay Master: how many paragraph readings, and the lenses;
@@ -101,7 +102,7 @@ export const WEEK_HEADS: Readonly<Record<Exclude<WeekSection, "week">, string>> 
   maths: "Math Buddy", look: "One thing to look at", english: "Linga", essay: "Essay Master", try: "One thing to try together",
 };
 
-export interface WeekUnit { id: string; name: string; sets: number; right: number; total: number; stretch: boolean; latest: number }
+export interface WeekUnit { id: string; name: string; sets: number; right: number; notSure: number; total: number; stretch: boolean; latest: number }
 /** The page as rows: what the words are made of. Counts and names only; empty when nothing was done this week. */
 export interface SundayPage {
   name: string;
@@ -157,9 +158,9 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   const maths = week.filter((e): e is MathsDigest => e.kind === "maths" && !!topicIn(e.topic));
   const byUnit = new Map<string, WeekUnit>();
   maths.forEach((e) => {
-    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, total: 0, stretch: false, latest: -1 };
+    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, notSure: 0, total: 0, stretch: false, latest: -1 };
     u.sets++; if (e.stretch) u.stretch = true;
-    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.total = e.total; }
+    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.notSure = e.notSure; u.total = e.total; }
     byUnit.set(e.topic, u);
   });
   page.units = [...byUnit.values()].sort((a, b) => b.sets - a.sets || b.latest - a.latest || a.id.localeCompare(b.id));
@@ -228,7 +229,7 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework) });
   if (page.units.length) {
     const shown = page.units.slice(0, t.units);
-    for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right, last set.` });
+    for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right${u.notSure ? `, ${u.notSure} not sure` : ""}, last set.` });
     const more = page.units.length - shown.length;
     if (more) out.push({ section: "maths", text: `And ${times(more, "more unit")}.` });
     if (page.stepUps.length === 1 && t.stepNames && wordsIn(`A step up taken in ${page.stepUps[0]}.`) <= LINE_WORDS) out.push({ section: "maths", text: `A step up taken in ${page.stepUps[0]}.` });
