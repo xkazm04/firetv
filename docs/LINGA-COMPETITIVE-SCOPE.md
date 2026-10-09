@@ -252,6 +252,33 @@ recap.
 - **B5 · Speech in is simulated.** The harness fakes `SpeechRecognition`. That proves the flow, not a microphone; a
   real microphone on the phone over Wi-Fi waits on MH-1.
 
+### Run of 2026-10-09
+
+Two attempts of `tools/linga-ui-test.cjs` on an isolated desk (empty data directory outside every repo, the claude CLI on the
+subscription, no voice). Evidence: `uat/runs/2026-10-09-linga-e-run/`. Attempt 1 stopped at the first page on a harness defect
+(the nav to landing was overwritten by the phone's join; fixed, 4ecd22c7). Attempt 2 ran live to the recap and stopped on a
+stale selector.
+
+| Step | Verdict |
+|---|---|
+| E1 Seat and pair | pass |
+| E2 Level | pass (A2 seated by hand, 75 ms) |
+| E3 Scene | pass for the scene and the opening line; the footer never read "Partner speaking" (headless, no voice) |
+| E4 Live replies | pass on lines (one typed, one simulated-spoken, each a new line); no moment fired |
+| E5 Coaching note | pass ("You said" is the exact reply) |
+| E6 Replay | pass (new question under "Try it again") |
+| E7 Recap | the product reached the recap in 99 ms; the harness failed on `.linga-track` (line 135), which the recap no longer renders. The rest of the script (My map, print, Maths and Essay entrances) was not reached |
+| E8 Timing | five model calls: modelMs median 9.96 s, max 11.58 s (opening 8.7, turns 11.6 and 10.7, coach 6.3, replay 10.0; 47.2 s in all). About twice the prediction (turn median 4.7 s, max 6.2 s; five calls 24-31 s). No sign of thinking reaching the CLI (no figure near 17-52 s, no timeout). Line to voice: null throughout |
+| E9 Boundary | pass (403) |
+
+Blockers: **B1** was the stale harness; it still needed one more fix (the recap selector, not made: two runs only), plus
+the join race above. **B2** held (webpack and a seeded directory worked; the operator's notes were right). **B3** held
+(the CLI answered, no spend). **B4** held: headless got no voice (`/api/speak` 503 with none configured) and the footer never
+said "speaking". **B5** held: recognition was simulated.
+
+Still owed: a real phone's microphone over Wi-Fi, heard audio, the owner's reading of the transcript (the builder's reading is in
+the evidence folder), and one more harness run after the recap selector is fixed.
+
 ## 4. Declined and deferred, in one place
 
 | | What | Why, for the sofa |

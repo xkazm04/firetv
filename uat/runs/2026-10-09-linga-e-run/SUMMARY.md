@@ -8,7 +8,7 @@ port 3217, `next dev --webpack`, no API key, no ElevenLabs/Piper, text engine = 
 
 1. **Attempt 1: failed at the first page, a harness defect.** `waitForSelector('[data-role="desk-object"]')` at
    `tools/linga-ui-test.cjs:91` timed out. The TV sat on the "Mia's phone is on the desk" confirmation: the harness
-   waited only for the phone's cookie (line 89), the nav to landing arrived before the join event, and the join then
+   waited only for the phone's cookie (line 89, before the fix), the nav to landing arrived before the join event, and the join then
    overwrote it (`desk/src/lib/session/store.ts:507-508`). No model call was made; no timings.json was written.
    Fixed in one commit (4ecd22c7: the harness waits for `joined` before the nav).
 2. **Attempt 2, fresh DATA and server: ran E1-E6 live, stopped at E7 on a stale selector.** `tools/linga-ui-test.cjs:135`
@@ -23,7 +23,7 @@ port 3217, `next dev --webpack`, no API key, no ElevenLabs/Piper, text engine = 
 | Step | Verdict | Evidence |
 |---|---|---|
 | E1 Seat and pair | pass (TV 1920x1150 default stage; the Desk display toggle was not used) | the run reached line 135 past the pairing asserts (lines 89-98) |
-| E2 Level | pass | the harness asserted no placement and the two level buttons, no "Start talking" (lines 101-102), then `level-self` 75 ms, A2 (timings.json) |
+| E2 Level | pass | the harness asserted no placement and the two level buttons, no "Start talking" (lines 100-101), then `level-self` 75 ms, A2 (timings.json) |
 | E3 Scene | pass for scene and line; **the footer never read "Partner speaking"** (headless) | `start` in timings.json: 8809 ms to a new line; footer "Select Repeat audio to enable speech, or use captions." |
 | E4 Live replies | pass on lines (two replies, each a new Pip line); **no moment fired** | `turn` x2 in timings.json; transcript.md rows 1-4; no `moment-done` timing, session `moments` empty |
 | E5 Coaching note | pass | shots/tv-coach.png; "You said" equals turn 3 exactly (transcript.md) |
