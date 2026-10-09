@@ -183,7 +183,12 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/catalog") { call.respondPacked(catalogCache.of("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}"),ContentType.Application.Json,"no-cache") }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         get("/routes") { val reply=routesFile.open();try { call.respondBytesWriter(ContentType.Application.Json,contentLength=reply.length){val buffer=ByteArray(RoutesReply.CHUNK);while(true){val n=reply.stream.read(buffer);if(n<0)break;writeFully(buffer,0,n)}} } finally { reply.stream.close() } }
-                        webSocket("/ws") { handle(this) }
+                        webSocket("/ws") {
+                            // Any page a phone loads can open this socket through its browser; only the controller's own page (or a client that sends no Origin, which is not a browser) reaches pairing.
+                            val origin=call.request.headers[HttpHeaders.Origin]
+                            if(origin!=null && !origin.substringAfter("://").equals(call.request.headers[HttpHeaders.Host],ignoreCase=true)) { close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"origin")); return@webSocket }
+                            handle(this)
+                        }
                     }
                 }
                 if(runCatching { candidate.start(false) }.isSuccess) {
