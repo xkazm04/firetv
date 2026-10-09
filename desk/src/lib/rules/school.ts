@@ -2111,6 +2111,22 @@ function joiner(gap: string, before: string): Joiner | null {
 const apply = (o: Op, p: Q, q: Q): Q | null => (o === "+" ? add(p, q) : o === "-" ? sub(p, q) : o === "×" ? mul(p, q) : div(p, q));
 
 /**
+ * A Pythagoras line that takes the root of the item's squared total (X1a, App Master ruling 2026-10-09). The value the
+ * root is taken of is x²+y² for the longest side and x²−y² for a shorter side. Stated on its own it stays legitimate
+ * ('c squared is 1156.', '36 + 64 = 100'). It leaks when it sits under a root ('the square root of 1156', '√1156',
+ * 'odmocnina z 1156'), and when the line states it together with a root instruction ('... = 1156, teď odmocni.').
+ * 'Then take the square root of the total.' names no number and passes. `text` is the line as leakText reads it.
+ */
+function pythRooted(k: { find: "longest" | "shorter"; x: bigint; y: bigint }, text: string): boolean {
+  const total = String(k.find === "longest" ? k.x * k.x + k.y * k.y : k.x * k.x - k.y * k.y);
+  const plain = text.replace(/(\d)[, ](?=\d{3}(?!\d))/g, "$1");
+  // the total as a number standing alone, not part of a longer figure
+  if (!new RegExp(String.raw`(?<![\d.,])${total}(?![\d]|[.,]\d)`).test(plain)) return false;
+  // a root word or sign anywhere in the same line: under the root, or beside a root instruction, either way it is the step
+  return /square\s+root|\broot|sqrt|√|odmocn/.test(plain);
+}
+
+/**
  * Does this hint or explanation line state the answer, or give it away? The rule is in this file's header, and each
  * shape's own part of it in `leakProfile`. Two more readings of rule 6 (W7): three numbers chained by × and ÷ whose
  * value is the answer ("12 ÷ 4 × 3" for 3/4 = ?/12, "40 ÷ 5 × 3" for 3/5 of 40), and the joining words above. False
@@ -2177,6 +2193,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
     };
     const text = leakText(hint);
     if (pr.written.some((re) => re.test(text))) return true;
+    if (r.kind.k === "pyth" && pythRooted(r.kind, text)) return true;
     const runs: { s: number; e: number; values: Q[] }[] = [];
     for (const m of text.matchAll(RUN)) {
       const run = m[0].replace(/[.,\s]+$/, "");

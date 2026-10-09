@@ -1618,10 +1618,14 @@ const PYTH_SPELLINGS=[
  // 25 and 7 -> 24
  [PH,'24','uk','right'],[PH,'32','uk','wrong','pyth-sides-added'],[PH,'576','uk','wrong','pyth-no-root'],[PH,'674','uk','wrong','pyth-squares-added'],[PH,'25','uk','wrong'],
 ];
+const PX=py('longest 16 30','mm');  // 34 mm. squares 256 + 900 = 1156 (X1a)
 const PYTH_LEAKS=[
  [PA,'The answer is 10 cm.'],[PA,'It is 10.'],[PA,'Ten centimetres.'],[PA,'The square root of 100 is 10.'],[PA,'So the longest side is 10'],[PA,'√100 = 10'],[PA,'20 ÷ 2'],[PA,'Half of 20.'],[PA,'5 × 2'],[PA,'10.0 cm'],[PA,'It comes to 1000%.'],
  [PB,'The missing side is 8.'],[PB,'Eight centimetres.'],[PB,'It is 8 cm.'],[PB,'16 ÷ 2'],[PB,'The square root of 64 is 8.'],
  [PC,'It is 13 mm.'],[PC,'Thirteen.'],[PD,'It is 12 metres.'],[PD,'The root of 144 is 12.'],[PE,'It is 15.'],[PG,'The longest side is 50 m.'],[PH,'The other side is 24 cm.'],
+ // X1a: the squared total under a root, or beside a root instruction, leaks
+ [PX,'The longest side is the square root of 1156.'],[PX,'the root of 1156'],[PX,'√1156'],[PX,'√ 1156'],[PX,'odmocnina z 1156'],[PX,'c² = 16² + 30² = 1156, teď odmocni.'],[PA,'36 + 64 = 100, now take the square root.'],
+ [PB,'Take the square root of 64.'],[PB,'100 - 36 = 64, then root it.'],
 ];
 const PYTH_LEGIT=[
  [PA,'Square both shorter sides.'],[PA,'Square 6 and 8 and add them.'],[PA,'6 × 6 = 36'],[PA,'8 × 8 = 64'],[PA,'36 + 64 = 100'],[PA,'Then take the square root of the total.'],[PA,'Add the squares of the two shorter sides.'],
@@ -1630,6 +1634,8 @@ const PYTH_LEGIT=[
  [PC,'5 × 5 = 25'],[PC,'12 × 12 = 144'],[PC,'25 + 144 = 169'],[PC,'Your answer is in mm.'],
  [PD,'13 × 13 = 169'],[PD,'5 × 5 = 25'],[PD,'169 - 25 = 144'],[PD,'Your answer is in metres.'],
  [PE,'9 × 9 = 81'],[PE,'12 × 12 = 144'],[PE,'81 + 144 = 225'],[PH,'25 × 25 = 625'],[PH,'7 × 7 = 49'],[PH,'625 - 49 = 576'],
+ // X1a: the squared total on its own stays legitimate (App Master ruling, supersedes MB-B16's refusal of it)
+ [PX,'c squared is 1156.'],[PX,'The sum of the squares is 1156.'],[PX,'256 + 900 = 1156'],[PX,'Square both shorter sides.'],[PX,'Then take the square root of the total.'],[PB,'The squares leave 64.'],
 ];
 const PYTH_PRINTS=[
  [PA,'A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side.'],
