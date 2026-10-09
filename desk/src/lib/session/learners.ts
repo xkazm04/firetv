@@ -72,8 +72,9 @@ export interface Learner {
   memory: string[];         // plain sentences the model reads, newest last, capped at 40
   history: HistoryEntry[];  // what happened, newest last, capped at 20
   /**
-   * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation and Essay
-   * reading - ids from closed lists and counts only, never text - newest last, capped at DIGEST_CAP. A separate list from
+   * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation, Essay
+   * reading, homework sheet read and paper typed in - ids from closed lists and counts only, never text - newest last,
+   * capped at DIGEST_CAP. A separate list from
    * the history (whose cap and pin are unchanged); the Sunday page (rules/week) is its only reader, and it is never
    * hydrated into the session (no screen is sent it). A learners.json written before W9 loads with none.
    */
@@ -379,6 +380,28 @@ export function addDigest(id: string, e: DigestEntry): void {
   saveLearner(l);
 }
 
+/** The local day an instant falls in (rules/week reads evenings the same way, so a DST change never splits one). */
+const localDay = (at: number) => { const d = new Date(at); return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`; };
+
+/**
+ * Hints counted onto the homework sheet they were asked on (MB-B14): the learner's latest homework entry of the same local
+ * day is restated in place - `hints` more hints, `second` more problems that needed a second - in one save, cleaned by
+ * the digest's whitelist. One entry per sheet, never one per hint (DIGEST_CAP would push a busy week's start out). False,
+ * and nothing written, when there is nothing to add or no sheet was read that day: a hint on a page read on an earlier
+ * day is not on the Sunday page. Throws when the file cannot be written.
+ */
+export function addHints(id: string, hints: number, second: number, now = Date.now()): boolean {
+  if (!(hints > 0) && !(second > 0)) return false;
+  const l = getLearner(id), day = localDay(now);
+  const i = l.digest.findLastIndex((d) => d.kind === "homework" && localDay(d.at) === day), d = l.digest[i];
+  if (d?.kind !== "homework") return false;
+  const [clean] = cleanDigest([{ ...d, hints: d.hints + Math.max(0, hints), second: d.second + Math.max(0, second) }]);
+  if (!clean) return false;
+  l.digest = l.digest.map((x, j) => (j === i ? clean : x));
+  saveLearner(l);
+  return true;
+}
+
 export function secureTopics(id: string): string[] {
   const l = getLearner(id);
   return Object.values(l.skills).filter((r) => r.secure).map((r) => r.topic);
@@ -386,7 +409,8 @@ export function secureTopics(id: string): string[] {
 
 /**
  * A paper typed on the phone, kept (v2 M5b): the raw rows go through cleanPaper (the one validation) and what it keeps is
- * stored with the date. Null, and nothing written, when no row survives. Throws when the file cannot be written.
+ * stored with the date, and the week's digest is told in the same save (MB-B14): the questions kept, never a mark or a
+ * score. Null, and nothing written, when no row survives. Throws when the file cannot be written.
  */
 export function addPaper(id: string, raw: unknown, now = Date.now()): StoredPaper | null {
   const c = cleanPaper(raw);
@@ -394,6 +418,8 @@ export function addPaper(id: string, raw: unknown, now = Date.now()): StoredPape
   const paper: StoredPaper = { at: now, items: c.items, unmapped: c.unmapped };
   const l = getLearner(id);
   l.papers = [...(l.papers ?? []), paper].slice(-PAPERS_CAP);
+  const [entry] = cleanDigest([{ at: now, kind: "paper", questions: c.items.length + c.unmapped.length }]);
+  if (entry) l.digest = [...l.digest, entry].slice(-DIGEST_CAP);
   saveLearner(l);
   return paper;
 }

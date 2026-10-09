@@ -9,7 +9,11 @@
  *              how many the desk was not sure of, how many in all, whether the set was asked for as "a step up", and
  *              the most frequent CODE-detected slip of the set with how many items showed it;
  *   - english: one per finished Linga conversation (english/conversation.ts "finish"): the scene, its skill, the replies;
- *   - essay:   one per paragraph reading (desk/essay.ts): the lens, the sentences, how many came back to fix.
+ *   - essay:   one per paragraph reading (desk/essay.ts): the lens, the sentences, how many came back to fix;
+ *   - homework: one per homework sheet read (app/api/read, maths pages only): the problems read, and the hints asked on
+ *              that local day with how many problems needed a second, restated in place at the dispatch boundary as each
+ *              hint lands (session/store.ts, learners.ts addHints) - one entry per sheet, never one per hint;
+ *   - paper:   one per practice paper typed in (session/learners.ts addPaper, in the same save): the questions kept.
  * Numbers are COUNTS of things in one set, conversation or reading - never a percent, never a score. Nothing here holds
  * problem text, an answer, a transcript, a quote or a model's words: only ids from closed lists and counts. `cleanDigest`
  * is the whitelist every read goes through; an entry it cannot trust is dropped whole.
@@ -32,12 +36,16 @@ export interface MathsDigest {
 export interface EnglishDigest { at: number; kind: "english"; sceneId: string; skill: SkillId; turns: number }
 /** One Essay Master reading: the lens, the sentences read, how many came back to fix. */
 export interface EssayDigest { at: number; kind: "essay"; lens: string; sentences: number; faulty: number }
-export type DigestEntry = MathsDigest | EnglishDigest | EssayDigest;
+/** A homework sheet read: its problems, and the hints that evening, with the problems that needed a second hint. Counts only. */
+export interface HomeworkDigest { at: number; kind: "homework"; problems: number; hints: number; second: number }
+/** A practice paper typed in: the questions kept (marked items and unmapped rows). No mark and no score. */
+export interface PaperDigest { at: number; kind: "paper"; questions: number }
+export type DigestEntry = MathsDigest | EnglishDigest | EssayDigest | HomeworkDigest | PaperDigest;
 
 /** The most entries kept; the oldest drop off the front. Sixty is weeks of evenings, and a page reads only seven days. */
 export const DIGEST_CAP = 60;
 /** Ceilings on the counts, well above anything the desk makes (a set is at most 12 items, a conversation 24 replies). */
-const MAX_ITEMS = 50, MAX_TURNS = 200, MAX_SENTENCES = 500;
+const MAX_ITEMS = 50, MAX_TURNS = 200, MAX_SENTENCES = 500, MAX_HINTS = 500, MAX_QUESTIONS = 200;
 
 /** A plan topic's id as english/check.ts mints it: "plan-" and eight hex digits. Never words. */
 const PLAN_ID = /^plan-[0-9a-f]{8}$/;
@@ -106,6 +114,18 @@ export function cleanEntry(raw: unknown): DigestEntry | null {
     const sentences = whole(o.sentences, MAX_SENTENCES);
     if (!lens || !sentences) return null;
     return { at, kind: "essay", lens, sentences, faulty: Math.min(sentences, whole(o.faulty, MAX_SENTENCES) ?? 0) };
+  }
+  if (o.kind === "homework") {
+    const problems = whole(o.problems, MAX_ITEMS);
+    if (!problems) return null;
+    // a second hint is a hint too, so the problems that needed one are never more than the hints
+    const hints = whole(o.hints, MAX_HINTS) ?? 0;
+    return { at, kind: "homework", problems, hints, second: Math.min(hints, whole(o.second, MAX_HINTS) ?? 0) };
+  }
+  if (o.kind === "paper") {
+    const questions = whole(o.questions, MAX_QUESTIONS);
+    if (!questions) return null;
+    return { at, kind: "paper", questions };
   }
   return null;
 }

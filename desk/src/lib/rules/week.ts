@@ -6,13 +6,14 @@
  * day rule) and returns rows: counts of things done, unit and scene names, one slip by kind, one thing to try together.
  * `sundayWords(page)` turns the rows into short lines, in a fixed order, only where there is something true to say:
  *   a. the week: how many evenings had work;
- *   b. Math Buddy: per unit worked (three at most, then "and N more"), the last set's count right; a step up in words;
+ *   b. Math Buddy: the homework sheets read, with the hints and the second hints that evening (MB-B14); per unit worked
+ *      (three at most, then "and N more"), the last set's count right; a step up in words; the practice papers typed in;
  *   c. one thing to look at: the week's most frequent code-detected slip, by its plain name, only when it came twice;
  *   d. Linga: how many conversations, and the situations' names (authored scene names, or a plan topic's own title);
  *   e. Essay Master: how many paragraph readings, and the lenses;
  *   f. one thing to try together: exactly one everyday act, from the authored table DO_IT keyed by the unit worked most,
  *      or a fallback by what was done when there was no maths.
- * An empty week is two words: "Nothing this week." The words hold counts of things (as the recap's do), never a
+ * An empty week, one with no entry at all, is two words: "Nothing this week." The words hold counts of things (as the recap's do), never a
  * percentage, a ranking, a comparison with a sibling, a school year or an age, never praise, a problem, an answer, a
  * transcript or a quote. Only THIS learner's record is read. Each line stays within LINE_WORDS words and the page within
  * PAGE_WORDS (a fixed ladder trims detail, never a section, when a busy week runs long). Phase 1 writes English only:
@@ -22,7 +23,7 @@
  */
 import type { Learner } from "../session/learners";
 import type { Profile } from "../session/store";
-import type { DigestEntry, EnglishDigest, EssayDigest, MathsDigest } from "./digest";
+import type { DigestEntry, EnglishDigest, EssayDigest, HomeworkDigest, MathsDigest } from "./digest";
 import { slipName } from "./digest";
 import { topicIn } from "../library/paths";
 import { ESSAY_TYPES } from "../library/lessons.data";
@@ -86,6 +87,10 @@ export interface SundayPage {
   units: WeekUnit[];
   /** the units with a step-up set this week, in `units` order */
   stepUps: string[];
+  /** the homework sheets read this week, and the hints and second hints counted onto them; null with none */
+  homework: { sheets: number; hints: number; second: number } | null;
+  /** the practice papers typed in this week */
+  papers: number;
   slip: { id: string; name: string; times: number } | null;
   english: { conversations: number; scenes: string[] } | null;
   essay: { readings: number; pieces: number; lenses: string[] } | null;
@@ -121,7 +126,7 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   const from = weekStart(now);
   const week = (learner.digest ?? []).filter((e: DigestEntry) => e.at >= from && e.at <= now);
   const name = profile?.name?.trim() || "Your learner";
-  const page: SundayPage = { name, empty: !week.length, evenings: new Set(week.map((e) => dayKey(e.at))).size, units: [], stepUps: [], slip: null, english: null, essay: null, tryIt: null };
+  const page: SundayPage = { name, empty: !week.length, evenings: new Set(week.map((e) => dayKey(e.at))).size, units: [], stepUps: [], homework: null, papers: 0, slip: null, english: null, essay: null, tryIt: null };
   if (page.empty) return page;
 
   // b. the units: one row each, from its latest set; most sets first, then the most recent, then the path's order
@@ -135,6 +140,10 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   });
   page.units = [...byUnit.values()].sort((a, b) => b.sets - a.sets || b.latest - a.latest || a.id.localeCompare(b.id));
   page.stepUps = page.units.filter((u) => u.stretch).map((u) => u.name);
+  // the homework sheets and their hints, and the papers typed in: counts only (MB-B14)
+  const sheets = week.filter((e): e is HomeworkDigest => e.kind === "homework");
+  if (sheets.length) page.homework = { sheets: sheets.length, hints: sheets.reduce((a, e) => a + e.hints, 0), second: sheets.reduce((a, e) => a + e.second, 0) };
+  page.papers = week.filter((e) => e.kind === "paper").length;
 
   // c. one slip by kind: the week's most frequent code-detected slip, ties by rules/school's table order, only twice or more
   const slips = new Map<string, number>();
@@ -180,12 +189,18 @@ function namesLine(head: string, names: string[]): string {
   return `${head}.`;
 }
 
+/** "Two homework sheets, 5 hints, 2 needed a second.": the sheets, then the hints and the second hints when each is above 0. */
+function homeworkLine(h: NonNullable<SundayPage["homework"]>): string {
+  return [cap(times(h.sheets, "homework sheet")), h.hints ? `${h.hints} ${h.hints === 1 ? "hint" : "hints"}` : "", h.second ? `${h.second} needed a second` : ""].filter(Boolean).join(", ") + ".";
+}
+
 function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.empty) return [{ section: "week", text: WEEK_EMPTY }];
   const out: WeekLine[] = [{ section: "week", text: `${page.name} worked on ${times(page.evenings, "evening")}.` }];
   const head = (section: Exclude<WeekSection, "week">) => out.push({ section, head: true, text: WEEK_HEADS[section] });
+  if (page.homework || page.units.length || page.papers) head("maths");
+  if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework) });
   if (page.units.length) {
-    head("maths");
     const shown = page.units.slice(0, t.units);
     for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right, last set.` });
     const more = page.units.length - shown.length;
@@ -193,6 +208,7 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
     if (page.stepUps.length === 1 && t.stepNames && wordsIn(`A step up taken in ${page.stepUps[0]}.`) <= LINE_WORDS) out.push({ section: "maths", text: `A step up taken in ${page.stepUps[0]}.` });
     else if (page.stepUps.length) out.push({ section: "maths", text: page.stepUps.length === 1 ? "A step up taken this week." : `A step up taken in ${times(page.stepUps.length, "unit")}.` });
   }
+  if (page.papers) out.push({ section: "maths", text: `${cap(times(page.papers, "practice paper"))} typed in.` });
   if (page.slip) { head("look"); out.push({ section: "look", text: `The most common slip, ${page.slip.times === 2 ? "twice" : `${num(page.slip.times)} times`}: ${low(page.slip.name)}.` }); }
   if (page.english) {
     head("english");

@@ -306,3 +306,79 @@ test('12: GUARD - the history cap is still 20 and the digest is a separate field
  for(const dir of ['tv','maths','essay','english','landing','app/phone'])for(const f of fs.readdirSync(src(dir)).filter((x)=>/\.tsx?$/.test(x)))
   assert.doesNotMatch(fs.readFileSync(src(`${dir}/${f}`),'utf8'),/\.digest\b/,`${dir}/${f} reads no digest`);
 });
+
+// ------------------------------------------------------------------ MB-B14: homework sheets and their hints write the week
+const W=require(src('lib/rules/week.ts'));
+const SHEET=[{number:1,text:'2x+3=11',x:0.5,y:0.2},{number:2,text:'x-5=2',x:0.5,y:0.5},{number:3,text:'3x=18',x:0.5,y:0.8}];
+const SNAP={...PHOTO,subject:'maths',title:'Algebra'};
+/** A homework read through the real route, vision stubbed (as desk-jobs-rules-test readOf does), at the local time `at` when given. */
+async function readSheet(at){
+ visionReads(SHEET);
+ const real=Date.now;if(at)Date.now=()=>at;
+ try{const r=await post('read',SNAP);assert.equal(r.status,200,await r.clone().text());}finally{Date.now=real;}
+}
+const weekText=()=>(store.getSession().week??[]).map((l)=>l.text);
+const hintOn=(key,problem,stage,owner)=>store.dispatch({type:'hint.set',hint:{key,problem,stage,hint1:{hint:'h',next:'n'},hint2:stage===2?{hint:'h2',next:'n2'}:null,askedQ:'',...(owner?{owner}:{})}});
+
+test('MB-B14: three homework reads and no set - the page is not "Nothing this week.", it says three homework sheets and three evenings',async()=>{
+ seat();calls=[];
+ const noon=(back)=>{const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-back);return d.getTime();};
+ for(const back of [2,1,0])await readSheet(noon(back));
+ assert.equal(calls.length,0,'no text model');
+ const d=digest();assert.equal(d.length,3,'one entry per sheet');
+ for(const e of d)assert.deepEqual({...e,at:0},{at:0,kind:'homework',problems:3,hints:0,second:0},'counts only: no title, no page id, no problem text');
+ assert.ok(!JSON.stringify(d).includes('Algebra')&&!JSON.stringify(d).includes('2x+3'),'no title, no problem text');
+ const lines=W.sundayWords(W.sundayPage(learners.getLearner(LEARNER),{name:'Mia'},noon(0)+3600000)).map((l)=>l.text);
+ assert.notDeepEqual(lines,[W.WEEK_EMPTY]);
+ assert.equal(lines[0],'Mia worked on three evenings.');
+ assert.ok(lines.includes('Math Buddy')&&lines.includes('Three homework sheets.'),lines.join(' | '));
+ // the session's page, drawn as the last read landed, is the same
+ const real=Date.now;Date.now=()=>noon(0)+60000;try{store.dispatch({type:'session.end'});}finally{Date.now=real;}
+ assert.ok(weekText().includes('Three homework sheets.'),weekText().join(' | '));
+});
+
+test('MB-B14: hints - two on one problem (one reaching stage 2) and one on another give "3 hints, 1 needed a second", on the one entry, and the page is redrawn',async()=>{
+ seat();await readSheet();
+ hintOn('p1','2x+3=11',1);
+ hintOn('p1','2x+3=11',2);store.dispatch({type:'hint.stage',stage:2});
+ assert.ok(weekText().includes('One homework sheet, 2 hints, 1 needed a second.'),`redrawn after a hint: ${weekText().join(' | ')}`);
+ // a stage 2 again on a problem already on the hard list does not count again
+ store.dispatch({type:'hint.stage',stage:2});
+ hintOn('p2','x-5=2',1);
+ const d=digest();assert.equal(d.length,1,'never one entry per hint');
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'homework',problems:3,hints:3,second:1});
+ assert.ok(weekText().includes('One homework sheet, 3 hints, 1 needed a second.'),weekText().join(' | '));
+ assert.equal(calls.length,0);
+});
+
+test('MB-B14: a hint for a learner who left the desk lands on that learner\'s entry, not the seated learner\'s',async()=>{
+ seat();const ben=LEARNER;await readSheet();
+ store.dispatch({type:'profile.draft',patch:{id:`${ben}-ada`,name:'Ada',type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});
+ const ada=`${ben}-ada`;assert.equal(store.getSession().learner.id,ada);
+ await readSheet();
+ hintOn('q1','2x+3=11',1,ben);hintOn('q1','2x+3=11',2,ben);store.dispatch({type:'hint.stage',stage:2,owner:ben});
+ assert.deepEqual(learners.getLearner(ben).digest.map((e)=>[e.hints,e.second]),[[2,1]],'the away learner\'s sheet');
+ assert.deepEqual(learners.getLearner(ada).digest.map((e)=>[e.hints,e.second]),[[0,0]],'the seated learner\'s sheet untouched');
+ assert.ok(!weekText().some((t)=>/hint/.test(t)),'the seated learner\'s page says no hint');
+});
+
+test('MB-B14 limit: a hint on a day with no homework sheet read writes nothing',async()=>{
+ seat();
+ hintOn('z1','2x+3=11',1);hintOn('z1','2x+3=11',2);store.dispatch({type:'hint.stage',stage:2});
+ assert.deepEqual(digest(),[],'no entry is made for a hint');
+ // a sheet read yesterday does not take today's hints
+ const y=new Date();y.setDate(y.getDate()-1);y.setHours(12,0,0,0);await readSheet(y.getTime());
+ hintOn('z2','x-5=2',1);
+ assert.deepEqual(digest().map((e)=>e.hints),[0]);
+ assert.equal(learners.addHints(LEARNER,1,0),false);
+});
+
+test('MB-B14: cleanEntry keeps only a homework or paper entry\'s whitelisted fields; junk is dropped whole',()=>{
+ const hw={at:1700000000000,kind:'homework',problems:3,hints:5,second:2},pp={at:1700000000000,kind:'paper',questions:12};
+ assert.deepEqual(D.cleanDigest([{...hw,title:'Algebra',text:'2x+3=11',answer:'4',id:'maths-1'}]),[hw]);
+ assert.deepEqual(D.cleanDigest([{...pp,title:'Mock',text:'Q1',answer:'7',marks:30,score:60}]),[pp]);
+ assert.deepEqual(D.cleanDigest([{...hw,problems:2.9,hints:-1,second:4}]),[{...hw,problems:2,hints:0,second:0}],'whole, not negative, never more seconds than hints');
+ assert.deepEqual(D.cleanDigest([{...hw,hints:'5',second:undefined}]),[{...hw,hints:0,second:0}]);
+ for(const j of [{...hw,problems:0},{...hw,problems:'3'},{...hw,at:0},{kind:'homework'},{...pp,questions:0},{...pp,questions:null},{...pp,at:'x'},{...pp,kind:'mock'}])
+  assert.deepEqual(D.cleanDigest([j]),[],`dropped: ${JSON.stringify(j)}`);
+});

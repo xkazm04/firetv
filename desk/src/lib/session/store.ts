@@ -14,7 +14,7 @@ import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
+import { addHints, addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
 import { isPath, learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
@@ -732,6 +732,22 @@ function restateMarked(s: Session): void {
 }
 
 /**
+ * What one hint event added to its owner's evening log, as the reducer counted it (MB-B14): every hint.set is one hint,
+ * and a problem counts once toward "needed a second" when it first joins the log's hard list (hint.stage 2). The owner
+ * is the hint's (it may be a learner who left the desk: toAway), else the learner seated. The log before is read as the
+ * reducer saw it, after a new evening's clearing (dayed). Null when the event added nothing.
+ */
+function hintsAdded(was: Session, now: Session, e: Event): { owner: string; hints: number; second: number } | null {
+  if (e.type !== "hint.set" && e.type !== "hint.stage") return null;
+  const owner = (e.type === "hint.set" ? e.hint.owner : e.owner) ?? was.learner?.id;
+  if (!owner) return null;
+  const logOf = (s: Session) => (s.learner?.id === owner ? s.log : s.away?.[owner]?.log) ?? { hints: 0, hard: [] };
+  const a = logOf(now), b = logOf(dayed(was, e));
+  const hints = Math.max(0, a.hints - b.hints), second = Math.max(0, a.hard.length - b.hard.length);
+  return hints || second ? { owner, hints, second } : null;
+}
+
+/**
  * The Sunday page's lines for the learner at the desk, from their own record (rules/week, no model): null with no one
  * seated. Read at the boundary, like the history: after an event that can change the record or who is seated, and when
  * a session ends. The page is a household convenience on the phone's Parent tab, not a locked view (Phase 1 has no
@@ -756,8 +772,12 @@ export function dispatch(e: Event): Session {
       return store.session;
     }
   }
-  const was = store.session.watch;
+  const was = store.session.watch, before = store.session;
   store.session = reduce(store.session, e);
+  // a hint is counted onto its owner's homework sheet of the day (MB-B14), never one digest entry per hint
+  const added = hintsAdded(before, store.session, e);
+  let hinted = false;
+  if (added) try { hinted = addHints(added.owner, added.hints, added.second); } catch (err) { console.error("A hint could not be counted on the week:", err instanceof Error ? err.message : err); }
   if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
   const w = store.session.watch;
   if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
@@ -765,7 +785,7 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null }; } catch {}
   }
-  if (REHYDRATE.has(e.type) || e.type === "session.end") try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
+  if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
   return store.session;

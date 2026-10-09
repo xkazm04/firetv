@@ -9,7 +9,7 @@ import { readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
 import { TYPE_WORDS, systemOf } from "@/tv/profileRows";
-import { addHistory } from "@/lib/session/learners";
+import { addDigest, addHistory } from "@/lib/session/learners";
 import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
@@ -38,11 +38,15 @@ export async function POST(req: Request) {
     if (!items.length) throw new DeskSaid(EMPTY_READ);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written
     // before the event, because `page.read` is what re-hydrates the record onto the session.
+    // The week's digest is told too (MB-B14), for the same owner: the problems read, as a count; the evening's hints are
+    // counted onto this entry as they land (session/store.ts, learners.ts addHints). No title, no page id, no problem text.
     if (subject === "maths") {
+      const at = Date.now();
       addHistory(owner, {
-        at: Date.now(), kind: "homework", label: title,
+        at, kind: "homework", label: title,
         detail: `${items.length} problem${items.length === 1 ? "" : "s"} read`,
       });
+      addDigest(owner, { at, kind: "homework", problems: items.length, hints: 0, second: 0 });
     }
     dispatch({ type: "page.read", id, items, readMs: ms, provider });
     return { id, items: items.length, ms, provider };

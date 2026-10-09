@@ -37,6 +37,8 @@ const NOW=at(27,21);
 const M=(day,h,topic,right,total,extra={})=>({at:at(day,h),kind:'maths',topic,right,notSure:0,total,...extra});
 const E=(day,h,sceneId,skill,turns)=>({at:at(day,h),kind:'english',sceneId,skill,turns});
 const R=(day,h,lens,sentences,faulty)=>({at:at(day,h),kind:'essay',lens,sentences,faulty});
+const H=(day,h,problems,hints=0,second=0)=>({at:at(day,h),kind:'homework',problems,hints,second});
+const P=(day,h,questions)=>({at:at(day,h),kind:'paper',questions});
 const MIA={name:'Mia'};
 const learnerOf=(digest,english={plan:null})=>({digest:D.cleanDigest(digest),english});
 const words=(l,p=MIA,now=NOW)=>W.sundayWords(W.sundayPage(learnerOf(l.digest??l,l.english),p,now));
@@ -208,6 +210,24 @@ test('6: privacy and the stance - no percent sign, no praise, ranking or compari
  // the name is the profile's; with none, a neutral word, never an id
  assert.match(words(WEEK,{name:'  '})[0].text,/^Your learner worked on/);
  assert.match(words(WEEK,null)[0].text,/^Your learner worked on/);
+});
+
+// ------------------------------------------------------------------ MB-B14: homework sheets and papers on the page
+test('MB-B14: the homework line comes first in Math Buddy, the paper line last; the heading shows for either alone; a homework-only week is not empty',()=>{
+ assert.deepEqual(texts(words([H(23,18,6),H(24,18,4),H(25,18,5)])),['Mia worked on three evenings.','# Math Buddy','Three homework sheets.','# One thing to try together',W.DO_IT_ELSE.any]);
+ assert.ok(words([H(24,18,6,1)]).some((l)=>l.text==='One homework sheet, 1 hint.'));
+ assert.ok(words([H(24,18,6,3,1),H(25,18,4,2,1)]).some((l)=>l.text==='Two homework sheets, 5 hints, 2 needed a second.'));
+ assert.deepEqual(texts(words([P(24,18,20)])),['Mia worked on one evening.','# Math Buddy','One practice paper typed in.','# One thing to try together',W.DO_IT_ELSE.any]);
+ assert.ok(words([P(24,18,20),P(25,18,8)]).some((l)=>l.text==='Two practice papers typed in.'));
+ const both=words([H(22,18,6,2),M(23,18,'area',4,6,{stretch:true}),P(24,18,20)]).filter((l)=>l.section==='maths').map((l)=>l.text);
+ assert.deepEqual(both.slice(0,2),['Math Buddy','One homework sheet, 2 hints.'],'homework before the units');
+ assert.equal(both.at(-1),'One practice paper typed in.','the paper after the unit and step-up lines');
+ assert.equal(both.filter((t)=>t==='Math Buddy').length,1,'one heading');
+ // evenings: a homework evening counts as any other
+ assert.equal(W.sundayPage(learnerOf([H(21,18,3),M(22,18,'area',3,6),H(22,19,3)]),MIA,NOW).evenings,2);
+ // counts only: no percent, no praise, no em dash
+ for(const l of words([H(21,18,9,40,9),H(22,18,9,0,0),P(23,18,30)]))assert.doesNotMatch(l.text,/%|[—–]|(great|well done|good job|score|percent)/i,l.text);
+ assert.equal(calls,0);
 });
 
 // ------------------------------------------------------------------ 7. through the store: this learner's only, lines only, phone only

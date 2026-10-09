@@ -159,3 +159,21 @@ test('papers 5: a paper the disk could not take is reported as not saved, never 
   assert.equal(L.getLearner('noa').papers,undefined,'no paper is kept');
   assert.deepEqual(temps().filter((f)=>f.endsWith('.tmp')),[],'the temp file is removed');
 });
+
+test('papers 6 (MB-B14): a typed paper writes one paper entry in the same save - the questions kept, no mark, no score - and the page names it',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const p=L.addPaper('pia',RAW,1700000000000);
+  const l=L.getLearner('pia');
+  assert.deepEqual(l.digest,[{at:1700000000000,kind:'paper',questions:p.items.length+p.unmapped.length}],'counts the kept rows, items plus unmapped');
+  assert.equal(JSON.stringify(l.digest).match(/marks|outOf|score|N2/),null,'no mark and no score on the digest');
+  // the same save: a disk that refuses the paper refuses its entry too
+  const real=fs.renameSync;fs.renameSync=()=>{throw Object.assign(new Error('EPERM: simulated'),{code:'EPERM'});};
+  try{assert.throws(()=>L.addPaper('pia',RAW,1700000000001));}finally{fs.renameSync=real;}
+  assert.equal(L.getLearner('pia').digest.length,1);
+  // a typed paper alone, through the session door: the page names it and is not empty
+  const S=require(path.join(root,'src/lib/session/store.ts'));
+  S.dispatch({type:'reset'});
+  S.dispatch({type:'profile.draft',patch:{id:'pax',name:'Pax',type:'elementary',age:12,system:'uk',modules:['maths']}});S.dispatch({type:'profile.save'});
+  S.dispatch({type:'paper.enter',rows:RAW});
+  assert.deepEqual(S.getSession().week.map((x)=>x.text),['Pax worked on one evening.','Math Buddy','One practice paper typed in.','One thing to try together','Ask them to teach you one thing they learned this week.']);
+});
