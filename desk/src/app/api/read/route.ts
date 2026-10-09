@@ -5,7 +5,10 @@
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
-import { readPage } from "@/lib/desk/read";
+import { readPage, type ReadWho } from "@/lib/desk/read";
+import { learnerPath } from "@/lib/library/paths";
+import { learnerAge } from "@/lib/rules/voice";
+import { TYPE_WORDS, systemOf } from "@/tv/profileRows";
 import { addHistory } from "@/lib/session/learners";
 import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
@@ -24,10 +27,13 @@ export async function POST(req: Request) {
   // the page is the learner's who snapped it: stamped now, and its history line goes to them even if the desk changes hands mid-read
   const owner = held?.owner ?? getSession().learner?.id;
   if (!owner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
+  // the maths read is told who the sheet is for: the profile of the learner whose page it is
+  const profile = getSession().profiles.find((p) => p.id === owner);
+  const who: ReadWho | undefined = subject === "maths" && profile ? { system: systemOf(profile), path: learnerPath({ profiles: [profile], learner: { id: owner } }), age: learnerAge({ profiles: [profile], learner: { id: owner } }), stage: TYPE_WORDS[profile.type] } : undefined;
   const b64 = image.replace(/^data:image\/\w+;base64,/, "");
   const r = await runJob("read", async () => {
     dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h, owner } });
-    const { items, provider, ms } = await readPage(b64, subject, w, h, id);
+    const { items, provider, ms } = await readPage(b64, subject, w, h, id, who);
     // a read with no item is not a read: the job fails with the desk's reason, so Try again reads this page again in place
     if (!items.length) throw new DeskSaid(EMPTY_READ);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written

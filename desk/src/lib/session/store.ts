@@ -75,7 +75,7 @@ export const topicLabel = (id: string): string => topicIn(id)?.name ?? id;
 const labelOf = (label: string, topic: string) => label === topicLabel(topic) || label === topic;
 
 
-export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; /** the normalised text, a content fingerprint: the key is the item's identity (page id + printed number), not its text */ fingerprint?: string; }
+export interface PageItem { n: number; /** a lettered part's own name on the page: 'a)', '3b' (n stays the printed number) */ label?: string; text: string; cx: number; cy: number; band: [number, number]; key: string; /** the normalised text, a content fingerprint: the key is the item's identity (page id + printed number), not its text */ fingerprint?: string; }
 /**
  * `owner` on a page, a set, a hint and a lesson is the learner it was made for (principle 3: only this learner's), stamped
  * when it is made - by the route that asked, else by the reducer from the learner at the desk. Older sessions have none:

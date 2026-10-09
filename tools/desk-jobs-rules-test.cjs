@@ -610,6 +610,39 @@ test('value-4 / craft-5: the reading caption says the read is one call, not that
  assert.doesNotMatch(tv,/as they are read/);assert.match(tv,/Reading the page… the problems appear here all at once when it is read\./);
 });
 
+test('MB-B3: the maths read prompt carries the cz learner\'s system, notation, course and age; English and Essay prompts are byte-for-byte what they were; a label rides on the item',async()=>{
+ const OLD=(what)=>`This is a photo of a printed page. Transcribe every numbered item exactly as printed: ${what}. `+
+  `For each item give its number, its text, and the position of its centre as fractions of the image (x: 0 = left edge, 1 = right edge; y: 0 = top, 1 = bottom). `+
+  `Keep the printed numbering. Do not solve anything and do not add items that are not there.`;
+ let seen=null;const spy=(items)=>reg.useProvider('vision',{name:'stub',run:async(req)=>{seen=req;return {raw:{items}};}});
+ spy([]);await readPage('AAAA','english',100,100,'p1');
+ assert.equal(seen.prompt,OLD('the exercise sentences, with their blanks (______) and the word in brackets'));assert.equal(seen.schema.properties.items.items.properties.label,undefined);
+ await readPage('AAAA','essay',100,100,'p1',{system:'cz',age:15});
+ assert.equal(seen.prompt,OLD('each paragraph as one item'),'a profile never reaches the Essay prompt');
+ await readPage('AAAA','maths',100,100,'p1',{system:'cz',path:'school',age:15,stage:'High school'});
+ const p=seen.prompt;
+ assert(p.startsWith(OLD('the maths problems, with all symbols and exponents (write exponents with ^, e.g. x^2)')),'the maths prompt keeps its old text first');
+ for(const bit of ['Czech Republic','decimal comma','colon','tg and cotg','School maths','15 years old','lim_(x->a)','a/b with brackets','no LaTeX','printed in'])assert(p.includes(bit),bit);
+ assert(!/High school/.test(p),'the age leads; the stage is the fallback');
+ assert.equal(seen.schema.properties.items.items.properties.label.type,'string');assert(!seen.schema.properties.items.items.required.includes('label'),'the label is optional');
+ await readPage('AAAA','maths',100,100,'p1',{path:'calc1',stage:'Other'});assert(/Their stage is Other\./.test(seen.prompt)&&!/years old/.test(seen.prompt));
+ // lettered parts: n stays the printed number, the label names the part, and the key carries it
+ stubVision(()=>({items:[{number:3,text:'b part',x:0.5,y:0.6,label:'3b'},{number:3,text:'a part',x:0.5,y:0.3,label:'3a'},{number:4,text:'plain',x:0.5,y:0.9}]}));
+ const r=await readPage('AAAA','maths',100,100,'p1');
+ assert.deepEqual(r.items.map(i=>[i.n,i.label]),[[3,'3a'],[3,'3b'],[4,undefined]],'number, then label');
+ assert.deepEqual(r.items.map(i=>i.key),['p1:3:3a','p1:3:3b','p1:4']);
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');assert.match(tv,/\{x\.label \?\? x\.n\}/);assert.match(tv,/it\.label \?\? it\.n/);
+});
+test('MB-B3: the read route hands the seated learner\'s profile to the maths read only',async()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'jobs-cz',name:'Cz',type:'high-school',age:16,system:'cz'}});store.dispatch({type:'profile.save'});
+ let prompt='';reg.useProvider('vision',{name:'stub',run:async(req)=>{prompt=req.prompt;return {raw:READ3};}});
+ assert.equal((await post('read',SNAP)).status,200);
+ assert(prompt.includes('Czech Republic')&&prompt.includes('16 years old')&&prompt.includes('School maths'),prompt);
+ prompt='';assert.equal((await post('read',{...SNAP,subject:'english'})).status,200);
+ assert(!/Czech|years old|School maths/.test(prompt),'the English read is told nothing about the learner');
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
