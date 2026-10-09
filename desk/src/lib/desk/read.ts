@@ -30,9 +30,15 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
     schema: SCHEMA,
   });
   const half = subject === "essay" ? 0.09 : 0.045;
-  const items: PageItem[] = (json.items || []).filter((i) => i && typeof i.text === "string").map((i) => ({
-    n: i.number, text: i.text.trim(), cx: Math.round(i.x * w), cy: Math.round(i.y * h),
-    band: [Math.max(0, Math.round((i.y - half) * h)), Math.min(h, Math.round((i.y + half) * h))] as [number, number], key: key(i.text),
-  })).sort((a, b) => a.cy - b.cy);
+  // a position the model gave as a number is a fraction of the page: kept inside it, a pixel count or a wild guess is not trusted past the edge
+  const unit = (v: number) => Math.min(1, Math.max(0, v));
+  const finite = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
+  const num = (n: number) => (finite(n) ? n : Infinity);
+  const at = (v: number, size: number) => Math.min(size, Math.max(0, Math.round(v * size)));
+  // printed order, never height alone: a two-column sheet keeps 1, 2, 3 (the sort is stable, so one number keeps the model's order)
+  const items: PageItem[] = (json.items || []).filter((i) => i && typeof i.text === "string" && finite(i.x) && finite(i.y)).map((i) => {
+    const x = unit(i.x), y = unit(i.y), lo = at(y - half, h), hi = at(y + half, h);
+    return { n: i.number, text: i.text.trim(), cx: at(x, w), cy: at(y, h), band: [Math.min(lo, hi), Math.max(lo, hi)] as [number, number], key: key(i.text) };
+  }).sort((a, b) => (num(a.n) === num(b.n) ? 0 : num(a.n) < num(b.n) ? -1 : 1));
   return { items, provider, ms };
 }

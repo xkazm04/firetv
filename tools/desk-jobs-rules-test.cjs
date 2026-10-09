@@ -542,6 +542,37 @@ test('HW3: an empty read fails for English and Essay too, and the TV and the pho
  assert.match(ph,/screen === "capture" && !failed\("read"\)/,'the camera stays off while Try again is offered');
 });
 
+// ---- robustness-2 / craft-7: readPage itself, vision stubbed; the shared reader for maths, English and Essay ----
+const {readPage}=require(src('lib/desk/read.ts'));
+const readOf=(items,subject='maths',w=1000,h=2000)=>{stubVision(()=>({items}));return readPage('AAAA',subject,w,h);};
+const row=(number,text,x,y)=>({number,text,x,y});
+test('robustness-2: an item with a position that is not a finite number is dropped; out-of-range and pixel positions stay inside the page',async()=>{
+ const r=await readOf([row(1,'a',0.5,0.3),row(2,'b',NaN,0.5),row(3,'c',0.5,Infinity),row(5,'e',-0.4,1.7),row(6,'f',640,1300),row(7,'g',0.5,0.01)]);
+ assert.deepEqual(r.items.map(i=>i.n),[1,5,6,7]);
+ for(const i of r.items){assert(i.cx>=0&&i.cx<=1000,`cx ${i.cx}`);assert(i.cy>=0&&i.cy<=2000,`cy ${i.cy}`);assert(i.band[0]>=0&&i.band[1]<=2000&&i.band[0]<=i.band[1],`band ${i.band}`);}
+ const p=r.items.find(i=>i.n===6);assert.deepEqual([p.cx,p.cy],[1000,2000],'a pixel position is clamped to the page edge');
+});
+test('robustness-2: a two-column sheet keeps 1, 2, 3; two items with the same number keep the model\'s order',async()=>{
+ const r=await readOf([row(2,'two',0.7,0.1),row(1,'one',0.2,0.6),row(3,'three',0.2,0.1),row(2,'two again',0.7,0.2)]);
+ assert.deepEqual(r.items.map(i=>i.text),['one','two','two again','three'],'printed number first, never height alone; ties stable');
+});
+test('robustness-2: w or h of 0 is refused with a 400 in the desk\'s words, no page is added',async()=>{
+ blank();
+ for(const bad of [{w:0},{h:0},{w:-5},{w:'x'}]){
+  const r=await post('read',{...SNAP,...bad});assert.equal(r.status,400,JSON.stringify(bad));deskWorded((await r.json()).error);
+ }
+ assert.equal(store.getSession().pages.length,0);
+});
+test('craft-7: the English and Essay reads order and band like the maths one',async()=>{
+ for(const subject of ['english','essay']){
+  const r=await readOf([row(2,'second',0.5,0.9),row(1,'first',0.5,0.02)],subject,100,100);
+  assert.deepEqual(r.items.map(i=>i.n),[1,2],subject);
+  const half=subject==='essay'?9:4.5;
+  assert.deepEqual(r.items[0].band,[0,Math.round(0.02*100+half)],`${subject}: the band is clamped at the top`);
+  assert.deepEqual(r.items[1].band,[Math.round(90-half),Math.min(100,Math.round(90+half))],subject);
+ }
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
