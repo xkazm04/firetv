@@ -31,13 +31,16 @@ afterEach(()=>reg.resetProviders());
  * Every spec in tools/calc-rules-test.cjs (its CHECKS, WELL and SWEEP tables), loaded by compiling that file with a
  * no-op node:test so none of its tests run here - the round trip follows the corpus as it grows.
  */
-function lotACorpus(){
+function lotATables(){
  const file=path.join(__dirname,'calc-rules-test.cjs');
  const m=new Module(file,module);m.filename=file;m.paths=Module._nodeModulePaths(__dirname);
  const real=m.require.bind(m);
  m.require=(id)=>id==='node:test'?{test(){},after(){},afterEach(){},before(){},beforeEach(){}}:real(id);
  m._compile(fs.readFileSync(file,'utf8')+'\n;module.exports={CHECKS,WELL,SWEEP};',file);
- const {CHECKS,WELL,SWEEP}=m.exports;
+ return m.exports;
+}
+function lotACorpus(){
+ const {CHECKS,WELL,SWEEP}=lotATables();
  return [...CHECKS.map(c=>c[0]),...WELL.map(w=>w[0]),...Object.values(SWEEP)].filter(s=>s&&typeof s==='object');
 }
 
@@ -220,6 +223,44 @@ test('4: the fallback for a spec is a fixed sentence per shape, chosen in code -
  assert.deepEqual(bad,[]);
  assert.equal(C.withheldCalc({shape:'derivative',f:'x^2'}),'Name the rule the expression is built with, then say the first step out loud.');
  assert.equal(typeof C.withheldCalc(null),'string','a line even with no spec');
+});
+
+test('D2-3: the leak check stays at least as strict as the judge - every answer checkAnswer calls right, stated in a hint, is refused',()=>{
+ const X=require(src('lib/rules/calc-expr.ts'));
+ const val=(n)=>{const e=compile(String(n));return e?e.at():NaN;};
+ /** The exact value of a limit or an integral spec, for its decimal candidates (null when infinite or not worked). */
+ const exact=(s)=>{
+  const f=compile(s.f);if(!f)return null;
+  if(s.shape==='definite-integral')return X.integrate(f,val(s.a),val(s.b));
+  if(s.shape!=='limit')return null;
+  const L=s.at==='inf'||s.at==='-inf'?X.limitInf(f,s.at==='inf'?1:-1):X.limitAt(f,val(s.at),s.side);
+  return L&&L.kind==='value'?L.v:null;
+ };
+ /** Every decimal neighbour of v at 1 to 5 places: both sides, so a halfway value has both its correct roundings. */
+ const decimals=(v)=>{const out=new Set();for(let k=1;k<=5;k++){const p=10**k;for(const r of [Math.floor(v*p)/p,Math.ceil(v*p)/p,v])out.add(r.toFixed(k));}return [...out];};
+ const {CHECKS}=lotATables();
+ const D=(f)=>({shape:'derivative',f}),A=(f)=>({shape:'antiderivative',f});
+ const pairs=[...CHECKS.map(([s,a])=>[s,a]),
+  [D('ln(1-x)'),'-1/(1-x)'],[D('ln(1-x)'),'1/(x-1)'],[D('ln(2-x)'),'-1/(2-x)'],[D('ln(4-x^2)'),'-2x/(4-x^2)'],[D('ln(x-2)'),'1/(x-2)'],
+  [A('1/(x+4)'),'ln(x+4) + C'],[A('1/x'),'ln|x| + C'],[A('1/(1-x)'),'-ln|1-x| + C']];
+ const L38={shape:'limit',f:'3/8 + x',at:0};
+ const specs=[...lotACorpus(),...grid(),L38,{shape:'definite-integral',f:'3x/4',a:0,b:1}];
+ for(const s of specs){const v=exact(s);if(v!==null&&Number.isFinite(v))for(const a of decimals(v))pairs.push([s,a]);}
+ let right=0;const bad=[],long=[];
+ for(const [s,a] of pairs){
+  if(typeof a!=='string'||C.checkAnswer(s,a).verdict!=='right')continue;
+  right++;
+  if(C.leaksCalc(s,`The answer is ${a}.`))continue;
+  // a known limit at the base (main 87ec2049), not D2's: leaksCalc reads windows of at most six tokens, so a longer answer said whole is not read
+  (a.trim().split(/\s+/).length>6?long:bad).push(`${s.shape} ${s.f}: ${a}`);
+ }
+ assert.deepEqual(bad,[]);
+ assert.deepEqual(long,['derivative x^2 e^x sin(x): 2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)','derivative (x^2 + 1)/(x - 1): (x^2 - 2x - 1)/(x - 1)^2'],'the six-token window, pinned as it stands');
+ assert.ok(right>=400,`the sweep holds ${right} right answers`);
+ // the brief's two pins, by name
+ assert.equal(C.leaksCalc(D('ln(1-x)'),'So the derivative is -1/(1-x).'),true,'-1/(1-x) on the ln(1-x) derivative');
+ assert.equal(C.leaksCalc(L38,'It is about 0.38.'),true,'0.38 on a 3/8 limit');
+ assert.equal(C.leaksCalc(L38,'Round to two places at the end.'),false,'the method is not the answer');
 });
 
 // ------------------------------------------------------------------ hint(): the engine stubbed at the provider seam
