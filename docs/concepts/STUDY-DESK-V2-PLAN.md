@@ -588,6 +588,43 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   so a kept limit's value is bit-identical to today's; otherwise dne.
   (26) chain.ts's code is not edited, but its behaviour on aliased lines is corrected: a 'lim' line claiming cos(pi*x) -> 1 at inf
   is no longer ticked; a 'dne' body on that line is ticked. chain-rules-test stays green, unchanged.
+  The App Master's rulings on the M3b-3h run (2026-10-09):
+  (27) M3b-3h is accepted. Commits: df1f7320, 5e604e72, 46c6ab5b, a9300b66, 937af503. The base literals (5e604e72) come before the
+  guard (46c6ab5b). tools/calc1-frozen.json is unchanged. The only test file in the diff is the new calc-alias-test. limitInf
+  returns run A itself. The four refused specs and the chain rows are there. The kill test is recorded and section 10 is rewritten.
+  The App Master ran tsc on main at 937af503 (clean), calc-alias-test (3 of 3) and calc2-seam-test (5 of 5).
+  (28) The comparison, refining (20). An answer reads as a decimal when, with spaces, one leading sign and enclosing brackets
+  removed, it is a decimal numeral (calc-read isDecimal). A decimal is right if and only if |answer - value| <= 5e-5 + 1e-12. Any
+  other number form (a whole number, a fraction, a constant) is right if and only if it is within 1e-6 of the value, relative to
+  max(1, |value|). Sign: when the answer's negation is right by the same test, and the value is not within that tolerance of 0, the
+  verdict is 'wrong' with slip 'sign'. Any other answer that reads as a number is 'wrong'. There is no 'unsure' band. An empty or
+  unreadable answer, or an answer in x, is 'unsure', as in Calculus 1. Leaks use the decimal window: a line leaks when it states a
+  number within 5e-5 of the value or of its negation, after the question's own pieces are set aside (f, a, b, the int_a^b form,
+  'n = <pieces>' and the rule's name). A hint that rounds the value to fewer than four places does not leak by this rule: a residual,
+  recorded in MATH-COURSE-PATHS section 10.
+  (29) The degenerate rule, refining (20). A spec is refused when |value - exact| <= 1e-4 (exact is calc-expr integrate(f, a, b)), or
+  integrate gives null (the desk cannot show the spec is not degenerate), or |value - other| <= 1e-4 for another rule's value with the
+  same pieces (Simpson's rule only when pieces is even). So Simpson's rule on a polynomial of degree 3 or less is refused, the
+  trapezoid and midpoint rules on a linear f are refused, S_10 of 1/x on [1, 2] is refused; S_4, T_5 and M_5 are kept.
+  (30) The spec is {shape: 'approx-integral', f, a, b, pieces, rule}. f compiles, uses x and has no +C, as Calculus 1's f does. a and b
+  are read as calc.ts num() reads a Num (a finite number, or plain text that compiles with no x to a finite constant; calc2.ts may
+  not import calc.ts, so num()'s few lines are copied). a < b. pieces is a whole number from 2 to 10, even for simpson. rule is
+  trapezoid, midpoint or simpson. A spec carrying answer, solution, truth, value or result is refused. Every point a rule evaluates
+  must be finite, or the spec is refused. Each 'why' reuses calc.ts's REJECT sentence where the meaning is the same, copied as calc2.ts
+  copied BAD_SPEC.
+  (31) The reader. calc.ts specFromQuestion keeps Calculus 1's reading first and unchanged. Only a text that reading returns null for
+  is offered to calc2SpecFromQuestion, on the same normalised text (normalQuestion stays in calc.ts). It reads the desk's own question()
+  plain text and 'Use the trapezoid rule with n = 4 to approximate int_1^2 1/x dx, to four decimal places.' It returns a spec only when
+  calc2WellFormed accepts it. At 937af503 Calculus 1's reader returns null for six such phrasings (listed in the log by step 1).
+  (32) The consumers (ruling 23). chainChecks returns null for every line of a calc2 spec, so a calc2 item's working lines stay bare;
+  working.ts is not edited. MathsTV.tsx is not edited: a calc2 item draws no plot on the TV, and the TV captures of a calc2-approx item
+  are owed to the owner. Seam-test row 3 is tightened as (24) says. Seam-test row 4's empty-list assertion becomes ['approx-integral'],
+  and its {shape: 'approx-integral'} case becomes a calc2 spec that wellFormed refuses; both edits are made openly, OLD/NEW.
+  (33) The shape and its topic land in one run: once Calc2SpecShape has a member it is typed into paths.ts shapesOfTopic and items.ts's
+  tables. The topic is calc2-approx (Stewart 7.7, OpenStax 3.6), after calc2-strategy, no prerequisites, shapes ['approx-integral'].
+  calc2's calcWords.methods becomes 'integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and
+  the trapezoid, midpoint and Simpson's rules'. calcSchema's f stays as it is: approx-integral has an f; making f conditional belongs
+  to the first shape without one.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
