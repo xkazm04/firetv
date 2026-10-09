@@ -387,3 +387,15 @@ test('HL4 case 4: two concurrent calls embed once',async()=>{
  const windows=L.lessonWindows(LESSON).length?2:0; // two lessons have transcripts here
  assert.equal(log.length,windows,'one embed call per lesson, shared by both callers');
 });
+
+test('HL5 case 1: the pick accepts only an id from the subject\'s menu',async()=>{
+ const {pickLesson}=freshLessons()&&load('desk/pick.ts');
+ stubText({lesson:'en-6',why:'chosen because ...'});
+ assert.equal(await pickLesson('maths','Solve for x: 3x - 7 = 11'),null,'an english id for a maths problem');
+ for(const bad of ['none',42,null,['bAerID24QJ0']]){stubText({lesson:bad,why:'x'});
+  const r=await pickLesson('maths','Solve for x: 3x - 7 = 11').catch((e)=>e);
+  assert.ok(r===null||r instanceof Error,`${JSON.stringify(bad)} is no lesson`);}
+ reg().useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(()=>[1,0])})});
+ stubText({lesson:` ${LESSON} `,why:'chosen because ...'});
+ assert.equal((await pickLesson('maths','Solve for x: 3x - 7 = 11')).id,LESSON,'a menu id still returns its lesson');
+});

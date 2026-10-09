@@ -28,7 +28,9 @@ export async function pickLesson(subject: Subject, problem: string): Promise<Les
     prompt: `Problem:\n${problem}\n\nLessons:\n${menu}\n\nAnswer with the lesson id (or 'none') and one sentence saying why, phrased for the student: "chosen because your problem needs …".`,
     schema: SCHEMA, model: "fast",
   });
-  const l = LESSONS.find((x) => x.id === json.lesson.trim());
+  // only an id from the menu that was offered counts: 'none', another subject's id and a non-string are no lesson
+  const offered = LESSONS.filter((x) => x.subject === subject);
+  const l = typeof json.lesson === "string" ? offered.find((x) => x.id === json.lesson.trim()) : undefined;
   if (!l) return null;
   const w = l.youtube ? await bestWindow(l.id, `${problem}. ${l.concepts.join(", ")}`) : null;
   return { id: l.id, title: l.title, t: w?.t ?? 0, text: w?.text ?? "", why: checkedWhy(subject, problem, l, json.why), youtube: l.youtube };
