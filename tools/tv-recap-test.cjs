@@ -307,6 +307,21 @@ test('M3: the phone\'s What the desk noticed has four states, and a failed write
  assert.match(phone,/memory\.lines\.map\(\(l, i\) => <li key=\{i\}>/);
 });
 
+test('M4: the phone End session ends the evening first, then writes it down, as the TV Menu does',()=>{
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const body=/const endSession = async \(\) => \{([\s\S]*?)\n  \};/.exec(phone)?.[1]??'';
+ assert.ok(body,'endSession found');
+ const end=body.indexOf('post({ type: "session.end" })'),mem=body.indexOf('call("/api/memory"'),busy=body.indexOf('setBusy(true)');
+ assert.ok(end>=0&&mem>end,'session.end is posted before /api/memory is called');
+ assert.ok(busy>end&&busy<mem,'busy covers only the memory call');
+ assert.match(body.slice(0,mem),/try \{ await post\(\{ type: "session\.end" \}\); \} catch \(e\) \{ setMsg\(/,'a failed session.end is caught and shown in the status line');
+ assert.doesNotMatch(body.slice(mem),/session\.end/,'nothing ends the evening after the memory');
+ assert.match(phone,/busy \? "Writing tonight down…" : "End session"/);
+ const tv=fs.readFileSync(path.join(root,'src/tv/keys.ts'),'utf8');
+ assert.ok(tv.indexOf('o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory"')>0,'the TV does the same order');
+ assert.match(fs.readFileSync(path.join(root,'src/lib/desk/memory.ts'),'utf8'),/model: "fast", thinking: false/,'writeMemory does not think');
+});
+
 test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
  try{
   seat();engine(lined);

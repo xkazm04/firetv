@@ -353,15 +353,19 @@ export default function Phone() {
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
     } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
-  /** Memory is written on the way out — and is never allowed to hold the door shut. */
+  /**
+   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written while busy
+   * shows "Writing tonight down…". A session.end that fails is said in the status line, and the memory is still written.
+   */
   const endSession = async () => {
+    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
     setBusy(true);
     try {
       const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; error?: string }));
       setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false }
         : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
     } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
-    finally { setBusy(false); await post({ type: "session.end" }); }
+    finally { setBusy(false); }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
@@ -614,7 +618,7 @@ export default function Phone() {
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
           <button className="pbtn" onClick={() => post({ type: s.timer.running ? "timer.pause" : "timer.start" })}>{s.timer.running ? `Pause · ${fmt(s.timer.left)}` : `Start · ${fmt(s.timer.left)}`}</button>
-          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Closing…" : "End session"}</button>
+          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Writing tonight down…" : "End session"}</button>
           {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
             <ul>{"error" in memory ? <li>{memory.error}</li>
               : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
