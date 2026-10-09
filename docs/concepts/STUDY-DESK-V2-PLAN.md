@@ -624,6 +624,7 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   tables. The topic is calc2-approx (Stewart 7.7, OpenStax 3.6), after calc2-strategy, no prerequisites, shapes ['approx-integral'].
   calc2's calcWords.methods becomes 'integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and
   the trapezoid, midpoint and Simpson's rules'. calcSchema's f stays as it is: approx-integral has an f; making f conditional belongs
+  to the first shape without one.
   The App Master's rulings on the M3b-3b run and the descope (2026-10-09):
   (34) M3b-3b is accepted. Commits: ec7bb9ff, cc38f18b, 62d8ab87, c0a1126e, ea831ef9. The frozen set requests (cc38f18b) come before any
   desk/src change. calc2.ts imports only ./calc-expr and ./calc-read. calc-expr.ts and tools/calc1-frozen.json are unchanged against
@@ -665,7 +666,6 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   one that is defined for every real x >= 1 and that has a limit or grows without bound.' PARAMS for the shape is empty, since f is always
   in the schema. SPEC_KEYS is unchanged. A calc2 item draws no plot on the TV and its working lines stay bare (ruling 32). The TV captures
   of a calc2-sequences item are owed to the owner.
-  to the first shape without one.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
 
