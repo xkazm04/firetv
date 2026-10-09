@@ -1,0 +1,1082 @@
+{
+ "generatedUtc": "2026-10-09T00:16:11.258907+00:00",
+ "committedBytes": 888094,
+ "committed": [
+  {
+   "path": "evidence/perf/p18/ab-verdict.json",
+   "bytes": 14459,
+   "sha256": "501a5520b46afa71880a42bfb1f8e840c8480667c9457cc78dcbee8b73b14779"
+  },
+  {
+   "path": "evidence/perf/p18/apk-diff.txt",
+   "bytes": 52,
+   "sha256": "0d0face6e0383d0fbfc31da02e29866afdb266972f5a0280ac03044b6ab67e7c"
+  },
+  {
+   "path": "evidence/perf/p18/audit/alloc-audit.json",
+   "bytes": 49000,
+   "sha256": "b92a630620529bd68d13c04006734a8dcaaf3f46ba7f44685d884e8c37310931"
+  },
+  {
+   "path": "evidence/perf/p18/audit/device-counters-end.txt",
+   "bytes": 90783,
+   "sha256": "5c168d52ce0d4b9c2cffdd1af0cd708e09adb264f037d6906ca5c9fe9cdf4cf7"
+  },
+  {
+   "path": "evidence/perf/p18/audit/device-counters-start.txt",
+   "bytes": 86460,
+   "sha256": "00a18f2b9b5d7a1d496d8dc4e6c5775d52696eaa98415ff63143208b785d146d"
+  },
+  {
+   "path": "evidence/perf/p18/audit/device-start.txt",
+   "bytes": 151,
+   "sha256": "9f35b41ee50aa8f2f2861bcd63efa6199ef3dd1c8e0a3bab83b84a3d2cebd6fe"
+  },
+  {
+   "path": "evidence/perf/p18/audit/host-cpu-end.json",
+   "bytes": 2554,
+   "sha256": "8232a043b7fdb1a9eb364cd476f7906f1a170c600412bca3ed0f3d2628682a8e"
+  },
+  {
+   "path": "evidence/perf/p18/audit/host-cpu-start.json",
+   "bytes": 2545,
+   "sha256": "6d5b5482d74b914d5bb28c563c2f280bd07d234e6f0ea674fecce7a2b4fc9672"
+  },
+  {
+   "path": "evidence/perf/p18/audit/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "evidence/perf/p18/audit/p11-readings.json",
+   "bytes": 153006,
+   "sha256": "73d125534f9a4c6b0f42be45a7ccc1328e6e1e9b7e898c027a3951876d82726a"
+  },
+  {
+   "path": "evidence/perf/p18/audit/probe.log",
+   "bytes": 1502,
+   "sha256": "423bf02df100eae8d0c6723e0a5f9e32538e0b23d74beb064fc463e105666f02"
+  },
+  {
+   "path": "evidence/perf/p18/audit/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "8126d3b7bcbd22ec28957715e4ad88dc1c27970639caaab5d7ac55696dfe9a16"
+  },
+  {
+   "path": "evidence/perf/p18/audit/summary.json",
+   "bytes": 103346,
+   "sha256": "1c942dc441c2c4013816ae90a967f8528acb0dd879096f39f0f2a27099b22f10"
+  },
+  {
+   "path": "evidence/perf/p18/audit/thread-priorities-before.txt",
+   "bytes": 1430,
+   "sha256": "ab4532055658c6841c58d685a72a2f101e074e814b07d803524d9dd73b128508"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/device-start.txt",
+   "bytes": 151,
+   "sha256": "049a41682592593f7d9b2efe68ffd481f7ed10c922118c32c75e587e817a178d"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/host-cpu-end.json",
+   "bytes": 2563,
+   "sha256": "c07f6c02dfb7711066ebb444f465299923d34035e731fdc9939d44db71ec5bdb"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/host-cpu-start.json",
+   "bytes": 2537,
+   "sha256": "f96ef47528da10992402b9a45668a1ae851512d2a4fcb69a558685ef2a508913"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/p11-readings.json",
+   "bytes": 48814,
+   "sha256": "87cd7d01199e588191daf61d0cdb2416d2cb69861a727ffee89ce5e462fecb69"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/p18-readings.json",
+   "bytes": 2372,
+   "sha256": "d2da0510f67c8021f1edf637be5d7ecca3015d8e20bee6fcfbdf167f78c1feb1"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/probe.log",
+   "bytes": 1124,
+   "sha256": "fe43beee1cc0a4dd123037f0785f4741596dde48b3c7e3129fc9fe1b83fe17b5"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "fd86735d74611c8769af0fa0782d775deb3be01d28da9d4d7f19b8393a1a3cc3"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/settle-try1.json",
+   "bytes": 1900,
+   "sha256": "5f41c89962cd6f6bd40ceb145bca21d30bb75ad152396986d4e00a299a05daba"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/settle-try2.json",
+   "bytes": 1900,
+   "sha256": "24c44451177b3e476a9202847dfe2f5dbab8f4d447ef0346d71a7ae83ddb0fe2"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/settled.txt",
+   "bytes": 3,
+   "sha256": "564739ea8fa5926d4fa5c9734fed462061960a22e6b8d5c06e94969d97891bf2"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/summary.json",
+   "bytes": 22876,
+   "sha256": "80d7906a003632714a55775bf17f464bb4962435ffe0a12296c67bfab9404ac6"
+  },
+  {
+   "path": "evidence/perf/p18/base-run1/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "1851e6012c08b8c31ba1966d130e12b1e41f4468c2a41a3efe56cd6cd20c23e5"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/device-start.txt",
+   "bytes": 151,
+   "sha256": "0d25b145399db453abbeca2c9095529b1681d2cd36f78307b06b0c6bdee0447f"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/host-cpu-end.json",
+   "bytes": 2564,
+   "sha256": "063e692ce8546c0a4987e4e761d153573c62e5b33a391a553fb54ed0639a5105"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/host-cpu-start.json",
+   "bytes": 2552,
+   "sha256": "967c110a22fae709f652e2594bc2e6aa093367aaad2c55dc058d00fac727293f"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/p11-readings.json",
+   "bytes": 64624,
+   "sha256": "84bfa0a2de6bb64eb86a972e9226f72c7bed17bd7166bbc018a545ec0e87926f"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/p18-readings.json",
+   "bytes": 2405,
+   "sha256": "7fed2e86bb53334dd3f4291fc2f2d1cd5537c9ea39108fa61c4777728709253b"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "8c38553c3581bd4bce1a32db25cc0c7ddbf293834b9b0a1fe5b6a09a31f10f1e"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "dc8e52858ec5a5cf442346f59f414f0c40fd0da87535bbaf153470148e675f11"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/summary.json",
+   "bytes": 22868,
+   "sha256": "adf5d1da1301187b6be67d99ac24c2a8ccc3b56c7fded0e3e646faa215a23523"
+  },
+  {
+   "path": "evidence/perf/p18/base-run2/thread-priorities-before.txt",
+   "bytes": 1363,
+   "sha256": "8b0bca57556bd8329b2a151b07c27f26152eced18d227da6a2f1a877e886b07d"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/device-start.txt",
+   "bytes": 151,
+   "sha256": "56eaa39725e3a4078044e8773d88a49c2392d0456306fcc0e969f8da1bda4866"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/host-cpu-end.json",
+   "bytes": 2557,
+   "sha256": "a0d6e6a43afd91484e3a778cf7455b59f5f2f5ed3de4d816414a89588b4f359f"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/host-cpu-start.json",
+   "bytes": 2558,
+   "sha256": "36524896c16c167eac08bf1357df90c06c52d7b8bf435081658cee55cbea495e"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/installed.json",
+   "bytes": 376,
+   "sha256": "96a9b4958f129f7d9c0ccdcf113c5e5504a62ffd71fd323905ef3a91092529c2"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/p11-readings.json",
+   "bytes": 57565,
+   "sha256": "eb37dd9ff61b5e9d85d78d7473a79a763f95f79bdcac7c75f628e2908f4cc4e8"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/p18-readings.json",
+   "bytes": 2408,
+   "sha256": "eaebdffe354de07e3b59e66335ca7ebc0f2c722b7e0398f728c91f760e0131c0"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/probe.log",
+   "bytes": 1118,
+   "sha256": "08bb0d4bc27cd241e2c22ff35ee20e33e039ad1a0eca9cfa817d194ee75d3a8c"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "ea357ca7977eb593ff85f9153e5b9f0bb74e562494c8d4743bd38e2ba51171a4"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/summary.json",
+   "bytes": 22873,
+   "sha256": "d8181ad638171581fe0527e4ed3868e8bde13ced1f8d90769e7374adcf1fd1af"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run1/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "99aa6dae1ffc3a2266ae21b17fbd702daf7a2ee95a3afb5276c8c08fc5b4c7d4"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/device-start.txt",
+   "bytes": 151,
+   "sha256": "854f620c1e94fcdfaf2c02a8c0a38fe95c819a9aa9ae4b125f6ef9d467622c46"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/host-cpu-end.json",
+   "bytes": 2550,
+   "sha256": "2935df28c19cfef0a05c094f74a2452bf46b629f541e07e5a2e394537603bb50"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/host-cpu-start.json",
+   "bytes": 2555,
+   "sha256": "60153ec84e164569345759646d3f45dbfee91cab54db8a2766fcb644691c4017"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/installed.json",
+   "bytes": 376,
+   "sha256": "96a9b4958f129f7d9c0ccdcf113c5e5504a62ffd71fd323905ef3a91092529c2"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/p11-readings.json",
+   "bytes": 64185,
+   "sha256": "0b960c9ad16592bc982a73339babaf202f44c74fa613a2fcb1e3d0010c951a86"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/p18-readings.json",
+   "bytes": 2390,
+   "sha256": "7d0a781b2059b3cc00dfd63b91a3fcf976795c89db73a19c472ac50ba0c7de67"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "6858a756eab5e51495b0afe9d6509d4b667a5e097a65ad98015a646df7ceb7ce"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "36cb9ab73b0b17cfc04796764ee58a4ec28be28ea9e7253bac833d75f9c0e44d"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/summary.json",
+   "bytes": 22916,
+   "sha256": "c1b78ab75d8a54458f404cd76a8781718d2d5fddc32bb647d2b76537de8e668c"
+  },
+  {
+   "path": "evidence/perf/p18/cut-run2/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "7120458d93a6d4cd5cd9e54c495514ce5643a06c90a59b11cacee05c92fef008"
+  },
+  {
+   "path": "evidence/perf/p18/device-after-runs-before-restore.txt",
+   "bytes": 250,
+   "sha256": "dbb6433f27635a1e8c6c75ef50edbb98bf396596b8d9f723049d7a75c38a8f99"
+  },
+  {
+   "path": "evidence/perf/p18/device-state-end.txt",
+   "bytes": 355,
+   "sha256": "33598786025e7a0cd5d29a7b67c26bf4a89ff087a0b7649e5b3744812d836164"
+  },
+  {
+   "path": "evidence/perf/p18/device-state-start.txt",
+   "bytes": 356,
+   "sha256": "782af9be2d4c7dca2965271923b7ad4212c72fb2908109ff4c7c3b6c200af4c8"
+  },
+  {
+   "path": "evidence/perf/p18/equivalence-ProfileReplyTest.xml",
+   "bytes": 2436,
+   "sha256": "7433b3cda153b1c422ea3dbaabab423af536780e1808a0ed4a35f6af6bfc9bd3"
+  },
+  {
+   "path": "evidence/perf/p18/gc-headroom.json",
+   "bytes": 1940,
+   "sha256": "5ff5394b8219d577ef268bf456734c00a4785d841610b6f05250d399a82e8cb9"
+  },
+  {
+   "path": "evidence/perf/p18/runs-log.txt",
+   "bytes": 388,
+   "sha256": "47e72d96078083f507135e58700eb3fb80d6c1277d683ae6e5d2363af68c72ae"
+  },
+  {
+   "path": "evidence/perf/p18/tests.json",
+   "bytes": 3324,
+   "sha256": "31e1e6c3b5db5e98ae3481c2a3b63fb6bb579a30804ba0f9d5b39be1dac83cef"
+  }
+ ],
+ "rawRoot": "C:/Users/kazda/kiro/deathride-raw-evidence (outside git)",
+ "rawBytes": 143293025,
+ "raw": [
+  {
+   "path": "p18/apk-diff.txt",
+   "bytes": 52,
+   "sha256": "0d0face6e0383d0fbfc31da02e29866afdb266972f5a0280ac03044b6ab67e7c"
+  },
+  {
+   "path": "p18/audit/alloc-audit.json",
+   "bytes": 49000,
+   "sha256": "b92a630620529bd68d13c04006734a8dcaaf3f46ba7f44685d884e8c37310931"
+  },
+  {
+   "path": "p18/audit/alloc-samples.jsonl.gz",
+   "bytes": 7291435,
+   "sha256": "e5491204c87124c53e2f33fd2ebf9d536714596139af99420f16d1de8db4c0f1"
+  },
+  {
+   "path": "p18/audit/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p18/audit/device-counters-end.txt",
+   "bytes": 90783,
+   "sha256": "5c168d52ce0d4b9c2cffdd1af0cd708e09adb264f037d6906ca5c9fe9cdf4cf7"
+  },
+  {
+   "path": "p18/audit/device-counters-start.txt",
+   "bytes": 86460,
+   "sha256": "00a18f2b9b5d7a1d496d8dc4e6c5775d52696eaa98415ff63143208b785d146d"
+  },
+  {
+   "path": "p18/audit/host-cpu-end.json",
+   "bytes": 2554,
+   "sha256": "8232a043b7fdb1a9eb364cd476f7906f1a170c600412bca3ed0f3d2628682a8e"
+  },
+  {
+   "path": "p18/audit/host-cpu-start.json",
+   "bytes": 2545,
+   "sha256": "6d5b5482d74b914d5bb28c563c2f280bd07d234e6f0ea674fecce7a2b4fc9672"
+  },
+  {
+   "path": "p18/audit/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p18/audit/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "p18/audit/logcat.txt",
+   "bytes": 203764,
+   "sha256": "63a82c6ec6adf334672f9f56a3257bc51d834e4ef415160538627a6b25860b2c"
+  },
+  {
+   "path": "p18/audit/p11-readings.json",
+   "bytes": 153006,
+   "sha256": "73d125534f9a4c6b0f42be45a7ccc1328e6e1e9b7e898c027a3951876d82726a"
+  },
+  {
+   "path": "p18/audit/probe.log",
+   "bytes": 1502,
+   "sha256": "423bf02df100eae8d0c6723e0a5f9e32538e0b23d74beb064fc463e105666f02"
+  },
+  {
+   "path": "p18/audit/raw.json.gz",
+   "bytes": 3249537,
+   "sha256": "1dbf77bff51d85b6f6d7274a3a4fd7c3da0f68db92a665e889616407e4cf6005"
+  },
+  {
+   "path": "p18/audit/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "8126d3b7bcbd22ec28957715e4ad88dc1c27970639caaab5d7ac55696dfe9a16"
+  },
+  {
+   "path": "p18/audit/startup-logcat.txt",
+   "bytes": 2850,
+   "sha256": "8161c78c8f2d56113eb1b8a14ee59177f934fa968d9ef7a3b737167cf5b8d7c1"
+  },
+  {
+   "path": "p18/audit/summary.json",
+   "bytes": 103346,
+   "sha256": "1c942dc441c2c4013816ae90a967f8528acb0dd879096f39f0f2a27099b22f10"
+  },
+  {
+   "path": "p18/audit/thread-priorities-before.txt",
+   "bytes": 1430,
+   "sha256": "ab4532055658c6841c58d685a72a2f101e074e814b07d803524d9dd73b128508"
+  },
+  {
+   "path": "p18/audit-alloc.out",
+   "bytes": 5389,
+   "sha256": "40023a7e7abf5fe125190873990042528c815a6788dc6b8f929523dbf66c8f3e"
+  },
+  {
+   "path": "p18/audit-audit.out",
+   "bytes": 9236,
+   "sha256": "d5f0e87250b98da0662a8b4620381f622450ba2c8058f40952d5597ad6b5c5b7"
+  },
+  {
+   "path": "p18/audit-device.out",
+   "bytes": 447,
+   "sha256": "4e82f5c19e5c03561c6b6458d23227ad17ddb2d9a0016d4dd84b671d3d30b0bd"
+  },
+  {
+   "path": "p18/audit-p11.out",
+   "bytes": 2944,
+   "sha256": "ef3936c5057b5d6e568d77c1daebb4b3bc47958135efed72a2e529b650f3bd64"
+  },
+  {
+   "path": "p18/audit-start.txt",
+   "bytes": 151,
+   "sha256": "9f35b41ee50aa8f2f2861bcd63efa6199ef3dd1c8e0a3bab83b84a3d2cebd6fe"
+  },
+  {
+   "path": "p18/audit-stop",
+   "bytes": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "path": "p18/audit-summary.out",
+   "bytes": 954,
+   "sha256": "d9a9560ff5e011b0e2818b0d0c6817b0ee88d39ec30e022ab63b7cf3109de173"
+  },
+  {
+   "path": "p18/base-apk-commit.txt",
+   "bytes": 9,
+   "sha256": "fb555d4b608d3dee5fa9787e4bbef0df97ef0b049faad4ed7c1c64da4ee22cf3"
+  },
+  {
+   "path": "p18/base-run1/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p18/base-run1/device-counters-end.txt",
+   "bytes": 89984,
+   "sha256": "ea102e02bd26a17710483de37506a6053b17228c7f4f27755d6950420e69166f"
+  },
+  {
+   "path": "p18/base-run1/device-counters-start.txt",
+   "bytes": 86644,
+   "sha256": "3eb1c7192f6cd45a8d5b0340c087aa9ab9f46e83d6ef62e0e1a7cb8cb67a4c4d"
+  },
+  {
+   "path": "p18/base-run1/host-cpu-end.json",
+   "bytes": 2563,
+   "sha256": "c07f6c02dfb7711066ebb444f465299923d34035e731fdc9939d44db71ec5bdb"
+  },
+  {
+   "path": "p18/base-run1/host-cpu-start.json",
+   "bytes": 2537,
+   "sha256": "f96ef47528da10992402b9a45668a1ae851512d2a4fcb69a558685ef2a508913"
+  },
+  {
+   "path": "p18/base-run1/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p18/base-run1/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "p18/base-run1/logcat.txt",
+   "bytes": 191781,
+   "sha256": "59a739006f211b9e3714b1dd588078772452e7e40e535e2e7848d54630090e49"
+  },
+  {
+   "path": "p18/base-run1/p11-readings.json",
+   "bytes": 48814,
+   "sha256": "87cd7d01199e588191daf61d0cdb2416d2cb69861a727ffee89ce5e462fecb69"
+  },
+  {
+   "path": "p18/base-run1/p18-readings.json",
+   "bytes": 2372,
+   "sha256": "d2da0510f67c8021f1edf637be5d7ecca3015d8e20bee6fcfbdf167f78c1feb1"
+  },
+  {
+   "path": "p18/base-run1/probe.log",
+   "bytes": 1124,
+   "sha256": "fe43beee1cc0a4dd123037f0785f4741596dde48b3c7e3129fc9fe1b83fe17b5"
+  },
+  {
+   "path": "p18/base-run1/raw.json.gz",
+   "bytes": 3327377,
+   "sha256": "fb8c036342a93df1d6436b112409766d84a6a205a63386b9bc10d9658266e73b"
+  },
+  {
+   "path": "p18/base-run1/routes-warmup.json",
+   "bytes": 134,
+   "sha256": "fd86735d74611c8769af0fa0782d775deb3be01d28da9d4d7f19b8393a1a3cc3"
+  },
+  {
+   "path": "p18/base-run1/settled.txt",
+   "bytes": 3,
+   "sha256": "564739ea8fa5926d4fa5c9734fed462061960a22e6b8d5c06e94969d97891bf2"
+  },
+  {
+   "path": "p18/base-run1/startup-logcat.txt",
+   "bytes": 2823,
+   "sha256": "338f2f92bbaecd8be86ceb8b17cb71d21b525751afe7eaf92c56ce3e1467db3a"
+  },
+  {
+   "path": "p18/base-run1/summary.json",
+   "bytes": 22876,
+   "sha256": "80d7906a003632714a55775bf17f464bb4962435ffe0a12296c67bfab9404ac6"
+  },
+  {
+   "path": "p18/base-run1/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "1851e6012c08b8c31ba1966d130e12b1e41f4468c2a41a3efe56cd6cd20c23e5"
+  },
+  {
+   "path": "p18/base-run1-device.out",
+   "bytes": 451,
+   "sha256": "31b43e6acce76a8303d17e007a0a83b659b86c4ce5706de013a75dcf94ba8ea0"
+  },
+  {
+   "path": "p18/base-run1-p11.out",
+   "bytes": 2926,
+   "sha256": "cf4b019f142fd51f1817d111fe2417d9809278669475a9aa80f81d379f01e791"
+  },
+  {
+   "path": "p18/base-run1-settle-try1.json",
+   "bytes": 1900,
+   "sha256": "5f41c89962cd6f6bd40ceb145bca21d30bb75ad152396986d4e00a299a05daba"
+  },
+  {
+   "path": "p18/base-run1-settle-try1.out",
+   "bytes": 27,
+   "sha256": "46a69a026d3c58ecabe55826ded1a5e753d24952a889d6465f641c226e5733d3"
+  },
+  {
+   "path": "p18/base-run1-settle-try2.json",
+   "bytes": 1900,
+   "sha256": "24c44451177b3e476a9202847dfe2f5dbab8f4d447ef0346d71a7ae83ddb0fe2"
+  },
+  {
+   "path": "p18/base-run1-settle-try2.out",
+   "bytes": 27,
+   "sha256": "d691545f8bd5e97f1f023ee0b87d37ed92384d7547ddbcfa3b9c4cfcc77f6f33"
+  },
+  {
+   "path": "p18/base-run1-start.txt",
+   "bytes": 151,
+   "sha256": "049a41682592593f7d9b2efe68ffd481f7ed10c922118c32c75e587e817a178d"
+  },
+  {
+   "path": "p18/base-run1-summary.out",
+   "bytes": 937,
+   "sha256": "a72f5503c157f65f38e7b064070116d7eb82ee450604ad605de3fd82625c4b00"
+  },
+  {
+   "path": "p18/base-run2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p18/base-run2/device-counters-end.txt",
+   "bytes": 90408,
+   "sha256": "4a11c0f64fd2d40e333d1f4a1cd52cf8a0b719a8394f4d4946c344efcae7f780"
+  },
+  {
+   "path": "p18/base-run2/device-counters-start.txt",
+   "bytes": 86432,
+   "sha256": "a0310ad7fffa4e7e7d75cb3ef0a885165e16f7034857ea65d7d796ebd1462845"
+  },
+  {
+   "path": "p18/base-run2/host-cpu-end.json",
+   "bytes": 2564,
+   "sha256": "063e692ce8546c0a4987e4e761d153573c62e5b33a391a553fb54ed0639a5105"
+  },
+  {
+   "path": "p18/base-run2/host-cpu-start.json",
+   "bytes": 2552,
+   "sha256": "967c110a22fae709f652e2594bc2e6aa093367aaad2c55dc058d00fac727293f"
+  },
+  {
+   "path": "p18/base-run2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p18/base-run2/installed.json",
+   "bytes": 376,
+   "sha256": "6c94309a42c727a9a6726f98d6ae2da110374d7795525356678231ad36c8e399"
+  },
+  {
+   "path": "p18/base-run2/logcat.txt",
+   "bytes": 146155,
+   "sha256": "8d60e30f886612b0fdb31c1ea727241bbe9cd0078fb4d9a3f461dde416c0189d"
+  },
+  {
+   "path": "p18/base-run2/p11-readings.json",
+   "bytes": 64624,
+   "sha256": "84bfa0a2de6bb64eb86a972e9226f72c7bed17bd7166bbc018a545ec0e87926f"
+  },
+  {
+   "path": "p18/base-run2/p18-readings.json",
+   "bytes": 2405,
+   "sha256": "7fed2e86bb53334dd3f4291fc2f2d1cd5537c9ea39108fa61c4777728709253b"
+  },
+  {
+   "path": "p18/base-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "8c38553c3581bd4bce1a32db25cc0c7ddbf293834b9b0a1fe5b6a09a31f10f1e"
+  },
+  {
+   "path": "p18/base-run2/raw.json.gz",
+   "bytes": 3377888,
+   "sha256": "445a9eae04a5bcdaa9681e13fe01eadafd8f7af28565280cb91a036e35d636df"
+  },
+  {
+   "path": "p18/base-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "dc8e52858ec5a5cf442346f59f414f0c40fd0da87535bbaf153470148e675f11"
+  },
+  {
+   "path": "p18/base-run2/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "p18/base-run2/startup-logcat.txt",
+   "bytes": 2814,
+   "sha256": "5c165a436de644fe4e5889ce695e8a435cbf2abc1a81d4d6dc328f0c5a2c923a"
+  },
+  {
+   "path": "p18/base-run2/summary.json",
+   "bytes": 22868,
+   "sha256": "adf5d1da1301187b6be67d99ac24c2a8ccc3b56c7fded0e3e646faa215a23523"
+  },
+  {
+   "path": "p18/base-run2/thread-priorities-before.txt",
+   "bytes": 1363,
+   "sha256": "8b0bca57556bd8329b2a151b07c27f26152eced18d227da6a2f1a877e886b07d"
+  },
+  {
+   "path": "p18/base-run2-device.out",
+   "bytes": 451,
+   "sha256": "8c28db66610cc5b2c925380c758121c0e6aa4091f969c7b776f3b7c92425a5d8"
+  },
+  {
+   "path": "p18/base-run2-p11.out",
+   "bytes": 2936,
+   "sha256": "e468d3927aea013903c0559296a2cdcebf13a27fc240e91dfbcca1ee19a6e4f3"
+  },
+  {
+   "path": "p18/base-run2-start.txt",
+   "bytes": 151,
+   "sha256": "0d25b145399db453abbeca2c9095529b1681d2cd36f78307b06b0c6bdee0447f"
+  },
+  {
+   "path": "p18/base-run2-summary.out",
+   "bytes": 937,
+   "sha256": "74df256c1144df1004a438e33659e767511daba8d7e0c05931fc419b58e34650"
+  },
+  {
+   "path": "p18/base.apk",
+   "bytes": 41429991,
+   "sha256": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66"
+  },
+  {
+   "path": "p18/build-base.log",
+   "bytes": 3312,
+   "sha256": "8a30c9f0f6bd0babd0bca22cdf258febb8d02b93d39b48343aa63bfea48609c2"
+  },
+  {
+   "path": "p18/build-cut.log",
+   "bytes": 3450,
+   "sha256": "2cfd2333afd3965e30bc6e9ab2f11f3be50e96fdf8a35873994e3dd0d62115c7"
+  },
+  {
+   "path": "p18/build-release-commit.txt",
+   "bytes": 9,
+   "sha256": "b64a6a4617bfbd1e6306d4242e92708bbf8b63831f5e9f3cde3352f32ff67766"
+  },
+  {
+   "path": "p18/build-release-start.txt",
+   "bytes": 42,
+   "sha256": "f66bdf7f6a3d709cfa9b348073e97dcdcafb49e9c0b7f57cf540ebad2587f793"
+  },
+  {
+   "path": "p18/build-release.log",
+   "bytes": 5559,
+   "sha256": "147fde1beb6a7aa7fba3890e11f2c18186c68e95f5bfb8abd5bb5dcc848d9549"
+  },
+  {
+   "path": "p18/cut-apk-commit.txt",
+   "bytes": 9,
+   "sha256": "b64a6a4617bfbd1e6306d4242e92708bbf8b63831f5e9f3cde3352f32ff67766"
+  },
+  {
+   "path": "p18/cut-run1/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p18/cut-run1/device-counters-end.txt",
+   "bytes": 90016,
+   "sha256": "ba17b28a1dc5c23e4fbc9187ffb5f7fb724c02152dec10b76def07c871240149"
+  },
+  {
+   "path": "p18/cut-run1/device-counters-start.txt",
+   "bytes": 86219,
+   "sha256": "1cc41fbd6cfdca0151fc67506c1981713b6ed9e8e1927e21ad02ed78965c6a7f"
+  },
+  {
+   "path": "p18/cut-run1/host-cpu-end.json",
+   "bytes": 2557,
+   "sha256": "a0d6e6a43afd91484e3a778cf7455b59f5f2f5ed3de4d816414a89588b4f359f"
+  },
+  {
+   "path": "p18/cut-run1/host-cpu-start.json",
+   "bytes": 2558,
+   "sha256": "36524896c16c167eac08bf1357df90c06c52d7b8bf435081658cee55cbea495e"
+  },
+  {
+   "path": "p18/cut-run1/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p18/cut-run1/installed.json",
+   "bytes": 376,
+   "sha256": "96a9b4958f129f7d9c0ccdcf113c5e5504a62ffd71fd323905ef3a91092529c2"
+  },
+  {
+   "path": "p18/cut-run1/logcat.txt",
+   "bytes": 190024,
+   "sha256": "68ea97e8d8cf6101f5cfb7265346982d2052ab841288b124aae37a13e1608315"
+  },
+  {
+   "path": "p18/cut-run1/p11-readings.json",
+   "bytes": 57565,
+   "sha256": "eb37dd9ff61b5e9d85d78d7473a79a763f95f79bdcac7c75f628e2908f4cc4e8"
+  },
+  {
+   "path": "p18/cut-run1/p18-readings.json",
+   "bytes": 2408,
+   "sha256": "eaebdffe354de07e3b59e66335ca7ebc0f2c722b7e0398f728c91f760e0131c0"
+  },
+  {
+   "path": "p18/cut-run1/probe.log",
+   "bytes": 1118,
+   "sha256": "08bb0d4bc27cd241e2c22ff35ee20e33e039ad1a0eca9cfa817d194ee75d3a8c"
+  },
+  {
+   "path": "p18/cut-run1/raw.json.gz",
+   "bytes": 3316926,
+   "sha256": "e35c214ee8f6550158f3b995643f999e79a3c0db900ea7badc92bf43d31129aa"
+  },
+  {
+   "path": "p18/cut-run1/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "ea357ca7977eb593ff85f9153e5b9f0bb74e562494c8d4743bd38e2ba51171a4"
+  },
+  {
+   "path": "p18/cut-run1/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "p18/cut-run1/startup-logcat.txt",
+   "bytes": 2819,
+   "sha256": "22227c3e4f819412f983bca24b17f707985320008a9a7271e618532e24b0ee14"
+  },
+  {
+   "path": "p18/cut-run1/summary.json",
+   "bytes": 22873,
+   "sha256": "d8181ad638171581fe0527e4ed3868e8bde13ced1f8d90769e7374adcf1fd1af"
+  },
+  {
+   "path": "p18/cut-run1/thread-priorities-before.txt",
+   "bytes": 1397,
+   "sha256": "99aa6dae1ffc3a2266ae21b17fbd702daf7a2ee95a3afb5276c8c08fc5b4c7d4"
+  },
+  {
+   "path": "p18/cut-run1-device.out",
+   "bytes": 450,
+   "sha256": "e0b4ab114a1f9441caa7ef74160f7aadeec21edb9bc198f2d4e1859c885f13f3"
+  },
+  {
+   "path": "p18/cut-run1-p11.out",
+   "bytes": 2932,
+   "sha256": "6230cb51e0a3002fee42c2e2d6fc5808f9522d4b20711d704276d20e68786622"
+  },
+  {
+   "path": "p18/cut-run1-start.txt",
+   "bytes": 151,
+   "sha256": "56eaa39725e3a4078044e8773d88a49c2392d0456306fcc0e969f8da1bda4866"
+  },
+  {
+   "path": "p18/cut-run1-summary.out",
+   "bytes": 955,
+   "sha256": "dfae68ce0f843766c1a4da546143feee8f756697b3f7fdf4a4c9fc04ea179b97"
+  },
+  {
+   "path": "p18/cut-run2/badging.txt",
+   "bytes": 5671,
+   "sha256": "83509e4acf16c5b4663c20fed9d1da7ef156673c3aec4f832aa10dc43ada7be3"
+  },
+  {
+   "path": "p18/cut-run2/device-counters-end.txt",
+   "bytes": 90043,
+   "sha256": "a71175dac37e01f61c1166e8f82560279bce633c0f2da90d6f1115536b8cb85e"
+  },
+  {
+   "path": "p18/cut-run2/device-counters-start.txt",
+   "bytes": 86512,
+   "sha256": "31496f5bbe9cb7b04c0dd907cc10a5fb717fb01820d4939d0c4be2ebc45f2c6d"
+  },
+  {
+   "path": "p18/cut-run2/host-cpu-end.json",
+   "bytes": 2550,
+   "sha256": "2935df28c19cfef0a05c094f74a2452bf46b629f541e07e5a2e394537603bb50"
+  },
+  {
+   "path": "p18/cut-run2/host-cpu-start.json",
+   "bytes": 2555,
+   "sha256": "60153ec84e164569345759646d3f45dbfee91cab54db8a2766fcb644691c4017"
+  },
+  {
+   "path": "p18/cut-run2/install.txt",
+   "bytes": 38,
+   "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+  },
+  {
+   "path": "p18/cut-run2/installed.json",
+   "bytes": 376,
+   "sha256": "96a9b4958f129f7d9c0ccdcf113c5e5504a62ffd71fd323905ef3a91092529c2"
+  },
+  {
+   "path": "p18/cut-run2/logcat.txt",
+   "bytes": 192314,
+   "sha256": "9c90d3ff7cdcb617c6f5c8a3bfb8e84bbe25ad0fff56c0c3b9a810908ad69e2e"
+  },
+  {
+   "path": "p18/cut-run2/p11-readings.json",
+   "bytes": 64185,
+   "sha256": "0b960c9ad16592bc982a73339babaf202f44c74fa613a2fcb1e3d0010c951a86"
+  },
+  {
+   "path": "p18/cut-run2/p18-readings.json",
+   "bytes": 2390,
+   "sha256": "7d0a781b2059b3cc00dfd63b91a3fcf976795c89db73a19c472ac50ba0c7de67"
+  },
+  {
+   "path": "p18/cut-run2/probe.log",
+   "bytes": 1118,
+   "sha256": "6858a756eab5e51495b0afe9d6509d4b667a5e097a65ad98015a646df7ceb7ce"
+  },
+  {
+   "path": "p18/cut-run2/raw.json.gz",
+   "bytes": 3361292,
+   "sha256": "fa347eb6aaefa1a86fcb7d6ae495a92fc7308bdd4cefdf8ebd6b26cebe38a267"
+  },
+  {
+   "path": "p18/cut-run2/routes-warmup.json",
+   "bytes": 135,
+   "sha256": "36cb9ab73b0b17cfc04796764ee58a4ec28be28ea9e7253bac833d75f9c0e44d"
+  },
+  {
+   "path": "p18/cut-run2/settled.txt",
+   "bytes": 13,
+   "sha256": "3cae111898641edb7f5d47e1ea86e27af6f1f09c0fcf820d518db905abc1d9e4"
+  },
+  {
+   "path": "p18/cut-run2/startup-logcat.txt",
+   "bytes": 2807,
+   "sha256": "4ef78b7b6549d122f79c8f5dd69d0c31da4bc6cb64323022214819a97fc494c9"
+  },
+  {
+   "path": "p18/cut-run2/summary.json",
+   "bytes": 22916,
+   "sha256": "c1b78ab75d8a54458f404cd76a8781718d2d5fddc32bb647d2b76537de8e668c"
+  },
+  {
+   "path": "p18/cut-run2/thread-priorities-before.txt",
+   "bytes": 1390,
+   "sha256": "7120458d93a6d4cd5cd9e54c495514ce5643a06c90a59b11cacee05c92fef008"
+  },
+  {
+   "path": "p18/cut-run2-device.out",
+   "bytes": 450,
+   "sha256": "576aa12fb04ed2996e56bde7a8bfd571fe54876c5a8d761b4cba54c5b55a503a"
+  },
+  {
+   "path": "p18/cut-run2-p11.out",
+   "bytes": 2884,
+   "sha256": "6d67a7c1e6d6a2113bff3bd2f5974e5cfd944946751e901720a02d12aeca5637"
+  },
+  {
+   "path": "p18/cut-run2-start.txt",
+   "bytes": 151,
+   "sha256": "854f620c1e94fcdfaf2c02a8c0a38fe95c819a9aa9ae4b125f6ef9d467622c46"
+  },
+  {
+   "path": "p18/cut-run2-summary.out",
+   "bytes": 960,
+   "sha256": "7d66e1dde95cd01812cf52460ea9e8a974269ec96dc9e30b2717d5a8f2da2ab9"
+  },
+  {
+   "path": "p18/cut-test-1.log",
+   "bytes": 5254,
+   "sha256": "847d764ce42b55065721455ed17cbecba3a99cf3cdd9d9fbe9abf548a6384cf9"
+  },
+  {
+   "path": "p18/cut-test-2.log",
+   "bytes": 3302,
+   "sha256": "66d4a89a6addb2068cb25fd390ca05d69adea18ff7b7115799129fbdf987490b"
+  },
+  {
+   "path": "p18/cut.apk",
+   "bytes": 41580205,
+   "sha256": "dd2d9754f7d908af3a0f5e9620b540c86da1db4f3d801b9c81d5e10fbc4a648b"
+  },
+  {
+   "path": "p18/ddms-probe/alloc-probe.json",
+   "bytes": 15983,
+   "sha256": "77d9da8b294dc9843aa1d36efa8b70d9237d9d6403f9e493fd028062cee7e235"
+  },
+  {
+   "path": "p18/device-after-runs-before-restore.txt",
+   "bytes": 250,
+   "sha256": "dbb6433f27635a1e8c6c75ef50edbb98bf396596b8d9f723049d7a75c38a8f99"
+  },
+  {
+   "path": "p18/device-state-end.txt",
+   "bytes": 355,
+   "sha256": "33598786025e7a0cd5d29a7b67c26bf4a89ff087a0b7649e5b3744812d836164"
+  },
+  {
+   "path": "p18/device-state-start.txt",
+   "bytes": 356,
+   "sha256": "782af9be2d4c7dca2965271923b7ad4212c72fb2908109ff4c7c3b6c200af4c8"
+  },
+  {
+   "path": "p18/gate-run1-commit.txt",
+   "bytes": 9,
+   "sha256": "b64a6a4617bfbd1e6306d4242e92708bbf8b63831f5e9f3cde3352f32ff67766"
+  },
+  {
+   "path": "p18/gate-run1-host.txt",
+   "bytes": 5,
+   "sha256": "90b53df56816c127246136d4403aba3b26cec599b2b950fb2ba78d6c1fb4e6bf"
+  },
+  {
+   "path": "p18/gate-run2-commit.txt",
+   "bytes": 9,
+   "sha256": "f704b8c9bcad9e0ea6d4cfd0f45a6aa28f2139173ad1f070d6b45a477b17a31c"
+  },
+  {
+   "path": "p18/gate-run2-host.txt",
+   "bytes": 5,
+   "sha256": "90b53df56816c127246136d4403aba3b26cec599b2b950fb2ba78d6c1fb4e6bf"
+  },
+  {
+   "path": "p18/gate-tests-run1.log",
+   "bytes": 39061,
+   "sha256": "5912d6f24ca692625f13987bff053fbd8abe5f5f845593482390e5680394b4b1"
+  },
+  {
+   "path": "p18/gate-tests-run2.log",
+   "bytes": 38989,
+   "sha256": "e23c5614ca6429ad50216dd1665644de8eef919b58dd4dbbe0901c93faab9b0a"
+  },
+  {
+   "path": "p18/gc-headroom.json",
+   "bytes": 1940,
+   "sha256": "5ff5394b8219d577ef268bf456734c00a4785d841610b6f05250d399a82e8cb9"
+  },
+  {
+   "path": "p18/release.apk",
+   "bytes": 33632781,
+   "sha256": "90ce9ef34d2141d5945de26a92673c005a2bb005133fadebf317f486b593e0f8"
+  },
+  {
+   "path": "p18/runs.log",
+   "bytes": 388,
+   "sha256": "47e72d96078083f507135e58700eb3fb80d6c1277d683ae6e5d2363af68c72ae"
+  },
+  {
+   "path": "p18/scripts/ab.sh",
+   "bytes": 1655,
+   "sha256": "e39163e2e035bd8ccc30b05966a28bb8947d523f028650d1b60912aea9972a72"
+  },
+  {
+   "path": "p18/scripts/audit.sh",
+   "bytes": 1503,
+   "sha256": "1f20422e252646b59b8aff64ce62e0111e303cf48d96d47cf9a2affcae655b66"
+  },
+  {
+   "path": "p18/scripts/collect.sh",
+   "bytes": 1224,
+   "sha256": "30daab7cf3044368f134094ff6f554dc2ba172362898a65e609ce6ee1f3ec386"
+  },
+  {
+   "path": "p18/scripts/ledger.py",
+   "bytes": 6672,
+   "sha256": "c46b3b33ba4da8170bff319fc7f874b214427e95030747ab00d952dfadbbda23"
+  },
+  {
+   "path": "p18/scripts/manifest.py",
+   "bytes": 1958,
+   "sha256": "9ce62d13b3360bc85a8df083efa0eb0fc0f2ab2fc521de1355796bf9e5748a86"
+  },
+  {
+   "path": "p18/scripts/settle.ps1",
+   "bytes": 757,
+   "sha256": "b81ca05e25fd1303f5355be8e0a5d9abeee382edd1381c0264aee001cb1f180f"
+  },
+  {
+   "path": "p18/TEST-dev.deathride.link.ProfileReplyTest.xml",
+   "bytes": 2436,
+   "sha256": "7433b3cda153b1c422ea3dbaabab423af536780e1808a0ed4a35f6af6bfc9bd3"
+  },
+  {
+   "path": "p18/verdict.json",
+   "bytes": 14459,
+   "sha256": "501a5520b46afa71880a42bfb1f8e840c8480667c9457cc78dcbee8b73b14779"
+  },
+  {
+   "path": "p18/verdict.out",
+   "bytes": 2800,
+   "sha256": "3d63327ec4a6b7b9546e25c4abd8234d1256726d6c8e35632bb4613d1b5459c0"
+  }
+ ],
+ "apks": {
+  "p18/base.apk": "deathride/main 992c48a9 (be571718..., byte-identical to P17 perf.apk)",
+  "p18/cut.apk": "the /profile cut 293f77a0 (dd2d9754...)",
+  "p18/release.apk": "acceptance: assembleRelease at the cut (see tests.json)"
+ },
+ "notBound": "p18/tooltest: dry runs of perf-p18.py on the audit run and on the first pair; not evidence.",
+ "rule": "Operator ruling 2026-10-07: summaries in git, raw files outside, bound here by SHA-256. No committed file over 512 KiB; no .gz, trace, hprof, APK or logcat in git."
+}

@@ -1,0 +1,51 @@
+{
+ "command": "gradlew.bat :core:test :link:test :game:test --rerun-tasks --console=plain",
+ "codeUnderTest": "Kotlin code of 293f77a0 (deathride/main 992c48a9 + the /profile cut); later commits change tools, evidence, ledger and docs only",
+ "runs": [
+  {
+   "run": 1,
+   "commit": "293f77a0 (code = 293f77a0)",
+   "result": "pass",
+   "core": "261 passed",
+   "link": "34, 2 skipped (as on the base): 29 + ProfileReplyTest 5",
+   "game": "117 passed",
+   "host": "100% CPU at start",
+   "log": "raw p18/gate-tests-run1.log"
+  },
+  {
+   "run": 2,
+   "commit": "474f9ef1 (code = 293f77a0, P18 A/B evidence committed)",
+   "result": "pass",
+   "core": "261 passed (EvidenceRuleTest included, P18 evidence committed)",
+   "link": "34, 2 skipped (as on the base)",
+   "game": "117 passed",
+   "host": "100% CPU at start",
+   "log": "raw p18/gate-tests-run2.log"
+  }
+ ],
+ "reading": "Both runs are green. No run failed, so nothing was rerun.",
+ "newTests": "ProfileReplyTest (link, 5 cases), over frame and input rows recorded on the Stick in the P18 audit run: traceJsonIsThePreP18Text (PerfTrace.json against the pre-P18 PerfTrace kept verbatim, 3 capacities x 8 cursors); replyBytesAreTheUtf8OfThePreP18Text (the reply's bytes against the pre-P18 route text's UTF-8 at 6 cursor pairs, twice, with a runtime map holding 'Zoë Łódź 🏎' and without one; a one-field change is caught); theReplyIsReusedAndTrimmedAndTheFreeListBounded; aWarmReplyAllocatesNoReplySizedText (JVM thread counter: a warm read of 600 rows adds 992 B to formatting its rows, the pre-P18 text 2,313,768 B, for a 225,034-byte reply); servedProfileIsTheOldRouteByteForByte (a bare ktor server running the old route line: status, every header but Date and the body equal for 5 queries x 3 Accept-Encodings).",
+ "equivalence": "ProfileReplyTest's JUnit result (raw p18/TEST-dev.deathride.link.ProfileReplyTest.xml, committed as equivalence-ProfileReplyTest.xml): 5 tests, 0 failures, 0 errors, 0 skipped; read by perf-p18.py's keep rule.",
+ "releaseApk": {
+  "command": "gradlew.bat :app:assembleRelease :desktop:compileKotlin --console=plain",
+  "commit": "293f77a0 (code = 293f77a0)",
+  "result": "pass (11 min 37 s); desktop compiled (warnings only)",
+  "sha256": "90ce9ef34d2141d5945de26a92673c005a2bb005133fadebf317f486b593e0f8",
+  "package": "dev.deathride.tracks (gradle.properties appId), not debuggable (aapt: no application-debuggable)",
+  "perfOnly": "P18 adds no perf-only code to the app. The cut is the /profile route itself, which exists in any build only while profiling (profileFrames set); its bytes are unchanged (ProfileReplyTest). The allocation sampler is a host tool (tools/perf-p18-alloc.py) and speaks to the debuggable perf package's JDWP only.",
+  "log": "raw p18/build-release.log"
+ },
+ "perfApks": {
+  "base": {
+   "sha256": "be571718543b3981f76f13a60d4697e69a94437f376bfaad03675b994004fe66",
+   "commit": "046d3f38 (code = 992c48a9; byte-identical to P17's perf.apk)"
+  },
+  "cut": {
+   "sha256": "dd2d9754f7d908af3a0f5e9620b540c86da1db4f3d801b9c81d5e10fbc4a648b",
+   "commit": "293f77a0",
+   "differsIn": "classes4.dex alone (apk-diff.txt)"
+  },
+  "command": "gradlew.bat :app:assembleDebug -PappId=dev.deathride.perf \"-PappLabel=Death Ride Perf\" -PracePort=8772",
+  "logs": "raw p18/build-base.log, build-cut.log"
+ }
+}
