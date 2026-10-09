@@ -84,7 +84,7 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  const browser=await chromium.launch({headless:true,args:['--autoplay-policy=no-user-gesture-required']});try{
  const tv=await browser.newPage({viewport:{width:1920,height:1150}}),phone=await browser.newPage({viewport:{width:390,height:844}});tvPage=tv;
  for(const page of [tv,phone])page.on('pageerror',e=>errors.push(e.message));
- await phone.addInitScript(()=>{class FakeRecognition{start(){setTimeout(()=>this.onresult?.({results:[{isFinal:true,0:{transcript:'Could you tell me which bridge you mean, please?'}}]}),60);}stop(){this.onend?.();}abort(){this.onend?.();}}window.SpeechRecognition=FakeRecognition;});
+ await phone.addInitScript(()=>{class FakeRecognition{start(){setTimeout(()=>this.onresult?.({results:[{isFinal:true,0:{transcript:'Where you saw the rover last time?'}}]}),60);}stop(){this.onend?.();}abort(){this.onend?.();}}window.SpeechRecognition=FakeRecognition;});
  // the phone pairs first, as it would from the Pair screen's QR: a join takes the TV to its confirmation, so the desk is walked back to the landing after it
  await phone.goto(base+'/phone?pin='+(await current()).pin);await phone.waitForFunction(async()=>(await(await fetch('/api/session')).json()).viewer==='phone');
  // the phone's cookie is set before its join event lands; a nav sent in between is overwritten by the join (store.ts:507-508), so wait for the join itself
@@ -125,7 +125,7 @@ const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,media
  s=await current();assert.ok(s.englishLearning.evidence.some(e=>e.mode==='choice'&&e.quote==='Which bridge do you mean?'));assert.ok(s.englishLearning.evidence.filter(e=>e.id.endsWith(':choice')).every(e=>e.mode==='choice'));
  // E4: a spoken reply (simulated recognition): capture, review the words (tick pre-checked), one tap to send
  await phone.getByRole('button',{name:'Speak a reply',exact:true}).click();await phone.getByRole('button',{name:'Stop & review',exact:true}).waitFor();
- await phone.waitForFunction(()=>document.querySelector('.linga-phone textarea')?.value.includes('which bridge'));
+ await phone.waitForFunction(()=>document.querySelector('.linga-phone textarea')?.value.includes('Where you saw'));
  await phone.getByRole('button',{name:'Stop & review',exact:true}).click();await phone.getByLabel('These are the words I said.',{exact:true}).waitFor();assert.equal(await phone.getByLabel('These are the words I said.',{exact:true}).isChecked(),true,'the tick is pre-checked after Stop');
  await waitCommand(phone,()=>phone.getByRole('button',{name:'Send reply',exact:true}).click(),'turn');s=await current();assert.equal(s.conversation.turns.at(-2).mode,'speech');assert.equal(s.conversation.turns.at(-2).supported,true);
  await takeMoment(phone,'spoken reply');
