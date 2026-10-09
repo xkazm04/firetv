@@ -128,7 +128,7 @@ export default function Phone() {
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
-  const camWanted = screen === "capture" || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
+  const camWanted = (screen === "capture" && !failed("read")) || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
     navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."));

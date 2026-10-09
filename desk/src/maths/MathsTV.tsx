@@ -939,7 +939,7 @@ export function PageScreen({ s }: { s: Session }) {
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No page yet" /></h1></>;
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
   const line = s.reading ? "Reading the page… the problems appear here as they are read."
-    : read?.phase === "failed" ? "The desk could not read this page. Snap it again on the phone."
+    : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
     : hj?.phase === "failed" ? "No hint that time. Select to try again."
     : it ? `Number ${it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";

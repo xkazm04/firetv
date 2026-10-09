@@ -466,17 +466,6 @@ test('status case 1: a hint whose engine answered raw text fails with the desk s
  assert.match(line,/\bhint\b/);assert.match(line,/x = 6 is the answer/,'the detail is kept for the server log');
 });
 
-// last: it swaps the store module out from under the routes loaded above
-test('case 7: a job saved as running is not running after the desk restarts',()=>{
- onPage();
- const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};
- fs.writeFileSync(path.join(data,'session.json'),JSON.stringify(saved));
- clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
- const job=store.getSession().jobs?.read;
- assert(job,'the saved job is still on record');assert.notEqual(job.phase,'running');
- assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
- assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
-});
 
 // ---- HW2: the homework door opens tonight's sheet, never the oldest page on the desk ----
 test('HW2: the door opens a maths page snapped tonight with problems; yesterday\'s, a failed one and an unstamped one ask for a photo',()=>{
@@ -512,4 +501,55 @@ test('HW2: the door and its caption use the one predicate',()=>{
  assert.match(tv.split('function doorCaption')[1].split('\n}')[0],/tonightsSheet\(s\)/);
  assert.match(keys,/tonightsSheet\(s\)/);
  assert.doesNotMatch(keys,/s\.pages\.findIndex\(\(p\) => p\.subject === "maths"\)/,'the oldest-page lookup is gone');
+});
+
+// ---- HW3: a read with zero problems is a failed job, retried in place ----
+test('HW3: a read that comes back with zero items ends failed with the desk\'s reason; a retry keeps the page and writes no history line',async()=>{
+ blank();
+ const {EMPTY_READ}=require(src('lib/desk/job.ts'));const learners=require(src('lib/session/learners.ts'));
+ const lines=()=>(learners.getLearner('jobs-scratch')?.history??[]).filter((h)=>h.kind==='homework').length;
+ const before=lines();
+ stubVision(()=>({items:[]}));
+ const r=await post('read',SNAP);
+ assert.equal(r.status,502);assert.equal((await r.json()).error,EMPTY_READ);deskWorded(EMPTY_READ);
+ let s=store.getSession();
+ assert.equal(s.jobs.read.phase,'failed');assert.equal(s.jobs.read.error,EMPTY_READ);
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,0);assert.equal(s.pages[0].provider,'error');assert.equal(s.reading,false);
+ assert.equal(lines(),before,'no homework history line for an empty read');
+ const id=s.pages[0].id;
+ const again=await retry({kind:'read'});
+ assert.notEqual(again.status,409,'a retry is accepted');assert.equal(again.status,502,'and the empty read fails again');
+ s=store.getSession();assert.equal(s.pages.length,1,'the page count is kept');assert.equal(s.pages[0].id,id,'the page id is kept');assert.equal(lines(),before);
+ stubVision(()=>READ3);
+ assert.equal((await retry({kind:'read'})).status,200);
+ s=store.getSession();assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,3);assert.equal(lines(),before+1,'the read that found problems is written down');
+});
+test('HW3: an empty read fails for English and Essay too, and the TV and the phone point to Try again',async()=>{
+ for(const subject of ['english','essay']){
+  blank();stubVision(()=>({items:[]}));
+  assert.equal((await post('read',{...SNAP,subject})).status,502,subject);
+  assert.equal(store.getSession().jobs.read.phase,'failed',subject);
+ }
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.match(tv,/Open Try again on the phone/);assert.doesNotMatch(tv,/Snap it again on the phone/);
+ const {panelFor,follow}=require(src('app/phone/panelFor.ts'));
+ const page={...PAGE,items:[],provider:'error'};
+ const failed={screen:'page',joined:true,subject:'maths',awaiting:null,practice:null,pages:[page],pageIx:0,jobs:{read:{id:'j',kind:'read',phase:'failed',key:page.id,error:'x',startedAt:0,input:{id:page.id}}}};
+ assert.equal(panelFor(failed),'capture','the capture panel carries that read\'s Try again');
+ const cue=follow(undefined,failed,{panel:'join',role:'student',busy:false});
+ assert.equal(cue.key,`page:retry:${page.id}`);assert.equal(cue.to,'capture','a phone arriving on a failed read lands where Try again is, and opensCamera is off there');
+ const ph=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(ph,/screen === "capture" && !failed\("read"\)/,'the camera stays off while Try again is offered');
+});
+
+// last: it swaps the store module out from under the routes loaded above
+test('case 7: a job saved as running is not running after the desk restarts',()=>{
+ onPage();
+ const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};
+ fs.writeFileSync(path.join(data,'session.json'),JSON.stringify(saved));
+ clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
+ const job=store.getSession().jobs?.read;
+ assert(job,'the saved job is still on record');assert.notEqual(job.phase,'running');
+ assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
+ assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
 });

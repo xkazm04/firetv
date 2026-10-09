@@ -33,10 +33,10 @@ function cueFor(s: Seen): Cue | null {
     case "practice": return { panel: "practice", key: sc };
     // "Tell the desk on the phone how you got there": the marked set and its walk are one hand-off
     case "sheet": case "walk": return { panel: "practice", key: "sheet" };
-    // "The desk could not read this page. Snap it again on the phone"
+    // "The desk could not read this page. Press Try again on the phone": the capture panel holds that read's Try again, so the camera stays off
     case "page": {
-      const p = s.pages[s.pageIx], read = s.jobs?.read;
-      return p && read?.phase === "failed" && read.key === p.id ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:unread:${p.id}` } : null;
+      const p = s.pages[s.pageIx];
+      return p && (readFailed(s) || (p.subject === "essay" && s.jobs?.read?.phase === "failed" && s.jobs.read.key === p.id)) ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:retry:${p.id}` } : null;
     }
     // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
     case "essaytype": case "forensic": return { panel: "paste", key: sc };
@@ -54,8 +54,11 @@ function cueFor(s: Seen): Cue | null {
 /** The panel the TV's screen hands off to, or "stay" where it asks nothing of the phone. */
 export const panelFor = (s: Seen): PScreen | "stay" => cueFor(s)?.panel ?? "stay";
 
+/** The page on the TV is one whose read failed: the phone brings Try again, not a camera. */
+export const readFailed = (s: Pick<Seen, "screen" | "pages" | "pageIx" | "jobs">) => { const p = s.pages[s.pageIx], read = s.jobs?.read; return s.screen === "page" && !!p && p.subject !== "essay" && read?.phase === "failed" && read.key === p.id; };
+
 /** A panel that turns the camera on as it opens. */
-const opensCamera = (panel: PScreen, s: Seen) => panel === "capture" || (panel === "practice" && s.screen === "practice" && !s.practice?.marked);
+const opensCamera = (panel: PScreen, s: Seen) => (panel === "capture" && !readFailed(s)) || (panel === "practice" && s.screen === "practice" && !s.practice?.marked);
 
 /** Where the phone is, who holds it, and whether the learner's hands are on it (typing, a shot held unsent, recording). */
 export interface At { panel: PScreen; role: "student" | "parent"; busy: boolean }

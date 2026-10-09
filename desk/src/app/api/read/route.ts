@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { readPage } from "@/lib/desk/read";
 import { addHistory } from "@/lib/session/learners";
-import { refused, runJob } from "@/lib/desk/job";
+import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
@@ -25,6 +25,8 @@ export async function POST(req: Request) {
   const r = await runJob("read", async () => {
     dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h, owner } });
     const { items, provider, ms } = await readPage(b64, subject, w, h);
+    // a read with no item is not a read: the job fails with the desk's reason, so Try again reads this page again in place
+    if (!items.length) throw new DeskSaid(EMPTY_READ);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written
     // before the event, because `page.read` is what re-hydrates the record onto the session.
     if (subject === "maths") {

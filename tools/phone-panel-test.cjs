@@ -100,7 +100,7 @@ const FIXTURES={
  practice:{s:session({screen:'practice',practice:set(false)}),panel:'practice',why:'snap the whole sheet with the phone'},
  sheet:{s:session({screen:'sheet',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
  walk:{s:session({screen:'walk',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
- page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Snap it again on the phone'},
+ page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Open Try again on the phone'},
  essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
  sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
@@ -292,7 +292,7 @@ test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, ty
  assert.match(src,/call\("\/api\/mark", \{ answers:/,'to the mark route, with no image');
  assert.match(src,/document\.activeElement\.blur\(\)/,'the box in hand is let go before sending, so the phone can follow the TV');
  // the camera is on for the snap route only
- assert.match(src,/camWanted = screen === "capture" \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
+ assert.match(src,/camWanted = \(screen === "capture" && !failed\("read"\)\) \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
  // the box's own cap is the rule's: the one number
  const rules=fs.readFileSync(path.join(SRC,'lib/rules/maths.ts'),'utf8');
  assert.match(rules,/export const TYPED_ANSWER_MAX = 40;/);assert.match(src,/TYPED_ANSWER_MAX/);

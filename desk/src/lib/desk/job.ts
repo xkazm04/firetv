@@ -56,14 +56,20 @@ const WHY: Record<EngineErrorKind, string> = {
   exit: "The engine behind it stopped part way.",
   shape: "The answer came back in pieces.",
 };
+/** A read that came back with nothing on the page: the job fails with this, and Try again reads the same page again. */
+export const EMPTY_READ = "The desk found nothing to read on that page. Try again.";
 export const BUSY = "The desk is already on it.";
 /** A run whose result no longer fits the desk (another learner sat down, the page went): dropped, not failed. */
 export const MOVED_ON = "The desk has moved on since that was asked.";
 /** POST /api/session/retry with no failed run of that kind. */
 export const NOTHING = "There is nothing to try again.";
 
+/** A failure whose reason the desk already has in its own words: a run throws it, and the job carries the sentence as it is. */
+export class DeskSaid extends Error {}
+
 /** The sentence a failed run leaves on the session: never an exception's text or its stack. */
 export function jobError(kind: JobKind, e: unknown): string {
+  if (e instanceof DeskSaid) return e.message;
   const why = e instanceof EngineError ? WHY[e.kind] : "";
   return why ? `${FAILED[kind]} ${why}` : `${FAILED[kind]} Try again.`;
 }
