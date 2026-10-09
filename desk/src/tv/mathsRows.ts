@@ -115,7 +115,7 @@ export type ContinueGo = Extract<Screen, "practice" | "sheet" | "page">;
  * screen says nothing about it.
  */
 export interface Continue { k: string; t: string; d: string; cap: string; go: ContinueGo; pageIx: number; focus: number }
-export function continueCard(s: Session): Continue | null {
+export function continueCard(s: Session, now = Date.now()): Continue | null {
   const name = s.practice ? topicName(s.practice.topic) : "";
   if (s.practice && !s.practice.marked) return {
     k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
@@ -129,11 +129,12 @@ export function continueCard(s: Session): Continue | null {
       : "The marked set is still on the desk. Enter shows it again, on the first one to look at.",
     go: "sheet", pageIx: 0, focus: firstToLook(s.practice.items),
   }; }
-  const pi = s.pages.findIndex((p) => p.subject === "maths" && p.items.length > 0);
-  if (pi >= 0) { const p = s.pages[pi]; return {
+  // tonight's sheet, by the same answer the door gives; a page still being read, with no problems yet, gets no card
+  const t = tonightsSheet(s, now);
+  if (t && t.page.items.length > 0) { const p = t.page; return {
     k: "On the desk", t: "Back to the sheet", d: `${p.title} · ${p.items.length} problems read.`,
-    cap: "The sheet you snapped is still on the desk. Enter opens it where you were.",
-    go: "page", pageIx: pi, focus: 0,
+    cap: "Tonight's sheet is still on the desk. Enter opens it at the first problem.",
+    go: "page", pageIx: t.ix, focus: 0,
   }; }
   return null;
 }

@@ -15,7 +15,8 @@ const {ESSAY_TYPES}=require(path.join(root,'src/lib/library/lessons.data.ts'));
 const {profileRows,locate,flat}=require(path.join(root,'src/tv/profileRows.ts'));
 
 const LOCAL={busy:false,table:false,hintInFlight:false};
-const page=(subject='maths')=>({id:'p1',subject,title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]},{n:2,key:'k2',text:'x + 2 = 5',band:[10,20]}]});
+const today=()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;};
+const page=(subject='maths')=>({id:'p1',subject,day:today(),title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]},{n:2,key:'k2',text:'x + 2 = 5',band:[10,20]}]});
 function session(patch={}){
  return {subject:'maths',screen:'landing',focus:0,view:'band',joined:true,pin:'1234',phoneUrl:'',awaiting:null,
   learner:{id:'ema',name:'Ema'},profiles:[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']}],draft:null,
@@ -352,7 +353,7 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
 
 // ---- landing-B: Select opens what is waiting, through one helper Tonight's continue card and the recap share ----
 const paper={topic:'linear-two-step',items:[{n:1,question:'2x + 3 = 11'},{n:2,question:'5x - 4 = 21'}]};
-const snapped={id:'p1',subject:'maths',title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
+const snapped={id:'p1',subject:'maths',day:today(),title:'Sheet one',img:'',w:100,h:100,items:[{n:1,key:'k1',text:'x + 1 = 2',band:[0,10]}]};
 const ownParagraph={type:'argument',text:'p',sentences:[{n:1,text:'Cats sleep.'},{n:2,text:'Dogs bark.'}],verdicts:[{n:1,verdict:'supports'},{n:2,verdict:'faulty'}],stats:{},summary:'It argues one way.'};
 const MATHS_STATES=[
  ['a marked set',{practice:marked},[{type:'subject',subject:'maths'},{type:'nav',screen:'sheet',focus:1}]],
@@ -658,4 +659,24 @@ test('plan case 7 (keys): with nothing read the lens home ends in plan, and Sele
  assert.equal(focusAfter(bottom,tvKey(bottom,'down',LOCAL)),4,'Down from the last lens reaches the plan');
  assert.equal(focusAfter(home,tvKey(home,'up',LOCAL)),3,'Up returns to the last lens');
  assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',focus:4}),'select',LOCAL).events[0],{type:'essay.plan',lens:ESSAY_TYPES[0].id},'no lens chosen: the first');
+});
+
+test('HW4: the continue card opens the sheet of tonight, never an older one; no sheet tonight, no card',()=>{
+ const {tvKey,tonightStops}=keys();const {continueCard,tonightsSheet}=require(ROWS);
+ const monday={...page(),id:'mon',day:'2000-1-3'},tonight={...page(),id:'tue',title:'Tuesday sheet'};
+ const old=session({screen:'tonight',pages:[monday]});
+ assert.equal(continueCard(old),null,'a Monday sheet and no sheet today: no card');
+ assert.deepEqual(tonightStops(old),['homework','teach','prepare'],'the D-pad row has no continue stop');
+ const both=session({screen:'tonight',pages:[monday,tonight]});
+ const card=continueCard(both);
+ assert.equal(card.pageIx,tonightsSheet(both).ix,'the same answer the door uses');
+ assert.equal(card.pageIx,1);assert.equal(card.go,'page');
+ assert.deepEqual(tvKey(both,'select',LOCAL).events.find(e=>e.type==='page.select'),{type:'page.select',pageIx:1});
+ const reading=session({screen:'page',pages:[monday,{...tonight,items:[]}],pageIx:1,reading:true});
+ assert.ok(tonightsSheet(reading),'a page being read is the sheet of tonight for the door');
+ assert.equal(continueCard(reading),null,'but with no problems read yet it gets no card');
+ assert.ok(!/where you were/i.test(card.cap),card.cap);assert.ok(!/—/.test(card.cap));
+ const tomorrow=Date.now()+36*3600*1000;
+ assert.equal(continueCard(both,tomorrow),null,'now is a parameter: the same pages a day on offer no card');
+ assert.equal(both.pages.length,2,'older pages stay on the desk');
 });

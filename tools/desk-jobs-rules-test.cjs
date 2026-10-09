@@ -469,8 +469,8 @@ test('status case 1: a hint whose engine answered raw text fails with the desk s
 
 // ---- HW2: the homework door opens tonight's sheet, never the oldest page on the desk ----
 test('HW2: the door opens a maths page snapped tonight with problems; yesterday\'s, a failed one and an unstamped one ask for a photo',()=>{
- const {tvKey,LOCAL}=require(src('tv/keys.ts'));const {tonightsSheet,dayOf}=require(src('tv/mathsRows.ts'));
- const door=(s)=>tvKey({...s,screen:'tonight',focus:s.pages.length?1:0},'select',LOCAL).events;
+ const {tvKey,LOCAL}=require(src('tv/keys.ts'));const {tonightsSheet,dayOf}=require(src('tv/mathsRows.ts'));const {tonightStops}=require(src('tv/keys.ts'));
+ const door=(s)=>tvKey({...s,screen:'tonight',focus:tonightStops({...s,screen:'tonight'}).indexOf('homework')},'select',LOCAL).events;
  const asks=[{type:'subject',subject:'maths'},{type:'page.ask',subject:'maths'}];
  onPage();
  let s=store.getSession();

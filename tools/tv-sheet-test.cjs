@@ -126,7 +126,7 @@ test('case 7: Back from the unmarked poster parks the set, and "Still open" is r
 // ---- S82: only this learner's. Math Buddy's work is stamped with its learner; another learner at the desk gets a clean desk ----
 const landing=()=>require(path.join(root,'src/tv/landingRows.ts'));
 const TWO=[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']},{id:'tom',name:'Tom',type:'high-school',age:15,system:'uk',modules:['maths']}];
-const PAGE_EMA={id:'maths-100',subject:'maths',title:'Algebra - Exercise 4.2',img:'',w:1,h:1,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}],owner:'ema'};
+const PAGE_EMA={id:'maths-100',subject:'maths',day:(()=>{const d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;})(),title:'Algebra - Exercise 4.2',img:'',w:1,h:1,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}],owner:'ema'};
 const HINT_EMA={key:'k1',problem:'2x+3=11',stage:1,hint1:{hint:'Undo the +3 first.',next:'What is left?'},hint2:null,askedQ:'',owner:'ema'};
 function emaEvening(patch={}){
  return session({profiles:TWO,screen:'sheet',focus:1,topic:'linear-one-step',practice:{...marked(['right','wrong','right','unsure','right','right']),owner:'ema'},
