@@ -76,7 +76,7 @@ LG-16's rework and LG-27 must keep all three.
 | 15 | Still owed: the owner's reading of the transcript | covered-elsewhere: LINGA-COMPETITIVE-SCOPE.md §3 *Still owed* |
 | 16 | Still owed: one more harness run after the recap selector fix | closed-on-main d0764a23 (runs 2 and 3) |
 
-**Total: 16 items** = 3 to an LG entry (LG-16, LG-26, LG-27) + 6 closed-on-main + 5 covered-elsewhere + 2 declined (harness and log items, no product claim, so no backlog entry).
+**Total: 16 items** = 3 to an LG entry (LG-16, LG-26, LG-27) + 5 closed-on-main + 6 covered-elsewhere + 2 declined (harness and log items, no product claim, so no backlog entry).
 
 ## 3. Methodology lessons
 
