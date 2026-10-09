@@ -183,3 +183,27 @@ By extension: 109 json, 19 txt, 15 log, 1 md. No refused extension, no logcat na
      - Card 6 follows under its own rule (section 10(b) ruling 1).
      - Card 3 (back-pressure) stays research-first, behind both.
 - **Reverse:** the owner's answer on goal 1's measure supersedes rulings 2 and 3.
+
+## 12. P18 rulings
+
+- **Who decided:** the App Master, under the operator's delegation of 2026-10-07 06:25Z. The owner may overrule any of the four.
+- **Context:** P18 (acbad996, merged at afc4d4cc) audited the race's allocation with ART's own tracker, cut the probe's `/profile` reply in place (card 5, 293f77a0) and found that after every full GC ART grows the heap exactly 24 MB above the survivors. See `docs/concepts/deathride/P18-heap-swing.md`, whose questions these answer.
+- **Rulings:**
+  1. **P18 is accepted.**
+     - Card 5 is kept under `perf-p18.py`, which was fixed at 70fe350c before the first A/B run.
+     - Allocation went from 2.599 / 2.576 to 2.271 / 2.254 MB/s, and GCs from 35 to 33.
+     - `ProfileReplyTest` (5 cases) shows the same bytes.
+     - The cut is observer-side, like P13f's and P13g's.
+     - The PSS line was not graded (unsettled). The next goal-1 soak grades it; no dedicated settled pair is spent on it (P18 question 3).
+  2. **Card 6 is graded on the lines that hold it.** This refines section 10(b) ruling 1, which named PSS max.
+     - P18 showed that PSS max is the Java heap's 24 MB headroom over the survivors, sampled 8 times a run: it swings 15-27 MiB between runs.
+     - So a fixed graphics cut is graded on owned textures and on the meminfo line that holds GL textures.
+     - PSS max is reported beside them and graded only on a settled pair.
+  3. **Section 7 ruling 2 stands** (P18 question 2).
+     - ktor CIO's 16 KiB header-line buffers (0.61 MB/s) come from probe requests that players never send.
+     - The engine, its configuration and the probe's cadence stay unchanged, so every reading stays comparable.
+  4. **Retention is the PSS lever left in the app** (P18 question 1).
+     - A retention audit goes into the P17 ledger as card 13: open, lane B, research first.
+     - It comes after card 6 and before card 3.
+     - It may force a GC and take a heap dump in a diagnostic run only, never in a graded run (I2).
+- **Reverse:** the owner may overrule any of these. His answer on goal 1's measure leaves them standing, because every option keeps the 192 MiB PSS line.
