@@ -624,6 +624,47 @@ the gate. M3b-1 goes first and alone, because M3b-2 builds on its seam)
   tables. The topic is calc2-approx (Stewart 7.7, OpenStax 3.6), after calc2-strategy, no prerequisites, shapes ['approx-integral'].
   calc2's calcWords.methods becomes 'integration by parts, trigonometric integrals, trigonometric substitution, partial fractions, and
   the trapezoid, midpoint and Simpson's rules'. calcSchema's f stays as it is: approx-integral has an f; making f conditional belongs
+  The App Master's rulings on the M3b-3b run and the descope (2026-10-09):
+  (34) M3b-3b is accepted. Commits: ec7bb9ff, cc38f18b, 62d8ab87, c0a1126e, ea831ef9. The frozen set requests (cc38f18b) come before any
+  desk/src change. calc2.ts imports only ./calc-expr and ./calc-read. calc-expr.ts and tools/calc1-frozen.json are unchanged against
+  937af503. The kill tests are recorded (7 of 15 rows, then 1, then 1). The App Master ran tsc on main at 66f0d7ff (clean); test:rules
+  is 72 green there.
+  (35) The owner's answer on the descope (ask 23e13a2f, 2026-10-09 06:34Z): accepted. The not-buildable list in MATH-COURSE-PATHS
+  section 10 stands as the honest limits: free terms in n; sequences with no real extension; sums outside the two families; free
+  improper integrands; power series (11.8-11.11). Order: 3c, then 3d, then 3e and 3f, each after 3d. One run at a time, each ruled after
+  the previous one settles. 3g stays not ruled in (ruling 18) and is revisited after 3f.
+  (36) The spec is {shape: 'sequence-limit', f}. f compiles, uses x and has no +C, as Calculus 1's f does. f must be finite at every
+  whole n from 1 to 100 (a_n is defined), or the spec is refused. A spec carrying answer, solution, truth, value or result is refused.
+  The truth is limitInf(f, 1), the guarded value of ruling 25, read as calc.ts reads a Calculus 1 limit at inf. Null is refused with
+  REJECT.limitUndefined's sentence. dne is refused with REJECT.limitDne's ('The limit does not exist.'). Both sentences are copied, as
+  calc2.ts copied BAD_SPEC. No second guard is written: the alias guard lives in limitInf. The App Master's probe at 66f0d7ff: n/(n+1) 1;
+  ln(n)/n 2.3258e-8; (1+1/n)^n 2.718281828205865; (n^2+1)/(2n^2) 0.5; 2^n/n^3 inf; n^(1/n) 1.0000000233; (1/2)^n 0; cos(pi n),
+  sin(pi n)+1 and (-1)^n dne.
+  (37) The comparison is Calculus 1's limit comparison, copied. It covers judgeNumber's limit row (exact 1e-6, rounded 5e-3), plus
+  checkAnswer's infinity reading and dne reading. calc2.ts may not import calc.ts, so the lines are copied, and a parity row proves the
+  copy. For every kept fixture and every answer in a fixed list, calc2's verdict and slip must equal calc.ts checkAnswer({shape: 'limit',
+  f, at: 'inf'}). Where a listed row and parity disagree, parity wins and the case is logged. calc2SlipsFor('sequence-limit') is
+  ['arithmetic-slip', 'sign'], as for approx-integral. 'limit-substituted-early' is not offered, because its words name zero over zero and x.
+  (38) Leaks follow Calculus 1's limit rule: leaksCalc's limit case and its infinite-truth rule. The question's own pieces are printed in
+  n: lim_(n->infinity), n->infinity, 'n approaches infinity' (and tends to, goes to), a_n, and the term as printed. A leak-parity row: on
+  lines with no variable, calc2LeaksCalc must equal leaksCalc on the Calculus 1 limit at inf with the same f. The withheld sentence is
+  fixed and holds no value: 'Say what the terms do as n grows, then name the step that makes it clear. The limit is yours to find.'
+  (39) The printers and the reader. The printers go in calc-expr.ts and are additive. tex() gains the variable's name (default 'x'), and
+  toTex(e) with one argument keeps its output byte for byte. A new export prints a node as plain text with the variable as a token of its
+  own, never glued to a letter (pi*n, not pin). The question prints f in n, in plain and in tex, in the form of calc.ts's limit question,
+  with n -> infinity and a_n. The reader is calc2SpecFromQuestion, reached only through ruling 31's hook. It matches the frame first
+  (a_n =, n -> infinity, 'the limit of the sequence'). Inside the term, it renames to x only an n that stands between non-letters, so
+  ln(n), sin(n) and tan(n) read as functions of x. An n inside a letter run is left as it is, and that term then fails to read (null). It
+  returns a spec only when calc2WellFormed accepts it. At 66f0d7ff Calculus 1's reader returns null for: 'Find the limit of the sequence
+  a_n = n/(n+1).'; 'Determine whether the sequence a_n = ln(n)/n converges or diverges. If it converges, find the limit.'; 'Find
+  lim_(n->infinity) (1+1/n)^n'; 'Find the limit as n approaches infinity of (n^2+1)/(2n^2).'
+  (40) The topic lands in this run. It is calc2-sequences (Stewart 11.1, OpenStax 5.1). It comes after calc2-approx, has no prerequisites,
+  and its shapes are ['sequence-limit']. calc2's calcWords.methods becomes 'integration by parts, trigonometric integrals, trigonometric
+  substitution, partial fractions, the trapezoid, midpoint and Simpson's rules, and limits of sequences'. The set line is the card's:
+  'sequence-limit: f, a function of x that the desk prints with n in place of x. The question is the limit of a_n = f(n) as n grows. Pick
+  one that is defined for every real x >= 1 and that has a limit or grows without bound.' PARAMS for the shape is empty, since f is always
+  in the schema. SPEC_KEYS is unchanged. A calc2 item draws no plot on the TV and its working lines stay bare (ruling 32). The TV captures
+  of a calc2-sequences item are owed to the owner.
   to the first shape without one.
 - Every M3b slice: no live model call in a gate; `desk/data/` untouched; no school or Calculus 1 screen or prompt text
   changes (a Calculus 1 learner sees and is sent byte-identical words).
