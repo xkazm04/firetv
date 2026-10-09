@@ -680,6 +680,43 @@ test('MB-B3: the read route hands the seated learner\'s profile to the maths rea
  assert(!/Czech|years old|School maths/.test(prompt),'the English read is told nothing about the learner');
 });
 
+// ---- HF1: a partial read says so ----
+test('HF1: missingNumbers names the printed numbers a read left out, run by run; unknown is not complete',()=>{
+ const {missingNumbers}=require(src('lib/desk/read.ts'));
+ const ns=(...a)=>a.map((n)=>typeof n==='number'?{n}:{n:parseInt(n),label:n});
+ assert.deepEqual(missingNumbers(ns(1,2,3,5)),[4]);
+ assert.deepEqual(missingNumbers(ns(1,2,3,4)),[]);
+ assert.deepEqual(missingNumbers(ns(1,2,3,1,2,4)),[3],'a repeated number starts a new run');
+ assert.deepEqual(missingNumbers(ns(7,8,9)),[],'a continuation sheet has no gap before it');
+ assert.deepEqual(missingNumbers(ns(1,'2a','2b',3)),[],'lettered parts count once');
+ assert.equal(missingNumbers([{n:1},{n:Infinity},{n:3}]),null);
+ assert.equal(missingNumbers([{n:1},{n:2.5}]),null);
+});
+test('HF1: the read route carries the missing numbers on the page, the answer, the done line and the log; a complete page carries an empty list',async()=>{
+ blank();
+ const row=(number,y)=>({number,text:`item ${number}`,y,x:0.5});
+ stubVision(()=>({items:[row(1,0.1),row(2,0.3),row(3,0.5),row(5,0.8)]}));
+ const warned=[];const w=console.warn;console.warn=(...a)=>warned.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.warn=w;}
+ assert.equal(r.status,200);const j=await r.json();
+ assert.equal(j.items,4);assert.deepEqual(j.missing,[4]);
+ const s=store.getSession();
+ assert.deepEqual(s.pages[0].missing,[4]);assert.equal(s.jobs.read.phase,'done');
+ assert(/Number 4 was not read/.test(s.status),s.status);assert(warned.some((l)=>l.includes('4')),'a server log line names it');
+ const {missingLine}=require(src('tv/pageLines.ts'));
+ assert.equal(missingLine([4]),'Number 4 was not read. Take a new photo of the page on the phone.');
+ assert.match(missingLine([4,7,9]),/^Numbers 4, 7 and 9 were not read\./);
+ assert.match(missingLine([4,7,9,11,12]),/^Numbers 4, 7, 9 and 2 more were not read\./);
+ assert.match(missingLine([4,7]),/^Numbers 4 and 7 were not read\./);
+ for(const l of [missingLine([4]),missingLine([1,2,3,4])])assert(!/[—–-]/.test(l)&&!/Try again/.test(l),l);
+ const tv=fs.readFileSync(src('tv/screens.tsx'),'utf8');assert.match(tv,/p\.missing\?\.length \? missingLine\(p\.missing\)/);
+ blank();stubVision(()=>({items:[row(1,0.1),row(2,0.3),row(3,0.5)]}));
+ const ok=await (await post('read',SNAP)).json();assert.deepEqual(ok.missing,[]);assert.deepEqual(store.getSession().pages[0].missing,[]);
+ blank();stubVision(()=>({items:[row(1,0.1),{...row(2,0.3),number:0}]}));
+ assert.equal((await (await post('read',SNAP)).json()).missing,null,'unknown is kept distinct');
+ assert.equal(store.getSession().pages[0].missing,null);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();

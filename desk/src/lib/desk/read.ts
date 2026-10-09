@@ -111,3 +111,22 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
   for (const it of items) it.key = itemKey(pageId, it.n, seen, it.label);
   return { items, provider, ms };
 }
+
+/**
+ * The printed numbers a read left out (HF1). A run is what orderItems treats as one section - a number and label already
+ * held start a new run - and a number is missing when it is a whole number between two printed numbers of one run. A lettered
+ * part counts once, as its number; a run that starts above 1 has no gap before it (a continuation sheet). Empty means the
+ * page is complete; null means unknown (an item with no usable printed number), which is not the same as complete.
+ */
+export function missingNumbers(items: Array<{ n: number; label?: string }>): number[] | null {
+  if (items.some((i) => !Number.isInteger(i.n) || i.n < 1)) return null;
+  const missing: number[] = [];
+  let held = new Set<string>(), run = new Set<number>();
+  const close = () => {
+    if (run.size) { const lo = Math.min(...run), hi = Math.max(...run); for (let k = lo + 1; k < hi; k++) if (!run.has(k)) missing.push(k); }
+    held = new Set(); run = new Set();
+  };
+  for (const i of items) { const id = `${i.n}|${i.label ?? ""}`; if (held.has(id)) close(); held.add(id); run.add(i.n); }
+  close();
+  return missing;
+}

@@ -5,10 +5,11 @@
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
-import { readPage, type ReadWho } from "@/lib/desk/read";
+import { missingNumbers, readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
 import { TYPE_WORDS, systemOf } from "@/tv/profileRows";
+import { missingLine } from "@/tv/pageLines";
 import { addDigest, addHistory } from "@/lib/session/learners";
 import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
@@ -48,10 +49,13 @@ export async function POST(req: Request) {
       });
       addDigest(owner, { at, kind: "homework", problems: items.length, hints: 0, second: 0 });
     }
-    dispatch({ type: "page.read", id, items, readMs: ms, provider });
-    return { id, items: items.length, ms, provider };
+    // which printed numbers the read left out: the page and the answer carry it, so a partial read is never taken for a whole one
+    const missing = missingNumbers(items);
+    if (missing?.length) console.warn(`desk read: page ${id} left out printed numbers ${missing.join(", ")}`);
+    dispatch({ type: "page.read", id, items, readMs: ms, provider, missing });
+    return { id, items: items.length, ms, provider, missing };
   }, {
-    key: id, input: { id }, start: "reading the page…", done: (x) => `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s`,
+    key: id, input: { id }, start: "reading the page…", done: (x) => `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s${x.missing?.length ? `. ${missingLine(x.missing)}` : ""}`,
     // the page stays on the desk, empty, so the TV stops saying "reading"
     onFail: () => dispatch({ type: "page.read", id, items: [], readMs: 0, provider: "error" }),
   });

@@ -6,7 +6,7 @@
  * Essay Master theirs. Each takes the session and a `focus` index and draws itself from its stop list in
  * tv/keys.ts - the same list the D-pad there walks, so a stop is added or moved in one place.
  */
-import { failedReadLine } from "@/tv/pageLines";
+import { failedReadLine, missingLine } from "@/tv/pageLines";
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
@@ -120,7 +120,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const ovScale = H / p.h;
   // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
   const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
-  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? "no hint that time — Select to try again" : undefined;
+  const pageLine = read?.phase === "failed" ? failedReadLine(p.subject) : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? "no hint that time — Select to try again" : p.missing?.length ? missingLine(p.missing) : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">

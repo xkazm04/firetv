@@ -81,7 +81,7 @@ export interface PageItem { n: number; /** a lettered part's own name on the pag
  * when it is made - by the route that asked, else by the reducer from the learner at the desk. Older sessions have none:
  * settleOwners gives each the learner the desk's own record names.
  */
-export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; }
+export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; owner?: string; day?: string; /** the printed numbers the read left out: empty when complete, null when unknown, absent when never checked */ missing?: number[] | null; }
 export interface Task { id: string; sub: Subject; name: string; min: number; done: boolean; }
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; owner?: string; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; owner?: string; }
@@ -319,7 +319,7 @@ export type Event =
   | { type: "subject"; subject: Subject }
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
-  | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string }
+  | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string; missing?: number[] | null }
   | { type: "page.ask"; subject: Subject } | { type: "page.unask" }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2; owner?: string }
@@ -553,7 +553,7 @@ function step(s: Session, e: Event): Session {
     case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;
     case "page.unask": n.awaiting = null; break;
     // a read that ends after its learner left lands on their page in `away`
-    case "page.read": { const read = (p: Page) => (p.id === e.id ? { ...p, items: e.items, readMs: e.readMs, provider: e.provider } : p);
+    case "page.read": { const read = (p: Page) => (p.id === e.id ? { ...p, items: e.items, readMs: e.readMs, provider: e.provider, ...(e.missing !== undefined ? { missing: e.missing } : {}) } : p);
       const who = s.pages.some((p) => p.id === e.id) ? null : awayWith(s, (x) => x.pages.some((p) => p.id === e.id));
       if (who) { toAway(s, n, who, (x) => ({ ...x, pages: x.pages.map(read), reading: false })); break; }
       n.pages = s.pages.map(read); n.reading = false; break; }
