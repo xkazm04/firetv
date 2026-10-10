@@ -599,3 +599,32 @@ test('P7-a (a): control, a readable learners.json at startup leaves the status c
  assert.notEqual(store.getSession().status,store.LEARNER_UNREAD);
  fs.rmSync(LJ(),{force:true});
 });
+
+// ---- learner-profile r2 robustness-2: a file that passes the shape check but fails the repair, or carries a null log / slot list ----
+const savedDesk=(extra)=>{
+ const ps=[{id:'ema',name:'Ema',type:'high-school',age:16,modules:['maths']},{id:'nela',name:'Nela',type:'high-school',age:16,modules:['maths']},{id:'simon',name:'Simon',type:'high-school',age:16,modules:['maths']}];
+ return JSON.stringify({profiles:ps,learner:{id:'nela',name:'Nela'},away:{simon:{pages:[],pageIx:0,itemIx:0,tasks:[]}},...extra});
+};
+test('R2-a: a file that fails the repair is set aside whole, the desk starts with SESSION_UNREAD and one line names the repair',()=>{
+ const body=savedDesk({pages:'x'});
+ const errs=reload(body);
+ assert.equal(errs.length,1,JSON.stringify(errs));assert.match(errs[0],/repair|could not be read/);
+ const kept=aside();assert.equal(kept.length,1);assert.equal(fs.readFileSync(path.join(data,kept[0]),'utf8'),body);
+ assert.equal(store.getSession().status,store.SESSION_UNREAD);assert.match(errs[0],new RegExp(kept[0].replace(/\./g,'\.')));
+});
+test('R2-b: a null log is repaired to an empty evening log, the profiles, seat and away slots stay, and the next event does not throw',async()=>{
+ const errs=reload(savedDesk({log:null}));
+ assert.equal(errs.length,1,JSON.stringify(errs));assert.match(errs[0],/log/);assert.equal(aside().length,0);
+ const s=store.getSession();assert.equal(s.profiles.length,3);assert.equal(s.learner.id,'nela');assert.ok(s.away.simon);
+ assert.deepEqual(s.log.problems,[]);
+ await quiet(async()=>{store.dispatch({type:'focus',focus:1});});
+ const f=JSON.parse(fs.readFileSync(SJ(),'utf8'));
+ assert.equal(f.profiles.length,3);assert.ok(f.away&&f.away.simon);
+});
+test('R2-c: an away slot with pages null takes the empty list, one line, and seating that learner leaves pages []',async()=>{
+ const errs=reload(savedDesk({away:{simon:{pages:null,tasks:'x',pageIx:0,itemIx:0}}}));
+ assert.equal(errs.length,2,JSON.stringify(errs));assert.match(errs.join('\n'),/simon/);assert.match(errs.join('\n'),/pages/);
+ assert.deepEqual(store.getSession().away.simon.pages,[]);assert.deepEqual(store.getSession().away.simon.tasks,[]);
+ await quiet(async()=>{store.dispatch({type:'learner.set',id:'simon'});});
+ assert.equal(store.getSession().learner.id,'simon');assert.deepEqual(store.getSession().pages,[]);
+});

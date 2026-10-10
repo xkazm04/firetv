@@ -757,9 +757,9 @@ function load(): Session {
   } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
   if (bad) return setAside(bad);
   try {
-    return settleOwners({ ...fresh(), ...j, profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
-  } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); }
-  return fresh();
+    const log = "log" in j && !(j.log && typeof j.log === "object" && !Array.isArray(j.log)) ? (console.error("desk session: session.json log was not an object, so the evening log starts empty; the rest of the file is kept"), fresh().log) : j.log;
+    return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+  } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
 }
 /** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
 function setAside(why: string): Session {
@@ -793,7 +793,14 @@ function keptProfiles(list: unknown[]): Profile[] {
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
-  return Object.fromEntries(Object.entries(a as Record<string, MathsSlot>).map(([k, x]) => [k, { ...emptySlot(), ...x, practice: shownPractice(x.practice), reading: false }]));
+  const out: Record<string, MathsSlot> = {};
+  for (const [k, x] of Object.entries(a as Record<string, MathsSlot>)) {
+    if (!x || typeof x !== "object" || Array.isArray(x)) { console.error(`desk session: session.json away slot "${k}" was dropped, it is not an object`); continue; }
+    const slot: MathsSlot = { ...emptySlot(), ...x, practice: shownPractice(x.practice), reading: false };
+    for (const f of ["pages", "tasks"] as const) if (!Array.isArray(slot[f])) { console.error(`desk session: session.json away slot "${k}" field ${f} was not a list, so it starts empty`); (slot as any)[f] = []; }
+    out[k] = slot;
+  }
+  return out;
 }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
