@@ -24,6 +24,7 @@ const learners=require(src('lib/session/learners.ts'));
 const {view}=require(src('lib/session/pairing.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+const {NOT_HEARD_LINE}=require(src('lib/desk/explain.ts'));
 const CANNOT_READ='The desk cannot read this answer as mathematics, and it does not guess.';
 const {topicIn}=require(src('lib/library/paths.ts'));
 const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
@@ -248,7 +249,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  // a reply that states the answer is replaced by the item's own line
  stubText(()=>({reply:'The derivative is 6x + 2, so check your last line.',slip:'unclear',value:''}));
  r=await post('explain',{transcript:'I do not know',n:3});b=await r.json();
- assert.equal(b.reply,M.NOT_SURE(4,CANNOT_READ));assert.equal(store.getSession().practice.items[3].reply,M.NOT_SURE(4,CANNOT_READ));
+ assert.equal(b.reply,M.NOT_SURE(4,CANNOT_READ)+' '+NOT_HEARD_LINE.en);assert.equal(store.getSession().practice.items[3].reply,M.NOT_SURE(4,CANNOT_READ)+' '+NOT_HEARD_LINE.en);
  assert.equal(store.getSession().practice.items[3].verdict,'unsure');
  // and for a number shape, the spoken number is the leak
  seat();
@@ -257,7 +258,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  assert.equal((await post('mark',PHOTO)).status,200);
  stubText(()=>({reply:'You should have got ten.',slip:'unclear',value:''}));
  b=await (await post('explain',{transcript:'no idea',n:0})).json();
- assert.equal(b.reply,M.NOT_SURE(1,CANNOT_READ));
+ assert.equal(b.reply,M.NOT_SURE(1,CANNOT_READ)+' '+NOT_HEARD_LINE.en);
 });
 
 test('5: the explanation never takes the model\'s word for the verdict: a stated verdict or solution in the reply is not read',async()=>{
