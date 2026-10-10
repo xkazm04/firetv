@@ -258,7 +258,7 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   for (let guard = 0; guard <= groups.length; guard++) {
     const free = width - [...fixed].reduce((a, i) => a + floor[i], 0), n = groups.reduce((a, g, i) => a + (fixed.has(i) ? 0 : g.ids.length), 0);
     w = groups.map((g, i) => (fixed.has(i) ? floor[i] : (free * g.ids.length) / Math.max(1, n)));
-    const under = w.map((x, i) => i).filter((i) => !fixed.has(i) && w[i] < floor[i]);
+    const under = w.map((_x, i) => i).filter((i) => !fixed.has(i) && w[i] < floor[i]);
     if (!under.length) break;
     under.forEach((i) => fixed.add(i));
   }
