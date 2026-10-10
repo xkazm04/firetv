@@ -404,7 +404,7 @@ test('WD9: a settle whose restate write fails is logged once and said; the answe
  answer=EXPLAINS('3/4');
  // the explanation records its attempt first (one save), then the settle's restate is the write that fails
  const restore=failLearnerWrites(1),c=catchLog();let r,j;
- try{r=await post('explain',{transcript:'I got eleven twelfths',n:4});j=await r.json();}finally{c.done();restore();}
+ try{r=await post('explain',{transcript:'I got three quarters',n:4});j=await r.json();}finally{c.done();restore();}
  assert.equal(r.status,200,JSON.stringify(j));
  assert.ok(j.reply&&j.settled==='right',`the reply and the settle are answered: ${JSON.stringify(j)}`);assert.equal(j.saved,false);
  assert.equal(c.errs.filter((l)=>/could not be restated/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);

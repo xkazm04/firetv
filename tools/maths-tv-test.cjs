@@ -947,7 +947,7 @@ test('heard 1: the drawn card of an item the desk settled from a spoken value op
  try{
   const base=secondSession(null,'walk');
   const item={n:2,question:'2x + 3 = 11',studentAnswer:'',verdict:'unsure'};
-  const x=await X.explainItem(item,'I took three off and halved it','linear-two-step','tv-heard',()=>true,12);
+  const x=await X.explainItem(item,'I took three off and halved it and got four','linear-two-step','tv-heard',()=>true,12);
   assert.equal(x.settled.verdict,'right');
   // the route stores it the way it does: practice.settle with the reply
   const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply,verdict:x.settled.verdict,slip:x.settled.slip,said:x.settled.said});

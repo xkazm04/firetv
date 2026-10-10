@@ -415,11 +415,11 @@ test('case 11: an item settled twice is counted once',async()=>{
 test('case 12: a wrong settle leaves k where it stands',async()=>{
  const me=await markedWalk(),n=getLearner(me).history.length;
  said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
- assert.equal((await explainAt(4)).body.settled,'wrong');
+ assert.equal((await explainAt(4,'I got eleven')).body.settled,'wrong');
  assert.equal(lineNow(me).detail,'1 of 6 right, 2 not sure','a wrong settle moves no tick, only a not sure');
  said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});await explainAt(3);
  said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
- assert.equal((await explainAt(5)).body.settled,'wrong');
+ assert.equal((await explainAt(5,'I got eleven')).body.settled,'wrong');
  assert.equal(lineNow(me).detail,'2 of 6 right','after a right settle, a wrong one leaves 2 - and nothing is left unsure');
  assert.equal(getLearner(me).history.length,n);
  const p=store.getSession().practice.items;assert.equal(lineNow(me).detail,`${p.filter(i=>i.verdict==='right').length} of ${p.length} right`,'the line is what the verdicts say');

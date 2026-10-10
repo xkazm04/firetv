@@ -309,7 +309,7 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   // ---- the blank item is settled by what the learner says they got; a reply that states it is the desk's own line
   const blank=plan.indexOf('blank');
   textPlan={explain:{reply:want[blank].right,slip:'unclear',value:want[blank].right}};
-  r=await step(`${topic} explain`,()=>post('explain',{transcript:'this is what I got',n:blank}));
+  r=await step(`${topic} explain`,()=>post('explain',{transcript:'I got '+want[blank].right,n:blank}));
   assert.equal(r.status,200);assert.equal(r.body.settled,'right',`${topic}: settled from the spoken answer`);
   assert.equal(r.body.reply,`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
   s=store.getSession();

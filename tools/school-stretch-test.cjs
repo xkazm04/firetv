@@ -284,11 +284,11 @@ test('6c: an explanation that settles an unsure step-up item records on the step
  seat();
  const spec=S.gen(99,2),q=S.question(spec).plain,value=answerOf(spec);
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look at the bottoms.',value})})});
- const a=await X.explainItem({n:1,question:q,spec,tier:2,stretch:true,verdict:'unsure'},'I made the bottoms the same',UNIT,LEARNER,()=>true,12,'uk');
+ const a=await X.explainItem({n:1,question:q,spec,tier:2,stretch:true,verdict:'unsure'},'I made the bottoms the same and got '+value,UNIT,LEARNER,()=>true,12,'uk');
  assert.equal(a.settled.verdict,'right');
  let rec=learners.getLearner(LEARNER).skills[UNIT];
  assert.equal(rec.seen,0);assert.deepEqual([rec.stretch.seen,rec.stretch.right],[1,1]);
- const b=await X.explainItem({n:1,question:q,spec,tier:2,verdict:'unsure'},'I made the bottoms the same',UNIT,LEARNER,()=>true,12,'uk');
+ const b=await X.explainItem({n:1,question:q,spec,tier:2,verdict:'unsure'},'I made the bottoms the same and got '+value,UNIT,LEARNER,()=>true,12,'uk');
  assert.equal(b.settled.verdict,'right');
  rec=learners.getLearner(LEARNER).skills[UNIT];
  assert.deepEqual([rec.seen,rec.right,rec.stretch.seen],[1,1,1]);

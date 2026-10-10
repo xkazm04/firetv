@@ -1118,7 +1118,7 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  assert.equal(store.getSession().practice.items[0].verdict,'right');
  // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
  stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
- await post('explain',{transcript:'twenty-eight square centimetres',n:1});
+ await post('explain',{transcript:'twenty-eight centimetres squared',n:1});
  const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 28 cm2. '+M.RIGHT(2),'the leaking reply is not shown');
 });
 
@@ -1230,4 +1230,34 @@ test('MK10: an unsure item says why the desk is not sure, in the engine\'s words
  assert.equal(w.verdict,'wrong');assert.equal(w.slip,undefined);assert.equal(w.said,M.ASK(1));
  // the part name still renames it
  assert.match(require(src('lib/rules/calc-word.ts')).namedLine(u.said,1,'5(b)'),/^The desk is not sure about number 5\(b\)\. /);
+});
+
+// ------------------------------------------------------------------ X5: a value settles an unsure item only when the learner said it
+test('X5: a model-written value the learner did not say settles nothing and writes no record; said, it settles as before (R2, R18)',async()=>{
+ const rec=(id,unit)=>JSON.stringify(learners.getLearner(id).skills[unit]??null);
+ // R2: an unsure school fraction item, the transcript has no number in it, the stub volunteers the right answer
+ seat('uk');setOn();
+ stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+ assert.equal((await post('mark',PHOTO)).status,200);
+ const item=store.getSession().practice.items[5];assert.equal(item.verdict,'unsure');
+ stubText(()=>({reply:'Look again at how you made the bottoms match.',value:'3/4'}));
+ const before=rec(LEARNER,UNIT);
+ const x=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'uk');
+ assert.equal(x.settled,undefined,'R2: not settled');assert.equal(rec(LEARNER,UNIT),before,'R2: the learner record is unchanged');
+ assert.doesNotMatch(x.reply,/The desk heard/);assert.equal(x.reply,'Look again at how you made the bottoms match.','R2: the non-leaking reply still shows');
+ // R2 through the route: 200, no settled field, the item stays unsure
+ const r=await post('explain',{transcript:'nevím, nějak jsem to odečetla',n:5});
+ const b=await r.json();assert.equal(r.status,200);assert.equal('settled' in b,false,'R2 route: no settled field');
+ assert.equal(store.getSession().practice.items[5].verdict,'unsure');assert.equal(rec(LEARNER,UNIT),before,'R2 route: record unchanged');
+ // control: the same item with the value said settles right and records once
+ const c=await X.explainItem(item,'I made them quarters and got three quarters',UNIT,LEARNER,()=>true,12,'uk');
+ assert.equal(c.settled.verdict,'right');assert.match(c.reply,/^The desk heard 3\/4\. /);assert.notEqual(rec(LEARNER,UNIT),before,'control: the record moved');
+ // R18: a linear item, 'I got five' with the stub's 4
+ const lin='linear-two-step',lq={n:1,question:'2x + 3 = 11',verdict:'unsure'};
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ const lb=rec(LEARNER,lin);
+ const y=await X.explainItem(lq,'I got five',lin,LEARNER,()=>true,12);
+ assert.equal(y.settled,undefined,'R18: not settled');assert.equal(rec(LEARNER,lin),lb,'R18: record unchanged');assert.doesNotMatch(y.reply,/The desk heard/);
+ const z=await X.explainItem(lq,'I got four',lin,LEARNER,()=>true,12);
+ assert.equal(z.settled.verdict,'right','control: four said settles');
 });

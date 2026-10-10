@@ -8,6 +8,7 @@
  * topic's closed vocabulary, and the desk drops anything outside it.
  *
  * The model also transcribes the value the learner says they got. That is evidence, not a verdict:
+ * the value settles only when code finds it in what was said (rules/saidValue, X5), and then
  * rules/maths substitutes it into the question, exactly as marking does, and an unsure item settles
  * on what the substitution says. The model never decides right or wrong. Its reply is checked in code
  * for the answer (`leaks`) - a reply that gives it away is replaced by the item's own line.
@@ -29,6 +30,7 @@ import { leaksCalc } from "../rules/calc";
 import { askedText, namedLine } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
 import { kindOfSpec } from "../rules/kinds";
+import { saidIn } from "../rules/saidValue";
 import { slipsShown } from "../rules/slips";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
@@ -254,7 +256,8 @@ export async function explainItem(
   const seen = seenOf(item, topicId);
   const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age, seen) : await explain(askedText(item), transcript, topicId, learnerId, calc, age, seen);
   // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
-  const verdict = !stillUnsure() ? null
+  // the value settles only when the learner said it (X5): a model-written value that is not in the transcript settles nothing and writes no record
+  const verdict = !stillUnsure() || !saidIn(h.value, transcript) ? null
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
     : settle(item, h.value, h.slip, topicId);
   // a step-up item (Family W8) settles onto the step-up record only, as marking does
