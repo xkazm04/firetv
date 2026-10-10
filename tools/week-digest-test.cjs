@@ -517,8 +517,8 @@ test('WD12: a hint whose count write fails is said (HINT_NOT_COUNTED) on both st
 
 test('WD13: a rehydrate that fails is logged with its reason, once per distinct failure and never once per event; the session is otherwise as it was',()=>{
  seat();
- const real=learners.getLearner;let reason='the disk went';
- learners.getLearner=()=>{throw new Error(reason);};
+ const real=learners.readLearner;let reason='the disk went';
+ learners.readLearner=()=>{throw new Error(reason);};
  const c=catchLog();
  try{
   store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'profile.save'});
@@ -527,5 +527,48 @@ test('WD13: a rehydrate that fails is logged with its reason, once per distinct 
   reason='another failure';store.dispatch({type:'learner.set',id:LEARNER});
   assert.equal(mine().length,2,'a distinct failure is logged again');assert.match(mine()[1],/another failure/);
   assert.equal(store.getSession().learner.id,LEARNER,'the seat is as it was');
- }finally{c.done();learners.getLearner=real;}
+ }finally{c.done();learners.readLearner=real;}
+});
+
+test('WD14a: an unreadable learners.json is said on a switch and never shows another learner\'s records; the same learner keeps its own',()=>{
+ const mk=(id)=>{store.dispatch({type:'profile.draft',patch:{id,name:'Mia',type:'elementary',age:12,system:'uk',modules:['maths','english','essay']}});store.dispatch({type:'profile.save'});};
+ store.dispatch({type:'reset'});
+ const IA=`wd14a-a-${process.pid}`,IB=`wd14a-b-${process.pid}`;
+ mk(IA);mk(IB);
+ learners.addHistory(IA,{at:Date.now(),kind:'practice',label:'Fractions',detail:'4 of 6 right'});
+ learners.addMemory(IA,'Likes worked examples.');
+ const mineA=learners.getLearner(IA);
+ assert.ok(mineA.history.length>0&&mineA.memory.length>0);
+ store.dispatch({type:'learner.set',id:IA});
+ assert.deepEqual(store.getSession().history,mineA.history);assert.deepEqual(store.getSession().memory,mineA.memory);
+ const whole=fs.readFileSync(FILE),short=whole.subarray(0,whole.length-5);
+ fs.writeFileSync(FILE,short);
+ const c=catchLog();
+ try{
+  store.dispatch({type:'learner.set',id:IA});
+  let s=store.getSession();
+  assert.deepEqual(s.history,mineA.history,'the same learner keeps its own history');assert.deepEqual(s.memory,mineA.memory,'and memory');
+  assert.notEqual(s.status,store.LEARNER_UNREAD);
+  assert.equal(c.errs.filter((l)=>/could not be read onto the desk/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+  store.dispatch({type:'learner.set',id:IB});
+  s=store.getSession();const b=learners.blank(IB);
+  assert.deepEqual(s.skills,b.skills);assert.deepEqual(s.writing,b.writing);assert.deepEqual(s.memory,b.memory);assert.deepEqual(s.history,b.history);assert.deepEqual(s.englishLearning,b.english);
+  assert.equal(s.paper,null);
+  assert.notDeepEqual(s.history,mineA.history);assert.notDeepEqual(s.memory,mineA.memory);
+  assert.equal(s.status,store.LEARNER_UNREAD);
+  assert.deepEqual(s.week,[{section:'week',text:W.WEEK_UNREAD}]);
+  assert.ok(fs.readFileSync(FILE).equals(short),'learners.json on disk is the truncated bytes, untouched');
+ }finally{c.done();fs.writeFileSync(FILE,whole);}
+ store.dispatch({type:'learner.set',id:IA});
+ let s=store.getSession();
+ assert.deepEqual(s.history,mineA.history);assert.deepEqual(s.memory,mineA.memory);assert.notEqual(s.status,store.LEARNER_UNREAD);
+ const aside=FILE+'.aside';fs.renameSync(FILE,aside);
+ try{
+  assert.doesNotThrow(()=>store.dispatch({type:'learner.set',id:IB}));
+  s=store.getSession();const b=learners.blank(IB);
+  assert.notEqual(s.status,store.LEARNER_UNREAD);assert.deepEqual(s.history,b.history);assert.deepEqual(s.memory,b.memory);
+ }finally{fs.renameSync(aside,FILE);}
+ const text=fs.readFileSync(src('lib/session/store.ts'),'utf8');
+ const at=text.indexOf('if (REHYDRATE.has(e.type)) {'),block=text.slice(at,text.indexOf('weekRead(store.session)',at));
+ assert.ok(block.includes('readLearner(id)')&&!block.includes('getLearner('),'the rehydrate reads through readLearner');
 });

@@ -14,7 +14,7 @@ import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { addHints, addHistory, addPaper, getLearner, readLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
+import { addHints, addHistory, addPaper, blank, getLearner, readLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
 import { isPath, learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
@@ -503,6 +503,8 @@ export const READ_NOT_KEPT = "That page was read, but the desk could not save it
 export const SETTLE_NOT_SAVED = "That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.";
 /** The status when a hint was shown but the learner file could not count it (WD12): the hint is on the desk, the week will not show it. */
 export const HINT_NOT_COUNTED = "Here is the hint, but the desk could not count it in the learner file, so the week will not show it.";
+/** The status when a learner file cannot be read on a switch (WD14a): the new learner's progress is not shown, and the previous learner's is never kept in its place. */
+export const LEARNER_UNREAD = "The learner file could not be read just now, so this learner's progress is not shown.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
@@ -818,10 +820,17 @@ export function dispatch(e: Event): Session {
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
     if (id) try {
-      const l = getLearner(id);
-      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null };
+      const l = readLearner(id);
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null, ...(store.session.status === LEARNER_UNREAD ? { status: "" } : {}) };
       rehydrateTold = "";
-    } catch (err) { tellRehydrate(err instanceof Error ? err.message : String(err)); }
+    } catch (err) {
+      tellRehydrate(err instanceof Error ? err.message : String(err));
+      // the same learner keeps its own records (WD13); a learner switched to never shows the previous learner's (WD14a)
+      if (before.learner?.id !== id) {
+        const b = blank(id);
+        store.session = { ...store.session, skills: b.skills, writing: b.writing, memory: b.memory, history: b.history, englishLearning: b.english, paper: null, status: LEARNER_UNREAD };
+      }
+    }
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();

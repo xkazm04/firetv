@@ -161,7 +161,7 @@ function writeLearner(id: string, l: Learner): void {
   writeBook(book);
 }
 
-function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
+export function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
 
 /** A finite whole number of at least 0, else 0. */
 const count = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
@@ -282,7 +282,7 @@ export function getLearner(id: string): Learner {
 /** The learner for a reader that must tell an unreadable learners.json from an empty one (WD14): it throws on the first, reads the second as an empty book. */
 export function readLearner(id: string): Learner {
   const book = readBook();
-  if (book === null) throw new Error("learners.json could not be read, so the week was not drawn from it");
+  if (book === null) throw new Error("learners.json could not be read");
   return book[id] ? clean(id, book[id]) : blank(id);
 }
 
