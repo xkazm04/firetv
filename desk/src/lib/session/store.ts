@@ -225,7 +225,7 @@ export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practic
 export type JobPhase = "running" | "done" | "failed";
 /** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
 export type JobInput = Record<string, string | number>;
-export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; }
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; }
 export type Jobs = Partial<Record<JobKind, Job>>;
 /** Said for a run the desk was restarted in the middle of. */
 export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
@@ -340,7 +340,7 @@ export type Event =
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
-  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
+  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
 const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
@@ -541,7 +541,7 @@ function switchedFrom(s: Session, n: Session): void {
   const jobs = { ...(s.jobs ?? {}) } as Jobs;
   for (const k of Object.keys(jobs) as JobKind[]) {
     const j = jobs[k];
-    if (j?.phase === "failed" || (k === "analyse" && j?.phase === "running")) { if (j.phase === "failed" && j.error !== undefined && n.status === j.error) n.status = ""; delete jobs[k]; }
+    if (j?.phase === "failed" || (k === "analyse" && j?.phase === "running")) { if (j.phase === "failed" && j.error !== undefined && n.status === j.error) n.status = ""; if (j.phase === "running" && j.start !== undefined && n.status === j.start) n.status = ""; delete jobs[k]; }
   }
   n.jobs = jobs;
 }
@@ -633,7 +633,7 @@ function step(s: Session, e: Event): Session {
       // a new lesson opens playing (the embed autoplays): the last one's Pause is not this one's
       if (e.lesson && e.lesson.id !== s.lesson?.id) n.lessonPaused = false; break;
     case "lesson.watched": if (s.watch && watchDue(s.watch, Date.now())) n.watch = { ...s.watch, logged: true }; break;
-    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}) } }; break;
+    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}), ...(e.start !== undefined ? { start: e.start } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
       n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
       // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
@@ -705,7 +705,7 @@ function step(s: Session, e: Event): Session {
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
-  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...n.jobs }; delete n.jobs.practice; }
+  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...n.jobs }; delete n.jobs.practice; if (s.jobs.practice.start !== undefined && n.status === s.jobs.practice.start) n.status = ""; }
   const w = watchOf(n.watch ?? null, n, n.updatedAt);
   if (w !== (n.watch ?? null)) n.watch = w;
   return n;

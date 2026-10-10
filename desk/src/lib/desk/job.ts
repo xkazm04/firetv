@@ -83,7 +83,7 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
   if (now?.phase === "running" && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
-  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}) });
+  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}) });
   if (opts.start) dispatch({ type: "status", text: opts.start });
   try {
     const value = await work(run);

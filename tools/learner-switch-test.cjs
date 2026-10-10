@@ -108,6 +108,36 @@ test('robustness-6: control, a focus event while a practice run is running chang
  assert.equal(s.status,'The desk could not write that set.');
 });
 
+// ---- P8: a dropped run's start status goes with it ----
+const running=(id,start)=>({id,phase:'running',startedAt:1,start});
+test('P8: a switch that drops a running analyse run clears its start status',()=>{
+ seatedWithWork();
+ globalThis.__desk.session={...store.getSession(),status:'reading your sentence…',jobs:{analyse:running('a1','reading your sentence…')}};
+ store.dispatch({type:'learner.set',id:'jakub'});
+ const s=store.getSession();assert.equal(s.jobs.analyse,undefined);assert.equal(s.status,'');
+});
+test('P8: a switch that drops a running practice run clears its start status',()=>{
+ seatedWithWork();
+ globalThis.__desk.session={...store.getSession(),status:'writing a practice set…',jobs:{practice:running('p1','writing a practice set…')}};
+ store.dispatch({type:'learner.set',id:'jakub'});
+ const s=store.getSession();assert.equal(s.jobs.practice,undefined);assert.equal(s.status,'');
+});
+test('P8: a status that is no longer the start text is left alone',()=>{
+ seatedWithWork();
+ globalThis.__desk.session={...store.getSession(),status:'something else',jobs:{analyse:running('a1','reading your sentence…'),practice:running('p1','writing a practice set…')}};
+ store.dispatch({type:'learner.set',id:'jakub'});
+ assert.equal(store.getSession().status,'something else');
+});
+test('P8: a real analyse run records its start text on the job',async()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ let release;answer=async()=>new Promise((r)=>{release=()=>r({json:{explanation:'x'},provider:'stub'});});
+ const a=postAnalyse({kind:'english',sentence:'I have seen him yesterday.'});
+ await new Promise((r)=>setTimeout(r,20));
+ assert.equal(store.getSession().status,'reading your sentence…');assert.equal(store.getSession().jobs.analyse.start,'reading your sentence…');
+ store.dispatch({type:'learner.set',id:'jakub'});assert.equal(store.getSession().status,'');
+ const c=catchErrors();try{release();await a;}finally{c.done();}
+});
+
 // ---- P3: the Sentence reading carries its owner ----
 test('P3: a Sentence reading that lands after a switch is dropped, and the new learner\'s own request is not refused',async()=>{
  seatedWithWork('ema');store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
