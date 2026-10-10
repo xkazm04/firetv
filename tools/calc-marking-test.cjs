@@ -200,7 +200,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  seat();
  const fx=FIX[2];
  setOn(fx.topic,fx.spec,4);
- stubVision(()=>({items:[1,2,3,4].map((n)=>({n,studentAnswer:'',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'}))}));
+ stubVision(()=>({items:[1,2,3,4].map((n)=>({n,studentAnswer:'?',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'}))}));
  assert.equal((await post('mark',PHOTO)).status,200);
  assert.ok(store.getSession().practice.items.every((i)=>i.verdict==='unsure'));
  const lines=()=>learners.getLearner(LEARNER).history;
@@ -251,7 +251,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  // and for a number shape, the spoken number is the leak
  seat();
  const ev=FIX[0];setOn(ev.topic,ev.spec,1);
- stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',slip:'unclear'}]}));
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  stubText(()=>({reply:'You should have got ten.',slip:'unclear',value:''}));
  b=await (await post('explain',{transcript:'no idea',n:0})).json();
@@ -262,7 +262,7 @@ test('5: the explanation never takes the model\'s word for the verdict: a stated
  seat();
  const fx=FIX[7];
  setOn(fx.topic,fx.spec,1);
- stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',slip:'unclear'}]}));
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  // the correct function without +C: code says wrong, slip lost-constant - whatever else the model sends
  stubText(()=>({reply:'Nearly there.',slip:'power-off-by-one',value:'x^2',verdict:'right',solution:'x^2 + C'}));
@@ -363,4 +363,33 @@ test('M3a 3: shown() keeps a part\'s stem and letter together or not at all - ju
  const set=(extra)=>{store.dispatch({type:'practice.set',practice:{topic:'calc1-optimisation',marked:false,items:[{n:1,question:q,spec:s,...extra}]}});const it=store.getSession().practice.items[0];return [it.stem??null,it.part??null];};
  assert.deepEqual(set({stem:'A rectangle has a perimeter of 20 metres.',part:'a'}),['A rectangle has a perimeter of 20 metres.','a']);
  for(const junk of [{part:'a'},{stem:'A rectangle.'},{stem:'A rectangle.',part:'z'},{stem:'A rectangle.',part:1},{stem:'   ',part:'a'},{stem:'x'.repeat(401),part:'a'},{stem:42,part:'b'}])assert.deepEqual(set(junk),[null,null],JSON.stringify(junk).slice(0,60));
+});
+
+test('MK11: a Calculus photo read with no answer to any question is refused (502, EMPTY_MARK), records nothing, and the next good snap marks',async()=>{
+ const {EMPTY_MARK}=require(src('lib/desk/mark.ts'));
+ const fx=FIX[2];
+ const reads={
+  'no items':()=>({items:[]}),
+  'items numbered outside the set':()=>({items:[{n:9,studentAnswer:'6x',studentWorking:'',slip:'unclear'}]}),
+  'every answer blank':()=>({items:[1,2,3].map((n)=>({n,studentAnswer:n===2?'   ':'',studentWorking:'6x',slip:'unclear'}))}),
+ };
+ const lines=()=>learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').length,digests=()=>learners.getLearner(LEARNER).digest.length;
+ for(const [why,read] of Object.entries(reads)){
+  seat();setOn(fx.topic,fx.spec,3);
+  const l0=lines(),d0=digests(),k0=skill(fx.topic).seen;
+  stubVision(read);
+  const r=await post('mark',PHOTO);
+  assert.equal(r.status,502,why);assert.equal((await r.json()).error,EMPTY_MARK,why);
+  const s=store.getSession();
+  assert.equal(s.practice.marked,false,why);assert.equal(s.jobs.mark.phase,'failed');assert.equal(s.jobs.mark.error,EMPTY_MARK);
+  assert.equal(lines(),l0,`${why}: no history line`);assert.equal(digests(),d0,`${why}: no digest entry`);
+  assert.equal(skill(fx.topic).seen,k0,`${why}: no attempt`);
+  stubVision(()=>({items:[1,2,3].map((n)=>({n,studentAnswer:'?',studentWorking:'',slip:'unclear'}))}));
+  {const rr=await post('mark',PHOTO);assert.equal(rr.status,200,`${why}: the next snap marks ${JSON.stringify(await rr.clone().json())}`);}
+  assert.equal(store.getSession().practice.marked,true);assert.equal(lines(),l0+1);assert.equal(digests(),d0+1);
+ }
+ // the ruled limit: one non-blank answer of the set lands the set
+ seat();setOn(fx.topic,fx.spec,3);const l1=lines();
+ stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
+ assert.equal((await post('mark',PHOTO)).status,200);assert.equal(lines(),l1+1);
 });

@@ -1045,3 +1045,36 @@ test('X1: explainItem replaces a reply the shared leak checks refuse - Czech fra
   assert.equal(r.reply,t.clean,`${t.name}: a clean reply is shown`);
  }
 });
+
+// ------------------------------------------------------------------ MK11: a photo with no answers on it is a failed mark
+const {EMPTY_MARK}=require(path.join(root,'src/lib/desk/mark.ts'));
+const digestOf=()=>learners.getLearner(LEARNER).digest.length;
+const linesOf=()=>learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').length;
+test('12: MK11 a photo read with no answer to any question is refused (502, EMPTY_MARK), records nothing, and the next good snap marks',async()=>{
+ const reads={
+  'no items':()=>({items:[]}),
+  'items numbered outside the set':()=>({items:[{n:90,studentAnswer:'11/12',studentWorking:''},{n:0,studentAnswer:'1',studentWorking:''}]}),
+  'every answer blank':()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:i%2?'':'   ',studentWorking:'9/12'}))}),
+ };
+ for(const [why,read] of Object.entries(reads)){
+  seat('uk');setOn();
+  stubVision(read);
+  const r=await post('mark',PHOTO);
+  assert.equal(r.status,502,why);
+  const msg=(await r.json()).error;assert.equal(msg,EMPTY_MARK,why);deskWords(msg);
+  const s=store.getSession();
+  assert.equal(s.practice.marked,false,`${why}: still open`);
+  assert.equal(s.jobs.mark.phase,'failed',why);assert.equal(s.jobs.mark.error,EMPTY_MARK,why);
+  assert.equal(linesOf(),0,`${why}: no history line`);assert.equal(digestOf(),0,`${why}: no digest entry`);
+  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0,`${why}: no attempt`);
+  stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+  assert.equal((await post('mark',PHOTO)).status,200,`${why}: the next good snap marks`);
+  assert.equal(store.getSession().practice.marked,true);assert.equal(linesOf(),1);assert.equal(digestOf(),1);
+ }
+});
+test('13: MK11 ruled limit - one non-blank answer to a question of the set still lands (marking has no completeness check)',async()=>{
+ seat('uk');setOn();
+ stubVision(()=>({items:[{n:1,studentAnswer:'11/12',studentWorking:''},{n:99,studentAnswer:'5',studentWorking:''}]}));
+ assert.equal((await post('mark',PHOTO)).status,200);
+ assert.equal(store.getSession().practice.marked,true);assert.equal(linesOf(),1);assert.equal(digestOf(),1);
+});

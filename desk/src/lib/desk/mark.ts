@@ -35,6 +35,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
+import { DeskSaid } from "./job";
 import { rightLine, slipVocabulary } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
 import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
@@ -199,8 +200,15 @@ export async function markSet(
     ...(kind !== "school" ? { slip: m.slip } : {}),
     ...(kind === "linear" ? { solution: typeof m.solution === "string" ? m.solution : "" } : {}),
   }));
+  // MK11: a page the desk could not read is a failed mark, never a marked set. Empty = no read matches a question of the
+  // set with a non-blank answer. One such answer lands the set as before (no completeness check for a partial read).
+  const asked = new Set(practice.items.map((i) => i.n));
+  if (!reads.some((r) => asked.has(r.n) && typeof r.studentAnswer === "string" && r.studentAnswer.trim() !== "")) throw new DeskSaid(EMPTY_MARK);
   return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
 }
+
+/** A photo read that found no answer to any question of the set: the mark fails with this and nothing is recorded. */
+export const EMPTY_MARK = "The desk could not find your answers on that photo. Snap the whole sheet again.";
 
 /**
  * A set answered by typing (Family W6): the phone sends one string per question, in item order, and CODE marks each one
