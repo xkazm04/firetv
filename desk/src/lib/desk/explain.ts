@@ -24,7 +24,7 @@
  * wrong item is never renamed from the conversation), and the reply is checked with leaksSchool(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, cleanValue, type Settled } from "../rules/maths";
+import { ASK, leaks, settle, settled, settleSpec, slip as slipOf, slipsFor, slipVocabulary, cleanValue, workingLines, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
 import { askedText, namedLine } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
@@ -45,6 +45,23 @@ const SCHEMA = {
 /** The withholding rule of every explanation reply: the school prompt and the Calculus prompt share it, in every voice. */
 export const EXPLAIN_WITHHOLD = "Socratic rules, absolute: never state the final answer, never give the completed line, never say whether they are right or wrong.";
 
+/**
+ * What the desk has already seen of the item, for the prompt (MB-B10): the learner's written answer, their working as numbered
+ * lines, and the slip the desk found with its line. Their own writing and the desk's fixed words only: never the right answer,
+ * a value the desk worked out, or a verdict word. Each part is left out when it has nothing to say.
+ */
+export interface Seen { answer?: string; working?: string[]; slip?: string; line?: number }
+
+/** The block the prompt carries after the question; empty (so the prompt is as it was) when nothing was seen. */
+function seenBlock(seen?: Seen): string {
+  if (!seen) return "";
+  const parts: string[] = [];
+  if (seen.answer) parts.push(`What the student wrote as their answer: «${seen.answer}»`);
+  if (seen.working?.length) parts.push(`Their working, line by line:\n${seen.working.map((l, k) => `${k + 1}. ${l}`).join("\n")}`);
+  if (seen.slip) parts.push(`The desk found this slip: ${seen.slip}${seen.working?.length && seen.line !== undefined ? `, on line ${seen.line}` : ""}.`);
+  return parts.length ? `${parts.join("\n\n")}\n\n` : "";
+}
+
 export async function explain(
   itemQuestion: string,
   transcript: string,
@@ -54,8 +71,10 @@ export async function explain(
   calc = false,
   /** The seated profile's age. Only the school stance is age-voiced (rules/voice); without an age it is today's text. */
   age?: number,
+  /** What the desk has seen of the item (MB-B10); without it the prompt is as it was. */
+  seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
-  if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId);
+  if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId, seen);
   const t = topic(topicId);
   const memory = getLearner(learnerId).memory;
 
@@ -64,6 +83,7 @@ export async function explain(
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
+    seenBlock(seen) +
     `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
     `and answer what they meant:\n«${transcript}»\n\n` +
     (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
@@ -100,12 +120,14 @@ export async function explainSchool(
   topicId: string,
   learnerId: string,
   age?: number,
+  seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
   const memory = getLearner(learnerId).memory;
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
+    seenBlock(seen) +
     `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
     `and answer what they meant:\n«${transcript}»\n\n` +
     (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
@@ -139,6 +161,7 @@ async function explainCalc(
   transcript: string,
   topicId: string,
   learnerId: string,
+  seen?: Seen,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   const t = topicIn(topicId);
   const memory = getLearner(learnerId).memory;
@@ -152,6 +175,7 @@ async function explainCalc(
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
+    seenBlock(seen) +
     `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
     `and answer what they meant:\n«${transcript}»\n\n` +
     (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
@@ -192,6 +216,24 @@ function heard(
  */
 export interface Explained { reply: string; /** the reply as the learner reads it: a part named as the paper names it (v2 M3a-2); `reply` is what the session stores */ shown: string; slip?: string; settled?: Settled; renamed?: { slip: string; said: string }; }
 
+/**
+ * What the item carries for the prompt: the written answer, the working as the pen counts it (workingLines, the same lines
+ * slipAt.line indexes from 0, so the prompt numbers from 1), the slip's own sentence from the topic's list, and its line.
+ * The working is shown only when the learner wrote some: a bare answer is not repeated as a line, and then no line is named.
+ */
+function seenOf(item: PracticeItem, topicId: string): Seen | undefined {
+  const answer = (item.studentAnswer ?? "").trim();
+  const working = (item.studentWorking ?? "").trim() ? workingLines(item) : [];
+  const says = item.slip ? slipOf(item.slip, topicId)?.says : undefined;
+  const seen: Seen = {
+    ...(answer ? { answer } : {}),
+    ...(working.length ? { working } : {}),
+    ...(says ? { slip: says } : {}),
+    ...(says && working.length && item.slipAt ? { line: item.slipAt.line + 1 } : {}),
+  };
+  return Object.keys(seen).length ? seen : undefined;
+}
+
 export async function explainItem(
   item: PracticeItem,
   transcript: string,
@@ -209,7 +251,8 @@ export async function explainItem(
   // the item's kind (rules/kinds) says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
   const kind = kindOfSpec(item.spec), calc = kind === "calc", school = kind === "school";
   // a part of a multi-part question (v2 M3a) is explained with its stem: the part's line alone does not say the situation
-  const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age) : await explain(askedText(item), transcript, topicId, learnerId, calc, age);
+  const seen = seenOf(item, topicId);
+  const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age, seen) : await explain(askedText(item), transcript, topicId, learnerId, calc, age, seen);
   // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
   const verdict = !stillUnsure() ? null
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
