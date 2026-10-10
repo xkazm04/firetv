@@ -6,8 +6,9 @@
  * forms (jeden, jedna, jedno; dva, dve). `figuresOfCzech` turns Czech number words into figures ('tri trinactiny'
  * is 3/13) so a leak check compares figures, whatever the model wrote.
  *
- * Nothing here settles an answer: a check, a settle or a marking path never imports this file (X1c). A learner who
- * says 'three quarters' or 'tri ctvrtiny' still settles nothing.
+ * A check, a settle or a marking path never takes a figure from this file. One gate that can only REFUSE a settle
+ * (saidValue.ts, X5) reads it. Words still never settle on their own (X1c): a learner who says 'three quarters' or
+ * 'tri ctvrtiny' still settles nothing.
  */
 
 /** Zero to twenty and the tens to ninety, in English. */
@@ -71,6 +72,58 @@ export function figuresOfCzech(line0: string): string {
       if (near(j - 1) && own(CS_ORD, toks[j].w)) { rep = `${n}/${CS_ORD[toks[j].w]}`; j++; }
       else rep = String(n);
     } else if (own(CS_ORD, w) && (w.endsWith("ina") || w === "polovina")) rep = `1/${CS_ORD[w]}`;
+    if (rep === null) { i++; continue; }
+    out += line.slice(from, toks[i].s) + rep;
+    from = toks[j - 1].e;
+    i = j;
+  }
+  return out + line.slice(from);
+}
+
+/** The one English word the closed tables above lack: 'nought' is 0. */
+const EN_NOUGHT = new Set(["nought", "naught"]);
+const enNum = (w: string): number | null => own(EN_CARD, w) ? EN_CARD[w] : EN_NOUGHT.has(w) ? 0 : null;
+/** An English fraction word as a denominator: 'third', 'thirds', 'halves'. */
+const enFrac = (w: string): number | null => own(EN_ORD, w) ? EN_ORD[w] : w === "halves" ? 2 : w.endsWith("s") && own(EN_ORD, w.slice(0, -1)) ? EN_ORD[w.slice(0, -1)] : null;
+
+/**
+ * The line with its English number words as figures: 'thirty-five' is 35, 'eleven twelfths' is 11/12, '3 quarters' is 3/4,
+ * 'a quarter' and a lone 'half' are 1/4 and 1/2, 'nought' is 0, and digit words after 'point' make one decimal
+ * ('seven point one five' is 7.15). The rest of the line is left as it was written.
+ */
+export function figuresOfEnglish(line: string): string {
+  const toks = [...line.matchAll(/\d+|\p{L}+/gu)].map((m) => ({ w: m[0].toLowerCase(), s: m.index ?? 0, e: (m.index ?? 0) + m[0].length }));
+  const near = (i: number) => i >= 0 && i + 1 < toks.length && /^[\s-]+$/.test(line.slice(toks[i].e, toks[i + 1].s));
+  let out = "", from = 0;
+  for (let i = 0; i < toks.length;) {
+    const w = toks[i].w;
+    let rep: string | null = null, j = i + 1;
+    if (/^\d/.test(w)) {
+      const d = near(i) ? enFrac(toks[i + 1].w) : null;
+      if (d !== null) { rep = `${w}/${d}`; j = i + 2; }
+    } else {
+      let n = enNum(w);
+      if (n !== null) {
+        if (n >= 20 && n % 10 === 0 && near(i)) {
+          const u = enNum(toks[i + 1].w);
+          if (u !== null && u >= 1 && u <= 9) { n += u; j = i + 2; }
+        }
+        if (near(j - 1) && toks[j].w === "point") {
+          let k = j + 1, ds = "";
+          while (k < toks.length && near(k - 1)) {
+            const u = enNum(toks[k].w);
+            if (u === null || u > 9) break;
+            ds += u; k++;
+          }
+          if (ds) { rep = `${n}.${ds}`; j = k; }
+        }
+        if (rep === null) {
+          const d = near(j - 1) ? enFrac(toks[j].w) : null;
+          if (d !== null) { rep = `${n}/${d}`; j++; } else rep = String(n);
+        }
+      } else if (w === "a" && near(i) && own(EN_ORD, toks[i + 1].w)) { rep = `1/${EN_ORD[toks[i + 1].w]}`; j = i + 2; }
+      else if (w === "half") rep = "1/2";
+    }
     if (rep === null) { i++; continue; }
     out += line.slice(from, toks[i].s) + rep;
     from = toks[j - 1].e;

@@ -1956,3 +1956,25 @@ test('X1c number words: three quarters, tři čtvrtiny and tri ctvrtiny given as
   const j=M.settleSpec(1,C,w,undefined,'t',sys);assert.ok(j===null||j.verdict==='unsure',`${sys}: ${w} settleSpec`);
  }
 });
+
+// ------------------------------------------------------------------ X5: a spoken value settles only when the learner said it
+test('X5 figuresOfEnglish: one row per form',()=>{
+ const N=require(path.join(root,'src/lib/rules/numberWords.ts'));
+ const rows=[['I got four','I got 4'],['thirty-five','35'],['thirty five','35'],['eleven twelfths','11/12'],['3 quarters','3/4'],['a quarter','1/4'],['one third','1/3'],['half','1/2'],['nought','0'],
+  ['seven point one five','7.15'],['nought point five','0.5'],['two halves','2/2'],['Draw a diagram first.','Draw a diagram first.']];
+ for (const [w,f] of rows) assert.equal(N.figuresOfEnglish(w),f,`figuresOfEnglish: ${w}`);
+});
+test('X5 saidIn: a value the learner said is heard',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I got four','4'],['eleven twelfths','11/12'],['jedenáct dvanáctin','11/12'],['one and five twelfths','1 5/12'],['nula celá pět','0,5'],['seven point one five','7.15'],
+  ['seven euros fifteen','€7.15'],['I made it thirty-five percent','35%'],['two to three','2:3'],['the first one gets twenty-four and the other thirty-six','24 and 36'],
+  ['minus three','-3'],['six x plus two','6x + 2'],['x squared','x^2'],['two lots of three x plus one','2(3x+1)'],['I got sine x plus C','sin x + C'],['I got x + C','x + C']];
+ for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
+});
+test('X5 saidIn: a value the learner did not say fails closed',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['nevím, nějak jsem to odečetla','7/12','R2'],['I got five','4','R18'],['three','-3','minus'],['','4','empty transcript'],['I got four','','empty value'],
+  ['I got cos x','sin x + C','function'],['x plus C','x + C','spoken letters'],['seven','7/12','one side of a fraction']];
+ for (const [t,v,why] of rows) assert.equal(V.saidIn(v,t),false,`not heard (${why}): ${t} / ${v}`);
+ assert.equal(V.EXPLAIN_TRANSCRIPT_MAX,1000);
+});
