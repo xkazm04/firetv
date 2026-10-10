@@ -838,6 +838,31 @@ test('paper 5: no paper - the screen asks for the marks on the phone, and a pape
  assert.match(drawMaths('PaperScreen',paperSession([it('1',3,3,['N12'])])),/No marks were lost/);
 });
 
+test('paper 5b: a paper that lost marks on questions naming no statement never says no marks were lost',()=>{
+ const {paperView,paperCaption}=PAPER(),{STATEMENTS}=STM();
+ const mapped=STATEMENTS.find(x=>x.touches.length);
+ const flat=(h)=>h.replace(/<[^>]*>/g,' ');
+ // (a) typed with no picks, 22 of 50
+ const a=[3,2,2,2,2,2,2,3,3,1].map((m,i)=>it(String(i+1),m,5,[]));
+ const va=paperView(paperSession(a));
+ assert.equal(va.lost,28);assert.equal(va.topics.length+va.off.length,0);
+ const ha=flat(drawMaths('PaperScreen',paperSession(a)));
+ assert.doesNotMatch(paperCaption(va),/No marks were lost/);assert.doesNotMatch(ha,/No marks were lost/);
+ assert.match(paperCaption(va),/28 marks were lost/);assert.match(ha,/28 marks sit on questions that name no statement/);
+ // (b) one mapped question with full marks, one unmapped that lost marks
+ const b=[it('1',3,3,[mapped.code]),it('2',0,2,[])];
+ const vb=paperView(paperSession(b));
+ assert.equal(vb.lost,2);
+ assert.doesNotMatch(paperCaption(vb),/No marks were lost/);assert.match(paperCaption(vb),/2 marks were lost/);
+ assert.doesNotMatch(flat(drawMaths('PaperScreen',paperSession(b))),/No marks were lost/);
+ // one mark reads in the singular
+ const vc=paperView(paperSession([it('1',1,2,[])]));
+ assert.match(paperCaption(vc),/^1 mark was lost on a question/);
+ assert.match(flat(drawMaths('PaperScreen',paperSession([it('1',1,2,[])]))),/1 mark sits on a question that names no statement/);
+ // (c) the control stays
+ assert.match(paperCaption(paperView(paperSession([it('1',3,3,[mapped.code]) ]))),/No marks were lost/);
+});
+
 test('paper 6: no string the recovery screen renders names the board, over a sweep of papers',()=>{
  const {paperView,paperCaption}=PAPER(),{STATEMENTS}=STM();
  const BAD=/GCSE|1MA1/i;

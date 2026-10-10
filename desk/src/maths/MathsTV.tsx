@@ -26,7 +26,7 @@ import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { lostWord, paperCaption, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
+import { lostWord, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -714,7 +714,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
               </div>
             );
           })}
-          {!v.topics.length && <div className="mb-prow mb-pnone">{v.off.length ? "Nothing on the desk yet covers these." : "No marks were lost."}</div>}
+          {!v.topics.length && <div className="mb-prow mb-pnone">{paperNone(v)}</div>}
           {w.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
           {w.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
         </div>

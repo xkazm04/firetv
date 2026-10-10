@@ -51,7 +51,19 @@ export const lostWord = (n: number): string => marks(n);
 /** The caption: where to start, or how to enter a paper. */
 export function paperCaption(v: PaperView): string {
   if (v.empty) return "Type the marks of a paper you sat on the phone. The desk shows where they were lost.";
-  if (!v.topics.length && !v.off.length) return "No marks were lost on this paper. Type another on the phone any time.";
+  if (!v.topics.length && !v.off.length) {
+    if (v.lost === 1) return "1 mark was lost on a question that names no statement. Pick what it tests on the phone.";
+    if (v.lost > 1) return `${v.lost} marks were lost on questions that name no statement. Pick what each one tests on the phone.`;
+    return "No marks were lost on this paper. Type another on the phone any time.";
+  }
   const first = v.topics[0];
   return first ? `Start with ${first.name}. The list runs from the biggest loss, with the base each one needs first.` : "None of these has a topic on the desk yet.";
+}
+
+/** The line the topic list shows when it holds no topic. */
+export function paperNone(v: PaperView): string {
+  if (v.off.length) return "Nothing on the desk yet covers these.";
+  if (v.lost === 1) return "1 mark sits on a question that names no statement.";
+  if (v.lost > 1) return `${v.lost} marks sit on questions that name no statement.`;
+  return "No marks were lost.";
 }
