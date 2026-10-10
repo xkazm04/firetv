@@ -97,6 +97,49 @@ test('the real list in desk/package.json has 63+ unique suites, each a file, wit
   assert.equal(list[list.length - 1], 'harness-rules-test.cjs');
 });
 
+// EC1a: the usage ledger (desk/src/lib/engines/meter.ts) must never land in desk/data. This suite itself runs under
+// the runner, so its own env carries DESK_USAGE_FILE: runUsage deletes it from the env it hands the runner unless the
+// case sets it, else the cases would test the pass-through branch and prove nothing.
+const RECORD = out => `require('node:fs').writeFileSync(${JSON.stringify(out)}, String(process.env.DESK_USAGE_FILE));${GREEN}`;
+function runUsage(names, env = {}) {
+  const outs = names.map(n => path.join(dir, `${n}.rec`));
+  const list = names.map((n, i) => write(`${n}.cjs`, RECORD(outs[i])));
+  const lf = path.join(dir, `list-usage-${Math.random().toString(36).slice(2)}.json`);
+  fs.writeFileSync(lf, JSON.stringify(list));
+  const e = { ...process.env, ...env };
+  if (!('DESK_USAGE_FILE' in env)) delete e.DESK_USAGE_FILE;
+  const r = spawnSync(process.execPath, [RUNNER, '--list', lf], { cwd: DESK, encoding: 'utf8', env: e });
+  return { code: r.status, out: r.stdout + r.stderr, seen: outs.map(o => fs.existsSync(o) ? fs.readFileSync(o, 'utf8') : null) };
+}
+const outside = (base, p) => { const rel = path.relative(base, p); return rel.startsWith('..') || path.isAbsolute(rel); };
+
+test('usage ledger: a suite gets a fresh absolute DESK_USAGE_FILE outside the repo and desk/data, removed after the run', () => {
+  const r = runUsage(['u-one']);
+  assert.equal(r.code, 0, r.out);
+  const v = r.seen[0];
+  assert.ok(v && v !== 'undefined', 'the suite saw no DESK_USAGE_FILE');
+  assert.ok(path.isAbsolute(v), v);
+  assert.ok(outside(path.resolve(__dirname, '..'), v), `inside the repo: ${v}`);
+  assert.ok(outside(path.join(DESK, 'data'), v), `under desk/data: ${v}`);
+  assert.equal(fs.existsSync(path.dirname(v)), false, 'the ledger directory outlived the run');
+});
+
+test('usage ledger: two suites in one list get two different ledgers', () => {
+  const r = runUsage(['u-a', 'u-b']);
+  assert.equal(r.code, 0, r.out);
+  assert.ok(r.seen[0] && r.seen[1] && r.seen[0] !== 'undefined');
+  assert.notEqual(r.seen[0], r.seen[1]);
+  assert.notEqual(path.dirname(r.seen[0]), path.dirname(r.seen[1]));
+});
+
+test('usage ledger: a DESK_USAGE_FILE already in the env is passed on unchanged', () => {
+  const mine = path.join(dir, 'mine', 'usage.jsonl');
+  const r = runUsage(['u-pass'], { DESK_USAGE_FILE: mine });
+  assert.equal(r.code, 0, r.out);
+  assert.equal(r.seen[0], mine);
+  assert.equal(fs.existsSync(path.dirname(mine)), false, 'the runner created a directory for a ledger it was given');
+});
+
 after(() => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch {} });
 
 // ------------------------------------------------------------------ the one loader (tools/ts-load.cjs)

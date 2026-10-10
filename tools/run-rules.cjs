@@ -1,6 +1,9 @@
 /**
  * The rules runner (npm run test:rules in desk/): every suite listed in desk/package.json's "rulesSuites", one at a
- * time, in list order, each as its own `node --test-reporter=tap <suite>` process with cwd desk/ and the parent's env.
+ * time, in list order, each as its own `node --test-reporter=tap <suite>` process with cwd desk/ and the parent's env plus one addition:
+ * DESK_USAGE_FILE, a fresh <os tmpdir>/desk-usage-XXXX/usage.jsonl per suite (removed after it, best effort), unless the parent
+ * already sets it. Without it meter.ts's usage ledger falls back to <cwd>/data, so a stub-engine suite would append rows
+ * to desk/data, where the real learners live.
  * It never stops at the first red suite: every suite runs, then one table says which were red and why.
  *
  * A suite is green only when it exits 0 by itself AND its last unindented TAP summary shows tests >= 1, fail 0 and
@@ -11,7 +14,7 @@
  * Usage: node ../tools/run-rules.cjs [--list <json file: an array, or an object with rulesSuites>] (cwd desk/).
  * Pure: no network, no model. Suite file names in the list are relative to tools/.
  */
-const fs = require('node:fs'), path = require('node:path'), { spawn } = require('node:child_process');
+const fs = require('node:fs'), os = require('node:os'), path = require('node:path'), { spawn } = require('node:child_process');
 
 const TOOLS = __dirname, DESK = path.resolve(TOOLS, '../desk');
 const TIMEOUT = Number(process.env.RULES_SUITE_TIMEOUT_MS) > 0 ? Number(process.env.RULES_SUITE_TIMEOUT_MS) : 600000;
@@ -47,13 +50,18 @@ function runOne(name) {
   return new Promise(resolve => {
     const file = path.join(TOOLS, name), t0 = Date.now();
     if (!fs.existsSync(file)) { console.error(`run-rules: missing file ${file}`); return resolve({ name, ms: 0, why: 'missing file' }); }
-    let text = '', timedOut = false;
-    const child = spawn(process.execPath, ['--test-reporter=tap', file], { cwd: DESK, env: process.env, stdio: ['ignore', 'pipe', 'inherit'] });
+    let text = '', timedOut = false, ledgerDir = null;
+    const env = { ...process.env };
+    if (!env.DESK_USAGE_FILE) {
+      try { ledgerDir = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-usage-')); env.DESK_USAGE_FILE = path.join(ledgerDir, 'usage.jsonl'); } catch { ledgerDir = null; }
+    }
+    const cleanup = () => { if (ledgerDir) try { fs.rmSync(ledgerDir, { recursive: true, force: true }); } catch {} };
+    const child = spawn(process.execPath, ['--test-reporter=tap', file], { cwd: DESK, env, stdio: ['ignore', 'pipe', 'inherit'] });
     child.stdout.on('data', d => { process.stdout.write(d); text += d; });
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, TIMEOUT);
-    child.on('error', e => { clearTimeout(timer); resolve({ name, ms: Date.now() - t0, why: `spawn failed: ${e.message}` }); });
+    child.on('error', e => { clearTimeout(timer); cleanup(); resolve({ name, ms: Date.now() - t0, why: `spawn failed: ${e.message}` }); });
     child.on('close', (code, signal) => {
-      clearTimeout(timer);
+      clearTimeout(timer); cleanup();
       const s = summary(text), r = { name, ms: Date.now() - t0, sum: s };
       if (timedOut) r.why = `timeout after ${TIMEOUT} ms`;
       else if (signal) r.why = `signal ${signal}`;
