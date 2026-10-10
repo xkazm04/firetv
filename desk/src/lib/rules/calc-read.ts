@@ -14,6 +14,10 @@ export const cleanAnswer = (a: string) => {
   if (eq >= 0) s = s.slice(eq + 1).trim();
   return s.replace(/\.$/, "").trim();
 };
+/** A one-number answer (optional sign, digits, one comma, digits; no space at the comma) read as a point ('2,718' is 2.718, '-0,38' is -0.38); any other answer comes back unchanged. */
+export const oneNumberComma = (ans: string) => /^[+\-−]?\s*\d+,\d+$/.test(ans.trim()) ? ans.replace(/\s+/g, "").replace(",", ".") : ans;
+/** A lone digit,digit in a line read as a point ('2,72' is 2.72); a list ('1,2,3', '1, 2') is left alone (maths.ts decimalComma's pattern). */
+export const pointForComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
 /** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */
 export const infinityOf = (s: string): 1 | -1 | null => {
   const m = /^([+\-−]?)\s*(inf|infinity|∞)$/i.exec(s.replace(/\s+/g, " ").trim());

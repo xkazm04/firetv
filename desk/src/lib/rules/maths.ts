@@ -159,7 +159,7 @@ export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: un
     return settled(n, v.verdict === "right", v.slip, topicId);
   }
   if (!isCalcSpec(spec)) return null;
-  const c = checkAnswer(spec, typeof answer === "string" ? answer : "");
+  const c = checkAnswer(spec, typeof answer === "string" ? answer : "", system);
   if (c.verdict === "unsure") return null;
   return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);
 }

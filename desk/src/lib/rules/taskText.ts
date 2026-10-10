@@ -29,7 +29,7 @@ export function withoutInstruction(text: string): string {
 }
 
 /** A comma system writes its decimals with a comma. */
-const commaSystem = (system?: SchoolSystem) => system === "cz" || system === "de";
+export const commaSystem = (system?: SchoolSystem) => system === "cz" || system === "de";
 
 /**
  * The text with a middle dot read as ×, a colon between two fractions as ÷, and - only where the school system says so

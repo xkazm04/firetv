@@ -393,3 +393,11 @@ test('MK11: a Calculus photo read with no answer to any question is refused (502
  stubVision(()=>({items:[{n:1,studentAnswer:'?',studentWorking:'',slip:'unclear'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);assert.equal(lines(),l1+1);
 });
+
+test('MK4: settleSpec reads a decimal comma in a one-number answer only for a cz or de learner',()=>{
+ const E=spec({shape:'limit',f:'(1 + 1/x)^x',at:'inf'});
+ const s=M.settleSpec(1,E,'2,718',null,'calc1-limits','cz');
+ assert.equal(s?.verdict,'right','cz settles it right');
+ assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits','uk'),null);
+ assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits'),null);
+});

@@ -15,9 +15,9 @@
  * Pure: imports only calc-expr.ts, calc-read.ts and calc2.ts - no engine, no session store, no TV module. A spec of a
  * Calculus 2 shape (rules/calc2.ts) is sent to calc2.ts on the first line of each public function below.
  */
-import { readTask, type SchoolSystem } from "./taskText";
+import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -416,15 +416,17 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, wr
  *   - an empty, unreadable or non-finite answer, an answer in x for a number, or a spec the desk cannot work out, is
  *     'unsure': the desk does not guess.
  * The `why` is a fixed sentence of the desk's, with no value in it.
+ * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4); never a function answer.
  */
-export function checkAnswer(spec: unknown, studentAnswer: unknown): CalcVerdict {
-  if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer);
+export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: SchoolSystem): CalcVerdict {
+  if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer, system);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", WHY.badSpec);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
-  const ans = cleanAnswer(studentAnswer);
+  let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
   const { truth } = r;
+  if (commaSystem(system) && truth.kind !== "derivative" && truth.kind !== "antiderivative") ans = oneNumberComma(ans);
   if (truth.kind === "inf" || r.spec.shape === "limit") {
     const inf = infinityOf(ans);
     if (inf !== null) {

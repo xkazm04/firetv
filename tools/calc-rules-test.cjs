@@ -507,3 +507,19 @@ test('MB-B28: a decimal for a limit or a definite integral is right only as the 
  assert.equal(v(LE,'e'),'right');assert.equal(v(LH,'1/2'),'right');assert.equal(v(IE,'(e - 1)/2'),'right');
  assert.equal(v({shape:'derivative-at',f:'x^2',at:6},'12.01'),'unsure');
 });
+
+test('MK4: a cz or de learner\'s one-number answer with a decimal comma reads as its point form; uk, us and no system leave it unsure',()=>{
+ const E={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},I13={shape:'definite-integral',f:'x^2',a:0,b:1},L38={shape:'limit',f:'3/8 + x',at:0};
+ const D={shape:'derivative-at',f:'x^3',at:0.5},SEQ={shape:'sequence-limit',f:'(1 + 1/x)^x'},AP={shape:'approx-integral',f:'1/x',a:1,b:2,pieces:5,rule:'trapezoid'};
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const cases=[[E,'2,718','2.718'],[E,'-2,718','-2.718'],[E,'2,8','2.8'],[E,'2,7','2.7'],[I13,'0,333','0.333'],[L38,'0,38','0.38'],[D,'0,75','0.75'],[D,'0,7','0.7'],[SEQ,'2,718','2.718'],[SEQ,'2,8','2.8'],[AP,'0,6956','0.6956'],[AP,'0,69','0.69']];
+ for(const [spec,comma,point] of cases){
+  for(const sys of ['cz','de'])assert.equal(v(spec,comma,sys),v(spec,point),`${spec.f} ${comma} ${sys}`);
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,comma,sys),'unsure',`${spec.f} ${comma} ${sys}`);
+ }
+ assert.equal(v(E,'2,718','cz'),'right');assert.equal(v(E,'2,7','cz'),'right');
+ assert.equal(v(I13,'0,3','cz'),'unsure');assert.equal(v(L38,'0,38','cz'),'right');assert.equal(v(D,'0,75','cz'),'right');
+ assert.equal(v(AP,'0,6956','cz'),'right');assert.equal(v(SEQ,'2,718','cz'),'right');
+ // a comma that is not a lone decimal is never read
+ for(const [spec,a] of [[E,'2,718,1'],[E,'1, 2'],[D,'2,5x']])assert.equal(v(spec,a,'cz'),v(spec,a),`${a} is not read`);
+});
