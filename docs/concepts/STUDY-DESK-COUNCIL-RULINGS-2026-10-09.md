@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), and for round 6 on 2026-10-10 (round 5 merged at d24f824d). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15 and 6cf02f5a name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), and for round 7 on 2026-10-10 (round 6 merged at 56431416). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279 and cc346058 name a run, not a commit.
 
 ---
 
@@ -155,7 +155,17 @@ Medium findings left open:
 | HF4b | `load()` reports a throw after the parse as 'could not be read'. Accepted as built. | HF4 asked `load()` to log why a saved session was not used. | none recorded | delivered, cfa59088 |
 | HF4c | Each commit carries its own tests. The HF4 commit was tested with the HF5 tests stripped. | A commit must stand alone for bisect. | none recorded | ruled, no change |
 
-The owner holds the homework Approval until full r3, by the process ruling on high lines. Full r3 (round 3 of 3, the last) runs after D4 (now merged), because D4 edited `store.ts` and `api/read/route.ts`, and both are in its span.
+Full r3 (round 2026-10-10-homework-page-reading-r3, run f6b73d06, judged at a6e92668, a span of 20 files): ready 0.5867, coverage 0.90, uncalibrated. This was the last round.
+- Scores: value 0.52 (low confidence), craft 0.58, rivalry 0.55, robustness 0.78, economics unmeasured.
+- Must-address, as the round's result stores it (the line is cut short there): 'economics is unmeasured: A read consumes resources beyond the desk process: one (at most two) HTTP calls per page to a local Ollama vision model (GPU time; vision.ts:46-49) and...'
+- That line was judged before EC1. EC1b (b4b4ea8f) now labels the read's vision call 'homework-read' (`desk/src/lib/desk/read.ts:97`). No later homework round exists to measure it.
+- Medium findings left open, all unslotted:
+  - economics-1 and economics-2;
+  - value-resnap-double-count;
+  - robustness-1: the read's onFail cleanup error is swallowed silently (`desk/src/lib/desk/job.ts:100`, `try { opts.onFail?.(e); } catch {}`);
+  - craft-1 to craft-3;
+  - rivalry-1 to rivalry-4.
+- The homework Approval is the owner's to decide.
 
 HF4 and HF5, as delivered (checked on `main` at 2d794e64):
 - `writeSession` publishes through a tmp file and `renameSync`, and removes the tmp file on failure (`desk/src/lib/session/store.ts` :821 and :842).
@@ -239,10 +249,21 @@ Medium findings left open, all unslotted (current lines checked on `main` at 2d7
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| HL13 | The lesson's why passes the same leak check as every hint line. `pickLesson` takes the learner's school system, and the hint route passes the system it already holds (the call is `desk/src/app/api/hint/route.ts:55`; `pickLesson` is `desk/src/lib/desk/pick.ts:24`). `checkedWhy` (`desk/src/lib/desk/pick.ts:18`, its gate at :19) drops its gate on `equationOf` or `expressionOf`. For every maths item it asks the predicate the hint uses: `leaksLine` in `desk/src/lib/desk/hint.ts` (:105-107). That is `leaks(problem, line, system)`, `leaksCalc` on the calc spec and on each part, and `leaksSchool` on the school spec, with the specs from `readQuestion(problem, system)`. Both paths call that one function, not a copy, so they cannot drift apart again. The built replacement line is checked by the same predicate, and the generic line stays the last resort. English and essay are unchanged. | Full r1 must-address 1 and 2 (craft-1, robustness-1). Stubbed probes got these whys back verbatim: 'The answer is 19.' on 'Sara has some sweets. She gives away 7 and has 12 left. How many did she start with?'; 'Chosen because x = 10 here.' on a cz learner's 'Řeš rovnici: 0,5x + 2 = 7'; 'The answer is 6.' on 'Find the derivative of f(x) = x^2 at x = 3.', for a learner on a school path. The TV shows the why (`desk/src/maths/MathsTV.tsx:1052` and :1064, and `desk/src/tv/screens.tsx:199`). The one suite case on it is `tools/withhold-rules-test.cjs` case 14 (:208), and it uses equation items only. | (a) Adding readers to `checkedWhy`'s own gate. That keeps a second predicate that can drift from the hint's. (b) Never showing the model's why, and always showing the built line. That drops a sentence that is safe on most items. | queued, delivery HL13, next |
+| HL13 | The lesson's why passes the same leak check as every hint line. `pickLesson` takes the learner's school system, and the hint route passes the system it already holds (the call is `desk/src/app/api/hint/route.ts:55`; `pickLesson` is `desk/src/lib/desk/pick.ts:24`). `checkedWhy` (`desk/src/lib/desk/pick.ts:18`, its gate at :19) drops its gate on `equationOf` or `expressionOf`. For every maths item it asks the predicate the hint uses: `leaksLine` in `desk/src/lib/desk/hint.ts` (:105-107). That is `leaks(problem, line, system)`, `leaksCalc` on the calc spec and on each part, and `leaksSchool` on the school spec, with the specs from `readQuestion(problem, system)`. Both paths call that one function, not a copy, so they cannot drift apart again. The built replacement line is checked by the same predicate, and the generic line stays the last resort. English and essay are unchanged. | Full r1 must-address 1 and 2 (craft-1, robustness-1). Stubbed probes got these whys back verbatim: 'The answer is 19.' on 'Sara has some sweets. She gives away 7 and has 12 left. How many did she start with?'; 'Chosen because x = 10 here.' on a cz learner's 'Řeš rovnici: 0,5x + 2 = 7'; 'The answer is 6.' on 'Find the derivative of f(x) = x^2 at x = 3.', for a learner on a school path. The TV shows the why (`desk/src/maths/MathsTV.tsx:1052` and :1064, and `desk/src/tv/screens.tsx:199`). The one suite case on it is `tools/withhold-rules-test.cjs` case 14 (:208), and it uses equation items only. | (a) Adding readers to `checkedWhy`'s own gate. That keeps a second predicate that can drift from the hint's. (b) Never showing the model's why, and always showing the built line. That drops a sentence that is safe on most items. | delivered, ed13a024 (run c072cd17) |
 
 - Must-address 3 is the gap EC1 closes. It gets no hint-only rework. EC1 counts the hint's text calls (up to two per stage) and the lesson pick's call.
-- The owner holds the hint Approval until full r2, by the process ruling on high lines. Full r2 (round 2 of 3) runs after HL13 and EC1, so that it can measure economics. It never runs beside EC1, whose engine files are in the hint span.
+HL13, as delivered (checked on `main` at ed13a024):
+- `leaksLine` and `Specs` in `hint.ts` (:105, :102) only gained `export`.
+- `checkedWhy` in `pick.ts` has no `equationOf` or `expressionOf` gate left. It reads `readQuestion(problem, system)` and calls `leaksLine` on the why and on the built line.
+- The hint route passes `system` (`desk/src/app/api/hint/route.ts:55`).
+- `tools/withhold-rules-test.cjs` case 14 is unchanged, and case 16 was added.
+- 73 suites, 1314 tests.
+- All three leaking probes now get the built line.
+- Noted, not fixed: the route proof uses the cz probe. If `leaksLine` flags 'x = 10' even without the system, that assertion does not prove the system is passed. The source diff does prove it.
+
+The owner holds the hint Approval until full r2. HL13 and EC1 have merged. Full r2 (round 2 of 3) runs after marking full r3, because reviews run one at a time.
+
+Noted, unslotted: the hint's own leak re-ask (`hint.ts:177`) is metered as try 1, not try 2. A fix would edit `hint.ts`, which is in the hint span, so it waits until hint full r2 has run.
 
 ## 4. Marking false ticks and false rings (practice-generation-marking)
 
@@ -271,6 +292,7 @@ Status of the work, checked on `main`:
   - value-calc-gaps: there is no implicit differentiation shape, and the 40-character typed cap refuses a correct 45-character answer. Unslotted, for the owner to weigh.
   - craft-1: the linear photo prompt still asks the reader to solve and judge while it copies. Unslotted.
 - The owner holds the marking Approval until marking r3, which runs after EC1.
+- Marking full r3 (round 3 of 3, the last) is in flight: run cc346058, dispatched 2026-10-10 05:51Z. Its span is the full r2 span of 33 files plus `desk/src/lib/engines/meter.ts`, `desk/src/lib/engines/prices.ts` and `tools/econ-rules-test.cjs`. Its economics pack holds `docs/economics/EC1-SAMPLE-2026-10-10.md` and its rows.
 - D3. Run d2d908e6 was held on one stale pin, at `tools/maths-rules-test.cjs:101-102`. Resolution run f29f363f added D3-5 and fast-forwarded, and it merged at f9f8276b. The commits:
   - D3-1 0b8b61fc, with its tsc fix fc113ec3;
   - D3-2 95ceb422;
@@ -299,8 +321,21 @@ These are the App Master's rulings, not the owner's.
 | MK10 | (D2 Q4) The unsure reasons reach the learner. Today `settleSpec` in `maths.ts` (:155) drops every unsure reason (it returns null at :158 and :163), so MK1's domain line and the rounded line never reach the screen, which they were meant to. The lite r2's medium findings go with it: the /api/mark vision-failure test and the empty-image refusal. | MK1 and MK5 promised the lines. | none recorded | queued, delivery 4d. Its /api/mark vision-failure test and its empty-image refusal were delivered by D3 (95d7e462, 95ceb422). 4d keeps the unsure reasons, value-unsure-says-different and maybe MK12. |
 | MK11 | (D3-1) A photo read with no non-blank answer to any question of the set is a failed mark. That covers no items, numbers outside the set, and every answer blank. `mark.ts` throws `DeskSaid(EMPTY_MARK)` (`desk/src/lib/desk/mark.ts:206`, the message at :211) and the route answers 502. Nothing is recorded: no history line, no digest entry, no attempt. The set stays open, so the next snap marks. Accepted limit: one non-blank matched answer still lands the set, because marking has no completeness check for a partial photo read. Pinned by `tools/calc-marking-test.cjs:368` and `tools/school-marking-test.cjs:1057`. | Full r2 must-address 1. | Landing an empty set as marked. | delivered, 0b8b61fc (tsc fix fc113ec3). Its old pin moved in f9f8276b. |
 | MK12 | A candidate, from D3's answer. Finding: a typed set whose every answer is blank lands today, with a history line and a digest entry but no attempt. The phone disables Send until a box has text (`tools/phone-panel-test.cjs:289-290`), so only a raw API body can reach it. Decision: a candidate only, to refuse it 400 before the job. | none (a finding from D3, not a council line) | none recorded | unslotted; it may fold into 4d |
-| EC1 | An economics instrument. Per-use rows carry the provider, ms, tries, the CLI envelope's usage, and failed runs. A price book is declared: the claude CLI on the subscription, and Ollama local. A measured sample is committed in the tree. It is measured live only outside any gate, and only through the claude CLI. | Full r2 must-address 2 (economics unmeasured). The homework full r1 also scored economics 0.05. | none recorded | queued, delivery EC1, after HL13; before marking r3 and hint full r2, so that both rounds can measure economics |
+| EC1 | An economics instrument. Per-use rows carry the provider, ms, tries, the CLI envelope's usage, and failed runs. A price book is declared: the claude CLI on the subscription, and Ollama local. A measured sample is committed in the tree. It is measured live only outside any gate, and only through the claude CLI. | Full r2 must-address 2 (economics unmeasured). The homework full r1 also scored economics 0.05. | none recorded | delivered, 0ddf3c43 (run d6cc1be4) |
 | MK4c | `calc2.ts` keeps its own two-line `commaSystem` copy and does not import the one in `taskText`. | `calc2-seam-test` pins calc2's imports. calc2 already rewrites `calc.ts` lines at the same seam. The MK4 parity asserts on the SEQ and AP specs catch drift. | Importing `commaSystem`, which moves the seam pin. | delivered, 0a7c2dd5 |
+| EC1a | `tools/run-rules.cjs` gives each suite its own `DESK_USAGE_FILE` in a fresh temp dir, unless one is already set. Stub-engine rows then stay out of `desk/data`. | `meter.ts` falls back to `<cwd>/data/usage.jsonl` when neither `DESK_USAGE_FILE` nor `DESK_DATA_DIR` is set. The runner starts every suite with cwd `desk/`. In the main checkout, `desk/data` holds real learners. Against the unchanged runner, a gate run wrote 81 rows, all kind vision and all with no use. Case (i) in `tools/harness-rules-test.cjs` failed before the fix and passes after it. | none recorded | delivered, 90d957a9 (run 9bcde838) |
+| EC1b | Labels on the remaining engine calls: 'homework-read' (`desk/src/lib/desk/read.ts:97`), 'paper-read' (`desk/src/lib/desk/paperRead.ts:53`), the three 'explain' calls (`desk/src/lib/desk/explain.ts:76`, :118 and :166), 'memory' (`desk/src/lib/desk/memory.ts:67`), 'worked-idea' (`desk/src/lib/desk/worked.ts:46`), 'english-sentence' (`desk/src/lib/desk/english.ts:33`), 'linga-check' (`desk/src/lib/english/check.ts:75`) and 'speak' (`desk/src/app/api/speak/route.ts:13`). Case i pins five of them behaviourally, and case i2 pins the rest by source. | An unlabelled call writes rows with use null, which are unattributed (`docs/economics/EC1-SAMPLE-2026-10-10.md`). | An ALS {use, job} scope in `job.ts`, which labels by context, not at each call site. It was not built. | delivered, b4b4ea8f (run ce489ee7) |
+| EC1c | The seven Essay Master and Linga text calls are labelled: 'essay-read' (`desk/src/lib/desk/essay.ts:78`) and 'essay-revise' (`essay.ts:183`); 'linga-take' (`desk/src/lib/english/conversation.ts:155`), 'linga-pitch' (:214), 'linga-opening' (:235) and 'linga-cut' (:289); and on the turn call (:328) `use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"`. Case j in `tools/econ-rules-test.cjs` pins each label. It also pins that, in each file, the count of `await text<` equals the count of `use:` (2 in essay.ts, 5 in conversation.ts), so a new unlabelled call fails. | The same as EC1b. Digest full r3 spans essay.ts and conversation.ts, so EC1c had to merge first. | none recorded | delivered, 8583b29b (run 7a3b0529) |
+| EC1c-a | Case j keeps source pins only. No ledger-row assertion through a stub provider is required for `analyseEssay` or `reviseSentence`. | Case a already proves that a use label reaches its row for any text call. Case i2 pins explain, the Linga check and speak by source in the same way. | A stub-provider row assertion. It was not attempted, and not shown to be impossible. | ruled, no change |
+| EC1d | A candidate only. Two kinds of engine call still write rows with use null. Both need an `engines/` change. (1) The speech-to-text route (`desk/src/app/api/listen/route.ts:12`). `listen()` in `desk/src/lib/engines/listen.ts` (:63) takes only `timeoutMs`, so its `call()` (:64) passes no use. (2) The four live probes in `desk/src/lib/engines/health.ts` (:94-99). They run only on `GET /api/smoke?live=1`. | none (the App Master found them after EC1c) | none recorded | unslotted |
+
+EC1, as delivered:
+- Four commits: fdbafce1, 1362af76, 03d2a076 and 0ddf3c43.
+- `desk/src/lib/engines/call.ts` writes one row on success (:41) and one on failure (:45).
+- `meter.ts` and `prices.ts` are new.
+- An unreported token class and an unpriced `marginalUsd` are null, not 0, and no row holds prompt text.
+- The sample (`docs/economics/EC1-SAMPLE-2026-10-10.md`): 13 claude CLI calls on haiku, 0 failures, notional total 0.0122 USD. The per-use split is in that doc.
+- The gate after EC1: 74 suites, 1323 tests. After EC1c: 74 suites, 1331 tests.
 
 MK4, MK4a, MK4b and MK4c were delivered by run 12cf4a44 in three commits: 2b1085d8 (the judge reads the comma for cz and de), a2421d81 (the leak checks) and 0a7c2dd5 (the calc2 seam). All three are on `main`.
 
@@ -309,6 +344,8 @@ Noted, not fixed: the middle commit a2421d81 alone fails `calc2-seam-test`, so a
 Round 4 ruled the economics instrument as E1. Essay section 6 already holds E1, so from round 5 on it is EC1. Its decision is unchanged.
 
 The economics lines of marking full r2 and hint full r1 are the same gap, and EC1 closes both.
+
+EC1 merged at 0ddf3c43, and EC1a to EC1c finished the labels on 2026-10-10. Marking full r3 carries the sample in its economics pack.
 
 ## 5. student-working-explanation
 
@@ -459,15 +496,37 @@ D4 rulings (run 3922989d). Run 9fcfac15 merged D4 to `main` while this round was
 | WD10 | `learners.ts` gets the pure appliers `withAttempt`, `withWriting`, `withHistory` and `withDigest`. Mark land, essay record, Linga `endTake` and the homework read route each apply their changes to one learner and write it with one `saveLearner`. A failed save writes nothing, and a Try again writes each record once. | robustness-2. A mark Try again doubled attempts (4 -> 8), and a conversation retry never wrote its english entry. | An idempotent digest key, which leaves the doubled attempts and history. | delivered, ccd841f4 (run 3922989d), merged by run 9fcfac15 |
 | WD10a | The Writing KPI (`tools/kpi-measure.cjs`, `writingPersisted`) counts two shapes: `addHistory(<id>, { kind: 'writing' })`; and `withHistory(<learner>, { kind: 'writing' })`, when `essay.ts` also calls `saveLearner(`. | WD10 moved essay record to one save, and the KPI saw only `addHistory`. Its pin at `tools/essay-rules-test.cjs` :422-423 failed, so the merge gate held run 3922989d. | Keeping `addHistory` in `essay.ts` so that the old regex matched. That brings the separate save back. | delivered, a6e92668 (run 9fcfac15) |
 | WD11 | A case for each of the five uncovered failure paths, in `tools/week-digest-test.cjs`. | robustness-3. | none recorded | delivered, bccfac78 (run 3922989d), merged by run 9fcfac15 |
-| WD12 | The status half of robustness-4. The hint count write (`store.ts` :798 at 2d794e64, :807 now) is logged only. Its failure is to be said through the hint route's done lines (`desk/src/app/api/hint/route.ts` :42 and :50, the same before and after D4; the line is ruled at its dispatch). It was not built in D4, because the hint full r1 was judging that route. | robustness-4. | none recorded | queued, delivery WD12, after HL13, which edits the same route |
+| WD12 | The status half of robustness-4. The hint count write (`store.ts` :798 at 2d794e64, :807 now) is logged only. Its failure is to be said through the hint route's done lines (`desk/src/app/api/hint/route.ts` :42 and :50, the same before and after D4; the line is ruled at its dispatch). It was not built in D4, because the hint full r1 was judging that route. | robustness-4. | none recorded | delivered, f06984ef (run 0f94108c) |
 | WD13 | The rehydrate catch (`store.ts` :804 at 2d794e64; `tellRehydrate` is defined at :784 and called at :821 now) logs with `console.error` and the reason, once per distinct failure, never once per event. Accepted limit: `rehydrateTold` is a module-level `let` (`store.ts:782`), not on `g.__desk`. A dev reload resets it, so the failure logs once more. | The :802 half of robustness-8. | none recorded | delivered, bccfac78 (run 3922989d), merged by run 9fcfac15 |
 | WD13a | A candidate only. A failed rehydrate after `learner.set` keeps the previous learner's skills and history on the session. It is nearly unreachable, because `getLearner` swallows an unreadable file. | none (a finding from D4's builder) | none recorded | unslotted |
+
+WD12, as ruled at its dispatch and delivered:
+- `HINT_NOT_COUNTED` (`desk/src/lib/session/store.ts:505`) reads 'Here is the hint, but the desk could not count it in the learner file, so the week will not show it.'
+- The store resets `counted` on `hint.set` (:809) and sets it false when the count throws (:810). `hintCounted()` (:853) reports it.
+- The stage 1 and stage 2 done lines say it. The lesson done line is prefixed with it when stage 1's count failed.
+- The hint answer gains `counted`.
+- `job.ts` is untouched.
+- WD6 is pinned as counted true.
+- 74 suites, 1329 tests.
 
 D4 (run 3922989d) built WD9, WD10, WD11 and WD13 in three commits: 4c89e7c9, ccd841f4 and bccfac78. They were held on the branch autopilot/accepted-idea-delivery-3922989d, and all three are on `main` now (checked with `git merge-base --is-ancestor`).
 - The merge gate held it on one pin, the WD10a one.
 - The same gate run showed `tools/calc-rules-test.cjs` red. Its tests 8 and 9 assert a 50 ms bound. On the held tip, with `DESK_TS_CACHE=0`, the suite ran 17 of 17 green (slowest 29.23 ms). D4 touches no calc file, so it was ruled a timing flake under load.
 - Resolution run 9fcfac15 fast-forwarded the three commits unchanged and added the WD10a commit a6e92668, the D3 pattern. `main` is at a6e92668.
-- Then the full r2 (round 2 of 3).
+- Full r2 (round 2026-10-10-weekly-digest-for-parents-r2, run a03b1279, judged at 0ddf3c43, a span of 17 files: full r1's 16 plus `desk/src/app/api/explain/route.ts`): ready 0.5694, coverage 1.00, uncalibrated.
+  - Scores: value 0.50, craft 0.66, rivalry 0.50, robustness 0.65, economics unmeasured.
+  - Must-address, verbatim: 'robustness: An unreadable learners.json shows the parent "Nothing this week."; the declared WEEK_UNREAD line is never reached'
+  - The line is high, so by the process ruling the owner's Approval waits for its rework (WD14) and for full r3, the last round.
+  - Medium left open, unslotted: robustness-2, the bare catches at `desk/src/lib/desk/essay.ts:194` and `desk/src/lib/session/store.ts` (:706, :710 and :817).
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| WD14 | `readLearner` (`desk/src/lib/session/learners.ts:283`) throws only when `readBook` returns null. `weekOf` (`store.ts:766`) reads through it. An unreadable learners.json therefore gives `WEEK_UNREAD` (`desk/src/lib/rules/week.ts:37`, 'The week could not be read just now.') instead of 'Nothing this week.'. An absent file still reads as empty, and that is pinned. `readBook` also returns null for invalid JSON and for a value that is not a book, so both of those give `WEEK_UNREAD` too. `weekRead`, its log text and W9-refresh are unchanged. learners.json stays byte-identical after the unreadable refresh. Case 'W9-unread (WD14)' in `tools/week-rules-test.cjs` pins it, on a file truncated by five bytes. | Digest full r2 must-address 1. `readAll` turned an unreadable book into an empty one. | none recorded | delivered, 0d44b28d (run d6aad5fb) |
+| WD14a | A candidate only, not ruled. The rehydrate in `dispatch()` (`store.ts:818-825`, its `getLearner` at :821) still reads through `getLearner`. After an unreadable learners.json, a learner's skills, history and memory therefore show empty. It is the failure WD14 fixed for the week, on another reader. It is related to WD13a. | none (the App Master found it while ruling WD14) | none recorded | unslotted |
+
+Noted: a blank file reads as empty in the code (`readBook`, `learners.ts:124`), but no case pins it. `weekOf`'s only caller is `weekRead` (`store.ts:777`; the call is at :778).
+
+The owner holds the digest Approval until full r3 (round 3 of 3, the last). Full r3 runs after hint full r2 on the review lane. Its span holds essay.ts and conversation.ts, so it waited for EC1c, which has merged.
 
 ## Process rulings
 
@@ -486,6 +545,7 @@ D4 (run 3922989d) built WD9, WD10, WD11 and WD13 in three commits: 4c89e7c9, ccd
 - One charter is one run. Deliveries run one at a time, and so do council reviews. The second slot takes a review beside a delivery, or another charter.
 - A review never runs beside a delivery that edits a file in its span. The marking span holds MathsTV.tsx, rules/calc*.ts, maths.ts and mark.ts, so 4f, 4c and 4d never run beside marking r3.
 - A held delivery is resolved by a resolution run on its own branch. It keeps the held commits unchanged and adds only what the hold needs (D3: run d2d908e6, resolved by run f29f363f at f9f8276b; D4: run 3922989d, resolution run 9fcfac15).
+- Exception, 2026-10-10: EC1c ran beside marking full r3, although `tools/econ-rules-test.cjs` is in the r3 span. It was found after dispatch and ruled no collision. A review reads its own worktree at its receipt head, and r3 is the last round, so no later round measures drift against that file.
 
 ## Delivery order
 
@@ -503,11 +563,15 @@ D3. marking empty read MK11, plus robustness-2 and robustness-3: done, f9f8276b.
 4c. MK4 with MK4a and MK4b, and MK4c: done, 0a7c2dd5 (run 12cf4a44).
 4h. homework HF4 and HF5: done, 2d794e64 (run c448db9f).
 D4. the digest full r1 rework, WD9-WD13: done, a6e92668 (run 3922989d, held on the WD10a pin; resolution run 9fcfac15 merged it).
-HL13. the hint full r1 rework: next.
-EC1. the economics instrument: after HL13, before marking r3 and hint full r2.
-WD12. the status of the hint count write: after EC1.
-4b. MB-B7, plus homework value-3.
-4d. MK10, plus value-unsure-says-different, and maybe MK12.
+HL13. the hint full r1 rework: done, ed13a024 (run c072cd17).
+EC1. the economics instrument: done, 0ddf3c43 (run d6cc1be4).
+EC1a. the rules runner's usage file: done, 90d957a9 (run 9bcde838).
+EC1b. the remaining labels: done, b4b4ea8f (run ce489ee7).
+WD12. the status of the hint count write: done, f06984ef (run 0f94108c).
+D5. the digest full r2 rework, WD14: done, 0d44b28d (run d6aad5fb).
+EC1c. the Essay Master and Linga labels: done, 8583b29b (run 7a3b0529).
+4b. MB-B7, plus homework value-3: next, when neither marking r3 nor hint full r2 is running, because MathsTV.tsx is in both spans.
+4d. MK10, plus value-unsure-says-different, and maybe MK12: next, when neither marking r3 nor hint full r2 is running, because MathsTV.tsx is in both spans.
 5. explain, X2-X4.
 6. essay, plus EM4-2/EM4-5 and digest value-3.
 7. learner-profile, plus homework robustness-6.
@@ -519,21 +583,27 @@ WD12. the status of the hint count write: after EC1.
 13. the recap follow-up, EM-B36 and MB-B23, plus digest value-4 and the lens order, after learner-profile.
 13a. the recap write-door contract: unchanged (queued; it goes next on the lane when the owner decides the recap Approval, and does not wait for learner-profile).
 
-Unslotted: EM-B11, WD6, MK12, marking value-calc-gaps, marking craft-1, homework value-retake-double-counts, WD13a, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3.
+Unslotted: EM-B11, WD6, MK12, marking value-calc-gaps, marking craft-1, homework value-retake-double-counts, WD13a, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3. Also these:
+- the homework full r3 mediums (economics-1, economics-2, value-resnap-double-count, robustness-1, craft-1 to craft-3, rivalry-1 to rivalry-4);
+- digest full r2 robustness-2;
+- WD14a;
+- EC1d;
+- the hint re-ask try count.
 
 Review lane, in order:
 - marking full r2: done, ready 0.6433 (run 13cf8526);
 - digest full r1: done, fail 0.40 (run 03fa57dd);
 - homework full r2: done, ready 0.5125 (run 18799a66);
 - hint full r1: done, ready 0.5556 (run 6cf02f5a);
-- homework full r3: next, the last round (D4 has merged);
-- digest full r2: next (D4 has merged);
-- hint full r2: after HL13 and EC1;
-- marking r3: after EC1, never beside 4d.
+- homework full r3: done, ready 0.5867 (run f6b73d06), the last round;
+- digest full r2: done, ready 0.5694 (run a03b1279), one high line, reworked as WD14;
+- marking r3: in flight (run cc346058), the last round;
+- hint full r2: next, after marking r3;
+- digest full r3: after hint full r2, the last round.
 
 ## Open contradictions
 
-None open after round 6.
+None open after round 7.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, and the lite r2 and r3 steps by the plan change.
 
