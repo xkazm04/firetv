@@ -20,7 +20,7 @@ import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, shownLines,
 import { copiesShown } from "./credit";
 import { applyStep, currentStep, missionDone, missionOf, STEP_MAX } from "./mission";
 import { accepts, isTurnAction, refusal } from "./turn";
-import { forkOf, heldOf, runningTake, takeSpent } from "./take";
+import { forkOf, heldOf, runningTake } from "./take";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, LevelCheck, Moment, SkillId, Take } from "./types";
 
 export { ConversationError };
