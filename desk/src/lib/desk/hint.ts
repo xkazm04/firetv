@@ -166,7 +166,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const maths = subject === "maths";
   const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}` +
     (maths ? `\nKeep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.` : "") + (maths && opts.ground ? `\n${opts.ground}` : "");
-  const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast" });
+  const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast", use: "hint" });
   const first = await ask("");
   const leaked = maths ? leakedIn(problem, spec, first.json, opts.system) : null, long = maths ? longIn(first.json) : null;
   if (!leaked && !long) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };

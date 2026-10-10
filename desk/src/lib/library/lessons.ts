@@ -72,7 +72,7 @@ async function build(): Promise<Map<string, number[][]>> {
     const w = lessonWindows(l.id); if (!w.length) continue;
     const digest = digestOf(w), had = old.get(l.id);
     if (had && had.digest === digest && wellFormed(had.vectors, w.length)) { next.set(l.id, had); out.set(l.id, had.vectors); continue; }
-    const { json } = await embed({ texts: w.map((x) => x.text) });
+    const { json } = await embed({ texts: w.map((x) => x.text), use: "lesson-window" });
     if (!wellFormed(json, w.length)) throw new Error(`the embedding engine did not answer with ${w.length} usable vector(s) for ${l.id}`);
     next.set(l.id, { digest, vectors: json }); out.set(l.id, json); changed = true;
   }
@@ -97,7 +97,7 @@ export async function ensureVectors(): Promise<Map<string, number[][]>> {
 export async function bestWindow(lessonId: string, query: string): Promise<{ t: number; text: string; score: number } | null> {
   const w = lessonWindows(lessonId); if (!w.length) return null;
   const vecs = (await ensureVectors()).get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
-  const [q] = (await embed({ texts: [query] })).json;
+  const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
   let best = 0, bs = -1;
   vecs.forEach((v, i) => { const s = cosine(q, v); if (s > bs) { bs = s; best = i; } });
   return { t: w[best].t, text: w[best].text, score: bs };

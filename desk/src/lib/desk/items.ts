@@ -88,7 +88,7 @@ function ask(topicId: string, memory: string[], slips: string[], want: number, a
     `- Every answer must be an integer or a simple fraction with a small denominator. No decimals, no surds.\n` +
     `- Order them so they get harder across the set: the first is the gentlest, the last is the hardest.\n` +
     `- State the answer you get for each; it will be checked.`;
-  return text<{ items: Candidate[] }>({ system: SYSTEM, prompt, schema: SCHEMA, model: "fast" });
+  return text<{ items: Candidate[] }>({ system: SYSTEM, prompt, schema: SCHEMA, model: "fast", use: "practice" });
 }
 
 /** Candidates that survive substitution, deduped against what we already have. */
@@ -249,7 +249,7 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
     `- Do not work any question out: give the specs only.`;
   // thinking off: writing nine short specs is not a reasoning task and the desk checks every one in code. Measured live
   // (tools/calc-model-yield.cjs, 6 topics): on = 62-90 s a call with two engine timeouts, off = 7-14 s and every set made
-  return text<{ specs: unknown[] }>({ system: calcSystem(topicId), prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false });
+  return text<{ specs: unknown[] }>({ system: calcSystem(topicId), prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false, use: "practice" });
 }
 
 /** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */

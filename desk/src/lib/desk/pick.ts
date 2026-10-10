@@ -30,7 +30,7 @@ export async function pickLesson(subject: Subject, problem: string, system?: Sch
   const { json } = await text<{ lesson: string; why: string }>({
     system: "You match a student's problem to the one lesson in a small library that teaches the method it needs. Most problems are NOT covered by a small library — if none of the lessons teaches the required method, answer exactly 'none'. A wrong lesson wastes the student's time; 'none' does not.",
     prompt: `Problem:\n${problem}\n\nLessons:\n${menu}\n\nAnswer with the lesson id (or 'none') and one sentence saying why, phrased for the student: "chosen because your problem needs …".`,
-    schema: SCHEMA, model: "fast",
+    schema: SCHEMA, model: "fast", use: "lesson-pick",
   });
   // only an id from the menu that was offered counts: 'none', another subject's id and a non-string are no lesson
   const offered = LESSONS.filter((x) => x.subject === subject);

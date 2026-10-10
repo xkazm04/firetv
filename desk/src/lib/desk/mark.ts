@@ -192,7 +192,7 @@ export async function markSet(
   const reading = kind === "school" ? { prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA }
     : kind === "calc" ? { prompt: calcPrompt(practice, slipVocabulary(practice.topic)), schema: CALC_SCHEMA }
     : { prompt: linearPrompt(practice, slipVocabulary(practice.topic)), schema: SCHEMA };
-  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading });
+  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, ...reading, use: "mark" });
 
   // only what each reader asks for is read: never a verdict, and a solution only from the linear reading (the trust gate)
   const reads = (Array.isArray(json?.items) ? json.items : []).filter((m) => m && typeof m.n === "number").map((m): Read => ({

@@ -110,3 +110,39 @@ test('case g: past the cap the ledger rotates to usage.1.jsonl, replacing the ol
  await text({system:'s',prompt:'p'});
  assert(fs.readFileSync(old,'utf8').startsWith('xxx'));assert.equal(rows().length,1);
 });
+
+// ---- case h: the labelled call sites, through stubs
+const LESSON='jWpiMu5LNdg';
+const stamp=(s)=>`00:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.000`;
+const cue=(s,t)=>`${stamp(s)} --> ${stamp(s+4)}\n${t}\n`;
+fs.mkdirSync(path.join(data,'lessons'),{recursive:true});
+fs.writeFileSync(path.join(data,'lessons',`${LESSON}.en.vtt`),['WEBVTT\n',cue(0,'welcome to equations'),cue(20,'an equation is a balance'),cue(45,'add the same to both sides')].join('\n'));
+/** Run `f`, ignore what it throws (the stubs answer just enough to be called), and give the rows it left. */
+async function rowsOf(f){fs.rmSync(LEDGER,{force:true});try{await f();}catch{/* only the request is read */}return rows();}
+const used=(r,use,kind)=>r.some((x)=>x.use===use&&x.kind===kind);
+
+test('case h: pickLesson, the hint ask, makeItems, markSet and the lessons embed each label their call',async()=>{
+ reg.useProvider('embed',{name:'stub',run:async(req)=>({raw:req.texts.map(()=>[1,0])})});
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({lesson:LESSON,why:'chosen because your problem needs a balance'})})});
+ const {pickLesson}=load('desk/pick.ts');
+ let r=await rowsOf(()=>pickLesson('maths','2x+3=7'));
+ assert(used(r,'lesson-pick','text'),'pickLesson: lesson-pick');
+ assert(used(r,'lesson-window','embed'),'the lesson embed: lesson-window');
+
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({hint:'Look at the balance of x and the numbers.',what_to_try_next:'Undo the addition first.',hint1:'a',hint2:'b',hint3:'c'})})});
+ const {hint}=load('desk/hint.ts');
+ r=await rowsOf(()=>hint('maths','Solve for x:  3x − 7 = 11',{}));
+ assert(used(r,'hint','text'),'hint: hint');
+
+ const {makeItems}=load('desk/items.ts');
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({items:[{question:'2x+3=11',answer:'4'}]})})});
+ r=await rowsOf(()=>makeItems('linear-one-step','econ-items',3));
+ assert(used(r,'practice','text'),'makeItems: practice');
+
+ const {markSet}=load('desk/mark.ts');
+ reg.useProvider('vision',{name:'stub',run:async()=>({raw:JSON.stringify({items:[{n:1,studentAnswer:'4',studentWorking:'',verdict:'right',solution:'4',slip:'unclear'}]})})});
+ const sheet={topic:'linear-one-step',marked:false,items:['2x+3=11','x-5=2'].map((question,ix)=>({n:ix+1,question}))};
+ r=await rowsOf(()=>markSet('img',sheet,'econ-mark'));
+ assert(used(r,'mark','vision'),'markSet: mark');
+ assert(!fs.readFileSync(LEDGER,'utf8').includes('econ-mark'),'no learner id in the ledger');
+});
