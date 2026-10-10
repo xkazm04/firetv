@@ -279,6 +279,13 @@ export function getLearner(id: string): Learner {
   return book[id] ? clean(id, book[id]) : blank(id);
 }
 
+/** The learner for a reader that must tell an unreadable learners.json from an empty one (WD14): it throws on the first, reads the second as an empty book. */
+export function readLearner(id: string): Learner {
+  const book = readBook();
+  if (book === null) throw new Error("learners.json could not be read, so the week was not drawn from it");
+  return book[id] ? clean(id, book[id]) : blank(id);
+}
+
 export function saveLearner(l: Learner): void {
   writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP), ...(l.papers?.length ? { papers: l.papers.slice(-PAPERS_CAP) } : {}) });
 }

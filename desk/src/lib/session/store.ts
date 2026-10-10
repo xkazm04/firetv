@@ -14,7 +14,7 @@ import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { addHints, addHistory, addPaper, getLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
+import { addHints, addHistory, addPaper, getLearner, readLearner, saveLearner, type HistoryEntry, type SkillRecord, type StoredPaper } from "./learners";
 import { isPath, learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS, PLAYBOOK } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
@@ -766,7 +766,7 @@ function hintsAdded(was: Session, now: Session, e: Event): { owner: string; hint
 export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
   const id = s.learner?.id;
   if (!id) return null;
-  return sundayWords(sundayPage(getLearner(id), s.profiles.find((p) => p.id === id), now));
+  return sundayWords(sundayPage(readLearner(id), s.profiles.find((p) => p.id === id), now));
 }
 
 /**

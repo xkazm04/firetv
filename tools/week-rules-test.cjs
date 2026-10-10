@@ -396,6 +396,32 @@ test('W9-refresh: a week refresh that throws is logged and set to the authored l
  assert.doesNotMatch(src_,/weekOf\([^)]*\)[^;]*;\s*\} catch \{\}/,'no week refresh in a bare catch');
 });
 
+// ------------------------------------------------------------------ W9-unread (WD14): a learners.json that is there but cannot be read is said, not drawn as an empty week
+test('W9-unread (WD14): an unreadable learners.json gives WEEK_UNREAD, never WEEK_EMPTY; an absent one gives WEEK_EMPTY',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'ur-a',name:'Uma',type:'elementary',age:12,system:'uk',modules:['maths']}});store.dispatch({type:'profile.save'});
+ learners.addDigest('ur-a',{at:Date.now(),kind:'maths',topic:'area',right:5,notSure:0,total:6});
+ store.dispatch({type:'learner.set',id:'ur-a'});
+ assert.equal(store.getSession().week[0].text,'Uma worked on one evening.');
+ const file=path.join(data,'learners.json'),good=fs.readFileSync(file),bad=good.subarray(0,good.length-5),err=console.error,logged=[];
+ try{
+  fs.writeFileSync(file,bad);console.error=(...a)=>logged.push(a.join(' '));
+  try{store.dispatch({type:'learner.set',id:'ur-a'});}finally{console.error=err;}
+  const week=store.getSession().week;
+  assert.deepEqual(week,[{section:'week',text:W.WEEK_UNREAD}],'the authored line');
+  assert.ok(!week.some((l)=>l.text===W.WEEK_EMPTY),'never the empty week');
+  assert.equal(logged.filter((l)=>/week could not be read/.test(l)).length,1,'one log line');
+  assert.ok(fs.readFileSync(file).equals(bad),'nothing was written over the unreadable file');
+  fs.writeFileSync(file,good);store.dispatch({type:'session.end'});
+  assert.equal(store.getSession().week[0].text,'Uma worked on one evening.','the page reads again');
+  const aside=file+'.aside';fs.renameSync(file,aside);
+  try{store.dispatch({type:'session.end'});assert.deepEqual(store.getSession().week,[{section:'week',text:W.WEEK_EMPTY}],'absent reads as an empty week');}
+  finally{fs.renameSync(aside,file);}
+ }finally{console.error=err;if(!fs.existsSync(file)||!fs.readFileSync(file).equals(good))fs.writeFileSync(file,good);}
+ const st=fs.readFileSync(src('lib/session/store.ts'),'utf8'),body=st.slice(st.indexOf('export function weekOf('),st.indexOf('function weekRead('));
+ assert.match(body,/readLearner\(/);assert.doesNotMatch(body,/getLearner\(/,'weekOf reads through readLearner');
+});
+
 // ------------------------------------------------------------------ 8. the phone draws it, and rules/week stays pure
 test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s lines under tonight\'s recap; rules/week imports no session module at run time and no engine',()=>{
  const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
