@@ -330,6 +330,81 @@ test('P10-a: A\'s late pick does not replace B\'s running pick, and B\'s pick la
  const s=store.getSession();assert.equal(s.noLesson,true,'B\'s pick landed on B');assert.equal(s.jobs.lesson.phase,'done');
 });
 
+// ---- P13 (delivery 7d-3): a hint's wait for its lesson ends when its pick ends without one, seated or away ----
+/** Picks that answer in the order they are asked: each waits on its own gate, and a gate marked to fail throws. */
+const gatedPicks=(gates)=>{let n=0;return async()=>{const g=gates[n++];await g?.p;if(g?.fail)throw new Error('boom');return {json:{lesson:'none',why:'x'},provider:'stub'};};};
+const gate=(fail=false)=>({...held1(),fail});
+const quiet=async(f)=>{const c=catchErrors();try{return await f();}finally{c.done();}};
+const snap=(s)=>({lesson:s.lesson,noLesson:s.noLesson,hint:s.hint?.hint1?.hint});
+test('P13 (a): a pick refused at the start (B\'s own pick is running) still ends the wait for A\'s hint in A\'s away slot',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1(),gB=gate();
+ const calls=gatedHints([gA],gatedPicks([gB]));
+ const pA=postHint();await until(()=>calls.hint===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===1);
+ gA.open();assert.equal((await pA).status,200);await settle();
+ assert.equal(calls.lesson,1,'A\'s pick never started');
+ let s=store.getSession();assert.equal(s.away.ema.noLesson,true,'A\'s wait ended');assert.equal(s.away.ema.lesson,null);
+ assert.equal(s.noLesson,false,'B\'s own pick has not landed, and A did not touch B');assert.equal(s.lesson,null);assert.equal(s.jobs.lesson.by,'jakub');
+ gB.open();await settle();
+ s=store.getSession();assert.equal(s.noLesson,true);
+ store.dispatch({type:'learner.set',id:'ema'});s=store.getSession();assert.equal(s.noLesson,true);assert.equal(s.hint.hint1.hint,'hint 0');
+});
+test('P13 (b): a pick that fails after the switch ends the wait for A\'s hint in A\'s away slot',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1(),gP=gate(true);
+ const calls=gatedHints([gA],gatedPicks([gP]));
+ const pA=postHint();await until(()=>calls.hint===1);
+ gA.open();assert.equal((await pA).status,200);await until(()=>calls.lesson===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ const before=snap(store.getSession());
+ await quiet(async()=>{gP.open();await settle();});
+ const s=store.getSession();
+ assert.equal(s.away.ema.noLesson,true,'A\'s wait ended');assert.equal(s.away.ema.lesson,null);
+ assert.deepEqual(snap(s),before,'B\'s lesson and noLesson are unchanged');
+ assert.equal(s.jobs.lesson,undefined,'P11: no failed job on B\'s desk');
+});
+test('P13 (c): A\'s pick superseded by B\'s pick lands in A\'s away slot (its own keyed lesson.set), and B\'s pick lands on B',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1(),gP1=gate(),gP2=gate();
+ const calls=gatedHints([gA],gatedPicks([gP1,gP2]));
+ const pA=postHint();await until(()=>calls.hint===1);
+ gA.open();assert.equal((await pA).status,200);await until(()=>calls.lesson===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===2);
+ assert.equal(store.getSession().jobs.lesson.by,'jakub','B\'s pick replaced A\'s record');
+ const before=snap(store.getSession());
+ gP1.open();await settle();
+ let s=store.getSession();
+ assert.equal(s.away.ema.noLesson,true,'A\'s pick landed in A\'s slot');
+ assert.deepEqual(snap(s),before,'B\'s lesson and noLesson are unchanged');
+ gP2.open();await settle();
+ s=store.getSession();assert.equal(s.noLesson,true,'B\'s pick landed on B');assert.equal(s.away.ema.noLesson,true);
+});
+test('P13 control: on the normal path noLesson is not true before the pick lands',async()=>{
+ seatedWithWork('ema');withPage();
+ const gP=gate();
+ const calls=gatedHints([],gatedPicks([gP]));
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===1);await settle();
+ let s=store.getSession();assert.equal(s.lesson,null);assert.equal(s.noLesson,false,'no flash of "no lesson"');
+ gP.open();await settle();assert.equal(store.getSession().noLesson,true);
+});
+test('P13 control: a re-ask on the same item - the first pick failing does not set noLesson on the new hint',async()=>{
+ seatedWithWork('ema');withPage();
+ const gP1=gate(true),gP2=gate();
+ const calls=gatedHints([],gatedPicks([gP1,gP2]));
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===1);
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===2);
+ await quiet(async()=>{gP1.open();await settle();});
+ let s=store.getSession();assert.equal(s.hint.hint1.hint,'hint 1');assert.equal(s.noLesson,false,'the new hint still waits for its own pick');
+ gP2.open();await settle();assert.equal(store.getSession().noLesson,true);
+});
+test('P13 control: a lesson chosen on the TV (no key) still lands on the seated hint',()=>{
+ seatedWithWork('ema');withPage();
+ store.dispatch({type:'lesson.set',lesson:null});assert.equal(store.getSession().noLesson,true);
+});
+
 // ---- P4 with P4-a: the switcher says what a switch ends ----
 test('P4: switchEndsLine names what the seated learner has running, and only for another learner',()=>{
  const {switchEndsLine}=require(src('tv/keys.ts'));

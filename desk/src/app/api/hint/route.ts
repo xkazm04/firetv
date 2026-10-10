@@ -49,12 +49,22 @@ export async function POST(req: Request) {
     return { ...h1, counted: hintCounted() };
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => (h1.counted ? `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` : HINT_NOT_COUNTED) });
   if (!r.ok) return refused(r);
-  // the lesson behind the hint, run for the learner who asked (it speaks only while they are seated, and lands in their away slot after a switch), keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
+  // the lesson behind the hint, run for the learner who asked (it speaks only while they are seated, and lands in their away slot after a switch), keyed to it: a newer hint's pick replaces this one
+  let myRun = "";
+  // a pick that is no longer the latest still lands (or ends the wait) on the hint that holds its key, seated or away, unless the same learner asked again for this item (P13)
+  const landed = (l: Awaited<ReturnType<typeof pickLesson>>) => {
+    const cur = getSession().jobs?.lesson, held = getSession().hint;
+    if (cur && cur.id !== myRun && cur.key === item.key && cur.by === who.id) return;
+    if (held?.key === item.key && held.owner !== undefined && held.owner !== who.id) return;
+    dispatch({ type: "lesson.set", lesson: l, key: item.key });
+  };
   void runJob("lesson", async (run) => {
+    myRun = run.id;
     const noLibrary = page.subject === "maths" && (judgeOf(path) === "calc" || kindOfQuestion(item.text, system) === "school");
     const l = noLibrary ? null : await pickLesson(page.subject, item.text, system);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
+    else landed(l);
     return l;
-  }, { key: item.key, supersedes: true, askedBy: who.id, done: (l) => `${r.value.counted ? "" : `${HINT_NOT_COUNTED} · `}${l ? `lesson: ${l.title}` : "no lesson covers this one"}` });
+  }, { key: item.key, supersedes: true, askedBy: who.id, done: (l) => `${r.value.counted ? "" : `${HINT_NOT_COUNTED} · `}${l ? `lesson: ${l.title}` : "no lesson covers this one"}` }).then((p) => { if (!p.ok) landed(null); }); // a pick refused at the start or failed ends the wait for its hint, seated or away
   return NextResponse.json({ stage: 1, ...r.value });
 }
