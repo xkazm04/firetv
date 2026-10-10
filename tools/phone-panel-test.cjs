@@ -491,5 +491,6 @@ test('X2 Type it',async(t)=>{
   assert.doesNotMatch(p,/<ExplainTalk [^>]*typed=\{q\}/);assert.match(p,/onSendTyped=\{\(\) => explain\(typedExplain\)\}/);
   assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.walkIx\]\)/,'the walkIx effect clears it');
   assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'a learner change clears it');
+  assert.match(p,/setHeard\(""\); setReply\(""\); setAgain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'P12: a learner change also clears the heard words, the reply and the second try');
  });
 });

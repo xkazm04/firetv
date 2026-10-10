@@ -336,7 +336,7 @@ export default function Phone() {
   // a new item on the walk is a new question: last time's transcript and answer do not belong to it
   useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.walkIx]);
   // and a different learner in the seat does not inherit the last one's typed words
-  useEffect(() => { setTypedExplain(""); setTyping(false); }, [s?.learner?.id]);
+  useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.learner?.id]);
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
