@@ -152,7 +152,7 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
   const lines=[...take.turns,said],before=c.turns.slice(0,c.turns.findIndex(t=>t.id===take.from)+1);
   commit({...c,pending:commandId,capture:false,error:""});
   try{
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...lines].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...lines].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-take"});
     const current=checkCurrent(c,commandId);
     if(runningTake(current)?.note!==take.note)throw new ConversationError("This take has changed. Return to the current scene.",409);
     const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:line(result.json.reply)}];
@@ -211,7 +211,7 @@ export async function englishCommand(raw:unknown){
     const {system,request,schema:shape}=pitchAsk(profile,learning,adultContent(profile,prefs),premise);
     pitching.add(learnerId);
     let r;
-    try{r=await text<Record<string,unknown>>({system,prompt:JSON.stringify(request),schema:shape,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});}
+    try{r=await text<Record<string,unknown>>({system,prompt:JSON.stringify(request),schema:shape,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-pitch"});}
     finally{pitching.delete(learnerId);}
     if(getSession().learner?.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
     const topic=shapePitch(r.json,premise,`${PITCH_PREFIX}${randomUUID().slice(0,8)}`,a=>audienceAllowed(profile,prefs,a));
@@ -232,7 +232,7 @@ export async function englishCommand(raw:unknown){
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};
     dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
     try{
-      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)}),schema:scene.steps?.length?openingSchema:openingWithSteps,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)}),schema:scene.steps?.length?openingSchema:openingWithSteps,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-opening"});
       checkCurrent(c,commandId);
       const opening={id:randomUUID(),role:"partner" as const,text:line(result.json.opening)};
       if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
@@ -286,7 +286,7 @@ export async function englishCommand(raw:unknown){
     const failed="Linga could not give notes on this take. The scene is as it was; press Cut again.";
     commit({...c,pending:commandId,capture:false,error:""});
     try{
-      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({scene:{title:c.title,goal:c.goal},preferences:c.preferences,learnerTurns:lines,task:CUT_TASK}),schema:cutSchema,accept:cutAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({scene:{title:c.title,goal:c.goal},preferences:c.preferences,learnerTurns:lines,task:CUT_TASK}),schema:cutSchema,accept:cutAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-cut"});
       const current=checkCurrent(c,commandId),notes=cleanNotes(result.json.notes,current.turns);
       if(!notes.length)throw new ConversationError(failed,502);
       endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes},provider:result.provider,responseMs:result.ms},commandId);return getSession();
@@ -325,7 +325,7 @@ export async function englishCommand(raw:unknown){
     const stepTask=c.mission&&!missionDone(c.mission)?" step: currentStep is the one goal this learner is working on. Set reached true only when submittedReply itself, in the learner's own words, does it, and quote the exact words of submittedReply that did it (at least two words); otherwise reached false with an empty quote.":"";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}${stepTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?(stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false});
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?(stepTask?turnWithStep:turnSchema):action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:action==="coach"?"linga-coach":action==="replay"?"linga-replay":"linga-turn"});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){

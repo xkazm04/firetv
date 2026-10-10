@@ -75,7 +75,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
     prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\n` +
       (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece. The summary is about that paragraph.\n` : "") +
       `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
-    schema: schemaFor(lens), model: "best",
+    schema: schemaFor(lens), model: "best", use: "essay-read",
   });
   // A highlight may only land on a sentence number that exists, and only on one this call judges: an observation for
   // any other number, or an `observations` that is not a list at all, is dropped. Which sentences are faulty is
@@ -180,7 +180,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
       `Before the rewrite, sentence ${n} read: "${old.text}"` + (before ? ` (${before.verdict}: ${before.note})` : "") + `.\n` +
       (move ? `The move they were asked to make: ${move.move} (pattern: ${move.pattern}).\n` : "") +
       `Observe sentence ${n} alone.`,
-    schema: reviseSchema(lens), model: "best",
+    schema: reviseSchema(lens), model: "best", use: "essay-revise",
   });
   // only the observation for sentence n is read; one that is missing or that the lens cannot read fails the run, so a
   // verdict is never invented. The others come from the first pass, as context for the rule.
