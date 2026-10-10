@@ -118,15 +118,21 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
  * part counts once, as its number; a run that starts above 1 has no gap before it (a continuation sheet). Empty means the
  * page is complete; null means unknown (an item with no usable printed number), which is not the same as complete.
  */
+export const MISSING_SPAN = 100;
 export function missingNumbers(items: Array<{ n: number; label?: string }>): number[] | null {
   if (items.some((i) => !Number.isInteger(i.n) || i.n < 1)) return null;
   const missing: number[] = [];
-  let held = new Set<string>(), run = new Set<number>();
+  let held = new Set<string>(), run = new Set<number>(), unknown = false;
   const close = () => {
-    if (run.size) { const lo = Math.min(...run), hi = Math.max(...run); for (let k = lo + 1; k < hi; k++) if (!run.has(k)) missing.push(k); }
+    if (run.size && !unknown) {
+      const lo = Math.min(...run), hi = Math.max(...run);
+      // a printed number is model output: a run spread wider than the ceiling, or a list longer than it, is unknown, never cut short
+      if (hi - lo > MISSING_SPAN) unknown = true;
+      else for (let k = lo + 1; k < hi; k++) if (!run.has(k)) { missing.push(k); if (missing.length > MISSING_SPAN) { unknown = true; break; } }
+    }
     held = new Set(); run = new Set();
   };
   for (const i of items) { const id = `${i.n}|${i.label ?? ""}`; if (held.has(id)) close(); held.add(id); run.add(i.n); }
   close();
-  return missing;
+  return unknown ? null : missing;
 }

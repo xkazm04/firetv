@@ -789,6 +789,29 @@ test('HF4: with the learner file and session.json both failing, READ_NOT_SAVED i
  assert.equal(store.getSession().status,READ_NOT_SAVED);
  store.dispatch({type:'status',text:'back'});
 });
+// ---- HF5: a printed number is model output; the missing list has a ceiling ----
+test('HF5: missingNumbers has a ceiling of MISSING_SPAN, a run or a list past it is unknown',()=>{
+ const {missingNumbers,MISSING_SPAN}=require(src('lib/desk/read.ts'));
+ assert.equal(MISSING_SPAN,100);
+ const it=(...ns)=>ns.map((n)=>({n}));
+ const t0=Date.now();assert.equal(missingNumbers(it(1,1000000)),null);assert(Date.now()-t0<200,'returns at once');
+ assert.deepEqual(missingNumbers(it(1,101)),Array.from({length:99},(_,i)=>i+2));
+ assert.equal(missingNumbers(it(1,102)),null);
+ // two runs (a repeated number starts a new one): gaps of 60 + 41 = 101 are unknown, 60 + 40 = 100 is the list
+ assert.equal(missingNumbers(it(1,62,1,43)),null);
+ assert.equal(missingNumbers(it(1,62,1,42)).length,100);
+ assert.deepEqual(missingNumbers(it(1,2,3)),[]);assert.deepEqual(missingNumbers(it(1,3)),[2]);
+});
+test('HF5: a read with printed numbers 1 and 1000000 answers 200 with missing null, no missing line, no warn listing numbers',async()=>{
+ blank();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:1000000,text:'x-5=2',y:0.6,x:0.5}]}));
+ const warns=[];const w0=console.warn;console.warn=(...a)=>warns.push(a.join(' '));
+ let r;try{r=await post('read',SNAP);}finally{console.warn=w0;}
+ assert.equal(r.status,200);const j=await r.json();assert.equal(j.missing,null);
+ assert(!/left out printed numbers/.test(store.getSession().status||''));
+ assert.deepEqual(warns.filter((l)=>/printed numbers/.test(l)),[]);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
