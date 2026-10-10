@@ -29,6 +29,7 @@ import { systemOf } from "@/tv/profileRows";
 import { lostWord, paperCaption, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
+import { missingLine } from "@/tv/pageLines";
 import { MathsMark as Mark } from "@/tv/marks";
 import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
@@ -942,6 +943,7 @@ export function PageScreen({ s }: { s: Session }) {
     : read?.phase === "failed" ? "The desk could not read this page. Open Try again on the phone."
     : hj?.phase === "running" ? "Thinking about a hint for this one…"
     : hj?.phase === "failed" ? "No hint that time. Select to try again."
+    : p.missing?.length ? missingLine(p.missing)
     : it ? `Number ${it.label ?? it.n} is under the lamp. Select for a hint — the next step, never the answer.` : "Nothing on this page could be read as a problem.";
   const band = (scale: number) => it ? { top: it.band[0] * scale, height: Math.max(8, (it.band[1] - it.band[0]) * scale) } : null;
   const menu = <div className="mb-status"><div className="mb-chip" data-role="maths-chip"><span className="mb-lab" style={{ marginLeft: 14 }}>Menu</span>{s.view === "band" ? "The photo" : "The problems"}</div><Chips s={s} learner={false} /></div>;

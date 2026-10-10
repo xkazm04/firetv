@@ -717,6 +717,17 @@ test('HF1: the read route carries the missing numbers on the page, the answer, t
  assert.equal(store.getSession().pages[0].missing,null);
 });
 
+test('HF1b: the Math Buddy page screen says the missing numbers, after the hint captions and before the lamp caption',()=>{
+ const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
+ assert.match(tv,/import \{ missingLine \} from "@\/tv\/pageLines"/);
+ const at=tv.indexOf('export function PageScreen');assert(at>=0);
+ const end=tv.indexOf('export function',at+10);const slice=tv.slice(at,end<0?undefined:end);
+ const branch='p.missing?.length ? missingLine(p.missing)';assert(slice.includes(branch));
+ const b=slice.indexOf(branch);
+ for(const before of ['Reading the page','could not read this page','Thinking about a hint','No hint that time'])assert(slice.indexOf(before)>=0&&slice.indexOf(before)<b,before);
+ assert(slice.indexOf('is under the lamp')>b);
+});
+
 // ---- HF2: a good read is kept when the learner file cannot be written ----
 test('HF2: with the learner file unwritable a read of 2 items is kept: 200, saved false, the items on the page, the job done, READ_NOT_SAVED said',async()=>{
  blank();
