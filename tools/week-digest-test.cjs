@@ -515,6 +515,24 @@ test('WD12: a hint whose count write fails is said (HINT_NOT_COUNTED) on both st
  assert.equal(r.status,200);assert.equal(j.counted,true);assert.ok(!store.getSession().status.startsWith(store.HINT_NOT_COUNTED));
 });
 
+test('P7-b: a hint asked while learners.json is unreadable answers counted false with HINT_NOT_COUNTED, and learners.json is byte-identical after',async()=>{
+ seat();await readSheet();
+ const HINT=async()=>({json:{hint:'What undoes the + 3?',what_to_try_next:'Write the equation again.'},provider:'test',ms:1});
+ answer=HINT;
+ const poll=async(name)=>{for(let i=0;i<200&&store.getSession().jobs?.[name]?.phase==='running';i++)await new Promise((r)=>setTimeout(r,10));await new Promise((r)=>setTimeout(r,20));};
+ const whole=fs.readFileSync(FILE),short=whole.subarray(0,whole.length-5);
+ fs.writeFileSync(FILE,short);
+ const c=catchLog();let r,j;
+ try{r=await post('hint',{stage:1});j=await r.json();await poll('lesson');}finally{c.done();fs.writeFileSync(FILE,whole);}
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,false);assert.equal(store.hintCounted(),false);
+ assert.ok(store.getSession().status.startsWith(store.HINT_NOT_COUNTED),`status: ${store.getSession().status}`);
+ assert.ok(c.errs.some((l)=>/could not be counted/.test(l)),`logged: ${c.errs.join(' | ')}`);
+ assert.ok(fs.readFileSync(FILE).equals(whole),'learners.json is the bytes it was restored to');
+ // a missing file is an empty book: nothing to count onto, and that is not a failure
+ const aside=FILE+'.aside';fs.renameSync(FILE,aside);
+ try{assert.equal(learners.addHints(LEARNER,1,0),false);}finally{fs.renameSync(aside,FILE);}
+});
+
 test('WD13: a rehydrate that fails is logged with its reason, once per distinct failure and never once per event; the session is otherwise as it was',()=>{
  seat();
  const real=learners.readLearner;let reason='the disk went';

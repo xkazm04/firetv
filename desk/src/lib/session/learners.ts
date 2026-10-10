@@ -419,7 +419,7 @@ const localDay = (at: number) => { const d = new Date(at); return `${d.getFullYe
  */
 export function addHints(id: string, hints: number, second: number, now = Date.now()): boolean {
   if (!(hints > 0) && !(second > 0)) return false;
-  const l = getLearner(id), day = localDay(now);
+  const l = readLearner(id), day = localDay(now);
   const i = l.digest.findLastIndex((d) => d.kind === "homework" && localDay(d.at) === day), d = l.digest[i];
   if (d?.kind !== "homework") return false;
   const [clean] = cleanDigest([{ ...d, hints: d.hints + Math.max(0, hints), second: d.second + Math.max(0, second) }]);
