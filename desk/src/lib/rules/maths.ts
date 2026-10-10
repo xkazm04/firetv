@@ -114,6 +114,7 @@ export function typedAnswersProblem(answers: unknown, n: number): string | null 
   if (answers.length > TYPED_ANSWERS_MAX) return `That is more than ${TYPED_ANSWERS_MAX} answers, and no set is that long. Send one for each question.`;
   if (answers.some((a) => typeof a !== "string")) return "One of the answers was not text. Type them again.";
   if (answers.length !== n) return `This set has ${n} questions and ${answers.length} answers came. Send one for each question.`;
+  if ((answers as string[]).every((a) => !a.trim())) return "Every answer is empty. Type at least one and send again.";
   const long = (answers as string[]).findIndex((a) => a.length > TYPED_ANSWER_MAX);
   if (long >= 0) return `Answer ${long + 1} is longer than ${TYPED_ANSWER_MAX} characters. Shorten it and send again.`;
   return null;
