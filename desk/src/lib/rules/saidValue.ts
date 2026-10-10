@@ -24,7 +24,7 @@ export const FUNCTION_ALIASES: Record<string, string[]> = {
 /** The names a value may carry, by their group. */
 const GROUP_OF: Record<string, string> = { sin: "sin", cos: "cos", tan: "tan", ln: "log", log: "log", sqrt: "sqrt", e: "exp", exp: "exp", pi: "pi", "π": "pi" };
 
-const edge = (a: string) => new RegExp(`(?<![\p{L}])${fold(a.toLowerCase())}(?![\p{L}])`, "u");
+const edge = (a: string) => new RegExp(`(?<![\\p{L}])${fold(a.toLowerCase())}(?![\\p{L}])`, "u");
 const ALIAS_RES: Record<string, RegExp[]> = Object.fromEntries(Object.entries(FUNCTION_ALIASES).map(([g, as]) => [g, as.map(edge)]));
 
 const runs = (s: string) => (s.match(/\d+/g) ?? []).map((r) => r.replace(/^0+(?=\d)/, ""));

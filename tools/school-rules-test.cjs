@@ -1971,6 +1971,13 @@ test('X5 saidIn: a value the learner said is heard',()=>{
   ['minus three','-3'],['six x plus two','6x + 2'],['x squared','x^2'],['two lots of three x plus one','2(3x+1)'],['I got sine x plus C','sin x + C'],['I got x + C','x + C']];
  for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
 });
+test('X5b saidIn: a function name is heard only as a whole word, not inside another word',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const no=[['nevím','e^x'],['I do not know, I just used the rule','e^x + C'],['I picked it from the list','pi'],['I stand by it','tan x + C'],['it cost me a lot','cos x + C'],['I was using it','sin x + C'],['I logged it','ln x + C'],['they are rooted','sqrt(x)']];
+ for (const [t,v] of no) assert.equal(V.saidIn(v,t),false,`X5b not heard inside a word: ${t} / ${v}`);
+ const yes=[['I got e to the x plus C','e^x + C'],['pi over 4','pi/4'],['natural log of seven over two','ln(7)/2'],['the square root of x','sqrt(x)'],['minus cos x plus C','-cos x + C'],['I got e^x + C','e^x + C']];
+ for (const [t,v] of yes) assert.equal(V.saidIn(v,t),true,`X5b heard as a word: ${t} / ${v}`);
+});
 test('X5 saidIn: a value the learner did not say fails closed',()=>{
  const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
  const rows=[['nevím, nějak jsem to odečetla','7/12','R2'],['I got five','4','R18'],['three','-3','minus'],['','4','empty transcript'],['I got four','','empty value'],
