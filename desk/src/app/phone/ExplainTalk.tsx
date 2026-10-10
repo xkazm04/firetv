@@ -2,6 +2,8 @@
  * "How did you get there?" on the Practice panel: say it (hold to speak), or type it. Presentational: props only, no
  * fetch and no session. The page keeps the state and the explain() call. What is typed is sent as it is, in any language.
  */
+import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
+
 export type ExplainTalkProps = {
   micOk: boolean; holding: boolean; heard: string; reply: string; busy: boolean;
   typed: string; typing: boolean;
@@ -13,7 +15,7 @@ export type ExplainTalkProps = {
 
 export function ExplainTalk(p: ExplainTalkProps) {
   const typedBox = <>
-    <div className="field"><textarea value={p.typed} onChange={(e) => p.onTyped(e.target.value)} placeholder="What did you do first?" aria-label="How did you get there? Type it in your own words" /></div>
+    <div className="field"><textarea value={p.typed} maxLength={EXPLAIN_TRANSCRIPT_MAX} onChange={(e) => p.onTyped(e.target.value)} placeholder="What did you do first?" aria-label="How did you get there? Type it in your own words" /></div>
     <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={p.onSendTyped} disabled={p.busy || !p.typed.trim()}>Send</button>
       {p.micOk
         ? <button className="pbtn" data-secondary="true" onClick={p.onCloseTyping}>Use the microphone</button>

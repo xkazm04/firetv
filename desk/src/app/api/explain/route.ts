@@ -10,16 +10,20 @@ import { refused, runJob } from "@/lib/desk/job";
 import { learnerAge } from "@/lib/rules/voice";
 import { learnerSystem } from "@/lib/rules/school";
 import { itemName } from "@/lib/rules/calc-word";
+import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const { transcript, n } = (await req.json().catch(() => ({}))) as { transcript?: string; n?: number };
+  const { transcript, n } = (await req.json().catch(() => ({}))) as { transcript?: unknown; n?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
   if (!practice) return NextResponse.json({ error: "Start a practice set first." }, { status: 400 });
   const item = practice.items[typeof n === "number" ? n : s.walkIx];
   if (!item) return NextResponse.json({ error: "That item is not on the desk any more." }, { status: 400 });
+  // nothing to hear, or too much to send, is refused before any model call; a refusal never truncates
+  if (typeof transcript !== "string" || !transcript.trim()) return NextResponse.json({ error: "Say or type how you got your answer first." }, { status: 400 });
+  if (transcript.length > EXPLAIN_TRANSCRIPT_MAX) return NextResponse.json({ error: `That is longer than ${EXPLAIN_TRANSCRIPT_MAX} characters. Shorten it and send again.` }, { status: 400 });
   // after the model answers, the walk may have moved on: settle only the same item, on the same set, still unsure
   const same = () => {
     const now = getSession().practice;
@@ -27,7 +31,7 @@ export async function POST(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
+    const x = await explainItem(item, transcript, practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s), learnerSystem(s), itemName(practice.items, practice.items.indexOf(item)));
     // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
     let saved = true;
     if (same()) {

@@ -628,3 +628,21 @@ test('MB-B2 fallback: on an item no reader reads, a line stating a solution is r
  assert.equal(M.leaks(word,'Odpověď je 19,5.'),true);
  assert.equal(M.leaks(word,'The answer is forty two.'),true);
 });
+
+// ---- X5 (craft-2, robustness-5): an empty, malformed or overlong transcript is refused before any model call ----
+test('X5 route: an empty, blank, non-JSON, non-string or 1001-character transcript is a 400 with its sentence and no model call; 1000 characters is heard',async()=>{
+ await markedWalk();
+ const route=require(path.join(root,'src/app/api/explain/route.ts'));
+ const post=(body)=>route.POST(new Request('http://desk/api/explain',{method:'POST',body}));
+ const EMPTY='Say or type how you got your answer first.',LONG='That is longer than 1000 characters. Shorten it and send again.';
+ const rows=[['empty',JSON.stringify({transcript:'',n:3}),EMPTY],['whitespace only',JSON.stringify({transcript:'  \n ',n:3}),EMPTY],['not JSON','this is not json',EMPTY],
+  ['a number',JSON.stringify({transcript:12,n:3}),EMPTY],['1001 characters',JSON.stringify({transcript:'a'.repeat(1001),n:3}),LONG]];
+ for(const [why,body,msg] of rows){
+  seen=[];said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
+  const r=await post(body);
+  assert.equal(r.status,400,why);assert.equal((await r.json()).error,msg,why);assert.equal(seen.length,0,`${why}: no model call`);
+ }
+ seen=[];said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
+ const ok=await post(JSON.stringify({transcript:'a'.repeat(1000),n:3}));
+ assert.equal(ok.status,200,'exactly 1000 characters is heard');assert.equal(seen.length,1);
+});
