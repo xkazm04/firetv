@@ -313,6 +313,17 @@ test('jobs 3: while an explanation runs the open item shows the desk thinking; a
  assert.equal(explainLine({practice:markedSet,jobs:{explain:job('failed',{key:'1',error:'x'}),mark:{id:'m',phase:'done',startedAt:2500,endedAt:3000}}},1),null,'a failure from a set marked before this one is not shown');
 });
 
+test('jobs 3b (P14): a running mark or explanation of the learner who left is not shown to the seated learner; their own and a job with no by are',()=>{
+ const {markLine,explainLine,MARKING,THINKING}=R();
+ const B={id:'bea',name:'Bea'};
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running',{by:'adam'})}}),null,'the mark of A is running, B has an unmarked set');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1',by:'adam'})}},1),null,'the explain of A is running on item 1, B is on item 1');
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running',{by:'bea'})}}).text,MARKING,'the own mark of B');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1',by:'bea'})}},1).text,THINKING,'the own explain of B');
+ assert.equal(markLine({learner:B,practice:unmarked,jobs:{mark:job('running')}}).text,MARKING,'no by: as today');
+ assert.equal(explainLine({learner:B,practice:markedSet,jobs:{explain:job('running',{key:'1'})}},1).text,THINKING,'no by: as today');
+});
+
 test('jobs 4: MathsTV draws the two states from tv/mathsRows.ts in the desk\'s voice, and adds no stop',()=>{
  const tv=tvSrc();
  assert.match(tv,/import \{[^}]*markLine[^}]*\} from "@\/tv\/mathsRows"/,'markLine from tv/mathsRows.ts');

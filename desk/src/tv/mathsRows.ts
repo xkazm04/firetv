@@ -263,7 +263,9 @@ export function fitRow(base: number, room: number, widthAt: (px: number) => numb
  * answer, a verdict or a model's words - only the desk's fixed sentences.
  */
 export interface JobLine { phase: "running" | "failed"; text: string }
-type JobsOf = Pick<Session, "jobs" | "practice">;
+type JobsOf = Pick<Session, "jobs" | "practice" | "learner">;
+/** A running job of a learner who left is not the seated learner's to see (P14); a job with no `by` shows as it always did. */
+const theirs = (j: { by?: string }, s: JobsOf) => j.by === undefined || j.by === s.learner?.id;
 /** When a run last moved: its end, or its start while it runs. */
 const at = (j: { startedAt: number; endedAt?: number } | undefined) => (j ? j.endedAt ?? j.startedAt : -Infinity);
 
@@ -279,7 +281,7 @@ export const SNAP_AGAIN = "Snap the sheet again and the desk tries again.";
 export function markLine(s: JobsOf): JobLine | null {
   const p = s.practice, j = s.jobs?.mark;
   if (!p || p.marked || !j) return null;
-  if (j.phase === "running") return { phase: "running", text: MARKING };
+  if (j.phase === "running") return theirs(j, s) ? { phase: "running", text: MARKING } : null;
   if (j.phase !== "failed" || at(s.jobs?.practice) > at(j)) return null;
   const said = (j.error ?? "The desk could not mark the set.").replace(/\s*Try again\.\s*$/, "");
   return { phase: "failed", text: `${said} ${SNAP_AGAIN}` };
@@ -295,7 +297,7 @@ export const THINKING = "The desk is thinking over what you said…";
 export function explainLine(s: JobsOf, n: number): JobLine | null {
   const j = s.jobs?.explain;
   if (!s.practice?.marked || !j || j.key !== String(n)) return null;
-  if (j.phase === "running") return { phase: "running", text: THINKING };
+  if (j.phase === "running") return theirs(j, s) ? { phase: "running", text: THINKING } : null;
   if (j.phase !== "failed" || at(s.jobs?.mark) > at(j)) return null;
   return { phase: "failed", text: j.error ?? "The desk could not follow that. Try again." };
 }
