@@ -26,6 +26,8 @@ export async function POST(req: Request) {
   const job = kind ? s.jobs?.[kind] : undefined;
   const route = kind ? ROUTES[kind] : undefined;
   if (!kind || !job || !route || job.phase !== "failed" || !job.input) return NextResponse.json({ error: NOTHING }, { status: 409 });
+  // a failed run of the learner who left is not the seated one's to ask again (a session restored from disk)
+  if (job.by !== undefined && job.by !== s.learner?.id) return NextResponse.json({ error: MOVED_ON }, { status: 409 });
   // a hint is for the item it was asked about: if the page under it has changed, there is nothing to ask again
   if (kind === "hint") {
     const item = s.pages[s.pageIx]?.items[Number(job.input.itemIx)];

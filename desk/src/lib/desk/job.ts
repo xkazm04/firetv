@@ -11,7 +11,7 @@
  * A run writes its done or failure line only while the learner who asked is still seated, so a run that outlives a switch never speaks on the next learner's desk.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, LEARNER_UNREAD_RUN, type JobInput, type JobKind } from "../session/store";
+import { dispatch, getSession, LEARNER_UNREAD_RUN, type Job, type JobInput, type JobKind } from "../session/store";
 import { LearnersUnread } from "../session/learners";
 import { EngineError, type EngineErrorKind } from "../engines/types";
 
@@ -77,18 +77,23 @@ export function jobError(kind: JobKind, e: unknown): string {
   return why ? `${FAILED[kind]} ${why}` : `${FAILED[kind]} Try again.`;
 }
 
+/** Whether a job holds its kind against a new run by the seated learner: running, and theirs or nobody's (P11). */
+export function blocksRun(job: Job | undefined, seatedId: string | undefined): boolean {
+  return job?.phase === "running" && (job.by === undefined || job.by === seatedId);
+}
+
 let seq = 0;
 const runId = (kind: JobKind) => `${kind}-${Date.now().toString(36)}-${(++seq).toString(36)}`;
 const detail = (e: unknown) => (e instanceof Error ? e.message : String(e)).split("\n")[0].slice(0, 120);
 
 export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>, opts: JobOptions<T> = {}): Promise<JobResult<T>> {
   const now = getSession().jobs?.[kind];
-  if (now?.phase === "running" && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
+  const seatedNow = getSession().learner?.id, asker = seatedNow;
+  if (blocksRun(now, seatedNow) && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
-  const asker = getSession().learner?.id;
   const seated = () => getSession().learner?.id === asker;
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
-  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}) });
+  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}), ...(asker !== undefined ? { by: asker } : {}) });
   if (opts.start) dispatch({ type: "status", text: opts.start });
   try {
     const value = await work(run);

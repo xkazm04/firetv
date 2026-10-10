@@ -10,7 +10,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK, HINT_NOT_COUNTED, hintCounted } from "@/lib/session/store";
 import { groundFor, hint } from "@/lib/desk/hint";
 import { pickLesson } from "@/lib/desk/pick";
-import { BUSY, refused, runJob } from "@/lib/desk/job";
+import { BUSY, blocksRun, refused, runJob } from "@/lib/desk/job";
 import { resolveEnglish } from "@/lib/rules/english";
 import { judgeOf, learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
@@ -26,7 +26,7 @@ export async function POST(req: Request) {
   const itemIx = typeof body.itemIx === "number" ? body.itemIx : s.itemIx;
   const item = page.items[itemIx]; if (!item) return NextResponse.json({ error: "That item is not on the page." }, { status: 400 });
   // one hint at a time: each is a model call and counts in the log
-  if (getSession().jobs?.hint?.phase === "running") return refused({ status: 409, error: BUSY });
+  if (blocksRun(getSession().jobs?.hint, who.id)) return refused({ status: 409, error: BUSY });
   if (typeof body.itemIx === "number") dispatch({ type: "item", itemIx: body.itemIx });
 
   const path = learnerPath(s), age = learnerAge(s), system = learnerSystem(s);

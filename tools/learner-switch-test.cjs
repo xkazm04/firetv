@@ -183,7 +183,7 @@ for(const kind of KINDS1){
   const c=catchErrors();let res;try{r.open();res=await r.p;}finally{c.done();}
   assert.equal(res.ok,false);
   const s=store.getSession();assert.notEqual(s.status,res.error);assert.equal(s.status,'');
-  assert.equal(s.jobs[kind].phase,'failed');assert.equal(s.jobs[kind].error,res.error);
+  assert.equal(s.jobs[kind],undefined,"P11 (i): the failure of the learner who left leaves no failed job on the next learner's desk");
  });
 }
 test('robustness-1 (c): a hint held at the engine across a switch does not write its done line on the next learner',async()=>{
@@ -233,6 +233,70 @@ test('robustness-1 (e): control, a run with no one seated at both moments writes
  store.dispatch({type:'reset'});assert.equal(store.getSession().learner,null);
  const r=heldRun('read');r.open();await r.p;
  assert.equal(store.getSession().status,'read done');
+});
+
+// ---- P11 (delivery 7d-2): a run of the learner who left neither blocks nor leaves a retry for the next learner ----
+const settle=async()=>{for(let i=0;i<60;i++)await new Promise((r)=>setImmediate(r));};
+const withPage=(key='k1',id='maths-1')=>{
+ store.dispatch({type:'page.reading',page:{id,subject:'maths',title:'Sheet',img:'',w:100,h:100}});
+ store.dispatch({type:'page.read',id,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,10],key}],readMs:1,provider:'test'});
+};
+const postHint=(body={})=>route('hint').POST(req('/api/hint',{method:'POST',body}));
+const postRetry=(kind)=>route('session/retry').POST(req('/api/session/retry',{method:'POST',body:{kind}}));
+/** A text stub where each hint call waits on its own gate, in the order they are asked; a lesson pick answers at once unless `pick` says otherwise. */
+const gatedHints=(gates,pick)=>{let n=0;const calls={hint:0,lesson:0};
+ answer=async(r)=>{const k=Object.keys(r.schema?.properties??{});
+  if(k.includes('hint')){const i=n++;calls.hint++;await gates[i]?.p;return {json:{hint:`hint ${i}`,what_to_try_next:'next'},provider:'stub'};}
+  calls.lesson++;return pick?pick(r):{json:{lesson:'none',why:'x'},provider:'stub'};};
+ return calls;};
+const until=async(f)=>{for(let i=0;i<200&&!f();i++)await new Promise((r)=>setImmediate(r));assert.ok(f(),'condition not reached');};
+test('P11 (ii): the next learner\'s hint is not refused while the learner who left has one running; each lands on its own learner',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1();const calls=gatedHints([gA]);
+ const pA=postHint();await until(()=>calls.hint===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ const rB=await postHint();assert.equal(rB.status,200,'B is not refused');
+ await settle();
+ let s=store.getSession();assert.equal(s.hint.hint1.hint,'hint 1');assert.equal(s.hint.owner,'jakub');
+ gA.open();assert.equal((await pA).status,200);await settle();
+ s=store.getSession();assert.equal(s.hint.hint1.hint,'hint 1',"A's late hint did not replace B's");assert.equal(s.hint.owner,'jakub');
+ assert.equal(s.away.ema.hint.hint1.hint,'hint 0');assert.equal(s.away.ema.hint.owner,'ema');
+});
+test('P11 (ii): the same through runJob for another kind (mark)',async()=>{
+ seatedWithWork('ema');const r=heldRun('mark');
+ store.dispatch({type:'learner.set',id:'jakub'});
+ const second=await job1().runJob('mark',async()=>2,{done:()=>'B done'});
+ assert.equal(second.ok,true,'not refused');assert.equal(store.getSession().jobs.mark.by,'jakub');
+ r.open();assert.equal((await r.p).ok,true);
+ const s=store.getSession();assert.equal(s.jobs.mark.by,'jakub',"the old run is no longer current: its late job.done is dropped");assert.equal(s.status,'B done');
+});
+test('P11 control: the seated learner\'s second request while their own run is running is still refused 409 BUSY',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1();const calls=gatedHints([gA]);
+ const pA=postHint();await until(()=>calls.hint===1);
+ const again=await postHint();assert.equal(again.status,409);assert.equal(calls.hint,1,'no second engine call');
+ const viaJob=await job1().runJob('hint',async()=>1);assert.equal(viaJob.ok,false);assert.equal(viaJob.status,409);
+ gA.open();await pA;await settle();
+});
+test('P11 (i): a run that fails after the switch leaves no failed job, and retry answers 409 with no engine call',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1();let calls=0;
+ answer=async()=>{calls++;await gA.p;throw new Error('boom');};
+ const pA=postHint();await until(()=>calls===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ const c=catchErrors();try{gA.open();assert.equal((await pA).status,502);await settle();}finally{c.done();}
+ assert.equal(store.getSession().jobs.hint,undefined,"no failed hint on B's desk");
+ const r=await postRetry('hint');assert.equal(r.status,409);assert.equal(calls,1,'no engine was called');
+});
+test('P11 (i): retry refuses a failed job whose by is not the seated learner (a restored session)',async()=>{
+ seatedWithWork('jakub');withPage('k1','maths-1');
+ const job={id:'h1',phase:'failed',startedAt:1,endedAt:2,error:'x',key:'k1',input:{itemIx:0,askedQ:''}};
+ let calls=0;answer=async()=>{calls++;return {json:{hint:'h',what_to_try_next:'n'},provider:'stub'};};
+ globalThis.__desk.session={...store.getSession(),jobs:{hint:{...job,by:'ema'}}};
+ const r=await postRetry('hint');assert.equal(r.status,409);assert.equal(calls,0);
+ globalThis.__desk.session={...store.getSession(),jobs:{hint:{...job,by:'jakub'}}};
+ assert.equal((await postRetry('hint')).status,200,'control: the seated learner\'s own failed job is retried');
+ await settle();
 });
 
 // ---- P4 with P4-a: the switcher says what a switch ends ----

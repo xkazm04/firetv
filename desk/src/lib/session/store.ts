@@ -225,7 +225,7 @@ export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practic
 export type JobPhase = "running" | "done" | "failed";
 /** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
 export type JobInput = Record<string, string | number>;
-export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; }
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; /** The status line the run set when it started (P8): a switch that drops the run clears it while it still reads this. */ start?: string; /** The learner the run is for (P11): a running job of a learner who is not seated does not block the seated one, and its failure leaves no retry. A job without one behaves as it always did. */ by?: string; }
 export type Jobs = Partial<Record<JobKind, Job>>;
 /** Said for a run the desk was restarted in the middle of. */
 export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
@@ -340,7 +340,7 @@ export type Event =
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
-  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
+  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
 const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
@@ -637,8 +637,10 @@ function step(s: Session, e: Event): Session {
       // a new lesson opens playing (the embed autoplays): the last one's Pause is not this one's
       if (e.lesson && e.lesson.id !== s.lesson?.id) n.lessonPaused = false; break;
     case "lesson.watched": if (s.watch && watchDue(s.watch, Date.now())) n.watch = { ...s.watch, logged: true }; break;
-    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}), ...(e.start !== undefined ? { start: e.start } : {}) } }; break;
+    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}), ...(e.start !== undefined ? { start: e.start } : {}), ...(e.by !== undefined ? { by: e.by } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
+      // a failure that lands for a learner who is not seated leaves no failed job: it is not the next learner to retry (P11)
+      if (e.type === "job.failed" && j.by !== undefined && j.by !== me) { n.jobs = { ...s.jobs }; delete n.jobs[e.kind]; break; }
       n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
       // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
       if (e.type === "job.failed" && e.kind === "lesson" && j.key === s.hint?.key) { n.lesson = null; n.noLesson = true; }
