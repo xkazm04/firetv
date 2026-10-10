@@ -18,8 +18,9 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
-import { commaSystem, type SchoolSystem } from "./taskText";
 import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+/** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
+const commaSystem = (system?: string) => system === "cz" || system === "de";
 
 /** The ids of the Calculus 2 shapes (not calculus2.spine.ts's Calc2Shape: that is a topic's list, which also holds Calculus 1's two integral shapes). */
 export type Calc2SpecShape = "approx-integral" | "sequence-limit";
@@ -245,7 +246,7 @@ function readsAsDecimal(ans: string): boolean {
  * The `why` is a fixed sentence of the desk's, with no value in it.
  * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4).
  */
-export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown, system?: SchoolSystem): Calc2Verdict {
+export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown, system?: string): Calc2Verdict {
   if (isSequence(spec)) return sequenceCheck(spec, studentAnswer, system);
   const r = read(spec);
   if (!r.ok) return verdict("unsure", BAD_SPEC);
@@ -507,7 +508,7 @@ function judgeLimit(truth: number, s: number, written: string): Calc2Verdict {
  * figures or more, 'unsure' with fewer; any other decimal within 5e-3 is 'unsure'); an empty, unreadable or non-finite
  * answer, an answer in x, or a spec the desk cannot work out, is 'unsure'.
  */
-function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown, system?: SchoolSystem): Calc2Verdict {
+function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown, system?: string): Calc2Verdict {
   const r = readSequence(spec);
   if (!r.ok) return verdict("unsure", BAD_SPEC);
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
