@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   if (typeof text !== "string" || !text.trim()) return new Response("Send a line to speak.", { status: 400 });
   if (!voiceConfigured()) return new Response("voice not configured", { status: 503 });
   try {
-    const { json, provider } = await speak({ text: text.slice(0, 900) });
+    const { json, provider } = await speak({ text: text.slice(0, 900), use: "speak" });
     // Piper returns WAV, ElevenLabs MP3. Announce what was actually synthesised.
     const type = provider.startsWith("piper/") ? "audio/wav" : "audio/mpeg";
     return new Response(new Uint8Array(json), { headers: { "Content-Type": type, "Cache-Control": "no-store" } });

@@ -50,6 +50,6 @@ export function paperPrompt(): string {
 
 /** Read one marked paper. The rows come back as the model gave them; clean them with `cleanPaper` before anything else reads them. */
 export async function readPaper(imageBase64: string): Promise<{ rows: ReadRow[]; provider: string; ms: number }> {
-  const { json, provider, ms } = await vision<{ items: ReadRow[] }>({ imageBase64, prompt: paperPrompt(), schema: PAPER_SCHEMA });
+  const { json, provider, ms } = await vision<{ items: ReadRow[] }>({ imageBase64, prompt: paperPrompt(), schema: PAPER_SCHEMA, use: "paper-read" });
   return { rows: json.items, provider, ms };
 }

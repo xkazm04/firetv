@@ -146,3 +146,35 @@ test('case h: pickLesson, the hint ask, makeItems, markSet and the lessons embed
  assert(used(r,'mark','vision'),'markSet: mark');
  assert(!fs.readFileSync(LEDGER,'utf8').includes('econ-mark'),'no learner id in the ledger');
 });
+
+// ---- case i: the rest of the labelled call sites
+const src=(f)=>fs.readFileSync(path.join(root,'src',f),'utf8');
+
+test('case i: readPage, readPaper, analyseSentence, writeMemory and teachTopic each label their call',async()=>{
+ reg.useProvider('vision',{name:'stub',run:async()=>({raw:JSON.stringify({items:[]})})});
+ const {readPage}=load('desk/read.ts');
+ let r=await rowsOf(()=>readPage('img','maths',100,100));
+ assert(used(r,'homework-read','vision'),'readPage: homework-read');
+ const {readPaper}=load('desk/paperRead.ts');
+ r=await rowsOf(()=>readPaper('img'));
+ assert(used(r,'paper-read','vision'),'readPaper: paper-read');
+
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({explanation:'You used the right tense.',lines:[],idea:'Undo each step in turn.'})})});
+ const {analyseSentence}=load('desk/english.ts');
+ r=await rowsOf(()=>analyseSentence('I went home yesterday.'));
+ assert(used(r,'english-sentence','text'),'analyseSentence: english-sentence');
+ const {writeMemory}=load('desk/memory.ts');
+ r=await rowsOf(()=>writeMemory('econ-memory',{topic:'linear-one-step'}));
+ assert(used(r,'memory','text'),'writeMemory: memory');
+ const {teachTopic}=load('desk/worked.ts');
+ r=await rowsOf(()=>teachTopic('frac-equivalent',undefined,'uk',1));
+ assert(used(r,'worked-idea','text'),'teachTopic: worked-idea');
+});
+
+test('case i2: the explain functions, the Linga check ask and the speak route label their call (source pins)',()=>{
+ const ex=src('lib/desk/explain.ts');
+ assert.equal((ex.match(/use: 'explain'|use: "explain"/g)||[]).length,3);
+ assert.equal((ex.match(/text<[^\n]*model: "best", use: "explain" \}\)/g)||[]).length,3,'each explain label sits inside a text request');
+ assert(/text<Record<string, unknown>>\(\{[^\n]*use: "linga-check" \}\)/.test(src('lib/english/check.ts')),'check.ts ask: linga-check');
+ assert(/speak\(\{ text: [^\n]*use: "speak" \}\)/.test(src('app/api/speak/route.ts')),'speak route: speak');
+});

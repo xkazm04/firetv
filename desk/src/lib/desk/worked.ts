@@ -43,7 +43,7 @@ export async function teachTopic(topic: string, age: number | undefined, system:
     const { json } = await text<{ idea: string }>({
       system: withManner(`You are a maths tutor for ${voice.who}. Explain the idea behind one topic in at most three short sentences, before the learner sees worked examples. Words only: write no digits and no worked numbers. No praise, no questions to the learner.`, voice),
       prompt: `Topic: ${title}.\nThe method the desk will show, step by step: ${method.steps.join("; ")}.\nA plain version of the idea, for reference: ${method.idea}\nWrite the idea in your own words for this learner.`,
-      schema: { type: "object", properties: { idea: { type: "string" } }, required: ["idea"] }, model: "fast", thinking: false,
+      schema: { type: "object", properties: { idea: { type: "string" } }, required: ["idea"] }, model: "fast", thinking: false, use: "worked-idea",
     });
     const clean = cleanIdea(json?.idea);
     if (clean) { idea = clean; own = true; }

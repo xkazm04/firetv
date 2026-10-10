@@ -72,7 +72,7 @@ function blank(learnerId: string, stage: LevelCheck["stage"]): LevelCheck {
 
 interface Ctx { profile: Profile; learning: EnglishLearning; adult: boolean; commandId: string; }
 const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000) =>
-  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true });
+  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" });
 
 /**
  * One model call against the check. Pending while it runs; the result lands only on the same check,

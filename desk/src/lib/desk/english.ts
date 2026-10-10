@@ -30,7 +30,7 @@ export async function analyseSentence(sentence: string, age?: number): Promise<E
     system: systemFor(age),
     prompt: `They wrote: "${sentence}"\n\nRule card (for you only; they never see it):\n${cardText(card)}\n\n` +
       (card.conflict ? "Tell them, kindly, why the tense they used does not fit the time word, and which tense the time word asks for." : "Tell them what they did right and name the time word that made it right."),
-    schema: SCHEMA, model: "fast",
+    schema: SCHEMA, model: "fast", use: "english-sentence",
   });
   return { sentence, card, explanation: json.explanation, provider };
 }

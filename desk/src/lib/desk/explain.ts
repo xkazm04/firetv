@@ -73,7 +73,7 @@ export async function explain(
     `value: the final value of x the student says they got, written as a plain number or simple fraction (nine is 9, ` +
     `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`;
 
-  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" }), topicId);
+  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best", use: "explain" }), topicId);
 }
 
 /** The school stance, in the learner's age voice (rules/voice): the linear items' and the school units' system prompt, one text. */
@@ -115,7 +115,7 @@ export async function explainSchool(
     `thirty-five percent is 35%), with a currency sign if they said one (seven euros fifteen is €7.15); a ratio with its colon ` +
     `(two to three is 2:3) and two amounts joined by and (twenty-four and thirty-six is 24 and 36). ` +
     `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`;
-  const { json, provider, ms } = await text<{ reply: string; value: string }>({ system: schoolSystem(age), prompt, schema: SCHOOL_SCHEMA, model: "best" });
+  const { json, provider, ms } = await text<{ reply: string; value: string }>({ system: schoolSystem(age), prompt, schema: SCHOOL_SCHEMA, model: "best", use: "explain" });
   return {
     reply: (typeof json?.reply === "string" ? json.reply : "").trim(),
     value: typeof json?.value === "string" ? json.value.trim() : "",
@@ -163,7 +163,7 @@ async function explainCalc(
     `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. ` +
     `An empty string if they did not say one.`;
 
-  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" }), topicId);
+  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best", use: "explain" }), topicId);
 }
 
 /** What was heard, as the desk keeps it: a slip only from the topic's list. */

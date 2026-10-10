@@ -94,7 +94,7 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
       `For each item give its number, its text, and the position of its centre as fractions of the image (x: 0 = left edge, 1 = right edge; y: 0 = top, 1 = bottom). ` +
       `Keep the printed numbering. Do not solve anything and do not add items that are not there.` +
       (subject === "maths" ? ` ${mathsContext(who)}` : ""),
-    schema: subject === "maths" ? MATHS_SCHEMA : SCHEMA,
+    schema: subject === "maths" ? MATHS_SCHEMA : SCHEMA, use: "homework-read",
   });
   const half = subject === "essay" ? 0.09 : 0.045;
   // a position the model gave as a number is a fraction of the page: kept inside it, a pixel count or a wild guess is not trusted past the edge

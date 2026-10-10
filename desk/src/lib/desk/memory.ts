@@ -64,7 +64,7 @@ export async function writeMemory(
     (existing.length ? `What you already noted about them — do not repeat any of it:\n${existing.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
     `Write what tonight added. If tonight added nothing new, return an empty list.`;
 
-  const { json } = await text<{ lines: string[] }>({ system, prompt, schema: SCHEMA, model: "fast", thinking: false });
+  const { json } = await text<{ lines: string[] }>({ system, prompt, schema: SCHEMA, model: "fast", thinking: false, use: "memory" });
   const lines = (Array.isArray(json?.lines) ? json.lines : [])
     .filter((l): l is string => typeof l === "string")
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))
