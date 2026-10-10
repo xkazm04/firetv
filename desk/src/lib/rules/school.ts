@@ -147,7 +147,7 @@ export type Unit = (typeof UNITS)[number];
 const UNIT_SPELLINGS: [string, Unit][] = (() => {
   const out: [string, Unit][] = [];
   const add = (u: Unit, ...s: string[]) => s.forEach((w) => out.push([w, u]));
-  const len = (u: Unit, stem: string) => [`${stem}res`, `${stem}re`, `${stem}ers`, `${stem}er`];
+  const len = (_u: Unit, stem: string) => [`${stem}res`, `${stem}re`, `${stem}ers`, `${stem}er`];
   add("cm2", "cm2", "cm^2", "cm²", ...len("cm2", "square centimet"));
   add("m2", "m2", "m^2", "m²", ...len("m2", "square met"));
   add("cm", "cm", ...len("cm", "centimet"));
