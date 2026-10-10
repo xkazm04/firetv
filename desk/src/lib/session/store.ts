@@ -499,6 +499,8 @@ export const PAGES_KEPT = 8;
 export const READ_NOT_SAVED = "That page was read, but the desk could not write it to the learner file, so tonight's record and the week do not have it.";
 /** The status when a page was read but session.json could not be written (HF4): the page is on the desk, and it is gone if the desk restarts. */
 export const READ_NOT_KEPT = "That page was read, but the desk could not save it, so it will be gone if the desk restarts.";
+/** The status when an answer was settled but the learner file could not be written (WD9): the item is settled on the desk, tonight's record and the week still show the old count. */
+export const SETTLE_NOT_SAVED = "That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
@@ -683,7 +685,7 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); const bad = !Array.isArray(j?.profiles) ? "profiles is not a list" : !(j?.learner === null || j?.learner?.id) ? "learner is neither null nor a learner with an id" : !j.profiles.every((p: Profile) => p.type in AGE_RANGE) ? "a profile has a type that is not known" : null; if (bad) console.error(`desk session: session.json was not used, it failed the shape check (${bad}); starting fresh`); else return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); } return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
@@ -796,7 +798,11 @@ export function dispatch(e: Event): Session {
   const added = hintsAdded(before, store.session, e);
   let hinted = false;
   if (added) try { hinted = addHints(added.owner, added.hints, added.second); } catch (err) { console.error("A hint could not be counted on the week:", err instanceof Error ? err.message : err); }
-  if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
+  // a settle is a learner's action, so a failed restate is logged once per event, never by the timer; whether it landed is kept for the explain route (WD9)
+  if (e.type === "practice.settle") {
+    store.settled = true;
+    if (e.verdict) try { restateMarked(store.session); } catch (err) { store.settled = false; console.error("A settled answer could not be restated on the learner file:", err instanceof Error ? err.message : err); }
+  }
   const w = store.session.watch;
   if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
   if (REHYDRATE.has(e.type)) {
@@ -827,6 +833,8 @@ function writeSession(): void {
     store.saved = false;
   }
 }
+/** Whether the last practice.settle restate landed (WD9); a settle with no verdict, or none yet, reads as landed. */
+export function settleSaved(): boolean { return store.settled !== false; }
 /** Whether the last session.json write landed (HF4). */
 export function sessionSaved(): boolean { return store.saved !== false; }
 export function subscribe(fn: Sub) { store.subs.add(fn); return () => store.subs.delete(fn); }

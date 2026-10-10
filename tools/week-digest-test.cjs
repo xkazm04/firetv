@@ -382,3 +382,45 @@ test('MB-B14: cleanEntry keeps only a homework or paper entry\'s whitelisted fie
  for(const j of [{...hw,problems:0},{...hw,problems:'3'},{...hw,at:0},{kind:'homework'},{...pp,questions:0},{...pp,questions:null},{...pp,at:'x'},{...pp,kind:'mock'}])
   assert.deepEqual(D.cleanDigest([j]),[],`dropped: ${JSON.stringify(j)}`);
 });
+
+// ------------------------------------------------------------------ WD9-WD13: a failed learner-file write is said, and one event is one save
+/** Fail the learners.json writes only (the rename over the book throws EPERM), after `skip` have gone through; returns the restore. Never desk/data. */
+function failLearnerWrites(skip=0){
+ const real=fs.renameSync;let n=0;
+ fs.renameSync=function(from,to,...rest){
+  if(String(to).endsWith('learners.json')&&n++>=skip)throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`),{code:'EPERM'});
+  return real.call(this,from,to,...rest);
+ };
+ return ()=>{fs.renameSync=real;};
+}
+/** The console's error lines, caught; `done()` puts the console back. */
+function catchLog(){const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));return {errs,done:()=>{console.error=e0;}};}
+const onFile=()=>{const l=JSON.parse(fs.readFileSync(FILE,'utf8'))[LEARNER];return {digest:l.digest,history:l.history,skills:l.skills,writing:l.writing,sessions:l.english.sessions};};
+const EXPLAINS=(value)=>async()=>({json:{reply:'Look at the common denominator again.',value},provider:'test',ms:1});
+
+test('WD9: a settle whose restate write fails is logged once and said; the answer stays 200 and done; a later settle restates in place',async()=>{
+ seat();visionThrows();setOn(SIX);assert.equal((await post('mark',{answers:TYPED})).status,200);
+ const was=onFile();
+ answer=EXPLAINS('3/4');
+ // the explanation records its attempt first (one save), then the settle's restate is the write that fails
+ const restore=failLearnerWrites(1),c=catchLog();let r,j;
+ try{r=await post('explain',{transcript:'I got eleven twelfths',n:4});j=await r.json();}finally{c.done();restore();}
+ assert.equal(r.status,200,JSON.stringify(j));
+ assert.ok(j.reply&&j.settled==='right',`the reply and the settle are answered: ${JSON.stringify(j)}`);assert.equal(j.saved,false);
+ assert.equal(c.errs.filter((l)=>/could not be restated/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+ const s=store.getSession();
+ assert.equal(s.jobs.explain.phase,'done');assert.equal(s.jobs.explain.error,undefined,'no Try again');
+ assert.equal(s.status,store.SETTLE_NOT_SAVED);
+ assert.equal(store.SETTLE_NOT_SAVED,"That answer was settled, but the desk could not write it to the learner file, so tonight's record and the week still show the old count.");
+ assert.equal(store.settleSaved(),false);
+ assert.equal(s.practice.items[4].verdict,'right','the item keeps its verdict on the session');
+ const now=onFile();assert.deepEqual(now.digest,was.digest,'the digest entry on file is as marked');assert.deepEqual(now.history,was.history,'the history line on file is as marked');
+ // writes work again: the next settle restates both lines in place, and the done line is the reply
+ answer=EXPLAINS('11/12');
+ r=await post('explain',{transcript:'eleven twelfths again',n:5});j=await r.json();
+ assert.equal(r.status,200);assert.equal(j.saved,true);assert.equal(store.settleSaved(),true);
+ assert.equal(store.getSession().status,j.reply,'the done line is the reply');
+ const d=onFile();assert.equal(d.digest.length,1,'restated in place, not a new entry');
+ assert.deepEqual({right:d.digest[0].right,notSure:d.digest[0].notSure},{right:3,notSure:0});
+ assert.equal(d.history.at(-1).detail,'3 of 6 right');
+});
