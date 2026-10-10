@@ -585,3 +585,36 @@ test('P16 sendSecond(): a reply that returns after the learner or the walk item 
   let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({});});await m.sendSecond();assert.equal(sent.n,11);
  });
 });
+
+// ---- P17 (delivery 7d-5): a learner switch clears the last learner's work on the phone
+// Same method as P15: the reset and its effect are cut out of page.tsx between stable markers, transpiled and run against stubs.
+const P17_LOAD={paras:['load paras'],sentence:'load sentence'};
+test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed answers and lines to their load values',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('// P17 (i) begin'),b=src.indexOf('// P17 (i) end');
+ assert.ok(a>0&&b>a,'the reset is where the test expects it');
+ assert.ok(b<src.indexOf('const rec = useRef'),'it sits before the rec ref');
+ assert.match(src,/useState\(FRESH_SENTENCE\)/);assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the load values are the ones the reset uses');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Memory'];
+ const make=()=>{
+  const calls=[];const s={learner:null};let effect;
+  const setters=NAMES.map((n)=>(v)=>calls.push([n,v]));
+  const f=new Function('s','useRef','useEffect','blankRow','FRESH_PARAS','FRESH_SENTENCE',...NAMES.map((n)=>'set'+n),`${js}\nreturn null;`);
+  f(s,(v)=>({current:v}),(fn)=>{effect=fn;},()=>({blank:true}),P17_LOAD.paras,P17_LOAD.sentence,...setters);
+  const seat=(id)=>{s.learner=id?{id}:null;calls.length=0;effect();return calls.slice();};
+  return {seat};
+ };
+ const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Memory:null};
+ await t.test('A to B: every listed state goes back to its load value',()=>{
+  const m=make();m.seat('ema');const c=m.seat('jakub');
+  assert.deepEqual(c.map(([n])=>n).sort(),[...NAMES].sort());
+  for(const [n,v] of c)assert.deepEqual(v,want[n],n);
+ });
+ await t.test('the first seating after load resets nothing',()=>{const m=make();assert.deepEqual(m.seat('ema'),[]);});
+ await t.test('A to none to A resets nothing',()=>{const m=make();m.seat('ema');assert.deepEqual(m.seat(null),[]);assert.deepEqual(m.seat('ema'),[]);});
+ await t.test('A to none to B resets when B sits, not when the seat empties',()=>{
+  const m=make();m.seat('ema');assert.deepEqual(m.seat(null),[]);assert.equal(m.seat('jakub').length,NAMES.length);
+ });
+ await t.test('A to B to B resets once',()=>{const m=make();m.seat('ema');m.seat('jakub');assert.deepEqual(m.seat('jakub'),[]);});
+});

@@ -39,6 +39,9 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
+/** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
+const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
+const FRESH_SENTENCE = "I have gone to school yesterday.";
 export default function Phone() {
   const { s, connected, post, reconnect } = useSession();
   /** Linga's panel posts and moves on; only the join reads the answer. */
@@ -53,14 +56,14 @@ export default function Phone() {
   const [q, setQ] = useState("");
   // the typed way of explaining has its own text: Point & ask keeps q
   const [typedExplain, setTypedExplain] = useState(""), [typing, setTyping] = useState(false);
-  const [sentence, setSentence] = useState("I have gone to school yesterday.");
+  const [sentence, setSentence] = useState(FRESH_SENTENCE);
   /**
    * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
    * textarea shows. The desk reads ONE paragraph at a time; Next steps to the next. All of it lives in this page's
    * state: a picked file is read here in the browser and never uploaded, stored or kept, and it is gone when the
    * phone page closes. Only the current paragraph goes to the desk, when Analyse is pressed.
    */
-  const [paras, setParas] = useState<string[]>(["Many students are tired. Sleep is important. Schools start early. This is bad."]);
+  const [paras, setParas] = useState<string[]>(FRESH_PARAS);
   const [pix, setPix] = useState(0);
   /** The paragraphs the desk has already read, by index: after one, Next is the button to press. */
   const [readIx, setReadIx] = useState<number[]>([]);
@@ -337,6 +340,21 @@ export default function Phone() {
   useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.walkIx]);
   // and a different learner in the seat does not inherit the last one's typed words
   useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.learner?.id]);
+
+  // P17 (i) begin: a different learner seated clears what the last learner worked on, on the phone
+  const lastSeated = useRef<string | undefined>(undefined);
+  const clearLastLearnersWork = () => {
+    setParas(FRESH_PARAS); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
+    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setMemory(null);
+  };
+  // the first seating after load, and the same learner sitting again after an empty seat, clear nothing
+  useEffect(() => {
+    const id = s?.learner?.id;
+    if (!id) return;
+    if (lastSeated.current && lastSeated.current !== id) clearLastLearnersWork();
+    lastSeated.current = id;
+  }, [s?.learner?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // P17 (i) end
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
