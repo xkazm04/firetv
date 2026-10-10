@@ -19,7 +19,7 @@ import path from "node:path";
 import { codexCli } from "./codex";
 import { provider, register } from "./registry";
 import { answer } from "./shape";
-import { EngineError, findBinary, type EngineResult, type Provider, type TextRequest } from "./types";
+import { EngineError, findBinary, type EngineResult, type Provider, type TextRequest, type Usage } from "./types";
 
 const BIN = process.env.CLAUDE_BIN || "claude";
 const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
@@ -31,6 +31,15 @@ const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.e
  */
 export function childEnv(req: Pick<TextRequest, "thinking">): NodeJS.ProcessEnv {
   return req.thinking === false ? { ...process.env, MAX_THINKING_TOKENS: "0" } : process.env;
+}
+
+/** The usage a claude CLI JSON envelope reports: its four token classes (each null when the envelope omits it; the whole object null when it has none) and total_cost_usd verbatim. */
+export function usageOf(envelope: unknown): Usage {
+  const e = (envelope && typeof envelope === "object" ? envelope : {}) as { usage?: Record<string, unknown>; total_cost_usd?: unknown };
+  const u = e.usage && typeof e.usage === "object" ? e.usage : {};
+  const n = (v: unknown) => (typeof v === "number" && Number.isFinite(v) ? v : null);
+  const tokens = { input: n(u.input_tokens), output: n(u.output_tokens), cacheRead: n(u.cache_read_input_tokens), cacheWrite: n(u.cache_creation_input_tokens) };
+  return { tokens: Object.values(tokens).every((v) => v === null) ? null : tokens, notionalUsd: n(e.total_cost_usd) };
 }
 
 /** The Claude CLI. It only produces the answer; text() parses and checks it, as for every provider. */
@@ -71,7 +80,7 @@ export const claudeCli: Provider<TextRequest, unknown> = {
     let envelope: { structured_output?: unknown; result?: unknown };
     try { envelope = JSON.parse(out); } catch { throw new EngineError("exit", reported, `claude answered without its JSON envelope: ${out.slice(0, 200)}`); }
     // With --json-schema the CLI has already parsed the answer; otherwise it is the model's text.
-    return { raw: envelope.structured_output ?? envelope.result, provider: reported, audit: out.slice(0, 2000) };
+    return { raw: envelope.structured_output ?? envelope.result, provider: reported, audit: out.slice(0, 2000), usage: usageOf(envelope) };
   },
   async probe() {
     return findBinary(BIN)

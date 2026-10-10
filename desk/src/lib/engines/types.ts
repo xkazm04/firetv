@@ -12,11 +12,11 @@ import path from "node:path";
 export type JSONSchema = Record<string, unknown>;
 
 /** `schema` is what the model is asked for; `accept`, when set, is the looser shape the caller holds the answer to (optional parts it checks and drops itself); `shorten` allows one re-ask when the answer only runs strings past their maxLength (shape.ts); `thinking: false` asks the provider to answer without hidden reasoning, for a short call where speed is the product (a provider without that switch ignores it). */
-export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; }
-export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; }
-export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; }
-export interface EmbedRequest { texts: string[]; timeoutMs?: number; }
-export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; }
+export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; shorten?: boolean; thinking?: boolean; use?: string; }
+export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; timeoutMs?: number; use?: string; }
+export interface SpeakRequest { text: string; voice?: string; timeoutMs?: number; use?: string; }
+export interface EmbedRequest { texts: string[]; timeoutMs?: number; use?: string; }
+export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; use?: string; }
 export interface Heard { text: string; language?: string; }
 
 export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; }
@@ -25,7 +25,9 @@ export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: 
  * What a provider hands back: its raw answer (a string to parse, or an already parsed value), the provider
  * string to report (defaults to the provider's name) and, optionally, an audit excerpt kept as EngineResult.raw.
  */
-export interface ProviderAnswer<R> { raw: R; provider?: string; audit?: string; }
+export interface ProviderAnswer<R> { raw: R; provider?: string; audit?: string; usage?: Usage; }
+/** What a provider reported it used: tokens per class (a class it did not report is null, never 0; the whole object is null when it reported none) and the notional API cost it stated, verbatim. */
+export interface Usage { tokens: { input: number | null; output: number | null; cacheRead: number | null; cacheWrite: number | null } | null; notionalUsd: number | null; }
 /** What the call core hands a provider besides the request: a signal that aborts when the deadline passes (call.ts). A provider that can stop its work (kill a child, abort a fetch) listens; one that cannot is still cut off by the core. */
 export interface CallContext { signal: AbortSignal; }
 /** What a probe says: whether the provider could be used now, and one line the operator can act on. No model call, no learner data, and never an upstream reply: `say` is the provider's own wording. */

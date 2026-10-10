@@ -49,3 +49,10 @@ export function provider<K extends EngineKind>(kind: K): Providers[K] {
   if (!p) throw new EngineError("unreachable", name, `The ${kind} engine has no provider named ${name}.`);
   return p;
 }
+
+/** Every registered provider name, across all kinds, without the test overrides. Read-only; starts nothing. */
+export function registeredProviders(): string[] {
+  const names = new Set<string>();
+  for (const r of Object.values(registered)) for (const n of r.providers.keys()) names.add(n);
+  return [...names].sort();
+}

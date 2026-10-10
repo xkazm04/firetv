@@ -94,7 +94,7 @@ export const onlyTooLong = (broken: Array<[string, string]>) => broken.length > 
  * overrun named; the second answer is held to the same schema, and if it fails too the first rejection
  * stands. No limit moves and nothing is cut here: the model rewrites its own strings or the call fails.
  */
-export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
+export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number; use?: string }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
   const started = Date.now();
   const { answer: a, provider: name } = await call(kind, p, req);
   const s = req.accept ?? req.schema;
@@ -106,7 +106,7 @@ export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSch
   const named = broken.map(([path, why]) => `${path || "(answer)"} is ${why}`).join("; ");
   console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
   try {
-    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` });
+    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, 2);
     return { json: conform<T>(b.raw, s, again), provider: again, ms: Date.now() - started, raw: b.audit };
   } catch {
     throw first;

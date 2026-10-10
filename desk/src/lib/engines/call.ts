@@ -5,9 +5,11 @@
  *
  * The core enforces the deadline itself and does not rely on a provider honouring the signal, so a stub, a
  * wrapper that drops the second argument, or a provider that forgot still ends in an EngineError("timeout").
+ * Every call, whichever way it ends, leaves one row in the usage ledger (meter.ts); a row never changes how the call ends.
  * Anything a provider throws that is not an EngineError becomes EngineError("exit") with the first line of its
  * message, so the contract in types.ts holds for every provider and lib/desk/job.ts can word the failure.
  */
+import { meter } from "./meter";
 import { EngineError, type EngineKind, type Provider, type ProviderAnswer } from "./types";
 
 /** The default deadline per kind, in ms; a request's timeoutMs replaces it, a provider's deadlineMs floors it. */
@@ -24,7 +26,7 @@ export interface Called<R> { answer: ProviderAnswer<R>; provider: string; ms: nu
 const firstLine = (e: unknown) => String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0].trim() || "The engine failed.";
 
 /** Run one provider under its deadline. Resolves with its answer, or rejects with an EngineError, always. */
-export async function call<Req extends { timeoutMs?: number }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req): Promise<Called<R>> {
+export async function call<Req extends { timeoutMs?: number; use?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1): Promise<Called<R>> {
   const started = Date.now(), ctl = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const late = new Promise<never>((_, reject) => {
@@ -35,9 +37,13 @@ export async function call<Req extends { timeoutMs?: number }, R>(kind: EngineKi
   ran.catch(() => {});
   try {
     const answer = await Promise.race([ran, late]);
-    return { answer, provider: answer.provider ?? p.name, ms: Date.now() - started };
+    const provider = answer.provider ?? p.name, ms = Date.now() - started;
+    meter({ kind, use: req.use, provider, try: attempt, ok: true, error: null, ms, startedAt: started, usage: answer.usage });
+    return { answer, provider, ms };
   } catch (e) {
-    throw e instanceof EngineError ? e : new EngineError("exit", p.name, firstLine(e));
+    const err = e instanceof EngineError ? e : new EngineError("exit", p.name, firstLine(e));
+    meter({ kind, use: req.use, provider: err.provider || p.name, try: attempt, ok: false, error: err.kind, ms: Date.now() - started, startedAt: started });
+    throw err;
   } finally {
     clearTimeout(timer);
   }
