@@ -494,3 +494,47 @@ test('X2 Type it',async(t)=>{
   assert.match(p,/setHeard\(""\); setReply\(""\); setAgain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'P12: a learner change also clears the heard words, the reply and the second try');
  });
 });
+
+// ---- P15 (delivery 7d-3): a late explain reply is dropped when the learner or the walk item changed
+// The harness has no DOM, so explain() itself is cut out of page.tsx, transpiled and run against stubs: a behavioural test of the real code.
+test('P15 explain(): a reply that returns after the learner or the walk item changed sets neither reply nor msg; busy clears',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('const seat = useRef'),b=src.indexOf('/** One typed second go');
+ assert.ok(a>0&&b>a,'explain() is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const make=(s,respond)=>{
+  const calls=[];const rec=(k)=>(v)=>calls.push([k,v]);
+  const f=new Function('s','useRef','call','setBusy','setMsg','setReply','setHeard','setTypedExplain','setTyping',`${js}\nreturn {explain,seat};`);
+  const out=f(s,(v)=>({current:v}),respond,rec('busy'),rec('msg'),rec('reply'),rec('heard'),rec('typed'),rec('typing'));
+  return {...out,calls};
+ };
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ const went=(calls,k)=>calls.filter(([x])=>x===k);
+ const seatedA={learner:{id:'ema'},walkIx:1};
+ await t.test('control: nothing changed - the reply lands and the heard and typed words clear',async()=>{
+  const m=make(seatedA,()=>reply({reply:'Good.'}));await m.explain('x');
+  assert.deepEqual(went(m.calls,'reply'),[['reply','Good.']]);assert.equal(went(m.calls,'heard').length,1);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the learner changed while it was out: no reply, no heard or typed clearing, busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'jakub',ix:1};g.open(reply({reply:'Good.'}));await p;
+  assert.equal(went(m.calls,'reply').length,0);assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);
+  assert.equal(went(m.calls,'heard').length,0);assert.equal(went(m.calls,'typed').length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the walk item changed while it was out: the same',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'ema',ix:2};g.open(reply({error:'The desk could not follow that.'},false,502));await p;
+  assert.equal(went(m.calls,'reply').length,0);assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('a failed send after a change is dropped too; unchanged, it says so',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.explain('x');
+  m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
+  assert.equal(went(m.calls,'msg').filter(([,v])=>v!=='').length,0);
+  const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.explain('x');
+  assert.equal(went(m2.calls,'msg').filter(([,v])=>v!=='').length,1);
+ });
+ await t.test('it is sent for the item that was open at send time',async()=>{
+  let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({reply:'ok'});});await m.explain('x');assert.equal(sent.n,1);
+ });
+});

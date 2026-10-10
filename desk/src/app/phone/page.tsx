@@ -341,15 +341,21 @@ export default function Phone() {
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
   const holdEnd = () => { if (!holding) return; rec.current?.stop(); rec.current = null; setHolding(false); setMsg(""); };
+  // who is seated and which walk item is open now, read after an await (the closure's `s` is the one from send time)
+  const seat = useRef({ id: s?.learner?.id, ix: s?.walkIx }); seat.current = { id: s?.learner?.id, ix: s?.walkIx };
   const explain = async (transcript: string) => {
     const t = transcript.trim(); if (!t) return;
+    const at = { id: s?.learner?.id, ix: s?.walkIx };
+    // a reply that returns after the learner or the walk item changed belongs to neither: it is dropped (busy still clears)
+    const moved = () => seat.current.id !== at.id || seat.current.ix !== at.ix;
     setBusy(true); setMsg("");
     try {
-      const r = await call("/api/explain", { transcript: t, n: s?.walkIx });
+      const r = await call("/api/explain", { transcript: t, n: at.ix });
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
+      if (moved()) return;
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
-    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /** One typed second go on the ringed item in hand: the TV draws what it came to; a refusal is the desk's own sentence. */
   const sendSecond = async () => {
