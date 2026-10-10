@@ -1111,7 +1111,7 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['unsure','unsure','unsure']);
  // "twenty-four and thirty-six" said aloud: the value is transcribed as two amounts and settles right
  stubText(()=>({reply:'Look at which share goes with the 2.',value:'24 and 36'}));
- const r=await post('explain',{transcript:'the first one gets twenty-four and the other thirty-six',n:0});
+ const r=await post('explain',{transcript:'I got twenty-four and the other thirty-six',n:0});
  assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
  assert.match(seenText[0].prompt,/twenty-four and thirty-six is 24 and 36/,'the explain prompt asks for two amounts as said');
  assert.match(seenText[0].prompt,/^Topic: Ratio and sharing\n/);

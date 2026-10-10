@@ -1967,7 +1967,7 @@ test('X5 figuresOfEnglish: one row per form',()=>{
 test('X5 saidIn: a value the learner said is heard',()=>{
  const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
  const rows=[['I got four','4'],['eleven twelfths','11/12'],['jedenáct dvanáctin','11/12'],['one and five twelfths','1 5/12'],['nula celá pět','0,5'],['seven point one five','7.15'],
-  ['seven euros fifteen','€7.15'],['I made it thirty-five percent','35%'],['two to three','2:3'],['the first one gets twenty-four and the other thirty-six','24 and 36'],
+  ['seven euros fifteen','€7.15'],['I made it thirty-five percent','35%'],['two to three','2:3'],['I got twenty-four and the other thirty-six','24 and 36'],
   ['minus three','-3'],['six x plus two','6x + 2'],['x squared','x^2'],['two lots of three x plus one','2(3x+1)'],['I got sine x plus C','sin x + C'],['I got x + C','x + C']];
  for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`heard: ${t} / ${v}`);
 });
@@ -1991,4 +1991,19 @@ test('X5 saidIn: a value the learner did not say fails closed',()=>{
   ['I got cos x','sin x + C','function'],['x plus C','x + C','spoken letters'],['seven','7/12','one side of a fraction']];
  for (const [t,v,why] of rows) assert.equal(V.saidIn(v,t),false,`not heard (${why}): ${t} / ${v}`);
  assert.equal(V.EXPLAIN_TRANSCRIPT_MAX,1000);
+});
+test('X6 saidIn: a value is not heard out of order or away from the answer',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['I took five sixths and one quarter and then I got lost','1/6','R2c'],['I took five sixths and one quarter and then I got lost','1/4','R2c'],['I got eleven twelfths','12/11','order'],
+  ['two x plus three equals eleven, I got five','3','before the cue'],['two x plus three equals eleven, I got five','11','before the cue'],
+  ['three quarters plus one sixth, I am not sure','3/6','pieced'],['three quarters plus one sixth, I am not sure','1/6','pieced'],['I am not sure, maybe e','e^x','letter x'],
+  ['what is two plus three','5','read from the question'],['I got stuck on the second one','2','a cue with no figure after it'],['seven plus two, then I got five','7','runs only before the last cue']];
+ for (const [t,v,why] of rows) assert.equal(V.saidIn(v,t),false,`X6 not heard (${why}): ${t} / ${v}`);
+});
+test("X6 saidIn: the learner's own answer is heard",()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const rows=[['two x plus three equals eleven, I got five','5'],['three quarters plus one sixth, I got eleven twelfths','11/12'],['vyšlo mi jedenáct dvanáctin','11/12'],['the answer is x squared','x^2'],
+  ['I got three x squared plus two x plus C','3x^2 + 2x + C'],['twelve plus three, my answer is fifteen','15'],['vychází mi sedm','7']];
+ for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`X6 heard: ${t} / ${v}`);
+ assert.ok(V.ANSWER_CUES.includes('got')&&V.ANSWER_CUES.includes('vychazi')&&!V.ANSWER_CUES.includes('is')&&!V.ANSWER_CUES.includes('equals'));
 });
