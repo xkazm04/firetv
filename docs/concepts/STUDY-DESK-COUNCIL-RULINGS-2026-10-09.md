@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), and for round 8 on 2026-10-10 (round 7 merged at e74340e8). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf and f795a859 name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288 and feedcd76 name a run, not a commit.
 
 ---
 
@@ -431,18 +431,21 @@ HF4 (delivery 4h) delivers the write half of must-address 1: tmp and rename, a l
 | P1 | `session.json` is written through a temp file plus rename, as `learners.ts` does. A failed write is logged and shown as status, never swallowed. `load()` validates each profile: a bad profile is dropped and logged, and the rest are kept. An unparseable file is moved aside (`session.json.bad-<stamp>`), logged, and said in a status line. `profile.draft` and `profile.save` check type against `AGE_RANGE`, and the other fields too. They refuse a bad patch in plain words. | Must-address 1. The write is a bare `writeFileSync` inside `try {} catch {}` (`desk/src/lib/session/store.ts:745`). `load()` (:658) falls back to `fresh()` on any error. The temp-plus-rename model is `desk/src/lib/session/learners.ts` (rename imported at :8). `AGE_RANGE` is `desk/src/tv/profileRows.ts:13`. | none recorded | delivered: the write half in cfa59088 (HF4); the load, draft and save halves in 4fef0a35 (7a, run 3720e29a) |
 | P2 | One function clears the per-learner desk state on any change of the seated learner, and both `learner.set` and `profile.save` call it. An edit of the seated profile keeps the running conversation. | Must-address 2. `learner.set` (`store.ts:516`) clears state; `profile.save` (:520) does not. | none recorded | delivered, 4fef0a35 (run 3720e29a); its follow-up P2-a in 60d9398c (run f1df9456) |
 | P3 | `english.set` carries an owner, as `essay.set` does. One for a learner who is not seated is dropped and logged. The analyse job slot is keyed per learner. | Must-address 3. `english.set` has no owner (`store.ts:561`); `essay.set` checks `e.owner` (:566). | none recorded | delivered, 4fef0a35 (run 3720e29a): the owner half as written; the per-learner slot as P3-a, which supersedes that clause |
-| P4 | While a Linga scene or a level check is running, the switcher says in one line that switching ends it. | Switching ends them today. | none recorded | queued, delivery 7b, widened by P4-a |
+| P4 | While a Linga scene or a level check is running, the switcher says in one line that switching ends it. | Switching ends them today. | none recorded | delivered, 3a0a70f8 (7b, run 27364288); corrected by P4-b, queued, delivery 7c |
 | P5 | Profile ids are checked unique on draft and save. A patch naming another learner's id is refused. | Must-address 1 family (data path between learners). | none recorded | delivered as P5-a, 4fef0a35 (run 3720e29a) |
 | P6 | `reset` joins `SERVER_ONLY`. Profile removal and the demo pair are NOT in this rework: removal deletes a child's data and needs its own design after the full round. | `SERVER_ONLY` (`desk/src/app/api/session/route.ts:12`) does not list `reset` today. | Building removal now. | delivered as P6-a, 4fef0a35 (run 3720e29a); P6-a supersedes the SERVER_ONLY clause |
-| P7 | An unreadable `learners.json` reaches the learner as one plain desk sentence, not 'Try again'. | `learners.ts` reports it only through `tell` (:120-129). | none recorded | delivered in part: the switch half in e4b33fb9 (WD14a, run 0a4ec2cd); the rest is P7-a, queued, delivery 7b |
+| P7 | An unreadable `learners.json` reaches the learner as one plain desk sentence, not 'Try again'. | `learners.ts` reports it only through `tell` (:120-129). | none recorded | delivered: the switch half in e4b33fb9 (WD14a, run 0a4ec2cd); the rest in 3ad55a23 (P7-a) and 21a3e500 (P7-b), run 27364288 |
 | P1-a | (7a question 3) `load()` drops a profile that is not an object, and a profile whose name is not text. Both are within P1. | 7a's question 3. | none recorded | delivered, 4fef0a35 |
 | P2-a | (7a question 1) A switch can happen while a practice run is running. The practice line then builds jobs from the new state, so the failed runs and the running analyse run that `switchedFrom` deleted stay deleted (`desk/src/lib/session/store.ts:708`). | The line rebuilt jobs from `s.jobs`, the state before the switch. That reopened homework robustness-6 and the 409 half of must-address 3. Two of 7a2's three new cases failed on the unchanged line. The third case is a control. | Folding the fix into 7b. 7b's files were in the hint full r2 span, and this fix touched only `store.ts` and the suite. | delivered, 60d9398c (run f1df9456) |
 | P3-a | A switch supersedes the running analyse job, as it does a practice run. That meets the per-learner analyse slot. `desk/src/lib/desk/job.ts` is untouched. | Lite r1 must-address 3 asks that the new learner's own request is not refused. Superseding does that with a store-only change, and 7a was store-side. | A per-learner job slot keyed in `job.ts`. | delivered, 4fef0a35 |
 | P5-a | With a draft open, another id is refused. With no draft open, an existing id starts an edit from that profile. A desk-made id gets a suffix when it is taken. A phone's id patch is answered 403 (`desk/src/app/api/session/route.ts:43`). | P5. | none recorded | delivered, 4fef0a35 |
 | P6-a | `reset` does NOT join `SERVER_ONLY`, because the TV bench's Reset session button posts it (`desk/src/app/tv/page.tsx:148`). A phone's reset is answered 403 instead (`desk/src/app/api/session/route.ts:42`). | P6 as written would break the TV's Reset session button. | P6 as written. | delivered, 4fef0a35 |
-| P4-a | P4's line also names a running Sentence reading. A switch drops it (lite r2 robustness-5), and nobody tells the learner who left (lite r2 value-1). | Lite r2 value-1 is the worst-character finding. A parent who switches in the middle of a scene or a reading loses that work, and nothing says so. | Keeping the Sentence reading in the away slot. That is not ruled, and the full round may raise it again. | queued, delivery 7b |
-| P7-a | This is the rest of P7. When learners.json cannot be read, two places say one plain desk sentence, never 'Try again', because a retry cannot succeed while the file is unreadable. They are the startup reads in `store.ts` (:795, :800 and :804; they were at about :703-712 before 7a) and the in-run failure sentence in `desk/src/lib/desk/job.ts` (`jobError`, :71). | Lite r2 robustness-7: marking and hint saves still say 'Try again'. WD14a closed the switch half. | none recorded | queued, delivery 7b |
-| P8 | When a switch drops a running run, it also clears that run's start status. A case pins this, and it fails before the fix. | Lite r2 robustness-6. After a switch drops a running analyse or practice run, the new learner's status still reads 'reading your sentence…' or 'writing your set…' with nothing running. No case covers it. | none recorded | queued, delivery 7b |
+| P4-a | P4's line also names a running Sentence reading. A switch drops it (lite r2 robustness-5), and nobody tells the learner who left (lite r2 value-1). | Lite r2 value-1 is the worst-character finding. A parent who switches in the middle of a scene or a reading loses that work, and nothing says so. | Keeping the Sentence reading in the away slot. That is not ruled, and the full round may raise it again. | delivered, 3a0a70f8 (run 27364288); widened by P4-b, queued, delivery 7c |
+| P7-a | This is the rest of P7. When learners.json cannot be read, two places say one plain desk sentence, never 'Try again', because a retry cannot succeed while the file is unreadable. They are the startup reads in `store.ts` (:795, :800 and :804; they were at about :703-712 before 7a) and the in-run failure sentence in `desk/src/lib/desk/job.ts` (`jobError`, :71). | Lite r2 robustness-7: marking and hint saves still say 'Try again'. WD14a closed the switch half. | none recorded | delivered, 3ad55a23 (run 27364288) |
+| P8 | When a switch drops a running run, it also clears that run's start status. A case pins this, and it fails before the fix. | Lite r2 robustness-6. After a switch drops a running analyse or practice run, the new learner's status still reads 'reading your sentence…' or 'writing your set…' with nothing running. No case covers it. | none recorded | delivered, be3ac14d (run 27364288) |
+| P7-b | The hint-save half of P7-a. `addHints` reads through `readLearner` (`desk/src/lib/session/learners.ts:420`, the read at :421). On an unreadable learners.json it throws into the store's count write, so the hint door says `HINT_NOT_COUNTED` and answers counted false. An absent or empty file still reads as an empty book. A day with no sheet still answers counted true, as WD12's pin in `tools/week-digest-test.cjs` holds. `desk/src/app/api/hint/route.ts` is unchanged. | Digest full r3 robustness-1 (med). `addHints` read through `getLearner`, which reads an unreadable file as an empty book, so the door answered counted:true while nothing was counted. | none recorded | delivered, 21a3e500 (run 27364288); its byte check is corrected by P7-c, queued, delivery 7c |
+| P4-b | `switchEndsLine` (`desk/src/tv/keys.ts:117`) names the Linga scene only while `turnState` (`desk/src/lib/english/turn.ts:34`) does not read it as finished. A finished scene is not named. A finished scene with a Take Two running is named. A running analyse run whose key is not 'english' is named as 'the Essay Master reading'. | P4 says the line shows only while something is running. At 3a0a70f8 any kept conversation is named, so after a finished scene the switcher still says a switch ends it. A switch also drops a running Essay Master reading, because `switchedFrom` (`store.ts:541`) deletes a running analyse run whatever its key, and P4-a's constraint covers any reading. 7b's question 4 raised the second half. | 7b's reading, which names any kept conversation and leaves the Essay Master reading unnamed. | queued, delivery 7c |
+| P7-c | P7-b's case checks that learners.json still holds its truncated bytes after the hint, before the case restores the file. | At 21a3e500 the case restores the whole file in finally and then compares the file with the bytes it restored, so that check cannot fail. | none recorded | queued, delivery 7c |
 
 Delivery 7 was split into 7a, 7a2 and 7b, on one lane. Lost: one branch. The reasons: P4's files (`desk/src/app/phone/page.tsx` and `desk/src/tv/keys.ts`) were in the hint full r2 span, and 7a had to merge before digest full r3, whose span holds `store.ts`.
 
@@ -472,6 +475,25 @@ Lite r2 mediums:
   - robustness-10: three cases in `tools/learner-switch-test.cjs` would also pass on lite r1's code.
 
 Next, ruled 2026-10-10: 7b lands before the learner-profile full r1. 7b waits for digest full r3 to settle, because `desk/src/app/phone/page.tsx` and `store.ts` are in that span. The full r1 has to wait for digest r3 anyway, because one Opus council runs at a time. Under the plan change no lite r3 runs: 7b reworks the mediums of a lite-ready major, and the full r1 follows its merge.
+
+7b, as delivered (four commits, run 27364288):
+- Eight files: `desk/src/app/phone/page.tsx`, `desk/src/lib/desk/job.ts`, `desk/src/lib/session/learners.ts`, `desk/src/lib/session/store.ts`, `desk/src/tv/keys.ts`, `desk/src/tv/screens.tsx`, `tools/learner-switch-test.cjs` and `tools/week-digest-test.cjs`.
+- P8 (be3ac14d): a Job keeps the status text it set at its start (`Job.start`, `desk/src/lib/session/store.ts:228`). `switchedFrom` (`store.ts:546`) and the practice line (`store.ts:710`) clear the status only while it still reads that text.
+- P7-a (3ad55a23): `learners.ts` exports `LearnersUnread` (:157), which `writeLearner` (:162), `readLearner` (:288) and `saveEnglish` (:299) throw. `jobError` (`desk/src/lib/desk/job.ts:72`) recognises it by type (:74) and says `LEARNER_UNREAD_RUN` (`store.ts:509`): 'The learner file could not be read just now, so this was not saved.' The startup reads go through `readLearner` (`store.ts:802-810`), set `LEARNER_UNREAD` once, and show no paper.
+- P7-b (21a3e500): as its row says.
+- P4 with P4-a (3a0a70f8): the pure `switchEndsLine` in `keys.ts`, shown in the TV Learner caption (`desk/src/tv/screens.tsx:406`) and in the phone's 'Not X?' line (`desk/src/app/phone/page.tsx:418`).
+- The merge gate: 75 suites, 1370 tests, all green.
+
+7b's questions, ruled:
+1. P8's constraint quotes the practice start status as 'writing your set…'. The code says 'writing a practice set…' (`desk/src/app/api/practice/route.ts:19`). The cases use the real texts. Ruled, no change.
+2. The bare catch over `settleOwners` could never fire, because `settleOwners` swallows its own `historyOf` errors. The startup notes an unreadable file through a wrapper around `readLearner`. Accepted as built.
+3. `LEARNER_UNREAD_RUN` is the one new sentence, because `LEARNER_UNREAD` says progress is 'not shown', which is wrong for a save. Accepted as built.
+4. A running Essay Master reading is dropped by a switch but was not named, because P4-a listed only the Sentence reading. Ruled as P4-b.
+5. No screenshot of the TV or the phone was taken, because no dev server was allowed. Noted.
+
+The App Master's check of 7b against its brief: one commit per ruling. The P8, P7-a and P7-b cases were shown failing on 2498060d and passing after, and P4's function did not exist there. `desk/src/app/api/hint/route.ts`, `desk/src/maths/` and `desk/src/lib/rules/` are unchanged. `jobError` matches by type, not by text. WD12's no-sheet pin is unchanged. No em dash was added. Two gaps: P4-b and P7-c.
+
+Next, ruled 2026-10-10 (round 9): delivery 7c (P4-b and P7-c) lands before the learner-profile full r1, because `keys.ts` and `tools/learner-switch-test.cjs` are in that span. The full r1 follows its merge. 4b may run beside the full r1, because its files are outside that span.
 
 ## 8. tv-phone-pairing
 
@@ -605,7 +627,18 @@ WD14a, as ruled at its dispatch and delivered (checked on `main` at 60d9398c):
 
 The owner holds the digest Approval until full r3 (round 3 of 3, the last). Full r3 runs after hint full r2 on the review lane. Its span holds essay.ts and conversation.ts, so it waited for EC1c, which has merged.
 
-Full r3 (round 3 of 3, the last) is in flight: run f795a859, dispatched 2026-10-10 09:26Z. Its span is full r2's 17 files plus `desk/src/app/api/hint/route.ts` (WD12's door), 18 in all. It waited for WD14a, 7a and 7a2, because its span holds `store.ts`.
+Full r3 (round 2026-10-10-weekly-digest-for-parents-r3, run f795a859) was judged at 60d9398c on a span of 18 files. Drift: changed. Result: ready 0.6311, coverage 1.00, no must-address line, no hard failure. This was the last round.
+- Scores: robustness 0.80 (0.65 at r2), value 0.56 (0.50), craft 0.72 (0.66), rivalry 0.50 (unchanged). Economics has no score in the result.
+- Medium findings:
+  - robustness-1: an unreadable learners.json made the hint door answer counted:true while nothing was counted, because `addHints` read through `getLearner`. Ruled as P7-b, delivered 21a3e500.
+  - craft-1: the learners.json atomic write skips fsync, and a zero-length file reads as an empty book that the next save writes over.
+  - craft-2: write outcomes travel through module-global 'last write landed' flags instead of a return value.
+  - value-1: a homework-only week names no topic and no weakness, only volume.
+  - value-2: the page covers only the seated learner. A two-child parent reaches the sibling's week only through a learner switch on the TV.
+  - rivalry-1: the week is pulled from the paired phone, never pushed.
+  - All but robustness-1 are unslotted.
+- The value member measured two scenarios: homework-only-week-cz (0.45) and two-child-household (0.40). Declaring them for later rounds is the owner's call. Neither is declared.
+- The digest Approval is the owner's to decide.
 
 ## Process rulings
 
@@ -631,6 +664,8 @@ Full r3 (round 3 of 3, the last) is in flight: run f795a859, dispatched 2026-10-
   - A review whose record is complete and valid is finished by a resume run, but only when its span is unchanged since its receipt. The resume copies the round directory and re-validates the result and every verdict. It must find drift none. Then it only renders report.html and writes the vault (hint full r2: run 77dbd15a, resumed by run 058f9e18).
   - Otherwise the round runs again.
 - A lite-ready major can get a rework of its mediums, ruled before its full round. That rework takes no lite round, and the full round follows its merge (learner-profile 7b).
+- A delivery that comes before a full round is checked against its brief before the round runs. A gap found there is ruled and delivered first, with no lite round (learner-profile: 7b, then 7c).
+- A static-analysis sweep runs beside a delivery only on files outside that delivery's paths. A finding in a delivery's file is filed open for a later pass, not edited (the unused Clock in `desk/src/tv/screens.tsx`).
 
 ## Delivery order
 
@@ -656,11 +691,12 @@ WD12. the status of the hint count write: done, f06984ef (run 0f94108c).
 D5. the digest full r2 rework, WD14: done, 0d44b28d (run d6aad5fb).
 EC1c. the Essay Master and Linga labels: done, 8583b29b (run 7a3b0529).
 WD14a. the rehydrate reads through readLearner, with WD13a: done, e4b33fb9 (run 0a4ec2cd).
-4b. MB-B7, plus homework value-3: next. Marking r3 and hint full r2 have settled, and MathsTV.tsx is in neither the digest full r3 span nor the learner-profile span.
-4d. MK10, plus value-unsure-says-different, and maybe MK12, plus marking full r3 value-1: next. Marking r3 and hint full r2 have settled, and MathsTV.tsx is in neither the digest full r3 span nor the learner-profile span.
+L1. the first lean sweep of desk/ (ledger lean-2026-10-10-desk): done, 17ffb8a7 (run feedcd76). Five of the seven TS6133 findings were removed, one commit each. Open: read.ts num (a probable missed use, not ruled), screens.tsx Clock (left for a later pass), calculus1.ts and habits.ts (no desk/src importer, test-only), and 560 unused exports, counted and not judged.
+4b. MB-B7, plus homework value-3: next. Marking r3 and hint full r2 have settled, and MathsTV.tsx is in neither the digest full r3 span nor the learner-profile span. It follows 7c on the delivery lane, and may run beside the learner-profile full r1.
+4d. MK10, plus value-unsure-says-different, and maybe MK12, plus marking full r3 value-1: next. Marking r3 and hint full r2 have settled, and MathsTV.tsx is in neither the digest full r3 span nor the learner-profile span. It follows 4b.
 5. explain, X2-X4.
 6. essay, plus EM4-2/EM4-5 and digest value-3.
-7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a and P8): next after digest full r3 settles, and before the learner-profile full r1.
+7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a, P7-b and P8): done, 3a0a70f8 (run 27364288). 7c (P4-b and P7-c): next, and before the learner-profile full r1.
 8. pairing.
 9. CEFR with placement.
 10. the W7 overlay.
@@ -672,6 +708,7 @@ WD14a. the rehydrate reads through readLearner, with WD13a: done, e4b33fb9 (run 
 Unslotted: EM-B11, WD6, MK12, marking value-calc-gaps, marking craft-1, homework value-retake-double-counts, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3. Also these:
 - the homework full r3 mediums (economics-1, economics-2, value-resnap-double-count, robustness-1, craft-1 to craft-3, rivalry-1 to rivalry-4);
 - digest full r2 robustness-2;
+- the digest full r3 mediums other than robustness-1: craft-1, craft-2, value-1, value-2 and rivalry-1;
 - EC1d;
 - the hint re-ask try count;
 - the hint full r2 mediums;
@@ -687,13 +724,13 @@ Review lane, in order:
 - digest full r2: done, ready 0.5694 (run a03b1279), one high line, reworked as WD14;
 - marking r3: done, ready 0.6885 (run cc346058), the last round;
 - hint full r2: done, ready 0.6035 (run 77dbd15a, finished by resume run 058f9e18);
-- digest full r3: in flight (run f795a859), the last round;
+- digest full r3: done, ready 0.6311 (run f795a859), the last round;
 - learner-profile lite r2: done, ready 0.7036 (run e1fc9eaf);
-- learner-profile full r1: after digest full r3 settles and 7b merges.
+- learner-profile full r1: after 7c merges.
 
 ## Open contradictions
 
-None open after round 8.
+None open after round 9. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, and P6's SERVER_ONLY clause by P6-a.
 
