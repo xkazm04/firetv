@@ -172,13 +172,24 @@ test('P4: switchEndsLine names what the seated learner has running, and only for
  assert.equal(switchEndsLine(only({jobs:{analyse:{id:'a',phase:'running',startedAt:1,key:'english'}}}),jakub),`Switching to ${jakub.name} ends the Sentence reading for ${ema.name}.`);
  assert.equal(switchEndsLine(only({conversation:{id:'c1',turns:[]},check:{level:'A2'},jobs:{analyse:{id:'a',phase:'running',startedAt:1,key:'english'}}}),jakub),`Switching to ${jakub.name} ends the Linga scene, the level check and the Sentence reading for ${ema.name}.`);
  assert.equal(switchEndsLine(only({conversation:{id:'c1',turns:[]}}),null),`Switching to someone else ends the Linga scene for ${ema.name}.`);
- // nothing running, an essay reading, a finished reading, or the seated learner's own card: no line
+ // nothing running, a finished reading, or the seated learner's own card: no line
  assert.equal(switchEndsLine(only({}),jakub),null);
- assert.equal(switchEndsLine(only({jobs:{analyse:{id:'a',phase:'running',startedAt:1,key:'essay'}}}),jakub),null);
+ assert.equal(switchEndsLine(only({jobs:{analyse:{id:'a',phase:'running',startedAt:1,key:'essay'}}}),jakub),`Switching to ${jakub.name} ends the Essay Master reading for ${ema.name}.`);
  assert.equal(switchEndsLine(only({jobs:{analyse:{id:'a',phase:'done',startedAt:1,endedAt:2,key:'english'}}}),jakub),null);
  assert.equal(switchEndsLine(only({conversation:{id:'c1',turns:[]}}),ema),null);
  assert.equal(switchEndsLine({...only({conversation:{id:'c1',turns:[]}}),learner:null},jakub),null);
  assert.ok(!/—/.test(switchEndsLine(only({check:{level:'A2'}}),jakub)));
+});
+test('P4-b: a finished Linga scene is not named; a Take Two in progress and a paused scene are',()=>{
+ const {switchEndsLine}=require(src('tv/keys.ts'));
+ seatedWithWork('ema');
+ const base=store.getSession(),jakub=base.profiles.find((p)=>p.id==='jakub'),ema=base.profiles.find((p)=>p.id==='ema');
+ const only=(o)=>({...base,conversation:null,check:null,jobs:{},...o});
+ const named=`Switching to ${jakub.name} ends the Linga scene for ${ema.name}.`;
+ assert.equal(switchEndsLine(only({conversation:{id:'c1',phase:'finished',turns:[]}}),jakub),null);
+ assert.equal(switchEndsLine(only({conversation:{id:'c1',phase:'finished',turns:[],takes:[{turns:[]}]}}),jakub),named);
+ assert.equal(switchEndsLine(only({conversation:{id:'c1',phase:'finished',turns:[],takes:[{turns:[],endedAt:5}]}}),jakub),null);
+ assert.equal(switchEndsLine(only({conversation:{id:'c1',paused:true,turns:[{id:'t1',role:'partner'}]}}),jakub),named);
 });
 test('P4: the TV Learner screen and the phone line both build their line with switchEndsLine (source pin)',()=>{
  assert.match(fs.readFileSync(src('tv/screens.tsx'),'utf8'),/switchEndsLine\(s, at\)/);

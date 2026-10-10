@@ -8,6 +8,7 @@
  */
 import { hasWorked } from "@/lib/library/worked";
 import { modeOf } from "@/lib/rules/mode";
+import { turnState } from "@/lib/english/turn";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { planSlots, planText, rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
@@ -110,13 +111,15 @@ export function tonightStops(s: Session): TonightStop[] {
 /** Who is at the desk: every profile, then "add a learner". */
 export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.profiles, "add"]; }
 /**
- * What a switch of learner ends (P4, P4-a): the seated learner's Linga scene, level check and running Sentence reading, named.
- * One line for the switcher, or null when nothing of those is running or the card is the seated learner's own. `to` is the
+ * What a switch of learner ends (P4, P4-a): the seated learner's Linga scene, level check and running reading, named.
+ * A finished scene is not named, a paused one and a Take Two in progress are. A running reading is the Sentence reading
+ * for key english and the Essay Master reading for any other key. One line for the switcher, or null when nothing of
+ * those is running or the card is the seated learner's own. `to` is the
  * focused learner's name; the phone, which has no card, passes null and the line says "someone else".
  */
 export function switchEndsLine(s: Session, to: Profile | null): string | null {
   if (!s.learner || to?.id === s.learner.id) return null;
-  const ends = [s.conversation ? "the Linga scene" : "", s.check ? "the level check" : "", s.jobs?.analyse?.phase === "running" && s.jobs.analyse.key === "english" ? "the Sentence reading" : ""].filter(Boolean);
+  const ends = [s.conversation && turnState(s.conversation) !== "finished" ? "the Linga scene" : "", s.check ? "the level check" : "", s.jobs?.analyse?.phase === "running" ? (s.jobs.analyse.key === "english" ? "the Sentence reading" : "the Essay Master reading") : ""].filter(Boolean);
   if (!ends.length) return null;
   const list = ends.length > 1 ? ends.slice(0, -1).join(", ") + " and " + ends[ends.length - 1] : ends[0];
   return `Switching to ${to ? to.name : "someone else"} ends ${list} for ${s.learner.name}.`;
