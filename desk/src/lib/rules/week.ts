@@ -126,7 +126,6 @@ export interface SundayPage {
 /** One line of the page: a section's heading, or one of its lines. What the phone is sent; never the digest. */
 export interface WeekLine { section: WeekSection; head?: true; text: string }
 
-const DAY = 24 * 60 * 60 * 1000;
 /** Local midnight six days before the day `now` falls in: the week is today and the six days before it. */
 export function weekStart(now: number): number {
   const d = new Date(now); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - 6); return d.getTime();
