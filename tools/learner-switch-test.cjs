@@ -299,6 +299,37 @@ test('P11 (i): retry refuses a failed job whose by is not the seated learner (a 
  await settle();
 });
 
+// ---- P10-a (delivery 7d-2): a hint's lesson pick runs for the learner who asked and speaks only while they are seated ----
+test('P10-a: a hint that returns after a switch leaves B\'s desk without a lesson line; A\'s away slot holds the pick and A finds it on return',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1();const calls=gatedHints([gA]);
+ const pA=postHint();await until(()=>calls.hint===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ const before=store.getSession();
+ gA.open();assert.equal((await pA).status,200);await settle();
+ assert.equal(calls.lesson,1,'the pick still ran, for A');
+ let s=store.getSession();
+ assert.doesNotMatch(s.status,/no lesson covers|lesson:|finding the lesson/);
+ assert.equal(s.lesson,before.lesson);assert.equal(s.noLesson,before.noLesson);assert.equal(s.hint,before.hint);
+ assert.equal(s.away.ema.noLesson,true,'A\'s away slot holds the none pick');assert.equal(s.away.ema.hint.owner,'ema');
+ store.dispatch({type:'learner.set',id:'ema'});
+ s=store.getSession();assert.equal(s.noLesson,true);assert.equal(s.hint.hint1.hint,'hint 0');
+});
+test('P10-a: A\'s late pick does not replace B\'s running pick, and B\'s pick lands on B',async()=>{
+ seatedWithWork('ema');withPage();
+ const gA=held1(),gPick=held1();
+ const calls=gatedHints([gA],async()=>{await gPick.p;return {json:{lesson:'none',why:'x'},provider:'stub'};});
+ const pA=postHint();await until(()=>calls.hint===1);
+ store.dispatch({type:'learner.set',id:'jakub'});withPage('kb','maths-b');
+ assert.equal((await postHint()).status,200);await until(()=>calls.lesson===1);
+ assert.equal(store.getSession().jobs.lesson.by,'jakub');
+ gA.open();assert.equal((await pA).status,200);await settle();
+ assert.equal(calls.lesson,1,'A\'s pick did not start');
+ assert.equal(store.getSession().jobs.lesson.by,'jakub');assert.equal(store.getSession().jobs.lesson.phase,'running');
+ gPick.open();await settle();
+ const s=store.getSession();assert.equal(s.noLesson,true,'B\'s pick landed on B');assert.equal(s.jobs.lesson.phase,'done');
+});
+
 // ---- P4 with P4-a: the switcher says what a switch ends ----
 test('P4: switchEndsLine names what the seated learner has running, and only for another learner',()=>{
  const {switchEndsLine}=require(src('tv/keys.ts'));

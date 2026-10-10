@@ -34,6 +34,8 @@ export interface JobOptions<T> {
    * the route's own request body, minus anything big (a page is held on the session by its id, not its image).
    */
   input?: JobInput;
+  /** The learner the run is for; defaults to the one seated when it starts. The run speaks only while they are seated, and the job records them. */
+  askedBy?: string;
   /** Put the session right before the failure is recorded (e.g. a page stops "reading"). */
   onFail?: (e: unknown) => void;
 }
@@ -88,13 +90,15 @@ const detail = (e: unknown) => (e instanceof Error ? e.message : String(e)).spli
 
 export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>, opts: JobOptions<T> = {}): Promise<JobResult<T>> {
   const now = getSession().jobs?.[kind];
-  const seatedNow = getSession().learner?.id, asker = seatedNow;
+  const seatedNow = getSession().learner?.id, asker = opts.askedBy ?? seatedNow;
   if (blocksRun(now, seatedNow) && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
+  // a run for a learner who left never replaces a running run of the seated learner (P10-a)
+  if (opts.supersedes && asker !== seatedNow && now?.phase === "running" && now.by === seatedNow) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
   const seated = () => getSession().learner?.id === asker;
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
   dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}), ...(asker !== undefined ? { by: asker } : {}) });
-  if (opts.start) dispatch({ type: "status", text: opts.start });
+  if (opts.start && seated()) dispatch({ type: "status", text: opts.start });
   try {
     const value = await work(run);
     if (run.current()) {
