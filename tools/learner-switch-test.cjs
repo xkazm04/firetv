@@ -628,3 +628,52 @@ test('R2-c: an away slot with pages null takes the empty list, one line, and sea
  await quiet(async()=>{store.dispatch({type:'learner.set',id:'simon'});});
  assert.equal(store.getSession().learner.id,'simon');assert.deepEqual(store.getSession().pages,[]);
 });
+
+// ---- learner-profile r3 pre-round: a file that cannot be read or put aside is kept; a log with a wrong field is repaired at load ----
+test('R3-a: session.json cannot be read (readFileSync replaced for the load): it is set aside, SESSION_UNREAD, one line names the read failure',()=>{
+ const nfs=require('node:fs'),was=nfs.readFileSync,body=savedDesk({});
+ let errs;
+ nfs.readFileSync=function(f,...a){if(String(f)===SJ())throw new Error('EIO boom');return was.call(this,f,...a);};
+ try{errs=reload(body);}finally{nfs.readFileSync=was;}
+ assert.equal(errs.length,1,JSON.stringify(errs));assert.match(errs[0],/could not be read \(EIO boom\)/);
+ const kept=aside();assert.equal(kept.length,1);assert.equal(fs.readFileSync(path.join(data,kept[0]),'utf8'),body);
+ assert.equal(store.getSession().status,store.SESSION_UNREAD);assert.ok(!fs.existsSync(SJ()));
+});
+test('R3-b: a rename that fails leaves session.json untouched and unsaved; once it can be renamed, the file is kept and the save lands',async()=>{
+ const nfs=require('node:fs'),was=nfs.renameSync,body=JSON.stringify({profiles:'x',learner:null});
+ const fail=function(a,b,...r){if(String(a)===SJ()&&/session\.json\.bad-/.test(String(b)))throw new Error('EBUSY boom');return was.call(this,a,b,...r);};
+ let errs;
+ try{
+  nfs.renameSync=fail;
+  errs=reload(body);
+  assert.equal(errs.length,1,JSON.stringify(errs));assert.match(errs[0],/not put aside/);
+  assert.equal(store.getSession().status,store.SESSION_UNREAD);assert.equal(aside().length,0);
+  await quiet(async()=>{store.dispatch({type:'focus',focus:1});});
+  assert.equal(fs.readFileSync(SJ(),'utf8'),body,'session.json is byte for byte the saved file');assert.equal(store.sessionSaved(),false);
+  nfs.renameSync=was;
+  const c=catchErrors();try{store.dispatch({type:'focus',focus:2});}finally{c.done();}
+  assert.equal(c.errs.filter((l)=>/put aside as session\.json\.bad-/.test(l)).length,1,JSON.stringify(c.errs));
+ }finally{nfs.renameSync=was;}
+ const kept=aside();assert.equal(kept.length,1);assert.equal(fs.readFileSync(path.join(data,kept[0]),'utf8'),body);
+ assert.notEqual(fs.readFileSync(SJ(),'utf8'),body);assert.equal(store.sessionSaved(),true);
+});
+const FRESH_LOG={problems:[],hints:0,hard:[],minutes:0,started:null};
+for(const [label,log,names] of [['{}',{},/problems, hints, hard, minutes, started/],['wrong types',{problems:'x',hints:'2',hard:null,minutes:'a',started:'b'},/problems, hints, hard, minutes, started/]])
+ test(`R3-c: a log of ${label} takes fresh values per field, one line names them, no aside, profiles and slots stay, and the next event does not throw`,async()=>{
+  const errs=reload(savedDesk({log}));
+  assert.equal(errs.length,1,JSON.stringify(errs));assert.match(errs[0],names);assert.equal(aside().length,0);
+  const s=store.getSession();assert.deepEqual(s.log,FRESH_LOG);
+  assert.equal(s.profiles.length,3);assert.equal(s.learner.id,'nela');assert.ok(s.away.simon);assert.notEqual(s.status,store.SESSION_UNREAD);
+  await quiet(async()=>{store.dispatch({type:'focus',focus:1});});
+  const f=JSON.parse(fs.readFileSync(SJ(),'utf8'));assert.equal(f.profiles.length,3);assert.ok(f.away&&f.away.simon);
+ });
+test('R3-d: an away slot with log null, or a log field of the wrong type, is repaired, one line per slot, and nothing throws',async()=>{
+ const slot=(log)=>({pages:[],pageIx:0,itemIx:0,tasks:[],log});
+ const errs=reload(savedDesk({away:{simon:slot(null),mia:slot({problems:3})}}));
+ assert.equal(errs.length,2,JSON.stringify(errs));assert.equal(errs.filter((l)=>/"simon"/.test(l)).length,1);assert.equal(errs.filter((l)=>/"mia"/.test(l)).length,1);
+ const a=store.getSession().away;
+ assert.deepEqual(a.simon.log,{problems:[],hints:0,hard:[]});assert.deepEqual(a.mia.log,{problems:[],hints:0,hard:[]});
+ await quiet(async()=>{store.dispatch({type:'focus',focus:1});});
+ await quiet(async()=>{store.dispatch({type:'learner.set',id:'simon'});});
+ assert.equal(store.getSession().learner.id,'simon');
+});

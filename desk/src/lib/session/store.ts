@@ -743,12 +743,12 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session {
   if (!existsSync(FILE)) return fresh();
   let raw: string;
-  try { raw = readFileSync(FILE, "utf8"); } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); return fresh(); }
+  try { raw = readFileSync(FILE, "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
   let j: any, bad: string | null = null;
   try {
     j = JSON.parse(raw);
@@ -757,15 +757,44 @@ function load(): Session {
   } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
   if (bad) return setAside(bad);
   try {
-    const log = "log" in j && !(j.log && typeof j.log === "object" && !Array.isArray(j.log)) ? (console.error("desk session: session.json log was not an object, so the evening log starts empty; the rest of the file is kept"), fresh().log) : j.log;
+    const log = "log" in j ? keptLog(j.log) : undefined;
     return settleOwners({ ...fresh(), ...j, ...(log === undefined ? {} : { log }), profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
   } catch (e) { return setAside(`its repair failed (${e instanceof Error ? e.message : e})`); }
+}
+/** The name an unusable session.json still has to be put aside as, when load() could not rename it; the store takes it over at startup. */
+let unplaced: string | undefined;
+const strings = (v: unknown) => Array.isArray(v) && v.every((x) => typeof x === "string");
+const count = (v: unknown) => typeof v === "number" && Number.isFinite(v);
+/** The fields of a saved log whose type is wrong, by name; `evening` also checks minutes, started, day and endedAt. */
+function badLogFields(l: Record<string, unknown>, evening: boolean): string[] {
+  const out: string[] = [];
+  if (!strings(l.problems)) out.push("problems");
+  if (!count(l.hints)) out.push("hints");
+  if (!strings(l.hard)) out.push("hard");
+  if (evening) {
+    if (!count(l.minutes)) out.push("minutes");
+    if (!(l.started === null || count(l.started))) out.push("started");
+    if (l.day !== undefined && typeof l.day !== "string") out.push("day");
+    if (l.endedAt !== undefined && !count(l.endedAt)) out.push("endedAt");
+  }
+  return out;
+}
+/** The evening log as saved: a log that is not an object starts empty, and each field of one with the wrong type takes the fresh value (day and endedAt are dropped); one line says which. */
+function keptLog(raw: unknown): Session["log"] {
+  const base = fresh().log;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) { console.error("desk session: session.json log was not an object, so the evening log starts empty; the rest of the file is kept"); return base; }
+  const l = raw as Record<string, unknown>, bad = badLogFields(l, true);
+  if (!bad.length) return l as Session["log"];
+  const out: Record<string, unknown> = { ...l };
+  for (const f of bad) { if (f === "day" || f === "endedAt") delete out[f]; else out[f] = (base as any)[f]; }
+  console.error(`desk session: session.json log field${bad.length > 1 ? "s" : ""} ${bad.join(", ")} had the wrong type, so ${bad.length > 1 ? "they take" : "it takes"} the fresh value; the rest of the file is kept`);
+  return out as Session["log"];
 }
 /** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
 function setAside(why: string): Session {
   const to = `${FILE}.bad-${Date.now().toString(36)}`;
   let where: string;
-  try { renameSync(FILE, to); where = `put aside as ${path.basename(to)}`; } catch (e) { where = `not put aside, the rename failed (${e instanceof Error ? e.message : e})`; }
+  try { renameSync(FILE, to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
   console.error(`desk session: session.json was not used, ${why}; ${where}; starting fresh`);
   return { ...fresh(), status: SESSION_UNREAD };
 }
@@ -797,12 +826,16 @@ function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   for (const [k, x] of Object.entries(a as Record<string, MathsSlot>)) {
     if (!x || typeof x !== "object" || Array.isArray(x)) { console.error(`desk session: session.json away slot "${k}" was dropped, it is not an object`); continue; }
     const slot: MathsSlot = { ...emptySlot(), ...x, practice: shownPractice(x.practice), reading: false };
+    const lg = (x as any).log as unknown, empty = emptySlot().log;
+    if (!("log" in x)) { /* an old slot with no log keeps the empty one */ }
+    else if (!lg || typeof lg !== "object" || Array.isArray(lg)) { console.error(`desk session: session.json away slot "${k}" log was not an object, so it starts empty`); slot.log = empty; }
+    else { const bad = badLogFields(lg as Record<string, unknown>, false); if (bad.length) { console.error(`desk session: session.json away slot "${k}" log field${bad.length > 1 ? "s" : ""} ${bad.join(", ")} had the wrong type, so ${bad.length > 1 ? "they start" : "it starts"} empty`); slot.log = { ...(lg as object), ...Object.fromEntries(bad.map((f) => [f, (empty as any)[f]])) } as MathsSlot["log"]; } }
     for (const f of ["pages", "tasks"] as const) if (!Array.isArray(slot[f])) { console.error(`desk session: session.json away slot "${k}" field ${f} was not a list, so it starts empty`); (slot as any)[f] = []; }
     out[k] = slot;
   }
   return out;
 }
-if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
+if (!g.__desk) { const session = load(); g.__desk = { session, subs: new Set(), ticker: null, ...(unplaced ? { aside: unplaced } : {}) }; }
 const store = g.__desk;
 // HMR can retain a session created before this feature was installed.
 if (!store.session.englishLearning) store.session.englishLearning = store.session.learner ? getLearner(store.session.learner.id).english : emptyEnglish();
@@ -952,6 +985,17 @@ export function dispatch(e: Event): Session {
  * change only, so the timer's once-a-second event cannot flood it.
  */
 function writeSession(): void {
+  // a session.json the load could not put aside is not ours to overwrite: try the rename again first, and write only once it has landed
+  if (store.aside) {
+    if (!existsSync(FILE)) store.aside = undefined;
+    else {
+      try { renameSync(FILE, store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
+      catch (e) {
+        if (store.saved !== false) console.error("desk session: session.json could not be put aside, so the session will not be written over it:", e instanceof Error ? e.message : e);
+        store.saved = false; return;
+      }
+    }
+  }
   const tmp = path.join(DATA, `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
   try {
     mkdirSync(DATA, { recursive: true });
