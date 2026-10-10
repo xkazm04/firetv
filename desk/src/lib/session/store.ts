@@ -6,7 +6,7 @@
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
 import type { Workroom } from "../twin/workroom";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
@@ -497,6 +497,8 @@ export const PAPER_NOT_SAVED = "That paper was not saved: the desk could not wri
 export const PAGES_KEPT = 8;
 /** The status when a page was read but the learner file could not be written (HF2): the page is on the desk, tonight's record and the week do not have it. */
 export const READ_NOT_SAVED = "That page was read, but the desk could not write it to the learner file, so tonight's record and the week do not have it.";
+/** The status when a page was read but session.json could not be written (HF4): the page is on the desk, and it is gone if the desk restarts. */
+export const READ_NOT_KEPT = "That page was read, but the desk could not save it, so it will be gone if the desk restarts.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
@@ -681,9 +683,9 @@ function logWatched(w: Watch): void {
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
-interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
+interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); const bad = !Array.isArray(j?.profiles) ? "profiles is not a list" : !(j?.learner === null || j?.learner?.id) ? "learner is neither null nor a learner with an id" : !j.profiles.every((p: Profile) => p.type in AGE_RANGE) ? "a profile has a type that is not known" : null; if (bad) console.error(`desk session: session.json was not used, it failed the shape check (${bad}); starting fresh`); else return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); } return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
@@ -802,8 +804,29 @@ export function dispatch(e: Event): Session {
     if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null }; } catch {}
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
-  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
+  writeSession();
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
   return store.session;
 }
+/**
+ * The one way session.json is written: a temp file beside it, then a rename over it, so a crash mid-write leaves the old
+ * file whole (the way learners.ts writeBook does). Whether it landed is kept for the read route (HF4). The log speaks on a
+ * change only, so the timer's once-a-second event cannot flood it.
+ */
+function writeSession(): void {
+  const tmp = path.join(DATA, `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  try {
+    mkdirSync(DATA, { recursive: true });
+    writeFileSync(tmp, JSON.stringify(store.session));
+    renameSync(tmp, FILE);
+    if (store.saved === false) console.error("desk session: session.json is being written again");
+    store.saved = true;
+  } catch (e) {
+    try { rmSync(tmp, { force: true }); } catch {}
+    if (store.saved !== false) console.error("desk session: session.json could not be written, so the session will not survive a restart:", e instanceof Error ? e.message : e);
+    store.saved = false;
+  }
+}
+/** Whether the last session.json write landed (HF4). */
+export function sessionSaved(): boolean { return store.saved !== false; }
 export function subscribe(fn: Sub) { store.subs.add(fn); return () => store.subs.delete(fn); }

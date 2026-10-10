@@ -4,7 +4,7 @@
  * the same page id, its image from the session, so a retry never adds a second page.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK, READ_NOT_SAVED } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK, READ_NOT_KEPT, READ_NOT_SAVED, sessionSaved } from "@/lib/session/store";
 import { missingNumbers, readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
@@ -58,9 +58,11 @@ export async function POST(req: Request) {
     const missing = missingNumbers(items);
     if (missing?.length) console.warn(`desk read: page ${id} left out printed numbers ${missing.join(", ")}`);
     dispatch({ type: "page.read", id, items, readMs: ms, provider, missing });
-    return { id, items: items.length, ms, provider, missing, saved };
+    // the page is on the desk, but session.json did not take it (HF4): said apart from the learner file, which wins
+    const kept = sessionSaved();
+    return { id, items: items.length, ms, provider, missing, saved: saved && kept, learnerSaved: saved };
   }, {
-    key: id, input: { id }, start: "reading the page…", done: (x) => !x.saved ? READ_NOT_SAVED : `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s${x.missing?.length ? `. ${missingLine(x.missing)}` : ""}`,
+    key: id, input: { id }, start: "reading the page…", done: (x) => !x.saved ? (x.learnerSaved ? READ_NOT_KEPT : READ_NOT_SAVED) : `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s${x.missing?.length ? `. ${missingLine(x.missing)}` : ""}`,
     // the page stays on the desk, empty, so the TV stops saying "reading"
     onFail: () => dispatch({ type: "page.read", id, items: [], readMs: 0, provider: "error" }),
   });

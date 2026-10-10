@@ -745,6 +745,50 @@ test('HF2: with the learner file unwritable a read of 2 items is kept: 200, save
  assert(errs.some((l)=>/learner file/.test(l)),'the error is logged');
 });
 
+// ---- HF4: session.json is published through a temp file, and a write that fails is said ----
+const SJ=()=>path.join(data,'session.json');
+const jam=()=>{fs.rmSync(SJ(),{recursive:true,force:true});fs.mkdirSync(SJ());fs.writeFileSync(path.join(SJ(),'x'),'x');};
+const unjam=()=>{if(fs.existsSync(SJ())&&fs.statSync(SJ()).isDirectory())fs.rmSync(SJ(),{recursive:true,force:true});};
+const tmps=()=>fs.readdirSync(data).filter((n)=>/^session.json..*.tmp$/.test(n));
+const catchErrors=()=>{const errs=[];const e0=console.error;console.error=(...a)=>errs.push(a.join(' '));return {errs,done:()=>{console.error=e0;}};};
+test('HF4: with session.json unwritable a read of 2 items is kept: 200, saved false, done, READ_NOT_KEPT said, one log line, no tmp left, one recovery line',async()=>{
+ blank();
+ const {READ_NOT_KEPT}=store;deskWorded(READ_NOT_KEPT);
+ assert.equal(READ_NOT_KEPT,'That page was read, but the desk could not save it, so it will be gone if the desk restarts.');
+ jam();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:2,text:'x-5=2',y:0.6,x:0.5}]}));
+ const c=catchErrors();let r,j;
+ try{
+  r=await post('read',SNAP);j=await r.json();assert.equal(store.getSession().status,READ_NOT_KEPT);
+  store.dispatch({type:'status',text:'a'});store.dispatch({type:'status',text:'b'});store.dispatch({type:'status',text:'c'});
+  const bad=c.errs.filter((l)=>/session.json/.test(l));
+  assert.equal(bad.length,1,'one line while writes keep failing: '+JSON.stringify(c.errs));
+  assert.equal(store.sessionSaved(),false);
+  assert.deepEqual(tmps(),[],'no temp file is left');
+  unjam();
+  store.dispatch({type:'status',text:'d'});store.dispatch({type:'status',text:'e'});
+  const back=c.errs.filter((l)=>/written again/.test(l));
+  assert.equal(back.length,1,'one recovery line');
+  assert.equal(store.sessionSaved(),true);
+ }finally{c.done();unjam();}
+ assert.equal(r.status,200);assert.equal(j.saved,false);assert.equal(j.items,2);
+ const s=store.getSession();
+ assert.equal(s.pages.length,1);assert.equal(s.pages[0].items.length,2);
+ assert.equal(s.jobs.read.phase,'done');
+ assert(JSON.parse(fs.readFileSync(SJ(),'utf8')).pages,'session.json parses');
+});
+test('HF4: with the learner file and session.json both failing, READ_NOT_SAVED is said',async()=>{
+ blank();
+ const {READ_NOT_SAVED}=store;
+ const file=path.join(data,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');jam();
+ stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.2,x:0.5}]}));
+ const c=catchErrors();let r;
+ try{r=await post('read',SNAP);}finally{c.done();unjam();if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(r.status,200);assert.equal((await r.json()).saved,false);
+ assert.equal(store.getSession().status,READ_NOT_SAVED);
+ store.dispatch({type:'status',text:'back'});
+});
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
@@ -755,4 +799,17 @@ test('case 7: a job saved as running is not running after the desk restarts',()=
  assert(job,'the saved job is still on record');assert.notEqual(job.phase,'running');
  assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
  assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
+});
+
+// ---- HF4: load() says why a session.json that exists was not used (after case 7: it swaps the store module too) ----
+test('HF4: load() logs once for a session.json that is not JSON or fails the shape check, and not at all for no file',()=>{
+ const reload=(content)=>{
+  clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];
+  if(content===null)fs.rmSync(SJ(),{force:true});else fs.writeFileSync(SJ(),content);
+  const c=catchErrors();try{store=require(storeFile);}finally{c.done();}
+  return c.errs.filter((l)=>/session.json/.test(l));
+ };
+ const a=reload('{not json');assert.equal(a.length,1,JSON.stringify(a));assert.equal(store.getSession().learner,null);
+ const b=reload(JSON.stringify({profiles:'nope',learner:null}));assert.equal(b.length,1,JSON.stringify(b));assert.match(b[0],/shape check/);assert.equal(store.getSession().learner,null);
+ const n=reload(null);assert.deepEqual(n,[]);
 });
