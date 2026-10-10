@@ -38,7 +38,7 @@ export function PaperPanel({ rows, setRows, post, seated, status, kept, name }: 
         {CHOICES.map((g) => <fieldset key={g.area}><legend>{g.name}</legend>
           {g.items.map((c) => <label key={c.code} data-picked={r.codes.includes(c.code) || undefined}>
             <input type="checkbox" checked={r.codes.includes(c.code)} onChange={() => pick(i, c.code)} />
-            <span>{c.can}{c.foundation ? "" : " (beyond a Foundation paper)"}</span></label>)}
+            <span>{c.can}{c.foundation ? "" : " (a harder statement)"}</span></label>)}
         </fieldset>)}
       </details>
       {rows.length > 1 && <button className="plink" onClick={() => setRows(rows.filter((_, k) => k !== i))}>Remove this question</button>}

@@ -823,7 +823,7 @@ test('paper 4: what the desk has no topic for is apart, under "Not on the desk y
  assert.ok(at>0&&html.slice(at).includes('Not on the desk yet'),'its own block, headed plainly');
  const esc=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
  assert.ok(html.slice(at).includes(esc(off.can)),'the can text is shown');
- assert.match(html,/beyond a Foundation paper/);
+ assert.match(html,/a harder statement/);assert.doesNotMatch(html,/Foundation/,'the drawn paper names no tier');
  assert.equal(html.slice(html.indexOf('maths-paper-topics'),at).includes(esc(off.can)),false,'not among the topics');
  assert.equal(drawMaths('PaperScreen',paperSession([it('3',0,1,['N12'])])).includes('maths-paper-off'),false,'no block when nothing is off the desk');
 });

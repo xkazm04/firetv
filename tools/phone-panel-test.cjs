@@ -356,12 +356,12 @@ test('paper 1: every row the desk would leave out is shown, with its reason in p
   [[row('1','1','2.5')],/Question 1 is left out: The marks the question is worth are not a whole number\./],
   [[row('1','','2')],/Question 1 is left out: The marks scored are not a whole number\./],
   [[row('1','0','0')],/Question 1 is left out: A question is worth at least 1 mark\./],
-  [[row('1','0','7')],/Question 1 is left out: No question on this paper is worth more than 6 marks\. Enter its parts one by one\./],
+  [[row('1','0','7')],/Question 1 is left out: The desk takes at most 6 marks for one question\. Enter its parts one by one\./],
   [[row('1','-1','2')],/Question 1 is left out: The marks scored cannot be below 0\./],
   [[row('1','3','2')],/Question 1 is left out: The marks scored are more than the question is worth\./],
   [[row('5(b)','1','2'),row('5 (B)','1','2')],/Question 5 \(B\) is left out: This question number is already on the paper\./],
   [Array.from({length:81},(_,i)=>row(String(i+1),'0','1')),/Question 81 is left out: A paper has at most 80 questions\./],
-  [Array.from({length:14},(_,i)=>row(String(i+1),'0','6')),/Question 14 is left out: This question takes the paper past 80 marks\./],
+  [Array.from({length:14},(_,i)=>row(String(i+1),'0','6')),/Question 14 is left out: The desk takes at most 80 marks for one paper\./],
  ];
  for(const [rows,re] of cases){const e=entryOf(rows);assert.ok(e.drops.some(d=>re.test(d)),`${re}\n${e.drops.join('\n')}`);}
  const codes=entryOf([row('1','0','2',['N1','NOPE','N2','N3','N4'])]);
@@ -405,6 +405,15 @@ test('paper 4: no string the Paper panel renders names the board, over a sweep o
  for(const p of papers){const e=entryOf(p);for(const t of [...e.drops,...e.notes])assert.doesNotMatch(t,BAD,t);}
  for(const g of statementChoices()){assert.doesNotMatch(g.name,BAD);for(const c of g.items)assert.doesNotMatch(c.can,BAD,c.code);}
  assert.doesNotMatch(code(PAPER_PANEL).replace(/\/\/.*$/gm,''),/["'`>][^"'`<>]*(GCSE|1MA1)/i,'no board name in the panel\'s own copy');
+});
+
+test('paper 4b: no string the Paper panel shows names an exam tier; a harder statement is flagged as one',()=>{
+ const {entryOf}=ENTRY();
+ const src=code(PAPER_PANEL);
+ assert.doesNotMatch(src.replace(/\/\/.*$/gm,''),/["'\x60>][^"'\x60<>]*Foundation/,'no tier in the panel copy');
+ assert.match(src,/ \(a harder statement\)/);
+ const rows=[[row('1','0','7')],Array.from({length:14},(_,i)=>row(String(i+1),'0','6'))];
+ for(const p of rows){const e=entryOf(p);assert.ok(e.drops.length);for(const t of e.drops)assert.doesNotMatch(t,/Foundation|Higher/i,t);}
 });
 
 test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{

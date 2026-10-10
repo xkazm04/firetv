@@ -88,12 +88,12 @@ const WHY: Record<DropReason, string> = {
   "marks-not-whole": "The marks scored are not a whole number.",
   "out-of-not-whole": "The marks the question is worth are not a whole number.",
   "out-of-under-one": "A question is worth at least 1 mark.",
-  "out-of-over-cap": `No question on this paper is worth more than ${MAX_OUT_OF} marks. Enter its parts one by one.`,
+  "out-of-over-cap": `The desk takes at most ${MAX_OUT_OF} marks for one question. Enter its parts one by one.`,
   "marks-under-zero": "The marks scored cannot be below 0.",
   "marks-over-out-of": "The marks scored are more than the question is worth.",
   "repeated-label": "This question number is already on the paper.",
   "too-many-items": `A paper has at most ${MAX_ITEMS} questions.`,
-  "over-paper-total": `This question takes the paper past ${PAPER_MARKS} marks.`,
+  "over-paper-total": `The desk takes at most ${PAPER_MARKS} marks for one paper.`,
 };
 const CODE_WHY: Record<CodeReason, string> = {
   "not-a-code": "This is not a statement code.",

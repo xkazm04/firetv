@@ -728,7 +728,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
             <div className="mb-poff" data-role="maths-paper-off">
               <div className="mb-kick">Not on the desk yet</div>
               {v.off.slice(0, PAPER_OFF).map((o) => (
-                <div key={o.can} className="o"><span className="c">{o.can}</span><span className="m">{lostWord(o.lost)} lost · from {o.from}{o.beyond ? " · beyond a Foundation paper" : ""}</span></div>
+                <div key={o.can} className="o"><span className="c">{o.can}</span><span className="m">{lostWord(o.lost)} lost · from {o.from}{o.beyond ? " · a harder statement" : ""}</span></div>
               ))}
               {v.off.length > PAPER_OFF && <div className="o"><span className="m">and {v.off.length - PAPER_OFF} more</span></div>}
               {v.unmapped > 0 && <div className="o"><span className="m">{v.unmapped === 1 ? "1 question" : `${v.unmapped} questions`} named no statement, so sit on no topic</span></div>}
