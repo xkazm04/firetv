@@ -9,7 +9,7 @@ const engine=require(path.join(root,'src/lib/engines/text.ts')),eye=require(path
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
 let looked;eye.vision=(req)=>looked(req);
 const {makeItems}=require(path.join(root,'src/lib/desk/items.ts'));
-const {markSet}=require(path.join(root,'src/lib/desk/mark.ts'));
+const {markSet,EMPTY_MARK}=require(path.join(root,'src/lib/desk/mark.ts'));
 const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
 const {explain}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
@@ -99,8 +99,10 @@ test('no marked line carries a value, and only settled items reach the learner r
  const me=getLearner('maths-record'),rec=me.skills['linear-one-step'];
  assert.equal(rec.seen,3);assert.equal(rec.right,1);assert.deepEqual(rec.slips,['sign-lost-moving']);
  assert.equal(me.history.at(-1).detail,'1 of 6 right, 3 not sure','the three the desk could not decide are on the line');
- looked=reply({items:'not json'});const blank=await markSet('img',sheet,'maths-blank');
- assert.equal(blank.unsure,6);assert.equal(getLearner('maths-blank').skills['linear-one-step'],undefined);
+ looked=reply({items:'not json'});
+ await assert.rejects(()=>markSet('img',sheet,'maths-blank'),{message:EMPTY_MARK});
+ const blank=getLearner('maths-blank');
+ assert.equal(blank.skills['linear-one-step'],undefined);assert.equal(blank.history.length,0,'no history entry');assert.equal(blank.digest.length,0,'no digest entry');
 });
 test('a wrong attempt moves the estimate but never un-secures a secured skill',()=>{
  let rec;for(let k=0;k<3;k++)rec=recordAttempt('maths-secure','linear-two-step',true);assert.equal(rec.secure,false,'three attempts are not enough');
