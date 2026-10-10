@@ -20,6 +20,7 @@ import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
+import { ExplainTalk } from "./ExplainTalk";
 import { recogniserLang } from "./recogniserLang";
 import { blankRow, type DraftRow } from "@/lib/rules/paperEntry";
 import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
@@ -50,6 +51,8 @@ export default function Phone() {
   const [msg, setMsg] = useState("");
   const [subject, setSubject] = useState<Subject>("maths");
   const [q, setQ] = useState("");
+  // the typed way of explaining has its own text: Point & ask keeps q
+  const [typedExplain, setTypedExplain] = useState(""), [typing, setTyping] = useState(false);
   const [sentence, setSentence] = useState("I have gone to school yesterday.");
   /**
    * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
@@ -331,7 +334,9 @@ export default function Phone() {
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
   // a new item on the walk is a new question: last time's transcript and answer do not belong to it
-  useEffect(() => { setHeard(""); setReply(""); setAgain(""); }, [s?.walkIx]);
+  useEffect(() => { setHeard(""); setReply(""); setAgain(""); setTypedExplain(""); setTyping(false); }, [s?.walkIx]);
+  // and a different learner in the seat does not inherit the last one's typed words
+  useEffect(() => { setTypedExplain(""); setTyping(false); }, [s?.learner?.id]);
 
   const rec = useRef<{ stop: () => void } | null>(null);
   const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
@@ -342,7 +347,7 @@ export default function Phone() {
     try {
       const r = await call("/api/explain", { transcript: t, n: s?.walkIx });
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
-      if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); }
+      if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); setTypedExplain(""); setTyping(false); }
       else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
     } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
@@ -548,24 +553,10 @@ export default function Phone() {
                     <button className="pbtn" data-signal="true" onClick={sendSecond} disabled={busy || !again.trim()}>Send</button>
                   </div>
                 </div>)}
-            {asking && <div className="ptalk">
-              <b>How did you get there?</b>
-              {reply ? <><p className="said">{reply}</p><p>The TV has it.</p></> : null}
-              {heard ? <>
-                <p>I heard: “{heard}”</p>
-                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(heard)} disabled={busy}>Send</button>
-                  <button className="pbtn" data-secondary="true" onClick={() => { setHeard(""); setReply(""); }}>Try again</button></div>
-              </> : micOk ? <>
-                <button className="phold" data-holding={holding} onPointerDown={holdStart} onPointerUp={holdEnd} onPointerLeave={holdEnd} onPointerCancel={holdEnd} onContextMenu={(e) => e.preventDefault()}>
-                  {holding ? "Listening… let go when you are done" : "Tell the desk how you got it"}</button>
-                <p style={{ fontSize: 12 }}>Hold the button, say what you did, let go.</p>
-              </> : <>
-                <p>The microphone is not available in this browser — type it instead.</p>
-                <div className="field"><textarea value={q} onChange={(e) => setQ(e.target.value)} placeholder="What did you do first?" /></div>
-                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(q)} disabled={busy || !q.trim()}>Send</button>
-                  <button className="pbtn" data-secondary="true" onClick={() => { setQ(""); setReply(""); }}>Try again</button></div>
-              </>}
-            </div>}
+            {asking && <ExplainTalk micOk={micOk} holding={holding} heard={heard} reply={reply} busy={busy} typed={typedExplain} typing={typing}
+              onHoldStart={holdStart} onHoldEnd={holdEnd} onSendHeard={() => explain(heard)} onTryAgain={() => { setHeard(""); setReply(""); }}
+              onTyped={setTypedExplain} onOpenTyping={() => setTyping(true)} onCloseTyping={() => setTyping(false)}
+              onSendTyped={() => explain(typedExplain)} onClearTyped={() => { setTypedExplain(""); setReply(""); }} />}
           </div>;
         })()}
 

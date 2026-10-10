@@ -462,3 +462,34 @@ test('MB-B33 mic: the recogniser language follows the seated learner\'s school s
  assert.equal(recogniserLang({learner:null,profiles}),'en-US');assert.equal(recogniserLang(null),'en-US');assert.equal(recogniserLang(undefined),'en-US');
  const page=code(PAGE);assert.match(page,/r\.lang = recogniserLang\(s\)/);assert.doesNotMatch(page,/r\.lang = "en-US"/);
 });
+
+// ---- X2 Type it (MB-B18, delivery 5b): a typed way to explain beside the hold button while a recogniser exists
+test('X2 Type it',async(t)=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {createElement}=require(path.join(root,'node_modules/react'));
+ const load=()=>require(path.join(SRC,'app/phone/ExplainTalk.tsx')).ExplainTalk;
+ const noop=()=>{};
+ const draw=(o)=>renderToStaticMarkup(createElement(load(),{micOk:true,holding:false,heard:'',reply:'',busy:false,typed:'',typing:false,
+  onHoldStart:noop,onHoldEnd:noop,onSendHeard:noop,onTryAgain:noop,onTyped:noop,onOpenTyping:noop,onCloseTyping:noop,onSendTyped:noop,onClearTyped:noop,...o}));
+ await t.test('(a) micOk, nothing heard, typing closed: the hold button and a Type it control',()=>{
+  const h=draw({});assert.match(h,/class="phold"/);assert.match(h,/>Type it</);assert.doesNotMatch(h,/<textarea/);
+ });
+ await t.test('(b) micOk, typing open: a labelled textarea and Send, disabled while blank',()=>{
+  const h=draw({typing:true});assert.match(h,/<textarea[^>]*aria-label="[^"]+"/);
+  assert.match(h,/<button[^>]*disabled=""[^>]*>Send<\/button>/,'blank text: Send is disabled');
+  assert.doesNotMatch(h,/class="phold"/);
+  assert.doesNotMatch(draw({typing:true,typed:'čitatel'}),/<button[^>]*disabled=""[^>]*>Send<\/button>/,'text typed: Send is enabled');
+ });
+ await t.test('(c) micOk false: the textarea shows and there is no hold button',()=>{
+  const h=draw({micOk:false});assert.match(h,/<textarea[^>]*aria-label=/);assert.doesNotMatch(h,/phold/);assert.doesNotMatch(h,/>Type it</);
+ });
+ await t.test('(d) heard set: I heard with Send and Try again',()=>{
+  const h=draw({heard:'two thirds'});assert.match(h,/I heard: “two thirds”/);assert.match(h,/>Send</);assert.match(h,/>Try again</);assert.doesNotMatch(h,/<textarea/);
+ });
+ await t.test('(e) page.tsx renders ExplainTalk, the typed text is not q, the walkIx effect clears it',()=>{
+  const p=code(PAGE);assert.match(p,/<ExplainTalk /);assert.match(p,/typed=\{typedExplain\}/);
+  assert.doesNotMatch(p,/<ExplainTalk [^>]*typed=\{q\}/);assert.match(p,/onSendTyped=\{\(\) => explain\(typedExplain\)\}/);
+  assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.walkIx\]\)/,'the walkIx effect clears it');
+  assert.match(p,/setTypedExplain\(""\);[^\n]*\}, \[s\?\.learner\?\.id\]\)/,'a learner change clears it');
+ });
+});
