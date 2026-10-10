@@ -538,3 +538,50 @@ test('P15 explain(): a reply that returns after the learner or the walk item cha
   let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({reply:'ok'});});await m.explain('x');assert.equal(sent.n,1);
  });
 });
+
+// ---- P16 (delivery 7d-4): a late second-try reply is dropped when the learner or the walk item changed
+// Same method as P15: sendSecond() is cut out of page.tsx, transpiled and run against stubs.
+test('P16 sendSecond(): a reply that returns after the learner or the walk item changed sets neither again nor msg; busy clears',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const e=src.indexOf('The evening ends first');
+ const a=src.indexOf('const seat = useRef'),b=src.lastIndexOf('/**',e);
+ assert.ok(a>0&&e>a&&b>a,'sendSecond() is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const make=(s,respond)=>{
+  const calls=[];const rec=(k)=>(v)=>calls.push([k,v]);
+  const f=new Function('s','useRef','call','again','busy','setAgain','setBusy','setMsg','setReply','setHeard','setTypedExplain','setTyping','document','HTMLElement',`${js}\nreturn {sendSecond,seat};`);
+  const out=f(s,(v)=>({current:v}),respond,'my go',false,rec('again'),rec('busy'),rec('msg'),rec('reply'),rec('heard'),rec('typed'),rec('typing'),{activeElement:null},class{});
+  return {...out,calls};
+ };
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ const went=(calls,k)=>calls.filter(([x])=>x===k);
+ const full=(calls)=>went(calls,'msg').filter(([,v])=>v!=='');
+ const seatedA={learner:{id:'ema'},walkIx:1,practice:{items:[{n:10},{n:11},{n:12}]}};
+ await t.test('control: nothing changed - ok clears again; a refusal says the route\'s error; busy ends false',async()=>{
+  const m=make(seatedA,()=>reply({}));await m.sendSecond();
+  assert.deepEqual(went(m.calls,'again'),[['again','']]);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+  const m2=make(seatedA,()=>reply({error:'No second go here.'},false,409));await m2.sendSecond();
+  assert.deepEqual(full(m2.calls),[['msg','No second go here.']]);assert.equal(went(m2.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the learner changed while it was out: no again, no msg, busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({}));await p;
+  assert.equal(went(m.calls,'again').length,0);assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('the walk item changed while it was out: a refusal sets no msg; busy cleared',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'ema',ix:2};g.open(reply({error:'No second go here.'},false,409));await p;
+  assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+ });
+ await t.test('a failed send after a change is dropped too; unchanged, it says so',async()=>{
+  const g=gate();const m=make(seatedA,()=>g.p);const p=m.sendSecond();
+  m.seat.current={id:'jakub',ix:1};g.open(Promise.reject(new Error('net')));await p.catch(()=>{});
+  assert.equal(full(m.calls).length,0);assert.equal(went(m.calls,'busy').at(-1)[1],false);
+  const m2=make(seatedA,()=>Promise.reject(new Error('net')));await m2.sendSecond();
+  assert.equal(full(m2.calls).length,1);assert.match(full(m2.calls)[0][1],/^That did not reach the desk: /);
+ });
+ await t.test('it is sent for the item that was open at send time',async()=>{
+  let sent;const m=make(seatedA,(u,b)=>{sent=b;return reply({});});await m.sendSecond();assert.equal(sent.n,11);
+ });
+});

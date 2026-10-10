@@ -361,12 +361,16 @@ export default function Phone() {
   const sendSecond = async () => {
     const it = s?.practice?.items[s.walkIx], a = again.trim(); if (!it || !a || busy) return;
     if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    const at = { id: s?.learner?.id, ix: s?.walkIx };
+    // a reply that returns after the learner or the walk item changed belongs to neither: it is dropped (busy still clears)
+    const moved = () => seat.current.id !== at.id || seat.current.ix !== at.ix;
     setBusy(true); setMsg("");
     try {
       const r = await call("/api/second", { n: it.n, answer: a });
       const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
       if (r.ok) setAgain(""); else setMsg(j.error ?? `The desk could not take that (${r.status}).`);
-    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+    } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /**
    * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written while busy
