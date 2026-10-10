@@ -1082,3 +1082,21 @@ test('13: MK11 ruled limit - one non-blank answer to a question of the set still
  assert.equal((await post('mark',PHOTO)).status,200);
  assert.equal(store.getSession().practice.marked,true);assert.equal(linesOf(),1);assert.equal(digestOf(),1);
 });
+
+// ------------------------------------------------------------------ D3-3: a failed vision call
+const {EngineError}=require(path.join(root,'src/lib/engines/types.ts'));
+for(const [why,sentence,fail] of [
+ ['a timeout','The desk could not mark the set. It took too long.',()=>{reg.useProvider('vision',{name:'stub',run:async()=>{throw new EngineError('timeout','stub','timed out');}});}],
+ ['an answer that is not JSON','The desk could not mark the set. The answer came back in pieces.',()=>{reg.useProvider('vision',{name:'stub',run:async()=>({raw:'this is not json at all'})});}],
+]){
+ test(`14: D3-3 vision fails with ${why}: 502 in desk words, job failed, nothing recorded, the next good snap marks`,async()=>{
+  seat('uk');setOn();fail();
+  const r=await post('mark',PHOTO);assert.equal(r.status,502);
+  assert.equal((await r.json()).error,sentence);
+  const s=store.getSession();
+  assert.equal(s.jobs.mark.phase,'failed');assert.equal(s.jobs.mark.error,sentence);
+  assert.equal(s.practice.marked,false);assert.equal(linesOf(),0);assert.equal(digestOf(),0);
+  stubVision(()=>({items:PAGE.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:''}))}));
+  assert.equal((await post('mark',PHOTO)).status,200);assert.equal(linesOf(),1);
+ });
+}
