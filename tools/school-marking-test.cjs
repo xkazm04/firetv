@@ -265,6 +265,7 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  let r=await post('explain',{transcript:'I made them quarters and got three quarters',n:5});
  assert.equal(r.status,200);
  const b=await r.json();assert.equal(b.settled,'right');
+ assert.match(b.reply,/^The desk heard 3\/4\. /,'the route returns what the desk heard');assert.match(store.getSession().practice.items[5].reply,/^The desk heard 3\/4\. /,'and the item stores it');
  const req=seenText[0];
  assert.doesNotMatch(req.system,/first-year university student/,'not the Calculus stance');
  assert.match(req.system,/listening to a school student explain/);
@@ -279,8 +280,8 @@ test('8: an unsure fractions item is explained in the school stance and settled 
  stubText(()=>({reply:'Yes, it comes to 11/12.',value:'11/12'}));
  r=await post('explain',{transcript:'eleven twelfths',n:8});
  const it9=store.getSession().practice.items[8];
- assert.equal(it9.verdict,'right');assert.equal(it9.reply,M.RIGHT(9),'the leaking reply is not shown');
- assert.equal((await r.json()).reply,M.RIGHT(9));
+ assert.equal(it9.verdict,'right');assert.equal(it9.reply,'The desk heard 11/12. '+M.RIGHT(9),'the leaking reply is not shown');
+ assert.equal((await r.json()).reply,'The desk heard 11/12. '+M.RIGHT(9));
  // item 8 (11/13, wrong with no slip): a slip the conversation names does not rename a school item
  stubText(()=>({reply:'Look at the tops.',value:'',slip:'tops-and-bottoms'}));
  await post('explain',{transcript:'I added them',n:7});
@@ -329,6 +330,36 @@ test('9: the Calculus explanation prompt is byte for byte what it was, and a lin
  await X.explainItem({n:1,question:'Solve for x: 3x - 7 = 11',verdict:'unsure'},'I added seven','linear-two-step',LEARNER,()=>false,12);
  assert.match(seenText[0].system,/listening to a school student explain/);assert.match(seenText[0].prompt,/the final value of x the student says they got/);
  assert.match(seenText[0].prompt,/^Topic: Two-step equations\n/);
+});
+
+test('10: a settled explanation names the value the desk heard; nothing settled, nothing named',async()=>{
+ const topic='calc1-rules',lin='linear-two-step',HEARD=/^The desk heard /;
+ // a Calculus item settled by the answer said, and a linear one by the value of x (the 'x = ' cleaned off)
+ stubText(()=>({reply:'Look at the second term.',slip:'unclear',value:'6x + 2'}));
+ let x=await X.explainItem({n:1,question:'Differentiate f(x) = 3x^2 + 2x.',spec:{shape:'derivative',f:'3x^2 + 2x'},verdict:'unsure'},'six x plus two',topic,LEARNER,()=>true,12,'cz');
+ assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 6x + 2. Look at the second term.');assert.equal(x.shown,x.reply);
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'x = 4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'I got four',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled.verdict,'right');assert.equal(x.reply,'The desk heard 4. Look at the first line.');
+ // a reply that leaks is replaced, and the heard sentence still leads the item's own line (the check ran on the model's reply alone)
+ stubText(()=>({reply:'It is 4.',slip:'unclear',value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'four',lin,LEARNER,()=>true,12);
+ assert.equal(x.reply,'The desk heard 4. '+M.RIGHT(1));
+ // a wrong answer said settles wrong, and the desk still says what it heard
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'5'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'five',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled.verdict,'wrong');assert.match(x.reply,/^The desk heard 5\. /);
+ // nothing settles: a value the engine cannot read, an item no longer unsure, a wrong item whose slip is renamed
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'about four'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'about four',lin,LEARNER,()=>true,12);
+ assert.equal(x.settled,undefined);assert.doesNotMatch(x.reply,HEARD);
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'unsure'},'four',lin,LEARNER,()=>false,12);
+ assert.equal(x.settled,undefined);assert.equal(x.reply,'Look at the first line.');
+ const undo=M.slipsFor(lin).find((q)=>q.id==='undo-wrong-order');
+ stubText(()=>({reply:'Look at what you did to both sides.',slip:undo.id,value:'4'}));
+ x=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'wrong',slip:'arithmetic-slip',said:M.ASK(1)},'four',lin,LEARNER,()=>false,12);
+ assert.ok(x.renamed);assert.doesNotMatch(x.reply,HEARD);
 });
 
 // ------------------------------------------------------------------ 6. typed answers (Family W6): no camera, no model
@@ -827,7 +858,7 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
  // the reply is leak-checked against the item's own spec: one that says the answer is replaced by the item's line
  stubText(()=>({reply:'Yes: 7.15 exactly.',value:'7.15'}));
  await post('explain',{transcript:'seven point one five',n:2});
- const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(3),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 7.15. '+M.RIGHT(3),'the leaking reply is not shown');
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
@@ -1018,7 +1049,7 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
  stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
  await post('explain',{transcript:'twenty-eight square centimetres',n:1});
- const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(2),'the leaking reply is not shown');
+ const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 28 cm2. '+M.RIGHT(2),'the leaking reply is not shown');
 });
 
 test('HL6: every frac-* withheld line is 25 words or fewer, keeps the closing sentence, names no number, and leaks nothing on its unit',()=>{

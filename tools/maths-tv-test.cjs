@@ -2,12 +2,14 @@
  * Math Buddy's television, the pure parts (desk/src/maths/prose.ts, desk/src/tv/mathsRows.ts): the desk's sentences
  * re-spell maths without changing it, the topic path takes "Secure" only from the learner's latched record, and a
  * line too long for the paper is fitted to it. Run with npm test in desk/ (directly: node tools/maths-tv-test.cjs).
- * Pure: no store, no route, no model, no browser.
+ * Pure, except one case that runs the reducer and a stubbed text provider on a temp data dir: no route, no live model, no browser.
  */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
-const {test}=require('node:test');
+const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
+// the settled-reply case below runs explainItem, which writes the learner record: a temp data dir, never desk/data
+process.env.DESK_DATA_DIR=path.join(require('node:os').tmpdir(),`desk-maths-tv-${process.pid}-${Date.now()}`);
 // loaded per test, so a missing module fails each case on its own
 const P=()=>require(path.join(root,'src/maths/prose.ts'));
 const T=()=>require(path.join(root,'src/maths/typeset.ts'));
@@ -618,6 +620,7 @@ test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topic
 
 // next/font runs only under Next: the face module answers with its class names
 for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+after(()=>{clearInterval(globalThis.__desk?.ticker);require('node:fs').rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 const SECOND_Q=['x+3=7','x-5=2','3x=18','x/2=4','x+1=10','5x=35'];
 /** The marked sheet as the TV is given it: items 2 and 4 are ringed; `second` is item 2's second go (or none). */
 function secondSession(second,screen='sheet',extra={}){
@@ -924,4 +927,20 @@ test('MK10: the drawn card of an unsure part gives the desk\'s reason under the 
   if(ans)assert.match(card,/The desk is not sure about number 2\(b\)\. /);else assert.match(card,/Number 2\(b\) has no answer yet\./);
   assert.equal(s.practice.items[2].said,line(items[2]),'the stored line is left alone');
  }
+});
+
+test('heard 1: the drawn card of an item the desk settled from a spoken value opens with what the desk heard',async()=>{
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));require(path.join(root,'src/lib/engines/text.ts'));
+ const X=require(path.join(root,'src/lib/desk/explain.ts')),{reduce}=require(path.join(root,'src/lib/session/store.ts'));
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'Look again at the step where the 1 moved.',slip:'unclear',value:'4'})})});
+ try{
+  const base=secondSession(null,'walk');
+  const item={n:2,question:'2x + 3 = 11',studentAnswer:'',verdict:'unsure'};
+  const x=await X.explainItem(item,'I took three off and halved it','linear-two-step','tv-heard',()=>true,12);
+  assert.equal(x.settled.verdict,'right');
+  // the route stores it the way it does: practice.settle with the reply
+  const s=reduce({...base,practice:{...base.practice,items:base.practice.items.map((it)=>it.n===2?item:it)}},{type:'practice.settle',n:2,reply:x.reply,verdict:x.settled.verdict,slip:x.settled.slip,said:x.settled.said});
+  const card=words(cardOf(drawMaths('Walk',{...s,walkIx:1}))).join(' ');
+  assert.match(card,/The desk heard 4\./,'the drawn card names the value the desk took');
+ }finally{reg.resetProviders();}
 });

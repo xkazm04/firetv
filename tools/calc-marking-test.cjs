@@ -212,7 +212,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  stubText(()=>({reply:'Good - you used the power rule on each term.',slip:'unclear',value:'2(3x+1)'}));
  let r=await post('explain',{transcript:'I brought the powers down and got two lots of three x plus one',n:0});
  assert.equal(r.status,200);let b=await r.json();
- assert.equal(b.settled,'right');assert.equal(b.reply,'Good - you used the power rule on each term.');
+ assert.equal(b.settled,'right');assert.equal(b.reply,'The desk heard 2(3x+1). Good - you used the power rule on each term.');
  const req=seenText[0];
  assert.match(req.system,/first-year university student/);assert.match(req.system,/Calculus 1/);
  assert.ok(req.prompt.includes(topicIn(fx.topic).name)&&req.prompt.includes(topicIn(fx.topic).blurb),'the topic from topicIn');

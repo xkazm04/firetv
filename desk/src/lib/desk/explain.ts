@@ -24,7 +24,7 @@
  * wrong item is never renamed from the conversation), and the reply is checked with leaksSchool(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, cleanValue, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
 import { askedText, namedLine } from "../rules/calc-word";
 import { DEFAULT_SCHOOL_SYSTEM, leaksSchool } from "../rules/school";
@@ -222,6 +222,9 @@ export async function explainItem(
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
   const own = verdict?.said ?? item.said ?? ASK(item.n);
   const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply, system);
-  const reply = h.reply && !gives ? h.reply : own;
+  const chosen = h.reply && !gives ? h.reply : own;
+  // a settled item names the value the desk took from the words (the learner's own value is not a leak, so the leak check above ran on the model's reply alone)
+  const took = verdict ? (calc || school ? h.value : cleanValue(h.value)).trim() : "";
+  const reply = took ? `The desk heard ${took}. ${chosen}` : chosen;
   return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

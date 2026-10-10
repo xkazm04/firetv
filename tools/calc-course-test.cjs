@@ -188,7 +188,7 @@ function scan(where){
    }
    if(it.said!==undefined)assert.ok(own.has(it.said)||it.said.startsWith(`The desk is not sure about number ${it.n}. `),`${at}: item ${it.n} said "${it.said}" - not the desk's own line`);
    // a reply is the desk's own line, or a model's reply the item's leak rule has passed (the course's replies all leak, so they are the desk's)
-   if(it.reply!==undefined)assert.ok(own.has(it.reply)||!(it.spec?C.leaksCalc(it.spec,it.reply):M.leaks(it.question,it.reply)),`${at}: item ${it.n} reply "${it.reply}" states the answer`);
+   if(it.reply!==undefined){const bare=it.reply.replace(/^The desk heard \S.*?\. /,'');assert.ok(own.has(bare)||!(it.spec?C.leaksCalc(it.spec,bare):M.leaks(it.question,bare)),`${at}: item ${it.n} reply "${it.reply}" states the answer`);}
   }
  }
 }
@@ -243,7 +243,7 @@ test('2: the school path through the same routes - linear-two-step practice, mar
  assert.equal(skill(SCHOOL,'linear-two-step').seen,5,'the unsure item is not an attempt');
  textPlan={explain:{reply:'Look at what you did to both sides first.',slip:'unclear',value:'2'}};
  r=await step('school explain',()=>post('explain',{transcript:'I took one off and got two',n:2}));
- assert.equal(r.status,200);assert.equal(r.body.settled,'right');assert.equal(r.body.reply,'Look at what you did to both sides first.');
+ assert.equal(r.status,200);assert.equal(r.body.settled,'right');assert.equal(r.body.reply,'The desk heard 2. Look at what you did to both sides first.');
  assert.equal(skill(SCHOOL,'linear-two-step').right,5);
  onPage('school-k','Solve for x:  2x + 3 = 11');
  textPlan={hint:[{hint:'What is being done to x first?',what_to_try_next:'Write the two sides one under the other.'}]};
@@ -311,9 +311,9 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   textPlan={explain:{reply:want[blank].right,slip:'unclear',value:want[blank].right}};
   r=await step(`${topic} explain`,()=>post('explain',{transcript:'this is what I got',n:blank}));
   assert.equal(r.status,200);assert.equal(r.body.settled,'right',`${topic}: settled from the spoken answer`);
-  assert.equal(r.body.reply,M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
+  assert.equal(r.body.reply,`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1),`${topic}: the reply stated the answer, so the desk's own line stands in`);
   s=store.getSession();
-  assert.deepEqual([s.practice.items[blank].verdict,s.practice.items[blank].said,s.practice.items[blank].reply],['right',M.RIGHT(blank+1),M.RIGHT(blank+1)]);
+  assert.deepEqual([s.practice.items[blank].verdict,s.practice.items[blank].said,s.practice.items[blank].reply],['right',M.RIGHT(blank+1),`The desk heard ${want[blank].right.trim()}. `+M.RIGHT(blank+1)]);
   assert.equal(skill(CALC,topic).secure,false,`${topic}: one mixed evening does not latch it`);
 
   // ---- a hint on a page item of the topic's question: clean kept; a leak re-asked once; a second leak the shape's sentence

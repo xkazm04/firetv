@@ -379,7 +379,7 @@ test('GUARD case 7: after settling, no line on any item carries a value, and the
  const p=store.getSession().practice;
  for(const i of p.items){
   const numbers=((i.said??'').match(/-?\d+(\/\d+)?/g)??[]).filter(v=>v!==String(i.n));assert.deepEqual(numbers,[],`item ${i.n} said: ${i.said}`);
-  const leaked=((i.reply??'').match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify(i.question,v));assert.deepEqual(leaked,[],`item ${i.n} reply: ${i.reply}`);
+  const leaked=((i.reply??'').replace(/^The desk heard \S.*?\. /,'').match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify(i.question,v));assert.deepEqual(leaked,[],`item ${i.n} reply: ${i.reply}`);
  }
  const keys=keysIn(p);assert(!keys.includes('answer'));assert(!keys.includes('solution'));
 });
