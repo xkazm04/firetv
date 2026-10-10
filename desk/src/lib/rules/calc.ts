@@ -496,6 +496,8 @@ const algebraSaid = (t: string) => t
 
 /** Most tokens a window of the line may span. */
 const WINDOW = 6;
+/** Most tokens the long pass reads as one expression (a right answer said whole, longer than WINDOW). */
+const LONG_WINDOW = 24;
 
 /**
  * Does this hint or explanation line state the answer? It reads the line as it would be said (number words to
@@ -508,6 +510,10 @@ const WINDOW = 6;
  *     an integral also by a decimal the judge would call right (0.38 for 3/8, 2.7 for e: D2 R1a);
  *   - a function shape leaks by any window that checkAnswer would call right (an antiderivative with or without +C);
  *   - an infinite limit leaks by naming infinity.
+ * Two long passes then read windows of seven up to LONG_WINDOW (24) tokens, and the line leaks if one compiles and is
+ * right by the same test: a function answer said whole ('2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)') is refused
+ * too. One reads the line as scan reads it, the other the line as it was before the question's own pieces were set
+ * aside (that step can erase a term of the answer). Both only add hits.
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
   if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
@@ -517,6 +523,7 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
   const { truth, f } = r, s = r.spec;
   let text = algebraSaid(spoken(line));
   if (truth.kind === "inf") return /infinit|∞|\binf\b/.test(text);
+  const raw = text;
   const fnRight = (e: Expr): boolean => {
     // one way, as the judge compares (D2): every answer it can call right is refused
     if (truth.kind === "derivative") return agreesWhereBoth(e, (x) => truth.at.get(x) ?? NaN, FUNCTION_TOL);
@@ -566,10 +573,21 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
     }
     return false;
   };
+  const tokenize = (t: string): string[] => t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
+    .map((w) => w.replace(/\.+$/, ""))
+    .filter(Boolean);
+  /** Does any window of WINDOW + 1 up to LONG_WINDOW tokens compile and read as the answer? */
+  const longRight = (tokens: string[]): boolean => {
+    for (let i = 0; i < tokens.length; i++) {
+      for (let n = WINDOW + 1; n <= Math.min(LONG_WINDOW, tokens.length - i); n++) {
+        const said = tokens.slice(i, i + n).join(" "), e = compile(said);
+        if (e && (truth.kind === "number" ? numberRight(e, tokens[i], said) : fnRight(e))) return true;
+      }
+    }
+    return false;
+  };
   const scan = (t: string): boolean => {
-    const tokens = t.replace(/[=,;:!?"“”‘’]/g, " ").split(/\s+/)
-      .map((w) => w.replace(/\.+$/, ""))
-      .filter(Boolean);
+    const tokens = tokenize(t);
     for (let i = 0; i < tokens.length;) {
       let took = 0, hit = false;
       for (let n = Math.min(WINDOW, tokens.length - i); n >= 1; n--) {
@@ -582,9 +600,11 @@ export function leaksCalc(spec: unknown, line: unknown): boolean {
       if (hit) return true;
       i += Math.max(1, took);
     }
-    return productRight(tokens);
+    return longRight(tokens) || productRight(tokens);
   };
   if (scan(text)) return true;
+  // the long pass also over the line as it was before the question's own pieces were set aside
+  if (raw !== text && longRight(tokenize(raw))) return true;
   // a substitution said in the line ('u = x^2'): the line is read again with the letter put back as its inside
   for (const m of text.matchAll(/\b([uvw])\s*=\s*([^\s,;=…]+)/g)) {
     const inner = single(m[2]);

@@ -251,16 +251,26 @@ test('D2-3: the leak check stays at least as strict as the judge - every answer 
   if(typeof a!=='string'||C.checkAnswer(s,a).verdict!=='right')continue;
   right++;
   if(C.leaksCalc(s,`The answer is ${a}.`))continue;
-  // a known limit at the base (main 87ec2049), not D2's: leaksCalc reads windows of at most six tokens, so a longer answer said whole is not read
+  // an answer longer than six tokens is read by the long passes (HL12, HL12a), so it is refused like the rest
   (a.trim().split(/\s+/).length>6?long:bad).push(`${s.shape} ${s.f}: ${a}`);
  }
  assert.deepEqual(bad,[]);
- assert.deepEqual(long,['derivative x^2 e^x sin(x): 2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)','derivative (x^2 + 1)/(x - 1): (x^2 - 2x - 1)/(x - 1)^2'],'the six-token window, pinned as it stands');
+ assert.deepEqual(long,[],'the long passes read the longer answers (HL12)');
  assert.ok(right>=400,`the sweep holds ${right} right answers`);
  // the brief's two pins, by name
  assert.equal(C.leaksCalc(D('ln(1-x)'),'So the derivative is -1/(1-x).'),true,'-1/(1-x) on the ln(1-x) derivative');
  assert.equal(C.leaksCalc(L38,'It is about 0.38.'),true,'0.38 on a 3/8 limit');
  assert.equal(C.leaksCalc(L38,'Round to two places at the end.'),false,'the method is not the answer');
+});
+
+test('HL12: the long passes refuse a long right answer said whole, and only a right one',()=>{
+ const P={shape:'derivative',f:'x^2 e^x sin(x)'},Q={shape:'derivative',f:'(x^2 + 1)/(x - 1)'};
+ assert.equal(C.leaksCalc(P,'So the derivative is 2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x).'),true,'the 11-token corpus answer');
+ assert.equal(C.leaksCalc(Q,'So the derivative is (x^2 - 2x - 1)/(x - 1)^2.'),true,'the 7-token corpus answer');
+ assert.equal(C.leaksCalc(P,'So the derivative is x^2 e^x cos(x) + 2x e^x sin(x) + e^x x^2 sin(x).'),true,'a reordered form');
+ assert.equal(C.leaksCalc(P,'So the derivative is 2x e^x sin(x) + x^2 e^x cos(x).'),false,'a long wrong expression');
+ assert.equal(C.leaksCalc(P,'So the derivative is x^2 e^x sin(x) + 2x e^x sin(x).'),false,'a long wrong expression holding the question function');
+ assert.equal(C.leaksCalc(P,'Write f(x) = x^2 e^x sin(x) as three factors and use the product rule on each.'),false,'a method line');
 });
 
 // ------------------------------------------------------------------ hint(): the engine stubbed at the provider seam
