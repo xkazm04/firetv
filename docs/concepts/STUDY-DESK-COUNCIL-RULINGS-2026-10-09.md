@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d).
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d) and for round 3 on 2026-10-10 (round 2 merged at f7f24df5). Ids such as run 13cf8526 name a run, not a commit.
 
 ---
 
@@ -92,9 +92,15 @@ Must-address, verbatim, both high:
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| HW4 | The Tonight screen's Back to the sheet card is `continueCard` (`desk/src/tv/mathsRows.ts:118`, its `findIndex` at :132). It opens tonight's sheet by the same answer as the door, `tonightsSheet` (:21). It is offered only when that sheet was read with at least one problem. With no such sheet, the card is not offered. Older pages stay on the desk. | Must-address 1 (value-5). | A deliberate resume of an older sheet. It contradicts HW2, and its caption 'where you were' misleads. | queued, delivery 4a |
-| HW5 | The printed-number sort in `readPage` (`desk/src/lib/desk/read.ts:82`) holds only when no printed number repeats on the page. A number that repeats with the same label, or with no label, means the sheet has sections that restart. Then walk the items top to bottom by band, and left to right inside one band. A new section starts at the first item whose number and label are already in the current section. Sections keep that page order. Inside a section, items sort by printed number, and lettered parts by label. A page with no repeat keeps today's sort, so robustness-2's two-column fix stands. The rule is the same for maths, English and Essay. Known limit: two sections side by side in two columns are not split. It is stated for the full round. | Must-address 2 (craft-8). | (a) Reading order alone, which breaks a two-column section. (b) The model's own order, which is unobserved on a real page. (c) A section field in the read schema, which changes the shared reader, the same reason craft-1's box was left out. | queued, delivery 4a |
-| HW6 | The failed-read line on the English page (`desk/src/tv/screens.tsx:122`, today 'could not read this page' followed by 'snap it again') points to Try again on the phone, as HW3 did for maths. | Lite r2 found r1 value-2 closed for maths and unchanged for English (robustness-7). | none recorded | queued, delivery 4a |
+| HW4 | The Tonight screen's Back to the sheet card is `continueCard` (`desk/src/tv/mathsRows.ts:118`, its `findIndex` at :132). It opens tonight's sheet by the same answer as the door, `tonightsSheet` (:21). It is offered only when that sheet was read with at least one problem. With no such sheet, the card is not offered. Older pages stay on the desk. | Must-address 1 (value-5). | A deliberate resume of an older sheet. It contradicts HW2, and its caption 'where you were' misleads. | delivered, afcb2714 |
+| HW5 | The printed-number sort in `readPage` (`desk/src/lib/desk/read.ts:82`) holds only when no printed number repeats on the page. A number that repeats with the same label, or with no label, means the sheet has sections that restart. Then walk the items top to bottom by band, and left to right inside one band. A new section starts at the first item whose number and label are already in the current section. Sections keep that page order. Inside a section, items sort by printed number, and lettered parts by label. A page with no repeat keeps today's sort, so robustness-2's two-column fix stands. The rule is the same for maths, English and Essay. Known limit: two sections side by side in two columns are not split. It is stated for the full round. | Must-address 2 (craft-8). | (a) Reading order alone, which breaks a two-column section. (b) The model's own order, which is unobserved on a real page. (c) A section field in the read schema, which changes the shared reader, the same reason craft-1's box was left out. | delivered, d147fcb8 |
+| HW6 | The failed-read line on the English page (`desk/src/tv/screens.tsx:122`, today 'could not read this page' followed by 'snap it again') points to Try again on the phone, as HW3 did for maths. | Lite r2 found r1 value-2 closed for maths and unchanged for English (robustness-7). | none recorded | delivered, b2c8389e |
+
+Delivery 4a is run b5a6629d (a run id, not a commit), merged at b2c8389e. Notes from its code, checked on `main`:
+- HW5 is `orderItems` in `desk/src/lib/desk/read.ts` (:71). A band runs from the first item to its band end, read left to right, and on equal x the upper item comes first.
+- The robustness-2 repeat pin moved by ruling, OLD one, two, two again, three -> NEW two, three | one, two again (`tools/desk-jobs-rules-test.cjs` :560-562).
+- The Essay failed-read line names the paste panel: 'Paste or type it on the phone.' (`desk/src/tv/pageLines.ts:9`, where HW6's line now lives).
+- Side-by-side sections are not split. That is a ruled limit.
 
 Left out of delivery 4a, by ruling:
 - (a) robustness-6 (med): the failed-read job is session-global, so a second learner inherits a Try again that answers 409. It joins P2 in delivery 7. The one function that clears per-learner desk state on a learner change also clears this job.
@@ -103,6 +109,30 @@ Left out of delivery 4a, by ruling:
 - (d) craft-1 band plausibility, value-3, craft-3 and craft-4 are unchanged and not in this rework.
 
 After 4a merges, a lite r3 (the last lite round) runs, then the full round.
+
+Superseded by the plan change (Process rulings): no lite r3 ran, and the full round followed.
+
+Full r1 (round 2026-10-10-homework-page-reading-r1, judged at 87ec2049): ready 0.485, coverage 1.0. Scores: value 0.50, craft 0.55, rivalry 0.55, robustness 0.55, economics 0.05. The judges are uncalibrated; under a trusted state the outcome would be fail.
+
+Must-address, verbatim, all high:
+1. craft: A partial read is indistinguishable from a complete one: no completeness verdict, no check of the printed numbering
+2. robustness: A good read is thrown away and reported as an unreadable page when the learner file cannot be written
+3. economics: Every read adds its page photo to the session, and nothing ever removes it, so each later event costs more with no ceiling
+
+The medium findings left open:
+- craft-2, the read-state seam: A fails, B is read, and going back to A shows reading.
+- craft-3, 0..1 centres against the Qwen-VL box scale (uncertain).
+- craft-4 and robustness-2, the non-atomic session write and its bare catch (`desk/src/lib/session/store.ts:805`; the ruling said about :801).
+- craft-5, the think:false fallback (`desk/src/lib/engines/vision.ts:48`, with the note at :4).
+
+value-3 ('No marks were lost' while marks sit on unmapped questions, `desk/src/tv/paperRows.ts:54` and `desk/src/maths/MathsTV.tsx:716`) joins delivery 4b. value-1 (a read sheet is hinted, never marked) is BACKLOG MB-B35, and it is with the owner as a scope question. The owner holds the homework Approval until a full r2 runs.
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| HF1 | A read carries a completeness verdict built from the printed numbering. `missingNumbers` in `read.ts` (:121) does it. A number is missing when it is a whole number between two printed numbers of one run. Runs follow `orderItems`' sections: a repeated number and label starts a new run. Lettered parts count once. A run that starts above 1 has no gap before it. An item with no usable number makes the verdict unknown (null), which is not the same as complete. The page record, the route's answer, the job's done line and a server log line carry the verdict. The page screen shows `missingLine` (`desk/src/tv/pageLines.ts:16`, used at `desk/src/tv/screens.tsx:123`), which asks for a new photo and offers no Try again. | Full r1 must-address 1. | none recorded | delivered, 1d7998ff |
+| HF2 | A learner-file write failure keeps the read. The page lands with its items, the job ends done, the answer is 200 with saved false, the error is logged, and the status says `READ_NOT_SAVED` (`store.ts:499`). `job.ts` is unchanged. | Must-address 2. | Failing the read, which spends another vision call on every Try again. | delivered, f071828d |
+| HF3 | A learner holds at most `PAGES_KEPT` = 8 pages (`store.ts:497`). A new page past the cap drops the oldest page whole, items and photo. The page being read is never dropped. A read in place adds nothing, and `pageIx` stays on the page just read. A retry for a dropped page answers 409. Accepted limit: a saved session or away slot that already holds more than 8 pages is trimmed only when that learner next reads a new page. | Must-address 3. | none recorded | delivered, bd69ff49 |
+| HF1b | The Math Buddy page screen also says `missingLine`. Maths pages render in `PageScreen` in `desk/src/maths/MathsTV.tsx` (:935-946), not in `desk/src/tv/screens.tsx`. So after HF1 a maths learner sees the missed numbers only in the bench status bar (`desk/src/app/tv/page.tsx:152`), which is not on the stage. The line shows when the page's missing list has numbers. It does not displace the reading, failed-read or hint captions. | Must-address 1 for maths, the feature's main subject. 4e's builder raised it. | Leaving the maths TV to the status bar. | queued, delivery 4g, before the homework full r2 |
 
 ## 3. hint-lesson-discovery
 
@@ -115,7 +145,7 @@ Must-address:
 |---|---|---|---|---|
 | HL1 | Rework before the full round. | The process rule below. | none recorded | delivered, part 1 (445c7bad) |
 | HL2 | A school task that reads as neither a fractions unit nor Calculus gets a neutral school-maths stance that names no unit. The voice age stays for vojtech-18, who is declared out of segment. | value-1, MB-B8. `STANCE` in `desk/src/lib/desk/hint.ts:44`, chosen at :63-66. | none recorded | delivered, 0599317f |
-| HL3 | `leaksCalc` catches a Calculus answer said in words. | robustness-2. `leaksCalc` (`desk/src/lib/rules/calc.ts`), called at `desk/src/lib/desk/explain.ts:224`. | none recorded | in flight, run a1f30e71 |
+| HL3 | `leaksCalc` catches a Calculus answer said in words. | robustness-2. `leaksCalc` (`desk/src/lib/rules/calc.ts:512`), called at `desk/src/lib/desk/explain.ts:224`. | none recorded | delivered, 8a568751 |
 | HL4 | `embeddings.json` is written atomically and keyed by model and transcript. A truncated cache is rebuilt, not fatal. | robustness-3 and craft-2. | none recorded | delivered, 331107da |
 | HL5 | The picker refuses a lesson id outside the menu it offered. | craft-1. | none recorded | delivered, 2be44253 |
 | HL6 | The fractions fallback line is 25 words or fewer. | value-3. | none recorded | delivered, e3661325 |
@@ -125,14 +155,55 @@ The same rework owns MB-B2, MB-B8, MB-B16 and MB-B33. It also carries X1 (sectio
 
 Delivery 3 was split into two branches on one lane. Lost: one branch. The reason: MB-B2 changes the shared reader (`readQuestion` also feeds `likeTopic`), and the guard is a different shape from lessons and stance.
 - Part 1 (lessons, stance and length) is run c75ab4a7, merged 445c7bad. Its commits: HL4 331107da, HL5 2be44253, HL2 0599317f, HL6 e3661325, the MB-B33 length cap d642c422 and Mic 5a2135b9, the MB-B8 grounding c7460599, and the BACKLOG notes 445c7bad.
-- Part 2 (the shared leak guard: X1, X1a, X1b, X1c, HL3, MB-B16, MB-B2) is in flight, run a1f30e71.
+- Part 2 (the shared leak guard: X1, X1a, X1b, X1c, HL3, MB-B16, MB-B2) is run a1f30e71, merged at 1c38f546. Its commits: X1 0af79dcd, X1a 9def48b2, X1b 42e666f7, X1c 42e666f7 (no code of its own; its guard case shares the table commit), HL3 8a568751, MB-B16 66602171, MB-B2 119988a1 with its fallback c4d9ef75, and the BACKLOG notes 1c38f546.
 
 HL7 stays queued as a stated ceiling for the full round. A lite r2 follows part 2's merge.
 
-## 4. Marking false ticks (practice-generation-marking)
+Superseded by the plan change: the hint goes to its full round after 4f, with no lite r2.
 
-Its full round is ready and its Approval is with the owner. MB-B26, MB-B27 (R2) and MB-B28 (R1) are one fix, already ruled
-in `docs/BACKLOG.md`. See those entries; they are not restated here. No new ruling id. Status: queued, delivery 4.
+Part 2 rulings:
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| HL8 | (part 2 Q1) ':' between two fractions reads as division on every system. | A ratio's value is the quotient, and the checks compare values. | Restricting it to cz and de now. That is one line in `taskText.plainTask` if a real sheet shows harm. | delivered, 119988a1 |
+| HL9 | (Q3) The MB-B2 fallback refuses only a line that states a solution. The half that refuses a number the item's own text lacks stays unbuilt, because the full rule refused 5 of 24 real stages. It is a stated ceiling for the hint full round. | MB-B2. | The full rule. | delivered, c4d9ef75 |
+| HL10 | (Q4) The leak check reads Czech 'jedna', 'jedno' and 'jeden' as 1. Accepted as a ceiling, because it only causes a refusal, the safe failure, and only when the answer is 1. | X1b. | none recorded | delivered, 42e666f7 |
+| HL11 | Flag for the hint full round: tasks the reader newly reads as school (Czech fraction tasks, '3/4 : 1/2') now end as 'no lesson for this' instead of reaching the lesson picker. No test covers it, and it may be a value regression. 'Solve 3x - 7 = 11.' now takes the linear stance. | HL8 and MB-B2 widened the reader. | none recorded | open, carried into the hint full round |
+| HL12 | (D2 Q3) Finding: `leaksCalc` reads windows of at most six tokens (`WINDOW = 6`, `calc.ts:498`). So a right function answer longer than that, said whole in a hint, is not refused. There are two corpus cases: the 11-token derivative of x^2 e^x sin(x), and (x^2 - 2x - 1)/(x - 1)^2 (7 tokens). fb201a90 pins them as they stand (`tools/calc-hint-test.cjs` :254-258). Decision: widen the window in its own delivery, 4f, before the hint full round. | D2 Q3. | Folding it into D2. | queued, delivery 4f |
+
+## 4. Marking false ticks and false rings (practice-generation-marking)
+
+Status of the work, checked on `main`:
+- Delivery 4 (run c2f1a530, merged b5cd169e): MB-B26 e4dc93f5, MB-B27 ebdddf7c, MB-B28 9c777d5d, BACKLOG b5cd169e.
+  - The linear battery judged 12,350 answers, with 0 false rings and 0 false ticks.
+  - Pins moved by ruling: 'x^3 - 4ln(x) + C' for 3x^2 - 4/x, right -> not sure. The calc2-path partial-fractions answers, ln(x) -> ln|x|, and 'ln(x) - ln(x+1) + C' is now not sure. calc1-frozen.json: specs 163 -> 166, calls 3690 -> 3756, and one row right -> not sure.
+- Lite r2 (2026-10-09-practice-generation-marking-lite-r2, at b2c8389e): ready 0.656, coverage 0.70. Scores: value 0.62, craft 0.72, robustness 0.62 (was 0.82). Must-address, verbatim:
+  1. robustness: False ring: the right derivative of ln(1-x) is marked wrong (also ln(2-x), ln(4-x^2))
+  2. robustness: False ring: a right 2-place rounding of a halfway limit or integral (0.38 for 3/8) is marked wrong
+  Both were already present at b8558e80, the head the full r1 judged. So the full r1 ready does not describe the marking, and the owner was told to hold the marking Approval.
+- D2 (run 7f0915e5, merged c62de4fb): D2-1 5a55d9e7, D2-2 f4a56e98, D2-3 fb201a90, D2-4 c62de4fb. 73 suites, 1285 tests. Moved pins, OLD -> NEW:
+  - CHECKS x^2 on [0,1], '0.3': wrong -> not sure;
+  - (1+1/x)^x, '2.7': wrong -> right;
+  - MB-B28 '2.7 for e': wrong -> right;
+  - calc2 (1+1/n)^n, '2.7': wrong -> right;
+  - the chain fixture 'ln(x) + C' for 1/x: true -> null;
+  - two calc1-frozen rows moved the same way.
+- Full r2: in flight, run 13cf8526 (a run, not a commit).
+
+These are the App Master's rulings, not the owner's.
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| MK1 | (MB-B27) An answer undefined where the truth is defined reads not sure, with a domain line in the desk's words, never wrong. The check runs one way only, so 1/x for the derivative of ln x is never refused. | Items state no domain, and on x > 0 the answer is correct. | Wrong, which would be a false ring. | delivered, ebdddf7c |
+| MK2 | (MB-B28) A decimal for a limit or a definite integral is right only as the exact value correctly rounded at its own written precision, and only inside today's tolerance. calc2 `judgeLimit` takes the same rule. `ROUNDED_CLOSE` and the leak checks are unchanged. | MB-B28. | none recorded | superseded by MK5 (its tolerance clause). Delivered, 9c777d5d |
+| MK3 | `chain.ts:94` is left alone in delivery 4, because it draws a pen, not a tick. | Delivery 4 scope. | none recorded | superseded by MK8 |
+| MK4 | (DQ1) '2,718' in a Calculus answer reads not sure today (unreadable), which is a safe failure. The decimal comma is wanted only for an answer that is one number alone (a limit, a definite integral, an evaluation, a derivative at a point), with one comma between digits. It is never read inside an expression, where a comma separates arguments or points. | A decimal comma is a school habit in cz and de. | none recorded | queued, delivery 4c |
+| MK5 | (R1a) A correct rounding of a limit or a definite integral at its own written decimals is never wrong. It is right with two or more significant figures (2.7 for e, 0.38 for 3/8, 3.0 for 3). It is not sure with fewer (0.3 for 1/3, 0.0 for 1/32). A decimal that is not a correct rounding keeps the old path: not sure inside `ROUNDED_CLOSE`, wrong outside it. One function in `calc-read.ts` decides it for both judges. D2 Q1, ruled: R1a holds literally, so a one-figure correct rounding reads not sure even inside the old window (0.4 for 0.4012). No corpus case has it. | Lite r2 must-address 2. | The old 5e-3 window running ahead of `roundsTo`. | delivered, 5a55d9e7 |
+| MK6 | The judge uses one-direction defined-ness and compares only where both sides are defined. An answer defined where the truth is not is no gap. An answer undefined where the truth is defined stays MK1's not sure. So the right derivatives of ln(1-x), ln(2-x) and ln(4-x^2) are right. -ln(1-x)+C for 1/(1-x) and ln(x-2)+C for 1/(x-2) read not sure. D2 Q2, ruled: a negated answer that differs only in defined-ness now carries the 'sign' slip, and the verdict stays wrong. | Lite r2 must-address 1. | The two-way skip in `pairs()`. | delivered, f4a56e98 |
+| MK7 | Accepted ceiling: ln(x+4)+C for 1/(x+4) reads right, because its gap lies outside every sample (`SAMPLES` spans about -3.32 to 4.80). `SAMPLES` is not widened. | The sample set is fixed (`desk/src/lib/rules/calc-expr.ts:704`). | Widening `SAMPLES`. | pinned as a named limit in D2: f4a56e98, `tools/calc-rules-test.cjs` :483-484 |
+| MK8 | `chain.ts` takes the one-way rule. A working line that is undefined where the line before it is defined is not a clean step (null, not true). The function is `oneWay` (`desk/src/lib/rules/chain.ts:95`). The line `chain.ts:94` that MK3 named has moved. | MK3 left the pen alone in delivery 4. | none recorded | delivered, c62de4fb |
+| MK9 | (DQ2) '1/abs(x)' for the derivative of ln x reads right, because it agrees with 1/x wherever ln x is defined. | The one-way rule (MK6). | none recorded | ruled, no change (no test pins it; none found in `tools/` or `desk/src`) |
+| MK10 | (D2 Q4) The unsure reasons reach the learner. Today `settleSpec` in `maths.ts` (:155) drops every unsure reason (it returns null at :158 and :163), so MK1's domain line and the rounded line never reach the screen, which they were meant to. The lite r2's medium findings go with it: the /api/mark vision-failure test and the empty-image refusal. | MK1 and MK5 promised the lines. | none recorded | queued, delivery 4d |
 
 ## 5. student-working-explanation
 
@@ -145,15 +216,15 @@ Must-address:
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| X1 | The leak gap is fixed once, in the hint rework. The explain reply is checked by the same three functions, `leaks`, `leaksCalc` and `leaksSchool`, and the council found the gap is exactly MB-B16's. The hint rework adds tests through `explainItem`, with the model stubbed. | Must-address 2, MB-B16. `desk/src/lib/desk/explain.ts:224`. | An explain-only guard. It would be a second copy of the same check. | in flight, run a1f30e71 |
-| X1a | On a Pythagoras item, a line that puts the item's squared total under a root is a leak, even when it does not state the root. Examples: 'the square root of 1156', 'the root of 1156', the root sign before 1156, Czech 'odmocnina z 1156'. The squared total on its own stays legitimate. | `tools/school-rules-test.cjs` `PYTH_LEGIT` (:1626) pins 'The sum of the squares is 100.' (:1628). | MB-B16's recommendation to refuse the squared total itself. It reverses a pinned design choice and leaves a second hint nothing to say on a Pythagoras item. | in flight, run a1f30e71 |
-| X1b | The leak checks read number words as figures before they compare. The words come from one closed table under `desk/src/lib/rules/`. English and Czech cardinals from zero to twenty, and the tens to a hundred. Fraction words from half to twentieths: Czech polovina to dvacetina, with and without diacritics, singular and plural. 'Pravdepodobnost je tri trinactiny.' on a 3/13 item is a leak. | Must-address 2. The leak checks work on figures today (`leaksSchool`, `desk/src/lib/rules/school.ts`). | Telling the model to write figures only. The guard has to hold whatever the model writes. | in flight, run a1f30e71 |
-| X1c | Settling from words is not widened. 'three quarters' and 'tri ctvrtiny' still settle nothing, which is the safe failure. | Marking path safety. | none recorded | in flight, run a1f30e71 |
+| X1 | The leak gap is fixed once, in the hint rework. The explain reply is checked by the same three functions, `leaks`, `leaksCalc` and `leaksSchool`, and the council found the gap is exactly MB-B16's. The hint rework adds tests through `explainItem`, with the model stubbed. | Must-address 2, MB-B16. `desk/src/lib/desk/explain.ts:224`. | An explain-only guard. It would be a second copy of the same check. | delivered, 0af79dcd |
+| X1a | On a Pythagoras item, a line that puts the item's squared total under a root is a leak, even when it does not state the root. Examples: 'the square root of 1156', 'the root of 1156', the root sign before 1156, Czech 'odmocnina z 1156'. The squared total on its own stays legitimate. | `tools/school-rules-test.cjs` `PYTH_LEGIT` (:1626) pins 'The sum of the squares is 100.' (:1628). | MB-B16's recommendation to refuse the squared total itself. It reverses a pinned design choice and leaves a second hint nothing to say on a Pythagoras item. | delivered, 9def48b2 |
+| X1b | The leak checks read number words as figures before they compare. The words come from one closed table under `desk/src/lib/rules/`. English and Czech cardinals from zero to twenty, and the tens to a hundred. Fraction words from half to twentieths: Czech polovina to dvacetina, with and without diacritics, singular and plural. 'Pravdepodobnost je tri trinactiny.' on a 3/13 item is a leak. | Must-address 2. The leak checks work on figures today (`leaksSchool`, `desk/src/lib/rules/school.ts`). | Telling the model to write figures only. The guard has to hold whatever the model writes. | delivered, 42e666f7 |
+| X1c | Settling from words is not widened. 'three quarters' and 'tri ctvrtiny' still settle nothing, which is the safe failure. | Marking path safety. | none recorded | delivered, 42e666f7 (no code of its own) |
 | X2 | A 'Type it' control is always beside the hold-to-speak button. Today the textarea appears only when there is no recogniser. The recogniser language follows the learner's school system: cs-CZ for cz. | Must-address 1, MB-B18. `desk/src/app/phone/page.tsx:288` (`r.lang = "en-US"`) and :544-556 (textarea at :550). :288 is also MB-B33's line; whichever rework lands first sets it. | none recorded | queued, delivery 5 |
 | X3 | When an explain settles an unsure item, the phone's reply and the TV's item line name the value the desk took from the learner's words, e.g. 'The desk heard 11/12.'. It is the learner's own value, so it is not a leak. When nothing settles, no value is named. | Must-address 1, second half. | none recorded | queued, delivery 5 |
 | X4 | The explain prompt also gets the learner's written answer, the transcribed working, and the slip and line the desk found. This comes only after X1 holds. | MB-B10. `desk/src/lib/desk/explain.ts` prompt build (about :100-127). X1 is MB-B10's own ceiling. | none recorded | queued, delivery 5 |
 
-X1 rides the hint rework (delivery 3, part 2). X2-X4 are their own rework (delivery 5), then a lite r2, then the full round.
+X1 rode the hint rework (delivery 3, part 2, merged at 1c38f546). X2-X4 are their own rework (delivery 5), then a lite r2, then the full round.
 
 ## 6. essay-paragraph-analysis
 
@@ -228,6 +299,33 @@ Must-address:
 
 This rework is serial with the Linga rework (delivery 11), because they share files.
 
+## 10. weekly-digest-for-parents
+
+Lite r1 (2026-10-09-weekly-digest-for-parents-lite-r1): ready 0.633. Scores: robustness 0.78, value 0.52, craft 0.68. Tier: major, because parents rely on what it writes into learners.json and read it as fact.
+
+Must-address, verbatim:
+1. value: A homework week and a typed paper read 'Nothing this week.' (MB-B14 / radka-41-MB5-2, nela-12-MB5-3): still in the tree
+
+D1 delivered the rows below (run e395e83f, merged 87ec2049).
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| WD1 | A homework sheet writes a count-only digest entry beside the history line: kind 'homework' with problems, hints and second, and no title, page id or text. Hints are counted at the store's dispatch boundary onto the hint owner's homework entry of the same local day. A hint never writes an entry of its own (`DIGEST_CAP` is 60, `desk/src/lib/rules/digest.ts:46`). | Must-address 1. | none recorded | delivered, 18789175, with the pin fix 6910c64b |
+| WD2 | A typed paper writes a count-only entry (kind 'paper', with questions) in `addPaper`'s own save. No marks and no score. | Must-address 1. | none recorded | delivered, 18789175 |
+| WD3 | (MB5-8) The unit line names the last set's not-sure count when it is above 0. | MB5-8. | none recorded | delivered, f47b8b41 |
+| WD4 | `LINE_WORDS` stays 14 (`desk/src/lib/rules/week.ts:39`) and `PAGE_WORDS` stays 90. A long unit name gets an authored short Sunday name. A long profile name is said by its first word. A last rung drops only the hint counts. The busiest week is 88 words, pinned, and a DST week is pinned. | The Sunday page has a fixed word budget. | Raising `LINE_WORDS`. | delivered, 79cf246c and 5d65293e |
+| WD5 | A week refresh that throws is logged, and the page says one authored line. It is never null, which the phone draws as 'Nothing this week.', and never the previous learner's lines. | Lite r1 robustness-1. | none recorded | delivered, 87ec2049 |
+| WD6 | (D1 Q1, DQ3) A hint on a page read on an earlier evening, or on a day with no sheet read, writes nothing. Accepted as a limit. | D1 Q1. | none recorded | unslotted |
+| WD7 | (D1 Q2) A successful re-read writes a second entry. Accepted, because today a re-read only follows a failed read, which writes neither. | D1 Q2. | none recorded | ruled, no change |
+| WD8 | (D1 Q3) A two-stage problem counts 2 hints and 1 'needed a second'. Confirmed. | D1 Q3. | none recorded | delivered, 18789175 |
+
+Left out, by ruling:
+- value-3 and EM4-2/EM4-5 join delivery 6.
+- value-4 and the EM-B36 lens order join delivery 13.
+- The DST and midnight-refresh limits stay open (craft-6).
+
+Next: the full round, under the plan change.
+
 ## Process rulings
 
 - Every feature passes council-lite.
@@ -238,31 +336,47 @@ This rework is serial with the Linga rework (delivery 11), because they share fi
 - A harness, environment or measurement item with no product claim is declined in its run's doc only, with no BACKLOG entry.
 - Reworks run one at a time, on one delivery lane, so two never edit the same files.
 - A mode has three lite rounds. A fourth is refused as stalled, and the owner decides instead.
+- Plan change, 2026-10-10: a lite-ready major goes straight to its full round after its rework, with no further lite round. It supersedes the lite r2 and lite r3 steps above for majors. A lite-fail feature still gets its next lite round.
+- A full round with a high must-address line is reworked before the owner decides its Approval. Then a full r2 runs.
 
 ## Delivery order
 
 1. memory-recap: done.
 2. homework: done, 602410d7.
-3. hint, carrying X1. The leak checks are shared with explain and marking, so they are fixed once, early. Part 1 done at 445c7bad; part 2 in flight, run a1f30e71.
-4. marking false ticks. It is already ruled, and it edits the same rules files, so it runs after the hint rework.
-4a. homework r2 rework, HW4-HW6, then the homework lite r3.
-4b. MB-B7, the paper picker.
-5. explain, X2-X4. It comes after 3 and 4, because explain settles through the same checks and its reply guard is X1.
-6. essay.
-7. learner-profile. It goes ahead of pairing, because P6 changes the session door that pairing builds on. It now also clears homework's failed-read job (robustness-6).
+3. hint, carrying X1: done (part 1 445c7bad, part 2 1c38f546).
+4. marking false ticks: done, b5cd169e.
+4a. homework HW4-HW6: done, b2c8389e.
+D1. digest MB-B14: done, 87ec2049.
+D2. marking false rings: done, c62de4fb.
+4e. homework HF1-HF3: done, bd69ff49.
+4g. HF1b, before the homework full r2.
+4f. HL12, the leaksCalc window, before the hint full round. 4g and 4f wait for the marking full r2 to settle, and they touch disjoint files.
+4b. MB-B7, plus homework value-3.
+4c. MK4.
+4d. MK10.
+5. explain, X2-X4.
+6. essay, plus EM4-2/EM4-5 and digest value-3.
+7. learner-profile, plus homework robustness-6.
 8. pairing.
 9. CEFR with placement.
-10. the `uat/` and `tools/` overlay fix (W7).
-11. the Linga rework with LG-25, after the owner's Approval of linga-conversation-turn.
+10. the W7 overlay.
+11. Linga with LG-25, after the owner's Approval.
 12. the claude-era Linga LT run.
-13. the recap follow-up, EM-B36 and MB-B23, after learner-profile.
-13a. the recap write-door contract. When the owner decides the recap Approval, it goes next on the lane. A rejection's reason joins it. It does not wait for learner-profile.
+13. the recap follow-up, EM-B36 and MB-B23, plus digest value-4 and the lens order, after learner-profile.
+13a. the recap write-door contract: unchanged (queued; it goes next on the lane when the owner decides the recap Approval, and does not wait for learner-profile).
 
-Unslotted: EM-B11, the essay voice, which now also carries MB-B8's age line.
+Unslotted: EM-B11 and WD6.
+
+Review lane, in order: marking full r2 (in flight, run 13cf8526); homework full r2 after 4g; hint full round after 4f; digest full round.
 
 ## Open contradictions
 
-None open.
+1. **MB-B28's BACKLOG text against MK5.**
+   - Ruling MK5 (delivered, 5a55d9e7): a correct rounding with two or more significant figures is right, so '2.7 for e' is right, and D2 moved the pins that way.
+   - `docs/BACKLOG.md` MB-B28 (:540-545): the recommendation says a decimal is right only as a correct rounding "(2.718 for e, 0.859 for (e-1)/2, 3.00 for 3)", and "any other decimal within `ROUNDED_CLOSE` reads 'not sure'". Its status note (9c777d5d) predates D2. The ceiling line says a calculator estimate at x = 0.01 is never ticked. I found no line saying '2.7 for e' stays out. But the entry never mentions MK5 or D2, so a reader of BACKLOG alone would expect 2.7 for e to read not sure.
+   - Not resolved here: this task may not edit BACKLOG. It needs a status note there.
+
+Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, and the lite r2 and r3 steps by the plan change.
 
 ## Resolved contradictions
 
@@ -273,4 +387,4 @@ None open.
 2. **Squared total on Pythagoras (X1a against MB-B16).**
    - Ruling X1a: the squared total on its own stays legitimate; only the squared total under a root is a leak.
    - `docs/BACKLOG.md` MB-B16: "for a Pythagoras spec the leak profile also refuses the squared answer (1156)", and its tests pin lines such as "c squared is 1156." as leaks. The test pin `tools/school-rules-test.cjs:1628` keeps 'The sum of the squares is 100.' legitimate.
-   - Ruling: on a Pythagoras item, take the value the root is taken of: x^2+y^2 for the longest side, x^2-y^2 for a shorter side. Stated on its own, that value stays legitimate: 'c squared is 1156.', 'The sum of the squares is 100.' and '36 + 64 = 100' pass. A line leaks when it puts the value under a root ('the square root of 1156', '√1156', 'odmocnina z 1156'). It also leaks when it states the value with a root instruction in the same line ('c² = 16² + 30² = 1156, teď odmocni.'). 'Then take the square root of the total.' stays legitimate. MB-B16's text that refuses the squared total itself is superseded. In flight: part 2, run a1f30e71, whose builder also edits MB-B16 in BACKLOG.
+   - Ruling: on a Pythagoras item, take the value the root is taken of: x^2+y^2 for the longest side, x^2-y^2 for a shorter side. Stated on its own, that value stays legitimate: 'c squared is 1156.', 'The sum of the squares is 100.' and '36 + 64 = 100' pass. A line leaks when it puts the value under a root ('the square root of 1156', '√1156', 'odmocnina z 1156'). It also leaks when it states the value with a root instruction in the same line ('c² = 16² + 30² = 1156, teď odmocni.'). 'Then take the square root of the total.' stays legitimate. MB-B16's text that refuses the squared total itself is superseded. Delivered: part 2, run a1f30e71, merged at 1c38f546 (X1a 9def48b2, MB-B16 66602171, with the BACKLOG note at 1c38f546).
