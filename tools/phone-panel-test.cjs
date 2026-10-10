@@ -618,3 +618,86 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
  });
  await t.test('A to B to B resets once',()=>{const m=make();m.seat('ema');m.seat('jakub');assert.deepEqual(m.seat('jakub'),[]);});
 });
+
+// ---- P17 (ii): a reply that returns after the learner changed is dropped by every handler
+// Each handler is cut out of page.tsx, transpiled and run against stubs. Only the learner is compared, never the walk item.
+test('P17 (ii) a reply that returns after the learner changed sets no state but busy, in every handler',async(t)=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const cut=(from,to)=>{const a=src.indexOf(from),e=src.indexOf(to,a);assert.ok(a>0&&e>a,`${from} is where the test expects it`);return src.slice(a,src.lastIndexOf('\n',e));};
+ const SETTERS=['Busy','Msg','Phase','Note','Info','Notice','ReadIx','PieceId','ShelfTick','Q','Paras'];
+ const PARAMS=['s','seat','call','post','shot','busy','typed','document','HTMLElement','onPlan','onSentence','slotText','rewrite','planFill','paras','pieceProblem','etype','keep','pieceId','source','essay','paragraphsOf','essayTooLong','pix','page','q','sentence',...SETTERS.map((n)=>'set'+n)];
+ const reply=(body,ok=true,status=200)=>Promise.resolve({ok,status,json:async()=>body});
+ const gate=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+ // build one handler; `respond(url, body)` is the network
+ const build=(slice,name,respond)=>{
+  const calls=[],urls=[],seat={current:{id:'ema',ix:1}};
+  const js=ts.transpileModule(slice,{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+  const f=new Function(...PARAMS,`${js}\nreturn {${name}};`);
+  const rec=(k)=>(v)=>calls.push([k,typeof v==='function'?'fn':v]);
+  const stubs={s:{practice:{items:[{n:10}]},walkIx:0,itemIx:0},seat,call:(u,b)=>{urls.push([u,b]);return respond(u,b);},post:(e)=>{urls.push(['post',e]);return respond('post',e);},shot:{url:'u',w:1,h:2},busy:false,typed:['a','b'],
+   document:{activeElement:null},HTMLElement:class{},onPlan:{i:0,plan:{}},onSentence:{n:2},slotText:'slot',rewrite:'rw',planFill:()=>({ok:true}),paras:['one','two'],pieceProblem:()=>'',
+   etype:'structure',keep:true,pieceId:'p1',source:'message',essay:'one',paragraphsOf:(x)=>[x],essayTooLong:()=>'',pix:0,page:{items:[]},q:'why',sentence:'I go.'};
+  const out=f(...PARAMS.map((p)=>p.startsWith('set')&&SETTERS.includes(p.slice(3))?rec(p.slice(3)):stubs[p]));
+  return {fn:out[name],calls,urls,seat,mark:()=>calls.length};
+ };
+ const sendS=cut('const send = async','const toJpeg'),slotS=cut('const sendSlot','useEffect(() => { if (onSentence)'),rewriteS=cut('const sendRewrite','/** Load a text as'),
+  pieceS=cut('const readPiece','const openKept'),paraS=cut('const analyseParagraph','/** From the sentence rewrite'),askS=cut('const ask = async',"/** The desk's failed run"),
+  retryS=cut('const retry = async','/** A Mic press'),workS=cut('const sendWorking','const sendTyped').replace(/\/\*\*\s*$/,''),typedS=cut('const sendTyped','// the set came back');
+ const okBody={piece:{pieceId:'p2'}};
+ // [label, slice, handler, args, network for a good reply, what the control must set]
+ const H=[
+  ['send',sendS,'send',['d',1,2,'maths','T'],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendSlot',slotS,'sendSlot',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['sendRewrite',rewriteS,'sendRewrite',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['readPiece',pieceS,'readPiece',[],()=>reply(okBody),(c)=>c.some(([k,v])=>k==='PieceId'&&v==='p2')&&c.some(([k])=>k==='ShelfTick')],
+  ['acceptNotice',pieceS,'acceptNotice',[],(u)=>u==='/api/texts'?reply({}):reply(okBody),(c)=>c.some(([k,v])=>k==='PieceId'&&v==='p2')],
+  ['analyseParagraph',paraS,'analyseParagraph',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')&&c.some(([k])=>k==='ReadIx')],
+  ['ask',askS,'ask',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Q'&&v==='')],
+  ['checkSentence',askS,'checkSentence',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Msg'&&v==='on the TV')],
+  ['retry',retryS,'retry',['read'],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendWorking',workS,'sendWorking',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+  ['sendTyped',typedS,'sendTyped',[],()=>reply({}),(c)=>c.some(([k,v])=>k==='Phase'&&v==='sent')],
+ ];
+ assert.equal(H.length,11,'eleven handlers');
+ for(const [label,slice,name,args,net,sets] of H){
+  await t.test(`${label}: control - nothing changed, it sets what it sets today`,async()=>{
+   const m=build(slice,name,net);await m.fn(...args);await new Promise((r)=>setImmediate(r));
+   assert.ok(sets(m.calls),`${label} sets its state`);assert.equal(m.calls.filter(([k])=>k==='Busy').at(-1)[1],false);
+  });
+  await t.test(`${label}: the learner changed while the call was out - nothing set but busy, which ends false`,async()=>{
+   for(const how of ['ok','refusal','reject']){
+    const g=gate();const m=build(slice,name,()=>g.p);const p=m.fn(...args);const from=m.mark();
+    m.seat.current={id:'jakub',ix:1};
+    if(how==='ok')g.open(net('/api/x')); else if(how==='refusal')g.open(reply({error:'No.'},false,409)); else g.open(Promise.reject(new Error('net')));
+    await p.catch(()=>{});await new Promise((r)=>setImmediate(r));
+    const after=m.calls.slice(from);
+    assert.deepEqual(after.filter(([k])=>k!=='Busy'),[],`${label} (${how}) set no state after the switch`);
+    if(label!=='acceptNotice'){assert.equal(after.at(-1)[0],'Busy');assert.equal(after.at(-1)[1],false);}
+   }
+  });
+ }
+ await t.test('readPiece: a 428 after a switch sets no notice; an ok after a switch sets no piece id',async()=>{
+  const g=gate();const m=build(pieceS,'readPiece',()=>g.p);const p=m.fn();const from=m.mark();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({notice:true,error:'Notice.'},false,428));await p;
+  assert.equal(m.calls.slice(from).filter(([k])=>k==='Notice').length,0);
+  const g2=gate();const m2=build(pieceS,'readPiece',()=>g2.p);const p2=m2.fn();const from2=m2.mark();
+  m2.seat.current={id:'jakub',ix:1};g2.open(reply(okBody));await p2;
+  assert.equal(m2.calls.slice(from2).filter(([k])=>k==='PieceId'||k==='ShelfTick').length,0);
+  const m3=build(pieceS,'readPiece',()=>reply({notice:true,error:'Notice.'},false,428));await m3.fn();
+  assert.deepEqual(m3.calls.filter(([k])=>k==='Notice'),[['Notice','Notice.']],'unchanged, the 428 still shows the notice');
+ });
+ await t.test('acceptNotice: after a switch it does not call readPiece (no piece is posted)',async()=>{
+  const g=gate();const m=build(pieceS,'acceptNotice',(u)=>u==='/api/texts'?g.p:reply(okBody));const p=m.fn();
+  m.seat.current={id:'jakub',ix:1};g.open(reply({}));await p;
+  assert.deepEqual(m.urls.map(([u])=>u),['/api/texts'],'only the notice was posted');
+  const m2=build(pieceS,'acceptNotice',()=>reply(okBody));await m2.fn();
+  assert.deepEqual(m2.urls.map(([u])=>u),['/api/texts','/api/analyse'],'unchanged, the piece follows the notice');
+ });
+ await t.test('request bodies are unchanged, and a walk item change alone drops nothing',async()=>{
+  const m=build(askS,'ask',()=>reply({}));await m.fn();assert.deepEqual(m.urls[0],['/api/hint',{askedQ:'why',itemIx:0}]);
+  const g=gate();const m2=build(askS,'ask',()=>g.p);const p=m2.fn();m2.seat.current={id:'ema',ix:2};g.open(reply({}));await p;
+  assert.ok(m2.calls.some(([k,v])=>k==='Q'&&v===''),'the learner is the same: the reply lands');
+  const w=build(workS,'sendWorking',()=>reply({}));await w.fn();assert.deepEqual(w.urls[0],['/api/mark',{image:'u',w:1,h:2}]);
+ });
+ assert.match(src,/onClick=\{checkSentence\}>Check it on the TV</,'the Say button calls the named handler');
+});
