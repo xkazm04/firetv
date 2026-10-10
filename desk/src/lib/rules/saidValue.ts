@@ -40,8 +40,13 @@ export function saidIn(value: string, transcript: string): boolean {
   const said = new Set(runs(superscripts(folded)));
   if (/(?<![\p{L}])squared(?![\p{L}])|na druhou/u.test(low) || low.includes("²")) said.add("2");
   if (/(?<![\p{L}])cubed(?![\p{L}])|na treti/u.test(low) || low.includes("³")) said.add("3");
-  const vl = fold(superscripts(v).toLowerCase());
+  // an area unit (cm2, m2) carries a 2 that is its exponent, not a figure; it is heard as the unit said, not as a digit
+  let vl = fold(superscripts(v).toLowerCase());
+  const unitless = vl.replace(/(?<![\p{L}])(c?m)\^?2(?!\d)/gu, "$1");
+  const area = unitless !== vl;
+  vl = unitless;
   const mine = runs(vl);
+  if (area && !said.has("2") && !/(?<![\p{L}])(?:square|sq)\.?\s+(?:centimet\p{L}*|met\p{L}*|cm|m)(?![\p{L}])|(?<![\p{L}])ctverecn/u.test(low)) return false;
   for (const r of mine) if (!said.has(r)) return false;
   const names = new Set<string>();
   for (const m of vl.matchAll(/\p{L}+/gu)) if (Object.prototype.hasOwnProperty.call(GROUP_OF, m[0])) names.add(GROUP_OF[m[0]]);

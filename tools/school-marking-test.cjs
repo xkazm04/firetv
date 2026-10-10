@@ -1118,7 +1118,7 @@ test('W7c 9: an unsure ratio, area or mean item is explained in the school stanc
  assert.equal(store.getSession().practice.items[0].verdict,'right');
  // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
  stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
- await post('explain',{transcript:'twenty-eight centimetres squared',n:1});
+ await post('explain',{transcript:'twenty-eight square centimetres',n:1});
  const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,'The desk heard 28 cm2. '+M.RIGHT(2),'the leaking reply is not shown');
 });
 

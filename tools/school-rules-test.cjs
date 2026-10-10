@@ -1978,6 +1978,13 @@ test('X5b saidIn: a function name is heard only as a whole word, not inside anot
  const yes=[['I got e to the x plus C','e^x + C'],['pi over 4','pi/4'],['natural log of seven over two','ln(7)/2'],['the square root of x','sqrt(x)'],['minus cos x plus C','-cos x + C'],['I got e^x + C','e^x + C']];
  for (const [t,v] of yes) assert.equal(V.saidIn(v,t),true,`X5b heard as a word: ${t} / ${v}`);
 });
+test('X5b saidIn: an area unit is heard when the learner says square centimetres or square metres',()=>{
+ const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
+ const yes=[['twenty-eight square centimetres','28 cm2'],['28 čtverečních centimetrů','28 cm2'],['twenty-eight square metres','28 m²'],['twenty-eight sq cm','28 cm^2'],['twenty-eight centimetres squared','28 cm2'],['28 cm2','28 cm2']];
+ for (const [t,v] of yes) assert.equal(V.saidIn(v,t),true,`X5b area heard: ${t} / ${v}`);
+ const no=[['twenty-eight centimetres','28 cm2'],['twenty square centimetres','28 cm2'],['I got fourteen square centimetres','2'],['I took the square root','2']];
+ for (const [t,v] of no) assert.equal(V.saidIn(v,t),false,`X5b area not heard: ${t} / ${v}`);
+});
 test('X5 saidIn: a value the learner did not say fails closed',()=>{
  const V=require(path.join(root,'src/lib/rules/saidValue.ts'));
  const rows=[['nevím, nějak jsem to odečetla','7/12','R2'],['I got five','4','R18'],['three','-3','minus'],['','4','empty transcript'],['I got four','','empty value'],
