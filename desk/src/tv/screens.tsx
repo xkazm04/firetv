@@ -35,9 +35,6 @@ function Rail({ s }: { s: Session }) {
     </aside>
   );
 }
-const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
-  <div className="clock" style={{ position: "absolute", top: 0, ...(right ? { right: 0, textAlign: "right" } : { left: 0 }) }} data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? "On the clock" : "Paused"}</small></div>
-);
 
 // ---- T0 ----
 /** The moment after pairing: the phone is on the desk. One picture, one instruction, one action. */
