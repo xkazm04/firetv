@@ -488,6 +488,33 @@ test('WD11: a hint whose count write fails is logged, still set on the session, 
  assert.deepEqual(onFile().digest,was.digest);assert.deepEqual(was.digest.map((e)=>[e.hints,e.second]),[[0,0]],'the homework entry\'s counts are unchanged');
 });
 
+test('WD12: a hint whose count write fails is said (HINT_NOT_COUNTED) on both stage lines and the lesson line; the route answers 200 with counted false; a later hint counts',async()=>{
+ seat();await readSheet();
+ const HINT=async()=>({json:{hint:'What undoes the + 3?',what_to_try_next:'Write the equation again.'},provider:'test',ms:1});
+ answer=HINT;
+ const poll=async(name)=>{for(let i=0;i<200&&store.getSession().jobs?.[name]?.phase==='running';i++)await new Promise((r)=>setTimeout(r,10));await new Promise((r)=>setTimeout(r,20));};
+ assert.equal(store.HINT_NOT_COUNTED,'Here is the hint, but the desk could not count it in the learner file, so the week will not show it.');
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();let r,j;
+ try{r=await post('hint',{stage:1});j=await r.json();await poll('lesson');}finally{c.done();restore();}
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,false);
+ const s=store.getSession();
+ assert.ok(s.hint?.hint1?.hint,'the hint is on the session');
+ assert.equal(c.errs.filter((l)=>/could not be counted/.test(l)).length,1,`one log line: ${c.errs.join(' | ')}`);
+ assert.equal(s.jobs.hint.phase,'done');assert.equal(s.jobs.hint.error,undefined);
+ assert.ok(s.status.startsWith(store.HINT_NOT_COUNTED),`status: ${s.status}`);
+ assert.equal(store.hintCounted(),false);
+ assert.deepEqual(onFile().digest,was.digest);assert.deepEqual(was.digest.map((e)=>[e.hints,e.second]),[[0,0]],'the counts on file are unchanged');
+ // writes work again: a stage 2 hint on the same item counts
+ r=await post('hint',{stage:2});j=await r.json();
+ assert.equal(r.status,200,JSON.stringify(j));assert.equal(j.counted,true);assert.equal(store.hintCounted(),true);
+ assert.notEqual(store.getSession().status,store.HINT_NOT_COUNTED);
+ const e=onFile().digest[0];assert.ok(e.hints+e.second>0,`the homework entry's counts rise: ${JSON.stringify(e)}`);
+ // WD6: a sheet read on an earlier day has nothing to count onto; that is not a failure
+ seat();const d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()-2);await readSheet(d.getTime());
+ answer=HINT;r=await post('hint',{stage:1});j=await r.json();await poll('lesson');
+ assert.equal(r.status,200);assert.equal(j.counted,true);assert.ok(!store.getSession().status.startsWith(store.HINT_NOT_COUNTED));
+});
+
 test('WD13: a rehydrate that fails is logged with its reason, once per distinct failure and never once per event; the session is otherwise as it was',()=>{
  seat();
  const real=learners.getLearner;let reason='the disk went';

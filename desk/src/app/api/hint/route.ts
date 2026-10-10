@@ -7,7 +7,7 @@
  * the hint screen says "No lesson for this" instead of offering a linear-equations video.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK, HINT_NOT_COUNTED, hintCounted } from "@/lib/session/store";
 import { groundFor, hint } from "@/lib/desk/hint";
 import { pickLesson } from "@/lib/desk/pick";
 import { BUSY, refused, runJob } from "@/lib/desk/job";
@@ -38,16 +38,16 @@ export async function POST(req: Request) {
       const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age, ground, system });
       dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? who.id } });
       dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? who.id });
-      return h2;
-    }, { key: item.key, input: { itemIx, stage: 2, askedQ: prev.askedQ }, start: "thinking one step further…", done: (h2) => `second hint in ${(h2.ms / 1000).toFixed(1)} s` });
+      return { ...h2, counted: hintCounted() };
+    }, { key: item.key, input: { itemIx, stage: 2, askedQ: prev.askedQ }, start: "thinking one step further…", done: (h2) => (h2.counted ? `second hint in ${(h2.ms / 1000).toFixed(1)} s` : HINT_NOT_COUNTED) });
     return r.ok ? NextResponse.json({ stage: 2, ...r.value }) : refused(r);
   }
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
     const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age, ground, system });
     dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: who.id } });
-    return h1;
-  }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });
+    return { ...h1, counted: hintCounted() };
+  }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => (h1.counted ? `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` : HINT_NOT_COUNTED) });
   if (!r.ok) return refused(r);
   // the lesson behind the hint, keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
   void runJob("lesson", async (run) => {
@@ -55,6 +55,6 @@ export async function POST(req: Request) {
     const l = noLibrary ? null : await pickLesson(page.subject, item.text, system);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
     return l;
-  }, { key: item.key, supersedes: true, done: (l) => (l ? `lesson: ${l.title}` : "no lesson covers this one") });
+  }, { key: item.key, supersedes: true, done: (l) => `${r.value.counted ? "" : `${HINT_NOT_COUNTED} · `}${l ? `lesson: ${l.title}` : "no lesson covers this one"}` });
   return NextResponse.json({ stage: 1, ...r.value });
 }
