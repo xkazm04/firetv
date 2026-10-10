@@ -99,10 +99,10 @@ const stanceOf = (subject: Subject, voice: Voice, kind: ItemKind, problem: strin
  * The specs a maths task reads as (rules/kinds readQuestion): a Calculus one, a school one, or the parts of a multi-part
  * Calculus task (v2 M3a); at most one of the three reads.
  */
-type Specs = Pick<Question, "calc" | "school" | "parts">;
+export type Specs = Pick<Question, "calc" | "school" | "parts">;
 
 /** Does this line give the item's answer away: the one leak rule, and each reader's own check when the item reads as its spec (every part's, for parts). */
-const leaksLine = (problem: string, spec: Specs, line: string, system?: SchoolSystem) =>
+export const leaksLine = (problem: string, spec: Specs, line: string, system?: SchoolSystem) =>
   leaks(problem, line, system) || (spec.calc !== null && leaksCalc(spec.calc, line)) || (spec.school !== null && leaksSchool(spec.school, line))
   || (spec.parts !== null && spec.parts.some((p) => leaksCalc(p, line)));
 

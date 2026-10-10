@@ -11,7 +11,7 @@ const {test,after,afterEach}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
 process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(os.tmpdir(),'desk-withhold-'));delete process.env.DESK_TEXT_ENGINE;
-after(()=>fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true}));
+after(()=>{if(globalThis.__desk?.ticker)clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 
 const load=(f)=>require(path.join(root,'src/lib',f));
 const reg=load('engines/registry.ts');
@@ -235,4 +235,53 @@ test('case 15: a line with "constructor" or "toString" in it is read as words - 
  for(const l of ['the constructor - 3 is not it','Constructor - 3','toString - 3','the valueOf - 3'])assert.equal(maths.leaks('x+5=2',l),false,`x+5=2 | ${l}`);
  assert.equal(maths.leaks('x+5=2','the constructor says minus 3'),true,'a real leak beside the word is still caught');
  assert.equal(maths.leaks('x+5=2','Look at the constructor of the line.'),false);
+});
+
+test('case 16: the lesson picker\'s "why" passes the hint path\'s own leak check (leaksLine) - word problems, cz notation and Calculus included; the route hands it the learner\'s system',async()=>{
+ const {pickLesson}=load('desk/pick.ts');
+ const {leaksLine}=load('desk/hint.ts');
+ const {readQuestion}=load('rules/kinds.ts');
+ const {LESSONS}=load('library/lessons.ts');
+ const lesson=LESSONS.find((l)=>l.id==='bAerID24QJ0');
+ const built=`Chosen because your problem needs this lesson's method: ${lesson.concepts[0]}.`;
+ const specsOf=(p,sys)=>{const r=readQuestion(p,sys);return {calc:r.calc??null,school:r.school??null,parts:r.parts??null};};
+ const WORD='Sara has some sweets. She gives away 7 and has 12 left. How many did she start with?';
+ const CZ='Řeš rovnici: 0,5x + 2 = 7';
+ const DER='Find the derivative of f(x) = x^2 at x = 3.';
+ const probes=[
+  {problem:WORD,sys:undefined,leak:'The answer is 19.',clean:'Chosen because your problem needs you to work backwards from what is left.'},
+  {problem:CZ,sys:'cz',leak:'Chosen because x = 10 here.',clean:'Chosen because your problem needs the same step on both sides.'},
+  {problem:DER,sys:undefined,leak:'The answer is 6.',clean:'Chosen because your problem needs the power rule.'},
+ ];
+ for(const {problem,sys,leak,clean} of probes){
+  const specs=specsOf(problem,sys);
+  assert.equal(leaksLine(problem,specs,leak,sys),true,`leaksLine flags: ${leak}`);
+  stub({lesson:lesson.id,why:leak});
+  const p=await pickLesson('maths',problem,sys);
+  assert.equal(seen.length,1,'one model call, no re-ask');
+  assert.equal(p.why,built,problem);
+  assert.equal(leaksLine(problem,specs,p.why,sys),false,p.why);
+  assert.equal(leaksLine(problem,specs,clean,sys),false,`rules flag the method-only line: ${clean}`);
+  stub({lesson:lesson.id,why:clean});
+  assert.equal((await pickLesson('maths',problem,sys)).why,clean,'a method-only why passes unchanged');
+  // agreement: the verdict on the why is whether pickLesson replaced it
+  for(const why of [leak,clean]){
+   stub({lesson:lesson.id,why});
+   assert.equal((await pickLesson('maths',problem,sys)).why!==why,leaksLine(problem,specs,why,sys),`agreement: ${why}`);
+  }
+ }
+ // the route passes the system: a cz learner, the cz item, the leaking why -> the session's lesson why is the built line
+ const store=load('session/store.ts');
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'hl13-cz',name:'Cz',type:'high-school',age:16,system:'cz'}});store.dispatch({type:'profile.save'});
+ const pg={id:'hl13-page',subject:'maths',title:'Sheet',img:'',w:100,h:100};
+ store.dispatch({type:'page.reading',page:pg});store.dispatch({type:'page.read',id:pg.id,items:[{n:1,text:CZ,cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+ reg.useProvider('text',{name:'stub',run:async(req)=>{
+  if(Object.keys(req.schema?.properties??{}).includes('lesson'))return {raw:JSON.stringify({lesson:lesson.id,why:'Chosen because x = 10 here.'})};
+  return {raw:JSON.stringify({hint:'Undo the + 2 first.',what_to_try_next:'Write the two sides one under the other.'})};
+ }});
+ const res=await require(path.join(root,'src/app/api/hint/route.ts')).POST(new Request('http://desk/api/hint',{method:'POST',body:'{}'}));
+ assert.equal(res.status,200);
+ for(let i=0;i<40;i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(store.getSession().lesson?.why,built,'the route handed pickLesson the cz system');
 });

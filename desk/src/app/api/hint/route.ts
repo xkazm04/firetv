@@ -52,7 +52,7 @@ export async function POST(req: Request) {
   // the lesson behind the hint, keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
   void runJob("lesson", async (run) => {
     const noLibrary = page.subject === "maths" && (judgeOf(path) === "calc" || kindOfQuestion(item.text, system) === "school");
-    const l = noLibrary ? null : await pickLesson(page.subject, item.text);
+    const l = noLibrary ? null : await pickLesson(page.subject, item.text, system);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
     return l;
   }, { key: item.key, supersedes: true, done: (l) => (l ? `lesson: ${l.title}` : "no lesson covers this one") });
