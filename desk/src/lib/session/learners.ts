@@ -306,12 +306,16 @@ export interface AttemptSet { stretch?: boolean; tier?: 1 | 2; /** the slips the
  * attempt leaves the step-up record exactly as it was. A slip seen at step-up is not added to the usual slips.
  */
 export function recordAttempt(id: string, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): SkillRecord {
-  const l = getLearner(id);
+  const l = withAttempt(getLearner(id), topic, right, slip, set);
+  saveLearner(l);
+  return l.skills[topic];
+}
+
+/** The learner with one attempt on `topic` applied; nothing is saved (WD10: a caller applies several changes, then saves once). */
+export function withAttempt(l: Learner, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): Learner {
   const before = l.skills[topic];
   const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip, set.shows);
-  l.skills[topic] = rec;
-  saveLearner(l);
-  return rec;
+  return { ...l, skills: { ...l.skills, [topic]: rec } };
 }
 
 /** A step-up attempt: the step-up record moved by `step`'s own rule; the usual fields as they were (zero when there were none). */
@@ -329,11 +333,15 @@ function stretchStep(before: SkillRecord | undefined, topic: string, right: bool
  */
 export function recordWriting(id: string, lens: string, sentences: number, faulty: number): SkillRecord | null {
   if (!lens || !(sentences > 0)) return null;
-  const l = getLearner(id);
-  const rec = step(l.writing[lens], lens, faulty / sentences < WRITING_CLEAN_BELOW);
-  l.writing[lens] = rec;
+  const l = withWriting(getLearner(id), lens, sentences, faulty);
   saveLearner(l);
-  return rec;
+  return l.writing[lens];
+}
+
+/** The learner with one reading through `lens` applied as an attempt; nothing is saved. A reading with no lens or no sentences changes nothing. */
+export function withWriting(l: Learner, lens: string, sentences: number, faulty: number): Learner {
+  if (!lens || !(sentences > 0)) return l;
+  return { ...l, writing: { ...l.writing, [lens]: step(l.writing[lens], lens, faulty / sentences < WRITING_CLEAN_BELOW) } };
 }
 
 function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string, shows?: readonly string[]): SkillRecord {
@@ -363,9 +371,13 @@ export function addMemory(id: string, line: string): void {
 /** One thing that happened, appended. Newest last; the oldest fall off the end, except a lesson's watched line (capped). */
 export function addHistory(id: string, e: HistoryEntry): void {
   if (!e || !e.label?.trim()) return;
-  const l = getLearner(id);
-  l.history = capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]);
-  saveLearner(l);
+  saveLearner(withHistory(getLearner(id), e));
+}
+
+/** The learner with one history line appended; nothing is saved. A line with no label changes nothing. */
+export function withHistory(l: Learner, e: HistoryEntry): Learner {
+  if (!e || !e.label?.trim()) return l;
+  return { ...l, history: capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]) };
 }
 
 /**
@@ -375,9 +387,14 @@ export function addHistory(id: string, e: HistoryEntry): void {
 export function addDigest(id: string, e: DigestEntry): void {
   const [clean] = cleanDigest([e]);
   if (!clean) return;
-  const l = getLearner(id);
-  l.digest = [...l.digest, clean].slice(-DIGEST_CAP);
-  saveLearner(l);
+  saveLearner(withDigest(getLearner(id), e));
+}
+
+/** The learner with one digest entry appended, cleaned and capped; nothing is saved. An entry it cannot trust changes nothing. */
+export function withDigest(l: Learner, e: DigestEntry): Learner {
+  const [clean] = cleanDigest([e]);
+  if (!clean) return l;
+  return { ...l, digest: [...l.digest, clean].slice(-DIGEST_CAP) };
 }
 
 /** The local day an instant falls in (rules/week reads evenings the same way, so a DST change never splits one). */

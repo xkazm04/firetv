@@ -39,7 +39,7 @@ import { DeskSaid } from "./job";
 import { rightLine, slipVocabulary } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM } from "../rules/school";
 import { judgeItem, judgeSet, kindOfSheet, type JudgeCtx, type Judged, type Read } from "../rules/kinds";
-import { addDigest, addHistory, recordAttempt } from "../session/learners";
+import { getLearner, saveLearner, withAttempt, withDigest, withHistory } from "../session/learners";
 import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
 import { partPlace } from "../rules/calc-word";
@@ -275,11 +275,14 @@ function land(
 
   // only settled items reach the record, each once, and only for the set still on the desk
   // a step-up item's attempt goes to the step-up record only (learners.ts recordAttempt, Family W8)
-  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier, shows: a.shows });
+  // WD10: the attempts, the history line and the digest entry are applied to one learner and written in ONE save, so a failed
+  // save writes none of them and a Try again records each once.
+  let l = getLearner(learnerId);
+  for (const a of attempts) l = withAttempt(l, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier, shows: a.shows });
   // what happened, in one line the home screen can read back: never invented, always these counts
   // (rules/maths; a later settle restates the same line from the same verdicts - session/store). The label is the
   // topic's name on whichever path it belongs to (topicIn), as session/store's restate reads it.
-  addHistory(learnerId, {
+  l = withHistory(l, {
     at: Date.now(), kind: "practice",
     label: topicIn(practice.topic)?.name ?? practice.topic,
     detail: rightLine(items),
@@ -287,7 +290,8 @@ function land(
   // ...and the week's digest (Family W9, rules/digest): one entry for this set - counts, the unit, the step-up flag and
   // the most frequent code-detected slip - never a question or an answer. An explanation that settles an item later
   // restates it in place (session/store restateMarked), as it restates the history line.
-  addDigest(learnerId, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
+  l = withDigest(l, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
+  saveLearner(l);
 
   return { items, ...run, unsure, landed: true };
 }

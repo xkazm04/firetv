@@ -395,7 +395,7 @@ function failLearnerWrites(skip=0){
 }
 /** The console's error lines, caught; `done()` puts the console back. */
 function catchLog(){const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));return {errs,done:()=>{console.error=e0;}};}
-const onFile=()=>{const l=JSON.parse(fs.readFileSync(FILE,'utf8'))[LEARNER];return {digest:l.digest,history:l.history,skills:l.skills,writing:l.writing,sessions:l.english.sessions};};
+const onFile=()=>{const l=learners.getLearner(LEARNER);return {digest:l.digest,history:l.history,skills:l.skills,writing:l.writing,sessions:l.english.sessions};};
 const EXPLAINS=(value)=>async()=>({json:{reply:'Look at the common denominator again.',value},provider:'test',ms:1});
 
 test('WD9: a settle whose restate write fails is logged once and said; the answer stays 200 and done; a later settle restates in place',async()=>{
@@ -423,4 +423,58 @@ test('WD9: a settle whose restate write fails is logged once and said; the answe
  const d=onFile();assert.equal(d.digest.length,1,'restated in place, not a new entry');
  assert.deepEqual({right:d.digest[0].right,notSure:d.digest[0].notSure},{right:3,notSure:0});
  assert.equal(d.history.at(-1).detail,'3 of 6 right');
+});
+
+test('WD10: a typed mark whose one save fails writes nothing (502, not marked); Try again records one set of attempts, one history line, one digest entry',async()=>{
+ seat();visionThrows();setOn(SIX);
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();let r;
+ try{r=await post('mark',{answers:TYPED});}finally{c.done();restore();}
+ assert.equal(r.status,502);
+ assert.equal(store.getSession().practice.marked,false);
+ assert.deepEqual(onFile(),was,'attempts, history and digest on file are as they were');
+ r=await post('mark',{answers:TYPED});assert.equal(r.status,200);
+ const l=onFile();
+ assert.equal(l.skills[UNIT].seen,4,'the attempts of one set only: the four settled items, not eight');
+ assert.equal(l.history.filter((h)=>h.kind==='practice').length,1);assert.equal(l.digest.filter((d)=>d.kind==='maths').length,1);
+ assert.equal(store.getSession().practice.marked,true);
+});
+
+test('WD10: an essay reading whose save fails writes nothing; the retry writes one history line, one writing step, one essay entry',async()=>{
+ seat();
+ answer=async()=>({json:{observations:[{n:2,support:'opinion',note:'no evidence'}],summary:'One to fix.'},provider:'test',ms:1});
+ const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await assert.rejects(analyseEssay(para,'evidence',LEARNER),/could not be written/);}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no history line, no writing step, no entry');
+ await analyseEssay(para,'evidence',LEARNER);
+ const l=onFile();
+ assert.equal(l.history.filter((h)=>h.kind==='writing').length,1);assert.equal(l.writing.evidence.seen,1);assert.equal(l.digest.filter((d)=>d.kind==='essay').length,1);
+});
+
+test('WD10: a Linga finish whose save fails writes nothing; the retried finish writes one sessions entry and one english entry',async()=>{
+ seat();
+ answer=async()=>({json:{title:'A title',goal:'Ask again.',opening:'Please open your books.'},provider:'test',ms:1});
+ const cmd=(action,extra={})=>{const s=store.getSession();return englishCommand({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:`wd10-${action}-${Math.random()}`,...extra});};
+ await cmd('start',{sceneId:'teacher'});
+ const last=store.getSession().conversation.turns.at(-1).id;
+ answer=async()=>({json:{reply:'Of course. Page ten.',observations:[{skill:'repair',quote:'Could you say that again, please?',success:true,confidence:'clear',note:'Asked to repeat.'}]},provider:'test',ms:1});
+ await cmd('turn',{text:'Could you say that again, please?',mode:'text',lastTurnId:last});
+ answer=async()=>{throw new Error('the text engine was called');};
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await assert.rejects(cmd('finish'));}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no sessions entry, no english entry');
+ assert.equal(was.sessions.length,0);assert.equal(was.digest.length,0);
+ await cmd('finish');
+ const l=onFile();
+ assert.equal(l.sessions.length,1,'one sessions entry');assert.equal(l.digest.filter((d)=>d.kind==='english').length,1,'the english entry is written by the retry');
+});
+
+test('WD10: a homework read whose save fails keeps the page and says READ_NOT_SAVED; neither the history line nor the homework entry is on file',async()=>{
+ seat();
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{await readSheet();}finally{c.done();restore();}
+ assert.deepEqual(onFile(),was,'no history line, no homework entry');
+ assert.equal(onFile().digest.length,0);
+ assert.equal(store.getSession().status,store.READ_NOT_SAVED);
+ assert.ok(c.errs.some((l)=>/learner file/.test(l)),'the error is logged');
 });

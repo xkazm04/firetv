@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
-import { addDigest, getLearner, saveEnglish } from "../session/learners";
+import { getLearner, saveEnglish, saveLearner, withDigest } from "../session/learners";
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction, pitchAsk } from "./check";
@@ -118,10 +118,12 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
 function endTake(c:Conversation,commandId:string){
   const learnerId=c.learnerId,learning=getLearner(learnerId).english;
   const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
-  saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
-  // the week's digest (Family W9, rules/digest): the scene, its skill and the replies counted, never a word of them;
-  // once per conversation, as the sessions list keeps it once
-  if(!learning.sessions.some(x=>x.id===c.id))addDigest(learnerId,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
+  // the sessions entry and the week's digest (Family W9, rules/digest: the scene, its skill and the replies counted, never a
+  // word of them; once per conversation, as the sessions list keeps it once) are written in ONE save (WD10), so a failed
+  // finish writes neither and the retried finish writes both
+  let next={...getLearner(learnerId),english:{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)}};
+  if(!learning.sessions.some(x=>x.id===c.id))next=withDigest(next,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
+  saveLearner(next);
   // a certificate, when this rehearsal completes what one needs (cert.ts): issued by code from the record, tonight's
   // quotes checked again against the replies as sent. Never at read time, never back-issued.
   const words=Object.fromEntries(c.turns.filter(t=>t.role==="learner").map(t=>[t.id,t.text]));

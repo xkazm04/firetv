@@ -10,7 +10,7 @@ import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
 import { TYPE_WORDS, systemOf } from "@/tv/profileRows";
 import { missingLine } from "@/tv/pageLines";
-import { addDigest, addHistory } from "@/lib/session/learners";
+import { getLearner, saveLearner, withDigest, withHistory } from "@/lib/session/learners";
 import { DeskSaid, EMPTY_READ, refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
@@ -47,11 +47,11 @@ export async function POST(req: Request) {
     if (subject === "maths") {
       try {
         const at = Date.now();
-        addHistory(owner, {
+        // the history line and the digest entry in one save (WD10)
+        saveLearner(withDigest(withHistory(getLearner(owner), {
           at, kind: "homework", label: title,
           detail: `${items.length} problem${items.length === 1 ? "" : "s"} read`,
-        });
-        addDigest(owner, { at, kind: "homework", problems: items.length, hints: 0, second: 0 });
+        }), { at, kind: "homework", problems: items.length, hints: 0, second: 0 }));
       } catch (e) { saved = false; console.error("desk read: the page was read but could not be written to the learner file:", e instanceof Error ? e.message : e); }
     }
     // which printed numbers the read left out: the page and the answer carry it, so a partial read is never taken for a whole one

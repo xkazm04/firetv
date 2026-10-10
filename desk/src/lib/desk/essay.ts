@@ -8,7 +8,7 @@
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, JOBS, numberedLines, observationOk, paragraphCount, paragraphStats, revise, SIDES, splitSentences, SUPPORTS, taught, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
-import { addDigest, addHistory, getLearner, recordWriting, saveLearner } from "../session/learners";
+import { getLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
@@ -92,13 +92,15 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
  */
 function record(learnerId: string, lens: Lens, sentences: number, faulty: number, paragraphs = 1) {
   if (!sentences) return;
-  addHistory(learnerId, {
+  // WD10: the history line, the writing step and the essay entry are written in ONE save, so a failed save writes none of them
+  let l = withHistory(getLearner(learnerId), {
     at: Date.now(), kind: "writing", label: lens.name,
     detail: `${faulty} of ${sentences} sentence${sentences === 1 ? "" : "s"} to fix${paragraphs > 1 ? `, ${paragraphs} paragraphs` : ""}`,
   });
-  recordWriting(learnerId, lens.id, sentences, faulty);
+  l = withWriting(l, lens.id, sentences, faulty);
   // the week's digest (Family W9, rules/digest): the lens and the two counts, never a sentence
-  addDigest(learnerId, { at: Date.now(), kind: "essay", lens: lens.id, sentences, faulty });
+  l = withDigest(l, { at: Date.now(), kind: "essay", lens: lens.id, sentences, faulty });
+  saveLearner(l);
 }
 
 /** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
