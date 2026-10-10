@@ -161,6 +161,80 @@ test('P7-a (b): control, any other failure still says Try again',async()=>{
  assert.match(store.getSession().jobs.memory.error,/Try again\.$/);
 });
 
+// ---- robustness-1: a run writes its status line only while its learner is seated ----
+const job1=()=>require(src('lib/desk/job.ts'));
+const held1=()=>{let open;const p=new Promise((r)=>{open=r;});return {p,open};};
+const KINDS1=['read','hint','lesson','mark','explain'];
+const heldRun=(kind,{fail=false}={})=>{
+ const g=held1();
+ const p=job1().runJob(kind,async()=>{await g.p;if(fail)throw new Error('boom');return 1;},{start:`${kind} start`,done:()=>`${kind} done`});
+ return {p,open:g.open};
+};
+for(const kind of KINDS1){
+ test(`robustness-1 (a): a ${kind} run that succeeds after a switch does not write its done line on the next learner's desk`,async()=>{
+  seatedWithWork('ema');const r=heldRun(kind);
+  store.dispatch({type:'learner.set',id:'jakub'});
+  r.open();assert.equal((await r.p).ok,true);
+  const s=store.getSession();assert.notEqual(s.status,`${kind} done`);assert.equal(s.learner.id,'jakub');assert.equal(s.jobs[kind].phase,'done');
+ });
+ test(`robustness-1 (b): a ${kind} run that fails after a switch does not write its failure sentence on the next learner's desk`,async()=>{
+  seatedWithWork('ema');const r=heldRun(kind,{fail:true});
+  store.dispatch({type:'learner.set',id:'jakub'});
+  const c=catchErrors();let res;try{r.open();res=await r.p;}finally{c.done();}
+  assert.equal(res.ok,false);
+  const s=store.getSession();assert.notEqual(s.status,res.error);assert.equal(s.status,'');
+  assert.equal(s.jobs[kind].phase,'failed');assert.equal(s.jobs[kind].error,res.error);
+ });
+}
+test('robustness-1 (c): a hint held at the engine across a switch does not write its done line on the next learner',async()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ store.dispatch({type:'page.reading',page:{id:'maths-1',subject:'maths',title:'Sheet',img:'',w:100,h:100}});
+ store.dispatch({type:'page.read',id:'maths-1',items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,10],key:'k1'}],readMs:1,provider:'test'});
+ const g=held1();let asked=0;
+ answer=async(r)=>{const k=Object.keys(r.schema?.properties??{});if(k.includes('hint')){asked++;await g.p;return {json:{hint:'Undo the +3 first.',what_to_try_next:'What is left?'},provider:'stub'};}return {json:{lesson:'none',why:'x'},provider:'stub'};};
+ const post=route('hint').POST(req('/api/hint',{method:'POST',body:{}}));
+ for(let i=0;i<200&&!asked;i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(asked,1);assert.equal(store.getSession().status,'thinking about a hint…');
+ store.dispatch({type:'learner.set',id:'jakub'});
+ assert.equal(store.getSession().status,'','the start line went with the switch');
+ g.open();await post;for(let i=0;i<40;i++)await new Promise((r)=>setImmediate(r));
+ assert.doesNotMatch(store.getSession().status,/^hint in /);assert.doesNotMatch(store.getSession().status,/thinking about a hint/);
+});
+test('robustness-1 (d): after a switch the surviving run keeps its job, but its start text is gone from the status line',async()=>{
+ seatedWithWork('ema');const r=heldRun('hint');
+ assert.equal(store.getSession().status,'hint start');
+ store.dispatch({type:'learner.set',id:'jakub'});
+ const s=store.getSession();assert.equal(s.status,'');assert.equal(s.jobs.hint.phase,'running');assert.equal(s.jobs.hint.start,'hint start');
+ r.open();await r.p;
+});
+test('robustness-1 (d): a status that is not the surviving run\'s start text is left alone',async()=>{
+ seatedWithWork('ema');const r=heldRun('hint');
+ store.dispatch({type:'status',text:'something else'});
+ store.dispatch({type:'learner.set',id:'jakub'});
+ assert.equal(store.getSession().status,'something else');
+ r.open();await r.p;
+});
+test('robustness-1 (e): control, a run whose learner stays seated writes its done line',async()=>{
+ seatedWithWork('ema');const r=heldRun('mark');r.open();await r.p;
+ assert.equal(store.getSession().status,'mark done');
+});
+test('robustness-1 (e): control, a run whose learner stays seated writes its failure line',async()=>{
+ seatedWithWork('ema');const r=heldRun('mark',{fail:true});
+ const c=catchErrors();let res;try{r.open();res=await r.p;}finally{c.done();}
+ assert.equal(store.getSession().status,res.error);assert.notEqual(res.error,'');
+});
+test('robustness-1 (e): control, a run whose learner left and came back (ema, jakub, ema) writes its done line',async()=>{
+ seatedWithWork('ema');const r=heldRun('explain');
+ store.dispatch({type:'learner.set',id:'jakub'});store.dispatch({type:'learner.set',id:'ema'});
+ r.open();await r.p;
+ assert.equal(store.getSession().status,'explain done');
+});
+test('robustness-1 (e): control, a run with no one seated at both moments writes its done line',async()=>{
+ store.dispatch({type:'reset'});assert.equal(store.getSession().learner,null);
+ const r=heldRun('read');r.open();await r.p;
+ assert.equal(store.getSession().status,'read done');
+});
+
 // ---- P4 with P4-a: the switcher says what a switch ends ----
 test('P4: switchEndsLine names what the seated learner has running, and only for another learner',()=>{
  const {switchEndsLine}=require(src('tv/keys.ts'));

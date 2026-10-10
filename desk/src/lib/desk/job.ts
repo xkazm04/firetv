@@ -8,6 +8,7 @@
  * and the old run's events are dropped by id). The free-text `status` line is still written, so the bench
  * bar and the phone keep working; on a failure it is the job's desk sentence alone. The engine's detail can
  * carry raw model output - an answer - so it goes to the server log (kind, run id, detail), never to a screen.
+ * A run writes its done or failure line only while the learner who asked is still seated, so a run that outlives a switch never speaks on the next learner's desk.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, LEARNER_UNREAD_RUN, type JobInput, type JobKind } from "../session/store";
@@ -84,6 +85,8 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
   const now = getSession().jobs?.[kind];
   if (now?.phase === "running" && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
+  const asker = getSession().learner?.id;
+  const seated = () => getSession().learner?.id === asker;
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
   dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}), ...(opts.start ? { start: opts.start } : {}) });
   if (opts.start) dispatch({ type: "status", text: opts.start });
@@ -91,7 +94,7 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
     const value = await work(run);
     if (run.current()) {
       dispatch({ type: "job.done", kind, id });
-      if (opts.done) dispatch({ type: "status", text: opts.done(value) });
+      if (opts.done && seated()) dispatch({ type: "status", text: opts.done(value) });
     }
     return { ok: true, value };
   } catch (e) {
@@ -101,7 +104,7 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
     if (run.current()) {
       try { opts.onFail?.(e); } catch {}
       dispatch({ type: "job.failed", kind, id, error });
-      dispatch({ type: "status", text: error });
+      if (seated()) dispatch({ type: "status", text: error });
     }
     return { ok: false, status: 502, error };
   }

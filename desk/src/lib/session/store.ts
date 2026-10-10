@@ -544,6 +544,8 @@ function switchedFrom(s: Session, n: Session): void {
   for (const k of Object.keys(jobs) as JobKind[]) {
     const j = jobs[k];
     if (j?.phase === "failed" || (k === "analyse" && j?.phase === "running")) { if (j.phase === "failed" && j.error !== undefined && n.status === j.error) n.status = ""; if (j.phase === "running" && j.start !== undefined && n.status === j.start) n.status = ""; delete jobs[k]; }
+    // a run that survives the switch keeps its job, but its start line was the learner who left's
+    else if (j?.phase === "running" && j.start !== undefined && n.status === j.start) n.status = "";
   }
   n.jobs = jobs;
 }
