@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -516,9 +516,18 @@ const LONG_WINDOW = 24;
  * right by the same test: a function answer said whole ('2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)') is refused
  * too. One reads the line as scan reads it, the other the line as it was before the question's own pieces were set
  * aside (that step can erase a term of the answer). Both only add hits.
+ * For a number, one more pass reads the line again with a lone digit,digit as a point ('2,72' is 2.72), for every learner (MK4).
  */
 export function leaksCalc(spec: unknown, line: unknown): boolean {
   if (isCalc2Spec(spec)) return calc2LeaksCalc(spec, line);
+  if (leaksCalcOnce(spec, line)) return true;
+  if (typeof line !== "string") return false;
+  const pointed = pointForComma(line);
+  if (pointed === line) return false;
+  const r = read(spec);
+  return r.ok && r.truth.kind === "number" && leaksCalcOnce(spec, pointed);
+}
+function leaksCalcOnce(spec: unknown, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
   const r = read(spec);
   if (!r.ok) return false;

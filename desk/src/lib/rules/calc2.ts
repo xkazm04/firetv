@@ -19,7 +19,7 @@
  */
 import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
 import { commaSystem, type SchoolSystem } from "./taskText";
-import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 
 /** The ids of the Calculus 2 shapes (not calculus2.spine.ts's Calc2Shape: that is a topic's list, which also holds Calculus 1's two integral shapes). */
 export type Calc2SpecShape = "approx-integral" | "sequence-limit";
@@ -283,9 +283,20 @@ function ownPieces(s: ApproxSpec): string[] {
  * to six whitespace-separated tokens, taking at each place the longest window the engine can read. A line leaks when a
  * window is a number within 5e-5 of the value or of its negation (ruling 28). A hint that rounds the value to fewer than
  * four places does not leak by this rule: a residual (docs/MATH-COURSE-PATHS.md section 10).
+ * One more pass reads the line again with a lone digit,digit as a point ('2,72' is 2.72), for every learner (MK4).
  */
 export function calc2LeaksCalc(spec: unknown, line: unknown): boolean {
-  if (isSequence(spec)) return sequenceLeaks(spec, line);
+  if (isSequence(spec)) return withPointed(line, (l) => sequenceLeaks(spec, l));
+  return withPointed(line, (l) => approxLeaks(spec, l));
+}
+/** A leak check run on the line, then once more on the line with a lone digit,digit read as a point (MK4); never more than twice. */
+function withPointed(line: unknown, leaks: (l: unknown) => boolean): boolean {
+  if (leaks(line)) return true;
+  if (typeof line !== "string") return false;
+  const pointed = pointForComma(line);
+  return pointed !== line && leaks(pointed);
+}
+function approxLeaks(spec: unknown, line: unknown): boolean {
   if (typeof line !== "string" || !line.trim()) return false;
   const r = read(spec);
   if (!r.ok) return false;

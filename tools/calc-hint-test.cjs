@@ -418,3 +418,14 @@ test('MB-B8 ground: a cz learner with a recorded fractions slip gets notation, s
  assert.equal((await post('hint',{})).status,200);await drain();
  assert.doesNotMatch(prompts.at(-1).prompt,/made these slips|decimal comma/);assert.match(prompts.at(-1).prompt,/The method this unit teaches/);
 });
+
+test('MK4: the leak check reads a decimal comma as a point for every learner, and only a lone digit,digit',()=>{
+ const E={shape:'limit',f:'(1 + 1/x)^x',at:'inf'},L38={shape:'limit',f:'3/8 + x',at:0},D={shape:'derivative-at',f:'x^3',at:0.5};
+ const SEQ={shape:'sequence-limit',f:'(1 + 1/x)^x'},AP={shape:'approx-integral',f:'1/x',a:1,b:2,pieces:5,rule:'trapezoid'};
+ for(const [spec,comma,point] of [[E,'2,718','2.718'],[E,'2,7','2.7'],[L38,'0,38','0.38'],[D,'0,75','0.75'],[SEQ,'2,718','2.718'],[AP,'0,6956','0.6956']])
+  assert.equal(C.leaksCalc(spec,`The answer is ${comma}.`),C.leaksCalc(spec,`The answer is ${point}.`),comma);
+ assert.equal(C.leaksCalc(E,'The answer is 2,718.'),true);assert.equal(C.leaksCalc(L38,'The answer is 0,38.'),true);
+ assert.equal(C.leaksCalc(E,'Limita je 2,72.'),true);
+ assert.equal(C.leaksCalc(E,'Try x = 1,2,3 first.'),false);
+ assert.equal(C.leaksCalc(D,'Substitute x = 0,5.'),false);
+});
