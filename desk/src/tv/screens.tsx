@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
 import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
@@ -403,7 +403,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 44 }}>
         {at
-          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.</div></>
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.{switchEndsLine(s, at) && <> <b>{switchEndsLine(s, at)}</b></>}</div></>
           : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
       </div>
     </main>

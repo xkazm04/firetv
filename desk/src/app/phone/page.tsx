@@ -13,7 +13,7 @@ import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
-import { forensicAt, planAt } from "@/tv/keys";
+import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
@@ -415,7 +415,7 @@ export default function Phone() {
               ? <button className="pbtn" data-signal="true" onClick={() => nav("paste")}>Send your paragraph</button>
               : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>)}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.</p>}</div>}
+          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}</div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>

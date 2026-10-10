@@ -110,6 +110,18 @@ export function tonightStops(s: Session): TonightStop[] {
 /** Who is at the desk: every profile, then "add a learner". */
 export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.profiles, "add"]; }
 /**
+ * What a switch of learner ends (P4, P4-a): the seated learner's Linga scene, level check and running Sentence reading, named.
+ * One line for the switcher, or null when nothing of those is running or the card is the seated learner's own. `to` is the
+ * focused learner's name; the phone, which has no card, passes null and the line says "someone else".
+ */
+export function switchEndsLine(s: Session, to: Profile | null): string | null {
+  if (!s.learner || to?.id === s.learner.id) return null;
+  const ends = [s.conversation ? "the Linga scene" : "", s.check ? "the level check" : "", s.jobs?.analyse?.phase === "running" && s.jobs.analyse.key === "english" ? "the Sentence reading" : ""].filter(Boolean);
+  if (!ends.length) return null;
+  const list = ends.length > 1 ? ends.slice(0, -1).join(", ") + " and " + ends[ends.length - 1] : ends[0];
+  return `Switching to ${to ? to.name : "someone else"} ends ${list} for ${s.learner.name}.`;
+}
+/**
  * A module's lessons on file; a maths lesson only on its own path (a lesson with no path is the school path's).
  * Calculus 1 has no lesson library, so on that path Math Buddy's list is empty and its screens say so.
  */
