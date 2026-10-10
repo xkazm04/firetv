@@ -38,6 +38,9 @@ export async function POST(req: Request) {
   if (refused) return NextResponse.json({ error: refused }, { status: 403 });
   // a lesson picked for a hint is the desk's pick; a lesson chosen on the TV (no key) is the screen's own
   if (e?.type === "lesson.set" && e.key !== undefined) return NextResponse.json({ error: "Ask for a hint on /api/hint." }, { status: 403 });
+  // the TV's own acts: wiping the desk, and starting an edit of a profile that is already made (a patch that names an id)
+  if (role === "phone" && e?.type === "reset") return NextResponse.json({ error: "Only the TV can reset the desk." }, { status: 403 });
+  if (role === "phone" && e?.type === "profile.draft" && e.patch && typeof e.patch === "object" && Object.hasOwn(e.patch, "id")) return NextResponse.json({ error: "Only the TV can start editing a profile." }, { status: 403 });
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {

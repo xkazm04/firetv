@@ -8,7 +8,7 @@
 import type { Workroom } from "../twin/workroom";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
-import { AGE_RANGE } from "@/tv/profileRows";
+import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import { dayOf } from "@/tv/mathsRows";
@@ -326,7 +326,7 @@ export type Event =
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
   | { type: "lesson.watched" }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
+  | { type: "english.set"; analysis: EnglishAnalysis; owner?: string } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
   | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
@@ -507,6 +507,44 @@ export const HINT_NOT_COUNTED = "Here is the hint, but the desk could not count 
 export const LEARNER_UNREAD = "The learner file could not be read just now, so this learner's progress is not shown.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
+/** The status when session.json could not be used and was put aside (P1): the desk started fresh, and the old file is kept beside it. */
+export const SESSION_UNREAD = "The desk could not read its saved session, so it started fresh.";
+/** What a profile patch or draft is refused for (P1, P5): each sentence follows the refusal's own opening in the status. */
+export const PROFILE_TYPE_UNKNOWN = "That school type is not one the desk knows.";
+export const PROFILE_SYSTEM_UNKNOWN = "That school system is not one the desk knows.";
+export const PROFILE_MODULES_UNKNOWN = "Those subjects are not ones the desk knows.";
+export const PROFILE_NAME_TEXT = "A name must be text.";
+export const PROFILE_AGE_WHOLE = "An age must be a whole number.";
+export const PROFILE_ID_KEPT = "A profile keeps the id it was made with.";
+const DRAFT_REFUSED = "The desk did not take that change to the profile. ";
+const SAVE_REFUSED = "The desk did not save that profile. ";
+const SUBJECTS: Subject[] = ["maths", "english", "essay"];
+/** The first thing wrong with the fields a patch (or a whole draft) carries, as a sentence, or null. A field the patch does not carry is not checked; an age outside its type's range is not a problem, the reducer deletes it. */
+export function profileProblem(patch: Partial<Profile>): string | null {
+  if (patch.type !== undefined && !(typeof patch.type === "string" && Object.hasOwn(AGE_RANGE, patch.type))) return PROFILE_TYPE_UNKNOWN;
+  if (patch.system !== undefined && !SYSTEMS.includes(patch.system)) return PROFILE_SYSTEM_UNKNOWN;
+  if (patch.modules !== undefined && !(Array.isArray(patch.modules) && patch.modules.every((m) => SUBJECTS.includes(m)) && new Set(patch.modules).size === patch.modules.length)) return PROFILE_MODULES_UNKNOWN;
+  if (patch.name !== undefined && typeof patch.name !== "string") return PROFILE_NAME_TEXT;
+  if (patch.age !== undefined && !(typeof patch.age === "number" && Number.isInteger(patch.age))) return PROFILE_AGE_WHOLE;
+  return null;
+}
+/** A profile id no profile on the desk holds: "p" and the millisecond, with a "-k" suffix when two are made in one millisecond. */
+function newProfileId(s: Session): string {
+  const base = "p" + Date.now();
+  let id = base;
+  for (let k = 2; s.profiles.some((p) => p.id === id); k++) id = `${base}-${k}`;
+  return id;
+}
+/** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
+function switchedFrom(s: Session, n: Session): void {
+  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null;
+  const jobs = { ...(s.jobs ?? {}) } as Jobs;
+  for (const k of Object.keys(jobs) as JobKind[]) {
+    const j = jobs[k];
+    if (j?.phase === "failed" || (k === "analyse" && j?.phase === "running")) { if (j.phase === "failed" && j.error !== undefined && n.status === j.error) n.status = ""; delete jobs[k]; }
+  }
+  n.jobs = jobs;
+}
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
@@ -548,13 +586,21 @@ function step(s: Session, e: Event): Session {
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch) });
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
+    case "profile.draft": { const patch: Partial<Profile> = e.patch && typeof e.patch === "object" ? e.patch : {};
+      const bad = profileProblem(patch); if (bad) { n.status = DRAFT_REFUSED + bad; break; }
+      if (s.draft && patch.id !== undefined && patch.id !== s.draft.id) { n.status = DRAFT_REFUSED + PROFILE_ID_KEPT; break; }
+      // no draft open: an id naming a profile starts an edit of it, any other id a new draft, and no id a new draft with an id of the desk's making
+      const named = !s.draft && typeof patch.id === "string" && patch.id ? patch.id : undefined;
+      const base: Profile = s.draft ?? s.profiles.find((p) => p.id === named) ?? { id: named ?? newProfileId(s), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] };
+      const d: Profile = pathChecked({ ...base, ...modeChecked(patch), id: base.id });
       // the age first (a type change may clear it), then the Adult gate on what is left
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = adultGated(d, s.draft); break; }
-    case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
+    case "profile.save": { const d = s.draft; if (!d) break;
+      const bad = profileProblem(d); if (bad) { n.status = SAVE_REFUSED + bad; break; }
+      if (!d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
-      n.conversation = null; seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
+      if (d.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, d.id); n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "landing"; n.focus = LANDING_REST; break; }
     case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
@@ -594,7 +640,9 @@ function step(s: Session, e: Event): Session {
       if (e.type === "job.failed" && e.kind === "lesson" && j.key === s.hint?.key) { n.lesson = null; n.noLesson = true; }
       break; }
     case "lesson.pause": n.lessonPaused = e.paused; break;
-    case "english.set": n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
+    // a reading is the learner's who asked: one that lands after they left is dropped, and the session stays as it is
+    case "english.set": if (e.owner && e.owner !== me) { console.error("desk session: a sentence reading for a learner who left the desk was dropped"); return s; }
+      n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
     // a paragraph (and its lens) is the learner's who asked: a reading that lands after they left goes to their slot, and the TV stays put
     case "essay.type": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essayType: e.essayType })); break; }
       n.essayType = e.essayType; break;
@@ -691,7 +739,51 @@ function logWatched(w: Watch): void {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); const bad = !Array.isArray(j?.profiles) ? "profiles is not a list" : !(j?.learner === null || j?.learner?.id) ? "learner is neither null nor a learner with an id" : !j.profiles.every((p: Profile) => p.type in AGE_RANGE) ? "a profile has a type that is not known" : null; if (bad) console.error(`desk session: session.json was not used, it failed the shape check (${bad}); starting fresh`); else return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); } return fresh(); }
+function load(): Session {
+  if (!existsSync(FILE)) return fresh();
+  let raw: string;
+  try { raw = readFileSync(FILE, "utf8"); } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); return fresh(); }
+  let j: any, bad: string | null = null;
+  try {
+    j = JSON.parse(raw);
+    bad = !Array.isArray(j?.profiles) ? "profiles is not a list" : !(j?.learner === null || j?.learner?.id) ? "learner is neither null nor a learner with an id" : null;
+    if (bad) bad = `it failed the shape check (${bad})`;
+  } catch (e) { bad = `it could not be read (${e instanceof Error ? e.message : e})`; }
+  if (bad) return setAside(bad);
+  try {
+    return settleOwners({ ...fresh(), ...j, profiles: keptProfiles(j.profiles), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history);
+  } catch (e) { console.error(`desk session: session.json was not used, it could not be read (${e instanceof Error ? e.message : e}); starting fresh`); }
+  return fresh();
+}
+/** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
+function setAside(why: string): Session {
+  const to = `${FILE}.bad-${Date.now().toString(36)}`;
+  let where: string;
+  try { renameSync(FILE, to); where = `put aside as ${path.basename(to)}`; } catch (e) { where = `not put aside, the rename failed (${e instanceof Error ? e.message : e})`; }
+  console.error(`desk session: session.json was not used, ${why}; ${where}; starting fresh`);
+  return { ...fresh(), status: SESSION_UNREAD };
+}
+/** A saved profile list as the desk keeps it: a profile with no usable id, a repeated id, a name that is not text or a type the desk does not know is dropped (and said); the rest of its fields are repaired. */
+function keptProfiles(list: unknown[]): Profile[] {
+  const out: Profile[] = [];
+  list.forEach((raw, ix) => {
+    const p = raw as Partial<Profile> | null;
+    const at = typeof p?.id === "string" && p.id ? `"${p.id}"` : `at index ${ix}`;
+    const drop = (why: string) => { console.error(`desk session: session.json profile ${at} was dropped, ${why}`); };
+    if (!p || typeof p !== "object") return drop("it is not a profile");
+    if (typeof p.id !== "string" || !p.id) return drop("it has no id");
+    if (out.some((x) => x.id === p.id)) return drop("its id repeats an earlier profile's");
+    if (typeof p.name !== "string") return drop("its name is not text");
+    if (typeof p.type !== "string" || !Object.hasOwn(AGE_RANGE, p.type)) return drop("its type is not one the desk knows");
+    const q: Profile = { ...(p as Profile) };
+    q.modules = Array.isArray(q.modules) ? Array.from(new Set((q.modules as Subject[]).filter((m) => SUBJECTS.includes(m)))) : [...SUBJECTS];
+    const r = AGE_RANGE[q.type];
+    if (q.age !== undefined && !(r && typeof q.age === "number" && Number.isInteger(q.age) && q.age >= r[0] && q.age <= r[1])) delete q.age;
+    if (q.system !== undefined && !SYSTEMS.includes(q.system)) delete q.system;
+    out.push(modeChecked(pathChecked(q)));
+  });
+  return out;
+}
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;

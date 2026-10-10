@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   if (body.kind === "english") {
     const r = await runJob("analyse", async () => {
       const a = await analyseSentence(body.sentence, age);
-      dispatch({ type: "english.set", analysis: a });
+      dispatch({ type: "english.set", analysis: a, owner: who.id });
       return a;
     }, { key: "english", start: "reading your sentence…", done: (a) => (a.card.conflict ? "the tense and the time word disagree" : "tense matches the time word") });
     return r.ok ? NextResponse.json(r.value) : refused(r);
