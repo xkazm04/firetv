@@ -203,7 +203,7 @@ export async function markSet(
   // MK11: a page the desk could not read is a failed mark, never a marked set. Empty = no read matches a question of the
   // set with a non-blank answer. One such answer lands the set as before (no completeness check for a partial read).
   const asked = new Set(practice.items.map((i) => i.n));
-  if (!reads.some((r) => asked.has(r.n) && typeof r.studentAnswer === "string" && r.studentAnswer.trim() !== "")) throw new DeskSaid(EMPTY_MARK);
+  if (!reads.some((r) => typeof r.n === "number" && asked.has(r.n) && typeof r.studentAnswer === "string" && r.studentAnswer.trim() !== "")) throw new DeskSaid(EMPTY_MARK);
   return markReads(practice, learnerId, stillSame, reads, { topic: practice.topic, system }, { provider, ms });
 }
 
