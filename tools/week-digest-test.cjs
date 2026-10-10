@@ -478,3 +478,27 @@ test('WD10: a homework read whose save fails keeps the page and says READ_NOT_SA
  assert.equal(store.getSession().status,store.READ_NOT_SAVED);
  assert.ok(c.errs.some((l)=>/learner file/.test(l)),'the error is logged');
 });
+
+test('WD11: a hint whose count write fails is logged, still set on the session, and leaves the homework entry\'s counts as they were; nothing throws',async()=>{
+ seat();await readSheet();
+ const was=onFile(),restore=failLearnerWrites(),c=catchLog();
+ try{hintOn('w1','2x+3=11',1);}finally{c.done();restore();}
+ assert.ok(c.errs.some((l)=>/could not be counted/.test(l)),`logged: ${c.errs.join(' | ')}`);
+ assert.equal(store.getSession().hint?.key,'w1','the hint is still on the session');
+ assert.deepEqual(onFile().digest,was.digest);assert.deepEqual(was.digest.map((e)=>[e.hints,e.second]),[[0,0]],'the homework entry\'s counts are unchanged');
+});
+
+test('WD13: a rehydrate that fails is logged with its reason, once per distinct failure and never once per event; the session is otherwise as it was',()=>{
+ seat();
+ const real=learners.getLearner;let reason='the disk went';
+ learners.getLearner=()=>{throw new Error(reason);};
+ const c=catchLog();
+ try{
+  store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'learner.set',id:LEARNER});store.dispatch({type:'profile.save'});
+  const mine=()=>c.errs.filter((l)=>/could not be read onto the desk/.test(l));
+  assert.equal(mine().length,1,`one line for three events: ${c.errs.join(' | ')}`);assert.match(mine()[0],/the disk went/);
+  reason='another failure';store.dispatch({type:'learner.set',id:LEARNER});
+  assert.equal(mine().length,2,'a distinct failure is logged again');assert.match(mine()[1],/another failure/);
+  assert.equal(store.getSession().learner.id,LEARNER,'the seat is as it was');
+ }finally{c.done();learners.getLearner=real;}
+});

@@ -779,6 +779,13 @@ function weekRead(s: Session): WeekLine[] | null {
   }
 }
 
+let rehydrateTold = "";
+/** A rehydrate that failed goes to the server log once per distinct failure (WD13), the way learners.ts tell does: the same failure on every event would flood it. */
+function tellRehydrate(why: string): void {
+  if (why !== rehydrateTold) console.error("The learner file could not be read onto the desk, so the session keeps what it held:", why);
+  rehydrateTold = why;
+}
+
 export function dispatch(e: Event): Session {
   if (e.type === "paper.enter") {
     // the one validation (rules/recovery cleanPaper) decides what is kept; a paper with no row left is not kept, and the TV stays put.
@@ -807,7 +814,11 @@ export function dispatch(e: Event): Session {
   if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
-    if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null }; } catch {}
+    if (id) try {
+      const l = getLearner(id);
+      store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english, paper: l.papers?.at(-1) ?? null };
+      rehydrateTold = "";
+    } catch (err) { tellRehydrate(err instanceof Error ? err.message : String(err)); }
   }
   if (REHYDRATE.has(e.type) || e.type === "session.end" || hinted) store.session = { ...store.session, week: weekRead(store.session) };
   writeSession();
