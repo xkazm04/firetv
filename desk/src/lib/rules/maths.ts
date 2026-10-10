@@ -92,6 +92,11 @@ export function slipVocabulary(topicId: string): string {
 export const RIGHT = (n: number) => `Number ${n} is right.`;
 export const ASK = (n: number) => `I got something different for number ${n}. How did you get there?`;
 
+/** The desk's line on an item it is not sure of: why, in the engine's own fixed words (never a value), or a question when it has no reason. */
+export const NOT_SURE = (n: number, why?: string) => `The desk is not sure about number ${n}. ${why || "How did you get there?"}`;
+/** The desk's line on an item with no answer. */
+export const BLANK = (n: number) => `Number ${n} has no answer yet.`;
+
 /** A value as a learner or a marker writes it: `x = 9` is `9`. */
 export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().replace(/^x\s*=\s*/i, "") : "");
 
@@ -153,14 +158,20 @@ export const isCalcSpec = (spec: unknown): boolean =>
  * No pen position: `locate` reads linear lines only. A spec of neither kind settles nothing.
  */
 export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | null {
+  const j = judgeSpec(n, spec, answer, slipId, topicId, system);
+  return j.verdict === "unsure" ? null : j;
+}
+
+/** settleSpec with the reason kept: the settled verdict, or `unsure` with the engine's own sentence (none for a spec of neither kind). */
+export function judgeSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | { verdict: "unsure"; why?: string } {
   if (isSchoolSpec(spec)) {
     const v = schoolCheck(spec, typeof answer === "string" ? answer : "", system);
-    if (v.verdict === "unsure") return null;
+    if (v.verdict === "unsure") return { verdict: "unsure", why: v.why };
     return settled(n, v.verdict === "right", v.slip, topicId);
   }
-  if (!isCalcSpec(spec)) return null;
+  if (!isCalcSpec(spec)) return { verdict: "unsure" };
   const c = checkAnswer(spec, typeof answer === "string" ? answer : "", system);
-  if (c.verdict === "unsure") return null;
+  if (c.verdict === "unsure") return { verdict: "unsure", why: c.why };
   return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);
 }
 

@@ -908,3 +908,20 @@ test('M5b step 4: the slip card says its line through deskLine - the same text f
  for(let i=0;i<parts.length;i++){const line=`Number ${parts[i].n} is right. I got something different for number ${parts[i].n}.`;
   assert.equal(deskLine(parts,i,line),namedLine(line,parts[i].n,itemName(parts,i)),'the same text, by construction');}
 });
+
+test('MK10: the drawn card of an unsure part gives the desk\'s reason under the part\'s name, never "something different"; a blank part has no answer yet',()=>{
+ const W=require(path.join(root,'src/lib/rules/calc-word.ts')),K=require(path.join(root,'src/lib/rules/kinds.ts'));
+ const w=W.drawWord('rectangle-perimeter',1),[a]=W.workedWord('rectangle-perimeter',1);
+ const single={n:1,question:'Find f\'(2) for f(x) = x^3.',spec:{shape:'derivative-at',f:'x^3',at:2}};
+ const [pa,pb]=W.wordItems(w,2);
+ const judged=(bAnswer)=>K.judgeSet({topic:w.topic,items:[single,pa,pb]},[{n:1,studentAnswer:'12'},{n:2,studentAnswer:a},{n:3,studentAnswer:bAnswer}],{topic:w.topic,system:'uk',typed:true}).items;
+ for(const [ans,line] of [['???',(it)=>it.said],['',()=>'Number 3 has no answer yet.']]){
+  const items=judged(ans);
+  assert.equal(items[2].verdict,'unsure');assert.equal(items[2].said,line(items[2]));
+  const s=secondSession(null,'walk',{practice:{topic:w.topic,marked:true,items},topic:w.topic,walkIx:2,focus:2});
+  const card=cardOf(drawMaths('Walk',s));
+  assert.doesNotMatch(card,/something different/);
+  if(ans)assert.match(card,/The desk is not sure about number 2\(b\)\. /);else assert.match(card,/Number 2\(b\) has no answer yet\./);
+  assert.equal(s.practice.items[2].said,line(items[2]),'the stored line is left alone');
+ }
+});

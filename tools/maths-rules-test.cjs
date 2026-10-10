@@ -61,7 +61,7 @@ test('marking believes the substitution, and asks when it cannot substitute: a w
  assert.equal(r.items[0].said,'Number 1 is right.');assert.equal(r.items[0].slip,undefined);
  assert.equal(r.items[1].studentAnswer,'-3');assert.equal(r.items[1].slip,'sign-lost-moving');assert.equal(r.items[1].said,slip('sign-lost-moving').says);
  assert.equal(r.items[2].slip,undefined,'a slip from another topic is dropped');assert.match(r.items[2].said,/How did you get there\?/);
- for(const i of r.items.slice(3)){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?/);}
+ for(const i of r.items.slice(3)){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?|has no answer yet\./);}
 });
 // S50 (T8): when the model can solve the item and the answer substitutes cleanly, the substitution decides - the model's verdict is overruled
 const walkSheet={topic:'linear-two-step',marked:false,items:['14 = 2x + 6','−2x + 3 = −1','2x+3=11','5x-4=21'].map((question,ix)=>({n:ix+1,question}))};
@@ -90,7 +90,7 @@ test('T8: the desk still asks when the answer does not substitute or the model c
  const r=await markSet('img',walkSheet,'maths-t8-ask');
  assert.deepEqual(r.items.map(i=>i.verdict),['unsure','unsure','unsure','unsure'],'unparseable answer, no answer, a model solution that fails verify, no model solution');
  assert.equal(r.unsure,4);assert.equal(getLearner('maths-t8-ask').skills['linear-two-step'],undefined,'nothing unsure reaches the record');
- for(const i of r.items){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?/);}
+ for(const i of r.items){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?|has no answer yet\./);}
 });
 test('no marked line carries a value, and only settled items reach the learner record',async()=>{
  looked=reply({items:marks});
@@ -310,7 +310,7 @@ test('case 3: a value the desk cannot read leaves the item unsure and the learne
   const r=await explainAt(3);
   assert.equal(r.status,200,value);assert.equal(r.body.settled,undefined,value);
   const it=store.getSession().practice.items[3];
-  assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with.','the reply still reaches the walk');assert.equal(it.said,'I got something different for number 4. How did you get there?',value);
+  assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with.','the reply still reaches the walk');assert.equal(it.said,'The desk is not sure about number 4. How did you get there?',value);
  }
  assert.deepEqual(record(me),before);
 });
@@ -350,7 +350,7 @@ test('case 4b: on an item already wrong, a slip the explanation names from the t
 test('case 5: a reply that gives the answer away is stopped in code, and the item\'s own line stands in',async()=>{
  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'2x+3=11'},{n:2,question:'x-5=2'}]}});
- const ask='I got something different for number 2. How did you get there?';
+ const ask='The desk is not sure about number 2. How did you get there?';
  store.dispatch({type:'practice.marked',items:[{n:1,question:'2x+3=11',verdict:'right',said:'Number 1 is right.'},{n:2,question:'x-5=2',verdict:'unsure',said:ask}]});
  for(const leak of ['You should get 7.','so x = 7','Nearly: x = 7/1 is where it lands.','It comes out at seven.','Work out 12-7.']){
   said({reply:leak,value:'',slip:'unclear'});
@@ -501,7 +501,7 @@ test('gate case 3: marking asks about a degenerate item and an x-answer - never 
  ]});
  const r=await markSet('img',odd,'maths-gate-mark');
  assert.deepEqual(r.items.map(i=>i.verdict),['unsure','unsure','unsure','unsure','right']);assert.equal(r.unsure,4);
- for(const i of r.items.slice(0,4))assert.equal(i.said,require(path.join(root,'src/lib/rules/maths.ts')).ASK(i.n),`item ${i.n} asks`);
+ for(const i of r.items.slice(0,4))assert.equal(i.said,require(path.join(root,'src/lib/rules/maths.ts')).NOT_SURE(i.n),`item ${i.n} is not sure`);
  const rec=getLearner('maths-gate-mark').skills['linear-one-step'];assert.equal(rec.seen,1,'only the real item reaches the record');assert.equal(rec.right,1);
 });
 

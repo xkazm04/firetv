@@ -168,7 +168,7 @@ const SHOWN=new Set(['n','question','studentAnswer','studentWorking','verdict','
 const SPEC_KEYS=new Set(['shape','f','at','a','b','side','on','kind','x0','steps']);
 const keysIn=(o)=>o&&typeof o==='object'?Object.entries(o).flatMap(([k,v])=>[k,...keysIn(v)]):[];
 /** The desk's own lines for a set on this topic: RIGHT, ASK, and the topic's slips in their own words. */
-const ownLines=(topic,n)=>new Set([...Array.from({length:n},(_,i)=>[M.RIGHT(i+1),M.ASK(i+1)]).flat(),...M.slipsFor(topic).map((s)=>s.says)]);
+const ownLines=(topic,n)=>new Set([...Array.from({length:n},(_,i)=>[M.RIGHT(i+1),M.ASK(i+1),M.BLANK(i+1),M.NOT_SURE(i+1)]).flat(),...M.slipsFor(topic).map((s)=>s.says)]);
 let scans=0;
 function scan(where){
  const s=store.getSession();
@@ -186,7 +186,7 @@ function scan(where){
     for(const k of Object.keys(it.spec))assert.ok(SPEC_KEYS.has(k),`${at}: item ${it.n}'s spec carries ${k}`);
     assert.equal(C.leaksCalc(it.spec,it.question),false,`${at}: item ${it.n}'s question states its result: ${it.question}`);
    }
-   if(it.said!==undefined)assert.ok(own.has(it.said),`${at}: item ${it.n} said "${it.said}" - not the desk's own line`);
+   if(it.said!==undefined)assert.ok(own.has(it.said)||it.said.startsWith(`The desk is not sure about number ${it.n}. `),`${at}: item ${it.n} said "${it.said}" - not the desk's own line`);
    // a reply is the desk's own line, or a model's reply the item's leak rule has passed (the course's replies all leak, so they are the desk's)
    if(it.reply!==undefined)assert.ok(own.has(it.reply)||!(it.spec?C.leaksCalc(it.spec,it.reply):M.leaks(it.question,it.reply)),`${at}: item ${it.n} reply "${it.reply}" states the answer`);
   }

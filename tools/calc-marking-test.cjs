@@ -24,6 +24,7 @@ const learners=require(src('lib/session/learners.ts'));
 const {view}=require(src('lib/session/pairing.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+const CANNOT_READ='The desk cannot read this answer as mathematics, and it does not guess.';
 const {topicIn}=require(src('lib/library/paths.ts'));
 const {CALC1_SPINE}=require(src('lib/library/calculus1.spine.ts'));
 const route=(name)=>require(src(`app/api/${name}/route.ts`));
@@ -155,7 +156,8 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
    const it=items[r.n-1],where=`${fx.topic} #${r.n} "${r.a}"`;
    assert.equal(it.verdict,r.verdict,where);
    assert.equal(it.slip,r.slip,`${where}: slip`);
-   assert.equal(it.said,r.verdict==='right'?M.RIGHT(r.n):r.slip?M.slipsFor(fx.topic).find((x)=>x.id===r.slip).says:M.ASK(r.n),`${where}: said`);
+   if(r.verdict==='unsure')assert.ok(r.a.trim()===''?it.said===M.BLANK(r.n):it.said.startsWith(M.NOT_SURE(r.n,'x').slice(0,-1))&&!it.said.includes('something different'),`${where}: said ${it.said}`);
+   else assert.equal(it.said,r.verdict==='right'?M.RIGHT(r.n):r.slip?M.slipsFor(fx.topic).find((x)=>x.id===r.slip).says:M.ASK(r.n),`${where}: said`);
    assert.equal(it.slipAt,undefined,`${where}: the pen has no position on a Calculus item`);
    assert.equal(it.studentAnswer,r.a,where);
    if(r.slip)assert.ok(M.slip(r.slip)?.name,`${where}: its name can be shown`);
@@ -176,8 +178,8 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
    const strings=stringsIn(v);
    assert.ok(!strings.some((x)=>x.includes('SOLVED')),`${fx.topic} ${where}: the model's solution reached the view`);
    // every line on an item is the desk's own (RIGHT, ASK or the slip's words - asserted above), never a model's text
-   const own=new Set([...rows.map((r)=>M.RIGHT(r.n)),...rows.map((r)=>M.ASK(r.n)),...M.slipsFor(fx.topic).map((x)=>x.says)]);
-   for(const it of v.practice.items)assert.ok(own.has(it.said),`${fx.topic} ${where}: "${it.said}"`);
+   const own=new Set([...rows.map((r)=>M.RIGHT(r.n)),...rows.map((r)=>M.ASK(r.n)),...rows.map((r)=>M.BLANK(r.n)),...M.slipsFor(fx.topic).map((x)=>x.says)]);
+   for(const it of v.practice.items)assert.ok(own.has(it.said)||it.said.startsWith(`The desk is not sure about number ${it.n}. `),`${fx.topic} ${where}: "${it.said}"`);
   }
   assert.ok(!stringsIn(learners.getLearner(LEARNER)).some((x)=>x.includes('SOLVED')),`${fx.topic}: the model's solution reached the record`);
  }
@@ -191,7 +193,7 @@ test('3: the model\'s verdict is not a fallback either: an answer the desk canno
  stubVision(()=>({items:[{n:1,studentAnswer:'',studentWorking:'',verdict:'right',solution:'6x + 2',slip:'unclear'},{n:2,studentAnswer:'???',studentWorking:'',verdict:'wrong',solution:'6x + 2',slip:'forgot-chain'}]}));
  assert.equal((await post('mark',PHOTO)).status,200);
  const items=store.getSession().practice.items;
- assert.deepEqual(items.map((i)=>[i.verdict,i.slip,i.said]),[['unsure',undefined,M.ASK(1)],['unsure',undefined,M.ASK(2)]]);
+ assert.deepEqual(items.map((i)=>[i.verdict,i.slip,i.said]),[['unsure',undefined,M.BLANK(1)],['unsure',undefined,M.NOT_SURE(2,CANNOT_READ)]]);
  assert.equal(skill(fx.topic).seen,was.seen,'no attempt recorded for an unsure item');
 });
 
@@ -246,7 +248,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  // a reply that states the answer is replaced by the item's own line
  stubText(()=>({reply:'The derivative is 6x + 2, so check your last line.',slip:'unclear',value:''}));
  r=await post('explain',{transcript:'I do not know',n:3});b=await r.json();
- assert.equal(b.reply,M.ASK(4));assert.equal(store.getSession().practice.items[3].reply,M.ASK(4));
+ assert.equal(b.reply,M.NOT_SURE(4,CANNOT_READ));assert.equal(store.getSession().practice.items[3].reply,M.NOT_SURE(4,CANNOT_READ));
  assert.equal(store.getSession().practice.items[3].verdict,'unsure');
  // and for a number shape, the spoken number is the leak
  seat();
@@ -255,7 +257,7 @@ test('4: an explanation settles an unsure Calculus item from the answer the lear
  assert.equal((await post('mark',PHOTO)).status,200);
  stubText(()=>({reply:'You should have got ten.',slip:'unclear',value:''}));
  b=await (await post('explain',{transcript:'no idea',n:0})).json();
- assert.equal(b.reply,M.ASK(1));
+ assert.equal(b.reply,M.NOT_SURE(1,CANNOT_READ));
 });
 
 test('5: the explanation never takes the model\'s word for the verdict: a stated verdict or solution in the reply is not read',async()=>{
@@ -400,4 +402,22 @@ test('MK4: settleSpec reads a decimal comma in a one-number answer only for a cz
  assert.equal(s?.verdict,'right','cz settles it right');
  assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits','uk'),null);
  assert.equal(M.settleSpec(1,E,'2,718',null,'calc1-limits'),null);
+});
+
+test('MK10: a Calculus item the desk is not sure of says why, in the engine\'s words, through the real judgeSet; a blank has no answer yet',()=>{
+ const K=require(src('lib/rules/kinds.ts'));
+ const judge=(s,a,topic='calc1-functions')=>K.judgeSet({topic,items:[{n:1,question:question(s),spec:s}]},[{n:1,studentAnswer:a}],{topic,system:'uk',typed:true}).items[0];
+ // (b) a rounded decimal MK5 leaves unsure
+ const third=spec({shape:'definite-integral',f:'x^2',a:'0',b:'1'}),r=C.checkAnswer(third,'0.3','uk');
+ assert.equal(r.verdict,'unsure','rounded');
+ const a=judge(third,'0.3','calc1-definite-integral');
+ assert.equal(a.verdict,'unsure');assert.equal(a.said,M.NOT_SURE(1,r.why));assert.match(r.why,/rounded decimal/);
+ assert.doesNotMatch(a.said,/something different|0\.3|1\/3/);
+ // ln(x) + C for 1/x: the domain reason
+ const inv=spec({shape:'antiderivative',f:'1/x'}),d=C.checkAnswer(inv,'ln(x) + C','uk');
+ assert.equal(d.verdict,'unsure','domain');
+ const b=judge(inv,'ln(x) + C','calc1-antiderivatives');
+ assert.equal(b.said,M.NOT_SURE(1,d.why));assert.notEqual(d.why,r.why,'a different reason for a different doubt');
+ // (c) a blank
+ assert.equal(judge(third,'  ').said,M.BLANK(1));
 });

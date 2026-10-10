@@ -18,7 +18,7 @@
  * Pure: it imports rules, the substitution checker and the path table, never the session, a learner file or an engine.
  */
 import { chainPen } from "./chain";
-import { ASK, cleanValue, isCalcSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
+import { BLANK, NOT_SURE, cleanValue, isCalcSpec, judgeSpec, locate, rootOf, settle, settled, settleSpec, workingLines, type Settled } from "./maths";
 import { partsFromQuestion, specFromQuestion as calcSpecFromQuestion, type CalcSpec } from "./calc";
 import type { Calc2Spec } from "./calc2";
 import { DEFAULT_SCHOOL_SYSTEM, generatorFor, isSchoolSpec, specFromQuestion as schoolSpecFromQuestion, unitOf, type SchoolSpec } from "./school";
@@ -143,6 +143,18 @@ const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 } => ({
 export interface Judged { items: PracticeItem[]; attempts: Attempt[]; unsure: number }
 
 /**
+ * What the desk says on an item it is not sure of: a blank answer has none yet; a school or Calculus item gives the
+ * engine's own reason; anything else asks how the learner got there. Fixed sentences, no value. Pure.
+ */
+export function unsureLine(item: { n: number; spec?: unknown }, read: Read, ctx: JudgeCtx): string {
+  const answer = str(read.studentAnswer);
+  if (!answer) return BLANK(item.n);
+  if (kindOfSpec(item.spec) === "linear") return NOT_SURE(item.n);
+  const j = judgeSpec(item.n, item.spec, answer, read.slip, ctx.topic, ctx.system ?? DEFAULT_SCHOOL_SYSTEM);
+  return NOT_SURE(item.n, j.verdict === "unsure" ? j.why : undefined);
+}
+
+/**
  * A whole set judged, item by item, each by ITS kind: `reads` are looked up by item number. `typed` reads (Family W6) keep
  * the answer as it was typed; a photographed linear answer is cleaned ("x = 4" is 4), as it always was. An item with no read
  * is a blank answer. Pure: nothing is recorded here - the caller lands the set once.
@@ -160,7 +172,7 @@ export function judgeSet(practice: { topic: string; items: PracticeItem[] }, rea
     const s = judgeItem(item, read, ctx);
     if (!s) {
       unsure++;
-      return { ...item, studentAnswer, studentWorking, verdict: "unsure", said: ASK(item.n) };
+      return { ...item, studentAnswer, studentWorking, verdict: "unsure", said: unsureLine(item, read, ctx) };
     }
     const shows = kindOfSpec(item.spec) === "school" ? slipsShown(practice.topic, item.spec) : [];
     attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item), ...(shows.length ? { shows } : {}) });

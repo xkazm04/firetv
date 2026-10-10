@@ -29,6 +29,9 @@ const learners=require(src('lib/session/learners.ts'));
 const S=require(src('lib/rules/school.ts'));
 const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
+/** The line on an item that is neither right nor slipped: a blank has no answer yet, an unsure one gives the engine's reason, a wrong one with no slip asks. */
+const elseLine=(verdict,a,n)=>verdict!=='unsure'?M.ASK(n):a.trim()===''?M.BLANK(n):null;
+const assertElse=(it,verdict,a,n,msg)=>{const want=elseLine(verdict,a,n);if(want!==null)return assert.equal(it.said,want,msg);assert.ok(it.said.startsWith(`The desk is not sure about number ${n}. `)&&!it.said.endsWith('How did you get there?'),`${msg||''} ${it.said}`);};
 const H=require(src('lib/desk/hint.ts'));
 const X=require(src('lib/desk/explain.ts'));
 const {PATHS,topicIn}=require(src('lib/library/paths.ts'));
@@ -153,7 +156,7 @@ for(const system of ['uk','cz','us']){
    assert.deepEqual(it.spec,p.spec,'the spec survives marking');
    if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));
    else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);
-   else assert.equal(it.said,M.ASK(i+1),'unsure, or wrong with no known slip: the desk asks');
+   else assertElse(it,verdict,p.a,i+1,'unsure says why, a blank has no answer yet, wrong with no known slip asks');
    assert.equal(it.slipAt,undefined,'no pen position on a school item');
   });
   const settledN=PAGE.filter((p)=>p[system][0]!=='unsure').length,right=PAGE.filter((p)=>p[system][0]==='right').length,unsure=PAGE.length-settledN;
@@ -434,7 +437,7 @@ test('12: a typed decimal comma is read by the seated learner\'s system: 0,75 is
  seat('cz');store.dispatch({type:'practice.set',practice:{topic:UNIT,marked:false,items:[{n:1,question:question(A),spec:A,tier:1}]}});noModel();
  await post('mark',{answers:['   ']});
  const it=store.getSession().practice.items[0];
- assert.deepEqual([it.verdict,it.said,it.studentAnswer,it.slip],['unsure',M.ASK(1),'',undefined],'whitespace only is a blank');
+ assert.deepEqual([it.verdict,it.said,it.studentAnswer,it.slip],['unsure',M.BLANK(1),'',undefined],'whitespace only is a blank');
  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0);
  assert.equal(lastLine().detail,'0 of 1 right, 1 not sure');
  // a newline or tab typed into a box is the keyboard's: the answer is read on one line
@@ -615,7 +618,7 @@ for(const unit of Object.keys(W7_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
@@ -772,7 +775,7 @@ for(const unit of Object.keys(B2_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
@@ -960,7 +963,7 @@ for(const unit of Object.keys(B3_PAGES)){
   page.forEach((p,i)=>{
    const [verdict,slip]=p.want,it=typed[i];
    assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
-   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assertElse(it,verdict,p.a,i+1);
   });
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
@@ -1100,3 +1103,26 @@ for(const [why,sentence,fail] of [
   assert.equal((await post('mark',PHOTO)).status,200);assert.equal(linesOf(),1);
  });
 }
+
+test('MK10: an unsure item says why the desk is not sure, in the engine\'s words, through the real judgeSet; a blank has no answer yet; a wrong item with no slip still asks',()=>{
+ const K=require(src('lib/rules/kinds.ts'));
+ const judge=(spec,a,system='uk',topic=UNIT)=>K.judgeSet({topic,items:[{n:1,question:question(spec),spec,tier:1}]},[{n:1,studentAnswer:a}],{topic,system,typed:true}).items[0];
+ // (a) a right value not in its simplest form: the engine's own reason, no value, never 'something different'
+ const T={shape:'simplify',expr:'6/33'},why=S.check(T,'4/22','uk').why;
+ assert.equal(S.check(T,'4/22','uk').verdict,'unsure');assert.ok(why.length>10);
+ const u=judge(T,'4/22');
+ assert.equal(u.verdict,'unsure');assert.equal(u.said,M.NOT_SURE(1,why));
+ assert.match(u.said,/^The desk is not sure about number 1\. /);assert.doesNotMatch(u.said,/something different|4\/22|2\/11/);
+ // (c) a blank answer has no answer yet
+ assert.equal(judge(T,'   ').said,M.BLANK(1));assert.equal(judge(T,'').said,M.BLANK(1));
+ // (d) a linear item the desk cannot solve: not sure, no reason
+ const lin=K.judgeSet({topic:'linear-one-step',items:[{n:2,question:'x*x=4'}]},[{n:2,studentAnswer:'2'}],{topic:'linear-one-step'}).items[0];
+ assert.equal(lin.verdict,'unsure');assert.equal(lin.said,M.NOT_SURE(2));
+ // (c) a blank linear item
+ assert.equal(K.judgeSet({topic:'linear-one-step',items:[{n:3,question:'2x+3=11'}]},[],{topic:'linear-one-step'}).items[0].said,M.BLANK(3));
+ // (e) control: wrong with no known slip asks
+ const w=judge(T,'7/9');
+ assert.equal(w.verdict,'wrong');assert.equal(w.slip,undefined);assert.equal(w.said,M.ASK(1));
+ // the part name still renames it
+ assert.match(require(src('lib/rules/calc-word.ts')).namedLine(u.said,1,'5(b)'),/^The desk is not sure about number 5\(b\)\. /);
+});
