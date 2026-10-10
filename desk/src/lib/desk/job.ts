@@ -10,7 +10,8 @@
  * carry raw model output - an answer - so it goes to the server log (kind, run id, detail), never to a screen.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, type JobInput, type JobKind } from "../session/store";
+import { dispatch, getSession, LEARNER_UNREAD_RUN, type JobInput, type JobKind } from "../session/store";
+import { LearnersUnread } from "../session/learners";
 import { EngineError, type EngineErrorKind } from "../engines/types";
 
 export interface JobRun {
@@ -70,6 +71,7 @@ export class DeskSaid extends Error {}
 /** The sentence a failed run leaves on the session: never an exception's text or its stack. */
 export function jobError(kind: JobKind, e: unknown): string {
   if (e instanceof DeskSaid) return e.message;
+  if (e instanceof LearnersUnread) return LEARNER_UNREAD_RUN;
   const why = e instanceof EngineError ? WHY[e.kind] : "";
   return why ? `${FAILED[kind]} ${why}` : `${FAILED[kind]} Try again.`;
 }

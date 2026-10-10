@@ -505,6 +505,8 @@ export const SETTLE_NOT_SAVED = "That answer was settled, but the desk could not
 export const HINT_NOT_COUNTED = "Here is the hint, but the desk could not count it in the learner file, so the week will not show it.";
 /** The status when a learner file cannot be read on a switch (WD14a): the new learner's progress is not shown, and the previous learner's is never kept in its place. */
 export const LEARNER_UNREAD = "The learner file could not be read just now, so this learner's progress is not shown.";
+/** The sentence of a run that failed because the learner file could not be read (P7-a): trying again cannot work while the file stays unreadable. */
+export const LEARNER_UNREAD_RUN = "The learner file could not be read just now, so this was not saved.";
 /** The status when no row of a paper survived cleanPaper: the rows are the problem, and the phone shows each drop. */
 export const PAPER_NO_ROW = "The desk kept no question from that paper.";
 /** The status when session.json could not be used and was put aside (P1): the desk started fresh, and the old file is kept beside it. */
@@ -797,11 +799,15 @@ if (store.session.conversation === undefined) store.session.conversation = null;
 if (store.session.check === undefined) store.session.check = null;
 if (!store.session.jobs) store.session.jobs = {};
 // ...and one whose Math Buddy work has no owner yet (settleOwners)
-try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
+// the startup reads go through readLearner: an unreadable learners.json is said once, in one sentence, never read as an empty book
+let learnersUnread = false;
+const readable = (id: string) => { try { return readLearner(id); } catch (err) { learnersUnread = true; throw err; } };
+try { store.session = settleOwners(store.session, (id) => readable(id).history); } catch {}
 // the Sunday page is drawn fresh for whoever is seated, never taken from the file
 store.session = { ...store.session, week: weekRead(store.session) };
 // the learner's latest paper (v2 M5b), read back through cleanPaper from their record, never taken from the saved session
-try { store.session = { ...store.session, paper: store.session.learner ? getLearner(store.session.learner.id).papers?.at(-1) ?? null : null }; } catch {}
+try { store.session = { ...store.session, paper: store.session.learner ? readable(store.session.learner.id).papers?.at(-1) ?? null : null }; } catch { store.session = { ...store.session, paper: null }; }
+if (learnersUnread) store.session = { ...store.session, status: LEARNER_UNREAD };
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
   if (watchDue(store.session.watch, Date.now())) dispatch({ type: "lesson.watched" });

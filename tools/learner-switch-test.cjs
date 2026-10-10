@@ -138,6 +138,29 @@ test('P8: a real analyse run records its start text on the job',async()=>{
  const c=catchErrors();try{release();await a;}finally{c.done();}
 });
 
+// ---- P7-a: an unreadable learners.json is one desk sentence, never 'Try again' ----
+const LJ=()=>path.join(data,'learners.json');
+/** A learners.json holding one learner, cut short by five bytes: it parses as nothing. */
+const truncatedBook=()=>{const l=require(src('lib/session/learners.ts'));fs.rmSync(LJ(),{force:true});l.saveEnglish('ema',{...l.blank('ema').english});const b=fs.readFileSync(LJ());fs.writeFileSync(LJ(),b.subarray(0,b.length-5));return fs.readFileSync(LJ());};
+test('P7-a (b): a run that fails on an unreadable learners.json says one desk sentence, not Try again',async()=>{
+ const job=require(src('lib/desk/job.ts')),l=require(src('lib/session/learners.ts'));
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const was=truncatedBook();
+ const c=catchErrors();let r;try{r=await job.runJob('memory',async()=>{l.saveEnglish('ema',l.blank('ema').english);});}finally{c.done();}
+ assert.equal(r.ok,false);
+ const s=store.getSession();
+ assert.equal(s.jobs.memory.phase,'failed');assert.equal(s.jobs.memory.error,store.LEARNER_UNREAD_RUN);assert.equal(s.status,store.LEARNER_UNREAD_RUN);
+ assert.doesNotMatch(s.status,/Try again/);assert.equal(store.LEARNER_UNREAD_RUN,'The learner file could not be read just now, so this was not saved.');
+ assert.ok(fs.readFileSync(LJ()).equals(was),'learners.json is untouched');
+ fs.rmSync(LJ(),{force:true});
+});
+test('P7-a (b): control, any other failure still says Try again',async()=>{
+ const job=require(src('lib/desk/job.ts'));
+ store.dispatch({type:'reset'});
+ const c=catchErrors();try{await job.runJob('memory',async()=>{throw new Error('boom');});}finally{c.done();}
+ assert.match(store.getSession().jobs.memory.error,/Try again\.$/);
+});
+
 // ---- P3: the Sentence reading carries its owner ----
 test('P3: a Sentence reading that lands after a switch is dropped, and the new learner\'s own request is not refused',async()=>{
  seatedWithWork('ema');store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
@@ -282,4 +305,18 @@ test('P1 load: the other fields of a kept profile are repaired, not the profile 
 });
 test('P1 load: no file logs nothing',()=>{
  assert.deepEqual(reload(null),[]);assert.equal(aside().length,0);
+});
+
+test('P7-a (a): a desk that starts with learners.json unreadable says LEARNER_UNREAD, and shows no paper',()=>{
+ truncatedBook();
+ reload(JSON.stringify({profiles:[good],learner:{id:'good',name:'Good'}}));
+ const s=store.getSession();assert.equal(s.learner.id,'good');
+ assert.equal(s.status,store.LEARNER_UNREAD);assert.equal(s.paper,null);
+ fs.rmSync(LJ(),{force:true});
+});
+test('P7-a (a): control, a readable learners.json at startup leaves the status clear',()=>{
+ const l=require(src('lib/session/learners.ts'));fs.rmSync(LJ(),{force:true});l.saveEnglish('good',l.blank('good').english);
+ reload(JSON.stringify({profiles:[good],learner:{id:'good',name:'Good'}}));
+ assert.notEqual(store.getSession().status,store.LEARNER_UNREAD);
+ fs.rmSync(LJ(),{force:true});
 });

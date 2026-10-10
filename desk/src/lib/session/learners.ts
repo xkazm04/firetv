@@ -153,10 +153,13 @@ function writeBook(book: Book): void {
   }
 }
 
+/** The failure of a write or a read-through that found learners.json unreadable (P7-a): a retry cannot succeed while the file stays so, and job.ts says it in one desk sentence. */
+export class LearnersUnread extends Error {}
+
 /** Put one learner into the book on disk - never over a file that could not be read. Throws when it cannot. */
 function writeLearner(id: string, l: Learner): void {
   const book = readBook();
-  if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
+  if (!book) throw new LearnersUnread("learners.json could not be read, so progress was not saved over it");
   book[id] = l;
   writeBook(book);
 }
@@ -282,7 +285,7 @@ export function getLearner(id: string): Learner {
 /** The learner for a reader that must tell an unreadable learners.json from an empty one (WD14): it throws on the first, reads the second as an empty book. */
 export function readLearner(id: string): Learner {
   const book = readBook();
-  if (book === null) throw new Error("learners.json could not be read");
+  if (book === null) throw new LearnersUnread("learners.json could not be read");
   return book[id] ? clean(id, book[id]) : blank(id);
 }
 
@@ -293,7 +296,7 @@ export function saveLearner(l: Learner): void {
 /** English commits (and saveLearner, the same way) report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
 export function saveEnglish(id: string, english: EnglishLearning): void {
   const book = readBook();
-  if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
+  if (!book) throw new LearnersUnread("learners.json could not be read, so progress was not saved over it");
   book[id] = { ...getLearner(id), english };
   writeBook(book);
 }
