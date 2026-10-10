@@ -595,8 +595,9 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
  assert.ok(a>0&&b>a,'the reset is where the test expects it');
  assert.ok(b<src.indexOf('const rec = useRef'),'it sits before the rec ref');
  assert.match(src,/useState\(FRESH_SENTENCE\)/);assert.match(src,/useState<string\[\]>\(FRESH_PARAS\)/,'the load values are the ones the reset uses');
+ assert.match(src,/\[keep, setKeep\] = useState\(true\)/,'keep loads true');assert.match(src,/\[ring, setRing\] = useState<[^=]*\| null>\(null\)/,'ring loads null');
  const js=ts.transpileModule(src.slice(a,b),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
- const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Memory'];
+ const NAMES=['Paras','Pix','ReadIx','Note','Info','Source','PieceId','Notice','Shot','Phase','Q','Msg','PaperRows','Typed','Sentence','Memory','Keep','Ring'];
  const make=()=>{
   const calls=[];const s={learner:null};let effect;
   const setters=NAMES.map((n)=>(v)=>calls.push([n,v]));
@@ -605,7 +606,7 @@ test('P17 (i) a learner switch resets the last learner\'s essay, photo, typed an
   const seat=(id)=>{s.learner=id?{id}:null;calls.length=0;effect();return calls.slice();};
   return {seat};
  };
- const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Memory:null};
+ const want={Paras:P17_LOAD.paras,Pix:0,ReadIx:[],Note:'',Info:'',Source:'message',PieceId:undefined,Notice:null,Shot:null,Phase:'idle',Q:'',Msg:'',PaperRows:[{blank:true}],Typed:[],Sentence:P17_LOAD.sentence,Memory:null,Keep:true,Ring:null};
  await t.test('A to B: every listed state goes back to its load value',()=>{
   const m=make();m.seat('ema');const c=m.seat('jakub');
   assert.deepEqual(c.map(([n])=>n).sort(),[...NAMES].sort());

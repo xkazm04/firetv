@@ -363,7 +363,7 @@ export default function Phone() {
   const lastSeated = useRef<string | undefined>(undefined);
   const clearLastLearnersWork = () => {
     setParas(FRESH_PARAS); setPix(0); setReadIx([]); setNote(""); setInfo(""); setSource("message"); setPieceId(undefined); setNotice(null);
-    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setMemory(null);
+    setShot(null); setPhase("idle"); setQ(""); setMsg(""); setPaperRows([blankRow()]); setTyped([]); setSentence(FRESH_SENTENCE); setMemory(null); setKeep(true); setRing(null);
   };
   // the first seating after load, and the same learner sitting again after an empty seat, clear nothing
   useEffect(() => {
