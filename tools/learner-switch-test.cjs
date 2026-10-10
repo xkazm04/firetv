@@ -87,6 +87,27 @@ test('robustness-6: a running analyse run is gone after a switch, and a done run
  const s=store.getSession();assert.equal(s.jobs.analyse,undefined);assert.equal(s.jobs.lesson?.phase,'done');
 });
 
+const plantRunning=()=>{
+ seatedWithWork();
+ const E='The desk could not write that set.';
+ globalThis.__desk.session={...store.getSession(),status:E,jobs:{practice:{id:'p1',phase:'running',startedAt:1},read:failed('r1',E),hint:failed('h1','The desk could not come up with a hint just now.'),analyse:{id:'a1',phase:'running',startedAt:1},lesson:{id:'l1',phase:'done',startedAt:1,endedAt:2}}};
+};
+const droppedAll=(s)=>{assert.equal(s.jobs.practice,undefined);assert.equal(s.jobs.read,undefined);assert.equal(s.jobs.hint,undefined);assert.equal(s.jobs.analyse,undefined);assert.equal(s.jobs.lesson?.phase,'done');assert.equal(s.status,'');};
+test('robustness-6: a switch while a practice run is running still drops the failed runs and the analyse run',()=>{
+ plantRunning();store.dispatch({type:'learner.set',id:'jakub'});droppedAll(store.getSession());
+});
+test('robustness-6: a profile save to a new learner while a practice run is running drops them too',()=>{
+ plantRunning();
+ store.dispatch({type:'profile.draft',patch:{name:'Zed'}});store.dispatch({type:'profile.save'});
+ droppedAll(store.getSession());
+});
+test('robustness-6: control, a focus event while a practice run is running changes no job and no status',()=>{
+ plantRunning();store.dispatch({type:'focus',focus:0});
+ const s=store.getSession();
+ assert.equal(s.jobs.practice?.phase,'running');assert.equal(s.jobs.read?.phase,'failed');assert.equal(s.jobs.hint?.phase,'failed');assert.equal(s.jobs.analyse?.phase,'running');assert.equal(s.jobs.lesson?.phase,'done');
+ assert.equal(s.status,'The desk could not write that set.');
+});
+
 // ---- P3: the Sentence reading carries its owner ----
 test('P3: a Sentence reading that lands after a switch is dropped, and the new learner\'s own request is not refused',async()=>{
  seatedWithWork('ema');store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});

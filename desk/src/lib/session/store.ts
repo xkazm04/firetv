@@ -705,7 +705,7 @@ function step(s: Session, e: Event): Session {
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
-  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
+  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...n.jobs }; delete n.jobs.practice; }
   const w = watchOf(n.watch ?? null, n, n.updatedAt);
   if (w !== (n.watch ?? null)) n.watch = w;
   return n;
