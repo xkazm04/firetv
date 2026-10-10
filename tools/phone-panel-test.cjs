@@ -416,6 +416,28 @@ test('paper 4b: no string the Paper panel shows names an exam tier; a harder sta
  for(const p of rows){const e=entryOf(p);assert.ok(e.drops.length);for(const t of e.drops)assert.doesNotMatch(t,/Foundation|Higher/i,t);}
 });
 
+test('paper 4c: the picker finds a statement by its words and folds its areas',()=>{
+ const {choicesMatching,statementChoices}=ENTRY();
+ const all=statementChoices(),n=(gs)=>gs.reduce((k,g)=>k+g.items.length,0);
+ const e=choicesMatching('');
+ assert.equal(e.length,all.length);assert.equal(n(e),n(all),'an empty query gives every area and statement');
+ assert.equal(n(choicesMatching('   ')),n(all),'spaces alone are empty');
+ const sample=all[0].items.find(c=>c.can.split(/\s+/).length>=3).can,w=sample.split(/\s+/);
+ const two=choicesMatching(w[0]+' '+w[w.length-1]);
+ assert.ok(two.flatMap(g=>g.items).some(c=>c.can===sample));
+ for(const c of two.flatMap(g=>g.items))assert.ok(c.can.toLowerCase().includes(w[0].toLowerCase())&&c.can.toLowerCase().includes(w[w.length-1].toLowerCase()),c.can);
+ assert.ok(n(two)<=n(choicesMatching(w[0])),'a second word only narrows');
+ assert.equal(n(choicesMatching(sample.toUpperCase())),n(choicesMatching(sample.toLowerCase())));
+ assert.ok(n(choicesMatching(sample.toUpperCase()))>=1,'another case matches');
+ assert.deepEqual(choicesMatching('zzzqqq xx'),[],'nothing matches: no area');
+ assert.equal(choicesMatching(w[0]).every(g=>g.items.length>0),true,'an area with no match is not drawn');
+ const src=code(PAPER_PANEL);
+ assert.match(src,/<details key=\{g\.area\} className="ppaper-area" open=\{typing \|\| undefined\}>/,'each area folds, and opens while typing');
+ assert.match(src,/No statement has these words\./);
+ assert.match(src,/useState\(""\)/,'each row keeps its own filter text');
+ assert.match(src,/\(\$\{picked\} picked\)/,'the area summary counts its picks');
+});
+
 test('paper 5: a paper kept can be shown on the TV from the panel - the TV has no key into the list, so the phone is its door',()=>{
  const src=code(PAPER_PANEL);
  assert.match(src,/seated && kept && <button[^>]*onClick=\{\(\) => void post\(\{ type: "nav", screen: "paper" \}\)\}/);

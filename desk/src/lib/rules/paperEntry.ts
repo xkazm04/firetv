@@ -47,3 +47,13 @@ export function statementChoices(): { area: Area; name: string; items: Choice[] 
 export const canOf = (code: string): string => STATEMENTS.find((s) => s.code === code)?.can ?? "";
 /** The most statements one question may name. */
 export const MOST_PICKS = MAX_CODES;
+
+/** The statements whose `can` text holds every typed word, ignoring case, by area; an area with no match is left out. An empty query keeps all. */
+export function choicesMatching(query: string): ReturnType<typeof statementChoices> {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean);
+  const all = statementChoices();
+  if (!words.length) return all;
+  return all
+    .map((g) => ({ ...g, items: g.items.filter((c) => words.every((w) => c.can.toLowerCase().includes(w))) }))
+    .filter((g) => g.items.length);
+}

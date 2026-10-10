@@ -6,14 +6,38 @@
  * cleanPaper) as they are typed, so every row the desk would leave out is shown here with its reason, and are then sent
  * through the session door (POST /api/session, `paper.enter`), where the same validation decides what is kept.
  */
-import { blankRow, canOf, entryOf, isBlank, rawOf, statementChoices, MOST_PICKS, type DraftRow } from "@/lib/rules/paperEntry";
+import { useState } from "react";
+import { blankRow, canOf, choicesMatching, entryOf, isBlank, rawOf, statementChoices, MOST_PICKS, type DraftRow } from "@/lib/rules/paperEntry";
 import type { Event } from "@/lib/session/store";
 
-const CHOICES = statementChoices();
 
 /** The heading and the Send button name whose record the paper goes to: whoever is seated on the TV. */
 export const paperHeading = (name?: string) => (name ? `A paper ${name} sat` : "A paper you sat");
 export const paperSend = (kept: number, name?: string) => (kept ? `Send ${kept} ${kept === 1 ? "question" : "questions"} to ${name ? `${name}'s record` : "the TV"}` : name ? `Send to ${name}'s record` : "Send to the TV");
+
+/** The codes of each area, whole: an area's count of picks does not shrink with the box. */
+const WHOLE = new Map(statementChoices().map((g) => [g.area, g.items.map((c) => c.code)]));
+
+/** One row's picker: the areas, each folded; a box narrows the list by words, and a pick the box hides stays picked. */
+function RowPicker({ codes, pick }: { codes: string[]; pick: (code: string) => void }) {
+  const [query, setQuery] = useState("");
+  const groups = choicesMatching(query);
+  const typing = query.trim() !== "";
+  return <details className="ppaper-pick">
+    <summary>{codes.length ? `Tests: ${codes.map(canOf).filter(Boolean).join("; ")}` : "What does it test? (pick up to " + MOST_PICKS + ")"}</summary>
+    <input className="ppaper-find" type="search" aria-label="Find a statement by its words" placeholder="Find by words" value={query} onChange={(x) => setQuery(x.target.value)} />
+    {typing && !groups.length && <p className="ppaper-none">No statement has these words.</p>}
+    {groups.map((g) => {
+      const picked = (WHOLE.get(g.area) ?? []).filter((c) => codes.includes(c)).length;
+      return <details key={g.area} className="ppaper-area" open={typing || undefined}>
+        <summary>{g.name}{picked ? ` (${picked} picked)` : ""}</summary>
+        {g.items.map((c) => <label key={c.code} data-picked={codes.includes(c.code) || undefined}>
+          <input type="checkbox" checked={codes.includes(c.code)} onChange={() => pick(c.code)} />
+          <span>{c.can}{c.foundation ? "" : " (a harder statement)"}</span></label>)}
+      </details>;
+    })}
+  </details>;
+}
 
 export function PaperPanel({ rows, setRows, post, seated, status, kept, name }: {
   rows: DraftRow[]; setRows: (r: DraftRow[]) => void; post: (e: Event) => Promise<Response>; seated: boolean; status: string; kept: boolean; name?: string;
@@ -33,14 +57,7 @@ export function PaperPanel({ rows, setRows, post, seated, status, kept, name }: 
         <input aria-label="Marks scored" placeholder="Scored" inputMode="numeric" value={r.marks} onChange={(x) => set(i, { marks: x.target.value })} />
         <input aria-label="Marks it was out of" placeholder="Out of" inputMode="numeric" value={r.outOf} onChange={(x) => set(i, { outOf: x.target.value })} />
       </div>
-      <details className="ppaper-pick">
-        <summary>{r.codes.length ? `Tests: ${r.codes.map(canOf).filter(Boolean).join("; ")}` : "What does it test? (pick up to " + MOST_PICKS + ")"}</summary>
-        {CHOICES.map((g) => <fieldset key={g.area}><legend>{g.name}</legend>
-          {g.items.map((c) => <label key={c.code} data-picked={r.codes.includes(c.code) || undefined}>
-            <input type="checkbox" checked={r.codes.includes(c.code)} onChange={() => pick(i, c.code)} />
-            <span>{c.can}{c.foundation ? "" : " (a harder statement)"}</span></label>)}
-        </fieldset>)}
-      </details>
+      <RowPicker codes={r.codes} pick={(code) => pick(i, code)} />
       {rows.length > 1 && <button className="plink" onClick={() => setRows(rows.filter((_, k) => k !== i))}>Remove this question</button>}
     </div>)}
     <button className="pbtn" data-secondary="true" onClick={() => setRows([...rows, blankRow()])}>Add a question</button>
