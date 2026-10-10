@@ -428,6 +428,19 @@ test('the Writing KPI sees stage 6 as it landed: a "writing" history kind that t
  put('src/lib/session/learners.ts',learners);put('src/lib/desk/essay.ts',essay.replace(/kind: "writing"/,'kind: "practice"'));
  assert.deepEqual(kpi.writingPersisted(fake),{persisted:false,kindDeclared:true,essayWrites:false},'a kind nothing appends is not persistence either');
 });
+test('WD10a: the Writing KPI accepts the one-save withHistory shape and refuses an applier that is never saved',()=>{
+ const fake=path.join(process.env.DESK_DATA_DIR,'fake-desk-wd10a'),put=(f,t)=>{fs.mkdirSync(path.dirname(path.join(fake,f)),{recursive:true});fs.writeFileSync(path.join(fake,f),t);};
+ const learners=fs.readFileSync(path.join(root,'src/lib/session/learners.ts'),'utf8'),essay=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ put('src/lib/session/learners.ts',learners);
+ put('src/lib/desk/essay.ts','export function record(learnerId, lens) {\n  addHistory(learnerId, { at: Date.now(), kind: "writing", label: lens.name, detail: "" });\n}\n');
+ assert.equal(kpi.writingPersisted(fake).essayWrites,true,'the old addHistory shape still counts');
+ put('src/lib/desk/essay.ts',essay.split('saveLearner(').join('noSave('));
+ const unsaved=kpi.writingPersisted(fake);
+ assert.equal(unsaved.essayWrites,false,'a withHistory applier that is never saved is not persistence');
+ assert.equal(unsaved.persisted,false);
+ put('src/lib/desk/essay.ts',essay);
+ assert.equal(kpi.writingPersisted(fake).essayWrites,true,'the current essay.ts counts');
+});
 test('the Writing KPI counts a learner with a writing episode, from the book a real reading wrote',()=>{
  const file=path.join(process.env.DESK_DATA_DIR,'learners.json');
  const r=kpi.learnerEvidence({file,source:'DESK_DATA_DIR',tried:[file]});

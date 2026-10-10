@@ -87,12 +87,15 @@ const ESSAY_CORE = ["src/lib/rules/essay.ts", "src/lib/desk/essay.ts"];
 /**
  * Stage 6 as it landed: a writing episode is a history entry of kind "writing", and the essay reading
  * is what appends it. Both halves must hold — a kind nothing writes, or a write of a kind the record drops, is not persistence.
+ * Both shapes count: addHistory(<id>, {kind: "writing"}), which saves by itself, and withHistory(<learner>, {kind: "writing"}) when essay.ts also calls saveLearner(.
  */
 function writingPersisted(deskDir = desk) {
   const read = f => { try { return fs.readFileSync(path.join(deskDir, f), "utf8"); } catch { return ""; } };
   const entry = read("src/lib/session/learners.ts").match(/export interface HistoryEntry \{[^}]*\}/);
   const kindDeclared = Boolean(entry && /\bkind\s*:[^;\n]*"writing"/.test(entry[0]));
-  const essayWrites = /addHistory\(\s*\w+\s*,\s*\{[^}]*\bkind\s*:\s*"writing"/.test(read("src/lib/desk/essay.ts"));
+  const src = read("src/lib/desk/essay.ts");
+  const m = /\b(addHistory|withHistory)\(\s*[\w.]+(?:\([^()]*\))?\s*,\s*\{[^}]*\bkind\s*:\s*"writing"/.exec(src);
+  const essayWrites = Boolean(m && (m[1] === "addHistory" || /\bsaveLearner\(/.test(src)));
   return { persisted: kindDeclared && essayWrites, kindDeclared, essayWrites };
 }
 
