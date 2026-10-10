@@ -361,6 +361,10 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
   ['an answer of 41 characters',{answers:[...A9.slice(0,2),'1'.repeat(41),...A9.slice(3)]},/Answer 3 is longer than 40 characters/],
   ['a body that is not JSON','{no',/did not get a photo/],
   ['a body that is an array','[1]',/neither a photo/],
+  ['an empty image',{image:'',w:100,h:100},/did not get a photo/],
+  ['an image that is a number',{image:123,w:100,h:100},/did not get a photo/],
+  ['an image that is null',{image:null,w:100,h:100},/did not get a photo/],
+  ['a data URL with no data',{image:'data:image/jpeg;base64,',w:100,h:100},/did not get a photo/],
  ];
  for(const [why,body,words] of refused){
   const r=await raw(body);assert.equal(r.status,400,why);
