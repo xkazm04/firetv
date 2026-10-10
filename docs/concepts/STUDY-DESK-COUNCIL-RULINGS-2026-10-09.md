@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69 and e9761c26 name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4 and dab615ba name a run, not a commit.
 
 ---
 
@@ -418,6 +418,8 @@ Must-address:
 | X5-a | The explain route refuses a transcript that is not a string, is blank, or is longer than `EXPLAIN_TRANSCRIPT_MAX` (1000 characters, `saidValue.ts:12`). It answers 400, before any model call (`desk/src/app/api/explain/route.ts:26`). The textarea in `ExplainTalk.tsx` carries the same maxLength (:18). | Full r1 craft-2, robustness-5 (R16), economics-2 and economics-3. | none recorded | delivered, c4bd192d (run 38d6db69) |
 | X5b | A function name is heard only as a whole word. `edge()` in `saidValue.ts` built its alias pattern from a template literal, and there the backslash before p{L} is dropped. So the lookarounds excluded only the characters p, {, L and }. The fix escapes the backslash (`saidValue.ts:27`). | The App Master found it when X5 settled. At c4bd192d, `saidIn` returned true for ('nevim','e^x'), ('no idea, I guessed','e^x + C'), ('I picked the answer from the list','pi') and ('I stand by it','tan x + C'). | none recorded | delivered, 9f6f38d0 (run e9761c26) |
 | X5b-a | An area unit is heard when the learner says it. The exponent 2 of cm2 or m2 (also cm^2 and m²) leaves the digit runs that must be heard (`saidValue.ts:45`). The area must be said instead, in one of these ways: a heard 2 (the digit, ², 'squared' or 'na druhou'); 'square' or 'sq' before a word that starts with 'centimet' or 'met', or before 'cm' or 'm'; a folded Czech word that starts with 'ctverecn' (:49). 'square' never adds a 2 to the heard digits. W7c 9 in `tools/school-marking-test.cjs` (:1120-1121) is back to its original transcript, 'twenty-eight square centimetres'. | X5's question 3. 'twenty-eight square centimetres' failed closed on '28 cm2', and X5 had changed that fixture to 'centimetres squared'. | X5's proposal to make 'square' an exponent word that adds a 2. Then 'I took the square root' would ground a 2. | delivered, 0a5a5296 (run e9761c26) |
+| X6 | `saidIn` (`desk/src/lib/rules/saidValue.ts:34`) hears a value only as the learner's own answer, in the order it was said. (a) Order. The value's digit runs must be consecutive runs of the folded transcript, in the same order. 'squared', 'cubed', 'na druhou' and 'na treti' count as a figure at the place where they are said. (b) Anchor. Those runs begin at the first figure after the last answer cue in the transcript. When the transcript has no answer cue, its runs must be exactly the value's runs. The cues are a closed table of English and Czech phrases in `saidValue.ts`, beside `FUNCTION_ALIASES` (:15), for example 'I got', 'the answer is', 'that is' and 'vyslo mi'. Bare 'is', 'equals' and '=' are not cues, because a learner who reads the question aloud says them. (c) Letters. Each single letter of the value that is not part of a function name (x, C) must be heard as a whole word. The gate can still only refuse a settle. Every row that X5 and X5b hear is still heard. | Full r2 must-address 1 and 2 (craft-1 and robustness-1). Replay R2c is ('I took five sixths and one quarter and then I got lost', 1/6). robustness-1's probes are ('I got eleven twelfths', 12/11), ('two x plus three equals eleven, I got five', 3) and ('three quarters plus one sixth, I am not sure', 3/6). Part (c) takes known limit (i), ('I am not sure, maybe e', e^x). | craft-1's own proposal, a contiguous figure match alone. It still hears 3 in 'two x plus three equals eleven, I got five'. | ruled 2026-10-10 (round 12); queued after 7d-5 |
+| X6-a | An item that stays unsure because its value was not heard gets one fixed line after the reply. In English, the line is X5's proposed sentence: 'The desk did not hear a final answer in that. Say or type what you got, for example: I got ...'. A learner whose school system is cz gets it in Czech. This takes known limit (iv). | X6 refuses more explanations than X5 did, so the learner needs to be told how to be heard. | none recorded | ruled 2026-10-10 (round 12); queued after 7d-5 |
 
 X1 rode the hint rework (delivery 3, part 2, merged at 1c38f546). X2-X4 were delivery 5, in two parts. 5a covered X3 (732b8747) and X4 (1dfcfdae). Run 036c1dd7 was released by a usage limit with one commit, 7ef725bf. Salvage run 62a80958 cherry-picked that commit, added its fail-before evidence, fixed the maths-tv suite header and a missed calc-course pin, and then built X4. 5b was X2's Type it (632287e6, with BACKLOG at af73ca72, run e8e43454). X2's language half was already on main (5a2135b9).
 
@@ -468,8 +470,34 @@ X5 and X5b, as delivered:
   (ii) '+∞' (calc1-continuity) fails closed when spoken as 'infinity', which is the safe failure.
   (iii) Any heard 2 grounds an area unit.
   (iv) X5's proposed not-heard sentence is not built: 'The desk did not hear a final answer in that. Say or type what you got, for example: I got ...'.
+  Round 12: X6 (c) takes limit (i), and X6-a takes limit (iv). Limits (ii) and (iii) stay unslotted.
 
 Next, ruled 2026-10-10 (round 11): the full r2 follows 7d-4 (P16, section 7), because `desk/src/app/phone/page.tsx` and `tools/phone-panel-test.cjs` are in this span. The r2 span adds `desk/src/lib/rules/saidValue.ts`. Full councils still run one at a time.
+
+Full r2 (round 2026-10-10-student-working-explanation-r2, run a7fb68b4):
+- What was judged: 44cbbca1, a span of 14 files (r1's 12 plus `desk/src/lib/rules/saidValue.ts` and `tools/school-rules-test.cjs`). The App Master derived the span.
+- The result: ready 0.5575, coverage 1.00, round 2 of 3. The judges are uncalibrated. There was no hard failure and no floor hit. Scores, with the delta against r1: value 0.50 (+0.05), craft 0.57 (+0.02), rivalry 0.55 (+0.05), robustness 0.70 (+0.15), economics 0.50 (+0.05).
+- The gates: the merge gate record of run 5ad42cde was cited (75 suites, 1438 tests, 0 failed). The council's own tsc run exited 0. Lint is unmeasured.
+- The evidence: L1 plus 29 stubbed replays. No real voice and no real model reply have been observed.
+- r1's two lines: closed as worded. A value with no ground in the transcript no longer settles anything. Replays R2 (no number said, stub 7/12), R18 ('I got five', stub 4), R18c ('I got three', stub -3) and R20b (Calculus 'I am stuck', stub 6x + 2) do not settle. Controls R1, R2b, R18b, R20, R21 and R21b settle when the value is said.
+- The must-address lines, verbatim:
+  1. craft: The grounding gate checks the value's digits as an unordered set, so a value pieced together from numbers the learner said settles and is recorded
+  2. robustness: saidIn grounds a model-written value on its digits as a set, so a value assembled from numbers the learner said but did not give as their answer settles the item and writes the learner...
+  robustness-1's full title (`verdict-robustness.json`): 'saidIn grounds a model-written value on its digits as a set, so a value assembled from numbers the learner said but did not give as their answer settles the item and writes the learner record'.
+- The defect: both lines name one defect in `desk/src/lib/rules/saidValue.ts`. The value's digit runs are checked as an unordered set (the transcript's runs at :40, the value's runs at :48, the membership test at :50). Replay R2c: 'I took five sixths and one quarter and then I got lost' with stub value 1/6 settled wrong, with slip top-not-scaled, and the record went from 8 to 9. robustness-1's pure probes of `saidIn` returned true for ('I got eleven twelfths', 12/11), ('two x plus three equals eleven, I got five', 3) and ('three quarters plus one sixth, I am not sure', 3/6).
+- The line: A full round with a high line is reworked before the owner decides its Approval, so there is no Approval yet. The rework is X6 and X6-a.
+- The findings below the must-address, one line each:
+  - a reply that says the answer is right, or praises, passes unchecked (R6): robustness-2 (med), value-2 (med), craft-2 (med), rivalry-2 (low);
+  - the reply language for a Czech learner, and the English fixed lines: value-1 (med), craft-8 (low);
+  - the economics findings: economics-1 (med, no measured row for an explanation), economics-2 (med, the most expensive call shape), economics-3 to economics-6 (low);
+  - craft-3 (med, the forgeable prompt fence), craft-4 (med, hand-concatenated prompt families), craft-5 (med, Chrome's server recogniser by default), craft-6 (med, the value is read back after the commit) and craft-7 (med, `n` means two things);
+  - rivalry-1 (med): behind Khan Academy Explain Your Thinking, because each explain send is one stateless turn;
+  - robustness-3 (med): the gate was cited, not run.
+- Correction: the App Master's r2 brief said that a second try is another model call. It is not: `sendSecond` posts to /api/second, which code judges with no model call (economics-3). Only re-sending an explanation makes another explain call.
+- The value member proposed three branches (czech-learner-explains, spoken-calculus-expression, blank-item-explained). They are unmeasured, and no `.personas/council/state.json` declares them.
+- The four known limits were kept out of every pack, as briefed, so r2 did not judge them.
+
+Next, ruled 2026-10-10 (round 12): X6 and X6-a are one delivery after 7d-5 (P17, section 7), because the delivery lane carries one branch at a time and 7d-5 was ruled first. The full r3, the last full round, follows its merge. Full councils still run one at a time.
 
 ## 6. essay-paragraph-analysis
 
@@ -529,7 +557,8 @@ HF4 (delivery 4h) delivers the write half of must-address 1: tmp and rename, a l
 | P13 | (7d-3) A hint's wait for its lesson ends when its pick ends without a lesson.set. It ends in the slot that holds that hint by its key, seated or away. The fix lives in the hint route, and the reducer is unchanged. `landed()` (`hint/route.ts:55`) sends the keyed lesson.set when the pick is no longer current, and a pick that does not end ok lands null (:68). There are three paths: (a) refused at start, by P10-a's refusal; (b) failed after the switch; (c) superseded by another learner's pick. Here the asker's own pick lands in the asker's away slot (the builder's choice, accepted). Guards: a re-ask by the same learner on the same key, and a seated hint with the same key but another owner. | 7d-2's report-only answer, confirmed by the App Master: a learner could come back to a stage-1 hint stuck on 'Finding the lesson…'. The App Master found path (c) at dispatch. | none recorded | delivered, 1aa3d4e8 (run 243b0a17) |
 | P14 | (7d-3) `markLine` (`desk/src/tv/mathsRows.ts:284`) and `explainLine` (:300) do not show a running job whose `by` is set and is not the seated learner (`theirs()`, :268). `JobsOf` carries the learner. `MathsTV.tsx` is unchanged. | 7d-2's report-only answer, confirmed: after a switch, the next learner saw 'Marking...' or the explain line until the leaver's run ended. The student-working full r1 found it too (robustness-2, craft-6, value-7). | none recorded | delivered, 12cb1bf6 (run 243b0a17) |
 | P15 | (7d-3) The phone's `explain()` drops a reply or an error that returns after the seated learner or the walk item changed. A seat ref is read after the await (`desk/src/app/phone/page.tsx:345`, `moved()` at :350), and busy still clears. The explain route is unchanged. | Student-working full r1 robustness-3. | none recorded | delivered, 1bbf359c (run 243b0a17) |
-| P16 | (7d-4) `sendSecond`, the phone's typed second try (`desk/src/app/phone/page.tsx:361`), drops a result or an error that returns after the learner or the walk item changed, by P15's mechanism. | 7d-3's report-only answer 3, confirmed: a late error from `sendSecond` sets msg on the next learner's panel. | none recorded | queued, delivery 7d-4 |
+| P16 | (7d-4) `sendSecond`, the phone's typed second try (`desk/src/app/phone/page.tsx:361`), drops a result or an error that returns after the learner or the walk item changed, by P15's mechanism. | 7d-3's report-only answer 3, confirmed: a late error from `sendSecond` sets msg on the next learner's panel. | none recorded | delivered, 44cbbca1 (run 5ad42cde) |
+| P17 | (i) (7d-5) On the phone, a switch to a different learner resets the last learner's work to its load values. A switch is the seated id becoming a defined id other than the last one seen. The reset covers paras, pix, readIx, note, info, source, pieceId, notice, shot, phase, q, msg, paperRows, typed, sentence and memory. A to none and back to A resets nothing. (ii) These handlers drop a reply or an error that returns after the seated learner changed, by P15's mechanism: send, sendSlot, sendRewrite, readPiece, acceptNotice, analyseParagraph, ask, retry, sendWorking, sendTyped, and the Say panel's 'Check it on the TV' button. After a switch, acceptNotice does not call readPiece. endSession is deliberate and unchanged. | 7d-4's report-only answer, which the App Master confirmed at 44cbbca1. After a switch, the next learner saw the last learner's essay. A read of that essay posted it to the new learner's shelf, or was refused with 'That piece is not on your shelf.' (`desk/src/app/api/texts/route.ts:41`; the brief named texts.ts, and this route file holds the text). paperRows, typed, sentence and memory were added at dispatch. | none recorded | dispatched 2026-10-10 as 7d-5 |
 
 Delivery 7 was split into 7a, 7a2 and 7b, on one lane. Lost: one branch. The reasons: P4's files (`desk/src/app/phone/page.tsx` and `desk/src/tv/keys.ts`) were in the hint full r2 span, and 7a had to merge before digest full r3, whose span holds `store.ts`.
 
@@ -630,6 +659,17 @@ Next, ruled 2026-10-10 (round 10): delivery 7d-2 (P10, P11 and P12) lands before
   4. P13 (c)'s landing choice is recorded in P13.
 
 Next, ruled 2026-10-10 (round 11): 7d-4 (P16) lands before the learner-profile full r2, because `page.tsx` is in its span. Then the two full r2s, this feature's and student-working-explanation's, one full council at a time.
+
+7d-4, as delivered (one commit, run 5ad42cde):
+- Commit 44cbbca1 (337300e8, rebased onto 50ee1e31). It is an ancestor of main.
+- Two files: `desk/src/app/phone/page.tsx` (+5/-1; `sendSecond` is at :361) and `tools/phone-panel-test.cjs` (+47).
+- The test 'P16 sendSecond()' has five sub-cases. Fail-before on 0a5a5296: (a) green, (b) red, (c) red, (d) red, (e) green.
+- The P15 test is unchanged.
+- The gate: 75 suites, 1438 tests.
+- The merge gate skipped typecheck, and the App Master ran tsc at 44cbbca1: exit 0.
+- Its report-only answer is ruled as P17.
+
+Next, ruled 2026-10-10 (round 12): 7d-5 (P17) lands before the learner-profile full r2, because `page.tsx` and `tools/phone-panel-test.cjs` are in its span. The full r2 follows its merge.
 
 ## 8. tv-phone-pairing
 
@@ -833,11 +873,13 @@ D5. the digest full r2 rework, WD14: done, 0d44b28d (run d6aad5fb).
 EC1c. the Essay Master and Linga labels: done, 8583b29b (run 7a3b0529).
 WD14a. the rehydrate reads through readLearner, with WD13a: done, e4b33fb9 (run 0a4ec2cd).
 L1. the first lean sweep of desk/ (ledger lean-2026-10-10-desk): done, 17ffb8a7 (run feedcd76). Five of the seven TS6133 findings were removed, one commit each. Open: read.ts num (a probable missed use, not ruled), screens.tsx Clock (left for a later pass), calculus1.ts and habits.ts (no desk/src importer, test-only), and 560 unused exports, counted and not judged.
+L1. the Clock: done at 4db57efe (run dab615ba, ledger f05bd322). read.ts num stays open.
 4b. MB-B7 wording and way in, plus homework value-3 (MB-B15): done, d2276d38 (run 56d9271f).
 4d. MK10 with value-unsure-says-different (marking full r3 value-1), plus MK12: done, 1476d461 (run af864d93).
 5. explain, X2-X4: done. 5a (X3, X4): 1dfcfdae (salvage run 62a80958, after run 036c1dd7 was released). 5b (X2's Type it): af73ca72 (run e8e43454). X2's language half: 5a2135b9. 5c, the full r1 rework: X5 (X5, X5-a) done, c4bd192d (run 38d6db69); X5b (X5b, X5b-a) done, 0a5a5296 (run e9761c26).
+5d, the full r2 rework (X6 and X6-a): queued after 7d-5.
 6. essay, plus EM4-2/EM4-5 and digest value-3.
-7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a, P7-b and P8): done, 3a0a70f8 (run 27364288). 7c (P4-b and P7-c): done, 1245013b (run 8704f32e). 7d (P9): done, 7955c66d (run c2a3c969). 7d-2 (P10-a, P11-a and P12): done, f5a854c0 (run c976c3d8). 7d-3 (P13, P14 and P15): done, 1bbf359c (run 243b0a17). 7d-4 (P16): next, before both full r2s.
+7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a, P7-b and P8): done, 3a0a70f8 (run 27364288). 7c (P4-b and P7-c): done, 1245013b (run 8704f32e). 7d (P9): done, 7955c66d (run c2a3c969). 7d-2 (P10-a, P11-a and P12): done, f5a854c0 (run c976c3d8). 7d-3 (P13, P14 and P15): done, 1bbf359c (run 243b0a17). 7d-4 (P16): done, 44cbbca1 (run 5ad42cde). 7d-5 (P17): dispatched.
 8. pairing.
 9. CEFR with placement.
 10. the W7 overlay.
@@ -852,7 +894,7 @@ Unslotted: EM-B11, WD6, marking value-calc-gaps, marking craft-1, homework value
 - the digest full r3 mediums other than robustness-1: craft-1, craft-2, value-1, value-2 and rivalry-1;
 - EC1d;
 - the learner-profile full r1 findings below its must-address (section 7), with craft-1 as candidate 7e;
-- the student-working-explanation full r1 findings not delivered, and the X5 and X5b known limits (section 5); the 11/12 example is kept by X5;
+- the student-working-explanation full r1 findings not delivered, the full r2 findings below its must-address, and the X5 and X5b known limits (ii) and (iii) (section 5); (i) and (iv) are taken by X6 and X6-a; the 11/12 example is kept by X5;
 - the hint re-ask try count;
 - the hint full r2 mediums;
 - the marking full r3 mediums other than value-1;
@@ -871,13 +913,14 @@ Review lane, in order:
 - learner-profile lite r2: done, ready 0.7036 (run e1fc9eaf);
 - learner-profile full r1: done, ready 0.5585 (run c916b03c), one high line, reworked as 7d and 7d-2;
 - student-working-explanation full r1: done, ready 0.50 (run 908c9d3a), two high lines naming one defect, reworked as X5 and X5b;
-- learner-profile full r2: after 7d-4 merges;
-- student-working-explanation full r2: after 7d-4 merges, one full council at a time;
-- tv-phone-pairing full r1: after both full r2s.
+- student-working-explanation full r2: done, ready 0.5575 (run a7fb68b4), two high lines naming one defect, reworked as X6 and X6-a;
+- learner-profile full r2: after 7d-5 merges;
+- student-working-explanation full r3: after X6 merges, the last round;
+- tv-phone-pairing full r1: after both of those.
 
 ## Open contradictions
 
-None open after round 11. P8's quoted start text is ruled as 7b question 1, so it is not open.
+None open after round 12. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, P6's SERVER_ONLY clause by P6-a, P10 by P10-a, and X1c's line in the numberWords.ts header by X5.
 
