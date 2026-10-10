@@ -236,6 +236,12 @@ function seenOf(item: PracticeItem, topicId: string): Seen | undefined {
   return Object.keys(seen).length ? seen : undefined;
 }
 
+/** The one line an unsure item gets when the value the model wrote was not in what the learner said (X6-a): English for every system but cz. */
+export const NOT_HEARD_LINE = {
+  en: "The desk did not hear a final answer in that. Say or type what you got, for example: I got ...",
+  cz: "V tom nezazněla konečná odpověď. Řekni nebo napiš, co ti vyšlo, například: Vyšlo mi ...",
+};
+
 export async function explainItem(
   item: PracticeItem,
   transcript: string,
@@ -257,7 +263,8 @@ export async function explainItem(
   const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age, seen) : await explain(askedText(item), transcript, topicId, learnerId, calc, age, seen);
   // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
   // the value settles only when the learner said it (X5): a model-written value that is not in the transcript settles nothing and writes no record
-  const verdict = !stillUnsure() || !saidIn(h.value, transcript) ? null
+  const unsure = stillUnsure(), heard = saidIn(h.value, transcript);
+  const verdict = !unsure || !heard ? null
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
     : settle(item, h.value, h.slip, topicId);
   // a step-up item (Family W8) settles onto the step-up record only, as marking does
@@ -271,6 +278,8 @@ export async function explainItem(
   const chosen = h.reply && !gives ? h.reply : own;
   // a settled item names the value the desk took from the words (the learner's own value is not a leak, so the leak check above ran on the model's reply alone)
   const took = verdict ? (calc || school ? h.value : cleanValue(h.value)).trim() : "";
-  const reply = took ? `The desk heard ${took}. ${chosen}` : chosen;
+  const body = took ? `The desk heard ${took}. ${chosen}` : chosen;
+  // an item still unsure whose value was not heard asks for the answer (X6-a); a wrong item or one no longer unsure gets no line
+  const reply = unsure && !heard && item.verdict !== "wrong" ? `${body} ${system === "cz" ? NOT_HEARD_LINE.cz : NOT_HEARD_LINE.en}` : body;
   return { reply, shown: namedLine(reply, item.n, name), slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

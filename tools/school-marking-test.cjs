@@ -1244,7 +1244,7 @@ test('X5: a model-written value the learner did not say settles nothing and writ
  const before=rec(LEARNER,UNIT);
  const x=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'uk');
  assert.equal(x.settled,undefined,'R2: not settled');assert.equal(rec(LEARNER,UNIT),before,'R2: the learner record is unchanged');
- assert.doesNotMatch(x.reply,/The desk heard/);assert.equal(x.reply,'Look again at how you made the bottoms match.','R2: the non-leaking reply still shows');
+ assert.doesNotMatch(x.reply,/The desk heard/);assert.equal(x.reply,'Look again at how you made the bottoms match. '+X.NOT_HEARD_LINE.en,'R2: the non-leaking reply still shows, then the X6-a line');assert.equal(x.shown,x.reply);
  // R2 through the route: 200, no settled field, the item stays unsure
  const r=await post('explain',{transcript:'nevím, nějak jsem to odečetla',n:5});
  const b=await r.json();assert.equal(r.status,200);assert.equal('settled' in b,false,'R2 route: no settled field');
@@ -1258,6 +1258,16 @@ test('X5: a model-written value the learner did not say settles nothing and writ
  const lb=rec(LEARNER,lin);
  const y=await X.explainItem(lq,'I got five',lin,LEARNER,()=>true,12);
  assert.equal(y.settled,undefined,'R18: not settled');assert.equal(rec(LEARNER,lin),lb,'R18: record unchanged');assert.doesNotMatch(y.reply,/The desk heard/);
+ assert.ok(y.reply.endsWith(' '+X.NOT_HEARD_LINE.en),'R18: ends with the X6-a line');
  const z=await X.explainItem(lq,'I got four',lin,LEARNER,()=>true,12);
- assert.equal(z.settled.verdict,'right','control: four said settles');
+ assert.equal(z.settled.verdict,'right','control: four said settles');assert.ok(!z.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: a settled item has no line');
+ // X6-a: Czech for system cz; none when the item is no longer unsure or was already wrong
+ stubText(()=>({reply:'Look again at how you made the bottoms match.',value:'3/4'}));
+ const cz=await X.explainItem(item,'nevím, nějak jsem to odečetla',UNIT,LEARNER,()=>true,12,'cz');
+ assert.equal(cz.settled,undefined);assert.equal(cz.reply,'Look again at how you made the bottoms match. '+X.NOT_HEARD_LINE.cz,'X6-a cz');assert.ok(X.NOT_HEARD_LINE.cz.startsWith('V tom nezazněla'));
+ stubText(()=>({reply:'Look at the first line.',slip:'unclear',value:'4'}));
+ const gone=await X.explainItem(lq,'I got five',lin,LEARNER,()=>false,12);
+ assert.ok(!gone.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: no line when the item is no longer unsure');
+ const wr=await X.explainItem({n:1,question:'2x + 3 = 11',verdict:'wrong'},'I got five',lin,LEARNER,()=>true,12);
+ assert.ok(!wr.reply.includes(X.NOT_HEARD_LINE.en),'X6-a: no line on a wrong item');
 });

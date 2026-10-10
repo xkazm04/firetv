@@ -11,7 +11,7 @@ let looked;eye.vision=(req)=>looked(req);
 const {makeItems}=require(path.join(root,'src/lib/desk/items.ts'));
 const {markSet,EMPTY_MARK}=require(path.join(root,'src/lib/desk/mark.ts'));
 const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
-const {explain}=require(path.join(root,'src/lib/desk/explain.ts'));
+const {explain,NOT_HEARD_LINE}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
 const {getLearner,recordAttempt,saveLearner,saveEnglish,addHistory}=require(path.join(root,'src/lib/session/learners.ts'));
 const {SYLLABUS,SYSTEM_START,topic,nextTopic,expectedIndex}=require(path.join(root,'src/lib/library/syllabus.ts'));
@@ -310,7 +310,7 @@ test('case 3: a value the desk cannot read leaves the item unsure and the learne
   const r=await explainAt(3);
   assert.equal(r.status,200,value);assert.equal(r.body.settled,undefined,value);
   const it=store.getSession().practice.items[3];
-  assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with.','the reply still reaches the walk');assert.equal(it.said,'The desk is not sure about number 4. How did you get there?',value);
+  assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with. '+NOT_HEARD_LINE.en,'the reply still reaches the walk');assert.equal(it.said,'The desk is not sure about number 4. How did you get there?',value);
  }
  assert.deepEqual(record(me),before);
 });
@@ -361,16 +361,16 @@ test('case 5: a reply that gives the answer away is stopped in code, and the ite
    const numbers=(String(text).match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify('x-5=2',v));
    assert.deepEqual(numbers,[],`${where} carries the answer after «${leak}»: ${text}`);
   }
-  assert.equal(r.body.reply,ask);assert.equal(it.reply,ask);
+  assert.equal(r.body.reply,ask+' '+NOT_HEARD_LINE.en);assert.equal(it.reply,ask+' '+NOT_HEARD_LINE.en);
  }
  said({reply:'Look at the line where the 5 moved.',value:'',slip:'unclear'});
- assert.equal((await explainAt(1)).body.reply,'Look at the line where the 5 moved.','a number from the question is not the answer');
+ assert.equal((await explainAt(1)).body.reply,'Look at the line where the 5 moved. '+NOT_HEARD_LINE.en,'a number from the question is not the answer');
 });
 test('case 6: the desk\'s reply rides on the walk item, for the TV\'s caption slot',async()=>{
  await markedWalk();
  said({reply:'Look at the line where the 1 moved.',value:'about nine',slip:'unclear'});
  await explainAt(4,'I am not sure');
- assert.equal(store.getSession().practice.items[4].reply,'Look at the line where the 1 moved.');
+ assert.equal(store.getSession().practice.items[4].reply,'Look at the line where the 1 moved. '+NOT_HEARD_LINE.en);
  assert.equal(store.getSession().practice.items[3].reply,undefined,'only the item explained');
 });
 test('GUARD case 7: after settling, no line on any item carries a value, and the session carries no answer',async()=>{
