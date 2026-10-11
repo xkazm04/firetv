@@ -12,7 +12,7 @@ import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
-import { follow, joinRefusal, type JoinHow, type PScreen } from "./panelFor";
+import { follow, joinRefusal, leaveOutcome, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
@@ -165,8 +165,15 @@ export default function Phone() {
   // a code an earlier version stored is cleared on open; the phone keeps none now, and a join never reads one
   useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch {} }, []);
   // the desk forgets this phone: its fingerprint is dropped there and its cookie goes here, and the stream reopens as a guest
-  const forget = () => { setMsg("This phone will ask for the code next time.");
-    void post({ type: "leave" }).then(() => reconnect(), () => {}); };
+  // it says forgotten only once the desk has answered that it is; a refusal or no answer leaves the phone paired
+  const forget = async () => {
+    let r: Response | null = null;
+    try { r = await post({ type: "leave" }); } catch {}
+    const j = r && !r.ok ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
+    const out = leaveOutcome({ status: r?.status, error: j.error });
+    setMsg(out.line);
+    if (out.forgotten) reconnect();
+  };
 
   // the phone stays where it is: the hand-off is shown, not jumped over
   const send = async (dataUrl: string, w: number, h: number, sub: Subject, title: string) => {

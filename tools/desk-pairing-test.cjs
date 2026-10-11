@@ -601,3 +601,72 @@ test('PR10: pin.turn gives a four-digit pin never equal to the one just used, an
   if(i<3)assert.deepEqual({...after,pin:'',updatedAt:0},{...before,pin:'',updatedAt:0});
  }
 });
+
+// ---- PR11: a pairing write that fails changes nothing, and the phone says what happened ----
+const NOT_SAVED={join:'The desk could not save this phone, so nothing changed. Type the same code again.',leave:'The desk could not forget this phone, so it is still paired. Try again.',reset:'The desk could not forget its phones, so nothing was reset. Try again.'};
+/** pairing.json made unwritable as the council's replay did: a directory at the temp file's name. Returns the undo. */
+const blockWrites=()=>{const d=`${keyFile()}.${process.pid}.tmp`;fs.mkdirSync(d);return ()=>fs.rmSync(d,{recursive:true,force:true});};
+const quietErrors=()=>{const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));return lines;};
+const oneLine=(lines)=>{assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/pairing\.json/);};
+test('PR11: the line texts are exported from pairing.ts',()=>{
+ const p=pairing();assert.equal(p.JOIN_NOT_SAVED,NOT_SAVED.join);assert.equal(p.LEAVE_NOT_SAVED,NOT_SAVED.leave);assert.equal(p.RESET_NOT_SAVED,NOT_SAVED.reset);
+});
+test('PR11: a right code whose phone cannot be saved answers 500 JOIN_NOT_SAVED, sets no cookie, changes nothing; unblocked, the same code joins',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs();const before=fs.readFileSync(keyFile(),'utf8');
+ globalThis.__deskJoin={wrong:3,until:0};const pin=store.getSession().pin,joined=store.getSession().joined;
+ const unblock=blockWrites(),lines=quietErrors();
+ try{
+  const r=await post({type:'join',code:pin},'guest');
+  assert.equal(r.status,500);assert.deepEqual(await r.json(),{error:NOT_SAVED.join});
+  assert.equal(r.headers.get('set-cookie'),null,'no Set-Cookie');
+  assert.equal(store.getSession().pin,pin);assert.equal(store.getSession().joined,joined);assert.equal(globalThis.__deskJoin.wrong,3);
+  assert.equal(fs.readFileSync(keyFile(),'utf8'),before,'the file is as it was');assert.equal(roleOfCookie(a),'phone');
+ }finally{mock.restoreAll();unblock();}
+ oneLine(lines);
+ const ok=await post({type:'join',code:pin},'guest');assert.equal(ok.status,200);
+ const c='desk-phone='+setCookie(ok,'desk-phone');assert.equal(roleOfCookie(c),'phone');
+ assert.notEqual(store.getSession().pin,pin,'the pin turned');assert.equal(globalThis.__deskJoin.wrong,0);
+ assert.equal(pj().phones.length,2,'the failed mint left no phantom entry in memory to be written now');
+});
+test('PR11: a listed phone\'s leave that cannot be written answers 500 LEAVE_NOT_SAVED, clears no cookie, and the phone stays; unblocked, it leaves',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs();
+ const unblock=blockWrites(),lines=quietErrors();
+ try{
+  const r=await post({type:'leave'},'phone',a);
+  assert.equal(r.status,500);assert.deepEqual(await r.json(),{error:NOT_SAVED.leave});
+  assert.doesNotMatch(r.headers.get('set-cookie')??'',/desk-phone/,'the cookie is not cleared');
+  assert.equal(roleOfCookie(a),'phone','still a phone in this instance');assert.equal(pj().phones.length,1,'and in the file');
+ }finally{mock.restoreAll();unblock();}
+ oneLine(lines);
+ const ok=await post({type:'leave'},'phone',a);assert.equal(ok.status,200);assert.match(ok.headers.get('set-cookie')??'',/desk-phone=;/);
+ assert.equal(roleOfCookie(a),'guest');assert.deepEqual(pj().phones,[]);
+});
+test('PR11: a TV reset that cannot forget the phones answers 500 RESET_NOT_SAVED and resets nothing; unblocked, it resets',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs(),b=await joinAs();
+ const pin=store.getSession().pin,learner=store.getSession().learner;
+ const unblock=blockWrites(),lines=quietErrors();
+ try{
+  const r=await post({type:'reset'},'tv');
+  assert.equal(r.status,500);assert.deepEqual(await r.json(),{error:NOT_SAVED.reset});
+  assert.equal(store.getSession().pin,pin);assert.equal(store.getSession().learner,learner,'the session is unchanged');
+  assert.equal(roleOfCookie(a),'phone');assert.equal(roleOfCookie(b),'phone');assert.equal(pj().phones.length,2);
+ }finally{mock.restoreAll();unblock();}
+ oneLine(lines);
+ assert.equal((await post({type:'reset'},'tv')).status,200);
+ assert.equal(roleOfCookie(a),'guest');assert.equal(roleOfCookie(b),'guest');assert.deepEqual(pj().phones,[]);
+});
+test('PR11: mintPhone, forgetPhone and forgetAllPhones each throw when the write fails, and leave memory equal to the file',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs(),b=await joinAs();const before=fs.readFileSync(keyFile(),'utf8');
+ const token=(c)=>c.slice('desk-phone='.length);
+ const unblock=blockWrites();
+ try{
+  assert.throws(()=>pairing().mintPhone(token(a)));
+  assert.throws(()=>pairing().forgetPhone(token(a)));
+  assert.throws(()=>pairing().forgetAllPhones());
+  assert.equal(fs.readFileSync(keyFile(),'utf8'),before);
+  assert.equal(roleOfCookie(a),'phone');assert.equal(roleOfCookie(b),'phone','memory still lists both');
+ }finally{unblock();}
+ const c=pairing().mintPhone(token(a));// the old entry is replaced: a was not already dropped by the failed mint
+ assert.equal(roleOfCookie(a),'guest');assert.equal(roleOfCookie('desk-phone='+c),'phone');assert.equal(pj().phones.length,2,'b and the new one: no phantom');
+ assert.equal(roleOfCookie(b),'phone');
+});

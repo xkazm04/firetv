@@ -90,6 +90,8 @@ export function follow(prev: string | null | undefined, s: Seen, at: At): Step {
 export type JoinHow = "typed" | "qr";
 /** The route's own texts (lib/session/pairing.ts WRONG_CODE, TOO_MANY_CODES); that module reads node:crypto, so the phone page cannot import it. */
 const WRONG_CODE = "That code is not on the TV.", TOO_MANY_CODES = "Too many wrong codes. Wait five minutes, then type the code again.";
+const JOIN_DESK_FAULT = "The desk had a problem and did not join this phone. Type the same code again.";
+const LEAVE_DESK_FAULT = "The desk had a problem and did not forget this phone. It is still paired: try again.";
 
 /**
  * What a refused join shows. A quiet join (the QR's) is quiet only about the shake: every refusal says why. status is
@@ -99,8 +101,20 @@ const WRONG_CODE = "That code is not on the TV.", TOO_MANY_CODES = "Too many wro
 export function joinRefusal(r: { status: number | undefined; error: string | undefined; how: JoinHow }): { line: string; shake: boolean; forget: boolean } {
   const shake = r.how === "typed";
   if (r.status === undefined) return { line: "That did not reach the desk.", shake, forget: false };
+  // the desk failed (a write it could not make): not a wrong code, so no shake, and the code is kept
+  if (r.status >= 500) return { line: r.error ?? JOIN_DESK_FAULT, shake: false, forget: false };
   if (r.error === TOO_MANY_CODES) return { line: TOO_MANY_CODES, shake, forget: false };
   const wrong = r.error === undefined || r.error === WRONG_CODE;
   if (wrong) return { line: WRONG_CODE, shake, forget: r.how === "qr" };
   return { line: r.error!, shake, forget: false };
+}
+
+/**
+ * What Forget this desk shows once the desk has answered. The phone is forgotten only for a 2xx answer; no answer or a
+ * refusal leaves it paired and says so (the route's own line when it sent one).
+ */
+export function leaveOutcome(r: { status: number | undefined; error: string | undefined }): { line: string; forgotten: boolean } {
+  if (r.status === undefined) return { line: "That did not reach the desk.", forgotten: false };
+  if (r.status >= 200 && r.status < 300) return { line: "This phone will ask for the code next time.", forgotten: true };
+  return { line: r.error ?? LEAVE_DESK_FAULT, forgotten: false };
 }

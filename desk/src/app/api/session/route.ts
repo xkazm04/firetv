@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, type Event } from "@/lib/session/store";
-import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -23,6 +23,9 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "lesson.watched": "A lesson is marked watched by the desk, as it plays.",
   "pin.turn": "The code turns over when a phone joins with it.",
 };
+
+/** One line for a pairing write that failed, in the shape of pairing.ts's last-seen line; the caller answers 500 and changes nothing. */
+const notSaved = (what: string, e: unknown) => console.error(`desk pairing: ${what} could not be written to pairing.json (${e instanceof Error ? e.message : e}); nothing was changed`);
 
 /**
  * The session as the caller may see it (lib/session/pairing.ts): the TV all of it, a phone all but the pin, a
@@ -48,7 +51,8 @@ export async function POST(req: Request) {
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {
-    forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value);
+    try { forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }
+    catch (err) { notSaved("a leave", err); return NextResponse.json({ error: LEAVE_NOT_SAVED }, { status: 500 }); }
     const res = NextResponse.json(view(getSession(), role === null ? null : role === "tv" ? "tv" : "guest"));
     res.cookies.set(PHONE_COOKIE, "", { ...COOKIE, maxAge: 0 });
     return res;
@@ -64,19 +68,27 @@ export async function POST(req: Request) {
       if (guarded) { joinWrongCode(); await joinDelay(); }
       return NextResponse.json({ error: WRONG_CODE }, { status: 403 });
     }
+    // the right code mints this phone's own token (a phone that joins again has its entry replaced); it is saved before anything else changes
+    let token: string | null = null;
+    if (guarded && e.code !== undefined) {
+      try { token = mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }
+      catch (err) { notSaved("a join", err); return NextResponse.json({ error: JOIN_NOT_SAVED }, { status: 500 }); }
+    }
     joinSucceeded();
     const s = dispatch({ type: "join" });
     if (role === null || role === "tv") return NextResponse.json(view(s, role));
     // a listed phone that sends no code is answered as the phone it is: no new token, no cookie
-    if (e.code === undefined) return NextResponse.json(view(s, "phone"));
+    if (token === null) return NextResponse.json(view(s, "phone"));
     // the code that was just used stops working: a new one is on the TV
     dispatch({ type: "pin.turn" });
     const res = NextResponse.json(view(s, "phone"));
-    // the right code mints this phone's own token (a phone that joins again has its entry replaced)
-    res.cookies.set(PHONE_COOKIE, mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value), COOKIE);
+    res.cookies.set(PHONE_COOKIE, token, COOKIE);
     return res;
   }
   // a reset that got this far is the TV's (or in-process): a new session, and every phone is forgotten
-  if (e?.type === "reset") forgetAllPhones();
+  if (e?.type === "reset") {
+    try { forgetAllPhones(); }
+    catch (err) { notSaved("a reset", err); return NextResponse.json({ error: RESET_NOT_SAVED }, { status: 500 }); }
+  }
   return NextResponse.json(view(dispatch(e), role));
 }

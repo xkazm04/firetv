@@ -31,6 +31,10 @@ export const WRONG_CODE = "That code is not on the TV.";
 export const NO_CODE = "Type the code the TV shows.";
 export const JOIN_FIRST = "Join the desk first: type the code the TV shows.";
 export const TOO_MANY_CODES = "Too many wrong codes. Wait five minutes, then type the code again.";
+/** What the route answers (500) when pairing.json cannot be written: nothing changed, and the phone is told what to do. */
+export const JOIN_NOT_SAVED = "The desk could not save this phone, so nothing changed. Type the same code again.";
+export const LEAVE_NOT_SAVED = "The desk could not forget this phone, so it is still paired. Try again.";
+export const RESET_NOT_SAVED = "The desk could not forget its phones, so nothing was reset. Try again.";
 
 /**
  * The join's brake. A 4-digit pin has only 9000 values, so a refused join waits before it answers, and a desk-wide
@@ -97,19 +101,22 @@ function state() {
   return cached;
 }
 /**
- * Write the key and the phones through a temp file in the same directory and a rename, so a crash leaves the old
- * file or the new one, never half of one. A phone that has lapsed is dropped here. The cache then follows the file.
+ * Write the key and the next list of phones through a temp file in the same directory and a rename, so a crash leaves
+ * the old file or the new one, never half of one. A phone that has lapsed is dropped from what is written. Only when
+ * the write has succeeded does the cache take the list and follow the file; a write that throws leaves the cache as it was.
  */
-function save(st: NonNullable<typeof cached>): void {
-  st.phones = st.phones.filter((p) => Date.now() - p.seen <= LAPSE_MS);
+function commit(st: NonNullable<typeof cached>, next: Phone[]): void {
+  const phones = next.filter((p) => Date.now() - p.seen <= LAPSE_MS);
   const tmp = `${st.file}.${process.pid}.tmp`;
   try {
-    writeFileSync(tmp, JSON.stringify({ key: st.key, phones: st.phones.map(({ fp, joined, seen }) => ({ fp, joined, seen })) }));
+    writeFileSync(tmp, JSON.stringify({ key: st.key, phones: phones.map(({ fp, joined, seen }) => ({ fp, joined, seen })) }));
     renameSync(tmp, st.file);
   } catch (e) { try { unlinkSync(tmp); } catch {} throw e; }
+  st.phones = phones;
   for (const p of st.phones) p.saved = p.seen;
   Object.assign(st, stamp(st.file));
 }
+const save = (st: NonNullable<typeof cached>) => commit(st, st.phones);
 export function tvKey(): string { return state().key; }
 
 const sign = (msg: string) => createHmac("sha256", tvKey()).update(msg).digest("base64url");
@@ -146,26 +153,24 @@ export function isPhone(c: string | undefined): boolean {
  */
 export function mintPhone(old?: string): string {
   const st = state(), token = randomBytes(32).toString("base64url"), now = Date.now(), was = listed(old);
-  st.phones = st.phones.filter((p) => p !== was);
-  st.phones.push({ fp: fingerprint(token).toString("hex"), joined: now, seen: now, saved: now });
+  const next = st.phones.filter((p) => p !== was);
+  next.push({ fp: fingerprint(token).toString("hex"), joined: now, seen: now, saved: now });
   // a ninth phone forgets the one seen least recently (the earliest listed, when two were seen together)
-  while (st.phones.length > CAP) st.phones.splice(st.phones.reduce((at, p, i) => (p.seen < st.phones[at].seen ? i : at), 0), 1);
-  save(st);
+  while (next.length > CAP) next.splice(next.reduce((at, p, i) => (p.seen < next[at].seen ? i : at), 0), 1);
+  commit(st, next);
   return token;
 }
-/** Forget this device: its fingerprint goes, so its cookie is dead wherever it was copied. */
+/** Forget this device: its fingerprint goes, so its cookie is dead wherever it was copied. A write that fails throws and changes nothing. */
 export function forgetPhone(old: string | undefined): void {
   const st = state(), was = listed(old);
   if (!was) return;
-  st.phones = st.phones.filter((p) => p !== was);
-  save(st);
+  commit(st, st.phones.filter((p) => p !== was));
 }
 /** A TV reset: every phone is forgotten. */
 export function forgetAllPhones(): void {
   const st = state();
   if (!st.phones.length) return;
-  st.phones = [];
-  save(st);
+  commit(st, []);
 }
 
 /** Anything with cookies: a NextRequest's, or a plain Request's Cookie header read by cookiesOf(). */

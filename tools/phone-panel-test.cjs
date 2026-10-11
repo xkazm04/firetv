@@ -763,3 +763,32 @@ test('PR10: the Forget link is offered while this device is a phone - on the pan
  assert.match(joined,/Forget this desk/,'a joined phone can reach it');
  assert.doesNotMatch(src,/hasDesk/,'no stored-code flag decides it');
 });
+
+// ---- PR11: a write the desk could not make is a desk fault, not a wrong code ----
+const JOIN_NOT_SAVED='The desk could not save this phone, so nothing changed. Type the same code again.',JOIN_DESK_FAULT='The desk had a problem and did not join this phone. Type the same code again.';
+const LEAVE_NOT_SAVED='The desk could not forget this phone, so it is still paired. Try again.',LEAVE_DESK_FAULT='The desk had a problem and did not forget this phone. It is still paired: try again.';
+const FORGOTTEN='This phone will ask for the code next time.';
+test('PR11: a join answered 500 or above never shakes and never forgets the code; it shows its error, or the desk-fault line',()=>{
+ for(const how of ['typed','qr']){
+  for(const status of [500,502])assert.deepEqual(P().joinRefusal({status,error:undefined,how}),{line:JOIN_DESK_FAULT,shake:false,forget:false},status+how);
+  assert.deepEqual(P().joinRefusal({status:500,error:JOIN_NOT_SAVED,how}),{line:JOIN_NOT_SAVED,shake:false,forget:false},how);
+ }
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
+ assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how:'typed'}),{line:NOREACH,shake:true,forget:false});
+});
+test('PR11: leaveOutcome says forgotten only for a 2xx answer',()=>{
+ assert.deepEqual(P().leaveOutcome({status:200,error:undefined}),{line:FORGOTTEN,forgotten:true});
+ assert.deepEqual(P().leaveOutcome({status:500,error:LEAVE_NOT_SAVED}),{line:LEAVE_NOT_SAVED,forgotten:false});
+ for(const status of [500,502])assert.deepEqual(P().leaveOutcome({status,error:undefined}),{line:LEAVE_DESK_FAULT,forgotten:false},String(status));
+ assert.deepEqual(P().leaveOutcome({status:undefined,error:undefined}),{line:NOREACH,forgotten:false});
+});
+test('PR11: page.tsx forget() waits for the desk: leaveOutcome, reconnect only when forgotten, no empty handler, no forgotten line of its own',()=>{
+ const src=code(PAGE);
+ const at=src.indexOf('const forget =');assert(at>0,'forget() is there');
+ const body=src.slice(at,src.indexOf('\n    };',at));
+ assert.match(body,/leaveOutcome\(/);
+ assert.match(body,/if \(\w+\.forgotten\)\s*reconnect\(\)/,'reconnect() only when forgotten');
+ assert.equal((body.match(/reconnect\(\)/g)??[]).length,1);
+ assert.doesNotMatch(body,/\(\) => \{\}/,'no empty handler');
+ assert.doesNotMatch(src,/This phone will ask for the code next time/,'the line lives in panelFor.ts');
+});
