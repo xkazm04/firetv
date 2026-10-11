@@ -523,3 +523,12 @@ test('MK4: a cz or de learner\'s one-number answer with a decimal comma reads as
  // a comma that is not a lone decimal is never read
  for(const [spec,a] of [[E,'2,718,1'],[E,'1, 2'],[D,'2,5x']])assert.equal(v(spec,a,'cz'),v(spec,a),`${a} is not read`);
 });
+
+test('MK14: a long right answer is taken whole (MB-B32)',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const QUOTIENT='(2x*cos(x^2)*(x^3+1)-3x^2*sin(x^2))/(x^3+1)^2';
+ assert.equal(QUOTIENT.length,45);
+ assert.equal(M.typedAnswersProblem([QUOTIENT,'1'.repeat(120)],2),null,'45 and 120 characters are taken whole');
+ assert.match(M.typedAnswersProblem([QUOTIENT,'1'.repeat(121)],2),/longer than 120 characters/,'121 is refused, never cut');
+ assert.equal(C.checkAnswer({shape:'derivative',f:'sin(x^2)/(x^3+1)'},QUOTIENT).verdict,'right','the quotient-rule derivative is right');
+});

@@ -102,7 +102,8 @@ export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().repl
 
 /** Typed answers (Family W6): the most a set may carry, and the longest one answer may be. Refused past either, never cut. */
 export const TYPED_ANSWERS_MAX = 12;
-export const TYPED_ANSWER_MAX = 40;
+/** 120 holds a quotient-rule derivative; the readers' own limits keep a longer answer unsure, never wrong. */
+export const TYPED_ANSWER_MAX = 120;
 
 /**
  * Are these the typed answers to a set of `n` questions? A plain sentence when not, null when they are: a list of

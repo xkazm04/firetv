@@ -464,7 +464,7 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
   ['answers that are an object',{answers:{0:'1'}},/as a list/],
   ['answers that are all spaces',{answers:Array.from({length:n},(_,i)=>' '.repeat(i%3))},/Every answer is empty. Type at least one and send again./],
   ['an empty list',{answers:[]},/has 9 questions and 0 answers/],
-  ['an answer of 41 characters',{answers:[...A9.slice(0,2),'1'.repeat(41),...A9.slice(3)]},/Answer 3 is longer than 40 characters/],
+  ['an answer of 121 characters',{answers:[...A9.slice(0,2),'1'.repeat(121),...A9.slice(3)]},/Answer 3 is longer than 120 characters/],
   ['a body that is not JSON','{no',/did not get a photo/],
   ['a body that is an array','[1]',/neither a photo/],
   ['an empty image',{image:'',w:100,h:100},/did not get a photo/],
@@ -481,9 +481,9 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
  assert.equal(seenVision.length+seenText.length,0,'a refusal calls no model');
  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0,'and records nothing');
  assert.equal(learners.getLearner(LEARNER).history.length,lines0,'and writes no history line');
- // the cap is inclusive: an answer of exactly 40 characters is taken whole (and is not sure, being no number)
- const r40=await raw({answers:[...A9.slice(0,2),'1'.repeat(40),...A9.slice(3)]});assert.equal(r40.status,200,'40 characters is allowed');
- assert.equal(store.getSession().practice.items[2].studentAnswer.length,40,'kept whole, never cut');
+ // the cap is inclusive: an answer of exactly 120 characters is taken whole (and is not sure, being no number)
+ const r120=await raw({answers:[...A9.slice(0,2),'1'.repeat(120),...A9.slice(3)]});assert.equal(r120.status,200,'120 characters is allowed');
+ assert.equal(store.getSession().practice.items[2].studentAnswer.length,120,'kept whole, never cut');
  // a set already marked is refused before anything; and no set at all is a plain 400
  const again=await raw({answers:typedOf()});assert.equal(again.status,409);assert.match((await again.json()).error,/already marked/);
  store.dispatch({type:'practice.clear'});

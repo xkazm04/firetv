@@ -295,7 +295,7 @@ test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, ty
  assert.match(src,/camWanted = \(screen === "capture" && !readAgain\) \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
  // the box's own cap is the rule's: the one number
  const rules=fs.readFileSync(path.join(SRC,'lib/rules/maths.ts'),'utf8');
- assert.match(rules,/export const TYPED_ANSWER_MAX = 40;/);assert.match(src,/TYPED_ANSWER_MAX/);
+ assert.match(rules,/export const TYPED_ANSWER_MAX = 120;/);assert.match(src,/TYPED_ANSWER_MAX/);
  // phone-sized: the tap targets are at least 44 px, and the size that stops a phone zooming into a field is 16 px
  const css=fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8');
  const rule=(sel)=>{const m=css.match(new RegExp(`(?:^|\\n)${sel.replace(/[.\[\]"=]/g,'\\$&')} \\{([^}]*)\\}`));assert.ok(m,`${sel} is styled`);return m[1];};
