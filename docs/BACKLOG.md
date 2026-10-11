@@ -517,7 +517,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B24** — A "Secure on the desk" tag beside marks lost on that topic, and the statement behind a row is never shown
   - origin: 2026-10-09-maths-l1/L1-radka-41-MB4-7, 2026-10-09-maths-l1/L1-vojtech-18-MB4-6
   - recommendation: build — a topic the learner's record calls secure stays in the list (ruling 2) with the tag "Secure on the desk" beside "N marks lost" (`maths/MathsTV.tsx:712`), which to a parent reads as the desk contradicting itself; and `recovery()` computes `topics[].codes` (`lib/rules/recovery.ts:63`, `:200`) that `paperView` drops and no UI file reads, so the TV never shows which statement led a question to a topic. The tag says what to do with the disagreement ("The desk had this as secure; the paper says otherwise") or is replaced by a plain "worth a recheck"; each topic row names the statement's can-text it came through
-  - status: open
+  - status: built in part: the tag reads Worth a recheck (ccd5660f); the statement behind a row stays open (App Master ruling RP4: it does not fit the side column beside the score and Not on the desk yet cards)
   - ceiling: the desk and the paper can still disagree; the line only says so
 - **MB-B25** — A right answer in the Character's notation ("c = 34 mm", "P(A) = 3/13") is unsure, and the desk says "something different"
   - origin: 2026-10-09-maths-l1/L1-vojtech-18-MB2-2; "Then I write 'c = 34 mm', like our teacher wants, and it tells me 'I got something different'. It was right. That makes me nervous about every other mark." (vojtech-18, 2026-10-09-maths-l1)
