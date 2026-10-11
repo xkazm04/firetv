@@ -85,6 +85,7 @@ export const SUNDAY_NAMES: Readonly<Record<string, string>> = {
   "calc1-log-derivative": "Derivative of the logarithm",
   "calc1-extrema": "Maxima, minima, mean value theorem",
   "calc1-shape": "Second derivative, curve sketching",
+  "calc1-area-so-far": "Integral with a variable limit",
   "calc1-ftc": "The fundamental theorem, net change",
   "calc1-area-average": "Areas between curves, average values",
 };
