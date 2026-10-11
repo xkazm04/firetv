@@ -332,3 +332,23 @@ test('PR2: the TV and in-process joins are never counted toward the budget',asyn
  for(let i=0;i<12;i++){await post({type:'join'},'tv');await post({type:'join'},undefined);}
  assert.equal((await post({type:'join',code:pin},'guest')).status,200);
 });
+
+// ---- PR3: the bad request and the key file ----
+test('PR3: a body that is not JSON, is null, or is empty answers 400 to a guest',async()=>{
+ evening('pair');
+ for(const raw of ['{not json','null','','[1]','"x"']){
+  const r=await sessionRoute().POST(new Request('http://desk/api/session',{method:'POST',headers:{'x-desk-role':'guest','Content-Type':'application/json'},body:raw}));
+  assert.equal(r.status,400,JSON.stringify(raw));assert.deepEqual(await r.json(),{error:'The desk could not read that request.'});
+ }
+});
+test('PR3: an unreadable pairing.json logs one line naming the file and the reason, and a key is minted',()=>{
+ pairing().tvKey();
+ const f=keyFile(),was=fs.readFileSync(f,'utf8');
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ try{
+  fs.writeFileSync(f,'{not json');fs.utimesSync(f,new Date(1),new Date(1));
+  const key=pairing().tvKey();
+  assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/pairing\.json/);assert.match(lines[0],/new key/);assert.match(lines[0],/TV/);
+  assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).key,key);assert(key.length>=16);
+ }finally{mock.restoreAll();fs.writeFileSync(f,was);}
+});

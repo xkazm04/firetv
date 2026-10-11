@@ -33,7 +33,10 @@ export async function GET(req: Request): Promise<Response>;
 export async function GET(req?: Request) { return NextResponse.json(view(getSession(), roleFrom(req))); }
 export async function POST(req: Request) {
   const role = roleFrom(req);
-  const e = (await req.json()) as Event;
+  // a body that is not JSON, or not an object, is a bad request before anything else is asked of it
+  const body: unknown = await req.json().catch(() => null);
+  if (!body || typeof body !== "object" || Array.isArray(body)) return NextResponse.json({ error: "The desk could not read that request." }, { status: 400 });
+  const e = body as Event;
   const refused = e?.type ? SERVER_ONLY[e.type] : undefined;
   if (refused) return NextResponse.json({ error: refused }, { status: 403 });
   // a lesson picked for a hint is the desk's pick; a lesson chosen on the TV (no key) is the screen's own

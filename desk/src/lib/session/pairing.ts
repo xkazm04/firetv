@@ -65,14 +65,17 @@ const FILE = () => path.join(DATA(), "pairing.json");
 let cached: { file: string; mtime: number; key: string } | null = null;
 export function tvKey(): string {
   const file = FILE();
+  let why = "";
   try {
     if (existsSync(file)) {
       const mtime = statSync(file).mtimeMs;
       if (cached && cached.file === file && cached.mtime === mtime) return cached.key;
       const key = JSON.parse(readFileSync(file, "utf8"))?.key;
       if (typeof key === "string" && key.length >= 16) { cached = { file, mtime, key }; return key; }
+      why = "it holds no usable key";
     }
-  } catch {}
+  } catch (e) { why = `it could not be read (${e instanceof Error ? e.message : e})`; }
+  if (why) console.error(`desk pairing: ${file} was not used, ${why}; a new key was minted, so the TV must open the new address printed at start`);
   const key = randomBytes(24).toString("base64url");
   mkdirSync(path.dirname(file), { recursive: true });
   writeFileSync(file, JSON.stringify({ key }));
