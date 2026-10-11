@@ -60,6 +60,7 @@ const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type)
  * an observation for a number outside `judged` is dropped, and the model is never asked for a verdict.
  */
 async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voice: Voice, focus?: { para: number; of: number }) {
+  // with `focus` (one paragraph of a piece) the observations come back unruled: analysePiece rules the whole piece once
   const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
   const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
   const ns = [...judged].sort((a, b) => a - b);
@@ -81,8 +82,8 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
   // any other number, or an `observations` that is not a list at all, is dropped. Which sentences are faulty is
   // decided by code (rules/essay decideVerdicts), which also keeps a fix only on a faulty sentence (cleanFix).
   const seen = (Array.isArray(json?.observations) ? json.observations : []).filter((o) => judged.has(o?.n as number));
-  const verdicts = decideVerdicts(lens.id, sentences, judged, seen);
-  return { verdicts, summary: typeof json?.summary === "string" ? json.summary : "", provider };
+  const verdicts = focus ? [] : decideVerdicts(lens.id, sentences, judged, seen);
+  return { verdicts, seen, summary: typeof json?.summary === "string" ? json.summary : "", provider };
 }
 
 /**
@@ -114,10 +115,13 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
 }
 
 /**
- * A whole piece (v2 E1): one call per paragraph (owner default V2-O5: verdicts stay anchored, a failure loses one
- * paragraph, not the piece), each read with the whole piece as context. `onProgress` gets the reading so far after
- * every paragraph, so the TV's map fills in as they come back. A paragraph that fails is listed in `piece.failed` and
- * the rest still land; only a piece where every paragraph failed fails. Recorded once, as one reading.
+ * A whole piece (v2 E1): one call per paragraph (owner default V2-O5: a failure loses one paragraph, not the piece),
+ * each read with the whole piece as context. `onProgress` gets the reading so far after every paragraph, so the TV's
+ * map fills in as they come back. A paragraph that fails is listed in `piece.failed` and the rest still land; only a
+ * piece where every paragraph failed fails. The piece is ruled ONCE (E2): each paragraph's accepted observations are
+ * kept, and decideVerdicts runs after the last paragraph over every paragraph that came back, with the whole piece as
+ * context. Until then the progress carries no verdicts and its summary names no paragraph to start with. Recorded
+ * once, as one reading.
  */
 export async function analysePiece(raw: string, type: AnalysisType, learnerId: string, age: number | undefined,
   onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string): Promise<EssayAnalysis> {
@@ -125,20 +129,22 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   const of = paragraphCount(sentences);
   const piece: NonNullable<EssayAnalysis["piece"]> = { paragraphs: of, read: [], failed: [], ...(pieceId ? { pieceId } : {}) };
   let verdicts: Verdict[] = [], provider: string | undefined, lastError: unknown;
-  const summaries: string[] = [];
+  const summaries: string[] = [], observed: Record<string, unknown>[] = [], judgedAll = new Set<number>();
   const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: { ...piece, read: [...piece.read], failed: [...piece.failed] } });
+  let ruled = false;
   const pieceSummary = () => {
     const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
     const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
     const head = `${faulty} of ${sentences.length} sentences to fix across ${of} paragraphs.`;
-    return at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
+    return ruled && at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
   };
   for (let para = 0; para < of; para++) {
     const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
     try {
       const r = await judge(sentences, judged, lens, voice, { para, of });
-      verdicts = [...verdicts, ...r.verdicts]; summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
+      observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }
+    if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); ruled = true; }
     onProgress(now());
   }
   if (!piece.read.length) throw lastError ?? new Error("no paragraph of the piece came back");

@@ -334,6 +334,11 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   return out;
 }
 
+/** Whether a paragraph of a piece is drawn as pending on the TV: every paragraph while the piece is still being read, and a paragraph that never came back. */
+export function paragraphPending(piece: { paragraphs: number; read: number[]; failed: number[] } | undefined, para: number): boolean {
+  return !!piece && (piece.read.length + piece.failed.length < piece.paragraphs || !piece.read.includes(para));
+}
+
 /**
  * The other sentences of a paragraph as the first pass saw them, for a rewrite to be judged against (rules, not a model).
  * Under Structure a sentence whose verdict kept a `supports` link (`kept`, the reading's verdicts) comes back with that

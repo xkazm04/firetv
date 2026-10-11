@@ -96,7 +96,9 @@ test('a piece is one reading in the learner\'s record, with the paragraph count'
   assert.equal(h.length, before + 1);
   assert.equal(h.at(-1).detail, '2 of 5 sentences to fix, 3 paragraphs');
 });
-test('essay-master-A case 9: Structure runs per judged paragraph - each paragraph\'s first unsupported claim is faulty, and the record counts both', async () => {
+test('essay-master-A case 9 (changed by E2, council rulings 2026-10-09 section 6): Structure is ruled ONCE over the whole piece - one faulty sentence in the piece, not one per paragraph, and the record counts it', async () => {
+  // E2: this case used to expect a faulty sentence in EACH paragraph (the rule ran per judged paragraph). The piece is now ruled once, after
+  // every paragraph has come back, so "the first unsupported claim is faulty" holds for the piece: 1 faulty, the other bare claims neutral.
   const TWO = 'Schools start too early. Teenagers are tired.\n\nHomework is pointless. Pupils are busy.';
   seen = [];
   answer = async (req) => {
@@ -106,9 +108,56 @@ test('essay-master-A case 9: Structure runs per judged paragraph - each paragrap
   };
   const a = await analysePiece(TWO, 'structure', 'oa-9', undefined);
   assert.equal(seen.length, 2, 'one call per paragraph');
-  assert.deepEqual(a.verdicts.map(v => [v.n, v.verdict]), [[1, 'faulty'], [2, 'neutral'], [3, 'faulty'], [4, 'neutral']], 'exactly one faulty sentence in EACH paragraph');
-  assert.equal(getLearner('oa-9').history.at(-1).detail, '2 of 4 sentences to fix, 2 paragraphs');
-  assert.match(a.summary, /^2 of 4 sentences to fix across 2 paragraphs\./);
+  assert.deepEqual(a.verdicts.map(v => [v.n, v.verdict]), [[1, 'faulty'], [2, 'neutral'], [3, 'neutral'], [4, 'neutral']], 'exactly one faulty sentence in the whole piece');
+  assert.equal(getLearner('oa-9').history.at(-1).detail, '1 of 4 sentences to fix, 2 paragraphs');
+  assert.match(a.summary, /^1 of 4 sentences to fix across 2 paragraphs. Start with paragraph 1: ok/);
+});
+// ---- E2 (council rulings 2026-10-09 section 6): a piece is ruled once, over the observations of all its paragraphs ----
+const SECTION_A = 'Phones should be banned in class. They distract everyone.\n\nA 2020 study found 40% of lessons were interrupted. This shows phones cost time.\n\nIn conclusion, phones should be banned. Teachers agree.';
+const OBS_A = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'evidence', supports: 1 }, { n: 4, job: 'link' }, { n: 5, job: 'link' }, { n: 6, job: 'context' }];
+const observing = (all) => async (req) => {
+  const m = /Judge only paragraph (\d+) of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);
+  return { json: { observations: all.filter(o => o.n >= Number(m[2]) && o.n <= Number(m[3])), summary: `Paragraph ${m[1]} summary.` }, provider: 'test', ms: 1 };
+};
+test('E2: the repro2 section A piece is ruled over all its paragraphs: no sentence faulty, 1, 3, 4 and 5 strong, no paragraph to start with', async () => {
+  seen = []; answer = observing(OBS_A);
+  const a = await analysePiece(SECTION_A, 'structure', 'e2-a', undefined);
+  assert.equal(seen.length, 3, 'the per-paragraph model calls stay');
+  const v = new Map(a.verdicts.map(x => [x.n, x.verdict]));
+  assert.equal(a.verdicts.filter(x => x.verdict === 'faulty').length, 0, 'judged per paragraph, 1 and 5 came back faulty');
+  for (const n of [1, 3, 4, 5]) assert.equal(v.get(n), 'strong', 'sentence ' + n);
+  assert.equal(a.verdicts.find(x => x.n === 3).supports, 1, 'the kept link');
+  assert.doesNotMatch(a.summary, /Start with paragraph/);
+  assert.match(a.summary, /^0 of 6 sentences to fix across 3 paragraphs./);
+});
+test('E2: while the piece is being read the progress carries no verdicts and no "Start with"; the map still fills in; the last report is the ruling', async () => {
+  answer = observing(OBS_A);
+  const progress = []; const a = await analysePiece(SECTION_A, 'structure', 'e2-b', undefined, (x) => progress.push(x));
+  assert.equal(progress.length, 3);
+  assert.deepEqual(progress.map(p => p.piece.read.length), [1, 2, 3], 'the progress still fills in paragraph by paragraph');
+  for (const p of progress.slice(0, -1)) { assert.deepEqual(p.verdicts, [], 'no verdicts yet'); assert.doesNotMatch(p.summary, /Start with/); }
+  assert.deepEqual(progress.at(-1).verdicts, a.verdicts); assert.equal(progress.at(-1).summary, a.summary);
+  // faulty claims on a piece whose first paragraph comes back first would otherwise name a paragraph early
+  answer = perParagraph(faultyAt([1, 3, 5]));
+  const early = []; await analysePiece(PIECE, 'structure', 'e2-b', undefined, (x) => early.push(x));
+  assert(early.slice(0, -1).every(p => p.verdicts.length === 0), 'no early verdicts');
+  assert(early.slice(0, -1).every(p => !/Start with/.test(p.summary)));
+});
+test('E2: a failed paragraph is handled as before: the rest are ruled, and the failed one stays unread', async () => {
+  answer = async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(OBS_A)(req); };
+  const progress = []; const a = await analysePiece(SECTION_A, 'structure', 'e2-c', undefined, (x) => progress.push(x));
+  assert.deepEqual(a.piece.read, [0, 2]); assert.deepEqual(a.piece.failed, [1]);
+  assert.deepEqual(a.verdicts.map(v => v.n).sort((x, y) => x - y), [1, 2, 5, 6], 'sentences of the failed paragraph (3 and 4) get no verdict; 5 is faulty, its evidence was never read');
+  assert.equal(progress.at(-1).verdicts.length, a.verdicts.length, 'the ruling comes after the last paragraph, read or failed');
+});
+test('E2: the TV draws every paragraph of a piece that is still being read as pending (paragraphPending), and EssayTV asks the rule', () => {
+  const P = (read, failed = []) => ({ paragraphs: 3, read, failed });
+  assert.equal(R.paragraphPending(undefined, 0), false, 'a one-paragraph reading has no piece');
+  for (const para of [0, 1, 2]) assert.equal(R.paragraphPending(P([0]), para), true, 'still being read: paragraph ' + para + ' is pending, even the one that came back');
+  assert.equal(R.paragraphPending(P([0, 1], [2]), 0), false, 'the piece is done: a read paragraph is drawn');
+  assert.equal(R.paragraphPending(P([0, 2], [1]), 1), true, 'a failed paragraph stays pending as before');
+  const tv = fs.readFileSync(path.join(root, 'src/essay/EssayTV.tsx'), 'utf8');
+  assert.equal((tv.match(/paragraphPending\(/g) || []).length, 2, 'the map and the rail both use it');
 });
 test('pieceProblem: limits checked in code, in the desk\'s words, never cut', () => {
   assert.equal(R.pieceProblem(PIECE), null);

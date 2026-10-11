@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphPending, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -254,7 +254,7 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
   // a piece (v2 E1): a wider gap between paragraphs, and a paragraph still being read drawn as an outline
   const breaks = a.sentences.filter((sn, i) => i > 0 && sn.para !== a.sentences[i - 1].para).length, PARA_GAP = 16;
   const W = 432, gap = 8, n = a.sentences.length, tot = a.sentences.reduce((x, y) => x + y.words, 0) || 1, per = (W - gap * Math.max(0, n - 1) - (PARA_GAP - gap) * breaks) / tot;
-  const pending = (sn: (typeof a.sentences)[number]) => !!a.piece && !a.piece.read.includes(sn.para ?? 0);
+  const pending = (sn: (typeof a.sentences)[number]) => paragraphPending(a.piece, sn.para ?? 0);
   let x = 0;
   const blocks = a.sentences.map((sn, i) => {
     if (i > 0 && sn.para !== a.sentences[i - 1].para) x += PARA_GAP - gap;
@@ -359,7 +359,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
           const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
-          const opens = j > 0 && x.para !== a.sentences[j - 1].para, wait = !!a.piece && !a.piece.read.includes(x.para ?? 0);
+          const opens = j > 0 && x.para !== a.sentences[j - 1].para, wait = paragraphPending(a.piece, x.para ?? 0);
           return (
             <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0} data-pending={wait}>
               <span className="em-n">{x.n}</span>
