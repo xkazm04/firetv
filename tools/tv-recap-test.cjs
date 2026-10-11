@@ -93,6 +93,23 @@ test('case 2: only the apps on the learner\'s profile, in the desk\'s order; an 
  assert.equal(words('Not tonight').length,2);
 });
 
+// the static words a screen's JSX can show: text nodes with each {...} removed, and a string or template literal that is a whole child with each ${...} removed; '=>' starts no text node
+function staticText(src){
+ const strip=(t)=>{let o;do{o=t;t=t.replace(/\{[^{}]*\}/g,' ');}while(t!==o);return t.replace(/{[^{}]*$/,' ');};
+ return [...src.matchAll(/(?<!=)>([^<>]*)</g)].map((m)=>{
+  const lit=m[1].match(/^\s*\{\s*(?:`([^`]*)`|"([^"]*)"|'([^']*)')\s*\}\s*$/);
+  return lit?(lit[1]??lit[2]??lit[3]).replace(/\$\{[^}]*\}/g,' '):strip(m[1]);
+ }).filter((t)=>/[A-Za-z]/.test(t)&&!/[=;()]/.test(t));
+}
+test('13-i-b: the Recap word check counts static words in text with expressions and in whole-child literals, and not code',()=>{
+ const count=(x)=>words(staticText(x).join(' ')).length;
+ assert.equal(count('<div>and {n} earlier</div>'),2);
+ assert.equal(count('<div>{`and ${n} earlier`}</div>'),2);
+ assert.equal(count('<i>{x}</i>'),0);
+ assert.equal(count('(_, i) => i < t.second'),0);
+ assert.equal(count('<p>Back to the desk</p>'),4);
+});
+
 test('case 3: the recap is a picture - no problem text, question or answer in its rows, and 25 words or fewer on screen',()=>{
  const {recapRows,recapCaption,RECAP_EMPTY}=recap();
  const s=evening();
@@ -105,7 +122,7 @@ test('case 3: the recap is a picture - no problem text, question or answer in it
  assert.ok(sec,'screens.tsx has its Recap section');
  assert.doesNotMatch(sec,/log\.hard/,'the hinted problems are not listed');
  assert.doesNotMatch(sec,/Send to parent/,'no fake send');
- const jsxText=[...sec.matchAll(/>([^<>{}]*)</g)].map((m)=>m[1]).filter((t)=>/[A-Za-z]/.test(t)&&!/[=;()]/.test(t));
+ const jsxText=staticText(sec);
  const captions=[session(),evening(),evening({history:[{at:TODAY(17),kind:'practice',label:'T',detail:'6 of 6 right'}],englishLearning:noEnglish,log:{...evening().log,hard:[],hints:0}}),jakub(),
   evening({history:[...evening().history,{at:TODAY(19),kind:'practice',label:'T',detail:'0 of 12 right'},{at:TODAY(19),kind:'writing',label:'Evidence',detail:'9 of 9 sentences to fix'}]})]
   .map((x)=>recapCaption(recapRows(x,NOW)));
@@ -584,15 +601,15 @@ test('13-i RC4: railOf keeps a reading with something to fix citron and a clean 
  for(const [of,against,arrows,back] of [[5,2,5,2],[12,3,12,3],[14,2,12,2],[14,14,12,12],[30,1,12,1],[30,29,12,11],[20,0,12,0],[0,0,0,0]])
   assert.deepEqual(railOf(of,against),{arrows,back},`railOf(${of},${against})`);
 });
-test('13-i RC3: five readings draw the last three rails and "and 2 earlier"; maths sets do the same',()=>{
+test('13-i RC3: five readings draw the last three rails and "2 earlier"; maths sets do the same',()=>{
  const hist=[10,11,12,13,14].map((h,i)=>WR(h,'Evidence',`${i+1} of 14 sentences to fix`));
  const html=draw(session({history:hist}),NOW);
  assert.equal((html.match(/data-role="recap-reading"/g)||[]).length,3);
  assert.equal((html.match(/data-role="recap-earlier"/g)||[]).length,1);
- assert.match(html,/and 2 earlier/);
+ assert.match(html,/2 earlier/);
  const sets=[10,11,12,13,14].map((h)=>({at:TODAY(h),kind:'practice',label:'Two-step equations',detail:'3 of 6 right'}));
  const m=draw(session({history:sets}),NOW);
  assert.equal((m.match(/data-role="recap-set"/g)||[]).length,3);
- assert.match(m,/and 2 earlier/);
+ assert.match(m,/2 earlier/);
  assert.doesNotMatch(draw(session({history:hist.slice(0,3)}),NOW),/recap-earlier/,'three readings need no earlier line');
 });

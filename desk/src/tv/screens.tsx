@@ -331,7 +331,7 @@ const PEN_ASK = <svg className="rc-ask" viewBox="0 0 46 40" aria-hidden="true"><
 const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
 /** The one small line under a tile that drew its last three: how many came before them. Nothing when none did. */
 function Earlier({ n }: { n: number }) {
-  return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{`and ${n} earlier`}</div> : null;
+  return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{n} earlier</div> : null;
 }
 function RecapMaths({ t }: { t: MathsTile }) {
   const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
