@@ -109,6 +109,25 @@ test('the level ladder is bounded, and the same answers always give the same ban
  assert.equal(P.startBand(null),'A2');assert.equal(P.startBand('A1'),'A1');assert.equal(P.startBand('C1'),'B2');
  assert.equal(P.kindFor('B2',[]),'say');assert.equal(P.kindFor('A2',[]),'choose');
 });
+test('a skip is no evidence, a weak pass is not strong, and two partials end the check (PC1 to PC4)',()=>{
+ const skip=band=>({band,verdict:'fail',kind:'say',response:'',skipped:true});
+ const say=(band,verdict)=>({band,verdict,kind:'say',response:'I go to school by bus every day.'});
+ const floor=P.staircase('A1',[skip('A1'),skip('A1')]);
+ assert.equal(floor.done,false,'two skipped A1 tasks do not floor the check');assert.equal(floor.confidence,'low');assert.equal(floor.band,'A1');assert.equal(floor.next,'A1');
+ assert.equal(P.staircase('B1',[skip('B1')]).next,'A2','a skip still moves the ladder down one band');
+ const weak=P.staircase('B1',[skip('B1'),{band:'A2',verdict:'pass',kind:'choose',response:'Yes please'},{band:'A2',verdict:'pass',kind:'listen',response:' Tuesday '}]);
+ assert.notEqual(weak.confidence,'high');assert.equal(weak.confidence,'low');
+ assert.equal(P.staircase('B1',[say('B1','pass'),say('B1','pass'),say('B2','fail')]).confidence,'high','two say passes under a say fail: high');
+ assert.notEqual(P.staircase('B1',[say('B1','pass'),say('B1','pass'),skip('B2')]).confidence,'high','a skip above is not a ceiling');
+ const two=P.staircase('B1',[say('B1','partial'),say('B1','partial')]);
+ assert.equal(two.done,true);assert.equal(two.band,'B1');assert.equal(two.confidence,'low');
+ assert.equal(P.staircase('B1',[{band:'B1',verdict:'pass',kind:'listen',response:'Tuesday'}]).next,'B1','a one-word listen pass does not climb into a say task');
+ assert.equal(P.staircase('B1',[{band:'B1',verdict:'pass',kind:'listen',response:'On Tuesday morning'}]).next,'B2','a longer listen pass is strong');
+ assert.equal(P.staircase('A2',[{band:'A2',verdict:'pass',kind:'choose',response:'x'}]).next,'B1','a weak pass still climbs when the next task is not a say task');
+ const task={id:'t',band:'A1',kind:'choose',prompt:'p',line:'',options:[],response:'',mode:'text',verdict:'fail',quote:'',note:'n',at:1,skipped:true};
+ const kept=P.cleanPlacement({at:1,band:'A1',selfBand:null,confidence:'low',source:'check',summary:'s',focus:'f',tasks:[task,{...task,id:'u',skipped:false}]});
+ assert.equal(kept.tasks[0].skipped,true);assert.equal('skipped' in kept.tasks[1],false);
+});
 test('the verdict comes from the English the answer shows, not from how well it argues',()=>{
  const say={kind:'say',band:'B2'},listen={kind:'listen',band:'B1',revealed:false};
  assert.equal(P.verdictFor(say,'yes','C1'),'pass');assert.equal(P.verdictFor(say,'yes','B1'),'partial');assert.equal(P.verdictFor(say,'yes','A2'),'fail');

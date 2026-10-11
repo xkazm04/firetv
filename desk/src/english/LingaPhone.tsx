@@ -176,7 +176,7 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>
     <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>{self?"Find my level with Linga":"Find my level again"}</button>
-    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{t.note}</p>)}</div></details>}
+    {placement.tasks.length>0&&!self&&<details><summary>What Linga saw</summary><div className="linga-transcript">{placement.tasks.map(t=><p key={t.id}><b>{t.band} · {KIND_WORD[t.kind]} · {t.skipped?"skipped":VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>{t.response?`“${t.response}”`:"Skipped"}<br/>{t.note}</p>)}</div></details>}
   </>;
 }
 

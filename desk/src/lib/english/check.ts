@@ -120,7 +120,7 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.verdict, note: t.note })), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise.` }, summarySchema);
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note })), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise.` }, summarySchema);
       const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: line(r.json.focus, 120), tasks: k.tasks };
       return {
         apply: now => {
@@ -299,8 +299,8 @@ Then your read of everything so far. selfBand: your best estimate of their band 
   if (action === "check-task") {
     const task = k.task;
     if (!task || input.taskId !== task.id) throw new ConversationError("This task has changed. Answer the one on the TV.", 409);
-    const judged = (verdict: PlacementTask["verdict"], response: string, mode: EvidenceMode, quote: string, note: string): PlacementTask =>
-      ({ id: task.id, band: task.band, kind: task.kind, prompt: task.prompt, line: task.line, options: task.options, response, mode, verdict, quote, note, at: Date.now() });
+    const judged = (verdict: PlacementTask["verdict"], response: string, mode: EvidenceMode, quote: string, note: string, skipped = false): PlacementTask =>
+      ({ id: task.id, band: task.band, kind: task.kind, prompt: task.prompt, line: task.line, options: task.options, response, mode, verdict, quote, note, at: Date.now(), ...(skipped ? { skipped: true } : {}) });
     const settle = async (t: PlacementTask, token: string) => {
       keys.delete(task.id);
       const now = current(k);
@@ -308,7 +308,7 @@ Then your read of everything so far. selfBand: your best estimate of their band 
       commit(next, "linga-check");
       await advance(next, ctx, `${token}:next`);
     };
-    if (input.skip === true) { await settle(judged("fail", "", "text", "", "Skipped. That tells Linga something too."), commandId); return true; }
+    if (input.skip === true) { await settle(judged("fail", "", "text", "", "Skipped. That tells Linga something too.", true), commandId); return true; }
     if (task.kind === "choose") {
       const option = input.option, key = keys.get(task.id);
       if (option !== 0 && option !== 1) throw new ConversationError("Choose one of the two replies.");

@@ -81,28 +81,79 @@ export function verdictFor(task: { kind: TaskKind; band: Band; revealed?: boolea
   return answered === "partly" && verdict === "pass" ? "partial" : verdict;
 }
 
-export interface Mark { band: Band; verdict: TaskVerdict; }
-const count = (marks: Mark[], band: Band, verdict: TaskVerdict) => marks.filter(m => m.band === band && m.verdict === verdict).length;
+/**
+ * What the ladder reads of one task. `kind` and `response` say how strong a pass is (a mark with no kind reads as a
+ * say mark); `skipped` says the learner passed on it. A PlacementTask fits as it stands.
+ */
+export interface Mark { band: Band; verdict: TaskVerdict; kind?: TaskKind; response?: string; skipped?: boolean; }
+/** A skip is no evidence: no count of passes, partials or fails includes it. */
+const counted = (marks: Mark[]) => marks.filter(m => !m.skipped);
+const count = (marks: Mark[], band: Band, verdict: TaskVerdict) => counted(marks).filter(m => m.band === band && m.verdict === verdict).length;
+const oneWord = (response: string | undefined) => (response ?? "").trim().split(/\s+/).filter(Boolean).length === 1;
+/** A weak pass is a choice between two options, or a listening answer of one word; every other pass is strong, a spoken one included. */
+export const weakPass = (m: Mark) => !m.skipped && m.verdict === "pass" && (m.kind === "choose" || (m.kind === "listen" && oneWord(m.response)));
+const strongPasses = (marks: Mark[], band: Band) => counted(marks).filter(m => m.band === band && m.verdict === "pass" && !weakPass(m)).length;
+
+/** What a confidence rests on; restsLine words each. */
+export type Rests = "scattered" | "partials" | "weak" | "skips" | "floor" | "unchecked" | "thin" | "firm";
 
 /**
- * Pass goes up a band, fail goes down, partial stays. The check stops at five tasks, at two failures
- * on A1, or once a band holds two passes with two failures above it (or C2 holds two passes).
- * The band is the highest one with more passes than failures; with none, one below the lowest band tried.
+ * Pass goes up a band, fail goes down, partial stays, a skip goes down (the learner is not asked something harder).
+ * A weak pass climbs one band at most and never into a say task by itself. The check stops at five tasks, at two
+ * failures on A1 (a skip is not one), at two partials on one band, or once a band holds two passes with two failures
+ * above it (or C2 holds two passes). The band is the highest one with more passes than failures; with none, one below
+ * the lowest band tried, or the band of two partials. Confidence is high only with two strong passes at the band and
+ * a real fail or partial above it (or C2); a band resting on weak passes or skips alone reads low.
  */
-export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"] } {
-  const last = marks.at(-1);
-  const next = last ? shift(last.band, last.verdict === "pass" ? 1 : last.verdict === "fail" ? -1 : 0) : start;
+export function staircase(start: Band, marks: Mark[]): { done: boolean; next: Band; band: Band; confidence: Placement["confidence"]; rests: Rests } {
+  const last = marks.at(-1), real = counted(marks);
+  let next = last ? shift(last.band, last.skipped || last.verdict === "fail" ? -1 : last.verdict === "pass" ? 1 : 0) : start;
+  if (last && weakPass(last) && next !== last.band && kindFor(next, marks as Array<{ band: Band; kind: TaskKind }>) === "say") next = last.band;
   const bracketed = BANDS.some((b, i) => count(marks, b, "pass") >= 2 && (i === BANDS.length - 1 || count(marks, BANDS[i + 1], "fail") >= 2));
   const floored = count(marks, "A1", "fail") >= 2;
-  const done = marks.length >= MAX_TASKS || bracketed || floored;
+  const partialBand = [...BANDS].reverse().find(b => count(marks, b, "partial") >= 2);
+  const done = marks.length >= MAX_TASKS || bracketed || floored || !!partialBand;
   const held = BANDS.filter(b => count(marks, b, "pass") > count(marks, b, "fail"));
   const lowest = marks.length ? BANDS[Math.min(...marks.map(m => BANDS.indexOf(m.band)))] : start;
-  const band = held.length ? held[held.length - 1] : shift(lowest, -1);
+  const top = held.length ? held[held.length - 1] : null;
+  const band = partialBand && (!top || BANDS.indexOf(top) < BANDS.indexOf(partialBand)) ? partialBand : top ?? shift(lowest, -1);
   // a pass above a failure means the answers disagree with each other
-  const scattered = marks.some(a => a.verdict === "pass" && marks.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
-  const ceiling = band === "C2" || count(marks, shift(band, 1), "fail") > 0;
-  const confidence = scattered ? "low" : bracketed || floored || (count(marks, band, "pass") >= 2 && ceiling) ? "high" : "medium";
-  return { done, next, band, confidence };
+  const scattered = real.some(a => a.verdict === "pass" && real.some(b => b.verdict === "fail" && BANDS.indexOf(b.band) < BANDS.indexOf(a.band)));
+  const strong = strongPasses(marks, band);
+  const ceiling = band === "C2" || real.some(m => m.verdict !== "pass" && BANDS.indexOf(m.band) > BANDS.indexOf(band));
+  let rests: Rests;
+  if (scattered) rests = "scattered";
+  else if (partialBand) rests = "partials";
+  else if (strong === 0) rests = floored ? "floor" : real.some(m => m.band === band && weakPass(m)) ? "weak" : "skips";
+  else if (strong >= 2 && ceiling) rests = "firm";
+  else rests = strong >= 2 ? "unchecked" : "thin";
+  const confidence = rests === "scattered" || rests === "partials" || rests === "weak" || rests === "skips" ? "low" : rests === "firm" ? "high" : "medium";
+  return { done, next, band, confidence, rests };
+}
+
+/**
+ * The verdict screen's one line on what a not-high read rests on (PC5): plain words, at most sixteen, no number but a
+ * band name. High keeps its own line. Pure: the tasks decide, so a placement stored under older rules reads from
+ * what it holds.
+ */
+export const CONFIDENCE_HIGH = "Your answers agreed with each other.";
+export function restsLine(confidence: Placement["confidence"], tasks: Mark[]): string {
+  if (confidence === "high") return CONFIDENCE_HIGH;
+  const ladder = staircase("A2", tasks), skipped = tasks.some(t => t.skipped);
+  switch (ladder.rests) {
+    case "scattered": return "Your answers disagreed with each other, so this is a careful guess.";
+    case "partials": return "Some answers only partly showed this level.";
+    case "weak": {
+      const atBand = tasks.filter(m => m.band === ladder.band && weakPass(m)), choices = atBand.some(m => m.kind === "choose"), words = atBand.some(m => m.kind === "listen");
+      const what = choices && words ? "answers chosen from two options and one-word answers" : choices ? "answers chosen from two options" : "one-word answers";
+      return `This level rests on ${what}${skipped ? " and skipped tasks" : ""}.`;
+    }
+    case "skips": return "Some tasks were skipped, so this level is a careful guess.";
+    case "floor": return "The tasks were too hard, so this is the lowest level.";
+    case "unchecked": return skipped ? "A skipped task left the next level up unchecked." : "No task at the next level up was answered.";
+    case "thin": return "Only one strong answer showed this level, so it may be a little off.";
+    default: return "Linga is not sure of this level, so try the check again another day.";
+  }
 }
 
 // ---- what survives a trip to disk ----
@@ -118,7 +169,7 @@ function cleanTask(value: unknown): PlacementTask | null {
   if (!text(t.id, 100) || !isBand(t.band) || !KINDS.includes(t.kind as TaskKind) || !VERDICTS.includes(t.verdict as TaskVerdict) || !MODES.includes(t.mode as EvidenceMode)) return null;
   if (!text(t.prompt, 400) || !text(t.line, 400) || !text(t.response, 1200) || !text(t.quote, 400) || !text(t.note, 400) || typeof t.at !== "number") return null;
   const options = Array.isArray(t.options) ? t.options.filter((o): o is string => text(o, 200)).slice(0, 2) : [];
-  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at };
+  return { id: t.id as string, band: t.band, kind: t.kind as TaskKind, prompt: t.prompt as string, line: t.line as string, options, response: t.response as string, mode: t.mode as EvidenceMode, verdict: t.verdict as TaskVerdict, quote: t.quote as string, note: t.note as string, at: t.at, ...(t.skipped === true ? { skipped: true } : {}) };
 }
 export function cleanPlacement(value: unknown): Placement | null {
   const p = obj(value);

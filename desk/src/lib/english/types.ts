@@ -32,6 +32,8 @@ export type TaskVerdict = "pass" | "partial" | "fail";
 export interface PlacementTask {
   id: string; band: Band; kind: TaskKind; prompt: string; line: string; options: string[];
   response: string; mode: EvidenceMode; verdict: TaskVerdict; quote: string; note: string; at: number;
+  /** the learner passed on it: no evidence either way (the verdict stays "fail" for readers older than the flag) */
+  skipped?: boolean;
 }
 export interface Placement {
   at: number; band: Band; selfBand: Band | null;
