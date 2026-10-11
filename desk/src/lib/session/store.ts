@@ -6,6 +6,7 @@
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
 import type { Workroom } from "../twin/workroom";
+import { randomInt } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
 import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
@@ -461,7 +462,7 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
 
 export function fresh(): Session {
   return {
-    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, phoneUrl: phoneUrl(), learner: null,
+    pin: String(randomInt(1000, 10000)), joined: false, phoneUrl: phoneUrl(), learner: null,
     // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },

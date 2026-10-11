@@ -433,3 +433,25 @@ test('PR6: an unread guest stream is closed after 32 unread messages and leaves 
   await busy.cancel();assert.equal(subs.size,before);
  }finally{mock.timers.reset();}
 });
+
+// ---- PR7: the pin is drawn with node:crypto ----
+test('PR7: 2000 fresh() pins are four digits, 1000 to 9999, and the pin line holds no Math.random',()=>{
+ for(let i=0;i<2000;i++){const p=store.fresh().pin;assert.match(p,/^\d{4}$/);assert(+p>=1000&&+p<=9999,p);}
+ const line=fs.readFileSync(src('lib/session/store.ts'),'utf8').split('\n').filter((l)=>/^\s*pin: String\(/.test(l));
+ assert.equal(line.length,1);assert.doesNotMatch(line[0],/Math\.random/);assert.match(line[0],/randomInt\(1000, 10000\)/);
+});
+
+// ---- pinned only (robustness-3 a and d): guards, no fix needed ----
+test('GUARD: 200 wrong-code joins fired at once check at most ten codes and refuse the rest with the cooldown text',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
+ const rs=await Promise.all(Array.from({length:200},()=>post({type:'join',code:bad},'guest')));
+ const texts=await Promise.all(rs.map(async(r)=>{assert.equal(r.status,403);return (await r.json()).error;}));
+ assert.equal(texts.filter((t)=>t==='That code is not on the TV.').length,10);
+ assert.equal(texts.filter((t)=>t===TOO_MANY).length,190);
+});
+test('GUARD: a TV join during the cooldown still joins',async()=>{
+ evening('pair');DESK_JOIN();const bad=wrongOf(store.getSession().pin);
+ for(let i=0;i<10;i++)await post({type:'join',code:bad},'guest');
+ assert.equal((await post({type:'join',code:bad},'guest')).status,403);
+ assert.equal((await post({type:'join'},'tv')).status,200);
+});
