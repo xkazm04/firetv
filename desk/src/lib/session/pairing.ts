@@ -29,6 +29,34 @@ export const COOKIE = { httpOnly: true, sameSite: "lax" as const, path: "/", max
 export const WRONG_CODE = "That code is not on the TV.";
 export const NO_CODE = "Type the code the TV shows.";
 export const JOIN_FIRST = "Join the desk first: type the code the TV shows.";
+export const TOO_MANY_CODES = "Too many wrong codes. Wait five minutes, then type the code again.";
+
+/**
+ * The join's brake. A 4-digit pin has only 9000 values, so a refused join waits before it answers, and a desk-wide
+ * budget of wrong codes ends in a cooldown. The pin never turns over on a lockout (that would lapse every joined
+ * phone). The count lives in memory on the global object, so a dev reload keeps it and a restart clears it.
+ * The TV and an in-process join (role tv, or none) are never delayed or counted by it; the route says who is guarded.
+ */
+const JOIN_DELAY_MS = 1000, JOIN_BUDGET = 10, JOIN_COOLDOWN_MS = 5 * 60_000;
+const joinGuard = () => { const g = globalThis as unknown as { __deskJoin?: { wrong: number; until: number } }; return (g.__deskJoin ??= { wrong: 0, until: 0 }); };
+/** Every refused join waits the same time before it answers. DESK_JOIN_DELAY_MS sets it, read at each call (the tests set 0). */
+export function joinDelay(): Promise<void> {
+  const ms = Number(process.env.DESK_JOIN_DELAY_MS ?? JOIN_DELAY_MS);
+  return ms > 0 ? new Promise((done) => setTimeout(done, ms)) : Promise.resolve();
+}
+/** True while the cooldown runs; when it has ended the count starts again from zero. */
+export function joinCooling(): boolean {
+  const g = joinGuard();
+  if (g.until && Date.now() >= g.until) { g.until = 0; g.wrong = 0; }
+  return g.until > 0;
+}
+/** A join refused for a wrong code: the tenth starts the cooldown. */
+export function joinWrongCode(): void {
+  const g = joinGuard();
+  if (++g.wrong >= JOIN_BUDGET) { g.until = Date.now() + JOIN_COOLDOWN_MS; g.wrong = 0; }
+}
+/** A join that succeeded: the count is zero. */
+export function joinSucceeded(): void { joinGuard().wrong = 0; }
 
 const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const FILE = () => path.join(DATA(), "pairing.json");

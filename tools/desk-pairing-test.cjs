@@ -286,3 +286,49 @@ test('PR1: tools/desk-dev-https.cjs --address answers the same table',()=>{
   assert.equal(r.stdout.trim(),want,name+' '+r.stderr);
  }
 });
+
+// ---- PR2: the code ----
+const DESK_JOIN=()=>{globalThis.__deskJoin=undefined;};
+const wrongOf=(pin)=>pin==='1000'?'1001':'1000';
+const TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
+process.env.DESK_JOIN_DELAY_MS='0';
+test('PR2: a wrong code is refused after the delay, and the right code still joins',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin;
+ process.env.DESK_JOIN_DELAY_MS='150';
+ try{
+  for(const body of [{type:'join',code:wrongOf(pin)},{type:'join'}]){
+   const t0=Date.now();const r=await post(body,'guest');const ms=Date.now()-t0;
+   assert.equal(r.status,403);assert(ms>=120,`refused after ${ms} ms, not at once`);
+  }
+  const t0=Date.now();const r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert(Date.now()-t0<120,'the right code is not delayed');
+ }finally{process.env.DESK_JOIN_DELAY_MS='0';}
+});
+test('PR2: 10 wrong codes start a five-minute cooldown; the right code is refused in it and joins after it',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
+ mock.timers.enable({apis:['Date'],now:1_000_000});
+ try{
+  for(let i=0;i<10;i++){const r=await post({type:'join',code:bad},'guest');assert.equal(r.status,403);assert.equal((await r.json()).error,'That code is not on the TV.',`refusal ${i+1} is a wrong code`);}
+  assert.equal(pairing().TOO_MANY_CODES,TOO_MANY);
+  let r=await post({type:'join',code:pin},'guest');assert.equal(r.status,403);assert.deepEqual(await r.json(),{error:TOO_MANY});
+  assert.equal(store.getSession().joined,false);
+  mock.timers.tick(4*60_000);r=await post({type:'join',code:pin},'guest');assert.equal(r.status,403,'still cooling at four minutes');
+  mock.timers.tick(61_000);r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200,'after the cooldown the right code joins');
+  for(let i=0;i<9;i++)await post({type:'join',code:bad},'guest');
+  r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200,'a success set the count to zero: nine more wrong codes do not lock');
+ }finally{mock.timers.reset();}
+});
+test('PR2: a lockout leaves the pin as it was and a phone that joined before it is still a phone; the TV and an in-process join are not held',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
+ const first=await post({type:'join',code:pin},'guest');const cookie='desk-phone='+setCookie(first,'desk-phone');
+ for(let i=0;i<10;i++)await post({type:'join',code:bad},'guest');
+ assert.equal((await post({type:'join',code:pin},'guest')).status,403,'locked');
+ assert.equal(store.getSession().pin,pin,'the pin is unchanged');
+ assert.equal(pairing().roleOf(pairing().cookiesOf(new Request('http://desk/',{headers:{cookie}}))),'phone','the earlier phone is still a phone');
+ assert.equal((await post({type:'join'},'tv')).status,200,'the TV joins during the cooldown');
+ assert.equal((await post({type:'join'},undefined)).status,200,'an in-process join joins during the cooldown');
+});
+test('PR2: the TV and in-process joins are never counted toward the budget',async()=>{
+ evening('pair');DESK_JOIN();const pin=store.getSession().pin;
+ for(let i=0;i<12;i++){await post({type:'join'},'tv');await post({type:'join'},undefined);}
+ assert.equal((await post({type:'join',code:pin},'guest')).status,200);
+});

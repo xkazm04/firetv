@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, type Event } from "@/lib/session/store";
-import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, WRONG_CODE, guestMay, phoneToken, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, phoneToken, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -51,8 +51,15 @@ export async function POST(req: Request) {
   if (e?.type === "join") {
     // the code is checked here, against the pin on the session; only the TV (and an in-process caller) joins without one
     const pin = getSession().pin;
-    if (e.code === undefined && role !== null && role !== "tv" && role !== "phone") return NextResponse.json({ error: NO_CODE }, { status: 403 });
-    if (e.code !== undefined && String(e.code) !== pin) return NextResponse.json({ error: WRONG_CODE }, { status: 403 });
+    // every refusal waits the same delay; a wrong code counts toward the desk's budget (pairing.ts); the TV and an in-process join are never held
+    const guarded = role !== null && role !== "tv";
+    if (e.code === undefined && role !== null && role !== "tv" && role !== "phone") { await joinDelay(); return NextResponse.json({ error: NO_CODE }, { status: 403 }); }
+    if (e.code !== undefined && guarded && joinCooling()) { await joinDelay(); return NextResponse.json({ error: TOO_MANY_CODES }, { status: 403 }); }
+    if (e.code !== undefined && String(e.code) !== pin) {
+      if (guarded) { joinWrongCode(); await joinDelay(); }
+      return NextResponse.json({ error: WRONG_CODE }, { status: 403 });
+    }
+    joinSucceeded();
     const s = dispatch({ type: "join" });
     if (role === null || role === "tv") return NextResponse.json(view(s, role));
     const res = NextResponse.json(view(s, "phone"));
