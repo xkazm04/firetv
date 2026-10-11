@@ -464,7 +464,7 @@ test('S77: the phone\'s Recap is the TV\'s tiles in words - a line per app, the 
   {at:TODAY(18),kind:'homework',label:'Sheet two',detail:'1 problem read'},{at:TODAY(18),kind:'homework',label:'Sheet three',detail:'2 problems read'}],
   log:{...evening().log,hints:1}});
  assert.deepEqual(lines(s),[
-  'Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint',
+  'Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint, 1 needed a second',
   'Linga - two conversations, 11 replies',
   'Essay Master - one reading (Argument): 2 of 5 sentences to fix']);
  assert.deepEqual(lines(jakub()),['Linga - not tonight','Essay Master - not tonight'],'an app with nothing tonight says so');
@@ -552,4 +552,29 @@ test('S78: a task id is unique across everything the desk holds - many adds in o
   const y=reduce(session({tasks:[{id:'t'+T,sub:'maths',name:'old',min:5,done:false},{id:'t'+T+'-1',sub:'maths',name:'old2',min:5,done:false}]}),{type:'task.add',name:'new',sub:'maths',min:10});
   assert.equal(new Set(y.tasks.map((t)=>t.id)).size,3,'a fresh id beside two held ones');
  }finally{Date.now=real;}
+});
+
+const WR=(h,label,detail)=>({at:TODAY(h),kind:'writing',label,detail});
+const phoneEssay=(history)=>{const {recapRows,recapLine}=recap();return recapLine(recapRows(session({history}),NOW)[2]);};
+test('13-i RC1: the essay phone line never sums counts across readings; each count is one reading, in the order read',()=>{
+ assert.equal(phoneEssay([WR(19,'Argument','2 of 5 sentences to fix')]),'Essay Master - one reading (Argument): 2 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Evidence','3 of 5 sentences to fix'),WR(18,'Evidence','1 of 5 sentences to fix')]),'Essay Master - two readings (Evidence): 3 of 5, then 1 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Structure','2 of 5 sentences to fix'),WR(18,'Evidence','1 of 4 sentences to fix')]),'Essay Master - two readings: Structure 2 of 5, then Evidence 1 of 4 sentences to fix');
+ const five=[3,2,1].length&&[WR(10,'Evidence','4 of 5 sentences to fix'),WR(11,'Evidence','4 of 5 sentences to fix'),WR(12,'Evidence','3 of 5 sentences to fix'),WR(13,'Evidence','2 of 5 sentences to fix'),WR(14,'Evidence','1 of 5 sentences to fix')];
+ assert.equal(phoneEssay(five),'Essay Master - five readings (Evidence), the last three: 3 of 5, then 2 of 5, then 1 of 5 sentences to fix');
+ const mixed=[WR(10,'Structure','4 of 5 sentences to fix'),WR(11,'Evidence','4 of 5 sentences to fix'),WR(12,'Structure','2 of 5 sentences to fix'),WR(13,'Evidence','3 of 4 sentences to fix'),WR(14,'Structure','1 of 5 sentences to fix')];
+ assert.equal(phoneEssay(mixed),'Essay Master - five readings, the last three: Structure 2 of 5, then Evidence 3 of 4, then Structure 1 of 5 sentences to fix');
+ assert.equal(phoneEssay([WR(17,'Evidence','3 of 5 sentences to fix, 1 fixed'),WR(18,'Evidence','1 of 5 sentences to fix, 2 fixed')]),'Essay Master - two readings (Evidence): 3 of 5, then 1 of 5 sentences to fix, 3 fixed tonight','fixed stays summed over tonight');
+ // the recap lists lenses in history order, the order read
+ assert.match(phoneEssay([WR(17,'Structure','2 of 5 sentences to fix'),WR(18,'Argument','1 of 5 sentences to fix')]),/Structure 2 of 5, then Argument 1 of 5/);
+});
+test('13-i RC2: the caption counts only the last reading, so one paragraph read twice is not counted twice',()=>{
+ const {recapRows,recapCaption}=recap();
+ const cap=(h)=>recapCaption(recapRows(session({practice:null,englishLearning:noEnglish,log:{started:null,minutes:0,problems:[],hard:[],hints:0},history:h}),NOW));
+ assert.equal(cap([WR(18,'Evidence','3 of 5 sentences to fix'),WR(19,'Evidence','1 of 5 sentences to fix')]),'Good evening\'s work - one to look at together.');
+});
+test('13-i RC7: the phone\'s maths line says how many hints needed a second; no second, no clause',()=>{
+ const {recapRows,recapLine}=recap(),line=(log)=>recapLine(recapRows(session({log:{started:null,minutes:0,problems:['k'],hard:[],hints:0,...log}}),NOW)[0]);
+ assert.equal(line({hints:3,hard:['a']}),'Math Buddy - 3 hints, 1 needed a second');
+ assert.equal(line({hints:1}),'Math Buddy - 1 hint');
 });

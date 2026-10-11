@@ -70,6 +70,8 @@ export function recapRows(s: Session, now: number): RecapTile[] {
   });
 }
 
+/** How many readings or sets the TV tile draws, and the phone line lists. */
+export const RECAP_READINGS = 3;
 const NUMBER = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 /**
  * How many things tonight came back to look at together: the sets' slips and the items the desk was not sure of
@@ -79,7 +81,11 @@ export function toLook(tiles: RecapTile[]): number {
   let n = 0;
   for (const t of tiles) {
     if (t.app === "maths") for (const x of t.sets) n += x.of - x.right;
-    if (t.app === "essay") for (const x of t.readings) n += x.against;
+    // Only the last reading's sentences to fix count: it is the last writing line of the history, which a rewrite
+    // restates in place, so one paragraph read twice is not counted twice. Ceiling, accepted: when two different
+    // paragraphs both have sentences to fix, only the last counts, because the history line holds no text that
+    // could tell a re-read from a new paragraph. The tile and the phone line still show every listed reading.
+    if (t.app === "essay" && t.readings.length) n += t.readings[t.readings.length - 1].against;
   }
   return n;
 }
@@ -124,17 +130,21 @@ export function recapLine(t: RecapTile): string {
       parts.push(`${times(t.sets.length, "set")}: ${said.join(", ")}`);
     }
     if (t.pages) parts.push(counted(t.pages, "page"));
-    if (t.hints) parts.push(counted(t.hints, "hint"));
+    if (t.hints) parts.push(t.second > 0 ? `${counted(t.hints, "hint")}, ${t.second} needed a second` : counted(t.hints, "hint"));
     return `${name} - ${parts.join("; ")}`;
   }
   if (t.app === "english") {
     const turns = t.talks.reduce((a, x) => a + x, 0);
     return `${name} - ${times(t.talks.length, "conversation")}, ${counted(turns, "reply", "replies")}`;
   }
-  const lenses = Array.from(new Set(t.readings.map((x) => x.lens)));
-  const against = t.readings.reduce((a, x) => a + x.against, 0), of = t.readings.reduce((a, x) => a + x.of, 0);
+  // Each count belongs to one reading, given in the order read; counts are never summed across readings. Past three
+  // readings only the last three are listed, the same three the TV tile draws.
+  const lenses = Array.from(new Set(t.readings.map((x) => x.lens))), one = lenses.length === 1;
+  const last = t.readings.slice(-RECAP_READINGS), more = t.readings.length > last.length;
+  const counts = last.map((x) => `${one ? "" : `${x.lens} `}${x.against} of ${x.of}`).join(", then ");
   const fixed = t.readings.reduce((a, x) => a + (x.fixed ?? 0), 0);
-  return `${name} - ${times(t.readings.length, "reading")}${lenses.length ? ` (${lenses.join(", ")})` : ""}: ${against} of ${counted(of, "sentence")} to fix${fixed ? `, ${fixed} fixed tonight` : ""}`;
+  const head = `${times(t.readings.length, "reading")}${one ? ` (${lenses[0]})` : ""}${more ? `, the last ${NUMBER[last.length]}` : ""}`;
+  return `${name} - ${head}: ${counts} ${last.length === 1 && last[0].of === 1 ? "sentence" : "sentences"} to fix${fixed ? `, ${fixed} fixed tonight` : ""}`;
 }
 
 /**
