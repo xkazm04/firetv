@@ -32,7 +32,7 @@ export function splitSentences(text: string): Sentence[] {
   return out;
 }
 function splitParagraph(text: string, before: number): Sentence[] {
-  const pieces = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?]["'”’)\]]?)\s+(?=[A-Z"“])/).filter(Boolean);
+  const pieces = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?]["'”’)\]]?)\s+(?=[\p{Lu}"“„])/u).filter(Boolean);
   const parts: string[] = [];
   for (const p of pieces) {
     if (parts.length && ABBREVIATION.test(parts[parts.length - 1])) parts[parts.length - 1] += " " + p;
@@ -441,7 +441,7 @@ export function planFill(plan: Plan, i: number, text: string): { ok: true; plan:
   const long = essayTooLong(t); if (long) return { ok: false, error: long };
   const one = splitSentences(t);
   if (one.length !== 1) return { ok: false, error: `That is ${one.length} sentences. Send slot ${i + 1} as one sentence.` };
-  if (!/^["“]?[A-Z]/.test(t) || !/[.!?]["'”’)]?$/.test(t)) return { ok: false, error: "Start it with a capital and end it with a full stop." };
+  if (!/^["“„]?\p{Lu}/u.test(t) || !/[.!?]["'”’)]?$/.test(t)) return { ok: false, error: "Start it with a capital and end it with a full stop." };
   return { ok: true, plan: { ...plan, slots: plan.slots.map((x, k) => (k === i ? t : x)) } };
 }
 

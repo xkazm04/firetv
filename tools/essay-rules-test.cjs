@@ -1114,3 +1114,19 @@ test('E1-b: reviseSentence rules a Structure rewrite against the links the first
  assert.deepEqual(schema.supports,{type:'integer'},'the Structure observation can carry supports');
  assert.match(seen.at(-1).system,/add supports: the number of the claim it backs/);
 });
+
+// ---- EM-B21 (council rulings 2026-10-09 section 6, E3): a sentence may open with any capital, not only A-Z ----
+test('EM-B21: splitSentences splits before a capital outside A-Z and before an opening low quote; English text is unchanged',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert.equal(R.splitSentences('Školy začínají brzy. Žáci jsou unavení. Émile Zola disagreed. So we wait.').length,4,'2 on the base');
+ assert.equal(R.splitSentences('Many critics praise the novel. Émile Zola disagreed with them.').length,2);
+ assert.equal(R.splitSentences('Řekl to dnes. „Ne,“ odpověděla.').length,2,'a low opening quote begins a sentence');
+ assert.equal(R.splitSentences('It rained. then we left. Émile agreed.').length,2,'a lower-case opener still does not split');
+ assert.equal(R.splitSentences('Dr. Šimek agreed.').length,1,'the abbreviation join is unchanged');
+});
+test('EM-B21: planFill accepts an opening capital outside A-Z and still refuses a lower-case opening',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const plan={lens:'structure',slots:['','','']};
+ for(const t of ['Školy by neměly telefony úplně zakazovat.','Žáci se tak učí sebekázni.','Česká školní inspekce v roce 2023 uvedla, že 45 % škol zakazuje telefony.','„Ne,“ řekla učitelka.'])assert.equal(R.planFill(plan,0,t).ok,true,t);
+ const low=R.planFill(plan,0,'školy by neměly telefony zakazovat.');assert.equal(low.ok,false);assert.match(low.error,/Start it with a capital/);
+});
