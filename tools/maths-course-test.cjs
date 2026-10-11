@@ -110,7 +110,7 @@ test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure 
  assert.deepEqual(teach(CALC_P,secure(CALC.slice(0,7).map((t)=>t.id))),to(7),'the first seven latched: the eighth');
  assert.equal(CALC[7].id,'calc1-rules');
  assert.deepEqual(teach(CALC_P,secure(CALC.map((t)=>t.id))),to(0),'every topic secure: back to the first');
- assert.deepEqual(teach(SCHOOL_P,{}),to(0),'the school path with empty skills still sees focus 0');
+ assert.deepEqual(teach({...SCHOOL_P,age:12},{}),to(0),'the school path with empty skills still sees focus 0');
  assert.deepEqual(teach(SCHOOL_P,secure([SYLLABUS[0].id])),to(1),'the school path has a frontier too');
  // a record not latched is not secure; a record on the other path is not read
  const notLatched={[CALC[0].id]:{...secure([CALC[0].id])[CALC[0].id],secure:false}};

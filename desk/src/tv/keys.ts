@@ -20,7 +20,7 @@ import { continueCard, likeUnit, tonightsSheet } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
-import { prepareStops } from "@/tv/prepareRows";
+import { pastPathEnd, prepareStops } from "@/tv/prepareRows";
 import { paperStopCount, paperView } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
@@ -204,7 +204,15 @@ export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly P
 export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
   const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
   const next = done.length ? frontierOn(path, done) : undefined;
-  return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
+  if (next) return Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id));
+  // a learner past the path's end with nothing secure opens on its last topic, not the first step
+  const last = done.length ? null : pastPathEnd(s);
+  return last ? Math.max(0, topicsOf(path).findIndex((t) => t.id === last.id)) : 0;
+}
+/** Where Get ready for school opens: the first unit, or for a learner past the path's end the stop of its last topic. */
+function prepareDoorFocus(s: Pick<Session, "profiles" | "learner">): number {
+  const last = pastPathEnd(s);
+  return last ? Math.max(0, prepareStops(s).findIndex((u) => u.id === last.id)) : 0;
 }
 /** The walk has one action, on its last item: back to the sheet. */
 export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
@@ -325,7 +333,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (at === "continue" && continueCard(s)) openWaiting(s, "maths", o);
     else if (at === "teach") o.nav("topics", topicsFocus(s));
     // Get ready for school opens on its list, the question closed
-    else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", 0); }
+    else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", prepareDoorFocus(s)); }
     // tonight's sheet opens; anything else (nothing, an older sheet, a failed read) asks for tonight's photo
     else { const sheet = tonightsSheet(s);
       if (sheet) { o.ev({ type: "page.select", pageIx: sheet.ix }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }

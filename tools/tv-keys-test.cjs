@@ -36,8 +36,10 @@ test('case 1: Tonight has one stop list - continue card, homework, teach, and (a
  const r=tvKey(withCont,'right',LOCAL);
  assert.ok(r.events.every(e=>e.type!=='focus'||e.focus<=3),'Right on the last stop never moves past it');
  assert.equal(focusAfter(withCont,r),3);
- assert.deepEqual(tvKey({...withCont,focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
- assert.deepEqual(tvKey(session({screen:'tonight',focus:1}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
+ // a learner inside the path (12): Ema is 16, past the path's end, whose Topics open on the last topic (MB-B19)
+ const young=(p={})=>session({profiles:[{...session().profiles[0],age:12}],...p});
+ assert.deepEqual(tvKey({...young({screen:'tonight',pages:[page()]}),focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
+ assert.deepEqual(tvKey(young({screen:'tonight',focus:1}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
  assert.deepEqual(tvKey(session({screen:'tonight',pages:[page()],focus:0}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0},{type:'nav',screen:'page',focus:0}],'the continue card opens the sheet it names');
  const tonight=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8').split('export function Tonight')[1].split('\nexport function')[0];
  assert.match(tonight,/tonightStops\(s\)/,'Tonight renders from the same stop list');
@@ -767,4 +769,51 @@ test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not 
  assert.deepEqual(tvKey(f(5),'select',LOCAL).events,[{type:'status',text:'Paragraph 2 did not come back. Send it again from the phone.'}],'an unruled sentence');
  assert.deepEqual(tvKey(f(2),'select',LOCAL).events,[{type:'status',text:rewriteStatus(2)}],'a ruled sentence');
  assert.equal(at(f(2),tvKey(essay({screen:'forensic',focus:2,essay:r,essayAt:5}),'select',LOCAL)),6,'Next sentence still walks every sentence, unruled ones too');
+});
+
+// ---- MB-B19: a learner past the end of the school path
+const learnerOf=(system,age,extra={})=>session({profiles:[{id:'ema',name:'Ema',type:'high-school',age,system,modules:['maths'],...extra}]});
+const secureRec=(topic)=>({topic,seen:6,right:6,estimate:0.9,secure:true,lastSeen:1,slips:[]});
+
+test('MB-B19 1: past the path\'s end with nothing secure, Topics and Get ready for school open on the last topic, and one line says the path ends',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {topicsOf}=require(path.join(root,'src/lib/library/paths.ts'));
+ for(const [system,age] of [['cz',18],['uk',17]]){
+  const s=learnerOf(system,age),topics=topicsOf('school'),last=topics[topics.length-1];
+  assert.equal(topicsFocus(s),topics.length-1,`${system} ${age}: Topics`);
+  const ix=PR.prepareStops(s).findIndex((u)=>u.id===last.id);
+  assert.ok(ix>0);
+  const open=tvKey({...s,screen:'tonight',focus:2},'select',LOCAL);
+  assert.deepEqual(open.events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:ix}],`${system} ${age}: the door`);
+  const line=PR.pathEndsLine(s);
+  assert.equal(line,`This path ends at ${PR.SYS_WORD[system](last.year)}; your year is past it.`);
+  assert.ok(line.split(/\s+/).length<=25);assert.doesNotMatch(line,/2014/);
+  assert.match(line,/^[A-Z][^!?]*\.$/,'one sentence');
+ }
+ assert.match(PR.pathEndsLine(learnerOf('cz',18)),/9\. ročník/);
+});
+
+test('MB-B19 2: past the end with one topic secure, Topics follow the frontier and Prepare still opens on the last topic',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {topicsOf,frontierOn}=require(path.join(root,'src/lib/library/paths.ts'));
+ const topics=topicsOf('school'),first=topics[0].id;
+ const s=session({...learnerOf('uk',17),skills:{[first]:secureRec(first)}});
+ const next=frontierOn('school',[first]);
+ assert.equal(topicsFocus(s),topics.findIndex((t)=>t.id===next.id));
+ assert.notEqual(topicsFocus(s),topics.length-1);
+ const ix=PR.prepareStops(s).findIndex((u)=>u.id===topics[topics.length-1].id);
+ assert.deepEqual(tvKey({...s,screen:'tonight',focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:ix}]);
+});
+
+test('MB-B19 3: a younger learner, one with no age and a calc1 learner keep focus 0 and have no line',()=>{
+ const {topicsFocus,tvKey}=keys();
+ const PR=require(path.join(root,'src/tv/prepareRows.ts'));
+ const noAge=session({profiles:[{id:'ema',name:'Ema',type:'high-school',system:'uk',modules:['maths']}]});
+ for(const [name,s] of [['uk 12',learnerOf('uk',12)],['no age',noAge],['calc1',calcW8()]]){
+  assert.equal(topicsFocus(s),0,name);assert.equal(PR.pathEndsLine(s),null,name);assert.equal(PR.pastPathEnd(s),null,name);
+ }
+ for(const s of [learnerOf('uk',12),noAge])
+  assert.deepEqual(tvKey({...s,screen:'tonight',focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:0}]);
 });

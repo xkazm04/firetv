@@ -9,7 +9,8 @@
  * Pure: types, and the path data (client-safe library data), are all it imports - never the store or the filesystem.
  */
 import type { SchoolSystem, Session } from "@/lib/session/store";
-import { PATHS, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { PATHS, expectedOn, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { systemOf } from "@/tv/profileRows";
 
 /** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
 export const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
@@ -71,6 +72,28 @@ export function choiceLine(cell: number): string {
 
 /** Tonight's caption on the Get ready for school door. */
 export const PREPARE_DOOR = "Pick what school is teaching next and practise it before the lesson.";
+
+/**
+ * The path's last topic when the learner is past the end of the school path, else null: on the school path, with an age
+ * on the profile (the Topics ruler's test), and a school year (expectedOn) that equals the path's length.
+ */
+export function pastPathEnd(s: Pick<Session, "profiles" | "learner">): PathTopic | null {
+  const path = learnerPath(s);
+  if (!PATHS[path].school) return null;
+  const me = s.profiles?.find((p) => p.id === s.learner?.id);
+  const age = me && me.type !== "other" ? me.age : undefined;
+  if (age === undefined) return null;
+  const topics = topicsOf(path);
+  return topics.length && expectedOn(path, systemOf(me), age) === topics.length ? topics[topics.length - 1] : null;
+}
+
+/** The line that says the path ends, for a learner past its end; null for everyone else. */
+export function pathEndsLine(s: Pick<Session, "profiles" | "learner">): string | null {
+  const last = pastPathEnd(s);
+  if (!last?.year) return null;
+  const me = s.profiles?.find((p) => p.id === s.learner?.id);
+  return `This path ends at ${SYS_WORD[systemOf(me)](last.year)}; your year is past it.`;
+}
 
 // ---------------------------------------------------------------- the scroller: cards under the lamp
 

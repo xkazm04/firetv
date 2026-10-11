@@ -24,7 +24,7 @@ import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
-import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, prepareGroups, prepareModel } from "@/tv/prepareRows";
+import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
@@ -428,7 +428,7 @@ const DOORS: Array<{ id: Door; k: string; t: string }> = [
 ];
 function doorCaption(s: Session, door: Door): string {
   if (door === "teach") return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
-  if (door === "prepare") return PREPARE_DOOR;
+  if (door === "prepare") return pathEndsLine(s) ?? PREPARE_DOOR;
   if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
   if (tonightsSheet(s)) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
   return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
@@ -631,6 +631,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
   const stops = groups.flatMap((g) => g.units);
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
+  const past = !!pastPathEnd(s), ends = pathEndsLine(s);
   const busy = asked || running(s, "practice") || running(s, "teach");
   const at = stopAt(stops, focus);
   const ix = at ? stops.indexOf(at) : 0;
@@ -657,6 +658,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
       </> : <>
         <div className="mb-kick">{at.strand} · six questions a set</div>
         <p>{at.blurb}</p>
+        {ends && <p data-role="maths-prepare-ends">{ends}</p>}
       </>}
     </div>
     <div className="mb-prep" data-role="maths-prepare" data-asking={asking || undefined}>
@@ -668,7 +670,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
             return (
               <div key={c.id} className="mb-unit2" data-focused={(!asking && i === ix) || undefined} data-held={(asking && i === ix) || undefined} style={{ left: c.x, width: c.w }}>
                 <div className="nm">{u.name}</div>
-                {u.year && <div className="yr">{SYS_WORD[sys](u.year)}</div>}
+                {u.year && !past && <div className="yr">{SYS_WORD[sys](u.year)}</div>}
               </div>
             );
           })}

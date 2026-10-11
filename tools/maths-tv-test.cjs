@@ -1121,3 +1121,15 @@ test('heard 1: the drawn card of an item the desk settled from a spoken value op
   assert.match(card,/The desk heard 4\./,'the drawn card names the value the desk took');
  }finally{reg.resetProviders();}
 });
+
+test('MB-B19 4: past the path\'s end the Prepare cards print no year and the lede carries the path-ends line; a younger learner is unchanged',()=>{
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const mk=(age)=>({...secondSession(null,'prepare',{focus:0,practice:null}),profiles:[{id:'ema',name:'Ema',type:'high-school',age,system:'uk',modules:['maths']}]});
+ const draw=(s)=>renderToStaticMarkup(createElement(M.Prepare,{s,focus:s.focus,busy:false,ask:null}));
+ const old=draw(mk(17)),young=draw(mk(12));
+ assert.doesNotMatch(old,/class="yr"/);assert.match(old,/data-role="maths-prepare-ends"[^>]*>This path ends at Year \d+; your year is past it\.</);
+ assert.match(young,/class="yr">Year \d+</);assert.doesNotMatch(young,/maths-prepare-ends/);
+ const tonight=renderToStaticMarkup(createElement(M.Tonight,{s:{...mk(17),screen:'tonight'},focus:2}));
+ assert.match(tonight,/This path ends at Year \d+/);assert.doesNotMatch(tonight,/Pick what school is teaching next/);
+});
