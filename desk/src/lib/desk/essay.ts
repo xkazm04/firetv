@@ -132,7 +132,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   const notEnglish: number[] = [];
   let verdicts: Verdict[] = [], provider: string | undefined, lastError: unknown;
   const summaries: string[] = [], observed: Record<string, unknown>[] = [], judgedAll = new Set<number>();
-  const pieceNow = () => ({ ...piece, read: [...piece.read], failed: [...piece.failed], ...(notEnglish.length ? { notEnglish: [...notEnglish] } : {}) });
+  const pieceNow = () => ({ ...piece, read: [...piece.read], failed: [...piece.failed], ...(notEnglish.length ? { notEnglish: [...notEnglish] } : {}), ...(piece.failed.length ? { observed: [...observed] } : {}) });
   const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: pieceNow() });
   let ruled = false;
   const pieceSummary = () => {
@@ -154,6 +154,40 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
   record(learnerId, lens, ruledSentences(sentences, pieceNow()).length, verdicts.filter((v) => v.verdict === "faulty").length, of);
   return now();
+}
+
+/**
+ * The paragraphs of a finished piece that did not come back (E4-a, send it again), asked again through the same judge
+ * call. The reading kept the accepted observations of the paragraphs that were read (piece.observed); the piece is ruled
+ * once more over those and the new ones, so the verdicts equal those of a piece read whole. A paragraph that comes back
+ * moves from failed to read; one that fails again stays failed. The reading's history line is restated in place with the
+ * new counts: no new line, no new attempt (the writing estimate and the digest keep the first count, as after a rewrite).
+ * The caller checks rules/essay pieceAgainProblem first.
+ */
+export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number): Promise<EssayAnalysis> {
+  const old = reading.piece!, lens = lensOf(reading.type), voice = voiceOf("essay", age), sentences = reading.sentences, of = old.paragraphs;
+  const piece: NonNullable<EssayAnalysis["piece"]> = { ...old, read: [...old.read], failed: [], ...(old.notEnglish ? { notEnglish: [...old.notEnglish] } : {}) };
+  const observed = [...(old.observed ?? [])], summaries: string[] = [];
+  const kept = /Start with paragraph (\d+): (.*)$/.exec(reading.summary);
+  if (kept) summaries[Number(kept[1]) - 1] = kept[2];
+  let provider = reading.provider;
+  const still: number[] = [];
+  for (const para of old.failed) {
+    const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
+    try {
+      const r = await judge(sentences, judged, lens, voice, { para, of });
+      observed.push(...r.seen); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
+    } catch { still.push(para); }
+  }
+  piece.failed = still; piece.read.sort((x, y) => x - y);
+  if (still.length) piece.observed = observed; else delete piece.observed;
+  const judgedAll = new Set(sentences.filter((s) => piece.read.includes(s.para ?? 0)).map((s) => s.n));
+  const verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed);
+  const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
+  const head = [`${faultyIn(verdicts)} of ${ruledSentences(sentences, piece).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(piece)].join(" ");
+  const summary = at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
+  try { restatePiece(learnerId, lens.name, reading, { verdicts, piece }); } catch {}
+  return { ...reading, verdicts, summary, provider, piece };
 }
 
 /** One observation, for the one sentence a rewrite asks about. */
@@ -220,6 +254,17 @@ function restateReading(learnerId: string, label: string, before: Verdict[], aft
   const m = LINE.exec(l.history[at].detail)!;
   const fixed = after.filter((v) => v.was?.verdict === "faulty" && v.verdict !== "faulty").length;
   const detail = `${faultyIn(after)} of ${m[2]} ${m[3]} to fix${m[4] ?? ""}${fixed ? `, ${fixed} fixed` : ""}`;
+  if (detail === l.history[at].detail) return;
+  saveLearner({ ...l, history: l.history.map((h, i) => (i === at ? { ...h, detail } : h)) });
+}
+
+/** The history line of a piece, restated in place after its failed paragraphs were read again: the counts as the piece now stands. */
+function restatePiece(learnerId: string, label: string, before: EssayAnalysis, after: Pick<EssayAnalysis, "verdicts" | "piece">): void {
+  const l = getLearner(learnerId), was = faultyIn(before.verdicts), ruledWas = ruledSentences(before.sentences, before.piece).length;
+  const at = l.history.findLastIndex((h) => h.kind === "writing" && h.label === label && LINE.exec(h.detail)?.[1] === String(was) && LINE.exec(h.detail)?.[2] === String(ruledWas));
+  if (at < 0) return;
+  const ruled = ruledSentences(before.sentences, after.piece).length;
+  const detail = `${faultyIn(after.verdicts)} of ${ruled} sentence${ruled === 1 ? "" : "s"} to fix, ${after.piece!.paragraphs} paragraphs`;
   if (detail === l.history[at].detail) return;
   saveLearner({ ...l, history: l.history.map((h, i) => (i === at ? { ...h, detail } : h)) });
 }

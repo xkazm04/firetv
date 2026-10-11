@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, paragraphsOf, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { essayFileProblem, essayTooLong, paragraphsOf, pieceAgainOffered, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
@@ -216,6 +216,12 @@ export default function Phone() {
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
       setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+  /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
+  const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
+    try { const r = await call("/api/analyse", { kind: "piece-again" }); const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
+      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "The desk could not read them again. Try again."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+  const againBtn = pieceAgainOffered(s?.essay) && <button className="pbtn" data-secondary="true" data-role="essay-piece-again" disabled={busy} onClick={() => void pieceAgain()}>Read the paragraphs that did not come back</button>;
   /** Load a text as a list of paragraphs, the first one showing. */
   const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
   const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
@@ -631,6 +637,7 @@ export default function Phone() {
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
             <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div>
+          {againBtn}
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
         {screen === "paste" && onPlan && <div className="pscreen" data-role="essay-plan"><h3>Slot {onPlan.i + 1} · {onPlan.slots[onPlan.i]?.label}</h3><p>One sentence, in your own words. It inks on the TV. When all three are written, press OK on Read it.</p>
@@ -650,6 +657,7 @@ export default function Phone() {
             <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
           <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
           {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
+          {againBtn}
           {notice !== null && <TextNotice text={notice} onAccept={() => void acceptNotice()} onDecline={() => { setNotice(null); setKeep(false); void readPiece(false); }} />}
           {paras.length > 1 && <div className="field" data-role="essay-piece">
             <label className="pkeep"><input type="checkbox" checked={keep} onChange={(e) => setKeep(e.target.checked)} data-role="essay-keep" /><span>Keep it on my shelf</span></label>

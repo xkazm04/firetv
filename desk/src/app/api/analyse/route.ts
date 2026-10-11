@@ -5,14 +5,15 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
-import { analyseEssay, analysePiece, reviseSentence } from "@/lib/desk/essay";
+import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
-import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceProblem, revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceProblem, revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 
 export const dynamic = "force-dynamic";
 type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType } | { kind: "rewrite"; n: number; text: string }
+  | { kind: "piece-again" }
   | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string };
 
 export async function POST(req: Request) {
@@ -46,6 +47,19 @@ export async function POST(req: Request) {
       key: `sentence:${n}`, start: `reading sentence ${n} again…`,
       done: (x) => (rewriteState(x.verdicts.find((v) => v.n === n)) === "holds" ? `sentence ${n} holds now` : `sentence ${n} still needs the move`),
     });
+    return r.ok ? NextResponse.json(r.value) : refused(r);
+  }
+  if (body.kind === "piece-again") {
+    // E4-a: the paragraphs of the piece on the desk that did not come back, read once more; checked in code before any run
+    const a = getSession().essay;
+    const problem = pieceAgainProblem(a);
+    if (problem || !a) return NextResponse.json({ error: problem }, { status: 400 });
+    const r = await runJob("analyse", async (run) => {
+      const done = await analysePieceAgain(a, who.id, age);
+      // one report, when the piece is ruled; a reading replaced since leaves the desk as it is now
+      if (run.current() && getSession().essay === a) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
+      return done;
+    }, { key: "essay", start: "reading the paragraphs that did not come back…", done: (x) => x.summary.slice(0, 120) });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
   if (body.kind === "piece") {

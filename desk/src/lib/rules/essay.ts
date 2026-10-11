@@ -399,6 +399,25 @@ export function unruledCaption(piece: PieceLike | undefined, para: number): { la
   return state === "not-read" ? { label: "Not read", text: NOT_READ(para) } : state === "not-english" ? { label: "Not read", text: NOT_ENGLISH(para) } : null;
 }
 
+/** Whether the phone offers "send it again": a piece that is done and has a paragraph that did not come back. */
+export function pieceAgainOffered(reading: { piece?: PieceLike } | null | undefined): boolean {
+  return !!reading?.piece && !pieceBeingRead(reading.piece) && reading.piece.failed.length > 0;
+}
+
+/**
+ * Why the paragraphs that did not come back cannot be sent again, in the desk's words, or null. Checked in code before
+ * any run, in this order: no piece on the desk, the piece still being read, no paragraph failed, and a sentence rewritten
+ * (a verdict carries `was`; ruling the piece again would undo it) or a reading that kept no observations.
+ */
+export function pieceAgainProblem(reading: { piece?: PieceLike & { observed?: unknown[] }; verdicts: Pick<VerdictLike, "was">[] } | null | undefined): string | null {
+  const piece = reading?.piece;
+  if (!reading || !piece) return "There is no piece on the desk. Read a whole piece from the Essay tab first.";
+  if (pieceBeingRead(piece)) return "The desk is still reading your piece. Send the paragraphs that did not come back once every paragraph is read.";
+  if (!piece.failed.length) return "No paragraph failed. There is nothing to send again.";
+  if (reading.verdicts.some((v) => v.was) || !piece.observed) return "A sentence of the piece was rewritten, so reading some paragraphs again would undo it. Read the whole piece again.";
+  return null;
+}
+
 /** The sentences of a piece the desk ruled: those of its paragraphs that came back and are English. */
 export function ruledSentences<S extends Pick<Sentence, "para">>(sentences: S[], piece: PieceLike | undefined): S[] {
   return sentences.filter((s) => !piece?.notEnglish?.includes(s.para ?? 0) && !piece?.failed.includes(s.para ?? 0));

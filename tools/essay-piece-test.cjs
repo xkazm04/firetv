@@ -251,3 +251,56 @@ test('E4: a piece whose paragraph 2 fails: state not-read, the summary names it 
   assert(a.summary.startsWith(`${faulty} of 4 sentences to fix across 3 paragraphs. Paragraph 2 did not come back. Send it again from the phone.`), a.summary);
   assert.equal(getLearner('e4-a').history.at(-1).detail, `${faulty} of 4 sentences to fix, 3 paragraphs`);
 });
+
+// ---- E4-a, send it again: only the failed paragraphs are asked again, and the piece is ruled once more over every paragraph read ----
+const AGAIN = { piece: (extra = {}) => ({ kind: 'piece', text: SECTION_A, type: 'structure', ...extra }) };
+const failOnce = (para) => { let failing = true; return async (req) => { if (failing && new RegExp('paragraph ' + para + ' of').test(req.prompt)) throw new Error('engine down'); return observing(OBS_A)(req); }; };
+const sessionWith = async (fail) => { dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; answer = fail ? async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(OBS_A)(req); } : observing(OBS_A); const r = await post(AGAIN.piece()); assert.equal(r.status, 200); seen = []; };
+test('E4-a piece-again: one call for paragraph 2, the piece ruled once over every paragraph read, failed empty, the history line restated in place', async () => {
+  await sessionWith(true);
+  const first = getSession().essay;
+  assert.deepEqual(first.piece.failed, [1]); assert.equal(R.paragraphState(first.piece, 1), 'not-read');
+  const lines = getLearner('ema').history.length, lineBefore = getLearner('ema').history.at(-1).detail;
+  answer = observing(OBS_A);
+  const whole = await analysePiece(SECTION_A, 'structure', 'e4-whole', undefined); // the piece read whole, for comparison
+  seen = [];
+  const r = await post({ kind: 'piece-again' });
+  assert.equal(r.status, 200);
+  assert.equal(seen.length, 1, 'exactly one model call'); assert.match(seen[0].prompt, /Judge only paragraph 2 of 3/);
+  const a = getSession().essay;
+  assert.deepEqual(a.piece.failed, []); assert.deepEqual([...a.piece.read].sort(), [0, 1, 2]);
+  assert.deepEqual(a.verdicts, whole.verdicts, 'the verdicts equal those of the piece read whole');
+  const h = getLearner('ema').history;
+  assert.equal(h.length, lines, 'no new history line'); assert.notEqual(h.at(-1).detail, lineBefore, 'the line is restated');
+  assert.equal(h.at(-1).detail, getLearner('e4-whole').history.at(-1).detail, 'and agrees with the piece read whole');
+});
+test('E4-a piece-again: a paragraph that fails again stays failed', async () => {
+  await sessionWith(true);
+  seen = []; answer = async (req) => { throw new Error('engine down'); };
+  const r = await post({ kind: 'piece-again' });
+  assert.equal(r.status, 200); assert.equal(seen.length, 1);
+  assert.deepEqual(getSession().essay.piece.failed, [1]); assert.deepEqual(getSession().essay.piece.read, [0, 2]);
+});
+test('E4-a piece-again: four refusals, each 400 with one plain line and no model call', async () => {
+  const refusal = async (re, what) => { seen = []; const r = await post({ kind: 'piece-again' }); assert.equal(r.status, 400, what); assert.match((await r.json()).error, re, what); assert.equal(seen.length, 0, what); };
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
+  await refusal(/no piece|No piece/i, 'no piece is on the desk');
+  const progress = []; answer = failOnce(2); await analysePiece(SECTION_A, 'structure', 'ema', undefined, (x) => progress.push(x));
+  dispatch({ type: 'essay.set', analysis: progress[0], owner: 'ema' });
+  await refusal(/still reading/i, 'the piece is still being read');
+  await sessionWith(false);
+  await refusal(/no paragraph failed|No paragraph failed/i, 'no paragraph failed');
+  await sessionWith(true);
+  const a = getSession().essay;
+  dispatch({ type: 'essay.revised', analysis: { ...a, verdicts: a.verdicts.map(v => v.n === 1 ? { ...v, was: { text: 'Old.', verdict: 'faulty' } } : v) }, n: 1 });
+  await refusal(/read the whole piece again/i, 'a sentence was rewritten');
+});
+test('E4-a piece-again: the phone offers one button, only for a piece that is done with a failed paragraph', () => {
+  assert.equal(R.pieceAgainOffered(undefined), false);
+  assert.equal(R.pieceAgainOffered({ piece: { paragraphs: 3, read: [0], failed: [] } }), false, 'still being read');
+  assert.equal(R.pieceAgainOffered({ piece: { paragraphs: 3, read: [0, 1, 2], failed: [] } }), false, 'nothing failed');
+  assert.equal(R.pieceAgainOffered({ piece: { paragraphs: 3, read: [0, 2], failed: [1] } }), true);
+  const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(phone, /Read the paragraphs that did not come back/); assert.match(phone, /kind: "piece-again"/);
+  assert.equal((phone.match(/pieceAgainOffered\(/g) || []).length, 1);
+});
