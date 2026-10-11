@@ -100,7 +100,6 @@ export async function readPage(imageBase64: string, subject: Subject, w: number,
   // a position the model gave as a number is a fraction of the page: kept inside it, a pixel count or a wild guess is not trusted past the edge
   const unit = (v: number) => Math.min(1, Math.max(0, v));
   const finite = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v);
-  const num = (n: number) => (finite(n) ? n : Infinity);
   const at = (v: number, size: number) => Math.min(size, Math.max(0, Math.round(v * size)));
   const items: PageItem[] = orderItems((json.items || []).filter((i) => i && typeof i.text === "string" && finite(i.x) && finite(i.y)).map((i) => {
     const x = unit(i.x), y = unit(i.y), lo = at(y - half, h), hi = at(y + half, h);
