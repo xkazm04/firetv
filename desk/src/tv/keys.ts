@@ -10,7 +10,7 @@ import { hasWorked } from "@/lib/library/worked";
 import { modeOf } from "@/lib/rules/mode";
 import { turnState } from "@/lib/english/turn";
 import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
-import { planSlots, planText, rewriteState } from "@/lib/rules/essay";
+import { planSlots, planText, rewriteState, rewriteUnruledLine } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
@@ -447,7 +447,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(FORENSIC_STOPS.length, 1); if (k === "left") o.move(FORENSIC_STOPS.length, -1);
     if (k !== "select") return;
     const at = stopAt(FORENSIC_STOPS, s.focus);
-    if (at === "rewrite") o.ev({ type: "status", text: rewriteStatus(a.sentences[i].n) });
+    if (at === "rewrite") o.ev({ type: "status", text: rewriteUnruledLine(a, a.sentences[i].n) ?? rewriteStatus(a.sentences[i].n) });
     if (at === "why") o.nav("playbook", PLAYBOOK_STOPS.indexOf(playFor(a.type)), "forensic");
     if (at === "next") go((i + 1) % n);
     if (at === "back") o.nav("essaytype", readingLens(s));

@@ -408,6 +408,15 @@ export function unruledCaption(piece: PieceLike | undefined, para: number): { la
   return state === "not-read" ? { label: "Not read", text: NOT_READ(para) } : state === "not-english" ? { label: "Not read", text: NOT_ENGLISH(para) } : null;
 }
 
+/**
+ * E4-b: why a sentence cannot be rewritten when its paragraph was not ruled - the paragraph's own line (unruledCaption) -
+ * or null: a ruled paragraph, a reading with no piece, a sentence number the reading does not have.
+ */
+export function rewriteUnruledLine(reading: { piece?: PieceLike; sentences: { n: number; para?: number }[] } | null | undefined, n: number): string | null {
+  const sn = reading?.sentences.find((x) => x.n === n);
+  return sn ? (unruledCaption(reading?.piece, sn.para ?? 0)?.text ?? null) : null;
+}
+
 /** Whether the phone offers "send it again": a piece that is done and has a paragraph that did not come back. */
 export function pieceAgainOffered(reading: { piece?: PieceLike } | null | undefined): boolean {
   return !!reading?.piece && !pieceBeingRead(reading.piece) && reading.piece.failed.length > 0;

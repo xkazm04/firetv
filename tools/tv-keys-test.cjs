@@ -689,3 +689,14 @@ test('HW6: a failed read says Try again on the phone for maths and English; an e
  for(const subject of ['maths','english','essay'])assert.ok(!/—|snap it again/.test(failedReadLine(subject)),subject);
  assert.match(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/failedReadLine\(p\.subject\)/,'the page screen uses it');
 });
+
+test('essay 4 (6c, E4-b): Rewrite on a sentence of a paragraph the desk did not rule puts that paragraph line on the status line; a ruled one says rewriteStatus',()=>{
+ const {tvKey,rewriteStatus}=keys();
+ const piece={paragraphs:2,read:[0],failed:[1]};
+ const sentences=TEXTS.map((text,i)=>({n:i+1,text,words:text.split(' ').length,connectors:[],role:'claim',para:i<3?0:1}));
+ const r={...reading(SIXV),sentences,piece};
+ const f=(essayAt)=>essay({screen:'forensic',focus:0,essay:r,essayAt});
+ assert.deepEqual(tvKey(f(5),'select',LOCAL).events,[{type:'status',text:'Paragraph 2 did not come back. Send it again from the phone.'}],'an unruled sentence');
+ assert.deepEqual(tvKey(f(2),'select',LOCAL).events,[{type:'status',text:rewriteStatus(2)}],'a ruled sentence');
+ assert.equal(at(f(2),tvKey(essay({screen:'forensic',focus:2,essay:r,essayAt:5}),'select',LOCAL)),6,'Next sentence still walks every sentence, unruled ones too');
+});

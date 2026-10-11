@@ -365,3 +365,36 @@ test('E3-b guards: 409 with nobody at the desk and 428 TEXT_NOTICE leave the sta
   r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true });
   assert.equal(r.status, 428); assert.equal(status(), 'before'); assert.equal(seen.length, 0);
 });
+
+// ---- E4-b (6c): a sentence of a paragraph the desk did not rule has no rewrite; the route refuses it with that paragraph's line ----
+const E4B_PIECE = 'Phones should be banned in class. They distract everyone.\n\nA 2020 study found 40% of lessons were interrupted. This shows phones cost time.\n\n' + CZ_R7 + '\n\nIn conclusion, phones should be banned. Teachers agree.';
+const E4B_OBS = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'evidence', supports: 1 }, { n: 4, job: 'link' }, { n: 7, job: 'link' }, { n: 8, job: 'context' }];
+const e4bDone = async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
+  seen = []; answer = async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(E4B_OBS)(req); };
+  assert.equal((await post({ kind: 'piece', text: E4B_PIECE, type: 'structure' })).status, 200);
+  const a = getSession().essay; assert.deepEqual(a.piece.failed, [1]); assert.deepEqual(a.piece.notEnglish, [2]);
+  return a;
+};
+const inPara = (a, para) => a.sentences.find(s => s.para === para).n;
+test('E4-b: a rewrite of a sentence in a failed or a not-English paragraph: 400 with that paragraph\'s line, no call, no job, verdicts unchanged', async () => {
+  const a = await e4bDone(); const before = JSON.stringify(a.verdicts), jobs = JSON.stringify(getSession().jobs);
+  for (const para of [1, 2]) {
+    seen = []; const n = inPara(a, para);
+    const r = await post({ kind: 'rewrite', n, text: 'Phones should be banned in every class.' });
+    assert.equal(r.status, 400, `paragraph ${para + 1}`); assert.equal((await r.json()).error, R.unruledCaption(a.piece, para).text);
+    assert.equal(seen.length, 0); assert.equal(JSON.stringify(getSession().jobs), jobs, 'no job'); assert.equal(JSON.stringify(getSession().essay.verdicts), before);
+  }
+});
+test('E4-b guard: a rewrite of a sentence in a ruled paragraph of the same piece still runs', async () => {
+  const a = await e4bDone(); seen = []; answer = observing(E4B_OBS);
+  const r = await post({ kind: 'rewrite', n: inPara(a, 0), text: 'Phones should be banned in every class.' });
+  assert.equal(seen.length, 1, 'one engine call'); assert.notEqual(r.status, 400, 'not refused');
+});
+test('E4-b guard: a piece still being read answers REWRITE_WHILE_READING first, even for a sentence in an unruled paragraph', async () => {
+  const progress = []; answer = async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(E4B_OBS)(req); };
+  await analysePiece(E4B_PIECE, 'structure', 'ema', undefined, (x) => progress.push(x));
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); dispatch({ type: 'essay.set', analysis: progress[0], owner: 'ema' });
+  seen = []; const r = await post({ kind: 'rewrite', n: 1, text: 'x' });
+  assert.equal(r.status, 400); assert.equal((await r.json()).error, R.REWRITE_WHILE_READING); assert.equal(seen.length, 0);
+});

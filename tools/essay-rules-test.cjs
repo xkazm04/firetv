@@ -1214,3 +1214,15 @@ test('E2-b: pieceBeingRead is true while read, failed and not-English paragraphs
   assert((src.match(/pieceBeingRead\(/g)||[]).length>=n,file+' asks the rule');
  }
 });
+
+test('E4-b: rewriteUnruledLine gives the paragraph\'s not-read or not-English line for a sentence of an unruled paragraph, and null otherwise',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const piece={paragraphs:3,read:[0],failed:[1],notEnglish:[2]};
+ const reading={piece,sentences:[{n:1,para:0},{n:2,para:1},{n:3,para:2}]};
+ assert.equal(R.rewriteUnruledLine(reading,2),'Paragraph 2 did not come back. Send it again from the phone.');
+ assert.equal(R.rewriteUnruledLine(reading,3),'Paragraph 3 is not in English, so the desk did not read it.');
+ assert.equal(R.rewriteUnruledLine(reading,1),null,'a read paragraph');
+ assert.equal(R.rewriteUnruledLine({sentences:reading.sentences},2),null,'a reading with no piece');
+ assert.equal(R.rewriteUnruledLine(reading,9),null,'an n the reading does not have');
+ assert.equal(R.rewriteUnruledLine(null,1),null);
+});

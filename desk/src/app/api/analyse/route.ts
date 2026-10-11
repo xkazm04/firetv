@@ -7,7 +7,7 @@ import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
-import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 
@@ -44,6 +44,9 @@ export async function POST(req: Request) {
     // E2-b: a piece still being read has no verdicts to rewrite against
     if (pieceBeingRead(a.piece)) return NextResponse.json({ error: REWRITE_WHILE_READING }, { status: 400 });
     const n = typeof body.n === "number" ? body.n : NaN;
+    // E4-b: a sentence of a paragraph the desk did not rule has no rewrite; the paragraph's own line, before any run
+    const unruled = rewriteUnruledLine(a, n);
+    if (unruled) return NextResponse.json({ error: unruled }, { status: 400 });
     const ok = revise(a, n, typeof body.text === "string" ? body.text : "");
     if (!ok.ok) return NextResponse.json({ error: ok.error }, { status: 400 });
     const r = await runJob("analyse", async () => {
