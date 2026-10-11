@@ -78,7 +78,8 @@ test('one call per paragraph, each told its paragraph, with the whole piece as c
   assert.deepEqual(a.verdicts.filter(v => v.verdict === 'faulty').map(v => v.n), [4]);
   assert.deepEqual(a.piece, { paragraphs: 3, read: [0, 1, 2], failed: [] });
   assert.equal(progress.length, 3); assert.deepEqual(progress.map(p => p.piece.read.length), [1, 2, 3], 'the map fills in paragraph by paragraph');
-  assert.match(a.summary, /^1 of 5 sentences to fix across 3 paragraphs\. Start with paragraph 2: Paragraph 2 summary\./);
+  assert.match(a.summary, /^1 of 5 sentences to fix across 3 paragraphs\. Start with paragraph 2, sentence 4: /);
+  assert.doesNotMatch(a.summary, /Paragraph 2 summary/, 'E9: the model\'s paragraph summary is not read');
 });
 test('a paragraph that fails loses only itself; every paragraph failing fails the piece', async () => {
   answer = perParagraph(faultyAt([1]), new Set([1]));
@@ -110,7 +111,8 @@ test('essay-master-A case 9 (changed by E2, council rulings 2026-10-09 section 6
   assert.equal(seen.length, 2, 'one call per paragraph');
   assert.deepEqual(a.verdicts.map(v => [v.n, v.verdict]), [[1, 'faulty'], [2, 'neutral'], [3, 'neutral'], [4, 'neutral']], 'exactly one faulty sentence in the whole piece');
   assert.equal(getLearner('oa-9').history.at(-1).detail, '1 of 4 sentences to fix, 2 paragraphs');
-  assert.match(a.summary, /^1 of 4 sentences to fix across 2 paragraphs. Start with paragraph 1: ok/);
+  assert.match(a.summary, /^1 of 4 sentences to fix across 2 paragraphs. Start with paragraph 1, sentence 1: /);
+  assert.doesNotMatch(a.summary, /: ok/, 'E9: the model\'s summary is not read');
 });
 // ---- E2 (council rulings 2026-10-09 section 6): a piece is ruled once, over the observations of all its paragraphs ----
 const SECTION_A = 'Phones should be banned in class. They distract everyone.\n\nA 2020 study found 40% of lessons were interrupted. This shows phones cost time.\n\nIn conclusion, phones should be banned. Teachers agree.';
@@ -468,4 +470,20 @@ test('E8-4 (guard): a send-again with the file writable says the summary and log
   const { r, errs } = await againWith(true);
   assert.equal(r.status, 200); assert.equal(status(), getSession().essay.summary.slice(0, 120)); assert.notEqual(status(), PIECE_AGAIN_NOT_SAVED);
   assert.equal(errs.length, 0);
+});
+
+// ---- E9 (essay full r2, craft-2): a piece's summary is code's line from the verdicts; no paragraph summary is read ----
+test('E9-4: one faulty sentence in paragraph 2: the summary ends "Start with paragraph 2, sentence n: <note>", with none of the stub\'s text; send-again builds the same line', async () => {
+  seen = []; answer = perParagraph(faultyAt([4]), new Set([2]));
+  const a = await analysePiece(PIECE, 'structure', 'e9-4', 15);
+  const v = a.verdicts.find(x => x.verdict === 'faulty');
+  assert.equal(v.n, 4);
+  assert(a.summary.endsWith(`Start with paragraph 2, sentence 4: ${v.note}`), a.summary);
+  assert.doesNotMatch(a.summary, /summary\./);
+  const { analysePieceAgain } = require(src('lib/desk/essay.ts'));
+  answer = perParagraph(faultyAt([4]));
+  const b = await analysePieceAgain(a, 'e9-4', 15);
+  assert.equal(b.summary, R.summaryLine(b));
+  assert(b.summary.endsWith(`Start with paragraph 2, sentence 4: ${b.verdicts.find(x => x.verdict === 'faulty').note}`), b.summary);
+  assert.doesNotMatch(b.summary, /summary\./);
 });

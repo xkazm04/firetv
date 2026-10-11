@@ -113,3 +113,10 @@ test('plan case 8: Ema fills two slots, the desk goes to Jakub, who has no plan;
  s=reduce(s,{type:'learner.set',id:'jakub'});
  assert.equal(JSON.parse(JSON.stringify(s)).away.ema.essayPlan.slots[0],'Schools should start later.','it survives a JSON round trip');
 });
+
+test('E9-2: a seated learner\'s reading holding model prose in its summary shows code\'s count on the landing card, never the prose',()=>{
+ const {reduce}=store(),{essayWaiting}=rows();
+ const B={...A2,verdicts:[{n:1,verdict:'faulty',note:'a'},{n:2,verdict:'faulty',note:'b'}],summary:'Excellent work, this paragraph is clear and convincing.'};
+ const s={...reduce(seatedEma(),{type:'essay.set',analysis:B}),history:[{at:Date.now()-86400000,kind:'writing',label:'Argument',detail:'2 of 2 sentences to fix'}]};
+ assert.equal(essayWaiting(s).line,'2 of 2 sentences to fix.');
+});

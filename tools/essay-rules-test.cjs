@@ -160,7 +160,7 @@ test('a verdict can only land on a sentence number that exists',async()=>{
  ],summary:'A clear paragraph.'});
  const a=await analyseEssay(THREE,'structure','essay-anon');
  assert.deepEqual(a.verdicts.map(v=>v.n),[1,3],'0 and length+1 are both off the end; only 1..3 survive');
- assert.equal(a.sentences.length,3);assert.equal(a.summary,'A clear paragraph.');assert.equal(a.type,'structure');
+ assert.equal(a.sentences.length,3);assert.equal(a.summary,'1 of 3 sentences to fix. Start with sentence 3: '+a.verdicts[1].note,'E9: the summary is code\'s line, never the model\'s');assert.equal(a.type,'structure');
  assert.equal(a.text,THREE,'the learner\'s own text is returned unchanged, not the collapsed one');
 });
 test('a single-sentence paragraph admits verdict 1 and nothing else',async()=>{
@@ -523,7 +523,7 @@ test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragrap
  const v2=a.verdicts.find(v=>v.n===2);
  assert.equal(v2.verdict,'strong');assert.equal(v2.note,'It names its source now.');
  assert.deepEqual(v2.was,{text:OLD2,verdict:'faulty'},'verdict 2 remembers the sentence it replaced');
- assert.equal(a.sentences[1].text,STUDY);assert.equal(a.summary,before.summary);assert.equal(a.type,'evidence');
+ assert.equal(a.sentences[1].text,STUDY);assert.equal(a.summary,'0 of 3 sentences to fix.','E9-5: the summary is restated from the verdicts as they now stand');assert.equal(RE.summaryLine(a),a.summary);assert.equal(a.type,'evidence');
  const {system,prompt}=seen[0];
  assert.match(system,/sentence 2 alone/i,'the model is asked for sentence 2 alone');
  assert.match(system,/Lens for this reading: Evidence/);
@@ -800,11 +800,11 @@ test('seat case 6: a reading that finishes after the desk was handed to another 
  assert.equal(s.essay,null,'nothing of Ema\'s on Jakub\'s desk');
  assert.equal(s.essayType,null);
  assert.equal(s.screen,'landing','the TV stays on the landing');
- assert.equal(s.away.ema.essay.summary,'Ema\'s reading.');
+ assert.match(s.away.ema.essay.summary,/^1 of 3 sentences to fix\. Start with sentence 2: /);
  assert.equal(s.away.ema.essayType,'evidence');
  assert.equal(getLearner('ema').history.length,before+1,'her history holds the one reading');
  dispatch({type:'learner.set',id:'ema'});
- assert.equal(getSession().essay.summary,'Ema\'s reading.');
+ assert.match(getSession().essay.summary,/^1 of 3 sentences to fix\. Start with sentence 2: /);
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
@@ -1399,21 +1399,25 @@ test('E6-2: strong and neutral verdicts keep the model note',()=>{
  const v=noteOf('argument','Schools should start later. Uniforms are cheap. Sleep matters.',[{n:1,side:'pushes'},{n:2,side:'neutral'},{n:3,side:'pushes',note:'Clear.'}]);
  assert.deepEqual(v.map(x=>[x.verdict,x.note]),[['strong','Great use of evidence.'],['neutral','Great use of evidence.'],['strong','Clear.']]);
 });
-test('E6-3: summaryLine leads with the count of code for one paragraph, keeps the summary of a piece and of an empty reading',()=>{
+test('E6-3 (changed by E9): summaryLine is code\'s line from the verdicts alone, for one paragraph, a piece and an empty reading',()=>{
  const sl=RE.summaryLine,s3=[{n:1},{n:2},{n:3}],f=(n)=>Array.from({length:n},(_,i)=>({n:i+1,verdict:'faulty',note:'x'}));
- assert.equal(sl({sentences:s3,verdicts:f(2),summary:'Good start.'}),'2 of 3 sentences to fix. Good start.');
- assert.equal(sl({sentences:[{n:1}],verdicts:f(1),summary:'Tighten it.'}),'1 of 1 sentence to fix. Tighten it.');
- assert.equal(sl({sentences:s3,verdicts:[],summary:''}),'0 of 3 sentences to fix.','no model summary: the count alone');
- assert.equal(sl({sentences:s3,verdicts:f(1),summary:'1 of 3 sentences to fix across 2 paragraphs.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'1 of 3 sentences to fix across 2 paragraphs.');
- assert.equal(sl({sentences:[],verdicts:[],summary:'In short.'}),'In short.');
- assert.equal(sl({summary:'In short.'}),'In short.');
+ assert.equal(sl({sentences:s3,verdicts:f(2),summary:'Good start.'}),'2 of 3 sentences to fix. Start with sentence 1: x','the model summary is never read');
+ assert.equal(sl({sentences:[{n:1}],verdicts:[{n:1,verdict:'faulty',note:''}],summary:'Tighten it.'}),'1 of 1 sentence to fix. Start with sentence 1.','an empty note leaves no colon');
+ assert.equal(sl({sentences:s3,verdicts:[],summary:'Great.'}),'0 of 3 sentences to fix.','none to fix: the head alone');
+ assert.equal(sl({sentences:s3,verdicts:[{n:3,verdict:'faulty',note:'c'},{n:2,verdict:'faulty',note:'b'}]}),'2 of 3 sentences to fix. Start with sentence 2: b','the first faulty sentence in sentence order');
+ const pc=[{n:1,para:0},{n:2,para:0},{n:3,para:1}];
+ assert.equal(sl({sentences:pc,verdicts:[{n:3,verdict:'faulty',note:'c'}],summary:'Model.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'1 of 3 sentences to fix across 2 paragraphs. Start with paragraph 2, sentence 3: c');
+ assert.equal(sl({sentences:pc,verdicts:[],summary:'Model.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'0 of 3 sentences to fix across 2 paragraphs.');
+ assert.equal(sl({sentences:pc,verdicts:[],summary:'Model.',piece:{paragraphs:2,read:[0],failed:[]}}),'Reading paragraph 2 of 2.','E2-b is unchanged');
+ assert.equal(sl({sentences:[],verdicts:[],summary:'In short.'}),'','no sentences: nothing');
+ assert.equal(sl({summary:'In short.'}),'');
 });
 test('E6-4: the TV caption and the spoken line both draw summaryLine',()=>{
  const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8'),sp=fs.readFileSync(path.join(root,'src/lib/desk/spoken.ts'),'utf8');
  assert.match(tv,/label: `Last verdict[^\n]*text: summaryLine\(a\)/);
  assert.match(sp,/summaryLine\(s\.essay\)/);
  const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
- assert.equal(spokenLine({screen:'forensic',essay:{sentences:[{n:1},{n:2}],verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'Fine.'}}),'1 of 2 sentences to fix. Fine.');
+ assert.equal(spokenLine({screen:'forensic',essay:{sentences:[{n:1},{n:2}],verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'Fine.'}}),'1 of 2 sentences to fix. Start with sentence 1: x');
 });
 
 // ---- E7 (essay full r1 craft-1): a reading that leaves a judged sentence unanswered fails and records nothing ----
@@ -1527,4 +1531,29 @@ test('E8-5: reviseSentence with no callback and a failing save still resolves',a
  answer=reply({verdicts:[{n:2,verdict:'strong',note:'ok'}]});
  const restore=failLearnerWrites(),e0=console.error;console.error=()=>{};
  try{const a=await reviseSentence(getSession().essay,2,STUDY,undefined,id);assert.equal(a.verdicts.find(v=>v.n===2).verdict,'strong');}finally{console.error=e0;restore();}
+});
+
+// ---- E9 (essay full r2, craft-2): code writes the summary from the verdicts it decided; the model is not asked for one ----
+test('E9-1: a Structure paragraph code rules 2 of 2 faulty is summarised by code, whatever the model said (a, summaryLine and the spoken line)',async()=>{
+ const TWO='Schools should start later. Therefore the start should move.';
+ answer=reply({verdicts:[{n:1,verdict:'faulty',note:'x'},{n:2,verdict:'faulty',note:'y'}],summary:'Excellent work, this paragraph is clear and convincing.'});
+ const a=await analyseEssay(TWO,'structure','essay-anon');
+ assert.deepEqual(a.verdicts.map(v=>v.verdict),['faulty','faulty']);
+ const want='2 of 2 sentences to fix. Start with sentence 1: '+a.verdicts[0].note;
+ const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
+ assert.equal(a.summary,want);assert.equal(RE.summaryLine(a),want);assert.equal(spokenLine({screen:'forensic',essay:a}),want);
+ for(const t of [a.summary,RE.summaryLine(a),spokenLine({screen:'forensic',essay:a})])assert.doesNotMatch(t,/Excellent/);
+});
+test('E9-3: the essay-read request asks for no summary: no summary property in the schema, no summary sentence in the system text',async()=>{
+ seen=[];answer=reply({verdicts:[{n:1,verdict:'faulty',note:'x'},{n:2,verdict:'neutral',note:'y'}],summary:'s'});
+ await analyseEssay('Schools should start later. Therefore the start should move.','structure','essay-anon');
+ assert.equal(seen.length,1);
+ assert.ok(!('summary' in seen[0].schema.properties),'no summary property');
+ assert.ok(!seen[0].schema.required.includes('summary'),'and none required');
+ assert.doesNotMatch(seen[0].system,/summary sentence/);assert.match(seen[0].system,/Plain text, to be read aloud\./);
+});
+test('E9-7: desk/essay.ts no longer parses a summary or asks for one',()=>{
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.doesNotMatch(src,/Start with paragraph \(\d\+\)/,'the kept-summary regex is gone');
+ assert.doesNotMatch(src,/summary sentence/);assert.doesNotMatch(src,/summaries/);
 });
