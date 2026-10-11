@@ -17,10 +17,11 @@ const VERDICT = path.join(UAT, 'driver/verdict.cjs'), RECERTIFY = path.join(UAT,
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-verdict-'));
 process.env.DESK_DATA_DIR = path.join(tmp, 'desk-data');
 
-const digest = () => {
+const digest = (dir = RUNS) => {
   const h = crypto.createHash('sha256');
-  for (const run of fs.readdirSync(RUNS).sort()) for (const f of fs.readdirSync(path.join(RUNS, run)).sort()) {
-    const p = path.join(RUNS, run, f);
+  // a plain file beside the runs (OPEN.md) is not a run
+  for (const run of fs.readdirSync(dir).sort().filter(r => fs.statSync(path.join(dir, r)).isDirectory())) for (const f of fs.readdirSync(path.join(dir, run)).sort()) {
+    const p = path.join(dir, run, f);
     if (fs.statSync(p).isFile()) h.update(`${run}/${f}\0`).update(fs.readFileSync(p));
   }
   return h.digest('hex');
@@ -271,4 +272,14 @@ test('the driver is on the claude CLI only: no codexText, no DESK_TEXT_ENGINE se
   assert.deepEqual(D().parseArgs(['--parallel', '2'], { characters: [] }).parallel, 2);
   assert.equal(D().parseArgs([], { characters: [] }).parallel, 3);
   assert.throws(() => D().parseArgs(['--parallel', '0'], { characters: [] }), /--parallel/);
+});
+
+test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a change inside a run', () => {
+  const runs = path.join(tmp, `plain-${crypto.randomUUID().slice(0, 8)}`);
+  fs.mkdirSync(path.join(runs, 'a-run'), { recursive: true });
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[]');
+  fs.writeFileSync(path.join(runs, 'OPEN.md'), '# Open\n');
+  const one = digest(runs);
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
+  assert.notEqual(digest(runs), one);
 });

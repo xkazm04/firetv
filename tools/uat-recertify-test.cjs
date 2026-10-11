@@ -15,10 +15,11 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'uat-recertify-'));
 process.env.DESK_DATA_DIR = path.join(tmp, 'desk-data');
 
 // the committed runs, hashed now and again at the end: the suite must leave them untouched
-const digest = () => {
+const digest = (dir = RUNS) => {
   const h = crypto.createHash('sha256');
-  for (const run of fs.readdirSync(RUNS).sort()) for (const f of fs.readdirSync(path.join(RUNS, run)).sort()) {
-    const p = path.join(RUNS, run, f);
+  // a plain file beside the runs (OPEN.md) is not a run
+  for (const run of fs.readdirSync(dir).sort().filter(r => fs.statSync(path.join(dir, r)).isDirectory())) for (const f of fs.readdirSync(path.join(dir, run)).sort()) {
+    const p = path.join(dir, run, f);
     if (fs.statSync(p).isFile()) h.update(`${run}/${f}\0`).update(fs.readFileSync(p));
   }
   return h.digest('hex');
@@ -377,4 +378,14 @@ test('instrument case: a recertify across the codex -> claude move names the eng
   // the same engine on both sides says none of this
   const same = droppedPair(stamp(63), stamp(63, [4, 9]));
   assert.equal(fs.readFileSync(R().renderRecertify(same.prior, same.rerun), 'utf8').includes('The instrument changed between these runs'), false);
+});
+
+test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a change inside a run', () => {
+  const runs = path.join(tmp, `plain-${crypto.randomUUID().slice(0, 8)}`);
+  fs.mkdirSync(path.join(runs, 'a-run'), { recursive: true });
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[]');
+  fs.writeFileSync(path.join(runs, 'OPEN.md'), '# Open\n');
+  const one = digest(runs);
+  fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
+  assert.notEqual(digest(runs), one);
 });
