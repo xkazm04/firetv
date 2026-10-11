@@ -287,6 +287,7 @@ const CHECKS = {
   unbacked: "No checkable sentence here backs this opinion.",
   long: (words: number) => `This sentence runs to ${words} words; split it.`,
   word: (word: string) => `'${word}' is doing too little here; say what you mean.`,
+  repeated: (word: string) => `'${word}' is used again here; say it once or find another word.`,
 };
 
 const NOTE_LABEL = /^\s*(?:strong|faulty|neutral|weak|good|great|excellent|solid|fine|ok|okay)\s*(?::|[-–—](?=\s))\s*/i;
@@ -302,8 +303,9 @@ export function cleanNote(note: string): string {
  * The model never says strong or faulty. Only sentences in `judged` get a verdict; an observation for any other
  * number is ignored as a verdict, but still reads as context (a rewrite passes the other sentences' first-pass roles).
  * A sentence gets an entry when it was observed (an observation the lens cannot read is neutral) or when code alone
- * rules it faulty (a Language sentence over LONG_SENTENCE_WORDS). The note is the model's; a faulty sentence with no
- * note gets the failed check's own line. A fix rides only on a faulty sentence, through cleanFix.
+ * rules it faulty (a Language sentence over LONG_SENTENCE_WORDS). Under a verdict code decided the words are code's:
+ * a faulty sentence's note is always the failed check's own line, never the model's; a strong or neutral sentence keeps
+ * the model's note. A fix rides only on a faulty sentence, through cleanFix.
  *  structure: an observation may carry `supports: n` (evidence, or a claim backing an earlier claim); code accepts n
  *    only when n is another sentence the model observed as a claim, and anything else is no link. A claim is strong
  *    when a marked evidence observation (carrying an EVIDENCE marker) names it, or when a claim that is strong that
@@ -383,7 +385,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         }
       } else if (lens === "language") {
         const bad = validIssues(read, s.text)[0];
-        if (bad) { verdict = "faulty"; check = CHECKS.word(bad.word); }
+        if (bad) { verdict = "faulty"; check = bad.kind === "repeated" ? CHECKS.repeated(bad.word) : CHECKS.word(bad.word); }
       } else if (read.job === "claim") {
         const rest = sentences.slice(at + 1), stop = rest.findIndex((t) => ok(t.n)?.job === "claim");
         const between = stop < 0 ? rest : rest.slice(0, stop);
@@ -400,7 +402,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     if (lens === "language" && verdict !== "faulty" && s.words > LONG_SENTENCE_WORDS) { verdict = "faulty"; check = CHECKS.long(s.words); }
     if (!o && verdict === "neutral") return;
     const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
-    const note = verdict === "faulty" && !said.trim() ? check : said;
+    const note = verdict === "faulty" ? check : said;
     const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
     const supports = lens === "evidence" ? backsOf(s) : linkOf(s);
     out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}), ...(supports !== undefined ? { supports } : {}) });
@@ -420,6 +422,18 @@ export function pieceBeingRead(piece: PieceLike | undefined): boolean {
 export function pieceReadingLine(piece: PieceLike): string {
   const back = piece.read.length + piece.failed.length + (piece.notEnglish?.length ?? 0);
   return `Reading paragraph ${Math.min(back + 1, piece.paragraphs)} of ${piece.paragraphs}.`;
+}
+
+/**
+ * The summary the desk shows and speaks for a reading. The model's summary is written blind of the verdicts, so code leads
+ * with its own count: a piece's summary already does; one paragraph gets "N of M sentences to fix." (the history line's
+ * words) and then the model's summary when it has one; a reading with no sentences keeps its summary.
+ */
+export function summaryLine(a: { sentences?: unknown[]; verdicts?: Pick<VerdictLike, "verdict">[]; summary: string; piece?: unknown }): string {
+  if (a.piece || !a.sentences?.length) return a.summary;
+  const faulty = (a.verdicts ?? []).filter((v) => v.verdict === "faulty").length, m = a.sentences.length;
+  const head = `${faulty} of ${m} sentence${m === 1 ? "" : "s"} to fix.`;
+  return a.summary.trim() ? `${head} ${a.summary.trim()}` : head;
 }
 
 /** Why a sentence cannot be rewritten while the piece it is in is still being read. */

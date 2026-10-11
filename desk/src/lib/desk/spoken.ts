@@ -6,11 +6,12 @@
  */
 import type { Session } from "../session/store";
 import { deskLine } from "../rules/calc-word";
+import { summaryLine } from "../rules/essay";
 
 export function spokenLine(s: Session): string | undefined {
   if (s.screen === "hint") return s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint;
   if (s.screen === "sentence") return s.english?.explanation;
-  if (s.screen === "forensic") return s.essay?.summary;
+  if (s.screen === "forensic") return s.essay ? summaryLine(s.essay) : undefined;
   if (s.screen === "walk") {
     const items = s.practice?.items, said = items?.[s.walkIx]?.said;
     return items && said ? deskLine(items, s.walkIx, said) : said;

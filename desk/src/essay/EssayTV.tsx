@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -146,7 +146,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : refused ? refused
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
-    : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: a.summary }
+    : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: summaryLine(a) }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
     : lens ? { label: `${lens.name} reads`, text: lens.promise } : { label: "Essay Master", text: "Choose a lens." };
 

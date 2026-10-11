@@ -170,7 +170,7 @@ test('a faulty verdict keeps a valid fix, trimmed, and the verdict itself is unt
  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'This argues the other side.',fix:{move:'  Concede,  then turn it back ',pattern:' Although [the other side],\n [why your claim still holds]. '}}],summary:'s'});
  const a=await analyseEssay(SIX,'argument','essay-fix');
  assert.equal(a.sentences.length,6);
- assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This argues the other side.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
+ assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This sentence wanders from the side the paragraph takes.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
 });
 test('a fix on a strong or neutral verdict is dropped, and the verdict stays',async()=>{
  answer=reply({verdicts:[{n:1,verdict:'strong',note:'clear side',fix:CONCEDE},{n:3,verdict:'neutral',note:'',fix:CONCEDE},{n:4,verdict:'faulty',note:'other side',fix:CONCEDE}],summary:'s'});
@@ -187,7 +187,7 @@ test('a fix without a [slot] is dropped - a rewritten sentence is not a pattern'
   const a=await analyseEssay(SIX,'argument','essay-fix');
   assert.equal(a.verdicts.length,1,'the verdict is never lost with its fix');
   assert.equal(a.verdicts[0].fix,undefined,pattern);
-  assert.equal(a.verdicts[0].note,'other side');
+  assert.equal(a.verdicts[0].note,'This sentence wanders from the side the paragraph takes.','a faulty verdict speaks the check line, not the model note');
  }
 });
 test('a pattern that is the learner\'s sentence around a slot, or mostly words, is dropped',async()=>{
@@ -207,7 +207,7 @@ test('a malformed fix never reaches the screen and never throws',async()=>{
   {move:CONCEDE.move,pattern:'Although ['+'x'.repeat(55)+'], ['+'y'.repeat(55)+'], and ['+'z'.repeat(55)+'].'}]){
   answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix}],summary:'s'});
   const a=await analyseEssay(SIX,'argument','essay-fix');
-  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'x'}],JSON.stringify(fix));
+  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This sentence wanders from the side the paragraph takes.'}],JSON.stringify(fix));
  }
 });
 test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
@@ -542,7 +542,7 @@ test('rewrite case 4: a rewrite judged still faulty keeps a fix only when it pas
  answer=reply({verdicts:[{n:2,verdict:'faulty',note:'Which study?',fix:COPY}]});
  const a=await reviseSentence(R3(),2,STUDY);
  const v=a.verdicts.find(x=>x.n===2);
- assert.equal(v.verdict,'faulty');assert.equal(v.note,'Which study?');
+ assert.equal(v.verdict,'faulty');assert.equal(v.note,'This only asserts; nothing here is checkable.','the check line, not the model note');
  assert.equal(v.fix,undefined,'four of the rewrite\'s own words in the pattern: the fix is dropped, the verdict stays');
  const {cleanFix}=rules();assert.deepEqual(cleanFix(COPY,OLD2),COPY,'against the old sentence the same pattern would have passed');
  const FAIR={move:'Name the source',pattern:'According to [who], [what they found].'};
@@ -1345,4 +1345,59 @@ test('E5-6: a rewrite of the backed opinion stays backed through the kept link, 
  const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
  assert.match(src,/evidence: \{ support: \{ type: "string", enum: \[\.\.\.SUPPORTS\] \}, backs: \{ type: "integer" \} \}/);
  assert.match(src,/For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion\./);
+});
+const BODY='Schools should start later in the morning.';
+const noteOf=(lens,text,o)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts(lens,ss,new Set(ss.map(s=>s.n)),o.map(x=>({note:'Great use of evidence.',...x})));};
+test('E6-1: under a faulty verdict the note is the failed check line, never the model note',()=>{
+ const praise='Great use of evidence.';
+ const cases=[
+  ['structure',BODY,[{n:1,job:'claim'}],'This claim has no evidence after it that a reader can check.'],
+  ['structure','Therefore it holds.',[{n:1,job:'link'}],'This links back to nothing: no evidence comes before it.'],
+  ['argument',BODY,[{n:1,side:'wanders'}],'This sentence wanders from the side the paragraph takes.'],
+  ['argument',BODY,[{n:1,side:'against',turnsBack:false}],"It takes the other side but never turns back: a turn needs a word like 'but' or 'although'."],
+  ['evidence',BODY,[{n:1,support:'opinion'}],OPINION],
+  ['language','It is a bad thing to do.',[{n:1,issues:[{kind:'vague',word:'bad'}]}],"'bad' is doing too little here; say what you mean."],
+  ['language','It is a good thing to do, a good thing.',[{n:1,issues:[{kind:'repeated',word:'good'}]}],"'good' is used again here; say it once or find another word."],
+  ['language',Array(37).fill('word').join(' ')+'.',[{n:1,issues:[]}],'This sentence runs to 37 words; split it.'],
+ ];
+ for(const [lens,text,obs,line] of cases){
+  const v=noteOf(lens,text,obs);
+  assert.equal(v.length,1);assert.equal(v[0].verdict,'faulty',lens+' '+line);
+  assert.equal(v[0].note,line);assert.notEqual(v[0].note,praise);
+ }
+ assert.equal(noteOf('evidence',EV_A,evObs(1)).find(x=>x.verdict==='faulty').note,UNBACKED);
+});
+test('E6-1 guard: every faulty verdict of every lens carries a check line, and none keeps the model note',()=>{
+ const spread=[
+  ['structure',EV_A,[{n:1,job:'claim'},{n:2,job:'claim'},{n:3,job:'evidence'},{n:4,job:'link'}]],
+  ['structure','Therefore it holds. Schools start early.',[{n:1,job:'link'},{n:2,job:'claim'}]],
+  ['argument',EV_A,[{n:1,side:'wanders'},{n:2,side:'against'},{n:3,side:'against',turnsBack:true},{n:4,side:'pushes'}]],
+  ['evidence',EV_A,evObs(1)],['evidence',EV_A,[{n:1,support:'opinion'},{n:2,support:'opinion'}]],
+  ['language','It is bad. It is good good.',[{n:1,issues:[{kind:'vague',word:'bad'}]},{n:2,issues:[{kind:'repeated',word:'good'}]}]],
+ ];
+ let faulty=0;
+ for(const [lens,text,obs] of spread){
+  for(const x of noteOf(lens,text,obs).filter(x=>x.verdict==='faulty')){faulty++;assert.ok(x.note.trim(),`${lens} ${x.n}: a faulty verdict has a check line`);assert.notEqual(x.note,'Great use of evidence.');}
+ }
+ assert.ok(faulty>=6,'the spread reaches the faulty paths');
+});
+test('E6-2: strong and neutral verdicts keep the model note',()=>{
+ const v=noteOf('argument','Schools should start later. Uniforms are cheap. Sleep matters.',[{n:1,side:'pushes'},{n:2,side:'neutral'},{n:3,side:'pushes',note:'Clear.'}]);
+ assert.deepEqual(v.map(x=>[x.verdict,x.note]),[['strong','Great use of evidence.'],['neutral','Great use of evidence.'],['strong','Clear.']]);
+});
+test('E6-3: summaryLine leads with the count of code for one paragraph, keeps the summary of a piece and of an empty reading',()=>{
+ const sl=RE.summaryLine,s3=[{n:1},{n:2},{n:3}],f=(n)=>Array.from({length:n},(_,i)=>({n:i+1,verdict:'faulty',note:'x'}));
+ assert.equal(sl({sentences:s3,verdicts:f(2),summary:'Good start.'}),'2 of 3 sentences to fix. Good start.');
+ assert.equal(sl({sentences:[{n:1}],verdicts:f(1),summary:'Tighten it.'}),'1 of 1 sentence to fix. Tighten it.');
+ assert.equal(sl({sentences:s3,verdicts:[],summary:''}),'0 of 3 sentences to fix.','no model summary: the count alone');
+ assert.equal(sl({sentences:s3,verdicts:f(1),summary:'1 of 3 sentences to fix across 2 paragraphs.',piece:{paragraphs:2,read:[0,1],failed:[]}}),'1 of 3 sentences to fix across 2 paragraphs.');
+ assert.equal(sl({sentences:[],verdicts:[],summary:'In short.'}),'In short.');
+ assert.equal(sl({summary:'In short.'}),'In short.');
+});
+test('E6-4: the TV caption and the spoken line both draw summaryLine',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8'),sp=fs.readFileSync(path.join(root,'src/lib/desk/spoken.ts'),'utf8');
+ assert.match(tv,/label: `Last verdict[^\n]*text: summaryLine\(a\)/);
+ assert.match(sp,/summaryLine\(s\.essay\)/);
+ const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
+ assert.equal(spokenLine({screen:'forensic',essay:{sentences:[{n:1},{n:2}],verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'Fine.'}}),'1 of 2 sentences to fix. Fine.');
 });
