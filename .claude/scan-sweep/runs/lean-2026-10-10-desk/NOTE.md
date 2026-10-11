@@ -44,3 +44,6 @@ Counts per status (572 rows):
 - L2-3: calculus1.ts and habits.ts set intentional (test-only corpus; habit detectors whose callers are not built yet).
 
 tsc after L2-1, from desk/: `--noEmit --incremental false --noUnusedLocals --noUnusedParameters` prints nothing (no TS6133, screens.tsx Clock is gone from main too); plain `tsc --noEmit` exits 0.
+
+## L3 (2026-10-11)
+Commit bc611df3. Removed paperTopicCount from desk/src/tv/paperRows.ts: nothing in desk/ or tools/ reads it (only prose in the rulings doc and uat findings.json). Removed paperRows' own SCHOOL and prereqsOf plus the topicsOf import; recovery.ts prereqsOf is now exported and paperRows imports it. Safe because both walk topicsOf('school') prereqs identically and give an empty set for an unknown id, so paperBiggest and paperCaption behave the same. tsc --noEmit exits 0, the strict unused flags report nothing in paperRows.ts or recovery.ts, test:rules stays at 1658 passing. Rows: 574 (built 9).
