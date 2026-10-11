@@ -810,7 +810,7 @@ test('paper 2: each topic shows its lost marks and the questions behind it; the 
  assert.equal(v.topics.some(x=>x.from.includes('9')),false,'a full-marks question adds nothing');
 });
 
-test('paper 3: a topic the desk calls secure stays in the list, marked secure beside it - never dropped (ruling 2)',()=>{
+test('paper 3: a topic the desk calls secure stays in the list, marked "Worth a recheck" beside it - never dropped (ruling 2)',()=>{
  const {paperView}=PAPER();
  const raw=[it('1',0,3,['N12'])];
  const plain=paperView(paperSession(raw)),sec=paperView(paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
@@ -819,7 +819,8 @@ test('paper 3: a topic the desk calls secure stays in the list, marked secure be
  assert.equal(sec.topics.find(t=>t.id==='pct-of-amount').secure,true);
  const html=drawMaths('PaperScreen',paperSession(raw,{'pct-of-amount':{topic:'pct-of-amount',secure:true}}));
  assert.equal((html.match(/data-role="maths-paper-secure"/g)??[]).length,1,'marked once, beside the topic');
- assert.match(html,/data-id="pct-of-amount"[^>]*>[\s\S]*?Secure on the desk/);
+ assert.match(html,/data-id="pct-of-amount"[^>]*>[\s\S]*?Worth a recheck/);
+ assert.equal(html.includes('Secure on the desk'),false,'the old pill text is gone');
  assert.equal(drawMaths('PaperScreen',paperSession(raw)).includes('maths-paper-secure'),false);
 });
 

@@ -732,7 +732,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
                 <span className="nm">{t.name}</span>
                 <span className="lost">{lostWord(t.lost)} lost</span>
                 <span className="from">From {t.from}</span>
-                {t.secure && <span className="sec" data-role="maths-paper-secure">Secure on the desk</span>}
+                {t.secure && <span className="sec" data-role="maths-paper-secure">Worth a recheck</span>}
               </div>
             );
           })}
