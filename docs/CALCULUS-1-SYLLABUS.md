@@ -40,7 +40,7 @@ are our own words and our own mathematics. No example is a real learner's work.
 | 20 | 4.9 | `calc1-antiderivatives` | Antiderivatives |
 | 21, 22 | - | (review, midterm 2) | - |
 | 23 | 5.1 | `calc1-definite-integral` | The definite integral |
-| 24 | 5.2 | `calc1-area-so-far` | The area-so-far function |
+| 24 | 5.2 | `calc1-area-so-far` | The integral with a variable upper limit |
 | 25 | 5.3, 5.4 | `calc1-ftc` | The fundamental theorem and net change |
 | 26 | 5.5 | `calc1-substitution` | The substitution rule |
 | 27 | 6.1, 6.5 | `calc1-area-average` | Areas between curves and average values |

@@ -349,3 +349,13 @@ test('19: no quoted \'calc1\' in desk/src outside paths.ts, calculus1.ts and cal
  assert.deepEqual(hits,[],'a site that decides Calculus by the path\'s id: ask the record\'s judge');
  assert.ok(walk(SRC).length>100,'the sweep read the tree');
 });
+
+test('TN1: calc1-area-so-far keeps its id and is named The integral with a variable upper limit (MB-B41)',()=>{
+ const t=CALC1_SPINE.find(x=>x.id==='calc1-area-so-far');
+ assert.ok(t,'the topic keeps its id');
+ assert.deepEqual(t.sessions,[24]);
+ assert.equal(t.name,'The integral with a variable upper limit');
+ assert.equal(t.blurb,'Letting the upper limit of an integral move turns the area under a curve into a function of that limit.');
+ assert.deepEqual(CALC1_SPINE.filter(x=>x.name.includes('area-so-far')).map(x=>x.id),[],'no name carries the old word');
+ assert.ok(CALC1_SPINE.find(x=>x.id==='calc1-ftc').prereq.includes('calc1-area-so-far'),'calc1-ftc still needs it');
+});

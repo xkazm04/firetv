@@ -171,7 +171,7 @@ export const CALC1_SPINE: CalcSpineTopic[] = [
   },
   {
     id: "calc1-area-so-far", sessions: [24], sections: ["5.2"],
-    name: "The area-so-far function", strand: "Integrals",
+    name: "The integral with a variable upper limit", strand: "Integrals",
     blurb: "Letting the upper limit of an integral move turns the area under a curve into a function of that limit.",
     prereq: ["calc1-definite-integral"],
     shapes: ["definite-integral"],
