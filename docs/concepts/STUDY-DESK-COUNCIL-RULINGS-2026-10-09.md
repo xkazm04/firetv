@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b and a2fbef80 name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c), and for round 22 on 2026-10-11 (round 21 merged at fe8d218e). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b, b878d726 (capture r21), e9ff4caa and 6b9a8cda name a run, not a commit.
 
 ---
 
@@ -227,6 +227,8 @@ HF1b, as delivered (checked on `main` at 72a4aadf):
 - The Math Buddy PageScreen caption chain is now: reading, failed read, hint running, hint failed, missing numbers, then under the lamp or nothing read (`desk/src/maths/MathsTV.tsx:942-947`; the missing-numbers branch is :946). It mirrors the `pageLine` chain in `desk/src/tv/screens.tsx:123`. The 'HF1b:' test in `tools/desk-jobs-rules-test.cjs` (:720) pins it.
 - Accepted limit: while a page's missing list has numbers, the missing line takes the place of the 'is under the lamp' caption (`MathsTV.tsx:947`) for every problem on that page. In the band view the focused problem still shows its OK Hint chip. The homework full r2 may judge it.
 
+Found 2026-10-11 (round 22): BACKLOG MB-B34 (2026-10-09 maths UAT, L1-nela-12-MB1-2: the homework door reopens the first sheet ever snapped) was already fixed on main by HW2 (3a98790e) and HW4 (afcb2714), through tonightsSheet (`desk/src/tv/mathsRows.ts:21`). Delivery 15 set its BACKLOG status to built (7a084ae8).
+
 ## 3. hint-lesson-discovery
 
 Lite r1: ready, 0.5814.
@@ -350,7 +352,7 @@ Status of the work, checked on `main`:
   - robustness-2 (no route case for a failed vision call): delivered by D3-3.
   - robustness-3, low (an empty or non-string image): delivered by D3-2.
   - value-unsure-says-different: an unsure item still tells the learner 'I got something different' (`desk/src/lib/rules/kinds.ts:163`, `desk/src/lib/rules/maths.ts:93`, `desk/src/maths/MathsTV.tsx:808-811`; the said line is built at :811). Delivered by 4d-1, 83bbe368 (run af864d93).
-  - value-calc-gaps: there is no implicit differentiation shape, and the 40-character typed cap refuses a correct 45-character answer. Unslotted, for the owner to weigh.
+  - value-calc-gaps: there is no implicit differentiation shape, and the 40-character typed cap refuses a correct 45-character answer. The cap half is delivered by MK14 (6cbe3bd4, round 22). The implicit differentiation half stays unslotted, for the owner to weigh.
   - craft-1: the linear photo prompt still asks the reader to solve and judge while it copies. Unslotted.
 - The owner holds the marking Approval until marking r3, which runs after EC1.
 - Full r3 (round 2026-10-10-practice-generation-marking-r3, run cc346058) was judged at f06984ef on a span of 36 files. Drift: changed. Result: ready 0.6885, coverage 1.00, no must-address line, no hard failure. This was the last round.
@@ -437,9 +439,43 @@ Ruled 2026-10-11 (round 21):
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| MK13 | One shared pattern ignores the name before an answer, and both reading sites in desk/src/lib/rules/school.ts use it: readInner and writtenFraction. It ignores exactly one of these: a single letter, in either case, then "=" (x is one case of it); "P(", then 1 to 20 characters with no "(", ")" or "=", then ")" and "="; "answer" or "ans", then ":" or "="; a bare "=". A two-letter name, a segment name, a name with a digit, two names, and an equation left as the answer all stay unsure. Ceiling, stated in the code: the check compares values, not names, so a wrong name with the right value is right. | MB-B25 (L1-vojtech-18-MB2-2): "c = 34 mm", "c = 34", "b = 40 cm", "P = 3/13" and "P(A) = 3/13" read as unsure. The prefix is the regex at school.ts:240, and again at :1630. If the two sites read the name differently, "c = 9/12" could read as 3/4 while its written fraction is lost. | segment names (AB =, \|AB\| =): not observed in the UAT, and an unsure is never wrong. Checking the name against the question: a school spec names no unknown. | in flight, delivery 14 (dispatched 2026-10-11, round 21) |
+| MK13 | One shared pattern ignores the name before an answer, and both reading sites in desk/src/lib/rules/school.ts use it: readInner and writtenFraction. It ignores exactly one of these: a single letter, in either case, then "=" (x is one case of it); "P(", then 1 to 20 characters with no "(", ")" or "=", then ")" and "="; "answer" or "ans", then ":" or "="; a bare "=". A two-letter name, a segment name, a name with a digit, two names, and an equation left as the answer all stay unsure. Ceiling, stated in the code: the check compares values, not names, so a wrong name with the right value is right. | MB-B25 (L1-vojtech-18-MB2-2): "c = 34 mm", "c = 34", "b = 40 cm", "P = 3/13" and "P(A) = 3/13" read as unsure. The prefix is the regex at school.ts:240, and again at :1630. If the two sites read the name differently, "c = 9/12" could read as 3/4 while its written fraction is lost. | segment names (AB =, \|AB\| =): not observed in the UAT, and an unsure is never wrong. Checking the name against the question: a school spec names no unknown. | delivered, 69f9bc52 (run e9ff4caa); BACKLOG 5773c964 |
 
 MK13 changes what readNumber reads while the marking Approval is with the owner, and the owner is told. The said-line half of MB-B25 was built by 83bbe368 (4d-1).
+
+Ruled 2026-10-11 (round 22):
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| MK13-a | readPair keeps its own prefix pattern, which ignores only "answer" or "ans" with ":" or "=", or a bare "=". Each side of a pair goes to readNumber, which strips a name through ANSWER_NAME. So "c = 24:36" and "a = 24 and b = 36" are read side by side. A test pin for a named pair is added with the next delivery that touches tools/school-rules-test.cjs. | Delivery 14's question 1: a third copy of the name pattern, in readPair in desk/src/lib/rules/school.ts. The prefix is at school.ts:1534 and the two readNumber calls at :1539 (delivery 14 saw the prefix at :1528 on its base). | readPair sharing ANSWER_NAME. Not needed, because each side already reaches readNumber, which strips the name. | ruled, no code change; the named-pair pin is queued |
+| MK14 | One cap of 120 characters for every typed answer. TYPED_ANSWER_MAX becomes 120. It stays the one number that the mark route, the second-go route and the phone's boxes read. An answer longer than the cap is refused in a plain sentence, as today. It is never cut. Why 120: a quotient-rule derivative printed plainly fits in it, and 120 is the BACKLOG's own figure. It stays under the calc reader's MAX_LENGTH of 200. A school answer longer than MAX_ANSWER (60) still reads as null, so it is unsure, never wrong. So the change can take a right answer whole, and it cannot tick a wrong one. Ceiling, accepted: the box can now hold pasted working. The check still reads one expression, so pasted working comes back unsure. The phone's character count (the second half of MB-B32) is not built here. desk/src/app/phone/page.tsx is in the tv-phone-pairing span, and the owner is deciding how the pairing closes (ask 276c835a). At 120, the box's maxLength cuts only a paste that is longer than 120. | MB-B32 (L1-matyas-19-MB3-4): a right quotient-rule derivative of 45 characters was cut at 40 and came back unsure. It is also the cap half of the marking full r2 finding value-calc-gaps. | A cap per set: 120 on sets whose items carry a Calculus spec, and 40 elsewhere. Rejected: the phone's box would need to know each item's kind, and a box with two possible limits follows a rule the learner cannot see. No cap. Rejected: the cap limits what the route takes and stores. | delivered in part, 6cbe3bd4 (run 6b9a8cda); BACKLOG 7a084ae8. The phone's character count, the second half of MB-B32, is held until the owner answers 276c835a, because desk/src/app/phone/page.tsx is in the tv-phone-pairing span. |
+
+MK14 changes what the mark route and the second go accept while the marking Approval is with the owner, and the owner is told. It took the cap half of value-calc-gaps by the App Master's ruling at dispatch. That finding had been unslotted for the owner to weigh.
+
+Delivery 14 and 15, as delivered (14: run e9ff4caa, merged at 5773c964; 15: run 6b9a8cda, merged at 7a084ae8):
+
+- 14 (run e9ff4caa), two commits, reconciled with git cat-file -e and git merge-base --is-ancestor (69f9bc52, 5773c964 and fe8d218e exist and are ancestors of main; 888bb46d and 84407fd7 are not): 69f9bc52 (MK13, the code and the test) and 5773c964 (BACKLOG). The run committed them as 888bb46d and 84407fd7, and they were rebased onto fe8d218e because capture r21 merged first.
+- Three files, +25 -4 (git diff --shortstat fe8d218e 5773c964): `desk/src/lib/rules/school.ts` (12), `docs/BACKLOG.md` (2) and `tools/school-rules-test.cjs` (15).
+- ANSWER_NAME is `desk/src/lib/rules/school.ts:241`. The two sites that use it are readInner (`:246`) and writtenFraction (`:1636`).
+- The new test 'MK13: a right answer written with its name is read (MB-B25)' is in tools/school-rules-test.cjs. It was red on base at its first positive read ('c = 34 mm' read as null).
+- The spelling batteries, before and after: PYTH 81 rows and PROB 133 rows, 0 false-right, 0 false-wrong.
+- Gate: 75 suites and 1645 tests, 0 failed. tsc exited 0 for the builder and for the Director at 5773c964. 0 em dashes added.
+- 14's four questions, each ruled:
+  - 1: the third copy of the name pattern is readPair's prefix. Ruled as MK13-a.
+  - 2: the reconcile was clean at bb03bd08. The only difference was the extra site. Accepted.
+  - 3: the new cases are in one new test, so the batteries' row counts did not change. Accepted.
+  - 4: on base, the one test stops at its first failed assert, so its cases were not run one by one. They are red on base by construction. Accepted.
+- 15 (run 6b9a8cda), two commits, reconciled the same way (6cbe3bd4 and 7a084ae8 exist and are ancestors of main): 6cbe3bd4 (MK14, the code and the tests) and 7a084ae8 (BACKLOG). The run's commits have the same SHAs, so it was not rebased.
+- Five files, +20 -10 (git diff --shortstat 5773c964 7a084ae8): `desk/src/lib/rules/maths.ts`, `docs/BACKLOG.md`, `tools/calc-rules-test.cjs`, `tools/phone-panel-test.cjs` and `tools/school-marking-test.cjs`.
+- Reconcile: main had 'export const TYPED_ANSWER_MAX = 40;' as briefed. It now reads 120 (`desk/src/lib/rules/maths.ts:106`).
+- What reads the const: typedAnswersProblem for the mark route (`maths.ts:119-120`), the second go (`desk/src/app/api/second/route.ts:36`) and the phone's two answer boxes (`desk/src/app/phone/page.tsx:570` and `:612`).
+- The pins that moved: tools/phone-panel-test.cjs (the const reads 120) and tools/school-marking-test.cjs (121 characters are refused, and 120 are kept whole). tools/maths-second-test.cjs reads the const and did not change.
+- The new test 'MK14: a long right answer is taken whole (MB-B32)' is in tools/calc-rules-test.cjs. On base, its 45-and-120 assert and its 121 refusal message were red. checkAnswer's verdict on the 45-character quotient-rule answer was already right.
+- The BACKLOG commit: MB-B32 built in part. MB-B25 built (83bbe368 and 69f9bc52), with its note's 888bb46d corrected to 69f9bc52. MB-B34 built (HW2 3a98790e, HW4 afcb2714).
+- Gate: 75 suites and 1646 tests, 0 failed. tsc exited 0 for the builder and for the Director at 7a084ae8. 0 em dashes added.
+- 15's two notes, ruled:
+  - (a) A 120-character answer of digits, sent through the mark route, still reads as unsure, because of the school reader's MAX_ANSWER of 60. This is as ruled. Accepted.
+  - (b) The phone's character count stays open until the owner answers 276c835a. Accepted.
 
 ## 5. student-working-explanation
 
@@ -1631,6 +1667,7 @@ Full r3 (round 2026-10-10-weekly-digest-for-parents-r3, run f795a859) was judged
 - A lite-ready feature that is not on the full-round list ends its lane at lite-ready. A medium found in code that just merged may still get a small follow-up delivery (PC6-b).
 - A ruling that left a finding for a later round does not shield it. When a later full round makes it a high line, it is reworked like any other, and the deferral is reopened only as far as the line reaches (tv-phone-pairing full r2, craft-2, as 8c).
 - A delivery whose rows are of two shapes is split by shape, one run each, in the lane's order (essay: 6a rules the reading, 6b draws what was not ruled).
+- A merged delivery's BACKLOG line cites its own code commit. When two runs merge close together, the second one is rebased, and the SHA it cites for itself goes stale. At settlement, the App Master checks every SHA that a merged BACKLOG line cites with git merge-base --is-ancestor <sha> main. A stale one is fixed in the next BACKLOG commit (MB-B25 cited 888bb46d, delivery 14's pre-rebase SHA; delivery 15 fixed it to 69f9bc52 at 7a084ae8).
 
 ## Delivery order
 
@@ -1675,7 +1712,8 @@ L2. the lean follow-up on ledger lean-2026-10-10-desk: done, 8d625e92 (L2-1), 53
 12. the claude-era Linga LT run.
 13. the recap follow-up, split by shape (round 21). 13-i (RC1 to RC7): done, 4e209aef, 8eaf85c4, 2ec91176, 75154729 and 806b543e (run b6742d4b). 13-i-b (RC3-a and RC3-b): done, 44a4fa85 and bb03bd08 (run a2fbef80). 13-ii: 13-ii-a is declined by ruling, and 13-ii-b is held until the owner answers 276c835a. RC3-c is queued with the next delivery that touches tools/tv-recap-test.cjs.
 13a. the recap write-door contract: unchanged (queued; it goes next on the lane when the owner decides the recap Approval, and does not wait for learner-profile).
-14. MK13 (MB-B25), the names that readNumber strips: dispatched 2026-10-11 (round 21), beside capture r21.
+14. MK13 (MB-B25), the names that readNumber strips: done, 69f9bc52 and 5773c964 (run e9ff4caa). MK13-a's named-pair pin is queued with the next delivery that touches tools/school-rules-test.cjs.
+15. MK14 (MB-B32), one cap of 120 for every typed answer: done in part, 6cbe3bd4 and 7a084ae8 (run 6b9a8cda). The phone's character count is held until the owner answers 276c835a.
 
 Ruled 2026-10-11 (round 14): the lane runs 8b, then 6, then 9b. Ruled 2026-10-11 (round 15): 9b ran before 6, beside the pairing full r2, because 6's phone half needs desk/src/app/phone/page.tsx, a file in that round's span. The lane now runs 6a, 6b, then 8c. Ruled 2026-10-11 (round 17): the lane runs 8c, then 6c. Ruled 2026-10-11 (round 18): the lane ran 8c, 6c, 6d, PR11 and PR12, one branch at a time.
 
@@ -1684,6 +1722,8 @@ Ruled 2026-10-11 (round 19): line 12 is no longer gated by W3 overlay proposal (
 Ruled 2026-10-11 (round 20): the lane ran L2 beside the essay full r2, then 6g, then 6h, one branch at a time. Line 13 still waits for the essay lane to settle.
 
 Ruled 2026-10-11 (round 21): the lane ran 13-i, then 13-i-b, one branch at a time, after the essay full r3 settled the essay lane. Delivery 14 runs next, beside capture r21, which edits only this doc.
+
+Ruled 2026-10-11 (round 22): the lane ran 14, then 15, one branch at a time. Capture r21 ran beside 14 and merged first, so 14 was rebased. 15 ran alone and was not rebased.
 
 Delivery W7 and W7c, as delivered:
 
@@ -1701,7 +1741,7 @@ Delivery W7 and W7c, as delivered:
   - W7's question 1: productBetween reads 'same' on differences that are only one-sided. Accepted, because it follows W7-2.
   - W7c-2: the Essay row barbora EM1-1 (L1-barbora-43-EM1-1) went from 6 changed of 9 compared (100 one-sided) to 13 changed of 26 (0 one-sided). The Math row matyas MB1-1 (L1-matyas-19-MB1-1) went from 18 changed of 26 (88 one-sided) to 35 changed of 48 (0 one-sided). All 355 rows stay aged (Linga 189, Essay 77, Math 89). productBetween needs no change, because it compares stamp against stamp.
 
-Unslotted: EM-B11, WD6, marking value-calc-gaps, marking craft-1, homework value-retake-double-counts, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3. Also these:
+Unslotted: EM-B11, WD6, marking value-calc-gaps (its implicit differentiation half; MK14 took the cap half), marking craft-1, homework value-retake-double-counts, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3. Also these:
 - the homework full r3 mediums (economics-1, economics-2, value-resnap-double-count, robustness-1, craft-1 to craft-3, rivalry-1 to rivalry-4);
 - digest full r2 robustness-2;
 - the digest full r3 mediums other than robustness-1: craft-1, craft-2, value-1, value-2 and rivalry-1;
@@ -1756,7 +1796,7 @@ Review lane, in order:
 
 ## Open contradictions
 
-None open after round 21. P8's quoted start text is ruled as 7b question 1, so it is not open.
+None open after round 22. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, P6's SERVER_ONLY clause by P6-a, P10 by P10-a, X1c's line in the numberWords.ts header by X5, PR5's remembered-code half by PR10 (delivered, dc511a47), and PR6's uncounted TV and phone streams by PR12 (delivered, e6d6af46).
 
