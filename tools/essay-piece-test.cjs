@@ -435,3 +435,37 @@ test('E7-6 (guard): a piece answered in full records exactly as before', async (
   assert.equal(res.status, 200); assert.deepEqual(getSession().essay.piece.failed, []);
   assert.match(getLearner('ema').history.at(-1).detail, /^\d of 6 sentences to fix, 3 paragraphs$/);
 });
+
+// ---- E8 (essay full r1 robustness-1): a failed save after a send-again is logged and said; the send-again still succeeds ----
+const failLearnerWrites = () => {
+  const real = fs.renameSync;
+  fs.renameSync = function (from, to, ...rest) {
+    if (String(to).endsWith('learners.json')) throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`), { code: 'EPERM' });
+    return real.call(this, from, to, ...rest);
+  };
+  return () => { fs.renameSync = real; };
+};
+const againWith = async (writable) => {
+  await sessionWith(true);
+  answer = observing(OBS_A);
+  const restore = writable ? () => {} : failLearnerWrites();
+  const errs = [], e0 = console.error; console.error = (...a) => errs.push(a.join(' '));
+  try { return { r: await post({ kind: 'piece-again' }), errs }; } finally { console.error = e0; restore(); }
+};
+test('E8-3: a send-again whose save fails answers 200, moves the paragraphs from failed to read, says PIECE_AGAIN_NOT_SAVED and logs one line', async () => {
+  const { PIECE_AGAIN_NOT_SAVED } = require(src('lib/desk/essay.ts'));
+  const line = getLearner('ema').history.at(-1).detail;
+  const { r, errs } = await againWith(false);
+  assert.equal(r.status, 200);
+  const a = getSession().essay;
+  assert.deepEqual(a.piece.failed, []); assert.deepEqual([...a.piece.read].sort(), [0, 1, 2]);
+  assert.equal(status(), PIECE_AGAIN_NOT_SAVED); assert.equal(getSession().jobs.analyse.phase, 'done');
+  assert.equal(errs.length, 1); assert.match(errs[0], /send-again/); assert.ok(!errs[0].includes('Phones'), 'no learner text');
+  assert.notEqual(getLearner('ema').history.at(-1).detail, undefined); assert.ok(line);
+});
+test('E8-4 (guard): a send-again with the file writable says the summary and logs nothing', async () => {
+  const { PIECE_AGAIN_NOT_SAVED } = require(src('lib/desk/essay.ts'));
+  const { r, errs } = await againWith(true);
+  assert.equal(r.status, 200); assert.equal(status(), getSession().essay.summary.slice(0, 120)); assert.notEqual(status(), PIECE_AGAIN_NOT_SAVED);
+  assert.equal(errs.length, 0);
+});

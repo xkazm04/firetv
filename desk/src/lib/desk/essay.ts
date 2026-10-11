@@ -8,10 +8,10 @@
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, pieceBeingRead, pieceReadingLine, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
-import { getLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
+import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
 import { voiceOf, withManner } from "../rules/voice";
-import type { EssayAnalysis, Verdict } from "../session/store";
+import { LEARNER_UNREAD_RUN, type EssayAnalysis, type Verdict } from "../session/store";
 
 type Lens = (typeof ANALYSIS_TYPES)[number];
 
@@ -55,6 +55,17 @@ export const PATTERN_RULE =
 
 /** A reading that left a judged sentence unanswered counts nothing: it fails with this and records nothing. */
 export const NOT_EVERY_SENTENCE = "The desk did not get a reading of every sentence, so it counted nothing. Send it again.";
+/** A rewrite was read but its restated history line did not save: the run still succeeds and says so. */
+export const REWRITE_NOT_SAVED = "That rewrite was read, but the desk could not write it to the learner file, so the history still shows the old count.";
+/** Send-again paragraphs were read but their restated history line did not save: the run still succeeds and says so. */
+export const PIECE_AGAIN_NOT_SAVED = "Those paragraphs were read, but the desk could not write them to the learner file, so the history still shows the old count.";
+
+/** A failed restate is logged (door and first line of the error, never learner text) and handed to `notSaved`. */
+function restateFailed(door: string, line: string, e: unknown, notSaved?: (line: string) => void) {
+  console.error(`essay ${door}: learner file not saved: ${(e instanceof Error ? e.message : String(e)).split("\n")[0].slice(0, 120)}`);
+  notSaved?.(e instanceof LearnersUnread ? LEARNER_UNREAD_RUN : line);
+}
+
 type Voice = ReturnType<typeof voiceOf>;
 const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
 
@@ -178,7 +189,7 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
  * new counts: no new line, no new attempt (the writing estimate and the digest keep the first count, as after a rewrite).
  * The caller checks rules/essay pieceAgainProblem first.
  */
-export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number): Promise<EssayAnalysis> {
+export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number, notSaved?: (line: string) => void): Promise<EssayAnalysis> {
   const old = reading.piece!, lens = lensOf(reading.type), voice = voiceOf("essay", age), sentences = reading.sentences, of = old.paragraphs;
   const piece: NonNullable<EssayAnalysis["piece"]> = { ...old, read: [...old.read], failed: [], ...(old.notEnglish ? { notEnglish: [...old.notEnglish] } : {}) };
   const observed = [...(old.observed ?? [])], summaries: string[] = [];
@@ -200,7 +211,7 @@ export async function analysePieceAgain(reading: EssayAnalysis, learnerId: strin
   const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
   const head = [`${faultyIn(verdicts)} of ${ruledSentences(sentences, piece).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(piece)].join(" ");
   const summary = at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
-  try { restatePiece(learnerId, lens.name, reading, { verdicts, piece }); } catch {}
+  try { restatePiece(learnerId, lens.name, reading, { verdicts, piece }); } catch (e) { restateFailed("send-again", PIECE_AGAIN_NOT_SAVED, e, notSaved); }
   return { ...reading, verdicts, summary, provider, piece };
 }
 
@@ -217,7 +228,7 @@ const reviseSchema = (lens: Lens) => { return { type: "object", properties: { ob
  * line is restated in place (restateReading), so the recap counts the sentences still to fix as the reading now
  * stands, and how many a rewrite fixed.
  */
-export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number, learnerId?: string): Promise<EssayAnalysis> {
+export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number, learnerId?: string, notSaved?: (line: string) => void): Promise<EssayAnalysis> {
   const voice = voiceOf("essay", age);
   const r = revise(reading, n, rewrite);
   if (!r.ok) throw new Error(r.error);
@@ -249,7 +260,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
   const verdict: Verdict = { ...decided, was };
   const verdicts = next.sentences.flatMap((s) => (s.n === n ? [verdict] : reading.verdicts.filter((v) => v.n === s.n)));
-  if (learnerId) try { restateReading(learnerId, lens.name, reading.verdicts, verdicts); } catch {}
+  if (learnerId) try { restateReading(learnerId, lens.name, reading.verdicts, verdicts); } catch (e) { restateFailed("rewrite", REWRITE_NOT_SAVED, e, notSaved); }
   return { ...next, verdicts, provider };
 }
 
@@ -262,7 +273,7 @@ const LINE = /^(\d+) of (\d+) (sentences?) to fix(, \d+ paragraphs)?(, \d+ fixed
  * and ", k fixed" for the sentences a rewrite moved from faulty to strong. It stays one line, one reading.
  */
 function restateReading(learnerId: string, label: string, before: Verdict[], after: Verdict[]): void {
-  const l = getLearner(learnerId), was = faultyIn(before);
+  const l = readLearner(learnerId), was = faultyIn(before);
   const at = l.history.findLastIndex((h) => h.kind === "writing" && h.label === label && LINE.exec(h.detail)?.[1] === String(was));
   if (at < 0) return;
   const m = LINE.exec(l.history[at].detail)!;
@@ -274,7 +285,7 @@ function restateReading(learnerId: string, label: string, before: Verdict[], aft
 
 /** The history line of a piece, restated in place after its failed paragraphs were read again: the counts as the piece now stands. */
 function restatePiece(learnerId: string, label: string, before: EssayAnalysis, after: Pick<EssayAnalysis, "verdicts" | "piece">): void {
-  const l = getLearner(learnerId), was = faultyIn(before.verdicts), ruledWas = ruledSentences(before.sentences, before.piece).length;
+  const l = readLearner(learnerId), was = faultyIn(before.verdicts), ruledWas = ruledSentences(before.sentences, before.piece).length;
   const at = l.history.findLastIndex((h) => h.kind === "writing" && h.label === label && LINE.exec(h.detail)?.[1] === String(was) && LINE.exec(h.detail)?.[2] === String(ruledWas));
   if (at < 0) return;
   const ruled = ruledSentences(before.sentences, after.piece).length;

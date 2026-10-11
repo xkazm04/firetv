@@ -49,14 +49,16 @@ export async function POST(req: Request) {
     if (unruled) return NextResponse.json({ error: unruled }, { status: 400 });
     const ok = revise(a, n, typeof body.text === "string" ? body.text : "");
     if (!ok.ok) return NextResponse.json({ error: ok.error }, { status: 400 });
+    // a rewrite that was read but whose history line did not save still succeeds, and says so (as SETTLE_NOT_SAVED does)
+    let notSaved: string | undefined;
     const r = await runJob("analyse", async () => {
-      const next = await reviseSentence(a, n, body.text, age, who.id);
+      const next = await reviseSentence(a, n, body.text, age, who.id, (line) => { notSaved = line; });
       // a paragraph read or a reset since the rewrite was asked leaves the desk as it is now
       if (getSession().essay === a) dispatch({ type: "essay.revised", analysis: next, n });
       return next;
     }, {
       key: `sentence:${n}`, start: `reading sentence ${n} again…`,
-      done: (x) => (rewriteState(x.verdicts.find((v) => v.n === n)) === "holds" ? `sentence ${n} holds now` : `sentence ${n} still needs the move`),
+      done: (x) => notSaved ?? (rewriteState(x.verdicts.find((v) => v.n === n)) === "holds" ? `sentence ${n} holds now` : `sentence ${n} still needs the move`),
     });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
@@ -65,12 +67,13 @@ export async function POST(req: Request) {
     const a = getSession().essay;
     const problem = pieceAgainProblem(a);
     if (problem || !a) return NextResponse.json({ error: problem }, { status: 400 });
+    let notSaved: string | undefined;
     const r = await runJob("analyse", async (run) => {
-      const done = await analysePieceAgain(a, who.id, age);
+      const done = await analysePieceAgain(a, who.id, age, (line) => { notSaved = line; });
       // one report, when the piece is ruled; a reading replaced since leaves the desk as it is now
       if (run.current() && getSession().essay === a) dispatch({ type: "essay.progress", analysis: done, owner: who.id });
       return done;
-    }, { key: "essay", start: "reading the paragraphs that did not come back…", done: (x) => x.summary.slice(0, 120) });
+    }, { key: "essay", start: "reading the paragraphs that did not come back…", done: (x) => notSaved ?? x.summary.slice(0, 120) });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
   if (body.kind === "piece") {

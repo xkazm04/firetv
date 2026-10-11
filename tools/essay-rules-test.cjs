@@ -1471,3 +1471,60 @@ test('E7-7: the request makes full coverage reachable - each lens requires its o
   assert.deepEqual(seen[0].schema.properties.observations.items.required,['n','note',field],`${lens}: the deciding field is required`);
  }
 });
+
+// ---- E8 (essay full r1 robustness-1): a failed save after a rewrite is logged and said; the rewrite still succeeds ----
+/** Fail the learners.json writes only (the rename over the book throws EPERM); returns the restore. Never desk/data. */
+function failLearnerWrites(){
+ const real=fs.renameSync;
+ fs.renameSync=function(from,to,...rest){
+  if(String(to).endsWith('learners.json'))throw Object.assign(new Error(`EPERM: operation not permitted, rename '${from}' -> '${to}'`),{code:'EPERM'});
+  return real.call(this,from,to,...rest);
+ };
+ return ()=>{fs.renameSync=real;};
+}
+const E8_FIVE='The school day starts too early. Research found that teenagers fall asleep later. Teenagers are just lazy. A 2019 study measured their sleep. Therefore the start should move.';
+async function e8Read(){
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const id=getSession().learner.id;
+ answer=faults([2,3]);
+ const first=await analyseEssay(E8_FIVE,'evidence',id);dispatch({type:'essay.set',analysis:first});
+ return id;
+}
+const e8Rewrite=async()=>{
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'It names its source now.'}]});
+ const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ try{const r=await analyse({kind:'rewrite',n:2,text:STUDY});return {r,errs};}finally{console.error=e0;}
+};
+test('E8-1: a rewrite whose save fails answers 200, shows the new verdict, says REWRITE_NOT_SAVED and logs one line',async()=>{
+ const {REWRITE_NOT_SAVED}=deskEssay();deskWorded(REWRITE_NOT_SAVED);
+ const id=await e8Read();const line=getLearner(id).history.at(-1).detail;
+ const restore=failLearnerWrites();let out;try{out=await e8Rewrite();}finally{restore();}
+ assert.equal(out.r.status,200);
+ assert.equal(getSession().essay.verdicts.find(v=>v.n===2).verdict,'strong','the new verdict is on the desk');
+ assert.equal(getSession().status,REWRITE_NOT_SAVED);assert.equal(getSession().jobs.analyse.phase,'done');
+ assert.equal(out.errs.length,1,'one server line');assert.match(out.errs[0],/rewrite/);assert.ok(!out.errs[0].includes('study')&&!out.errs[0].includes('teenagers'),'no learner text');
+ assert.equal(getLearner(id).history.at(-1).detail,line,'the file still holds the old count');
+});
+test('E8-2: a rewrite with learners.json unreadable answers 200 and says LEARNER_UNREAD_RUN',async()=>{
+ const {LEARNER_UNREAD_RUN}=require(path.join(root,'src/lib/session/store.ts'));
+ const id=await e8Read();
+ const file=path.join(process.env.DESK_DATA_DIR,'learners.json');const had=fs.existsSync(file)?fs.readFileSync(file):null;
+ fs.writeFileSync(file,'not a book');
+ let out;try{out=await e8Rewrite();}finally{if(had)fs.writeFileSync(file,had);else fs.rmSync(file,{force:true});}
+ assert.equal(out.r.status,200);assert.equal(getSession().status,LEARNER_UNREAD_RUN);
+ assert.equal(getSession().essay.verdicts.find(v=>v.n===2).verdict,'strong');
+ assert.equal(out.errs.filter(l=>/essay rewrite/.test(l)).length,1,'one line for the save of the rewrite; other readers of the book log their own');
+});
+test('E8-4 (guard): with the file writable a rewrite says today\'s status and logs nothing',async()=>{
+ const {REWRITE_NOT_SAVED}=deskEssay();
+ const id=await e8Read();const out=await e8Rewrite();
+ assert.equal(out.r.status,200);assert.equal(getSession().status,'sentence 2 holds now');assert.notEqual(getSession().status,REWRITE_NOT_SAVED);
+ assert.equal(out.errs.length,0,'no log line');assert.equal(getLearner(id).history.at(-1).detail,'1 of 5 sentences to fix, 1 fixed');
+});
+test('E8-5: reviseSentence with no callback and a failing save still resolves',async()=>{
+ const {reviseSentence}=deskEssay();
+ const id=await e8Read();
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'ok'}]});
+ const restore=failLearnerWrites(),e0=console.error;console.error=()=>{};
+ try{const a=await reviseSentence(getSession().essay,2,STUDY,undefined,id);assert.equal(a.verdicts.find(v=>v.n===2).verdict,'strong');}finally{console.error=e0;restore();}
+});
