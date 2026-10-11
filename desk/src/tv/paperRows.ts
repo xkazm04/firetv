@@ -4,8 +4,7 @@
  * desk calls secure marked beside them and never dropped (ruling 2). Pure; no string names the board.
  */
 import type { Session } from "@/lib/session/store";
-import { recovery, type Recovery } from "@/lib/rules/recovery";
-import { topicsOf } from "@/lib/library/paths";
+import { recovery, prereqsOf, type Recovery } from "@/lib/rules/recovery";
 
 export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean; }
 export interface PaperOff { can: string; lost: number; from: string; beyond: boolean; }
@@ -33,9 +32,6 @@ export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
     off: r.notOnDesk.map((o) => ({ can: o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation })),
   };
 }
-
-/** How many topics the list holds. */
-export const paperTopicCount = (s: Pick<Session, "paper" | "skills">): number => paperView(s).topics.length;
 
 /** The stops the D-pad walks (tv/keys): the topic rows, then the off-desk statements. */
 export const paperStopCount = (s: Pick<Session, "paper" | "skills">): number => { const v = paperView(s); return v.topics.length + v.off.length; };
@@ -77,17 +73,6 @@ export function paperWindow(n: number, focus: number, size: number): { from: num
 /** The lines of the paper's card: what was scored, and what was lost. */
 export const scoreLine = (v: PaperView): string => `${v.marks} of ${v.outOf} marks · ${marks(v.lost)} lost`;
 export const lostWord = (n: number): string => marks(n);
-
-const SCHOOL = topicsOf("school");
-/** Every prerequisite of a school topic, followed through. */
-function prereqsOf(id: string): Set<string> {
-  const all = new Set<string>(), todo = [id];
-  while (todo.length) {
-    const at = todo.pop();
-    for (const p of SCHOOL.find((t) => t.id === at)?.prereq ?? []) if (!all.has(p)) { all.add(p); todo.push(p); }
-  }
-  return all;
-}
 
 /**
  * The row that lost the most and needs the first row as a base: the earliest row in list order with the largest lost

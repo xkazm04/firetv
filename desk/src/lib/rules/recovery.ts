@@ -150,7 +150,7 @@ export function cleanPaper(raw: unknown): CleanPaper {
 }
 
 /** Every prerequisite of a school topic, followed through (a prerequisite's own prerequisites, and so on). */
-function prereqsOf(id: string): Set<string> {
+export function prereqsOf(id: string): Set<string> {
   const all = new Set<string>(), todo = [id];
   while (todo.length) {
     const t = SCHOOL[AT.get(todo.pop()!) ?? -1];
