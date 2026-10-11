@@ -255,3 +255,34 @@ test('case 9 (P5): the fix narrows only the guest - a joined phone and the TV st
  for(const k of Object.keys(extra)){assert.deepEqual(t[k],extra[k],`the TV still receives ${k}`);assert.deepEqual(p[k],extra[k],`a joined phone still receives ${k}`);}
  assert.equal(t.viewer,'tv');assert.equal(p.viewer,'phone');assert.equal(p.pin,'');
 });
+
+// ---- Delivery 8 (PR1-PR3): the address, the code, the bad request ----
+const a4=(address,internal=false)=>({address,family:'IPv4',internal,netmask:'255.255.255.0',mac:'00:00:00:00:00:00',cidr:null});
+const lan=()=>require(src('lib/session/lan.ts'));
+/** One table of cases: the helper (lib/session/lan.ts) and the dev-https script (tools/desk-dev-https.cjs) are both held to it. */
+const LAN_CASES=[
+ ['the measured host: Tailscale, Wi-Fi 2, vEthernet (WSL) -> the Wi-Fi',{'Tailscale':[a4('100.100.134.107')],'Wi-Fi 2':[a4('10.0.0.140')],'vEthernet (WSL)':[a4('172.25.208.1')],'Loopback':[a4('127.0.0.1',true)]},{},'10.0.0.140'],
+ ['a vEthernet 172.x listed before a Wi-Fi 192.168.x -> the 192.168',{'vEthernet (Default Switch)':[a4('172.20.0.1')],'Wi-Fi':[a4('192.168.1.20')]},{},'192.168.1.20'],
+ ['only Tailscale and a link-local address -> Tailscale',{'Ethernet':[a4('169.254.3.4')],'Tailscale':[a4('100.64.0.9')]},{},'100.64.0.9'],
+ ['no non-internal IPv4 -> localhost',{'lo':[a4('127.0.0.1',true)],'Wi-Fi':[{address:'fe80::1',family:'IPv6',internal:false}]},{},'localhost'],
+ ['a virtual adapter after a real one in the same rank',{'VirtualBox Host-Only':[a4('192.168.56.1')],'Wi-Fi':[a4('192.168.1.7')]},{},'192.168.1.7'],
+ ['DESK_PHONE_HOST wins over all of them',{'Wi-Fi':[a4('192.168.1.20')]},{DESK_PHONE_HOST:'desk.local'},'desk.local'],
+ ['a blank DESK_PHONE_HOST is not an override',{'Wi-Fi':[a4('192.168.1.20')]},{DESK_PHONE_HOST:'   '},'192.168.1.20'],
+];
+for(const [name,ifaces,env,want] of LAN_CASES)test('PR1: lanHost - '+name,()=>{assert.equal(lan().lanHost(ifaces,env),want);});
+test('PR1: phoneUrl() (store.ts) and the landing page pick through the same helper',()=>{
+ const was=process.env.DESK_PHONE_HOST;
+ mock.method(os,'networkInterfaces',()=>LAN_CASES[0][1]);
+ try{
+  store.dispatch({type:'reset'});assert.match(store.getSession().phoneUrl,/^http:\/\/10\.0\.0\.140:\d+\/phone$/,'phoneUrl follows the ranked pick');
+  process.env.DESK_PHONE_HOST='desk.example';store.dispatch({type:'reset'});assert.match(store.getSession().phoneUrl,/^http:\/\/desk\.example:\d+\/phone$/);
+ }finally{mock.restoreAll();if(was===undefined)delete process.env.DESK_PHONE_HOST;else process.env.DESK_PHONE_HOST=was;store.dispatch({type:'reset'});}
+ const page=fs.readFileSync(src('app/page.tsx'),'utf8');assert.match(page,/lanHost\(/,'the landing page shows the same host');assert.doesNotMatch(page,/networkInterfaces/);
+});
+test('PR1: tools/desk-dev-https.cjs --address answers the same table',()=>{
+ const {spawnSync}=require('node:child_process');
+ for(const [name,ifaces,env,want] of LAN_CASES){
+  const r=spawnSync(process.execPath,[path.resolve(__dirname,'desk-dev-https.cjs'),'--address'],{cwd:root,encoding:'utf8',env:{...process.env,DESK_PHONE_HOST:'',...env,DESK_FAKE_INTERFACES:JSON.stringify(ifaces)}});
+  assert.equal(r.stdout.trim(),want,name+' '+r.stderr);
+ }
+});

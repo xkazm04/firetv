@@ -1,8 +1,10 @@
 /** Run from desk/ (npm run dev:https): next dev over HTTPS with a certificate for this computer's LAN address, so a phone's microphone works. --cert-only makes the files and stops. */
-const fs=require('node:fs'),path=require('node:path'),{spawn,spawnSync}=require('node:child_process'),{networkInterfaces}=require('node:os');
+const fs=require('node:fs'),path=require('node:path'),{spawn,spawnSync}=require('node:child_process');
 const dir=path.resolve(process.cwd(),'certificates');
-// the same address phoneUrl() in desk/src/lib/session/store.ts picks
-const ip=Object.values(networkInterfaces()).flat().find(n=>n&&n.family==='IPv4'&&!n.internal)?.address??'localhost';
+// the same address phoneUrl() in desk/src/lib/session/store.ts picks: both ask lanHost() (DESK_FAKE_INTERFACES is the test's stand-in for the adapters)
+require('./ts-load.cjs');
+const ip=require(path.resolve(__dirname,'../desk/src/lib/session/lan.ts')).lanHost(process.env.DESK_FAKE_INTERFACES?JSON.parse(process.env.DESK_FAKE_INTERFACES):undefined);
+if(process.argv.includes('--address')){console.log(ip);process.exit(0);}
 const names=['localhost','127.0.0.1',...(ip==='localhost'?[]:[ip])];
 const cert=path.join(dir,`desk-${ip}.pem`),key=path.join(dir,`desk-${ip}-key.pem`);
 

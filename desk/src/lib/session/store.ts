@@ -7,7 +7,7 @@
  */
 import type { Workroom } from "../twin/workroom";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
-import { networkInterfaces } from "node:os";
+import { lanHost } from "./lan";
 import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
@@ -348,7 +348,7 @@ const FILE = path.join(DATA, "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
 function phoneUrl(): string {
-  const ip = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
+  const ip = lanHost();
   return `${process.env.DESK_HTTPS === "1" ? "https" : "http"}://${ip}:${process.env.PORT ?? "3000"}/phone`;
 }
 
