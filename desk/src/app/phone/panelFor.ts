@@ -85,3 +85,23 @@ export function follow(prev: string | null | undefined, s: Seen, at: At): Step {
   else if (cue && key !== prev && at.role === "student" && !at.busy) to = cue.panel;
   return { key, to: to === at.panel ? null : to };
 }
+
+/** How a code reached the join: typed on the panel, kept from an earlier join, or carried by the TV's QR. */
+export type JoinHow = "typed" | "remembered" | "qr";
+/** The route's own texts (lib/session/pairing.ts WRONG_CODE, TOO_MANY_CODES); that module reads node:crypto, so the phone page cannot import it. */
+const WRONG_CODE = "That code is not on the TV.", TOO_MANY_CODES = "Too many wrong codes. Wait five minutes, then type the code again.";
+
+/**
+ * What a refused join shows. A quiet join (a remembered code, the QR's) is quiet only about the shake: every refusal
+ * says why. status is undefined when no answer came. A code the TV does not know is forgotten when the phone brought it
+ * (a reset gives the TV a new one); a cooldown or a lost connection says nothing about the code, so it is kept.
+ */
+export function joinRefusal(r: { status: number | undefined; error: string | undefined; how: JoinHow }): { line: string; shake: boolean; forget: boolean } {
+  const shake = r.how === "typed";
+  if (r.status === undefined) return { line: "That did not reach the desk.", shake, forget: false };
+  if (r.error === TOO_MANY_CODES) return { line: TOO_MANY_CODES, shake, forget: false };
+  const wrong = r.error === undefined || r.error === WRONG_CODE;
+  if (wrong && r.how === "remembered") return { line: "The TV has a new code. Type the code the TV shows.", shake, forget: true };
+  if (wrong) return { line: WRONG_CODE, shake, forget: r.how === "qr" };
+  return { line: r.error!, shake, forget: false };
+}

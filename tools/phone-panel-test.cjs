@@ -702,3 +702,42 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
  });
  assert.match(src,/onClick=\{checkSentence\}>Check it on the TV</,'the Say button calls the named handler');
 });
+
+// ---- PR5: every refused join says why on the Join panel ----
+const WRONG='That code is not on the TV.',TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
+const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That did not reach the desk.';
+test('PR5: the join lines are the route\'s own, and carry no digit and no em dash',()=>{
+ const pairing=fs.readFileSync(path.join(SRC,'lib/session/pairing.ts'),'utf8');
+ assert(pairing.includes(`"${WRONG}"`)&&pairing.includes(`"${TOO_MANY}"`),'the route texts are the ones this suite expects');
+ for(const l of [NEWCODE,NOREACH])assert.doesNotMatch(l,/[0-9—]/);
+});
+test('PR5: a remembered code the TV does not know is forgotten and the phone says the TV has a new code',()=>{
+ const r=P().joinRefusal({status:403,error:WRONG,how:'remembered'});
+ assert.deepEqual(r,{line:NEWCODE,shake:false,forget:true});
+});
+test('PR5: a QR code the TV does not know says so, quietly, and is forgotten',()=>{
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'qr'}),{line:WRONG,shake:false,forget:true});
+});
+test('PR5: a cooldown refusal shows the route\'s text and keeps the stored code, typed or not',()=>{
+ for(const how of ['typed','remembered','qr'])assert.deepEqual(P().joinRefusal({status:403,error:TOO_MANY,how}),{line:TOO_MANY,shake:how==='typed',forget:false},how);
+});
+test('PR5: no answer says it did not reach the desk and keeps the stored code',()=>{
+ for(const how of ['typed','remembered','qr'])assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how}),{line:NOREACH,shake:how==='typed',forget:false},how);
+});
+test('PR5: any other refusal shows the route\'s text, or the wrong-code line when it sends none',()=>{
+ assert.deepEqual(P().joinRefusal({status:500,error:'Boom.',how:'remembered'}),{line:'Boom.',shake:false,forget:false});
+ assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'qr'}),{line:WRONG,shake:false,forget:true});
+ assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'typed'}),{line:WRONG,shake:true,forget:false});
+});
+test('PR5: a typed wrong code shakes and keeps what is stored',()=>{
+ assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
+});
+test('PR5: page.tsx join() sends every refusal through joinRefusal, quiet ones too, and removes desk.pin when told to forget',()=>{
+ const src=code(PAGE);
+ assert.match(src,/joinRefusal/,'page.tsx uses joinRefusal');
+ const at=src.indexOf('const join = async'),body=src.slice(at,src.indexOf('const onPin',at));
+ assert(at>0&&body.includes('joinRefusal('),'join() calls it');
+ assert.doesNotMatch(body,/if \(quiet\) return/,'a quiet join no longer returns before saying why');
+ assert.match(body,/\.forget[\s\S]*localStorage\.getItem\("desk\.pin"\) === code[\s\S]*localStorage\.removeItem\("desk\.pin"\)[\s\S]*setHasDesk\(false\)/,'forget removes desk.pin only when it is the refused code, and clears hasDesk');
+ assert.match(src,/join\(q, "qr"\)/);assert.match(src,/join\(code, "remembered"\)/);
+});

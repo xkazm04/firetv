@@ -12,7 +12,7 @@ import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
-import { follow, type PScreen } from "./panelFor";
+import { follow, joinRefusal, type JoinHow, type PScreen } from "./panelFor";
 import { forensicAt, planAt, switchEndsLine } from "@/tv/keys";
 import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
@@ -126,7 +126,7 @@ export default function Phone() {
     if (!q) return;
     remembered.current = null;
     history.replaceState(null, "", location.pathname);
-    void join(q, true);
+    void join(q, "qr");
   }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -149,15 +149,18 @@ export default function Phone() {
   const [bad, setBad] = useState(false);
   /**
    * The desk checks the code (api/session): a match sets this phone's cookie and the stream reopens as a joined
-   * phone; a refusal says why. Quiet for a code the phone brought (the QR, a remembered one): no shake for those.
+   * phone; a refusal says why (joinRefusal). Quiet for a code the phone brought (the QR, a remembered one): no shake for those,
+   * but the line is shown, and a code the TV no longer knows is forgotten.
    */
-  const join = async (code = pin, quiet = false) => {
+  const join = async (code = pin, how: JoinHow = "typed") => {
     let r: Response | null = null;
     try { r = await post({ type: "join", code }); } catch {}
     if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); setHasDesk(true); } catch {} reconnect(); return; }
-    if (quiet) return;
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
-    setMsg(r ? j.error ?? "That code is not on the TV." : "That did not reach the desk."); setBad(true); setTimeout(() => setBad(false), 500);
+    const refusal = joinRefusal({ status: r?.status, error: j.error, how });
+    if (refusal.forget) { try { if (localStorage.getItem("desk.pin") === code) localStorage.removeItem("desk.pin"); } catch {} setHasDesk(false); }
+    setMsg(refusal.line);
+    if (refusal.shake) { setBad(true); setTimeout(() => setBad(false), 500); }
   };
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
@@ -166,7 +169,7 @@ export default function Phone() {
   /** Whether this phone holds a desk to forget: the Forget link is offered only then. */
   const [hasDesk, setHasDesk] = useState(false);
   useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); setHasDesk(!!remembered.current); } catch {} }, []);
-  useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, true); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, "remembered"); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the desk forgets this phone too: its cookie goes, and the stream reopens as a guest
   const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setHasDesk(false); setMsg("This phone will ask for the code next time.");
     void post({ type: "leave" }).then(() => reconnect(), () => {}); };
