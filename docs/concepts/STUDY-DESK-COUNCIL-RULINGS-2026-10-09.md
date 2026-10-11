@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1 and dff24ac2 name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359 and cf79b2aa name a run, not a commit.
 
 ---
 
@@ -598,9 +598,9 @@ HF4 (delivery 4h) delivers the write half of must-address 1: tmp and rename, a l
 | P15 | (7d-3) The phone's `explain()` drops a reply or an error that returns after the seated learner or the walk item changed. A seat ref is read after the await (`desk/src/app/phone/page.tsx:345`, `moved()` at :350), and busy still clears. The explain route is unchanged. | Student-working full r1 robustness-3. | none recorded | delivered, 1bbf359c (run 243b0a17) |
 | P16 | (7d-4) `sendSecond`, the phone's typed second try (`desk/src/app/phone/page.tsx:361`), drops a result or an error that returns after the learner or the walk item changed, by P15's mechanism. | 7d-3's report-only answer 3, confirmed: a late error from `sendSecond` sets msg on the next learner's panel. | none recorded | delivered, 44cbbca1 (run 5ad42cde) |
 | P17 | (i) (7d-5) On the phone, a switch to a different learner resets the last learner's work to its load values. A switch is the seated id becoming a defined id other than the last one seen. The reset covers paras, pix, readIx, note, info, source, pieceId, notice, shot, phase, q, msg, paperRows, typed, sentence and memory. A to none and back to A resets nothing. (ii) These handlers drop a reply or an error that returns after the seated learner changed, by P15's mechanism: send, sendSlot, sendRewrite, readPiece, acceptNotice, analyseParagraph, ask, retry, sendWorking, sendTyped, and the Say panel's 'Check it on the TV' button. After a switch, acceptNotice does not call readPiece. endSession is deliberate and unchanged. | 7d-4's report-only answer, which the App Master confirmed at 44cbbca1. After a switch, the next learner saw the last learner's essay. A read of that essay posted it to the new learner's shelf, or was refused with 'That piece is not on your shelf.' (`desk/src/app/api/texts/route.ts:41`; the brief named texts.ts, and this route file holds the text). paperRows, typed, sentence and memory were added at dispatch. | none recorded | delivered, 0edd8b13 (i) and 61d87bfc (ii) (run 200beb31) |
-| P17-a | On a switch to a different learner, `clearLastLearnersWork` (`desk/src/app/phone/page.tsx:364`) also sets keep back to true and ring to null, their load values. A P17 (i) case covers it. | The App Master read page.tsx's useState list at 61d87bfc and found that P17 (i) left these two out: `keep` is at :82 and `ring` at :86. It was kept out of P18, because page.tsx and tools/phone-panel-test.cjs were in the student-working-explanation full r3 span. | none recorded | dispatched 2026-10-11 in the pre-r3 rework |
+| P17-a | On a switch to a different learner, `clearLastLearnersWork` (`desk/src/app/phone/page.tsx:364`) also sets keep back to true and ring to null, their load values. A P17 (i) case covers it. | The App Master read page.tsx's useState list at 61d87bfc and found that P17 (i) left these two out: `keep` is at :82 and `ring` at :86. It was kept out of P18, because page.tsx and tools/phone-panel-test.cjs were in the student-working-explanation full r3 span. | none recorded | delivered, 5f9a8c67 (run 1ee1d75f) |
 | P18 | In `load()` (`desk/src/lib/session/store.ts`, :748): a repair that throws goes through `setAside`: the file is kept as session.json.bad-*, the desk starts with SESSION_UNREAD, and one log line names the repair's error. A saved log that is not an object is repaired to the empty evening log, with one line. `awayShown` drops a slot that is not an object, and gives a pages or tasks field that is not a list the empty list, with one line each. | Full r2 must-address (robustness-2), and its two more shapes, log: null and an away slot with pages: null. | Fixing the data where it throws, in the reducer. | delivered, 84832dfa (run 80b15cc1) |
-| P18-a | (i) A session.json that `readFileSync` cannot read goes through `setAside`. (ii) A session.json the desk could not use and could not put aside is never overwritten: each later write tries the aside again, and writes only once it lands. (iii) In a log that is an object, each wrong field is repaired to `fresh()`'s value. (iv) An away slot's log is repaired the same way. | P18's report-only answers 1 and 2, which the App Master confirmed at 84832dfa. `log: {}` and an away slot with `log: null` make every dispatch throw in `stamped` (`store.ts:570-571`), through `loggedIn` (:556), which reads `l.problems.length` and `x.log`. | `setAside` on a read failure alone. When the rename fails too, the next save still overwrites the file. | dispatched 2026-10-11 in the pre-r3 rework |
+| P18-a | (i) A session.json that `readFileSync` cannot read goes through `setAside`. (ii) A session.json the desk could not use and could not put aside is never overwritten: each later write tries the aside again, and writes only once it lands. (iii) In a log that is an object, each wrong field is repaired to `fresh()`'s value. (iv) An away slot's log is repaired the same way. | P18's report-only answers 1 and 2, which the App Master confirmed at 84832dfa. `log: {}` and an away slot with `log: null` make every dispatch throw in `stamped` (`store.ts:570-571`), through `loggedIn` (:556), which reads `l.problems.length` and `x.log`. | `setAside` on a read failure alone. When the rename fails too, the next save still overwrites the file. | delivered, 34f7b4bf (run 1ee1d75f) |
 
 Delivery 7 was split into 7a, 7a2 and 7b, on one lane. Lost: one branch. The reasons: P4's files (`desk/src/app/phone/page.tsx` and `desk/src/tv/keys.ts`) were in the hint full r2 span, and 7a had to merge before digest full r3, whose span holds `store.ts`.
 
@@ -754,9 +754,43 @@ P18, as delivered (one commit, run 80b15cc1):
 
 Next, ruled 2026-10-11 (round 13): the pre-r3 rework (P17-a and P18-a, one delivery, two commits) lands before the learner-profile full r3, the last full round, because `desk/src/app/phone/page.tsx`, `tools/phone-panel-test.cjs`, `desk/src/lib/session/store.ts` and `tools/learner-switch-test.cjs` are in its span. The full r3 follows its merge.
 
+The pre-r3 rework, as delivered (two commits, run 1ee1d75f):
+- Both commits are ancestors of `main` (checked with `git cat-file -e` and `git merge-base --is-ancestor`).
+- 5f9a8c67 changes `desk/src/app/phone/page.tsx` and `tools/phone-panel-test.cjs`, +4/-3. 34f7b4bf changes `desk/src/lib/session/store.ts` and `tools/learner-switch-test.cjs`, +98/-5.
+- The `store.ts` hunks are the Store type (aside), `load()` (:748), the new `keptLog` (:783) and `badLogFields` (:769), `setAside` (:794), `awayShown` (:823), the store init, and the aside guard at the top of `writeSession` (:987). No reducer changed.
+- Fail-before was observed. On the old `page.tsx`, 'A to B' and 'A to none to B' were red. On the old `store.ts`, R3-a to R3-d were red. All were green after.
+- The gate: 75 suites, 1480 tests. tsc exited 0.
+- Its report-only answers, ruled:
+  1. An `essayPlan.slots` that is not a list throws. It throws in `emptyOf` (`desk/src/lib/session/store.ts:376`), and on `essay.plan` (:666) and `essay.slot` (:669, which calls `planFill`). No test exercised it. Ruled as known limit (viii). It was named to the full r3 and is not slotted.
+  2. No route reads `session.json` outside `load()` and `writeSession`. Only two comments name the file (`rules/mode.ts:24` and `session/learners.ts:5`). Accepted.
+
+Full r3 (round 2026-10-11-learner-profile-multi-learner-switching-r3, run 333437c2), the last full round:
+- What was judged: head f2645f41 and a span of 21 files, from its receipt.json. The App Master derived the span (r2's 21 files, unchanged). Four span files differ from r2: `store.ts`, `phone/page.tsx`, `tools/learner-switch-test.cjs` and `tools/phone-panel-test.cjs` (+141/-11). Nothing carried forward.
+- The result: ready 0.5525, coverage 1.00, round 3 of 3, with uncalibrated judges. Scores, with the delta against r2: value 0.60 (0.00), craft 0.58 (+0.01), rivalry 0.45 (-0.10), robustness 0.65 (+0.05), economics 0.40 (0.00). No hard failure.
+- r2's must-address line is closed (robustness-1, low). The replays are in `replay-aside.md`:
+  - Scenario 1: a file with `pages: 5` is renamed `session.json.bad-*` with the same bytes, the desk starts with SESSION_UNREAD, and one log line names the repair failure.
+  - Scenario 2: the rename is made to fail, and session.json is not written over until the rename lands.
+  - Scenario 3: an unreadable session.json is put aside the same way.
+  - Cases R2-a, R3-a and R3-b pass. One residual is recorded, not as a reopening: nothing reads an aside file back, and SESSION_UNREAD does not say where the old file went.
+- The Essay answer. Simon's three-paragraph piece was being read when Nela was seated, and the reading was let finish. The route answers 200 with "3 of 6 sentences to fix across 3 paragraphs". The finished reading still writes the leaving learner's history in learners.json: a history line `writing: Structure: 3 of 6 sentences to fix, 3 paragraphs`, a writing-skill step for `structure` (seen 1), and one digest entry `{kind: essay, lens: structure, sentences: 6, faulty: 3}`. Nela's record is unchanged. When Simon is seated again, his desk shows paragraph 1 of 3 and "1 of 6 sentences to fix". Nothing says the reading was cut. So the desk shows 1 of 6 while his record and the parent's digest count 3 of 6. No case in the four span suites covers this path.
+- The must-address line, verbatim from result.json, where it is stored truncated: 'robustness: A whole-piece Essay reading that outlives a switch leaves the leaving learner's away slot frozen at its first paragraph while their record says the reading finished; the failure path...'. robustness-2's full title (`verdict-robustness.json`): 'A whole-piece Essay reading that outlives a switch leaves the leaving learner's away slot frozen at its first paragraph while their record says the reading finished; the failure path has no case'.
+- The findings below the must-address, one line each:
+  - robustness-3 (med): a watched lesson whose history line cannot be written is swallowed with no log line and no status; robustness-4 (low): two routes parse the request body with no catch (`session/route.ts` and `analyse/route.ts`); robustness-7 (low): an essayPlan whose slots is not a list has no case; robustness-1 (low, r2's line closed), robustness-5 (low, hard-fail checks), robustness-6 (low, gate record) and robustness-8 (low, a cross-reference to economics);
+  - value-1 (med): the same Essay reading as the must-address; value-2 (med): a sibling's turn ends a Linga scene or a part-way level check, with no Carry on afterwards; value-3 to value-6 (low), and value-time-saved (low);
+  - craft-1 (med): the phone resets on a switch from a hand-kept list of 18 setters, and some per-learner state is outside it; craft-2 (med): EssayShelf refetches on a learner change with no stale-response guard; craft-3 (med): a switch drops a run's events instead of cancelling its work; craft-4 to craft-8 (low);
+  - economics-1 (med): a dropped piece reading keeps calling the engine, at most 29 calls for a 30-paragraph piece; economics-2 (med): a switch cycle lifts the one-run-per-kind guard on analyse; economics-3 (med): every event rewrites the whole session.json, with no limit on away slots; economics-4 to economics-6 (low);
+  - rivalry-1 (med): behind all three named rivals on guarding the switch, the profile edit and the Adult gate; rivalry-2 (med): behind Khan Academy Kids on deleting one learner; rivalry-3 to rivalry-6 (low).
+- Four members reach the Essay reading from their own questions (robustness-2 high, value-1, economics-1 and craft-3 med, rivalry-5 low). Only robustness's class, an untested failure path, makes it must-address.
+- Value is measured at confidence low. No L2 run has put two learners at one desk.
+- This was the last full round. A fourth is refused, so the high line goes to the owner as a decision beside the Approval.
+
+Next, ruled 2026-10-11 (round 14): the owner decides robustness-2 beside the r3 Approval (ask 28b44148). The options are to finish the reading into the away slot, to stop it at the switch, or to accept it as a known limit. No rework is slotted until he answers.
+
 ## 8. tv-phone-pairing
 
 Lite r1: ready, 0.5036. Security-sensitive. A full round follows a clean lite r2.
+
+Superseded (round 14): by the plan change of 2026-10-10 in the Process rulings, a lite-ready major goes straight to its full round after its rework. The pairing full r1 followed delivery 8 with no lite r2.
 
 Must-address:
 1. value: The QR and the printed addresses point at the host's first network adapter, which on the measured host is not the Wi-Fi
@@ -764,11 +798,68 @@ Must-address:
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| PR1 | `phoneUrl` and the printed `/tv?key=` address prefer a private LAN IPv4 (192.168/16, 10/8, 172.16/12) over CGNAT 100.64/10 (Tailscale) and link-local. An explicit env override is kept. | Must-address 1. `phoneUrl()` takes the first non-internal IPv4 (`desk/src/lib/session/store.ts:349-352`); `desk/src/app/page.tsx:6` does the same; the key address is built at `desk/src/lib/session/pairing.ts:163`. | none recorded | queued, delivery 8 |
-| PR2 | Keep 4 digits, because viktor-67 types badly and the QR carries the pin. Add a fixed delay on every refused join, and a desk-wide budget of failed joins with a cooldown. Never rotate the pin on lockout: that would lapse every joined phone. | Must-address 2. `desk/src/lib/session/pairing.ts`. | A longer code, and rotating the pin on lockout. | queued, delivery 8 |
-| PR3 | A malformed or null POST `/api/session` body gets a 400 (R10). A failed read of `pairing.json` or `session.json` logs one line. | `desk/src/app/api/session/route.ts`. | none recorded | queued, delivery 8 |
+| PR1 | `phoneUrl` and the printed `/tv?key=` address prefer a private LAN IPv4 (192.168/16, 10/8, 172.16/12) over CGNAT 100.64/10 (Tailscale) and link-local. An explicit env override is kept. | Must-address 1. `phoneUrl()` takes the first non-internal IPv4 (`desk/src/lib/session/store.ts:349-352`); `desk/src/app/page.tsx:6` does the same; the key address is built at `desk/src/lib/session/pairing.ts:163`. | none recorded | delivered, 1c32a230, with a type cast at 04d6d002 (run b4747c7d) |
+| PR2 | Keep 4 digits, because viktor-67 types badly and the QR carries the pin. Add a fixed delay on every refused join, and a desk-wide budget of failed joins with a cooldown. Never rotate the pin on lockout: that would lapse every joined phone. | Must-address 2. `desk/src/lib/session/pairing.ts`. | A longer code, and rotating the pin on lockout. | delivered, d5a94eff (run b4747c7d) |
+| PR3 | A malformed or null POST `/api/session` body gets a 400 (R10). A failed read of `pairing.json` or `session.json` logs one line. | `desk/src/app/api/session/route.ts`. | none recorded | delivered, ae2469bd (run b4747c7d). Its session.json half was already on main (HF4, P18 and P18-a), so nothing was built for it |
+| PR1-a | `DESK_PHONE_HOST` wins when it is set and not blank. Otherwise the non-internal IPv4 addresses rank 192.168/16, then 10/8, 172.16/12, CGNAT 100.64/10, link-local, and any other. Within a rank, an adapter named like vEthernet, WSL, Hyper-V, Docker, VirtualBox or VMware comes last, and ties keep adapter order. With no candidate, the answer is localhost. `phoneUrl()` (`desk/src/lib/session/store.ts:351`), `desk/src/app/page.tsx:6` and `tools/desk-dev-https.cjs` all use `lanHost()` (`desk/src/lib/session/lan.ts:24`). | A refinement of PR1, ruled at the dispatch of delivery 8. | none recorded | delivered, 1c32a230 (run b4747c7d) |
+| PR2-a | Each refused guarded join waits `DESK_JOIN_DELAY_MS`, 1000 ms by default. Ten wrong codes start a five-minute, desk-wide cooldown. During the cooldown, any guarded join that carries a code is refused with `TOO_MANY_CODES` ('Too many wrong codes. Wait five minutes, then type the code again.', `desk/src/lib/session/pairing.ts:32`). The pin never rotates. The TV and an in-process join are never delayed, counted or held. The count lives in memory, so a restart clears it, and any successful join sets it to zero. | PR2's numbers, ruled at dispatch. | none recorded | delivered, d5a94eff (run b4747c7d) |
+| PR4 | `cookiesOf()` never throws. It treats a value it cannot decode the way Next's own parser does, so the proxy and the stream read one Cookie header the same way. The stream draws each message outside the catch that guards the enqueue. A throw while drawing writes one log line and closes the stream. `cancel()` and a failed enqueue also clear the ping. | Full r1 must-address 5 (robustness-1). | none recorded | dispatched 2026-10-11, delivery 8b |
+| PR5 | A quiet join is quiet only about the shake. For every refusal, one pure function in `desk/src/app/phone/panelFor.ts` decides the line to show, whether to shake (typed codes only), and whether to forget the stored code. A remembered code refused as not on the TV is forgotten, and the Join panel says 'The TV has a new code. Type the code the TV shows.' A cooldown refusal shows the route's text and keeps the stored code. The server's count does not change, so a phone counts at most once per reset. | Full r1 must-address 6 (robustness-2). | Not counting a former pin on the server, which needs a store of past pins. | dispatched 2026-10-11, delivery 8b |
+| PR6 | At most 8 guest streams are open at once, desk-wide, and a ninth closes the oldest guest stream. TV, phone and in-process streams are not counted, and the cap never closes them. Each stream has a high-water mark of 32 messages. A stream whose reader stopped reading is closed and unsubscribed instead of queueing. | Full r1 must-address 7 (economics-1). | Refusing a ninth guest, which would let one device hold the lobby shut. | dispatched 2026-10-11, delivery 8b |
+| PR7 | The pin is drawn with `randomInt` from `node:crypto`, not with `Math.random` (`store.ts` `fresh()`). | Known limit (v) of the full r1. Craft did not judge it, because the round exited early. It is one line, in a security path inside the span. | Leaving it for the full r2 to judge. | dispatched 2026-10-11, delivery 8b |
 
 Left for a later round, by ruling: expiry and per-phone revoke, a per-device token, and the desk-wide `joined`.
+
+Delivery 8, as delivered (four commits, run b4747c7d):
+- Commits: 1c32a230 (PR1), d5a94eff (PR2), ae2469bd (PR3) and 04d6d002 (a type cast on `lan.ts`, +1/-1). All four are ancestors of `main`.
+- Seven files: `desk/src/lib/session/lan.ts` (new), `desk/src/lib/session/store.ts`, `desk/src/lib/session/pairing.ts`, `desk/src/app/page.tsx`, `desk/src/app/api/session/route.ts`, `tools/desk-pairing-test.cjs` and `tools/desk-dev-https.cjs`.
+- Fail-before was observed. The 14 new cases were written first and run on 4aa3601f, and all were red except one guard (TV and in-process joins are never counted), which passed before.
+- In a cooldown the right code is refused, the pin is unchanged, an earlier phone is still a phone, and the TV and an in-process join get in. The cases are at `tools/desk-pairing-test.cjs:306` (ten wrong codes, then the right code refused with the line, and joined after the cooldown), :320 (the lockout leaves the pin; the TV at :327 and an in-process join at :328 join during it) and :330 (the TV and in-process joins are never counted).
+- The gate: 75 suites, 1498 tests. tsc exited 0 at 04d6d002 for the builder, the Director and the App Master. The first tsc run had printed `src/lib/session/lan.ts(31,53): error TS2367`, which the cast fixed.
+- Report-only, ruled:
+  1. The pin is drawn by `Math.random` (`desk/src/lib/session/store.ts:464`) and compared with `!==` (`desk/src/app/api/session/route.ts:61`). Neither was built. Ruled as PR7 for the draw.
+  2. The phone shows the route's error text (`desk/src/app/phone/page.tsx:160`). The cooldown line and WRONG_CODE or NO_CODE appear verbatim. A 1 s wait has no spinner.
+- The App Master's reading: `joinSucceeded()` (`desk/src/lib/session/pairing.ts:59`) zeroes the count on every successful join, including the TV's and an in-process one. The phone's quiet rejoin with a remembered code is a guarded join, so a stale code counts toward the budget.
+
+Full r1 (round 2026-10-11-tv-phone-pairing-r1, run cf79b2aa):
+- What was judged: 04d6d002 and a span of 17 files: lite r1's 14 plus `desk/src/lib/session/lan.ts`, `desk/src/app/page.tsx` and `tools/desk-dev-https.cjs`. The App Master derived the span.
+- The result: fail, overall 0.28, coverage 0.25, round 1 of 3, with uncalibrated judges.
+  - Robustness scored 0.40, under its 0.50 mechanical floor, which binds at every trust state. So the round exited early, and value, craft and rivalry are unmeasured.
+  - Economics scored 0.10. There was no hard failure.
+  - The gates: the merge gate record of run b4747c7d was cited (75 suites, 1498 tests), the council's tsc exited 0, and lint is unmeasured.
+- The seven must-address lines, verbatim from result.json:
+  1. 'robustness scored 0.4 below its floor of 0.5'
+  2. 'value is unmeasured: The round exited early on the robustness mechanical floor (0.40 < 0.50, binding at every trust state), so this judged member was not run (council SKILL.md...'
+  3. 'craft is unmeasured: The round exited early on the robustness mechanical floor (0.40 < 0.50, binding at every trust state), so this judged member was not run (council SKILL.md...'
+  4. 'rivalry is unmeasured: The round exited early on the robustness mechanical floor (0.40 < 0.50, binding at every trust state), so this judged member was not run (council SKILL.md...'
+  5. 'robustness: The session stream's catch {} swallows a throw from liveRole/view: a joined phone carrying one malformed foreign cookie gets a stream that never sends a message, and nothing is logged'
+  6. 'robustness: A quiet join refusal is dropped on the phone and the refused remembered code is kept, so stale phones after a reset fill the desk-wide budget and lock out the correct code with no...'
+  7. 'economics: A guest can open lobby streams without limit, and every dispatch, a join included, fans out to all of them with no ceiling and no backpressure'
+  - Item 6 is stored truncated. robustness-2's full title (`verdict-robustness.json`): 'A quiet join refusal is dropped on the phone and the refused remembered code is kept, so stale phones after a reset fill the desk-wide budget and lock out the correct code with no reason shown'.
+  - Items 5 to 7 are robustness-1, robustness-2 and economics-1, all high. Items 2 to 4 are the rows the early exit left unjudged.
+  - Item 5, executed in-process: a clean cookie jar got its first message (1349 bytes); with `; other=%E0` added, no message arrived and nothing was logged. `cookiesOf()` decodes with no guard, and the proxy uses Next's tolerant parser.
+  - Item 7, run once in-process: with 2000 guest streams, median dispatch went from 0.54 ms to 30.5 ms.
+- Lite r1's two lines are both closed at this head.
+  - Line 1 (the QR and the printed addresses): closed by replay RA. On the measured host (Tailscale 100.100.134.107, Wi-Fi 2 10.0.0.140, vEthernet (WSL) 172.25.208.1) every surface gives 10.0.0.140.
+  - Line 2 (a 4-digit code with no failure delay and no attempt budget): closed as worded, by replay RB. Each refusal waits 1000 ms. 10 codes are checked in the first 5 minutes and 120 in 60 minutes, so finding the pin takes 37.5 h on average and 75 h at worst. A correct guess during the cooldown is refused (403). 200 guesses fired at once: 10 were checked and 190 refused.
+  - What still lets a guesser past the budget: when another device's correct join falls between bursts of nine, the count resets. 45 codes were checked in 45 s with no cooldown.
+- The remembered-code replay: after a TV reset, ten reopenings of /phone with the old code start the cooldown, and the parent's right code is then refused ('Too many wrong codes. Wait five minutes, then type the code again.'). The phone shows nothing for the quiet refusal, and the stale code stays in localStorage. A phone that joined before a lockout is still a phone (replay RD): the pin is unchanged, and it works as before.
+- Known limits (i) to (viii), from report.md section 9:
+  - (i) The budget is desk-wide: one device's ten wrong codes, or the family's own stale reopenings, lock every new phone out for five minutes. The TV and already-joined phones are untouched.
+  - (ii) The budget lives in memory, so a restart clears it and keeps the pin. Confirmed in code, not replayed, not judged.
+  - (iii) Any successful join zeroes the count, including TV and in-process joins (`route.ts:65`). Replayed: nine wrong codes, then a family join, five times over, checked 45 codes in 45 s.
+  - (iv) About 120 codes an hour, measured. Not judged.
+  - (v) The pin comes from `Math.random` and is compared with `!==` (`store.ts:464`, `route.ts:61`). Not judged. Ruled as PR7.
+  - (vi) Expiry, per-phone revoke, a per-device token and the desk-wide `joined` are left for a later round, by ruling. Not judged.
+  - (vii) A refused join waits a second, and the phone shows no sign that it is waiting (economics-2).
+  - (viii) `tools/desk-dev-https.cjs` loads `lan.ts` through ts-load, and only `--address` has been run. The certificate and next-dev path is unmeasured.
+- The findings below the must-address, one line each:
+  - robustness-3 (med): several declared or reachable failure paths have no case in the suites; robustness-4 (low): gate composition; robustness-5 (low): `drop/page.tsx` `join()` has no catch around its fetch; robustness-6 (low): `lanHost()` calls `os.networkInterfaces()` unguarded at store module load; robustness-7 (low): per-refusal timers with no concurrency cap; robustness-8 (low): hard-fail checks, none present;
+  - economics-2 (med): a refused join holds one 1 s timer and the open request, with no cap on how many are held; economics-3 (med): the client reopens its stream every 1.5 s on error with no attempt cap and no backoff; economics-4 to economics-7 (low).
+- Unmeasured, and why: the rivalry member made no web lookups, and craft did not read the device-pairing registry subject. No L2 run: nobody has paired a physical phone, scanned the QR with a camera or paired a second phone.
+- A full fail is reworked. The rework is 8b (PR4 to PR7). Full r2 runs all five members after it merges.
+
+Next, ruled 2026-10-11 (round 14): 8b goes first on the delivery lane, ahead of delivery 6. A full fail on a security-sensitive feature that every journey starts with is reworked before new work, and 8b is small. Items 1 to 4 close only when full r2 runs every member; 8b does not answer them. The other findings and known limits are not slotted, and full r2 judges them on the evidence.
 
 ## 9. linga-placement-check, with cefr-certificate-issuance
 
@@ -781,14 +872,88 @@ Must-address:
 
 | id | decision | constraint | alternative that lost | status |
 |---|---|---|---|---|
-| PC1 | A mark carries its kind and its strength. A skip is recorded as skipped: no evidence, never a fail. A two-option choose pass and a one-keyword listen pass are weak. A spoken say pass is strong. | Placement (1). `desk/src/lib/english/placement.ts` (say tasks at :79-81 per LG-18). | none recorded | queued, delivery 9 |
-| PC2 | High confidence needs at least two strong passes at the band, plus a fail or partial above it that is not a skip (or the band is the top one). Skips never count. A band that rests only on weak passes or skips reads low. | Placement (1). | none recorded | queued, delivery 9 |
-| PC3 | Two partials at one band end the check at that band, at low confidence. This answers LG-18. | LG-18 (`docs/BACKLOG.md:111`). | none recorded | queued, delivery 9 |
-| PC4 | A weak pass climbs one rung at most, and never into a say task by itself. | Placement (1). | none recorded | queued, delivery 9 |
-| PC5 | Whenever confidence is not high, the verdict screen says in one line what the band rests on. | Placement (1). | none recorded | queued, delivery 9 |
-| PC6 | The certificate consumes only high confidence under the new rules. It also needs at least one piece of the learner's own evidence at the band, dated after the check. This closes CEFR craft-1 (R10). | CEFR (1). | none recorded | queued, delivery 9 |
+| PC1 | A mark carries its kind and its strength. A skip is recorded as skipped: no evidence, never a fail. A two-option choose pass and a one-keyword listen pass are weak. A spoken say pass is strong. | Placement (1). `desk/src/lib/english/placement.ts` (say tasks at :79-81 per LG-18). | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC2 | High confidence needs at least two strong passes at the band, plus a fail or partial above it that is not a skip (or the band is the top one). Skips never count. A band that rests only on weak passes or skips reads low. | Placement (1). | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC3 | Two partials at one band end the check at that band, at low confidence. This answers LG-18. | LG-18 (`docs/BACKLOG.md:111`). | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC4 | A weak pass climbs one rung at most, and never into a say task by itself. | Placement (1). | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC5 | Whenever confidence is not high, the verdict screen says in one line what the band rests on. | Placement (1). | none recorded | delivered, ac266efc (run ffa7f3f0) |
+| PC6 | The certificate consumes only high confidence under the new rules. It also needs at least one piece of the learner's own evidence at the band, dated after the check. This closes CEFR craft-1 (R10). | CEFR (1). | none recorded | delivered, 4aa3601f (run ffa7f3f0), with LG-10 marked built in docs/BACKLOG.md |
+| PC1-a | A skip is stored with `skipped: true` beside verdict 'fail'. It still moves the ladder down, and no count includes it. A choose pass and a one-word listen pass are weak; every other pass is strong. A mark with no kind reads as a say mark. | Ruled at the dispatch and the settlement of delivery 9. | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC2-a | Two real A1 fails and no pass read medium (the rests floor). | Ruled at the dispatch and the settlement of delivery 9. | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC3-a | The band of two partials stays that band. These are PC3's words, and lite r1 value-2 named dropping below it as the defect. Confidence is low, so no certificate issues. | Ruled at the dispatch and the settlement of delivery 9. | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC4-a | After a weak pass, the next task holds the band when the next band's task would be a say task. | Ruled at the dispatch and the settlement of delivery 9. | none recorded | delivered, 05192cff (run ffa7f3f0) |
+| PC6-a | 'At the band' is not built, because evidence carries no band. Any piece of the learner's own evidence after the check corroborates. CEFR craft-1's band half stays open. | The builder's report-only answer, accepted. | none recorded | delivered as reported, 4aa3601f (run ffa7f3f0) |
+| PC6-b | `certGap` sets `needsNew` only when it has no blocker and no open skill. That is exactly when `issue()` waits only for a piece after the check. One case pins a high check with nothing after it and open skills, which gets no `needsNew`. | CEFR lite r2 robustness-2 and craft-3, where 24 of 288 built records disagree. `desk/src/lib/english/cert.ts:174` sets `needsNew` whenever `corroborated(...)` is false, without looking at `open`. | One function that returns a certificate or a gap (craft-3's shape), which is a larger change. | queued, delivery 9b |
 
 This rework is serial with the Linga rework (delivery 11), because they share files.
+
+Delivery 9, as delivered (three commits, run ffa7f3f0):
+- Commits: 05192cff (PC1 to PC4, +92/-20), ac266efc (PC5, +22/-4) and 4aa3601f (PC6, +37/-15). All three are ancestors of `main`.
+- Nine files, all declared: `desk/src/lib/english/placement.ts`, `check.ts`, `types.ts`, `view.ts` and `cert.ts`, `desk/src/english/LingaPhone.tsx`, `tools/linga-rules-test.cjs`, `tools/cert-rules-test.cjs` and `docs/BACKLOG.md`. Nothing in `session/`, `tv/`, `app/` or `rules/`, and `BAND_NAME` is untouched.
+- Fail-before was argued from the source, not run. The App Master confirmed it in the old source.
+- The CEFR lite r2 ran cert 23 on f2645f41's `cert.ts`: four assertions fail there ('medium issues nothing', 'medium blocker low', 'high with all evidence older issues nothing' and 'certGap names needsNew'), and three pass as guards.
+- The changed expectations each name PC6 or PC2: cert 4 (the step-down fixture, medium to high), cert 11 (a completing check now issues nothing), cert 16 to 18, 20 and 22 (the fixture default, medium to high), and the linga-rules ladder test (`climb('A1', fail)` now reads medium).
+- The `view.ts` caption for the 'low' blocker was reworded from 'a mixed read' to 'not firm enough', because it now also stands for medium.
+- The gate: 75 suites, 1483 tests. tsc exited 0.
+- Its report-only answers, ruled:
+  1. Stored confidence is read by `cert.ts` `certBand`, by `view.ts` and `LingaPhone.tsx` (through `restsLine`, which re-derives the reason from the stored tasks), and by `PlacementRecord`. An old stored 'high' from skips still meets `certBand`. A re-read would need a migration decision, and the placements record keeps no tasks. Not built, not slotted.
+  2. 'At the band' is not built, because evidence carries no band. Ruled as PC6-a.
+  3. PC3 says two partials end the check at that band. The builder places the band at the partial band unless a held band is higher. Ruled as PC3-a.
+  4. Two real A1 fails and no pass read medium. Ruled as PC2-a.
+  5. `Mark` and `staircase` now return a `rests` field (additive).
+
+Placement lite r2 (round 2026-10-11-linga-placement-check-lite-r2, run 6b308dab):
+- The result: lite-ready 0.7186 (r1 0.6329), coverage 0.70, must-address empty, round 2 of 3, judged at 4aa3601f. Scores, with the delta against r1: value 0.67 (+0.12), craft 0.74 (+0.06), robustness 0.78 (+0.06). Rivalry and economics are not judged in lite. The judges are uncalibrated. The App Master derived the span (r1's seven files plus `view.ts`).
+- r1's line ('value: Placement confidence reads 'high' from skips, guesses and one-keyword passes') is closed, by reproduction:
+  - viktor-67, two skipped A1 tasks: A1, low, and the check is not done (r1: high). Line: "Some tasks were skipped, so this level is a careful guess."
+  - tomas-9, a guessed A2 choose pass, a one-word A2 listen pass and a skipped B1 say: A2, low (r1: high).
+  - The stored task carries `skipped: true` beside verdict 'fail', and the flag survives the trip to disk. The summary prompt carries `verdict: "skipped"`.
+- r1's mediums:
+  - value-2, repeated partials drop the band: better. Five A2 partials read A2 low (r1: A1 medium).
+  - value-3, upward lean from guessed tasks: better, not closed. Walking tomas-9 through the ladder still ends at B1 low with a B1 say task in task 3 or 4. LG-14 stays open.
+  - value-4, the verdict screen does not say how much the band rests on: closed.
+  - craft-1, the mark type throws away strength: closed.
+  - craft-2, a skip is stored as a spoken fail: better. The verdict stays 'fail' beside the flag.
+  - robustness-1, no case for the skip path: better. The pure ladder and every `restsLine` shape are pinned; `check.ts:311`, the summary prompt and both screens' lines have no case.
+- The answers on known limits:
+  - (i) A placement stored before 05192cff keeps its stored confidence. Confirmed (value-5, low).
+  - (ii) Two partials at one band place the learner at that band. Confirmed as a real lean (value-2, med): A2 pass twice then B1 partial twice reads B1 low, where r1's code read A2 medium.
+  - (iii) Two real A1 fails and no pass read medium. Better.
+  - (iv) A skipped task's stored verdict stays 'fail'. Holds; no reader was found that calls it a fail.
+- What the old code (f2645f41) does with the new cases: the PC5 test fails whole, because `restsLine` does not exist. In the PC1 to PC4 test, seven assertions pass on the old code by design (the floor band, a skip stepping B1 to A2, two say passes under a say fail reading high, a longer listen pass climbing to B2, a weak A2 choose pass climbing to B1, and `cleanPlacement` writing no flag when skipped is false). The rest fail there.
+- The new findings: value-6 (med): an all-skipped check stores an A1 placement, sets the level and asks the model for what the learner "showed"; craft-3 (med): `restsLine` re-derives the reason from the tasks while the badge uses the stored confidence; robustness-1 (med): no case reaches `check.ts:311`; value-7 (low): the verdict line is not always plain for a 9-year-old; value-8 (low); craft-4 to craft-7 (low); robustness-2 to robustness-4 (low).
+
+CEFR lite r2 (round 2026-10-11-cefr-certificate-issuance-lite-r2, run 98ac0359):
+- The result: lite-ready 0.6464 (r1 0.5964), coverage 0.70, must-address empty, round 2 of 3, judged at 04d6d002 on the App Master's 13 files, unchanged from r1. Scores, with the delta against r1: value 0.55 (+0.10), craft 0.70 (+0.02), robustness 0.75 (0.00). The judges are uncalibrated.
+- r1's line ('value: The band a certificate names rests on one check that reads high from a guess and a skip, and no evidence corroborates it') is closed, by R9, R10 and the check drive:
+  - R9: tomas-9's marks read A2 low, `certBand` is null, and `issue()` issues nothing.
+  - R10: a high B2 check completing from replies all older than it issues nothing, and `certGap` shows `needsNew: true`. One typed reply dated after the check issues. A medium check with that reply issues nothing.
+  - The `check.ts` drive: a B1 high read leaves certificates at 0 at completion; an all-skipped check reads A1 low.
+- r1's mediums:
+
+| r1 finding | now |
+|---|---|
+| robustness-1, a digit from a topic title | unchanged |
+| robustness-2, the gate cited, not observed | better (four span suites and tsc run) |
+| value-2, the next scene ignores open skills with no plan | unchanged |
+| value-3, no journey or run reaches a certificate | unchanged |
+| craft-1, evidence carries no level | unchanged |
+| craft-2, BASE_SKILLS unread, the plate silent about it | unchanged |
+
+- The answers on known limits:
+  - (i) 'At the band' is not built. The weakest B2 that issues is a high B2 check with all seven B2 skills shown only by later replies and one typed 'Hi.' (medium, value-1).
+  - (ii) An old stored 'high' from two plain-fail skips still meets `certBand`; only the corroboration rule stands between it and a plate (medium, value-3).
+  - (iii) A held certificate survives a later medium check. Consistent with 'kept for good' (low, value-7).
+  - (iv) 'low' also stands for medium. The one text it drives is accurate for both (low, value-7).
+  - (v) No screen reads `needsNew`. The TV reads 'Linga issues it when you next finish a conversation.', and the phone shows nothing (medium, value-4).
+- The regressions:
+  - What held: a high A2 check with every skill shown after it issues; issuing twice is idempotent; the certificate survives 400 newer pieces; self, low and medium never certify.
+  - `certGap` and `issue()` do not agree on `needsNew`: 24 of 288 built records set it while 3 to 5 skills are open (robustness-2, craft-3). The reverse never occurred. Ruled as PC6-b.
+  - cert 23 on f2645f41's `cert.ts`: four assertions fail and three pass as guards (craft-6).
+  - The changed expectations (cert 4, 11, 16 to 18, 20 and 22) are sound. Cert 11 loses its only positive path through a check's completion (craft-5).
+- The findings: value-1 to value-5 (med); craft-1 to craft-3 (med); robustness-1 (med, the digit) and robustness-2 (med, `needsNew`); value-6 to value-8 (low); craft-4 to craft-9 (low); robustness-3 to robustness-6 (low). robustness-3: a finished level check cannot issue with the real clock, and the one path that does is a future-dated record.
+
+Next, ruled 2026-10-11 (round 14): neither feature is on the full-round list, so both lanes end at lite-ready. PC6-b is slotted as delivery 9b, because it is a defect in a field that just merged. The other mediums of both lite r2 rounds are not slotted.
 
 ## 10. weekly-digest-for-parents
 
@@ -934,6 +1099,8 @@ Full r3 (round 2026-10-10-weekly-digest-for-parents-r3, run f795a859) was judged
 - A delivery's declared paths include every test that asserts the text it changes. X6 was held on `tools/calc-marking-test.cjs` test 4, which was outside its paths.
 - Review runs write their run line to `.ai/skill-runs.local.jsonl`, which git ignores, and never to `.ai/consults.jsonl`, which this repo tracks. There is no gitignore change.
 - A council vault lost with its review worktree is scaffolded fresh by the next round, which says so.
+- A full round that exits early on a mechanical floor is reworked on the must-address lines that carry a finding. Its unmeasured rows close only when the next full round runs every member (tv-phone-pairing full r1).
+- A lite-ready feature that is not on the full-round list ends its lane at lite-ready. A medium found in code that just merged may still get a small follow-up delivery (PC6-b).
 
 ## Delivery order
 
@@ -965,14 +1132,16 @@ L1. the first lean sweep of desk/ (ledger lean-2026-10-10-desk): done, 17ffb8a7 
 5. explain, X2-X4: done. 5a (X3, X4): 1dfcfdae (salvage run 62a80958, after run 036c1dd7 was released). 5b (X2's Type it): af73ca72 (run e8e43454). X2's language half: 5a2135b9. 5c, the full r1 rework: X5 (X5, X5-a) done, c4bd192d (run 38d6db69); X5b (X5b, X5b-a) done, 0a5a5296 (run e9761c26).
 5d, the full r2 rework (X6 and X6-a): done, 025d06c3, 92c8bbd1 and db28d070 (run af69ab78, after held run 0994cd5c).
 6. essay, plus EM4-2/EM4-5 and digest value-3.
-7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a, P7-b and P8): done, 3a0a70f8 (run 27364288). 7c (P4-b and P7-c): done, 1245013b (run 8704f32e). 7d (P9): done, 7955c66d (run c2a3c969). 7d-2 (P10-a, P11-a and P12): done, f5a854c0 (run c976c3d8). 7d-3 (P13, P14 and P15): done, 1bbf359c (run 243b0a17). 7d-4 (P16): done, 44cbbca1 (run 5ad42cde). 7d-5 (P17): done, 0edd8b13 and 61d87bfc (run 200beb31). P18: done, 84832dfa (run 80b15cc1). The pre-r3 rework (P17-a, P18-a): dispatched.
-8. pairing.
-9. CEFR with placement.
+7. learner-profile, plus homework robustness-6. 7a: done, 4fef0a35 (run 3720e29a). 7a2: done, 60d9398c (run f1df9456). 7b (P4 with P4-a, P7-a, P7-b and P8): done, 3a0a70f8 (run 27364288). 7c (P4-b and P7-c): done, 1245013b (run 8704f32e). 7d (P9): done, 7955c66d (run c2a3c969). 7d-2 (P10-a, P11-a and P12): done, f5a854c0 (run c976c3d8). 7d-3 (P13, P14 and P15): done, 1bbf359c (run 243b0a17). 7d-4 (P16): done, 44cbbca1 (run 5ad42cde). 7d-5 (P17): done, 0edd8b13 and 61d87bfc (run 200beb31). P18: done, 84832dfa (run 80b15cc1). The pre-r3 rework (P17-a, P18-a): done, 5f9a8c67 and 34f7b4bf (run 1ee1d75f).
+8. pairing PR1 to PR3: done, 1c32a230, d5a94eff, ae2469bd and 04d6d002 (run b4747c7d). 8b, the full r1 rework (PR4 to PR7): dispatched.
+9. CEFR with placement, PC1 to PC6: done, 05192cff, ac266efc and 4aa3601f (run ffa7f3f0). 9b (PC6-b): queued, after 6.
 10. the W7 overlay.
 11. Linga with LG-25, after the owner's Approval.
 12. the claude-era Linga LT run.
 13. the recap follow-up, EM-B36 and MB-B23, plus digest value-4 and the lens order, after learner-profile.
 13a. the recap write-door contract: unchanged (queued; it goes next on the lane when the owner decides the recap Approval, and does not wait for learner-profile).
+
+Ruled 2026-10-11 (round 14): the lane runs 8b, then 6, then 9b.
 
 Unslotted: EM-B11, WD6, marking value-calc-gaps, marking craft-1, homework value-retake-double-counts, and these hint full r1 mediums: value-1, craft-5, value-3, craft-2, craft-3, craft-4, robustness-2, economics-2 and economics-3. Also these:
 - the homework full r3 mediums (economics-1, economics-2, value-resnap-double-count, robustness-1, craft-1 to craft-3, rivalry-1 to rivalry-4);
@@ -988,6 +1157,10 @@ Unslotted: EM-B11, WD6, marking value-calc-gaps, marking craft-1, homework value
 - the hint full r2 mediums;
 - the marking full r3 mediums other than value-1;
 - the learner-profile lite r2 mediums that are not in 7b: robustness-2, robustness-3, robustness-8 with value-2, craft-2, craft-4 and robustness-10.
+- the learner-profile full r3 findings below its must-address (section 7);
+- the tv-phone-pairing full r1 findings below its must-address, and its known limits (section 8);
+- the placement lite r2 mediums (section 9);
+- the CEFR lite r2 mediums other than PC6-b's (section 9).
 
 Review lane, in order:
 - marking full r2: done, ready 0.6433 (run 13cf8526);
@@ -1005,12 +1178,15 @@ Review lane, in order:
 - student-working-explanation full r2: done, ready 0.5575 (run a7fb68b4), two high lines naming one defect, reworked as X6 and X6-a;
 - learner-profile full r2: done, ready 0.5625 (run 73da4bac), one high line, reworked as P18;
 - student-working-explanation full r3: done, ready 0.5805 (run dff24ac2), the last round, one high line (craft-1), with the owner as a decision;
-- learner-profile full r3: after the pre-r3 rework merges, the last round;
-- tv-phone-pairing full r1: after learner-profile full r3.
+- learner-profile full r3: done, ready 0.5525 (run 333437c2), the last round, one high line (robustness-2), with the owner as a decision;
+- tv-phone-pairing full r1: done, fail 0.28 at coverage 0.25 (run cf79b2aa), on the robustness floor, reworked as 8b;
+- placement lite r2: done, ready 0.7186 (run 6b308dab);
+- CEFR lite r2: done, ready 0.6464 (run 98ac0359);
+- tv-phone-pairing full r2: after 8b merges, all five members.
 
 ## Open contradictions
 
-None open after round 13. P8's quoted start text is ruled as 7b question 1, so it is not open.
+None open after round 14. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, P6's SERVER_ONLY clause by P6-a, P10 by P10-a, and X1c's line in the numberWords.ts header by X5.
 
