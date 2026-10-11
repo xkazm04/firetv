@@ -558,7 +558,7 @@ test('W7c 1: the four batch-3 units are on the school path after the percent uni
  // the multiply-and-divide blurb is one sentence with one main clause (batch 1's read as two joined by "and")
  assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions multiply top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
  // SL3: every school blurb is 25 words or fewer and still names its method steps
- for(const t of P.topicsOf('school'))assert.ok(t.blurb.trim().split(/s+/).length<=25,`${t.id}: blurb is 25 words or fewer`);
+ for(const t of P.topicsOf('school'))assert.ok(t.blurb.trim().split(/\s+/).length<=25,`${t.id}: blurb is 25 words or fewer`);
  for(const [id,res] of [['area',[/rectangle/i,/triangle/i,/add/i]],['probability',[/equally likely/i,/not happen/i]],['dec-arith',[/lined? up/i,/tak(e|en) away|subtract/i,/count/i,/multipl/i]],['ratio-share',[/single part/i]]])
   for(const r of res)assert.match(P.topicIn(id).blurb,r,`${id}: blurb keeps ${r}`);
  for(const t of P.topicsOf('school'))assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${t.id}: one sentence`);
