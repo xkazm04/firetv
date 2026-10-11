@@ -1076,7 +1076,7 @@ test('RP3 e: every statement with no touches fits two lines of the off-desk row;
 test('RP3 f: every new string is 25 words or fewer and has no em dash',()=>{
  const {offCountLine,offSummary,paperView}=PAPER();
  const papers=[rp3Paper(),[it('1',0,2,['A19'])],[it('1',1,2,['A19'])],[it('1',1,2,['A19']),it('2',0,2,['N12'])],[it('1',0,2,['N12'])]];
- for(const raw of papers){const v=paperView(paperSession(raw));for(const t of [offCountLine(v),offSummary(v)]){if(t===null)continue;assert.ok(t.trim().split(/\s+/).length<=25,t);assert.ok(!t.includes('2014'),t);}}
+ for(const raw of papers){const v=paperView(paperSession(raw));for(const t of [offCountLine(v),offSummary(v)]){if(t===null)continue;assert.ok(t.trim().split(/\s+/).length<=25,t);assert.ok(!t.includes('—'),t);}}
 });
 
 test('M5b step 4: the slip card says its line through deskLine - the same text for a single item and for a part',()=>{
