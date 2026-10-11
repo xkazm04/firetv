@@ -606,7 +606,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B39** — Get ready for school, the road the paper sends the learner down, skips the worked lesson
   - origin: 2026-10-09-maths-l1/L1-owen-17-MB2-8
   - recommendation: build — Topics teaches first (`hasWorked` then teach); Get ready for school writes the set straight away (`tv/keys.ts:453`: `topics: hasWorked ? teach : set`), so from the paper, Back and Prepare he never meets the lesson. From the recovery route a topic with a worked lesson offers it (one press, skippable) before the set
-  - status: open
+  - status: built (GR1: 5a45e935): a unit with a worked lesson offers See how first, lit; Right takes the usual set
   - ceiling: a lesson offered and skipped is the learner's choice
 - **MB-B40** — The set the recovery leads to never sees the paper: its lost statements are not the set's aim
   - origin: 2026-10-09-maths-l1/L1-radka-41-MB4-9
