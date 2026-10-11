@@ -147,6 +147,12 @@ function sceneName(id: string, learner: Pick<Learner, "english">): string | null
   return AUTHORED_SCENES.find((s) => s.id === id)?.name ?? learner.english?.plan?.topics?.find((t) => t.id === id)?.title?.trim() ?? null;
 }
 
+/** The lens names, each once, in the order the lenses were first read (the digest's own entries sorted by time). */
+function lensesRead(reads: EssayDigest[]): string[] {
+  const names: string[] = [];
+  for (const r of [...reads].sort((a, b) => a.at - b.at)) { const n = ESSAY_TYPES.find((t) => t.id === r.lens)?.name; if (n && !names.includes(n)) names.push(n); }
+  return names;
+}
 /** The week's rows from this learner's own digest. Deterministic: the same learner, profile and `now` give the same page. */
 export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile: Pick<Profile, "name"> | null | undefined, now: number): SundayPage {
   const from = weekStart(now);
@@ -186,9 +192,9 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
     for (const e of [...talks].sort((a, b) => b.at - a.at)) { const n = sceneName(e.sceneId, learner); if (n && !scenes.includes(n)) scenes.push(n); }
     page.english = { conversations: talks.length, scenes };
   }
-  // e. Essay Master: the readings, and the lenses in the desk's own order
+  // e. Essay Master: the readings, and the lenses in the order read (each where its first reading falls, as the recap lists them)
   const reads = week.filter((e): e is EssayDigest => e.kind === "essay");
-  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => (r.paragraphs !== undefined ? r.paragraphs > 1 : r.sentences >= PIECE_SENTENCES)).length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
+  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => (r.paragraphs !== undefined ? r.paragraphs > 1 : r.sentences >= PIECE_SENTENCES)).length, lenses: lensesRead(reads) };
 
   // f. one act: the unit worked most (the first row) when the table has it, else by what was done
   const top = page.units.find((u) => DO_IT[u.id]);

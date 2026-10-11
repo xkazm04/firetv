@@ -176,7 +176,7 @@ test('5: Linga and Essay Master lines when present: scene names (authored, or th
  assert.ok(words([E(24,18,'plan-99999999','relate',2)]).some((x)=>x.text==='One conversation.'),'a scene the desk cannot name is counted, not named');
  assert.ok(words([R(24,18,'language',3,1)]).some((x)=>x.text==='One paragraph reading, through Language.'));
  const all=words([R(21,18,'language',3,1),R(22,18,'evidence',3,1),R(23,18,'argument',3,1),R(24,18,'structure',3,1)]);
- assert.ok(all.some((x)=>x.text==='Four paragraph readings, through Structure, Argument, Evidence and Language.'),'lenses in the desk\'s order');
+ assert.ok(all.some((x)=>x.text==='Four paragraph readings, through Language, Evidence, Argument and Structure.'),'lenses in the order read, as the recap lists them (not the desk order, which cannot follow per-reading counts)');
  const maths=words([M(24,18,'area',6,6)]);
  assert.ok(!maths.some((x)=>x.section==='english'||x.section==='essay'),'no Linga or Essay lines without them');
  assert.ok(!words([E(24,18,'teacher','repair',3)]).some((x)=>x.section==='maths'||x.section==='look'),'no maths lines without maths');
@@ -441,4 +441,9 @@ test('13-i RC5: an entry with paragraphs is a piece when it has more than one; o
  assert.deepEqual(words([RP(24,18,'structure',14,2,1)]).filter((x)=>x.section==='essay'&&!x.head).map((x)=>x.text),['One paragraph reading, through Structure.'],'one long paragraph stays a paragraph reading');
  assert.ok(words([R(24,18,'structure',12,2)]).some((x)=>x.text==='One piece, through Structure.'),'no paragraph count, 12 sentences: a piece as before');
  assert.ok(words([R(24,18,'structure',11,2)]).some((x)=>x.text==='One paragraph reading, through Structure.'));
+});
+
+test('13-i RC6: the Sunday page lists lenses where their first reading falls, whatever order the digest holds them in',()=>{
+ const lines=words([R(23,18,'argument',3,1),R(21,18,'structure',3,1),R(22,18,'language',3,1),R(24,18,'structure',3,1)]);
+ assert.ok(lines.some((x)=>x.text==='Four paragraph readings, through Structure, Language and Argument.'),texts(lines).join(' | '));
 });
