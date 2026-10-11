@@ -617,7 +617,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B41** — The topic "The area-so-far function" is the American course word the Character names as a pet peeve
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-10
   - recommendation: build — Topics shows "The area-so-far function" on his path (`lib/library/calculus1.spine.ts:174-175`, name and blurb). The topic is named in course-neutral words (integral with a variable upper limit); a spine test keeps the id
-  - status: open
+  - status: built (TN1: 5899d6a9): the topic is named The integral with a variable upper limit; id and blurb unchanged; the Sunday page says Integral with a variable limit (TN1-a)
   - ceiling: a neutral name may be less friendly to a first-year; the blurb keeps the plain words
 - **MB-B42** — Unsimplified answers are ticked right, while the worked lesson teaches "then simplify"
   - origin: 2026-10-09-maths-l1/L1-nela-12-MB2-7
