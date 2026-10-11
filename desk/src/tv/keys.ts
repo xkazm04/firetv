@@ -33,10 +33,12 @@ export function keyOf(k: string): Key | null { return KEYBOARD.get(k) ?? null; }
 
 /**
  * What the TV holds for itself, outside the session: the practice wait, the forensic table, a hint on its way, and on
- * Get ready for school the two-cell question after Select on a unit (`prepareAsk`: null while the list is walked, else
- * the lit cell - 0 "The usual", 1 "A step up"; tv/prepareRows PREPARE_CHOICES). Absent is null.
+ * Get ready for school the question after Select on a unit (`prepareAsk`: null while the list is walked, else the lit
+ * cell - -1 "See how first" (a unit with a worked lesson only), 0 "The usual", 1 "A step up"; tv/prepareRows
+ * PREPARE_CHOICES, LESSON_CHOICE). `lessonFrom` says the worked lesson on screen was opened from Get ready for school,
+ * so its Back goes there and not to Topics. Absent is null.
  */
-export interface Local { busy: boolean; table: boolean; hintInFlight: boolean; prepareAsk?: 0 | 1 | null }
+export interface Local { busy: boolean; table: boolean; hintInFlight: boolean; prepareAsk?: -1 | 0 | 1 | null; lessonFrom?: "prepare" | null }
 export const LOCAL: Local = { busy: false, table: false, hintInFlight: false, prepareAsk: null };
 /** A POST the key fires after its events. `onFail` is applied on a non-ok answer or a network error, `onDone` on an ok one. */
 export interface Call { url: string; body: Record<string, unknown>; onFail?: Partial<Local>; onDone?: Partial<Local> }
@@ -234,9 +236,15 @@ class Out implements Step {
     this.calls.push({ url: "/api/practice", body: opts.stretch ? { topic, stretch: true } : { topic }, onFail: { busy: false } });
     this.local.busy = true;
   }
-  /** Ask for a worked lesson (v2 M1) unless one is already being written: the topic opens, the lesson lands on `worked`. */
-  teach(local: Local, topic: string) {
+  /**
+   * Ask for a worked lesson (v2 M1) unless one is already being written: the topic opens, the lesson lands on `worked`.
+   * `origin` says where it was asked from (Get ready for school); it is kept in Local so the lesson's Back returns there.
+   * Asked from Topics (no origin) it clears an origin left over. Local is written only when the value changes.
+   */
+  teach(local: Local, topic: string, origin?: "prepare") {
     if (local.busy || running(this.s, "teach")) return;
+    if (origin && local.lessonFrom !== origin) this.local.lessonFrom = origin;
+    else if (!origin && local.lessonFrom) this.local.lessonFrom = null;
     this.ev({ type: "topic.open", topic, stay: true });
     this.calls.push({ url: "/api/worked", body: { topic }, onFail: { busy: false }, onDone: { busy: false } });
     this.local.busy = true;
@@ -469,32 +477,45 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "select") { const t = stopAt(stops, s.focus); if (t && hasWorked(t.id)) o.teach(local, t.id); else if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
   },
-  // the worked lesson (v2 M1): two actions, Try six (the usual set on this unit) and Back to the topics
+  // the worked lesson (v2 M1): two actions, Try six (the usual set on this unit) and Back to the topics - or, when the lesson
+  // was opened from Get ready for school (`lessonFrom`), Back to that door on the same unit, the question closed
   worked: (s, k, local, o) => {
     const stops = WORKED_STOPS;
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     const at = stopAt(stops, s.focus);
-    if (k === "select" && at === "try" && s.worked) o.set(local, s.worked.topic);
-    if ((k === "select" && at === "back") || k === "back" || k === "up" || k === "menu") o.nav("topics");
+    if (k === "select" && at === "try" && s.worked) {
+      const asked = o.calls.length;
+      o.set(local, s.worked.topic);
+      if (o.calls.length > asked && local.lessonFrom) o.local.lessonFrom = null;
+    }
+    if ((k === "select" && at === "back") || k === "back" || k === "up" || k === "menu") {
+      if (local.lessonFrom === "prepare") {
+        o.local.lessonFrom = null;
+        if (typeof local.prepareAsk === "number") o.local.prepareAsk = null;
+        o.nav("prepare", Math.max(0, prepareStops(s).findIndex((u) => u.id === s.worked?.topic)));
+      } else o.nav("topics");
+    }
   },
   // Get ready for school (Family W8): Left/Right walk the units strand by strand; Select asks "The usual" or "A step up"
-  // (two cells, "The usual" lit), Left/Right between them, Select writes the set as Topics does - staying here while it is
+  // (two cells, "The usual" lit; a unit with a worked lesson has "See how first" before them, lit, and Select on it opens
+  // the lesson as Topics does), Left/Right between them, Select writes the set as Topics does - staying here while it is
   // written - and Back closes the question on the same unit. Up, Menu or Back on the list go home, the lamp on this door.
   prepare: (s, k, local, o) => {
     const stops = prepareStops(s), unit = stopAt(stops, s.focus);
     const writing = local.busy || running(s, "practice");
     const ask = local.prepareAsk;
-    if (ask === 0 || ask === 1) {
+    if (ask === -1 || ask === 0 || ask === 1) {
       if (k === "back") { o.local.prepareAsk = null; return; }
-      if (writing) return;
+      if (writing || running(s, "teach")) return;
       if (k === "left" && ask > 0) o.local.prepareAsk = 0;
-      if (k === "right" && ask < 1) o.local.prepareAsk = 1;
-      if (k === "select" && unit) o.set(local, unit.id, { stretch: ask === 1, stay: true });
+      if (k === "left" && ask === 0 && unit && hasWorked(unit.id)) o.local.prepareAsk = -1;
+      if (k === "right" && ask < 1) o.local.prepareAsk = ask === -1 ? 0 : 1;
+      if (k === "select" && unit) { if (ask === -1) o.teach(local, unit.id, "prepare"); else o.set(local, unit.id, { stretch: ask === 1, stay: true }); }
       return;
     }
     if (k === "up" || k === "menu" || k === "back") { o.nav("tonight", Math.max(0, tonightStops(s).indexOf("prepare"))); return; }
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
-    if (k === "select" && unit && !writing) o.local.prepareAsk = 0;
+    if (k === "select" && unit && !writing && !running(s, "teach")) o.local.prepareAsk = hasWorked(unit.id) ? -1 : 0;
   },
   // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics; Back or Menu return to Get ready for school
   paper: (s, k, _, o) => {

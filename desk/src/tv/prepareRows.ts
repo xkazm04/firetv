@@ -43,14 +43,27 @@ export function prepareStops(s: OnPath): PathTopic[] {
   return prepareGroups(s).flatMap((g) => g.units);
 }
 
-/** The two cells Select on a unit asks between: the usual set, or a step up (rules/stretch). "The usual" is first and lit first. */
+/** The two cells Select on a unit asks between: the usual set, or a step up (rules/stretch). They are cells 0 and 1. */
 export const PREPARE_CHOICES = [
   { id: "usual", t: "The usual", k: "Your level" },
   { id: "stretch", t: "A step up", k: "More of the harder ones" },
 ] as const;
 
-/** The one sentence under the two cells, for the lit one. */
+/** The third cell, cell -1, before the two: a unit with a worked lesson offers the lesson first, lit when the question opens. */
+export const LESSON_CHOICE = { id: "lesson", t: "See how first", k: "A worked lesson" } as const;
+
+/** The cells a unit's question shows, left to right, with the number each one is lit by (tv/keys `prepareAsk`). */
+export function choicesFor(worked: boolean): { cell: -1 | 0 | 1; id: string; t: string; k: string }[] {
+  const two = PREPARE_CHOICES.map((c, i) => ({ cell: i as 0 | 1, ...c }));
+  return worked ? [{ cell: -1 as const, ...LESSON_CHOICE }, ...two] : two;
+}
+
+/** What is shown, instead of the choice line, while the worked lesson is being written. */
+export const LESSON_WRITING = "Writing the worked lesson.";
+
+/** The one sentence under the cells, for the lit one. */
 export function choiceLine(cell: number): string {
+  if (cell === -1) return "A short worked example first, then six questions at your usual level.";
   return cell === 1
     ? "Six questions with more of the harder kind, and a secure step up draws a second line on its topic."
     : "Six questions at your usual level, marked by the desk when you snap or type your answers.";

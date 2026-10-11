@@ -13,6 +13,7 @@ import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode 
 import type { Page, PracticeItem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicIn, topicsOf } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
+import { hasWorked } from "@/lib/library/worked";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
@@ -23,7 +24,7 @@ import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
-import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
+import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { lostWord, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
@@ -39,9 +40,9 @@ import { KIND_WORD, lookAt, working } from "./working";
 
 /**
  * The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set; `ask` the lit cell of Get
- * ready for school's two-cell question (tv/keys Local `prepareAsk`: null while its list is walked).
+ * ready for school's question (tv/keys Local `prepareAsk`: null while its list is walked).
  */
-export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: 0 | 1 | null }) {
+export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: -1 | 0 | 1 | null }) {
   const f = s.focus;
   const blank = s.screen === "tonight" && !continueCard(s);
   const lamp = ["sheet", "walk", "page", "hint", "practice", "units", "worked"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "paper" || s.screen === "calendar" ? "wide" : "desk";
@@ -625,16 +626,16 @@ function Stepped() {
  * needle, no SCHOOL tick. A scroller under the lamp like the Topics ruler (tv/prepareRows `prepareModel`); Select on a unit
  * asks "The usual" or "A step up" (`ask`, the lit cell) and writes the set through the same /api/practice route as Topics.
  */
-export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: number; busy: boolean; ask: 0 | 1 | null }) {
+export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: number; busy: boolean; ask: -1 | 0 | 1 | null }) {
   const groups = prepareGroups(s);
   const stops = groups.flatMap((g) => g.units);
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
-  const busy = asked || running(s, "practice");
+  const busy = asked || running(s, "practice") || running(s, "teach");
   const at = stopAt(stops, focus);
   const ix = at ? stops.indexOf(at) : 0;
   const m = prepareModel(groups, ix);
-  const asking = ask === 0 || ask === 1;
+  const asking = ask === -1 || ask === 0 || ask === 1;
   const failed = busy || !at ? null : practiceFailed(s, at.id);
   const [step, setStep] = useState(0);
   useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
@@ -646,13 +647,13 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
       {asking ? <>
         <div className="mb-kick">{busy ? <>{KIND_ICON.six}Preparing · {at.name}</> : at.name}</div>
         <div className="mb-choice" data-role="maths-choice">
-          {PREPARE_CHOICES.map((c, i) => (
-            <div key={c.id} className="mb-cell2" data-id={c.id} data-focused={!busy && ask === i} data-dim={(busy && ask !== i) || undefined}>
+          {choicesFor(hasWorked(at.id)).map((c) => (
+            <div key={c.id} className="mb-cell2" data-id={c.id} data-focused={!busy && ask === c.cell} data-dim={(busy && ask !== c.cell) || undefined}>
               <span className="k">{c.k}</span><span className="t">{c.t}</span>
             </div>
           ))}
         </div>
-        <p>{busy ? PREP[step] : failed ?? choiceLine(ask)}</p>
+        <p>{busy ? (ask === -1 ? LESSON_WRITING : PREP[step]) : failed ?? choiceLine(ask)}</p>
       </> : <>
         <div className="mb-kick">{at.strand} · six questions a set</div>
         <p>{at.blurb}</p>

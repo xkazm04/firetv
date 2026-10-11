@@ -575,25 +575,29 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  const {tvKey}=keys();
  const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts'));
  const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s),N=stops.length;
+ // a unit with no worked lesson (GR1, MB-B39): the question is the two cells this test pins; the lesson cell has its own test
+ const {hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const U=stops.findIndex((u)=>!hasWorked(u.id));
+ assert.ok(U>=0,'some school unit has no worked lesson');
  assert.equal(N,require(path.join(root,'src/lib/library/paths.ts')).PATHS.school.topics.length,'every school unit is a stop');
  assert.deepEqual(tvKey(s,'right',LOCAL).events,[{type:'focus',focus:1}]);
  assert.deepEqual(tvKey(s,'left',LOCAL).events,[],'clamped at the first unit');
  assert.deepEqual(tvKey({...s,focus:N-1},'right',LOCAL).events,[],'clamped at the last unit');
  // the list: Select opens the question, lit on "The usual"; nothing is posted and nothing is called yet
- const sel=tvKey({...s,focus:3},'select',LOCAL);
+ const sel=tvKey({...s,focus:U},'select',LOCAL);
  assert.deepEqual([sel.events,sel.calls,sel.local],[[],[],{prepareAsk:0}]);
  // the question: Left/Right between the two cells, clamped, the unit's focus untouched
  const at0={...LOCAL,prepareAsk:0},at1={...LOCAL,prepareAsk:1};
- assert.deepEqual(tvKey({...s,focus:3},'right',at0).local,{prepareAsk:1});
- assert.deepEqual(tvKey({...s,focus:3},'right',at1).local,{},'clamped at "A step up"');
- assert.deepEqual(tvKey({...s,focus:3},'left',at1).local,{prepareAsk:0});
- assert.deepEqual(tvKey({...s,focus:3},'left',at0).local,{},'clamped at "The usual"');
- for(const k of ['right','left'])assert.deepEqual(tvKey({...s,focus:3},k,at0).events,[],'the unit keeps its place');
+ assert.deepEqual(tvKey({...s,focus:U},'right',at0).local,{prepareAsk:1});
+ assert.deepEqual(tvKey({...s,focus:U},'right',at1).local,{},'clamped at "A step up"');
+ assert.deepEqual(tvKey({...s,focus:U},'left',at1).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:U},'left',at0).local,{},'clamped at "The usual"');
+ for(const k of ['right','left'])assert.deepEqual(tvKey({...s,focus:U},k,at0).events,[],'the unit keeps its place');
  // Back from the question: the list, on the same unit (no focus event, no nav)
- const back=tvKey({...s,focus:3},'back',at1);
+ const back=tvKey({...s,focus:U},'back',at1);
  assert.deepEqual([back.events,back.calls,back.local],[[],[],{prepareAsk:null}]);
  // Select on "The usual" writes the set exactly as Topics does, staying on this screen; on "A step up" with the flag
- const usual=tvKey({...s,focus:3},'select',at0),up=tvKey({...s,focus:3},'select',at1),id=stops[3].id;
+ const usual=tvKey({...s,focus:U},'select',at0),up=tvKey({...s,focus:U},'select',at1),id=stops[U].id;
  assert.deepEqual(usual.events,[{type:'topic.open',topic:id,stay:true}]);
  assert.deepEqual(usual.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}],'the usual set: the same body as Topics');
  assert.deepEqual(usual.local,{busy:true});
@@ -601,9 +605,9 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  // while it is written nothing else is asked; Back still closes the question
  for(const busy of [{...at1,busy:true},at1]){
   const run=busy.busy?s:{...s,jobs:{practice:{id:'j',phase:'running',startedAt:1}}};
-  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:3},k,busy),{events:[],calls:[],local:{}},`writing: ${k}`);
-  assert.deepEqual(tvKey({...run,focus:3},'back',busy).local,{prepareAsk:null});
-  assert.deepEqual(tvKey({...run,focus:3},'select',{...LOCAL,busy:busy.busy}).local,{},'no question opens while a set is written');
+  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:U},k,busy),{events:[],calls:[],local:{}},`writing: ${k}`);
+  assert.deepEqual(tvKey({...run,focus:U},'back',busy).local,{prepareAsk:null});
+  assert.deepEqual(tvKey({...run,focus:U},'select',{...LOCAL,busy:busy.busy}).local,{},'no question opens while a set is written');
  }
  // Up, Menu and Back on the list go home, the lamp on this door (after the continue card when one is up)
  for(const k of ['up','menu','back'])assert.deepEqual(tvKey({...s,focus:5},k,LOCAL).events,[{type:'nav',screen:'tonight',focus:2}],k);
@@ -613,6 +617,70 @@ test('W8 2: Get ready for school - Left/Right walk the units (clamped), Select a
  // no step on this screen posts anything but focus, nav or the topic it is asking a set for
  for(const f of [0,7,14])for(const l of [LOCAL,at0,at1])for(const k of ['up','down','left','right','select','back','menu'])
   for(const e of tvKey({...s,focus:f},k,l).events)assert.ok(['focus','nav','topic.open'].includes(e.type),`${k}: ${e.type}`);
+});
+
+test('GR1: Get ready for school offers the worked lesson first (MB-B39)',()=>{
+ const K=keys(),{tvKey,topicStops}=K;
+ const {prepareStops,choicesFor,choiceLine}=require(path.join(root,'src/tv/prepareRows.ts'));
+ const {hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const s=uk12({screen:'prepare',focus:0}),stops=prepareStops(s);
+ const W=stops.findIndex((u)=>hasWorked(u.id)),U=stops.findIndex((u)=>!hasWorked(u.id)),id=stops[W].id;
+ assert.ok(W>=0&&U>=0);
+ const at=(n)=>({...LOCAL,prepareAsk:n});
+ // Select on a unit with a lesson opens the question lit on the lesson cell; on a unit without, as before
+ const sel=tvKey({...s,focus:W},'select',LOCAL);
+ assert.deepEqual([sel.events,sel.calls,sel.local],[[],[],{prepareAsk:-1}]);
+ assert.deepEqual(tvKey({...s,focus:U},'select',LOCAL).local,{prepareAsk:0});
+ // Right and Left walk -1, 0, 1, clamped at both ends
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(-1)).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(0)).local,{prepareAsk:1});
+ assert.deepEqual(tvKey({...s,focus:W},'right',at(1)).local,{});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(1)).local,{prepareAsk:0});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(0)).local,{prepareAsk:-1});
+ assert.deepEqual(tvKey({...s,focus:W},'left',at(-1)).local,{});
+ assert.deepEqual(tvKey({...s,focus:U},'left',at(0)).local,{},'no lesson cell to the left of a unit without a lesson');
+ assert.deepEqual(tvKey({...s,focus:W},'back',at(-1)).local,{prepareAsk:null});
+ // the cells and the line
+ assert.deepEqual(choicesFor(true).map((c)=>[c.cell,c.t]),[[-1,'See how first'],[0,'The usual'],[1,'A step up']]);
+ assert.equal(choicesFor(true)[0].k,'A worked lesson');
+ assert.deepEqual(choicesFor(false).map((c)=>c.cell),[0,1]);
+ assert.equal(choiceLine(-1),'A short worked example first, then six questions at your usual level.');
+ // Select on the lesson cell teaches exactly as Topics does, and records where it came from
+ const teach=tvKey({...s,focus:W},'select',at(-1)),topics=tvKey({...s,screen:'topics',focus:topicStops(s).findIndex((t)=>t.id===id)},'select',LOCAL);
+ assert.deepEqual(teach.events,[{type:'topic.open',topic:id,stay:true}]);
+ assert.deepEqual(teach.calls,[{url:'/api/worked',body:{topic:id},onFail:{busy:false},onDone:{busy:false}}]);
+ assert.deepEqual(teach.events,topics.events);assert.deepEqual(teach.calls,topics.calls);
+ assert.deepEqual(teach.local,{busy:true,lessonFrom:'prepare'});
+ assert.deepEqual(topics.local,{busy:true},'Topics with no origin leaves Local as it was');
+ // the usual set and a step up, as W8 2 pins them
+ const usual=tvKey({...s,focus:W},'select',at(0)),up=tvKey({...s,focus:W},'select',at(1));
+ assert.deepEqual(usual.events,[{type:'topic.open',topic:id,stay:true}]);
+ assert.deepEqual(usual.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}]);assert.deepEqual(usual.local,{busy:true});
+ assert.deepEqual(up.calls,[{url:'/api/practice',body:{topic:id,stretch:true},onFail:{busy:false}}]);
+ // while a lesson or a set is written the question asks nothing else; a running teach job counts
+ for(const [run,l] of [[s,{...at(-1),busy:true}],[{...s,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},at(-1)],[{...s,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},at(0)]])
+  for(const k of ['select','left','right'])assert.deepEqual(tvKey({...run,focus:W},k,l),{events:[],calls:[],local:{}},`writing: ${k}`);
+ assert.deepEqual(tvKey({...s,focus:W,jobs:{teach:{id:'j',phase:'running',startedAt:1}}},'select',LOCAL).local,{},'no question opens while a lesson is written');
+ // the lesson: from Get ready for school every way back goes there, on the unit, and clears the origin
+ const lesson={topic:id,title:'T',idea:'x',own:false,steps:[],examples:[]};
+ const ws=(focus)=>({...s,screen:'worked',focus,worked:lesson});
+ const from={...LOCAL,lessonFrom:'prepare'};
+ for(const [focus,k] of [[1,'select'],[0,'back'],[0,'up'],[0,'menu'],[1,'back']]){
+  const r=tvKey(ws(focus),k,from);
+  assert.deepEqual(r.events,[{type:'nav',screen:'prepare',focus:W}],`${focus} ${k}`);assert.deepEqual(r.local,{lessonFrom:null});assert.deepEqual(r.calls,[]);
+ }
+ assert.deepEqual(tvKey(ws(1),'back',{...from,prepareAsk:-1}).local,{lessonFrom:null,prepareAsk:null},'a question left open is closed');
+ // with no origin they go to Topics as today
+ for(const [focus,k] of [[1,'select'],[0,'back'],[0,'up'],[0,'menu']]){
+  const r=tvKey(ws(focus),k,LOCAL);assert.deepEqual([r.events,r.local],[[{type:'nav',screen:'topics',focus:0}],{}],`${focus} ${k}`);
+ }
+ // Try six writes the usual set as today, and clears the origin only when it was set
+ const six=tvKey(ws(0),'select',LOCAL),six2=tvKey(ws(0),'select',from);
+ assert.deepEqual(six.calls,[{url:'/api/practice',body:{topic:id},onFail:{busy:false}}]);
+ assert.deepEqual(six.events,[{type:'topic.open',topic:id}]);assert.deepEqual(six.local,{busy:true});
+ assert.deepEqual([six2.events,six2.calls],[six.events,six.calls]);assert.deepEqual(six2.local,{busy:true,lessonFrom:null});
+ // Topics' own teach clears an origin left over
+ assert.deepEqual(tvKey({...s,screen:'topics',focus:topicStops(s).findIndex((t)=>t.id===id)},'select',from).local,{busy:true,lessonFrom:null});
 });
 
 test('W8 3: "Six more" on a step-up set asks for a step up again; on a usual set exactly as before',()=>{
