@@ -53,6 +53,8 @@ function readBlock(file) {
   if (!m) throw new Error(`${file}: no json block`);
   return { file, text, sim: JSON.parse(m[1]) };
 }
+/** A synthesis field written as text: a model that answers with an array gets its elements joined, never printed as ['...']. */
+const plain = v => Array.isArray(v) ? v.join(' ') : String(v ?? '');
 const characters = () => fs.readdirSync(path.join(uat, 'characters')).filter(f => f.endsWith('.md')).map(f => readBlock(path.join(uat, 'characters', f)));
 const journeys = () => Object.fromEntries(fs.readdirSync(path.join(uat, 'journeys')).filter(f => f.endsWith('.md')).map(f => { const j = readBlock(path.join(uat, 'journeys', f)); return [j.sim.id, j]; }));
 
@@ -390,13 +392,13 @@ async function synthesize(dir, id, results, cast, ms) {
     synth = r.provider;
     fs.writeFileSync(path.join(dir, 'SUMMARY.md'), [
       `# SUMMARY — LT run ${id}`, '', `Synthesised by ${synth}. Read with report.md; findings are unverified at LT.`, '',
-      '## Panel verdict', '', s.panelVerdict, '',
+      '## Panel verdict', '', plain(s.panelVerdict), '',
       '## Cross-cutting themes', '', ...s.themes.map(t => `- **${t.title}** (${t.characters.join(', ')}) — ${t.evidence}`), '',
       '## Impact-ranked backlog', '', ...s.backlog.map((b, i) => `${i + 1}. **${b.title}** · \`${b.recommendation}\` — ${b.why} (${b.findings.join(', ')})`), '',
       '## Conflicts between Characters', '', ...(s.conflicts.length ? s.conflicts.map(c => `- ${c}`) : ['None.']), '',
       '## Strengths to protect', '', ...s.strengths.map(x => `- ${x}`), '',
       '## Honest ceilings', '', ...s.ceilings.map(x => `- ${x}`), '',
-      '## Value ledger', '', s.valueLedger, '',
+      '## Value ledger', '', plain(s.valueLedger), '',
     ].join('\n'));
   } catch (e) {
     fs.writeFileSync(path.join(dir, 'SUMMARY.md'), `# SUMMARY — LT run ${id}\n\nSynthesis failed: ${e.message}\n\nSee report.md.\n`);

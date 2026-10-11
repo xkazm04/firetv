@@ -283,3 +283,15 @@ test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a 
   fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
   assert.notEqual(digest(runs), one);
 });
+
+test('W7-6: SUMMARY.md prints a panel verdict and a value ledger the model sent as one-element arrays as plain text', async () => {
+  const driver = require(DRIVER), call = driver.claude.call, dir = path.join(tmp, 'synth-array'), run = RUN_IDS[0];
+  fs.mkdirSync(dir, { recursive: true });
+  driver.claude.call = async () => ({ provider: 'stub', json: { themes: [], backlog: [], conflicts: [], strengths: [], ceilings: [], panelVerdict: ['The panel says ship it.'], valueLedger: ['Saves ten minutes a week.', 'Costs none.'] } });
+  try { await D().synthesize(dir, run, resultsOf(run), [], 0); } finally { driver.claude.call = call; }
+  const md = fs.readFileSync(path.join(dir, 'SUMMARY.md'), 'utf8');
+  const lines = md.split('\n');
+  assert.ok(lines.includes('The panel says ship it.'), md);
+  assert.ok(lines.includes('Saves ten minutes a week. Costs none.'), md);
+  assert.ok(!md.includes("['"), 'no array printed raw');
+});
