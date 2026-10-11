@@ -34,6 +34,8 @@ const post=(e,role,cookie)=>sessionRoute().POST(req('/api/session',{method:'POST
 /** The key the desk minted, read where the desk keeps it. */
 const keyFile=()=>path.join(data,'pairing.json');
 const theKey=()=>{pairing().tvKey();return JSON.parse(fs.readFileSync(keyFile(),'utf8')).key;};
+/** Join as a guest with the code on the session now; the cookie the desk set (PR8: the phone's own token). */
+const joinAs=async()=>{const r=await post({type:'join',code:store.getSession().pin},'guest');return 'desk-phone='+setCookie(r,'desk-phone');};
 const hmac=(key,msg)=>crypto.createHmac('sha256',key).update(msg).digest('base64url');
 const setCookie=(r,name)=>{const all=r.headers.getSetCookie?r.headers.getSetCookie():[r.headers.get('set-cookie')??''];const c=all.find((x)=>x.startsWith(name+'='));return c?c.slice(name.length+1).split(';')[0]:undefined;};
 /** The proxy's verdict: 401, or passed on with the role it wrote. */
@@ -76,11 +78,11 @@ test('case 2: a join is checked on the server - no code or a wrong code is 403, 
  const wrong=pin==='1000'?'1001':'1000';
  r=await post({type:'join',code:wrong},'guest');assert.equal(r.status,403);assert.deepEqual(await r.json(),{error:'That code is not on the TV.'});assert.equal(store.getSession().joined,false);
  r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);
- assert.equal(setCookie(r,'desk-phone'),hmac(theKey(),pin),'desk-phone is the HMAC of the key and the pin');
+ assert.notEqual(setCookie(r,'desk-phone'),hmac(theKey(),pin),'PR8: desk-phone is the phone own token, no longer the HMAC of the key and the pin');
  assert.equal(store.getSession().joined,true);
  const v=await r.json();assert.equal(v.viewer,'phone');assert.equal(v.pin,'');assert.equal(v.joined,true);
- // critic revise: the key file holds the key only; the pin lives on the session
- assert.deepEqual(Object.keys(JSON.parse(fs.readFileSync(keyFile(),'utf8'))),['key']);
+ // critic revise: the key file holds the key and (PR8) the phones' fingerprints; the pin lives on the session. Changed openly: PR8 adds phones beside the key.
+ assert.deepEqual(Object.keys(JSON.parse(fs.readFileSync(keyFile(),'utf8'))).sort(),['key','phones']);
  // the phone no longer decides: no compare with s.pin is left in the browser, and every join posts its code
  const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
  assert.doesNotMatch(phone,/[!=]==?\s*s\??\.pin\b|\bs\??\.pin\s*[!=]==?/,'the phone compares nothing with s.pin');
@@ -109,7 +111,7 @@ test('case 4: the proxy shuts every API route but the session\'s own to a guest 
  evening('landing');const {config}=proxyOf();
  assert(config.matcher.includes('/api/:path*')&&config.matcher.includes('/tv'),'the proxy runs on the API and the TV');
  const key=theKey(),pin=store.getSession().pin;
- const tv=`desk-tv=${hmac(key,'tv')}`,phone=`desk-phone=${hmac(key,pin)}`;
+ const tv=`desk-tv=${hmac(key,'tv')}`,phone=await joinAs();// PR8: a phone's cookie is its own token, joined for
  const gated=apiRoutes().filter((r)=>r!=='/api/session'&&r!=='/api/session/stream');
  for(const r of ['/api/hint','/api/read','/api/mark','/api/practice','/api/explain','/api/analyse','/api/memory','/api/english','/api/speak','/api/session/retry'])assert(gated.includes(r),`${r} is on disk and gated`);
  for(const url of gated){
@@ -124,13 +126,13 @@ test('case 4: the proxy shuts every API route but the session\'s own to a guest 
  for(const [url,method] of [['/api/session','GET'],['/api/session','POST'],['/api/session/stream','GET']]){const v=await through(url,{method});assert(v.passed,`${method} ${url} is the lobby's door`);assert.equal(v.role,'guest');}
 });
 
-test('case 5: a reset rotates the pin and lapses every phone; /tv?key= sets desk-tv and drops the key from the address',async()=>{
+test('case 5: a reset rotates the pin, which holds no phone (PR8); /tv?key= sets desk-tv and drops the key from the address',async()=>{
  evening('landing');const key=theKey(),old=store.getSession().pin;
- const phone=`desk-phone=${hmac(key,old)}`;
+ const phone=await joinAs();// PR8: a phone's cookie is its own token
  assert.equal((await through('/api/hint',{cookie:phone})).role,'phone');
  do store.dispatch({type:'reset'});while(store.getSession().pin===old);
- assert.equal((await through('/api/hint',{cookie:phone})).status,401,'the old phone is a guest again');
- assert.equal((await through('/api/session',{method:'GET',cookie:phone})).role,'guest');
+ // PR8: the pin no longer holds a phone, so a new pin lapses none (PR9 makes the TV's reset forget them)
+ assert.equal((await through('/api/hint',{cookie:phone})).role,'phone','the phone is still a phone');
  const pairingJson=JSON.parse(fs.readFileSync(keyFile(),'utf8'));assert.equal(pairingJson.key,key,'the key survives a reset');
  let v=await through(`/tv?key=${encodeURIComponent(key)}&test=1`,{method:'GET'});
  assert([302,303,307,308].includes(v.status),'a redirect');assert.equal(new URL(v.res.headers.get('location')).pathname,'/tv');
@@ -153,11 +155,11 @@ test('case 6: the stream draws each connection\'s own view - after a dispatch th
   const t=await read(tv),g=await read(guest);
   assert.equal(t.status,'next');assert.equal(t.pin,pin);assert.equal(t.viewer,'tv');
   assert.equal(g.pin,'');assert.equal(g.viewer,'guest');assert.deepEqual(g.pages,[]);
-  // a phone whose pin has lapsed on the open stream is a guest from the next message on
-  const key=theKey(),ph=await (await streamRoute().GET(req('/api/session/stream',{role:'phone',cookie:`desk-phone=${hmac(key,pin)}`}))).body.getReader();
+  // a phone is a phone while it is listed (PR8): the pin turning over does not end its stream
+  const ph=await (await streamRoute().GET(req('/api/session/stream',{role:'phone',cookie:await joinAs()}))).body.getReader();
   assert.equal((await read(ph)).viewer,'phone');
   do store.dispatch({type:'reset'});while(store.getSession().pin===pin);
-  const lapsed=await read(ph);assert.equal(lapsed.viewer,'guest');assert.equal(lapsed.joined,false);
+  const lapsed=await read(ph);assert.equal(lapsed.viewer,'phone');// PR8: a new pin lapses no phone
   await tv.cancel();await guest.cancel();await ph.cancel();
  }finally{mock.timers.reset();}
 });
@@ -454,4 +456,54 @@ test('GUARD: a TV join during the cooldown still joins',async()=>{
  for(let i=0;i<10;i++)await post({type:'join',code:bad},'guest');
  assert.equal((await post({type:'join',code:bad},'guest')).status,403);
  assert.equal((await post({type:'join'},'tv')).status,200);
+});
+
+// ---- PR8: a phone's credential is its own ----
+const fpOf=(token)=>crypto.createHash('sha256').update(token).digest('hex');
+const tokenOf=(cookie)=>cookie.replace(/^desk-phone=/,'');
+const pj=()=>JSON.parse(fs.readFileSync(keyFile(),'utf8'));
+let tick=0;
+/** Write pairing.json as the test wants it. The mtime is set to a new second each time, so no write hides behind a coarse clock. */
+const put=(phones)=>{pairing().tvKey();fs.writeFileSync(keyFile(),JSON.stringify({key:pj().key,phones}));const t=new Date(Date.now()+(++tick)*1000);fs.utimesSync(keyFile(),t,t);};
+const roleOfCookie=(cookie)=>pairing().roleOf(pairing().cookiesOf(new Request('http://desk/',{headers:cookie?{cookie}:{}})));
+const MIN=60_000,HOUR=60*MIN,DAY=24*HOUR;
+test('PR8: two guests join in turn and get two different cookies, each a phone, neither the HMAC of the key and a pin; pairing.json lists two fingerprints and no token',async()=>{
+ evening('pair');DESK_JOIN();put([]);const key=theKey();
+ const pins=[store.getSession().pin];const a=await joinAs();pins.push(store.getSession().pin);const b=await joinAs();
+ assert.notEqual(a,b);assert.equal(roleOfCookie(a),'phone');assert.equal(roleOfCookie(b),'phone');
+ for(const c of [a,b])for(const p of pins)assert.notEqual(tokenOf(c),hmac(key,p),'not the HMAC of the key and the pin');
+ const f=pj();assert.equal(f.phones.length,2);
+ assert.deepEqual(f.phones.map((x)=>x.fp).sort(),[fpOf(tokenOf(a)),fpOf(tokenOf(b))].sort());
+ const text=fs.readFileSync(keyFile(),'utf8');assert(!text.includes(tokenOf(a))&&!text.includes(tokenOf(b)),'no token on disk');
+ for(const x of f.phones){assert(Math.abs(x.joined-Date.now())<60_000);assert(Math.abs(x.seen-Date.now())<60_000);}
+});
+test('PR8: a cookie of the old shape, the HMAC of the key and the pin, is a guest through roleOf and liveRole',()=>{
+ evening('pair');DESK_JOIN();put([]);const old='desk-phone='+hmac(theKey(),store.getSession().pin);
+ assert.equal(roleOfCookie(old),'guest');
+ assert.equal(pairing().liveRole(req('/api/session/stream',{role:'phone',cookie:old})),'guest');
+});
+test('PR8: a listed phone is still a phone after the pin turns over',async()=>{
+ evening('pair');DESK_JOIN();put([]);const c=await joinAs();
+ const was=store.getSession().pin;do store.dispatch({type:'reset'});while(store.getSession().pin===was);
+ assert.equal(roleOfCookie(c),'phone');
+ assert.equal(pairing().liveRole(req('/api/session/stream',{role:'phone',cookie:c})),'phone');
+});
+test('PR8: a listed phone that posts join with no code is answered as a phone - no new token, no Set-Cookie, the pin and the list unchanged',async()=>{
+ evening('pair');DESK_JOIN();put([]);const c=await joinAs();
+ const pin=store.getSession().pin,list=fs.readFileSync(keyFile(),'utf8');
+ const r=await post({type:'join'},'phone',c);assert.equal(r.status,200);
+ assert.equal((await r.json()).viewer,'phone');assert.equal(setCookie(r,'desk-phone'),undefined);
+ assert.equal(store.getSession().pin,pin);assert.equal(fs.readFileSync(keyFile(),'utf8'),list);
+});
+test('PR8: a listed phone that joins with the right code gets a new token that replaces its entry',async()=>{
+ evening('pair');DESK_JOIN();put([]);const c=await joinAs();
+ const r=await post({type:'join',code:store.getSession().pin},'phone',c);assert.equal(r.status,200);
+ const n=setCookie(r,'desk-phone');assert(n&&n!==tokenOf(c));
+ const f=pj();assert.equal(f.phones.length,1,'it replaced the entry');assert.equal(f.phones[0].fp,fpOf(n));
+});
+test('PR8: the TV\'s join and an in-process join set no cookie and change neither the list nor the pin',async()=>{
+ evening('pair');DESK_JOIN();put([]);await joinAs();
+ const pin=store.getSession().pin,list=fs.readFileSync(keyFile(),'utf8');
+ for(const role of ['tv',undefined]){const r=await post({type:'join'},role);assert.equal(r.status,200);assert.equal(setCookie(r,'desk-phone'),undefined);
+  assert.equal(store.getSession().pin,pin);assert.equal(fs.readFileSync(keyFile(),'utf8'),list);}
 });

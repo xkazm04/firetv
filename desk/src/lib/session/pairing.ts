@@ -5,16 +5,17 @@
  *   at every start (src/instrumentation.ts) as the TV's address, /tv?key=...; opening it once sets an httpOnly
  *   desk-tv cookie (src/proxy.ts). An address cannot stand in for the key: a client may send its own
  *   x-forwarded-for.
- * - a phone: a device that gave the TV's code to the server. A join with the session's pin sets desk-phone, the
- *   HMAC of the key and that pin. The pin lives on the session only (the session is the only state), so a reset,
- *   which mints a new pin, lapses every phone at once, and the phones ask for the code again.
+ * - a phone: a device that gave the TV's code to the server. A join with the session's pin mints a random token for
+ *   that phone (node:crypto) and sets it as desk-phone. pairing.json keeps beside the key each phone's fingerprint (the
+ *   SHA-256 of its token, never the token), when it joined and when it was last seen; a cookie is a phone while its
+ *   fingerprint is listed. No credential holds the pin.
  * - a guest: anyone else on the network. A guest sees the lobby and may post only what joining needs.
  *
  * The proxy classifies every API request from its cookies and writes the role into x-desk-role; the session
  * routes draw that caller's view(). A request with no x-desk-role never came through the proxy - a test, or
  * retry's in-process call - and keeps the whole session.
  */
-import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { getSession, type Event, type Session } from "./store";
@@ -24,7 +25,7 @@ export type Role = "tv" | "phone" | "guest";
 export const ROLE_HEADER = "x-desk-role";
 export const TV_COOKIE = "desk-tv";
 export const PHONE_COOKIE = "desk-phone";
-/** The cookies outlive a browser restart; a phone's lapses anyway when the pin turns over. */
+/** The cookies outlive a browser restart; a phone's token lives as long as its fingerprint is listed. */
 export const COOKIE = { httpOnly: true, sameSite: "lax" as const, path: "/", maxAge: 60 * 60 * 24 * 400 };
 export const WRONG_CODE = "That code is not on the TV.";
 export const NO_CODE = "Type the code the TV shows.";
@@ -61,37 +62,72 @@ export function joinSucceeded(): void { joinGuard().wrong = 0; }
 const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const FILE = () => path.join(DATA(), "pairing.json");
 
-/** The desk's key, read once per change of the file (mtime), minted the first time it is asked for. */
-let cached: { file: string; mtime: number; key: string } | null = null;
-export function tvKey(): string {
+/** One phone as pairing.json lists it: the SHA-256 of its token (hex), when it joined and when it was last seen (epoch ms). */
+interface Phone { fp: string; joined: number; seen: number }
+const FP = /^[0-9a-f]{64}$/;
+const phoneOk = (p: unknown): p is Phone => !!p && typeof p === "object" && FP.test((p as Phone).fp) && Number.isFinite((p as Phone).joined) && Number.isFinite((p as Phone).seen);
+
+/**
+ * The desk's key and its phones, read once per change of the file (mtime, and size: two writes of one size in one
+ * clock tick would otherwise hide each other). The key is minted the first time it is asked for, with no phones.
+ */
+let cached: { file: string; mtime: number; size: number; key: string; phones: Phone[] } | null = null;
+const stamp = (file: string) => { const st = statSync(file); return { mtime: st.mtimeMs, size: st.size }; };
+function state() {
   const file = FILE();
   let why = "";
   try {
     if (existsSync(file)) {
-      const mtime = statSync(file).mtimeMs;
-      if (cached && cached.file === file && cached.mtime === mtime) return cached.key;
-      const key = JSON.parse(readFileSync(file, "utf8"))?.key;
-      if (typeof key === "string" && key.length >= 16) { cached = { file, mtime, key }; return key; }
+      const at = stamp(file);
+      if (cached && cached.file === file && cached.mtime === at.mtime && cached.size === at.size) return cached;
+      const j = JSON.parse(readFileSync(file, "utf8"));
+      if (typeof j?.key === "string" && j.key.length >= 16) {
+        cached = { file, ...at, key: j.key, phones: Array.isArray(j.phones) ? j.phones.filter(phoneOk).map((p: Phone) => ({ fp: p.fp, joined: p.joined, seen: p.seen })) : [] };
+        return cached;
+      }
       why = "it holds no usable key";
     }
   } catch (e) { why = `it could not be read (${e instanceof Error ? e.message : e})`; }
   if (why) console.error(`desk pairing: ${file} was not used, ${why}; a new key was minted, so the TV must open the new address printed at start`);
-  const key = randomBytes(24).toString("base64url");
   mkdirSync(path.dirname(file), { recursive: true });
-  writeFileSync(file, JSON.stringify({ key }));
-  cached = { file, mtime: statSync(file).mtimeMs, key };
-  return key;
+  cached = { file, mtime: 0, size: 0, key: randomBytes(24).toString("base64url"), phones: [] };
+  save(cached);
+  return cached;
 }
+/** Write the key and the phones; the cache then follows the file it just wrote. */
+function save(st: NonNullable<typeof cached>): void {
+  writeFileSync(st.file, JSON.stringify({ key: st.key, phones: st.phones }));
+  Object.assign(st, stamp(st.file));
+}
+export function tvKey(): string { return state().key; }
 
 const sign = (msg: string) => createHmac("sha256", tvKey()).update(msg).digest("base64url");
 /** What the TV's cookie holds: the key's signature, so the key itself never rides in a cookie. */
 export const tvToken = () => sign("tv");
-/** What a phone's cookie holds: the key's signature of the pin on the session now. */
-export const phoneToken = (pin = getSession().pin) => sign(pin);
 const same = (a: string | undefined, b: string) => { if (!a) return false; const x = Buffer.from(a), y = Buffer.from(b); return x.length === y.length && timingSafeEqual(x, y); };
 export const isTvKey = (k: string | null | undefined) => same(k ?? undefined, tvKey());
-/** A phone cookie is good while the pin it was minted for is still the session's. */
-export const isPhone = (c: string | undefined) => { const pin = getSession().pin; return !!pin && same(c, phoneToken(pin)); };
+const fingerprint = (token: string) => createHash("sha256").update(token).digest();
+/** The listed phone this cookie is, or undefined. Every entry is compared, in constant time, so the answer does not say how far a guess got. */
+function listed(c: string | undefined): Phone | undefined {
+  if (!c) return undefined;
+  const fp = fingerprint(c);
+  let hit: Phone | undefined;
+  for (const p of state().phones) if (timingSafeEqual(Buffer.from(p.fp, "hex"), fp)) hit = p;
+  return hit;
+}
+/** A phone cookie is good while its fingerprint is listed. */
+export const isPhone = (c: string | undefined) => !!listed(c);
+/**
+ * A guarded join with the right code: a new random token for this phone, its fingerprint listed. A phone that
+ * joins again (it sends its old cookie) has its entry replaced. The token is returned and never written.
+ */
+export function mintPhone(old?: string): string {
+  const st = state(), token = randomBytes(32).toString("base64url"), now = Date.now(), was = listed(old);
+  st.phones = st.phones.filter((p) => p !== was);
+  st.phones.push({ fp: fingerprint(token).toString("hex"), joined: now, seen: now });
+  save(st);
+  return token;
+}
 
 /** Anything with cookies: a NextRequest's, or a plain Request's Cookie header read by cookiesOf(). */
 export interface Jar { get(name: string): { value: string } | undefined }

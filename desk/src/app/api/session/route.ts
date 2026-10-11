@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, type Event } from "@/lib/session/store";
-import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, phoneToken, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -65,8 +65,11 @@ export async function POST(req: Request) {
     joinSucceeded();
     const s = dispatch({ type: "join" });
     if (role === null || role === "tv") return NextResponse.json(view(s, role));
+    // a listed phone that sends no code is answered as the phone it is: no new token, no cookie
+    if (e.code === undefined) return NextResponse.json(view(s, "phone"));
     const res = NextResponse.json(view(s, "phone"));
-    res.cookies.set(PHONE_COOKIE, phoneToken(pin), COOKIE);
+    // the right code mints this phone's own token (a phone that joins again has its entry replaced)
+    res.cookies.set(PHONE_COOKIE, mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value), COOKIE);
     return res;
   }
   return NextResponse.json(view(dispatch(e), role));
