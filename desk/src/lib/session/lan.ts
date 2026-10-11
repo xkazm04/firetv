@@ -27,7 +27,7 @@ export function lanHost(interfaces: Interfaces = networkInterfaces(), env: NodeJ
   const found: { ip: string; rank: number; virtual: boolean; at: number }[] = [];
   for (const [name, list] of Object.entries(interfaces)) {
     for (const n of list ?? []) {
-      const family: string | number | undefined = n?.family;
+      const family = n?.family as string | number | undefined;
       if (!n || n.internal || (family !== "IPv4" && family !== 4)) continue;
       found.push({ ip: n.address, rank: rank(n.address), virtual: VIRTUAL.test(name), at: found.length });
     }
