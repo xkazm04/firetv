@@ -3365,7 +3365,7 @@ export const SCHOOL_WITHHELD = {
   "mean-range": "The mean is the total divided by how many numbers. The range is largest take away smallest. The answer is yours to work out.",
   "area": "Rectangle: length times width. Triangle: halve base times height. Joined rectangles: work out each, then add. The answer is yours to work out.",
   "unit-rate": "Find the value of a single item first by dividing, then multiply by the amount asked about. The answer is yours to work out.",
-  "ratio-share": "Common factor to simplify. Scale both for a missing term. Share: divide by the total, times each part. The answer is yours to work out.",
+  "ratio-share": "Common factor to simplify. Missing term: scale both. Share: divide by the parts' total, times each part. The answer is yours to work out.",
   "pythagoras": "Square the sides you know. Add for the longest side, subtract for a shorter side, then square root. The answer is yours to work out.",
   "probability": "Probability is the counters you want divided by all the counters in the bag. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",

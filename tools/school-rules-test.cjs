@@ -494,7 +494,7 @@ test('SL2-a WITHHELD: five withheld lines name the step they used to miss, for e
  assert.match(W['dec-arith'],/(put|place|count)[^.]*(point|decimal place|places)/i,'dec-arith puts the point back');
  assert.match(W['dec-arith'],/multipl/i,'dec-arith multiplies');
  assert.match(W['pythagoras'],/add/i,'pythagoras adds for the longest');assert.match(W['pythagoras'],/subtract|take away/i,'pythagoras subtracts for a shorter side');
- assert.match(W['ratio-share'],/common factor/i,'ratio-share simplifies by a common factor');assert.match(W['ratio-share'],/scale both/i,'ratio-share scales both parts');assert.match(W['ratio-share'],/divide by the total/i,'ratio-share shares by the total of the parts');
+ assert.match(W['ratio-share'],/common factor/i,'ratio-share simplifies by a common factor');assert.match(W['ratio-share'],/scale both/i,'ratio-share scales both parts');assert.match(W['ratio-share'],/divide by the parts' total/i,'ratio-share shares by the total of the parts');
  assert.match(W['area'],/rectangle/i);assert.match(W['area'],/triangle/i);assert.match(W['area'],/add/i,'area adds the parts');
  assert.match(W['dec-convert'],/divide[^.]*top[^.]*bottom/i,'dec-convert divides top by bottom');assert.match(W['dec-convert'],/place value/i);assert.match(W['dec-convert'],/simplif/i);assert.match(W['dec-convert'],/percent/i);
  for (const k of ['dec-arith','pythagoras','ratio-share','area','dec-convert']) assert.match(W[k],/ The answer is yours to work out\.$/,k);

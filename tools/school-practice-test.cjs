@@ -556,7 +556,11 @@ test('W7c 1: the four batch-3 units are on the school path after the percent uni
   for(const p of prereq)assert.ok(order.indexOf(p)<order.indexOf(id),`${id} needs ${p}, which comes earlier`);
  }
  // the multiply-and-divide blurb is one sentence with one main clause (batch 1's read as two joined by "and")
- assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions are multiplied top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
+ assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions multiply top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
+ // SL3: every school blurb is 25 words or fewer and still names its method steps
+ for(const t of P.topicsOf('school'))assert.ok(t.blurb.trim().split(/s+/).length<=25,`${t.id}: blurb is 25 words or fewer`);
+ for(const [id,res] of [['area',[/rectangle/i,/triangle/i,/add/i]],['probability',[/equally likely/i,/not happen/i]],['dec-arith',[/lined? up/i,/tak(e|en) away|subtract/i,/count/i,/multipl/i]],['ratio-share',[/single part/i]]])
+  for(const r of res)assert.match(P.topicIn(id).blurb,r,`${id}: blurb keeps ${r}`);
  for(const t of P.topicsOf('school'))assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${t.id}: one sentence`);
  // the unit a reader says a spec belongs to is the topic on the path, so the hint's stance and the history line name it
  for(const [spec,id] of [[{shape:'ratio',expr:'60 in 2:3'},'ratio-share'],[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'},'unit-rate'],[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'},'area'],[{shape:'stat',expr:'mean 4, 7, 9, 10'},'mean-range']])
