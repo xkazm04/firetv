@@ -137,26 +137,46 @@ function productOf(runs, gaps, { repo, git, files, current }) {
 const one = s => String(s ?? '').replace(/\s*\n\s*/g, ' ');
 /** How a row's product stands: nothing when it was seen on the current one (or the ledger was built without a repo). */
 const productCell = g => g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '';
-/** OPEN.md: every open gap by Character x journey, the pair with the highest rank first. */
+/** The module a journey id belongs to: J1-J5 Linga, EM1-EM5 Essay Master, MB1-MB5 Math Buddy. An id of no other prefix is Linga. */
+const moduleOf = journey => /^EM\d/.test(journey) ? 'Essay Master' : /^MB\d/.test(journey) ? 'Math Buddy' : 'Linga';
+const MODULES = ['Linga', 'Essay Master', 'Math Buddy'];
+const RE_WALK = 'Next: these rows are re-checked by an L1 re-walk through the /uat skill. The Linga driver does not rerun them.';
+/** How the open rows of a module are re-checked: linga-text.cjs drives Linga only. */
+const NEXT = {
+  Linga: 'Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair\'s open rows, and each answer is stamped into the run that owns the row.',
+  'Essay Master': RE_WALK,
+  'Math Buddy': RE_WALK,
+};
+/** OPEN.md: every open gap by module, then by Character x journey, the pair with the highest rank first. */
 function statusOf(L, { insights = INSIGHTS } = {}) {
-  const pairs = new Map();
-  for (const g of L.open) { const k = pairKey(g.character, g.journey); (pairs.get(k) ?? pairs.set(k, []).get(k)).push(g); }
   const byRank = (a, b) => b.rank - a.rank || b.recurrence - a.recurrence || b.unasked - a.unasked || a.id.localeCompare(b.id);
-  const sections = [...pairs.values()].map(gs => gs.sort(byRank)).sort((a, b) => b[0].rank - a[0].rank || b.length - a.length || a[0].character.localeCompare(b[0].character) || jn(a[0].journey) - jn(b[0].journey));
-  const holding = new Set(L.open.flatMap(g => g.rows.map(r => r.run)));
   const top = L.runs.filter(r => !r.parent), drained = top.filter(r => fs.existsSync(path.join(insights, `${r.id}.md`)));
-  const recurring = L.open.filter(g => g.recurrence > 1).length, unasked = L.open.filter(g => g.unasked > 0).length;
   const row = g => `- \`${g.id}\` ${g.severity} · rank ${g.rank} · ${one(g.title)}${g.recurrence > 1 ? ` · recurrence ${g.recurrence}, first seen ${g.firstSeen}` : ''}${g.unasked > 0 ? ` · unasked since ${g.unaskedSince} (${g.unasked} later run${g.unasked === 1 ? '' : 's'} of this pair)` : ''}${productCell(g)}`;
+  const section = mod => {
+    const open = L.open.filter(g => moduleOf(g.journey) === mod);
+    if (!open.length) return [];
+    const pairs = new Map();
+    for (const g of open) { const k = pairKey(g.character, g.journey); (pairs.get(k) ?? pairs.set(k, []).get(k)).push(g); }
+    const sections = [...pairs.values()].map(gs => gs.sort(byRank)).sort((a, b) => b[0].rank - a[0].rank || b.length - a.length || a[0].character.localeCompare(b[0].character) || jn(a[0].journey) - jn(b[0].journey));
+    const holding = new Set(open.flatMap(g => g.rows.map(r => r.run)));
+    const recurring = open.filter(g => g.recurrence > 1).length, unasked = open.filter(g => g.unasked > 0).length;
+    const n = { current: 0, aged: 0, unknown: 0 };
+    if (L.product) for (const g of open) n[g.productState]++;
+    return [
+      `# ${mod}`, '',
+      `${open.length} open in ${pairs.size} pairs across ${holding.size} runs`,
+      ...(L.product ? [`${open.length} open: ${n.current} seen on the current product, ${n.aged} seen before a product change${n.unknown ? `, ${n.unknown} unknown` : ''}`] : []), '',
+      `recurring ${recurring} · unasked by a later run of their pair ${unasked}`, '',
+      NEXT[mod], '',
+      ...sections.flatMap(gs => [`## ${gs[0].character} ${gs[0].journey} · ${gs.length} open · top rank ${gs[0].rank}`, '', ...gs.map(row), '']),
+    ];
+  };
   return [
-    '# Open LT findings — Linga', '',
-    'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run.', '',
-    `${L.open.length} open in ${pairs.size} pairs across ${holding.size} runs`,
-    ...(L.product ? [`${L.open.length} open: ${L.product.counts.current} seen on the current product, ${L.product.counts.aged} seen before a product change${L.product.counts.unknown ? `, ${L.product.counts.unknown} unknown` : ''}`] : []), '',
-    `recurring ${recurring} · unasked by a later run of their pair ${unasked}`,
+    '# Open LT findings', '',
+    'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.', '',
     `drained ${drained.length} of ${top.length} runs`,
     ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []), '',
-    'Next: `node uat/driver/linga-text.cjs --recertify` reruns every pair below; each judge answers all of its pair\'s open rows, and each answer is stamped into the run that owns the row.', '',
-    ...sections.flatMap(gs => [`## ${gs[0].character} ${gs[0].journey} · ${gs.length} open · top rank ${gs[0].rank}`, '', ...gs.map(row), '']),
+    ...MODULES.flatMap(section),
   ].join('\n');
 }
 /** OPEN.md beside the runs, from a fresh ledger. */
@@ -166,4 +186,4 @@ function writeStatus(dir = RUNS, opts = {}) {
   return { md, file };
 }
 
-module.exports = { RUNS, runsOf, ledger, statusOf, writeStatus, isOpen, pairKey };
+module.exports = { RUNS, runsOf, ledger, statusOf, writeStatus, isOpen, pairKey, moduleOf };

@@ -389,3 +389,27 @@ test('product case 6: OPEN.md leads with the split and every aged row ends with 
   assert.equal(fs.readFileSync(out.file, 'utf8'), md2);
   assert.ok(asked.every(a => a === 'log' || a === 'ls-tree'));
 });
+
+test('W7-1: OPEN.md files each open row under its own module, and only Linga carries the --recertify line', () => {
+  const runs = path.join(tmp, `modules-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'R', [
+    finding({ id: 'F-L', character: 'tomas-9', journey: 'J2', title: 'linga row' }),
+    finding({ id: 'F-E', character: 'daniel-15', journey: 'EM3', title: 'essay row' }),
+    finding({ id: 'F-M', character: 'nela-12', journey: 'MB2', title: 'math row' }),
+  ]);
+  const md = L().statusOf(L().ledger(runs)), lines = md.split('\n');
+  const part = name => { const i = lines.indexOf(`# ${name}`); assert.ok(i >= 0, `a section for ${name}`); const j = lines.findIndex((l, k) => k > i && /^# /.test(l)); return lines.slice(i, j < 0 ? undefined : j); };
+  const lin = part('Linga'), ess = part('Essay Master'), mat = part('Math Buddy');
+  assert.ok(lin.some(l => l.includes('linga row')) && !lin.some(l => l.includes('essay row') || l.includes('math row')), lin.join('\n'));
+  assert.ok(ess.some(l => l.includes('essay row')) && !ess.some(l => l.includes('linga row') || l.includes('math row')), ess.join('\n'));
+  assert.ok(mat.some(l => l.includes('math row')) && !mat.some(l => l.includes('linga row') || l.includes('essay row')), mat.join('\n'));
+  for (const s of [lin, ess, mat]) assert.ok(s.includes('1 open in 1 pairs across 1 runs'), s.join('\n'));
+  assert.ok(lin.some(l => l.includes('node uat/driver/linga-text.cjs --recertify')));
+  for (const s of [ess, mat]) {
+    assert.ok(!s.some(l => l.includes('--recertify')), 'the driver reruns Linga only');
+    assert.ok(s.some(l => l.includes('L1 re-walk through the /uat skill')), s.join('\n'));
+  }
+  assert.ok(!lines[0].includes('Linga'), 'the title no longer names Linga alone');
+  // a module with no open row has no section
+  assert.ok(!L().statusOf(L().ledger((() => { const r = path.join(tmp, `lonly-${crypto.randomUUID().slice(0, 8)}`); writeRun(r, 'R', [finding()]); return r; })())).includes('# Essay Master'));
+});
