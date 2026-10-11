@@ -522,8 +522,8 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B25** — A right answer in the Character's notation ("c = 34 mm", "P(A) = 3/13") is unsure, and the desk says "something different"
   - origin: 2026-10-09-maths-l1/L1-vojtech-18-MB2-2; "Then I write 'c = 34 mm', like our teacher wants, and it tells me 'I got something different'. It was right. That makes me nervous about every other mark." (vojtech-18, 2026-10-09-maths-l1)
   - recommendation: build — `readNumber` ignores only a leading "x =", "answer:", "ans:" or "=" (`lib/rules/school.ts:37`), so "c = 34 mm", "c = 34", "b = 40 cm", "P = 3/13" and "P(A) = 3/13" are unsure, and the said line is ASK (MB-B1), which reads as wrong under the title "The desk is not sure"; "x = 10" is right. R5. `readNumber` strips one leading single-letter name or `P(…)` with "=" as it strips "x ="; a test holds those five to right on a matching item; the unsure said line never says "something different" (for example "The desk could not read number N as one value. How did you get there?")
-  - status: open
-  - status note: the said-line clause is built by 83bbe368 (an unsure item no longer says "something different"). The names that readNumber strips stay open.; the names readNumber strips are built by delivery 14 (MK13: 888bb46d): one letter or P(...) before "=", read the same at both reading sites
+  - status: built (83bbe368 and 69f9bc52)
+  - status note: the said-line clause is built by 83bbe368 (an unsure item no longer says "something different"). The names that readNumber strips are built by delivery 14 (MK13: 69f9bc52): one letter or P(...) before "=", read the same at both reading sites
   - ceiling: any letter before "=" is stripped, so a wrong name with the right value is ticked; the check compares values, not names
 - **MB-B26** — False tick and false ring: a typed mixed number on a linear item is read as a product
   - origin: 2026-10-09-maths-l1/L1-owen-17-MB2-1, 2026-10-09-maths-l1/L1-owen-17-MB2-2; "Then I did the equations one, wrote 1 3/4, and it ticked it. My mate checked: it's 3/4, I'd got the sign wrong. If it ticks wrong answers, what's the point?" (owen-17, 2026-10-09-maths-l1)
@@ -567,7 +567,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B32** — Typed answers are capped at 40 characters: the phone cuts a quotient-rule answer silently and the item comes back "not sure"
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-4
   - recommendation: build — `TYPED_ANSWER_MAX = 40` (`lib/rules/maths.ts:98`); the phone input has `maxLength` 40 (typing stops, a paste is cut); "(2x*cos(x^2)*(x^3+1)-3x^2*sin(x^2))/(x^3+1)^2" (45) is right whole and unreadable when cut, so it comes back "not sure"; the route refuses a 41-character answer for the whole set, and the second go has the same cap. On a set whose items carry a Calculus spec the per-answer cap is long enough for the spec's own derivative printed plainly (for example 120), and the phone shows a count instead of cutting silently
-  - status: open
+  - status: built in part (MK14: 6cbe3bd4): the cap is 120 for every typed answer; the phone count stays open, because page.tsx is in the pairing span
   - ceiling: a longer cap invites pasted working into the answer box; the check still reads one expression
 - **MB-B33** — Hints are English-only with no word cap, and the Point & ask presets and the Mic are English
   - origin: 2026-10-09-maths-l1/L1-vojtech-18-MB1-4
@@ -578,7 +578,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B34** — The next evening, "I have homework" reopens the first sheet ever snapped and never asks for tonight's
   - origin: 2026-10-09-maths-l1/L1-nela-12-MB1-2; "The next evening it showed yesterday's sheet again. I pressed homework and got the old problems, and Mum had to find 'Capture' on the phone. Blbost." (nela-12, 2026-10-09-maths-l1)
   - recommendation: build — pages are never cleared (only the bench's Reset button clears them); the homework door does `page.select` of the first maths page and the continue card points at the oldest read page (`tv/keys.ts:306-307`: `pages.findIndex(subject maths)` then `page.select`, else `page.ask`), so a new sheet is reachable only through the phone's Capture tab. On a new evening (or once a page is older than today) the homework door issues `page.ask`; older sheets stay reachable from the page's Left/Right or the continue card
-  - status: open
+  - status: built (HW2 3a98790e, HW4 afcb2714: the door opens only tonight's sheet, else it asks for tonight's photo)
   - ceiling: a sheet from last night can still be the right one (an unfinished page); the door asks, it does not decide
 - **MB-B35** — A learner's own homework sheet can be hinted but never marked
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB1-3; "I came for 'which of my ten did I get wrong and where'. It can show my sheet and nudge me on one problem, but it can't mark my sheet." (matyas-19, 2026-10-09-maths-l1)
