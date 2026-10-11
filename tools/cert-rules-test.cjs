@@ -512,3 +512,32 @@ test('cert 22: the plan-done home\'s "Talk again" starts a scene for an open ski
  assert(scene&&C.certGap&&C.certGap(l).open.includes(scene.skill),`talk again starts ${scene&&scene.id}`);
  assert.equal(v.caption,scene.goal);
 });
+test('cert 24 (PC6-b): a high check with nothing of the learner own after it, and skills still open, gets no needsNew',()=>{
+ const band='B1',plan=['describe'],need=[...C.BASE_SKILLS[band],...plan];
+ const l=earned({band,plan,placements:[check(band,'high',20000)],ev:evidenceFor(need.slice(0,2),{at:9000})});
+ assert.equal(C.issue(l,1),null,'nothing issues');
+ const gap=C.certGap(l);
+ assert.equal(gap.blocker,null);
+ assert(gap.open.length>0,'skills are still open');
+ assert.equal(gap.needsNew,undefined,'needsNew is for the record that waits only for a piece after the check');
+});
+test('cert 25 (PC6-b): needsNew agrees with issue() on 288 records; a gap with no blocker, nothing open and no needsNew issues',()=>{
+ const B2=C.BASE_SKILLS.B2,A2=C.BASE_SKILLS.A2,bad=[];let n=0;
+ for(const confidence of ['high','medium','low'])for(const source of ['check','self'])for(const timing of ['none','before','after','mixed'])for(const shown of [0,1,'all'])for(const holds of [false,true])for(const plan of [false,true]){
+  const planSkills=plan?['describe']:[],band=plan?'B2':'A2',req=plan?[...B2,...planSkills]:A2;
+  const skills=shown==='all'?req:shown===1?[req[0]]:[],at=timing==='after'?10000:1000;
+  const mk=(checkAt)=>({...check(band,confidence,checkAt),source});
+  let l=earned({band,plan:planSkills,placements:[mk(5000)],ev:timing==='none'||!skills.length?[]:evidenceFor(skills,{at})});
+  if(timing==='mixed'&&skills.length)l=mergeEvidence(l,[ev({id:'late',skill:skills[0],mode:'text',quote:LINES[skills[0]],at:9000})]);
+  if(holds){const h=C.issue({...l,placements:[mk(0)]},1);if(h)l={...l,certificates:[h]};}
+  n++;
+  const gap=C.certGap(l),iss=C.issue(l,90000);
+  const older=C.issue({...l,placements:[{...l.placements.at(-1),at:-1}]},90000);
+  const waitsOnlyNew=iss===null&&!!older,sig=`conf=${confidence} src=${source} timing=${timing} shown=${shown} held=${holds} plan=${plan}`;
+  if(!!gap.needsNew!==waitsOnlyNew)bad.push(`${sig}: needsNew=${!!gap.needsNew} waitsOnlyForNew=${waitsOnlyNew} open=${gap.open.length} blocker=${gap.blocker}`);
+  if(!gap.blocker&&!gap.open.length&&!gap.needsNew&&!holds&&iss===null)bad.push(`${sig}: gap says ready, issue null`);
+ }
+ assert.equal(n,288);
+ console.log(`cert 25: ${n} records, ${bad.length} disagreements`);
+ assert.deepEqual(bad,[]);
+});

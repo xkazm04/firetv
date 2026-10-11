@@ -154,7 +154,7 @@ export interface CertGap {
   shown: SkillId[];
   /** required skills still to show; empty when a blocker stands or the certificate for this band and requirement is already held */
   open: SkillId[];
-  /** present (true) only when no piece of the learner's own evidence is dated after the check yet: issue() waits for one */
+  /** present (true) only when nothing is open and no piece of the learner's own evidence is dated after the check yet: then issue() waits for that piece alone */
   needsNew?: true;
 }
 /**
@@ -171,7 +171,8 @@ export function certGap(l: EnglishLearning): CertGap {
   const required = requirementFor(l, band);
   if ((l.certificates ?? []).some(c => c.band === band && sameSet(c.skills.map(s => s.skill), required))) return { band, blocker: null, shown: required, open: [] };
   const shown = required.filter(skill => { const p = progressOf(l, skill); return (p === "independent" || p === "transfer") && !!evidenceFor(l, skill, {}); });
-  return { band, blocker: null, shown, open: required.filter(s => !shown.includes(s)), ...(corroborated(l, last.at, {}) ? {} : { needsNew: true as const }) };
+  const open = required.filter(s => !shown.includes(s));
+  return { band, blocker: null, shown, open, ...(!open.length && !corroborated(l, last.at, {}) ? { needsNew: true as const } : {}) };
 }
 /** The shown skills of a gap, named, with how each was shown (the mode of the evidence the plate would print). */
 export function shownSkills(l: EnglishLearning, gap: CertGap = certGap(l)): Array<{ skill: SkillId; name: string; mode: CertSkill["mode"] }> {
