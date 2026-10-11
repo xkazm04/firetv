@@ -277,7 +277,7 @@ export function observationOk(lens: string, o: unknown): boolean {
   }
 }
 
-/** The line a faulty sentence gets when the model's note is empty: the check that failed, in its own words. */
+/** The line a faulty sentence gets as its note: the check that failed, in its own words. */
 const CHECKS = {
   unsupported: "This claim has no evidence after it that a reader can check.",
   floating: "This links back to nothing: no evidence comes before it.",
