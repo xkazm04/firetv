@@ -40,7 +40,7 @@ export const LINE_WORDS = 14;
 export const PAGE_WORDS = 90;
 /** The most units named before "and N more". */
 export const UNITS_SHOWN = 3;
-/** A reading of this many sentences or more is a piece on the Sunday page (the digest keeps no paragraph count; a lone paragraph is far shorter). */
+/** An entry with no paragraph count (written before the digest kept one) is a piece on the Sunday page at this many sentences or more; a lone paragraph is far shorter. */
 export const PIECE_SENTENCES = 12;
 
 /**
@@ -188,7 +188,7 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   }
   // e. Essay Master: the readings, and the lenses in the desk's own order
   const reads = week.filter((e): e is EssayDigest => e.kind === "essay");
-  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => r.sentences >= PIECE_SENTENCES).length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
+  if (reads.length) page.essay = { readings: reads.length, pieces: reads.filter((r) => (r.paragraphs !== undefined ? r.paragraphs > 1 : r.sentences >= PIECE_SENTENCES)).length, lenses: ESSAY_TYPES.filter((t) => reads.some((r) => r.lens === t.id)).map((t) => t.name) };
 
   // f. one act: the unit worked most (the first row) when the table has it, else by what was done
   const top = page.units.find((u) => DO_IT[u.id]);

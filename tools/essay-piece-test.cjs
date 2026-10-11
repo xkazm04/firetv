@@ -111,6 +111,7 @@ test('essay-master-A case 9 (changed by E2, council rulings 2026-10-09 section 6
   assert.equal(seen.length, 2, 'one call per paragraph');
   assert.deepEqual(a.verdicts.map(v => [v.n, v.verdict]), [[1, 'faulty'], [2, 'neutral'], [3, 'neutral'], [4, 'neutral']], 'exactly one faulty sentence in the whole piece');
   assert.equal(getLearner('oa-9').history.at(-1).detail, '1 of 4 sentences to fix, 2 paragraphs');
+  assert.equal(getLearner('oa-9').digest.at(-1).paragraphs, 2, 'RC5: a piece writes its paragraph count to the week digest');
   assert.match(a.summary, /^1 of 4 sentences to fix across 2 paragraphs. Start with paragraph 1, sentence 1: /);
   assert.doesNotMatch(a.summary, /: ok/, 'E9: the model\'s summary is not read');
 });
@@ -237,6 +238,7 @@ test('E3: an English paragraph either side of one that is not: two calls, notEng
   assert.equal(a.sentences.length, 7);
   assert(a.summary.startsWith(`${faulty} of 4 sentences to fix across 3 paragraphs. Paragraph 2 is not in English, so the desk did not read it.`), a.summary);
   assert.equal(getLearner('e3-b').history.at(-1).detail, `${faulty} of 4 sentences to fix, 3 paragraphs`);
+  assert.equal(getLearner('e3-b').digest.at(-1).paragraphs, 3, 'RC5: the piece digest carries its paragraph count');
 });
 test('E3: a piece with every paragraph English has no notEnglish on it, and the pieces of the earlier cases keep their shape', async () => {
   answer = perParagraph(faultyAt([])); const a = await analysePiece(PIECE, 'structure', 'e3-c', undefined);

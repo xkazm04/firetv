@@ -1010,7 +1010,7 @@ test('essay-master-A case 6: the learner record counts code\'s verdicts, not the
  const l=getLearner('oa-6');
  assert.equal(l.history.at(-1).detail,'2 of 3 sentences to fix');
  assert.equal(l.writing.argument.right,0,'two of three faulty is not under a quarter');
- assert.deepEqual({...l.digest.at(-1),at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2});
+ assert.deepEqual({...l.digest.at(-1),at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2,paragraphs:1});
 });
 test('essay-master-A case 7: the prompt no longer asks for a verdict; the withholding rules are still in it verbatim',async()=>{
  const {NEVER_REWRITE,PATTERN_RULE}=deskEssay();

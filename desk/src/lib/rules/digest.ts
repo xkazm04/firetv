@@ -34,8 +34,11 @@ export interface MathsDigest {
 }
 /** A finished Linga conversation: the scene (an authored scene id, or a plan topic's id), its skill, the learner's replies. */
 export interface EnglishDigest { at: number; kind: "english"; sceneId: string; skill: SkillId; turns: number }
-/** One Essay Master reading: the lens, the sentences read, how many came back to fix. */
-export interface EssayDigest { at: number; kind: "essay"; lens: string; sentences: number; faulty: number }
+/**
+ * One Essay Master reading: the lens, the sentences read, how many came back to fix, and the paragraphs read (1 for a
+ * paragraph, the count for a piece). An entry written before the count existed has no paragraphs.
+ */
+export interface EssayDigest { at: number; kind: "essay"; lens: string; sentences: number; faulty: number; paragraphs?: number }
 /** A homework sheet read: its problems, and the hints that evening, with the problems that needed a second hint. Counts only. */
 export interface HomeworkDigest { at: number; kind: "homework"; problems: number; hints: number; second: number }
 /** A practice paper typed in: the questions kept (marked items and unmapped rows). No mark and no score. */
@@ -113,7 +116,10 @@ export function cleanEntry(raw: unknown): DigestEntry | null {
     const lens = typeof o.lens === "string" && LENSES.has(o.lens) ? o.lens : "";
     const sentences = whole(o.sentences, MAX_SENTENCES);
     if (!lens || !sentences) return null;
-    return { at, kind: "essay", lens, sentences, faulty: Math.min(sentences, whole(o.faulty, MAX_SENTENCES) ?? 0) };
+    // paragraphs is kept only as a whole number from 1 to the sentences; anything else drops the field, not the entry
+    const p = o.paragraphs;
+    const paragraphs = typeof p === "number" && Number.isInteger(p) && p >= 1 && p <= sentences ? p : null;
+    return { at, kind: "essay", lens, sentences, faulty: Math.min(sentences, whole(o.faulty, MAX_SENTENCES) ?? 0), ...(paragraphs ? { paragraphs } : {}) };
   }
   if (o.kind === "homework") {
     const problems = whole(o.problems, MAX_ITEMS);

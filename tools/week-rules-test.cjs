@@ -434,3 +434,11 @@ test('8: GUARD - the phone\'s Recap panel draws This week from the session\'s li
  assert.doesNotMatch(out,/require\([^)]*(session\/(store|learners)|engines\/|desk\/)/,'pure: no store, learners file, engine or pipeline at run time');
  assert.doesNotMatch(fs.readFileSync(src('lib/rules/week.ts'),'utf8'),/—/,'no em dash in the page\'s copy');
 });
+
+test('13-i RC5: an entry with paragraphs is a piece when it has more than one; one without the count is a piece from PIECE_SENTENCES, as before',()=>{
+ const RP=(day,h,lens,sentences,faulty,paragraphs)=>({...R(day,h,lens,sentences,faulty),paragraphs});
+ assert.deepEqual(words([RP(24,18,'structure',9,2,3)]).filter((x)=>x.section==='essay'&&!x.head).map((x)=>x.text),['One piece, through Structure.'],'a 3-paragraph piece of 9 sentences is a piece, not a paragraph reading');
+ assert.deepEqual(words([RP(24,18,'structure',14,2,1)]).filter((x)=>x.section==='essay'&&!x.head).map((x)=>x.text),['One paragraph reading, through Structure.'],'one long paragraph stays a paragraph reading');
+ assert.ok(words([R(24,18,'structure',12,2)]).some((x)=>x.text==='One piece, through Structure.'),'no paragraph count, 12 sentences: a piece as before');
+ assert.ok(words([R(24,18,'structure',11,2)]).some((x)=>x.text==='One paragraph reading, through Structure.'));
+});

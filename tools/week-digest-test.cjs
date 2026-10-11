@@ -159,7 +159,7 @@ test('7: an Essay Master reading writes one essay entry - the lens and the two c
  const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
  await analyseEssay(para,'evidence',LEARNER);
  const d=digest();assert.equal(d.length,1);
- assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'evidence',sentences:3,faulty:1});
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'evidence',sentences:3,faulty:1,paragraphs:1});
  assert.ok(!JSON.stringify(d).includes('Homework')&&!JSON.stringify(d).includes('One to fix'),'no text of the paragraph or the reading');
 });
 
@@ -194,7 +194,7 @@ test('6 (essay-master-A case 6): the digest counts codes verdicts - observations
  answer=async()=>({json:{observations:[{n:1,side:'wanders',verdict:'strong',note:'a'},{n:2,side:'wanders',verdict:'strong',note:'b'},{n:3,side:'pushes',verdict:'strong',note:'c'}],summary:'s'},provider:'test',ms:1});
  await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','argument',LEARNER);
  const d=digest();assert.equal(d.length,1);
- assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2});
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'essay',lens:'argument',sentences:3,faulty:2,paragraphs:1});
  assert.equal(learners.getLearner(LEARNER).history.at(-1).detail,'2 of 3 sentences to fix');
 });
 
@@ -288,7 +288,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  for(const x of questions)assert.ok(!text.includes(x),`no question text: ${x}`);
  for(const a of answers.filter((a)=>/[\/,.%\s]/.test(a)))assert.ok(!text.includes(a),`no typed answer: ${a}`);
  for(const w of ['summer','lake','vague','sharper','Work out'])assert.ok(!text.includes(w),`no ${w}`);
- const KEYS={maths:['at','kind','topic','right','notSure','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty']};
+ const KEYS={maths:['at','kind','topic','right','notSure','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty','paragraphs']};
  for(const e of d){for(const k of Object.keys(e))assert.ok(KEYS[e.kind].includes(k),`${e.kind}.${k} is on the whitelist`);
   for(const [k,v] of Object.entries(e))if(typeof v==='number')assert.ok(Number.isInteger(v)&&v>=0,`${k} is a whole count or a date`);}
  // every string is an id from a closed list
@@ -590,4 +590,13 @@ test('WD14a: an unreadable learners.json is said on a switch and never shows ano
  const text=fs.readFileSync(src('lib/session/store.ts'),'utf8');
  const at=text.indexOf('if (REHYDRATE.has(e.type)) {'),block=text.slice(at,text.indexOf('weekRead(store.session)',at));
  assert.ok(block.includes('readLearner(id)')&&!block.includes('getLearner('),'the rehydrate reads through readLearner');
+});
+
+test('13-i RC5: cleanDigest keeps a valid paragraphs on an essay entry and drops a bad one while keeping the entry',()=>{
+ const e={at:1700000000000,kind:'essay',lens:'structure',sentences:9,faulty:2};
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:3}]),[{...e,paragraphs:3}]);
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:1}]),[{...e,paragraphs:1}]);
+ assert.deepEqual(D.cleanDigest([{...e,paragraphs:9}]),[{...e,paragraphs:9}],'as many paragraphs as sentences is the most');
+ for(const bad of [0,2.5,'3',10,-1,NaN,null])assert.deepEqual(D.cleanDigest([{...e,paragraphs:bad}]),[e],`paragraphs ${JSON.stringify(bad)} dropped, entry kept`);
+ assert.deepEqual(D.cleanDigest([e]),[e],'an entry from before the count stays without it');
 });

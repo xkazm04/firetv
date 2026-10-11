@@ -120,8 +120,8 @@ function record(learnerId: string, lens: Lens, sentences: number, faulty: number
     detail: `${faulty} of ${sentences} sentence${sentences === 1 ? "" : "s"} to fix${paragraphs > 1 ? `, ${paragraphs} paragraphs` : ""}`,
   });
   l = withWriting(l, lens.id, sentences, faulty);
-  // the week's digest (Family W9, rules/digest): the lens and the two counts, never a sentence
-  l = withDigest(l, { at: Date.now(), kind: "essay", lens: lens.id, sentences, faulty });
+  // the week's digest (Family W9, rules/digest): the lens, the counts and the paragraphs read, never a sentence
+  l = withDigest(l, { at: Date.now(), kind: "essay", lens: lens.id, sentences, faulty, paragraphs });
   saveLearner(l);
 }
 
