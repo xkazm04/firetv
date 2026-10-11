@@ -27,8 +27,16 @@ export interface Entry { clean: CleanPaper; drops: string[]; notes: string[]; ke
 export function entryOf(rows: readonly DraftRow[]): Entry {
   const clean = cleanPaper(rawOf(rows));
   const where = (q: string, row: number) => (q ? `Question ${q}` : `Row ${row}`);
+  const typed = rows.filter((r) => !isBlank(r));
+  /** An empty box says what to type; text that is not a whole number keeps the desk's own sentence. d.row is 1-based over the typed rows. */
+  const reason = (d: { row: number; reason: string; why: string }) => {
+    const r = typed[d.row - 1];
+    if (r && d.reason === "marks-not-whole" && !r.marks.trim()) return "Type 0 if nothing was scored.";
+    if (r && d.reason === "out-of-not-whole" && !r.outOf.trim()) return "Type what the question is out of.";
+    return d.why;
+  };
   const drops = [
-    ...clean.dropped.map((d) => `${where(d.q, d.row)} is left out: ${d.why}`),
+    ...clean.dropped.map((d) => `${where(d.q, d.row)} is left out: ${reason(d)}`),
     ...clean.droppedCodes.map((d) => `Question ${d.q}: ${d.why}${d.code ? ` (${d.code})` : ""}`),
   ];
   const notes = clean.unmapped.map((u) => `Question ${u.q} names no statement the desk knows, so it counts in the marks but sits on no topic.`);
