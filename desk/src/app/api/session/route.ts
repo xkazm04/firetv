@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { dispatch, getSession, type Event } from "@/lib/session/store";
-import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, mintPhone, roleFrom, view } from "@/lib/session/pairing";
+import { COOKIE, JOIN_FIRST, NO_CODE, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
 
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {
+    forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value);
     const res = NextResponse.json(view(getSession(), role === null ? null : role === "tv" ? "tv" : "guest"));
     res.cookies.set(PHONE_COOKIE, "", { ...COOKIE, maxAge: 0 });
     return res;
@@ -72,5 +73,7 @@ export async function POST(req: Request) {
     res.cookies.set(PHONE_COOKIE, mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value), COOKIE);
     return res;
   }
+  // a reset that got this far is the TV's (or in-process): a new session, and every phone is forgotten
+  if (e?.type === "reset") forgetAllPhones();
   return NextResponse.json(view(dispatch(e), role));
 }

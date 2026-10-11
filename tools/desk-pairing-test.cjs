@@ -126,13 +126,13 @@ test('case 4: the proxy shuts every API route but the session\'s own to a guest 
  for(const [url,method] of [['/api/session','GET'],['/api/session','POST'],['/api/session/stream','GET']]){const v=await through(url,{method});assert(v.passed,`${method} ${url} is the lobby's door`);assert.equal(v.role,'guest');}
 });
 
-test('case 5: a reset rotates the pin, which holds no phone (PR8); /tv?key= sets desk-tv and drops the key from the address',async()=>{
+test('case 5: a reset (the TV, PR9) forgets every phone; /tv?key= sets desk-tv and drops the key from the address',async()=>{
  evening('landing');const key=theKey(),old=store.getSession().pin;
  const phone=await joinAs();// PR8: a phone's cookie is its own token
  assert.equal((await through('/api/hint',{cookie:phone})).role,'phone');
- do store.dispatch({type:'reset'});while(store.getSession().pin===old);
- // PR8: the pin no longer holds a phone, so a new pin lapses none (PR9 makes the TV's reset forget them)
- assert.equal((await through('/api/hint',{cookie:phone})).role,'phone','the phone is still a phone');
+ assert.equal((await post({type:'reset'},'tv')).status,200);// PR9: the route's reset empties the list (PR8: the pin holds no phone)
+ assert.equal((await through('/api/hint',{cookie:phone})).status,401,'the old phone is a guest again');
+ assert.equal((await through('/api/session',{method:'GET',cookie:phone})).role,'guest');
  const pairingJson=JSON.parse(fs.readFileSync(keyFile(),'utf8'));assert.equal(pairingJson.key,key,'the key survives a reset');
  let v=await through(`/tv?key=${encodeURIComponent(key)}&test=1`,{method:'GET'});
  assert([302,303,307,308].includes(v.status),'a redirect');assert.equal(new URL(v.res.headers.get('location')).pathname,'/tv');
@@ -155,11 +155,11 @@ test('case 6: the stream draws each connection\'s own view - after a dispatch th
   const t=await read(tv),g=await read(guest);
   assert.equal(t.status,'next');assert.equal(t.pin,pin);assert.equal(t.viewer,'tv');
   assert.equal(g.pin,'');assert.equal(g.viewer,'guest');assert.deepEqual(g.pages,[]);
-  // a phone is a phone while it is listed (PR8): the pin turning over does not end its stream
+  // a phone whose entry is gone (a TV reset forgot it) on the open stream is a guest from the next message on
   const ph=await (await streamRoute().GET(req('/api/session/stream',{role:'phone',cookie:await joinAs()}))).body.getReader();
   assert.equal((await read(ph)).viewer,'phone');
-  do store.dispatch({type:'reset'});while(store.getSession().pin===pin);
-  const lapsed=await read(ph);assert.equal(lapsed.viewer,'phone');// PR8: a new pin lapses no phone
+  await post({type:'reset'},'tv');// PR9: the TV's reset forgets every phone
+  const lapsed=await read(ph);assert.equal(lapsed.viewer,'guest');assert.equal(lapsed.joined,false);
   await tv.cancel();await guest.cancel();await ph.cancel();
  }finally{mock.timers.reset();}
 });
@@ -506,4 +506,68 @@ test('PR8: the TV\'s join and an in-process join set no cookie and change neithe
  const pin=store.getSession().pin,list=fs.readFileSync(keyFile(),'utf8');
  for(const role of ['tv',undefined]){const r=await post({type:'join'},role);assert.equal(r.status,200);assert.equal(setCookie(r,'desk-phone'),undefined);
   assert.equal(store.getSession().pin,pin);assert.equal(fs.readFileSync(keyFile(),'utf8'),list);}
+});
+
+// ---- PR9: a phone lapses, the list is capped, and a phone can be forgotten ----
+/** A phone the test lists by hand: its token and its entry, seen `ago` ms back. */
+const listedAgo=(name,ago)=>{const token='token-'+name+'-'.padEnd(40,'x');return {cookie:'desk-phone='+token,entry:{fp:fpOf(token),joined:Date.now()-ago,seen:Date.now()-ago}};};
+test('PR9: a phone not seen for 31 days is a guest; one seen 29 days ago is a phone',()=>{
+ evening('pair');const old=listedAgo('old',31*DAY),young=listedAgo('young',29*DAY);
+ put([old.entry,young.entry]);
+ assert.equal(roleOfCookie(old.cookie),'guest');assert.equal(roleOfCookie(young.cookie),'phone');
+});
+test('PR9: nine phones join - eight are listed, the one seen least recently is a guest, the other eight are phones',async()=>{
+ evening('pair');DESK_JOIN();put([]);
+ mock.timers.enable({apis:['Date'],now:Date.now()});
+ try{
+  const cookies=[];for(let i=0;i<9;i++){cookies.push(await joinAs());mock.timers.tick(1000);}
+  assert.equal(pj().phones.length,8);
+  assert.equal(roleOfCookie(cookies[0]),'guest','the first, seen least recently, was forgotten');
+  for(const c of cookies.slice(1))assert.equal(roleOfCookie(c),'phone');
+ }finally{mock.timers.reset();}
+});
+test('PR9: a leave with a listed cookie drops that fingerprint - the cookie is a guest, sent again too - and the other phones stay phones',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs(),b=await joinAs();
+ const r=await post({type:'leave'},'phone',a);assert.equal(r.status,200);
+ assert.match(r.headers.get('set-cookie')??'',/desk-phone=;/,'the cookie is cleared as before');
+ assert.equal(roleOfCookie(a),'guest');
+ assert.equal((await post({type:'leave'},'phone',a)).status,200);assert.equal(roleOfCookie(a),'guest','sent again, still a guest');
+ assert.equal((await through('/api/hint',{cookie:a})).status,401);
+ assert.equal(roleOfCookie(b),'phone');assert.equal(pj().phones.length,1);
+});
+test('PR9: a reset the route accepts - the TV\'s, or an in-process one - empties the list; a phone\'s reset is refused and changes nothing',async()=>{
+ for(const role of ['tv',undefined]){
+  evening('pair');DESK_JOIN();put([]);const a=await joinAs(),b=await joinAs();
+  assert.equal((await post({type:'reset'},'phone',a)).status,403);assert.equal(roleOfCookie(a),'phone');assert.equal(pj().phones.length,2);
+  assert.equal((await post({type:'reset'},role)).status,200);
+  assert.equal(roleOfCookie(a),'guest');assert.equal(roleOfCookie(b),'guest');assert.deepEqual(pj().phones,[]);assert.equal(pj().key,theKey());
+ }
+});
+test('PR9: isPhone writes last seen at most once an hour - a seen 10 minutes old leaves the file as it was, one 2 hours old becomes about now',()=>{
+ evening('pair');const fresh=listedAgo('fresh',10*MIN);put([fresh.entry]);
+ const text=fs.readFileSync(keyFile(),'utf8');
+ assert.equal(roleOfCookie(fresh.cookie),'phone');assert.equal(fs.readFileSync(keyFile(),'utf8'),text,'10 minutes: no write');
+ const stale=listedAgo('stale',2*HOUR);put([stale.entry]);
+ assert.equal(roleOfCookie(stale.cookie),'phone');
+ const f=pj();assert.equal(f.phones.length,1);assert.equal(f.phones[0].fp,stale.entry.fp);assert.equal(f.phones[0].joined,stale.entry.joined,'joined stays');
+ assert(Math.abs(f.phones[0].seen-Date.now())<60_000,'seen is about now');
+ const after=fs.readFileSync(keyFile(),'utf8');assert.equal(roleOfCookie(stale.cookie),'phone');assert.equal(fs.readFileSync(keyFile(),'utf8'),after,'then not again within the hour');
+});
+test('PR9: pairing.json is written through a temp file and a rename - after a join, a leave and a reset the data dir holds no temp file, and no writeFileSync goes straight to it',async()=>{
+ evening('pair');DESK_JOIN();put([]);const a=await joinAs();await joinAs();
+ await post({type:'leave'},'phone',a);await post({type:'reset'},'tv');
+ const names=fs.readdirSync(data);assert(names.includes('pairing.json'));
+ assert.deepEqual(names.filter((n)=>n.startsWith('pairing.json')&&n!=='pairing.json'),[],'no temp file left');
+ const code=fs.readFileSync(src('lib/session/pairing.ts'),'utf8');
+ const writes=[...code.matchAll(/writeFileSync\(\s*([^,]+),/g)].map((m)=>m[1].trim());
+ assert(writes.length>=1&&writes.every((w)=>w==='tmp'),'every write goes to the temp file: '+writes.join('|'));
+ assert.match(code,/renameSync\(tmp,/);
+});
+test('PR9: a failed seen write logs one line and the caller stays a phone for that request',()=>{
+ evening('pair');const stale=listedAgo('failing',2*HOUR);put([stale.entry]);
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ mock.method(fs,'writeFileSync',()=>{throw new Error('disk full');});
+ try{assert.equal(roleOfCookie(stale.cookie),'phone');}finally{mock.restoreAll();}
+ assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/pairing\.json/);assert.match(lines[0],/disk full/);
+ assert.equal(pj().phones[0].seen,stale.entry.seen,'the file is as it was');
 });

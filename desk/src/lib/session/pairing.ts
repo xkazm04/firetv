@@ -16,7 +16,7 @@
  * retry's in-process call - and keeps the whole session.
  */
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
-import { existsSync, mkdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { getSession, type Event, type Session } from "./store";
 import { emptyEnglish } from "../english/types";
@@ -63,9 +63,11 @@ const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data")
 const FILE = () => path.join(DATA(), "pairing.json");
 
 /** One phone as pairing.json lists it: the SHA-256 of its token (hex), when it joined and when it was last seen (epoch ms). */
-interface Phone { fp: string; joined: number; seen: number }
+interface Phone { fp: string; joined: number; seen: number; saved: number }
+/** A phone not seen for this long lapses; the desk lists at most CAP; last seen is written at most once an hour per phone. */
+const LAPSE_MS = 30 * 24 * 3600_000, CAP = 8, SEEN_EVERY_MS = 3600_000;
 const FP = /^[0-9a-f]{64}$/;
-const phoneOk = (p: unknown): p is Phone => !!p && typeof p === "object" && FP.test((p as Phone).fp) && Number.isFinite((p as Phone).joined) && Number.isFinite((p as Phone).seen);
+const phoneOk = (p: unknown): p is Omit<Phone, "saved"> => !!p && typeof p === "object" && FP.test((p as Phone).fp) && Number.isFinite((p as Phone).joined) && Number.isFinite((p as Phone).seen);
 
 /**
  * The desk's key and its phones, read once per change of the file (mtime, and size: two writes of one size in one
@@ -82,7 +84,7 @@ function state() {
       if (cached && cached.file === file && cached.mtime === at.mtime && cached.size === at.size) return cached;
       const j = JSON.parse(readFileSync(file, "utf8"));
       if (typeof j?.key === "string" && j.key.length >= 16) {
-        cached = { file, ...at, key: j.key, phones: Array.isArray(j.phones) ? j.phones.filter(phoneOk).map((p: Phone) => ({ fp: p.fp, joined: p.joined, seen: p.seen })) : [] };
+        cached = { file, ...at, key: j.key, phones: Array.isArray(j.phones) ? j.phones.filter(phoneOk).map((p: Phone) => ({ fp: p.fp, joined: p.joined, seen: p.seen, saved: p.seen })) : [] };
         return cached;
       }
       why = "it holds no usable key";
@@ -94,9 +96,18 @@ function state() {
   save(cached);
   return cached;
 }
-/** Write the key and the phones; the cache then follows the file it just wrote. */
+/**
+ * Write the key and the phones through a temp file in the same directory and a rename, so a crash leaves the old
+ * file or the new one, never half of one. A phone that has lapsed is dropped here. The cache then follows the file.
+ */
 function save(st: NonNullable<typeof cached>): void {
-  writeFileSync(st.file, JSON.stringify({ key: st.key, phones: st.phones }));
+  st.phones = st.phones.filter((p) => Date.now() - p.seen <= LAPSE_MS);
+  const tmp = `${st.file}.${process.pid}.tmp`;
+  try {
+    writeFileSync(tmp, JSON.stringify({ key: st.key, phones: st.phones.map(({ fp, joined, seen }) => ({ fp, joined, seen })) }));
+    renameSync(tmp, st.file);
+  } catch (e) { try { unlinkSync(tmp); } catch {} throw e; }
+  for (const p of st.phones) p.saved = p.seen;
   Object.assign(st, stamp(st.file));
 }
 export function tvKey(): string { return state().key; }
@@ -115,8 +126,20 @@ function listed(c: string | undefined): Phone | undefined {
   for (const p of state().phones) if (timingSafeEqual(Buffer.from(p.fp, "hex"), fp)) hit = p;
   return hit;
 }
-/** A phone cookie is good while its fingerprint is listed. */
-export const isPhone = (c: string | undefined) => !!listed(c);
+/**
+ * A phone cookie is good while its fingerprint is listed and its phone has been seen in the last 30 days. Being asked
+ * about is being seen: the time is kept in memory, and written only when the stored one is an hour old. A write that
+ * fails logs one line and is tried again in an hour; the caller is a phone for this request all the same.
+ */
+export function isPhone(c: string | undefined): boolean {
+  const p = listed(c), now = Date.now();
+  if (!p || now - p.seen > LAPSE_MS) return false;
+  p.seen = now;
+  if (now - p.saved >= SEEN_EVERY_MS) {
+    try { save(state()); } catch (e) { p.saved = now; console.error(`desk pairing: last seen could not be written to ${state().file} (${e instanceof Error ? e.message : e}); the phone stays a phone`); }
+  }
+  return true;
+}
 /**
  * A guarded join with the right code: a new random token for this phone, its fingerprint listed. A phone that
  * joins again (it sends its old cookie) has its entry replaced. The token is returned and never written.
@@ -124,9 +147,25 @@ export const isPhone = (c: string | undefined) => !!listed(c);
 export function mintPhone(old?: string): string {
   const st = state(), token = randomBytes(32).toString("base64url"), now = Date.now(), was = listed(old);
   st.phones = st.phones.filter((p) => p !== was);
-  st.phones.push({ fp: fingerprint(token).toString("hex"), joined: now, seen: now });
+  st.phones.push({ fp: fingerprint(token).toString("hex"), joined: now, seen: now, saved: now });
+  // a ninth phone forgets the one seen least recently (the earliest listed, when two were seen together)
+  while (st.phones.length > CAP) st.phones.splice(st.phones.reduce((at, p, i) => (p.seen < st.phones[at].seen ? i : at), 0), 1);
   save(st);
   return token;
+}
+/** Forget this device: its fingerprint goes, so its cookie is dead wherever it was copied. */
+export function forgetPhone(old: string | undefined): void {
+  const st = state(), was = listed(old);
+  if (!was) return;
+  st.phones = st.phones.filter((p) => p !== was);
+  save(st);
+}
+/** A TV reset: every phone is forgotten. */
+export function forgetAllPhones(): void {
+  const st = state();
+  if (!st.phones.length) return;
+  st.phones = [];
+  save(st);
 }
 
 /** Anything with cookies: a NextRequest's, or a plain Request's Cookie header read by cookiesOf(). */
