@@ -13,7 +13,7 @@ for (const f of L.files) {
   const { sf } = L.edges(f), t = taken.get(f) || { names: new Set(), all: false };
   const add = (name, node) => {
     if (t.all || t.names.has(name)) return;
-    if (new RegExp("\b" + name.replace(/\$/g, "\$") + "\b").test(L.toolsText)) return;
+    if (new RegExp("\\b" + name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b").test(L.toolsText)) return;
     out.push({ file: L.rel(f), line: sf.getLineAndCharacterOfPosition(node.getStart()).line + 1, name });
   };
   for (const s of sf.statements) {
