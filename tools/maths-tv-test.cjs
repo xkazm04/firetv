@@ -913,6 +913,53 @@ test('paper 8: the D-pad - Down on Get ready for school opens the list, Right wa
  assert.match(fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8'),/mathsOwns\(s\) \|\| paperOwns\(s\)\) \? <MathsTV/,'the TV page hands it to Math Buddy');
 });
 
+test('RP1: Select on a recovery row opens Get ready for school on its unit with the question open; Back and Menu land on that unit (MB-B9)',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts'));
+ const {prepareStops}=require(path.join(root,'src/tv/prepareRows.ts')),{hasWorked}=require(path.join(root,'src/lib/library/worked.ts'));
+ const {STATEMENTS}=STM(),{paperView}=PAPER();
+ const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
+ const mk=(raw,focus=0,extra={})=>({...paperSession(raw,{},focus),profiles:prof,...extra});
+ // find a paper whose topics are all on the school path and include a unit with a worked lesson and one without
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ let raw=null;
+ outer:for(const a of codes)for(const b of codes){
+  if(a===b)continue;const r=[it('1',0,2,[a]),it('2',0,5,[b])];const p=mk(r);
+  const ids=paperView(p).topics.map(t=>t.id),st=prepareStops(p);
+  if(ids.length<2||!ids.every(id=>st.some(u=>u.id===id)))continue;
+  const w=ids.map(hasWorked);
+  if(w.includes(true)&&w.includes(false)){raw=r;break outer;}
+ }
+ assert.ok(raw,'some paper has a unit with a worked lesson and one without');
+ const p=mk(raw),topics=paperView(p).topics,stops=prepareStops(p);
+ const navs=(r)=>r.events;
+ for(let f=0;f<topics.length;f++){
+  const id=topics[f].id,ix=stops.findIndex(u=>u.id===id),pf={...p,focus:f};
+  assert.ok(ix>=0);
+  const sel=K.tvKey(pf,'select',K.LOCAL);
+  assert.deepEqual(sel.events,[{type:'nav',screen:'prepare',focus:ix}],`select ${f}`);
+  assert.deepEqual(sel.local,{prepareAsk:hasWorked(id)?-1:0});assert.deepEqual(sel.calls,[]);
+  for(const k of ['back','menu']){
+   const r=K.tvKey(pf,k,K.LOCAL);
+   assert.deepEqual(navs(r),[{type:'nav',screen:'prepare',focus:ix}],`${k} ${f}`);assert.deepEqual(r.local,{prepareAsk:null});
+  }
+  // the set is within 3 presses of the list
+  const at={...p,screen:'prepare',focus:ix};let l={...K.LOCAL,...sel.local};
+  if(hasWorked(id)){const r=K.tvKey(at,'right',l);l={...l,...r.local};}
+  const go=K.tvKey(at,'select',l);
+  assert.equal(go.calls.length,1,`one call for ${id}`);
+  assert.equal(go.calls[0].url,'/api/practice');assert.equal(go.calls[0].body.topic,id);
+ }
+ // while a set is written Select still goes to the unit, with no question
+ const busy=K.tvKey({...p,focus:0},'select',{...K.LOCAL,busy:true});
+ assert.deepEqual(busy.events,[{type:'nav',screen:'prepare',focus:stops.findIndex(u=>u.id===topics[0].id)}]);
+ assert.deepEqual(busy.local,{prepareAsk:null});
+ // a paper with no topics: Select does nothing, Back still goes to the first unit
+ const none=mk([it('1',2,2,['N12'])]);
+ assert.equal(paperView(none).topics.length,0);
+ assert.deepEqual(K.tvKey(none,'select',K.LOCAL).events,[]);
+ assert.deepEqual(K.tvKey(none,'back',K.LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
+});
+
 test('M5b step 4: the slip card says its line through deskLine - the same text for a single item and for a part',()=>{
  const src=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
  assert.match(src,/const said = deskLine\(items, ix,/);

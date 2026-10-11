@@ -381,7 +381,8 @@ Typed entry is the door that ships; the photo path is M5c's.
   at a time, then "and n more"; a statement past a Foundation paper says so, and questions that named no statement are counted.
 - The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. With no paper the screen asks
   for the marks on the phone. The screens say "a paper", "your paper": nothing says the board's name while its claim is off.
-- The D-pad: Left/Up and Right/Down walk the topics, Back or Menu return to Get ready for school. The list is opened from the
+- The D-pad: Left/Up and Right/Down walk the topics, Select on a topic opens Get ready for school on that unit with its question open (a set is
+  two presses from the list, three when the unit has a worked lesson); Back or Menu land on that unit. The list is opened from the
   phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
 - The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
   the text is the same as before for every item.

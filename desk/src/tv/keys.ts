@@ -21,7 +21,7 @@ import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, essayWaiting, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 import { prepareStops } from "@/tv/prepareRows";
-import { paperTopicCount } from "@/tv/paperRows";
+import { paperTopicCount, paperView } from "@/tv/paperRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -517,11 +517,20 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "select" && unit && !writing && !running(s, "teach")) o.local.prepareAsk = hasWorked(unit.id) ? -1 : 0;
   },
-  // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics; Back or Menu return to Get ready for school
-  paper: (s, k, _, o) => {
+  // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics.
+  // Select on a topic opens Get ready for school on that unit with its question open, as Select there would (or just on
+  // the unit while a set or lesson is written). Back or Menu land on that unit, or the first when the list is empty.
+  paper: (s, k, local, o) => {
     const n = paperTopicCount(s);
     if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);
-    if (k === "back" || k === "menu") o.nav("prepare", 0);
+    const t = stopAt(paperView(s).topics, s.focus);
+    const ix = t ? prepareStops(s).findIndex((u) => u.id === t.id) : -1;
+    if (k === "select" && t && ix >= 0) {
+      const writing = local.busy || running(s, "practice") || running(s, "teach");
+      o.local.prepareAsk = writing ? null : hasWorked(t.id) ? -1 : 0;
+      o.nav("prepare", ix);
+    }
+    if (k === "back" || k === "menu") { o.local.prepareAsk = null; o.nav("prepare", Math.max(0, ix)); }
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
   practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },
