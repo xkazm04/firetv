@@ -3,7 +3,7 @@ import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { certWords, monthOf, recommendFor } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL } from "@/lib/english/curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, restsLine, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement, type Take } from "@/lib/english/types";
 import { practiceLine } from "@/lib/english/rules";
 import { isPitchId, PITCH_MAX } from "@/lib/english/pitch";
@@ -171,7 +171,7 @@ function VerdictPanel({placement,run,busy,hasPlan}:{placement:Placement;run:Run;
   return <>
     <div className="linga-band"><b>{placement.band}</b><span>{BAND_NAME[placement.band]}</span></div>
     <p>{placement.summary||BAND_CAN[placement.band]}</p>
-    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${placement.confidence==="low"?" Your answers were mixed, so try the check again another day for a firmer read.":placement.confidence==="high"?" Your answers agreed with each other.":""}`}</p>
+    <p className="linga-note">{self?"You chose this level yourself.":`Linga's read from your answers, not a certificate.${" "+restsLine(placement.confidence,placement.tasks)}`}</p>
     {placement.focus&&!self&&<p><b>Next to practise:</b> {placement.focus}</p>}
     {placement.summary&&<p className="linga-note">{BAND_CAN[placement.band]}</p>}
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run(hasPlan?"plan-open":"plan-propose")}>See my topics</button>

@@ -128,6 +128,24 @@ test('a skip is no evidence, a weak pass is not strong, and two partials end the
  const kept=P.cleanPlacement({at:1,band:'A1',selfBand:null,confidence:'low',source:'check',summary:'s',focus:'f',tasks:[task,{...task,id:'u',skipped:false}]});
  assert.equal(kept.tasks[0].skipped,true);assert.equal('skipped' in kept.tasks[1],false);
 });
+test('the verdict line says what a not-high read rests on, in plain words (PC5)',()=>{
+ const t=(band,verdict,kind,response='',skipped)=>({band,verdict,kind,response,...(skipped?{skipped:true}:{})});
+ const say=(band,verdict)=>t(band,verdict,'say','I go to school by bus.');
+ const shapes={
+  skips:[P.restsLine('low',[t('A1','fail','choose','',true),t('A1','fail','choose','',true)]),/skipped/],
+  choice:[P.restsLine('low',[t('A2','pass','choose','Yes'),t('A2','pass','choose','No')]),/two options/],
+  oneWord:[P.restsLine('low',[t('B1','pass','listen','Tuesday'),t('B1','pass','listen','Monday')]),/one-word/],
+  mixed:[P.restsLine('low',[t('B1','fail','say','x'),t('A2','pass','choose','Yes'),t('A2','pass','listen','Tuesday')]),/./],
+  partly:[P.restsLine('low',[say('B1','partial'),say('B1','partial')]),/partly/],
+  disagreed:[P.restsLine('low',[say('A2','fail'),say('B1','pass')]),/disagreed/],
+  above:[P.restsLine('medium',[say('B1','pass'),say('B1','pass'),t('B2','fail','say','',true)]),/skipped task/],
+ };
+ for(const [name,[line,re]] of Object.entries(shapes)){
+  assert(re.test(line),name+': '+line);assert(line.split(/\s+/).length<=16,name+' is at most sixteen words');
+  assert(!/\d/.test(line)&&!line.includes(String.fromCharCode(8212)),name+' has no digit and no em dash');assert(!/fail/i.test(line),name+' never says failed');
+ }
+ assert.equal(P.restsLine('high',[]),'Your answers agreed with each other.');
+});
 test('the verdict comes from the English the answer shows, not from how well it argues',()=>{
  const say={kind:'say',band:'B2'},listen={kind:'listen',band:'B1',revealed:false};
  assert.equal(P.verdictFor(say,'yes','C1'),'pass');assert.equal(P.verdictFor(say,'yes','B1'),'partial');assert.equal(P.verdictFor(say,'yes','A2'),'fail');

@@ -11,7 +11,7 @@ import type { Screen, Session } from "../session/store";
 import { checkAccepts, checkAt, isCheckCommand, ownerOf } from "./activity";
 import { certGap, dayMonth, plateOf, recommendFor, shownSkills, unseenCertificate } from "./cert";
 import { defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL } from "./curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, restsLine, shift } from "./placement";
 import { currentStep, missionDone } from "./mission";
 import { isPitchId } from "./pitch";
 import { NOTE_LABEL } from "./notes";
@@ -355,7 +355,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = self ? "This is the level you picked." : "See the conversations Linga picks for this level, or find your level again."; captionTag = self ? "Your pick" : "What next";
     actions = [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd(l.plan && lc?.stage !== "verdict" ? "plan-open" : "plan-propose")), act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start")), act("pick-level", "Pick it myself", "Choose a level from A1 to C2 yourself.", pickAt(b))];
     if (placement.focus && !self) details.push(`On the phone, next to practise: ${placement.focus}`);
-    if (!self && placement.confidence !== "medium") details.push(`On the phone: ${placement.confidence === "low" ? "your answers were mixed, so try the check again another day for a firmer read" : "your answers agreed with each other"}.`);
+    if (!self) details.push(`On the phone: ${restsLine(placement.confidence, placement.tasks)}`);
   } else if (s.screen === "linga-plan" && lc && lc.askGoal) {
     tag = `Your topics · ${level}`;
     hero = { kind: "message", kicker: "Before Linga picks your topics", text: "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.", note: "" };
