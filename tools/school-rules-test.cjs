@@ -485,6 +485,10 @@ test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carri
  for (const u of units){const order=S.SCHOOL_SLIPS.map((s)=>s.id).filter((id)=>S.SCHOOL_UNIT_SLIPS[u].includes(id));assert.deepEqual([...S.SCHOOL_UNIT_SLIPS[u]],order,`${u}: in SCHOOL_SLIPS order`);}
 });
 
+test('MB-B6 WITHHELD: every withheld hint line is 25 words or fewer and holds no digit',()=>{
+ for (const [k,v] of Object.entries(S.SCHOOL_WITHHELD)){const n=v.trim().split(/\s+/).length;assert.ok(n<=25,`${k}: withheld line is ${n} words, 25 or fewer`);assert.doesNotMatch(v,/\d/,k);}
+});
+
 // ------------------------------------------------------------------ W7 wellFormed and question
 test('W7 wellFormed: each new shape reads only its one printed spelling and refuses what makes a poor question',()=>{
  for (const s of [M1,M3,M4,M5,M6,S1,S2,S3,O1,O2,O4,O5,O6,O7,P1,P2,P3,PS,D1,D2,D3]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));

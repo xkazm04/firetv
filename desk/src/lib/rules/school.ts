@@ -3350,7 +3350,7 @@ export function unitOf(spec: unknown): string | null {
 
 /**
  * The line the TV shows and speaks when the model's hint on a school item gave the answer away twice: written here,
- * never by a model, one per unit. Each names the unit's method and carries no digit and no number word (leaksSchool
+ * never by a model, one per unit, each 25 words or fewer. Each names the unit's method and carries no digit and no number word (leaksSchool
  * reads words as numbers), so nothing on it can be the answer.
  */
 export const SCHOOL_WITHHELD = {
@@ -3358,16 +3358,16 @@ export const SCHOOL_WITHHELD = {
   "frac-of-amount": "Divide the amount by the bottom number to find a single part, then multiply by the top number. The answer is yours to work out.",
   "frac-add-sub": "Make the bottoms the same first by rewriting each fraction. Then combine only the tops. The answer is yours to work out.",
   "frac-mul-div": "To multiply, multiply tops and bottoms. To divide, flip the last fraction and multiply. Simplify at the end. The answer is yours to work out.",
-  "dec-convert": "A fraction is its top divided by its bottom, so dividing gives the decimal. A percentage counts hundredths, so a decimal is written as a percentage by finding how many hundredths it makes, and a percentage as a decimal the other way. To make a fraction, write the decimal as tenths, hundredths or thousandths and simplify. The answer is yours to work out.",
-  "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
-  "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
-  "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
-  "mean-range": "The mean is the total of the numbers divided by how many numbers there are. The range is the largest number take away the smallest. The answer is yours to work out.",
-  "area": "The area of a rectangle is its length times its width. For a triangle, multiply the base by the height and halve the result. For two rectangles together, find the area of each and add them. The answer is yours to work out.",
-  "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
-  "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
-  "pythagoras": "In a right-angled triangle, multiply each shorter side by itself and add the results to get the longest side multiplied by itself. To find the longest side, add those squares and then take the square root. To find a shorter side, take the square of the other shorter side away from the square of the longest side, then take the square root. The answer is yours to work out.",
-  "probability": "A probability is the number of counters you want divided by the number of counters in the bag altogether, so it is never more than a whole. For the chance of not getting a colour, count the counters that are not it, or take its chance away from a whole. For either of a pair of colours, add their counters first. The answer is yours to work out.",
+  "dec-convert": "Divide the top of a fraction by its bottom to get the decimal. A percentage counts hundredths. The answer is yours to work out.",
+  "pct-of-amount": "Find a hundredth of the amount, then build up to the percentage you need. The answer is yours to work out.",
+  "pct-change": "Find the percentage of the amount: that is the change. Add it or take it off. The answer is yours to work out.",
+  "dec-arith": "Line up the decimal points, filling empty places with zeros. To multiply, ignore the points first. The answer is yours to work out.",
+  "mean-range": "The mean is the total divided by how many numbers. The range is largest take away smallest. The answer is yours to work out.",
+  "area": "A rectangle's area is length times width. Halve base times height for a triangle. The answer is yours to work out.",
+  "unit-rate": "Find the value of a single item first by dividing, then multiply by the amount asked about. The answer is yours to work out.",
+  "ratio-share": "Add the ratio's parts, divide the amount by that total, then multiply by each part. The answer is yours to work out.",
+  "pythagoras": "Square each shorter side and add them to get the longest side squared, then take the square root. The answer is yours to work out.",
+  "probability": "Probability is the counters you want divided by all the counters in the bag. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */
