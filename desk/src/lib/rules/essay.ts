@@ -254,9 +254,13 @@ export function cleanNote(note: string): string {
  * A sentence gets an entry when it was observed (an observation the lens cannot read is neutral) or when code alone
  * rules it faulty (a Language sentence over LONG_SENTENCE_WORDS). The note is the model's; a faulty sentence with no
  * note gets the failed check's own line. A fix rides only on a faulty sentence, through cleanFix.
- *  structure: a claim with an observed evidence sentence (carrying an EVIDENCE marker) after it, before the next
- *    claim, is strong; the FIRST claim without is faulty, later ones neutral. Evidence with a marker is strong; a link
- *    with such evidence before it is strong, with none it is faulty.
+ *  structure: an observation may carry `supports: n` (evidence, or a claim backing an earlier claim); code accepts n
+ *    only when n is another sentence the model observed as a claim, and anything else is no link. A claim is strong
+ *    when a marked evidence observation (carrying an EVIDENCE marker) names it, or when a claim that is strong that
+ *    way names it (one level, no chains). A claim nothing names is neutral when marked evidence between it and the
+ *    next claim carries no accepted link (code cannot tell what that evidence backs), else unsupported: the FIRST
+ *    unsupported claim is faulty, later ones neutral. Evidence with a marker is strong; a link with such evidence
+ *    before it is strong, with none it is faulty. An accepted link rides on the verdict as `supports`.
  *  argument: pushes strong, wanders faulty, neutral neutral; against is a turn only when turnsBack is true AND the
  *    sentence holds a contrast connector, then strong, else faulty.
  *  evidence: checkable is strong only with an EVIDENCE marker or a number, else neutral; opinion is faulty unless a
@@ -271,6 +275,18 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   }
   const ok = (n: number) => (observationOk(lens, by.get(n)) ? by.get(n)! : null);
   const marked = (s: Sentence) => EVIDENCE.test(s.text);
+  // structure: the link a sentence's observation carries, accepted only when it names another observed claim
+  const linkOf = (s: Sentence): number | undefined => {
+    if (lens !== "structure") return undefined;
+    const o = ok(s.n), t = o?.supports;
+    return (o?.job === "evidence" || o?.job === "claim") && typeof t === "number" && Number.isInteger(t) && t !== s.n && ok(t)?.job === "claim" ? t : undefined;
+  };
+  const named = new Set<number>(), direct = new Set<number>(), strongClaims = new Set<number>();
+  if (lens === "structure") {
+    for (const s of sentences) { const t = linkOf(s); if (t !== undefined) { named.add(t); if (ok(s.n)?.job === "evidence" && marked(s)) direct.add(t); } }
+    for (const t of direct) strongClaims.add(t);
+    for (const s of sentences) { const t = linkOf(s); if (t !== undefined && ok(s.n)?.job === "claim" && direct.has(s.n)) strongClaims.add(t); }
+  }
   const out: VerdictLike[] = [];
   let unsupportedSeen = false;
   sentences.forEach((s, at) => {
@@ -296,8 +312,10 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
         if (bad) { verdict = "faulty"; check = CHECKS.word(bad.word); }
       } else if (read.job === "claim") {
         const rest = sentences.slice(at + 1), stop = rest.findIndex((t) => ok(t.n)?.job === "claim");
-        const supported = (stop < 0 ? rest : rest.slice(0, stop)).some((t) => ok(t.n)?.job === "evidence" && marked(t));
-        if (supported) verdict = "strong";
+        const between = stop < 0 ? rest : rest.slice(0, stop);
+        const blind = !named.has(s.n) && between.some((t) => ok(t.n)?.job === "evidence" && marked(t) && linkOf(t) === undefined);
+        if (strongClaims.has(s.n)) verdict = "strong";
+        else if (blind) verdict = "neutral";
         else if (!unsupportedSeen) { verdict = "faulty"; check = CHECKS.unsupported; unsupportedSeen = true; }
       } else if (read.job === "evidence") verdict = marked(s) ? "strong" : "neutral";
       else if (read.job === "link") {
@@ -310,22 +328,30 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
     const note = verdict === "faulty" && !said.trim() ? check : said;
     const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
-    out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}) });
+    const supports = linkOf(s);
+    out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}), ...(supports !== undefined ? { supports } : {}) });
   });
   return out;
 }
 
-/** The other sentences of a paragraph as the first pass saw them, for a rewrite to be judged against (rules, not a model). */
-export function contextObservations(lens: string, sentences: Sentence[], except: number): Obs[] {
+/**
+ * The other sentences of a paragraph as the first pass saw them, for a rewrite to be judged against (rules, not a model).
+ * Under Structure a sentence whose verdict kept a `supports` link (`kept`, the reading's verdicts) comes back with that
+ * link beside its job, so a rewritten claim is ruled against what the evidence named in the first reading.
+ */
+export function contextObservations(lens: string, sentences: Sentence[], except: number, kept: Pick<VerdictLike, "n" | "supports">[] = []): Obs[] {
   if (lens !== "structure" && lens !== "evidence") return [];
-  return sentences.filter((s) => s.n !== except).flatMap((s): Obs[] =>
-    lens === "structure" ? [{ n: s.n, job: s.role }] : s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : []);
+  return sentences.filter((s) => s.n !== except).flatMap((s): Obs[] => {
+    if (lens !== "structure") return s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : [];
+    const link = kept.find((v) => v.n === s.n)?.supports;
+    return [{ n: s.n, job: link !== undefined && s.role !== "claim" ? "evidence" : s.role, ...(link !== undefined ? { supports: link } : {}) }];
+  });
 }
 
 // ---- rewriting one sentence in place ----
 
 /** A reading as the desk holds it (session/store EssayAnalysis), in the shape these rules need. */
-export interface VerdictLike { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
+export interface VerdictLike { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; supports?: number; }
 /** The sentence a rewrite replaced, as the paragraph was first read: its text, its verdict and the fix it was taught. */
 export interface Was { text: string; verdict: VerdictLike["verdict"]; fix?: Fix; }
 export interface ReadingLike { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: VerdictLike[]; summary: string; provider?: string; }

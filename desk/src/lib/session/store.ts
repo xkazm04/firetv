@@ -244,8 +244,9 @@ function settled(jobs: unknown): Jobs {
 /**
  * One sentence's reading. `fix` (the move and a slotted pattern) only ever rides on a faulty verdict; older sessions have none.
  * `was` is set only by a rewrite of this sentence (essay.revised): the sentence as first read, its verdict and the fix it was taught.
+ * `supports` (Structure) is the claim this sentence backs, set only for a link code accepted; a rewrite is ruled against it.
  */
-export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
+export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; supports?: number; }
 /**
  * `piece` (v2 E1) is set on a whole-piece reading: how many paragraphs, which have been read and which failed (0-based),
  * and the text store's id when the learner kept it. A one-paragraph reading has none.

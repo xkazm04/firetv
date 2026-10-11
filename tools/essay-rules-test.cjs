@@ -922,7 +922,8 @@ test('essay-master-A case 1: Structure - only the FIRST unsupported claim is fau
  answer=obsReply([1,2,3].map(n=>({n,job:'claim',verdict:'strong'})));
  const a=await analyseEssay('Homework is pointless. Teachers give too much. It ruins evenings.','structure','oa-1');
  assert.deepEqual(verdictsOf(a),[[1,'faulty'],[2,'neutral'],[3,'neutral']],'one unsupported claim is named, the rest are not piled on');
- answer=obsReply([{n:1,job:'claim',verdict:'faulty'},{n:2,job:'evidence',verdict:'faulty'},{n:3,job:'claim',verdict:'faulty'}]);
+ answer=obsReply([{n:1,job:'claim',verdict:'faulty'},{n:2,job:'evidence',supports:1,verdict:'faulty'},{n:3,job:'claim',verdict:'faulty'}]);
+ // E1: the evidence now names claim 1 (supports:1); without the link claim 1 would be neutral, never strong by position
  const b=await analyseEssay('Homework is pointless. Research found that pupils lose sleep. It ruins evenings.','structure','oa-1');
  assert.deepEqual(verdictsOf(b),[[1,'strong'],[2,'strong'],[3,'faulty']],'claim 1 has marked evidence after it; claim 3 is the first without');
  answer=obsReply([{n:1,job:'claim'},{n:2,job:'evidence'}]);
@@ -1048,4 +1049,68 @@ test('a note never carries a verdict label: the verdict is code\'s',async()=>{
  answer=obsReply([{n:2,support:'checkable',note:'Strong: names the study.'}]);
  const r=await reviseSentence(R3(),2,STUDY);
  assert.equal(r.verdicts.find(v=>v.n===2).note,'Names the study.');
+});
+
+// ---- E1 (council rulings 2026-10-09 section 6): under Structure an evidence observation names the claim it backs ----
+const RE=require(path.join(root,'src/lib/rules/essay.ts'));
+const UNI='School uniforms are good. In 2019 a study found 70% of pupils saved time. Uniforms also look smart.';
+const uniOf=(obs,text=UNI)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts('structure',ss,new Set(ss.map(s=>s.n)),obs);};
+const uniPairs=(obs,text)=>uniOf(obs,text).map(v=>[v.n,v.verdict]);
+const claimEvClaim=(supports)=>[{n:1,job:'claim'},{n:2,job:'evidence',...(supports===undefined?{}:{supports})},{n:3,job:'claim'}];
+test('E1-a: the evidence names the claim it backs; the planted claim before it is the faulty one',()=>{
+ assert.deepEqual(uniPairs(claimEvClaim(3)),[[1,'faulty'],[2,'strong'],[3,'strong']],'supports 3: claim 3 strong, claim 1 faulty');
+ assert.deepEqual(uniPairs(claimEvClaim(1)),[[1,'strong'],[2,'strong'],[3,'faulty']],'supports 1: claim 1 strong, claim 3 faulty');
+ assert.equal(uniOf(claimEvClaim(3)).find(v=>v.n===1).note,'This claim has no evidence after it that a reader can check.','the faulty line is today\'s check line');
+});
+test('E1-a: with no link the claim before the evidence is neutral, never strong by position',()=>{
+ assert.deepEqual(uniPairs(claimEvClaim()),[[1,'neutral'],[2,'strong'],[3,'faulty']]);
+});
+test('E1-a: a supports that names the evidence itself, a context sentence or a number outside the reading is no link',()=>{
+ const same=uniPairs(claimEvClaim());
+ for(const bad of [2,99,0,-1,1.5,'1','3',null,true]) assert.deepEqual(uniPairs(claimEvClaim(bad)),same,`supports ${JSON.stringify(bad)} is no link`);
+ const ctx=[{n:1,job:'claim'},{n:2,job:'evidence',supports:3},{n:3,job:'context'}];
+ assert.deepEqual(uniPairs(ctx),[[1,'neutral'],[2,'strong'],[3,'neutral']],'sentence 3 is context, not a claim: no link');
+ for(const v of uniOf(claimEvClaim(2))) assert.equal('supports' in v,false,'no kept link on a refused one');
+});
+test('E1-a: three bare claims are as before (repro2 J): 1 faulty, 2 and 3 neutral',()=>{
+ assert.deepEqual(uniPairs([1,2,3].map(n=>({n,job:'claim'}))),[[1,'faulty'],[2,'neutral'],[3,'neutral']]);
+});
+test('E1-a: a claim named by a strong claim is strong, one level only; one named by a claim that is not strong is not',()=>{
+ const T='Schools should change. Homework is pointless. In 2019 a study found 70% of pupils lose sleep.';
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'evidence',supports:2}],T),[[1,'strong'],[2,'strong'],[3,'strong']]);
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'evidence'}],T),[[1,'faulty'],[2,'neutral'],[3,'strong']],'claim 2 is not strong, so claim 1 is not strong through it');
+ const L='Schools should change. Homework is pointless. Tests are unfair. In 2019 a study found 70% of pupils lose sleep.';
+ assert.deepEqual(uniPairs([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'claim',supports:2},{n:4,job:'evidence',supports:3}],L),
+  [[1,'faulty'],[2,'strong'],[3,'strong'],[4,'strong']],'no chains: 2 is named by strong claim 3, but 1 is named only by 2, which is strong one level down');
+});
+test('E1-b: a verdict keeps the link its observation carried, only an accepted one',()=>{
+ const v=uniOf(claimEvClaim(3));
+ assert.equal(v.find(x=>x.n===2).supports,3);
+ assert.equal(v.find(x=>x.n===1).supports,undefined);
+ assert.equal('supports' in uniOf([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'context'}]).find(x=>x.n===1),false);
+ assert.equal(uniOf([{n:1,job:'claim'},{n:2,job:'claim',supports:1},{n:3,job:'context'}]).find(x=>x.n===2).supports,1,'a claim backing an earlier claim keeps its link');
+});
+test('E1-b: a Structure rewrite of a claim is ruled against the kept links of the first reading',()=>{
+ const ss=RE.splitSentences(UNI), first=uniOf(claimEvClaim(1));
+ const ctx=RE.contextObservations('structure',ss,1,first);
+ assert.deepEqual(ctx.find(o=>o.n===2),{n:2,job:'evidence',supports:1},'the kept link rides with its job');
+ const ruled=(c)=>RE.decideVerdicts('structure',ss,new Set([1]),[{n:1,job:'claim'},...c]).find(v=>v.n===1).verdict;
+ assert.equal(ruled(ctx),'strong','the evidence named claim 1 in the first reading, so the rewrite stays strong');
+ assert.equal(ruled(RE.contextObservations('structure',ss,1)),'neutral','without a kept link the context evidence backs nothing code can see');
+ assert.equal(ruled(RE.contextObservations('structure',ss,1,uniOf(claimEvClaim(3)))),'faulty','a link kept to another claim does not back this one: the evidence is known to back claim 3');
+ assert.deepEqual(RE.contextObservations('evidence',ss,1,first),[{n:2,support:'checkable'}],'other lenses are unchanged');
+});
+test('E1-b: reviseSentence rules a Structure rewrite against the links the first reading kept (wired through the reading\'s verdicts)',async()=>{
+ const {reviseSentence}=deskEssay(),ss=splitSentences(UNI);
+ const reading=(verdicts)=>({text:UNI,type:'structure',sentences:ss,stats:paragraphStats(ss),verdicts,summary:'s',provider:'test'});
+ const kept=uniOf(claimEvClaim(1));
+ answer=obsReply([{n:1,job:'claim',note:'Clearer.'}]);
+ const a=await reviseSentence(reading(kept),1,'School uniforms are a good idea.');
+ assert.equal(a.verdicts.find(v=>v.n===1).verdict,'strong','the evidence named claim 1 in the first reading');
+ assert.equal(a.verdicts.find(v=>v.n===2).supports,1,'the other verdicts, and their links, are kept');
+ const b=await reviseSentence(reading(kept.map(({supports,...v})=>v)),1,'School uniforms are a good idea.');
+ assert.equal(b.verdicts.find(v=>v.n===1).verdict,'neutral','with no kept link the evidence backs nothing code can see');
+ const schema=seen.at(-1).schema.properties.observations.items.properties;
+ assert.deepEqual(schema.supports,{type:'integer'},'the Structure observation can carry supports');
+ assert.match(seen.at(-1).system,/add supports: the number of the claim it backs/);
 });

@@ -21,13 +21,13 @@ type Lens = (typeof ANALYSIS_TYPES)[number];
  */
 const FIX = { type: "object", properties: { move: { type: "string" }, pattern: { type: "string" } }, required: ["move", "pattern"] };
 const OBSERVED: Record<string, Record<string, unknown>> = {
-  structure: { job: { type: "string", enum: [...JOBS] } },
+  structure: { job: { type: "string", enum: [...JOBS] }, supports: { type: "integer" } },
   argument: { side: { type: "string", enum: [...SIDES] }, turnsBack: { type: "boolean" } },
   evidence: { support: { type: "string", enum: [...SUPPORTS] } },
   language: { issues: { type: "array", items: { type: "object", properties: { kind: { type: "string", enum: [...ISSUE_KINDS] }, word: { type: "string" } }, required: ["kind", "word"] } } },
 };
 const OBSERVE: Record<string, string> = {
-  structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none.",
+  structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none. For an evidence sentence, or a claim that backs an earlier claim, add supports: the number of the claim it backs.",
   argument: "For each sentence, report the side it takes: side is pushes (for the paragraph's claim), against, wanders or neutral; turnsBack is true when a sentence on the other side turns back to the claim.",
   evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context.",
   language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. Report no issue for a sentence that has none; the desk counts length itself.",
@@ -186,7 +186,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   // verdict is never invented. The others come from the first pass, as context for the rule.
   const got = (Array.isArray(json?.observations) ? json.observations : []).find((o) => o?.n === n);
   if (!got || !observationOk(lens.id, got)) throw new Error(`no observation came back for sentence ${n}`);
-  const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n)]).find((v) => v.n === n);
+  const decided = decideVerdicts(lens.id, next.sentences, new Set([n]), [got, ...contextObservations(lens.id, next.sentences, n, reading.verdicts)]).find((v) => v.n === n);
   if (!decided) throw new Error(`no verdict could be decided for sentence ${n}`);
   const was = before?.was ?? { text: old.text, verdict: before?.verdict ?? "neutral", ...(before?.fix ? { fix: before.fix } : {}) };
   const verdict: Verdict = { ...decided, was };
