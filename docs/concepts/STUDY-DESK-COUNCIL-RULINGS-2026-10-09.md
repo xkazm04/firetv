@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c), and for round 22 on 2026-10-11 (round 21 merged at fe8d218e), and for round 23 on 2026-10-11 (round 22 merged at d93b6eda), and for round 24 on 2026-10-11 (round 23 merged at b95e3836), and for round 25 on 2026-10-11 (round 24 merged at 416e24ba), and for round 26 on 2026-10-11 (round 25 merged at 5773d558), and for round 27 on 2026-10-11 (round 26 merged at 419d8f3f), and for round 28 on 2026-10-11 (round 27 merged at a5a3d2bb). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b, b878d726 (capture r21), e9ff4caa, 6b9a8cda, 6a780c9a (capture r22), 12db6fd8, 1e81ded3, 3440c2ae (capture r23), ce511120, aa157cdb, f37489af (capture r24), 966009e3, 3743a5da (capture r25), 26d58dd4, 6759b75f (capture r26), f0472b94 (capture r27), 17cab0a5, bea13399 and bf0eec4e name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c), and for round 22 on 2026-10-11 (round 21 merged at fe8d218e), and for round 23 on 2026-10-11 (round 22 merged at d93b6eda), and for round 24 on 2026-10-11 (round 23 merged at b95e3836), and for round 25 on 2026-10-11 (round 24 merged at 416e24ba), and for round 26 on 2026-10-11 (round 25 merged at 5773d558), and for round 27 on 2026-10-11 (round 26 merged at 419d8f3f), and for round 28 on 2026-10-11 (round 27 merged at a5a3d2bb), and for round 29 on 2026-10-11 (round 28 merged at de27b8d9). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b, b878d726 (capture r21), e9ff4caa, 6b9a8cda, 6a780c9a (capture r22), 12db6fd8, 1e81ded3, 3440c2ae (capture r23), ce511120, aa157cdb, f37489af (capture r24), 966009e3, 3743a5da (capture r25), 26d58dd4, 6759b75f (capture r26), f0472b94 (capture r27), 17cab0a5, bea13399, f860eadc (capture r28), 4ab11c9b and bf0eec4e name a run, not a commit.
 
 ---
 
@@ -436,6 +436,26 @@ Lean L3, as delivered (run bea13399, merged at 2e9504b4):
 - L3 closes the two found-not-fixed items that rounds 26 and 27 left for the lean lane.
 - Gate: 1658 tests, unchanged. tsc exited 0 for the builder and for the Director at 2e9504b4. 0 em dashes added.
 - Its question, ruled: the duplicate prereqsOf row uses kind unused-local with tool duplication, because the ledger has no duplication kind. Accepted. No new kind.
+
+Ruled 2026-10-11 (round 29):
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| RP4 | On a paper's recovery list, the pill beside a topic the learner's record calls secure reads 'Worth a recheck', in place of 'Secure on the desk'. Nothing else changes: data-role maths-paper-secure, data-secure on the row, the .sec class, its CSS, the dimming of a secure row that is not lit, and the row's place in recovery()'s order (ruling 2). The statement behind each row (the second half of MB-B24, L1-vojtech-18-MB4-6) is not built. | MB-B24, from the 2026-10-09 maths UAT (L1-radka-41-MB4-7, minor, trust). 'Secure on the desk' beside 'N marks lost' read to a parent as the desk contradicting itself. The side column is 572 by 620 px. The score card and the Not on the desk yet card use about 415 px of it. The worst lit topic (probability, through P3, P4 and P7) needs six lines at 20 px, about 217 px with its card. | The backlog's longer tag, 'The desk had this as secure; the paper says otherwise'. A pill is a short label, so the design docs give the reason instead. Also rejected: naming each row's statements in the side column. It fits only if the Not on the desk yet card moves on the topic page, which needs a separate ruling and is not worth it for two minors. | delivered in part, ccd5660f (run 4ab11c9b); BACKLOG f2cbf983. The statement half stays open and unslotted. |
+
+RP4 is the App Master's ruling, not the owner's. Ceiling, from MB-B24: the desk and the paper can still disagree; the pill only says so.
+
+Delivery 22, as delivered (run 4ab11c9b, merged at f2cbf983):
+
+- 22 merged by fast-forward at f2cbf983 in three commits, with no rebase. ccd5660f is the code and the test. 8e1ba1f9 is the two design docs. f2cbf983 is BACKLOG: MB-B24 built in part, citing ccd5660f.
+- Five files, by git diff --numstat de27b8d9 f2cbf983: desk/src/maths/MathsTV.tsx 1/1, docs/BACKLOG.md 1/1, docs/DESIGN-MATH-BUDDY.md 5/4, docs/STUDY-DESK-SCREENS.md 4/4, tools/maths-tv-test.cjs 3/2. These are exactly the declared paths.
+- Cites checked on main at f2cbf983: the pill at `desk/src/maths/MathsTV.tsx:735`; 'paper 3' in `tools/maths-tv-test.cjs` at `:813`, with the new-text assertion at `:822` and the old-text-gone assertion at `:823`; MB-B24's status at `docs/BACKLOG.md:520`.
+- Red on base: paper 3 was red on base (maths-tv-test 71 pass, 1 fail). It is green on main.
+- The round 28 found-not-fixed item is closed by 8e1ba1f9. That item was the PE1 lines in docs/STUDY-DESK-SCREENS.md :163 and :165 and docs/DESIGN-MATH-BUDDY.md :197 and :294. They now match the code: pathEndsLine (`desk/src/tv/prepareRows.ts:91`), maths-prepare-ends (`MathsTV.tsx:661`), no year word when past is set (`MathsTV.tsx:673`), and topicsFocus and prepareDoorFocus (`desk/src/tv/keys.ts:204` and `:213`).
+- Q1. git grep 'Secure on the desk' finds only the negative assertion in maths-tv-test. Accepted. The BACKLOG, uat-insights and uat/runs mentions are history.
+- Q2. Topics opens on the path's last topic only when nothing is secure. This is PE1 as ruled in round 28 (keys.ts topicsFocus). Accepted, no change.
+- Q3. At settlement the App Master checked that only tools/maths-tv-test.cjs draws PaperScreen or asserts the pill. Closed.
+- Gate: node tools/worktree-preflight.cjs and npm run test:rules in desk/ gave 75 suites and 1662 tests, 0 failed. The count is unchanged because the new assertion sits inside an existing test. tsc was not run by the builder. tsc --noEmit exited 0 for the Director at f2cbf983. 0 em dashes added.
 
 ## 4. Marking false ticks and false rings (practice-generation-marking)
 
@@ -1677,6 +1697,8 @@ D1 delivered the rows below (run e395e83f, merged 87ec2049).
 | WD7 | (D1 Q2) A successful re-read writes a second entry. Accepted, because today a re-read only follows a failed read, which writes neither. | D1 Q2. | none recorded | ruled, no change |
 | WD8 | (D1 Q3) A two-stage problem counts 2 hints and 1 'needed a second'. Confirmed. | D1 Q3. | none recorded | delivered, 18789175 |
 
+Capture r29 set MB-B14's BACKLOG status to built (18789175, 6910c64b, f47b8b41). It had read open since D1.
+
 Left out, by ruling:
 - value-3 and EM4-2/EM4-5 joined delivery 6. Moved to delivery 13 (round 15): EM4-5 is EM-B36's re-read count, and EM4-2's missing paragraph count belongs to the Sunday line, so they sit with EM-B36 and the lens order. Delivery 6 carries only the essay's own must-address lines.
 - value-4 and the EM-B36 lens order join delivery 13.
@@ -1864,6 +1886,7 @@ L3. the lean pass on paperRows (paperTopicCount and the second prereqsOf): done,
 19. RP2 (MB-B5 part 1), a paper's recovery rows add up to the paper: done in part, ee949056 and dbe87f99 (run 26d58dd4). Part 2, the library map rows, is open.
 20. RP3 (MB-B13), every off-desk statement walked by name after the topics: done, 1faea42d and 61333b84, with test fixes 2b0da162 and f7d59677 (run bf0eec4e).
 21. PE1 (MB-B19), a learner past the end of the school path: done in part, 29cdfd86 and 9fae8244 (run 17cab0a5). The first focus for a younger learner with nothing secure is open.
+22. RP4 (MB-B24 part 1), a secure topic on a paper's recovery list reads Worth a recheck: done in part, ccd5660f, 8e1ba1f9 and f2cbf983 (run 4ab11c9b). The statement behind a row is open.
 
 Ruled 2026-10-11 (round 14): the lane runs 8b, then 6, then 9b. Ruled 2026-10-11 (round 15): 9b ran before 6, beside the pairing full r2, because 6's phone half needs desk/src/app/phone/page.tsx, a file in that round's span. The lane now runs 6a, 6b, then 8c. Ruled 2026-10-11 (round 17): the lane runs 8c, then 6c. Ruled 2026-10-11 (round 18): the lane ran 8c, 6c, 6d, PR11 and PR12, one branch at a time.
 
@@ -1886,6 +1909,8 @@ Ruled 2026-10-11 (round 26): the lane ran 19 alone, one branch, with no hold and
 Ruled 2026-10-11 (round 27): the lane ran 20 alone, one branch, with no hold and no rebase. 20 made four commits where its brief asked for two; the last two are one-line test fixes.
 
 Ruled 2026-10-11 (round 28): the lane ran 21 beside Lean L3, on disjoint declared paths. L3 merged first, so 21 was rebased onto 2e9504b4.
+
+Ruled 2026-10-11 (round 29): the lane ran 22 alone, one branch, with no hold and no rebase.
 
 Delivery W7 and W7c, as delivered:
 
@@ -1958,7 +1983,7 @@ Review lane, in order:
 
 ## Open contradictions
 
-None open after round 28. P8's quoted start text is ruled as 7b question 1, so it is not open.
+None open after round 29. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, P6's SERVER_ONLY clause by P6-a, P10 by P10-a, X1c's line in the numberWords.ts header by X5, PR5's remembered-code half by PR10 (delivered, dc511a47), and PR6's uncounted TV and phone streams by PR12 (delivered, e6d6af46).
 
