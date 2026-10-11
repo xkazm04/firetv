@@ -70,7 +70,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
 - **LG-10** — Placement confidence counts a skip as evidence
   - origin: 2026-09-15-lt/LT-viktor-67-J1-3 (verified: two skipped A1 tasks, `confidence: "high"` in the stored placement), 2026-09-15-lt/LT-jana-29-J1-1, 2026-09-15-lt-j1b/LT-petra-38-J1-1, 2026-09-15-lt-j1b/LT-tomas-9-J1-3; 2026-10-09-lt/LT-tomas-9-J1-2 (claude CLI; verified: `high` rests on the B1 skip as the fail above A2, and on a guessed choose pass and a keyword listen pass); "I guessed the 'took' one, so I don't quite believe it." (tomas-9, 2026-10-09-lt)
   - recommendation: build — a skip settles as a fail (`lib/english/check.ts:311`); two A1 fails set `floored`, which reads "high" (`lib/english/placement.ts:96`, `:104`); partials never touch confidence. A floor reached by skips reads "low", and repeated partials cap at "medium". A certificate needs medium or high (`lib/english/cert.ts:69`), so this now gates certificates
-  - status: open
+  - status: built 05192cff
   - ceiling: a lucky guess on a choose task still reads as a pass
 - **LG-11** — Shaping an own-words topic can drop the details the learner named
   - origin: 2026-09-15-lt/LT-jana-29-J2-2, 2026-09-15-lt/LT-oksana-34-J2-3, 2026-09-15-lt-recert/LT-lukas-24-J2-3, 2026-09-15-lt-recert/LT-tomas-9-J2-4; "the bit about ending a date politely seems to have disappeared" (lukas-24, 2026-09-15-lt-recert)
