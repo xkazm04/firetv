@@ -284,6 +284,7 @@ const CHECKS = {
   noTurn: "It takes the other side but never turns back: a turn needs a word like 'but' or 'although'.",
   wanders: "This sentence wanders from the side the paragraph takes.",
   opinion: "This only asserts; nothing here is checkable.",
+  unbacked: "No checkable sentence here backs this opinion.",
   long: (words: number) => `This sentence runs to ${words} words; split it.`,
   word: (word: string) => `'${word}' is doing too little here; say what you mean.`,
 };
@@ -312,8 +313,16 @@ export function cleanNote(note: string): string {
  *    before it is strong, with none it is faulty. An accepted link rides on the verdict as `supports`.
  *  argument: pushes strong, wanders faulty, neutral neutral; against is a turn only when turnsBack is true AND the
  *    sentence holds a contrast connector, then strong, else faulty.
- *  evidence: checkable is strong only with an EVIDENCE marker or a number, else neutral; opinion is faulty unless a
- *    checkable sentence follows it.
+ *  evidence: checkable is strong only with an EVIDENCE marker or a number, else neutral. An observation may carry
+ *    `backs: n`, the opinion a checkable sentence backs. Decided per paragraph (s.para; one paragraph is one paragraph):
+ *    (a) code accepts n only when the support is checkable, n is an integer, not the sentence itself, in the same
+ *    paragraph, and observed as opinion; anything else is no link. (b) An opinion a marked checkable sentence names
+ *    through an accepted link is backed, so neutral. (c) In a paragraph where a marked checkable sentence carries an
+ *    accepted link, an opinion nothing names is neutral when a marked checkable sentence between it and the next
+ *    opinion carries no accepted link (code cannot tell what that evidence backs), else unbacked: the FIRST unbacked
+ *    opinion among the judged sentences of the paragraph is faulty, later ones neutral. (d) A paragraph with a marked
+ *    checkable sentence but no accepted link: every opinion is neutral. (e) A paragraph with no marked checkable
+ *    sentence: every opinion is faulty. An accepted link rides on the verdict as `supports`.
  *  language: a vague or repeated word that is really in the sentence is faulty, and so is length over the limit.
  */
 export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<number>, observations: unknown): VerdictLike[] {
@@ -330,6 +339,16 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const o = ok(s.n), t = o?.supports;
     return (o?.job === "evidence" || o?.job === "claim") && typeof t === "number" && Number.isInteger(t) && t !== s.n && ok(t)?.job === "claim" ? t : undefined;
   };
+  // evidence: the link a checkable sentence's observation carries, accepted only when it names an opinion of its own paragraph
+  const paraOf = (s: Sentence) => s.para ?? 0;
+  const backsOf = (s: Sentence): number | undefined => {
+    if (lens !== "evidence") return undefined;
+    const o = ok(s.n), t = o?.backs, target = typeof t === "number" ? sentences.find((x) => x.n === t) : undefined;
+    return o?.support === "checkable" && target && target.n !== s.n && paraOf(target) === paraOf(s) && ok(target.n)?.support === "opinion" ? target.n : undefined;
+  };
+  const markedChecks = (para: number) => sentences.filter((t) => paraOf(t) === para && ok(t.n)?.support === "checkable" && marked(t));
+  const backed = new Set<number>(), unbackedSeen = new Set<number>();
+  if (lens === "evidence") for (const t of sentences) { const b = backsOf(t); if (b !== undefined && marked(t)) backed.add(b); }
   const named = new Set<number>(), direct = new Set<number>(), strongClaims = new Set<number>();
   if (lens === "structure") {
     for (const s of sentences) { const t = linkOf(s); if (t !== undefined) { named.add(t); if (ok(s.n)?.job === "evidence" && marked(s)) direct.add(t); } }
@@ -353,8 +372,14 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
       } else if (lens === "evidence") {
         if (read.support === "checkable") verdict = marked(s) ? "strong" : "neutral";
         else if (read.support === "opinion") {
-          const backed = sentences.slice(at + 1).some((t) => ok(t.n)?.support === "checkable" && marked(t));
-          if (!backed) { verdict = "faulty"; check = CHECKS.opinion; }
+          const para = paraOf(s), marks = markedChecks(para);
+          if (!marks.length) { verdict = "faulty"; check = CHECKS.opinion; }
+          else if (backed.has(s.n) || !marks.some((t) => backsOf(t) !== undefined)) verdict = "neutral";
+          else {
+            const rest = sentences.slice(at + 1).filter((t) => paraOf(t) === para), stop = rest.findIndex((t) => ok(t.n)?.support === "opinion");
+            const blind = (stop < 0 ? rest : rest.slice(0, stop)).some((t) => marks.includes(t) && backsOf(t) === undefined);
+            if (!blind && !unbackedSeen.has(para)) { verdict = "faulty"; check = CHECKS.unbacked; unbackedSeen.add(para); }
+          }
         }
       } else if (lens === "language") {
         const bad = validIssues(read, s.text)[0];
@@ -377,7 +402,7 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
     const said = typeof o?.note === "string" ? cleanNote(o.note) : "";
     const note = verdict === "faulty" && !said.trim() ? check : said;
     const fix = verdict === "faulty" ? cleanFix(o?.fix, s.text) : undefined;
-    const supports = linkOf(s);
+    const supports = lens === "evidence" ? backsOf(s) : linkOf(s);
     out.push({ n: s.n, verdict, note, ...(fix ? { fix } : {}), ...(supports !== undefined ? { supports } : {}) });
   });
   return out;
@@ -469,12 +494,16 @@ export function unruledLines(piece: PieceLike | undefined): string[] {
 /**
  * The other sentences of a paragraph as the first pass saw them, for a rewrite to be judged against (rules, not a model).
  * Under Structure a sentence whose verdict kept a `supports` link (`kept`, the reading's verdicts) comes back with that
- * link beside its job, so a rewritten claim is ruled against what the evidence named in the first reading.
+ * link beside its job, so a rewritten claim is ruled against what the evidence named in the first reading. Under Evidence
+ * the same kept link comes back as a checkable sentence with `backs`, whatever its first-pass role.
  */
 export function contextObservations(lens: string, sentences: Sentence[], except: number, kept: Pick<VerdictLike, "n" | "supports">[] = []): Obs[] {
   if (lens !== "structure" && lens !== "evidence") return [];
   return sentences.filter((s) => s.n !== except).flatMap((s): Obs[] => {
-    if (lens !== "structure") return s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : [];
+    if (lens !== "structure") {
+      const backs = kept.find((v) => v.n === s.n)?.supports;
+      return backs !== undefined ? [{ n: s.n, support: "checkable", backs }] : s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : [];
+    }
     const link = kept.find((v) => v.n === s.n)?.supports;
     return [{ n: s.n, job: link !== undefined && s.role !== "claim" ? "evidence" : s.role, ...(link !== undefined ? { supports: link } : {}) }];
   });

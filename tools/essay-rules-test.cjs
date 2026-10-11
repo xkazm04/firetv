@@ -1100,7 +1100,7 @@ test('E1-b: a Structure rewrite of a claim is ruled against the kept links of th
  assert.equal(ruled(ctx),'strong','the evidence named claim 1 in the first reading, so the rewrite stays strong');
  assert.equal(ruled(RE.contextObservations('structure',ss,1)),'neutral','without a kept link the context evidence backs nothing code can see');
  assert.equal(ruled(RE.contextObservations('structure',ss,1,uniOf(claimEvClaim(3)))),'faulty','a link kept to another claim does not back this one: the evidence is known to back claim 3');
- assert.deepEqual(RE.contextObservations('evidence',ss,1,first),[{n:2,support:'checkable'}],'other lenses are unchanged');
+ assert.deepEqual(RE.contextObservations('evidence',ss,1),[{n:2,support:'checkable'}],'other lenses are unchanged');
 });
 test('E1-b: reviseSentence rules a Structure rewrite against the links the first reading kept (wired through the reading\'s verdicts)',async()=>{
  const {reviseSentence}=deskEssay(),ss=splitSentences(UNI);
@@ -1284,4 +1284,65 @@ test('E3-c: EssayType and EssayPlan caption a refusal line, a running job still 
  }
  const plain=capOf(drawEssay('EssayPlan',{...base,jobs:{},status:''}));
  assert.deepEqual(capOf(drawEssay('EssayPlan',{...base,jobs:{},status:KEYS.planStatus(0)})),plain);
+});
+
+// ---- essay full r1 rework, part 1: E5 the Evidence lens rules an opinion by a link the model names; E6 the words under a faulty verdict are code's ----
+const EV_A='Schools should start later in the morning. Uniforms also make students less creative. Research found that teenagers who start at 8:45 sleep 34 minutes more. Therefore a later start would help students learn.';
+const UNBACKED='No checkable sentence here backs this opinion.',OPINION='This only asserts; nothing here is checkable.';
+const evRule=(text,obs)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);};
+const evObs=(backs)=>[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',...(backs===undefined?{}:{backs})},{n:4,support:'opinion'}];
+test('E5-1: the Evidence lens rules an opinion by the link a checkable sentence names, not by its position',()=>{
+ const v=evRule(EV_A,evObs(1));
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'faulty'],[3,'strong'],[4,'neutral']]);
+ assert.equal(v[1].note,UNBACKED);
+ assert.equal(v.find(x=>x.verdict==='faulty').n,2,'sentence 2 is the first faulty sentence');
+ assert.equal(v[2].supports,1,'the accepted link rides on the verdict as supports');
+});
+test('E5-2: a paragraph whose checkable sentence names no opinion marks nothing',()=>{
+ const v=evRule(EV_A,evObs());
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'neutral'],[3,'strong'],[4,'neutral']]);
+ assert.ok(!v.some(x=>x.verdict==='faulty'));
+});
+test('E5-3: a paragraph with no marked checkable sentence marks every opinion',()=>{
+ const t='Schools start too early. Uniforms hurt creativity. Nobody likes homework.';
+ const v=evRule(t,[1,2,3].map(n=>({n,support:'opinion'})));
+ assert.deepEqual(v.map(x=>[x.verdict,x.note]),[1,2,3].map(()=>['faulty',OPINION]));
+});
+test('E5-4: a backs that names the sentence itself, a context or checkable sentence, a number outside the paragraph or another paragraph is no link',()=>{
+ const none=(obs,text=EV_A)=>assert.ok(!evRule(text,obs).some(x=>x.verdict==='faulty'||x.supports!==undefined),JSON.stringify(obs));
+ none([{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:3},{n:4,support:'opinion'}]);
+ none([{n:1,support:'context'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ none([{n:1,support:'checkable'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ none(evObs(9));none(evObs(1.5));none(evObs('1'));
+ const two='Schools start too early. Uniforms hurt creativity.\n\nResearch found that 34 minutes more sleep helps. Homework is dull.';
+ const cross=evRule(two,[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'}]);
+ assert.deepEqual(cross.map(x=>[x.n,x.verdict,x.supports]),[[1,'faulty',undefined],[2,'faulty',undefined],[3,'strong',undefined],[4,'neutral',undefined]],'no link across paragraphs: paragraph 1 has no marked checkable sentence, paragraph 2 has one with no link');
+ const bad=evRule(EV_A,[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'opinion',backs:1},{n:4,support:'opinion'}]);
+ assert.ok(bad.every(x=>x.verdict==='faulty'&&x.supports===undefined),'an opinion sentence carries no link');
+});
+test('E5-5: a piece of two paragraphs has its own first unbacked opinion in each',()=>{
+ const t='Schools start too early. Uniforms hurt creativity. Research found that 34 minutes more sleep helps.\n\nHomework is dull. Phones are bad. A study measured 20% more focus without them.';
+ const ss=RE.splitSentences(t);assert.deepEqual(ss.map(s=>s.para),[0,0,0,1,1,1]);
+ const obs=[{n:1,support:'opinion'},{n:2,support:'opinion'},{n:3,support:'checkable',backs:1},{n:4,support:'opinion'},{n:5,support:'opinion'},{n:6,support:'checkable',backs:4}];
+ const v=RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);
+ assert.deepEqual(v.filter(x=>x.verdict==='faulty').map(x=>x.n),[2,5]);
+ assert.deepEqual(v.filter(x=>x.verdict==='faulty').map(x=>x.note),[UNBACKED,UNBACKED]);
+});
+test('E5 (c): a marked checkable sentence with no link between an opinion and the next opinion makes that opinion neutral; later unbacked opinions are neutral',()=>{
+ const t='Schools start too early. Research found that 34 minutes more sleep helps. Uniforms hurt creativity. Phones are bad. A study measured 20% more focus without them. Homework is dull. Therefore it all holds.';
+ const ss=RE.splitSentences(t);
+ const obs=[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'opinion'},{n:4,support:'opinion'},{n:5,support:'checkable'},{n:6,support:'opinion'},{n:7,support:'opinion'}];
+ const v=RE.decideVerdicts('evidence',ss,new Set(ss.map(s=>s.n)),obs);
+ assert.deepEqual(v.map(x=>[x.n,x.verdict]),[[1,'neutral'],[2,'strong'],[3,'faulty'],[4,'neutral'],[5,'strong'],[6,'neutral'],[7,'neutral']],'3 is the first unbacked; 4 is blind to what 5 backs; later ones are neutral');
+});
+test('E5-6: a rewrite of the backed opinion stays backed through the kept link, and the schema and prompt ask for backs',()=>{
+ const ss=RE.splitSentences(EV_A),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3,4]),evObs(1));
+ const ctx=RE.contextObservations('evidence',ss,1,first);
+ assert.deepEqual(ctx.find(o=>o.n===3),{n:3,support:'checkable',backs:1},'the kept link rides with the sentence');
+ assert.equal(ctx.find(o=>o.n===4),undefined);
+ const ruled=RE.decideVerdicts('evidence',ss,new Set([1]),[{n:1,support:'opinion'},...ctx]).find(v=>v.n===1);
+ assert.equal(ruled.verdict,'neutral','backed through the kept link');
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.match(src,/evidence: \{ support: \{ type: "string", enum: \[\.\.\.SUPPORTS\] \}, backs: \{ type: "integer" \} \}/);
+ assert.match(src,/For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion\./);
 });

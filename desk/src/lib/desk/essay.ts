@@ -23,13 +23,13 @@ const FIX = { type: "object", properties: { move: { type: "string" }, pattern: {
 const OBSERVED: Record<string, Record<string, unknown>> = {
   structure: { job: { type: "string", enum: [...JOBS] }, supports: { type: "integer" } },
   argument: { side: { type: "string", enum: [...SIDES] }, turnsBack: { type: "boolean" } },
-  evidence: { support: { type: "string", enum: [...SUPPORTS] } },
+  evidence: { support: { type: "string", enum: [...SUPPORTS] }, backs: { type: "integer" } },
   language: { issues: { type: "array", items: { type: "object", properties: { kind: { type: "string", enum: [...ISSUE_KINDS] }, word: { type: "string" } }, required: ["kind", "word"] } } },
 };
 const OBSERVE: Record<string, string> = {
   structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none. For an evidence sentence, or a claim that backs an earlier claim, add supports: the number of the claim it backs.",
   argument: "For each sentence, report the side it takes: side is pushes (for the paragraph's claim), against, wanders or neutral; turnsBack is true when a sentence on the other side turns back to the claim.",
-  evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context.",
+  evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context. For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion.",
   language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. Report no issue for a sentence that has none; the desk counts length itself.",
 };
 const observedOf = (lens: Lens) => OBSERVED[lens.id] ?? OBSERVED.structure;
