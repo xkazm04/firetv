@@ -438,6 +438,98 @@ test('PR6: an unread guest stream is closed after 32 unread messages and leaves 
  }finally{mock.timers.reset();}
 });
 
+// ---- PR12: the TV, and each listed phone, keep at most four session streams ----
+const devKeys=()=>[...(globalThis.__deskDeviceStreams?.keys()??[])];
+const gotNext=async(n,r)=>{const x=await Promise.race([r.read(),new Promise((_,no)=>setTimeout(()=>no(new Error(n+' got nothing')),1500))]);assert.equal(x.done,false,n+' is still open');};
+const nextAll=async(named)=>{for(const r of named)await r.read();push();for(const [n,r] of named.map((r,i)=>['stream '+i,r]))await gotNext(n,r);};
+test('PR12: five streams on one phone cookie: the set grows by four, the first ends, the other four get the next push',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,keys=devKeys(),rs=[];
+  for(let i=0;i<5;i++)rs.push(await open('phone',cookie));
+  assert.equal(subs.size-before,4);
+  assert.equal(await endsSoon(rs[0]),true,'the first phone stream ended');
+  await nextAll(rs.slice(1));
+  for(const r of rs.slice(1))await r.cancel();
+  assert.equal(subs.size,before);assert.deepEqual(devKeys(),keys);
+ }finally{mock.timers.reset();}
+});
+test('PR12: a copied cookie shares its phone\'s four',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,rs=[];
+  for(let i=0;i<3;i++)rs.push(await open('phone',cookie));
+  rs.push(await open('phone',cookie+'; other=1'));rs.push(await open('phone','a=b; '+cookie));
+  assert.equal(subs.size-before,4);
+  assert.equal(await endsSoon(rs[0]),true,'the first stream ended');
+  await nextAll(rs.slice(1));
+  for(const r of rs.slice(1))await r.cancel();
+  assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
+test('PR12: two phones have a cap each',async()=>{
+ const a=await phoneCookie(),b=await phoneCookie();assert.notEqual(a,b);
+ mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,ra=[],rb=[];
+  for(let i=0;i<4;i++)ra.push(await open('phone',a));
+  for(let i=0;i<5;i++)rb.push(await open('phone',b));
+  assert.equal(subs.size-before,8);
+  assert.equal(await endsSoon(rb[0]),true,"B's first stream ended");
+  await nextAll([...ra,...rb.slice(1)]);
+  for(const r of [...ra,...rb.slice(1)])await r.cancel();
+  assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
+test('PR12: five TV streams close the first; an earlier phone stream and the guests are untouched',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size;
+  const ph=await open('phone',cookie),tvs=[];
+  for(let i=0;i<5;i++)tvs.push(await open('tv'));
+  const gs=[];for(let i=0;i<3;i++)gs.push(await open('guest'));
+  assert.equal(subs.size-before,1+4+3);
+  assert.equal(await endsSoon(tvs[0]),true,'the first TV stream ended');
+  await nextAll([ph,...tvs.slice(1),...gs]);
+  for(const r of [ph,...tvs.slice(1),...gs])await r.cancel();
+  assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
+test('PR12: five in-process streams all stay open',async()=>{
+ mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,rs=[];
+  for(let i=0;i<5;i++)rs.push((await streamRoute().GET()).body.getReader());
+  assert.equal(subs.size-before,5);
+  await nextAll(rs);
+  for(const r of rs)await r.cancel();
+  assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
+test('PR12: many streams on one phone cookie leave four subscribers, and a push costs little (figures recorded, not asserted)',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,N=+process.env.PR12_N||2000;
+  const t0=Date.now();
+  for(let i=0;i<N;i++)await open('phone',cookie);
+  const openMs=Date.now()-t0;
+  assert.equal(subs.size-before,4);
+  const ms=[];for(let i=0;i<21;i++){const t=process.hrtime.bigint();push();ms.push(Number(process.hrtime.bigint()-t)/1e6);}
+  ms.sort((x,y)=>x-y);
+  console.log(`PR12 figures: opened ${N} in ${openMs} ms; push median ${ms[10].toFixed(3)} ms, max ${ms[20].toFixed(3)} ms`);
+ }finally{mock.timers.reset();}
+});
+test('PR12: when every stream of a phone and of the TV is cancelled, the set and the device map are as they were',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,keys=devKeys();
+  const rs=[];for(let i=0;i<3;i++){rs.push(await open('phone',cookie));rs.push(await open('tv'));}
+  assert.equal(subs.size-before,6);
+  for(const r of rs)await r.cancel();
+  assert.equal(subs.size,before);assert.deepEqual(devKeys(),keys,'no key left behind');
+ }finally{mock.timers.reset();}
+});
+
 // ---- PR7: the pin is drawn with node:crypto ----
 test('PR7: 2000 fresh() pins are four digits, 1000 to 9999, and the pin line holds no Math.random',()=>{
  for(let i=0;i<2000;i++){const p=store.fresh().pin;assert.match(p,/^\d{4}$/);assert(+p>=1000&&+p<=9999,p);}
