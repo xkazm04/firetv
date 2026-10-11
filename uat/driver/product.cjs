@@ -6,7 +6,7 @@
  *   surface()                       -> the repo-relative, sorted desk/src files the driver loads (derived, not listed)
  *   stampOf(repo, files, git?)      -> { commit, dirty, files: { path: git blob sha } } of the working tree now
  *   seenOf(run, opts)               -> { commit, files, source: 'run.json' | 'git' } for a run, or null (unknown)
- *   changedBetween(seen, now)       -> { changed: [path], total } between two file -> blob maps
+ *   changedBetween(seen, now)       -> { changed: [path], oneSided: [path], total } between two file -> blob maps
  *
  * The load set is whatever require.cache holds under desk/src after the driver's entry modules load and one Linga
  * screen renders (surface.cjs install(), the modules linga-text.cjs reads), measured in a child process on a scratch
@@ -93,10 +93,13 @@ function seenOf(run, { repo, git = repo && gitOf(repo), files = [], cache = new 
   } catch { return null; }
 }
 
-/** The paths whose blob differs between two maps (a path only one side has counts), and how many paths in all. */
+/**
+ * The paths that both maps hold and whose blob differs (changed: the only ones that age a row), the paths only one side
+ * holds (oneSided: a file the other side never saw, so nothing there to compare), and how many paths in all.
+ */
 function changedBetween(seen, now) {
-  const all = [...new Set([...Object.keys(seen), ...Object.keys(now)])].sort();
-  return { changed: all.filter(f => seen[f] !== now[f]), total: all.length };
+  const all = [...new Set([...Object.keys(seen), ...Object.keys(now)])].sort(), both = f => f in seen && f in now;
+  return { changed: all.filter(f => both(f) && seen[f] !== now[f]), oneSided: all.filter(f => !both(f)), total: all.length };
 }
 
 if (require.main === module && process.argv[2] === '--surface') {

@@ -359,7 +359,7 @@ test('product case 6: OPEN.md leads with the split and every aged row ends with 
   const files = P().surface(), N = files.length;
   const current = { commit: 'c'.repeat(40), dirty: false, files: Object.fromEntries(files.map((f, i) => [f, `${String(i).padStart(40, '0')}`])) };
   const SAME = 3; // three files are byte-identical to the 15 Sep ones
-  const old = f => files.indexOf(f) < SAME ? current.files[f] : `old${files.indexOf(f)}`.padEnd(40, '0');
+  const old = f => files.indexOf(f) < SAME ? current.files[f] : `abc${files.indexOf(f)}`.padEnd(40, '0');
   const asked = [];
   const stub = args => {
     asked.push(args[0]);
@@ -412,4 +412,22 @@ test('W7-1: OPEN.md files each open row under its own module, and only Linga car
   assert.ok(!lines[0].includes('Linga'), 'the title no longer names Linga alone');
   // a module with no open row has no section
   assert.ok(!L().statusOf(L().ledger((() => { const r = path.join(tmp, `lonly-${crypto.randomUUID().slice(0, 8)}`); writeRun(r, 'R', [finding()]); return r; })())).includes('# Essay Master'));
+});
+
+test('W7-2: a path only one side holds does not age a row; it is counted apart', () => {
+  const d = P().changedBetween({ 'desk/src/a.ts': 'x1', 'desk/src/gone.ts': 'g' }, { 'desk/src/a.ts': 'x1', 'desk/src/new.ts': 'n' });
+  assert.deepEqual(d.changed, [], 'no path both sides hold differs');
+  assert.deepEqual(d.oneSided, ['desk/src/gone.ts', 'desk/src/new.ts']);
+  assert.equal(d.total, 3);
+  assert.deepEqual(P().changedBetween({ 'desk/src/a.ts': 'x1' }, { 'desk/src/a.ts': 'x2' }).changed, ['desk/src/a.ts'], 'a shared path with another blob still ages');
+  // in the ledger: the stamp holds one file the load set lacks, and the load set holds one the stamp lacks
+  const dir = path.join(tmp, `w72-${crypto.randomUUID().slice(0, 8)}`), runs = path.join(dir, 'uat/runs');
+  const current = { commit: 'beef', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/new.ts': 'n' } };
+  writeRun(runs, 'A', [finding()], { started: '2026-10-01T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { 'desk/src/a.ts': 'x1', 'desk/src/gone.ts': 'g' } } });
+  const led = L().ledger(runs, { repo: dir, git: () => '', files: Object.keys(current.files), current }), g = led.open[0];
+  assert.equal(g.productState, 'current');
+  assert.deepEqual(g.changed, []);
+  assert.deepEqual(g.oneSided, ['desk/src/gone.ts', 'desk/src/new.ts']);
+  assert.deepEqual(led.product.counts, { current: 1, aged: 0, unknown: 0 });
+  assert.ok(L().statusOf(led).split('\n').find(l => l.includes('a gap')).endsWith(' · 2 paths held by one side only'));
 });

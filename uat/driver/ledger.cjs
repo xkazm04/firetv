@@ -18,7 +18,7 @@
  * did not show its judge the gap (in the record's prior[] or by a recertify stamp): a gap no rerun asks about ages here
  * instead of vanishing. With `opts.repo` each gap also says what product it was seen on (product.cjs): `seen` is the
  * run's own stamp (run.json `product`) or, for a run without one, the commit that first added its findings.json;
- * `changed` lists the files of the driver's load set whose blob differs now, and `productState` is 'current' (none),
+ * `changed` lists the files both the run's stamp and the driver's load set hold whose blob differs now (`oneSided` the paths only one holds: they never age a row), and `productState` is 'current' (none),
  * 'aged' (some) or 'unknown' (no stamp and no history: never read as current). `opts` may inject `git`, `files` and
  * `current` (product.cjs stampOf), so a stamped run needs no git call. Nothing here calls a model.
  */
@@ -124,9 +124,9 @@ function productOf(runs, gaps, { repo, git, files, current }) {
   const seenOf = run => { if (!seenBy.has(run.id)) seenBy.set(run.id, PR.seenOf(run, { repo, git: now.git, files: now.files, cache })); return seenBy.get(run.id); };
   for (const g of gaps) {
     const s = seenOf(runs.find(r => r.id === g.lastSeen));
-    if (!s) { Object.assign(g, { seen: null, changed: null, productState: 'unknown', productFiles: null }); continue; }
+    if (!s) { Object.assign(g, { seen: null, changed: null, oneSided: null, productState: 'unknown', productFiles: null }); continue; }
     const d = PR.changedBetween(s.files, now.current.files);
-    Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total });
+    Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, oneSided: d.oneSided, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total - d.oneSided.length });
   }
   const counts = { current: 0, aged: 0, unknown: 0 };
   for (const g of gaps) if (g.open) counts[g.productState]++;
@@ -136,7 +136,7 @@ function productOf(runs, gaps, { repo, git, files, current }) {
 // ---------------------------------------------------------------- the operator view
 const one = s => String(s ?? '').replace(/\s*\n\s*/g, ' ');
 /** How a row's product stands: nothing when it was seen on the current one (or the ledger was built without a repo). */
-const productCell = g => g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '';
+const productCell = g => (g.productState === 'aged' ? ` · product: ${g.changed.length} of ${g.productFiles} files changed since` : g.productState === 'unknown' ? ' · product: unknown' : '') + (g.oneSided?.length ? ` · ${g.oneSided.length} paths held by one side only` : '');
 /** The module a journey id belongs to: J1-J5 Linga, EM1-EM5 Essay Master, MB1-MB5 Math Buddy. An id of no other prefix is Linga. */
 const moduleOf = journey => /^EM\d/.test(journey) ? 'Essay Master' : /^MB\d/.test(journey) ? 'Math Buddy' : 'Linga';
 const MODULES = ['Linga', 'Essay Master', 'Math Buddy'];
