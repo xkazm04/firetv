@@ -756,7 +756,9 @@ test('the analyse route asks essayTooLong before it starts a run, on the essay b
  assert.ok(at>0,'the route checks the cap');
  assert.ok(at>src.indexOf('body.kind === "rewrite"'),'after the english and rewrite branches, so those are not capped');
  assert.ok(at<src.indexOf('runJob("analyse", async () => {\n    dispatch({ type: "essay.type"'),'before the essay run starts');
- assert.match(src.slice(at,at+200),/status: 400/);
+ // changed by E3-b: the refusal now goes through refusedWithLine, which answers 400 and says the line on the status line
+ assert.match(src.slice(at,at+200),/refusedWithLine\(tooLong\)/);
+ assert.match(src,/function refusedWithLine[\s\S]{0,200}status: 400/);
 });
 test('the phone page: no essay in the capture picker, no essay sample, the file picker takes .txt and .md, and it uses the pure rules',()=>{
  const src=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');

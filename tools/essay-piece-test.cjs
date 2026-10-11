@@ -332,3 +332,36 @@ test('E2-b: the phone marks as read only the paragraphs in the reply, names each
   assert.match(phone, /setReadIx\(back\?\.read/, 'readPiece reads the reply\'s piece.read');
   for (const piece of [{ paragraphs: 3, read: [], failed: [0] }, { paragraphs: 3, read: [], failed: [], notEnglish: [0] }]) assert(phone.includes(R.unruledLines(piece)[0].replace('Paragraph 1', 'Paragraph ${k + 1}')), 'the phone says each paragraph not ruled in the rule\'s words'); assert.match(phone, /REWRITE_WHILE_READING/); assert.match(phone, /disabled=\{busy \|\| rewriting\}/);
 });
+
+// ---- E3-b (council rulings 2026-10-09 section 6, 6c): a reading refused before any run puts the refusal's line on the TV's status line ----
+const status = () => getSession().status;
+const seatAndMark = (id = 'ema') => { dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id }); dispatch({ type: 'status', text: 'before' }); seen = []; answer = async () => { throw new Error('no model call expected'); }; };
+test('E3-b: the plan\'s Read it body ({ kind: essay }) with a Czech paragraph: 400 as before, no run, and the status is the line', async () => {
+  seatAndMark();
+  const r = await post({ kind: 'essay', text: CZ_R7, type: 'structure' });
+  assert.equal(r.status, 400); assert.equal((await r.json()).error, EN_LINE); assert.equal(seen.length, 0);
+  assert.equal(status(), EN_LINE); assert.deepEqual(getSession().jobs, {}, 'no job');
+});
+test('E3-b: a kind essay paragraph that is too long: its essayTooLong line becomes the status', async () => {
+  seatAndMark();
+  const text = 'Long sentence here. '.repeat(300);
+  const r = await post({ kind: 'essay', text, type: 'structure' });
+  assert.equal(r.status, 400); const line = R.essayTooLong(text); assert(line); assert.equal((await r.json()).error, line); assert.equal(status(), line); assert.equal(seen.length, 0);
+});
+test('E3-b: a kind piece made only of Czech paragraphs, and a piece that pieceProblem refuses: each one\'s line becomes the status', async () => {
+  seatAndMark();
+  let r = await post({ kind: 'piece', text: CZ_R4 + '\n\n' + CZ_R7, type: 'structure' });
+  assert.equal(r.status, 400); assert.equal(status(), EN_LINE);
+  seatAndMark();
+  const text = Array.from({ length: R.PIECE_PARAGRAPHS_MAX + 1 }, (_, i) => `Paragraph ${i}.`).join('\n\n');
+  r = await post({ kind: 'piece', text, type: 'structure' });
+  assert.equal(r.status, 400); const line = R.pieceProblem(text); assert(line); assert.equal((await r.json()).error, line); assert.equal(status(), line); assert.equal(seen.length, 0);
+});
+test('E3-b guards: 409 with nobody at the desk and 428 TEXT_NOTICE leave the status as it was', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'status', text: 'before' });
+  let r = await post({ kind: 'essay', text: CZ_R7, type: 'structure' });
+  assert.equal(r.status, 409); assert.equal(status(), 'before');
+  texts.deleteAll('ema'); seatAndMark();
+  r = await post({ kind: 'piece', text: PIECE, type: 'structure', keep: true });
+  assert.equal(r.status, 428); assert.equal(status(), 'before'); assert.equal(seen.length, 0);
+});

@@ -16,6 +16,12 @@ type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: strin
   | { kind: "piece-again" }
   | { kind: "piece"; text: string; type: AnalysisType; keep?: boolean; pieceId?: string; source?: string };
 
+/** E3-b: a reading refused before any run with a line for the learner says the line on the TV's status line too, whichever door sent it. */
+function refusedWithLine(error: string) {
+  dispatch({ type: "status", text: error });
+  return NextResponse.json({ error }, { status: 400 });
+}
+
 export async function POST(req: Request) {
   const body = (await req.json()) as Body;
   // a reading is somebody's: with no one at the desk there is no one to read it for
@@ -68,9 +74,9 @@ export async function POST(req: Request) {
     // a whole piece (v2 E1): checked in code before any run, kept on the learner's shelf when asked (after the
     // one-time notice), then read paragraph by paragraph while the TV fills in
     const problem = pieceProblem(body.text);
-    if (problem) return NextResponse.json({ error: problem }, { status: 400 });
+    if (problem) return refusedWithLine(problem);
     // E3: a piece with no paragraph in English is said so before anything is kept or read
-    if (!paragraphsOf(body.text).some(paragraphIsEnglish)) return NextResponse.json({ error: NOT_ENGLISH_LINE }, { status: 400 });
+    if (!paragraphsOf(body.text).some(paragraphIsEnglish)) return refusedWithLine(NOT_ENGLISH_LINE);
     let pieceId: string | undefined;
     if (body.keep) {
       if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
@@ -100,9 +106,9 @@ export async function POST(req: Request) {
   // one paragraph per reading: a longer text is refused with a sentence, never cut down (the cap is in rules/essay,
   // not measured: revisit after live use). The phone splits a file or message into paragraphs before it sends one.
   const tooLong = essayTooLong(body.text);
-  if (tooLong) return NextResponse.json({ error: tooLong }, { status: 400 });
+  if (tooLong) return refusedWithLine(tooLong);
   // E3: code decides whether the paragraph is English before any run, and says so plainly when it is not
-  if (!paragraphIsEnglish(body.text)) return NextResponse.json({ error: NOT_ENGLISH_LINE }, { status: 400 });
+  if (!paragraphIsEnglish(body.text)) return refusedWithLine(NOT_ENGLISH_LINE);
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
     const a = await analyseEssay(body.text, body.type, who.id, age);
