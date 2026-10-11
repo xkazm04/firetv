@@ -489,6 +489,17 @@ test('MB-B6 WITHHELD: every withheld hint line is 25 words or fewer and holds no
  for (const [k,v] of Object.entries(S.SCHOOL_WITHHELD)){const n=v.trim().split(/\s+/).length;assert.ok(n<=25,`${k}: withheld line is ${n} words, 25 or fewer`);assert.doesNotMatch(v,/\d/,k);}
 });
 
+test('SL2-a WITHHELD: five withheld lines name the step they used to miss, for every item kind their unit sets',()=>{
+ const W=S.SCHOOL_WITHHELD;
+ assert.match(W['dec-arith'],/(put|place|count)[^.]*(point|decimal place|places)/i,'dec-arith puts the point back');
+ assert.match(W['dec-arith'],/multipl/i,'dec-arith multiplies');
+ assert.match(W['pythagoras'],/add/i,'pythagoras adds for the longest');assert.match(W['pythagoras'],/subtract|take away/i,'pythagoras subtracts for a shorter side');
+ assert.match(W['ratio-share'],/common factor/i,'ratio-share simplifies by a common factor');assert.match(W['ratio-share'],/scale both parts/i,'ratio-share scales both parts');assert.match(W['ratio-share'],/total of the parts/i,'ratio-share shares by the total of the parts');
+ assert.match(W['area'],/rectangle/i);assert.match(W['area'],/triangle/i);assert.match(W['area'],/add/i,'area adds the parts');
+ assert.match(W['dec-convert'],/divide[^.]*top[^.]*bottom/i,'dec-convert divides top by bottom');assert.match(W['dec-convert'],/place value/i);assert.match(W['dec-convert'],/simplif/i);assert.match(W['dec-convert'],/percent/i);
+ for (const k of ['dec-arith','pythagoras','ratio-share','area','dec-convert']) assert.match(W[k],/ The answer is yours to work out\.$/,k);
+});
+
 // ------------------------------------------------------------------ W7 wellFormed and question
 test('W7 wellFormed: each new shape reads only its one printed spelling and refuses what makes a poor question',()=>{
  for (const s of [M1,M3,M4,M5,M6,S1,S2,S3,O1,O2,O4,O5,O6,O7,P1,P2,P3,PS,D1,D2,D3]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
