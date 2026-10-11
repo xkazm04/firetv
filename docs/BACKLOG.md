@@ -355,7 +355,7 @@ The 2026-10-09 L1 drain (`2026-10-09-essay-l1`: Essay Master read in code by fiv
   - origin: 2026-10-09-essay-l1/L1-barbora-43-EM4-5, 2026-10-09-essay-l1/L1-barbora-43-EM4-7
   - recommendation: build — `tv/recapRows.ts:122` sums `against` and `of` over readings: a 5-sentence paragraph read twice under Evidence reads "two readings (Evidence): 4 of 10 sentences to fix" and "four to look at together". The TV tile draws the last three readings (`tv/screens.tsx:362`) while the phone counts all; the tile draws at most 12 arrows with the faulty ones at the end, so a reading of 14 or more sentences shows no citron at all (branches checked: of up to 12 clean, of over 12 broken); the Sunday page orders lenses by the desk's order and the recap by reading order. The phone line counts per reading ("3 of 5, then 1 of 5") or names the paragraph count, so a re-read reads as progress; over 12 sentences the rail scales (or turns the faulty share round proportionally) and the tile says "and N more"; one lens order everywhere. Must keep the count that follows a rewrite (EM-B1)
   - owner: end-of-session-memory-recap council rework
-  - status: open
+  - status: open (built by 13-i: 4e209aef, 8eaf85c4, 2ec91176, 75154729)
   - ceiling: per-reading counts show a trend, not which sentence moved
 - **EM-B37** — Nothing says grammar and spelling are not checked, and "Well done" lands on sentences with errors
   - origin: 2026-10-09-essay-l1/L1-daniel-15-EM3-9; "It doesn't say anything about grammar, which is what I actually lose marks for, and it doesn't pretend to check it. That's honest, I guess, but it's also the thing I needed." (daniel-15, 2026-10-09-essay-l1)
@@ -512,7 +512,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
   - origin: 2026-10-09-maths-l1/L1-vojtech-18-MB1-5, 2026-10-09-maths-l1/L1-radka-41-MB5-7
   - recommendation: build — `MathsTile` (`tv/recapRows.ts:47-57`) draws page icons and one lamp per hint, the second-hint lamps lit, and names no problem; the phone line has the hint count only, with no second-hint count. And `recapRows`, the phone Recap and the week read the seated learner's session fields and record; the other child's evening sits in `away` until they are seated again (`lib/session/store.ts:379-386`, `seat()` moves slots). The phone's recap line adds "k needed a second hint"; the phone Recap lists every learner with work tonight, one block each
   - owner: end-of-session-memory-recap council rework
-  - status: open
+  - status: open (the phone's second-hint count is built by 13-i (4e209aef); per-learner blocks and problem naming stay open (delivery 13-ii))
   - ceiling: naming the problems puts the sheet's content on the recap, which the curtain forbids for Essay and does not for Math
 - **MB-B24** — A "Secure on the desk" tag beside marks lost on that topic, and the statement behind a row is never shown
   - origin: 2026-10-09-maths-l1/L1-radka-41-MB4-7, 2026-10-09-maths-l1/L1-vojtech-18-MB4-6
