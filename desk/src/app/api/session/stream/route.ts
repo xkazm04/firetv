@@ -4,9 +4,19 @@
  * from the next message on. An in-process call (no x-desk-role) gets the session itself.
  */
 import { getSession, subscribe, type Session } from "@/lib/session/store";
-import { liveRole, view } from "@/lib/session/pairing";
+import { liveRole, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
+
+/**
+ * At most this many guest streams are open at once, desk-wide: a guest is anyone on the network, so the oldest is let go
+ * when a ninth arrives (it reopens by itself). The TV, a phone and an in-process stream are not counted. The list is on the
+ * global object, so a dev reload keeps it.
+ */
+const GUEST_STREAMS = 8;
+/** A stream whose reader has this many messages unread is let go: a phone that went to sleep, which reopens by itself. */
+const UNREAD = 32;
+const guests = () => { const g = globalThis as unknown as { __deskGuestStreams?: (() => void)[] }; return (g.__deskGuestStreams ??= []); };
 // Two signatures: the one Next's generated route types check (a Request) and the in-process one (none).
 export async function GET(): Promise<Response>;
 export async function GET(req: Request): Promise<Response>;
@@ -15,23 +25,26 @@ export async function GET(req?: Request) {
   let unsub = () => {};
   let ping: ReturnType<typeof setInterval> | undefined;
   let ended = false;
+  let release = () => {};
   const stream = new ReadableStream({
     start(controller) {
-      const release = () => { ended = true; unsub(); clearInterval(ping); };
-      const close = () => { release(); try { controller.close(); } catch {} };
+      function close() { release(); try { controller.close(); } catch {} }
+      release = () => { ended = true; unsub(); clearInterval(ping); const list = guests(), i = list.indexOf(close); if (i >= 0) list.splice(i, 1); };
+      if (roleFrom(req) === "guest") { const list = guests(); while (list.length >= GUEST_STREAMS) list.shift()!(); list.push(close); }
       const send = (s: Session) => {
         // the message is drawn outside the enqueue's catch: a throw here is a fault to name, and the stream ends rather than sit open and silent
         let chunk: Uint8Array;
         try { chunk = enc.encode(`data: ${JSON.stringify(view(s, liveRole(req)))}\n\n`); }
         catch (e) { console.error(`desk session stream: could not draw a message, closing the stream (${e instanceof Error ? e.message : e})`); close(); return; }
+        if ((controller.desiredSize ?? 1) <= 0) { close(); return; }
         try { controller.enqueue(chunk); } catch { release(); }
       };
       unsub = subscribe(send);
       send(getSession());
       if (ended) return;
-      ping = setInterval(() => { try { controller.enqueue(enc.encode(": ping\n\n")); } catch { clearInterval(ping); } }, 15000);
+      ping = setInterval(() => { if ((controller.desiredSize ?? 1) <= 0) { close(); return; } try { controller.enqueue(enc.encode(": ping\n\n")); } catch { clearInterval(ping); } }, 15000);
     },
-    cancel() { ended = true; unsub(); clearInterval(ping); },
-  });
+    cancel() { release(); },
+  }, new CountQueuingStrategy({ highWaterMark: UNREAD }));
   return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", Connection: "keep-alive" } });
 }

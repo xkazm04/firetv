@@ -389,3 +389,47 @@ test('PR4: a throw while drawing logs one line and the stream ends, with the pin
   assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/^desk session stream:/);
  }finally{mock.restoreAll();mock.timers.reset();}
 });
+
+// ---- PR6: a cap on guest streams, and a reader that stopped reading is let go ----
+const open=async(role,cookie)=>(await streamRoute().GET(req('/api/session/stream',{role,cookie}))).body.getReader();
+const endsSoon=(rd)=>Promise.race([(async()=>{for(;;){const x=await rd.read();if(x.done)return true;}})(),new Promise((r)=>setTimeout(()=>r(false),1500))]);
+const push=()=>{const s=store.getSession();[...globalThis.__desk.subs].forEach((f)=>f(s));};
+test('PR6: nine guest streams close the oldest, and the subscriber set grows by at most eight',async()=>{
+ evening('pair');mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size,rs=[];
+  for(let i=0;i<9;i++)rs.push(await open('guest'));
+  assert.equal(subs.size-before,8);
+  assert.equal(await endsSoon(rs[0]),true,'the first guest stream ended');
+  for(const r of rs.slice(1))await r.cancel();
+  assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
+test('PR6: a TV stream and a phone stream opened first stay open through twenty guest arrivals',async()=>{
+ const cookie=await phoneCookie();mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size;
+  const tv=await open('tv'),ph=await open('phone',cookie),inproc=(await streamRoute().GET()).body.getReader();
+  const guests=[];for(let i=0;i<20;i++)guests.push(await open('guest'));
+  assert.equal(subs.size-before,3+8);
+  for(const r of [tv,ph,inproc])await r.read();// the first message
+  push();
+  for(const [n,r] of [['tv',tv],['phone',ph],['in-process',inproc]]){const x=await Promise.race([r.read(),new Promise((_,no)=>setTimeout(()=>no(new Error(n+' got nothing')),1500))]);assert.equal(x.done,false,n+' is still open');}
+  for(const r of [tv,ph,inproc,...guests.slice(12)])await r.cancel();
+ }finally{mock.timers.reset();}
+});
+test('PR6: an unread guest stream is closed after 32 unread messages and leaves the set; a stream that reads keeps getting messages',async()=>{
+ evening('pair');mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size;
+  const idle=await open('guest'),busy=await open('tv');
+  assert.equal(subs.size,before+2);
+  let got=0;
+  for(let i=0;i<40;i++){push();await busy.read();got++;}
+  assert.equal(got,40);
+  assert.equal(subs.size,before+1,'only the idle stream left');
+  let n=0;for(;;){const x=await idle.read();if(x.done)break;n++;}
+  assert(n<=32,`${n} messages were queued`);assert(n>=31,`${n}`);
+  await busy.cancel();assert.equal(subs.size,before);
+ }finally{mock.timers.reset();}
+});
