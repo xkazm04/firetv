@@ -97,8 +97,9 @@ export const ESSAY_PARAGRAPH_MAX_CHARS = 4000;
 /** The plain sentence for a paragraph over the cap, or null when it fits. Never truncates: the learner splits it. */
 export function essayTooLong(text: unknown): string | null {
   if (typeof text !== "string" || text.length <= ESSAY_PARAGRAPH_MAX_CHARS) return null;
-  return `That paragraph is too long to read in one go. Split it in two and send one part at a time (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters).`;
+  return PARAGRAPH_TOO_LONG_LINE;
 }
+const PARAGRAPH_TOO_LONG_LINE = `That paragraph is too long to read in one go. Split it in two and send one part at a time (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters).`;
 
 /**
  * A whole piece (v2 E1) is read one call per paragraph, so its size is a count of calls. 30 paragraphs is a long
@@ -109,19 +110,35 @@ export const PIECE_MAX_CHARS = 100 * 1024;
 
 /** Why a whole piece cannot be read in one go, or null. Each paragraph must fit the paragraph cap; never truncates. */
 export function pieceProblem(text: unknown): string | null {
-  if (typeof text !== "string" || !text.trim()) return "There is nothing to read. Write or send a piece first.";
-  if (text.length > PIECE_MAX_CHARS) return `That piece is too long to read in one go. Keep it under ${PIECE_MAX_CHARS / 1024} KB.`;
+  if (typeof text !== "string" || !text.trim()) return PIECE_EMPTY_LINE;
+  if (text.length > PIECE_MAX_CHARS) return PIECE_TOO_LONG_LINE;
   const ps = paragraphsOf(text);
-  if (ps.length > PIECE_PARAGRAPHS_MAX) return `That is ${ps.length} paragraphs. The desk reads up to ${PIECE_PARAGRAPHS_MAX} at a time: send it in parts.`;
+  if (ps.length > PIECE_PARAGRAPHS_MAX) return pieceParagraphsLine(ps.length);
   const long = ps.findIndex((p) => essayTooLong(p) !== null);
-  if (long >= 0) return `Paragraph ${long + 1} is too long to read in one go. Split it in two (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters each).`;
+  if (long >= 0) return pieceParagraphLongLine(long + 1);
   return null;
 }
+const PIECE_EMPTY_LINE = "There is nothing to read. Write or send a piece first.";
+const PIECE_TOO_LONG_LINE = `That piece is too long to read in one go. Keep it under ${PIECE_MAX_CHARS / 1024} KB.`;
+const pieceParagraphsLine = (n: number) => `That is ${n} paragraphs. The desk reads up to ${PIECE_PARAGRAPHS_MAX} at a time: send it in parts.`;
+const pieceParagraphLongLine = (n: number) => `Paragraph ${n} is too long to read in one go. Split it in two (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters each).`;
 
 // ---- E3: the desk reads English writing; code decides, before any verdict or count, whether a paragraph is English ----
 
 /** The line a paragraph that is not English gets, on the phone and on the TV. */
 export const NOT_ENGLISH_LINE = "Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.";
+
+/**
+ * E3-c: the caption the stage gives a refusal line the desk said before any run (the status the analyse route
+ * dispatches), or null when the status is anything else. It recognises the lines from the sources above.
+ */
+export function refusalCaption(status: unknown): { label: string; text: string } | null {
+  if (typeof status !== "string" || !status) return null;
+  const known = status === NOT_ENGLISH_LINE || status === PARAGRAPH_TOO_LONG_LINE || status === PIECE_EMPTY_LINE || status === PIECE_TOO_LONG_LINE
+    || (status === pieceParagraphsLine(Number(/^That is (\d+) paragraphs\./.exec(status)?.[1])))
+    || (status === pieceParagraphLongLine(Number(/^Paragraph (\d+) is too/.exec(status)?.[1])));
+  return known ? { label: "Not read", text: status } : null;
+}
 
 const ENGLISH_WORDS = new Set(("the of and to a in is that it was for on are as with they be at this have from or by not but we you their would should can more than which also because " +
   "so if there them these most many my who will an his her its our your has had were been do does did about into when what one all some other only just very how why then too").split(" "));

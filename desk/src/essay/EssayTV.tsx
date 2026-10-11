@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphState, pieceBeingRead, unruledCaption, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -141,8 +141,10 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
   const reading = pieceBeingRead(a?.piece);
+  const refused = refusalCaption(s.status);
   const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
+    : refused ? refused
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }
     : at === "last" && a ? { label: `Last verdict · ${ESSAY_TYPES.find((t) => t.id === a.type)?.name ?? "Structure"}`, text: a.summary }
     : lens && chosen ? { label: `${lens.name} · chosen`, text: "Paste, type or dictate one paragraph on the phone." }
@@ -207,8 +209,10 @@ export function EssayPlan({ s }: { s: Session }) {
   const done = slots.every(Boolean);
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const fit = here >= 0 && slots[here] ? planFit(defs, here, slots[here]) : null;
+  const refused = refusalCaption(s.status);
   const cap = job?.phase === "running" ? { label: "Reading", text: "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Press OK on Read it to send it again." }
+    : refused ? refused
     : here >= 0 ? { label: `Slot ${here + 1} · ${defs[here]?.label ?? ""}`, text: fit ?? (slots[here] ? "Written. Say it again on the phone to change it." : "Say it on the phone.") }
     : at === "read" ? { label: "Read it", text: done ? "The desk reads your paragraph through the " + (ESSAY_TYPES.find((t) => t.id === s.essayPlan?.lens)?.name ?? "Structure") + " lens." : "A slot is still to write. OK takes you to it." }
     : { label: "Your plan", text: "Back to the lenses. What you wrote stays." };

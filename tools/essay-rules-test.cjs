@@ -1235,3 +1235,53 @@ test('E4-c: the rail draws a paragraph that was not ruled from the stylesheet (d
  assert.doesNotMatch(tv,/opacity:\s*0?\.4/,'no inline opacity on the rail row');
  assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the data-state count stays 2');
 });
+
+// ---- E3-c: the stage says a refusal line the desk gave before any run, labelled 'Not read'
+const ER=require(path.join(root,'src/lib/rules/essay.ts'));
+const KEYS=require(path.join(root,'src/tv/keys.ts'));
+const LINE_ENGLISH='Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.';
+const LINE_LONG='That paragraph is too long to read in one go. Split it in two and send one part at a time (up to 4000 characters).';
+const LINE_EMPTY='There is nothing to read. Write or send a piece first.';
+const LINE_PIECE_BIG='That piece is too long to read in one go. Keep it under 100 KB.';
+const LINE_PARAS='That is 31 paragraphs. The desk reads up to 30 at a time: send it in parts.';
+const LINE_PARA_LONG='Paragraph 2 is too long to read in one go. Split it in two (up to 4000 characters each).';
+const bigPara='a'.repeat(4001);
+const refusals=()=>[
+ ['not english',ER.NOT_ENGLISH_LINE],
+ ['too long',ER.essayTooLong(bigPara)],
+ ['empty piece',ER.pieceProblem('')],
+ ['piece too big',ER.pieceProblem('a '.repeat(ER.PIECE_MAX_CHARS))],
+ ['too many paragraphs',ER.pieceProblem(Array.from({length:ER.PIECE_PARAGRAPHS_MAX+1},(_,i)=>`Paragraph ${i}.`).join('\n\n'))],
+ ['a paragraph over the cap',ER.pieceProblem('Short one.\n\n'+bigPara)],
+];
+test('E3-c guard: the refusal lines are byte for byte what they were at 3b97c46d',()=>{
+ const got=refusals().map(r=>r[1]);
+ assert.deepEqual(got,[LINE_ENGLISH,LINE_LONG,LINE_EMPTY,LINE_PIECE_BIG,LINE_PARAS,LINE_PARA_LONG]);
+});
+test('E3-c: refusalCaption names every refusal line, and nothing else',()=>{
+ for(const [n,l] of refusals())assert.deepEqual(ER.refusalCaption(l),{label:'Not read',text:l},n);
+ for(const x of [KEYS.planStatus(0),KEYS.rewriteStatus(2),'structure lens chosen \u2014 paste or dictate the paragraph on the phone','reading your paragraph \u2014 structure lens…','reading your piece, 3 paragraphs \u2014 argument lens…','',null,undefined,42])
+  assert.equal(ER.refusalCaption(x),null,String(x));
+});
+{
+ for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+  const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+}
+function drawEssay(name,s){
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server')),{createElement}=require(path.join(root,'node_modules/react'));
+ const E=require(path.join(root,'src/essay/EssayTV.tsx'));
+ return renderToStaticMarkup(createElement(E[name],{s,focus:-1}));
+}
+const capOf=(html)=>{const m=/<div class="em-cap[^"]*"><div class="em-lbl">([^<]*)<\/div><p>([^<]*)<\/p>/.exec(html);return m&&{label:m[1],text:m[2]};};
+test('E3-c: EssayType and EssayPlan caption a refusal line, a running job still wins, a plan status is unchanged',()=>{
+ const {getSession}=require(path.join(root,'src/lib/session/store.ts'));
+ const base=getSession();
+ for(const name of ['EssayType','EssayPlan']){
+  const s={...base,jobs:{},status:ER.NOT_ENGLISH_LINE};
+  assert.deepEqual(capOf(drawEssay(name,s)),{label:'Not read',text:ER.NOT_ENGLISH_LINE},name);
+  const running={...s,jobs:{analyse:{id:'j',phase:'running',startedAt:Date.now(),key:'essay'}}};
+  assert.equal(capOf(drawEssay(name,running)).label,'Reading',name);
+ }
+ const plain=capOf(drawEssay('EssayPlan',{...base,jobs:{},status:''}));
+ assert.deepEqual(capOf(drawEssay('EssayPlan',{...base,jobs:{},status:KEYS.planStatus(0)})),plain);
+});
