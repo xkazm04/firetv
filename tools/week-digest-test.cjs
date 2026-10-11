@@ -155,7 +155,7 @@ test('6: a finished Linga conversation writes one english entry (scene, skill, r
 
 test('7: an Essay Master reading writes one essay entry - the lens and the two counts, never a sentence',async()=>{
  seat();
- answer=async()=>({json:{observations:[{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
  const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
  await analyseEssay(para,'evidence',LEARNER);
  const d=digest();assert.equal(d.length,1);
@@ -165,7 +165,7 @@ test('7: an Essay Master reading writes one essay entry - the lens and the two c
 
 test('M8 (EM-B20): a piece evening - the history is read again once the piece is recorded, the recap row reads the ", N paragraphs" line, the Sunday line says piece',async()=>{
  seat();
- answer=async()=>({json:{observations:[],summary:'Read.'},provider:'test',ms:1});
+ answer=async(req)=>{const m=/Judge only paragraph \d+ of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);const observations=[];for(let n=Number(m[1]);n<=Number(m[2]);n++)observations.push({n,support:'context',note:'ok'});return {json:{observations,summary:'Read.'},provider:'test',ms:1};};
  const para=(k)=>Array.from({length:5},(_,i)=>`Teenagers sleep better with a later start number ${k}${i}.`).join(' ');
  const piece=[para(1),para(2),para(3)].join('\n\n');
  const res=await post('analyse',{kind:'piece',text:piece,type:'evidence'});
@@ -278,7 +278,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  const questions=[],answers=[];
  const sets=[[SIX,TYPED],[[A,B,C,A,B,C],['11/12','7/12','3/4','2/3','1/2','0.75']],[[C,C,C,C,C,C],['3/4','2/6','3/4','75%','1 1/2','3/4']]];
  for(const [specs,typed] of sets){setOn(specs);questions.push(...specs.map(q));answers.push(...typed.filter(Boolean));assert.equal((await post('mark',{answers:typed})).status,200);}
- answer=async()=>({json:{observations:[{n:1,issues:[{kind:'vague',word:'nice'}],note:'Too vague.'}],summary:'Make it sharper.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,issues:[{kind:'vague',word:'nice'}],note:'Too vague.'},{n:2,issues:[],note:'Fine.'}],summary:'Make it sharper.'},provider:'test',ms:1});
  const para='My summer was nice. We went to the lake.';
  await analyseEssay(para,'language',LEARNER);
  const d=digest(),text=JSON.stringify(d);
@@ -441,7 +441,7 @@ test('WD10: a typed mark whose one save fails writes nothing (502, not marked); 
 
 test('WD10: an essay reading whose save fails writes nothing; the retry writes one history line, one writing step, one essay entry',async()=>{
  seat();
- answer=async()=>({json:{observations:[{n:2,support:'opinion',note:'no evidence'}],summary:'One to fix.'},provider:'test',ms:1});
+ answer=async()=>({json:{observations:[{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}],summary:'One to fix.'},provider:'test',ms:1});
  const para='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
  const was=onFile(),restore=failLearnerWrites(),c=catchLog();
  try{await assert.rejects(analyseEssay(para,'evidence',LEARNER),/could not be written/);}finally{c.done();restore();}

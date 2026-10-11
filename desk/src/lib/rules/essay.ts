@@ -277,6 +277,19 @@ export function observationOk(lens: string, o: unknown): boolean {
   }
 }
 
+/**
+ * The judged sentence numbers, ascending, that have no readable observation. Observations are read as decideVerdicts
+ * reads them: the first one with a numeric n wins for that n, and one for a number outside `judged` does not count.
+ */
+export function unanswered(lens: string, judged: Set<number>, observations: unknown): number[] {
+  const first = new Map<number, unknown>();
+  for (const o of Array.isArray(observations) ? observations : []) {
+    const n = (o as Obs | null)?.n;
+    if (o && typeof o === "object" && typeof n === "number" && !first.has(n)) first.set(n, o);
+  }
+  return [...judged].filter((n) => !observationOk(lens, first.get(n))).sort((x, y) => x - y);
+}
+
 /** The line a faulty sentence gets as its note: the check that failed, in its own words. */
 const CHECKS = {
   unsupported: "This claim has no evidence after it that a reader can check.",

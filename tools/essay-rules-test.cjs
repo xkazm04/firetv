@@ -22,6 +22,8 @@ const WANTED={
  argument:{faulty:{side:'wanders'},strong:{side:'pushes'},neutral:{side:'neutral'}},
  evidence:{faulty:{support:'opinion'},strong:{support:'checkable'},neutral:{support:'context'}},
 };
+// the sentences a fixture did not name, answered neutral only so the reading is whole: analyseEssay below leaves their entries out of the verdicts
+const filler=new Set();
 const asObservations=(req,r)=>{
  if(!r||!r.json||!('verdicts' in r.json)||!req.schema?.properties?.observations)return r;
  const lens=(/Lens for this reading: (\w+)/.exec(req.system)||[])[1]?.toLowerCase();
@@ -36,10 +38,20 @@ const asObservations=(req,r)=>{
   const {verdict,...keep}=e;
   return {...keep,...field(e)};
  }):verdicts;
+ // E7: a reading must answer every sentence it judges, so a fixture that names only some gets a neutral observation for the rest
+ if(req.use==='essay-read'&&Array.isArray(observations)){
+  const para=/Judge only paragraph \d+ of \d+: sentences (\d+) to (\d+)/.exec(req.prompt);
+  for(const [n] of text){
+   if(para&&(n<Number(para[1])||n>Number(para[2])))continue;
+   if(!observations.some(o=>o&&o.n===n)){observations.push({n,note:'ok',...field({verdict:'neutral'})});filler.add(n);}
+  }
+ }
  return {...r,json:{...rest,observations}};
 };
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return Promise.resolve(answer(req)).then(r=>asObservations(req,r));};
-const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
+const {NOT_EVERY_SENTENCE}=require(path.join(root,'src/lib/desk/essay.ts'));
+const deskEssayModule=require(path.join(root,'src/lib/desk/essay.ts'));
+const analyseEssay=async(...args)=>{filler.clear();const a=await deskEssayModule.analyseEssay(...args);return {...a,verdicts:a.verdicts.filter(v=>!filler.has(v.n))};};
 const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const {lensStandings,writingTotals}=require(path.join(root,'src/tv/writingRows.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
@@ -158,9 +170,9 @@ test('a single-sentence paragraph admits verdict 1 and nothing else',async()=>{
 });
 test('verdicts the model malformed never reach the screen, and never throw',async()=>{
  for(const verdicts of [undefined,null,'not an array',[{n:'1',verdict:'strong',note:'a string number'}],[{verdict:'strong',note:'no number at all'}]]){
-  answer=reply({verdicts,summary:'s'});
-  const a=await analyseEssay(THREE,'language','essay-anon');
-  assert.deepEqual(a.verdicts,[],JSON.stringify(verdicts));
+  answer=obsReply(verdicts);
+  // E7: an answer no sentence of which can be read is a reading of no sentence, so it fails and counts nothing
+  await assert.rejects(analyseEssay(THREE,'language','essay-anon'),{message:NOT_EVERY_SENTENCE},JSON.stringify(verdicts));
  }
 });
 // ---- the fix: how to rephrase a faulty sentence, as a named move and a pattern with [slots] - never the sentence rewritten ----
@@ -237,7 +249,7 @@ test('the model is asked for a fix only on a faulty verdict, as a move and a slo
  assert.match(system,/\[slot\]/);
  assert.match(system,/No fix on strong or neutral verdicts/);
  const item=schema.properties.observations.items;
- assert.deepEqual(item.required,['n','note'],'fix is optional: a model that omits it still answers inside the schema');
+ assert.deepEqual(item.required,['n','note','side'],'the deciding field of the lens is required; fix is optional: a model that omits it still answers inside the schema');
  assert.deepEqual(item.properties.fix.required,['move','pattern']);
  assert.equal(item.properties.fix.properties.pattern.maxLength,undefined,'no length limit in the schema: an over-long fix loses the fix, not the reading');
 });
@@ -918,6 +930,8 @@ test('D1: a piece is read with paragraphs named in the prompt; verdicts still an
 // ---- the model observes, code rules (challenge essay-master-A): every verdict is decided in rules/essay ----
 // These send observations directly. Where a legacy `verdict` rides beside one it is there to show it is ignored.
 const obsReply=(observations)=>reply({observations,summary:'s'});
+// the deciding field that reads as neutral on each lens: a whole answer for a fixture that only needs the request
+const FULL_FIELD={structure:{job:'none'},argument:{side:'neutral'},evidence:{support:'context'},language:{issues:[]}};
 const verdictsOf=(a)=>a.verdicts.map(v=>[v.n,v.verdict]);
 
 test('essay-master-A case 1: Structure - only the FIRST unsupported claim is faulty; a claim with a marked evidence sentence after it is strong; the legacy verdict is ignored',async()=>{
@@ -949,12 +963,12 @@ test('essay-master-A case 3: Language - a vague word must be in the sentence; le
  assert.deepEqual(verdictsOf(a),[[1,'neutral']],'the word is not in the sentence: the issue is dropped');
  const long=`The ${Array(LONG_SENTENCE_WORDS-1).fill('long').join(' ')} end.`;
  assert.equal(splitSentences(long)[0].words,LONG_SENTENCE_WORDS+1,'a 36-word sentence');
- answer=obsReply([]);
+ answer=obsReply([{n:1,issues:[],note:'long'}]);
  const b=await analyseEssay(long,'language','oa-3');
  assert.deepEqual(verdictsOf(b),[[1,'faulty']],'no observed issue, faulty by length alone');
  assert.match(b.verdicts[0].note,/36 words/);
  const edge=`The ${Array(LONG_SENTENCE_WORDS-2).fill('long').join(' ')} end.`;
- assert.equal((await analyseEssay(edge,'language','oa-3')).verdicts.length,0,'exactly at the limit is fine');
+ assert.equal((await analyseEssay(edge,'language','oa-3')).verdicts.filter(v=>v.verdict==='faulty').length,0,'exactly at the limit is fine');
  answer=obsReply([{n:1,issues:[{kind:'vague',word:'important'}],note:''}]);
  const c=await analyseEssay('Sleep is important.','language','oa-3');
  assert.deepEqual(verdictsOf(c),[[1,'faulty']]);
@@ -1001,7 +1015,7 @@ test('essay-master-A case 6: the learner record counts code\'s verdicts, not the
 test('essay-master-A case 7: the prompt no longer asks for a verdict; the withholding rules are still in it verbatim',async()=>{
  const {NEVER_REWRITE,PATTERN_RULE}=deskEssay();
  for(const lens of ['structure','argument','evidence','language']){
-  seen=[];answer=obsReply([]);
+  seen=[];answer=obsReply([1,2,3].map(n=>({n,note:'x',...FULL_FIELD[lens]})));
   await analyseEssay(THREE,lens,'oa-7');
   const {system,schema}=seen[0];
   assert.doesNotMatch(system,/'faulty' for a real problem/);
@@ -1025,13 +1039,13 @@ test('essay-master-A case 8 (GUARD): observations that cannot be read are neutra
  ];
  for(const observations of junk){
   answer=obsReply(observations);
-  const a=await analyseEssay(THREE,'structure','oa-8');
-  assert.deepEqual(a.verdicts,[],JSON.stringify(observations));
+  // E7: observations the desk cannot read leave every sentence unanswered: the reading fails and counts nothing
+  await assert.rejects(analyseEssay(THREE,'structure','oa-8'),{message:NOT_EVERY_SENTENCE},JSON.stringify(observations));
  }
  for(const [lens,bad] of [['structure',{job:'boss'}],['argument',{side:'sideways'}],['evidence',{support:'vibes'}],['language',{issues:'many'}]]){
-  answer=obsReply([{n:1,...bad,note:'x',fix:CONCEDE}]);
-  const a=await analyseEssay(THREE,lens,'oa-8');
-  assert.deepEqual(a.verdicts,[{n:1,verdict:'neutral',note:'x'}],`${lens}: an unknown value is neutral, with its fix dropped`);
+  // E7: an unknown value is an unreadable sentence, and a reading with one fails whole; the same value on a rewrite already did
+  answer=obsReply([1,2,3].map(n=>({n,...(n===1?bad:FULL_FIELD[lens]),note:'x',fix:CONCEDE})));
+  await assert.rejects(analyseEssay(THREE,lens,'oa-8'),{message:NOT_EVERY_SENTENCE},`${lens}: an unknown value leaves its sentence unanswered`);
  }
  // a fix on a sentence code rules neutral or strong is dropped; on a faulty one it stays
  answer=obsReply([{n:1,side:'pushes',fix:CONCEDE,note:'a'},{n:2,side:'wanders',fix:CONCEDE,note:'b'},{n:3,side:'neutral',fix:CONCEDE,note:'c'}]);
@@ -1400,4 +1414,60 @@ test('E6-4: the TV caption and the spoken line both draw summaryLine',()=>{
  assert.match(sp,/summaryLine\(s\.essay\)/);
  const {spokenLine}=require(path.join(root,'src/lib/desk/spoken.ts'));
  assert.equal(spokenLine({screen:'forensic',essay:{sentences:[{n:1},{n:2}],verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'Fine.'}}),'1 of 2 sentences to fix. Fine.');
+});
+
+// ---- E7 (essay full r1 craft-1): a reading that leaves a judged sentence unanswered fails and records nothing ----
+test('E7-1: unanswered() names the judged sentences with no readable observation, ascending, first observation wins',()=>{
+ const {unanswered}=rules();
+ const ok={structure:{job:'claim'},argument:{side:'pushes'},evidence:{support:'checkable'},language:{issues:[]}};
+ const bad={structure:{job:'boss'},argument:{side:'sideways'},evidence:{support:'vibes'},language:{issues:'many'}};
+ const judged=new Set([3,1,2]);
+ for(const lens of Object.keys(ok)){
+  assert.deepEqual(unanswered(lens,judged,[]),[1,2,3],`${lens}: nothing answered`);
+  assert.deepEqual(unanswered(lens,judged,undefined),[1,2,3],`${lens}: not a list`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:3,...ok[lens]}]),[2],`${lens}: 1 and 3 answered`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:2,...ok[lens]},{n:3,...ok[lens]}]),[],`${lens}: all answered`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...bad[lens]},{n:1,...ok[lens]},{n:2,...ok[lens]},{n:3,...ok[lens]}]),[1],`${lens}: the first observation for 1 is unreadable, a later readable one does not rescue it`);
+  assert.deepEqual(unanswered(lens,judged,[{n:1,...ok[lens]},{n:2,...ok[lens]},{n:9,...ok[lens]}]),[3],`${lens}: an observation outside judged does not count`);
+  assert.deepEqual(unanswered(lens,judged,[{n:'1',...ok[lens]},null,'x',{...ok[lens]}]),[1,2,3],`${lens}: no numeric n is no answer`);
+ }
+});
+const e7Snapshot=(id)=>JSON.stringify(getLearner(id));
+const E7_THREE='Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
+test('E7-2: a reading that answers only sentences 2 and 3 fails with NOT_EVERY_SENTENCE and records nothing',async()=>{
+ const id='e7-partial',before=e7Snapshot(id);
+ answer=obsReply([{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}]);
+ const log=console.error,lines=[];console.error=(...a)=>lines.push(a.join(' '));
+ try{await assert.rejects(analyseEssay(E7_THREE,'evidence',id),(e)=>e.constructor.name==='DeskSaid'&&e.message===NOT_EVERY_SENTENCE);}finally{console.error=log;}
+ assert.equal(e7Snapshot(id),before,'the history, the writing estimate and the digest are unchanged');
+ assert.equal(lines.length,1,'one server line');assert.match(lines[0],/evidence/);assert.match(lines[0],/\b1\b/);
+ assert.ok(!lines[0].includes('Homework')&&!lines[0].includes('no evidence'),'no sentence text and no note in the line');
+});
+test('E7-3: observations: [] is not a clean reading - it fails and records nothing',async()=>{
+ const id='e7-empty',before=e7Snapshot(id);
+ for(const lens of ['structure','argument','evidence','language']){
+  answer=obsReply([]);
+  const log=console.error;console.error=()=>{};
+  try{await assert.rejects(analyseEssay(E7_THREE,lens,id),{message:NOT_EVERY_SENTENCE},lens);}finally{console.error=log;}
+ }
+ assert.equal(e7Snapshot(id),before);
+});
+test('E7-6 (guard): a full answer records exactly as before',async()=>{
+ const id='e7-full';
+ answer=obsReply([{n:1,support:'context',note:'ok'},{n:2,support:'opinion',note:'no evidence'},{n:3,support:'context',note:'ok'}]);
+ const a=await analyseEssay(E7_THREE,'evidence',id);
+ assert.deepEqual(a.verdicts.map(v=>[v.n,v.verdict]),[[1,'neutral'],[2,'faulty'],[3,'neutral']]);
+ const l=getLearner(id);
+ assert.equal(l.history.at(-1).detail,'1 of 3 sentences to fix');assert.equal(l.writing.evidence.seen,1);
+});
+test('E7-7: the request makes full coverage reachable - each lens requires its own deciding field beside n and note',async()=>{
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ assert.match(src,/const DECIDING[^=]*=\s*\{\s*structure: "job", argument: "side", evidence: "support", language: "issues"\s*\}/);
+ assert.match(src,/required: \["n", "note", DECIDING\[lens\.id\] \?\? DECIDING\.structure\]/);
+ assert.match(src,/give issues: \[\]/);assert.match(src,/Give one observation for every sentence you are asked to judge\./);
+ for(const [lens,field] of [['structure','job'],['argument','side'],['evidence','support'],['language','issues']]){
+  seen=[];answer=obsReply([1,2,3].map(n=>({n,note:'x',...FULL_FIELD[lens]})));
+  await analyseEssay(E7_THREE,lens,'e7-schema');
+  assert.deepEqual(seen[0].schema.properties.observations.items.required,['n','note',field],`${lens}: the deciding field is required`);
+ }
 });

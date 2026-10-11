@@ -6,9 +6,10 @@
  * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, pieceBeingRead, pieceReadingLine, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, pieceBeingRead, pieceReadingLine, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
+import { DeskSaid } from "./job";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
@@ -20,6 +21,8 @@ type Lens = (typeof ANALYSIS_TYPES)[number];
  * those (rules/essay decideVerdicts). What is observed depends on the lens.
  */
 const FIX = { type: "object", properties: { move: { type: "string" }, pattern: { type: "string" } }, required: ["move", "pattern"] };
+/** The one field each lens decides on: required in the request, so a reading can cover every sentence. */
+const DECIDING: Record<string, string> = { structure: "job", argument: "side", evidence: "support", language: "issues" };
 const OBSERVED: Record<string, Record<string, unknown>> = {
   structure: { job: { type: "string", enum: [...JOBS] }, supports: { type: "integer" } },
   argument: { side: { type: "string", enum: [...SIDES] }, turnsBack: { type: "boolean" } },
@@ -30,13 +33,13 @@ const OBSERVE: Record<string, string> = {
   structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none. For an evidence sentence, or a claim that backs an earlier claim, add supports: the number of the claim it backs.",
   argument: "For each sentence, report the side it takes: side is pushes (for the paragraph's claim), against, wanders or neutral; turnsBack is true when a sentence on the other side turns back to the claim.",
   evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context. For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion.",
-  language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. Report no issue for a sentence that has none; the desk counts length itself.",
+  language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. For a sentence with no issue, give issues: []; the desk counts length itself.",
 };
 const observedOf = (lens: Lens) => OBSERVED[lens.id] ?? OBSERVED.structure;
 const schemaFor = (lens: Lens) => ({
   type: "object",
   properties: {
-    observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note"] } },
+    observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note", DECIDING[lens.id] ?? DECIDING.structure] } },
     summary: { type: "string" },
   },
   required: ["observations", "summary"],
@@ -50,6 +53,8 @@ export const NEVER_REWRITE = "Never rewrite their sentences for them.";
 export const PATTERN_RULE =
   "A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts.";
 
+/** A reading that left a judged sentence unanswered counts nothing: it fails with this and records nothing. */
+export const NOT_EVERY_SENTENCE = "The desk did not get a reading of every sentence, so it counted nothing. Send it again.";
 type Voice = ReturnType<typeof voiceOf>;
 const lensOf = (type: string): Lens => ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
 
@@ -68,6 +73,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Observe each sentence by its number and report only what you see; the desk decides what is done well and what needs fixing. ` +
       `${OBSERVE[lens.id] ?? OBSERVE.structure} ` +
+      `Give one observation for every sentence you are asked to judge. ` +
       `Each note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
@@ -82,6 +88,11 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
   // any other number, or an `observations` that is not a list at all, is dropped. Which sentences are faulty is
   // decided by code (rules/essay decideVerdicts), which also keeps a fix only on a faulty sentence (cleanFix).
   const seen = (Array.isArray(json?.observations) ? json.observations : []).filter((o) => judged.has(o?.n as number));
+  const missing = unanswered(lens.id, judged, seen);
+  if (missing.length) {
+    console.error(`essay ${lens.id} reading: no readable observation for sentence${missing.length === 1 ? "" : "s"} ${missing.join(", ")}`);
+    throw new DeskSaid(NOT_EVERY_SENTENCE);
+  }
   const verdicts = focus ? [] : decideVerdicts(lens.id, sentences, judged, seen);
   return { verdicts, seen, summary: typeof json?.summary === "string" ? json.summary : "", provider };
 }

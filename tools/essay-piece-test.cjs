@@ -202,7 +202,7 @@ test('route: limits refused before any call; the TV opens on the first paragraph
 });
 test('a one-paragraph reading is unchanged: no piece, the paragraph prompt', async () => {
   const { analyseEssay } = require(src('lib/desk/essay.ts'));
-  seen = []; answer = async () => ({ json: { verdicts: [{ n: 1, verdict: 'strong', note: 'Good.' }], summary: 'ok' }, provider: 'test', ms: 1 });
+  seen = []; answer = async () => ({ json: { verdicts: [{ n: 1, verdict: 'strong', note: 'Good.' }, { n: 2, verdict: 'neutral', note: 'Fine.' }], summary: 'ok' }, provider: 'test', ms: 1 });
   const a = await analyseEssay('One good sentence. And another one.', 'structure', 'ema', 15);
   assert.equal(a.piece, undefined); assert.doesNotMatch(seen[0].prompt, /Judge only paragraph/); assert.match(seen[0].prompt, /The student's paragraph,/);
 });
@@ -368,7 +368,7 @@ test('E3-b guards: 409 with nobody at the desk and 428 TEXT_NOTICE leave the sta
 
 // ---- E4-b (6c): a sentence of a paragraph the desk did not rule has no rewrite; the route refuses it with that paragraph's line ----
 const E4B_PIECE = 'Phones should be banned in class. They distract everyone.\n\nA 2020 study found 40% of lessons were interrupted. This shows phones cost time.\n\n' + CZ_R7 + '\n\nIn conclusion, phones should be banned. Teachers agree.';
-const E4B_OBS = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'evidence', supports: 1 }, { n: 4, job: 'link' }, { n: 7, job: 'link' }, { n: 8, job: 'context' }];
+const E4B_OBS = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'evidence', supports: 1 }, { n: 4, job: 'link' }, { n: 7, job: 'link' }, { n: 8, job: 'context' }, { n: 9, job: 'context' }];
 const e4bDone = async () => {
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
   seen = []; answer = async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(E4B_OBS)(req); };
@@ -397,4 +397,41 @@ test('E4-b guard: a piece still being read answers REWRITE_WHILE_READING first, 
   dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); dispatch({ type: 'essay.set', analysis: progress[0], owner: 'ema' });
   seen = []; const r = await post({ kind: 'rewrite', n: 1, text: 'x' });
   assert.equal(r.status, 400); assert.equal((await r.json()).error, R.REWRITE_WHILE_READING); assert.equal(seen.length, 0);
+});
+
+// ---- E7 (essay full r1 craft-1): a reading that leaves a judged sentence unanswered fails and records nothing ----
+const { NOT_EVERY_SENTENCE } = require(src('lib/desk/essay.ts'));
+const quietly = async (fn) => { const log = console.error; console.error = () => {}; try { return await fn(); } finally { console.error = log; } };
+const E7_PARA = 'Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
+test('E7-4: POST analyse kind essay with a reading that misses sentence 1 answers 502 with the line, says it on the status line, records nothing', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = [];
+  const before = JSON.stringify(getLearner('ema'));
+  answer = async () => ({ json: { observations: [{ n: 2, support: 'opinion', note: 'x' }, { n: 3, support: 'context', note: 'y' }], summary: 's' }, provider: 'test', ms: 1 });
+  const r = await quietly(() => post({ kind: 'essay', text: E7_PARA, type: 'evidence' }));
+  assert.equal(r.status, 502); assert.equal((await r.json()).error, NOT_EVERY_SENTENCE);
+  assert.equal(status(), NOT_EVERY_SENTENCE); assert.equal(JSON.stringify(getLearner('ema')), before, 'nothing recorded');
+});
+test('E7-5: a piece whose paragraph 2 misses a sentence: paragraph 2 is failed, the history counts only paragraph 1, and send-again with a full answer reads it', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = [];
+  const TWO = 'Phones should be banned in class. They distract everyone.\n\nA 2020 study found 40% of lessons were interrupted. This shows phones cost time.';
+  const obs = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'evidence', supports: 1 }, { n: 4, job: 'link' }];
+  answer = async (req) => { const r = await observing(obs)(req); return /paragraph 2 of/.test(req.prompt) ? { ...r, json: { ...r.json, observations: r.json.observations.filter((o) => o.n !== 4) } } : r; };
+  const res = await quietly(() => post({ kind: 'piece', text: TWO, type: 'structure' }));
+  assert.equal(res.status, 200);
+  const a = getSession().essay;
+  assert.deepEqual(a.piece.read, [0]); assert.deepEqual(a.piece.failed, [1]);
+  assert.match(getLearner('ema').history.at(-1).detail, /^\d of 2 sentences to fix, 2 paragraphs$/, 'only paragraph 1\'s two sentences are counted');
+  answer = observing(obs);
+  const again = await post({ kind: 'piece-again' });
+  assert.equal(again.status, 200);
+  const b = getSession().essay;
+  assert.deepEqual(b.piece.failed, []); assert.deepEqual([...b.piece.read].sort(), [0, 1]);
+  assert.match(getLearner('ema').history.at(-1).detail, /^\d of 4 sentences to fix, 2 paragraphs$/);
+});
+test('E7-6 (guard): a piece answered in full records exactly as before', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = [];
+  answer = observing(OBS_A);
+  const res = await post({ kind: 'piece', text: SECTION_A, type: 'structure' });
+  assert.equal(res.status, 200); assert.deepEqual(getSession().essay.piece.failed, []);
+  assert.match(getLearner('ema').history.at(-1).detail, /^\d of 6 sentences to fix, 3 paragraphs$/);
 });
