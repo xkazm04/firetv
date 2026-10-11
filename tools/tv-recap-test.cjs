@@ -578,3 +578,21 @@ test('13-i RC7: the phone\'s maths line says how many hints needed a second; no 
  assert.equal(line({hints:3,hard:['a']}),'Math Buddy - 3 hints, 1 needed a second');
  assert.equal(line({hints:1}),'Math Buddy - 1 hint');
 });
+
+test('13-i RC4: railOf keeps a reading with something to fix citron and a clean one never',()=>{
+ const {railOf}=recap();
+ for(const [of,against,arrows,back] of [[5,2,5,2],[12,3,12,3],[14,2,12,2],[14,14,12,12],[30,1,12,1],[30,29,12,11],[20,0,12,0],[0,0,0,0]])
+  assert.deepEqual(railOf(of,against),{arrows,back},`railOf(${of},${against})`);
+});
+test('13-i RC3: five readings draw the last three rails and "and 2 earlier"; maths sets do the same',()=>{
+ const hist=[10,11,12,13,14].map((h,i)=>WR(h,'Evidence',`${i+1} of 14 sentences to fix`));
+ const html=draw(session({history:hist}),NOW);
+ assert.equal((html.match(/data-role="recap-reading"/g)||[]).length,3);
+ assert.equal((html.match(/data-role="recap-earlier"/g)||[]).length,1);
+ assert.match(html,/and 2 earlier/);
+ const sets=[10,11,12,13,14].map((h)=>({at:TODAY(h),kind:'practice',label:'Two-step equations',detail:'3 of 6 right'}));
+ const m=draw(session({history:sets}),NOW);
+ assert.equal((m.match(/data-role="recap-set"/g)||[]).length,3);
+ assert.match(m,/and 2 earlier/);
+ assert.doesNotMatch(draw(session({history:hist.slice(0,3)}),NOW),/recap-earlier/,'three readings need no earlier line');
+});

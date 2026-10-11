@@ -14,7 +14,7 @@ import { fmt } from "./useSession";
 import { stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
-import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import { recapRows, recapCaption, railOf, RECAP_READINGS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
 import { Mark as LingaMark } from "@/english/OpenDoor";
@@ -329,15 +329,20 @@ const PEN_RING = <svg className="rc-ring" viewBox="0 0 46 40" aria-hidden="true"
 /** Lamplight's unsure mark: no tick and no slip, the pen's ring dashed in the paper's "not sure" blue. */
 const PEN_ASK = <svg className="rc-ask" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
 const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
+/** The one small line under a tile that drew its last three: how many came before them. Nothing when none did. */
+function Earlier({ n }: { n: number }) {
+  return n > 0 ? <div className="rc-earlier" data-role="recap-earlier">{`and ${n} earlier`}</div> : null;
+}
 function RecapMaths({ t }: { t: MathsTile }) {
   const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
   return (<>
     <div className="rc-head"><MathsMark /><div className="mb-word">Math <em>Buddy</em></div></div>
     <div className="rc-sheet">
       {t.empty ? <div className="rc-none">{t.empty}</div> : <>
-        {t.sets.slice(-3).map((x, k) => (
+        {t.sets.slice(-RECAP_READINGS).map((x, k) => (
           <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => { const v = i < x.right ? "right" : i >= x.of - (x.unsure ?? 0) ? "unsure" : "look"; return <i key={i} data-v={v}>{v === "right" ? PEN_TICK : v === "unsure" ? PEN_ASK : PEN_RING}</i>; })}</div>
         ))}
+        <Earlier n={t.sets.length - RECAP_READINGS} />
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
         {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}
       </>}
@@ -357,12 +362,15 @@ function RecapEssay({ t }: { t: EssayTile }) {
   return (<>
     <div className="rc-head"><EssayBrand /></div>
     {t.empty ? <div className="rc-none">{t.empty}</div>
-      : <div className="rc-reads">{t.readings.slice(-3).map((r, k) => (
-        <div key={k} className="rc-read" data-role="recap-reading">
-          <div className="rc-lens">{r.lens}</div>
-          <div className="rc-rail">{Array.from({ length: Math.min(r.of, 12) }, (_, i) => { const back = i >= r.of - r.against; return <i key={i} data-against={back || undefined}><EssayArrow len={72} h={34} against={back} color="currentColor" /></i>; })}</div>
-        </div>
-      ))}</div>}
+      : <div className="rc-reads">{t.readings.slice(-RECAP_READINGS).map((r, k) => {
+        const rail = railOf(r.of, r.against);
+        return (
+          <div key={k} className="rc-read" data-role="recap-reading">
+            <div className="rc-lens">{r.lens}</div>
+            <div className="rc-rail">{Array.from({ length: rail.arrows }, (_, i) => { const back = i >= rail.arrows - rail.back; return <i key={i} data-against={back || undefined}><EssayArrow len={72} h={34} against={back} color="currentColor" /></i>; })}</div>
+          </div>
+        );
+      })}<Earlier n={t.readings.length - RECAP_READINGS} /></div>}
   </>);
 }
 

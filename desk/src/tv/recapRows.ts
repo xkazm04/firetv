@@ -72,6 +72,19 @@ export function recapRows(s: Session, now: number): RecapTile[] {
 
 /** How many readings or sets the TV tile draws, and the phone line lists. */
 export const RECAP_READINGS = 3;
+/** The most arrows or marks one rail draws. */
+export const RAIL_MAX = 12;
+/**
+ * The essay rail for a reading of `of` sentences with `against` to fix: how many arrows to draw and how many of them,
+ * at the end, turn citron. Up to 12 sentences it is exact. Past 12 the rail is a scale of 12: a reading with something
+ * to fix always shows at least one citron arrow and never all of them unless every sentence needs fixing, and a
+ * reading with nothing to fix shows none.
+ */
+export function railOf(of: number, against: number): { arrows: number; back: number } {
+  if (of <= RAIL_MAX) return { arrows: of, back: against };
+  const back = against <= 0 ? 0 : against >= of ? RAIL_MAX : Math.min(RAIL_MAX - 1, Math.max(1, Math.round((RAIL_MAX * against) / of)));
+  return { arrows: RAIL_MAX, back };
+}
 const NUMBER = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 /**
  * How many things tonight came back to look at together: the sets' slips and the items the desk was not sure of

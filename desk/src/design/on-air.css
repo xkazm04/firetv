@@ -275,6 +275,8 @@
 .rc .rc-em .em-wm { font-size: 40px; }
 .rc .rc-reads { margin-top: 56px; display: flex; flex-direction: column; gap: 48px; }
 .rc .rc-lens { font: 600 32px/1 var(--em-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--em-mute); }
+.rc .rc-earlier { font: 600 26px/1 var(--em-mono); letter-spacing: .08em; color: var(--em-mute); }
+.rc .rc-mb .rc-earlier { font: 600 30px/1 var(--mb-hand, inherit); letter-spacing: 0; color: var(--mb-blue); }
 .rc .rc-rail { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 16px 14px; }
 .rc .rc-rail i { display: block; color: rgba(238, 233, 224, .5); }
 .rc .rc-rail i[data-against] { color: var(--em-cit); }
