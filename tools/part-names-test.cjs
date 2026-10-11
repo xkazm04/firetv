@@ -51,7 +51,10 @@ test('2: a single item, and the hint, sentence, forensic and break screens, spea
  assert.equal(spokenLine({...s,screen:'hint',hint:{stage:1,hint1,hint2}}),'Look at Number 6 again.','the hint is not renamed');
  assert.equal(spokenLine({...s,screen:'hint',hint:{stage:2,hint1,hint2}}),'Second.');
  assert.equal(spokenLine({...s,screen:'sentence',english:{explanation:'Because.'}}),'Because.');
- assert.equal(spokenLine({...s,screen:'forensic',essay:{summary:'In short.'}}),'In short.');
+ const said=spokenLine({...s,screen:'forensic',essay:{sentences:[{n:1,text:'One.'},{n:2,text:'Two.'}],verdicts:[{n:1,verdict:'faulty',note:'Name the claim first.'},{n:2,verdict:'strong',note:'Good.'}],summary:'In short.'}});
+ assert.equal(said,'1 of 2 sentences to fix. Start with sentence 1: Name the claim first.','the forensic screen speaks the summary line from code');
+ assert.ok(!said.includes('In short.'),'the model prose is not spoken');
+ assert.equal(spokenLine({...s,screen:'forensic',essay:{summary:'In short.'}}),'','no sentences: nothing, as essay-rules rules for E9');
  assert.equal(spokenLine({...s,screen:'break'}),'Time for a break.');
  assert.equal(spokenLine({...s,screen:'practice'}),'');
 });
