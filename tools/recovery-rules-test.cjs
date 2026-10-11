@@ -85,28 +85,28 @@ test('validation: an unknown code is dropped, not guessed; only-unknown codes la
   assert.equal(R.cleanPaper([it('1', 0, 1, ['GCSE'])]).droppedCodes[0].code, '', 'a code naming the board is not echoed');
 });
 
-test('a full-marks item adds nothing; an item with two codes counts in full against both', () => {
+test('a full-marks item adds nothing; an item with two codes shares its loss in whole marks', () => {
   const full = R.recovery([it('1', 3, 3, ['N10', 'N3'])]);
   assert.deepEqual(full.topics, []); assert.deepEqual(full.notOnDesk, []); assert.deepEqual(full.totals, { marks: 3, outOf: 3, lost: 0 });
   const r = R.recovery([it('5(b)', 1, 4, ['N10', 'G20']), it('6', 2, 2, ['G20'])]);
   assert.deepEqual(r.topics.map((t) => [t.id, t.lost, t.items, t.codes]).sort(), [
-    ['dec-convert', 3, ['5(b)'], ['N10']], ['pythagoras', 3, ['5(b)'], ['G20']],
-  ], 'both statements lost the 3 marks; the full-marks item 6 is behind nothing');
+    ['dec-convert', 2, ['5(b)'], ['N10']], ['pythagoras', 1, ['5(b)'], ['G20']],
+  ], 'the 3 lost marks are shared 2 and 1, the first code taking the odd mark; the full-marks item 6 is behind nothing');
   assert.equal(r.totals.lost, 3, 'the paper lost 3, once');
   const gap = R.recovery([it('7', 0, 2, ['N3', 'N4'])]);
-  assert.deepEqual(gap.notOnDesk.map((o) => [o.code, o.lost]), [['N3', 2], ['N4', 2]]);
+  assert.deepEqual(gap.notOnDesk.map((o) => [o.code, o.lost]), [['N3', 1], ['N4', 1]], 'two lost marks, one to each statement');
 });
 
 test('two statements on one topic give one entry with the sum', () => {
   // N11, R4 and R5 all touch ratio-share only
   const r = R.recovery([it('1', 1, 3, ['N11']), it('2(a)', 0, 2, ['R4']), it('2(b)', 2, 5, ['R5'])]);
   assert.deepEqual(r.topics, [{ id: 'ratio-share', name: topicIn('ratio-share').name, lost: 7, items: ['1', '2(a)', '2(b)'], codes: ['N11', 'R4', 'R5'] }]);
-  // one item reaching one topic through two of its codes counts once there (and in full on each statement)
+  // one item reaching one topic through two of its codes counts once there, and it is one destination
   const one = R.recovery([it('3', 0, 4, ['R4', 'R5'])]);
   assert.deepEqual(one.topics.map((t) => [t.id, t.lost, t.items, t.codes]), [['ratio-share', 4, ['3'], ['R4', 'R5']]]);
-  // N12 touches two topics: both get the item
+  // N12 touches two topics: both get a share of the item
   const two = R.recovery([it('4', 1, 3, ['N12'])]);
-  assert.deepEqual(ids(two).sort(), ['frac-of-amount', 'pct-of-amount']); assert(two.topics.every((t) => t.lost === 2));
+  assert.deepEqual(ids(two).sort(), ['frac-of-amount', 'pct-of-amount']); assert(two.topics.every((t) => t.lost === 1));
 });
 
 test('the prerequisite rule: a later topic with more lost marks still comes after its own prerequisite', () => {
@@ -118,9 +118,9 @@ test('the prerequisite rule: a later topic with more lost marks still comes afte
   const p = R.recovery([it('1', 0, 5, ['G20']), it('2', 0, 1, ['G16'])]);
   assert.deepEqual(ids(p), ['area', 'pythagoras']);
   // a chain: pct-change needs pct-of-amount needs dec-convert
-  const c = R.recovery([it('1', 0, 1, ['N10']), it('2', 0, 3, ['N12']), it('3', 0, 2, ['S4'])]);
+  const c = R.recovery([it('1', 0, 1, ['N10']), it('2', 0, 6, ['N12']), it('3', 0, 2, ['S4'])]);
   assert.deepEqual(ids(c), ['frac-of-amount', 'dec-convert', 'pct-of-amount', 'mean-range'],
-    'pct-of-amount (3) pulls dec-convert (1) forward; frac-of-amount (3) needs nothing and goes first by its own lost marks');
+    'N12 shares its 6 as 3 and 3; pct-of-amount (3) pulls dec-convert (1) forward; frac-of-amount (3) needs nothing and goes first by its own lost marks');
   // unrelated topics go by lost marks, ties by path order
   const u = R.recovery([it('1', 0, 2, ['P3']), it('2', 0, 3, ['S4']), it('3', 0, 1, ['A1']), it('4', 0, 2, ['G16'])]);
   assert.deepEqual(u.topics.map((t) => [t.id, t.lost]), [['mean-range', 3], ['area', 2], ['probability', 2], ['linear-one-step', 1]]);
@@ -138,10 +138,10 @@ test('the prerequisite rule: a later topic with more lost marks still comes afte
 test('notOnDesk: a gap statement keeps its can text and no topic; a higher-only statement is flagged, never dropped', () => {
   const r = R.recovery([it('1', 0, 2, ['N3']), it('2', 1, 5, ['A13', 'N10']), it('3', 0, 1, ['N3']), it('4', 0, 4, ['P8'])]);
   assert.deepEqual(r.notOnDesk, [
-    { code: 'A13', can: G.STATEMENTS.find((s) => s.code === 'A13').can, lost: 4, items: ['2'], foundation: false },
     { code: 'P8', can: G.STATEMENTS.find((s) => s.code === 'P8').can, lost: 4, items: ['4'], foundation: true },
     { code: 'N3', can: G.STATEMENTS.find((s) => s.code === 'N3').can, lost: 3, items: ['1', '3'], foundation: true },
-  ], 'by lost marks, ties in statement order');
+    { code: 'A13', can: G.STATEMENTS.find((s) => s.code === 'A13').can, lost: 2, items: ['2'], foundation: false },
+  ], 'by lost marks; item 2 shares its 4 lost marks 2 and 2 with N10');
   assert.deepEqual(r.topics.map((t) => [t.id, t.items, t.codes]), [['dec-convert', ['2'], ['N10']]], 'no gap code reaches a topic');
   for (const t of r.topics) for (const c of t.codes) assert(G.STATEMENTS.find((s) => s.code === c).touches.includes(t.id));
   for (const s of G.STATEMENTS.filter((x) => !x.foundation)) {
@@ -153,10 +153,11 @@ test('notOnDesk: a gap statement keeps its can text and no topic; a higher-only 
 test('the sweep: every Foundation statement reaches a school-path topic or notOnDesk, in step with gcseCoverage()', () => {
   const cov = G.gcseCoverage(); const touched = [], gaps = [];
   for (const st of G.FOUNDATION) {
-    const r = R.recovery([it('1', 0, 2, [st.code])]);
+    const n = Math.max(1, cov.topics[st.code].length); // one lost mark for each topic it reaches
+    const r = R.recovery([it('1', 0, n, [st.code])]);
     assert.equal(r.topics.length + r.notOnDesk.length > 0, true, st.code);
     assert(!(r.topics.length && r.notOnDesk.length), `${st.code} is either on the desk or not`);
-    for (const t of r.topics) { assert(topicIn(t.id), t.id); assert(SCHOOL.has(t.id), `${t.id} is on the school path`); assert.equal(t.lost, 2); }
+    for (const t of r.topics) { assert(topicIn(t.id), t.id); assert(SCHOOL.has(t.id), `${t.id} is on the school path`); assert.equal(t.lost, 1); }
     assert.deepEqual(r.topics.map((t) => t.id).sort(), [...cov.topics[st.code]].sort(), st.code);
     if (r.topics.length) touched.push(st.code); else { gaps.push(st.code); assert.equal(r.notOnDesk[0].can, st.can); }
   }
@@ -185,4 +186,38 @@ test('no returned string names the board while the claim is off', () => {
   }
   assert(n > 1000, `${n} strings looked at`);
   for (const st of G.STATEMENTS) for (const s of strings(R.recovery([it('1', 0, 1, [st.code])]))) assert.doesNotMatch(s, /GCSE|1MA1|Edexcel/i, s);
+});
+
+test('RP2: a question lost marks are shared in whole marks, so the rows add up to the paper', () => {
+  const sum = (r) => r.topics.reduce((t, x) => t + x.lost, 0) + r.notOnDesk.reduce((t, x) => t + x.lost, 0) + r.unmapped.reduce((t, x) => t + x.outOf - x.marks, 0);
+  // (a) N2 touches three topics: 4 lost marks go 2, 1, 1 in the statement's order
+  const a = R.recovery([it('8', 0, 4, ['N2'])]);
+  assert.deepEqual(a.topics.map((t) => [t.id, t.lost]).sort(), [['dec-arith', 1], ['frac-add-sub', 2], ['frac-mul-div', 1]]);
+  assert.equal(sum(a), 4);
+  // (b) N12 touches frac-of-amount and pct-of-amount: 1 lost mark goes to the first only
+  const b = R.recovery([it('9', 2, 3, ['N12'])]);
+  assert.deepEqual(b.topics.map((t) => [t.id, t.lost, t.items]), [['frac-of-amount', 1, ['9']]], 'pct-of-amount is not listed');
+  // (c) over a seeded sweep: the rows add up to the paper and no row has lost 0
+  const codes = G.STATEMENTS.map((x) => x.code);
+  let seed = 7; const rnd = (n) => ((seed = (seed * 1103515245 + 12345) % 2147483648) % n);
+  for (let k = 0; k < 400; k++) {
+    const paper = Array.from({ length: 1 + rnd(8) }, (_, i) => { const o = 1 + rnd(6); return it(String(i + 1), rnd(o + 1), o, [codes[rnd(codes.length)], codes[rnd(codes.length)], codes[rnd(codes.length)]].slice(0, 1 + rnd(3))); });
+    const r = R.recovery(paper);
+    assert.equal(sum(r), r.totals.lost, 'paper ' + k);
+    assert(r.topics.every((t) => t.lost > 0) && r.notOnDesk.every((o) => o.lost > 0), 'paper ' + k + ' has a row of 0');
+  }
+  // (d) reachOf agrees with a direct reading of STATEMENTS for single codes, pairs and triples
+  const direct = (cs) => {
+    const seen = new Set(), topics = [], off = [];
+    for (const c of cs) {
+      const t = G.STATEMENTS.find((x) => x.code === c).touches.filter((id) => SCHOOL.has(id));
+      for (const [kind, id] of t.length ? t.map((x) => ['t', x]) : [['o', c]]) { if (seen.has(kind + id)) continue; seen.add(kind + id); (kind === 't' ? topics : off).push(id); }
+    }
+    return { topics, off };
+  };
+  for (const c of codes) assert.deepEqual(R.reachOf([c]), direct([c]), c);
+  for (let k = 0; k < 600; k++) {
+    const cs = [...new Set(Array.from({ length: 2 + rnd(2) }, () => codes[rnd(codes.length)]))];
+    assert.deepEqual(R.reachOf(cs), direct(cs), cs.join());
+  }
 });

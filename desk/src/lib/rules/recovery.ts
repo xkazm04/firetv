@@ -59,7 +59,7 @@ export interface CleanPaper {
   droppedCodes: DroppedCode[];
 }
 
-/** A desk topic where marks were lost: the sum over the items behind it, their labels and the codes that led here. */
+/** A desk topic where marks were lost: the sum of the shares of the items behind it, their labels and the codes that led here. */
 export interface RecoveryTopic { id: string; name: string; lost: number; items: string[]; codes: string[]; }
 /** A statement the desk has no topic for: its `can` text, never linked to a topic; `foundation: false` is flagged, never dropped. */
 export interface NotOnDesk { code: string; can: string; lost: number; items: string[]; foundation: boolean; }
@@ -159,14 +159,44 @@ function prereqsOf(id: string): Set<string> {
   return all;
 }
 
+/** A place an item's lost marks can go: a school-path topic, or a statement the path has no topic for. */
+interface Dest { kind: "topic" | "off"; id: string; codes: string[]; }
+
+/** The destinations of one cleaned item's codes, in the item's order; a place reached twice is kept once, at its first place. */
+function destinations(codes: string[]): Dest[] {
+  const out: Dest[] = [];
+  const put = (kind: Dest["kind"], id: string, code: string) => {
+    const d = out.find((x) => x.kind === kind && x.id === id);
+    if (d) { if (!d.codes.includes(code)) d.codes.push(code); } else out.push({ kind, id, codes: [code] });
+  };
+  for (const code of codes) {
+    const st = BY_CODE.get(code);
+    if (!st) continue;
+    const ids = st.touches.filter((id) => AT.has(id));
+    if (!ids.length) put("off", code, code);
+    else for (const id of ids) put("topic", id, code);
+  }
+  return out;
+}
+
+/**
+ * Where one cleaned item's codes lead: the school-path topic ids and the not-on-the-desk statement codes, each in the
+ * destination order. A code leads to the path topics its statement's `touches` lists, in that order; a code with none is
+ * its own destination. A place reached twice is listed once, at its first place.
+ */
+export function reachOf(codes: string[]): { topics: string[]; off: string[] } {
+  const d = destinations(codes);
+  return { topics: d.filter((x) => x.kind === "topic").map((x) => x.id), off: d.filter((x) => x.kind === "off").map((x) => x.id) };
+}
+
 /**
  * The recovery of a raw paper (cleaned by `cleanPaper` first, whose result it carries).
  *   - An item's lost marks are outOf - marks; a full-marks item adds nothing anywhere.
- *   - An item's lost marks count IN FULL against every code it names: a question that tests two statements was lost on
- *     both, so the statements' sums may add up to more than the paper lost.
- *   - Each statement leads to the school-path topics its `touches` names. A topic appears once: its `lost` is the sum
- *     over the distinct items behind it (an item reaching one topic through two of its codes counts once there), with
- *     those items' labels in paper order and the codes that led to it.
+ *   - An item's lost marks are SHARED, in whole marks, across the destinations its codes reach (`reachOf`). With L lost
+ *     marks and n destinations each gets floor(L / n), and the first (L mod n) get one more. The shares add up to L.
+ *   - A topic's `lost` is the sum of its shares. Its items and codes come only from items that gave it at least 1 mark;
+ *     so does a notOnDesk statement's. A destination whose total is 0 is left out, before the order is computed.
+ *   - Invariant: the topics' lost, plus the notOnDesk lost, plus the unmapped items' lost marks, equal `totals.lost`.
  *   - Order: most lost marks first, except that a topic never comes before one of its own prerequisites (followed
  *     through) that is also in the list. A prerequisite is pulled forward by the heaviest topic that needs it, so the
  *     largest loss is met as early as its prerequisites allow; ties go by path order.
@@ -185,21 +215,19 @@ export function recovery(raw: unknown): Recovery {
   for (const it of clean.items) {
     const lost = it.outOf - it.marks;
     if (lost <= 0) continue;
-    const reached = new Set<string>();
-    for (const code of it.codes) {
-      const st = BY_CODE.get(code)!;
-      const ids = st.touches.filter((id) => AT.has(id));
-      if (!ids.length) {
-        const o = off.get(code) ?? { code, can: st.can, lost: 0, items: [], foundation: st.foundation };
-        o.lost += lost; add(o.items, it.q); off.set(code, o);
-        continue;
+    const dests = destinations(it.codes), n = dests.length, base = Math.floor(lost / n), extra = lost % n;
+    dests.forEach((d, i) => {
+      const share = base + (i < extra ? 1 : 0);
+      if (share <= 0) return;
+      if (d.kind === "topic") {
+        const t = topics.get(d.id) ?? { id: d.id, name: SCHOOL[AT.get(d.id)!].name, lost: 0, items: [], codes: [] };
+        t.lost += share; add(t.items, it.q); for (const c of d.codes) add(t.codes, c); topics.set(d.id, t);
+      } else {
+        const st = BY_CODE.get(d.id)!;
+        const o = off.get(d.id) ?? { code: d.id, can: st.can, lost: 0, items: [], foundation: st.foundation };
+        o.lost += share; add(o.items, it.q); off.set(d.id, o);
       }
-      for (const id of ids) {
-        const t = topics.get(id) ?? { id, name: SCHOOL[AT.get(id)!].name, lost: 0, items: [], codes: [] };
-        if (!reached.has(id)) { t.lost += lost; reached.add(id); }
-        add(t.items, it.q); add(t.codes, code); topics.set(id, t);
-      }
-    }
+    });
   }
 
   // The order: a topic is free once every prerequisite of it in the list is placed; of the free ones, the heaviest goes

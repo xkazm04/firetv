@@ -4,7 +4,7 @@
  *
  * The kill figure: an item of the key counts as mapped to the right unit when the cleaned read has an item with the
  * key's label whose codes reach the same desk topics as the key's codes AND the same not-on-the-desk statements. Units
- * are found by `recovery()` itself (a one-item paper with a mark lost), so a statement's `touches` on the school path
+ * are found by `reachOf()`, the destinations `recovery()` shares a lost item across, so a statement's `touches` on the school path
  * are followed exactly as the recovery list follows them: two different codes that reach the same topics are the same
  * unit, and a gap statement is its own unit. The figure is mapped items / key items over every paper scored; the probe
  * passes at KILL_PERCENT or more (section g).
@@ -15,7 +15,7 @@
  *
  * Pure: types and library data only; no store, no engine, no fs, no model.
  */
-import { recovery, type CleanPaper, type PaperItem } from "./recovery";
+import { cleanPaper, reachOf, type CleanPaper, type PaperItem } from "./recovery";
 
 /** The kill row's bar (plan section g): under this share of items mapped to the right unit, the photo path is not offered. */
 export const KILL_PERCENT = 85;
@@ -43,10 +43,10 @@ export interface RunScore {
 /** Two labels are the same question when they differ only in case and spaces, as cleanPaper compares them. */
 const sameLabel = (q: string) => q.toLowerCase().replace(/\s+/g, "");
 
-/** The units a list of codes reaches: the school-path topics and the not-on-the-desk statements, as recovery() finds them. */
+/** The units a list of codes reaches: the school-path topics and the not-on-the-desk statements, as reachOf() finds them. */
 export function unitsOf(codes: string[]): { topics: string[]; off: string[] } {
-  const r = recovery([{ q: "1", marks: 0, outOf: 1, codes }]);
-  return { topics: r.topics.map((t) => t.id).sort(), off: r.notOnDesk.map((o) => o.code).sort() };
+  const r = reachOf(cleanPaper([{ q: "1", marks: 0, outOf: 1, codes }]).items[0]?.codes ?? []);
+  return { topics: [...r.topics].sort(), off: [...r.off].sort() };
 }
 const sameUnits = (a: string[], b: string[]) => {
   const x = unitsOf(a), y = unitsOf(b);

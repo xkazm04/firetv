@@ -379,7 +379,14 @@ Typed entry is the door that ships; the photo path is M5c's.
 - Right, two cards. The paper's: the marks scored large, "of 80", and "N of M marks - K marks lost". Under it, only when
   there is something to say, **Not on the desk yet** (`mb-poff`): the statements with no topic, set in their can text, three
   at a time, then "and n more"; a statement past a Foundation paper says so, and questions that named no statement are counted.
-- The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. With no paper the screen asks
+- The rows add up (RP2, 2026-10-11). A question's lost marks are shared in whole marks across what its codes reach: the
+  school-path topics each statement touches, in order, or the statement itself when it touches none. With L lost marks and
+  n places each gets L div n, and the first L mod n get one more. A place that gets 0 is left out. So the topic rows, the
+  Not on the desk rows and the questions with no statement add up to the marks the paper lost.
+- The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. When the first row is not the
+  biggest loss it reads "Start with <first>, the base for <biggest>, where most marks went.", the biggest being the earliest
+  row with the most lost that needs the first as a base; otherwise it names the first row and says the list runs from the
+  biggest loss. With no paper the screen asks
   for the marks on the phone. The screens say "a paper", "your paper": nothing says the board's name while its claim is off.
 - The D-pad: Left/Up and Right/Down walk the topics, Select on a topic opens Get ready for school on that unit with its question open (a set is
   two presses from the list, three when the unit has a worked lesson); Back or Menu land on that unit. The list is opened from the

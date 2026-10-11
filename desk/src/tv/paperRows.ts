@@ -5,6 +5,7 @@
  */
 import type { Session } from "@/lib/session/store";
 import { recovery, type Recovery } from "@/lib/rules/recovery";
+import { topicsOf } from "@/lib/library/paths";
 
 export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean; }
 export interface PaperOff { can: string; lost: number; from: string; beyond: boolean; }
@@ -48,6 +49,29 @@ export function paperWindow(n: number, focus: number, size: number): { from: num
 export const scoreLine = (v: PaperView): string => `${v.marks} of ${v.outOf} marks · ${marks(v.lost)} lost`;
 export const lostWord = (n: number): string => marks(n);
 
+const SCHOOL = topicsOf("school");
+/** Every prerequisite of a school topic, followed through. */
+function prereqsOf(id: string): Set<string> {
+  const all = new Set<string>(), todo = [id];
+  while (todo.length) {
+    const at = todo.pop();
+    for (const p of SCHOOL.find((t) => t.id === at)?.prereq ?? []) if (!all.has(p)) { all.add(p); todo.push(p); }
+  }
+  return all;
+}
+
+/**
+ * The row that lost the most and needs the first row as a base: the earliest row in list order with the largest lost
+ * whose prerequisites, followed through, include the first row's topic. Null when the first row is itself the biggest.
+ */
+export function paperBiggest(v: PaperView): PaperTopic | null {
+  const first = v.topics[0];
+  if (!first) return null;
+  const most = Math.max(...v.topics.map((t) => t.lost));
+  if (first.lost === most) return null;
+  return v.topics.find((t) => t.lost === most && prereqsOf(t.id).has(first.id)) ?? null;
+}
+
 /** The caption: where to start, or how to enter a paper. */
 export function paperCaption(v: PaperView): string {
   if (v.empty) return "Type the marks of a paper you sat on the phone. The desk shows where they were lost.";
@@ -57,6 +81,8 @@ export function paperCaption(v: PaperView): string {
     return "No marks were lost on this paper. Type another on the phone any time.";
   }
   const first = v.topics[0];
+  const big = paperBiggest(v);
+  if (first && big) return `Start with ${first.name}, the base for ${big.name}, where most marks went.`;
   return first ? `Start with ${first.name}. The list runs from the biggest loss, with the base each one needs first.` : "None of these has a topic on the desk yet.";
 }
 

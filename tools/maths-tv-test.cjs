@@ -802,10 +802,10 @@ test('paper 2: each topic shows its lost marks and the questions behind it; the 
  const raw=[it('5(b)',1,3,['N12']),it('7',0,2,['N12','N2']),it('9',4,4,['A1'])];
  const v=paperView(paperSession(raw));
  const t=v.topics.find(x=>x.id==='pct-of-amount');
- assert.ok(t,'N12 leads to a topic on the path');assert.equal(t.lost,4);assert.equal(t.from,'5(b), 7');
+ assert.ok(t,'N12 leads to a topic on the path');assert.equal(t.lost,2,'5(b) and 7 each give it 1 mark of their 2 lost');assert.equal(t.from,'5(b), 7');
  assert.deepEqual([v.marks,v.outOf,v.lost],[5,9,4]);
  const html=drawMaths('PaperScreen',paperSession(raw));
- assert.match(html,/4 marks lost/);assert.match(html,/From 5\(b\), 7/);
+ assert.match(html,/2 marks lost/);assert.match(html,/From 5\(b\), 7/);
  assert.ok(html.includes(scoreLine(v))&&/5 of 9 marks · 4 marks lost/.test(html.replace(/<[^>]*>/g,'')),'the paper\'s marks, out of and lost');
  assert.equal(v.topics.some(x=>x.from.includes('9')),false,'a full-marks question adds nothing');
 });
@@ -889,6 +889,27 @@ test('paper 6: no string the recovery screen renders names the board, over a swe
   assert.doesNotMatch(text,BAD,JSON.stringify(raw).slice(0,80));
  }
  assert.doesNotMatch(drawMaths('PaperScreen',paperSession(null)).replace(/<[^>]*>/g,' '),BAD);
+});
+
+test('RP2 caption: a first row that is not the biggest loss names the base and the biggest; every caption is short',()=>{
+ const {paperView,paperCaption,paperBiggest}=PAPER(),{STATEMENTS}=STM();
+ const words=t=>t.trim().split(/\s+/).length;
+ const v=paperView(paperSession([it('1',2,3,['N1']),it('2',0,4,['R7']),it('3',0,2,['G16'])]));
+ assert.equal(paperCaption(v),'Start with Equivalent fractions, the base for Unit rates and direct proportion, where most marks went.');
+ // the first row is the biggest: the old caption stays
+ const w=paperView(paperSession([it('1',0,4,['N1']),it('2',2,3,['R7'])]));
+ assert.equal(w.topics[0].lost,Math.max(...w.topics.map(t=>t.lost)));
+ assert.match(paperCaption(w),/^Start with [^,]+\. The list runs from the biggest loss/);
+ // a sweep: the caption is 25 words or fewer, has no em dash, and a biggest row exists whenever the first is not the biggest
+ const codes=STATEMENTS.filter(x=>x.touches.length).map(x=>x.code);
+ let seed=5;const rnd=n=>((seed=(seed*1103515245+12345)%2147483648)%n);let two=0;
+ for(let k=0;k<400;k++){
+  const raw=Array.from({length:1+rnd(8)},(_,i)=>{const o=1+rnd(6);return it(String(i+1),rnd(o+1),o,Array.from({length:1+rnd(3)},()=>codes[rnd(codes.length)]));});
+  const pv=paperView(paperSession(raw)),c=paperCaption(pv);
+  assert.ok(words(c)<=25,c);assert.ok(!c.includes('\u2014'),c);
+  if(pv.topics.length&&pv.topics[0].lost<Math.max(...pv.topics.map(t=>t.lost))){assert.ok(paperBiggest(pv),'a biggest row exists: '+JSON.stringify(raw));assert.match(c,/^Start with .+, the base for .+, where most marks went\.$/);two++;}
+ }
+ assert.ok(two>0,'the sweep meets the two-name caption');
 });
 
 test('paper 7: the list shows five topics around the lamp and says when more lie either side',()=>{
