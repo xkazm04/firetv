@@ -21,6 +21,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   // v2: a whole piece's later paragraphs, a worked lesson and the Workroom are written by the desk alone
   "essay.progress": "Send the piece to /api/analyse.", "worked.set": "Ask for a lesson on /api/worked.", "workroom.set": "Open the Workroom on /api/twin.",
   "lesson.watched": "A lesson is marked watched by the desk, as it plays.",
+  "pin.turn": "The code turns over when a phone joins with it.",
 };
 
 /**
@@ -68,6 +69,8 @@ export async function POST(req: Request) {
     if (role === null || role === "tv") return NextResponse.json(view(s, role));
     // a listed phone that sends no code is answered as the phone it is: no new token, no cookie
     if (e.code === undefined) return NextResponse.json(view(s, "phone"));
+    // the code that was just used stops working: a new one is on the TV
+    dispatch({ type: "pin.turn" });
     const res = NextResponse.json(view(s, "phone"));
     // the right code mints this phone's own token (a phone that joins again has its entry replaced)
     res.cookies.set(PHONE_COOKIE, mintPhone(cookiesOf(req).get(PHONE_COOKIE)?.value), COOKIE);

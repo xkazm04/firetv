@@ -173,29 +173,29 @@ test('GUARD: the QR path - the Pair screen\'s phoneUrl?pin= posted as a join lan
  const v=await r.json();assert.equal(v.joined,true);assert.equal(v.screen,'joined');
  const {follow}=require(src('app/phone/panelFor.ts'));
  assert.equal(follow(undefined,v,{panel:'join',role:'student',busy:false}).to,'joined','a fresh join lands on the confirmation');
- // the remembered code is the same post: a phone whose cookie is gone joins again with the code it kept
- const again=await post({type:'join',code},'guest');assert.equal(again.status,200);
+ // changed openly (PR10): the code works once, so the same post a second time is a wrong code (no phone keeps a code now)
+ const again=await post({type:'join',code},'guest');assert.equal(again.status,403);
 });
 
 test('case 7: a join shows Joined only to a TV waiting to be paired - mid-session a phone (a parent, or a remembered one rejoining) slips in and the page stays',async()=>{
  const {follow}=require(src('app/phone/panelFor.ts'));
  // the first phone ever: the TV was not joined, so it confirms, from wherever it stood
  evening('landing');let pin=store.getSession().pin;
- let r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','first join -> the Joined screen');
+ let r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','first join -> the Joined screen');
  // the TV on the code: it is waiting for a phone, so the join confirms even on a joined desk
  globalThis.__desk.session={...store.getSession(),screen:'pair',focus:1};
- r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','join while on pair -> joined');assert.equal(store.getSession().focus,0);
+ r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','join while on pair -> joined');assert.equal(store.getSession().focus,0);
  // Ema on her page, the desk already joined: a parent's phone joins and the TV does not move
  globalThis.__desk.session={...store.getSession(),screen:'page',focus:2,itemIx:1};
- r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);
+ r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200);
  let s=store.getSession();assert.equal(s.joined,true);assert.equal(s.screen,'page','join mid-session -> the page stays');assert.equal(s.focus,2);assert.equal(s.itemIx,1);
  const v=await r.json();assert.equal(v.screen,'page');
  const step=follow(undefined,v,{panel:'join',role:'student',busy:false});assert.equal(step.to,'joined','the phone lands on its confirmation, not a blank panel');
- // Ema's own phone reloads (its cookie gone) and rejoins with the code it remembered: the same silent join
- r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);s=store.getSession();assert.equal(s.screen,'page','a remembered rejoin mid-session -> stays');assert.equal(s.focus,2);
+ // Ema's own phone reloads (its cookie gone) and joins with the code the TV shows now (PR10: the old one was used): the same silent join
+ r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200);s=store.getSession();assert.equal(s.screen,'page','a remembered rejoin mid-session -> stays');assert.equal(s.focus,2);
  // a draft still owns the screen: never the profile, even for a first phone
  evening('profile');pin=store.getSession().pin;
- r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'profile');
+ r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'profile');
 });
 
 test('GUARD: an in-process caller with no proxy header keeps the whole session and the open join',async()=>{
@@ -315,16 +315,18 @@ test('PR2: 10 wrong codes start a five-minute cooldown; the right code is refuse
   assert.equal(store.getSession().joined,false);
   mock.timers.tick(4*60_000);r=await post({type:'join',code:pin},'guest');assert.equal(r.status,403,'still cooling at four minutes');
   mock.timers.tick(61_000);r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200,'after the cooldown the right code joins');
-  for(let i=0;i<9;i++)await post({type:'join',code:bad},'guest');
-  r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200,'a success set the count to zero: nine more wrong codes do not lock');
+  // PR10: the code turned over with that join, so the next right code is the new one
+  for(let i=0;i<9;i++)await post({type:'join',code:wrongOf(store.getSession().pin)},'guest');
+  r=await post({type:'join',code:store.getSession().pin},'guest');assert.equal(r.status,200,'a success set the count to zero: nine more wrong codes do not lock');
  }finally{mock.timers.reset();}
 });
 test('PR2: a lockout leaves the pin as it was and a phone that joined before it is still a phone; the TV and an in-process join are not held',async()=>{
  evening('pair');DESK_JOIN();const pin=store.getSession().pin,bad=wrongOf(pin);
  const first=await post({type:'join',code:pin},'guest');const cookie='desk-phone='+setCookie(first,'desk-phone');
- for(let i=0;i<10;i++)await post({type:'join',code:bad},'guest');
- assert.equal((await post({type:'join',code:pin},'guest')).status,403,'locked');
- assert.equal(store.getSession().pin,pin,'the pin is unchanged');
+ const turned=store.getSession().pin;// PR10: the first join turned the code over; the lockout then leaves it as it is
+ for(let i=0;i<10;i++)await post({type:'join',code:wrongOf(turned)},'guest');
+ assert.equal((await post({type:'join',code:turned},'guest')).status,403,'locked');
+ assert.equal(store.getSession().pin,turned,'the pin is unchanged');
  assert.equal(pairing().roleOf(pairing().cookiesOf(new Request('http://desk/',{headers:{cookie}}))),'phone','the earlier phone is still a phone');
  assert.equal((await post({type:'join'},'tv')).status,200,'the TV joins during the cooldown');
  assert.equal((await post({type:'join'},undefined)).status,200,'an in-process join joins during the cooldown');
@@ -439,8 +441,10 @@ test('PR6: an unread guest stream is closed after 32 unread messages and leaves 
 // ---- PR7: the pin is drawn with node:crypto ----
 test('PR7: 2000 fresh() pins are four digits, 1000 to 9999, and the pin line holds no Math.random',()=>{
  for(let i=0;i<2000;i++){const p=store.fresh().pin;assert.match(p,/^\d{4}$/);assert(+p>=1000&&+p<=9999,p);}
- const line=fs.readFileSync(src('lib/session/store.ts'),'utf8').split('\n').filter((l)=>/^\s*pin: String\(/.test(l));
- assert.equal(line.length,1);assert.doesNotMatch(line[0],/Math\.random/);assert.match(line[0],/randomInt\(1000, 10000\)/);
+ // changed openly (PR10): the draw is one helper that fresh() and pin.turn both use, so the line to check is the helper's
+ const text=fs.readFileSync(src('lib/session/store.ts'),'utf8'),line=text.split('\n').filter((l)=>/^const drawPin = /.test(l));
+ assert.equal(line.length,1);assert.doesNotMatch(line[0],/Math\.random/);assert.match(line[0],/String\(randomInt\(1000, 10000\)\)/);
+ assert.match(text,/^\s*pin: drawPin\(\),/m,'fresh draws with it');
 });
 
 // ---- pinned only (robustness-3 a and d): guards, no fix needed ----
@@ -570,4 +574,30 @@ test('PR9: a failed seen write logs one line and the caller stays a phone for th
  try{assert.equal(roleOfCookie(stale.cookie),'phone');}finally{mock.restoreAll();}
  assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/pairing\.json/);assert.match(lines[0],/disk full/);
  assert.equal(pj().phones[0].seen,stale.entry.seen,'the file is as it was');
+});
+
+// ---- PR10: the code turns over once it is used ----
+test('PR10: a guest join with the right code turns the pin over - the old code is then a wrong code, and it counts',async()=>{
+ evening('pair');DESK_JOIN();put([]);const was=store.getSession().pin;
+ assert.equal((await post({type:'join',code:was},'guest')).status,200);
+ assert.notEqual(store.getSession().pin,was,'the pin turned');
+ const r=await post({type:'join',code:was},'guest');assert.equal(r.status,403);assert.deepEqual(await r.json(),{error:'That code is not on the TV.'});
+ assert.equal(globalThis.__deskJoin.wrong,1,'a used code typed again counts');
+ assert.equal(pj().phones.length,1,'the refused join listed no phone');
+});
+test('PR10: a TV join and an in-process join leave the pin as it was; a listed phone join with no code too',async()=>{
+ evening('pair');DESK_JOIN();put([]);const c=await joinAs();const pin=store.getSession().pin;
+ for(const [role,cookie] of [['tv'],[undefined],['phone',c]]){assert.equal((await post({type:'join'},role,cookie)).status,200);assert.equal(store.getSession().pin,pin,String(role));}
+});
+test('PR10: a screen that posts pin.turn gets 403 and the pin stays',async()=>{
+ evening('pair');DESK_JOIN();put([]);const c=await joinAs();const pin=store.getSession().pin;
+ for(const [role,cookie] of [['tv'],['phone',c],['guest']]){const r=await post({type:'pin.turn'},role,cookie);assert.equal(r.status,403,String(role));assert.equal(store.getSession().pin,pin);}
+});
+test('PR10: pin.turn gives a four-digit pin never equal to the one just used, and changes nothing else',()=>{
+ evening('page');
+ for(let i=0;i<3000;i++){
+  const before=store.getSession();store.dispatch({type:'pin.turn'});const after=store.getSession();
+  assert.match(after.pin,/^\d{4}$/);assert(+after.pin>=1000&&+after.pin<=9999);assert.notEqual(after.pin,before.pin);
+  if(i<3)assert.deepEqual({...after,pin:'',updatedAt:0},{...before,pin:'',updatedAt:0});
+ }
 });

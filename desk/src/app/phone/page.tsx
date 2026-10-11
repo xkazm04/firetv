@@ -124,7 +124,6 @@ export default function Phone() {
     if (!s || s.joined) return;
     const q = new URLSearchParams(location.search).get("pin");
     if (!q) return;
-    remembered.current = null;
     history.replaceState(null, "", location.pathname);
     void join(q, "qr");
   }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -149,29 +148,24 @@ export default function Phone() {
   const [bad, setBad] = useState(false);
   /**
    * The desk checks the code (api/session): a match sets this phone's cookie and the stream reopens as a joined
-   * phone; a refusal says why (joinRefusal). Quiet for a code the phone brought (the QR, a remembered one): no shake for those,
-   * but the line is shown, and a code the TV no longer knows is forgotten.
+   * phone; a refusal says why (joinRefusal). Quiet for a code the phone brought (the QR): no shake for that, but the line
+   * is shown. The phone keeps no code (the code on the TV turns over after each join), and a listed phone never needs it.
    */
   const join = async (code = pin, how: JoinHow = "typed") => {
     let r: Response | null = null;
     try { r = await post({ type: "join", code }); } catch {}
-    if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); setHasDesk(true); } catch {} reconnect(); return; }
+    if (r?.ok) { setMsg(""); reconnect(); return; }
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     const refusal = joinRefusal({ status: r?.status, error: j.error, how });
-    if (refusal.forget) { try { if (localStorage.getItem("desk.pin") === code) localStorage.removeItem("desk.pin"); } catch {} setHasDesk(false); }
     setMsg(refusal.line);
     if (refusal.shake) { setBad(true); setTimeout(() => setBad(false), 500); }
   };
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
-  // the phone remembers the desk: a code kept from an earlier join lets it in without asking
-  const remembered = useRef<string | null>(null);
-  /** Whether this phone holds a desk to forget: the Forget link is offered only then. */
-  const [hasDesk, setHasDesk] = useState(false);
-  useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); setHasDesk(!!remembered.current); } catch {} }, []);
-  useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, "remembered"); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
-  // the desk forgets this phone too: its cookie goes, and the stream reopens as a guest
-  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setHasDesk(false); setMsg("This phone will ask for the code next time.");
+  // a code an earlier version stored is cleared on open; the phone keeps none now, and a join never reads one
+  useEffect(() => { try { localStorage.removeItem("desk.pin"); } catch {} }, []);
+  // the desk forgets this phone: its fingerprint is dropped there and its cookie goes here, and the stream reopens as a guest
+  const forget = () => { setMsg("This phone will ask for the code next time.");
     void post({ type: "leave" }).then(() => reconnect(), () => {}); };
 
   // the phone stays where it is: the hand-off is shown, not jumped over
@@ -465,7 +459,7 @@ export default function Phone() {
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
           <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={() => join()}>Join</button></div>
-          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. This phone remembers the desk once it has joined.{hasDesk && <> <button className="plink" onClick={forget}>Forget this desk</button></>}</p>
+          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. The code works once: it changes when a phone joins with it.</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
@@ -479,7 +473,8 @@ export default function Phone() {
               ? <button className="pbtn" data-signal="true" onClick={() => nav("paste")}>Send your paragraph</button>
               : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>)}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}</div>}
+          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.{switchEndsLine(s, null) && ` ${switchEndsLine(s, null)}`}</p>}
+          {s.viewer === "phone" && <p style={{ fontSize: 12 }}><button className="plink" onClick={forget}>Forget this desk</button></p>}</div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>

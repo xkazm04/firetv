@@ -343,7 +343,7 @@ export type Event =
   | { type: "practice.second"; n: number; verdict: "right" | "wrong" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
-  | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
+  | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
 const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const FILE = path.join(DATA, "session.json");
@@ -461,9 +461,11 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   return n;
 }
 
+/** The code on the TV: four digits, drawn with node:crypto. */
+const drawPin = () => String(randomInt(1000, 10000));
 export function fresh(): Session {
   return {
-    pin: String(randomInt(1000, 10000)), joined: false, phoneUrl: phoneUrl(), learner: null,
+    pin: drawPin(), joined: false, phoneUrl: phoneUrl(), learner: null,
     // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
@@ -587,6 +589,8 @@ function step(s: Session, e: Event): Session {
       if (waiting && s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break; }
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
+    // the code on the TV turns over once a phone has joined with it (the session route raises this): a new pin, never the one just used
+    case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
     case "nav": if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
       n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;

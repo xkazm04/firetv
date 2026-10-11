@@ -711,33 +711,55 @@ test('PR5: the join lines are the route\'s own, and carry no digit and no em das
  assert(pairing.includes(`"${WRONG}"`)&&pairing.includes(`"${TOO_MANY}"`),'the route texts are the ones this suite expects');
  for(const l of [NEWCODE,NOREACH])assert.doesNotMatch(l,/[0-9\u2014]/);
 });
-test('PR5: a remembered code the TV does not know is forgotten and the phone says the TV has a new code',()=>{
- const r=P().joinRefusal({status:403,error:WRONG,how:'remembered'});
- assert.deepEqual(r,{line:NEWCODE,shake:false,forget:true});
+// PR10 supersedes PR5's remembered-code half: the phone no longer stores the code, so there is no remembered join and no row for it (typed and QR stand)
+test('PR10: a code the phone brought is no longer remembered - joinRefusal has no remembered row and says no new-code line',()=>{
+ const src=fs.readFileSync(PANEL,'utf8');
+ assert.doesNotMatch(src,/remembered/,'panelFor.ts has no remembered join');
+ assert.doesNotMatch(src,/The TV has a new code/);
 });
 test('PR5: a QR code the TV does not know says so, quietly, and is forgotten',()=>{
  assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'qr'}),{line:WRONG,shake:false,forget:true});
 });
 test('PR5: a cooldown refusal shows the route\'s text and keeps the stored code, typed or not',()=>{
- for(const how of ['typed','remembered','qr'])assert.deepEqual(P().joinRefusal({status:403,error:TOO_MANY,how}),{line:TOO_MANY,shake:how==='typed',forget:false},how);
+ for(const how of ['typed','qr'])assert.deepEqual(P().joinRefusal({status:403,error:TOO_MANY,how}),{line:TOO_MANY,shake:how==='typed',forget:false},how);
 });
 test('PR5: no answer says it did not reach the desk and keeps the stored code',()=>{
- for(const how of ['typed','remembered','qr'])assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how}),{line:NOREACH,shake:how==='typed',forget:false},how);
+ for(const how of ['typed','qr'])assert.deepEqual(P().joinRefusal({status:undefined,error:undefined,how}),{line:NOREACH,shake:how==='typed',forget:false},how);
 });
 test('PR5: any other refusal shows the route\'s text, or the wrong-code line when it sends none',()=>{
- assert.deepEqual(P().joinRefusal({status:500,error:'Boom.',how:'remembered'}),{line:'Boom.',shake:false,forget:false});
+ assert.deepEqual(P().joinRefusal({status:500,error:'Boom.',how:'qr'}),{line:'Boom.',shake:false,forget:false});
  assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'qr'}),{line:WRONG,shake:false,forget:true});
  assert.deepEqual(P().joinRefusal({status:403,error:undefined,how:'typed'}),{line:WRONG,shake:true,forget:false});
 });
 test('PR5: a typed wrong code shakes and keeps what is stored',()=>{
  assert.deepEqual(P().joinRefusal({status:403,error:WRONG,how:'typed'}),{line:WRONG,shake:true,forget:false});
 });
-test('PR5: page.tsx join() sends every refusal through joinRefusal, quiet ones too, and removes desk.pin when told to forget',()=>{
+test('PR5: page.tsx join() sends every refusal through joinRefusal, quiet ones too',()=>{
  const src=code(PAGE);
  assert.match(src,/joinRefusal/,'page.tsx uses joinRefusal');
  const at=src.indexOf('const join = async'),body=src.slice(at,src.indexOf('const onPin',at));
  assert(at>0&&body.includes('joinRefusal('),'join() calls it');
  assert.doesNotMatch(body,/if \(quiet\) return/,'a quiet join no longer returns before saying why');
- assert.match(body,/\.forget[\s\S]*localStorage\.getItem\("desk\.pin"\) === code[\s\S]*localStorage\.removeItem\("desk\.pin"\)[\s\S]*setHasDesk\(false\)/,'forget removes desk.pin only when it is the refused code, and clears hasDesk');
- assert.match(src,/join\(q, "qr"\)/);assert.match(src,/join\(code, "remembered"\)/);
+ // changed openly (PR10): the phone stores no code, so there is nothing for a refusal to forget and no remembered join
+ assert.doesNotMatch(body,/desk\.pin/,'join() neither stores nor forgets a code');
+ assert.match(src,/join\(q, "qr"\)/);assert.doesNotMatch(src,/"remembered"/);
+});
+
+// ---- PR10: the phone keeps no code ----
+test('PR10: page.tsx writes no desk.pin to localStorage, removes a stored one on open, and has no remembered join',()=>{
+ const src=code(PAGE);
+ assert.doesNotMatch(src,/localStorage\.setItem\("desk\.pin"/,'no write of the code');
+ assert.doesNotMatch(src,/localStorage\.getItem\("desk\.pin"/,'the code is never read back');
+ assert.doesNotMatch(src,/remembered/,'no remembered ref or join');
+ assert.match(src,/useEffect\(\(\) => \{[\s\S]{0,60}localStorage\.removeItem\("desk\.pin"\)[\s\S]{0,60}\}, \[\]\)/,'a stored code is removed on open');
+});
+test('PR10: JoinHow has no remembered',()=>{
+ assert.match(fs.readFileSync(PANEL,'utf8'),/export type JoinHow = "typed" \| "qr";/);
+});
+test('PR10: the Forget link is offered while this device is a phone - on the panel a joined phone sees',()=>{
+ const src=code(PAGE);
+ assert.match(src,/s\??\.viewer === "phone" && [\s\S]{0,120}Forget this desk/,'depends on the viewer being a phone');
+ const joined=src.slice(src.indexOf('screen === "joined"'),src.indexOf('screen === "profile" && <div'));
+ assert.match(joined,/Forget this desk/,'a joined phone can reach it');
+ assert.doesNotMatch(src,/hasDesk/,'no stored-code flag decides it');
 });
