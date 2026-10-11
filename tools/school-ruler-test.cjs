@@ -285,14 +285,31 @@ test('W8 2: Get ready for school lists the units by strand with the learner\'s o
   assert.match(html,new RegExp(`data-focused="true"[^>]*><div class="nm">${units[4].name}<`),'the lamp on the focused unit');
  }
  // the question: two cells, "The usual" lit, the unit held and not lit; then "A step up"
- const s={...seated({system:'uk'}),screen:'prepare',focus:2,skills:{}};
+ const {hasWorked}=require(src('lib/library/worked.ts'));
+ const s0={...seated({system:'uk'}),screen:'prepare',focus:0,skills:{}};
+ const plain=PR.prepareStops(s0).findIndex((u)=>!hasWorked(u.id));
+ const s={...seated({system:'uk'}),screen:'prepare',focus:plain,skills:{}};
  for(const ask of [0,1]){
-  const html=drawW8(s,ask),name=PR.prepareStops(s)[2].name;
+  const html=drawW8(s,ask),name=PR.prepareStops(s)[plain].name;
   assert.equal(count(html,/class="mb-cell2"/g),2);assert.equal(count(html,/data-focused="true"/g),1,'one thing lit: the cell');
   assert.match(html,new RegExp(`class="mb-cell2" data-id="${ask?'stretch':'usual'}" data-focused="true"`));
   assert.match(html,new RegExp(`data-held="true"[^>]*><div class="nm">${name}<`),'the unit is held under the question');
   assert.ok(html.includes(PR.choiceLine(ask)),'the lit cell\'s sentence');
   assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+ }
+ // a unit with a worked lesson: three cells, "See how first" first, the lit one follows the ask
+ const lessonAt=PR.prepareStops(s0).findIndex((u)=>hasWorked(u.id));
+ const sw={...seated({system:'uk'}),screen:'prepare',focus:lessonAt,skills:{}};
+ for(const ask of [-1,0,1]){
+  const html=drawW8(sw,ask),name=PR.prepareStops(sw)[lessonAt].name,lit=ask<0?'lesson':ask?'stretch':'usual';
+  assert.equal(count(html,/class="mb-cell2"/g),3);
+  assert.deepEqual([...html.matchAll(/class="mb-cell2" data-id="(\w+)"/g)].map((m)=>m[1]),['lesson','usual','stretch']);
+  assert.equal(count(html,/data-focused="true"/g),1,'one thing lit: the cell');
+  assert.match(html,new RegExp(`class="mb-cell2" data-id="${lit}" data-focused="true"`));
+  assert.match(html,new RegExp(`data-held="true"[^>]*><div class="nm">${name}<`),'the unit is held under the question');
+  assert.ok(html.includes(PR.choiceLine(ask)),'the lit cell\'s sentence');
+  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+  if(ask<0){assert.ok(html.includes(PR.LESSON_CHOICE.t));assert.ok(html.includes(PR.LESSON_CHOICE.k));}
  }
  // a Calculus learner has no units here (and no door to reach it)
  const calc=draw({...seated({type:'other',age:19,mathPath:'calc1'}),screen:'prepare',focus:0,skills:{}});
