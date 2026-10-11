@@ -1179,7 +1179,7 @@ const B3_SPELLINGS={
   [RS2,'3:5','uk','right'],[RS2,'5:3','uk','wrong','ratio-swapped'],[RS2,'6:10','uk','unsure'],[RS2,'3:4','uk','wrong'],[RS2,'1:5','uk','wrong'],
   [RS3,'2:5','uk','right'],[RS3,'2 : 5','de','right'],[RS3,'5:2','uk','wrong','ratio-swapped'],[RS3,'4:10','uk','unsure'],
   // 60 shared in 2:3 = 24 and 36, in that order: the other order listed with 'and' is unsure, written as a ratio it is wrong
-  [RH1,'24 and 36','uk','right'],[RH1,'24:36','uk','right'],[RH1,'24 : 36','uk','right'],[RH1,'24 & 36','uk','right'],[RH1,'24 and 36.','uk','right'],[RH1,'24.0 and 36','uk','right'],
+  [RH1,'24 and 36','uk','right'],[RH1,'c = 24:36','uk','right'],[RH1,'a = 24 and b = 36','uk','right'],[RH1,'24:36','uk','right'],[RH1,'24 : 36','uk','right'],[RH1,'24 & 36','uk','right'],[RH1,'24 and 36.','uk','right'],[RH1,'24.0 and 36','uk','right'],
   [RH1,'36 and 24','uk','unsure'],[RH1,'36:24','uk','wrong','ratio-swapped'],
   [RH1,'30 and 20','uk','wrong','ratio-split-each'],[RH1,'20 and 30','uk','wrong','ratio-split-each'],[RH1,'2 and 3','uk','wrong','ratio-as-amounts'],[RH1,'2:3','uk','wrong','ratio-as-amounts'],
   [RH1,'120 and 180','uk','wrong','ratio-by-difference'],[RH1,'12 and 48','uk','wrong'],[RH1,'25 and 35','uk','wrong'],
