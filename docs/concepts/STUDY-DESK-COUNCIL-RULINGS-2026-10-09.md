@@ -13,7 +13,7 @@ Inputs: the council-lite round of each feature (round 1, score and must-address 
 
 Status is given per row. A delivered ruling cites its commit. "queued, delivery N" refers to the delivery order at the end
 of this doc. "in flight, run X" means a builder is working on it. Code sites were checked on `main`; where a site had moved,
-the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c), and for round 22 on 2026-10-11 (round 21 merged at fe8d218e). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b, b878d726 (capture r21), e9ff4caa and 6b9a8cda name a run, not a commit.
+the current line is cited. This doc was updated for round 2 on 2026-10-09 (the first version merged at 7041d11d), for round 3 on 2026-10-10 (round 2 merged at f7f24df5), for round 4 on 2026-10-10 (round 3 merged at a5ff6720), for round 5 on 2026-10-10 (round 4 merged at c28380e2), for round 6 on 2026-10-10 (round 5 merged at d24f824d), for round 7 on 2026-10-10 (round 6 merged at 56431416), for round 8 on 2026-10-10 (round 7 merged at e74340e8), and for round 9 on 2026-10-10 (round 8 merged at 2498060d), and for round 10 on 2026-10-10 (round 9 merged at 4edacb54), and for round 11 on 2026-10-10 (round 10 merged at a5a0eb19), and for round 12 on 2026-10-10 (round 11 merged at 50ee1e31), and for round 13 on 2026-10-11 (round 12 merged at d7987408), and for round 14 on 2026-10-11 (round 13 merged at f2645f41), and for round 15 on 2026-10-11 (round 14 merged at 2365ad92), and for round 16 on 2026-10-11 (round 15 merged at 4193c55e), and for round 17 on 2026-10-11 (round 16 merged at 4ef795f0), and for round 18 on 2026-10-11 (round 17 merged at b2009df1), and for round 19 on 2026-10-11 (round 18 merged at 53dbdd33), and for round 20 on 2026-10-11 (round 19 merged at 4f930cc9), and for round 21 on 2026-10-11 (round 20 merged at afe0501c), and for round 22 on 2026-10-11 (round 21 merged at fe8d218e), and for round 23 on 2026-10-11 (round 22 merged at d93b6eda). Ids such as run 13cf8526, d2d908e6, f29f363f, eac6191a, 03fa57dd, 18799a66, 57233789, 6d685adf, 12cf4a44, c448db9f, 3922989d, 9fcfac15, 6cf02f5a, c072cd17, d6cc1be4, 9bcde838, ce489ee7, 0f94108c, d6aad5fb, 7a3b0529, f6b73d06, a03b1279, cc346058, 5d52a422, 0a4ec2cd, 3720e29a, 7d7171be, f1df9456, 77dbd15a, 058f9e18, e1fc9eaf, f795a859, 27364288, feedcd76, 8e4ef693, 8704f32e, 56d9271f, af864d93, c916b03c, 036c1dd7, 62a80958, c2a3c969, e8e43454, fa069457 (capture r10), c976c3d8, 908c9d3a, 243b0a17, 38d6db69, e9761c26, 1f8f5ef3 (capture r11), 5ad42cde, a7fb68b4, dab615ba, 1236bd27 (capture r12), 200beb31, 0994cd5c, af69ab78, 73da4bac, 80b15cc1, dff24ac2, 3aa168a3 (capture r13), 1ee1d75f, ffa7f3f0, b4747c7d, 333437c2, 6b308dab, 98ac0359, cf79b2aa, e158c14f (capture r14), a41f6567, 7e1cad00, 7933aa33 (capture r15), 93e16c60, 8ed29bf1, 80fa2642 (capture r16), e7bdaf06, e91b057f (capture r17), 6d379b49, 9c07044c, 36036ff6, 342fac19, 0e2af485, ba253bba, 92e76f24 (capture r18), 529d7b48, ba38f08e, 93d18808, 541b1f74, f699c29c, 4b25dfae (capture r19), d4aeb4f3, 85a2a235, d2f9e78d, 2cb1d267, 5651f179 (capture r20), 1f5206cc, b6742d4b, b878d726 (capture r21), e9ff4caa, 6b9a8cda, 6a780c9a (capture r22), 12db6fd8 and 1e81ded3 name a run, not a commit.
 
 ---
 
@@ -328,6 +328,27 @@ Full r2 (round 2026-10-10-hint-lesson-discovery-r2, run 77dbd15a, finished by re
 
 Noted, unslotted: the hint's own leak re-ask (`hint.ts:177`) is metered as try 1, not try 2. A fix would edit `hint.ts`, which is in the hint span, so it waits until hint full r2 has run. Hint full r2 has run, so the hint span no longer holds it back. It stays unslotted.
 
+Ruled 2026-10-11 (round 23):
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| GR1 | On Get ready for school, a unit with a worked lesson (hasWorked) asks three cells: 'See how first' (prepareAsk -1, lit when the question opens, k line 'A worked lesson'), 'The usual' (0) and 'A step up' (1). Select on the first opens the unit's worked lesson exactly as Topics does (o.teach, the same /api/worked call). The TV keeps the lesson's origin in Local lessonFrom, so the lesson's Back stop, Back, Up and Menu return to Get ready for school on the same unit, with the question closed. Try six writes the usual set as before. A unit with no worked lesson keeps its two cells. The origin is kept on the TV, not in the session. | MB-B39 (L1-owen-17-MB2-8). Topics teaches first, but Get ready for school wrote the set straight away, so a learner sent there from the paper never met the lesson. | 'The usual' stays lit with the lesson beside it, rejected because a learner on a remote presses the lit cell. A lesson offered only on the road from the paper, rejected because the door does not know how it was reached, and a door that changes with the route follows a rule the learner cannot see. | delivered, 5a45e935 (run 1e81ded3, carrying 050e3253 of held run 12db6fd8); BACKLOG 0e3fa4fb |
+| GR1-a | school-ruler 'W8 2' runs its two-cell block on the first prepare unit with no worked lesson, found with PR.prepareStops and hasWorked, not hard-coded (today index 4, linear-one-step). It adds a drawn block on the first unit with a lesson (today index 2, frac-add-sub). For ask -1, 0 and 1 that block asserts: 3 cells in the order lesson, usual, stretch; one thing lit, and the right one; the unit held under the question; the choiceLine; no digit on the question; and for -1, the t and k text of LESSON_CHOICE. | Delivery 16 was held on that test (about :291). It counted 2 mb-cell2 cells on focus 2, a unit with a lesson, which now rightly draws 3. The test was outside 16's paths. | Only moving the block, rejected because then nothing checks how the lesson cell is drawn (tv-keys-test checks only the keys). Only changing the count to 3, rejected because then nothing checks the two-cell question that 3 of the 17 units still ask. | delivered, 19b254ae (run 1e81ded3) |
+
+GR1 delivers BACKLOG MB-B39 from the 2026-10-09 maths UAT, not a council finding. It is recorded here because it opens the worked lesson. GR1-a is the App Master's ruling, not the owner's.
+
+Delivery 16 and 16a, as delivered (16: run 12db6fd8, held; 16a: run 1e81ded3, merged at 0e3fa4fb):
+
+- 16 (run 12db6fd8) made 050e3253 (the code and the tv-keys tests) and 37b764ce (BACKLOG) on d93b6eda.
+- The merge gate held 16 on school-ruler W8 2 alone: 74 of 75 suites, 1646 of 1647 tests, tsc exit 0.
+- Its branch is superseded and not merged. Its held ask 1428ba2c is moot, and the owner discards it.
+- 16a (run 1e81ded3) merged by fast-forward at 0e3fa4fb, in three commits. 5a45e935 is git cherry-pick -x of 050e3253 (4 files, +139 -36: keys.ts, prepareRows.ts, MathsTV.tsx, tools/tv-keys-test.cjs). 19b254ae is GR1-a (tools/school-ruler-test.cjs, +19 -2). 0e3fa4fb is BACKLOG: MB-B39 built, citing 5a45e935.
+- 37b764ce was not carried, because it cited 050e3253, which is not on main.
+- Reconciled with git cat-file -e and git merge-base --is-ancestor: d93b6eda, 5a45e935, 19b254ae and 0e3fa4fb exist and are ancestors of main. 050e3253 and 37b764ce exist and are not. The message of 5a45e935 says 'cherry picked from commit 050e3253...'.
+- Six files, +159 -39 (git diff --shortstat d93b6eda 0e3fa4fb).
+- Cites checked on main at 0e3fa4fb, none moved: LESSON_CHOICE at `desk/src/tv/prepareRows.ts:53` and choicesFor at `:56`. Local with lessonFrom at `desk/src/tv/keys.ts:41`. The teach helper's origin write at `keys.ts:246-247`. The worked handler's return to prepare at `keys.ts:492-493`. MathsTV Prepare draws choicesFor(hasWorked(at.id)) at `desk/src/maths/MathsTV.tsx:650`. The tv-keys test 'GR1: Get ready for school offers the worked lesson first (MB-B39)' at `tools/tv-keys-test.cjs:622`. The school-ruler test 'W8 2' at `tools/school-ruler-test.cjs:269`.
+- Gate: node tools/worktree-preflight.cjs and npm run test:rules in desk/ gave 75 suites and 1647 tests, 0 failed. tsc --noEmit --incremental false exited 0 in desk/ at 0e3fa4fb (the App Master's check; the merge gate skips typecheck and lint on this repo). 0 em dashes added.
+
 ## 4. Marking false ticks and false rings (practice-generation-marking)
 
 Status of the work, checked on `main`:
@@ -476,6 +497,14 @@ Delivery 14 and 15, as delivered (14: run e9ff4caa, merged at 5773c964; 15: run 
 - 15's two notes, ruled:
   - (a) A 120-character answer of digits, sent through the mark route, still reads as unsure, because of the school reader's MAX_ANSWER of 60. This is as ruled. Accepted.
   - (b) The phone's character count stays open until the owner answers 276c835a. Accepted.
+
+Ruled 2026-10-11 (round 23):
+
+| id | decision | constraint | alternative that lost | status |
+|---|---|---|---|---|
+| TN1 | The Calculus 1 topic calc1-area-so-far is named 'The integral with a variable upper limit'. Its id, blurb, sessions, sections, prereq and shapes do not change, so no learner record moves. The name reaches the model on the set request's first line ('Topic: <name>', askCalc, `desk/src/lib/desk/items.ts:239`). So the calc1-area-so-far row of tools/calc-sets-frozen.json moves on purpose. Only that row's 'Topic: ' text is edited by hand, to the new name, and nothing else in the file changes. tools/calc-sets-frozen-gen.cjs is not run, because its header says never to regenerate the file to make a row green. The 'frozen sets' test in tools/calc2-approx-test.cjs then proves, byte for byte, that no other request moved. docs/CALCULUS-1-SYLLABUS.md row :43 takes the new name. A test pins the id and the new name. | MB-B41 (L1-matyas-19-MB3-10). Topics shows 'The area-so-far function' (`desk/src/lib/library/calculus1.spine.ts:174`), the American course word that the Character names as a pet peeve. The BACKLOG asks for course-neutral words. | Regenerating the frozen file, rejected because it would hide any other request that moved. A display name kept apart from the name the model reads, rejected because one topic would have two names. 'The area function', rejected because it is still a course word, not the plain description the BACKLOG asks for. | ruled, next on the delivery lane as 17 |
+
+TN1 changes the words of one set request while the marking Approval is with the owner, and the owner is told. Ceiling, accepted: a neutral name may be less friendly to a first-year, and the blurb keeps the plain words.
 
 ## 5. student-working-explanation
 
@@ -1668,6 +1697,8 @@ Full r3 (round 2026-10-10-weekly-digest-for-parents-r3, run f795a859) was judged
 - A ruling that left a finding for a later round does not shield it. When a later full round makes it a high line, it is reworked like any other, and the deferral is reopened only as far as the line reaches (tv-phone-pairing full r2, craft-2, as 8c).
 - A delivery whose rows are of two shapes is split by shape, one run each, in the lane's order (essay: 6a rules the reading, 6b draws what was not ruled).
 - A merged delivery's BACKLOG line cites its own code commit. When two runs merge close together, the second one is rebased, and the SHA it cites for itself goes stale. At settlement, the App Master checks every SHA that a merged BACKLOG line cites with git merge-base --is-ancestor <sha> main. A stale one is fixed in the next BACKLOG commit (MB-B25 cited 888bb46d, delivery 14's pre-rebase SHA; delivery 15 fixed it to 69f9bc52 at 7a084ae8).
+- A resolution run that carries a held delivery's code by git cherry-pick -x does not carry the held BACKLOG commit, because that commit cites a SHA that does not reach main. It writes the BACKLOG line again, citing the cherry-picked SHA (16a: 050e3253 carried as 5a45e935, 37b764ce dropped, 0e3fa4fb cites 5a45e935). This amends the rule that a resolution run keeps the held commits unchanged.
+- Before a delivery is dispatched, the App Master greps tools/ for every test or frozen file that draws, counts or stores what the change alters (markup classes, strings, set requests), and puts them in the delivery's paths. Delivery 16 was held on tools/school-ruler-test.cjs W8 2, which counts mb-cell2 cells and was not in its paths. For the same reason, TN1's paths include tools/calc-sets-frozen.json. This widens the X6 rule.
 
 ## Delivery order
 
@@ -1714,6 +1745,8 @@ L2. the lean follow-up on ledger lean-2026-10-10-desk: done, 8d625e92 (L2-1), 53
 13a. the recap write-door contract: unchanged (queued; it goes next on the lane when the owner decides the recap Approval, and does not wait for learner-profile).
 14. MK13 (MB-B25), the names that readNumber strips: done, 69f9bc52 and 5773c964 (run e9ff4caa). MK13-a's named-pair pin is queued with the next delivery that touches tools/school-rules-test.cjs.
 15. MK14 (MB-B32), one cap of 120 for every typed answer: done in part, 6cbe3bd4 and 7a084ae8 (run 6b9a8cda). The phone's character count is held until the owner answers 276c835a.
+16. GR1 (MB-B39), Get ready for school offers the worked lesson first: done, 5a45e935, 19b254ae and 0e3fa4fb (run 1e81ded3, after held run 12db6fd8). GR1-a ruled the school-ruler test.
+17. TN1 (MB-B41), the area-so-far topic named in course-neutral words: ruled, next on the lane.
 
 Ruled 2026-10-11 (round 14): the lane runs 8b, then 6, then 9b. Ruled 2026-10-11 (round 15): 9b ran before 6, beside the pairing full r2, because 6's phone half needs desk/src/app/phone/page.tsx, a file in that round's span. The lane now runs 6a, 6b, then 8c. Ruled 2026-10-11 (round 17): the lane runs 8c, then 6c. Ruled 2026-10-11 (round 18): the lane ran 8c, 6c, 6d, PR11 and PR12, one branch at a time.
 
@@ -1724,6 +1757,8 @@ Ruled 2026-10-11 (round 20): the lane ran L2 beside the essay full r2, then 6g, 
 Ruled 2026-10-11 (round 21): the lane ran 13-i, then 13-i-b, one branch at a time, after the essay full r3 settled the essay lane. Delivery 14 runs next, beside capture r21, which edits only this doc.
 
 Ruled 2026-10-11 (round 22): the lane ran 14, then 15, one branch at a time. Capture r21 ran beside 14 and merged first, so 14 was rebased. 15 ran alone and was not rebased.
+
+Ruled 2026-10-11 (round 23): the lane ran 16, then 16a, one branch at a time. 16 was held on tools/school-ruler-test.cjs W8 2, outside its paths. 16a carried 16's code commit by cherry-pick, with the GR1-a test ruling. 17 runs next.
 
 Delivery W7 and W7c, as delivered:
 
@@ -1796,7 +1831,7 @@ Review lane, in order:
 
 ## Open contradictions
 
-None open after round 22. P8's quoted start text is ruled as 7b question 1, so it is not open.
+None open after round 23. P8's quoted start text is ruled as 7b question 1, so it is not open.
 
 Supersessions that are resolved, not open: MK2 by MK5, MK3 by MK8, the lite r2 and r3 steps by the plan change, P3's per-learner slot by P3-a, P6's SERVER_ONLY clause by P6-a, P10 by P10-a, X1c's line in the numberWords.ts header by X5, PR5's remembered-code half by PR10 (delivered, dc511a47), and PR6's uncounted TV and phone streams by PR12 (delivered, e6d6af46).
 
