@@ -93,6 +93,22 @@ Math Buddy has L1 only today; rows marked (L2) need the vision host (env.md, *Ma
 
 Severity: a false tick or an answer leak is always a blocker, whatever its impact rank (as a boundary breach is for Linga); everything else derives from impact (below).
 
+## Grounding denominators for Essay Master and Math Buddy
+
+A source counts only when it enters the prompt or the schema of that call. A walker scores each surface as the sources that reach it over the N below, and never defines its own. Fixed once in the 2026-10-09 L1 walks: Essay Master in uat/runs/2026-10-09-essay-l1/SUMMARY.md ("Grounding denominators"), Math Buddy in uat/runs/2026-10-09-maths-l1/SUMMARY.md (same section). The source lists are there.
+
+| Surface | N |
+|---|---|
+| **ES-READ** (the reading of a paragraph or a piece) | 8 |
+| **ES-REVISE** (judging a rewrite) | 7 |
+| **MB-READ** (page read, vision) | 5 |
+| **MB-MARK** (snapped sheet: vision read and code verdict) | 6 |
+| **MB-HINT** | 8 |
+| **MB-EXPLAIN** | 8 |
+| **MB-SET** (model-made set; a code-built set is n-a) | 7 |
+| **MB-WORKED** (idea text) | 5 |
+| **MB-PICK** (lesson pick) | 3 |
+
 ## Impact
 
 `impact = { frequency, reachability, trust_erosion }`, each `low | med | high`. Rank = frequency × reachability × trust erosion (low 1, med 2, high 3). Severity is derived: ≥18 blocker, ≥8 major, ≥3 minor, else polish. A boundary breach is always a blocker.
@@ -103,7 +119,7 @@ Severity: a false tick or an answer leak is always a blocker, whatever its impac
 
 ## Finding schema
 
-As the skill defines it, with `cert_level: "LT"` for this overlay:
+As the skill defines it, with `cert_level` set to the level the row was found at: `"L1"`, `"LT"` or `"L2"`:
 
 `{ id, journey, character, cert_level, type, severity, impact, dimension, title, expected, got, evidence[], code_check, verdict, resolution, ceiling, recurrence, suggested_acceptance, engine }`
 
