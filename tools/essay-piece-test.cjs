@@ -155,9 +155,9 @@ test('E2: the TV draws every paragraph of a piece that is still being read as pe
   assert.equal(R.paragraphPending(undefined, 0), false, 'a one-paragraph reading has no piece');
   for (const para of [0, 1, 2]) assert.equal(R.paragraphPending(P([0]), para), true, 'still being read: paragraph ' + para + ' is pending, even the one that came back');
   assert.equal(R.paragraphPending(P([0, 1], [2]), 0), false, 'the piece is done: a read paragraph is drawn');
-  assert.equal(R.paragraphPending(P([0, 2], [1]), 1), true, 'a failed paragraph stays pending as before');
+  assert.equal(R.paragraphPending(P([0, 2], [1]), 1), false, 'changed by E4 (council rulings 2026-10-09 section 6): a failed paragraph is drawn as not read, never pending, once the piece is done');
   const tv = fs.readFileSync(path.join(root, 'src/essay/EssayTV.tsx'), 'utf8');
-  assert.equal((tv.match(/paragraphPending\(/g) || []).length, 2, 'the map and the rail both use it');
+  assert.equal((tv.match(/paragraphState\(/g) || []).length, 2, 'the map and the rail both use it (changed by E4: they ask paragraphState, of which paragraphPending is the pending view)');
 });
 test('pieceProblem: limits checked in code, in the desk\'s words, never cut', () => {
   assert.equal(R.pieceProblem(PIECE), null);
@@ -239,4 +239,15 @@ test('E3: an English paragraph either side of one that is not: two calls, notEng
 test('E3: a piece with every paragraph English has no notEnglish on it, and the pieces of the earlier cases keep their shape', async () => {
   answer = perParagraph(faultyAt([])); const a = await analysePiece(PIECE, 'structure', 'e3-c', undefined);
   assert.equal(a.piece.notEnglish, undefined);
+});
+
+// ---- E4, E4-a: a failed paragraph is not read, never pending; its sentences leave the count and the summary names it ----
+test('E4: a piece whose paragraph 2 fails: state not-read, the summary names it with the failed line, its sentences leave the count, the history line agrees', async () => {
+  answer = async (req) => { if (/paragraph 2 of/.test(req.prompt)) throw new Error('engine down'); return observing(OBS_A)(req); };
+  const a = await analysePiece(SECTION_A, 'structure', 'e4-a', undefined);
+  assert.deepEqual(a.piece.failed, [1]);
+  assert.equal(R.paragraphState(a.piece, 1), 'not-read'); assert.equal(R.paragraphState(a.piece, 0), 'read');
+  const faulty = a.verdicts.filter(v => v.verdict === 'faulty').length;
+  assert(a.summary.startsWith(`${faulty} of 4 sentences to fix across 3 paragraphs. Paragraph 2 did not come back. Send it again from the phone.`), a.summary);
+  assert.equal(getLearner('e4-a').history.at(-1).detail, `${faulty} of 4 sentences to fix, 3 paragraphs`);
 });

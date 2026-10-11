@@ -1158,3 +1158,37 @@ test('E3-a: every English paragraph the two essay suites use reads as English; f
  assert(Math.max(...cz.map(r=>r.english))<R.ENGLISH_FLOOR,'every Czech text is under the English floor; the lowest English text (below the floor too) is kept English by the Czech signal, the two floors act together');
  assert(Math.min(...cz.map(r=>r.czech))>=R.CZECH_FLOOR&&high<R.CZECH_FLOOR,'the Czech floor sits between the English corpus and the Czech texts');
 });
+
+// ---- E4, E4-a (council rulings 2026-10-09 section 6): a paragraph the desk did not rule is said and drawn as such ----
+test('E4-a: paragraphState gives one state per paragraph: pending while the piece is read, then read, not-read (failed) or not-english',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const P=(read,failed=[],notEnglish)=>({paragraphs:4,read,failed,...(notEnglish?{notEnglish}:{})});
+ for(const para of [0,1,2,3])assert.equal(R.paragraphState(P([0]),para),'pending','being read: every paragraph is pending, the one back included');
+ assert.equal(R.paragraphState(P([0],[1],[2]),3),'pending','one paragraph still out');
+ const done=P([0,3],[1],[2]);
+ assert.deepEqual([0,1,2,3].map(k=>R.paragraphState(done,k)),['read','not-read','not-english','read']);
+ assert.equal(R.paragraphState(undefined,0),'read','a one-paragraph reading has no piece and is drawn as read');
+ assert.equal(R.paragraphPending(done,1),false,'a failed paragraph is never pending once the piece is done (E4)');
+ assert.equal(R.paragraphPending(P([0]),0),true);
+});
+test('E4-a: the forensic caption is a rule: a sentence of a paragraph that was not ruled gets "Not read" and the paragraph\'s line, never Neutral',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const done={paragraphs:3,read:[0],failed:[1],notEnglish:[2]};
+ assert.deepEqual(R.unruledCaption(done,1),{label:'Not read',text:'Paragraph 2 did not come back. Send it again from the phone.'});
+ assert.deepEqual(R.unruledCaption(done,2),{label:'Not read',text:'Paragraph 3 is not in English, so the desk did not read it.'});
+ assert.equal(R.unruledCaption(done,0),null);
+ assert.equal(R.unruledCaption({paragraphs:3,read:[0],failed:[]},1),null,'while the piece is read nothing is "not read" yet');
+ assert.equal(R.unruledCaption(undefined,0),null);
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/unruledCaption\(/,'the page asks the rule');
+ assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the map and the rail carry a data attribute naming the state');
+ assert.equal((tv.match(/paragraphState\(/g)||[]).length,2);
+});
+test('E4-a: ruledSentences leaves out the sentences of failed and not-English paragraphs; unruledLines names them in paragraph order',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const ss=R.splitSentences('One here. Two here.\n\nThree here.\n\nFour here. Five here.');
+ const piece={paragraphs:3,read:[0],failed:[2],notEnglish:[1]};
+ assert.deepEqual(R.ruledSentences(ss,piece).map(s=>s.n),[1,2]);
+ assert.deepEqual(R.unruledLines(piece),['Paragraph 2 is not in English, so the desk did not read it.','Paragraph 3 did not come back. Send it again from the phone.']);
+ assert.deepEqual(R.ruledSentences(ss,undefined).map(s=>s.n),[1,2,3,4,5]);
+});

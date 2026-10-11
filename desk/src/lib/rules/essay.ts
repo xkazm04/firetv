@@ -374,19 +374,42 @@ export function pieceBeingRead(piece: PieceLike | undefined): boolean {
   return !!piece && piece.read.length + piece.failed.length + (piece.notEnglish?.length ?? 0) < piece.paragraphs;
 }
 
-/** Whether a paragraph of a piece is drawn as pending on the TV: every paragraph while the piece is still being read, and a paragraph that never came back. */
+/**
+ * One paragraph of a piece, in one word (E4-a): pending for every paragraph while the piece is still being read; then
+ * read, not-read (it failed to come back) or not-english (the desk did not read it). A reading with no piece is read.
+ */
+export type ParagraphState = "pending" | "read" | "not-read" | "not-english";
+export function paragraphState(piece: PieceLike | undefined, para: number): ParagraphState {
+  if (!piece) return "read";
+  if (pieceBeingRead(piece)) return "pending";
+  return piece.notEnglish?.includes(para) ? "not-english" : piece.read.includes(para) ? "read" : "not-read";
+}
+
+/** Whether a paragraph of a piece is drawn as pending on the TV: only while the piece is still being read. A paragraph that never came back is not read, not pending. */
 export function paragraphPending(piece: PieceLike | undefined, para: number): boolean {
-  return !!piece && (pieceBeingRead(piece) || !piece.read.includes(para));
+  return paragraphState(piece, para) === "pending";
 }
 
-/** The sentences of a piece the desk ruled: those of its paragraphs that were not skipped as not English. */
+const NOT_READ = (para: number) => `Paragraph ${para + 1} did not come back. Send it again from the phone.`;
+const NOT_ENGLISH = (para: number) => `Paragraph ${para + 1} is not in English, so the desk did not read it.`;
+
+/** The caption of a sentence whose paragraph the desk did not rule: "Not read" and the paragraph's line; null for any other. */
+export function unruledCaption(piece: PieceLike | undefined, para: number): { label: string; text: string } | null {
+  const state = paragraphState(piece, para);
+  return state === "not-read" ? { label: "Not read", text: NOT_READ(para) } : state === "not-english" ? { label: "Not read", text: NOT_ENGLISH(para) } : null;
+}
+
+/** The sentences of a piece the desk ruled: those of its paragraphs that came back and are English. */
 export function ruledSentences<S extends Pick<Sentence, "para">>(sentences: S[], piece: PieceLike | undefined): S[] {
-  return sentences.filter((s) => !piece?.notEnglish?.includes(s.para ?? 0));
+  return sentences.filter((s) => !piece?.notEnglish?.includes(s.para ?? 0) && !piece?.failed.includes(s.para ?? 0));
 }
 
-/** What a piece's summary says about a paragraph the desk did not rule, one line per paragraph, in paragraph order. */
+/** What a piece's summary says about each paragraph the desk did not rule, one line per paragraph, in paragraph order. */
 export function unruledLines(piece: PieceLike | undefined): string[] {
-  return (piece?.notEnglish ?? []).slice().sort((x, y) => x - y).map((k) => `Paragraph ${k + 1} is not in English, so the desk did not read it.`);
+  const lines = new Map<number, string>();
+  for (const k of piece?.failed ?? []) lines.set(k, NOT_READ(k));
+  for (const k of piece?.notEnglish ?? []) lines.set(k, NOT_ENGLISH(k));
+  return [...lines].sort((x, y) => x[0] - y[0]).map((x) => x[1]);
 }
 
 /**
