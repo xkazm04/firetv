@@ -104,7 +104,9 @@ export function cookiesOf(req: Request): Jar {
   const all = new Map<string, string>();
   for (const part of (req.headers.get("cookie") ?? "").split(";")) {
     const i = part.indexOf("="); if (i < 0) continue;
-    const k = part.slice(0, i).trim(); if (k && !all.has(k)) all.set(k, decodeURIComponent(part.slice(i + 1).trim()));
+    const k = part.slice(0, i).trim(); if (!k || all.has(k)) continue;
+    // a value that will not decode is left out, as Next's own parser does (@edge-runtime/cookies parseCookie), so the proxy and the stream agree
+    try { all.set(k, decodeURIComponent(part.slice(i + 1).trim())); } catch {}
   }
   return { get: (name) => (all.has(name) ? { value: all.get(name)! } : undefined) };
 }

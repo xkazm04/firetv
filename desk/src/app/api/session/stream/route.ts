@@ -13,14 +13,25 @@ export async function GET(req: Request): Promise<Response>;
 export async function GET(req?: Request) {
   const enc = new TextEncoder();
   let unsub = () => {};
+  let ping: ReturnType<typeof setInterval> | undefined;
+  let ended = false;
   const stream = new ReadableStream({
     start(controller) {
-      const send = (s: Session) => { try { controller.enqueue(enc.encode(`data: ${JSON.stringify(view(s, liveRole(req)))}\n\n`)); } catch {} };
-      send(getSession());
+      const release = () => { ended = true; unsub(); clearInterval(ping); };
+      const close = () => { release(); try { controller.close(); } catch {} };
+      const send = (s: Session) => {
+        // the message is drawn outside the enqueue's catch: a throw here is a fault to name, and the stream ends rather than sit open and silent
+        let chunk: Uint8Array;
+        try { chunk = enc.encode(`data: ${JSON.stringify(view(s, liveRole(req)))}\n\n`); }
+        catch (e) { console.error(`desk session stream: could not draw a message, closing the stream (${e instanceof Error ? e.message : e})`); close(); return; }
+        try { controller.enqueue(chunk); } catch { release(); }
+      };
       unsub = subscribe(send);
-      const ping = setInterval(() => { try { controller.enqueue(enc.encode(": ping\n\n")); } catch { clearInterval(ping); } }, 15000);
+      send(getSession());
+      if (ended) return;
+      ping = setInterval(() => { try { controller.enqueue(enc.encode(": ping\n\n")); } catch { clearInterval(ping); } }, 15000);
     },
-    cancel() { unsub(); },
+    cancel() { ended = true; unsub(); clearInterval(ping); },
   });
   return new Response(stream, { headers: { "Content-Type": "text/event-stream", "Cache-Control": "no-cache, no-transform", Connection: "keep-alive" } });
 }

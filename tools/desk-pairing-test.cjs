@@ -352,3 +352,40 @@ test('PR3: an unreadable pairing.json logs one line naming the file and the reas
   assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).key,key);assert(key.length>=16);
  }finally{mock.restoreAll();fs.writeFileSync(f,was);}
 });
+
+// ---- PR4: the stream survives a foreign cookie and never stays open and silent ----
+const DEC=new TextDecoder();
+const phoneCookie=async()=>{evening('pair');DESK_JOIN();const pin=store.getSession().pin;const r=await post({type:'join',code:pin},'guest');return 'desk-phone='+setCookie(r,'desk-phone');};
+test('PR4: a phone stream whose Cookie header carries a malformed foreign value still gets its first message, as a phone',async()=>{
+ const cookie=await phoneCookie()+'; other=%E0';
+ mock.timers.enable({apis:['setInterval']});
+ try{
+  const res=await streamRoute().GET(req('/api/session/stream',{role:'phone',cookie}));const rd=res.body.getReader();
+  const first=await Promise.race([rd.read(),new Promise((_,no)=>setTimeout(()=>no(new Error('no message arrived')),1500))]);
+  assert.equal(JSON.parse(DEC.decode(first.value).replace(/^data: /,'')).viewer,'phone');await rd.cancel();
+ }finally{mock.timers.reset();}
+});
+test('PR4: cookiesOf and Next\'s RequestCookies classify five Cookie headers the same way',async()=>{
+ const phone=await phoneCookie(),tv='desk-tv='+pairing().tvToken();
+ const headers=[phone,phone+'; other=%E0',phone+'; other=abc%',tv,undefined];
+ const want=['phone','phone','phone','tv','guest'];
+ headers.forEach((h,i)=>{
+  const mine=pairing().roleOf(pairing().cookiesOf(new Request('http://desk/',{headers:h?{cookie:h}:{}})));
+  const nexts=pairing().roleOf(new NextRequest('http://desk/',{headers:h?{cookie:h}:{}}).cookies);
+  assert.equal(nexts,want[i],`Next, header ${i}`);assert.equal(mine,nexts,`header ${i}: ${h}`);
+ });
+});
+test('PR4: a throw while drawing logs one line and the stream ends, with the ping cleared',async()=>{
+ evening('pair');const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ mock.timers.enable({apis:['setInterval']});
+ try{
+  const subs=globalThis.__desk.subs,before=subs.size;
+  const rd=(await streamRoute().GET(req('/api/session/stream',{role:'guest'}))).body.getReader();
+  await rd.read();assert.equal(subs.size,before+1);
+  const loop={...store.getSession()};loop.learner=loop;
+  subs.forEach((f)=>f(loop));
+  const end=await Promise.race([rd.read(),new Promise((_,no)=>setTimeout(()=>no(new Error('the stream stayed open')),1500))]);
+  assert.equal(end.done,true);assert.equal(subs.size,before,'unsubscribed');
+  assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/^desk session stream:/);
+ }finally{mock.restoreAll();mock.timers.reset();}
+});
