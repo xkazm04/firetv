@@ -206,3 +206,37 @@ test('a one-paragraph reading is unchanged: no piece, the paragraph prompt', asy
   const a = await analyseEssay('One good sentence. And another one.', 'structure', 'ema', 15);
   assert.equal(a.piece, undefined); assert.doesNotMatch(seen[0].prompt, /Judge only paragraph/); assert.match(seen[0].prompt, /The student's paragraph,/);
 });
+
+// ---- E3 (council rulings 2026-10-09 section 6): a paragraph that is not English is said so and not ruled ----
+const CZ_R4 = 'Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují, avšak bez nich se žáci nenaučí sebekázni. Proto je lepší je regulovat.';
+const CZ_R7 = 'Telefony by ve škole měly zůstat povolené. Podle výzkumu Univerzity Karlovy se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný.';
+const EN_LINE = 'Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.';
+test('E3: one paragraph (kind essay) that is not English is refused with 400 and the line, before any run', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
+  seen = []; answer = async () => { throw new Error('no model call expected'); };
+  const r = await post({ kind: 'essay', text: CZ_R7, type: 'structure' });
+  assert.equal(r.status, 400); assert.equal((await r.json()).error, EN_LINE); assert.equal(seen.length, 0);
+});
+test('E3: a piece whose every paragraph is not English is refused with 400 and the line, before any run', async () => {
+  seen = [];
+  const r = await post({ kind: 'piece', text: CZ_R4 + '\n\n' + CZ_R7, type: 'structure' });
+  assert.equal(r.status, 400); assert.equal((await r.json()).error, EN_LINE); assert.equal(seen.length, 0);
+  await assert.rejects(analysePiece(CZ_R4 + '\n\n' + CZ_R7, 'structure', 'e3-a', undefined), /not in English/, 'and analysePiece itself never rules it');
+});
+const E3_PIECE = 'Schools start too early. Teenagers are tired.\n\n' + CZ_R7 + '\n\nResearch found that teens sleep later. Therefore school should start at nine.';
+const E3_OBS = [{ n: 1, job: 'claim' }, { n: 2, job: 'context' }, { n: 3, job: 'claim' }, { n: 4, job: 'evidence' }, { n: 5, job: 'link' }, { n: 6, job: 'evidence', supports: 1 }, { n: 7, job: 'link' }];
+test('E3: an English paragraph either side of one that is not: two calls, notEnglish [1], no verdict on its sentences, the head counts the English sentences and names it, the history line agrees', async () => {
+  seen = []; answer = observing(E3_OBS);
+  const a = await analysePiece(E3_PIECE, 'structure', 'e3-b', undefined);
+  assert.equal(seen.length, 2, 'the paragraph that is not English costs no call');
+  assert.deepEqual(a.piece.notEnglish, [1]); assert.deepEqual(a.piece.read, [0, 2]); assert.deepEqual(a.piece.failed, []);
+  assert(a.verdicts.every(v => v.n < 3 || v.n > 5), 'no verdict on sentences 3 to 5');
+  const faulty = a.verdicts.filter(v => v.verdict === 'faulty').length;
+  assert.equal(a.sentences.length, 7);
+  assert(a.summary.startsWith(`${faulty} of 4 sentences to fix across 3 paragraphs. Paragraph 2 is not in English, so the desk did not read it.`), a.summary);
+  assert.equal(getLearner('e3-b').history.at(-1).detail, `${faulty} of 4 sentences to fix, 3 paragraphs`);
+});
+test('E3: a piece with every paragraph English has no notEnglish on it, and the pieces of the earlier cases keep their shape', async () => {
+  answer = perParagraph(faultyAt([])); const a = await analysePiece(PIECE, 'structure', 'e3-c', undefined);
+  assert.equal(a.piece.notEnglish, undefined);
+});

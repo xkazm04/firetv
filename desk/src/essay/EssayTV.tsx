@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphPending, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphPending, pieceBeingRead, planFit, planSlots, rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -140,7 +140,7 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
 
   const job = s.jobs?.analyse?.key === "essay" ? s.jobs.analyse : undefined;
   const chosen = lens && s.essayType === lens.id;
-  const reading = a?.piece && a.piece.read.length + a.piece.failed.length < a.piece.paragraphs;
+  const reading = pieceBeingRead(a?.piece);
   const cap = job?.phase === "running" ? { label: "Reading", text: reading ? "The desk is reading your piece, a paragraph at a time. Each one lands here." : "The desk is reading your paragraph. It lands here." }
     : job?.phase === "failed" && (chosen || !a) ? { label: "Not read", text: job.error ?? "The paragraph did not come back. Send it again from the phone." }
     : at === "plan" ? { label: "Start from the pattern", text: "Write the paragraph yourself: one sentence for each slot, on the phone." }

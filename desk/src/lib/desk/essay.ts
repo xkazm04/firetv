@@ -6,7 +6,7 @@
  * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, JOBS, numberedLines, observationOk, paragraphCount, paragraphStats, revise, SIDES, splitSentences, SUPPORTS, taught, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
@@ -121,34 +121,38 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
  * piece where every paragraph failed fails. The piece is ruled ONCE (E2): each paragraph's accepted observations are
  * kept, and decideVerdicts runs after the last paragraph over every paragraph that came back, with the whole piece as
  * context. Until then the progress carries no verdicts and its summary names no paragraph to start with. Recorded
- * once, as one reading.
+ * once, as one reading. A paragraph that is not English (E3, decided by code before any call) gets no call and no verdict:
+ * it is listed in `piece.notEnglish`, and the summary counts only the sentences of the paragraphs that were ruled.
  */
 export async function analysePiece(raw: string, type: AnalysisType, learnerId: string, age: number | undefined,
   onProgress: (a: EssayAnalysis) => void = () => {}, pieceId?: string): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw), lens = lensOf(type), voice = voiceOf("essay", age);
   const of = paragraphCount(sentences);
   const piece: NonNullable<EssayAnalysis["piece"]> = { paragraphs: of, read: [], failed: [], ...(pieceId ? { pieceId } : {}) };
+  const notEnglish: number[] = [];
   let verdicts: Verdict[] = [], provider: string | undefined, lastError: unknown;
   const summaries: string[] = [], observed: Record<string, unknown>[] = [], judgedAll = new Set<number>();
-  const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: { ...piece, read: [...piece.read], failed: [...piece.failed] } });
+  const pieceNow = () => ({ ...piece, read: [...piece.read], failed: [...piece.failed], ...(notEnglish.length ? { notEnglish: [...notEnglish] } : {}) });
+  const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: pieceNow() });
   let ruled = false;
   const pieceSummary = () => {
     const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
     const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
-    const head = `${faulty} of ${sentences.length} sentences to fix across ${of} paragraphs.`;
+    const head = [`${faulty} of ${ruledSentences(sentences, pieceNow()).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(pieceNow())].join(" ");
     return ruled && at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
   };
   for (let para = 0; para < of; para++) {
-    const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
-    try {
+    const own = sentences.filter((s) => (s.para ?? 0) === para), judged = new Set(own.map((s) => s.n));
+    if (!paragraphIsEnglish(joinSentences(own))) notEnglish.push(para);
+    else try {
       const r = await judge(sentences, judged, lens, voice, { para, of });
       observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }
     if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); ruled = true; }
     onProgress(now());
   }
-  if (!piece.read.length) throw lastError ?? new Error("no paragraph of the piece came back");
-  record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length, of);
+  if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
+  record(learnerId, lens, ruledSentences(sentences, pieceNow()).length, verdicts.filter((v) => v.verdict === "faulty").length, of);
   return now();
 }
 

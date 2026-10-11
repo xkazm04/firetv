@@ -118,6 +118,38 @@ export function pieceProblem(text: unknown): string | null {
   return null;
 }
 
+// ---- E3: the desk reads English writing; code decides, before any verdict or count, whether a paragraph is English ----
+
+/** The line a paragraph that is not English gets, on the phone and on the TV. */
+export const NOT_ENGLISH_LINE = "Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.";
+
+const ENGLISH_WORDS = new Set(("the of and to a in is that it was for on are as with they be at this have from or by not but we you their would should can more than which also because " +
+  "so if there them these most many my who will an his her its our your has had were been do does did about into when what one all some other only just very how why then too").split(" "));
+/** Common Czech function words, written without diacritics (a text is folded before it is compared, so a piece typed without them reads the same). Words that are also English (to, a, by, do, so, on, ten, pro, ale) are left out. */
+const CZECH_WORDS = new Set(("je se ze na jsou ve si byl byla bylo jako ktery ktera ktere aby nebo take vsak avsak proto podle nez tak uz jen jak mezi pri bez byt ho jeho jeji jejich ma neni nejsou " +
+  "nich nim tim jsem jsme jste bude budou muze musi kdyz kde kdo ani tedy tudiz nicmene protoze pokud vsichni velmi").split(" "));
+const CZECH_LETTERS = /[ěščřžýáíéúůďťňó]/i;
+const fold = (w: string) => w.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+/** The shares behind the English rule: words, English function words over words, Czech signal over words. */
+export function englishReading(text: unknown): { words: number; english: number; czech: number } {
+  const ws = (typeof text === "string" ? text.toLowerCase().match(/[\p{L}']+/gu) : null) ?? [];
+  if (!ws.length) return { words: 0, english: 0, czech: 0 };
+  const en = ws.filter((w) => ENGLISH_WORDS.has(w)).length;
+  const cz = ws.filter((w) => CZECH_LETTERS.test(w) || CZECH_WORDS.has(fold(w))).length;
+  return { words: ws.length, english: en / ws.length, czech: cz / ws.length };
+}
+/** The floors, set on the corpus in tools/essay-rules-test.cjs (E3-a): below the English floor AND at or over the Czech floor, in a paragraph of at least ENGLISH_MIN_WORDS words. */
+export const ENGLISH_MIN_WORDS = 6;
+export const ENGLISH_FLOOR = 0.15;
+export const CZECH_FLOOR = 0.25;
+
+/** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
+export function paragraphIsEnglish(text: unknown): boolean {
+  const r = englishReading(text);
+  return !(r.words >= ENGLISH_MIN_WORDS && r.english < ENGLISH_FLOOR && r.czech >= CZECH_FLOOR);
+}
+
 /**
  * Whether a file the learner picked can be read as text, checked in the browser before anything is read into the
  * panel (nothing is uploaded or kept). Call it with the file's name, type and size, then again with the text once
@@ -334,9 +366,27 @@ export function decideVerdicts(lens: string, sentences: Sentence[], judged: Set<
   return out;
 }
 
+/** The state of a piece's reading as the desk holds it (session/store EssayAnalysis.piece): 0-based paragraph numbers. `notEnglish` is absent on an older session. */
+export interface PieceLike { paragraphs: number; read: number[]; failed: number[]; notEnglish?: number[]; }
+
+/** Whether a piece is still being read: its read, failed and not-English paragraphs number fewer than its paragraphs. */
+export function pieceBeingRead(piece: PieceLike | undefined): boolean {
+  return !!piece && piece.read.length + piece.failed.length + (piece.notEnglish?.length ?? 0) < piece.paragraphs;
+}
+
 /** Whether a paragraph of a piece is drawn as pending on the TV: every paragraph while the piece is still being read, and a paragraph that never came back. */
-export function paragraphPending(piece: { paragraphs: number; read: number[]; failed: number[] } | undefined, para: number): boolean {
-  return !!piece && (piece.read.length + piece.failed.length < piece.paragraphs || !piece.read.includes(para));
+export function paragraphPending(piece: PieceLike | undefined, para: number): boolean {
+  return !!piece && (pieceBeingRead(piece) || !piece.read.includes(para));
+}
+
+/** The sentences of a piece the desk ruled: those of its paragraphs that were not skipped as not English. */
+export function ruledSentences<S extends Pick<Sentence, "para">>(sentences: S[], piece: PieceLike | undefined): S[] {
+  return sentences.filter((s) => !piece?.notEnglish?.includes(s.para ?? 0));
+}
+
+/** What a piece's summary says about a paragraph the desk did not rule, one line per paragraph, in paragraph order. */
+export function unruledLines(piece: PieceLike | undefined): string[] {
+  return (piece?.notEnglish ?? []).slice().sort((x, y) => x - y).map((k) => `Paragraph ${k + 1} is not in English, so the desk did not read it.`);
 }
 
 /**

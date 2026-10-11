@@ -1130,3 +1130,31 @@ test('EM-B21: planFill accepts an opening capital outside A-Z and still refuses 
  for(const t of ['Školy by neměly telefony úplně zakazovat.','Žáci se tak učí sebekázni.','Česká školní inspekce v roce 2023 uvedla, že 45 % škol zakazuje telefony.','„Ne,“ řekla učitelka.'])assert.equal(R.planFill(plan,0,t).ok,true,t);
  const low=R.planFill(plan,0,'školy by neměly telefony zakazovat.');assert.equal(low.ok,false);assert.match(low.error,/Start it with a capital/);
 });
+
+// ---- E3-a (council rulings 2026-10-09 section 6): one pure rule says, with no model, whether a paragraph reads as English ----
+const CZ_R4='Telefony by ve škole měly zůstat povolené. Někteří učitelé tvrdí, že rozptylují, avšak bez nich se žáci nenaučí sebekázni. Proto je lepší je regulovat.';
+const CZ_R7='Telefony by ve škole měly zůstat povolené. Podle výzkumu Univerzity Karlovy se žáci s jasnými pravidly soustředí lépe. To ukazuje, že zákaz není nutný.';
+const CZ_R4_PLAIN='Telefony by ve skole mely zustat povolene. Nekteri ucitele tvrdi, ze rozptyluji, avsak bez nich se zaci nenauci sebekazni. Proto je lepsi je regulovat.';
+test('E3-a: the rule says not English for the Czech paragraphs of the L1 run (R4, R7, R4 without diacritics)',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const [k,t] of [['R4',CZ_R4],['R7',CZ_R7],['R4 without diacritics',CZ_R4_PLAIN]])assert.equal(R.paragraphIsEnglish(t),false,k);
+ assert.equal(R.NOT_ENGLISH_LINE,'Essay Master reads English writing. This paragraph is not in English, so the desk did not read it.');
+});
+test('E3-a: the rule says English for accented names inside English, for a short paragraph, and for empty or odd input',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const t of ['Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.','Škola začíná','Dobrý den','Hello there',''])assert.equal(R.paragraphIsEnglish(t),true,JSON.stringify(t));
+ for(const t of [undefined,null,42,{}])assert.equal(R.paragraphIsEnglish(t),true,String(t));
+});
+test('E3-a: every English paragraph the two essay suites use reads as English; floors set on this corpus',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const corpus=[THREE,SIX,FIVE,STUDY,CLAIM,EVID,LINK,UNI,'The school day starts too early. Research found that teenagers fall asleep later.','A later start would help. Therefore the start should move.','In conclusion, the bell should ring at nine.',
+  'Schools start too early. Teenagers are tired.','Research found that teens sleep later. This is bad.','Therefore school should start at nine.',
+  'Phones should be banned in class. They distract everyone.','A 2020 study found 40% of lessons were interrupted. This shows phones cost time.','In conclusion, phones should be banned. Teachers agree.',
+  'Homework is pointless. Pupils are busy.','One good sentence. And another one.','Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.'];
+ let low=1,high=0;
+ for(const t of corpus){const r=R.englishReading(t);if(r.words>=R.ENGLISH_MIN_WORDS){low=Math.min(low,r.english);}high=Math.max(high,r.czech);assert.equal(R.paragraphIsEnglish(t),true,t.slice(0,40));}
+ console.log(`# E3-a corpus: ${corpus.length} English paragraphs, lowest English share ${low.toFixed(2)}, highest Czech signal ${high.toFixed(2)}; floors english<${R.ENGLISH_FLOOR}, czech>=${R.CZECH_FLOOR}, words>=${R.ENGLISH_MIN_WORDS}`);
+ const cz=[CZ_R4,CZ_R7,CZ_R4_PLAIN].map(R.englishReading);
+ assert(Math.max(...cz.map(r=>r.english))<R.ENGLISH_FLOOR,'every Czech text is under the English floor; the lowest English text (below the floor too) is kept English by the Czech signal, the two floors act together');
+ assert(Math.min(...cz.map(r=>r.czech))>=R.CZECH_FLOOR&&high<R.CZECH_FLOOR,'the Czech floor sits between the English corpus and the Czech texts');
+});

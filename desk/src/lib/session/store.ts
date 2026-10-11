@@ -251,7 +251,7 @@ export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; 
  * `piece` (v2 E1) is set on a whole-piece reading: how many paragraphs, which have been read and which failed (0-based),
  * and the text store's id when the learner kept it. A one-paragraph reading has none.
  */
-export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; pieceId?: string }; }
+export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; piece?: { paragraphs: number; read: number[]; failed: number[]; notEnglish?: number[]; observed?: Record<string, unknown>[]; pieceId?: string }; }
 
 /** The learner sitting at the desk: a profile's id and name. */
 export interface AtDesk { id: string; name: string }
