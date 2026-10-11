@@ -2007,3 +2007,18 @@ test("X6 saidIn: the learner's own answer is heard",()=>{
  for (const [t,v] of rows) assert.equal(V.saidIn(v,t),true,`X6 heard: ${t} / ${v}`);
  assert.ok(V.ANSWER_CUES.includes('got')&&V.ANSWER_CUES.includes('vychazi')&&!V.ANSWER_CUES.includes('is')&&!V.ANSWER_CUES.includes('equals'));
 });
+
+test('MK13: a right answer written with its name is read (MB-B25)',()=>{
+ const R=(w,sys='uk')=>S.readNumber(w,sys);
+ const reads=[['c = 34 mm','uk',34,1,'integer','mm'],['c = 34','uk',34,1,'integer'],['C=34','uk',34,1,'integer'],['b = 40 cm','uk',40,1,'integer','cm'],
+  ['P = 3/13','uk',3,13,'fraction'],['P(A) = 3/13','uk',3,13,'fraction'],['p(red)=1/4','uk',1,4,'fraction']];
+ for (const [w,sys,n,d,form,unit] of reads){
+  const got=R(w,sys);
+  assert.ok(got&&got.kind==='number'&&got.value.n===n&&got.value.d===d&&got.form===form&&(got.unit??null)===(unit??null),`reads ${w}: ${JSON.stringify(got)}`);
+ }
+ for (const w of ['ab = 5','AB = 13 cm','|AB| = 13','v1 = 5','c = a = 5','y = 2x + 3','P() = 1/2','P(A)(B) = 1/2']) assert.equal(R(w),null,`unsure ${w}`);
+ for (const w of ['c = 10','c = 10 cm','C = 10cm']) assert.equal(S.check(PA,w,'uk').verdict,'right',`PA ${w}`);
+ for (const w of ['P = 3/10','P(A) = 3/10','p(red) = 0.3']) assert.equal(S.check(QA,w,'uk').verdict,'right',`QA ${w}`);
+ assert.equal(S.check(S1,'c = 9/12','uk').verdict,'unsure');
+ assert.equal(S.check(S1,'c = 3/4','uk').verdict,'right');
+});

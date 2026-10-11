@@ -34,7 +34,10 @@
  *   - one number per answer: an integer, a terminating decimal, a fraction `a/b`, a mixed number `1 1/2` (the fraction
  *     proper, 0 < top < bottom), a percent `25%` / `25 %` / `25 percent`, or a ratio `a:b` (kept as a pair, never a
  *     value: in cz and de ':' is also the division sign);
- *   - ignored around it: a leading `x =`, `answer:`, `ans:` or `=`, one trailing full stop, spaces;
+ *   - ignored around it: a leading single-letter name and `=` (`x =`, `c =`), `P(...) =` (one to 20 characters inside, no
+ *     brackets or '='), `answer:`, `ans:` or `=`, one trailing full stop, spaces. A two-letter or segment name, a name
+ *     with a digit, two names and an equation stay null. Ceiling: the check compares values, not names, so a wrong
+ *     name with the right value (`a = 10` where c is asked) is right; a school spec names no unknown to compare to;
  *   - a unit from the closed list UNITS (and the English words for them) after the number, or a currency sign before
  *     or after it, is returned as `unit` and never changes the number; any other trailing word is null;
  *   - us and uk: '.' is the decimal point; ',' only separates thousands in the strict 1,234 / 12,345,678 grouping, and
@@ -234,10 +237,13 @@ function parsePlain(t: string, sys: SchoolSystem): Plain | null {
   return frac === undefined ? { q, form: "integer", places: 0 } : { q, form: "decimal", places: f.length };
 }
 
+/** What readInner and writtenFraction both ignore at the start: one letter then '=', 'P(...)' then '=', 'answer:', 'ans:' or '='. */
+const ANSWER_NAME = /^(?:[a-z] ?=|p\([^()=]{1,20}\) ?=|answer ?[:=]|ans ?[:=]|=) ?/i;
+
 function readInner(answer: string, sys: SchoolSystem): Reading | null {
   if (answer.length > MAX_ANSWER) return null;
   let s = normalise(answer);
-  s = s.replace(/^(?:x ?=|answer ?[:=]|ans ?[:=]|=) ?/i, "");
+  s = s.replace(ANSWER_NAME, "");
   if (/[^.]\.$/.test(s)) s = s.slice(0, -1).trimEnd();
   if (!s) return null;
   // a currency sign before the number
@@ -1627,7 +1633,7 @@ function judgeMissingRatio(r: ReadOk, v: Q, form: Reading["form"]): SchoolVerdic
 
 /** The top and bottom as written, for an answer that reads as a plain fraction ('9/12', 'x = 9/12', '9 / 12.'), or null. */
 function writtenFraction(answer: string): [bigint, bigint] | null {
-  let s = normalise(answer).replace(/^(?:x ?=|answer ?[:=]|ans ?[:=]|=) ?/i, "");
+  let s = normalise(answer).replace(ANSWER_NAME, "");
   if (/[^.]\.$/.test(s)) s = s.slice(0, -1).trimEnd();
   const m = /^(\d+) ?\/ ?(\d+)$/.exec(s);
   return m ? [BigInt(m[1]), BigInt(m[2])] : null;
