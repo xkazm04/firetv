@@ -374,6 +374,15 @@ export function pieceBeingRead(piece: PieceLike | undefined): boolean {
   return !!piece && piece.read.length + piece.failed.length + (piece.notEnglish?.length ?? 0) < piece.paragraphs;
 }
 
+/** The summary of a piece that is still being read (E2-b): it counts nothing yet. k is the paragraphs back plus one, at most N. */
+export function pieceReadingLine(piece: PieceLike): string {
+  const back = piece.read.length + piece.failed.length + (piece.notEnglish?.length ?? 0);
+  return `Reading paragraph ${Math.min(back + 1, piece.paragraphs)} of ${piece.paragraphs}.`;
+}
+
+/** Why a sentence cannot be rewritten while the piece it is in is still being read. */
+export const REWRITE_WHILE_READING = "The desk is still reading your piece. Rewrite a sentence once every paragraph is read.";
+
 /**
  * One paragraph of a piece, in one word (E4-a): pending for every paragraph while the piece is still being read; then
  * read, not-read (it failed to come back) or not-english (the desk did not read it). A reading with no piece is read.

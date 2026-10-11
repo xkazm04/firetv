@@ -6,7 +6,7 @@
  * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, pieceBeingRead, pieceReadingLine, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
@@ -136,15 +136,18 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: pieceNow() });
   let ruled = false;
   const pieceSummary = () => {
+    // E2-b: while the piece is still being read its summary counts nothing
+    if (pieceBeingRead(pieceNow())) return pieceReadingLine(pieceNow());
     const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
     const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
     const head = [`${faulty} of ${ruledSentences(sentences, pieceNow()).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(pieceNow())].join(" ");
     return ruled && at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
   };
+  // E3: code decides which paragraphs are English up front, so the reading line counts them as back from the first report
+  for (let para = 0; para < of; para++) if (!paragraphIsEnglish(joinSentences(sentences.filter((s) => (s.para ?? 0) === para)))) notEnglish.push(para);
   for (let para = 0; para < of; para++) {
-    const own = sentences.filter((s) => (s.para ?? 0) === para), judged = new Set(own.map((s) => s.n));
-    if (!paragraphIsEnglish(joinSentences(own))) notEnglish.push(para);
-    else try {
+    const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
+    if (!notEnglish.includes(para)) try {
       const r = await judge(sentences, judged, lens, voice, { para, of });
       observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }

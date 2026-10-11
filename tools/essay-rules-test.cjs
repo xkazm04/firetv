@@ -1192,3 +1192,23 @@ test('E4-a: ruledSentences leaves out the sentences of failed and not-English pa
  assert.deepEqual(R.unruledLines(piece),['Paragraph 2 is not in English, so the desk did not read it.','Paragraph 3 did not come back. Send it again from the phone.']);
  assert.deepEqual(R.ruledSentences(ss,undefined).map(s=>s.n),[1,2,3,4,5]);
 });
+
+// ---- E2-b (council rulings 2026-10-09 section 6): one rule says whether a piece is still being read ----
+test('E2-b: pieceBeingRead is true while read, failed and not-English paragraphs number fewer than the paragraphs; the reading line counts the paragraphs back plus one, at most N',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ const P=(read,failed=[],notEnglish)=>({paragraphs:4,read,failed,...(notEnglish?{notEnglish}:{})});
+ assert.equal(R.pieceBeingRead(undefined),false,'no piece, nothing is being read');
+ assert.equal(R.pieceBeingRead(P([])),true);
+ assert.equal(R.pieceBeingRead(P([0],[1])),true);
+ assert.equal(R.pieceBeingRead(P([0],[1],[2])),true,'three of four are back');
+ assert.equal(R.pieceBeingRead(P([0,3],[1],[2])),false,'read + failed + not English make four');
+ assert.equal(R.pieceBeingRead(P([0,1,2,3])),false);
+ assert.equal(R.pieceReadingLine(P([])),'Reading paragraph 1 of 4.');
+ assert.equal(R.pieceReadingLine(P([0],[1],[2])),'Reading paragraph 4 of 4.');
+ assert.equal(R.pieceReadingLine({paragraphs:2,read:[0,1],failed:[]}),'Reading paragraph 2 of 2.','at most N');
+ assert.equal(R.REWRITE_WHILE_READING,'The desk is still reading your piece. Rewrite a sentence once every paragraph is read.');
+ for(const [file,n] of [['app/api/analyse/route.ts',1],['app/phone/page.tsx',1],['essay/EssayTV.tsx',1]]){
+  const src=fs.readFileSync(path.join(root,'src',file),'utf8');
+  assert((src.match(/pieceBeingRead\(/g)||[]).length>=n,file+' asks the rule');
+ }
+});

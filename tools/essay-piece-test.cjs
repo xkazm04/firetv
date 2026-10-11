@@ -304,3 +304,31 @@ test('E4-a piece-again: the phone offers one button, only for a piece that is do
   assert.match(phone, /Read the paragraphs that did not come back/); assert.match(phone, /kind: "piece-again"/);
   assert.equal((phone.match(/pieceAgainOffered\(/g) || []).length, 1);
 });
+
+// ---- E2-b: while a piece is being read a rewrite is refused and the summary counts nothing ----
+test('E2-b: the summary of a piece being read is "Reading paragraph k of N."; the last report is the ruling', async () => {
+  answer = observing(OBS_A);
+  const progress = []; const a = await analysePiece(SECTION_A, 'structure', 'e2b-a', undefined, (x) => progress.push(x));
+  assert.deepEqual(progress.slice(0, -1).map(p => p.summary), ['Reading paragraph 2 of 3.', 'Reading paragraph 3 of 3.']);
+  assert.equal(progress.at(-1).summary, a.summary); assert.match(a.summary, /^0 of 6 sentences to fix across 3 paragraphs\./);
+  // a failed and a not-English paragraph are back too
+  answer = observing(E3_OBS); const mixed = [];
+  await analysePiece(E3_PIECE, 'structure', 'e2b-b', undefined, (x) => mixed.push(x));
+  assert.equal(mixed[0].summary, 'Reading paragraph 3 of 3.', 'paragraph 1 is back and paragraph 2 is not English: two are back');
+});
+test('E2-b: a rewrite while the piece is being read is refused with 400 and the line, before any run', async () => {
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' });
+  const progress = []; answer = observing(OBS_A); await analysePiece(SECTION_A, 'structure', 'ema', undefined, (x) => progress.push(x));
+  dispatch({ type: 'essay.set', analysis: progress[0], owner: 'ema' });
+  seen = [];
+  const r = await post({ kind: 'rewrite', n: 1, text: 'Phones must be banned in every class.' });
+  assert.equal(r.status, 400); assert.equal((await r.json()).error, 'The desk is still reading your piece. Rewrite a sentence once every paragraph is read.'); assert.equal(seen.length, 0);
+  dispatch({ type: 'essay.set', analysis: progress.at(-1), owner: 'ema' });
+  const ok = await post({ kind: 'rewrite', n: 1, text: 'x' });
+  assert.notEqual((await ok.json()).error, 'The desk is still reading your piece. Rewrite a sentence once every paragraph is read.', 'the piece is read: the refusal is gone');
+});
+test('E2-b: the phone marks as read only the paragraphs in the reply, names each paragraph not ruled, and the rewrite panel shows the line and disables Send', () => {
+  const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
+  assert.match(phone, /setReadIx\(back\?\.read/, 'readPiece reads the reply\'s piece.read');
+  assert.match(phone, /unruledLines\(/); assert.match(phone, /REWRITE_WHILE_READING/); assert.match(phone, /disabled=\{busy \|\| rewriting\}/);
+});

@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, paragraphsOf, pieceAgainOffered, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, unruledLines, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
@@ -203,6 +203,8 @@ export default function Phone() {
   // the TV is on one sentence of the paragraph: the Essay tab offers that sentence, the learner's own words, to rewrite
   const onSentence = s?.screen === "forensic" && s.essay?.sentences.length ? s.essay.sentences[forensicAt(s)] : null;
   const [rewrite, setRewrite] = useState("");
+  // E2-b: while the piece is still being read a sentence cannot be rewritten
+  const rewriting = pieceBeingRead(s?.essay?.piece);
   // the TV is on the plan: the Essay tab writes the slot its caret is on, one sentence, in the learner's own words
   const onPlan = s?.screen === "essayplan" && s.essayPlan ? { i: planAt(s), plan: s.essayPlan, slots: planSlots(PLAYBOOK.find((p) => p.id === "para") ?? PLAYBOOK[0]) } : null;
   const [slotText, setSlotText] = useState("");
@@ -258,7 +260,9 @@ export default function Phone() {
       const j = await r.json().catch(() => ({} as { error?: string; notice?: boolean; piece?: { pieceId?: string } }));
       if (moved()) return;
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
-      if (r.ok) { setMsg("on the TV"); setReadIx(paras.map((_, i) => i)); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
+      // E3, E4: only the paragraphs the desk ruled are marked read; each one it did not rule is named with its line
+      const back = (j as { piece?: { read?: number[]; failed: number[]; notEnglish?: number[]; paragraphs: number } }).piece;
+      if (r.ok) { setMsg("on the TV"); setReadIx(back?.read ?? paras.map((_, i) => i)); if (back) setInfo(unruledLines({ ...back, read: back.read ?? [] }).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
       else { setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that piece. Try again."); }
     } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
   };
@@ -634,9 +638,10 @@ export default function Phone() {
           <button className="pbtn" data-signal="true" disabled={busy} onClick={checkSentence}>Check it on the TV</button></div>}
 
         {screen === "paste" && onSentence && <div className="pscreen" data-role="essay-rewrite"><h3>Sentence {onSentence.n}</h3><p>Rewrite it in your own words. The desk reads this one sentence again, in its paragraph.</p>
+          {rewriting && <p role="alert" data-role="essay-rewrite-wait">{REWRITE_WHILE_READING}</p>}
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || rewriting} onClick={sendRewrite}>Send</button></div>
           {againBtn}
           {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 

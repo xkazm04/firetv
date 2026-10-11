@@ -7,7 +7,7 @@ import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
-import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceProblem, revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
 
@@ -35,6 +35,8 @@ export async function POST(req: Request) {
     // the rewrite is checked in code before any run starts: one new sentence, for a sentence the paragraph has
     const a = getSession().essay;
     if (!a?.sentences.length) return NextResponse.json({ error: "There is no paragraph on the desk to rewrite in. Send one from the Essay tab." }, { status: 400 });
+    // E2-b: a piece still being read has no verdicts to rewrite against
+    if (pieceBeingRead(a.piece)) return NextResponse.json({ error: REWRITE_WHILE_READING }, { status: 400 });
     const n = typeof body.n === "number" ? body.n : NaN;
     const ok = revise(a, n, typeof body.text === "string" ? body.text : "");
     if (!ok.ok) return NextResponse.json({ error: ok.error }, { status: 400 });
