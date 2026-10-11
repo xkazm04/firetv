@@ -330,5 +330,5 @@ test('E2-b: a rewrite while the piece is being read is refused with 400 and the 
 test('E2-b: the phone marks as read only the paragraphs in the reply, names each paragraph not ruled, and the rewrite panel shows the line and disables Send', () => {
   const phone = fs.readFileSync(path.join(root, 'src/app/phone/page.tsx'), 'utf8');
   assert.match(phone, /setReadIx\(back\?\.read/, 'readPiece reads the reply\'s piece.read');
-  assert.match(phone, /unruledLines\(/); assert.match(phone, /REWRITE_WHILE_READING/); assert.match(phone, /disabled=\{busy \|\| rewriting\}/);
+  for (const piece of [{ paragraphs: 3, read: [], failed: [0] }, { paragraphs: 3, read: [], failed: [], notEnglish: [0] }]) assert(phone.includes(R.unruledLines(piece)[0].replace('Paragraph 1', 'Paragraph ${k + 1}')), 'the phone says each paragraph not ruled in the rule\'s words'); assert.match(phone, /REWRITE_WHILE_READING/); assert.match(phone, /disabled=\{busy \|\| rewriting\}/);
 });

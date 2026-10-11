@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES, PLAYBOOK } from "@/lib/library/lessons.data";
-import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, unruledLines, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
+import { essayFileProblem, essayTooLong, REWRITE_WHILE_READING, paragraphsOf, pieceAgainOffered, pieceBeingRead, pieceProblem, planFill, planFit, planSlots } from "@/lib/rules/essay";
 import { EssayShelf, TextNotice } from "./EssayShelf";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
@@ -218,12 +218,6 @@ export default function Phone() {
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
       if (moved()) return;
       setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
-  /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
-  const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
-    try { const r = await call("/api/analyse", { kind: "piece-again" }); const j = await r.json().catch(() => ({} as { error?: string }));
-      if (moved()) return;
-      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "The desk could not read them again. Try again."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
-  const againBtn = pieceAgainOffered(s?.essay) && <button className="pbtn" data-secondary="true" data-role="essay-piece-again" disabled={busy} onClick={() => void pieceAgain()}>Read the paragraphs that did not come back</button>;
   /** Load a text as a list of paragraphs, the first one showing. */
   const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
   const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
@@ -262,7 +256,7 @@ export default function Phone() {
       if (r.status === 428 && (j as { notice?: boolean }).notice) { setMsg(""); setNotice((j as { error?: string }).error ?? ""); return; }
       // E3, E4: only the paragraphs the desk ruled are marked read; each one it did not rule is named with its line
       const back = (j as { piece?: { read?: number[]; failed: number[]; notEnglish?: number[]; paragraphs: number } }).piece;
-      if (r.ok) { setMsg("on the TV"); setReadIx(back?.read ?? paras.map((_, i) => i)); if (back) setInfo(unruledLines({ ...back, read: back.read ?? [] }).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
+      if (r.ok) { setMsg("on the TV"); setReadIx(back?.read ?? paras.map((_, i) => i)); setInfo([...(back?.failed ?? []).map((k) => [k, `Paragraph ${k + 1} did not come back. Send it again from the phone.`] as const), ...(back?.notEnglish ?? []).map((k) => [k, `Paragraph ${k + 1} is not in English, so the desk did not read it.`] as const)].sort((x, y) => x[0] - y[0]).map((x) => x[1]).join(" ")); const id = (j as { piece?: { pieceId?: string } }).piece?.pieceId; if (id) setPieceId(id); setShelfTick((t) => t + 1); }
       else { setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that piece. Try again."); }
     } catch { if (!moved()) { setMsg(""); setNote("That did not reach the desk."); } } finally { setBusy(false); }
   };
@@ -291,6 +285,12 @@ export default function Phone() {
   };
   /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
   const nextFromRewrite = () => { goPara(pix + 1); void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) }); };
+  /** E4-a: a piece that is done with a paragraph that did not come back offers to read just those again (the desk checks it in code). */
+  const pieceAgain = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("the desk is reading them again…");
+    try { const r = await call("/api/analyse", { kind: "piece-again" }); const j = await r.json().catch(() => ({} as { error?: string }));
+      if (moved()) return;
+      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "The desk could not read them again. Try again."); } catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+  const againBtn = pieceAgainOffered(s?.essay) && <button className="pbtn" data-secondary="true" data-role="essay-piece-again" disabled={busy} onClick={() => void pieceAgain()}>Read the paragraphs that did not come back</button>;
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
     const best = nearestItem(page.items, y);
