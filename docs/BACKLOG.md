@@ -435,7 +435,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
 - **MB-B9** — No step from a recovery row to its practice: Select does nothing, and Back lands on Equivalent fractions
   - origin: 2026-10-09-maths-l1/L1-owen-17-MB4-3, 2026-10-09-maths-l1/L1-radka-41-MB4-3, 2026-10-09-maths-l1/L1-vojtech-18-MB4-4; "I press OK on the first topic and nothing happens. Back, and I am at fractions again." (vojtech-18, 2026-10-09-maths-l1)
   - recommendation: build — the paper key handler moves focus only and has no Select (`tv/keys.ts:482-488`): Back and Menu go to Get ready for school with focus 0 (Equivalent fractions) and no mark of the paper's topics, so the first topic's set is 7 presses away for Radka (Back, Right x4, Select, Select), 16 for Vojtěch and 5 to 17 for Owen. Select on a lit recovery row opens Prepare focused on that unit with the question asked, so a set is 2 presses from the list ("The usual" or "A step up"); Back lands on the lit topic's unit; presses from list to set are 3 or fewer (C5)
-  - status: open
+  - status: built (RP1: b3581eb2): Select on a recovery row opens Get ready for school on that unit with its question open; Back and Menu land on that unit; a set is 2 presses from the list, 3 when the unit has a worked lesson
   - ceiling: the set that follows is the generic unit set unless MB-B40 is built
 - **MB-B10** — An explain reply cannot see the learner's written answer, the working or the slip the code found (MB-EXPLAIN 3/8)
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-11, 2026-10-09-maths-l1/L1-nela-12-MB2-3, 2026-10-09-maths-l1/L1-owen-17-MB2-9
