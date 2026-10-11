@@ -195,7 +195,7 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   side, so they stack as rows (art 112 px, text beside it, the lit one slides left instead of up). Left/Right walk
   them in stop order either way. Each door's caption is one sentence.
 - **Get ready for school** (Family W8, `Prepare`, `desk/src/tv/prepareRows.ts`) - the units as cards (Fraunces 38,
-  four lines at most, the year word below in Manrope 30 amber) under strand headings (20 px uppercase labels with a
+  four lines at most, the year word below in Manrope 30 amber; a learner past the end of the school path gets no year word) under strand headings (20 px uppercase labels with a
   rule under them), on a track that pans under the lamp like the Topics ruler, a heading kept on the stage past the
   left fade. The lit card is amber and lifts; its glow stays inside the window. Nothing of the path is drawn here. The
   question is two cells (Fraunces 48 with a 21 px label above: "Your level" / "The usual", "More of the harder ones" /
@@ -291,7 +291,7 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 | screen | composition |
 |---|---|
 | Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors, three on the school path (Get ready for school, W8); the caption; the ruler (a path of more than eight topics: the strand strip, with a step-up line under a bar where units' step-ups have latched) |
-| Get ready for school | top bar with the crumb; "What is school *doing?*"; the lit unit's strand and blurb, or the two cells and the lit cell's sentence; the units as cards by strand, each with the learner's year word, panning under the lamp |
+| Get ready for school | top bar with the crumb; "What is school *doing?*"; the lit unit's strand and blurb, or the two cells and the lit cell's sentence; the units as cards by strand, each with the learner's year word (none past the end of the school path, where the lede adds a line saying the path ends), panning under the lamp |
 | Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
 | Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on a school unit, six the desk wrote itself with no model call, three at tier 1 then three at tier 2: "Work out 3/4 + 1/6.", "Fill in the missing number: 3/4 = ?/12." with the gap '?' stacked over 12 at the fraction size, "Write 18/24 in its simplest form.", "Find 3/5 of 40 kg.", "Work out 3/4 ÷ 1/2.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |
@@ -374,8 +374,9 @@ The recovery from a failed paper has its own screen (`paper`, `PaperScreen`), on
 Typed entry is the door that ships; the photo path is M5c's.
 - Left, the topics where marks were lost, in the order `recovery()` gives them (the base of the biggest loss first) and
   never re-sorted: five rows at a time (`mb-prow`, 104 px, the lit row amber-ruled), a number, the topic's name, "N marks
-  lost" in amber, "From 5(b), 7" under it. A topic the desk calls secure keeps its row and wears a "Secure on the desk"
-  pill (`data-role="maths-paper-secure"`): the paper decides, the desk only says what it knows.
+  lost" in amber, "From 5(b), 7" under it. A topic the desk calls secure keeps its row and wears a "Worth a recheck"
+  pill (`data-role="maths-paper-secure"`): the desk had the topic as secure, and the paper lost marks on it. The paper
+  decides, the desk only says what it knows.
 - Right, two cards. The paper's: the marks scored large, "of 80", "N of M marks - K marks lost", and, when some lost marks
   sit on statements with no topic, one line at the card's small size (`maths-paper-offcount`): "N of M lost marks are not on
   the desk yet.", "1 of M lost marks is not on the desk yet.", or "The one lost mark is not on the desk yet." Under it, only
