@@ -30,3 +30,17 @@ Scripts use the TypeScript compiler API from desk/node_modules (through the link
 - screens.tsx:38 `Clock`: delivery 7b's file.
 
 Nothing failed to run.
+
+## Correction 2026-10-11 (L2)
+Matcher defect: unused-exports.cjs line 16 built its RegExp from a string with a single backslash, so `\b` was a backspace (U+0008) and the rule "an export that tools/ names as a word is spared" never fired. Fixed in 53fca526 (doubled backslashes, regex metacharacters in the name escaped). Re-run on main 4f930cc9 writes unused-exports.out and .err: 283 lines, of which 274 are rows of the original 560 and 9 are new.
+
+Counts per status (572 rows):
+- before: built 6, intentional 3, open 563, declined 0, descoped 0
+- after: built 7, intentional 5, open 274, declined 286, descoped 0
+
+- 286 unused-export rows declined: named in tools/ as a word. 274 stay open. None descoped (every old row still sits in the same file; none was imported since).
+- New exports that appear only in the corrected run (added after 2498060d), not added as rows: 9 (ExplainTalkProps, Seen, weakPass, Rests, CONFIDENCE_HIGH, PieceLike, ParagraphState, unsureLine, FUNCTION_ALIASES).
+- L2-1: read.ts `num` deleted in 8d625e92 (row 2 now built).
+- L2-3: calculus1.ts and habits.ts set intentional (test-only corpus; habit detectors whose callers are not built yet).
+
+tsc after L2-1, from desk/: `--noEmit --incremental false --noUnusedLocals --noUnusedParameters` prints nothing (no TS6133, screens.tsx Clock is gone from main too); plain `tsc --noEmit` exits 0.
