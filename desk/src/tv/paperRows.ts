@@ -34,8 +34,37 @@ export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
   };
 }
 
-/** How many topics the list holds: the stops the D-pad walks (tv/keys). */
+/** How many topics the list holds. */
 export const paperTopicCount = (s: Pick<Session, "paper" | "skills">): number => paperView(s).topics.length;
+
+/** The stops the D-pad walks (tv/keys): the topic rows, then the off-desk statements. */
+export const paperStopCount = (s: Pick<Session, "paper" | "skills">): number => { const v = paperView(s); return v.topics.length + v.off.length; };
+
+/**
+ * The off-desk row's name (design/maths-lamplight.css .mb-poffrow): 26 px, in 732 px of room - the 1100 px column, less
+ * 4 px of border, 48 px of padding, the 56 px number column, two 20 px gaps and the 220 px lost/From column. At 0.55 of a
+ * character's size per character, every statement with no touches wraps whole into two lines (tools/maths-tv-test RP3 e).
+ */
+export const OFF_NAME_PX = 26;
+export const OFF_NAME_ROOM = 1100 - 4 - 48 - 56 - 40 - 220;
+export const OFF_CH = 0.55 * OFF_NAME_PX;
+
+/** The lost marks that sit on statements the desk has no topic for. */
+const offLost = (v: PaperView): number => v.off.reduce((n, o) => n + o.lost, 0);
+
+/** The score card's extra line: how many of the lost marks are not on the desk yet; null when none are. */
+export function offCountLine(v: PaperView): string | null {
+  const n = offLost(v);
+  if (n <= 0) return null;
+  if (n >= 2) return `${n} of ${v.lost} lost marks are not on the desk yet.`;
+  return v.lost > 1 ? `1 of ${v.lost} lost marks is not on the desk yet.` : "The one lost mark is not on the desk yet.";
+}
+
+/** The Not on the desk yet card's line: how many statements the desk has no topic for. */
+export function offSummary(v: PaperView): string {
+  const n = v.off.length;
+  return `${n === 1 ? "1 statement" : `${n} statements`} the desk has no topic for${v.topics.length ? ", after the topics" : ""}.`;
+}
 
 /** The topic rows in view: `size` of them around the lamp, and whether more lie above or below. */
 export function paperWindow(n: number, focus: number, size: number): { from: number; to: number; up: boolean; down: boolean } {

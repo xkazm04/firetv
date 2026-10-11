@@ -200,8 +200,8 @@ export function reachOf(codes: string[]): { topics: string[]; off: string[] } {
  *   - Order: most lost marks first, except that a topic never comes before one of its own prerequisites (followed
  *     through) that is also in the list. A prerequisite is pulled forward by the heaviest topic that needs it, so the
  *     largest loss is met as early as its prerequisites allow; ties go by path order.
- *   - A statement that leads to no school-path topic (empty `touches`) is in `notOnDesk`, most lost first, ties in
- *     STATEMENTS order; `foundation: false` is kept and flagged.
+ *   - A statement that leads to no school-path topic (empty `touches`) is in `notOnDesk`, most lost first; among equal
+ *     losses a Foundation statement comes before a flagged one, then STATEMENTS order; `foundation: false` is kept and flagged.
  *   - Totals are over every kept item, `unmapped` included.
  */
 export function recovery(raw: unknown): Recovery {
@@ -243,6 +243,6 @@ export function recovery(raw: unknown): Recovery {
   }
 
   const order = new Map(STATEMENTS.map((s, i) => [s.code, i]));
-  const notOnDesk = [...off.values()].sort((a, b) => b.lost - a.lost || order.get(a.code)! - order.get(b.code)!);
+  const notOnDesk = [...off.values()].sort((a, b) => b.lost - a.lost || Number(!a.foundation) - Number(!b.foundation) || order.get(a.code)! - order.get(b.code)!);
   return { ...clean, topics: placed, notOnDesk, totals };
 }

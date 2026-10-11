@@ -691,6 +691,12 @@
 .maths-tv .mb-prow .sec { justify-self: end; font-size: 22px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--mb-navy); background: rgba(255, 197, 107, .9); border-radius: 999px; padding: 2px 16px; }
 .maths-tv .mb-prow[data-focused="true"] { background: rgba(255, 197, 107, .16); border-color: var(--mb-amber); color: var(--mb-cream-hi); }
 .maths-tv .mb-prow[data-secure="true"]:not([data-focused="true"]) { opacity: .8; }
+/* RP3: an off-desk row. Name room = 1100 - 4 border - 48 padding - 56 number - 40 gaps - 220 lost/From column = 732 px, which
+   fits every statement in two lines at 26 px (paperRows OFF_NAME_PX, OFF_NAME_ROOM, OFF_CH). */
+.maths-tv .mb-poffrow { grid-template-columns: 56px 1fr 220px; padding: 12px 24px; }
+.maths-tv .mb-poffrow .nm { font-size: 26px; line-height: 1.15; white-space: normal; text-overflow: clip; max-height: 60px; align-self: center; grid-row: 1 / 3; }
+.maths-tv .mb-poffrow .lost { font-size: 26px; line-height: 1.1; text-align: right; }
+.maths-tv .mb-poffrow .from { font-size: 20px; line-height: 1.15; text-align: right; }
 .maths-tv .mb-pnone { display: block; font-size: 30px; }
 .maths-tv .mb-ptopics .mb-rchev.u { right: 8px; top: -36px; transform: rotate(90deg); }
 .maths-tv .mb-ptopics .mb-rchev.d { right: 8px; top: auto; bottom: -48px; transform: rotate(90deg); }
@@ -699,6 +705,7 @@
 .maths-tv .mb-pscore .big { font-family: var(--mb-serif); font-size: 84px; line-height: 1.1; color: var(--mb-cream-hi); }
 .maths-tv .mb-pscore .big small { font-size: 36px; opacity: .7; }
 .maths-tv .mb-pscore .sub { font-size: 28px; opacity: .85; }
+.maths-tv .mb-pscore .off { margin-top: 8px; font-size: 22px; color: var(--mb-amber); }
 .maths-tv .mb-poff .mb-kick { font-size: 20px; margin-bottom: 8px; }
 .maths-tv .mb-poff .o { display: flex; flex-direction: column; margin-top: 10px; }
 .maths-tv .mb-poff .c { font-size: 26px; font-weight: 600; line-height: 1.2; }

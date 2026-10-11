@@ -135,6 +135,13 @@ test('the prerequisite rule: a later topic with more lost marks still comes afte
   }
 });
 
+test('RP3: among equal losses a Foundation statement comes before a flagged one', () => {
+  const r = R.recovery([it('1', 0, 4, ['A15']), it('2', 0, 4, ['A19'])]);
+  assert.deepEqual(r.notOnDesk.map((o) => o.code), ['A19', 'A15'], 'both lost 4; A19 is Foundation, A15 is flagged');
+  assert.equal(G.STATEMENTS.find((x) => x.code === 'A15').foundation, false);
+  assert.equal(G.STATEMENTS.find((x) => x.code === 'A19').foundation, true);
+});
+
 test('notOnDesk: a gap statement keeps its can text and no topic; a higher-only statement is flagged, never dropped', () => {
   const r = R.recovery([it('1', 0, 2, ['N3']), it('2', 1, 5, ['A13', 'N10']), it('3', 0, 1, ['N3']), it('4', 0, 4, ['P8'])]);
   assert.deepEqual(r.notOnDesk, [

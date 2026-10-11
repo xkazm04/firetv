@@ -832,13 +832,14 @@ test('paper 4: what the desk has no topic for is apart, under "Not on the desk y
  assert.ok(v.off.some(o=>o.can===off.can&&o.lost===2&&o.from==='1'&&!o.beyond));
  assert.ok(v.off.some(o=>o.can===beyond.can&&o.beyond));
  assert.equal(v.topics.some(t=>t.name===off.can),false,'never linked to a topic');
- const html=drawMaths('PaperScreen',paperSession(raw));
+ const html=drawMaths('PaperScreen',paperSession(raw)),page=drawMaths('PaperScreen',paperSession(raw,{},v.topics.length));
  const at=html.indexOf('data-role="maths-paper-off"');
  assert.ok(at>0&&html.slice(at).includes('Not on the desk yet'),'its own block, headed plainly');
  const esc=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
- assert.ok(html.slice(at).includes(esc(off.can)),'the can text is shown');
- assert.match(html,/a harder statement/);assert.doesNotMatch(html,/Foundation/,'the drawn paper names no tier');
+ assert.ok(page.slice(page.indexOf('maths-paper-offrows')).includes(esc(off.can)),'RP3: the can text is on the off-desk page');
+ assert.match(page,/a harder statement/);assert.doesNotMatch(html+page,/Foundation/,'the drawn paper names no tier');
  assert.equal(html.slice(html.indexOf('maths-paper-topics'),at).includes(esc(off.can)),false,'not among the topics');
+ assert.equal(page.includes('data-id="'+v.topics[0].id+'"'),false,'no topic row on the off-desk page');
  assert.equal(drawMaths('PaperScreen',paperSession([it('3',0,1,['N12'])])).includes('maths-paper-off'),false,'no block when nothing is off the desk');
 });
 
@@ -887,6 +888,7 @@ test('paper 6: no string the recovery screen renders names the board, over a swe
   const s=paperSession(raw),v=paperView(s);
   const text=drawMaths('PaperScreen',s).replace(/<[^>]*>/g,' ')+paperCaption(v);
   assert.doesNotMatch(text,BAD,JSON.stringify(raw).slice(0,80));
+  if(v.off.length)assert.doesNotMatch(drawMaths('PaperScreen',paperSession(raw,{},v.topics.length)).replace(/<[^>]*>/g,' '),BAD,'off-desk page '+JSON.stringify(raw).slice(0,80));
  }
  assert.doesNotMatch(drawMaths('PaperScreen',paperSession(null)).replace(/<[^>]*>/g,' '),BAD);
 });
@@ -979,6 +981,102 @@ test('RP1: Select on a recovery row opens Get ready for school on its unit with 
  assert.equal(paperView(none).topics.length,0);
  assert.deepEqual(K.tvKey(none,'select',K.LOCAL).events,[]);
  assert.deepEqual(K.tvKey(none,'back',K.LOCAL).events,[{type:'nav',screen:'prepare',focus:0}]);
+});
+
+// ---------------------------------------------------------------- RP3: every off-desk statement is walked by name (MB-B13)
+
+/** A paper with topics (the first codes that reach a desk topic) and off-desk statements (Foundation first, then flagged). */
+function rp3Paper(){
+ const {STATEMENTS}=STM();
+ const on=STATEMENTS.filter(x=>x.touches.length).slice(0,3),off=[...STATEMENTS.filter(x=>!x.touches.length&&x.foundation).slice(0,7),...STATEMENTS.filter(x=>!x.touches.length&&!x.foundation).slice(0,2)];
+ return [...on.map((x,i)=>it(String(i+1),0,2,[x.code])),...off.map((x,i)=>it(String(i+10),0,1+(i%3),[x.code]))];
+}
+const escH=(x)=>x.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const flat3=(h)=>h.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ');
+
+test('RP3 a: one walk - the topics, then the off-desk statements; Select does nothing on a statement; Back and Menu go to the first unit',()=>{
+ const K=require(path.join(root,'src/tv/keys.ts')),{paperView,paperStopCount}=PAPER();
+ const prof=[{id:'ema',name:'Ema',type:'elementary',age:12,system:'uk',modules:['maths']}];
+ const mk=(f)=>({...paperSession(rp3Paper(),{},f),profiles:prof});
+ const v=paperView(mk(0)),t=v.topics.length,n=t+v.off.length;
+ assert.ok(t>=2&&v.off.length>=6);assert.equal(paperStopCount(mk(0)),n);
+ const foc=(r)=>r.events.find(e=>e.type==='focus')?.focus;
+ for(const k of ['right','down'])assert.equal(foc(K.tvKey(mk(t-1),k,K.LOCAL)),t,'forward from the last topic: '+k);
+ for(const k of ['left','up'])assert.equal(foc(K.tvKey(mk(t),k,K.LOCAL)),t-1,'back from the first statement: '+k);
+ assert.equal(K.tvKey(mk(n-1),'down',K.LOCAL).events.find(e=>e.type==='focus'),undefined,'Down on the last stop stays');
+ assert.equal(foc(K.tvKey(mk(n-2),'down',K.LOCAL)),n-1);
+ for(let f=t;f<n;f++){
+  const sel=K.tvKey(mk(f),'select',K.LOCAL);
+  assert.deepEqual(sel.events,[]);assert.deepEqual(sel.calls,[]);assert.deepEqual(sel.local,{},'local unchanged');
+  for(const k of ['back','menu']){const r=K.tvKey(mk(f),k,K.LOCAL);assert.deepEqual(r.events,[{type:'nav',screen:'prepare',focus:0}],k);assert.deepEqual(r.local,{prepareAsk:null});}
+ }
+});
+
+test('RP3 b: every off-desk statement is reachable by name on its own page; the topic rows are not drawn there; no "and n more"',()=>{
+ const {paperView}=PAPER();
+ const raw=rp3Paper(),v=paperView(paperSession(raw)),t=v.topics.length;
+ for(let f=0;f<t+v.off.length;f++){
+  const h=drawMaths('PaperScreen',paperSession(raw,{},f));
+  assert.doesNotMatch(flat3(h),/and [0-9]+ more/,'focus '+f);
+  if(f<t)continue;
+  const j=f-t,at=h.indexOf('data-role="maths-paper-offrows"');
+  assert.ok(at>0,'the off-desk page at '+f);
+  const rows=h.slice(at,h.indexOf('<aside'));
+  const lit=rows.match(/<div class="mb-prow mb-poffrow" data-focused="true"[^>]*>.*?<\/div>/s);
+  assert.ok(lit&&lit[0].includes(escH(v.off[j].can)),'the lit row names statement '+j);
+  for(const tp of v.topics)assert.equal(h.includes('data-id="'+tp.id+'"'),false,'no topic row on the off-desk page');
+  assert.equal(h.includes('maths-paper-topics'),false);
+  assert.match(h,/data-role="maths-title"[^>]*>.*Not on the desk yet/s);
+ }
+ assert.ok(drawMaths('PaperScreen',paperSession(raw,{},0)).includes('maths-paper-topics'),'on a topic the topic window shows');
+ // no topic rows at all: focus 0 is the first statement, so the page shows at once
+ assert.ok(drawMaths('PaperScreen',paperSession([it('1',0,2,['A19'])])).includes('maths-paper-offrows'));
+});
+
+test('RP3 c: the off-desk rows follow notOnDesk order, and the A19 / A15 tie draws A19 first',()=>{
+ const {paperView,paperWindow}=PAPER(),{STATEMENTS}=STM();
+ const h=drawMaths('PaperScreen',paperSession([it('1',0,4,['A15']),it('2',0,4,['A19'])]));
+ const a=h.indexOf(escH(STATEMENTS.find(x=>x.code==='A19').can)),b=h.indexOf(escH(STATEMENTS.find(x=>x.code==='A15').can));
+ assert.ok(a>0&&b>a,'A19 above A15');
+ assert.match(flat3(h),/From 2 .* From 1 · a harder statement/);
+ const v=paperView(paperSession(rp3Paper())),t=v.topics.length;
+ const hh=drawMaths('PaperScreen',paperSession(rp3Paper(),{},t+2));
+ const w=paperWindow(v.off.length,2,5);
+ let last=-1;for(let j=w.from;j<w.to;j++){const i=hh.indexOf(escH(v.off[j].can));assert.ok(i>last,'row '+j+' in order');last=i;}
+});
+
+test('RP3 d: the score card counts the lost marks that are not on the desk yet; the off card summarises',()=>{
+ const {offCountLine,offSummary,paperView}=PAPER();
+ const line=(raw)=>{const h=drawMaths('PaperScreen',paperSession(raw)),at=h.indexOf('data-role="maths-paper-score"'),e=h.indexOf('data-role="maths-paper-off"',at);return {h,score:flat3(h.slice(at,e>at?e:h.length)),has:h.includes('maths-paper-offcount')};};
+ let r=line([it('1',0,3,['A19']),it('2',0,2,['N12'])]);
+ assert.ok(r.has&&r.score.includes('3 of 5 lost marks are not on the desk yet.'));
+ r=line([it('1',0,2,['A19']),it('2',0,3,['A15'])]);assert.ok(r.score.includes('5 of 5 lost marks are not on the desk yet.'));
+ r=line([it('1',1,2,['A19']),it('2',0,2,['N12'])]);assert.ok(r.score.includes('1 of 3 lost marks is not on the desk yet.'));
+ r=line([it('1',1,2,['A19'])]);assert.ok(r.score.includes('The one lost mark is not on the desk yet.'));
+ r=line([it('1',0,2,['N12'])]);assert.equal(r.has,false);assert.doesNotMatch(r.score,/not on the desk yet/);
+ assert.equal(offCountLine(paperView(paperSession([it('1',0,2,['N12'])]))),null);
+ assert.equal(offSummary(paperView(paperSession([it('1',0,2,['N12']),it('2',0,2,['A19']),it('3',0,1,['A15'])]))),'2 statements the desk has no topic for, after the topics.');
+ assert.equal(offSummary(paperView(paperSession([it('1',0,2,['N12']),it('2',0,2,['A19'])]))),'1 statement the desk has no topic for, after the topics.');
+ assert.equal(offSummary(paperView(paperSession([it('2',0,2,['A19']),it('3',0,1,['A15'])]))),'2 statements the desk has no topic for.');
+ assert.equal(offSummary(paperView(paperSession([it('2',0,2,['A19']),it('3',2,2,['N12'])]))),'1 statement the desk has no topic for.');
+ const h=drawMaths('PaperScreen',paperSession([it('1',0,2,['N12']),it('2',0,2,['A19'])])),card=h.slice(h.indexOf('data-role="maths-paper-off"'));
+ assert.ok(flat3(card).includes('1 statement the desk has no topic for, after the topics.'));
+ assert.equal(card.includes(escH(STM().STATEMENTS.find(x=>x.code==='A19').can)),false,'the card no longer lists statements');
+});
+
+test('RP3 e: every statement with no touches fits two lines of the off-desk row; the CSS carries the numbers',()=>{
+ const {OFF_NAME_PX,OFF_NAME_ROOM,OFF_CH}=PAPER(),{STATEMENTS}=STM(),{wrapLabel}=require(path.join(root,'src/tv/rulerRows.ts'));
+ assert.equal(OFF_CH,0.55*OFF_NAME_PX);
+ const bad=STATEMENTS.filter(x=>!x.touches.length&&!wrapLabel(x.can,OFF_NAME_ROOM,OFF_CH,2)).map(x=>x.code);
+ assert.deepEqual(bad,[]);
+ const css=fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8');
+ assert.match(css,new RegExp('\\.mb-poffrow \\.nm \\{[^}]*font-size: '+OFF_NAME_PX+'px'));
+});
+
+test('RP3 f: every new string is 25 words or fewer and has no em dash',()=>{
+ const {offCountLine,offSummary,paperView}=PAPER();
+ const papers=[rp3Paper(),[it('1',0,2,['A19'])],[it('1',1,2,['A19'])],[it('1',1,2,['A19']),it('2',0,2,['N12'])],[it('1',0,2,['N12'])]];
+ for(const raw of papers){const v=paperView(paperSession(raw));for(const t of [offCountLine(v),offSummary(v)]){if(t===null)continue;assert.ok(t.trim().split(/\s+/).length<=25,t);assert.ok(!t.includes('2014'),t);}}
 });
 
 test('M5b step 4: the slip card says its line through deskLine - the same text for a single item and for a part',()=>{

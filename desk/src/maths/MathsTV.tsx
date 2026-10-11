@@ -27,7 +27,7 @@ import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { lostWord, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
+import { lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -684,8 +684,6 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
 
 /** How many topic rows the list shows at once; the lamp walks the rest. */
 const PAPER_ROWS = 5;
-/** The off-desk statements the card has room for; the rest are counted. */
-const PAPER_OFF = 3;
 
 /**
  * The recovery from a paper (v2 M5b): the topics where marks were lost, in the order rules/recovery gives them (biggest
@@ -697,11 +695,32 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
   const v = paperView(s);
   const w = paperWindow(v.topics.length, focus, PAPER_ROWS);
   const lamp = Math.min(Math.max(0, focus), Math.max(0, v.topics.length - 1));
+  const offAt = Math.min(Math.max(0, focus), v.topics.length + v.off.length - 1) - v.topics.length;
+  const onOff = !v.empty && v.off.length > 0 && offAt >= 0;
+  const ow = paperWindow(v.off.length, offAt, PAPER_ROWS);
+  const count = offCountLine(v);
   return (<>
     <Top s={s} crumb="A paper you sat" />
-    <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : "Where the marks went"} /></h1>
+    <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : onOff ? "Not on the desk yet" : "Where the marks went"} /></h1>
     {v.empty ? <div className="mb-lede" data-role="maths-paper-empty"><div className="mb-kick">No paper yet</div><p>Type the marks of a paper you sat on the phone.</p></div> : (
       <div className="mb-paperrec" data-role="maths-paper">
+        {onOff ? (
+          <div className="mb-ptopics" data-role="maths-paper-offrows">
+            {v.off.slice(ow.from, ow.to).map((o, i) => {
+              const ix = ow.from + i;
+              return (
+                <div key={o.can} className="mb-prow mb-poffrow" data-focused={ix === offAt || undefined}>
+                  <span className="n">{ix + 1}</span>
+                  <span className="nm">{o.can}</span>
+                  <span className="lost">{lostWord(o.lost)} lost</span>
+                  <span className="from">From {o.from}{o.beyond ? " · a harder statement" : ""}</span>
+                </div>
+              );
+            })}
+            {ow.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
+            {ow.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
+          </div>
+        ) : (
         <div className="mb-ptopics" data-role="maths-paper-topics">
           {v.topics.slice(w.from, w.to).map((t, i) => {
             const ix = w.from + i;
@@ -719,19 +738,18 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
           {w.up && <div className="mb-rchev u" data-role="maths-more"><Chev dir="l" on /></div>}
           {w.down && <div className="mb-rchev d" data-role="maths-more"><Chev dir="r" on /></div>}
         </div>
+        )}
         <aside className="mb-pside">
           <div className="mb-pscore" data-role="maths-paper-score">
             <div className="mb-kick">Your paper</div>
             <div className="big">{v.marks} <small>of {v.outOf}</small></div>
             <div className="sub">{scoreLine(v)}</div>
+            {count && <div className="off" data-role="maths-paper-offcount">{count}</div>}
           </div>
           {(v.off.length > 0 || v.unmapped > 0) && (
             <div className="mb-poff" data-role="maths-paper-off">
               <div className="mb-kick">Not on the desk yet</div>
-              {v.off.slice(0, PAPER_OFF).map((o) => (
-                <div key={o.can} className="o"><span className="c">{o.can}</span><span className="m">{lostWord(o.lost)} lost · from {o.from}{o.beyond ? " · a harder statement" : ""}</span></div>
-              ))}
-              {v.off.length > PAPER_OFF && <div className="o"><span className="m">and {v.off.length - PAPER_OFF} more</span></div>}
+              {v.off.length > 0 && <div className="o"><span className="m">{offSummary(v)}</span></div>}
               {v.unmapped > 0 && <div className="o"><span className="m">{v.unmapped === 1 ? "1 question" : `${v.unmapped} questions`} named no statement, so sit on no topic</span></div>}
             </div>
           )}

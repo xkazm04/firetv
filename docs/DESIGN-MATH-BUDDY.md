@@ -376,9 +376,20 @@ Typed entry is the door that ships; the photo path is M5c's.
   never re-sorted: five rows at a time (`mb-prow`, 104 px, the lit row amber-ruled), a number, the topic's name, "N marks
   lost" in amber, "From 5(b), 7" under it. A topic the desk calls secure keeps its row and wears a "Secure on the desk"
   pill (`data-role="maths-paper-secure"`): the paper decides, the desk only says what it knows.
-- Right, two cards. The paper's: the marks scored large, "of 80", and "N of M marks - K marks lost". Under it, only when
-  there is something to say, **Not on the desk yet** (`mb-poff`): the statements with no topic, set in their can text, three
-  at a time, then "and n more"; a statement past a Foundation paper says so, and questions that named no statement are counted.
+- Right, two cards. The paper's: the marks scored large, "of 80", "N of M marks - K marks lost", and, when some lost marks
+  sit on statements with no topic, one line at the card's small size (`maths-paper-offcount`): "N of M lost marks are not on
+  the desk yet.", "1 of M lost marks is not on the desk yet.", or "The one lost mark is not on the desk yet." Under it, only
+  when there is something to say, **Not on the desk yet** (`mb-poff`): a count ("k statements the desk has no topic for,
+  after the topics.", without "after the topics" when the paper has no topic row) and the line for questions that named no
+  statement. It no longer lists statements; the lamp walks them.
+- The off-desk page (RP3, 2026-10-11, MB-B13). While the lamp is on an off-desk statement the left column shows
+  `maths-paper-offrows` instead of the topic rows, and the title reads "Not on the desk yet". Five rows around the lamp
+  with the same chevrons, 104 px each: its number in the off-desk list, the can text whole (up to two lines), "N marks lost"
+  in amber and "From 1, 3" under it ("From 2 · a harder statement" for a statement past Foundation). The off-desk order is
+  most lost first; among equal losses a Foundation statement comes before a flagged one, then the spec order. Fit: the name is
+  26 px in 732 px of room (1100 less 4 border, 48 padding, 56 number, 40 gaps and a 220 px lost/From column), at 0.55 of
+  the size a character, so all 74 statements with no touches wrap whole into two lines (`OFF_NAME_PX`, `OFF_NAME_ROOM`,
+  `OFF_CH` in `tv/paperRows.ts`). With no topic row, focus 0 is the first statement.
 - The rows add up (RP2, 2026-10-11). A question's lost marks are shared in whole marks across what its codes reach: the
   school-path topics each statement touches, in order, or the statement itself when it touches none. With L lost marks and
   n places each gets L div n, and the first L mod n get one more. A place that gets 0 is left out. So the topic rows, the
@@ -388,8 +399,10 @@ Typed entry is the door that ships; the photo path is M5c's.
   row with the most lost that needs the first as a base; otherwise it names the first row and says the list runs from the
   biggest loss. With no paper the screen asks
   for the marks on the phone. The screens say "a paper", "your paper": nothing says the board's name while its claim is off.
-- The D-pad: Left/Up and Right/Down walk the topics, Select on a topic opens Get ready for school on that unit with its question open (a set is
-  two presses from the list, three when the unit has a worked lesson); Back or Menu land on that unit. The list is opened from the
+- The D-pad is one walk: the topic rows in `recovery()` order, then the off-desk statements. Left/Up go back one stop and
+  Right/Down forward one, clamped over all stops. Select on a topic opens Get ready for school on that unit with its question
+  open (a set is two presses from the list, three when the unit has a worked lesson); Select on a statement does nothing.
+  Back or Menu land on a topic's unit, or on the first unit from a statement. The list is opened from the
   phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
 - The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
   the text is the same as before for every item.
