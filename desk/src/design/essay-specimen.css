@@ -133,6 +133,8 @@
 .essay-tv .em-r.para { margin-top: var(--em-para-gap, 18px); }
 .essay-tv .em-r[data-pending="true"] { opacity: .22; }
 .essay-tv .em-r.cur { opacity: 1; }
+/* a paragraph the desk did not rule (E4-c): dim even under the cursor, as the inline style drew it; after .cur so it wins */
+.essay-tv .em-r[data-state="not-read"], .essay-tv .em-r[data-state="not-english"] { opacity: .4; }
 .essay-tv .em-r.cur .em-n { color: var(--em-bone); }
 .essay-tv .em-r.bad .em-n { color: var(--em-cit); }
 /* a rewritten sentence: the old arrow as a faint ghost just under the new one, same start - the turn is the picture */

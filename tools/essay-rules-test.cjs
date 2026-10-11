@@ -1226,3 +1226,12 @@ test('E4-b: rewriteUnruledLine gives the paragraph\'s not-read or not-English li
  assert.equal(R.rewriteUnruledLine(reading,9),null,'an n the reading does not have');
  assert.equal(R.rewriteUnruledLine(null,1),null);
 });
+
+test('E4-c: the rail draws a paragraph that was not ruled from the stylesheet (data-state not-read and not-english, opacity .4), not from an inline opacity',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/essay-specimen.css'),'utf8');
+ assert.match(css,/\.em-r\[data-state="not-read"\][^{]*\{[^}]*opacity:\s*\.4\b/);
+ assert.match(css,/\.em-r\[data-state="not-english"\][^{]*\{[^}]*opacity:\s*\.4\b/);
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.doesNotMatch(tv,/opacity:\s*0?\.4/,'no inline opacity on the rail row');
+ assert.equal((tv.match(/data-state=\{/g)||[]).length,2,'the data-state count stays 2');
+});

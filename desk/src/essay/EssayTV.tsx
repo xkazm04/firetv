@@ -361,9 +361,9 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
           const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
-          const opens = j > 0 && x.para !== a.sentences[j - 1].para, state = paragraphState(a.piece, x.para ?? 0), wait = state === "pending", out = state === "not-read" || state === "not-english";
+          const opens = j > 0 && x.para !== a.sentences[j - 1].para, state = paragraphState(a.piece, x.para ?? 0), wait = state === "pending";
           return (
-            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0} data-pending={wait} data-state={state} style={out ? { opacity: 0.4 } : undefined}>
+            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}${opens ? " para" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))} data-para={x.para ?? 0} data-pending={wait} data-state={state}>
               <span className="em-n">{x.n}</span>
               <Arrow len={Math.round(56 + (124 * x.words) / maxW)} against={bad} color={bad ? CIT : vd === "strong" ? BONE : MUTE} />
               {/* a rewritten sentence keeps its old arrow as a ghost under the new one: the before and after as one picture */}
