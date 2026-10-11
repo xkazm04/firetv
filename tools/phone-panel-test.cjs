@@ -709,7 +709,7 @@ const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That
 test('PR5: the join lines are the route\'s own, and carry no digit and no em dash',()=>{
  const pairing=fs.readFileSync(path.join(SRC,'lib/session/pairing.ts'),'utf8');
  assert(pairing.includes(`"${WRONG}"`)&&pairing.includes(`"${TOO_MANY}"`),'the route texts are the ones this suite expects');
- for(const l of [NEWCODE,NOREACH])assert.doesNotMatch(l,/[0-92014]/);
+ for(const l of [NEWCODE,NOREACH])assert.doesNotMatch(l,/[0-9\u2014]/);
 });
 test('PR5: a remembered code the TV does not know is forgotten and the phone says the TV has a new code',()=>{
  const r=P().joinRefusal({status:403,error:WRONG,how:'remembered'});
