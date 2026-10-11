@@ -6,7 +6,7 @@
  * a sentence that exists and a mastery verdict is never a prompt's mood.
  */
 import { text } from "../engines/text";
-import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, pieceBeingRead, pieceReadingLine, revise, ruledSentences, SIDES, splitSentences, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
+import { ANALYSIS_TYPES, contextObservations, decideVerdicts, ISSUE_KINDS, joinSentences, JOBS, NOT_ENGLISH_LINE, numberedLines, observationOk, paragraphCount, paragraphIsEnglish, paragraphStats, revise, ruledSentences, SIDES, splitSentences, summaryLine, SUPPORTS, taught, unanswered, unruledLines, type AnalysisType, type Sentence } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { getLearner, LearnersUnread, readLearner, saveLearner, withDigest, withHistory, withWriting } from "../session/learners";
 import { DeskSaid } from "./job";
@@ -40,9 +40,8 @@ const schemaFor = (lens: Lens) => ({
   type: "object",
   properties: {
     observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note", DECIDING[lens.id] ?? DECIDING.structure] } },
-    summary: { type: "string" },
   },
-  required: ["observations", "summary"],
+  required: ["observations"],
 });
 
 /**
@@ -80,7 +79,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
   const stats = paragraphStats(sentences.filter((s) => judged.has(s.n)));
   const numbered = numberedLines(sentences), piece = paragraphCount(sentences) > 1;
   const ns = [...judged].sort((a, b) => a - b);
-  const { json, provider } = await text<{ observations: Record<string, unknown>[]; summary: string }>({
+  const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Observe each sentence by its number and report only what you see; the desk decides what is done well and what needs fixing. ` +
       `${OBSERVE[lens.id] ?? OBSERVE.structure} ` +
@@ -89,9 +88,9 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
       `${PATTERN_RULE} ` +
-      `Then one summary sentence. Plain text, to be read aloud.`, voice),
+      `Plain text, to be read aloud.`, voice),
     prompt: `The student's ${piece ? `piece, ${paragraphCount(sentences)} paragraphs,` : "paragraph,"} sentence by sentence:\n${numbered}\n\n` +
-      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece. The summary is about that paragraph.\n` : "") +
+      (focus ? `Judge only paragraph ${focus.para + 1} of ${focus.of}: sentences ${ns[0]} to ${ns.at(-1)}, one observation each, in the context of the whole piece.\n` : "") +
       `Counts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
     schema: schemaFor(lens), model: "best", use: "essay-read",
   });
@@ -105,7 +104,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
     throw new DeskSaid(NOT_EVERY_SENTENCE);
   }
   const verdicts = focus ? [] : decideVerdicts(lens.id, sentences, judged, seen);
-  return { verdicts, seen, summary: typeof json?.summary === "string" ? json.summary : "", provider };
+  return { verdicts, seen, provider };
 }
 
 /**
@@ -131,9 +130,10 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
   const sentences = splitSentences(raw);
   const stats = paragraphStats(sentences);
   const lens = lensOf(type);
-  const { verdicts, summary, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, voiceOf("essay", age));
+  const { verdicts, provider } = await judge(sentences, new Set(sentences.map((s) => s.n)), lens, voiceOf("essay", age));
   record(learnerId, lens, sentences.length, verdicts.filter((v) => v.verdict === "faulty").length);
-  return { text: raw, type, sentences, stats, verdicts, summary, provider };
+  const reading: EssayAnalysis = { text: raw, type, sentences, stats, verdicts, summary: "", provider };
+  return { ...reading, summary: summaryLine(reading) };
 }
 
 /**
@@ -153,27 +153,19 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
   const piece: NonNullable<EssayAnalysis["piece"]> = { paragraphs: of, read: [], failed: [], ...(pieceId ? { pieceId } : {}) };
   const notEnglish: number[] = [];
   let verdicts: Verdict[] = [], provider: string | undefined, lastError: unknown;
-  const summaries: string[] = [], observed: Record<string, unknown>[] = [], judgedAll = new Set<number>();
+  const observed: Record<string, unknown>[] = [], judgedAll = new Set<number>();
   const pieceNow = () => ({ ...piece, read: [...piece.read], failed: [...piece.failed], ...(notEnglish.length ? { notEnglish: [...notEnglish] } : {}), ...(piece.failed.length ? { observed: [...observed] } : {}) });
   const now = (): EssayAnalysis => ({ text: raw, type, sentences, stats: paragraphStats(sentences), verdicts, summary: pieceSummary(), provider, piece: pieceNow() });
-  let ruled = false;
-  const pieceSummary = () => {
-    // E2-b: while the piece is still being read its summary counts nothing
-    if (pieceBeingRead(pieceNow())) return pieceReadingLine(pieceNow());
-    const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
-    const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
-    const head = [`${faulty} of ${ruledSentences(sentences, pieceNow()).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(pieceNow())].join(" ");
-    return ruled && at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
-  };
+  const pieceSummary = () => summaryLine({ sentences, verdicts, piece: pieceNow() });
   // E3: code decides which paragraphs are English up front, so the reading line counts them as back from the first report
   for (let para = 0; para < of; para++) if (!paragraphIsEnglish(joinSentences(sentences.filter((s) => (s.para ?? 0) === para)))) notEnglish.push(para);
   for (let para = 0; para < of; para++) {
     const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
     if (!notEnglish.includes(para)) try {
       const r = await judge(sentences, judged, lens, voice, { para, of });
-      observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
+      observed.push(...r.seen); judged.forEach((n) => judgedAll.add(n)); provider = r.provider; piece.read.push(para);
     } catch (e) { lastError = e; piece.failed.push(para); }
-    if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); ruled = true; }
+    if (para === of - 1 && piece.read.length) { verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed); }
     onProgress(now());
   }
   if (!piece.read.length) throw lastError ?? new Error(notEnglish.length ? NOT_ENGLISH_LINE : "no paragraph of the piece came back");
@@ -192,25 +184,21 @@ export async function analysePiece(raw: string, type: AnalysisType, learnerId: s
 export async function analysePieceAgain(reading: EssayAnalysis, learnerId: string, age?: number, notSaved?: (line: string) => void): Promise<EssayAnalysis> {
   const old = reading.piece!, lens = lensOf(reading.type), voice = voiceOf("essay", age), sentences = reading.sentences, of = old.paragraphs;
   const piece: NonNullable<EssayAnalysis["piece"]> = { ...old, read: [...old.read], failed: [], ...(old.notEnglish ? { notEnglish: [...old.notEnglish] } : {}) };
-  const observed = [...(old.observed ?? [])], summaries: string[] = [];
-  const kept = /Start with paragraph (\d+): (.*)$/.exec(reading.summary);
-  if (kept) summaries[Number(kept[1]) - 1] = kept[2];
+  const observed = [...(old.observed ?? [])];
   let provider = reading.provider;
   const still: number[] = [];
   for (const para of old.failed) {
     const judged = new Set(sentences.filter((s) => (s.para ?? 0) === para).map((s) => s.n));
     try {
       const r = await judge(sentences, judged, lens, voice, { para, of });
-      observed.push(...r.seen); summaries[para] = r.summary; provider = r.provider; piece.read.push(para);
+      observed.push(...r.seen); provider = r.provider; piece.read.push(para);
     } catch { still.push(para); }
   }
   piece.failed = still; piece.read.sort((x, y) => x - y);
   if (still.length) piece.observed = observed; else delete piece.observed;
   const judgedAll = new Set(sentences.filter((s) => piece.read.includes(s.para ?? 0)).map((s) => s.n));
   const verdicts = decideVerdicts(lens.id, sentences, judgedAll, observed);
-  const first = verdicts.find((v) => v.verdict === "faulty"), at = first ? sentences.find((s) => s.n === first.n)?.para : undefined;
-  const head = [`${faultyIn(verdicts)} of ${ruledSentences(sentences, piece).length} sentences to fix across ${of} paragraphs.`, ...unruledLines(piece)].join(" ");
-  const summary = at !== undefined && summaries[at] ? `${head} Start with paragraph ${at + 1}: ${summaries[at]}` : head;
+  const summary = summaryLine({ sentences, verdicts, piece });
   try { restatePiece(learnerId, lens.name, reading, { verdicts, piece }); } catch (e) { restateFailed("send-again", PIECE_AGAIN_NOT_SAVED, e, notSaved); }
   return { ...reading, verdicts, summary, provider, piece };
 }
@@ -261,7 +249,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const verdict: Verdict = { ...decided, was };
   const verdicts = next.sentences.flatMap((s) => (s.n === n ? [verdict] : reading.verdicts.filter((v) => v.n === s.n)));
   if (learnerId) try { restateReading(learnerId, lens.name, reading.verdicts, verdicts); } catch (e) { restateFailed("rewrite", REWRITE_NOT_SAVED, e, notSaved); }
-  return { ...next, verdicts, provider };
+  return { ...next, verdicts, summary: summaryLine({ sentences: next.sentences, verdicts, piece: next.piece }), provider };
 }
 
 const faultyIn = (vs: Pick<Verdict, "verdict">[]) => vs.filter((v) => v.verdict === "faulty").length;

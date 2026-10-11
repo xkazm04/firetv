@@ -55,7 +55,7 @@ const YOUNG: Record<VoiceSubject, { who: string; manner: string }> = {
     who: "a learner aged 11 to 13",
     manner: OPEN + SHORT +
       "Comment on what the sentence does in the paragraph - its move - one idea at a time, and never rewrite or improve their sentences for them. " +
-      "Each note is one plain sentence a child can act on; the summary is one plain sentence too. " +
+      "Each note is one plain sentence a child can act on. " +
       "Name a move in everyday words. Be kind about what works only when it is true. " + KIND,
   },
   english: {

@@ -438,15 +438,28 @@ export function pieceReadingLine(piece: PieceLike): string {
 }
 
 /**
- * The summary the desk shows and speaks for a reading. The model's summary is written blind of the verdicts, so code leads
- * with its own count: a piece's summary already does; one paragraph gets "N of M sentences to fix." (the history line's
- * words) and then the model's summary when it has one; a reading with no sentences keeps its summary.
+ * The one summary of every essay reading, written by code from the verdicts it decided (E9): it reads only the sentences,
+ * the verdicts and the piece, never the model's summary. A reading with no sentences has none (''). A piece still being
+ * read gets pieceReadingLine (E2-b). A ruled piece is "N of M sentences to fix across P paragraphs.", then a line for each
+ * paragraph the desk did not rule, then, when a sentence is faulty, " Start with paragraph p, sentence n: <note>" for the
+ * first faulty sentence in sentence order, n numbered as the TV numbers it. One paragraph is "N of M sentences to fix.",
+ * then, when N is 1 or more, " Start with sentence n: <note>" for the first faulty sentence (just " Start with sentence n."
+ * when its note is empty). With none to fix the head stands alone.
  */
-export function summaryLine(a: { sentences?: unknown[]; verdicts?: Pick<VerdictLike, "verdict">[]; summary: string; piece?: unknown }): string {
-  if (a.piece || !a.sentences?.length) return a.summary;
-  const faulty = (a.verdicts ?? []).filter((v) => v.verdict === "faulty").length, m = a.sentences.length;
-  const head = `${faulty} of ${m} sentence${m === 1 ? "" : "s"} to fix.`;
-  return a.summary.trim() ? `${head} ${a.summary.trim()}` : head;
+export function summaryLine(a: { sentences?: Pick<Sentence, "n" | "para">[]; verdicts?: Pick<VerdictLike, "n" | "verdict" | "note">[]; piece?: PieceLike }): string {
+  const sentences = a.sentences ?? [];
+  if (!sentences.length) return "";
+  if (pieceBeingRead(a.piece)) return pieceReadingLine(a.piece!);
+  const faulty = (a.verdicts ?? []).filter((v) => v.verdict === "faulty");
+  const first = sentences.map((s) => faulty.find((v) => v.n === s.n)).find((v) => v), note = first?.note.trim() ?? "";
+  if (a.piece) {
+    const ruled = ruledSentences(sentences, a.piece).length;
+    const head = [`${faulty.length} of ${ruled} sentence${ruled === 1 ? "" : "s"} to fix across ${a.piece.paragraphs} paragraphs.`, ...unruledLines(a.piece)].join(" ");
+    const at = first ? sentences.find((s) => s.n === first.n) : undefined;
+    return first && at ? `${head} Start with paragraph ${(at.para ?? 0) + 1}, sentence ${first.n}${note ? `: ${note}` : "."}` : head;
+  }
+  const m = sentences.length, head = `${faulty.length} of ${m} sentence${m === 1 ? "" : "s"} to fix.`;
+  return first ? `${head} Start with sentence ${first.n}${note ? `: ${note}` : "."}` : head;
 }
 
 /** Why a sentence cannot be rewritten while the piece it is in is still being read. */
