@@ -427,7 +427,29 @@ test('W7-2: a path only one side holds does not age a row; it is counted apart',
   const led = L().ledger(runs, { repo: dir, git: () => '', files: Object.keys(current.files), current }), g = led.open[0];
   assert.equal(g.productState, 'current');
   assert.deepEqual(g.changed, []);
-  assert.deepEqual(g.oneSided, ['desk/src/gone.ts', 'desk/src/new.ts']);
+  assert.deepEqual(g.oneSided, ['desk/src/gone.ts'], 'new.ts is the load set only: a stamped run is not compared over it');
   assert.deepEqual(led.product.counts, { current: 1, aged: 0, unknown: 0 });
-  assert.ok(L().statusOf(led).split('\n').find(l => l.includes('a gap')).endsWith(' · 2 paths held by one side only'));
+  assert.ok(L().statusOf(led).split('\n').find(l => l.includes('a gap')).endsWith(' · 1 paths held by one side only'));
+});
+
+test('W7c-1: a stamped run is compared over its own files; a module-only file ages the row, a missing one does not', () => {
+  const dir = path.join(tmp, `w7c-${crypto.randomUUID().slice(0, 8)}`), runs = path.join(dir, 'uat/runs');
+  const same = { 'desk/src/a.ts': 'x1', 'desk/src/b.ts': 'x2' };
+  // the injected load set (the Linga set) holds a.ts and b.ts only; the Essay stamp also holds Workroom.tsx, which differs now
+  const current = { commit: 'beef', dirty: false, files: { ...same, 'desk/src/essay/Workroom.tsx': 'new' } };
+  const loadSet = Object.keys(same);
+  writeRun(runs, 'A-essay', [finding({ id: 'E-1', journey: 'EM2', title: 'an essay gap' })], { started: '2026-10-01T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same, 'desk/src/essay/Workroom.tsx': 'old' } } });
+  writeRun(runs, 'B-linga', [finding({ id: 'L-1', journey: 'J3', title: 'a linga gap' })], { started: '2026-10-02T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same } } });
+  writeRun(runs, 'C-gone', [finding({ id: 'G-1', journey: 'MB1', title: 'a math gap' })], { started: '2026-10-03T00:00:00.000Z', product: { commit: 'c0ffee', dirty: false, files: { ...same, 'desk/src/lib/desk/gone.ts': 'g' } } });
+  const led = L().ledger(runs, { repo: dir, git: () => '', files: loadSet, current }), by = t => led.open.find(g => g.title === t);
+  const e = by('an essay gap'), l = by('a linga gap'), m = by('a math gap');
+  assert.equal(e.productState, 'aged');
+  assert.deepEqual(e.changed, ['desk/src/essay/Workroom.tsx']);
+  assert.equal(e.productFiles, 3);
+  assert.equal(l.productState, 'current');
+  assert.deepEqual(l.changed, []);
+  assert.equal(m.productState, 'current', 'a stamped path missing now does not age the row');
+  assert.deepEqual(m.oneSided, ['desk/src/lib/desk/gone.ts']);
+  assert.equal(m.productFiles, 2);
+  assert.deepEqual(led.product.counts, { current: 2, aged: 1, unknown: 0 });
 });

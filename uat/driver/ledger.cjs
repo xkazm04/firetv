@@ -18,9 +18,9 @@
  * did not show its judge the gap (in the record's prior[] or by a recertify stamp): a gap no rerun asks about ages here
  * instead of vanishing. With `opts.repo` each gap also says what product it was seen on (product.cjs): `seen` is the
  * run's own stamp (run.json `product`) or, for a run without one, the commit that first added its findings.json;
- * `changed` lists the files both the run's stamp and the driver's load set hold whose blob differs now (`oneSided` the paths only one holds: they never age a row), and `productState` is 'current' (none),
+ * `changed` lists the files both sides hold whose blob differs now (`oneSided` the paths only one holds: they never age a row). A run with its own stamp is compared over the files that stamp holds, against the working tree's blob of each; a run without one over the driver's load set, at its commit and now, and `productState` is 'current' (none),
  * 'aged' (some) or 'unknown' (no stamp and no history: never read as current). `opts` may inject `git`, `files` and
- * `current` (product.cjs stampOf), so a stamped run needs no git call. Nothing here calls a model.
+ * `current` (product.cjs stampOf: a stamped run reads its now blobs from it, a stamped file absent from it is one-sided), so a stamped run needs no git call. Nothing here calls a model.
  */
 const fs = require('node:fs'), path = require('node:path');
 const UAT = path.resolve(__dirname, '..'), RUNS = path.join(UAT, 'runs'), INSIGHTS = path.resolve(UAT, '../docs/uat-insights');
@@ -120,12 +120,22 @@ function productOf(runs, gaps, { repo, git, files, current }) {
     const g = git ?? PR.gitOf(repo), list = files ?? PR.surface();
     now = { git: g, files: list, current: current ?? PR.stampOf(repo, list, g) };
   } catch { return null; }
-  const cache = new Map(), seenBy = new Map();
+  const cache = new Map(), seenBy = new Map(), nowBy = new Map();
+  /** The tree's blobs now for one stamp's own file list, one git call per distinct list. */
+  const nowOf = list => {
+    const key = list.join('|');
+    if (!nowBy.has(key)) nowBy.set(key, current ? Object.fromEntries(list.filter(f => f in current.files).map(f => [f, current.files[f]])) : PR.blobsNow(repo, list, now.git));
+    return nowBy.get(key);
+  };
   const seenOf = run => { if (!seenBy.has(run.id)) seenBy.set(run.id, PR.seenOf(run, { repo, git: now.git, files: now.files, cache })); return seenBy.get(run.id); };
   for (const g of gaps) {
     const s = seenOf(runs.find(r => r.id === g.lastSeen));
     if (!s) { Object.assign(g, { seen: null, changed: null, oneSided: null, productState: 'unknown', productFiles: null }); continue; }
-    const d = PR.changedBetween(s.files, now.current.files);
+    let against = now.current.files;
+    if (s.source === 'run.json') {
+      against = nowOf(Object.keys(s.files));
+    }
+    const d = PR.changedBetween(s.files, against);
     Object.assign(g, { seen: { commit: s.commit, source: s.source }, changed: d.changed, oneSided: d.oneSided, productState: d.changed.length ? 'aged' : 'current', productFiles: d.total - d.oneSided.length });
   }
   const counts = { current: 0, aged: 0, unknown: 0 };
