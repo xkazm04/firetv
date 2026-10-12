@@ -27,7 +27,7 @@ import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
+import { leftOutLine, lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -701,6 +701,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
   const onOff = !v.empty && v.off.length > 0 && offAt >= 0;
   const ow = paperWindow(v.off.length, offAt, PAPER_ROWS);
   const count = offCountLine(v);
+  const left = leftOutLine(v);
   return (<>
     <Top s={s} crumb="A paper you sat" />
     <h1 className="mb-title" data-role="maths-title"><Amber text={v.empty ? "A paper you sat" : onOff ? "Not on the desk yet" : "Where the marks went"} /></h1>
@@ -747,6 +748,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
             <div className="big">{v.marks} <small>of {v.outOf}</small></div>
             <div className="sub">{scoreLine(v)}</div>
             {count && <div className="off" data-role="maths-paper-offcount">{count}</div>}
+            {left && <div className="off" data-role="maths-paper-leftout">{left}</div>}
           </div>
           {(v.off.length > 0 || v.unmapped > 0) && (
             <div className="mb-poff" data-role="maths-paper-off">

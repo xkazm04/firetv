@@ -1134,3 +1134,22 @@ test('MB-B19 4: past the path\'s end the Prepare cards print no year and the led
  const tonight=renderToStaticMarkup(createElement(M.Tonight,{s:{...mk(17),screen:'tonight'},focus:2}));
  assert.match(tonight,/This path ends at Year \d+/);assert.doesNotMatch(tonight,/Pick what school is teaching next/);
 });
+
+test('RP6 left out: the score card says how many typed questions the phone left out, and says nothing when none were',()=>{
+ const {paperView,leftOutLine}=PAPER();
+ const raw=[it('5(b)',1,3,['N12']),it('9',4,4,['A1'])];
+ const two='2 questions were left out on the phone, so they are not in this score.',one='1 question was left out on the phone, so it is not in this score.';
+ const withN=(n)=>{const s=paperSession(raw);s.paper={...s.paper,leftOut:n};return s;};
+ assert.equal(leftOutLine(paperView(withN(2))),two);
+ assert.equal(leftOutLine(paperView(withN(1))),one);
+ assert.equal(leftOutLine(paperView(withN(0))),null);
+ assert.equal(leftOutLine(paperView(paperSession(raw))),null,'a paper without the field');
+ assert.equal(paperView(paperSession(null)).leftOut,0);
+ const html=drawMaths('PaperScreen',withN(2));
+ assert.ok(html.includes('data-role="maths-paper-leftout"')&&html.includes(two));
+ assert.equal(drawMaths('PaperScreen',paperSession(raw)).includes('maths-paper-leftout'),false);
+ for(const t of [one,two]){
+  assert.ok(t.trim().split(/\s+/).length<=25,'25 words or fewer');
+  assert.ok(!t.includes(String.fromCharCode(8212))&&!t.includes(String.fromCharCode(8211)),'no em or en dash');
+ }
+});

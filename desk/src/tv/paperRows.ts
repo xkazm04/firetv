@@ -17,16 +17,18 @@ export interface PaperView {
   off: PaperOff[];
   /** Questions left with no statement (their marks are in the totals, on no topic). */
   unmapped: number;
+  /** Typed rows the phone's cleaning left out of this paper; 0 when none. */
+  leftOut: number;
 }
 
 const marks = (n: number) => `${n} ${n === 1 ? "mark" : "marks"}`;
 const labels = (qs: readonly string[]) => qs.join(", ");
 
 export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
-  if (!s.paper) return { empty: true, marks: 0, outOf: 0, lost: 0, topics: [], off: [], unmapped: 0 };
+  if (!s.paper) return { empty: true, marks: 0, outOf: 0, lost: 0, topics: [], off: [], unmapped: 0, leftOut: 0 };
   const r: Recovery = recovery([...s.paper.items, ...s.paper.unmapped]);
   return {
-    empty: false, marks: r.totals.marks, outOf: r.totals.outOf, lost: r.totals.lost, unmapped: r.unmapped.length,
+    empty: false, marks: r.totals.marks, outOf: r.totals.outOf, lost: r.totals.lost, unmapped: r.unmapped.length, leftOut: s.paper.leftOut ?? 0,
     // the order is recovery()'s: the learner meets the base of the biggest loss first
     topics: r.topics.map((t) => ({ id: t.id, name: t.name, lost: t.lost, from: labels(t.items), secure: s.skills?.[t.id]?.secure === true })),
     off: r.notOnDesk.map((o) => ({ can: o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation })),
@@ -54,6 +56,14 @@ export function offCountLine(v: PaperView): string | null {
   if (n <= 0) return null;
   if (n >= 2) return `${n} of ${v.lost} lost marks are not on the desk yet.`;
   return v.lost > 1 ? `1 of ${v.lost} lost marks is not on the desk yet.` : "The one lost mark is not on the desk yet.";
+}
+
+/** The score card's left-out line: how many typed questions the phone left out of the paper; null when none. */
+export function leftOutLine(v: PaperView): string | null {
+  const n = v.leftOut;
+  if (n < 1) return null;
+  if (n === 1) return "1 question was left out on the phone, so it is not in this score.";
+  return `${n} questions were left out on the phone, so they are not in this score.`;
 }
 
 /** The Not on the desk yet card's line: how many statements the desk has no topic for. */

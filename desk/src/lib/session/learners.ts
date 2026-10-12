@@ -59,7 +59,11 @@ const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing", "lesso
  * A paper the learner sat, as kept (v2 M5b): the cleaned paper (rules/recovery cleanPaper: `items` with a known statement
  * code, `unmapped` without) and the date it was entered. The recovery is recomputed from it, never stored.
  */
-export interface StoredPaper { at: number; items: PaperItem[]; unmapped: PaperItem[]; }
+export interface StoredPaper {
+  at: number; items: PaperItem[]; unmapped: PaperItem[];
+  /** the typed rows cleanPaper left out when the paper was entered; present only when above 0 */
+  leftOut?: number;
+}
 /** The papers kept per learner: the newest few. */
 export const PAPERS_CAP = 5;
 
@@ -227,12 +231,15 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
  */
 export function cleanStoredPaper(raw: unknown): StoredPaper | null {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
-  const { at, items, unmapped } = raw as Record<string, unknown>;
+  const { at, items, unmapped, leftOut } = raw as Record<string, unknown>;
   if (typeof at !== "number" || !Number.isFinite(at) || at < 0 || !Array.isArray(items) || !Array.isArray(unmapped)) return null;
   const c = cleanPaper([...items, ...unmapped]);
   if (c.dropped.length || c.droppedCodes.length || !c.items.length && !c.unmapped.length) return null;
   const same = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
-  return same(c.items, items) && same(c.unmapped, unmapped) ? { at, items: c.items, unmapped: c.unmapped } : null;
+  if (!same(c.items, items) || !same(c.unmapped, unmapped)) return null;
+  // the count is a note beside the marks, never part of them: a bad value is left off and the paper is still kept
+  const note = typeof leftOut === "number" && Number.isSafeInteger(leftOut) && leftOut > 0 ? { leftOut } : {};
+  return { at, items: c.items, unmapped: c.unmapped, ...note };
 }
 /** The stored papers that read back cleanly, in order, at most the newest PAPERS_CAP. */
 function cleanPapers(raw: unknown): StoredPaper[] {
@@ -442,7 +449,7 @@ export function secureTopics(id: string): string[] {
 export function addPaper(id: string, raw: unknown, now = Date.now()): StoredPaper | null {
   const c = cleanPaper(raw);
   if (!c.items.length && !c.unmapped.length) return null;
-  const paper: StoredPaper = { at: now, items: c.items, unmapped: c.unmapped };
+  const paper: StoredPaper = { at: now, items: c.items, unmapped: c.unmapped, ...(c.dropped.length > 0 ? { leftOut: c.dropped.length } : {}) };
   const l = getLearner(id);
   l.papers = [...(l.papers ?? []), paper].slice(-PAPERS_CAP);
   const [entry] = cleanDigest([{ at: now, kind: "paper", questions: c.items.length + c.unmapped.length }]);

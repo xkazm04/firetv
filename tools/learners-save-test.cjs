@@ -81,7 +81,8 @@ test('papers 1: a paper round-trips - the cleaned paper and its date, kept on th
   const back=L.getLearner('pam');
   assert.deepEqual(back.papers,[p]);
   const stored=JSON.parse(fs.readFileSync(FILE,'utf8')).pam.papers;
-  assert.deepEqual(Object.keys(stored[0]).sort(),['at','items','unmapped'],'the paper and its date; no recovery beside them');
+  assert.deepEqual(Object.keys(stored[0]).sort(),['at','items','leftOut','unmapped'],'the paper, its date and the count left out; no recovery beside them');
+  assert.equal(p.leftOut,1);
   assert.equal(L.addPaper('pam',[{q:'x',marks:9,outOf:1,codes:[]}]),null,'a paper with no surviving row is not kept');
   assert.equal(L.getLearner('pam').papers.length,1);
   for(let i=0;i<7;i++)L.addPaper('pam',RAW,2000+i);
@@ -136,8 +137,25 @@ test('papers 4: a paper typed on the phone goes through the session door - kept 
   const s=S.getSession();
   assert.equal(s.screen,'paper');
   assert.deepEqual(s.paper.items.map(x=>x.q),['1','2(a)']);
+  assert.equal(s.paper.leftOut,1);
   assert.deepEqual(s.paper,L.getLearner('mia').papers.at(-1),'the session carries the learner\'s latest paper');
   assert.equal(JSON.stringify(s).includes('"topics"'),false,'the recovery is recomputed, never stored or sent');
+});
+
+test('papers 5 (RP6): the count of typed rows left out is kept only when above 0, and a bad stored count is left off while the paper stays',()=>{
+  fs.writeFileSync(FILE,'{}');
+  const clean=L.addPaper('rae',[{q:'1',marks:1,outOf:3,codes:['N2']}],10);
+  assert.equal('leftOut' in clean,false,'a paper of good rows has no leftOut key');
+  assert.equal('leftOut' in JSON.parse(fs.readFileSync(FILE,'utf8')).rae.papers[0],false);
+  const good={at:5,items:[{q:'1',marks:1,outOf:3,codes:['N2']}],unmapped:[]};
+  fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[{...good,leftOut:2}]}}));
+  assert.equal(L.getLearner('ann').papers[0].leftOut,2,'a stored count reads back');
+  for(const bad of [-1,2.5,'3',0,null]){
+    fs.writeFileSync(FILE,JSON.stringify({ann:{id:'ann',papers:[{...good,leftOut:bad}]}}));
+    const papers=L.getLearner('ann').papers;
+    assert.equal(papers.length,1,`a paper with leftOut ${JSON.stringify(bad)} is still kept`);
+    assert.equal('leftOut' in papers[0],false,`leftOut ${JSON.stringify(bad)} is left off`);
+  }
 });
 
 test('papers 5: a paper the disk could not take is reported as not saved, never as a paper with no row; nothing is kept and the TV stays put (ruling 11)',()=>{
