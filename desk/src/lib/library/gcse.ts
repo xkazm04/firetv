@@ -57,7 +57,7 @@ export const STATEMENTS: Statement[] = [
   a("A1", "Use and interpret algebraic notation", ["linear-one-step"]),
   a("A2", "Substitute values into formulae and expressions"),
   a("A3", "Know the words: expression, equation, formula, identity, inequality, term, factor"),
-  a("A4", "Simplify and manipulate expressions: like terms, a term over a bracket, common factors, two binomials, simple quadratics", ["linear-both-sides"]),
+  a("A4", "Simplify and manipulate expressions: like terms, brackets, factors, two binomials, simple quadratics"),
   a("A5", "Use standard formulae; rearrange a formula to change the subject"),
   a("A6", "Tell an equation from an identity; show two expressions are equivalent"),
   a("A7", "Read simple expressions as functions with inputs and outputs"),

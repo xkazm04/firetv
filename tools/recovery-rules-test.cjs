@@ -228,3 +228,12 @@ test('RP2: a question lost marks are shared in whole marks, so the rows add up t
     assert.deepEqual(R.reachOf(cs), direct(cs), cs.join());
   }
 });
+
+test('RP7: an expression question (A4) is not on the desk yet, not a share of an equations unit', () => {
+  assert.deepEqual(G.STATEMENTS.find((x) => x.code === 'A4').touches, []);
+  const a = R.recovery([it('3', 0, 2, ['A4'])]);
+  assert.deepEqual([ids(a), a.notOnDesk.map((o) => [o.code, o.lost, o.foundation])], [[], [['A4', 2, true]]]);
+  const b = R.recovery([it('5', 0, 4, ['A4', 'A17'])]);
+  assert.deepEqual(b.topics.map((t) => [t.id, t.lost]).sort(), [['linear-both-sides', 1], ['linear-one-step', 1], ['linear-two-step', 1]]);
+  assert.deepEqual(b.notOnDesk.map((o) => [o.code, o.lost]), [['A4', 1]]);
+});
