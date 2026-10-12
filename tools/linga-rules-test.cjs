@@ -1629,3 +1629,15 @@ test('take case 8: inside a take the TV shows the line again and Back to the not
  const sw=S.surfaceOf(takeView('linga-talk',{takes:[{...running,turns:[...running.turns,{id:'c1:x',role:'learner',text:'I work in a hotel.',mode:'text'}]}],pending:'held'}));
  assert.deepEqual(sw.strays,[]);assert.deepEqual(sw.unrendered,[]);
 });
+test('LG-12: the tag Try it again ends with the first reply after a replay',async()=>{
+ fresh();answerAll();
+ await command('start',{sceneId:'booking',replace:true});
+ await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ await command('coach');await command('replay');
+ const V=view();
+ assert.equal(getSession().conversation.phase,'replay');
+ assert.equal(V.lingaView(getSession(),{}).tag,'Try it again');
+ await command('turn',{text:'I booked three nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert.equal(getSession().conversation.phase,'conversation','LG-12: the first reply after a replay ends the replay');
+ assert.equal(V.lingaView(getSession(),{}).tag,'Conversation','LG-12: the TV tag says Conversation again');
+});
