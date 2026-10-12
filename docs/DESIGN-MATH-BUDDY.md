@@ -379,7 +379,9 @@ Typed entry is the door that ships; the photo path is M5c's.
   decides, the desk only says what it knows.
 - Right, two cards. The paper's: the marks scored large, "of 80", "N of M marks - K marks lost", and, when some lost marks
   sit on statements with no topic, one line at the card's small size (`maths-paper-offcount`): "N of M lost marks are not on
-  the desk yet.", "1 of M lost marks is not on the desk yet.", or "The one lost mark is not on the desk yet." Under it, only
+  the desk yet.", "1 of M lost marks is not on the desk yet.", or "The one lost mark is not on the desk yet." When the phone left typed rows out of the paper, a second small line
+  (`maths-paper-leftout`) follows it: "1 question was left out on the phone, so it is not in this score." or "K questions
+  were left out on the phone, so they are not in this score."; it is absent when none were left out. Under it, only
   when there is something to say, **Not on the desk yet** (`mb-poff`): a count ("k statements the desk has no topic for,
   after the topics.", without "after the topics" when the paper has no topic row) and the line for questions that named no
   statement. It no longer lists statements; the lamp walks them.
