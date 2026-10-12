@@ -206,7 +206,7 @@ recap.
 | **E3 · Scene** | *Choose a situation* → an all-ages scene (The missing moon rover). The TV shows the partner's name and a generated opening line, and the footer reads "Partner speaking". |
 | **E4 · Live partner replies** | Two replies, one typed and one spoken (capture, transcript shown, sent). Each gets a new partner line. A person reads the transcript and marks whether each line answers what was said. If a moment fires (the default coaching preference allows one, `conversation.ts:83`), the run takes it and goes back with *Back to the conversation*. |
 | **E5 · Coaching note** | *Pause & coach*. The TV's "You said" is an exact piece of the reply; the server refuses anything else (`desk/src/lib/english/conversation.ts:231`). |
-| **E6 · Replay** | *Replay the moment*. A new partner question appears under the tag "Try it again" (`desk/src/lib/english/view.ts:408`). |
+| **E6 · Replay** | *Replay the moment*. A new partner question appears under the tag "Try it again" (`desk/src/lib/english/view.ts:470`), until the learner replies to it; then the tag reads Conversation again (LG-12). |
 | **E7 · Recap** | *Finish*. The TV recap appears, the phone lists the moments, and with MH-3 one learned thing is on the TV. |
 | **E8 · Turn timing** | For each action: wall time from click to TV update, and the model's `responseMs`. With MH-4, also line → voice. |
 | **E9 · Boundary** | Starting the adults-only scene for this child is refused with 403. The harness already checks this. |
