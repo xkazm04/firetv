@@ -80,7 +80,7 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
 - **LG-12** — "Try it again" stays on screen after the retry
   - origin: 2026-09-15-lt/LT-adela-17-J4-6, 2026-09-15-lt-recert/LT-viktor-67-J4-4, 2026-09-15-lt-recert/LT-adela-17-J4-5, 2026-09-15-lt-recert/LT-petra-38-J4-2
   - recommendation: build — `phase:"replay"` is set (`lib/english/conversation.ts:347`) and never reset, and the tag follows it (`lib/english/view.ts:470`). Clear it after the first replay turn
-  - status: open
+  - status: built (93854f8f): the first learner reply after a replay sets the phase back to conversation, so the TV tag reads Conversation again
   - ceiling: clearing the tag says nothing about whether the retry worked (LG-4)
 - **LG-13** — The situation list is one fixed order for everyone
   - origin: 2026-09-15-lt/LT-petra-38-J4-4, 2026-09-15-lt/LT-tomas-9-J4-4, 2026-09-15-lt/LT-jana-29-J1-4, 2026-09-15-lt-recert/LT-petra-38-J4-3; "I want more hotel situations near the top." (petra-38, 2026-09-15-lt-recert)
