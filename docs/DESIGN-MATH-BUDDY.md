@@ -391,12 +391,13 @@ Typed entry is the door that ships; the photo path is M5c's.
   in amber and "From 1, 3" under it ("From 2 · a harder statement" for a statement past Foundation). The off-desk order is
   most lost first; among equal losses a Foundation statement comes before a flagged one, then the spec order. Fit: the name is
   26 px in 732 px of room (1100 less 4 border, 48 padding, 56 number, 40 gaps and a 220 px lost/From column), at 0.55 of
-  the size a character, so all 74 statements with no touches wrap whole into two lines (`OFF_NAME_PX`, `OFF_NAME_ROOM`,
+  the size a character, so all 75 statements with no touches wrap whole into two lines (`OFF_NAME_PX`, `OFF_NAME_ROOM`,
   `OFF_CH` in `tv/paperRows.ts`). With no topic row, focus 0 is the first statement.
 - The rows add up (RP2, 2026-10-11). A question's lost marks are shared in whole marks across what its codes reach: the
   school-path topics each statement touches, in order, or the statement itself when it touches none. With L lost marks and
   n places each gets L div n, and the first L mod n get one more. A place that gets 0 is left out. So the topic rows, the
   Not on the desk rows and the questions with no statement add up to the marks the paper lost.
+- Expressions are not equations (RP7, 2026-10-12). A4 (simplify and manipulate expressions) touches no desk topic. So a question on it is a Not on the desk yet row, not a share of Equations with brackets and x on both sides. A question keyed A4 and A17 shares its lost marks over A4 and the three equations topics.
 - The caption (the screen's one caption slot, 930 px) starts the learner at the first topic. When the first row is not the
   biggest loss it reads "Start with <first>, the base for <biggest>, where most marks went.", the biggest being the earliest
   row with the most lost that needs the first as a base; otherwise it names the first row and says the list runs from the
@@ -443,7 +444,7 @@ on the phone or the TV changed in M5c: no route, no event, no button reads the r
 
 From `docs/uat-insights/2026-10-09-maths-l1.md` (five Characters read the surface in code, no model call, no vision call). Rulings applied and not open: R1 (a decimal for a limit or a definite integral is right only as a correct rounding of the exact value at its own written precision, otherwise "not sure" and asks for the exact value; `lib/rules/calc.ts:53-61`), R2 ("ln x + C" is not right for the antiderivative of 1/x) and R5 (Czech in Math Buddy is in scope: Czech school units and the maturita).
 
-1. **The paper map.** "A paper you sat" maps questions onto 97 statements in GCSE Foundation wording (an owner decision). Radka (a parent with a CERMAT mock) and Vojtěch (a maturita paper) meet it as UK exam language, and 74 of the 97 statements have no desk topic. The backlog builds the wording and the way in (an area-level choice first, Czech task-shaped statements, no "Foundation paper" words for a cz learner). Whether the desk grows a Czech or a maturita statement map of its own is the open decision.
+1. **The paper map.** "A paper you sat" maps questions onto 97 statements in GCSE Foundation wording (an owner decision). Radka (a parent with a CERMAT mock) and Vojtěch (a maturita paper) meet it as UK exam language, and 75 of the 97 statements have no desk topic. The backlog builds the wording and the way in (an area-level choice first, Czech task-shaped statements, no "Foundation paper" words for a cz learner). Whether the desk grows a Czech or a maturita statement map of its own is the open decision.
 2. **Marking a learner's own sheet.** The page route reads and hints; `/api/mark` marks only the desk's own sets. Matyáš's first job is "which of my ten did I get wrong and where". Two parents ask the opposite of the desk: that it never claim a check nobody made. Should a snapped page whose items read as Calculus specs be markable from a photo of working, by the same code judge, with items that do not read being "not sure"? It waits on the vision host.
 3. **Unsimplified answers.** "6/4" for 4/5 + 7/10 is ticked right because the question does not ask for simplest form, while the worked lesson teaches "then simplify". Either the add and subtract questions say "simplest form", or the lesson drops the step. A right value is right, and a teacher who wants lowest terms marks it down.
 4. **A path past 9. ročník.** The path ends at 9. ročník and no maturita path exists by design, yet an 18-year-old is welcomed to "what school is teaching next" and handed school-level sets as "a step up". The backlog builds the honest ceiling (a caption, the opening focus, the year labels). Whether to build content beyond the path is a scope decision.
