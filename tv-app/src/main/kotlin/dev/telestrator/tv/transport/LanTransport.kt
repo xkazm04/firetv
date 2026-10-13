@@ -2,6 +2,7 @@ package dev.telestrator.tv.transport
 
 import android.content.Context
 import android.util.Log
+import dev.telestrator.core.PairingUrl
 import io.ktor.http.ContentType
 import io.ktor.server.application.call
 import io.ktor.server.application.install
@@ -72,7 +73,7 @@ class LanTransport(
      * Null while the TV has no LAN address (Wi-Fi down or not yet joined): the card then says it is
      * connecting, and the once-a-second poll puts the real address up as soon as there is one.
      */
-    override fun pairingUrl(): String? = lanAddress()?.let { "http://$it:$port/?pin=$pin" }
+    override fun pairingUrl(): String? = lanAddress()?.let { PairingUrl.of("http://$it:$port/", pin) }
 
     override fun start(scope: CoroutineScope, onPen: suspend (PenChannel) -> Unit) {
         val html = context.assets.open("companion/index.html").use { it.readBytes().decodeToString() }

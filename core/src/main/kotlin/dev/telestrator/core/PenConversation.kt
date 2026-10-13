@@ -62,6 +62,10 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
         }
     }
 
+    /** Milliseconds until the guess-limit cooldown ends, or null when the desk is not locked. */
+    @Synchronized
+    internal fun retryAfterMs(): Long? = lockedUntilMs?.let { (it - nowMs).coerceAtLeast(0) }
+
     /** Checks [offered] against the PIN and counts it; a right PIN restarts the count. */
     @Synchronized
     internal fun check(offered: String): PinCheck {
@@ -157,13 +161,13 @@ class PenConversation(
         if (hello == null) {
             if (msg !is PenMessage.Hello) return emptyList()
             return when (desk.check(msg.pin)) {
-                PairingDesk.PinCheck.LOCKED -> reject(LOCKED)
+                PairingDesk.PinCheck.LOCKED -> reject(LOCKED, desk.retryAfterMs())
                 PairingDesk.PinCheck.WRONG -> reject(WRONG_PIN)
                 PairingDesk.PinCheck.RIGHT -> pair(msg, replaced = false)
             }
         }
 
-        if (desk.generation != generation) return emptyList()
+        if (desk.generation != generation) return superseded()
         // Answer the probe on the receive path, before any work, so the number reflects
         // transport plus decode, not the render.
         if (msg is PenMessage.Ping) return listOf(PenEffect.Send(TvMessage.Pong(msg.id)))
@@ -195,7 +199,7 @@ class PenConversation(
 
     private fun sharedHello(msg: PenMessage.Hello): List<PenEffect> {
         when (desk.check(msg.pin)) {
-            PairingDesk.PinCheck.LOCKED -> return listOf(refusal(LOCKED))
+            PairingDesk.PinCheck.LOCKED -> return listOf(refusal(LOCKED, desk.retryAfterMs()))
             PairingDesk.PinCheck.RIGHT -> return pair(msg, replaced = hello != null)
             PairingDesk.PinCheck.WRONG -> Unit
         }
@@ -212,8 +216,23 @@ class PenConversation(
         return effects
     }
 
-    private fun refusal(reason: String) =
-        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason))
+    /**
+     * A newer pen took this one's place. The first thing the older phone sends afterwards is
+     * answered with a refusal and a hang-up, so it can say so instead of showing a green dot over
+     * strokes that go nowhere; after that it stands down silently. The reason is not a PIN refusal:
+     * it never reaches the TV's card.
+     */
+    private fun superseded(): List<PenEffect> {
+        // A shared connection is the relay's own socket, not a pen: hanging up would cut every
+        // phone behind it. It stands down silently, as it always has.
+        if (shared || closed) return emptyList()
+        return reject(TAKEN_OVER)
+    }
+
+    private fun refusal(reason: String, retryAfterMs: Long? = null) =
+        PenEffect.Send(
+            TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason, retryAfterMs = retryAfterMs),
+        )
 
     companion object {
         /** See [PairingDesk.MAX_WRONG_PINS]; the limit is the desk's, shared by every connection. */
@@ -224,11 +243,14 @@ class PenConversation(
 
         private const val WRONG_PIN = "wrong PIN"
         private const val LOCKED = "too many wrong PINs"
+
+        /** What a replaced pen is told. The companion page keys on this exact string. */
+        const val TAKEN_OVER = "another pen took over"
     }
 
-    private fun reject(reason: String): List<PenEffect> {
+    private fun reject(reason: String, retryAfterMs: Long? = null): List<PenEffect> {
         closed = true
-        return listOf(refusal(reason), PenEffect.Close(reason))
+        return listOf(refusal(reason, retryAfterMs), PenEffect.Close(reason))
     }
 }
 
@@ -287,7 +309,7 @@ class Heartbeat {
 
         // Thumbnails only while paused, and only once per frame the viewer stops on: one is orders
         // of magnitude bigger than a state message and shares the pen's connection.
-        val thumbKey = if (input.paused) input.t / THUMB_BUCKET_MS else Long.MIN_VALUE
+        val thumbKey = if (input.paused) input.t / TransportPlan.FRAME_MS else Long.MIN_VALUE
         val thumbnailAtMs = if (input.paused && thumbKey != lastThumbKey) {
             lastThumbKey = thumbKey
             input.t
@@ -317,6 +339,5 @@ class Heartbeat {
 
     companion object {
         const val INTERVAL_MS = 400L
-        const val THUMB_BUCKET_MS = 200L
     }
 }

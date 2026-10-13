@@ -59,7 +59,7 @@ class PenConversationTest {
     }
 
     @Test
-    fun `case 4 - the newest pen wins and the older one stands down silently`() {
+    fun `case 4 - the newest pen wins and the older one is told once that it was replaced`() {
         val desk = desk()
         val a = desk.open(openedAtMs = 0)
         val b = desk.open(openedAtMs = 0)
@@ -67,6 +67,15 @@ class PenConversationTest {
         assertEquals(PenEffect.Paired("pen-a", 1), a.onText(hello("4821", "pen-a")).last())
         assertEquals(PenEffect.Paired("pen-b", 2), b.onText(hello("4821", "pen-b")).last())
 
+        // The older pen is told once, then hung up on; nothing it sends reaches the session.
+        val told = a.onText("""{"type":"clear"}""")
+        assertEquals(
+            listOf(
+                PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = "another pen took over")),
+                PenEffect.Close("another pen took over"),
+            ),
+            told,
+        )
         assertEquals(emptyList<PenEffect>(), a.onText("""{"type":"clear"}"""))
         assertFalse(a.isCurrent)
         assertEquals(listOf(PenEffect.Deliver(PenMessage.Clear)), b.onText("""{"type":"clear"}"""))
@@ -103,8 +112,8 @@ class SharedPenConversationTest {
     private fun desk() = PairingDesk(pin = "4821", videoAspect = aspect)
     private fun hello(pin: String, clientId: String = "pen-a") =
         """{"type":"hello","pin":"$pin","clientId":"$clientId"}"""
-    private fun refused(reason: String) =
-        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason))
+    private fun refused(reason: String, retryAfterMs: Long? = null) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason, retryAfterMs = retryAfterMs))
     private fun accepted(session: String) =
         PenEffect.Send(TvMessage.Welcome(sessionId = session, videoAspect = aspect, accepted = true))
 
@@ -185,11 +194,14 @@ class SharedPenConversationTest {
         }
 
         // Locked: the right PIN is refused, nothing is delivered, nobody is paired.
-        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+        assertEquals(
+            listOf(refused("too many wrong PINs", retryAfterMs = PenConversation.COOLDOWN_MS)),
+            pen.onText(hello("4821", "pen-a")),
+        )
         assertFalse(pen.isPaired)
         assertEquals(emptyList<PenEffect>(), pen.onText("""{"type":"undo"}"""))
         assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS - 1))
-        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+        assertEquals(listOf(refused("too many wrong PINs", retryAfterMs = 1)), pen.onText(hello("4821", "pen-a")))
 
         // The cooldown tick lifts it, and the count starts again.
         assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS))
@@ -253,7 +265,7 @@ class HeartbeatTest {
     )
 
     @Test
-    fun `case 7 - the mirror ships once per paused doc and the thumbnail once per 200 ms bucket`() {
+    fun `case 7 - the mirror ships once per paused doc and the thumbnail once per frame`() {
         val hb = Heartbeat()
 
         val first = hb.beat(input(5_000, paused = true))
@@ -264,14 +276,23 @@ class HeartbeatTest {
         assertNull(again.doc)
         assertNull(again.thumbnailAtMs)
 
-        assertNull(hb.beat(input(5_150, paused = true)).thumbnailAtMs)
-        assertEquals(5_250L, hb.beat(input(5_250, paused = true)).thumbnailAtMs)
+        assertNull(hb.beat(input(5_030, paused = true)).thumbnailAtMs)
+        assertEquals(5_050L, hb.beat(input(5_050, paused = true)).thumbnailAtMs)
 
         val playing = hb.beat(input(6_000, paused = false))
         assertNull(playing.doc)
         assertNull(playing.thumbnailAtMs)
 
         assertEquals(TvMessage.Doc(3, d1), hb.beat(input(6_000, paused = true)).doc)
+    }
+
+    @Test
+    fun `case 7b - stepping frame by frame while paused sends a thumbnail for every frame`() {
+        val hb = Heartbeat()
+        val steps = (0 until 5).map { 5_000L + it * TransportPlan.FRAME_MS }
+        val sent = steps.map { hb.beat(input(it, paused = true)).thumbnailAtMs }
+
+        assertEquals(steps, sent, "thumbnails sent for five single-frame steps: ${sent.count { it != null }} of 5")
     }
 
     @Test

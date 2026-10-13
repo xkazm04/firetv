@@ -76,6 +76,18 @@ class PenEngine(
     val canUndo: Boolean @Synchronized get() = history.canUndo
     val canRedo: Boolean @Synchronized get() = history.canRedo
 
+    private val dropped = java.util.TreeMap<String, Int>()
+
+    /**
+     * Messages that decoded and were dropped anyway, by reason: "draws but nothing appears" is
+     * answerable from /health. A copy, sorted by reason.
+     */
+    val droppedCounts: Map<String, Int> @Synchronized get() = LinkedHashMap(dropped)
+
+    private fun drop(reason: String) {
+        dropped.merge(reason, 1, Int::plus)
+    }
+
     private fun nextId(): String = "a${ids.incrementAndGet()}"
 
     private fun holdMs(requested: String?): Long =
@@ -158,7 +170,9 @@ class PenEngine(
     private fun handlePen(msg: PenMessage.Pen, tMs: Long) {
         // A point needs an x and a y. The wire decodes any list, and a short one would throw here,
         // on the pen's receive loop, and end the connection; skip it and keep the rest.
-        val xyp = msg.pts.filter { it.size >= 2 }.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
+        val usable = msg.pts.filter { it.size >= 2 }
+        if (usable.size < msg.pts.size) drop("pen-short-point")
+        val xyp = usable.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
         when (msg.phase) {
             "down" -> {
                 clearLive()
@@ -183,17 +197,18 @@ class PenEngine(
                     if (finished.points.size >= 2) commit(finished)
                 }
             }
+            else -> drop("pen-unknown-phase")
         }
     }
 
     private fun handleShape(msg: PenMessage.Shape, tMs: Long) {
         // Both ends need an x and a y, for the same reason as a pen point: drop, never throw.
-        if (msg.from.size < 2 || msg.to.size < 2) return
+        if (msg.from.size < 2 || msg.to.size < 2) return drop("shape-short-end")
         // A tap is not a drawing, as a one-point stroke is not (handlePen): an arrow or a ring whose
         // ends are where the finger held still would draw a stray arrowhead or a dot. A spotlight
         // keeps its floor radius below, so a tap there is a default-sized spotlight.
         val length = metric.distance(msg.from, msg.to)
-        if (msg.tool != "spotlight" && length < Smoothing.MIN_POINT_DISTANCE) return
+        if (msg.tool != "spotlight" && length < Smoothing.MIN_POINT_DISTANCE) return drop("shape-tap")
         val hold = holdMs(msg.hold)
         val style = Style(color = msg.color, width = msg.width)
         val a = when (msg.tool) {
@@ -208,7 +223,7 @@ class PenEngine(
             )
             else -> null
         }
-        if (a != null) commit(a)
+        if (a != null) commit(a) else drop("shape-unknown-tool")
     }
 
     private fun handleTag(msg: PenMessage.Tag, tMs: Long) {

@@ -109,6 +109,8 @@ sealed interface TvMessage {
         val videoAspect: Double,
         val accepted: Boolean,
         val reason: String? = null,
+        /** On a lockout refusal: how long until a hello can succeed. Absent otherwise; older phones ignore it. */
+        val retryAfterMs: Long? = null,
     ) : TvMessage
 
     @Serializable

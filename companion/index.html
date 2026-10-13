@@ -159,8 +159,12 @@
   const mirror = $('mirror'), mctx = mirror.getContext('2d');
   const statusEl = $('status'), dot = $('dot'), hint = $('hint');
   const tagbox = $('tagbox'), tagtext = $('tagtext');
+  const pairBtn = document.querySelector('#pinbox button');
 
-  let pin = new URLSearchParams(location.search).get('pin') || '0000';
+  // The PIN rides in the fragment (#pin=), which the browser never sends, so a relay's access
+  // log cannot learn it. The query (?pin=) stays as a fallback for QR codes printed earlier.
+  let pin = new URLSearchParams(location.hash.slice(1)).get('pin')
+    || new URLSearchParams(location.search).get('pin') || '0000';
   const clientId = 'pen-' + Math.random().toString(36).slice(2, 8);
 
   let tool = 'freehand';
@@ -187,11 +191,49 @@
       // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
       if (refused) return;
       if (!statusEl.classList.contains('bad')) statusEl.textContent = 'reconnecting…';
-      setTimeout(connect, 1000);
+      scheduleReconnect();
     };
     ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   }
   function send(o) { if (connected) ws.send(JSON.stringify(o)); }
+
+  // A TV that is gone is redialled with a doubling wait (1 s up to 15 s), not every second for as
+  // long as the tab lives; a welcome resets it. While the screen is hidden nothing is dialled, and
+  // showing the page again dials at once.
+  const BACKOFF_MIN_MS = 1000, BACKOFF_MAX_MS = 15000;
+  let backoff = BACKOFF_MIN_MS, redial = 0;
+  function scheduleReconnect() {
+    clearTimeout(redial);
+    redial = 0;
+    if (document.hidden) return;
+    redial = setTimeout(() => { redial = 0; connect(); }, backoff);
+    backoff = Math.min(backoff * 2, BACKOFF_MAX_MS);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || refused || connected || redial || (ws && ws.readyState < 2)) return;
+    backoff = BACKOFF_MIN_MS;
+    connect();
+  });
+
+  // The lockout's remaining time, shown as seconds; Pair stays disabled until it runs out.
+  let lockTick = 0;
+  function stopCountdown() { clearInterval(lockTick); lockTick = 0; pairBtn.disabled = false; }
+  function countdown(reason, ms) {
+    clearInterval(lockTick);
+    const end = Date.now() + ms;
+    pairBtn.disabled = true;
+    const tick = () => {
+      const left = Math.ceil((end - Date.now()) / 1000);
+      if (left <= 0) {
+        stopCountdown();
+        statusEl.textContent = reason + ' · type the PIN from the TV';
+        return;
+      }
+      statusEl.textContent = reason + ' · wait ' + left + ' s, then type the PIN';
+    };
+    tick();
+    lockTick = setInterval(tick, 250);
+  }
 
   function onMessage(m) {
     if (m.type === 'welcome') {
@@ -200,15 +242,28 @@
         // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
         // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
         const locked = m.reason === 'too many wrong PINs';
+        // Another phone paired with the same PIN and holds the pen. Typing the PIN here would take
+        // it straight back and the two phones would trade it; reloading the page is the way back.
+        if (m.reason === 'another pen took over') {
+          paired = false;
+          dot.classList.remove('on');
+          statusEl.textContent = 'another phone has the pen · reload this page to take it back';
+          statusEl.classList.add('bad');
+          return;
+        }
         statusEl.textContent = (m.reason || 'not paired') +
           (locked ? ' · wait half a minute, then type the PIN' : ' · type the PIN from the TV');
         statusEl.classList.add('bad');
         pinbox.classList.add('show');
         pintext.value = '';
         pintext.focus();
+        // The TV said when the cooldown ends: count it down and keep Pair off until then.
+        if (locked && typeof m.retryAfterMs === 'number') countdown(m.reason, m.retryAfterMs);
         return;
       }
       paired = true;
+      stopCountdown();
+      backoff = BACKOFF_MIN_MS;
       hint.textContent = 'draw here';
       statusEl.classList.remove('bad');
       dot.classList.add('on');
@@ -298,10 +353,14 @@
     if (!typed) return;
     pin = typed;
     // A reload keeps the PIN the viewer typed rather than the one the TV refused.
+    // It goes back into the fragment, and an old ?pin= is dropped from the query, so the PIN is
+    // never in anything the page host sees.
     const q = new URLSearchParams(location.search);
-    q.set('pin', pin);
-    history.replaceState(null, '', '?' + q);
+    q.delete('pin');
+    const qs = q.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + '#pin=' + encodeURIComponent(pin));
     refused = false;
+    stopCountdown();
     pinbox.classList.remove('show');
     statusEl.classList.remove('bad');
     statusEl.textContent = 'pairing…';
@@ -346,7 +405,8 @@
     if (tagbox.classList.contains('show')) return;
     // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
     if (!paired) {
-      hint.textContent = refused ? 'type the PIN above to draw' : 'not connected to the TV yet';
+      hint.textContent = !refused ? 'not connected to the TV yet'
+        : pinbox.classList.contains('show') ? 'type the PIN above to draw' : 'another phone has the pen';
       hint.classList.remove('hide');
       return;
     }
