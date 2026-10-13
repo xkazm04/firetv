@@ -775,3 +775,14 @@ test('OPT-1: a name longer than PROFILE_NAME_MAX is refused for a guest, a phone
  }
  const file=path.join(data,'session.json');assert.ok(fs.statSync(file).size<100000,'session.json does not carry the long name');
 });
+test('OPT-2: a timer.tick whose seconds are not a number from 1 to 60 moves neither the clock nor the evening\'s minutes; 1 and 59 still do',async()=>{
+ evening('tonight');store.dispatch({type:'timer.start'});
+ const at=()=>{const s=store.getSession();return {left:s.timer.left,minutes:s.log.minutes,phase:s.timer.phase};};
+ for(const seconds of ['abc',-600,0,1e9,null,undefined,61,'5']){
+  const before=at();const r=await post({type:'timer.tick',seconds},'phone');assert.equal(r.status,200);
+  assert.deepEqual(at(),before,`seconds ${JSON.stringify(seconds)} moved the timer`);
+  assert.ok(Number.isFinite(store.getSession().timer.left),'the clock is a number');
+ }
+ let b=at();store.dispatch({type:'timer.tick',seconds:1});assert.equal(at().left,b.left-1,'the desk\'s own tick');
+ b=at();store.dispatch({type:'timer.tick',seconds:59});assert.equal(at().left,Math.max(0,b.left-59),'the TV\'s fast tick');
+});

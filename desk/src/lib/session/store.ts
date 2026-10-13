@@ -583,6 +583,10 @@ function stamped(n: Session, now = Date.now()): Session {
   return { ...n, log: { ...n.log, day: dayOf(now) } };
 }
 
+/** The seconds one timer.tick may carry: a posted event is JSON, so a string, a negative or a huge number can arrive. */
+const TICK_MAX = 60;
+const tickOk = (v: unknown): v is number => typeof v === "number" && Number.isFinite(v) && v > 0 && v <= TICK_MAX;
+
 export function reduce(s: Session, e: Event): Session { return stamped(step(dayed(s, e), e)); }
 
 function step(s: Session, e: Event): Session {
@@ -689,7 +693,8 @@ function step(s: Session, e: Event): Session {
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
     case "timer.pause": n.timer = { ...s.timer, running: false }; break;
-    case "timer.tick": { if (!s.timer.running) break; const left = Math.max(0, s.timer.left - e.seconds); const t = { ...s.timer, left };
+    // a tick is the desk's second (the ticker) or the TV's fast minute (59): anything but a number from 1 to 60 moves nothing
+    case "timer.tick": { if (!s.timer.running || !tickOk(e.seconds)) break; const left = Math.max(0, s.timer.left - e.seconds); const t = { ...s.timer, left };
       if (t.phase === "work") n.log = { ...s.log, minutes: s.log.minutes + e.seconds / 60 };
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
