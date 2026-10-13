@@ -182,7 +182,12 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
   if (!status) {
     // a run's findings.json is the record the ledger and every recertify stamp live in: a new run never writes over one
     if (out.run && fs.existsSync(path.join(out.runs, out.run, 'findings.json'))) throw new Error(`--run ${out.run} already holds findings.json under ${out.runs}: pick a new run id, or recertify it with --recertify ${out.run}`);
-    const bad =(journeyTexts ?? Object.values(journeys()).map(j => j.text)).flatMap(V.unknownGates);
+    const texts = journeyTexts ?? Object.values(journeys()).map(j => j.text);
+    // a --journeys id no journey file defines matches no Character's list: every child would run nothing and the run exit 0
+    const ids = texts.map(t => { try { return JSON.parse(t.match(/```json\s*\n([\s\S]*?)\n```/)?.[1] ?? 'null')?.id; } catch { return undefined; } }).filter(Boolean);
+    const unknown = (out.journeys ?? []).filter(j => !ids.includes(j));
+    if (unknown.length) throw new Error(`--journeys ${unknown.join(',')}: no journey file defines ${unknown.length === 1 ? 'it' : 'them'}. Known: ${ids.join(', ')}`);
+    const bad = texts.flatMap(V.unknownGates);
     if (bad.length) throw new Error(`unknown metric in a journey's gates: ${bad.map(g => `${g.journey} gates ${g.metric}`).join('; ')}. Known: ${M.series().map(s => s.id).join(', ')}`);
   }
   return { mode: status ? 'status' : out.recertify ? 'recertify' : ledger ? 'ledger' : 'run', ...out };
