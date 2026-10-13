@@ -228,12 +228,15 @@ const health=()=>load('engines/health.ts');
 after(()=>{if(globalThis.__desk&&globalThis.__desk.ticker)clearInterval(globalThis.__desk.ticker);});
 const nap=(ms)=>new Promise((r)=>setTimeout(r,ms));
 const LIVE={text:{ok:'yes'},vision:{title:'t'},embed:[[1]],speak:Buffer.from('x'),listen:{text:'hi'}};
-/** A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it). */
+/**
+ * A stub for every kind with a probe and a run, both counted; `over[kind]` replaces fields (probe: null drops it).
+ * `n.peak` is the most runs in flight at once: side by side is a count, never a wall-clock race a loaded machine loses.
+ */
 const stubAll=(over={},delay=0)=>{
- const n={run:{},probe:{}};
+ const n={run:{},probe:{},live:0,peak:0};
  for(const k of KINDS){
   n.run[k]=0;n.probe[k]=0;
-  const p={name:'stub',run:async()=>{n.run[k]++;if(delay)await nap(delay);return {raw:LIVE[k]};},probe:async()=>{n.probe[k]++;return {ok:true,say:'fine'};},...(over[k]||{})};
+  const p={name:'stub',run:async()=>{n.run[k]++;n.live++;n.peak=Math.max(n.peak,n.live);try{if(delay)await nap(delay);}finally{n.live--;}return {raw:LIVE[k]};},probe:async()=>{n.probe[k]++;return {ok:true,say:'fine'};},...(over[k]||{})};
   if(over[k]&&over[k].probe===null)delete p.probe;
   reg().useProvider(k,p);
  }
@@ -285,10 +288,8 @@ test('case 22: the real ollama probes read /api/tags: a missing model says what 
 
 test('case 23: a live check runs text, vision, embed and speak side by side, listen as a probe; a failure is a typed row with no engine text',async()=>{
  const n=stubAll({},40);
- const t0=Date.now();
  const r=await health().engineCheck({live:true,sample:'aGk='});
- const took=Date.now()-t0;
- assert(took<120,`parallel: ${took} ms (the serial sum is 160)`);
+ assert.equal(n.peak,4,`side by side: text, vision, embed and speak all in flight at once (peak ${n.peak}; one at a time is 1)`);
  assert.deepEqual(r.map(x=>x.kind),['text','vision','embed','speak','listen']);
  for(const k of ['text','vision','embed','speak']){assert.equal(n.run[k],1,`${k} ran`);const row=r.find(x=>x.kind===k);assert.equal(row.ok,true,k);assert.equal(row.provider,'stub',k);assert(row.ms>=30,`${k} reports the engine's ms (${row.ms})`);}
  assert.equal(n.run.listen,0,'listen is not run');assert.equal(n.probe.listen,1);
