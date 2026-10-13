@@ -830,6 +830,15 @@ test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write 
  }finally{fs.renameSync=real;}
 });
 
+test('case 6c: an onFail that throws still records the failure, and its own error reaches the server log (one door, never none)',async()=>{
+ onPage();
+ const {runJob}=require(src('lib/desk/job.ts'));
+ const errs=[],e0=console.error;console.error=(...a)=>errs.push(a.join(' '));
+ let r;try{r=await runJob('practice',async()=>{throw new Error('engine down');},{onFail:()=>{throw new Error('put-right broke');}});}finally{console.error=e0;}
+ assert.equal(r.ok,false);assert.equal(store.getSession().jobs.practice.phase,'failed');deskWorded(store.getSession().jobs.practice.error);
+ assert.equal(errs.filter((l)=>/onFail/.test(l)&&/put-right broke/.test(l)&&/practice/.test(l)).length,1,JSON.stringify(errs));
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();

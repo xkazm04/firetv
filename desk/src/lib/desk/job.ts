@@ -111,7 +111,8 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
     // the engine's detail can carry raw model output (an answer): it goes to the server log, never to a screen
     console.error(`desk job failed: ${kind} ${id}: ${detail(e)}`);
     if (run.current()) {
-      try { opts.onFail?.(e); } catch {}
+      // a put-right that breaks never stops the failure being recorded, and its own error reaches the log (never no door)
+      try { opts.onFail?.(e); } catch (f) { console.error(`desk job onFail failed: ${kind} ${id}: ${detail(f)}`); }
       dispatch({ type: "job.failed", kind, id, error });
       if (seated()) dispatch({ type: "status", text: error });
     }
