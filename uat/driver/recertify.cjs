@@ -27,12 +27,14 @@ const dirOf = run => path.isAbsolute(run) ? run : path.join(RUNS, run);
 /** A run's id: its directory name, or `<originating>/recert-<k>` for a rerun. */
 const runId = run => { const d = dirOf(run), b = path.basename(d); return /^recert-\d+$/.test(b) ? `${path.basename(path.dirname(d))}/${b}` : b; };
 const readJson = p => JSON.parse(fs.readFileSync(p, 'utf8'));
-const NOT_RESULTS = new Set(['findings.json', 'run.json']);
+// one reader of a run's per-Character files and one open rule, shared with the ledger: a file a dying child tore is
+// left out (its planned pairs are then not-evaluable in finish()), never a throw that loses every stamp of the rerun
+const LG = require('./ledger.cjs');
 /** The per-Character result files of a run. */
-const results = run => fs.readdirSync(dirOf(run)).filter(f => f.endsWith('.json') && !NOT_RESULTS.has(f)).sort().map(f => readJson(path.join(dirOf(run), f))).filter(r => r && r.character && Array.isArray(r.journeys));
+const results = run => LG.resultsOf(dirOf(run));
 const findings = run => readJson(path.join(dirOf(run), 'findings.json'));
 const runJson = run => { try { return readJson(path.join(dirOf(run), 'run.json')); } catch { return null; } };
-const isOpen = f => f.type !== 'strength' && f.resolution === 'open';
+const isOpen = LG.isOpen;
 const jn = j => Number(String(j).replace(/\D/g, '')) || 0;
 
 // ---------------------------------------------------------------- plan

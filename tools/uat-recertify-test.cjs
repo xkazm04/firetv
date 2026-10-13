@@ -389,3 +389,19 @@ test('W7-3: the runs digest skips a plain file such as OPEN.md and still sees a 
   fs.writeFileSync(path.join(runs, 'a-run', 'findings.json'), '[1]');
   assert.notEqual(digest(runs), one);
 });
+
+test('a rerun whose Character file was torn mid-write still stamps the originating run: its planned rows are not-evaluable, nothing throws', () => {
+  const prior = copyRun(BEGINNERS), rerun = path.join(prior, 'recert-1');
+  fs.mkdirSync(rerun, { recursive: true });
+  fs.writeFileSync(path.join(rerun, 'run.json'), JSON.stringify({ id: R().runId(rerun), recertify: BEGINNERS, pairs: { 'tomas-9': ['J3'] } }));
+  fs.writeFileSync(path.join(rerun, 'tomas-9.json'), '{"character":"tomas-9","journeys":[{"id":"J3"');   // the child died while saving
+  fs.writeFileSync(path.join(rerun, 'findings.json'), '[]');
+  const open = R().openFindings(prior, 'tomas-9', 'J3').map(f => f.id);
+  assert.ok(open.length > 0, 'the fixture pair has open rows');
+  const out = R().finish(prior, rerun);
+  assert.equal(out.notEvaluable, open.length);
+  assert.equal(out.fixed, 0);
+  const rows = Object.fromEntries(readJson(path.join(prior, 'findings.json')).map(f => [f.id, f]));
+  for (const id of open) { assert.equal(rows[id].recertify_status, 'not-evaluable'); assert.equal(rows[id].resolution, 'open'); }
+  assert.ok(fs.existsSync(out.file), 'recertify.md is written');
+});

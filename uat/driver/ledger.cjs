@@ -50,7 +50,7 @@ function runsOf(dir) {
   }
   return out.sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0)).map((r, order) => ({ ...r, order }));
 }
-/** The per-Character result files of one run. */
+/** The per-Character result files of one run; one that cannot be read (a child that died while saving) is left out. recertify.cjs reads them here too. */
 const resultsOf = d => fs.readdirSync(d).filter(f => f.endsWith('.json') && !NOT_RESULTS.has(f)).sort()
   .map(f => { try { return readJson(path.join(d, f)); } catch { return null; } }).filter(r => r && r.character && Array.isArray(r.journeys));
 
@@ -199,4 +199,4 @@ function writeStatus(dir = RUNS, opts = {}) {
   return { md, file };
 }
 
-module.exports = { RUNS, runsOf, ledger, statusOf, writeStatus, isOpen, pairKey, moduleOf };
+module.exports = { RUNS, runsOf, resultsOf, ledger, statusOf, writeStatus, isOpen, pairKey, moduleOf };
