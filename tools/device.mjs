@@ -19,6 +19,8 @@
  */
 import { execFileSync } from 'node:child_process';
 import os from 'node:os';
+import { readFileSync } from 'node:fs';
+import { PNG } from 'pngjs';
 
 export const ADB_BIN =
   process.env.ADB ?? 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
@@ -125,4 +127,58 @@ export function pairingPin(args, tag, adb = makeAdb({ timeout: 10_000 })) {
     process.exit(2);
   }
   return pin;
+}
+
+/**
+ * Whether a phone page turned a pen away, judged on its state and not its wording: the status line carries the
+ * `bad` class and a PIN input is visible to type into. The words change (0a6a553a rewrote them once already); the
+ * state is what the viewer relies on. Waits up to [timeoutMs] for `bad`.
+ */
+export async function refusalShown(page, timeoutMs = 8000) {
+  await page
+    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: timeoutMs })
+    .catch(() => {});
+  const state = await page.evaluate(() => {
+    const input = document.getElementById('pintext');
+    return {
+      status: document.getElementById('status').textContent ?? '',
+      bad: document.getElementById('status').classList.contains('bad'),
+      pinInput: !!input && input.getClientRects().length > 0 && getComputedStyle(input).visibility !== 'hidden',
+    };
+  });
+  return { ok: state.bad && state.pinInput, ...state };
+}
+
+/** Pen colours as they read in a screencap. */
+export const INK = {
+  // #FFD400 with tolerance; the fixture's pure yellow (255,255,0) fails the green test.
+  yellow: (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70,
+  // #00E5FF, a hue that appears nowhere in the fixture's colour bars.
+  cyan: (r, g, b) => r < 90 && g > 195 && b > 225,
+};
+
+/**
+ * Counts pixels of one pen colour in a decoded frame ({width, height, data} RGBA), ignoring the pairing card (top
+ * right) and the status-bar band (below 94% of the height, the boundary row included in the count) so a tool does
+ * not end up grading the TV's furniture. The one classifier for live-ui-test and relay-test.
+ */
+export function countInk({ width, height, data }, which = 'yellow') {
+  const match = INK[which];
+  let n = 0;
+  for (let y = 0; y < height; y++) {
+    if (y > height * 0.94) continue;
+    for (let x = 0; x < width; x++) {
+      if (x > width * 0.74 && y < height * 0.44) continue;
+      const i = (width * y + x) << 2;
+      if (match(data[i], data[i + 1], data[i + 2])) n++;
+    }
+  }
+  return n;
+}
+
+/** Pulls a framebuffer capture off the device (screencap to [remote], pull to [dest]) as a decoded PNG. */
+export function tvScreenshot(adb, remote, dest) {
+  adb('shell', 'screencap', '-p', remote);
+  adb('pull', remote, dest);
+  return { png: PNG.sync.read(readFileSync(dest)), file: dest };
 }

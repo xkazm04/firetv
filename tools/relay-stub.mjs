@@ -107,6 +107,9 @@ function attach(ws, role) {
     if (role === 'tv' && tv === ws) {
       tv = null;
       lastState = null;
+      // The phone's frames now go nowhere, so say so: a close (1012, service restart) makes the companion
+      // redial, and its hello reaches the TV once that is back with its new PIN.
+      if (pen && pen.readyState === pen.OPEN) pen.close(1012, 'tv left');
     }
     if (role === 'pen' && pen === ws) pen = null;
   });
