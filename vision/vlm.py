@@ -8,6 +8,10 @@ asked to count or to do arithmetic.
 
     from vlm import ask, b64, loads
     out, seconds = ask([b64("page.jpg")], "What is written here?", SCHEMA)
+
+What the lab needs: Python 3, Ollama with the model pulled (`ollama pull qwen3.8:27b`), and Pillow for
+point.py and poc_ocr.py (`pip install pillow` - the import is `PIL`, the package is not). Everything
+else is the standard library. Run the scripts from the repo root (`python vision/poc_ocr.py`).
 """
 import base64
 import json
