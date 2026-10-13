@@ -39,11 +39,13 @@ data class HealthReading(
  */
 fun healthBody(r: HealthReading): String {
     fun ms(v: Double) = "%.3f".format(Locale.ROOT, v)
+    val dropped = r.dropped.entries.sortedBy { it.key }.joinToString(",") { """"${it.key}":${it.value}""" }
     return """{"ok":true,"transport":"${r.transport}",""" +
         """"annotations":${r.annotations},"revision":${r.revision},""" +
         """"t":${r.t},"durationMs":${r.durationMs},""" +
         """"paused":${r.paused},"rate":${r.rate},"pens":${r.pens},""" +
         """"canUndo":${r.canUndo},"canRedo":${r.canRedo},""" +
         """"renderP50Ms":${ms(r.renderP50Ms)},"renderP95Ms":${ms(r.renderP95Ms)},""" +
-        """"renderMaxMs":${ms(r.renderMaxMs)},"renderFrames":${r.renderFrames}}"""
+        """"renderMaxMs":${ms(r.renderMaxMs)},"renderFrames":${r.renderFrames},""" +
+        """"dropped":{$dropped}}"""
 }
