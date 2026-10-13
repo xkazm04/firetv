@@ -487,6 +487,12 @@ export function leaksByForm(question: string, line: string, system?: SchoolSyste
   if (eq || isSum(ex!)) {
     const root = (n: string) => { const v = evaluate(n, 0); return v !== null && (answers(v) || answers(-v)); };
     for (const m of spoken(line).matchAll(PAIR)) if (root(m[1]) && root(m[2])) return true;
+    // one root named alone as the answer ("one of the numbers is 3", "one root is x = -4", "one bracket is x + 4"): half the answer
+    for (const m of line.matchAll(/\b(?:one|first|second|other|another)\b[^.?!;:]{0,40}?\b(?:is|are|equals?)\b(.*)/gi)) {
+      const t = spoken(m[1]), n = t.match(/^\s*(?:x\s*=\s*)?(-?\d+(?:\.\d+)?)(?![\d\/]|\.\d)/), b = t.match(/^\s*\(?\s*(x\s*[+-]\s*\d+)\s*\)?/);
+      if (n && root(n[1])) return true;
+      if (b && !own.includes(compact(b[0])) && linearRoot(b[1]) !== null && answers(linearRoot(b[1])!)) return true;
+    }
   }
   if (ex) for (const f of masked.split(/[|,;:!?"“”‘’'$=\{}]|\.(?!\d)/)) {
     const frag = f.trim();
