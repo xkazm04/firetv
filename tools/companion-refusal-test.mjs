@@ -229,6 +229,32 @@ try {
     await page.mouse.up();
     check('paired: a stroke inks under the finger', ink > 0, `${ink} ink pixels`);
 
+    // The TV floors a spotlight's radius at 0.03 of the picture width (PenEngine); the preview
+    // under the finger must show the ring the TV will draw, not the 2 px the finger moved.
+    await page.evaluate(() => window.__pen.setTool('spotlight'));
+    const cx = box.x + box.width * 0.5, cy = box.y + box.height * 0.5;
+    await page.mouse.move(cx, cy);
+    await page.mouse.down();
+    await page.mouse.move(cx + 2, cy);
+    const span = await page.evaluate(() => {
+      const c = document.getElementById('cv');
+      const px = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let lo = Infinity, hi = -Infinity;
+      for (let i = 3; i < px.length; i += 4) {
+        if (px[i] === 0) continue;
+        const x = ((i - 3) / 4) % c.width;
+        lo = Math.min(lo, x);
+        hi = Math.max(hi, x);
+      }
+      return { ring: hi >= lo ? (hi - lo) / c.width : 0 };
+    });
+    await page.mouse.up();
+    check(
+      'spotlight: a short drag previews the floor-sized ring the TV draws',
+      span.ring >= 0.055,
+      `ring ${(span.ring * 100).toFixed(1)}% of the pad width, TV floor 6.0%`,
+    );
+
     // ---- every control has a name a screen reader can say ---------------------------------
     // A name made only of symbols (a lone ✕) is read as the symbol, so it counts as unnamed.
     const unnamed = await page.evaluate(() =>

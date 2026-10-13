@@ -405,6 +405,7 @@
   pad.addEventListener('pointerup', endStroke);
   pad.addEventListener('pointercancel', endStroke);
 
+  const SPOTLIGHT_MIN_RADIUS = 0.03;
   function previewShape(a, b) {
     clearCanvas();
     const p1 = px(a), p2 = px(b);
@@ -412,7 +413,14 @@
     ctx.lineWidth = 3;
     ctx.beginPath();
     if (tool === 'arrow') { ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); }
-    else { ctx.arc(p1[0], p1[1], Math.hypot(p2[0] - p1[0], p2[1] - p1[1]), 0, Math.PI * 2); }
+    else {
+      // The pad carries the video's aspect, so pad pixels are content-width units times the pad
+      // width, the unit the TV measures radii in. A spotlight never lands smaller than 0.03 of
+      // the width (PenEngine), so neither does its preview.
+      let r = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+      if (tool === 'spotlight') r = Math.max(r, SPOTLIGHT_MIN_RADIUS * pad.clientWidth);
+      ctx.arc(p1[0], p1[1], r, 0, Math.PI * 2);
+    }
     ctx.stroke();
   }
 

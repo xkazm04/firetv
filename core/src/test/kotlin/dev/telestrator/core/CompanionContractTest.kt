@@ -101,4 +101,11 @@ class CompanionContractTest {
         assertEquals(AnnotationTimeline.MOMENT_SPAN_MS, const("MOMENT_SPAN_MS"))
         assertEquals(AnnotationTimeline.ON_MOMENT_LEAD_MS, const("ON_MOMENT_LEAD_MS"))
     }
+
+    @Test
+    fun `the spotlight floor the preview copies is the engine's`() {
+        val m = Regex("""\bSPOTLIGHT_MIN_RADIUS\s*=\s*([0-9.]+)""").find(page)
+        checkNotNull(m) { "SPOTLIGHT_MIN_RADIUS not found in the page" }
+        assertEquals(PenEngine.SPOTLIGHT_MIN_RADIUS, m.groupValues[1].toDouble())
+    }
 }

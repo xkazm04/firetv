@@ -204,7 +204,7 @@ class PenEngine(
             )
             "spotlight" -> Annotation.Spotlight(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = metric.distance(msg.from, msg.to).coerceAtLeast(0.03),
+                center = msg.from, radius = length.coerceAtLeast(SPOTLIGHT_MIN_RADIUS),
             )
             else -> null
         }
@@ -241,5 +241,13 @@ class PenEngine(
     private fun clearLive() {
         liveMeta = null
         livePoints.clear()
+    }
+
+    companion object {
+        /**
+         * The smallest spotlight, in content-width units: a tap with the spotlight tool lands this
+         * big. The phone's preview copies it (companion/index.html, checked by CompanionContractTest).
+         */
+        const val SPOTLIGHT_MIN_RADIUS: Double = 0.03
     }
 }
