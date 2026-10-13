@@ -626,3 +626,17 @@ test('SW5: seven talks tonight draw the last five marks and "2 earlier"; five or
  const t5=five.slice(five.indexOf('data-app="english"'),five.indexOf('data-app="essay"'));
  assert.equal((t5.match(/data-role="recap-talk"/g)||[]).length,5);assert.doesNotMatch(t5,/recap-earlier/,'five need no earlier line');
 });
+// SW6 (scan-sweep optimize 2026-10-13): the shell's lesson ticker asks nothing the phone cannot do and names the remote's button
+test('SW6: the lesson ticker - paused or playing - names Play, not the bench keyboard, and asks no circle on the phone',()=>{
+ const {LessonScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:null};
+ const ticker=(paused)=>{const h=renderToStaticMarkup(createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson,lessonPaused:paused})}));return h.slice(h.indexOf('class="ticker"'));};
+ for(const paused of [false,true]){
+  const t=ticker(paused);
+  // no phone panel circles a lesson frame (tools/phone-panel-test.cjs NO_PANEL): the TV must not ask for one
+  assert.doesNotMatch(t,/circle on the phone/i,`paused=${paused}: no ask the phone cannot answer`);
+  assert.doesNotMatch(t,/\bSpace\b/,`paused=${paused}: the remote has no Space key`);
+  assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
+ }
+ assert.match(ticker(true),/paused/);assert.match(ticker(false),/playing/);
+});

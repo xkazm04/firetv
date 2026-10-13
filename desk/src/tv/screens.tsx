@@ -202,7 +202,8 @@ export function LessonScreen({ s }: { s: Session }) {
         <span className="cap">The part that matters · {fmt(l.t)}</span>
         <div className="body" style={{ marginTop: 16, color: "var(--mute)", fontSize: 28, lineHeight: 1.45 }}>{l.text.slice(0, 520)}{l.text.length > 520 ? "…" : ""}</div>
       </div>
-      <div className="ticker"><span>{s.lessonPaused ? "paused — circle on the phone to ask about this frame" : "playing"}</span><i>·</i><span>Space pauses</span><i>·</i><span>Back returns</span></div>
+      {/* facts only: the remote's own button, and no ask the phone cannot answer (no phone panel circles a lesson frame) */}
+      <div className="ticker"><span>{s.lessonPaused ? "paused" : "playing"}</span><i>·</i><span>{s.lessonPaused ? "Play resumes" : "Play pauses"}</span><i>·</i><span>Back returns</span></div>
     </main>
   </>);
 }
