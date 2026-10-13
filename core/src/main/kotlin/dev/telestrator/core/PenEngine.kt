@@ -76,6 +76,12 @@ class PenEngine(
     val canUndo: Boolean @Synchronized get() = history.canUndo
     val canRedo: Boolean @Synchronized get() = history.canRedo
 
+    /**
+     * Messages that decoded and were dropped anyway, by reason. Stub: always empty (the counting
+     * lands with the fix; this commit is the instrument).
+     */
+    val droppedCounts: Map<String, Int> @Synchronized get() = emptyMap()
+
     private fun nextId(): String = "a${ids.incrementAndGet()}"
 
     private fun holdMs(requested: String?): Long =

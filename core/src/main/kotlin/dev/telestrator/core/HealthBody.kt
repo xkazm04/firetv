@@ -25,6 +25,8 @@ data class HealthReading(
     val renderP95Ms: Double,
     val renderMaxMs: Double,
     val renderFrames: Int,
+    /** Decoded pen messages the engine dropped, by reason (see [PenEngine.droppedCounts]). */
+    val dropped: Map<String, Int> = emptyMap(),
 )
 
 /**
