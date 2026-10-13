@@ -731,6 +731,30 @@ test('SW1: checkSentence - a call that never reached the desk says so and never 
  assert.equal((await run(()=>reply({},true,200))).msg,'on the TV','unchanged: an ok is on the TV');
 });
 
+// ---- SW2 (scan-sweep optimize 2026-10-13): a camera granted after the panel let it go is stopped, never left running ----
+test('SW2: the camera effect stops a stream that arrives after the panel no longer wants it, and on unmount',async()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.lastIndexOf('useEffect(() => {',src.indexOf('if (!camWanted)')),e=src.indexOf('}, [camWanted]);',a);
+ assert.ok(a>0&&e>a,'the camera effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, [camWanted]);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const run=async(late)=>{
+  let effect=null,open;const granted=new Promise((r)=>{open=r;});const stopped=[],cams=[];
+  const navigator={mediaDevices:{getUserMedia:()=>granted}};
+  new Function('useEffect','camWanted','cam','setCam','video','setMsg','screen','navigator',js)((f)=>{effect=f;},true,null,(v)=>cams.push(v),{current:null},()=>{},'capture',navigator);
+  const cleanup=effect();
+  if(late)assert.equal(typeof cleanup,'function','the effect hands React a cleanup');
+  if(late&&typeof cleanup==='function')cleanup();
+  open({getTracks:()=>[{stop:()=>stopped.push('video')}]});await new Promise((r)=>setImmediate(r));
+  return {stopped,cams,cleanup};
+ };
+ const late=await run(true);
+ assert.deepEqual(late.stopped,['video'],'a stream granted after the panel let the camera go is stopped at once');
+ assert.deepEqual(late.cams,[],'and never becomes the panel\'s camera');
+ const wanted=await run(false);
+ assert.equal(wanted.cams.length,1,'unchanged: a stream that arrives while wanted is the camera');assert.deepEqual(wanted.stopped,[]);
+ wanted.cleanup();assert.deepEqual(wanted.stopped,['video'],'the page going away stops the camera in use');
+});
+
 // ---- PR5: every refused join says why on the Join panel ----
 const WRONG='That code is not on the TV.',TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
 const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That did not reach the desk.';

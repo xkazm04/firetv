@@ -139,7 +139,11 @@ export default function Phone() {
   const camWanted = (screen === "capture" && !readAgain) || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
-    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."));
+    // the grant can come after the panel let the camera go (a tab picked while the browser asked): that stream is
+    // stopped at once, and the one in use is stopped when the page goes, so the camera is never left on unasked
+    let live = true, got: MediaStream | null = null;
+    navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { if (!live) { st.getTracks().forEach((t) => t.stop()); return; } got = st; setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => { if (live) setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."); });
+    return () => { live = false; got?.getTracks().forEach((t) => t.stop()); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [camWanted]);
   // the element arrives after the stream does; hand it the stream once it is on the page
