@@ -10,8 +10,9 @@ photo is — perspective, blur, uneven light, sensor noise, JPEG. That gives a *
 photos dropped in artifacts/vision/desk/photos/ are the real test; `--photos` runs those and prints
 what the model read, for judging by eye since there is no ground truth for them.
 
-    python vision/poc_ocr.py             # render, degrade at three levels, read, score
-    python vision/poc_ocr.py --photos    # read real photos, print, no scoring
+    python vision/poc_ocr.py                  # render, degrade at three levels, read, score
+    python vision/poc_ocr.py --photos         # read real photos, print, no scoring
+    python vision/poc_ocr.py --circles-only   # re-run only the circle test (maths + Spanish, mild + harsh)
 
 Re-measured on the product, not this copy: `npm run bench` in desk/ reads the phone's sample pages
 (prototype/data.json, byte-identical to desk/public/samples) through desk's own readPage(), scores
