@@ -15,5 +15,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    // CompanionContractTest reads the phone page; without this an edit to the page alone leaves
+    // the test task up to date (or served from the build cache) and the contract is never re-read.
+    inputs.file(rootProject.layout.projectDirectory.file("companion/index.html"))
+        .withPropertyName("companionPage")
+        .withPathSensitivity(PathSensitivity.RELATIVE)
     testLogging { events("passed", "failed", "skipped") }
 }
