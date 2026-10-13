@@ -692,6 +692,26 @@ test('SW14: hint and lesson with their data gone draw a band, a title and a capt
   assert.match(h,/class="cap"[^]*Back/,`${n}: a caption that names Back`);
  }
 });
+// SW15 (scan-sweep optimize 2026-10-13, tv-surface): a label that carries the meaning alone is at or above On Air's 28 px floor (docs/DESIGN-ON-AIR.md: furniture labels only go to 20-22 px)
+/** [selector, px] for every rule of a stylesheet that draws generated text from an attribute and sets a px font size. */
+function attrLabelSizes(css){
+ const out=[];
+ for(const m of css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)){
+  if(!/content:\s*attr\(/.test(m[2]))continue;
+  const px=m[2].match(/font-size:\s*(\d+(?:\.\d+)?)px/);
+  if(px)out.push([m[1].trim(),Number(px[1])]);
+ }
+ return out;
+}
+test('SW15: the sentence screen\'s tense label (.tok::after, content attr(data-l)) is at least 28 px',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rows=attrLabelSizes(css);
+ assert.ok(rows.some(([sel])=>/\.tok::after/.test(sel)),'control: the scan finds the label rule');
+ assert.deepEqual(rows.filter(([,px])=>px<28),[],'no attribute-drawn label is under the floor');
+ // the scan bites: a seeded 26 px label is found, the same rule in a comment is not
+ assert.deepEqual(attrLabelSizes('.x::after { content: attr(data-l); font-size: 26px; }'),[['.x::after',26]]);
+ assert.deepEqual(attrLabelSizes('/* .x::after { content: attr(data-l); font-size: 26px; } */'),[]);
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
