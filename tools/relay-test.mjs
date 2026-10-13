@@ -15,14 +15,13 @@
  */
 import { chromium } from 'playwright';
 import { spawn } from 'node:child_process';
-import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
-import { PNG } from 'pngjs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, PHONE, pinFromLogcat } from './device.mjs';
+import { countInk, makeAdb, tvScreenshot, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, PHONE, pinFromLogcat } from './device.mjs';
 const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 // How the TV addresses this machine. The emulator has a fixed host alias; a Stick on Wi-Fi has to
@@ -39,26 +38,7 @@ const adb = (...a) => adbBin(...a).toString();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const relayHealth = async () => (await fetch(`http://127.0.0.1:${PORT}/health`)).json();
 
-function tvScreenshot(name) {
-  adb('shell', 'screencap', '-p', '/sdcard/_relay.png');
-  const dest = path.join(OUT, name);
-  adb('pull', '/sdcard/_relay.png', dest);
-  return PNG.sync.read(readFileSync(dest));
-}
-
-const isInk = (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70;
-function countInk(png) {
-  const { width, height, data } = png;
-  let n = 0;
-  for (let y = 0; y < height * 0.94; y++) {
-    for (let x = 0; x < width; x++) {
-      if (x > width * 0.74 && y < height * 0.44) continue;
-      const i = (width * y + x) << 2;
-      if (isInk(data[i], data[i + 1], data[i + 2])) n++;
-    }
-  }
-  return n;
-}
+const tvShot = (name) => tvScreenshot(adbBin, '/sdcard/_relay.png', path.join(OUT, name)).png;
 
 const checks = [];
 function check(name, ok, detail = '') {
@@ -210,7 +190,7 @@ const run = async () => {
 
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_DOWN'); // clear
   await sleep(800);
-  const inkBefore = countInk(tvScreenshot('relay-00-clean.png'));
+  const inkBefore = countInk(tvShot('relay-00-clean.png'));
 
   const pad = await page.locator('#pad').boundingBox();
   const cdp = await context.newCDPSession(page);
@@ -233,7 +213,7 @@ const run = async () => {
   h = await relayHealth();
   check('a stroke drawn on the phone reaches the TV over the relay', h.annotationCount >= 1, `ink=${h.annotationCount}`);
 
-  const inkAfter = countInk(tvScreenshot('relay-01-drawn.png'));
+  const inkAfter = countInk(tvShot('relay-01-drawn.png'));
   check('and is rendered in the TV framebuffer', inkAfter > inkBefore + 1500, `ink px ${inkBefore} -> ${inkAfter}`);
 
   check('no uncaught errors on the phone page', consoleErrors.length === 0, consoleErrors.join('; '));
