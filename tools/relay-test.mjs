@@ -22,7 +22,7 @@ import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, hostAddressForDevice, pinFromLogcat } from './device.mjs';
+import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, pinFromLogcat } from './device.mjs';
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
@@ -262,11 +262,18 @@ const run = async () => {
   const rtt = await measureRelayRtt(pin);
   if (rtt) {
     console.log(`\n  relay round-trip: p50 ${rtt.p50.toFixed(1)} ms, p95 ${rtt.p95.toFixed(1)} ms over ${rtt.n} probes`);
-    console.log('  This is NOT comparable to the LAN probe and is NOT the production cost. The');
-    console.log('  relay here is a process on this same machine, so the number measures protocol');
-    console.log('  overhead and nothing else - it will read faster than the LAN path, which goes');
-    console.log('  through an adb tunnel. A hosted relay adds two internet legs: budget +100-200 ms');
-    console.log('  and re-measure against the deployed relay before trusting freehand on this path.');
+    console.log('  This is NOT the production cost: the relay here is a process on this machine.');
+    if (IS_TUNNELLED) {
+      // Emulator: TV, relay and probe share one host, so only protocol overhead is left to measure.
+      console.log('  With the TV on this host too, the number is protocol overhead and nothing else -');
+      console.log('  it will read faster than the LAN probe, which goes through an adb tunnel.');
+    } else {
+      // Hardware: relay -> Stick crosses the same Wi-Fi the LAN probe does, plus one extra hop.
+      console.log(`  The relay -> TV leg crosses this network to ${TV_HOST.split(':')[0]}, so the number is the LAN`);
+      console.log('  path plus one local hop - compare it with latency-probe on the same Wi-Fi.');
+    }
+    console.log('  A hosted relay adds two internet legs: budget +100-200 ms and re-measure against');
+    console.log('  the deployed relay before trusting freehand on this path.');
     // Asserts only that the extra hop introduces no pathological cost of its own.
     check('relay adds no protocol-level overhead of its own', rtt.p95 < 120, `p95 ${rtt.p95.toFixed(1)} ms`);
   } else {
