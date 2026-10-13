@@ -370,15 +370,29 @@ const run = async () => {
   await browser.close();
 
   const failed = checks.filter((c) => !c.ok);
-  writeFileSync(
-    path.join(OUT, 'live-ui-test.json'),
-    JSON.stringify({ when: new Date().toISOString(), checks }, null, 2)
-  );
+  writeReport();
   console.log(`\n${checks.length - failed.length}/${checks.length} checks passed. Artifacts: ${OUT}`);
   process.exit(failed.length ? 1 : 0);
 };
 
+/**
+ * The result file is written on every exit, a crash included. Otherwise the previous run's file,
+ * green or not, stays in artifacts/ and reads as this run's.
+ */
+function writeReport(crash) {
+  const body = { when: new Date().toISOString(), checks };
+  if (crash) body.crashed = String(crash);
+  writeFileSync(path.join(OUT, 'live-ui-test.json'), JSON.stringify(body, null, 2));
+}
+
 run().catch((e) => {
   console.error('live-ui-test crashed:', e);
+  // Exit 3, not 1: the harness could not finish, which is not the same as a check that failed.
+  checks.push({ name: 'live UI test completed', ok: false, detail: String(e) });
+  try {
+    writeReport(e);
+  } catch (w) {
+    console.error('and the result file could not be written:', w.message);
+  }
   process.exit(3);
 });
