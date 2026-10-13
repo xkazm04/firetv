@@ -405,3 +405,17 @@ test('a rerun whose Character file was torn mid-write still stamps the originati
   for (const id of open) { assert.equal(rows[id].recertify_status, 'not-evaluable'); assert.equal(rows[id].resolution, 'open'); }
   assert.ok(fs.existsSync(out.file), 'recertify.md is written');
 });
+
+test('the instrument hashes every driver file there is, derived from the directory, so a new driver file cannot run unrecorded', () => {
+  const real = R().instrumentOf({ model: 'm', judgeScreenCap: 1 }).driver;
+  const onDisk = fs.readdirSync(path.dirname(RECERTIFY)).filter(f => f.endsWith('.cjs')).sort();
+  assert.deepEqual(Object.keys(real).sort(), onDisk, 'every .cjs under uat/driver is hashed');
+  const dir = path.join(tmp, `driver-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  for (const f of onDisk) fs.copyFileSync(path.join(path.dirname(RECERTIFY), f), path.join(dir, f));
+  fs.writeFileSync(path.join(dir, 'judge-prompts.cjs'), 'module.exports = {};\n');
+  fs.writeFileSync(path.join(dir, 'notes.md'), 'not code');
+  const seeded = R().instrumentOf({ model: 'm', judgeScreenCap: 1, dir }).driver;
+  assert.ok('judge-prompts.cjs' in seeded, 'a driver file added later is in the instrument');
+  assert.ok(!('notes.md' in seeded), 'only .cjs files are the driver');
+  assert.equal(seeded['verdict.cjs'], real['verdict.cjs'], 'the same file hashes the same');
+});
