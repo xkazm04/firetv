@@ -36,6 +36,7 @@ const at = () => Number(process.hrtime.bigint() - t0) / 1e6;
 const events = [];
 const wsRtt = [];
 const tcpRtt = [];
+let tcpFailed = 0;
 
 const pct = (a, p) => (a.length ? a[Math.min(a.length - 1, Math.floor((a.length * p) / 100))] : NaN);
 const stats = (a) => {
@@ -57,6 +58,8 @@ async function tcpLoop() {
         if (!err) {
           tcpRtt.push(ms);
           if (ms > STALL_MS) events.push({ at: started, ms, who: 'tcp' });
+        } else {
+          tcpFailed++;
         }
         sock.destroy();
         resolve();
@@ -123,6 +126,7 @@ ws.on('open', () => {
       console.log(`\n  ws  (our app, loaded)   ${stats(wsRtt)}`);
       console.log(`  tcp (adbd, same Wi-Fi)  ${stats(tcpRtt)}`);
       console.log(`  unanswered ws probes    ${inflight.size}`);
+      console.log(`  failed tcp connects     ${tcpFailed}`);
 
       const wsStalls = events.filter((e) => e.who === 'ws');
       const tcpStalls = events.filter((e) => e.who === 'tcp');
@@ -135,7 +139,14 @@ ws.on('open', () => {
       const coincident = wsStalls.filter((w) =>
         tcpStalls.some((t) => Math.abs(t.at - w.at) < 250)
       ).length;
-      if (wsStalls.length) {
+      if (wsStalls.length && !tcpRtt.length) {
+        // The control leg measured nothing (adbd not listening on :5555, or the host is a loopback
+        // tunnel), so "no tcp stall beside it" is an absence of data, not evidence against the link.
+        console.log(
+          `\n  no verdict: the tcp leg connected 0 times (${tcpFailed} failed), so ${wsStalls.length} ws stalls ` +
+            'cannot be told apart. Check adbd listens on :5555 (adb tcpip 5555) and --host is the device itself.'
+        );
+      } else if (wsStalls.length) {
         console.log(
           `\n  ${coincident}/${wsStalls.length} ws stalls coincide with a tcp stall -> ` +
             (coincident > wsStalls.length / 2 ? 'the LINK is stalling' : 'the APP is stalling')
