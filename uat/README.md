@@ -2,7 +2,7 @@
 
 Simulated user acceptance testing for the Study Desk's three modules, **Linga**, **Essay Master** and **Math Buddy**, driven by the `/uat` skill (`.claude/skills/uat`, linked from `ai-registry/skills/uat`). The skill is the engine; this directory is the per-app overlay.
 
-Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`driver/linga-text.cjs:38-44`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
+Each module has its own Characters and journeys: Linga's at the top of `characters/` and `journeys/` (J1–J5, with the `sim` blocks the LT driver reads), Essay Master's in `characters/essay/` and `journeys/essay/` (EM1–EM5), Math Buddy's in `characters/maths/` and `journeys/maths/` (MB1–MB5). Essay and Math files carry no `sim` block (no driver reads them yet) and live in subdirectories because the LT driver throws on a top-level file without one (`driver/linga-text.cjs:51-55`, `readBlock`). A journey that wanders out of its module is a finding about the exit, not a journey into another module.
 
 ## Levels in this repo
 
@@ -42,6 +42,7 @@ uat/
   driver/ledger.cjs      one open ledger across every run: run-qualified ids, recurs chains, unasked counts, OPEN.md
   driver/product.cjs     the product a run saw: the desk/src files the driver loads, git blobs, stamped into run.json; read from git for older runs
   driver/verdict.cjs     the journey verdict decided in code from named checks
+  driver/metrics.cjs     the metric registry: the judge schema, the journey gates, the roll-up and the report lines are derived from it
   runs/<id>/             findings.json, report.md, SUMMARY.md, run.json, per-Character transcripts and voices
   runs/<id>/recert-<k>/  a rerun of <id>'s open pairs; recertify.md (then recertify-<k>.md) sits beside <id>'s findings
   runs/OPEN.md           derived by --status (and after a ledger recertify): what is open now across every run
