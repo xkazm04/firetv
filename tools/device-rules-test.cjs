@@ -90,3 +90,20 @@ test('every harness tool takes its argv from parseArgs, none keeps its own parse
     assert.doesNotMatch(src, /process\.argv\.slice\(2\)/, `${t}.mjs parses argv itself`);
   }
 });
+
+// README states how many checks each device harness makes; two commits in a row added checks and left the number
+// behind (605b0f9b to live-ui-test, 3b2ac640 to relay-test). The figure is derived here from the check() calls a
+// full run makes: every call site, less the ones that only record a failure (a literal `false` verdict).
+test('README check counts match the check() calls of a full live-ui-test and relay-test run', () => {
+  const readme = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8');
+  for (const [tool, label] of [['live-ui-test', 'live-ui-test.mjs'], ['relay-test', 'relay-test.mjs']]) {
+    const src = fs.readFileSync(path.join(__dirname, `${tool}.mjs`), 'utf8');
+    const calls = (src.match(/(^|[^\w.])check\(/gm) || []).length - (src.match(/function check\(/g) || []).length;
+    const failOnly = (src.match(/(^|[^\w.])check\([^;]*?,\s*false\s*,/gm) || []).length;
+    const row = readme.split('\n').find((l) => l.startsWith('| `tools/`')) || '';
+    const at = row.indexOf(label);
+    const stated = Number((/(\d+) checks/.exec(row.slice(at)) || [])[1]);
+    assert.ok(at >= 0, `README's tools row does not name ${label}`);
+    assert.equal(stated, calls - failOnly, `README says ${stated} checks for ${label}; a full run makes ${calls - failOnly}`);
+  }
+});
