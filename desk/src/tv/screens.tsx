@@ -136,7 +136,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
         {(s.reading || pageLine) && <div className="cap" style={{ position: "absolute", left: 30, bottom: 24, zIndex: 2 }}>{s.reading ? "reading the page…" : pageLine}</div>}
       </div>
       {it && !s.reading && (
-        <div className="lt" style={{ marginTop: 24, maxWidth: 1728 }}><div className="tag">{p.subject === "essay" ? `¶ ${it.n}` : `Item ${it.n}`}</div><div className="txt" style={{ fontSize: 36 }}>{p.subject === "essay" ? it.text.slice(0, 110) + "…" : shown(it.text)}</div></div>
+        <div className="lt" style={{ marginTop: 24, maxWidth: 1728 }}><div className="tag">{p.subject === "essay" ? `¶ ${it.n}` : `Item ${it.n}`}</div><div className="txt" style={{ fontSize: 36 }}>{p.subject === "essay" ? it.text.slice(0, 110) + (it.text.length > 110 ? "…" : "") : shown(it.text)}</div></div>
       )}
       <div className="strip" style={{ position: "absolute", left: 0, bottom: 0 }}>
         {s.pages.map((pg, i) => <div key={pg.id} className="thumb" data-current={i === s.pageIx} style={{ backgroundImage: `url(${pg.img})` }} />)}

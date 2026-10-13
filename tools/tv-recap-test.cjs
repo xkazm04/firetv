@@ -640,3 +640,12 @@ test('SW6: the lesson ticker - paused or playing - names Play, not the bench key
  }
  assert.match(ticker(true),/paused/);assert.match(ticker(false),/playing/);
 });
+// SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
+test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
+ const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const pg=(text)=>({id:'e1',subject:'essay',day:'x',title:'My essay',img:'',w:100,h:100,readMs:2000,items:[{n:1,key:'k1',text,band:[0,10]}]});
+ const lt=(text)=>{const h=renderToStaticMarkup(createElement(PageScreen,{s:session({screen:'page',pages:[pg(text)]}),view:'band'}));const m=h.match(/class="txt"[^>]*>([^<]*)</);return m&&m[1];};
+ assert.equal(lt('Cats sleep a lot.'),'Cats sleep a lot.','a short paragraph is shown whole, with no ellipsis');
+ const long='word '.repeat(40).trim();
+ assert.equal(lt(long),long.slice(0,110)+'…','a long one is cut at 110 and says so');
+});
