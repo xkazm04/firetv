@@ -8,7 +8,7 @@
  */
 import { text } from "../engines/text";
 import { topicIn } from "../library/paths";
-import { addMemory, getLearner } from "../session/learners";
+import { getLearner, saveLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
@@ -70,6 +70,7 @@ export async function writeMemory(
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))
     .filter(Boolean)
     .slice(0, 3);
-  for (const l of lines) addMemory(learnerId, l);
+  // WD10: the lines are added in ONE save (read fresh: the record may have moved while the model wrote), so a failed write keeps none and a Try again writes each once
+  if (lines.length) { const l = getLearner(learnerId); saveLearner({ ...l, memory: [...l.memory, ...lines] }); }
   return lines;
 }

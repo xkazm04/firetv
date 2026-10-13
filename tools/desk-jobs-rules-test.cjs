@@ -812,6 +812,24 @@ test('HF5: a read with printed numbers 1 and 1000000 answers 200 with missing nu
  assert.deepEqual(warns.filter((l)=>/printed numbers/.test(l)),[]);
 });
 
+test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write that fails keeps all of them or none, never some',async()=>{
+ const {writeMemory}=require(src('lib/desk/memory.ts'));const L=require(src('lib/session/learners.ts'));
+ const LINES=['They undo the constant first.','They check by substituting.','They like one step at a time.'];
+ stubText({other:()=>({lines:LINES})});
+ const real=fs.renameSync;let writes=0,failOn=0;
+ fs.renameSync=(a,b)=>{if(path.basename(b)==='learners.json'){writes++;if(writes===failOn)throw new Error('disk full');}return real(a,b);};
+ try{
+  const had=L.getLearner('jobs-memory-a').memory.length;
+  assert.deepEqual(await writeMemory('jobs-memory-a',{topic:'linear-one-step',hintsUsed:2}),LINES);
+  assert.equal(writes,1,'three lines, one write of learners.json');
+  assert.equal(L.getLearner('jobs-memory-a').memory.length,had+3);
+  writes=0;failOn=2;
+  await writeMemory('jobs-memory-b',{topic:'linear-one-step',hintsUsed:2}).catch(()=>null);
+  const kept=L.getLearner('jobs-memory-b').memory.length;
+  assert(kept===0||kept===3,`a failed write kept ${kept} of 3 lines: a Try again would write the kept ones twice`);
+ }finally{fs.renameSync=real;}
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
