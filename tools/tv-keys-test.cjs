@@ -817,3 +817,24 @@ test('MB-B19 3: a younger learner, one with no age and a calc1 learner keep focu
  for(const s of [learnerOf('uk',12),noAge])
   assert.deepEqual(tvKey({...s,screen:'tonight',focus:2},'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'prepare',focus:0}]);
 });
+
+// SW7 (scan-sweep optimize 2026-10-13): each spoken line's audio blob is let go when the next one replaces it
+test('SW7: the TV speaks line after line and holds at most one audio blob URL, the one playing',async()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ const a=src.indexOf('useEffect(() => {',src.indexOf('// speak what is new')),e=src.indexOf('}, [s, voice]);',a);
+ assert.ok(a>0&&e>a,'the speak effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, [s, voice]);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const live=new Set();let n=0;
+ const URL_={createObjectURL:()=>{const u=`blob:${++n}`;live.add(u);return u;},revokeObjectURL:(u)=>live.delete(u)};
+ class Audio_{constructor(src){this.src=src;this.onended=null;}pause(){}play(){return Promise.resolve();}}
+ const audio={current:null},spoken={current:''};
+ const say=async(line)=>{let effect;new Function('useEffect','s','voice','spokenLine','spoken','call','audio','URL','Audio','speechSynthesis','SpeechSynthesisUtterance',js)(
+  (f)=>{effect=f;},{line},true,(s)=>s.line,spoken,async()=>({ok:true,blob:async()=>({})}),audio,URL_,Audio_,{cancel(){},speak(){}},class{});
+  effect();for(let i=0;i<5;i++)await new Promise((r)=>setImmediate(r));};
+ for(const l of ['one','two','three','four'])await say(l);
+ assert.equal(n,4,'four lines, four blobs');
+ assert.deepEqual([...live],[audio.current.src],'only the line playing still holds its blob');
+ audio.current.onended?.({currentTarget:audio.current});
+ assert.equal(live.size,0,'and it is let go when it ends');
+});

@@ -84,15 +84,18 @@ export default function TV() {
     fit(); const ro = new ResizeObserver(fit); if (frame.current) ro.observe(frame.current); return () => ro.disconnect();
   }, [s?.screen, shown]);
 
-  // speak what is new: the hint, the explanation, the verdict
+  // speak what is new: the hint, the explanation, the verdict. Each line's blob is let go when it ends or the next
+  // line replaces it (as english/useEnglishAudio.ts does), so an evening of lines holds one, not hundreds.
   useEffect(() => {
     if (!s || !voice) return;
-        const line = spokenLine(s);
+    const line = spokenLine(s);
     if (!line || line === spoken.current) return;
     spoken.current = line;
     (async () => {
       try { const r = await call("/api/speak", { text: line }); if (!r.ok) throw new Error(); const blob = await r.blob();
-        audio.current?.pause(); audio.current = new Audio(URL.createObjectURL(blob)); await audio.current.play(); }
+        const old = audio.current; old?.pause(); if (old?.src.startsWith("blob:")) URL.revokeObjectURL(old.src);
+        const next = new Audio(URL.createObjectURL(blob)); next.onended = () => URL.revokeObjectURL(next.src);
+        audio.current = next; await next.play(); }
       catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch {} }
     })();
   }, [s, voice]);
