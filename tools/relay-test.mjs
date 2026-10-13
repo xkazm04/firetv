@@ -281,8 +281,14 @@ run()
   })
   .finally(async () => {
     relay?.kill();
-    // Put the app back the way the rest of the harness expects to find it.
-    restoreLanTransport();
+    // Put the app back the way the rest of the harness expects to find it. With adb gone this
+    // throws too, and an uncaught throw here would skip the result file below and leave the
+    // previous run's in artifacts/ - so it is recorded as a check instead.
+    try {
+      restoreLanTransport();
+    } catch (e) {
+      check('the app is put back on the LAN transport', false, e.message);
+    }
 
     const failed = checks.filter((c) => !c.ok);
     writeFileSync(
