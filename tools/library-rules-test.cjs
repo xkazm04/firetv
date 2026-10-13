@@ -33,3 +33,22 @@ test('VTT-3: a timing line without hours (mm:ss.ttt, as the WebVTT format allows
  assert.deepEqual(parseVtt(raw),[{t:1,text:'first line'},{t:65,text:'second line'}]);
  assert.deepEqual(parseVtt(['WEBVTT','','01:00:02.000 --> 01:00:04.000','late line',''].join('\n')),[{t:3602,text:'late line'}],'an hour is still an hour');
 });
+
+// ---- the vector cache ----
+const LESSON='jWpiMu5LNdg';
+const stamp=(s)=>`00:${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}.000`;
+const cue=(s,text)=>`${stamp(s)} --> ${stamp(s+4)}\n${text}\n`;
+test('CACHE-1: a vector cache that cannot be written says so in the server log once, and the pick still answers',async()=>{
+ fs.mkdirSync(path.join(data,'lessons'),{recursive:true});
+ fs.writeFileSync(path.join(data,'lessons',`${LESSON}.en.vtt`),['WEBVTT\n',cue(0,'welcome to equations'),cue(50,'add the same to both sides'),cue(100,'divide to undo')].join('\n'));
+ // embeddings.json is a directory: it cannot be read as a cache, and nothing can be renamed over it
+ fs.mkdirSync(path.join(data,'embeddings.json'),{recursive:true});
+ lib('engines/registry.ts').useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map((_,i)=>[1,i+1,0])})});
+ const L=lib('library/lessons.ts');
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ let b;
+ try{b=await L.bestWindow(LESSON,'q');}finally{mock.restoreAll();}
+ assert.ok(b&&typeof b.t==='number','the pick still answers');
+ assert.equal(lines.filter((l)=>/embeddings\.json/.test(l)).length,1,'one line names the cache file: '+lines.join('|'));
+ assert.deepEqual(fs.readdirSync(data).filter((n)=>n.endsWith('.tmp')),[],'no temp file is left');
+});

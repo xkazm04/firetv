@@ -59,7 +59,11 @@ function writeCache(f: string, entries: Map<string, Cached>): void {
     mkdirSync(DATA, { recursive: true });
     writeFileSync(tmp, JSON.stringify({ v: CACHE_VERSION, model: EMBED_MODEL, lessons: Object.fromEntries(entries) }));
     renameSync(tmp, f);
-  } catch { try { rmSync(tmp, { force: true }); } catch {} }
+  } catch (e) {
+    try { rmSync(tmp, { force: true }); } catch {}
+    // the vectors still serve this process; the next start pays the embedding engine again for every lesson, so it is said
+    console.error(`desk library: ${path.basename(f)} could not be written, so the next start embeds every lesson again: ${e instanceof Error ? e.message : e}`);
+  }
 }
 
 let building: Promise<Map<string, number[][]>> | null = null;
