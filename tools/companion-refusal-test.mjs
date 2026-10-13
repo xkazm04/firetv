@@ -51,7 +51,7 @@ function fakeTv(cfg) {
         log.refused++;
         if (log.firstRefusalAt === null) log.firstRefusalAt = performance.now();
         // The TV's order: the refusal, then the close (VIOLATED_POLICY, as KtorPenChannel sends it).
-        this.deliver({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: cfg.reason || 'wrong PIN' });
+        this.deliver({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: cfg.reason || 'wrong PIN', retryAfterMs: cfg.retryAfterMs });
         setTimeout(() => this.drop(1008, cfg.reason || 'wrong PIN'), 5);
         return;
       }
@@ -289,6 +289,33 @@ try {
       .then(() => true, () => false);
     check('fragment: an old ?pin= QR still pairs', oldPaired, `paired ${oldPaired}`);
     await old.close();
+  }
+
+  // ---- locked, with the TV's retry time ------------------------------------------------------------
+  // The locked refusal carries retryAfterMs; the page counts it down and keeps Pair off until then.
+  {
+    const page = await browser.newPage();
+    await page.clock.install();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, reason: 'too many wrong PINs', retryAfterMs: 20000 });
+    await page.goto(PAGE + '?pin=0000');
+    await page.clock.runFor(500);
+    const early = await page.evaluate(() => ({
+      status: document.getElementById('status').textContent,
+      pairOff: document.querySelector('#pinbox button').disabled,
+    }));
+    await page.clock.runFor(10000);
+    const mid = await page.locator('#status').textContent();
+    await page.clock.runFor(10500);
+    const late = await page.evaluate(() => ({
+      status: document.getElementById('status').textContent,
+      pairOff: document.querySelector('#pinbox button').disabled,
+    }));
+    check(
+      'locked+retry: the page counts the cooldown down and enables Pair at the end',
+      /\b(19|20) s/.test(early.status) && early.pairOff && /\b(9|10) s/.test(mid) && !late.pairOff && /type the PIN/i.test(late.status),
+      `start "${early.status}" pair ${early.pairOff ? 'off' : 'on'}; mid "${mid}"; end "${late.status}" pair ${late.pairOff ? 'off' : 'on'}`,
+    );
+    await page.close();
   }
 
   // ---- https (relay) -----------------------------------------------------------------------

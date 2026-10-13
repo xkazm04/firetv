@@ -1,6 +1,7 @@
 package dev.telestrator.core
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 /**
@@ -61,5 +62,21 @@ class PairingGuessLimitTest {
         }
         assertEquals(0, paired, "the guesser paired within one cooldown window")
         assertEquals(PenConversation.MAX_WRONG_PINS, refusedWrong)
+    }
+
+    @Test
+    fun `case 4 - a locked refusal tells the phone how long until a retry can succeed`() {
+        val desk = PairingDesk(pin = "4821", videoAspect = aspect)
+        repeat(PenConversation.MAX_WRONG_PINS) { desk.open(openedAtMs = 1_000).onText(hello("0000")) }
+
+        // The lock started at 1_000 and runs COOLDOWN_MS; 10 s in, 20 s are left.
+        val locked = desk.open(openedAtMs = 11_000).onText(hello("4821", "pen-a"))
+        val welcome = (locked.first() as PenEffect.Send).message as TvMessage
+        val wire = welcome.encode()
+        assertTrue(wire.contains("\"retryAfterMs\":${PenConversation.COOLDOWN_MS - 10_000}"), "the locked refusal on the wire: $wire")
+
+        // An ordinary wrong PIN has no cooldown to report, and old phones still decode the rest.
+        val wrong = desk.open(openedAtMs = 1_000 + PenConversation.COOLDOWN_MS).onText(hello("0000"))
+        assertTrue(!((wrong.first() as PenEffect.Send).message as TvMessage).encode().contains("retryAfterMs"))
     }
 }
