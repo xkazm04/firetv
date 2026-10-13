@@ -163,7 +163,7 @@ class PenConversation(
             }
         }
 
-        if (desk.generation != generation) return emptyList()
+        if (desk.generation != generation) return superseded()
         // Answer the probe on the receive path, before any work, so the number reflects
         // transport plus decode, not the render.
         if (msg is PenMessage.Ping) return listOf(PenEffect.Send(TvMessage.Pong(msg.id)))
@@ -212,6 +212,19 @@ class PenConversation(
         return effects
     }
 
+    /**
+     * A newer pen took this one's place. The first thing the older phone sends afterwards is
+     * answered with a refusal and a hang-up, so it can say so instead of showing a green dot over
+     * strokes that go nowhere; after that it stands down silently. The reason is not a PIN refusal:
+     * it never reaches the TV's card.
+     */
+    private fun superseded(): List<PenEffect> {
+        // A shared connection is the relay's own socket, not a pen: hanging up would cut every
+        // phone behind it. It stands down silently, as it always has.
+        if (shared || closed) return emptyList()
+        return reject(TAKEN_OVER)
+    }
+
     private fun refusal(reason: String) =
         PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason))
 
@@ -224,6 +237,9 @@ class PenConversation(
 
         private const val WRONG_PIN = "wrong PIN"
         private const val LOCKED = "too many wrong PINs"
+
+        /** What a replaced pen is told. The companion page keys on this exact string. */
+        const val TAKEN_OVER = "another pen took over"
     }
 
     private fun reject(reason: String): List<PenEffect> {

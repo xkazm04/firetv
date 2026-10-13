@@ -221,6 +221,15 @@
         // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
         // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
         const locked = m.reason === 'too many wrong PINs';
+        // Another phone paired with the same PIN and holds the pen. Typing the PIN here would take
+        // it straight back and the two phones would trade it; reloading the page is the way back.
+        if (m.reason === 'another pen took over') {
+          paired = false;
+          dot.classList.remove('on');
+          statusEl.textContent = 'another phone has the pen · reload this page to take it back';
+          statusEl.classList.add('bad');
+          return;
+        }
         statusEl.textContent = (m.reason || 'not paired') +
           (locked ? ' · wait half a minute, then type the PIN' : ' · type the PIN from the TV');
         statusEl.classList.add('bad');
@@ -371,7 +380,8 @@
     if (tagbox.classList.contains('show')) return;
     // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
     if (!paired) {
-      hint.textContent = refused ? 'type the PIN above to draw' : 'not connected to the TV yet';
+      hint.textContent = !refused ? 'not connected to the TV yet'
+        : pinbox.classList.contains('show') ? 'type the PIN above to draw' : 'another phone has the pen';
       hint.classList.remove('hide');
       return;
     }
