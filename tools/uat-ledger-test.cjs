@@ -453,3 +453,18 @@ test('W7c-1: a stamped run is compared over its own files; a module-only file ag
   assert.equal(m.productFiles, 2);
   assert.deepEqual(led.product.counts, { current: 2, aged: 1, unknown: 0 });
 });
+
+test('a run whose findings.json cannot be read is named in the ledger and on OPEN.md, never read as a run with nothing open', () => {
+  const runs = path.join(tmp, `unreadable-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'A-good', [finding({ title: 'a readable gap' })], { started: '2026-10-01T00:00:00.000Z' });
+  writeRun(runs, 'B-torn', [finding()], { started: '2026-10-02T00:00:00.000Z' });
+  fs.writeFileSync(path.join(runs, 'B-torn', 'findings.json'), '[{"id":"F-1","type":"quality-gap"');   // a write cut short
+  writeRun(runs, 'C-object', [], { started: '2026-10-03T00:00:00.000Z' });
+  fs.writeFileSync(path.join(runs, 'C-object', 'findings.json'), '{"not":"a list"}');
+  const led = L().ledger(runs);
+  assert.equal(led.open.length, 1, 'the readable run still counts');
+  assert.deepEqual(led.unreadable.map(u => u.run), ['B-torn', 'C-object']);
+  const lines = L().statusOf(led).split('\n');
+  for (const run of ['B-torn', 'C-object']) assert.ok(lines.some(l => l.startsWith('unreadable:') && l.includes(`${run}/findings.json`)), `OPEN.md names ${run}: ${lines.slice(0, 8).join(' | ')}`);
+  assert.deepEqual(L().ledger(copyRuns()).unreadable, [], 'the committed runs are all readable');
+});

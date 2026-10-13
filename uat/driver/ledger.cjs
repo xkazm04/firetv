@@ -2,7 +2,7 @@
  * One open ledger across every LT run, derived from the runs' own files and never stored: what is open for Linga now,
  * which Character x journey holds it, and how long each gap has gone unasked.
  *
- *   ledger(runsDir, opts?) -> { dir, runs, rows, gaps, open, byGid, product }
+ *   ledger(runsDir, opts?) -> { dir, runs, rows, gaps, open, byGid, product, unreadable: [{ run, error }] }
  *   statusOf(ledger)       -> the operator view (OPEN.md): open gaps by pair, highest rank first, the next command
  *   writeStatus(runsDir)   -> writes <runsDir>/OPEN.md from a fresh ledger; returns { md, file }
  *
@@ -59,7 +59,7 @@ const resolveIn = (run, ref) => String(ref).includes('/') ? String(ref) : `${run
 
 function ledger(dir = RUNS, opts = {}) {
   const runs = runsOf(dir), runById = new Map(runs.map(r => [r.id, r])), rows = [];
-  const ran = new Map(), asked = new Map(); // run id -> Set(pair), run id -> Set(gid)
+  const ran = new Map(), asked = new Map(), unreadable = []; // run id -> Set(pair), run id -> Set(gid); runs whose record could not be read
   for (const run of runs) {
     const rs = resultsOf(run.dir), mine = new Set(), shown = new Set();
     for (const r of rs) for (const j of r.journeys) {
@@ -67,9 +67,11 @@ function ledger(dir = RUNS, opts = {}) {
       for (const p of Array.isArray(j.prior) ? j.prior : []) if (p?.id) shown.add(resolveIn(run, p.id));
     }
     ran.set(run.id, mine); asked.set(run.id, shown);
+    // a record that cannot be read is named, never read as a run with nothing open: its rows would vanish from OPEN.md
     let fs0 = [];
-    try { fs0 = readJson(path.join(run.dir, 'findings.json')); } catch { fs0 = []; }
-    (Array.isArray(fs0) ? fs0 : []).forEach((f, i) => { if (f && f.id) rows.push({ ...f, run: run.id, gid: `${run.id}/${f.id}`, order: run.order, at: i }); });
+    try { fs0 = readJson(path.join(run.dir, 'findings.json')); } catch (e) { fs0 = []; unreadable.push({ run: run.id, error: String(e.message).split('\n')[0].slice(0, 160) }); }
+    if (!Array.isArray(fs0)) { unreadable.push({ run: run.id, error: 'not a list of findings' }); fs0 = []; }
+    fs0.forEach((f, i) => { if (f && f.id) rows.push({ ...f, run: run.id, gid: `${run.id}/${f.id}`, order: run.order, at: i }); });
   }
   const byRow = new Map(rows.map(r => [r.gid, r]));
   // a recertify stamp asked about the row in the run it names
@@ -106,7 +108,7 @@ function ledger(dir = RUNS, opts = {}) {
   }
   gaps.sort((a, b) => a.head.order - b.head.order || a.head.at - b.head.at);
   const product = opts.repo ? productOf(runs, gaps, opts) : null;
-  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid, product };
+  return { dir, runs, rows, gaps, open: gaps.filter(g => g.open), byGid, product, unreadable };
 }
 
 /**
@@ -185,7 +187,8 @@ function statusOf(L, { insights = INSIGHTS } = {}) {
     '# Open LT findings', '',
     'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.', '',
     `drained ${drained.length} of ${top.length} runs`,
-    ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []), '',
+    ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []),
+    ...(L.unreadable ?? []).map(u => `unreadable: ${u.run}/findings.json (${one(u.error)}): its rows are not counted below`), '',
     ...MODULES.flatMap(section),
   ].join('\n');
 }
