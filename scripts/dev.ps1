@@ -73,6 +73,22 @@ function Adb {
 
 function Step($msg) { Write-Host "`n=== $msg ===" -ForegroundColor Cyan }
 
+# Waits for the device to answer as booted, with a deadline. `adb wait-for-device` and a bare
+# boot_completed loop both wait forever: a missing AVD or an emulator that dies at start, and a
+# Stick still showing its "Allow USB debugging?" prompt (unauthorized is not "device"), left the
+# cycle hanging with no sentence. Polling getprop needs no device to fail fast, so the deadline holds.
+function Wait-Device([int]$TimeoutSec = 300, [string]$Hint = '') {
+  $deadline = (Get-Date).AddSeconds($TimeoutSec)
+  while ($true) {
+    $r = Adb shell getprop sys.boot_completed
+    if ($r.Output -eq '1') { return }
+    if ((Get-Date) -gt $deadline) {
+      throw "device not booted after $TimeoutSec s (adb said: $($r.Output)). $Hint"
+    }
+    Start-Sleep -Seconds 2
+  }
+}
+
 if (& $run 'unit') {
   Step 'unit tests (core, JVM only)'
   & .\gradlew.bat :core:test --console=plain
@@ -97,7 +113,7 @@ if (& $run 'boot') {
       throw "cannot reach $serial - check the Stick is awake, on the same network, and that " +
             "Settings > My Fire TV > Developer options > ADB debugging is on"
     }
-    (Adb wait-for-device) | Out-Null
+    Wait-Device -TimeoutSec 60 -Hint "Accept the 'Allow USB debugging?' prompt on the TV, then re-run."
     $model = (Adb shell getprop ro.product.model).Output
     $fireos = (Adb shell getprop ro.build.version.fireos).Output
     Write-Host "device ready: $model (Fire OS $fireos)"
@@ -108,8 +124,7 @@ if (& $run 'boot') {
       $emuArgs = @('-avd', $Avd, '-no-snapshot-save', '-no-boot-anim')
       if ($Headless) { $emuArgs += '-no-window' }
       Start-Process -FilePath "$sdk\emulator\emulator.exe" -ArgumentList $emuArgs
-      (Adb wait-for-device) | Out-Null
-      while ((Adb shell getprop sys.boot_completed).Output -ne '1') { Start-Sleep -Seconds 2 }
+      Wait-Device -TimeoutSec 300 -Hint "Is '$Avd' an AVD? $sdk\emulator\emulator.exe -list-avds; -Headless:`$false shows why it stopped."
     }
     Write-Host "device ready: $((Adb shell getprop ro.product.model).Output)"
   }
