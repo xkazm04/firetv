@@ -252,13 +252,17 @@ test('case 19: the status asks each kind\'s active provider for its probe: five 
 });
 
 test('case 20: a probe that never answers is one not-ok row at the budget; the others are unaffected and the round is parallel',async()=>{
- stubAll({listen:{probe:()=>new Promise(()=>{})}});
+ // a probe answers only once all five probes have started: asked one at a time, the first waits past the 30 ms budget
+ let started=0,open;const allIn=new Promise((r)=>{open=r;});
+ const arrive=()=>{if(++started===5)open();};
+ const held=async()=>{arrive();if(await Promise.race([allIn.then(()=>true),nap(200).then(()=>false)]))return {ok:true,say:'fine'};return {ok:false,say:'asked alone'};};
+ stubAll({text:{probe:held},vision:{probe:held},embed:{probe:held},speak:{probe:held},listen:{probe:()=>{arrive();return new Promise(()=>{});}}});
  const t0=Date.now();
  const rows=await health().engineStatus(30);
  assert(Date.now()-t0<500,`returned in ${Date.now()-t0} ms`);
  const listen=rows.find(r=>r.kind==='listen');
  assert.equal(listen.ok,false);assert.match(listen.say,/did not answer/);
- for(const r of rows.filter(r=>r.kind!=='listen'))assert.equal(r.ok,true,r.kind);
+ for(const r of rows.filter(r=>r.kind!=='listen'))assert.equal(r.ok,true,`${r.kind}: answered, so all five probes were in flight at once (${r.say})`);
 });
 
 test('case 21: a provider with no probe is ok:null and says how to find out; never ok:true on no evidence',async()=>{
