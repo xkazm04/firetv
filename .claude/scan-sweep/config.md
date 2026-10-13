@@ -29,9 +29,9 @@ Each runs in its own invocation, `&&`-chained, exit code asserted (SKILL.md sect
 | --- | --- |
 | anything under `desk/` or a `tools/*-rules-test.cjs` | `cd desk && npm test` (tsc --noEmit, then every rules suite in `test:rules`) |
 | `core/` | `./gradlew.bat :core:test` from the repo root (PowerShell), exit 0 |
-| `tv-app/` | `./gradlew.bat :core:test :tv-app:compileDebugKotlin` |
+| `tv-app/` | `./gradlew.bat :core:test :tv-app:compileDebugKotlin :tv-app:testDebugUnitTest` (the JVM tests landed 2026-10-13) |
 | a TV screen (`desk/src/tv`, `desk/src/app/tv`, `desk/src/english/LingaTV.tsx`) | the gate above, plus a Playwright capture from `tools/` against a second dev server (`next dev --webpack` in a worktree) with its own seeded `DESK_DATA_DIR` |
-| `uat/driver` | `node --check uat/driver/linga-text.cjs`; a live LT run costs codex calls and is the operator's call |
+| `uat/driver` | `node --check uat/driver/linga-text.cjs`; a live LT run costs claude CLI subscription calls (every role since 2026-10-09) and is the operator's call |
 
 **Full-tree before the last commit** (references/challenge.md section 7 step 4): `cd desk && npm
 test` always, and the gradle line whenever anything Kotlin changed. The rules suites are wired

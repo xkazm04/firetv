@@ -81,7 +81,7 @@ into `tail`/`head` before `&&`. Never use `;` before a commit.
   through PowerShell from the worktree root. Only ONE gradle run at a time across agents: take the lock with
   `mkdir C:/Users/kazda/AppData/Local/Temp/firetv-sweep-gradle.lock` (it fails if the lock is held, so retry
   after a minute), and `rmdir` it when done, even on failure.
-- `uat/driver`: `node --check <file>`. Never run a live LT run.
+- `uat/driver`: `node --check <file>`. Never run a live LT run (claude CLI subscription calls).
 - **A red whole-tree gate is probably not yours.** Another agent is mid-edit in the same tree. Compare the
   failing paths against your files before you treat a red as yours. If none are yours, say so, scope the check
   to your own files, and do not commit into a red that is yours.
