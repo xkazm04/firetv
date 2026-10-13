@@ -305,6 +305,37 @@ test('case 9: report.md\'s Metrics section holds one bullet per registry metric,
   assert.ok(section.includes('- **moment precision:** 1/2 (50%)'), section);
 });
 
+// ---- fault injection: a kill mid-write must leave the old findings.json whole
+/** fs.writeFileSync that tears any write aimed at a findings.json (or its temp sibling): half the bytes land, then it throws. */
+function tearFindingsWrites(fn) {
+  const real = fs.writeFileSync, torn = [];
+  fs.writeFileSync = (file, data, ...rest) => {
+    if (String(file).includes('findings.json')) { real(file, String(data).slice(0, Math.floor(String(data).length / 2)), ...rest); torn.push(String(file)); throw new Error('killed mid-write'); }
+    return real(file, data, ...rest);
+  };
+  return Promise.resolve().then(fn).then(() => ({ torn, threw: false }), () => ({ torn, threw: true })).finally(() => { fs.writeFileSync = real; });
+}
+test('fault 1: writeBack() killed mid-write leaves the original findings.json parseable and unstamped', async () => {
+  const run = copyRun(BEGINNERS), file = path.join(run, 'findings.json'), original = fs.readFileSync(file, 'utf8');
+  const open = readJson(file).filter(f => f.resolution === 'open' && f.type !== 'strength');
+  assert.ok(open.length > 0, 'the fixture has an open finding to stamp');
+  const statuses = { [open[0].id]: { status: 'not-seen', evidence: 'x', finding: -1 } };
+  const r = await tearFindingsWrites(() => R().writeBack(run, 'fault', statuses));
+  assert.ok(r.threw && r.torn.length === 1, 'the stub tore the write');
+  assert.doesNotThrow(() => JSON.parse(fs.readFileSync(file, 'utf8')), 'findings.json still parses');
+  assert.equal(fs.readFileSync(file, 'utf8'), original, 'and is the old record, byte for byte');
+});
+test('fault 2: synthesize() killed mid-write leaves an existing findings.json parseable and unchanged', async () => {
+  const dir = path.join(tmp, `fault-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const file = path.join(dir, 'findings.json'), original = JSON.stringify([{ id: 'OLD-1', type: 'gap' }], null, 2);
+  fs.writeFileSync(file, original);
+  const committed = readJson(path.join(RUNS, BEGINNERS, 'tomas-9.json')), j = committed.journeys.find(x => x.id === 'J3');
+  const result = { ...committed, journeys: [j], calls: {} };
+  const r = await tearFindingsWrites(() => D().synthesize(dir, 'fault', [result], [], 0));
+  assert.ok(r.threw && r.torn.length === 1, 'the stub tore the write');
+  assert.equal(fs.readFileSync(file, 'utf8'), original, 'the old record is whole');
+});
+
 // ================================================================ the product between the two runs (uat/driver/product.cjs)
 const runDir = (name, record, run) => {
   const d = path.join(tmp, `${name}-${crypto.randomUUID().slice(0, 8)}`);
