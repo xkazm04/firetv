@@ -274,9 +274,11 @@ const run = async () => {
   }
 };
 
+let crashed = false;
 run()
   .catch((e) => {
     console.error('relay-test crashed:', e);
+    crashed = true;
     checks.push({ name: 'relay test completed', ok: false, detail: String(e) });
   })
   .finally(async () => {
@@ -296,5 +298,7 @@ run()
       JSON.stringify({ when: new Date().toISOString(), checks }, null, 2)
     );
     console.log(`\n${checks.length - failed.length}/${checks.length} checks passed.`);
-    process.exit(failed.length ? 1 : 0);
+    // 3 when the run itself crashed, as live-ui-test does: the harness could not finish, which is
+    // not the same as a check that failed.
+    process.exit(crashed ? 3 : failed.length ? 1 : 0);
   });
