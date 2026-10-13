@@ -31,7 +31,7 @@ import { voiceOf, withManner, type Voice } from "../rules/voice";
 import { SCHOOL_SLIPS } from "../rules/school";
 import { WORKED_METHODS } from "../library/worked";
 import { getLearner } from "../session/learners";
-import { SYSTEM_WORDS } from "@/tv/profileRows";
+import { notationLine } from "./read";
 import type { SchoolSystem, Subject } from "../session/store";
 
 const SCHEMA = {
@@ -121,10 +121,7 @@ function leakedIn(problem: string, spec: Specs, said: Said, system?: SchoolSyste
  */
 export function groundFor(problem: string, who: { id: string; system: SchoolSystem }): string {
   const parts: string[] = [];
-  if (who.system === "cz" || who.system === "de") {
-    const note = who.system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot" : "a decimal comma (3,5) and division written with a colon";
-    parts.push(`The learner is in the ${SYSTEM_WORDS[who.system]} school system, whose notation uses ${note}.`);
-  }
+  if (who.system === "cz" || who.system === "de") parts.push(notationLine(who.system));
   const school = readQuestion(problem, who.system).school;
   const unit = school ? unitOf(school) : null;
   if (unit) {

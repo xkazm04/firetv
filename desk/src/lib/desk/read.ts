@@ -23,17 +23,20 @@ const MATHS_SCHEMA = {
 /** Who the maths page is for, from the seated learner's profile (the hint and the school rules read the same fields). */
 export interface ReadWho { system?: SchoolSystem; path?: MathPath; age?: number; stage?: string }
 
+/** A school system's notation in the one sentence both maths prompts carry: the read (mathsContext) and the hint's ground (hint.ts groundFor). */
+export function notationLine(system: SchoolSystem): string {
+  const note = system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot"
+    : system === "de" ? "a decimal comma (3,5) and division written with a colon" : "a decimal point (3.5)";
+  return `The learner is in the ${SYSTEM_WORDS[system]} school system, whose notation uses ${note}.`;
+}
+
 /**
  * What the maths read is told about the learner, so it writes the sheet the way the learner's school does. Only the maths
  * read carries it: the English and Essay prompts are exactly what they were.
  */
 export function mathsContext(who: ReadWho = {}): string {
   const parts: string[] = [];
-  if (who.system) {
-    const note = who.system === "cz" ? "a decimal comma (3,5), division written with a colon, and tg and cotg for tan and cot"
-      : who.system === "de" ? "a decimal comma (3,5) and division written with a colon" : "a decimal point (3.5)";
-    parts.push(`The learner is in the ${SYSTEM_WORDS[who.system]} school system, whose notation uses ${note}.`);
-  }
+  if (who.system) parts.push(notationLine(who.system));
   if (who.path) parts.push(`Their course in progress is ${PATHS[who.path].name}.`);
   if (who.age !== undefined) parts.push(`They are ${who.age} years old.`);
   else if (who.stage) parts.push(`Their stage is ${who.stage}.`);
