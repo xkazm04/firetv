@@ -665,6 +665,19 @@ test('SW11: the lesson embed enables the player API and both lesson screens send
   assert.match(t,/postMessage\(/,`${f}: posts it to the iframe`);
  }
 });
+// SW12 (scan-sweep optimize 2026-10-13, tv-surface): Math Buddy's lesson says what SW6 holds for the shell - Play, no circle on the phone, no Space
+test('SW12: the maths lesson line - paused or playing - names Play, not the bench keyboard, and asks no circle on the phone',()=>{
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:null,concepts:[]};
+ const line=(paused)=>{const h=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson,lessonPaused:paused})}));const i=h.indexOf('class="mb-paused"');return h.slice(i,h.indexOf('</div>',i));};
+ for(const paused of [false,true]){
+  const t=line(paused);
+  assert.ok(t.length>0,`paused=${paused}: the line is drawn`);
+  assert.doesNotMatch(t,/circle on the phone/i,`paused=${paused}: no ask the phone cannot answer`);
+  assert.doesNotMatch(t,/\bSpace\b/,`paused=${paused}: the remote has no Space key`);
+  assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
+ }
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
