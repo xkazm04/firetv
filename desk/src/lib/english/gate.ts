@@ -74,3 +74,18 @@ export function audienceOf(text: string, label: Audience): Audience | null {
 /** The words of a topic that the gate reads: everything a partner will be told to play, and everything shown. */
 export const topicText = (t: { title: string; goal: string; why: string; partner: string; premise: string; cue: string }) =>
   [t.title, t.goal, t.why, t.partner, t.premise, t.cue].join(" \n ");
+
+/** The one line a partner says in place of a reply the gate stopped. Code-written, in scene, and the scene goes on. */
+export const REDIRECT_LINE = "Let's keep to our practice here, so tell me more about what you need.";
+
+/**
+ * Whether a partner line may reach this learner (LG-20). The premise rule applied to the reply: for a learner who is not
+ * an adult, or a desk in Family mode (`adult` false, from `adultContent`), a line on the never-list or the adult list is
+ * never shown and never stored; the redirect takes its place. The gate only narrows: an adult learner's line passes as
+ * it came, and innuendo and non-English stay on the prompt.
+ */
+export function partnerLine(reply: string, adult: boolean): string {
+  if (adult) return reply;
+  const audience = keywordAudience(reply);
+  return audience === null || audience === "adult" ? REDIRECT_LINE : reply;
+}

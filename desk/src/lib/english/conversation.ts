@@ -6,7 +6,7 @@ import { getLearner, saveEnglish, saveLearner, withDigest } from "../session/lea
 import { markSeen, recommendFor, withCertificate } from "./cert";
 import { checkAt, parked } from "./activity";
 import { checkCommand, isCheckAction, pitchAsk } from "./check";
-import { keywordAudience } from "./gate";
+import { keywordAudience, partnerLine } from "./gate";
 import { keepPitch, PITCH_MAX, PITCH_PREFIX, shapePitch } from "./pitch";
 import { BETTER_MAX, cleanNotes, NOTE_KINDS, NOTE_MAX, NOTES_MAX, QUOTE_MAX } from "./notes";
 import { modeOf } from "../rules/mode";
@@ -62,6 +62,11 @@ function checkCurrent(c:Conversation,token?:string):Conversation{
   const s=getSession(),now=s.conversation;
   if(s.learner?.id!==c.learnerId||s.subject!=="english"||now?.id!==c.id||(token&&now.pending!==token))throw new ConversationError("This conversation has changed. Return to the current scene.",409);
   return now;
+}
+/** A partner line as the learner may see it (gate.ts partnerLine, LG-20): every site that makes one goes through here. */
+function partnerSays(c:Conversation,value:unknown,max?:number):string{
+  const p=getSession().profiles.find(p=>p.id===c.learnerId);
+  return partnerLine(line(value,max),adultContent(p,c.preferences));
 }
 function tutorSystem(c:Conversation):string{
   const p=getSession().profiles.find(p=>p.id===c.learnerId),scene=sceneOf(c)!;
@@ -155,7 +160,7 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
     const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...lines].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-take"});
     const current=checkCurrent(c,commandId);
     if(runningTake(current)?.note!==take.note)throw new ConversationError("This take has changed. Return to the current scene.",409);
-    const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:line(result.json.reply)}];
+    const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply)}];
     const takes=current.takes!.map((t):Take=>t.note===take.note?{...t,turns,held}:t);
     commit({...current,takes,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms},"linga-talk");
     return getSession();
@@ -234,9 +239,9 @@ export async function englishCommand(raw:unknown){
     try{
       const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."+(scene.steps?.length?"":` steps: two or three things the learner can reach in this scene, each a goal under ${STEP_MAX} characters, never words for the learner to say.`)}),schema:scene.steps?.length?openingSchema:openingWithSteps,accept:openingAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-opening"});
       checkCurrent(c,commandId);
-      const opening={id:randomUUID(),role:"partner" as const,text:line(result.json.opening)};
+      const opening={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.opening)},openingHeld=opening.text===line(result.json.opening);
       if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
-      commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],...(()=>{const m=missionOf(scene,result.json.steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(result.json.help,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],...(()=>{const m=missionOf(scene,result.json.steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:"The scene could not be prepared. Try again or choose another situation."});}catch{/* superseded */}throw e;}
   }
@@ -329,7 +334,7 @@ export async function englishCommand(raw:unknown){
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
-      const partnerReply=line(result.json.reply),turnId=`${c.id}:${commandId}`;
+      const partnerReply=partnerSays(c,result.json.reply),replyHeld=partnerReply===line(result.json.reply),turnId=`${c.id}:${commandId}`;
       const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,shown:shownLines(c),skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
       // a reply read back from the partner's last line is supported: code can add support, never remove it
       const copied=copiesShown(reply,c.turns.filter(t=>t.role==="partner").slice(-1).map(t=>t.text));
@@ -340,13 +345,13 @@ export async function englishCommand(raw:unknown){
       saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
+      next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
-      const partner={id:randomUUID(),role:"partner" as const,text:line(result.json.reply)};
-      next={...next,phase:"replay",supported:true,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn)};
+      const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply)},replayHeld=partner.text===line(result.json.reply);
+      next={...next,phase:"replay",supported:true,turns:[...c.turns,partner],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replayHeld?result.json.help:undefined,partner.text),c.help?.forTurn)};
     }
     commit(next,screenFor(next));return getSession();
   }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:"The tutor could not complete that turn. Your reply is still on the phone; please retry."});}catch{/* newer episode owns the UI */}throw e;}
