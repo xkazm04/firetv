@@ -169,7 +169,10 @@
 
   // ---- transport -----------------------------------------------------------
   function connect() {
-    const sock = (ws = new WebSocket('ws://' + location.host + '/ws'));
+    // The TV serves this page over http (ws://); a relay serves it over https, where a ws://
+    // socket is mixed content and never opens.
+    const scheme = location.protocol === 'https:' ? 'wss://' : 'ws://';
+    const sock = (ws = new WebSocket(scheme + location.host + '/ws'));
     ws.onopen = () => {
       connected = true;
       send({ type: 'hello', pin, clientId });

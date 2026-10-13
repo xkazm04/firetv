@@ -29,10 +29,11 @@ const TV_PIN = '4821';
 
 /** Replaces window.WebSocket with a TV that holds [cfg.pin]. Runs inside the page. */
 function fakeTv(cfg) {
-  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [] });
+  const log = (window.__tv = { opened: 0, refused: 0, welcomed: 0, firstRefusalAt: null, openedAt: [], urls: [] });
   class FakeTvSocket {
     constructor(url) {
       this.url = url;
+      log.urls.push(String(url));
       this.readyState = 0;
       this.n = ++log.opened;
       log.openedAt.push(performance.now());
@@ -139,6 +140,36 @@ try {
       .then(() => true, () => false);
     const tv = await page.evaluate(() => window.__tv);
     check('drop: a dropped line reconnects and pairs again', back, `${tv.opened} connections, ${tv.welcomed} welcomed`);
+    await page.close();
+  }
+
+  // ---- https (relay) -----------------------------------------------------------------------
+  // The relay serves the page over https (RelayTransport: wss://relay.example/...). A page loaded
+  // over https may not open a ws:// socket (mixed content), so the pen must dial wss://.
+  // The origin is a route, fulfilled from the file: nothing leaves the machine.
+  {
+    const page = await browser.newPage();
+    await page.route('https://relay.test/**', (route) =>
+      route.fulfill({ status: 200, contentType: 'text/html; charset=utf-8', path: fileURLToPath(PAGE) }),
+    );
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto('https://relay.test/?pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__tv && window.__tv.opened > 0, null, { timeout: 4000 }).catch(() => {});
+    const tv = await page.evaluate(() => window.__tv);
+    const url = (tv && tv.urls[0]) || '';
+    check('https: a page served over https dials wss://', url.startsWith('wss://relay.test/'), url || 'no socket');
+    await page.close();
+  }
+
+  // ---- file/http (LAN) guard ---------------------------------------------------------------
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto(PAGE + '?pin=' + TV_PIN);
+    await page.waitForFunction(() => window.__tv && window.__tv.opened > 0, null, { timeout: 4000 }).catch(() => {});
+    const tv = await page.evaluate(() => window.__tv);
+    const url = (tv && tv.urls[0]) || '';
+    check('lan: a page served over http still dials ws://', url.startsWith('ws://'), url || 'no socket');
     await page.close();
   }
 } finally {
