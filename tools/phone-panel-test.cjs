@@ -861,3 +861,12 @@ test('PR11: page.tsx forget() waits for the desk: leaveOutcome, reconnect only w
  assert.doesNotMatch(body,/\(\) => \{\}/,'no empty handler');
  assert.doesNotMatch(src,/This phone will ask for the code next time/,'the line lives in panelFor.ts');
 });
+
+// ---- SW11 (scan-sweep optimize 2026-10-13): the phone's one status line is announced, as the Essay panel's notes are ----
+test('SW11: the status line every handler writes to is a polite live region; the Essay panel keeps its alerts',()=>{
+ const tree=code(PAGE);
+ const status=tree.match(/<div className="pstatus"[^>]*>/);assert.ok(status,'the status line is drawn');
+ assert.match(status[0],/role="status"/,'a screen reader hears "That did not reach the desk." as it is written');
+ assert.match(status[0],/aria-live="polite"/);
+ assert.equal((tree.match(/role="alert"/g)||[]).length,2,'unchanged: the Essay panel\'s two alerts');
+});

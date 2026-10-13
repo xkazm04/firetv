@@ -709,7 +709,7 @@ export default function Phone() {
           <WeekPage lines={s.learner ? s.week : null} />
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
-        <div className="pstatus">{msg}</div>
+        <div className="pstatus" role="status" aria-live="polite">{msg}</div>
       </div>
       <div className="pnav">
         {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["paper", "Paper"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
