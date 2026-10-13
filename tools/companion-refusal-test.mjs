@@ -20,6 +20,7 @@
 import { chromium } from 'playwright';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { refusalShown } from './device.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const PAGE = pathToFileURL(path.join(here, '..', 'companion', 'index.html')).href;
@@ -117,8 +118,8 @@ try {
     const prompt = await pinPrompt(page);
     check('refuse: the page asks for the PIN', prompt !== null, `status "${status}"`);
     // live-ui-test check 15 (a phone with the wrong PIN is refused) on the page's real refusal state.
-    const intruder = { status, bad: await page.locator('#status.bad').count() > 0, prompt: prompt !== null };
-    check('refuse: live-ui-test check 15 passes for a refused intruder', /not paired/i.test(intruder.status), `status "${status}"`);
+    const intruder = await refusalShown(page, 1000);
+    check('refuse: live-ui-test check 15 passes for a refused intruder', intruder.ok, `status "${intruder.status}", bad ${intruder.bad}, PIN input ${intruder.pinInput}`);
     if (prompt) {
       await prompt.fill(TV_PIN);
       await prompt.press('Enter');

@@ -126,3 +126,23 @@ export function pairingPin(args, tag, adb = makeAdb({ timeout: 10_000 })) {
   }
   return pin;
 }
+
+/**
+ * Whether a phone page turned a pen away, judged on its state and not its wording: the status line carries the
+ * `bad` class and a PIN input is visible to type into. The words change (0a6a553a rewrote them once already); the
+ * state is what the viewer relies on. Waits up to [timeoutMs] for `bad`.
+ */
+export async function refusalShown(page, timeoutMs = 8000) {
+  await page
+    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: timeoutMs })
+    .catch(() => {});
+  const state = await page.evaluate(() => {
+    const input = document.getElementById('pintext');
+    return {
+      status: document.getElementById('status').textContent ?? '',
+      bad: document.getElementById('status').classList.contains('bad'),
+      pinInput: !!input && input.getClientRects().length > 0 && getComputedStyle(input).visibility !== 'hidden',
+    };
+  });
+  return { ok: state.bad && state.pinInput, ...state };
+}

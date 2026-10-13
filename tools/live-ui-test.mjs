@@ -14,7 +14,7 @@ import { chromium } from 'playwright';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import path from 'node:path';
-import { makeAdb, pairingPin, parseArgs, PHONE, TV_BASE } from './device.mjs';
+import { makeAdb, pairingPin, parseArgs, PHONE, refusalShown, TV_BASE } from './device.mjs';
 
 const BASE = TV_BASE;
 const args = parseArgs();
@@ -350,12 +350,9 @@ const run = async () => {
 
   // ---- 15. a pen that cannot quote the PIN is turned away -----------------
   const intruder = await context.newPage();
-  await intruder.goto(`${BASE}/?pin=0000`, { waitUntil: 'domcontentloaded' });
-  await intruder
-    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 8000 })
-    .catch(() => {});
-  const intruderStatus = (await intruder.textContent('#status')) ?? '';
-  check('a phone with the wrong PIN is refused', /not paired/i.test(intruderStatus), intruderStatus.slice(0, 55));
+  await intruder.goto(`${BASE}/#pin=0000`, { waitUntil: 'domcontentloaded' });
+  const refusal = await refusalShown(intruder);
+  check('a phone with the wrong PIN is refused', refusal.ok, `${refusal.status.slice(0, 55)}${refusal.pinInput ? '' : ' (no PIN input)'}`);
   await intruder.close();
 
   await browser.close();
