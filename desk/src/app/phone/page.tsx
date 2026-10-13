@@ -302,7 +302,12 @@ export default function Phone() {
       if (!r.ok && r.status !== 502) { const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return; setMsg(j.error ?? `The desk could not ask (${r.status}).`); } }
     catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
   /** The Say panel's button: the sentence to the TV. */
-  const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…"); try { const r = await call("/api/analyse", { kind: "english", sentence }); if (moved()) return; setMsg(r.ok ? "on the TV" : "failed"); } finally { setBusy(false); } };
+  const checkSentence = async () => { const who = seat.current.id, moved = () => seat.current.id !== who; setBusy(true); setMsg("sending…");
+    try { const r = await call("/api/analyse", { kind: "english", sentence }); if (moved()) return;
+      if (r.ok) { setMsg("on the TV"); return; }
+      const j = await r.json().catch(() => ({} as { error?: string })); if (moved()) return;
+      setMsg((j as { error?: string }).error ?? `The desk could not check that sentence (${r.status}).`); }
+    catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The desk's failed run of this kind that can be asked again in place: it holds what it was asked with. */
   const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.id !== passed ? j : null; };
   /** A hint that failed for the item the TV is on. */

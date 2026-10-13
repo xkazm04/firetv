@@ -707,6 +707,30 @@ test('P17 (ii) a reply that returns after the learner changed sets no state but 
  assert.match(src,/onClick=\{checkSentence\}>Check it on the TV</,'the Say button calls the named handler');
 });
 
+// ---- SW1 (scan-sweep optimize 2026-10-13): the Say panel's Check it on the TV fails the way its eleven siblings do ----
+test('SW1: checkSentence - a call that never reached the desk says so and never rejects; a refusal shows the route\'s own line',async()=>{
+ const src=fs.readFileSync(PAGE,'utf8');
+ const a=src.indexOf('const checkSentence'),e=src.indexOf("/** The desk's failed run",a);assert.ok(a>0&&e>a,'checkSentence is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,src.lastIndexOf('\n',e)),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ const run=async(respond)=>{
+  const calls=[],seat={current:{id:'ema'}};
+  const f=new Function('seat','call','sentence','setBusy','setMsg',`${js}\nreturn checkSentence;`);
+  const fn=f(seat,()=>respond(),'I go.',(v)=>calls.push(['Busy',v]),(v)=>calls.push(['Msg',v]));
+  let threw=null;try{await fn();}catch(x){threw=x;}
+  return {threw,msg:calls.filter(([k])=>k==='Msg').at(-1)?.[1],busy:calls.filter(([k])=>k==='Busy').at(-1)?.[1]};
+ };
+ const reply=(body,ok,status)=>Promise.resolve({ok,status,json:async()=>body});
+ const down=await run(()=>Promise.reject(new TypeError('Failed to fetch')));
+ assert.equal(down.threw,null,'a network failure is handled, not left as an unhandled rejection');
+ assert.equal(down.msg,'That did not reach the desk.','the line its siblings say');assert.equal(down.busy,false);
+ const nobody=await run(()=>reply({error:'No one is at the desk yet.'},false,409));
+ assert.equal(nobody.msg,'No one is at the desk yet.','the route\'s own reason, not a bare "failed"');
+ const bare=await run(()=>reply({},false,500));
+ assert.match(bare.msg,/could not check that sentence \(500\)/);
+ assert.doesNotMatch(src.slice(a,e),/"failed"/,'no bare "failed" left in the handler');
+ assert.equal((await run(()=>reply({},true,200))).msg,'on the TV','unchanged: an ok is on the TV');
+});
+
 // ---- PR5: every refused join says why on the Join panel ----
 const WRONG='That code is not on the TV.',TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
 const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That did not reach the desk.';
