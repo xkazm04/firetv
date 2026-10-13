@@ -9,7 +9,10 @@ import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.asTransport
 import android.os.SystemClock
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.util.concurrent.atomic.AtomicInteger
@@ -28,8 +31,13 @@ class Session(clipId: String, videoAspect: Double) {
     private val _doc = MutableStateFlow(engine.doc)
     val doc: StateFlow<AnnotationDoc> = _doc
 
-    private val _transport = MutableStateFlow<TransportCommand?>(null)
-    val transport: StateFlow<TransportCommand?> = _transport
+    /**
+     * Transport commands for the player, every one in arrival order. A state flow kept only the
+     * newest: a burst (two undos, an undo and a seek, messages a Wi-Fi stall delivered together)
+     * reached the player as its last command alone.
+     */
+    private val _commands = Channel<TransportCommand>(Channel.UNLIMITED)
+    val commands: Flow<TransportCommand> = _commands.receiveAsFlow()
 
     /** Set by the player each frame; read when a pen message arrives so strokes anchor to a time. */
     @Volatile
@@ -82,7 +90,7 @@ class Session(clipId: String, videoAspect: Double) {
         // touch may be on another frame, and only the planner sees the player (TransportPlan).
         val transport = msg as? PenMessage.Transport ?: msg.asTransport()
         if (transport != null) {
-            _transport.value = TransportCommand(transport.cmd, transport.value, System.nanoTime())
+            _commands.trySend(TransportCommand(transport.cmd, transport.value))
             return
         }
         edit(msg)
@@ -136,5 +144,5 @@ class Session(clipId: String, videoAspect: Double) {
         )
     }
 
-    data class TransportCommand(val cmd: String, val value: Double, val nanos: Long)
+    data class TransportCommand(val cmd: String, val value: Double)
 }
