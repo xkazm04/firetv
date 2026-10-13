@@ -188,3 +188,13 @@ test('a Linga suite that never finishes is no reading after the timeout, and say
  const done=path.join(scratch,'done-suite.cjs');fs.writeFileSync(done,"console.log('# pass 3');console.log('# fail 0');\n");
  assert.deepEqual(lingaChecks({file:done,timeout:20000}),{pass:3,fail:0,note:null},'a suite that finishes is read as before');
 });
+test('a typecheck that never finishes is no reading after the timeout, and says it timed out',()=>{
+ const {typecheckErrors}=require('./kpi-measure.cjs');
+ const fake=path.join(scratch,'desk-stuck-tsc');fs.mkdirSync(path.join(fake,'node_modules/typescript/bin'),{recursive:true});
+ fs.writeFileSync(path.join(fake,'node_modules/typescript/bin/tsc'),"setInterval(()=>{},1000);\n");
+ const t0=Date.now(),r=typecheckErrors({deskDir:fake,timeout:400});
+ assert.ok(Date.now()-t0<20000,'it returned');
+ assert.strictEqual(r.errors,null);assert.match(r.note,/timed out after 400 ms/);
+ fs.writeFileSync(path.join(fake,'node_modules/typescript/bin/tsc'),"console.log('a.ts(1,1): error TS2307: Cannot find module x');process.exit(2);\n");
+ assert.deepEqual(typecheckErrors({deskDir:fake,timeout:20000}),{errors:1,unresolved:1,note:null},'a typecheck that finishes is read as before');
+});

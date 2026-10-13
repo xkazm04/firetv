@@ -103,10 +103,11 @@ function writingPersisted(deskDir = desk) {
 }
 
 // KPI 4 — TypeScript typecheck errors in desk/, from desk's own compiler. No compiler, no reading.
-function typecheckErrors() {
-  const tsc = path.join(desk, "node_modules/typescript/bin/tsc");
+function typecheckErrors({ deskDir = desk, timeout = SUITE_TIMEOUT } = {}) {
+  const tsc = path.join(deskDir, "node_modules/typescript/bin/tsc");
   if (!fs.existsSync(tsc)) return { errors: null, unresolved: null, note: "desk/node_modules has no typescript — run npm install in desk/ (in a worktree, link the operator's copy)" };
-  const r = spawnSync(process.execPath, [tsc, "--noEmit", "--incremental", "false", "-p", path.join(desk, "tsconfig.json")], { cwd: desk, encoding: "utf8" });
+  const r = spawnSync(process.execPath, [tsc, "--noEmit", "--incremental", "false", "-p", path.join(deskDir, "tsconfig.json")], { cwd: deskDir, encoding: "utf8", timeout, killSignal: "SIGKILL" });
+  if (r.error && r.error.code === "ETIMEDOUT") return { errors: null, unresolved: null, note: `tsc timed out after ${timeout} ms` };
   const out = `${r.stdout || ""}${r.stderr || ""}`;
   if (r.status !== 0 && !/error TS\d+/.test(out)) return { errors: null, unresolved: null, note: `tsc exited ${r.status} without a diagnostic` };
   const lines = out.split(/\r?\n/).filter(l => /error TS\d+/.test(l));
@@ -219,5 +220,5 @@ function print(r, asJson) {
   }
 }
 
-module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, lingaChecks, mainCheckout, same };
+module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, lingaChecks, typecheckErrors, mainCheckout, same };
 if (require.main === module) print(measure(), process.argv.includes("--json"));
