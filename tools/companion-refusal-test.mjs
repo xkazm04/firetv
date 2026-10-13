@@ -38,6 +38,8 @@ function fakeTv(cfg) {
       this.n = ++log.opened;
       log.openedAt.push(performance.now());
       setTimeout(() => {
+        // A TV that is gone: the connection never opens, it just fails.
+        if (cfg.dead && !window.__tvAlive) return this.drop(1006, '');
         this.readyState = 1;
         if (this.onopen) this.onopen({});
       }, 10);
@@ -182,6 +184,37 @@ try {
     await page.waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 2000 });
     const status = (await page.locator('#status').textContent()) ?? '';
     check('locked: the page says to wait, not to type the PIN now', /wait/i.test(status), `status "${status}"`);
+    await page.close();
+  }
+
+  // ---- a lost TV ------------------------------------------------------------------------------
+  // A closed TV app must not be redialled every second for as long as the tab lives: the page
+  // backs off, stays quiet while its screen is hidden, and comes back at once when it is shown.
+  {
+    const page = await browser.newPage();
+    await page.clock.install();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dead: true });
+    await page.addInitScript(() => {
+      window.__hidden = false;
+      Object.defineProperty(document, 'hidden', { get: () => window.__hidden });
+    });
+    await page.goto(PAGE + '?pin=' + TV_PIN);
+    await page.clock.runFor(60000);
+    const dialled = await page.evaluate(() => window.__tv.opened);
+    check('lost TV: connection attempts in 60 s with the TV gone', dialled <= 10, `${dialled} attempts (was ~60)`);
+
+    // The screen goes dark: nothing is dialled while hidden.
+    await page.evaluate(() => { window.__hidden = true; });
+    const before = await page.evaluate(() => window.__tv.opened);
+    await page.clock.runFor(60000);
+    const hiddenDials = (await page.evaluate(() => window.__tv.opened)) - before;
+    check('lost TV: nothing is dialled while the screen is hidden', hiddenDials <= 1, `${hiddenDials} attempts in 60 s hidden`);
+
+    // The TV comes back and the phone is picked up: it dials at once, not after the backoff.
+    await page.evaluate(() => { window.__tvAlive = true; window.__hidden = false; document.dispatchEvent(new Event('visibilitychange')); });
+    await page.clock.runFor(2000);
+    const back = await page.evaluate(() => window.__pen.isConnected());
+    check('lost TV: showing the page again pairs within 2 s', back, `paired ${back}`);
     await page.close();
   }
 
