@@ -850,3 +850,15 @@ test('OPT-8: a key that cannot be saved (the data dir refuses the write) is stil
  assert.equal(pj().key,k1,'the key the TV holds is the one written');
  fs.writeFileSync(f,was);const t=new Date(Date.now()+60_000);fs.utimesSync(f,t,t);
 });
+
+// ---- LAN2: a forced phone host does not scan the adapters ----
+test('LAN2: lanHost with DESK_PHONE_HOST set reads no network adapter, with none set it reads them once',()=>{
+ const real=os.networkInterfaces;let scans=0;
+ mock.method(os,'networkInterfaces',()=>{scans++;return real.call(os);});
+ try{
+  for(let i=0;i<200;i++)assert.equal(require(src('lib/session/lan.ts')).lanHost(undefined,{DESK_PHONE_HOST:'desk.test'}),'desk.test');
+  assert.equal(scans,0,'a forced host scans no adapter');
+  require(src('lib/session/lan.ts')).lanHost(undefined,{});
+  assert.equal(scans,1,'no forced host: one scan');
+ }finally{mock.restoreAll();}
+});
