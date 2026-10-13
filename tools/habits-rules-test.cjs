@@ -85,6 +85,13 @@ test('long-run: the band is the writer\'s own, from styleSheet over their texts;
   assert.deepEqual(detect('long-run',long),[]);assert.deepEqual(detect('long-run',long,null),[]);
 });
 
+test('long-run: the fixture\'s CHAT band is what styleSheet measures over CHAT_OWN, and a sentence is long by the band\'s own count',()=>{
+  const sh=styleSheet(fx.CHAT_OWN);
+  assert.deepEqual({wps:{p50:sh.wps.p50,p90:sh.wps.p90},sentences:sh.sentences},fx.CHAT);
+  // one splitSentences sentence of 3 short pieces (9 words) is not longer than a p90 of 5: the band counted those pieces
+  assert.deepEqual(detect('long-run','ok see you at 6. bring the charger. thanks. Then we can go. the shop shuts at 8.',fx.CHAT),[]);
+});
+
 const A='The bus was late again. This is why I missed the quiz.';   // vague-opener
 const B='We walked in. The day was fine.';                          // nothing
 test('openHabits: a habit in one piece is not open',()=>{

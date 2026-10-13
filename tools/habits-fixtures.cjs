@@ -15,6 +15,10 @@ const essay = (...paras) => paras.join('\n\n');
 const BAND = { wps: { p50: 9, p90: 18 }, sentences: 40 };
 const SHORT = { wps: { p50: 8, p90: 12 }, sentences: 30 };
 const THIN = { wps: { p50: 9, p90: 18 }, sentences: 6 };
+// A chat writer who types in lower case: CHAT is what styleSheet gives over CHAT_OWN (the suite checks it). Their stops are
+// not followed by a capital, so splitSentences reads a whole message as one sentence while the band counts its pieces.
+const CHAT_OWN = ['ok see you at 6', 'bring the charger', 'thanks', 'running late. be there in 10', 'can you grab milk', 'the shop shuts at 8', 'yes fine', 'text me when you leave', 'no worries. see you soon', 'got it. thanks', 'on the bus now', 'lunch was good', 'where are you', 'call me later. busy now', 'the train is late again', 'see you at the station', 'did you eat', 'all good here', 'i am home', 'love you. night'];
+const CHAT = { wps: { p50: 3, p90: 5 }, sentences: 25 };
 
 const vague = [
   P('The bus was late again. This is why I missed the quiz.', 2),
@@ -166,6 +170,10 @@ const longrun = [
   C(`${SA} ${LB} ${SB} ${LC} ${SC}`, { band: BAND }),
   C(`${E18} ${SB} ${E18}`, { band: BAND }),
   C(`${M14} ${SC} ${M14}`, { band: SHORT }),
+  // added 2026-10-13 (scan-sweep): the writer's own lower-case register is not a long run against their own band
+  C('ok see you at 6. bring the charger. thanks. Then we can go. the shop shuts at 8.', { band: CHAT }),
+  C('running late. be there in 10. Sorry about that. the bus is slow. see you soon.', { band: CHAT }),
+  P('ok see you at 6. Then the long walk over the hill to the old farm by the river and the mill. After that the slow bus back into town with all the bags and the dog.', 2, { band: CHAT }),
 ];
 
 const filler = [
@@ -245,5 +253,5 @@ module.exports = {
   'long-run': longrun,
   filler,
   'two-claims': claims,
-  BAND, SHORT, THIN,
+  BAND, SHORT, THIN, CHAT, CHAT_OWN,
 };

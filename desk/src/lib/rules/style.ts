@@ -50,6 +50,8 @@ const words = (t: string) => t.match(/[\p{L}\p{N}']+/gu) ?? [];
 export function sentencesOf(text: string): string[] {
   return text.split(/(?<=[.!?…])\s+|\n+/).map((s) => s.trim()).filter((s) => words(s).length > 0);
 }
+/** A text's sentence lengths in words, measured as the sheet's wps is: sentencesOf, then this file's word count. */
+export const sentenceWords = (text: string): number[] => sentencesOf(text).map((s) => words(s).length);
 const pct = (xs: number[], q: number) => { if (!xs.length) return 0; const s = [...xs].sort((a, b) => a - b); return s[Math.min(s.length - 1, Math.floor(q * (s.length - 1)))]; };
 const pm = (n: number, d: number) => (d ? Math.round((1000 * n) / d) : 0);
 const count = (t: string, re: RegExp) => (t.match(re) ?? []).length;

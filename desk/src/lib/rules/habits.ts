@@ -6,14 +6,14 @@
  * `para` the first sentence's paragraph (0 when the text has one), `quote` an exact slice of the text.
  *
  * English only, like style.ts: the word lists below are English, and a text with nothing English to read (under 15% of its
- * words common English function words) returns no hits. The lists are this file's own; style.ts's are private and not imported.
+ * words common English function words) returns no hits. The lists are this file's own; style.ts's are private and not imported (long-run reads sentenceWords, the band's own measure).
  * Pure: no model, no clock, no store. A detector never throws; a non-string gives no hits.
  *
  * Measured by tools/habits-rules-test.cjs on tools/habits-fixtures.cjs. The gate is zero false positives; a detector that
  * cannot reach it is out of SHIPPED (it stays in this file, and openHabits never sees it).
  */
 import { splitSentences, type Sentence } from "./essay";
-import type { StyleSheet } from "./style";
+import { sentenceWords, type StyleSheet } from "./style";
 
 export type Habit = "vague-opener" | "hedge-stack" | "repeated-opener" | "long-run" | "filler" | "two-claims";
 export interface HabitHit { habit: Habit; n: number[]; para: number; quote: string; }
@@ -86,16 +86,20 @@ function repeatedOpener(text: string, ss: Sentence[]): HabitHit[] {
 
 // ---- (4) long-run ----
 // Rule: two or more neighbouring sentences of one paragraph, each longer than the writer's own 90th-percentile sentence
-// (band.wps.p90, in words, as Sentence.words counts them). The band must come from styleSheet over the writer's own texts
+// (band.wps.p90, in words). A sentence's length is measured as the band was (style.ts sentenceWords: its pieces split at
+// every stop and line break, words as letters and digits) and is its longest piece: splitSentences keeps "ok see you at 6.
+// bring the charger." as one sentence when no capital follows a stop, and comparing that whole with a band of pieces would
+// call a lower-case writer's own register a long run. The band must come from styleSheet over the writer's own texts
 // and from at least MIN_BAND_SENTENCES sentences; with no band, a thin one, or a p90 of 0 the detector returns nothing.
 function longRun(text: string, ss: Sentence[], band?: Band | null): HabitHit[] {
   if (!band || !(band.sentences >= MIN_BAND_SENTENCES) || !(band.wps?.p90 > 0)) return [];
   const out: HabitHit[] = [];
   let run: Sentence[] = [];
   const flush = () => { if (run.length >= 2) out.push(hit("long-run", text, run)); run = []; };
+  const long = (s: Sentence) => Math.max(0, ...sentenceWords(s.text)) > band.wps.p90;
   for (const s of ss) {
-    if (s.words > band.wps.p90 && (!run.length || (run[0].para ?? 0) === (s.para ?? 0))) run.push(s);
-    else { flush(); if (s.words > band.wps.p90) run.push(s); }
+    if (long(s) && (!run.length || (run[0].para ?? 0) === (s.para ?? 0))) run.push(s);
+    else { flush(); if (long(s)) run.push(s); }
   }
   flush();
   return out;
