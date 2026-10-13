@@ -187,3 +187,44 @@ test('dev.ps1 Initialize-LiveTools: installs what is missing, names a failed ste
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+// The relay stub stands in for the production relay. When the TV's socket closed it cleared the TV and left the phone's
+// socket open, so a phone paired through the relay kept drawing into a peer that was gone: no frame, no close, and the
+// companion only re-pairs when its own socket closes. The stub is run as a child on a free loopback port with two ws
+// clients; nothing leaves the machine.
+test('relay-stub: a TV that leaves closes the phone socket (1012) so the companion re-pairs; a replaced TV does not', async () => {
+  const cp = require('node:child_process'), net = require('node:net');
+  const WebSocket = require('ws');
+  const port = await new Promise((res) => { const s = net.createServer().listen(0, '127.0.0.1', () => { const p = s.address().port; s.close(() => res(p)); }); });
+  const child = cp.spawn(process.execPath, [path.join(__dirname, 'relay-stub.mjs'), '--port', String(port)], { stdio: ['ignore', 'pipe', 'inherit'] });
+  const sockets = [];
+  try {
+    await new Promise((res, rej) => { child.stdout.on('data', (d) => /listening/.test(String(d)) && res()); child.on('exit', () => rej(new Error('relay-stub exited'))); });
+    const dial = (role) => new Promise((res, rej) => {
+      const ws = new WebSocket(`ws://127.0.0.1:${port}/${role}`);
+      ws.closed = new Promise((r) => ws.on('close', (code) => r(code)));
+      ws.got = [];
+      ws.on('message', (m) => ws.got.push(String(m)));
+      ws.on('open', () => { sockets.push(ws); res(ws); });
+      ws.on('error', rej);
+    });
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    const settled = (ws, ms) => Promise.race([ws.closed, sleep(ms).then(() => 'open')]);
+
+    // A TV that is replaced by its own redial (the old socket closes after the new one attached): the phone stays.
+    let tv = await dial('tv'), pen = await dial('ws');
+    const tv2 = await dial('tv');
+    await tv.closed;
+    assert.equal(await settled(pen, 300), 'open', 'a replaced TV socket closed the phone');
+    pen.send('after-redial');
+    await sleep(100);
+    assert.deepEqual(tv2.got, ['after-redial'], 'the phone no longer reaches the redialled TV');
+
+    // The current TV leaves: the phone is told by a close, 1012 (service restart).
+    tv2.close();
+    assert.equal(await settled(pen, 1500), 1012, 'the phone socket stays open after the TV left');
+  } finally {
+    for (const ws of sockets) ws.terminate();
+    child.kill();
+  }
+});
