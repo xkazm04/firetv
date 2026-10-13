@@ -177,6 +177,7 @@ function runs(a, eff) {
   return false;
 }
 
+// the Linga members of store.ts `Screen`; tools/uat-surface-test.cjs holds this list to that type
 const LINGA_SCREENS = ['linga', 'linga-check', 'linga-verdict', 'linga-plan', 'linga-scenes', 'linga-map', 'linga-talk', 'linga-moment', 'linga-coach', 'linga-recap', 'linga-cert', 'linga-certs'];
 /**
  * Every action the view defines for this session on any Linga screen, with or without the menu, and with the
@@ -285,4 +286,4 @@ function pick(sf, d) {
     ?? list[0] ?? null;
 }
 
-module.exports = { surfaceOf, surfaceText, choices, pick, install, BY_DESIGN_UNMAPPED };
+module.exports = { surfaceOf, surfaceText, choices, pick, install, BY_DESIGN_UNMAPPED, LINGA_SCREENS };

@@ -276,3 +276,14 @@ test('case 6: the judge reads a long screen whole, or with the cut named, never 
   const long = 'y'.repeat(JUDGE_SCREEN_CAP + 1234);
   assert.match(judgePayload(record(long)).steps[0].shown, /\[\.\.\. 1234 more characters not shown\]$/);
 });
+
+test('GUARD: the catalogue walks every Linga screen the session store declares, read from its Screen type, not a copy that can fall behind', () => {
+  const lingaScreensOf = src => { const m = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').match(/export type Screen\s*=([^;]+);/); assert.ok(m, 'store.ts declares type Screen'); return [...m[1].matchAll(/"([^"]+)"/g)].map(x => x[1]).filter(s => /^linga(-|$)/.test(s)).sort(); };
+  const store = fs.readFileSync(path.join(root, 'src/lib/session/store.ts'), 'utf8');
+  const declared = lingaScreensOf(store);
+  assert.ok(declared.length >= 12, `store.ts declares the Linga screens (${declared.length})`);
+  assert.deepEqual([...surface().LINGA_SCREENS].sort(), declared, 'surface.cjs walks exactly the declared Linga screens');
+  // the seeded control: a screen added to the type and not to the walk is caught
+  const seeded = lingaScreensOf(store.replace('"linga" |', '"linga" | "linga-seeded" |'));
+  assert.notDeepEqual([...surface().LINGA_SCREENS].sort(), seeded);
+});
