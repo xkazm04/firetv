@@ -787,6 +787,21 @@ test('the analyse route refuses a body that is not a reading - not JSON, null, n
  }
  assert.equal(seen.length,asked,'no model call');
 });
+test('a piece sent to be kept while a reading is running is refused BUSY before it is kept: no piece on the shelf for a reading that never ran',async()=>{
+ const texts=require(path.join(root,'src/lib/session/texts.ts'));
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});texts.markNoticed('ema');
+ let open;const gate=new Promise((r)=>{open=r;});answer=async()=>{await gate;throw new Error('held');};
+ const first=analyse({kind:'essay',text:'Schools should start later. Teenagers sleep late.',type:'evidence'});
+ for(let i=0;i<50&&getSession().jobs?.analyse?.phase!=='running';i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(getSession().jobs?.analyse?.phase,'running');
+ const had=texts.listPieces('ema').length;
+ for(let k=0;k<2;k++){
+  const r=await analyse({kind:'piece',text:'First paragraph is here and it is in English.\n\nSecond paragraph is also English text.',type:'evidence',keep:true});
+  assert.equal(r.status,409);deskWorded((await r.json()).error);
+ }
+ assert.equal(texts.listPieces('ema').length,had,'two refused sends kept no piece');
+ open();await first;
+});
 test('the phone page: no essay in the capture picker, no essay sample, the file picker takes .txt and .md, and it uses the pure rules',()=>{
  const src=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  const capture=src.slice(src.indexOf('{screen === "capture" && ('),src.indexOf('{screen === "practice" && s'));

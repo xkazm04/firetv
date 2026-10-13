@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, analysePiece, analysePieceAgain, reviseSentence } from "@/lib/desk/essay";
-import { refused, runJob } from "@/lib/desk/job";
+import { BUSY, blocksRun, refused, runJob } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
@@ -93,6 +93,8 @@ export async function POST(req: Request) {
     if (!paragraphsOf(body.text).some(paragraphIsEnglish)) return refusedWithLine(NOT_ENGLISH_LINE);
     let pieceId: string | undefined;
     if (body.keep) {
+      // a reading already running refuses this one: refused before the piece is kept, so a refused send leaves no piece on the shelf
+      if (blocksRun(getSession().jobs?.analyse, who.id)) return refused({ status: 409, error: BUSY });
       if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
       const kept = typeof body.pieceId === "string" ? addVersion(who.id, body.pieceId, { text: body.text, source: body.source }) : addPiece(who.id, { text: body.text, source: body.source });
       // the same text kept again is not a failure: the reading goes ahead on the version already kept
