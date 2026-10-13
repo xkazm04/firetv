@@ -190,11 +190,29 @@
       // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
       if (refused) return;
       if (!statusEl.classList.contains('bad')) statusEl.textContent = 'reconnecting…';
-      setTimeout(connect, 1000);
+      scheduleReconnect();
     };
     ws.onmessage = (e) => onMessage(JSON.parse(e.data));
   }
   function send(o) { if (connected) ws.send(JSON.stringify(o)); }
+
+  // A TV that is gone is redialled with a doubling wait (1 s up to 15 s), not every second for as
+  // long as the tab lives; a welcome resets it. While the screen is hidden nothing is dialled, and
+  // showing the page again dials at once.
+  const BACKOFF_MIN_MS = 1000, BACKOFF_MAX_MS = 15000;
+  let backoff = BACKOFF_MIN_MS, redial = 0;
+  function scheduleReconnect() {
+    clearTimeout(redial);
+    redial = 0;
+    if (document.hidden) return;
+    redial = setTimeout(() => { redial = 0; connect(); }, backoff);
+    backoff = Math.min(backoff * 2, BACKOFF_MAX_MS);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || refused || connected || redial || (ws && ws.readyState < 2)) return;
+    backoff = BACKOFF_MIN_MS;
+    connect();
+  });
 
   function onMessage(m) {
     if (m.type === 'welcome') {
@@ -212,6 +230,7 @@
         return;
       }
       paired = true;
+      backoff = BACKOFF_MIN_MS;
       hint.textContent = 'draw here';
       statusEl.classList.remove('bad');
       dot.classList.add('on');
