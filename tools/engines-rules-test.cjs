@@ -423,3 +423,17 @@ test('sweep case 2: findBinary finds what a spawn without a shell would start: o
   else assert.equal(findBinary('deskshim'),path.join(dir,'deskshim'));
  }finally{process.env.PATH=prior;if(priorW!==undefined)process.env.Path=priorW;fs.rmSync(dir,{recursive:true,force:true});}
 });
+
+test('sweep case 3: a transcriber is "on this machine" only at a loopback host; another host on the network is not local',async()=>{
+ const L=load('engines/listen.ts'),real=globalThis.fetch,prior=process.env.STT_URL;
+ try{
+  globalThis.fetch=async()=>new Response('{}',{status:200});
+  for(const u of ['http://localhost:8080','http://127.0.0.1:8080/','http://[::1]:8080']){process.env.STT_URL=u;assert.equal((await L.listenStatus()).local,true,u);}
+  for(const u of ['http://192.168.1.20:8080','https://stt.example.com']){
+   process.env.STT_URL=u;const s=await L.listenStatus();
+   assert.equal(s.local,false,`${u}: not on this machine`);
+   const p=await reg().provider('listen').probe();
+   assert.doesNotMatch(p.say,/this machine/,`${u}: the engine check does not say "on this machine"`);
+  }
+ }finally{globalThis.fetch=real;if(prior===undefined)delete process.env.STT_URL;else process.env.STT_URL=prior;}
+});

@@ -24,6 +24,8 @@ const headers = (): Record<string, string> => {
 
 /** STT_URL without a path or credentials, for a line that names where we looked. */
 const origin = () => { try { return new URL(base()).origin; } catch { return "STT_URL"; } };
+/** True only when STT_URL names this computer (a loopback host): a transcriber elsewhere on the network is not "on this machine". */
+const onThisMachine = () => { try { return /^(localhost|127(\.\d{1,3}){3}|\[::1\])$/i.test(new URL(base()).hostname); } catch { return false; } };
 
 export interface ListenStatus { reachable: boolean; provider: string; local: boolean; }
 
@@ -31,9 +33,9 @@ export interface ListenStatus { reachable: boolean; provider: string; local: boo
 export async function listenStatus(): Promise<ListenStatus> {
   try {
     const r = await fetch(cloud() ? `${base()}/v1/models` : `${base()}/health`, { headers: headers(), signal: AbortSignal.timeout(2000) });
-    return { reachable: r.ok, provider: reported(), local: !cloud() };
+    return { reachable: r.ok, provider: reported(), local: onThisMachine() };
   } catch {
-    return { reachable: false, provider: reported(), local: !cloud() };
+    return { reachable: false, provider: reported(), local: onThisMachine() };
   }
 }
 
@@ -53,7 +55,7 @@ const scribe = (name: string): Provider<ListenRequest, Heard> => ({
   async probe() {
     const s = await listenStatus();
     if (s.reachable) return { ok: true, say: s.local ? `${s.provider} answers on this machine.` : `${s.provider} answers.` };
-    return { ok: false, say: s.local ? `no transcriber answers at ${origin()}: start gravitone, or set STT_URL.` : "Scribe is not answering: check ELEVENLABS_API_KEY and the network." };
+    return { ok: false, say: cloud() ? "Scribe is not answering: check ELEVENLABS_API_KEY and the network." : `no transcriber answers at ${origin()}: start gravitone, or set STT_URL.` };
   },
 });
 
