@@ -23,7 +23,7 @@ import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
 import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
-import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
+import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -1066,8 +1066,12 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
 
 export function LessonScreen({ s }: { s: Session }) {
   const l = s.lesson;
+  // Play/Pause is the desk's flag; the embed only obeys what it is told (enablejsapi + postMessage), so tell it on every flip
+  const frame = useRef<HTMLIFrameElement>(null);
+  const paused = s.lessonPaused;
+  useEffect(() => { frame.current?.contentWindow?.postMessage(playerCommand(paused), "*"); }, [paused]);
   if (!l) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No lesson open" /></h1></>;
-  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1` : null;
+  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1` : null;
   // Concepts are labels: the library entry's own when there is one (a hint's pick carries a transcript chunk in
   // `text`; the library's lesson pick carries the concepts joined by " · "). Over four words is not a concept.
   const concepts = (LESSONS.find((x) => x.id === l.id)?.concepts ?? l.text.split(" · "))
@@ -1076,10 +1080,10 @@ export function LessonScreen({ s }: { s: Session }) {
   return (<>
     <Top s={s} crumb="The lesson" right={<Chips s={s} learner={false} phone={false} />} />
     <div className="mb-screen" data-role="maths-sheet">
-      {src ? <iframe src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} />
+      {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
         : <div className="none">This unit has no video yet — its theory screen is the lesson.</div>}
     </div>
-    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused — circle on the phone to ask about this frame" : "Playing · Space pauses · Back returns"}</span></div>
+    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused · Play resumes · Back returns" : "Playing · Play pauses · Back returns"}</span></div>
     <aside className="mb-lesson-side">
       <div className="mb-kick">The part that matters · {fmt(l.t)}</div>
       <div className="mb-stitle" data-role="maths-title"><Amber text={l.title} /></div>

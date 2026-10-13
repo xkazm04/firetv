@@ -112,7 +112,7 @@
 .sent { font-size: 92px; font-weight: 500; line-height: 1.25; letter-spacing: -.01em; }
 .tok { position: relative; display: inline-block; }
 .tok[data-k="tense"] { border-bottom: 10px solid var(--signal); } .tok[data-k="marker"] { border-bottom: 10px solid var(--english); }
-.tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
 .tok[data-k="tense"]::after { color: var(--tint); } .tok[data-k="marker"]::after { color: var(--english); }
 
 /* ---- rule card ---- */

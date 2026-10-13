@@ -855,3 +855,38 @@ test('SW8: an evening of session messages leaves a bounded window.__desk.events,
  assert.ok(ev.length<=500,`three hours of ticks keep ${ev.length} lines, not ${N+1}`);
  assert.equal(ev.at(-1),`msg ${`{"tick":${N-1}}`.length}`,'the newest line is kept');
 });
+
+// SW13 (scan-sweep optimize 2026-10-13, tv-surface): the D-pad listener is bound once, not swapped on every session message
+test('SW13: 100 session updates leave the TV page with one keydown binding, and a key pressed after them is handled against the newest session',()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ const a=src.indexOf('// ---- D-pad'),r=src.indexOf('removeEventListener("keydown", onKey)',a);
+ assert.ok(a>0&&r>a,'the D-pad effect is where the test expects it');
+ const end=src.slice(r).match(/\}, \[[^\]]*\]\);/);
+ assert.ok(end,'the effect closes with its dependency list');
+ const js=ts.transpileModule(src.slice(a,r+end.index+end[0].length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ // a minimal hooks driver: refs persist across renders; an effect re-runs (after its cleanup) only when a dependency changed
+ const refs=[],effs=[];let adds=0,removes=0,handler=null;
+ const seen=[];
+ const world={
+  addEventListener:(t,f)=>{adds++;handler=f;},removeEventListener:()=>{removes++;handler=null;},
+  notTheTV:()=>false,lingaOwns:()=>false,keyOf:()=>'play',tvKey:(s)=>{seen.push(s.n);return {events:[]};},
+  landingStops:()=>[],landingAt:()=>0,runStep:async()=>{},matchMedia:()=>({matches:false}),setZoom:()=>{},setTimeout:()=>0,
+  local:{current:{}},zooming:{current:false},post:()=>{},call:()=>{},apply:()=>{},ZOOM_MS:0,
+ };
+ const names=Object.keys(world);
+ const render=(s)=>{
+  let ri=0,ei=0;
+  const useRef=(v)=>{const i=ri++;return refs[i]??(refs[i]={current:v});},useEffect=(f,deps)=>{
+   const i=ei++,e=effs[i]??(effs[i]={deps:null,clean:null});
+   if(e.deps&&deps&&e.deps.length===deps.length&&e.deps.every((d,k)=>Object.is(d,deps[k])))return;
+   e.clean?.();e.deps=deps;e.clean=f()||null;
+  };
+  new Function('useEffect','useRef','s',...names,js)(useEffect,useRef,s,...names.map((n)=>world[n]));
+ };
+ for(let i=0;i<100;i++)render({n:i,screen:'lesson'});
+ assert.equal(adds,1,`100 session messages made ${adds} keydown bindings, not one per message`);
+ assert.equal(adds-removes,1,'and exactly one is live');
+ handler({key:' ',preventDefault(){}});
+ assert.deepEqual(seen,[99],'the key is read against the newest session');
+});

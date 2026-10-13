@@ -109,7 +109,7 @@ const FIXTURES={
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};
 /** Hand-offs the TV makes that no phone panel does: the phone stays, and the gap is named. */
-const NO_PANEL={lesson:'circle on the phone to ask about this frame - no phone panel circles a lesson frame'};
+const NO_PANEL={};// the lesson's "circle on the phone" ask left both TVs (shell 79ed1a38, Math Buddy 2026-10-13): lesson asks nothing of the phone and is covered by case 3
 
 /** The phone after the TV moves from `from` to `to`: the panel it shows once both renders have run. */
 function walk(from,to){

@@ -640,6 +640,91 @@ test('SW6: the lesson ticker - paused or playing - names Play, not the bench key
  }
  assert.match(ticker(true),/paused/);assert.match(ticker(false),/playing/);
 });
+// SW11 (scan-sweep optimize 2026-10-13, tv-surface): Play/Pause reaches the player - the embed accepts commands and the lesson screens send them
+/** A TS/TSX source with block comments and whole-line or trailing // comments removed (a URL's // is kept). */
+const noComments=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+test('SW11: the lesson embed enables the player API and both lesson screens send pauseVideo/playVideo when lessonPaused changes',()=>{
+ const {LessonScreen}=require(path.join(root,'src/tv/screens.tsx')),M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:'abc123',concepts:[]};
+ const shellHtml=renderToStaticMarkup(createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson})}));
+ const mathsHtml=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson})}));
+ for(const [name,h] of [['shell',shellHtml],['maths',mathsHtml]]){
+  const src=(h.match(/<iframe[^>]*src="([^"]*)"/)||[])[1];
+  assert.ok(src,`${name}: the embed is drawn`);
+  assert.match(src,/(\?|&amp;|&)enablejsapi=1(&amp;|&|$)/,`${name}: the embed accepts player commands`);
+ }
+ // the command the player takes, as the IFrame API's postMessage form
+ const {playerCommand}=keys();
+ assert.equal(typeof playerCommand,'function','keys.ts names the command');
+ assert.deepEqual(JSON.parse(playerCommand(true)),{event:'command',func:'pauseVideo',args:''});
+ assert.deepEqual(JSON.parse(playerCommand(false)),{event:'command',func:'playVideo',args:''});
+ // each lesson screen posts it to the embed's window
+ for(const f of ['src/tv/screens.tsx','src/maths/MathsTV.tsx']){
+  const t=noComments(fs.readFileSync(path.join(root,f),'utf8'));
+  assert.match(t,/playerCommand\(/,`${f}: sends the command`);
+  assert.match(t,/postMessage\(/,`${f}: posts it to the iframe`);
+ }
+});
+// SW12 (scan-sweep optimize 2026-10-13, tv-surface): Math Buddy's lesson says what SW6 holds for the shell - Play, no circle on the phone, no Space
+test('SW12: the maths lesson line - paused or playing - names Play, not the bench keyboard, and asks no circle on the phone',()=>{
+ const M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:null,concepts:[]};
+ const line=(paused)=>{const h=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson,lessonPaused:paused})}));const i=h.indexOf('class="mb-paused"');return h.slice(i,h.indexOf('</div>',i));};
+ for(const paused of [false,true]){
+  const t=line(paused);
+  assert.ok(t.length>0,`paused=${paused}: the line is drawn`);
+  assert.doesNotMatch(t,/circle on the phone/i,`paused=${paused}: no ask the phone cannot answer`);
+  assert.doesNotMatch(t,/\bSpace\b/,`paused=${paused}: the remote has no Space key`);
+  assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
+ }
+});
+// SW14 (scan-sweep optimize 2026-10-13, tv-surface): the hint and lesson screens draw an empty state, as the page and sentence screens do
+test('SW14: hint and lesson with their data gone draw a band, a title and a caption naming Back - not an empty stage',()=>{
+ const {HintScreen,LessonScreen,PageScreen,SentenceScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const drawn=[['hint',createElement(HintScreen,{s:session({subject:'english',screen:'hint',hint:null}),focus:0})],['lesson',createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson:null})})],
+  ['page',createElement(PageScreen,{s:session({screen:'page',pages:[]}),view:'band'})],['sentence',createElement(SentenceScreen,{s:session({subject:'english',screen:'sentence',english:null}),focus:0})]];
+ const empty=drawn.filter(([,el])=>renderToStaticMarkup(el)==='').map(([n])=>n);
+ assert.deepEqual(empty,[],'no data screen draws nothing');
+ for(const [n,el] of drawn.slice(0,2)){
+  const h=renderToStaticMarkup(el);
+  assert.match(h,/class="band /,`${n}: the band`);
+  assert.match(h,/class="title"/,`${n}: a title`);
+  assert.match(h,/class="cap"[^]*Back/,`${n}: a caption that names Back`);
+ }
+});
+// SW15 (scan-sweep optimize 2026-10-13, tv-surface): a label that carries the meaning alone is at or above On Air's 28 px floor (docs/DESIGN-ON-AIR.md: furniture labels only go to 20-22 px)
+/** [selector, px] for every rule of a stylesheet that draws generated text from an attribute and sets a px font size. */
+function attrLabelSizes(css){
+ const out=[];
+ for(const m of css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/([^{}]+)\{([^{}]*)\}/g)){
+  if(!/content:\s*attr\(/.test(m[2]))continue;
+  const px=m[2].match(/font-size:\s*(\d+(?:\.\d+)?)px/);
+  if(px)out.push([m[1].trim(),Number(px[1])]);
+ }
+ return out;
+}
+test('SW15: the sentence screen\'s tense label (.tok::after, content attr(data-l)) is at least 28 px',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8');
+ const rows=attrLabelSizes(css);
+ assert.ok(rows.some(([sel])=>/\.tok::after/.test(sel)),'control: the scan finds the label rule');
+ assert.deepEqual(rows.filter(([,px])=>px<28),[],'no attribute-drawn label is under the floor');
+ // the scan bites: a seeded 26 px label is found, the same rule in a comment is not
+ assert.deepEqual(attrLabelSizes('.x::after { content: attr(data-l); font-size: 26px; }'),[['.x::after',26]]);
+ assert.deepEqual(attrLabelSizes('/* .x::after { content: attr(data-l); font-size: 26px; } */'),[]);
+});
+// SW16 (scan-sweep optimize 2026-10-13, tv-surface): the /probe hydration check is a dev-server tool - a production build answers 404
+test('SW16: /probe renders in development and throws notFound() in production',()=>{
+ const Probe=require(path.join(root,'src/app/probe/page.tsx')).default;
+ const was=process.env.NODE_ENV;
+ try{
+  process.env.NODE_ENV='development';
+  assert.match(renderToStaticMarkup(createElement(Probe)),/probe:/,'control: the dev page is drawn');
+  process.env.NODE_ENV='production';
+  let err=null;try{renderToStaticMarkup(createElement(Probe));}catch(e){err=e;}
+  assert.ok(err,'production does not draw the diagnostic page');
+  assert.match(String(err.digest??''),/NEXT_(HTTP_ERROR_FALLBACK|NOT_FOUND)/,'it is the framework\'s 404, not another error');
+ }finally{process.env.NODE_ENV=was;}
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));

@@ -7,11 +7,11 @@
  * tv/keys.ts - the same list the D-pad there walks, so a stop is added or moved in one place.
  */
 import { failedReadLine, missingLine } from "@/tv/pageLines";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
 import { recapRows, recapCaption, railOf, RECAP_READINGS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
@@ -150,7 +150,16 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
 
 // ---- T4 Hint ----
 export function HintScreen({ s, focus }: { s: Session; focus: number }) {
-  const h = s.hint; if (!h) return null;
+  const h = s.hint;
+  // nothing to explain (the hint was cleared under the screen): one ask, not a blank stage
+  if (!h) return (<>
+    <div className="band band-left" />
+    <main className="content-full">
+      <div className="eyebrow" style={{ marginTop: 40 }}>{NAME[s.subject]} · hint</div>
+      <div className="title" style={{ marginTop: 50 }}>No hint yet</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return to the page, then Select on an item for a hint.</div></div>
+    </main>
+  </>);
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx];
   const at = stopAt(HINT_STOPS, focus);
@@ -186,8 +195,21 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T5 Lesson ----
 export function LessonScreen({ s }: { s: Session }) {
-  const l = s.lesson; if (!l) return null;
-  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1` : null;
+  const l = s.lesson;
+  // Play/Pause is the desk's flag; the embed only obeys what it is told (enablejsapi + postMessage), so tell it on every flip
+  const frame = useRef<HTMLIFrameElement>(null);
+  const paused = s.lessonPaused;
+  useEffect(() => { frame.current?.contentWindow?.postMessage(playerCommand(paused), "*"); }, [paused]);
+  // no lesson open (cleared under the screen): one ask, not a blank stage
+  if (!l) return (<>
+    <div className="band band-wedge" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch={s.subject} style={{ marginTop: 40 }}>{NAME[s.subject]} · lesson</div>
+      <div className="title" style={{ marginTop: 50 }}>No lesson open</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return.</div></div>
+    </main>
+  </>);
+  const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1` : null;
   return (<>
     <div className="band band-wedge" />
     <main className="content-full">
@@ -195,7 +217,7 @@ export function LessonScreen({ s }: { s: Session }) {
       <div className="headline" style={{ fontFamily: "var(--display)", fontWeight: 800, textTransform: "uppercase", fontSize: 56 }}>{l.title}</div>
       <div className="body" style={{ marginTop: 10, color: "var(--mute)" }}>{shown(l.why)}</div>
       <div style={{ position: "absolute", left: 0, top: 200, width: 1120, height: 630, background: "#000" }}>
-        {src ? <iframe src={src} width={1120} height={630} allow="autoplay; encrypted-media" style={{ border: 0 }} title={l.title} />
+        {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" style={{ border: 0 }} title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
              : <div className="body" style={{ padding: 40, color: "var(--mute)" }}>This unit has no video yet — its theory screen is the lesson. Press Menu.</div>}
       </div>
       <div style={{ position: "absolute", left: 1160, top: 200, width: 568 }}>
