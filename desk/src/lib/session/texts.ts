@@ -16,6 +16,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, rmSync, w
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { paragraphsOf } from "../rules/essay";
+import { dataDir } from "../dataDir";
 
 export const TEXT_VERSION_MAX_CHARS = 100 * 1024;
 export const TEXT_VERSIONS_MAX = 20;
@@ -32,11 +33,10 @@ export interface PieceCard { id: string; format: string; title: string; versions
 export type TextResult<T> = { ok: true; value: T } | { ok: false; error: string; status: number };
 const fail = (error: string, status = 400): { ok: false; error: string; status: number } => ({ ok: false, error, status });
 
-const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 /** Ids become path parts, so only plain ids pass: a learner id as the store mints them, a piece id as this file does. */
 const LEARNER_ID = /^[A-Za-z0-9_-]{1,64}$/, PIECE_ID = /^t-[a-f0-9]{12}$/;
 const FORMAT = /^[a-z][a-z0-9-]{0,23}$/;
-const folder = (learnerId: string) => path.join(DATA(), "texts", learnerId);
+const folder = (learnerId: string) => path.join(dataDir(), "texts", learnerId);
 const fileOf = (learnerId: string, id: string) => path.join(folder(learnerId), `${id}.json`);
 
 function cleanPiece(v: unknown): Piece | null {

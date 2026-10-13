@@ -20,6 +20,7 @@ import { existsSync, mkdirSync, readFileSync, renameSync, statSync, unlinkSync, 
 import path from "node:path";
 import { getSession, type Event, type Session } from "./store";
 import { emptyEnglish } from "../english/types";
+import { dataDir } from "../dataDir";
 
 export type Role = "tv" | "phone" | "guest";
 export const ROLE_HEADER = "x-desk-role";
@@ -63,8 +64,7 @@ export function joinWrongCode(): void {
 /** A join that succeeded: the count is zero. */
 export function joinSucceeded(): void { joinGuard().wrong = 0; }
 
-const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = () => path.join(DATA(), "pairing.json");
+const FILE = () => path.join(dataDir(), "pairing.json");
 
 /** One phone as pairing.json lists it: the SHA-256 of its token (hex), when it joined and when it was last seen (epoch ms). */
 interface Phone { fp: string; joined: number; seen: number; saved: number }

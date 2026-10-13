@@ -8,20 +8,19 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { parseVtt, windows, type Cue } from "./vtt";
 import { embed, cosine, EMBED_MODEL } from "../engines/embed";
+import { dataDir } from "../dataDir";
 
 // Maths lessons are Khan Academy (CC BY-NC-SA); transcripts live in <data>/lessons (local only).
 import { LESSONS } from "./lessons.data";
 export { LESSONS };
 export type { Lesson } from "./lessons.data";
 
-// The same data directory as the session store and the learner records (store.ts, learners.ts).
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const cache = new Map<string, Cue[]>();
 let vectors: Map<string, number[][]> | null = null;
 
 export function lessonWindows(id: string): Cue[] {
   if (cache.has(id)) return cache.get(id)!;
-  const f = path.join(DATA, "lessons", `${id}.en.vtt`);
+  const f = path.join(dataDir(), "lessons", `${id}.en.vtt`);
   // a missing transcript is not remembered: one that is placed later is read on the next pick
   if (!existsSync(f)) return [];
   const w = windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS);
@@ -58,7 +57,7 @@ function readCache(f: string): Map<string, Cached> {
 function writeCache(f: string, entries: Map<string, Cached>): void {
   const tmp = `${f}.${process.pid}.${Date.now().toString(36)}.tmp`;
   try {
-    mkdirSync(DATA, { recursive: true });
+    mkdirSync(dataDir(), { recursive: true });
     writeFileSync(tmp, JSON.stringify({ v: CACHE_VERSION, model: EMBED_MODEL, lessons: Object.fromEntries(entries) }));
     renameSync(tmp, f);
   } catch (e) {
@@ -71,7 +70,7 @@ function writeCache(f: string, entries: Map<string, Cached>): void {
 let building: Promise<Map<string, number[][]>> | null = null;
 
 async function build(): Promise<Map<string, number[][]>> {
-  const f = path.join(DATA, "embeddings.json");
+  const f = path.join(dataDir(), "embeddings.json");
   const old = readCache(f), next = new Map<string, Cached>(), out = new Map<string, number[][]>();
   let changed = false;
   for (const l of LESSONS.filter((l) => l.youtube)) {

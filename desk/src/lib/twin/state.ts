@@ -7,11 +7,11 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
+import { dataDir } from "../dataDir";
 
 export interface TwinState { cardId: string; createdAt: string; excluded: string[] }
-const DATA = () => process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const LEARNER_ID = /^[A-Za-z0-9_-]{1,64}$/;
-const file = (learnerId: string) => path.join(DATA(), "texts", learnerId, "twin.json");
+const file = (learnerId: string) => path.join(dataDir(), "texts", learnerId, "twin.json");
 
 /** The pieces left out of the exemplars, read without making a state file (a delete-all must leave nothing behind). */
 export function excludedOf(learnerId: string): string[] {

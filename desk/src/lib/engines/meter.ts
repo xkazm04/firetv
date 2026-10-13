@@ -11,6 +11,7 @@ import { appendFileSync, renameSync, statSync, unlinkSync } from "node:fs";
 import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { priceOf } from "./prices";
+import { dataDir } from "../dataDir";
 import type { EngineErrorKind, EngineKind, Usage } from "./types";
 
 export interface UsageRow {
@@ -23,7 +24,7 @@ const MAX_BYTES = 5 * 1024 * 1024;
 const logged = new Set<string>();
 
 export function usageFile(): string {
-  return process.env.DESK_USAGE_FILE || path.join(process.env.DESK_DATA_DIR || path.join(process.cwd(), "data"), "usage.jsonl");
+  return process.env.DESK_USAGE_FILE || path.join(dataDir(), "usage.jsonl");
 }
 
 /** Append one row. Never throws. */

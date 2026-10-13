@@ -9,6 +9,7 @@ import type { Workroom } from "../twin/workroom";
 import { randomInt } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
+import { dataDir } from "../dataDir";
 import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
@@ -345,8 +346,7 @@ export type Event =
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = path.join(DATA, "session.json");
+const FILE = () => path.join(dataDir(), "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
 function phoneUrl(): string {
@@ -772,9 +772,9 @@ type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session {
-  if (!existsSync(FILE)) return fresh();
+  if (!existsSync(FILE())) return fresh();
   let raw: string;
-  try { raw = readFileSync(FILE, "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
+  try { raw = readFileSync(FILE(), "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
   let j: any, bad: string | null = null;
   try {
     j = JSON.parse(raw);
@@ -818,9 +818,9 @@ function keptLog(raw: unknown): Session["log"] {
 }
 /** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
 function setAside(why: string): Session {
-  const to = `${FILE}.bad-${Date.now().toString(36)}`;
+  const to = `${FILE()}.bad-${Date.now().toString(36)}`;
   let where: string;
-  try { renameSync(FILE, to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
+  try { renameSync(FILE(), to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
   console.error(`desk session: session.json was not used, ${why}; ${where}; starting fresh`);
   return { ...fresh(), status: SESSION_UNREAD };
 }
@@ -1014,20 +1014,20 @@ export function dispatch(e: Event): Session {
 function writeSession(): void {
   // a session.json the load could not put aside is not ours to overwrite: try the rename again first, and write only once it has landed
   if (store.aside) {
-    if (!existsSync(FILE)) store.aside = undefined;
+    if (!existsSync(FILE())) store.aside = undefined;
     else {
-      try { renameSync(FILE, store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
+      try { renameSync(FILE(), store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
       catch (e) {
         if (store.saved !== false) console.error("desk session: session.json could not be put aside, so the session will not be written over it:", e instanceof Error ? e.message : e);
         store.saved = false; return;
       }
     }
   }
-  const tmp = path.join(DATA, `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  const tmp = path.join(dataDir(), `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
   try {
-    mkdirSync(DATA, { recursive: true });
+    mkdirSync(dataDir(), { recursive: true });
     writeFileSync(tmp, JSON.stringify(store.session));
-    renameSync(tmp, FILE);
+    renameSync(tmp, FILE());
     if (store.saved === false) console.error("desk session: session.json is being written again");
     store.saved = true;
   } catch (e) {
