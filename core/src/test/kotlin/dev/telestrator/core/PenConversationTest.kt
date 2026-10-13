@@ -112,8 +112,8 @@ class SharedPenConversationTest {
     private fun desk() = PairingDesk(pin = "4821", videoAspect = aspect)
     private fun hello(pin: String, clientId: String = "pen-a") =
         """{"type":"hello","pin":"$pin","clientId":"$clientId"}"""
-    private fun refused(reason: String) =
-        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason))
+    private fun refused(reason: String, retryAfterMs: Long? = null) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason, retryAfterMs = retryAfterMs))
     private fun accepted(session: String) =
         PenEffect.Send(TvMessage.Welcome(sessionId = session, videoAspect = aspect, accepted = true))
 
@@ -194,11 +194,14 @@ class SharedPenConversationTest {
         }
 
         // Locked: the right PIN is refused, nothing is delivered, nobody is paired.
-        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+        assertEquals(
+            listOf(refused("too many wrong PINs", retryAfterMs = PenConversation.COOLDOWN_MS)),
+            pen.onText(hello("4821", "pen-a")),
+        )
         assertFalse(pen.isPaired)
         assertEquals(emptyList<PenEffect>(), pen.onText("""{"type":"undo"}"""))
         assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS - 1))
-        assertEquals(listOf(refused("too many wrong PINs")), pen.onText(hello("4821", "pen-a")))
+        assertEquals(listOf(refused("too many wrong PINs", retryAfterMs = 1)), pen.onText(hello("4821", "pen-a")))
 
         // The cooldown tick lifts it, and the count starts again.
         assertEquals(emptyList<PenEffect>(), pen.onTick(1_000 + PenConversation.COOLDOWN_MS))

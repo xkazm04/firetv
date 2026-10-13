@@ -14,8 +14,8 @@ class PairingGuessLimitTest {
     private val aspect = 16.0 / 9.0
     private fun hello(pin: String, clientId: String = "pen-x") =
         """{"type":"hello","pin":"$pin","clientId":"$clientId"}"""
-    private fun refused(reason: String) =
-        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason))
+    private fun refused(reason: String, retryAfterMs: Long? = null) =
+        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = reason, retryAfterMs = retryAfterMs))
 
     @Test
     fun `case 1 - wrong PINs on fresh LAN connections lock pairing for the cooldown`() {
@@ -30,7 +30,7 @@ class PairingGuessLimitTest {
 
         // The sixth connection, right PIN and all, is refused while the cooldown runs.
         assertEquals(
-            listOf(refused("too many wrong PINs"), PenEffect.Close("too many wrong PINs")),
+            listOf(refused("too many wrong PINs", retryAfterMs = 1), PenEffect.Close("too many wrong PINs")),
             desk.open(openedAtMs = 1_000 + PenConversation.COOLDOWN_MS - 1).onText(hello("4821", "pen-a")),
         )
 

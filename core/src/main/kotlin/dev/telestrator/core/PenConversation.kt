@@ -62,6 +62,10 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
         }
     }
 
+    /** Milliseconds until the guess-limit cooldown ends, or null when the desk is not locked. */
+    @Synchronized
+    internal fun retryAfterMs(): Long? = lockedUntilMs?.let { (it - nowMs).coerceAtLeast(0) }
+
     /** Checks [offered] against the PIN and counts it; a right PIN restarts the count. */
     @Synchronized
     internal fun check(offered: String): PinCheck {
@@ -157,7 +161,7 @@ class PenConversation(
         if (hello == null) {
             if (msg !is PenMessage.Hello) return emptyList()
             return when (desk.check(msg.pin)) {
-                PairingDesk.PinCheck.LOCKED -> reject(LOCKED)
+                PairingDesk.PinCheck.LOCKED -> reject(LOCKED, desk.retryAfterMs())
                 PairingDesk.PinCheck.WRONG -> reject(WRONG_PIN)
                 PairingDesk.PinCheck.RIGHT -> pair(msg, replaced = false)
             }
@@ -195,7 +199,7 @@ class PenConversation(
 
     private fun sharedHello(msg: PenMessage.Hello): List<PenEffect> {
         when (desk.check(msg.pin)) {
-            PairingDesk.PinCheck.LOCKED -> return listOf(refusal(LOCKED))
+            PairingDesk.PinCheck.LOCKED -> return listOf(refusal(LOCKED, desk.retryAfterMs()))
             PairingDesk.PinCheck.RIGHT -> return pair(msg, replaced = hello != null)
             PairingDesk.PinCheck.WRONG -> Unit
         }
@@ -225,8 +229,10 @@ class PenConversation(
         return reject(TAKEN_OVER)
     }
 
-    private fun refusal(reason: String) =
-        PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason))
+    private fun refusal(reason: String, retryAfterMs: Long? = null) =
+        PenEffect.Send(
+            TvMessage.Welcome(sessionId = "", videoAspect = desk.videoAspect, accepted = false, reason = reason, retryAfterMs = retryAfterMs),
+        )
 
     companion object {
         /** See [PairingDesk.MAX_WRONG_PINS]; the limit is the desk's, shared by every connection. */
@@ -242,9 +248,9 @@ class PenConversation(
         const val TAKEN_OVER = "another pen took over"
     }
 
-    private fun reject(reason: String): List<PenEffect> {
+    private fun reject(reason: String, retryAfterMs: Long? = null): List<PenEffect> {
         closed = true
-        return listOf(refusal(reason), PenEffect.Close(reason))
+        return listOf(refusal(reason, retryAfterMs), PenEffect.Close(reason))
     }
 }
 

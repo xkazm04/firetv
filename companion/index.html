@@ -159,6 +159,7 @@
   const mirror = $('mirror'), mctx = mirror.getContext('2d');
   const statusEl = $('status'), dot = $('dot'), hint = $('hint');
   const tagbox = $('tagbox'), tagtext = $('tagtext');
+  const pairBtn = document.querySelector('#pinbox button');
 
   // The PIN rides in the fragment (#pin=), which the browser never sends, so a relay's access
   // log cannot learn it. The query (?pin=) stays as a fallback for QR codes printed earlier.
@@ -214,6 +215,26 @@
     connect();
   });
 
+  // The lockout's remaining time, shown as seconds; Pair stays disabled until it runs out.
+  let lockTick = 0;
+  function stopCountdown() { clearInterval(lockTick); lockTick = 0; pairBtn.disabled = false; }
+  function countdown(reason, ms) {
+    clearInterval(lockTick);
+    const end = Date.now() + ms;
+    pairBtn.disabled = true;
+    const tick = () => {
+      const left = Math.ceil((end - Date.now()) / 1000);
+      if (left <= 0) {
+        stopCountdown();
+        statusEl.textContent = reason + ' · type the PIN from the TV';
+        return;
+      }
+      statusEl.textContent = reason + ' · wait ' + left + ' s, then type the PIN';
+    };
+    tick();
+    lockTick = setInterval(tick, 250);
+  }
+
   function onMessage(m) {
     if (m.type === 'welcome') {
       if (!m.accepted) {
@@ -236,9 +257,12 @@
         pinbox.classList.add('show');
         pintext.value = '';
         pintext.focus();
+        // The TV said when the cooldown ends: count it down and keep Pair off until then.
+        if (locked && typeof m.retryAfterMs === 'number') countdown(m.reason, m.retryAfterMs);
         return;
       }
       paired = true;
+      stopCountdown();
       backoff = BACKOFF_MIN_MS;
       hint.textContent = 'draw here';
       statusEl.classList.remove('bad');
@@ -336,6 +360,7 @@
     const qs = q.toString();
     history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + '#pin=' + encodeURIComponent(pin));
     refused = false;
+    stopCountdown();
     pinbox.classList.remove('show');
     statusEl.classList.remove('bad');
     statusEl.textContent = 'pairing…';
