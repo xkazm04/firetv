@@ -468,3 +468,13 @@ test('a run whose findings.json cannot be read is named in the ledger and on OPE
   for (const run of ['B-torn', 'C-object']) assert.ok(lines.some(l => l.startsWith('unreadable:') && l.includes(`${run}/findings.json`)), `OPEN.md names ${run}: ${lines.slice(0, 8).join(' | ')}`);
   assert.deepEqual(L().ledger(copyRuns()).unreadable, [], 'the committed runs are all readable');
 });
+
+test('--run naming a run that already has findings.json is refused before anything is spawned; a new name is taken', () => {
+  const runs = path.join(tmp, `taken-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, '2026-10-01-lt', [finding()], { started: '2026-10-01T00:00:00.000Z' });
+  assert.throws(() => D().parseArgs(['--run', '2026-10-01-lt', '--runs', runs], { characters: [] }), /2026-10-01-lt already holds findings\.json/);
+  assert.equal(D().parseArgs(['--run', '2026-10-02-lt', '--runs', runs], { characters: [] }).run, '2026-10-02-lt');
+  fs.mkdirSync(path.join(runs, 'empty-lt'));
+  assert.equal(D().parseArgs(['--run', 'empty-lt', '--runs', runs], { characters: [] }).run, 'empty-lt', 'a directory with no record yet is free');
+  assert.equal(D().parseArgs(['--status', '--run', '2026-10-01-lt', '--runs', runs], { characters: [] }).mode, 'status', '--status writes no run');
+});

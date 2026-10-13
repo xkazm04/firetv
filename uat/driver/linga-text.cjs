@@ -156,7 +156,8 @@ const RUNS_DIR = path.join(uat, 'runs');
  * The command line. A word after --recertify that is neither a flag nor a Character id is a run (today's per-run
  * recertify); nothing, a flag or a Character id after it is the ledger recertify of every run. --status wins over both.
  * Any other mode also checks that every journey's gates name a registered metric (metrics.cjs) and throws if one does not,
- * so the run stops here, before a Character process is spawned or a model is called.
+ * so the run stops here, before a Character process is spawned or a model is called. So does `--run <id>` naming a run
+ * that already holds a findings.json.
  */
 function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts = null } = {}) {
   const out = { only: [], runs, journeys: null, run: null, recertify: null, parallel: 3 };
@@ -179,7 +180,9 @@ function parseArgs(args, { runs = RUNS_DIR, characters: ids = null, journeyTexts
     } else out.only.push(a);
   }
   if (!status) {
-    const bad = (journeyTexts ?? Object.values(journeys()).map(j => j.text)).flatMap(V.unknownGates);
+    // a run's findings.json is the record the ledger and every recertify stamp live in: a new run never writes over one
+    if (out.run && fs.existsSync(path.join(out.runs, out.run, 'findings.json'))) throw new Error(`--run ${out.run} already holds findings.json under ${out.runs}: pick a new run id, or recertify it with --recertify ${out.run}`);
+    const bad =(journeyTexts ?? Object.values(journeys()).map(j => j.text)).flatMap(V.unknownGates);
     if (bad.length) throw new Error(`unknown metric in a journey's gates: ${bad.map(g => `${g.journey} gates ${g.metric}`).join('; ')}. Known: ${M.series().map(s => s.id).join(', ')}`);
   }
   return { mode: status ? 'status' : out.recertify ? 'recertify' : ledger ? 'ledger' : 'run', ...out };
