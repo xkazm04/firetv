@@ -41,6 +41,8 @@ function lex(src: string): Tok[] | null {
       let j = i;
       while (j < s.length && s[j] >= "0" && s[j] <= "9") j++;
       if (s[j] === ".") { j++; while (j < s.length && s[j] >= "0" && s[j] <= "9") j++; }
+      // a second decimal point ('4.0.5') is no figure: never 4.0 times .5
+      if (s[j] === ".") return null;
       const v = Number(s.slice(i, j));
       if (!Number.isFinite(v)) return null;
       out.push({ k: "num", v }); i = j; continue;
@@ -48,7 +50,7 @@ function lex(src: string): Tok[] | null {
     if (c === ".") {
       let j = i + 1;
       while (j < s.length && s[j] >= "0" && s[j] <= "9") j++;
-      if (j === i + 1) return null;
+      if (j === i + 1 || s[j] === ".") return null;
       out.push({ k: "num", v: Number(s.slice(i, j)) }); i = j; continue;
     }
     if (c === "x" || c === "X") { out.push({ k: "x" }); i++; continue; }

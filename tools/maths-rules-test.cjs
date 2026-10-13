@@ -490,6 +490,18 @@ test('gate case 2: an answer that itself contains x is never read as a number; w
  assert.equal(verify('2x+3=3','5x'),false);assert.equal(verify('2x+3=3','0'),true);
  assert.equal(substitute('2x+3=11','4'),true);assert.equal(substitute('2x+3=11','5'),false);assert.equal(substitute('2x=7','7/2'),true);
 });
+test('gate case 2b: a figure with two decimal points is no number - never two numbers multiplied into the root',()=>{
+ const {substitute}=require(path.join(root,'src/lib/desk/verify.ts'));
+ const {secondGo,markTyped}=require(path.join(root,'src/lib/desk/mark.ts'));
+ // '4.0.5' once read as 4.0 times .5 = 2, the root of x+1=3
+ for(const [eq,v] of [['x+1=3','4.0.5'],['2x=5','5.0.5'],['x-1=0','2.0.5'],['x+1=3','.4.5']])assert.equal(substitute(eq,v),null,`${v} is not a number`);
+ for(const e of ['4.0.5','1.2.3x','.4.5'])assert.equal(evaluate(e,1),null,e);
+ assert.equal(secondGo({n:1,question:'x+1=3'},'4.0.5','linear-one-step'),null,'a second go typed with two points is not spent');
+ const typed=markTyped(['4.0.5','2'],{topic:'linear-one-step',marked:false,items:[{n:1,question:'x+1=3'},{n:2,question:'x+1=3'}]},'maths-two-points',()=>false);
+ assert.deepEqual(typed.items.map(i=>i.verdict),['unsure','right']);
+ // a figure with one point, a trailing point and a leading point read as before
+ assert.equal(substitute('x+1=3','2.0'),true);assert.equal(substitute('x+1=3','2.'),true);assert.equal(evaluate('.5x',4),2);assert.equal(substitute('2x=1','0.5'),true);
+});
 test('gate case 3: marking asks about a degenerate item and an x-answer - never "right"; a real item still marks right',async()=>{
  const odd={topic:'linear-one-step',marked:false,items:['3+4=7','2(x+1)=2x+2','2x+3=3','2x+1=1','2x+3=11'].map((question,ix)=>({n:ix+1,question}))};
  looked=reply({items:[
