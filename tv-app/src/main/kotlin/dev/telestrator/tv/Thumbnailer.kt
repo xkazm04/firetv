@@ -24,6 +24,7 @@ class Thumbnailer internal constructor(private val source: FrameSource) {
 
     private var lastKeyMs = Long.MIN_VALUE
     private var lastResult: String? = null
+    private var released = false
 
     /**
      * A data URL for the frame at [tMs], or null if it could not be decoded.
@@ -32,7 +33,9 @@ class Thumbnailer internal constructor(private val source: FrameSource) {
      * milliseconds. Results are cached per [bucketMs] so that holding pause does not re-decode
      * the same frame over and over.
      */
+    @Synchronized
     fun dataUrlAt(tMs: Long, widthPx: Int = 320, bucketMs: Long = 200): String? {
+        if (released) return null
         val key = tMs / bucketMs
         if (key == lastKeyMs) return lastResult
 
@@ -54,7 +57,9 @@ class Thumbnailer internal constructor(private val source: FrameSource) {
         "data:image/jpeg;base64," + Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
     }.getOrNull()
 
+    @Synchronized
     fun release() {
+        released = true
         source.release()
     }
 }
