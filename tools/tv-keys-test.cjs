@@ -838,3 +838,20 @@ test('SW7: the TV speaks line after line and holds at most one audio blob URL, t
  audio.current.onended?.({currentTarget:audio.current});
  assert.equal(live.size,0,'and it is let go when it ends');
 });
+
+// SW8 (scan-sweep optimize 2026-10-13): the stream's debug trace on window.__desk is bounded - the clock ticks every second
+test('SW8: an evening of session messages leaves a bounded window.__desk.events, newest last',()=>{
+ const ts=require('./ts-load.cjs').ts();
+ const src=fs.readFileSync(path.join(root,'src/tv/useSession.ts'),'utf8');
+ const a=src.indexOf('useEffect(() => {'),e=src.indexOf('}, []);',a);
+ assert.ok(a>0&&e>a,'the stream effect is where the test expects it');
+ const js=ts.transpileModule(src.slice(a,e+'}, []);'.length),{compilerOptions:{target:ts.ScriptTarget.ES2020}}).outputText;
+ let es=null;class ES{constructor(){es=this;}close(){}}
+ const win={};let effect;
+ new Function('useEffect','window','EventSource','setS','setConnected','reopen','setTimeout',js)((f)=>{effect=f;},win,ES,()=>{},()=>{},{current:null},()=>{});
+ effect();
+ const N=3*3600;for(let i=0;i<N;i++)es.onmessage({data:`{"tick":${i}}`});
+ const ev=win.__desk.events;
+ assert.ok(ev.length<=500,`three hours of ticks keep ${ev.length} lines, not ${N+1}`);
+ assert.equal(ev.at(-1),`msg ${`{"tick":${N-1}}`.length}`,'the newest line is kept');
+});
