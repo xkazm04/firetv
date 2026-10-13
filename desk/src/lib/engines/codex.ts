@@ -39,7 +39,7 @@ export const codexCli: Provider<CodexRequest, unknown> = {
   // codex starts an agent session per call; a tutor timeout tuned for the Claude CLI is too tight for it
   deadlineMs: 240000,
   async run(req, ctx) {
-    const model = MODEL(), reported = `codex-cli/${model}`;
+    const model = MODEL(), reported = `codex/${model}`;
     const dir = await mkdtemp(path.join(tmpdir(), "desk-codex-"));
     try {
       const last = path.join(dir, "last.txt");
