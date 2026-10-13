@@ -2,15 +2,25 @@
 export interface Cue { t: number; text: string; }
 
 export function parseVtt(raw: string): Cue[] {
-  const ts = /^(\d\d):(\d\d):(\d\d)\.(\d\d\d) --> /;
+  // the hours are optional in WebVTT (mm:ss.ttt); YouTube always writes them
+  const ts = /^(?:(\d+):)?(\d\d):(\d\d)\.(\d\d\d) --> /;
   const cues: Array<[number, string]> = [];
   let cur: number | null = null, buf: string[] = [];
+  // a cue identifier is the line just before a timing line, itself the first line after a blank one: it is not caption
+  // text. A line YouTube leaves blank-looking inside a cue (" ") is followed by text, never by a timing line.
+  let blankBefore = true, pushedLast = false, afterBlank = false;
   for (const ln of raw.split(/\r?\n/)) {
     const m = ln.match(ts);
-    if (m) { if (cur !== null && buf.length) cues.push([cur, buf.join(" ")]); cur = +m[1] * 3600 + +m[2] * 60 + +m[3]; buf = []; continue; }
-    if (/^(WEBVTT|Kind:|Language:|NOTE)/.test(ln) || !ln.trim()) continue;
+    if (m) {
+      if (pushedLast && afterBlank) buf.pop();
+      if (cur !== null && buf.length) cues.push([cur, buf.join(" ")]);
+      cur = +(m[1] ?? 0) * 3600 + +m[2] * 60 + +m[3]; buf = []; blankBefore = false; pushedLast = false; continue;
+    }
+    if (!ln.trim()) { blankBefore = true; pushedLast = false; continue; }
+    if (/^(WEBVTT|Kind:|Language:|NOTE)/.test(ln)) { blankBefore = false; pushedLast = false; continue; }
     const t = ln.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
-    if (t) buf.push(t);
+    if (t) { buf.push(t); pushedLast = true; afterBlank = blankBefore; } else pushedLast = false;
+    blankBefore = false;
   }
   if (cur !== null && buf.length) cues.push([cur, buf.join(" ")]);
 
