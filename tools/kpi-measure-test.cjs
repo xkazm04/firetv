@@ -4,11 +4,12 @@
  * npm test in desk/ (directly: node tools/kpi-measure-test.cjs). Fixture checkouts live in a disposable directory,
  * never desk/data — and no fixture here ever names a real node_modules, let alone removes one.
  */
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
 const {test,after}=require('node:test');
 const {findLearnerBook,learnerEvidence}=require('./kpi-measure.cjs');
 const preflight=require('./worktree-preflight.cjs');
-const scratch=path.resolve(__dirname,'../artifacts/kpi-measure',String(Date.now()));
+// under the OS temp dir and removed at the end, as the uat suites do: a run leaves nothing in the tree
+const scratch=fs.mkdtempSync(path.join(os.tmpdir(),'kpi-measure-'));
 const checkout=(name,book)=>{const dir=path.join(scratch,name);fs.mkdirSync(path.join(dir,'desk/data'),{recursive:true});if(book!==undefined)fs.writeFileSync(path.join(dir,'desk/data/learners.json'),typeof book==='string'?book:JSON.stringify(book));return dir;};
 const ONE={ema:{id:'ema',skills:{},memory:[]}};
 
@@ -49,7 +50,15 @@ test('a book that is not a learner book is no reading either',()=>{
 // The worktree preflight. Every path below is inside the disposable scratch directory: the fixtures' node_modules
 // are three files deep, the only link made points scratch at scratch, and nothing outside scratch is read or written.
 const links=[];
-after(()=>{for(const l of links.reverse()){try{fs.unlinkSync(l);}catch{try{fs.rmdirSync(l);}catch{/* scratch is disposable */}}}});
+// Links first, each by unlink (never a recursive remove through a junction). Scratch is removed only once every link
+// is gone; a link that outlived its unlink keeps scratch on disk rather than risk a remove that walks through it.
+const gone=l=>{try{fs.lstatSync(l);return false;}catch{return true;}};
+after(()=>{
+ for(const l of links.reverse()){try{fs.unlinkSync(l);}catch{try{fs.rmdirSync(l);}catch{/* reported below */}}}
+ const left=links.filter(l=>!gone(l));
+ if(left.length){console.error(`kpi-measure-test: ${left.length} link(s) still in ${scratch}; scratch left in place`);return;}
+ fs.rmSync(scratch,{recursive:true,force:true});
+});
 const install=(name,{typescript=true,other=false}={})=>{
  const dir=path.join(scratch,name),modules=path.join(dir,'desk/node_modules');
  if(typescript){fs.mkdirSync(path.join(modules,'typescript'),{recursive:true});fs.writeFileSync(path.join(modules,'typescript/package.json'),'{"name":"typescript"}');}
