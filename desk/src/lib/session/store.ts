@@ -346,6 +346,47 @@ export type Event =
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
+/**
+ * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
+ * type, a check per field. A type that is not here, or a field that fails its check, is refused with a sentence before the
+ * reducer sees it. Ranges are the reducer's (a focus or a walk index may be -1 or past the end); this checks the kind of value.
+ * paper.enter's rows are unchecked on purpose: the desk's own cleanPaper decides what stands.
+ */
+const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true };
+type Field = (v: unknown) => boolean;
+const f = {
+  str: ((v) => typeof v === "string") as Field,
+  name: ((v) => typeof v === "string" && v.trim().length > 0) as Field,
+  int: ((v) => Number.isInteger(v)) as Field,
+  num: ((v) => typeof v === "number" && Number.isFinite(v)) as Field,
+  bool: ((v) => typeof v === "boolean") as Field,
+  screen: ((v) => typeof v === "string" && Object.hasOwn(SCREENS, v)) as Field,
+  subject: ((v) => v === "maths" || v === "english" || v === "essay") as Field,
+  object: ((v) => !!v && typeof v === "object" && !Array.isArray(v)) as Field,
+};
+const maybe = (c: Field): Field => (v) => v === undefined || c(v);
+const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
+const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { type: K }>, "type">]-?: Field } } = {
+  join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen) }, focus: { focus: f.int }, subject: { subject: f.subject },
+  "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
+  "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
+  "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
+  "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
+  "paper.enter": { rows: () => true },
+  "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
+  "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
+  "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
+  status: { text: f.str }, "session.end": {}, reset: {},
+};
+/** Why a posted event is refused, or null when it may go to the reducer. */
+export function badPost(e: unknown): string | null {
+  const type = (e as { type?: unknown } | null)?.type;
+  if (typeof type !== "string" || !Object.hasOwn(SHAPES, type)) return "The desk does not know that kind of request.";
+  const shape = SHAPES[type as Event["type"]] as Record<string, Field>;
+  for (const [k, ok] of Object.entries(shape)) if (!ok((e as Record<string, unknown>)[k])) return `The desk could not use ${type}: ${k} is not what it expects.`;
+  return null;
+}
+
 const FILE = () => path.join(dataDir(), "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */

@@ -779,7 +779,7 @@ test('OPT-2: a timer.tick whose seconds are not a number from 1 to 60 moves neit
  evening('tonight');store.dispatch({type:'timer.start'});
  const at=()=>{const s=store.getSession();return {left:s.timer.left,minutes:s.log.minutes,phase:s.timer.phase};};
  for(const seconds of ['abc',-600,0,1e9,null,undefined,61,'5']){
-  const before=at();const r=await post({type:'timer.tick',seconds},'phone');assert.equal(r.status,200);
+  const before=at();const r=await post({type:'timer.tick',seconds},'phone');assert.ok([200,400].includes(r.status),'answered 200 (a number the reducer bounds) or 400 (not a number): '+r.status);
   assert.deepEqual(at(),before,`seconds ${JSON.stringify(seconds)} moved the timer`);
   assert.ok(Number.isFinite(store.getSession().timer.left),'the clock is a number');
  }
@@ -923,7 +923,7 @@ test('NL: every Event type has a sample, and none that changes a slot field is w
 // Each client-postable type is posted with one junk value in each field, as the TV; the route must answer 400 and leave the
 // session (and so session.json and every stream) as it was. A type the desk does not know is the last row.
 const JUNK={
- nav:{screen:{ok:{screen:'maths'},bad:['nope',{},null,7]},focus:{ok:{screen:'tonight',focus:1},bad:['a',1.5,{},null]},from:{ok:{screen:'tonight',from:'landing'},bad:['nope',{},7]}},
+ nav:{screen:{ok:{screen:'tonight'},bad:['nope',{},null,7]},focus:{ok:{screen:'tonight',focus:1},bad:['a',1.5,{},null]},from:{ok:{screen:'tonight',from:'landing'},bad:['nope',{},7]}},
  focus:{focus:{ok:{focus:1},bad:['a',1.5,{},null]}},
  subject:{subject:{ok:{subject:'maths'},bad:['nope',{},null,7]}},
  'learner.set':{id:{ok:{id:'ema'},bad:[{},7,null]}},
