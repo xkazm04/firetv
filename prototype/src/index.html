@@ -524,7 +524,8 @@ function skipBreak() { const t = S.timer; t.phase = "work"; t.left = 25*60; show
 function endSession() {
   clearInterval(tick); S.timer.running = false;
   $("rTime").textContent = Math.round(S.log.minutes); $("rProblems").textContent = S.log.problems.size; $("rHints").textContent = S.log.hints;
-  $("recapTitle").textContent = S.log.problems.size ? (S.log.hard.length ? "Good session — two things to look at together" : "Good session") : "Short session";
+  const hard = S.log.hard.length, things = ["one thing", "two things", "three things", "four things", "five things"][hard - 1] || `${hard} things`;
+  $("recapTitle").textContent = S.log.problems.size ? (hard ? `Good session — ${things} to look at together` : "Good session") : "Short session";
   $("hardList").innerHTML = S.log.hard.length ? S.log.hard.map(h => `<li>${h}</li>`).join("") : "<li>Nothing needed a second hint.</li>";
   show("recap");
 }
