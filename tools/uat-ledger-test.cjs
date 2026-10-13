@@ -478,3 +478,11 @@ test('--run naming a run that already has findings.json is refused before anythi
   assert.equal(D().parseArgs(['--run', 'empty-lt', '--runs', runs], { characters: [] }).run, 'empty-lt', 'a directory with no record yet is free');
   assert.equal(D().parseArgs(['--status', '--run', '2026-10-01-lt', '--runs', runs], { characters: [] }).mode, 'status', '--status writes no run');
 });
+
+test('OPEN.md says how many rows are open in total, and says 0 when nothing is, instead of printing no count at all', () => {
+  const runs = path.join(tmp, `none-open-${crypto.randomUUID().slice(0, 8)}`);
+  writeRun(runs, 'A', [finding({ resolution: 'fixed' }), finding({ id: 'F-2', type: 'strength', resolution: 'n-a' })], { started: '2026-10-01T00:00:00.000Z' });
+  const lines = L().statusOf(L().ledger(runs)).split('\n');
+  assert.ok(lines.includes('0 open across 1 run: nothing to recertify'), lines.slice(0, 6).join(' | '));
+  assert.ok(L().statusOf(L().ledger(copyRuns())).split('\n').includes('186 open across 5 runs'));
+});

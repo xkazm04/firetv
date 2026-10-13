@@ -186,6 +186,8 @@ function statusOf(L, { insights = INSIGHTS } = {}) {
   return [
     '# Open LT findings', '',
     'Derived from every run under uat/runs/ by uat/driver/ledger.cjs (`node uat/driver/linga-text.cjs --status`), rewritten after every ledger recertify. Do not edit: the findings.json of each run is the record. Ids are run-qualified, `<run>/<id>`, since a finding id is positional within its run. One section per module that has open rows.', '',
+    // the total, always: with no module section below, a 0 must still be said rather than read off an empty page
+    `${L.open.length} open across ${top.length} run${top.length === 1 ? '' : 's'}${L.open.length ? '' : ': nothing to recertify'}`,
     `drained ${drained.length} of ${top.length} runs`,
     ...(top.length > drained.length ? [`undrained: ${top.filter(r => !drained.includes(r)).map(r => r.id).join(', ')} (home: docs/uat-insights/<run-id>.md, uat/README.md)`] : []),
     ...(L.unreadable ?? []).map(u => `unreadable: ${u.run}/findings.json (${one(u.error)}): its rows are not counted below`), '',
