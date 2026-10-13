@@ -189,13 +189,18 @@ class PenEngine(
     private fun handleShape(msg: PenMessage.Shape, tMs: Long) {
         // Both ends need an x and a y, for the same reason as a pen point: drop, never throw.
         if (msg.from.size < 2 || msg.to.size < 2) return
+        // A tap is not a drawing, as a one-point stroke is not (handlePen): an arrow or a ring whose
+        // ends are where the finger held still would draw a stray arrowhead or a dot. A spotlight
+        // keeps its floor radius below, so a tap there is a default-sized spotlight.
+        val length = metric.distance(msg.from, msg.to)
+        if (msg.tool != "spotlight" && length < Smoothing.MIN_POINT_DISTANCE) return
         val hold = holdMs(msg.hold)
         val style = Style(color = msg.color, width = msg.width)
         val a = when (msg.tool) {
             "arrow" -> Annotation.Arrow(nextId(), tMs, tMs + hold, style, msg.from, msg.to)
             "circle" -> Annotation.Circle(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = metric.distance(msg.from, msg.to),
+                center = msg.from, radius = length,
             )
             "spotlight" -> Annotation.Spotlight(
                 nextId(), tMs, tMs + hold, style,
