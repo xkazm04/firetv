@@ -29,6 +29,20 @@ export const ADB_SERIAL = process.env.ADB_SERIAL ?? '';
 export const TV_HOST = process.env.TV_HOST ?? '127.0.0.1:8765';
 export const TV_BASE = process.env.TV_URL ?? `http://${TV_HOST}`;
 
+/**
+ * The phone every browser-driven tool opens the companion as: a Pixel 8. One profile, because the
+ * companion sizes its canvases by devicePixelRatio - two profiles would test two different phones
+ * and call it one path over two transports.
+ */
+export const PHONE = Object.freeze({
+  viewport: { width: 412, height: 915 },
+  deviceScaleFactor: 2.625,
+  isMobile: true,
+  hasTouch: true,
+  userAgent:
+    'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36',
+});
+
 /** True when the TV is reached over the loopback tunnel rather than across a real network. */
 export const IS_TUNNELLED = /^(127\.0\.0\.1|localhost)\b/.test(TV_HOST);
 

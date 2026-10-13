@@ -107,3 +107,16 @@ test('README check counts match the check() calls of a full live-ui-test and rel
     assert.equal(stated, calls - failOnly, `README says ${stated} checks for ${label}; a full run makes ${calls - failOnly}`);
   }
 });
+
+// The relay path claims to be "the same phone, through a relay". The companion sizes its canvases by
+// devicePixelRatio, so a second phone profile in relay-test drove a different phone than live-ui-test did.
+test('live-ui-test and relay-test open the companion as one phone (device.mjs PHONE)', async () => {
+  const { PHONE } = await load();
+  assert.equal(typeof PHONE, 'object', 'device.mjs exports no PHONE profile');
+  assert.ok(PHONE.isMobile && PHONE.hasTouch && PHONE.deviceScaleFactor > 1 && /Android/.test(PHONE.userAgent));
+  for (const t of ['live-ui-test', 'relay-test']) {
+    const src = fs.readFileSync(path.join(__dirname, `${t}.mjs`), 'utf8');
+    assert.match(src, /browser\.newContext\(PHONE\)/, `${t}.mjs opens its own phone profile`);
+    assert.doesNotMatch(src, /deviceScaleFactor/, `${t}.mjs sets its own deviceScaleFactor`);
+  }
+});

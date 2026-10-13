@@ -14,7 +14,7 @@ import { chromium } from 'playwright';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import path from 'node:path';
-import { makeAdb, pairingPin, parseArgs, TV_BASE } from './device.mjs';
+import { makeAdb, pairingPin, parseArgs, PHONE, TV_BASE } from './device.mjs';
 
 const BASE = TV_BASE;
 const args = parseArgs();
@@ -77,14 +77,7 @@ const run = async () => {
 
   // ---- 1. the phone opens the page the TV serves ---------------------------
   const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 412, height: 915 },
-    deviceScaleFactor: 2.625,
-    isMobile: true,
-    hasTouch: true,
-    userAgent:
-      'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36',
-  });
+  const context = await browser.newContext(PHONE);
   const page = await context.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));

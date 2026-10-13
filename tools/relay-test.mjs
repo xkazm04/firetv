@@ -22,7 +22,7 @@ import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, pinFromLogcat } from './device.mjs';
+import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, PHONE, pinFromLogcat } from './device.mjs';
 const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 // How the TV addresses this machine. The emulator has a fixed host alias; a Stick on Wi-Fi has to
@@ -187,12 +187,7 @@ const run = async () => {
   await sleep(LATE_PHONE_MS);
   check('the TV is still dialled in after the phone window that used to close', (await relayHealth()).tvConnected);
   const browser = await chromium.launch();
-  const context = await browser.newContext({
-    viewport: { width: 412, height: 915 },
-    deviceScaleFactor: 2,
-    isMobile: true,
-    hasTouch: true,
-  });
+  const context = await browser.newContext(PHONE);
   const page = await context.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
