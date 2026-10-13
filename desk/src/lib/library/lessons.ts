@@ -22,7 +22,9 @@ let vectors: Map<string, number[][]> | null = null;
 export function lessonWindows(id: string): Cue[] {
   if (cache.has(id)) return cache.get(id)!;
   const f = path.join(DATA, "lessons", `${id}.en.vtt`);
-  const w = existsSync(f) ? windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS) : [];
+  // a missing transcript is not remembered: one that is placed later is read on the next pick
+  if (!existsSync(f)) return [];
+  const w = windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS);
   cache.set(id, w); return w;
 }
 
@@ -100,7 +102,10 @@ export async function ensureVectors(): Promise<Map<string, number[][]>> {
 /** Nearest window in a lesson to a query — the seek target. */
 export async function bestWindow(lessonId: string, query: string): Promise<{ t: number; text: string; score: number } | null> {
   const w = lessonWindows(lessonId); if (!w.length) return null;
-  const vecs = (await ensureVectors()).get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
+  let all = await ensureVectors();
+  // a lesson that gained windows after the map was published: rebuild once (the disk cache keeps the others)
+  if (!all.has(lessonId) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
+  const vecs = all.get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
   const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
   let best = 0, bs = -1;
   vecs.forEach((v, i) => { const s = cosine(q, v); if (s > bs) { bs = s; best = i; } });
