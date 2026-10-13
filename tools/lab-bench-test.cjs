@@ -165,3 +165,9 @@ test('case 11: the replay follows hint()\'s re-ask - the call is counted as one,
  // the re-ask's line was shown, not the withheld fallback: its LaTeX is counted on this problem
  assert.equal(r.hints.problems.find((p)=>p.q===q)?.latex,true,'the recorded reask1 answered the re-ask');
 });
+
+test('case 12: the bench loads desk TypeScript through the rules suites\' one loader (tools/ts-load.cjs), not a second one',()=>{
+ const src=fs.readFileSync(BENCH,'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,'');
+ assert.match(src,/require\("\.\/ts-load\.cjs"\)/);
+ assert.doesNotMatch(src,/require\.extensions|_resolveFilename|transpileModule/,'no loader of its own');
+});

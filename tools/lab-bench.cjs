@@ -19,7 +19,7 @@
  * directory under the OS temp dir (lessons.ts would write embeddings.json into desk/data otherwise); with no
  * lesson transcripts there, pickLesson scores the lesson id and never embeds. No Python runs here.
  */
-const fs = require("node:fs"), os = require("node:os"), path = require("node:path"), crypto = require("node:crypto"), Module = require("node:module");
+const fs = require("node:fs"), os = require("node:os"), path = require("node:path"), crypto = require("node:crypto");
 const corpus = require("./lab-corpus.cjs");
 
 const DESK = path.resolve(__dirname, "../desk");
@@ -37,17 +37,11 @@ function pinData() {
   return dataDir;
 }
 let mods = null;
-/** desk's TypeScript, transpiled with desk's own compiler (the loader of the rules suites). */
+/** desk's TypeScript, transpiled with desk's own compiler through the rules suites' one loader (its disk cache too). */
 function desk() {
   if (mods) return mods;
   pinData();
-  let ts;
-  try { ts = require(path.join(DESK, "node_modules/typescript")); }
-  catch { throw new Error("The bench transpiles desk TypeScript with desk's own compiler. Run `npm install` in desk/ first."); }
-  const resolve = Module._resolveFilename;
-  Module._resolveFilename = function (id, ...args) { return resolve.call(this, id.startsWith("@/") ? path.join(DESK, "src", id.slice(2)) : id, ...args); };
-  if (!require.extensions[".ts"]) require.extensions[".ts"] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, "utf8"),
-    { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+  require("./ts-load.cjs");
   const load = (f) => require(path.join(DESK, "src/lib", f));
   mods = { reg: load("engines/registry.ts"), read: load("desk/read.ts"), hint: load("desk/hint.ts"), pick: load("desk/pick.ts"),
     select: load("desk/select.ts"), kinds: load("rules/kinds.ts") };
