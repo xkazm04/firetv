@@ -400,3 +400,12 @@ test('HL5 case 1: the pick accepts only an id from the subject\'s menu',async()=
  stubText({lesson:` ${LESSON} `,why:'chosen because ...'});
  assert.equal((await pickLesson('maths','Solve for x: 3x - 7 = 11')).id,LESSON,'a menu id still returns its lesson');
 });
+
+// ---- scan-sweep optimize 2026-10-13: the schema rule and its neighbours agree
+test('sweep case 1: fit() counts characters as the schema check does: a reply at its maxLength with an emoji passes both',()=>{
+ const {fit,validate,str}=load('engines/shape.ts');
+ const reply='a'.repeat(229)+'\u{1F600}'; // 230 characters, 231 UTF-16 units
+ assert.deepEqual(validate(reply,str(230)),[],'the schema check accepts it');
+ assert.equal(fit(reply,230,()=>new Error('does not fit')),reply,'fit accepts what the schema accepted');
+ assert.throws(()=>fit('a'.repeat(230)+'\u{1F600}',230,()=>new Error('does not fit')),/does not fit/,'one character over is still refused');
+});

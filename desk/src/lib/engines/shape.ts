@@ -17,9 +17,9 @@ export const object = (x: unknown): Record<string, unknown> => x && typeof x ===
 export const str = (maxLength: number, minLength = 1) => ({ type: "string", maxLength, minLength });
 /** A closed object whose every property is required. */
 export const schema = (properties: Record<string, unknown>) => ({ type: "object", additionalProperties: false, properties, required: Object.keys(properties) });
-/** A trimmed, non-empty string of at most `max` characters, or `fail()` thrown. */
+/** A trimmed, non-empty string of at most `max` characters, or `fail()` thrown. Characters are counted as validate() counts maxLength, so a string the schema let through is never refused here. */
 export function fit(value: unknown, max: number, fail: () => Error): string {
-  if (typeof value !== "string" || !value.trim() || value.length > max) throw fail();
+  if (typeof value !== "string" || !value.trim() || [...value].length > max) throw fail();
   return value.trim();
 }
 
