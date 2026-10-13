@@ -295,3 +295,17 @@ test('W7-6: SUMMARY.md prints a panel verdict and a value ledger the model sent 
   assert.ok(lines.includes('Saves ten minutes a week. Costs none.'), md);
   assert.ok(!md.includes("['"), 'no array printed raw');
 });
+
+test('a Character process that exits non-zero is a crash even when it saved its file first; its journeys so far are kept', () => {
+  const dir = path.join(tmp, `collect-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const saved = id => fs.writeFileSync(path.join(dir, `${id}.json`), JSON.stringify({ character: id, name: id, journeys: [{ id: 'J1', steps: [], setup: [], facts: {}, endedBy: 'done', ms: 0 }], calls: {} }));
+  saved('a-1'); saved('b-2');   // b-2 saved after J1, then died in J2
+  const cast = ['a-1', 'b-2', 'c-3'].map(id => ({ sim: { id, name: id } }));
+  const rs = D().collectResults(dir, cast, [0, 1, null]);
+  assert.equal(rs[0].crashed, undefined, 'exit 0 with its file is a finished Character');
+  assert.equal(rs[1].crashed, true, 'exit 1 is a crash although its file reads');
+  assert.equal(rs[1].exit, 1);
+  assert.deepEqual(rs[1].journeys.map(j => j.id), ['J1'], 'the journeys it finished are kept');
+  assert.equal(rs[2].crashed, true, 'no file is a crash');
+  assert.deepEqual(rs[2].journeys, []);
+});

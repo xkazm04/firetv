@@ -192,7 +192,7 @@ function statusCommand({ runs = RUNS_DIR, product } = {}) {
   const PR = require('./product.cjs'), inRepo = !path.relative(PR.REPO, runs).startsWith('..') && !path.isAbsolute(path.relative(PR.REPO, runs));
   return require('./ledger.cjs').writeStatus(runs, product ?? (inRepo ? { repo: PR.REPO } : {}));
 }
-module.exports = { childEnv, claude, ROLES, refuseCodexEngine, engineLabels, actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, JUDGE_SCREEN_CAP };
+module.exports = { childEnv, claude, ROLES, refuseCodexEngine, engineLabels, actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, collectResults, JUDGE_SCREEN_CAP };
 
 /** run.json's `product`: the desk/src files the driver loads and their git blobs now. Nothing when git cannot say. */
 function productStamp() {
@@ -262,7 +262,7 @@ async function parent() {
   const codes = new Array(cast.length);
   let next = 0;
   await Promise.all(Array.from({ length: Math.min(a.parallel, cast.length) }, async () => { while (next < cast.length) { const i = next++; codes[i] = await runOne(cast[i]); } }));
-  const results = cast.map((c, i) => { try { return JSON.parse(fs.readFileSync(path.join(dir, `${c.sim.id}.json`), 'utf8')); } catch { return { character: c.sim.id, name: c.sim.name, crashed: true, exit: codes[i], journeys: [], calls: {} }; } });
+  const results = collectResults(dir, cast, codes);
   await synthesize(dir, id, results, cast, Date.now() - started);
   console.log(`\nWrote ${path.relative(process.cwd(), dir)}/report.md, SUMMARY.md, findings.json`);
   if (prior) {
@@ -274,6 +274,20 @@ async function parent() {
     console.log(`Recertified from the ledger: ${out.fixed} fixed (LT), ${out.recurs} recur, ${out.notEvaluable} not evaluable (rows) · stamped ${Object.entries(out.stamped).map(([r, n]) => `${r} ${n}`).join(', ') || 'nothing'} · wrote ${path.relative(process.cwd(), out.file)}`);
   }
   process.exit(results.some(r => r.crashed) ? 1 : 0);
+}
+
+/**
+ * Each Character's result as its process left it. A child saves after every journey, so a file that reads proves only
+ * that some journeys finished: an exit other than 0 is a crash all the same (crashed, exit), with the journeys it saved
+ * kept. No file is a crash with none.
+ */
+function collectResults(dir, cast, codes) {
+  return cast.map((c, i) => {
+    let r = null;
+    try { r = JSON.parse(fs.readFileSync(path.join(dir, `${c.sim.id}.json`), 'utf8')); } catch { r = null; }
+    if (!r || typeof r !== 'object') return { character: c.sim.id, name: c.sim.name, crashed: true, exit: codes[i], journeys: [], calls: {} };
+    return codes[i] === 0 ? r : { ...r, crashed: true, exit: codes[i], journeys: Array.isArray(r.journeys) ? r.journeys : [] };
+  });
 }
 
 const LEVEL = { low: 1, med: 2, high: 3 };
