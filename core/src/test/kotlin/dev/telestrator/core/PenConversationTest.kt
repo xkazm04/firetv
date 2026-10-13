@@ -59,7 +59,7 @@ class PenConversationTest {
     }
 
     @Test
-    fun `case 4 - the newest pen wins and the older one stands down silently`() {
+    fun `case 4 - the newest pen wins and the older one is told once that it was replaced`() {
         val desk = desk()
         val a = desk.open(openedAtMs = 0)
         val b = desk.open(openedAtMs = 0)
@@ -67,6 +67,15 @@ class PenConversationTest {
         assertEquals(PenEffect.Paired("pen-a", 1), a.onText(hello("4821", "pen-a")).last())
         assertEquals(PenEffect.Paired("pen-b", 2), b.onText(hello("4821", "pen-b")).last())
 
+        // The older pen is told once, then hung up on; nothing it sends reaches the session.
+        val told = a.onText("""{"type":"clear"}""")
+        assertEquals(
+            listOf(
+                PenEffect.Send(TvMessage.Welcome(sessionId = "", videoAspect = aspect, accepted = false, reason = "another pen took over")),
+                PenEffect.Close("another pen took over"),
+            ),
+            told,
+        )
         assertEquals(emptyList<PenEffect>(), a.onText("""{"type":"clear"}"""))
         assertFalse(a.isCurrent)
         assertEquals(listOf(PenEffect.Deliver(PenMessage.Clear)), b.onText("""{"type":"clear"}"""))

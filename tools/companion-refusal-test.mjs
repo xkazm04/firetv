@@ -187,6 +187,35 @@ try {
     await page.close();
   }
 
+  // ---- replaced by another phone -----------------------------------------------------------------
+  // The TV tells a superseded pen once ("another pen took over") and hangs up. That is not a wrong
+  // PIN: the dot goes red, the pad is blocked, and the page does not ask for the PIN again (two
+  // phones typing it at each other would take the pen back and forth).
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, reason: 'another pen took over' });
+    await page.goto(PAGE + '?pin=0000');
+    await page.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    await page.waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 2000 });
+    const state = await page.evaluate(() => ({
+      status: document.getElementById('status').textContent,
+      dotOn: document.getElementById('dot').classList.contains('on'),
+      promptShown: document.getElementById('pinbox').classList.contains('show'),
+    }));
+    const box = await page.locator('#pad').boundingBox();
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.3);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width * 0.6, box.y + box.height * 0.5);
+    await page.mouse.up();
+    const hint = await page.evaluate(() => document.getElementById('hint').textContent);
+    check(
+      'replaced: the page says another phone has the pen, dot red, no PIN prompt, pad blocked',
+      /another|took over/i.test(state.status) && !state.dotOn && !state.promptShown && !/type the PIN/i.test(hint),
+      `status "${state.status}", dot ${state.dotOn ? 'on' : 'off'}, prompt ${state.promptShown}, hint "${hint}"`,
+    );
+    await page.close();
+  }
+
   // ---- a lost TV ------------------------------------------------------------------------------
   // A closed TV app must not be redialled every second for as long as the tab lives: the page
   // backs off, stays quiet while its screen is hidden, and comes back at once when it is shown.
