@@ -978,7 +978,8 @@ export function dispatch(e: Event): Session {
     if (e.verdict) try { restateMarked(store.session); } catch (err) { store.settled = false; console.error("A settled answer could not be restated on the learner file:", err instanceof Error ? err.message : err); }
   }
   const w = store.session.watch;
-  if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
+  // the line is what Units and the calendar tick by: a write that fails is said, as a failed hint count or settle is
+  if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch (err) { console.error("A watched lesson could not be written to the learner file, so Units will not tick it:", err instanceof Error ? err.message : err); }
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
     if (id) try {

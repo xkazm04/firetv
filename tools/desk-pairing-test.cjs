@@ -812,3 +812,18 @@ test('OPT-4: with no one at the desk, nothing is written for no one - a task add
  store.dispatch({type:'learner.set',id:'ema'});const n=store.getSession().tasks.length;
  store.dispatch({type:'task.add',name:'Read chapter 3',sub:'english',min:10});assert.equal(store.getSession().tasks.length,n+1,'a seated learner still adds');
 });
+test('OPT-5: a watched lesson whose line cannot be written to the learner file says so in the server log; a written one says nothing',()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const lf=path.join(data,'learners.json'),had=fs.existsSync(lf)?fs.readFileSync(lf,'utf8'):null;
+ const id='jWpiMu5LNdg',arm=()=>{const s=store.getSession();globalThis.__desk.session={...s,screen:'lesson',lessonPaused:false,lesson:{id,title:'How to solve one-step equations',t:0,text:'',why:'',owner:'ema'},watch:{id,owner:'ema',ms:10*60_000,since:null,logged:false}};};
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ try{
+  arm();fs.writeFileSync(lf,'{not json');
+  store.dispatch({type:'lesson.watched'});
+  assert.equal(store.getSession().watch?.logged,true,'the desk counted it watched');
+  assert.ok(lines.some((l)=>/watched/i.test(l)&&/lesson/i.test(l)),'a line says the watched lesson was not written: '+lines.join('|'));
+  lines.length=0;fs.rmSync(lf,{force:true});arm();
+  store.dispatch({type:'lesson.watched'});
+  assert.ok(!lines.some((l)=>/watched/i.test(l)),'a written line says nothing: '+lines.join('|'));
+ }finally{mock.restoreAll();if(had===null)fs.rmSync(lf,{force:true});else fs.writeFileSync(lf,had);}
+});
