@@ -172,6 +172,16 @@ function priorStatuses(ids, rows = [], { endedBy } = {}) {
   return out;
 }
 /**
+ * Replaces a run record whole or not at all: the bytes go to a temp file in the same directory, then rename over the record,
+ * so a process killed mid-write leaves the old findings.json, never half of the new one.
+ */
+function writeAtomic(file, data) {
+  const tmp = `${file}.${process.pid}.tmp`;
+  try { fs.writeFileSync(tmp, data); fs.renameSync(tmp, file); }
+  catch (e) { try { fs.rmSync(tmp, { force: true }); } catch { /* the temp is scratch */ } throw e; }
+}
+
+/**
  * Stamps the originating findings.json. not-seen -> resolution 'fixed' (LT evidence; never 'resolved-verified');
  * recurs -> stays open, recurrence + 1; not-evaluable -> stays open. Every stamped row names the rerun.
  */
@@ -185,7 +195,7 @@ function writeBack(prior, id, statuses) {
     else if (s.status === 'recurs') { f.recurrence = (f.recurrence ?? 1) + 1; if (s.as) f.recurred_as = s.as; count.recurs++; }
     else count.notEvaluable++;
   }
-  fs.writeFileSync(file, JSON.stringify(rows, null, 2));
+  writeAtomic(file, JSON.stringify(rows, null, 2));
   return count;
 }
 
@@ -335,4 +345,4 @@ function instrumentOf({ model, judgeScreenCap, roles, dir = __dirname }) {
   };
 }
 
-module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };
+module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, writeAtomic, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };
