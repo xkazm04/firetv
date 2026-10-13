@@ -712,6 +712,19 @@ test('SW15: the sentence screen\'s tense label (.tok::after, content attr(data-l
  assert.deepEqual(attrLabelSizes('.x::after { content: attr(data-l); font-size: 26px; }'),[['.x::after',26]]);
  assert.deepEqual(attrLabelSizes('/* .x::after { content: attr(data-l); font-size: 26px; } */'),[]);
 });
+// SW16 (scan-sweep optimize 2026-10-13, tv-surface): the /probe hydration check is a dev-server tool - a production build answers 404
+test('SW16: /probe renders in development and throws notFound() in production',()=>{
+ const Probe=require(path.join(root,'src/app/probe/page.tsx')).default;
+ const was=process.env.NODE_ENV;
+ try{
+  process.env.NODE_ENV='development';
+  assert.match(renderToStaticMarkup(createElement(Probe)),/probe:/,'control: the dev page is drawn');
+  process.env.NODE_ENV='production';
+  let err=null;try{renderToStaticMarkup(createElement(Probe));}catch(e){err=e;}
+  assert.ok(err,'production does not draw the diagnostic page');
+  assert.match(String(err.digest??''),/NEXT_(HTTP_ERROR_FALLBACK|NOT_FOUND)/,'it is the framework\'s 404, not another error');
+ }finally{process.env.NODE_ENV=was;}
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
