@@ -73,6 +73,35 @@ function Adb {
 
 function Step($msg) { Write-Host "`n=== $msg ===" -ForegroundColor Cyan }
 
+# tools/node_modules must hold the packages package-lock.json names and Playwright's Chromium, or live-ui-test
+# dies at chromium.launch ("Executable doesn't exist") and the run reports only "live UI test failed". Installs when
+# node_modules is missing or older than the lockfile, and Chromium once per lockfile (a marker in node_modules).
+# Each step is judged by its exit code and named when it fails.
+function Initialize-LiveTools([string]$ToolsDir = (Join-Path $root 'tools')) {
+  Push-Location $ToolsDir
+  $prev = $ErrorActionPreference
+  $ErrorActionPreference = 'Continue'
+  try {
+    $lock = Get-Item package-lock.json -ErrorAction SilentlyContinue
+    $mods = Get-Item node_modules -ErrorAction SilentlyContinue
+    $stale = (-not $mods) -or ($lock -and $lock.LastWriteTime -gt $mods.LastWriteTime)
+    if ($stale) {
+      Write-Host 'installing tools/ packages'
+      npm install --no-audit --no-fund | Out-Host
+      if ($LASTEXITCODE) { throw "npm install in tools/ failed (exit $LASTEXITCODE)" }
+      (Get-Item node_modules).LastWriteTime = Get-Date
+    }
+    $stamp = if ($lock) { "$($lock.LastWriteTimeUtc.Ticks)" } else { 'no-lockfile' }
+    $marker = Join-Path 'node_modules' '.chromium-installed'
+    if ($stale -or -not (Test-Path $marker) -or ((Get-Content $marker -ErrorAction SilentlyContinue) -ne $stamp)) {
+      Write-Host 'installing Playwright Chromium'
+      npx playwright install chromium | Out-Host
+      if ($LASTEXITCODE) { throw "npx playwright install chromium failed (exit $LASTEXITCODE)" }
+      Set-Content $marker $stamp
+    }
+  } finally { $ErrorActionPreference = $prev; Pop-Location }
+}
+
 # Waits for the device to answer as booted, with a deadline. `adb wait-for-device` and a bare
 # boot_completed loop both wait forever: a missing AVD or an emulator that dies at start, and a
 # Stick still showing its "Allow USB debugging?" prompt (unauthorized is not "device"), left the
@@ -165,7 +194,7 @@ if (& $run 'live') {
   $env:ADB_SERIAL = if ($onHardware) { $serial } else { '' }
   $env:TV_HOST = $tvHost
   try {
-    if (-not (Test-Path node_modules)) { npm install --no-audit --no-fund | Out-Null }
+    Initialize-LiveTools (Get-Location).Path
     # Judge node by its exit code alone. Anything it prints to stderr - a Playwright warning, a
     # tool's own diagnostic - would otherwise terminate this script as a NativeCommandError.
     $prev = $ErrorActionPreference
