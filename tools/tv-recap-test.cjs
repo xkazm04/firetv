@@ -649,3 +649,27 @@ test('SW9: an essay paragraph on the page screen ends in an ellipsis only when i
  const long='word '.repeat(40).trim();
  assert.equal(lt(long),long.slice(0,110)+'…','a long one is cut at 110 and says so');
 });
+// SW10 (scan-sweep optimize 2026-10-13): On Air's stylesheet carries only rules some screen draws - it ships on every page, the phone's too
+/** The class names desk/src hands to className (JSX attributes, className props, and the consts they name), comments ignored by the parser. */
+function drawnClasses(){
+ const used=new Set(),words=(t)=>t.split(/\s+/).forEach((w)=>w&&used.add(w)),files=[];
+ const walk=(d)=>{for(const f of fs.readdirSync(d,{withFileTypes:true})){const p=path.join(d,f.name);if(f.isDirectory())walk(p);else if(/\.tsx?$/.test(f.name))files.push(p);}};walk(path.join(root,'src'));
+ for(const f of files){
+  const sf=ts.createSourceFile(f,fs.readFileSync(f,'utf8'),ts.ScriptTarget.Latest,true,f.endsWith('x')?ts.ScriptKind.TSX:ts.ScriptKind.TS);
+  const decl=new Map();(function d(n){if(ts.isVariableDeclaration(n)&&ts.isIdentifier(n.name)&&n.initializer)decl.set(n.name.text,n.initializer);ts.forEachChild(n,d);})(sf);
+  const seen=new Set();
+  const strings=(n)=>{if(!n)return;if(ts.isStringLiteralLike(n))words(n.text);else if(ts.isTemplateExpression(n)){words(n.head.text);n.templateSpans.forEach((s)=>{strings(s.expression);words(s.literal.text);});}
+   else if(ts.isIdentifier(n)&&decl.has(n.text)&&!seen.has(n.text)){seen.add(n.text);strings(decl.get(n.text));}else ts.forEachChild(n,strings);};
+  (function v(n){if((ts.isJsxAttribute(n)&&n.name.getText()==='className')||(ts.isPropertyAssignment(n)&&/className/i.test(n.name.getText())))strings(n.initializer);ts.forEachChild(n,v);})(sf);
+ }
+ return used;
+}
+const deadIn=(css,used)=>[...new Set([...css.replace(/\/\*[\s\S]*?\*\//g,'').matchAll(/\.([a-zA-Z][\w-]*)/g)].map((m)=>m[1]))].filter((c)=>!used.has(c));
+test('SW10: every class On Air styles is drawn by some screen - no dead rules shipped to the TV and the phone',()=>{
+ const css=fs.readFileSync(path.join(root,'src/design/on-air.css'),'utf8'),used=drawnClasses();
+ assert.deepEqual(deadIn(css,used),[],'on-air.css styles classes nothing draws');
+ // the scan bites: a seeded rule nobody draws is found, and the same rule in a comment is not
+ assert.deepEqual(deadIn(css+'\n.sw-seeded-dead { color: red; }',used),['sw-seeded-dead']);
+ assert.deepEqual(deadIn(css+'\n/* .sw-seeded-dead { color: red; } */',used),[]);
+ assert.ok(used.has('rc-tile')&&used.has('band-corner')&&used.has('btn'),'control: classes the screens draw are seen');
+});
