@@ -856,6 +856,18 @@ test('case 6e: a hint question that is not text, or longer than the cap, is a 40
  assert.equal(store.getSession().hint.askedQ.length,HINT_QUESTION_MAX);
 });
 
+test('case 6f: a JSON null, a list, a string or a number as the body is answered by every pipeline route here - never a throw (a 500); a refusal is in desk words',async()=>{
+ stubText({hint:()=>({hint:'Undo the +3 first.',what_to_try_next:'Write what is left.'}),lesson:()=>({lesson:'none',why:'x'})});
+ for(const name of ['read','hint','explain','mark','practice','analyse','session/retry'])for(const body of ['null','[]','"x"','7']){
+  onPage();
+  let r;try{r=await route(name).POST(new Request(`http://desk/api/${name}`,{method:'POST',body}));}catch(e){assert.fail(`${name} ${body}: threw ${e.constructor.name}`);}
+  await drain();
+  // a hint with no fields is the hint for the focused item, as an empty body always was
+  if(name==='hint'){assert.equal(r.status,200,`${name} ${body}`);continue;}
+  assert(r.status>=400&&r.status<500,`${name} ${body}: ${r.status}`);deskWorded((await r.json()).error);
+ }
+});
+
 test('case 6c: an onFail that throws still records the failure, and its own error reaches the server log (one door, never none)',async()=>{
  onPage();
  const {runJob}=require(src('lib/desk/job.ts'));

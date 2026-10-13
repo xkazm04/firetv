@@ -21,7 +21,7 @@ const ROUTES: Partial<Record<JobKind, { path: string; post: (req: Request) => Pr
 };
 
 export async function POST(req: Request) {
-  const { kind } = (await req.json().catch(() => ({}))) as { kind?: JobKind };
+  const { kind } = ((await req.json().catch(() => null)) ?? {}) as { kind?: JobKind };
   const s = getSession();
   const job = kind ? s.jobs?.[kind] : undefined;
   const route = kind ? ROUTES[kind] : undefined;

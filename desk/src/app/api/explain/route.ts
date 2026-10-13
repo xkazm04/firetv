@@ -14,7 +14,7 @@ import { EXPLAIN_TRANSCRIPT_MAX } from "@/lib/rules/saidValue";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const { transcript, n } = (await req.json().catch(() => ({}))) as { transcript?: unknown; n?: number };
+  const { transcript, n } = ((await req.json().catch(() => null)) ?? {}) as { transcript?: unknown; n?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;

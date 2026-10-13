@@ -16,7 +16,7 @@ import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { id?: string; image?: string; subject?: Subject; title?: unknown; w?: number; h?: number };
+  const body = ((await req.json().catch(() => null)) ?? {}) as { id?: string; image?: string; subject?: Subject; title?: unknown; w?: number; h?: number };
   const held = body.id ? getSession().pages.find((p) => p.id === body.id) : undefined;
   if (body.id && !held) return NextResponse.json({ error: "That page is no longer on the desk." }, { status: 409 });
   // a title that is not text is the desk's own: it labels the page and the learner's history line, and a number there broke the history write

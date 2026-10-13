@@ -20,7 +20,7 @@ import { hintQuestionProblem } from "@/lib/rules/maths";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
+  const body = ((await req.json().catch(() => null)) ?? {}) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   // the learner's question goes into the prompt, the session and the job's input: text, and no longer than the cap - refused before any run, never cut
