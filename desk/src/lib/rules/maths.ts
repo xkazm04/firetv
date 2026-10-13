@@ -104,6 +104,15 @@ export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().repl
 export const TYPED_ANSWERS_MAX = 12;
 /** 120 holds a quotient-rule derivative; the readers' own limits keep a longer answer unsure, never wrong. */
 export const TYPED_ANSWER_MAX = 120;
+/**
+ * The most a snapped page may weigh, as the data URL the phone posts. The phone draws every photo at 1280 px wide as JPEG 0.85
+ * (phone/page.tsx toJpeg): a full portrait page of fine print is well under 6 MB as text, so 12 MB leaves room and stops the rest.
+ */
+export const READ_IMAGE_MAX = 12 * 1024 * 1024;
+/** Why a photo is refused before any run, in the desk's words; null when it can be read. */
+export function readImageProblem(image: unknown): string | null {
+  return typeof image === "string" && image.length > READ_IMAGE_MAX ? "That photo is too big for the desk to read. Snap the page again, closer or in better light." : null;
+}
 /** The longest question the hint route takes with a hint (the explain transcript's cap, X5): a longer one is refused, never cut. */
 export const HINT_QUESTION_MAX = 1000;
 /** Why a hint question is refused before any run, in the desk's words; null when it can be asked (absent is no question). */
