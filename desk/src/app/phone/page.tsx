@@ -95,6 +95,7 @@ export default function Phone() {
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
+  const ending = useRef(false);
   /** The profile name's posts, in the order typed (inOrder). */
   const [nameQueue] = useState(inOrder);
   const video = useRef<HTMLVideoElement>(null);
@@ -444,18 +445,22 @@ export default function Phone() {
     } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /**
-   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written while busy
-   * shows "Writing tonight down…". A session.end that fails is said in the status line, and the memory is still written.
+   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written. Busy shows
+   * "Writing tonight down…" from the first tap, and a second tap before the first is done does nothing (the ref answers
+   * at once; the disabled button waits for a render). A session.end that fails is said in the status line, and the
+   * memory is still written.
    */
   const endSession = async () => {
-    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
+    if (ending.current) return;
+    ending.current = true;
     setBusy(true);
+    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
     try {
       const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; already?: boolean; error?: string }));
       setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false, already: j.already === true }
         : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
     } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
-    finally { setBusy(false); }
+    finally { setBusy(false); ending.current = false; }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to

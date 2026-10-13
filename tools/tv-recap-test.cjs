@@ -334,7 +334,11 @@ test('M4: the phone End session ends the evening first, then writes it down, as 
  assert.ok(body,'endSession found');
  const end=body.indexOf('post({ type: "session.end" })'),mem=body.indexOf('call("/api/memory"'),busy=body.indexOf('setBusy(true)');
  assert.ok(end>=0&&mem>end,'session.end is posted before /api/memory is called');
- assert.ok(busy>end&&busy<mem,'busy covers only the memory call');
+ assert.ok(busy>=0&&busy<end,'busy is on from the first tap, before session.end is posted (a second tap in that round trip must not post another)');
+ assert.match(body.slice(0,end),/if \(ending\.current\) return;\s*ending\.current = true;/,'a ref guard answers a second tap at once, before the first render');
+ assert.match(body.slice(mem),/finally \{ setBusy\(false\); ending\.current = false; \}/,'busy and the guard are released together when the memory call is done');
+ assert.equal((body.match(/setBusy\(true\)/g)||[]).length,1,'busy is turned on once');
+ assert.doesNotMatch(body.slice(end),/setBusy\(true\)/,'the old shape, busy only around the memory call, is gone');
  assert.match(body.slice(0,mem),/try \{ await post\(\{ type: "session\.end" \}\); \} catch \(e\) \{ setMsg\(/,'a failed session.end is caught and shown in the status line');
  assert.doesNotMatch(body.slice(mem),/session\.end/,'nothing ends the evening after the memory');
  assert.match(phone,/busy \? "Writing tonight down…" : "End session"/);
