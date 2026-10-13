@@ -21,11 +21,12 @@ function rank(ip: string): number {
  * (rank() above; within a rank an adapter that looks virtual comes last, and ties keep the adapter order), else localhost.
  * tools/desk-dev-https.cjs asks for the same answer.
  */
-export function lanHost(interfaces: Interfaces = networkInterfaces(), env: NodeJS.ProcessEnv = process.env): string {
+export function lanHost(interfaces?: Interfaces, env: NodeJS.ProcessEnv = process.env): string {
   const forced = env.DESK_PHONE_HOST?.trim();
   if (forced) return forced;
   const found: { ip: string; rank: number; virtual: boolean; at: number }[] = [];
-  for (const [name, list] of Object.entries(interfaces)) {
+  // read lazily: a forced host above pays no adapter scan
+  for (const [name, list] of Object.entries(interfaces ?? networkInterfaces())) {
     for (const n of list ?? []) {
       const family = n?.family as string | number | undefined;
       if (!n || n.internal || (family !== "IPv4" && family !== 4)) continue;

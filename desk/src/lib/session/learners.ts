@@ -12,6 +12,7 @@ import { cleanEnglish } from "../english/rules";
 import { DIGEST_CAP, cleanDigest, type DigestEntry } from "../rules/digest";
 import { stepSlips } from "../rules/slips";
 import { cleanPaper, type PaperItem } from "../rules/recovery";
+import { dataDir } from "../dataDir";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
@@ -88,8 +89,7 @@ export interface Learner {
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = path.join(DATA, "learners.json");
+const FILE = () => path.join(dataDir(), "learners.json");
 
 const MEMORY_CAP = 40;
 const HISTORY_CAP = 20;
@@ -118,8 +118,8 @@ function tell(line: string): void {
 function readBook(): Book | null {
   let text: string;
   try {
-    if (!existsSync(FILE)) return {};
-    text = readFileSync(FILE, "utf8");
+    if (!existsSync(FILE())) return {};
+    text = readFileSync(FILE(), "utf8");
   } catch (e) {
     if ((e as NodeJS.ErrnoException)?.code === "ENOENT") return {};
     tell(`learners.json could not be read, so it will not be written over: ${why(e)}`);
@@ -146,11 +146,11 @@ function readAll(): Book {
  * mid-write leaves the old file whole, never a partial one. A failure removes the temp file and throws.
  */
 function writeBook(book: Book): void {
-  const tmp = path.join(DATA, `learners.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  const tmp = path.join(dataDir(), `learners.json.${process.pid}.${Date.now().toString(36)}.tmp`);
   try {
-    mkdirSync(DATA, { recursive: true });
+    mkdirSync(dataDir(), { recursive: true });
     writeFileSync(tmp, JSON.stringify(book));
-    renameSync(tmp, FILE);
+    renameSync(tmp, FILE());
   } catch (e) {
     try { rmSync(tmp, { force: true }); } catch {}
     throw new Error(`learners.json could not be written, so progress was not saved: ${why(e)}`);

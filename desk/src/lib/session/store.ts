@@ -9,6 +9,7 @@ import type { Workroom } from "../twin/workroom";
 import { randomInt } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { lanHost } from "./lan";
+import { dataDir } from "../dataDir";
 import { AGE_RANGE, SYSTEMS } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
@@ -345,8 +346,48 @@ export type Event =
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput; start?: string; by?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" } | { type: "pin.turn" };
 
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
-const FILE = path.join(DATA, "session.json");
+/**
+ * The one door for what a screen or phone posts (api/session POST, after the server-only refusals): for each client-postable
+ * type, a check per field. A type that is not here, or a field that fails its check, is refused with a sentence before the
+ * reducer sees it. Ranges are the reducer's (a focus or a walk index may be -1 or past the end); this checks the kind of value.
+ * paper.enter's rows are unchecked on purpose: the desk's own cleanPaper decides what stands.
+ */
+const SCREENS: Record<Screen, true> = { landing: true, pair: true, joined: true, tonight: true, units: true, calendar: true, page: true, hint: true, lesson: true, sentence: true, headtohead: true, essaytype: true, essayplan: true, forensic: true, playbook: true, xray: true, break: true, recap: true, learner: true, profile: true, topics: true, prepare: true, paper: true, practice: true, sheet: true, walk: true, linga: true, "linga-scenes": true, "linga-map": true, "linga-talk": true, "linga-coach": true, "linga-recap": true, "linga-check": true, "linga-verdict": true, "linga-plan": true, "linga-moment": true, "linga-cert": true, "linga-certs": true, worked: true, workroom: true };
+type Field = (v: unknown) => boolean;
+const f = {
+  str: ((v) => typeof v === "string") as Field,
+  name: ((v) => typeof v === "string" && v.trim().length > 0) as Field,
+  int: ((v) => Number.isInteger(v)) as Field,
+  num: ((v) => typeof v === "number" && Number.isFinite(v)) as Field,
+  bool: ((v) => typeof v === "boolean") as Field,
+  screen: ((v) => typeof v === "string" && Object.hasOwn(SCREENS, v)) as Field,
+  subject: ((v) => v === "maths" || v === "english" || v === "essay") as Field,
+  object: ((v) => !!v && typeof v === "object" && !Array.isArray(v)) as Field,
+};
+const maybe = (c: Field): Field => (v) => v === undefined || c(v);
+const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
+const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { type: K }>, "type">]-?: Field } } = {
+  join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen) }, focus: { focus: f.int }, subject: { subject: f.subject },
+  "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
+  "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
+  "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
+  "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
+  "paper.enter": { rows: () => true },
+  "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
+  "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
+  "topic.open": { topic: f.str, stay: maybe(f.bool) }, walk: { ix: f.int }, "practice.clear": {},
+  status: { text: f.str }, "session.end": {}, reset: {},
+};
+/** Why a posted event is refused, or null when it may go to the reducer. */
+export function badPost(e: unknown): string | null {
+  const type = (e as { type?: unknown } | null)?.type;
+  if (typeof type !== "string" || !Object.hasOwn(SHAPES, type)) return "The desk does not know that kind of request.";
+  const shape = SHAPES[type as Event["type"]] as Record<string, Field>;
+  for (const [k, ok] of Object.entries(shape)) if (!ok((e as Record<string, unknown>)[k])) return `The desk could not use ${type}: ${k} is not what it expects.`;
+  return null;
+}
+
+const FILE = () => path.join(dataDir(), "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
 function phoneUrl(): string {
@@ -772,9 +813,9 @@ type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; /** whether the last session.json write landed (HF4); a store HMR kept from before has none, which reads as landed */ saved?: boolean; /** whether the last practice.settle restate of the learner file landed (WD9); a missing value reads as landed */ settled?: boolean; /** whether the last hint count write landed (WD12); a missing value reads as counted */ counted?: boolean; /** where an unusable session.json is still to be put aside: the load could not rename it, so no save may write over it until it is */ aside?: string; }
 const g = globalThis as unknown as { __desk?: Store };
 function load(): Session {
-  if (!existsSync(FILE)) return fresh();
+  if (!existsSync(FILE())) return fresh();
   let raw: string;
-  try { raw = readFileSync(FILE, "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
+  try { raw = readFileSync(FILE(), "utf8"); } catch (e) { return setAside(`it could not be read (${e instanceof Error ? e.message : e})`); }
   let j: any, bad: string | null = null;
   try {
     j = JSON.parse(raw);
@@ -818,9 +859,9 @@ function keptLog(raw: unknown): Session["log"] {
 }
 /** An unusable session.json is renamed beside itself (kept, never deleted) and the desk starts fresh with SESSION_UNREAD; one log line says why and where it went. */
 function setAside(why: string): Session {
-  const to = `${FILE}.bad-${Date.now().toString(36)}`;
+  const to = `${FILE()}.bad-${Date.now().toString(36)}`;
   let where: string;
-  try { renameSync(FILE, to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
+  try { renameSync(FILE(), to); where = `put aside as ${path.basename(to)}`; } catch (e) { unplaced = to; where = `not put aside, the rename failed (${e instanceof Error ? e.message : e}), and no save will write over it until it is`; }
   console.error(`desk session: session.json was not used, ${why}; ${where}; starting fresh`);
   return { ...fresh(), status: SESSION_UNREAD };
 }
@@ -1014,20 +1055,20 @@ export function dispatch(e: Event): Session {
 function writeSession(): void {
   // a session.json the load could not put aside is not ours to overwrite: try the rename again first, and write only once it has landed
   if (store.aside) {
-    if (!existsSync(FILE)) store.aside = undefined;
+    if (!existsSync(FILE())) store.aside = undefined;
     else {
-      try { renameSync(FILE, store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
+      try { renameSync(FILE(), store.aside); console.error(`desk session: session.json was put aside as ${path.basename(store.aside)}`); store.aside = undefined; }
       catch (e) {
         if (store.saved !== false) console.error("desk session: session.json could not be put aside, so the session will not be written over it:", e instanceof Error ? e.message : e);
         store.saved = false; return;
       }
     }
   }
-  const tmp = path.join(DATA, `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
+  const tmp = path.join(dataDir(), `session.json.${process.pid}.${Date.now().toString(36)}.tmp`);
   try {
-    mkdirSync(DATA, { recursive: true });
+    mkdirSync(dataDir(), { recursive: true });
     writeFileSync(tmp, JSON.stringify(store.session));
-    renameSync(tmp, FILE);
+    renameSync(tmp, FILE());
     if (store.saved === false) console.error("desk session: session.json is being written again");
     store.saved = true;
   } catch (e) {

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { dispatch, getSession, type Event } from "@/lib/session/store";
+import { badPost, dispatch, getSession, type Event } from "@/lib/session/store";
 import { COOKIE, JOIN_FIRST, JOIN_NOT_SAVED, LEAVE_NOT_SAVED, NO_CODE, RESET_NOT_SAVED, PHONE_COOKIE, TOO_MANY_CODES, WRONG_CODE, guestMay, joinCooling, joinDelay, joinSucceeded, joinWrongCode, cookiesOf, forgetAllPhones, forgetPhone, mintPhone, roleFrom, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
@@ -49,6 +49,9 @@ export async function POST(req: Request) {
   if (role === "phone" && e?.type === "reset") return NextResponse.json({ error: "Only the TV can reset the desk." }, { status: 403 });
   if (role === "phone" && e?.type === "profile.draft" && e.patch && typeof e.patch === "object" && Object.hasOwn(e.patch, "id")) return NextResponse.json({ error: "Only the TV can start editing a profile." }, { status: 403 });
   if (role === "guest" && !guestMay(getSession(), e)) return NextResponse.json({ error: JOIN_FIRST }, { status: 403 });
+  // one door for every field a screen or phone posts: a request the reducer was not built for never reaches it
+  const bad = badPost(e);
+  if (bad) return NextResponse.json({ error: bad }, { status: 400 });
   // forgetting the desk: this device's phone cookie goes; the desk is untouched
   if (e?.type === "leave") {
     try { forgetPhone(cookiesOf(req).get(PHONE_COOKIE)?.value); }

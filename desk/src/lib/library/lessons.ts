@@ -8,21 +8,22 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { parseVtt, windows, type Cue } from "./vtt";
 import { embed, cosine, EMBED_MODEL } from "../engines/embed";
+import { dataDir } from "../dataDir";
 
 // Maths lessons are Khan Academy (CC BY-NC-SA); transcripts live in <data>/lessons (local only).
 import { LESSONS } from "./lessons.data";
 export { LESSONS };
 export type { Lesson } from "./lessons.data";
 
-// The same data directory as the session store and the learner records (store.ts, learners.ts).
-const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const cache = new Map<string, Cue[]>();
 let vectors: Map<string, number[][]> | null = null;
 
 export function lessonWindows(id: string): Cue[] {
   if (cache.has(id)) return cache.get(id)!;
-  const f = path.join(DATA, "lessons", `${id}.en.vtt`);
-  const w = existsSync(f) ? windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS) : [];
+  const f = path.join(dataDir(), "lessons", `${id}.en.vtt`);
+  // a missing transcript is not remembered: one that is placed later is read on the next pick
+  if (!existsSync(f)) return [];
+  const w = windows(parseVtt(readFileSync(f, "utf8")), WINDOW_SECONDS);
   cache.set(id, w); return w;
 }
 
@@ -56,7 +57,7 @@ function readCache(f: string): Map<string, Cached> {
 function writeCache(f: string, entries: Map<string, Cached>): void {
   const tmp = `${f}.${process.pid}.${Date.now().toString(36)}.tmp`;
   try {
-    mkdirSync(DATA, { recursive: true });
+    mkdirSync(dataDir(), { recursive: true });
     writeFileSync(tmp, JSON.stringify({ v: CACHE_VERSION, model: EMBED_MODEL, lessons: Object.fromEntries(entries) }));
     renameSync(tmp, f);
   } catch (e) {
@@ -69,7 +70,7 @@ function writeCache(f: string, entries: Map<string, Cached>): void {
 let building: Promise<Map<string, number[][]>> | null = null;
 
 async function build(): Promise<Map<string, number[][]>> {
-  const f = path.join(DATA, "embeddings.json");
+  const f = path.join(dataDir(), "embeddings.json");
   const old = readCache(f), next = new Map<string, Cached>(), out = new Map<string, number[][]>();
   let changed = false;
   for (const l of LESSONS.filter((l) => l.youtube)) {
@@ -100,7 +101,10 @@ export async function ensureVectors(): Promise<Map<string, number[][]>> {
 /** Nearest window in a lesson to a query — the seek target. */
 export async function bestWindow(lessonId: string, query: string): Promise<{ t: number; text: string; score: number } | null> {
   const w = lessonWindows(lessonId); if (!w.length) return null;
-  const vecs = (await ensureVectors()).get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
+  let all = await ensureVectors();
+  // a lesson that gained windows after the map was published: rebuild once (the disk cache keeps the others)
+  if (!all.has(lessonId) && LESSONS.some((l) => l.id === lessonId && l.youtube)) { vectors = null; all = await ensureVectors(); }
+  const vecs = all.get(lessonId); if (!vecs) return { t: w[0].t, text: w[0].text, score: 0 };
   const [q] = (await embed({ texts: [query], use: "lesson-window" })).json;
   let best = 0, bs = -1;
   vecs.forEach((v, i) => { const s = cosine(q, v); if (s > bs) { bs = s; best = i; } });
