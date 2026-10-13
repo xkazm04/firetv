@@ -176,3 +176,15 @@ test('kpi-measure and the preflight resolve the same main checkout, from one sha
   assert.doesNotMatch(code,/const\s+same\s*=/,`${f} keeps no copy of same`);
  }
 });
+
+// The rules runner gives every suite a timeout (run-rules.cjs RULES_SUITE_TIMEOUT_MS); the KPI tool runs the same Linga
+// suite and must not wait on it for ever either. A suite that never exits is no reading, said so, never a hang.
+test('a Linga suite that never finishes is no reading after the timeout, and says it timed out',()=>{
+ const {lingaChecks}=require('./kpi-measure.cjs');
+ const stuck=path.join(scratch,'stuck-suite.cjs');fs.writeFileSync(stuck,"setInterval(()=>{},1000);\n");
+ const t0=Date.now(),r=lingaChecks({file:stuck,timeout:400});
+ assert.ok(Date.now()-t0<20000,'it returned');
+ assert.strictEqual(r.pass,null);assert.strictEqual(r.fail,null);assert.match(r.note,/timed out after 400 ms/);
+ const done=path.join(scratch,'done-suite.cjs');fs.writeFileSync(done,"console.log('# pass 3');console.log('# fail 0');\n");
+ assert.deepEqual(lingaChecks({file:done,timeout:20000}),{pass:3,fail:0,note:null},'a suite that finishes is read as before');
+});

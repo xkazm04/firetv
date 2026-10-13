@@ -67,8 +67,11 @@ function coveredBy(sources, modulePath) {
 }
 
 // KPI 1 — Linga conversation-loop checks passing. The suite is the gate; parse its own count, never our own.
-function lingaChecks() {
-  const r = spawnSync(process.execPath, [path.join(__dirname, "linga-rules-test.cjs")], { encoding: "utf8" });
+// The same bound the rules runner gives every suite (run-rules.cjs RULES_SUITE_TIMEOUT_MS): a suite that never exits is no reading, not a hang.
+const SUITE_TIMEOUT = Number(process.env.RULES_SUITE_TIMEOUT_MS) > 0 ? Number(process.env.RULES_SUITE_TIMEOUT_MS) : 600000;
+function lingaChecks({ file = path.join(__dirname, "linga-rules-test.cjs"), timeout = SUITE_TIMEOUT } = {}) {
+  const r = spawnSync(process.execPath, [file], { encoding: "utf8", timeout, killSignal: "SIGKILL" });
+  if (r.error && r.error.code === "ETIMEDOUT") return { pass: null, fail: null, note: `suite timed out after ${timeout} ms` };
   const out = `${r.stdout || ""}${r.stderr || ""}`;
   const num = k => { const m = out.match(new RegExp(`^\\D*${k} (\\d+)$`, "m")); return m ? Number(m[1]) : null; };
   const pass = num("pass"), fail = num("fail");
@@ -216,5 +219,5 @@ function print(r, asJson) {
   }
 }
 
-module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, mainCheckout, same };
+module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, lingaChecks, mainCheckout, same };
 if (require.main === module) print(measure(), process.argv.includes("--json"));
