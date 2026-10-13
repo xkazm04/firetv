@@ -18,15 +18,13 @@ private const val TAG = "Thumbnailer"
  * TV hardware is often a hardware overlay plane that cannot be read back, so grabbing the frame
  * from the media itself is the approach that will still work on a Fire TV Stick.
  */
-class Thumbnailer(context: Context, uri: Uri) {
+class Thumbnailer internal constructor(private val source: FrameSource) {
 
-    private val retriever = MediaMetadataRetriever().apply {
-        runCatching { setDataSource(context, uri) }
-            .onFailure { Log.w(TAG, "cannot open $uri for thumbnails", it) }
-    }
+    constructor(context: Context, uri: Uri) : this(RetrieverFrameSource(context, uri))
 
     private var lastKeyMs = Long.MIN_VALUE
     private var lastResult: String? = null
+    private var released = false
 
     /**
      * A data URL for the frame at [tMs], or null if it could not be decoded.
@@ -35,17 +33,14 @@ class Thumbnailer(context: Context, uri: Uri) {
      * milliseconds. Results are cached per [bucketMs] so that holding pause does not re-decode
      * the same frame over and over.
      */
+    @Synchronized
     fun dataUrlAt(tMs: Long, widthPx: Int = 320, bucketMs: Long = 200): String? {
+        if (released) return null
         val key = tMs / bucketMs
         if (key == lastKeyMs) return lastResult
 
         val frame = runCatching {
-            retriever.getScaledFrameAtTime(
-                tMs * 1000,
-                MediaMetadataRetriever.OPTION_CLOSEST_SYNC,
-                widthPx,
-                widthPx * 9 / 16,
-            )
+            source.frameAt(tMs * 1000, widthPx, widthPx * 9 / 16)
         }.onFailure { Log.w(TAG, "frame grab failed at ${tMs}ms", it) }.getOrNull()
 
         lastKeyMs = key
@@ -62,7 +57,29 @@ class Thumbnailer(context: Context, uri: Uri) {
         "data:image/jpeg;base64," + Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP)
     }.getOrNull()
 
+    @Synchronized
     fun release() {
+        released = true
+        source.release()
+    }
+}
+
+/** Where [Thumbnailer] gets a decoded frame; the seam that lets the JVM drive it without a decoder. */
+internal interface FrameSource {
+    fun frameAt(tUs: Long, widthPx: Int, heightPx: Int): Bitmap?
+    fun release()
+}
+
+private class RetrieverFrameSource(context: Context, uri: Uri) : FrameSource {
+    private val retriever = MediaMetadataRetriever().apply {
+        runCatching { setDataSource(context, uri) }
+            .onFailure { Log.w(TAG, "cannot open $uri for thumbnails", it) }
+    }
+
+    override fun frameAt(tUs: Long, widthPx: Int, heightPx: Int): Bitmap? =
+        retriever.getScaledFrameAtTime(tUs, MediaMetadataRetriever.OPTION_CLOSEST_SYNC, widthPx, heightPx)
+
+    override fun release() {
         runCatching { retriever.release() }
     }
 }
