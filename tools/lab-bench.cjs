@@ -2,9 +2,9 @@
 /**
  * The lab bench: the lab's corpus (tools/lab-corpus.cjs) run through the PRODUCTION read, hint and lesson-pick
  * modules - desk's readPage, hint and pickLesson through the engines registry, never a copy - and scored with the
- * lab's rules: equations_intact (vision/poc_ocr.py), the one leak rule (rules/maths leaks(), which hint() already
- * gates on), the right/none tally against vision/poc_retrieval.py ACCEPT. One measure is new: `selects`, whether
- * the phone's tap at an item's TRUE centre selects that item, given the centres the model reported - judged with
+ * lab's rules: equations_intact (vision/poc_ocr.py), the leak gate hint() itself applies (desk/hint leaksLine:
+ * rules/maths leaks() plus the Calculus and school readers' own checks), the right/none tally against
+ * vision/poc_retrieval.py ACCEPT. One measure is new: `selects`, whether the phone's tap at an item's TRUE centre selects that item, given the centres the model reported - judged with
  * the phone's own rule, nearestItem() in desk/src/lib/desk/select.ts. It prints the lab baseline beside this run
  * and a verdict per PoC kill criterion (STUDY-DESK-POC-RESULTS.md:7-9), and exits 1 on a fail.
  *
@@ -50,7 +50,7 @@ function desk() {
     { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
   const load = (f) => require(path.join(DESK, "src/lib", f));
   mods = { reg: load("engines/registry.ts"), read: load("desk/read.ts"), hint: load("desk/hint.ts"), pick: load("desk/pick.ts"),
-    select: load("desk/select.ts"), maths: load("rules/maths.ts") };
+    select: load("desk/select.ts"), kinds: load("rules/kinds.ts") };
   return mods;
 }
 
@@ -159,13 +159,16 @@ async function benchHints(m, providers, calls) {
   for (const p of corpus.problems) {
     calls.length = 0;
     const row = { q: p.q };
+    // the gate hint() applies to this item: the item read as hint() reads it, then leaksLine over that spec
+    const read = m.kinds.readQuestion(p.q), spec = { calc: read.calc ?? null, school: read.school ?? null, parts: read.parts ?? null };
+    const leaks = (s) => m.hint.leaksLine(p.q, spec, String(s || ""));
     try {
       const h1 = await m.hint.hint("maths", p.q, {});
       const h2 = await m.hint.hint("maths", p.q, { previous: h1.hint });
       providers.text = h2.provider;
       const shown = [h1.hint, h1.next, h2.hint, h2.next];
-      row.leaked = calls.some((c) => m.maths.leaks(p.q, String(c.said.hint || "")) || m.maths.leaks(p.q, String(c.said.what_to_try_next || "")));
-      row.reached = shown.some((s) => m.maths.leaks(p.q, s));
+      row.leaked = calls.some((c) => leaks(c.said.hint) || leaks(c.said.what_to_try_next));
+      row.reached = shown.some(leaks);
       row.reasked = calls.some((c) => c.reask);
       row.latex = shown.some(latex);
     } catch (e) { row.error = String(e.message || e); }
@@ -173,7 +176,7 @@ async function benchHints(m, providers, calls) {
   }
   const n = (k) => rows.filter((r) => r[k]).length;
   return { leaked: n("leaked"), of: rows.length, latex: n("latex"), reasked: n("reasked"), reached: n("reached"), errors: n("error"),
-    rule: "rules/maths leaks()", problems: rows.filter((r) => r.leaked || r.reached || r.reasked || r.latex || r.error), seconds: (Date.now() - t0) / 1000 };
+    rule: "desk/hint leaksLine()", problems: rows.filter((r) => r.leaked || r.reached || r.reasked || r.latex || r.error), seconds: (Date.now() - t0) / 1000 };
 }
 
 async function benchRetrieval(m, providers) {

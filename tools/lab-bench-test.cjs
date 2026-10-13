@@ -48,7 +48,7 @@ test('case 3: the 24 recorded PoC maths hint stages through the production hint(
  assert.deepEqual(pick(r.hints,['leaked','of','latex']),{leaked:0,of:12,latex:3});
  assert.equal(r.hints.reasked,0,'the gate lets every recorded stage through untouched');
  assert.equal(r.hints.reached,0);
- assert.equal(r.hints.rule,'rules/maths leaks()');
+ assert.equal(r.hints.rule,'desk/hint leaksLine()');
  assert.equal(r.verdicts.B,'pass');
 });
 
@@ -141,4 +141,16 @@ test('case 9 GUARD: the phone\'s tap selects exactly as before - nearestItem equ
  for(const items of lists)for(let y=-50;y<=1900;y+=7)assert.equal(nearestItem(items,y),old({items},y),`y=${y} over ${items.length} items`);
  // a tie keeps the first item, as the loop's strict < did
  assert.equal(nearestItem([{cy:100},{cy:200}],150),0);
+});
+
+test('case 10: the leak tally is the gate hint() applies (desk/hint leaksLine), not rules/maths leaks() alone',async()=>{
+ // 'What is 15% of 240?' reads as a school task; its answer is caught by the school reader, which leaks() alone misses
+ const q='What is 15% of 240?';
+ const r=await runBench({replay:{hints:{[q]:{hint1:{hint:'The answer is 36.',what_to_try_next:'Check it against 240.'}}}}});
+ assert.equal(r.hints.reasked,1,'production re-asked: its gate saw the leak');
+ assert.equal(r.hints.leaked,1,'the bench counts what the gate saw');
+ assert.equal(r.hints.reached,0);
+ assert.equal(r.hints.rule,'desk/hint leaksLine()');
+ const src=fs.readFileSync(BENCH,'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,'');
+ assert.doesNotMatch(src,/maths\.leaks\(/,'one leak rule: the bench scores with the gate hint() uses');
 });
