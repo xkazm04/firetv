@@ -195,3 +195,20 @@ test('papers 6 (MB-B14): a typed paper writes one paper entry in the same save -
   S.dispatch({type:'paper.enter',rows:RAW});
   assert.deepEqual(S.getSession().week.map((x)=>x.text),['Pax worked on one evening.','Math Buddy','One practice paper typed in.','One thing to try together','Ask them to teach you one thing they learned this week.']);
 });
+
+// scan-sweep optimize 2026-10-13 (session): the usual record's counts are read by the step-up record's rule
+test('OPT-6: a skill record read from disk keeps whole counts of at least 0 and right never above seen - the rule cleanStretch already applies',()=>{
+  const book={opt6:{id:'opt6',skills:{
+    a:{topic:'a',seen:-3,right:9,estimate:0.5,lastSeen:'x',slips:[]},
+    b:{topic:'b',seen:2.7,right:'abc',estimate:0.5,lastSeen:-5,slips:[]},
+    c:{topic:'c',seen:'7',right:4,estimate:0.5,lastSeen:1700000000000,slips:[],stretch:{seen:-3,right:9,estimate:0.5,secure:false,lastSeen:'x'}},
+  },writing:{w:{topic:'w',seen:-1,right:2,estimate:0.2,lastSeen:0,slips:[]}}}};
+  fs.writeFileSync(FILE,JSON.stringify(book));
+  const l=L.getLearner('opt6'),ok=(r,name)=>{
+    for(const k of ['seen','right','lastSeen'])assert.ok(Number.isInteger(r[k])&&r[k]>=0,`${name}.${k} = ${r[k]}: a whole count of at least 0`);
+    assert.ok(r.right<=r.seen,`${name}: right ${r.right} is not above seen ${r.seen}`);
+  };
+  for(const k of ['a','b','c'])ok(l.skills[k],k);ok(l.skills.c.stretch,'c.stretch');ok(l.writing.w,'writing.w');
+  assert.deepEqual([l.skills.c.seen,l.skills.c.right,l.skills.c.lastSeen],[7,4,1700000000000],'a good record reads as it was');
+  fs.rmSync(FILE,{force:true});
+});

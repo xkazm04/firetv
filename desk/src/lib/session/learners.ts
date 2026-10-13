@@ -210,13 +210,15 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
     const stretch = cleanStretch(r.stretch);
     const slips = Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [];
     const held = cleanHeld(r.held, slips);
+    // the counts by cleanStretch's rule: whole, at least 0, and right never above seen
+    const seen = count(r.seen);
     skills[k] = {
       topic: typeof r.topic === "string" ? r.topic : k,
-      seen: Number(r.seen) || 0,
-      right: Number(r.right) || 0,
+      seen,
+      right: Math.min(seen, count(r.right)),
       estimate: Number.isFinite(Number(r.estimate)) ? Math.min(1, Math.max(0, Number(r.estimate))) : 0,
       secure: r.secure === true,
-      lastSeen: Number(r.lastSeen) || 0,
+      lastSeen: count(r.lastSeen),
       slips,
       ...(held ? { held } : {}),
       ...(stretch ? { stretch } : {}),
