@@ -1083,7 +1083,7 @@ export function LessonScreen({ s }: { s: Session }) {
       {src ? <iframe ref={frame} src={src} width={1120} height={630} allow="autoplay; encrypted-media" title={l.title} onLoad={() => { if (paused) frame.current?.contentWindow?.postMessage(playerCommand(true), "*"); }} />
         : <div className="none">This unit has no video yet — its theory screen is the lesson.</div>}
     </div>
-    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused — circle on the phone to ask about this frame" : "Playing · Space pauses · Back returns"}</span></div>
+    <div className="mb-paused">{s.lessonPaused ? PAUSE : PLAY}<span>{s.lessonPaused ? "Paused · Play resumes · Back returns" : "Playing · Play pauses · Back returns"}</span></div>
     <aside className="mb-lesson-side">
       <div className="mb-kick">The part that matters · {fmt(l.t)}</div>
       <div className="mb-stitle" data-role="maths-title"><Amber text={l.title} /></div>
