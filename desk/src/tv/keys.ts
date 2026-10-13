@@ -188,6 +188,8 @@ export function focusAfterRewrite(a: EssayAnalysis, n: number, focus: number): n
 }
 /** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
+/** The YouTube IFrame API's postMessage form of Play/Pause: what the lesson screens send the embed when lessonPaused flips. */
+export const playerCommand = (paused: boolean): string => JSON.stringify({ event: "command", func: paused ? "pauseVideo" : "playVideo", args: "" });
 export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 /** The recap: one tile per app on the desk, then back to the desk (tv/recapRows.ts). */
