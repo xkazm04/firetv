@@ -275,6 +275,15 @@ class HeartbeatTest {
     }
 
     @Test
+    fun `case 7b - stepping frame by frame while paused sends a thumbnail for every frame`() {
+        val hb = Heartbeat()
+        val steps = (0 until 5).map { 5_000L + it * TransportPlan.FRAME_MS }
+        val sent = steps.map { hb.beat(input(it, paused = true)).thumbnailAtMs }
+
+        assertEquals(steps, sent, "thumbnails sent for five single-frame steps: ${sent.count { it != null }} of 5")
+    }
+
+    @Test
     fun `case 8 GUARD - the state message copies the input unchanged and encodes without nulls`() {
         val state = Heartbeat().beat(input(5_000, paused = true)).state
 
