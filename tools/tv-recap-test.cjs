@@ -678,6 +678,20 @@ test('SW12: the maths lesson line - paused or playing - names Play, not the benc
   assert.match(t,/\bPlay\b/,`paused=${paused}: the remote's own button`);
  }
 });
+// SW14 (scan-sweep optimize 2026-10-13, tv-surface): the hint and lesson screens draw an empty state, as the page and sentence screens do
+test('SW14: hint and lesson with their data gone draw a band, a title and a caption naming Back - not an empty stage',()=>{
+ const {HintScreen,LessonScreen,PageScreen,SentenceScreen}=require(path.join(root,'src/tv/screens.tsx'));
+ const drawn=[['hint',createElement(HintScreen,{s:session({subject:'english',screen:'hint',hint:null}),focus:0})],['lesson',createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson:null})})],
+  ['page',createElement(PageScreen,{s:session({screen:'page',pages:[]}),view:'band'})],['sentence',createElement(SentenceScreen,{s:session({subject:'english',screen:'sentence',english:null}),focus:0})]];
+ const empty=drawn.filter(([,el])=>renderToStaticMarkup(el)==='').map(([n])=>n);
+ assert.deepEqual(empty,[],'no data screen draws nothing');
+ for(const [n,el] of drawn.slice(0,2)){
+  const h=renderToStaticMarkup(el);
+  assert.match(h,/class="band /,`${n}: the band`);
+  assert.match(h,/class="title"/,`${n}: a title`);
+  assert.match(h,/class="cap"[^]*Back/,`${n}: a caption that names Back`);
+ }
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
