@@ -185,6 +185,50 @@ try {
     await page.close();
   }
 
+  // ---- PIN in the fragment -------------------------------------------------------------------
+  // A URL fragment never leaves the client, so a relay's access log cannot learn the PIN from
+  // the request line. The QR carries #pin=; the page pairs from it, and a PIN typed after a
+  // refusal is kept in the fragment too, never written back into the query.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto(PAGE + '#pin=' + TV_PIN);
+    const paired = await page
+      .waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 })
+      .then(() => true, () => false);
+    const search = await page.evaluate(() => location.search);
+    check('fragment: a page opened at #pin=<right> pairs, and location.search has no pin', paired && !/pin/.test(search), `paired ${paired}, search "${search}"`);
+    await page.close();
+
+    const typed = await browser.newPage();
+    await typed.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await typed.goto(PAGE + '#pin=0000');
+    await typed.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    const prompt = await pinPrompt(typed);
+    if (prompt) {
+      await prompt.fill(TV_PIN);
+      await prompt.press('Enter');
+      await typed.waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 }).catch(() => {});
+    }
+    const where = await typed.evaluate(() => ({ search: location.search, hash: location.hash }));
+    check(
+      'fragment: a typed PIN is kept in the fragment, the query stays clean',
+      !/pin/.test(where.search) && where.hash === '#pin=' + TV_PIN,
+      `search "${where.search}", hash "${where.hash}"`,
+    );
+    await typed.close();
+
+    // Old QR codes carry ?pin=; they keep working.
+    const old = await browser.newPage();
+    await old.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await old.goto(PAGE + '?pin=' + TV_PIN);
+    const oldPaired = await old
+      .waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 })
+      .then(() => true, () => false);
+    check('fragment: an old ?pin= QR still pairs', oldPaired, `paired ${oldPaired}`);
+    await old.close();
+  }
+
   // ---- https (relay) -----------------------------------------------------------------------
   // The relay serves the page over https (RelayTransport: wss://relay.example/...). A page loaded
   // over https may not open a ws:// socket (mixed content), so the pen must dial wss://.
