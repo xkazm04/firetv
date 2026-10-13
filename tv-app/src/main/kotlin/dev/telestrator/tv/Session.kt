@@ -71,7 +71,11 @@ class Session(clipId: String, videoAspect: Double) {
 
     fun penConnected(): Int = pens.incrementAndGet()
 
-    fun penDisconnected(): Int = pens.decrementAndGet().coerceAtLeast(0).also { pens.set(it) }
+    /**
+     * One atomic step, never below zero. Decrementing and then writing the clamped value back as a
+     * second step lost every connect or disconnect another pen's thread made in between.
+     */
+    fun penDisconnected(): Int = pens.updateAndGet { (it - 1).coerceAtLeast(0) }
 
     fun accept(msg: PenMessage) {
         // Undo and redo take the planner's road, the remote's and the phone's alike: the ink they
