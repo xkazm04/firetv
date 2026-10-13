@@ -615,3 +615,14 @@ test('13-i RC3: five readings draw the last three rails and "2 earlier"; maths s
  assert.match(m,/2 earlier/);
  assert.doesNotMatch(draw(session({history:hist.slice(0,3)}),NOW),/recap-earlier/,'three readings need no earlier line');
 });
+// SW5 (scan-sweep optimize 2026-10-13): the Linga tile draws its last five talks and, like the other two tiles, says how many came before
+test('SW5: seven talks tonight draw the last five marks and "2 earlier"; five or fewer draw no earlier line',()=>{
+ const talks=(n)=>Array.from({length:n},(_,i)=>({id:`t${i}`,sceneId:'cafe',title:'At the cafe',at:TODAY(10+i),turns:3+i}));
+ const html=draw(session({englishLearning:{...noEnglish,sessions:talks(7)}}),NOW);
+ const tile=html.slice(html.indexOf('data-app="english"'),html.indexOf('data-app="essay"'));
+ assert.equal((tile.match(/data-role="recap-talk"/g)||[]).length,5,'the last five talks');
+ assert.match(tile,/data-role="recap-earlier"[^>]*>2 earlier</,'and the two before them, counted');
+ const five=draw(session({englishLearning:{...noEnglish,sessions:talks(5)}}),NOW);
+ const t5=five.slice(five.indexOf('data-app="english"'),five.indexOf('data-app="essay"'));
+ assert.equal((t5.match(/data-role="recap-talk"/g)||[]).length,5);assert.doesNotMatch(t5,/recap-earlier/,'five need no earlier line');
+});

@@ -265,6 +265,7 @@
 .rc .rc-door { position: relative; flex: 1; margin: 28px 24px 0; border: 10px solid #6A3946; border-bottom: 0; border-radius: 240px 240px 0 0;
   background: radial-gradient(420px 300px at 50% 100%, #F6D0A2, #EADFCE 70%); box-shadow: 0 16px 0 -2px #5D3548; display: flex; }
 .rc .rc-lg .rc-none { font-family: Georgia, "Times New Roman", serif; font-style: italic; color: #775F5D; margin-bottom: 70px; }
+.rc .rc-lg .rc-earlier { margin-top: 18px; text-align: center; font: italic 30px/1 Georgia, "Times New Roman", serif; letter-spacing: 0; color: #775F5D; }
 .rc .rc-talks { margin: auto auto 34px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 16px; padding: 0 24px; }
 .rc .rc-talks b { width: var(--rc-d); height: var(--rc-d); border-radius: 50%; background: #41273D; color: #FFF8E8; display: grid; place-items: center;
   font: 700 32px/1 Georgia, "Times New Roman", serif; box-shadow: 0 6px 0 #6E283C; }

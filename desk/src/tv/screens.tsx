@@ -349,13 +349,16 @@ function RecapMaths({ t }: { t: MathsTile }) {
     </div>
   </>);
 }
+/** The most conversations the Linga card draws; the ones before them are counted under it, as the other two tiles do. */
+const RECAP_TALKS = 5;
 function RecapLinga({ t }: { t: LingaTile }) {
   return (<>
     <div className="rc-head"><LingaMark /></div>
     <div className="rc-door">
       {t.empty ? <div className="rc-none">{t.empty}</div>
-        : <div className="rc-talks">{t.talks.slice(-5).map((n, i) => <b key={i} data-role="recap-talk" style={{ "--rc-d": `${Math.round(48 + Math.min(n, 14) * 8)}px` } as React.CSSProperties}>{n}</b>)}</div>}
+        : <div className="rc-talks">{t.talks.slice(-RECAP_TALKS).map((n, i) => <b key={i} data-role="recap-talk" style={{ "--rc-d": `${Math.round(48 + Math.min(n, 14) * 8)}px` } as React.CSSProperties}>{n}</b>)}</div>}
     </div>
+    {!t.empty && <Earlier n={t.talks.length - RECAP_TALKS} />}
   </>);
 }
 function RecapEssay({ t }: { t: EssayTile }) {
