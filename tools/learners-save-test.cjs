@@ -212,3 +212,13 @@ test('OPT-6: a skill record read from disk keeps whole counts of at least 0 and 
   assert.deepEqual([l.skills.c.seen,l.skills.c.right,l.skills.c.lastSeen],[7,4,1700000000000],'a good record reads as it was');
   fs.rmSync(FILE,{force:true});
 });
+test('OPT-10: saveEnglish reads learners.json once - the book it writes into is the book it merges from',()=>{
+  fs.writeFileSync(FILE,JSON.stringify({o10:{id:'o10',skills:{},writing:{},memory:['kept'],history:[],digest:[]}}));
+  const real=fs.readFileSync;let reads=0;
+  const en=L.getLearner('o10').english;
+  fs.readFileSync=function(p,...a){if(String(p)===FILE)reads++;return real.call(this,p,...a);};
+  try{L.saveEnglish('o10',en);}finally{fs.readFileSync=real;}
+  assert.equal(reads,1,`saveEnglish read learners.json ${reads} times`);
+  assert.deepEqual(L.getLearner('o10').memory,['kept'],'the rest of the learner is kept');
+  fs.rmSync(FILE,{force:true});
+});

@@ -306,7 +306,8 @@ export function saveLearner(l: Learner): void {
 export function saveEnglish(id: string, english: EnglishLearning): void {
   const book = readBook();
   if (!book) throw new LearnersUnread("learners.json could not be read, so progress was not saved over it");
-  book[id] = { ...getLearner(id), english };
+  // the learner from the book just read (getLearner would read and parse the file a second time)
+  book[id] = { ...(book[id] ? clean(id, book[id]) : blank(id)), english };
   writeBook(book);
 }
 
