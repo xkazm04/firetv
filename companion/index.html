@@ -195,7 +195,11 @@
     if (m.type === 'welcome') {
       if (!m.accepted) {
         refused = true;
-        statusEl.textContent = (m.reason || 'not paired') + ' · type the PIN from the TV';
+        // After too many wrong PINs the TV refuses every PIN, the right one too, for half a
+        // minute (PairingDesk.COOLDOWN_MS): typing it at once would only be refused again.
+        const locked = m.reason === 'too many wrong PINs';
+        statusEl.textContent = (m.reason || 'not paired') +
+          (locked ? ' · wait half a minute, then type the PIN' : ' · type the PIN from the TV');
         statusEl.classList.add('bad');
         pinbox.classList.add('show');
         pintext.value = '';

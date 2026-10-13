@@ -49,8 +49,8 @@ function fakeTv(cfg) {
         log.refused++;
         if (log.firstRefusalAt === null) log.firstRefusalAt = performance.now();
         // The TV's order: the refusal, then the close (VIOLATED_POLICY, as KtorPenChannel sends it).
-        this.deliver({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: 'wrong PIN' });
-        setTimeout(() => this.drop(1008, 'wrong PIN'), 5);
+        this.deliver({ type: 'welcome', sessionId: '', videoAspect: 1.7778, accepted: false, reason: cfg.reason || 'wrong PIN' });
+        setTimeout(() => this.drop(1008, cfg.reason || 'wrong PIN'), 5);
         return;
       }
       log.welcomed++;
@@ -140,6 +140,20 @@ try {
       .then(() => true, () => false);
     const tv = await page.evaluate(() => window.__tv);
     check('drop: a dropped line reconnects and pairs again', back, `${tv.opened} connections, ${tv.welcomed} welcomed`);
+    await page.close();
+  }
+
+  // ---- locked (too many wrong PINs) ----------------------------------------------------------
+  // During the TV's cooldown the right PIN is refused too, so "type the PIN" is a remedy that
+  // cannot help yet: the page must say to wait.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false, reason: 'too many wrong PINs' });
+    await page.goto(PAGE + '?pin=0000');
+    await page.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    await page.waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 2000 });
+    const status = (await page.locator('#status').textContent()) ?? '';
+    check('locked: the page says to wait, not to type the PIN now', /wait/i.test(status), `status "${status}"`);
     await page.close();
   }
 
