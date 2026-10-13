@@ -21,6 +21,7 @@ test('pinFromLogcat takes the PIN of the LAST pairing line, from ?pin= or &pin='
   assert.equal(pinFromLogcat(twoLaunches), '2222');
   assert.equal(pinFromLogcat('I Telestrator: transport=lan pairing=http://10.0.0.142:8765/?pin=4821'), '4821');
   assert.equal(pinFromLogcat('I Telestrator: listening on http://10.0.0.142:8765/?pin=9999'), undefined, 'only a pairing= line counts');
+  assert.equal(pinFromLogcat('I Telestrator: transport=lan pairing=http://10.0.0.142:8765/#pin=5150'), '5150', 'the fragment form');
   assert.equal(pinFromLogcat(''), undefined);
 });
 

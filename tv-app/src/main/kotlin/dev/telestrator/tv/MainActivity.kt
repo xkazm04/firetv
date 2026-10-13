@@ -37,6 +37,7 @@ import androidx.media3.ui.PlayerView
 import androidx.tv.material3.Text
 import androidx.lifecycle.lifecycleScope
 import dev.telestrator.core.LinkEvent
+import dev.telestrator.core.PairingUrl
 import dev.telestrator.core.PenMessage
 import dev.telestrator.core.PlayerAction
 import dev.telestrator.core.TransportPlan
@@ -117,7 +118,7 @@ class MainActivity : ComponentActivity() {
         val phoneUrl = intent?.getStringExtra("phone_url") ?: DEFAULT_RELAY_PHONE
         return RelayTransport(
             relayWsUrl = relayUrl,
-            phoneUrl = "$phoneUrl?pin=${session.pin}",
+            phoneUrl = PairingUrl.of(phoneUrl, session.pin),
         )
     }
 

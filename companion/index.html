@@ -160,7 +160,10 @@
   const statusEl = $('status'), dot = $('dot'), hint = $('hint');
   const tagbox = $('tagbox'), tagtext = $('tagtext');
 
-  let pin = new URLSearchParams(location.search).get('pin') || '0000';
+  // The PIN rides in the fragment (#pin=), which the browser never sends, so a relay's access
+  // log cannot learn it. The query (?pin=) stays as a fallback for QR codes printed earlier.
+  let pin = new URLSearchParams(location.hash.slice(1)).get('pin')
+    || new URLSearchParams(location.search).get('pin') || '0000';
   const clientId = 'pen-' + Math.random().toString(36).slice(2, 8);
 
   let tool = 'freehand';
@@ -298,9 +301,12 @@
     if (!typed) return;
     pin = typed;
     // A reload keeps the PIN the viewer typed rather than the one the TV refused.
+    // It goes back into the fragment, and an old ?pin= is dropped from the query, so the PIN is
+    // never in anything the page host sees.
     const q = new URLSearchParams(location.search);
-    q.set('pin', pin);
-    history.replaceState(null, '', '?' + q);
+    q.delete('pin');
+    const qs = q.toString();
+    history.replaceState(null, '', location.pathname + (qs ? '?' + qs : '') + '#pin=' + encodeURIComponent(pin));
     refused = false;
     pinbox.classList.remove('show');
     statusEl.classList.remove('bad');

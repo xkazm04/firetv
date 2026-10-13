@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.Text
 import dev.telestrator.core.LinkView
+import dev.telestrator.core.PairingUrl
 import kotlinx.coroutines.delay
 
 /** How often the card re-reads the clock; the shortest thing it times is a 3 s grace. */
@@ -119,7 +120,7 @@ private fun Invitation(url: String, pin: String, transport: String, title: Strin
         Image(bitmap = qr, contentDescription = stringResource(R.string.link_qr), modifier = Modifier.size(200.dp))
     }
     Pin(pin)
-    Text(url.removePrefix("http://").substringBefore('?'), color = Color.Black, fontSize = 16.sp)
+    Text(PairingUrl.display(url), color = Color.Black, fontSize = 16.sp)
     Text(stringResource(R.string.link_via, transport), color = Color.DarkGray, fontSize = 14.sp)
 }
 
