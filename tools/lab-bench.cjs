@@ -256,14 +256,24 @@ function table(r) {
 }
 
 async function main(argv) {
-  const json = argv.includes("--json"), live = argv.includes("--live");
-  const at = argv.indexOf("--replay");
-  let replay = true;
-  if (at >= 0 && argv[at + 1] && !argv[at + 1].startsWith("--")) {
-    try { replay = JSON.parse(fs.readFileSync(argv[at + 1], "utf8")); }
-    catch (e) { console.error(`lab bench: cannot read the replay file ${argv[at + 1]}: ${e.message}`); return 2; }
+  // every argument is one the bench honours, or the run is refused: a fixture it never read must not score as a pass
+  let json = false, live = false, file = null, replayArg = false;
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--json") json = true;
+    else if (a === "--live") live = true;
+    else if (a === "--replay" || a.startsWith("--replay=")) {
+      replayArg = true;
+      file = a === "--replay" ? (argv[i + 1] && !argv[i + 1].startsWith("--") ? argv[++i] : null) : a.slice("--replay=".length);
+      if (!file) { console.error("lab bench: --replay needs a file (--replay <file.json>); with no flag the bench replays the recorded set."); return 2; }
+    } else { console.error(`lab bench: unknown argument ${a} (use --json, --live, --replay <file.json>).`); return 2; }
   }
-  if (live && at >= 0) { console.error("lab bench: --live and --replay are two different runs; pick one."); return 2; }
+  if (live && replayArg) { console.error("lab bench: --live and --replay are two different runs; pick one."); return 2; }
+  let replay = true;
+  if (file) {
+    try { replay = JSON.parse(fs.readFileSync(file, "utf8")); }
+    catch (e) { console.error(`lab bench: cannot read the replay file ${file}: ${e.message}`); return 2; }
+  }
   const r = await runBench({ replay, live });
   if (json) { const { read, hints, retrieval, baseline, verdicts: v, providers } = r; console.log(JSON.stringify({ read, hints, retrieval, baseline, verdicts: v, providers }, null, 1)); }
   else console.log(table(r));

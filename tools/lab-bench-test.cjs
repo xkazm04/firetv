@@ -171,3 +171,16 @@ test('case 12: the bench loads desk TypeScript through the rules suites\' one lo
  assert.match(src,/require\("\.\/ts-load\.cjs"\)/);
  assert.doesNotMatch(src,/require\.extensions|_resolveFilename|transpileModule/,'no loader of its own');
 });
+
+test('case 13: an argument the bench cannot honour is exit 2, never a pass on the recorded set; --replay=<file> is read',()=>{
+ const leaky={hints:{'Solve for x: 3x - 7 = 11':{hint1:{hint:'x = 6',what_to_try_next:'Check it.'}},'Solve: x/4 + 3 = 8':{hint1:{hint:'x = 20',what_to_try_next:'Check it.'}}}};
+ const f=path.join(scratch,'leaky-eq.json');fs.writeFileSync(f,JSON.stringify(leaky));
+ for(const args of [['--replay'],['--replay','--json'],['--repaly',f],['--replay',f,'extra']]){
+  const out=cli(...args);
+  assert.equal(out.status,2,`${args.join(' ')}: ${out.stdout.slice(0,80)}`);
+  assert.match(out.stderr,/lab bench:/);
+ }
+ const eq=cli(`--replay=${f}`);
+ assert.equal(eq.status,1,'the fixture was read: B fails');
+ assert.match(eq.stdout,/B\b.*fail/);
+});
