@@ -862,3 +862,59 @@ test('LAN2: lanHost with DESK_PHONE_HOST set reads no network adapter, with none
   assert.equal(scans,1,'no forced host: one scan');
  }finally{mock.restoreAll();}
 });
+
+// ---- NL: NEEDS_LEARNER follows the slot fields, not a hand list ----
+// Ground truth: an event that changes a MathsSlot field (slotOf in store.ts) must write nothing while no one is at the desk.
+// One sample per Event type, read from the union in store.ts so a type added without a sample fails by name.
+const SLOT_FIELDS=['pages','pageIx','itemIx','reading','hint','lesson','noLesson','lessonPaused','topic','practice','walkIx','tasks','essay','essayType','essayAt','essayPlan'];
+const eventTypes=()=>{
+ const text=fs.readFileSync(src('lib/session/store.ts'),'utf8').split('\n').filter((l)=>!/^\s*\/\//.test(l)).join('\n');
+ const a=text.indexOf('export type Event ='),b=text.indexOf('const DATA',a);
+ return [...new Set([...text.slice(a,b).matchAll(/\{ type: "([a-z.]+)"/g)].map((m)=>m[1]))];
+};
+const analysis={sentences:[],thesis:'',claims:[],text:'a b',title:'t',issues:[],summary:''};
+const SAMPLES={
+ 'linga.changed':{type:'linga.changed',conversation:null,check:null,screen:'linga',focus:1},
+ 'join':{type:'join'},'leave':{type:'leave'},'nav':{type:'nav',screen:'maths',focus:1},'focus':{type:'focus',focus:2},'subject':{type:'subject',subject:'english'},
+ 'learner.set':{type:'learner.set',id:'ema'},
+ 'profile.draft':{type:'profile.draft',patch:{name:'x'}},'profile.save':{type:'profile.save'},'profile.discard':{type:'profile.discard'},
+ 'page.reading':{type:'page.reading',page:{id:'p1',subject:'maths',photo:'x'}},
+ 'page.read':{type:'page.read',id:'p1',items:[{n:1,text:'1+1'}],readMs:1,provider:'stub'},
+ 'page.ask':{type:'page.ask',subject:'maths'},'page.unask':{type:'page.unask'},
+ 'page.select':{type:'page.select',pageIx:1,itemIx:1},'item':{type:'item',itemIx:1},'view':{type:'view',view:'overview'},
+ 'hint.set':{type:'hint.set',hint:{stage:1,text:'h',n:1}},'hint.stage':{type:'hint.stage',stage:2},
+ 'lesson.set':{type:'lesson.set',lesson:{id:'jWpiMu5LNdg',title:'t',t:0,text:'',why:''}},'lesson.pause':{type:'lesson.pause',paused:true},
+ 'lesson.watched':{type:'lesson.watched'},
+ 'english.set':{type:'english.set',analysis},'essay.type':{type:'essay.type',essayType:'argument'},
+ 'worked.set':{type:'worked.set',worked:{steps:[]}},'workroom.set':{type:'workroom.set',workroom:{},open:true},
+ 'essay.set':{type:'essay.set',analysis},'essay.progress':{type:'essay.progress',analysis},'essay.at':{type:'essay.at',n:2},
+ 'essay.plan':{type:'essay.plan',lens:'claim'},'essay.slot':{type:'essay.slot',i:0,text:'A sentence.'},'essay.revised':{type:'essay.revised',analysis,n:1},
+ 'paper.enter':{type:'paper.enter',rows:[{q:'1+1',a:'2'}]},
+ 'task.add':{type:'task.add',name:'Read chapter 3',sub:'english',min:10},'task.done':{type:'task.done',id:'t1',done:true},
+ 'timer.start':{type:'timer.start'},'timer.pause':{type:'timer.pause'},'timer.tick':{type:'timer.tick',seconds:5},'timer.skipbreak':{type:'timer.skipbreak'},
+ 'topic.open':{type:'topic.open',topic:'fractions'},
+ 'practice.set':{type:'practice.set',practice:{topic:'t',items:[{n:1,q:'1+1',a:'2'}]}},'practice.marked':{type:'practice.marked',items:[{n:1,q:'1+1',a:'2'}]},
+ 'walk':{type:'walk',ix:1},'practice.clear':{type:'practice.clear'},'practice.second':{type:'practice.second',n:1,verdict:'right'},
+ 'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
+ 'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
+ 'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},
+};
+// seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
+const SEATS_OR_CLEARS=new Set(['learner.set','reset']);
+test('NL: every Event type has a sample, and none that changes a slot field is written with no one at the desk',()=>{
+ const types=eventTypes();
+ assert.ok(types.length>=50,'the Event union was read: '+types.length);
+ assert.deepEqual(types.filter((t)=>!SAMPLES[t]),[],'event types with no sample in this table');
+ assert.deepEqual(Object.keys(SAMPLES).filter((t)=>!types.includes(t)),[],'samples for types that are gone');
+ const slot=()=>JSON.stringify(SLOT_FIELDS.map((k)=>store.getSession()[k]));
+ const wrote=[];
+ for(const t of types){
+  if(SEATS_OR_CLEARS.has(t))continue;
+  store.dispatch({type:'reset'});assert.equal(store.getSession().learner,null);
+  const before=slot();
+  try{store.dispatch(SAMPLES[t]);}catch{/* a sample the reducer refuses writes nothing */}
+  if(slot()!==before)wrote.push(t);
+ }
+ assert.deepEqual(wrote,[],'these change a MathsSlot field with no one at the desk - add them to NEEDS_LEARNER');
+ store.dispatch({type:'reset'});
+});
