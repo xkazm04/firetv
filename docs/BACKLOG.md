@@ -122,8 +122,8 @@ The 2026-10-09 drains (analysis in `docs/uat-insights/2026-10-09-*.md`) append t
   - origin: 2026-09-15-lt/LT-ondrej-16-J5-1 (VERIFY-confirmed breach; fixed at LT, ceiling "Prompt-held, not code-enforced"); "apparently dating was fine after one request, so the limits weren't consistent" (ondrej-16, 2026-09-15-lt)
   - recommendation: build — the rule is a prompt sentence (`lib/english/conversation.ts:77`); the keyword gate never runs on partner replies (`lib/english/gate.ts:11-12`). A code check of the reply for a minor, keeping the in-scene redirect, with a model-level test
   - owner: linga-conversation-turn council rework
-  - status: open
-  - ceiling: a keyword check catches named topics, not innuendo
+  - status: built 14b4ae91
+  - ceiling: a keyword check catches named topics, not innuendo; innuendo and non-English remain prompt-held
 - **LG-21** — The date partner's refusal is one repeated line
   - origin: 2026-09-15-lt-recert/LT-lukas-24-J5-2, 2026-09-15-lt/LT-lukas-24-J3-3; "Hearing that three times felt mechanical. I want to practise showing interest respectfully" (lukas-24, 2026-09-15-lt-recert)
   - recommendation: concept-doc — `docs/LINGA-CONVERSATION-DESIGN.md`, *Open questions (09-15 drain)*. Trades against LG-20: the date premise (`lib/english/curriculum.ts:57`) and "never flirt explicitly … Decline warmly" (`lib/english/conversation.ts:77`)
