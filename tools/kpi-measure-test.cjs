@@ -101,6 +101,14 @@ test('no donor anywhere is one instruction and a non-zero exit, never a stack',(
  assert.match(r.reason,/no checkout near /);
  assert.equal(o.lines.length,1,'one line, not a stack');assert.match(o.lines[0],/Run `npm install` in desk\/, then `npm test`\.$/);
 });
+// The gate's typecheck must start the compiler the preflight checked for. A bare `tsc` resolves through node_modules/.bin,
+// which the preflight never looks at: a linked donor without .bin (the main checkout, measured 2026-10-13) passes the
+// preflight in silence and the gate then dies on "tsc is not recognized" in every worktree.
+test('npm test\'s typecheck runs the compiler by the path the preflight and the KPI tool check, never through .bin',()=>{
+ const scripts=JSON.parse(fs.readFileSync(path.join(__dirname,'../desk/package.json'),'utf8')).scripts;
+ assert.match(scripts['test:types'],/^node node_modules\/typescript\/bin\/tsc --noEmit\b/,'the compiler is started by its file, not by a .bin shim');
+ assert.doesNotMatch(scripts['test:types'],/(^|&&\s*)tsc\b/,'no bare tsc');
+});
 test('a real directory in the way is reported, never deleted — an install is the operator\'s, not ours',()=>{
  const half=install('checkout-half-installed',{typescript:false,other:true});install('donor-for-half');
  const r=preflight.ensure({env:{},checkout:half.dir,main:null,levels:1,link:never});

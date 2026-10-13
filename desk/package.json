@@ -11,7 +11,7 @@
     "bench": "node ../tools/lab-bench.cjs",
     "pretest": "node ../tools/worktree-preflight.cjs",
     "test": "npm run test:types && npm run test:rules",
-    "test:types": "tsc --noEmit",
+    "test:types": "node node_modules/typescript/bin/tsc --noEmit",
     "test:rules": "node ../tools/run-rules.cjs"
   },
   "rulesSuites": [
