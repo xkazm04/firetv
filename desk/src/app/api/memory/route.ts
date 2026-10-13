@@ -8,7 +8,8 @@
  * hint, a verdict, a reading, a conversation - is new.
  *
  * The answer says which case it is: `asked` false is an evening with no work (nothing was asked), `asked` true with
- * no lines is a model that found nothing new; a failed run answers with the desk's own sentence as `error`.
+ * no lines is a model that found nothing new, `already` true is an evening written by an earlier ask (the TV Menu
+ * before the phone End session); a failed run answers with the desk's own sentence as `error`.
  */
 import { createHash } from "node:crypto";
 import { NextResponse } from "next/server";
@@ -33,7 +34,7 @@ export async function POST() {
   const tonight = eveningOf(s, Date.now());
   if (!s.practice?.items?.length && !s.log.hints && !tonight.essay.length && !tonight.linga.conversations) return NextResponse.json({ lines: [], asked: false });
   const key = evening(s, who.id, topic, tonight), last = s.jobs?.memory;
-  if (last?.phase === "done" && last.key === key) return NextResponse.json({ lines: [], asked: true });
+  if (last?.phase === "done" && last.key === key) return NextResponse.json({ lines: [], asked: true, already: true });
   const r = await runJob("memory", () => writeMemory(who.id, {
     topic,
     items: s.practice?.items,

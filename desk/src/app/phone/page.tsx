@@ -103,9 +103,9 @@ export default function Phone() {
   const [again, setAgain] = useState("");
   /**
    * What the desk noticed tonight, read once on the way out: the lines written, whether the model was asked (an evening
-   * with no work asks nothing), or the desk's own sentence for a write that failed.
+   * with no work asks nothing; one written by an earlier ask is not asked again), or the desk's own sentence for a write that failed.
    */
-  const [memory, setMemory] = useState<{ lines: string[]; asked: boolean } | { error: string } | null>(null);
+  const [memory, setMemory] = useState<{ lines: string[]; asked: boolean; already?: boolean } | { error: string } | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
   /**
@@ -430,8 +430,8 @@ export default function Phone() {
     try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
     setBusy(true);
     try {
-      const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; error?: string }));
-      setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false }
+      const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; already?: boolean; error?: string }));
+      setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false, already: j.already === true }
         : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
     } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
     finally { setBusy(false); }
@@ -681,7 +681,7 @@ export default function Phone() {
           {memory && <div className="precap" data-role="phone-memory"><b>What the desk noticed</b>
             <ul>{"error" in memory ? <li>{memory.error}</li>
               : memory.lines.length ? memory.lines.map((l, i) => <li key={i}>{l}</li>)
-              : <li>{memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
+              : <li>{memory.already ? "Tonight is already written down." : memory.asked ? "Nothing new to note tonight." : "Nothing worked on tonight."}</li>}</ul></div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
           {(() => {

@@ -300,7 +300,7 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
   assert.match(lastReq.prompt,/Essay Master tonight/);assert.match(lastReq.prompt,/Argument lens: 5 sentences read, 2 to fix when read, 1 after rewrites/);
   assert.doesNotMatch(lastReq.prompt,/Topic worked on tonight/,'no maths section for an evening with no maths');
   assert.doesNotMatch(lastReq.prompt,/Linga tonight/);
-  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:true},'the same evening is not written twice');assert.equal(asked,1);
+  r=await memoryPost();assert.deepEqual(r.body,{lines:[],asked:true,already:true},'the same evening is not written twice, and the answer says it was written already');assert.equal(asked,1);
   // a new Essay line is new work: the evening key covers it
   globalThis.__desk.session={...store().getSession(),history:[...store().getSession().history,{at:Date.now()-500,kind:'writing',label:'Evidence',detail:'2 of 4 sentences to fix'}]};
   await memoryPost();assert.equal(asked,2,'a new reading is new work');
@@ -314,10 +314,12 @@ test('M2: an Essay-only evening and a Linga-only evening are written down too; t
  }finally{reg().resetProviders();}
 });
 
-test('M3: the phone\'s What the desk noticed has four states, and a failed write never reads as an empty evening',()=>{
+test('M3: the phone\'s What the desk noticed has five states, and a failed write never reads as an empty evening',()=>{
  const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  assert.match(phone,/Nothing new to note tonight\./,'the model was asked and returned none');
  assert.match(phone,/Nothing worked on tonight\./,'nothing was asked');
+ assert.match(phone,/Tonight is already written down\./,'End session after the TV Menu wrote the evening says it was written, not that there was nothing');
+ assert.match(phone,/already: j\.already === true/,'the route\'s already flag reaches the panel');
  assert.doesNotMatch(phone,/Nothing written down tonight/,'the old catch-all is gone');
  assert.match(phone,/asked: j\.asked !== false/,'the route says which case it is');
  assert.match(phone,/\{ error: j\.error \?\? /,'a non-ok answer shows the desk\'s own sentence');
