@@ -56,12 +56,12 @@ export function makeAdb({ maxBuffer = 1 << 28, timeout } = {}) {
  * Docker, VPN). Pick the interface whose address shares the longest prefix with the device's, so
  * a Hyper-V switch on 172.x never wins over the Wi-Fi adapter the Stick is actually on.
  */
-export function hostAddressForDevice(tvHost = TV_HOST) {
+export function hostAddressForDevice(tvHost = TV_HOST, interfaces = os.networkInterfaces()) {
   if (process.env.TV_RELAY_HOST) return process.env.TV_RELAY_HOST;
   const deviceIp = tvHost.split(':')[0];
   if (deviceIp === '127.0.0.1' || deviceIp === 'localhost') return '10.0.2.2';
 
-  const candidates = Object.values(os.networkInterfaces())
+  const candidates = Object.values(interfaces)
     .flat()
     .filter((n) => n && n.family === 'IPv4' && !n.internal)
     .map((n) => n.address);
