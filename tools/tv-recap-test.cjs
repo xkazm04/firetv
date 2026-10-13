@@ -640,6 +640,31 @@ test('SW6: the lesson ticker - paused or playing - names Play, not the bench key
  }
  assert.match(ticker(true),/paused/);assert.match(ticker(false),/playing/);
 });
+// SW11 (scan-sweep optimize 2026-10-13, tv-surface): Play/Pause reaches the player - the embed accepts commands and the lesson screens send them
+/** A TS/TSX source with block comments and whole-line or trailing // comments removed (a URL's // is kept). */
+const noComments=(t)=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+test('SW11: the lesson embed enables the player API and both lesson screens send pauseVideo/playVideo when lessonPaused changes',()=>{
+ const {LessonScreen}=require(path.join(root,'src/tv/screens.tsx')),M=require(path.join(root,'src/maths/MathsTV.tsx'));
+ const lesson={id:'l1',title:'Past simple',t:0,text:'yesterday · ago',why:'Unit 6.',youtube:'abc123',concepts:[]};
+ const shellHtml=renderToStaticMarkup(createElement(LessonScreen,{s:session({subject:'english',screen:'lesson',lesson})}));
+ const mathsHtml=renderToStaticMarkup(createElement(M.LessonScreen,{s:session({subject:'maths',screen:'lesson',lesson})}));
+ for(const [name,h] of [['shell',shellHtml],['maths',mathsHtml]]){
+  const src=(h.match(/<iframe[^>]*src="([^"]*)"/)||[])[1];
+  assert.ok(src,`${name}: the embed is drawn`);
+  assert.match(src,/(\?|&amp;|&)enablejsapi=1(&amp;|&|$)/,`${name}: the embed accepts player commands`);
+ }
+ // the command the player takes, as the IFrame API's postMessage form
+ const {playerCommand}=keys();
+ assert.equal(typeof playerCommand,'function','keys.ts names the command');
+ assert.deepEqual(JSON.parse(playerCommand(true)),{event:'command',func:'pauseVideo',args:''});
+ assert.deepEqual(JSON.parse(playerCommand(false)),{event:'command',func:'playVideo',args:''});
+ // each lesson screen posts it to the embed's window
+ for(const f of ['src/tv/screens.tsx','src/maths/MathsTV.tsx']){
+  const t=noComments(fs.readFileSync(path.join(root,f),'utf8'));
+  assert.match(t,/playerCommand\(/,`${f}: sends the command`);
+  assert.match(t,/postMessage\(/,`${f}: posts it to the iframe`);
+ }
+});
 // SW9 (scan-sweep optimize 2026-10-13): the page's lower third marks a cut paragraph as cut, and only a cut one (as the lesson text does)
 test('SW9: an essay paragraph on the page screen ends in an ellipsis only when it was cut',()=>{
  const {PageScreen}=require(path.join(root,'src/tv/screens.tsx'));
