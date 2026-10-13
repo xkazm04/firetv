@@ -57,7 +57,9 @@
   .swatch { flex:0 0 40px; height:36px; border-radius:8px; border:2px solid transparent; padding:0; }
   .swatch[aria-pressed="true"] { border-color:#fff; }
 
-  input[type=range] { flex:1; accent-color:var(--ink); min-width:0; }
+  /* The track stays thin; the box is what a thumb hits, and 16 px (the default) is under the
+     24 px minimum target. */
+  input[type=range] { flex:1; accent-color:var(--ink); min-width:0; height:32px; margin:0; }
   .lbl { color:var(--dim); font-size:11px; align-self:center; flex:0 0 auto;
     font-variant-numeric:tabular-nums; }
 

@@ -266,6 +266,17 @@ try {
         .map((el) => el.outerHTML.slice(0, 60)),
     );
     check('a11y: every button and input has a spoken name', unnamed.length === 0, `${unnamed.length} unnamed ${unnamed.join(' | ')}`);
+
+    // WCAG 2.5.8: a pointer target is at least 24 x 24 CSS px. Measured on a phone-sized page.
+    await page.setViewportSize({ width: 375, height: 667 });
+    const small = await page.evaluate(() =>
+      [...document.querySelectorAll('nav button, nav input')]
+        .filter((el) => el.offsetParent)
+        .map((el) => [el.getAttribute('aria-label') || el.textContent.trim() || el.id, el.getBoundingClientRect()])
+        .filter(([, r]) => Math.min(r.width, r.height) < 24)
+        .map(([name, r]) => `${name} ${Math.round(r.width)}x${Math.round(r.height)}`),
+    );
+    check('a11y: every control is at least 24 px on a phone', small.length === 0, `${small.length} small ${small.join(' | ')}`);
     await page.close();
   }
 } finally {
