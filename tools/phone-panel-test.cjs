@@ -755,6 +755,23 @@ test('SW2: the camera effect stops a stream that arrives after the panel no long
  wanted.cleanup();assert.deepEqual(wanted.stopped,['video'],'the page going away stops the camera in use');
 });
 
+// ---- SW3/SW4 (scan-sweep optimize 2026-10-13): case 13's phone-sized rule (44 px targets, 16 px fields) on every panel ----
+const phoneCss=()=>fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+const ruleOf=(css,sel)=>{const i=css.indexOf(`${sel} {`);assert.ok(i>=0,`${sel} is styled`);return css.slice(i,css.indexOf('}',i));};
+const pxOf=(decl,prop)=>Number((decl.match(new RegExp(`(?:^|[;{\\s])${prop}: (\\d+)px`))||[])[1]||0);
+test('SW3: every typed field on the phone is 16 px or more, so a phone does not zoom in when it is tapped',()=>{
+ const css=phoneCss();
+ // the .field row holds the code, the name, the question, the sentence, the plan slot and the paragraph
+ assert.ok(pxOf(ruleOf(css,'.field input, .field textarea, .field select'),'font-size')>=16,'.field controls are 16 px or more');
+ assert.ok(pxOf(ruleOf(css,'.ppaper-find'),'font-size')>=16,'the Paper panel\'s search box is 16 px or more');
+ assert.ok(pxOf(ruleOf(css,'.pask input'),'font-size')>=16,'unchanged: the typed answers');
+});
+test('SW4: the phone\'s tap targets are at least 44 px tall - the tab bar, the presets, the samples and the role switch',()=>{
+ const css=phoneCss();
+ for(const sel of ['.pnav button','.presets button','.samples button','.ptop .who button','.field input, .field textarea, .field select'])
+  assert.ok(pxOf(ruleOf(css,sel),'min-height')>=44,`${sel} is at least 44 px tall`);
+});
+
 // ---- PR5: every refused join says why on the Join panel ----
 const WRONG='That code is not on the TV.',TOO_MANY='Too many wrong codes. Wait five minutes, then type the code again.';
 const NEWCODE='The TV has a new code. Type the code the TV shows.',NOREACH='That did not reach the desk.';
