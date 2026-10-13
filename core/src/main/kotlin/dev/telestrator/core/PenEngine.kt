@@ -156,7 +156,9 @@ class PenEngine(
     }
 
     private fun handlePen(msg: PenMessage.Pen, tMs: Long) {
-        val xyp = msg.pts.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
+        // A point needs an x and a y. The wire decodes any list, and a short one would throw here,
+        // on the pen's receive loop, and end the connection; skip it and keep the rest.
+        val xyp = msg.pts.filter { it.size >= 2 }.map { listOf(it[0], it[1], it.getOrElse(2) { 0.5 }) }
         when (msg.phase) {
             "down" -> {
                 clearLive()
@@ -185,6 +187,8 @@ class PenEngine(
     }
 
     private fun handleShape(msg: PenMessage.Shape, tMs: Long) {
+        // Both ends need an x and a y, for the same reason as a pen point: drop, never throw.
+        if (msg.from.size < 2 || msg.to.size < 2) return
         val hold = holdMs(msg.hold)
         val style = Style(color = msg.color, width = msg.width)
         val a = when (msg.tool) {
