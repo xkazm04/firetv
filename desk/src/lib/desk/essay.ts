@@ -21,25 +21,28 @@ type Lens = (typeof ANALYSIS_TYPES)[number];
  * those (rules/essay decideVerdicts). What is observed depends on the lens.
  */
 const FIX = { type: "object", properties: { move: { type: "string" }, pattern: { type: "string" } }, required: ["move", "pattern"] };
-/** The one field each lens decides on: required in the request, so a reading can cover every sentence. */
-const DECIDING: Record<string, string> = { structure: "job", argument: "side", evidence: "support", language: "issues" };
-const OBSERVED: Record<string, Record<string, unknown>> = {
+/**
+ * The one field each lens decides on: required in the request, so a reading can cover every sentence. These three maps are
+ * keyed by the lens ids themselves (rules/essay ANALYSIS_TYPES), so a lens added there without its fields here does not compile.
+ */
+const DECIDING: Record<AnalysisType, string> = { structure: "job", argument: "side", evidence: "support", language: "issues" };
+const OBSERVED: Record<AnalysisType, Record<string, unknown>> = {
   structure: { job: { type: "string", enum: [...JOBS] }, supports: { type: "integer" } },
   argument: { side: { type: "string", enum: [...SIDES] }, turnsBack: { type: "boolean" } },
   evidence: { support: { type: "string", enum: [...SUPPORTS] }, backs: { type: "integer" } },
   language: { issues: { type: "array", items: { type: "object", properties: { kind: { type: "string", enum: [...ISSUE_KINDS] }, word: { type: "string" } }, required: ["kind", "word"] } } },
 };
-const OBSERVE: Record<string, string> = {
+const OBSERVE: Record<AnalysisType, string> = {
   structure: "For each sentence, report the job it does: job is claim, evidence, link, context or none. For an evidence sentence, or a claim that backs an earlier claim, add supports: the number of the claim it backs.",
   argument: "For each sentence, report the side it takes: side is pushes (for the paragraph's claim), against, wanders or neutral; turnsBack is true when a sentence on the other side turns back to the claim.",
   evidence: "For each sentence, report the support it gives: support is checkable (a number, a source or an example a reader could check), opinion (only asserts) or context. For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion.",
   language: "For each sentence, list its issues: each is {kind: vague or repeated, word: the exact word as it is written in the sentence}. For a sentence with no issue, give issues: []; the desk counts length itself.",
 };
-const observedOf = (lens: Lens) => OBSERVED[lens.id] ?? OBSERVED.structure;
+const observedOf = (lens: Lens) => OBSERVED[lens.id];
 const schemaFor = (lens: Lens) => ({
   type: "object",
   properties: {
-    observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note", DECIDING[lens.id] ?? DECIDING.structure] } },
+    observations: { type: "array", items: { type: "object", properties: { n: { type: "integer" }, ...observedOf(lens), note: { type: "string" }, fix: FIX }, required: ["n", "note", DECIDING[lens.id]] } },
   },
   required: ["observations"],
 });
@@ -82,7 +85,7 @@ async function judge(sentences: Sentence[], judged: Set<number>, lens: Lens, voi
   const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Observe each sentence by its number and report only what you see; the desk decides what is done well and what needs fixing. ` +
-      `${OBSERVE[lens.id] ?? OBSERVE.structure} ` +
+      `${OBSERVE[lens.id]} ` +
       `Give one observation for every sentence you are asked to judge. ` +
       `Each note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
@@ -229,7 +232,7 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const { json, provider } = await text<{ observations: Record<string, unknown>[] }>({
     system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `The student has rewritten one sentence of their paragraph, sentence ${n}. Observe sentence ${n} alone, in the context of the paragraph, and give exactly one observation, for sentence ${n}; report only what you see, the desk decides whether it now does its job. ` +
-      `${OBSERVE[lens.id] ?? OBSERVE.structure} Do not observe the other sentences. ` +
+      `${OBSERVE[lens.id]} Do not observe the other sentences. ` +
       `The note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix to a sentence you see a problem in: 'move' names the technique in 2 to 6 words, and 'pattern' is a sentence frame with the content left as bracketed slots. ` +
       `${PATTERN_RULE} Plain text, to be read aloud.`, voice),

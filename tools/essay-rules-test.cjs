@@ -1482,7 +1482,10 @@ test('E7-6 (guard): a full answer records exactly as before',async()=>{
 test('E7-7: the request makes full coverage reachable - each lens requires its own deciding field beside n and note',async()=>{
  const src=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
  assert.match(src,/const DECIDING[^=]*=\s*\{\s*structure: "job", argument: "side", evidence: "support", language: "issues"\s*\}/);
- assert.match(src,/required: \["n", "note", DECIDING\[lens\.id\] \?\? DECIDING\.structure\]/);
+ assert.match(src,/required: \["n", "note", DECIDING\[lens\.id\]\]/);
+ // the lens maps are keyed by the lens ids (a lens with no fields does not compile), so no lens falls back to Structure's
+ for(const map of ['DECIDING','OBSERVED','OBSERVE'])assert.match(src,new RegExp(`const ${map}: Record<AnalysisType,`),map);
+ assert.doesNotMatch(src,/\?\? (DECIDING|OBSERVED|OBSERVE)\.structure/);
  assert.match(src,/give issues: \[\]/);assert.match(src,/Give one observation for every sentence you are asked to judge\./);
  for(const [lens,field] of [['structure','job'],['argument','side'],['evidence','support'],['language','issues']]){
   seen=[];answer=obsReply([1,2,3].map(n=>({n,note:'x',...FULL_FIELD[lens]})));
