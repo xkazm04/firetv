@@ -120,8 +120,11 @@ export default function TV() {
   useEffect(() => { if (s?.screen !== "landing" && zooming.current) { zooming.current = false; setZoom(null); } }, [s?.screen]);
 
   // ---- D-pad: the keymap is tv/keys.ts; this is only its executor ----
+  // the session changes on every message (the clock ticks): the handler reads the newest one through a ref, so the listener is bound once
+  const sNow = useRef(s); sNow.current = s;
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const s = sNow.current;
       if (!s || notTheTV(s) || lingaOwns(s)) return;
       const k = keyOf(e.key); if (!k) return;
       e.preventDefault();
@@ -139,7 +142,7 @@ export default function TV() {
       void runStep(step, { post, call, apply });
     };
     addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey);
-  }, [s, post, apply]);
+  }, [post, apply]);
 
   return (
     <div className="bench" ref={bench}>
