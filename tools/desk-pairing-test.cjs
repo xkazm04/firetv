@@ -1,7 +1,7 @@
 /**
  * Pairing is a server fact. The TV is the browser holding the desk's key (a desk-tv cookie, set once from the
  * address the desk prints at start); a phone is a device that gave the TV's code to the server (a desk-phone
- * cookie, the HMAC of the key and the session's pin); everyone else is a guest and sees the lobby. One module owns
+ * cookie holding a random token minted at the join, whose SHA-256 pairing.json lists - PR8); everyone else is a guest and sees the lobby. One module owns
  * it (lib/session/pairing.ts), one gate applies it to every API route (src/proxy.ts), and the session routes draw
  * each caller's view of the one session.
  *

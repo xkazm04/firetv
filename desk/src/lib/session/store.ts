@@ -37,8 +37,8 @@ export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "cale
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
-/** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
 /**
+ * `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path.
  * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4; the gate since slice A5). Optional and usually absent:
  * unset means the mode is derived (modeOf). A stored "adult" counts only while rules/mode adultAllowed holds (18+).
  */
@@ -147,12 +147,12 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
   if (Number.isInteger(o.nth) && o.nth! >= 0) at.nth = o.nth;
   return at;
 };
-/** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
 /**
  * A worked lesson (v2 M1, lib/desk/worked.ts): the idea (the model's words when `own`, else the authored one), the three
  * method steps, and examples written and answered by code. `owner` is the learner it was written for.
  */
 export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 }[]; owner?: string; }
+/** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
@@ -185,9 +185,9 @@ function specShown(x: unknown): CalcSpec | Calc2Spec | SchoolSpec | undefined {
   }
   return out as unknown as CalcSpec;
 }
-/** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
 /** The longest stem a part may carry: a few sentences of a situation. */
 const STEM_MAX = 400;
+/** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
 function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, second, spec, tier, stretch, stem, part }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
@@ -565,7 +565,7 @@ function switchedFrom(s: Session, n: Session): void {
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 
-/** The local day a moment falls in, as the log is stamped with it. */
+/** Whether a log holds any of the evening's work: a problem, a hint or a hard one. */
 const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !!(l.problems.length || l.hints || l.hard.length);
 
 /**
@@ -701,14 +701,14 @@ function step(s: Session, e: Event): Session {
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
-    // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
-    // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
-    // a worked lesson lands for the learner who asked, and only while they are at the desk
     // the paper is kept by dispatch (the reducer writes no file); the TV is then on its recovery list
     case "paper.enter": n.subject = "maths"; n.screen = "paper"; n.focus = 0; break;
+    // a worked lesson lands for the learner who asked, and only while they are at the desk
     case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
     // the Workroom summary for the learner at the desk; `open` also puts it on the TV
     case "workroom.set": if (e.workroom.owner !== me) break; n.workroom = e.workroom; if (e.open) { n.screen = "workroom"; n.subject = "essay"; n.focus = 0; } break;
+    // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
+    // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
