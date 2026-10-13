@@ -287,7 +287,7 @@ class Heartbeat {
 
         // Thumbnails only while paused, and only once per frame the viewer stops on: one is orders
         // of magnitude bigger than a state message and shares the pen's connection.
-        val thumbKey = if (input.paused) input.t / THUMB_BUCKET_MS else Long.MIN_VALUE
+        val thumbKey = if (input.paused) input.t / TransportPlan.FRAME_MS else Long.MIN_VALUE
         val thumbnailAtMs = if (input.paused && thumbKey != lastThumbKey) {
             lastThumbKey = thumbKey
             input.t
@@ -317,6 +317,5 @@ class Heartbeat {
 
     companion object {
         const val INTERVAL_MS = 400L
-        const val THUMB_BUCKET_MS = 200L
     }
 }

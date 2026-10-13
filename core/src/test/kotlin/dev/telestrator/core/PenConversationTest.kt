@@ -253,7 +253,7 @@ class HeartbeatTest {
     )
 
     @Test
-    fun `case 7 - the mirror ships once per paused doc and the thumbnail once per 200 ms bucket`() {
+    fun `case 7 - the mirror ships once per paused doc and the thumbnail once per frame`() {
         val hb = Heartbeat()
 
         val first = hb.beat(input(5_000, paused = true))
@@ -264,8 +264,8 @@ class HeartbeatTest {
         assertNull(again.doc)
         assertNull(again.thumbnailAtMs)
 
-        assertNull(hb.beat(input(5_150, paused = true)).thumbnailAtMs)
-        assertEquals(5_250L, hb.beat(input(5_250, paused = true)).thumbnailAtMs)
+        assertNull(hb.beat(input(5_030, paused = true)).thumbnailAtMs)
+        assertEquals(5_050L, hb.beat(input(5_050, paused = true)).thumbnailAtMs)
 
         val playing = hb.beat(input(6_000, paused = false))
         assertNull(playing.doc)
