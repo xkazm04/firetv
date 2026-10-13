@@ -365,7 +365,7 @@ async function synthesize(dir, id, results, cast, ms) {
   }
   // a gap that came back outranks a new one of equal impact
   findings.sort((a, b) => (a.type === 'strength') - (b.type === 'strength') || b.rank - a.rank || b.recurrence - a.recurrence);
-  fs.writeFileSync(path.join(dir, 'findings.json'), JSON.stringify(findings, null, 2));
+  require('./recertify.cjs').writeAtomic(path.join(dir, 'findings.json'), JSON.stringify(findings, null, 2));
 
   const open = findings.filter(f => f.type !== 'strength'), strengths = findings.filter(f => f.type === 'strength');
   const cov = driverCoverage(results);
