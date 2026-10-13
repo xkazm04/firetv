@@ -228,3 +228,32 @@ test('relay-stub: a TV that leaves closes the phone socket (1012) so the compani
     child.kill();
   }
 });
+
+// live-ui-test and relay-test each kept a copy of the pen-ink classifier and the TV screencap, and the copies drifted
+// at the status-bar boundary (live-ui-test skipped y > 0.94h, relay-test looped y < 0.94h). One pure countInk in
+// device.mjs now answers for both; this pins it on a synthetic frame with ink on the boundary row, inside the pairing
+// card, below the band and in the open, and keeps a second copy from growing back.
+test('device.mjs countInk: one classifier on a synthetic frame; no tool keeps its own', async () => {
+  const { countInk } = await load();
+  assert.equal(typeof countInk, 'function', 'device.mjs exports no countInk');
+  const width = 100, height = 100;
+  const data = new Uint8Array(width * height * 4);
+  const put = (x, y, [r, g, b]) => { const i = (width * y + x) << 2; data.set([r, g, b, 255], i); };
+  const yellow = [255, 200, 0], cyan = [0, 229, 255];
+  put(10, 50, yellow);              // in the open: counts
+  put(10, 94, yellow);              // the boundary row (0.94 * 100): counts, as live-ui-test always did
+  put(80, 10, yellow);              // inside the pairing card: ignored
+  put(10, 95, yellow);              // inside the status-bar band: ignored
+  put(20, 50, [255, 255, 0]);       // the fixture's pure yellow is not the pen
+  put(30, 50, cyan);
+  put(31, 50, cyan);
+  const frame = { width, height, data };
+  assert.equal(countInk(frame), 2);
+  assert.equal(countInk(frame, 'yellow'), 2);
+  assert.equal(countInk(frame, 'cyan'), 2);
+  const strip = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+  for (const t of ['live-ui-test', 'relay-test']) {
+    const src = strip(fs.readFileSync(path.join(__dirname, `${t}.mjs`), 'utf8'));
+    assert.doesNotMatch(src, /function countInk|const isInk|const INK|function tvScreenshot/, `${t}.mjs keeps its own pixel classifier or capture`);
+  }
+});
