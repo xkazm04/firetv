@@ -17,4 +17,9 @@ class SessionPinTest {
             assertTrue(p.all { it in '0'..'9' } && p[0] != '0', "PIN shape of $p")
         }
     }
+
+    @Test
+    fun `the PIN is drawn from a SecureRandom`() {
+        assertTrue(Session.PIN_RANDOM is java.security.SecureRandom, "PIN source is ${Session.PIN_RANDOM.javaClass.name}")
+    }
 }

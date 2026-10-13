@@ -102,7 +102,7 @@ export const parseArgs = (argv = process.argv.slice(2)) =>
   Object.fromEntries(argv.flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : [])));
 
 /** The PIN in the last pairing line MainActivity logged (`transport=... pairing=<url>#pin=NNNN`, or the older ?pin=), or undefined. */
-export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&#]pin=(\d{4})/g)].at(-1)?.[1];
+export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&#]pin=(\d{4,8})/g)].at(-1)?.[1];
 
 /**
  * The pairing PIN for a tool that pairs as a pen. /health no longer carries it: anything that can reach the port

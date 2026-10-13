@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.security.SecureRandom
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -75,7 +76,8 @@ class Session(clipId: String, videoAspect: Double) {
     @Volatile
     private var dirty: Boolean = false
 
-    val pin: String = (1000..9999).random().toString()
+    /** Six digits from a cryptographic generator: 900000 values, not guessable from the seed. */
+    val pin: String = (100_000 + PIN_RANDOM.nextInt(900_000)).toString()
 
     fun penConnected(): Int = pens.incrementAndGet()
 
@@ -145,4 +147,9 @@ class Session(clipId: String, videoAspect: Double) {
     }
 
     data class TransportCommand(val cmd: String, val value: Double)
+
+    internal companion object {
+        /** Where the pairing PIN comes from. Not kotlin.random: that is seeded for speed, not secrecy. */
+        val PIN_RANDOM: java.util.Random = SecureRandom()
+    }
 }
