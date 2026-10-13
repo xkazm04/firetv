@@ -918,3 +918,57 @@ test('NL: every Event type has a sample, and none that changes a slot field is w
  assert.deepEqual(wrote,[],'these change a MathsSlot field with no one at the desk - add them to NEEDS_LEARNER');
  store.dispatch({type:'reset'});
 });
+
+// ---- EV: one door for every client-postable event ----
+// Each client-postable type is posted with one junk value in each field, as the TV; the route must answer 400 and leave the
+// session (and so session.json and every stream) as it was. A type the desk does not know is the last row.
+const JUNK={
+ nav:{screen:{ok:{screen:'maths'},bad:['nope',{},null,7]},focus:{ok:{screen:'tonight',focus:1},bad:['a',1.5,{},null]},from:{ok:{screen:'tonight',from:'landing'},bad:['nope',{},7]}},
+ focus:{focus:{ok:{focus:1},bad:['a',1.5,{},null]}},
+ subject:{subject:{ok:{subject:'maths'},bad:['nope',{},null,7]}},
+ 'learner.set':{id:{ok:{id:'ema'},bad:[{},7,null]}},
+ 'profile.draft':{patch:{ok:{patch:{}},bad:['x',[],null,7]}},
+ 'page.ask':{subject:{ok:{subject:'maths'},bad:['nope',{},null]}},
+ 'page.select':{pageIx:{ok:{pageIx:0},bad:['a',1.5,{},null]},itemIx:{ok:{pageIx:0,itemIx:0},bad:['a',1.5,{}]}},
+ item:{itemIx:{ok:{itemIx:0},bad:['a',1.5,{},null]}},
+ view:{view:{ok:{view:'band'},bad:['nope',{},null,7]}},
+ 'lesson.set':{lesson:{ok:{lesson:null},bad:['x',7,{},{id:7},{id:'a',title:{},t:0,text:'',why:''},{id:'a',title:'b',t:'x',text:'',why:''}]}},
+ 'lesson.pause':{paused:{ok:{paused:true},bad:['yes',{},null,1]}},
+ 'essay.type':{essayType:{ok:{essayType:'argument'},bad:[{},7,null]},owner:{ok:{essayType:'argument',owner:'ema'},bad:[{},7]}},
+ 'essay.at':{n:{ok:{n:null},bad:['a',1.5,{}]}},
+ 'essay.plan':{lens:{ok:{lens:'claim'},bad:[{},7,null]}},
+ 'essay.slot':{i:{ok:{i:0,text:'x'},bad:['a',1.5,{},null]},text:{ok:{i:0,text:'x'},bad:[{},7,null]}},
+ 'task.add':{name:{ok:{name:'Read',sub:'english',min:10},bad:[{},7,null,'']},sub:{ok:{name:'Read',sub:'english',min:10},bad:['nope',{},null]},min:{ok:{name:'Read',sub:'english',min:10},bad:['a',{},null]}},
+ 'task.done':{id:{ok:{id:'t1',done:true},bad:[{},7,null]},done:{ok:{id:'t1',done:true},bad:['yes',{},null,1]}},
+ 'timer.tick':{seconds:{ok:{seconds:1},bad:['a',{},null]}},
+ 'topic.open':{topic:{ok:{topic:'fractions'},bad:[{},7,null]},stay:{ok:{topic:'fractions',stay:true},bad:['a',{},1]}},
+ walk:{ix:{ok:{ix:0},bad:['a',1.5,{},null]}},
+ status:{text:{ok:{text:'x'},bad:[{},7,null]}},
+};
+const junkPosts=()=>{const rows=[];for(const [type,fields] of Object.entries(JUNK))for(const [field,{ok,bad}] of Object.entries(fields))for(const v of bad)rows.push({type,field,e:{type,...ok,[field]:v}});
+ rows.push({type:'bogus',field:'type',e:{type:'bogus'}});return rows;};
+/** The types with a junk post the desk let through (not a 400) or that changed the session. */
+async function leaky(){
+ evening('landing');const out=new Map();
+ for(const {type,field,e} of junkPosts()){
+  const before=JSON.stringify(store.getSession());let status;
+  try{status=(await post(e,'tv')).status;}catch{status='threw';}
+  const changed=JSON.stringify(store.getSession())!==before;
+  if(status!==400||changed)out.set(type,[...(out.get(type)??[]),`${field}=${JSON.stringify(e[field])}${changed?'(changed)':''}`]);
+  evening('landing');
+ }
+ return out;
+}
+test('EV1: a junk value in any field of a client-postable event is a 400 and leaves the session as it was; an unknown type too',async()=>{
+ const l=await leaky();
+ assert.deepEqual([...l.keys()],[],l.size+' of '+(Object.keys(JUNK).length+1)+' types with a field the door let through: '+[...l].map(([t,v])=>t+' ['+v.slice(0,2).join(', ')+']').join('; '));
+});
+test('EV2: every legitimate post the screens make still passes the door',async()=>{
+ evening('landing');
+ const ok=[...Object.entries(JUNK)].flatMap(([type,fields])=>Object.values(fields).map((f)=>({type,...f.ok})));
+ ok.push({type:'nav',screen:'page',focus:-1},{type:'focus',focus:-1},{type:'walk',ix:-1},{type:'walk',ix:7},{type:'leave'},{type:'timer.start'},{type:'timer.pause'},{type:'timer.skipbreak'},{type:'practice.clear'},{type:'session.end'},{type:'profile.save'},{type:'profile.discard'},{type:'page.unask'},{type:'paper.enter',rows:[]},
+  {type:'lesson.set',lesson:{id:'jWpiMu5LNdg',title:'t',t:0,text:'a · b',why:'w',youtube:'jWpiMu5LNdg'}},{type:'lesson.set',lesson:{id:'jWpiMu5LNdg',title:'t',t:0,text:'',why:''}},{type:'essay.at',n:3},{type:'task.add',name:'x',sub:'maths',min:10});
+ const refused=[];
+ for(const e of ok){const r=await post(e,'tv');if(r.status===400)refused.push(JSON.stringify(e));}
+ assert.deepEqual(refused,[],'legitimate posts the door refused');
+});
