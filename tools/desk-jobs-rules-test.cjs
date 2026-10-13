@@ -842,6 +842,20 @@ test('case 6d: a snap whose title is not text is read under the desk\'s own titl
  }
 });
 
+test('case 6e: a hint question that is not text, or longer than the cap, is a 400 in desk words before any job - never truncated, never kept; the cap itself is asked',async()=>{
+ const {HINT_QUESTION_MAX}=require(src('lib/rules/maths.ts'));
+ assert.equal(typeof HINT_QUESTION_MAX,'number');
+ let asked=0;stubText({hint:()=>{asked++;return {hint:'Undo the +3 first.',what_to_try_next:'Write what is left.'};},lesson:()=>({lesson:'none',why:'x'})});
+ for(const askedQ of ['x'.repeat(HINT_QUESTION_MAX+1),42,{q:'why'},['why']]){
+  onPage();
+  const r=await post('hint',{askedQ});assert.equal(r.status,400,JSON.stringify(askedQ).slice(0,40));deskWorded((await r.json()).error);
+  const s=store.getSession();assert.equal(s.jobs?.hint,undefined,'no hint job');assert.equal(s.hint??null,null,'nothing kept');
+ }
+ assert.equal(asked,0,'no model call');
+ onPage();assert.equal((await post('hint',{askedQ:'w'.repeat(HINT_QUESTION_MAX)})).status,200,'the cap itself is asked');await drain();
+ assert.equal(store.getSession().hint.askedQ.length,HINT_QUESTION_MAX);
+});
+
 test('case 6c: an onFail that throws still records the failure, and its own error reaches the server log (one door, never none)',async()=>{
  onPage();
  const {runJob}=require(src('lib/desk/job.ts'));

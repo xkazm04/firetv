@@ -16,12 +16,16 @@ import { judgeOf, learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
 import { kindOfQuestion } from "@/lib/rules/kinds";
 import { learnerSystem } from "@/lib/rules/school";
+import { hintQuestionProblem } from "@/lib/rules/maths";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
+  // the learner's question goes into the prompt, the session and the job's input: text, and no longer than the cap - refused before any run, never cut
+  const qProblem = hintQuestionProblem(body.askedQ);
+  if (qProblem) return NextResponse.json({ error: qProblem }, { status: 400 });
   const page = s.pages[s.pageIx]; if (!page) return NextResponse.json({ error: "Photograph a page first." }, { status: 400 });
   const itemIx = typeof body.itemIx === "number" ? body.itemIx : s.itemIx;
   const item = page.items[itemIx]; if (!item) return NextResponse.json({ error: "That item is not on the page." }, { status: 400 });

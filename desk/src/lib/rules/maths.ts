@@ -104,6 +104,14 @@ export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().repl
 export const TYPED_ANSWERS_MAX = 12;
 /** 120 holds a quotient-rule derivative; the readers' own limits keep a longer answer unsure, never wrong. */
 export const TYPED_ANSWER_MAX = 120;
+/** The longest question the hint route takes with a hint (the explain transcript's cap, X5): a longer one is refused, never cut. */
+export const HINT_QUESTION_MAX = 1000;
+/** Why a hint question is refused before any run, in the desk's words; null when it can be asked (absent is no question). */
+export function hintQuestionProblem(q: unknown): string | null {
+  if (q === undefined || q === null) return null;
+  if (typeof q !== "string") return "The desk did not get your question as text. Type it again.";
+  return q.length > HINT_QUESTION_MAX ? `That question is longer than ${HINT_QUESTION_MAX} characters. Shorten it and ask again.` : null;
+}
 
 /**
  * Are these the typed answers to a set of `n` questions? A plain sentence when not, null when they are: a list of
