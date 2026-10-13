@@ -762,3 +762,16 @@ test('PR11: mintPhone, forgetPhone and forgetAllPhones each throw when the write
  assert.equal(roleOfCookie(a),'guest');assert.equal(roleOfCookie('desk-phone='+c),'phone');assert.equal(pj().phones.length,2,'b and the new one: no phantom');
  assert.equal(roleOfCookie(b),'phone');
 });
+
+// ---- scan-sweep optimize 2026-10-13 (session): what a caller may post, and what a failure leaves behind ----
+test('OPT-1: a name longer than PROFILE_NAME_MAX is refused for a guest, a phone and the TV alike; the draft, the profiles and session.json stay small',async()=>{
+ evening('profile');const max=store.PROFILE_NAME_MAX;assert.ok(Number.isInteger(max)&&max>=20,'the cap is exported and roomy');
+ let r=await post({type:'profile.draft',patch:{name:'E'.repeat(max)}},'guest');assert.equal(r.status,200);assert.equal(store.getSession().draft.name.length,max,'a name at the cap is taken');
+ for(const role of ['guest','phone','tv']){
+  const before=store.getSession().draft;
+  r=await post({type:'profile.draft',patch:{name:'x'.repeat(200000)}},role);
+  assert.equal(store.getSession().draft,before,`${role}: the long name did not land on the draft`);
+  assert.match(store.getSession().status,/name/i,`${role}: the status says why`);
+ }
+ const file=path.join(data,'session.json');assert.ok(fs.statSync(file).size<100000,'session.json does not carry the long name');
+});

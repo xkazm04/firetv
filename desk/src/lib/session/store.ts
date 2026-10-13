@@ -520,6 +520,12 @@ export const PROFILE_TYPE_UNKNOWN = "That school type is not one the desk knows.
 export const PROFILE_SYSTEM_UNKNOWN = "That school system is not one the desk knows.";
 export const PROFILE_MODULES_UNKNOWN = "Those subjects are not ones the desk knows.";
 export const PROFILE_NAME_TEXT = "A name must be text.";
+/**
+ * The longest name a profile takes. A guest may type the name (pairing.ts guestMay), the draft rides in every message to
+ * every screen and the saved profile in session.json, so a name is bounded where it is checked, for every caller.
+ */
+export const PROFILE_NAME_MAX = 40;
+export const PROFILE_NAME_LONG = `A name must be at most ${PROFILE_NAME_MAX} letters.`;
 export const PROFILE_AGE_WHOLE = "An age must be a whole number.";
 export const PROFILE_ID_KEPT = "A profile keeps the id it was made with.";
 const DRAFT_REFUSED = "The desk did not take that change to the profile. ";
@@ -531,6 +537,7 @@ export function profileProblem(patch: Partial<Profile>): string | null {
   if (patch.system !== undefined && !SYSTEMS.includes(patch.system)) return PROFILE_SYSTEM_UNKNOWN;
   if (patch.modules !== undefined && !(Array.isArray(patch.modules) && patch.modules.every((m) => SUBJECTS.includes(m)) && new Set(patch.modules).size === patch.modules.length)) return PROFILE_MODULES_UNKNOWN;
   if (patch.name !== undefined && typeof patch.name !== "string") return PROFILE_NAME_TEXT;
+  if (patch.name !== undefined && patch.name.length > PROFILE_NAME_MAX) return PROFILE_NAME_LONG;
   if (patch.age !== undefined && !(typeof patch.age === "number" && Number.isInteger(patch.age))) return PROFILE_AGE_WHOLE;
   return null;
 }
