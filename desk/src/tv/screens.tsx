@@ -150,7 +150,16 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
 
 // ---- T4 Hint ----
 export function HintScreen({ s, focus }: { s: Session; focus: number }) {
-  const h = s.hint; if (!h) return null;
+  const h = s.hint;
+  // nothing to explain (the hint was cleared under the screen): one ask, not a blank stage
+  if (!h) return (<>
+    <div className="band band-left" />
+    <main className="content-full">
+      <div className="eyebrow" style={{ marginTop: 40 }}>{NAME[s.subject]} · hint</div>
+      <div className="title" style={{ marginTop: 50 }}>No hint yet</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return to the page, then Select on an item for a hint.</div></div>
+    </main>
+  </>);
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx];
   const at = stopAt(HINT_STOPS, focus);
@@ -191,7 +200,15 @@ export function LessonScreen({ s }: { s: Session }) {
   const frame = useRef<HTMLIFrameElement>(null);
   const paused = s.lessonPaused;
   useEffect(() => { frame.current?.contentWindow?.postMessage(playerCommand(paused), "*"); }, [paused]);
-  if (!l) return null;
+  // no lesson open (cleared under the screen): one ask, not a blank stage
+  if (!l) return (<>
+    <div className="band band-wedge" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch={s.subject} style={{ marginTop: 40 }}>{NAME[s.subject]} · lesson</div>
+      <div className="title" style={{ marginTop: 50 }}>No lesson open</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Back</span><div className="cap-text">Press Back to return.</div></div>
+    </main>
+  </>);
   const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1&enablejsapi=1` : null;
   return (<>
     <div className="band band-wedge" />
