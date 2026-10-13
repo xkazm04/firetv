@@ -199,6 +199,23 @@ test('retry: a lesson (teach) that failed is asked again for the same topic thro
  }finally{W.teachTopic=real;}
 });
 
+test('size caps: a 100k-character Linga sentence and a 30 MB photo are refused in desk words - no job, no engine call',async()=>{
+ blank();let calls=0;
+ stubText({other:()=>{calls++;return {};}});stubVision(()=>{calls++;return READ3;});
+ const long=await post('analyse',{kind:'english',sentence:'a'.repeat(100000)});
+ assert.equal(long.status,400);deskWorded((await long.json()).error);
+ assert.equal(store.getSession().jobs.analyse,undefined,'no analyse job started');
+ const big=await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(30*1024*1024)});
+ assert.equal(big.status,400);deskWorded((await big.json()).error);
+ assert.equal(store.getSession().pages.length,0,'no page kept');assert.equal(store.getSession().jobs.read,undefined,'no read job started');
+ assert.equal(calls,0,'no engine reached');
+ // what the phone sends (1280 px JPEG) and an ordinary sentence still go through
+ stubText({other:()=>({})});
+ assert.notEqual((await post('analyse',{kind:'english',sentence:'a'.repeat(900)})).status,400,'a long but ordinary sentence is read');
+ stubVision(()=>READ3);
+ assert.equal((await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(6*1024*1024)})).status,200,'a 6 MB photo, above what the phone makes, is read');
+});
+
 test('retry: with nothing failed there is nothing to retry, and no engine is called',async()=>{
  onPage();
  let asked=0;stubText({items:()=>{asked++;return {items:STATED};},hint:()=>{asked++;return {hint:'x',what_to_try_next:'y'};}});
