@@ -801,3 +801,14 @@ test('OPT-3: an unreadable pairing.json is put aside beside itself, not written 
   assert.equal(lines.length,1,lines.join('|'));assert.ok(lines[0].includes(aside[0]),`the line names ${aside[0]}: ${lines[0]}`);
  }finally{mock.restoreAll();for(const n of fs.readdirSync(data))if(n.startsWith('pairing.json.bad-'))fs.rmSync(path.join(data,n));fs.writeFileSync(f,was);}
 });
+test('OPT-4: with no one at the desk, nothing is written for no one - a task added or ticked, or a lesson paused, leaves the session as it was',async()=>{
+ store.dispatch({type:'reset'});assert.equal(store.getSession().learner,null);
+ const t=store.getSession().tasks[0];
+ for(const e of [{type:'task.add',name:'Read chapter 3',sub:'english',min:10},...(t?[{type:'task.done',id:t.id,done:true}]:[]),{type:'lesson.pause',paused:true}]){
+  const before=store.getSession();store.dispatch(e);
+  assert.equal(store.getSession().tasks,before.tasks,`${e.type} wrote the list with no one seated`);
+  assert.equal(store.getSession().lessonPaused,before.lessonPaused,`${e.type} moved the lesson with no one seated`);
+ }
+ store.dispatch({type:'learner.set',id:'ema'});const n=store.getSession().tasks.length;
+ store.dispatch({type:'task.add',name:'Read chapter 3',sub:'english',min:10});assert.equal(store.getSession().tasks.length,n+1,'a seated learner still adds');
+});

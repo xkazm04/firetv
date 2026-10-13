@@ -492,7 +492,9 @@ export function fresh(): Session {
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
   "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
-  "walk", "practice.clear", "paper.enter", "session.end"]);
+  "walk", "practice.clear", "paper.enter", "session.end",
+  // tonight's list and the lesson's pause are a learner's (MathsSlot tasks, lessonPaused): seat() replaces them on the first sit-down
+  "task.add", "task.done", "lesson.pause"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
 export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
 /** The status when a paper's rows were fine but the learner file could not be written (App Master ruling 11): the disk failed, not the rows. */
