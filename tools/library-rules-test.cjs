@@ -52,3 +52,16 @@ test('CACHE-1: a vector cache that cannot be written says so in the server log o
  assert.equal(lines.filter((l)=>/embeddings\.json/.test(l)).length,1,'one line names the cache file: '+lines.join('|'));
  assert.deepEqual(fs.readdirSync(data).filter((n)=>n.endsWith('.tmp')),[],'no temp file is left');
 });
+
+test('LATE-1: a transcript placed after the first pick is used by the next pick, without a restart',async()=>{
+ const LATE='bAerID24QJ0';
+ const byText=(t)=>/divide/.test(t)?[0,0,1]:/welcome/.test(t)?[1,0,0]:[0,1,0];
+ lib('engines/registry.ts').useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.map(byText)})});
+ const L=lib('library/lessons.ts');
+ fs.rmSync(path.join(data,'embeddings.json'),{recursive:true,force:true});
+ await L.ensureVectors();
+ assert.equal(await L.bestWindow(LATE,'divide'),null,'no transcript yet: no window');
+ fs.writeFileSync(path.join(data,'lessons',`${LATE}.en.vtt`),['WEBVTT\n',cue(0,'welcome to linear equations'),cue(50,'add the same to both sides'),cue(100,'divide to undo')].join('\n'));
+ const b=await L.bestWindow(LATE,'divide');
+ assert.ok(b&&b.t>0,'the late transcript seeks past 0:00: '+JSON.stringify(b));
+});
