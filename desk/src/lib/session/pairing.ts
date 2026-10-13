@@ -94,7 +94,14 @@ function state() {
       why = "it holds no usable key";
     }
   } catch (e) { why = `it could not be read (${e instanceof Error ? e.message : e})`; }
-  if (why) console.error(`desk pairing: ${file} was not used, ${why}; a new key was minted, so the TV must open the new address printed at start`);
+  // an unusable file is renamed beside itself, never written over (store.ts setAside does the same for session.json):
+  // its phones are the operator's to recover, and a read that failed for a moment must not erase them
+  if (why) {
+    const to = `${file}.bad-${Date.now().toString(36)}`;
+    let where: string;
+    try { renameSync(file, to); where = `put aside as ${path.basename(to)}`; } catch (e) { where = `not put aside (${e instanceof Error ? e.message : e})`; }
+    console.error(`desk pairing: ${file} was not used, ${why}; ${where}; a new key was minted, so the TV must open the new address printed at start`);
+  }
   mkdirSync(path.dirname(file), { recursive: true });
   cached = { file, mtime: 0, size: 0, key: randomBytes(24).toString("base64url"), phones: [] };
   save(cached);

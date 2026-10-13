@@ -354,7 +354,7 @@ test('PR3: an unreadable pairing.json logs one line naming the file and the reas
   const key=pairing().tvKey();
   assert.equal(lines.length,1,lines.join('|'));assert.match(lines[0],/pairing\.json/);assert.match(lines[0],/new key/);assert.match(lines[0],/TV/);
   assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).key,key);assert(key.length>=16);
- }finally{mock.restoreAll();fs.writeFileSync(f,was);}
+ }finally{mock.restoreAll();fs.writeFileSync(f,was);for(const n of fs.readdirSync(data))if(n.startsWith('pairing.json.bad-'))fs.rmSync(path.join(data,n));}// the junk is put aside (OPT-3); it is not a temp file
 });
 
 // ---- PR4: the stream survives a foreign cookie and never stays open and silent ----
@@ -785,4 +785,19 @@ test('OPT-2: a timer.tick whose seconds are not a number from 1 to 60 moves neit
  }
  let b=at();store.dispatch({type:'timer.tick',seconds:1});assert.equal(at().left,b.left-1,'the desk\'s own tick');
  b=at();store.dispatch({type:'timer.tick',seconds:59});assert.equal(at().left,Math.max(0,b.left-59),'the TV\'s fast tick');
+});
+test('OPT-3: an unreadable pairing.json is put aside beside itself, not written over - its phones are still on disk for the operator - and the one line says where',()=>{
+ pairing().tvKey();
+ const f=keyFile(),was=fs.readFileSync(f,'utf8');
+ for(const n of fs.readdirSync(data))if(n.startsWith('pairing.json.bad-'))fs.rmSync(path.join(data,n));
+ const lines=[];mock.method(console,'error',(...a)=>lines.push(a.join(' ')));
+ try{
+  const junk='{"key":"'+'k'.repeat(30)+'","phones":[{"fp":"'+'a'.repeat(64)+'"';// a write cut short: the list is in it
+  fs.writeFileSync(f,junk);fs.utimesSync(f,new Date(2),new Date(2));
+  const key=pairing().tvKey();
+  const aside=fs.readdirSync(data).filter((n)=>n.startsWith('pairing.json.bad-'));
+  assert.equal(aside.length,1,'one file put aside');assert.equal(fs.readFileSync(path.join(data,aside[0]),'utf8'),junk,'byte for byte');
+  assert.equal(JSON.parse(fs.readFileSync(f,'utf8')).key,key,'a new key is minted in its place');
+  assert.equal(lines.length,1,lines.join('|'));assert.ok(lines[0].includes(aside[0]),`the line names ${aside[0]}: ${lines[0]}`);
+ }finally{mock.restoreAll();for(const n of fs.readdirSync(data))if(n.startsWith('pairing.json.bad-'))fs.rmSync(path.join(data,n));fs.writeFileSync(f,was);}
 });
