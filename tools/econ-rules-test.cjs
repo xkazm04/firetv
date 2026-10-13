@@ -192,3 +192,27 @@ test('case j: the Essay Master and Linga text calls label their call (EC1c)',()=
  assert.equal((cv.match(/await text</g)||[]).length,5);
  assert.equal((cv.match(/\buse:/g)||[]).length,5,'conversation.ts: every text call labelled');
 });
+
+test('case h2: the string each real provider reports, on success and on exit, names its own book entry',async()=>{
+ const {codexCli}=load('engines/codex.ts');const {ollamaEmbed}=load('engines/embed.ts');
+ const fake=path.join(data,'fake-codex.js');
+ fs.writeFileSync(fake,"const a=process.argv.slice(2);if(process.env.FAKE_CODEX_FAIL){process.stderr.write('boom');process.exit(3);}require('node:fs').writeFileSync(a[a.indexOf('-o')+1],'{}');");
+ const realFetch=globalThis.fetch,oldJs=process.env.CODEX_JS;
+ process.env.CODEX_JS=fake;
+ globalThis.fetch=async()=>({ok:true,json:async()=>({embeddings:[[1]]}),text:async()=>''});
+ try{
+  const ctx={signal:new AbortController().signal};
+  const seen=[];
+  seen.push([codexCli,(await codexCli.run({system:'s',prompt:'p'},ctx)).provider]);
+  process.env.FAKE_CODEX_FAIL='1';
+  seen.push([codexCli,await codexCli.run({system:'s',prompt:'p'},ctx).then(()=>'none',(e)=>e.provider)]);
+  delete process.env.FAKE_CODEX_FAIL;
+  seen.push([ollamaEmbed,(await ollamaEmbed.run({texts:['a']},ctx)).provider]);
+  globalThis.fetch=async()=>({ok:false,status:500,text:async()=>'x'});
+  seen.push([ollamaEmbed,await ollamaEmbed.run({texts:['a']},ctx).then(()=>'none',(e)=>e.provider)]);
+  for(const [p,reported] of seen){
+   assert.equal(String(reported).split('/')[0],p.name,`${p.name} reports ${reported}`);
+   assert(PRICE_BOOK.providers[String(reported).split('/')[0]],`${reported} resolves to a book entry`);
+  }
+ }finally{globalThis.fetch=realFetch;delete process.env.FAKE_CODEX_FAIL;if(oldJs===undefined)delete process.env.CODEX_JS;else process.env.CODEX_JS=oldJs;}
+});
