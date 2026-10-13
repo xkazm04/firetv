@@ -77,12 +77,14 @@ const phoneOk = (p: unknown): p is Omit<Phone, "saved"> => !!p && typeof p === "
  * The desk's key and its phones, read once per change of the file (mtime, and size: two writes of one size in one
  * clock tick would otherwise hide each other). The key is minted the first time it is asked for, with no phones.
  */
-let cached: { file: string; mtime: number; size: number; key: string; phones: Phone[] } | null = null;
+let cached: { file: string; mtime: number; size: number; key: string; phones: Phone[]; /** minted, and its file could not be written yet */ unsaved?: true } | null = null;
 const stamp = (file: string) => { const st = statSync(file); return { mtime: st.mtimeMs, size: st.size }; };
 function state() {
   const file = FILE();
   let why = "";
   try {
+    // a key minted this run that could not be written stays the desk's key: a new one per request would lock the TV out
+    if (cached?.unsaved && cached.file === file && !existsSync(file)) return cached;
     if (existsSync(file)) {
       const at = stamp(file);
       if (cached && cached.file === file && cached.mtime === at.mtime && cached.size === at.size) return cached;
@@ -104,7 +106,11 @@ function state() {
   }
   mkdirSync(path.dirname(file), { recursive: true });
   cached = { file, mtime: 0, size: 0, key: randomBytes(24).toString("base64url"), phones: [] };
-  save(cached);
+  try { save(cached); }
+  catch (e) {
+    cached.unsaved = true;
+    console.error(`desk pairing: ${file} could not be written (${e instanceof Error ? e.message : e}); the key printed at start holds for this run only, and no phone can join until the desk can write it`);
+  }
   return cached;
 }
 /**
@@ -122,6 +128,7 @@ function commit(st: NonNullable<typeof cached>, next: Phone[]): void {
   st.phones = phones;
   for (const p of st.phones) p.saved = p.seen;
   Object.assign(st, stamp(st.file));
+  delete st.unsaved;
 }
 const save = (st: NonNullable<typeof cached>) => commit(st, st.phones);
 export function tvKey(): string { return state().key; }

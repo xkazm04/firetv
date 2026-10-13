@@ -836,3 +836,17 @@ test('OPT-7: a lesson chosen on a screen (no key) is a library lesson, played fr
  const l=store.getSession().lesson;assert.equal(l.id,lib.id);assert.equal(l.youtube,lib.youtube,'the library\'s video, not the posted one');assert.equal(l.title,lib.title,'the library\'s title');assert.equal(l.t,12);
  store.dispatch({type:'lesson.set',lesson:null});assert.equal(store.getSession().lesson,null,'no lesson still clears');
 });
+test('OPT-8: a key that cannot be saved (the data dir refuses the write) is still the desk\'s one key for this run - the same on every call, said once - and a later save keeps it',()=>{
+ pairing().tvKey();const f=keyFile(),was=fs.readFileSync(f,'utf8');fs.rmSync(f);
+ const unblock=blockWrites(),lines=quietErrors();
+ let k1,k2;
+ try{
+  assert.doesNotThrow(()=>{k1=pairing().tvKey();},'the desk still has a key');
+  k2=pairing().tvKey();assert.equal(k2,k1,'one key for the run, not a new one per request');
+  assert.equal(roleOfCookie('desk-tv='+pairing().tvToken()),'tv','the TV cookie of that key is the TV');
+  assert.equal(lines.filter((l)=>/pairing\.json/.test(l)).length,1,'said once: '+lines.join('|'));
+ }finally{mock.restoreAll();unblock();}
+ pairing().forgetAllPhones();pairing().mintPhone();// a write that lands
+ assert.equal(pj().key,k1,'the key the TV holds is the one written');
+ fs.writeFileSync(f,was);const t=new Date(Date.now()+60_000);fs.utimesSync(f,t,t);
+});
