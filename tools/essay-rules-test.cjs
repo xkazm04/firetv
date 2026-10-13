@@ -7,7 +7,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 require('./ts-load.cjs');
-process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/essay-rules',String(Date.now()));
+process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'desk-essay-rules-'));
 const {splitSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essay.ts'));
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 /**
@@ -55,7 +55,11 @@ const analyseEssay=async(...args)=>{filler.clear();const a=await deskEssayModule
 const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const {lensStandings,writingTotals}=require(path.join(root,'src/tv/writingRows.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
-after(()=>clearInterval(globalThis.__desk.ticker));
+after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
+test('GUARD: the disposable data directory is under the OS temp dir, never inside the tree (repo law)',()=>{
+ const rel=path.relative(require('node:os').tmpdir(),process.env.DESK_DATA_DIR);
+ assert.ok(rel&&!rel.startsWith('..')&&!path.isAbsolute(rel),process.env.DESK_DATA_DIR);
+});
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 const THREE='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
