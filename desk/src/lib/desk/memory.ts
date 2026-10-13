@@ -2,7 +2,7 @@
  * What the session taught the desk about this learner.
  *
  * One to three plain sentences in the third person, written to be read back into a later prompt
- * — items.ts, explain.ts and hint.ts all carry them. So: prose, not JSON, not bullets, no
+ * — items.ts and explain.ts carry them, through notesBlock below (hint.ts does not). So: prose, not JSON, not bullets, no
  * numbers the next session cannot check. The existing memory goes into the prompt so the desk
  * does not write the same sentence forty times.
  */
@@ -19,6 +19,11 @@ const SCHEMA = {
   properties: { lines: { type: "array", items: { type: "string" } } },
   required: ["lines"],
 };
+
+/** The learner's notes as every prompt that reads them back carries them (explain.ts, items.ts); empty when there are none. */
+export function notesBlock(memory: readonly string[]): string {
+  return memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "";
+}
 
 export async function writeMemory(
   learnerId: string,

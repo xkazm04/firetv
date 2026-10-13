@@ -31,6 +31,7 @@
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
 import { getLearner } from "../session/learners";
+import { notesBlock } from "./memory";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
@@ -78,7 +79,7 @@ function ask(topicId: string, memory: string[], slips: string[], want: number, a
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
   const prompt =
     `Topic: ${name}\n${blurb}\n\n` +
-    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    notesBlock(memory) +
     known +
     (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
     `Write ${want} practice questions on this topic.\n` +
@@ -237,7 +238,7 @@ function askCalc(topicId: string, shapes: (CalcShape | Calc2SpecShape)[], memory
     : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
-    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    notesBlock(memory) +
     known +
     (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
     `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +

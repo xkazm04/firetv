@@ -36,6 +36,7 @@ import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, pathOfTopic, topicIn, type PathInfo } from "../library/paths";
 import { getLearner, recordAttempt } from "../session/learners";
+import { notesBlock } from "./memory";
 import type { PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
@@ -53,6 +54,11 @@ export const EXPLAIN_WITHHOLD = "Socratic rules, absolute: never state the final
  * a value the desk worked out, or a verdict word. Each part is left out when it has nothing to say.
  */
 export interface Seen { answer?: string; working?: string[]; slip?: string; line?: number }
+
+/** What the learner said, as all three explanation prompts carry it: rough speech, read charitably. */
+const heardBlock = (transcript: string) =>
+  `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
+  `and answer what they meant:\n«${transcript}»\n\n`;
 
 /** The block the prompt carries after the question; empty (so the prompt is as it was) when nothing was seen. */
 function seenBlock(seen?: Seen): string {
@@ -86,9 +92,8 @@ export async function explain(
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
     seenBlock(seen) +
-    `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
-    `and answer what they meant:\n«${transcript}»\n\n` +
-    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    heardBlock(transcript) +
+    notesBlock(memory) +
     `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
     `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
     `or their reasoning was sound:\n${slipVocabulary(topicId)}\n\n` +
@@ -130,9 +135,8 @@ export async function explainSchool(
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
     seenBlock(seen) +
-    `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
-    `and answer what they meant:\n«${transcript}»\n\n` +
-    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    heardBlock(transcript) +
+    notesBlock(memory) +
     `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
     `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
     `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
@@ -178,9 +182,8 @@ async function explainCalc(
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
     `The question: ${itemQuestion}\n\n` +
     seenBlock(seen) +
-    `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
-    `and answer what they meant:\n«${transcript}»\n\n` +
-    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    heardBlock(transcript) +
+    notesBlock(memory) +
     `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
     `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
     `or their reasoning was sound:\n${slipVocabulary(topicId)}\n\n` +
