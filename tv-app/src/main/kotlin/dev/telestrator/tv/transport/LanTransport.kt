@@ -88,7 +88,7 @@ class LanTransport(
         // engine's parent context is what makes that failure ours to handle.
         val engineFailures = CoroutineExceptionHandler { _, e ->
             if (e.isBindFailure()) Log.w(TAG, "port $port busy") else Log.e(TAG, "pen server failed", e)
-            _failure.value = e.message ?: e.toString()
+            _failure.value = failureMessage(e, port)
         }
 
         scope.launch(Dispatchers.IO) {
@@ -128,13 +128,13 @@ class LanTransport(
                 val cause = started.exceptionOrNull()
                 if (cause?.isBindFailure() != true) {
                     Log.e(TAG, "pen server failed to start", cause)
-                    _failure.value = cause?.message ?: "pen server failed to start"
+                    _failure.value = failureMessage(cause, port)
                     return@launch
                 }
                 Log.w(TAG, "port $port busy, retrying (${attempt + 1}/$BIND_ATTEMPTS)")
                 delay(BIND_RETRY_MS)
             }
-            _failure.value = "port $port is in use by something else"
+            _failure.value = portInUse(port)
             Log.e(TAG, "giving up: port $port is already in use")
         }
     }
@@ -161,3 +161,12 @@ class LanTransport(
  */
 internal fun lanIpv4(addresses: List<InetAddress>): String? =
     addresses.filterIsInstance<Inet4Address>().firstOrNull { !it.isLoopbackAddress }?.hostAddress
+
+/**
+ * What the pairing card says when the pen server cannot start ([PenTransport.failure]): one
+ * sentence a viewer can act on. The exception itself goes to the log, never to the television.
+ */
+internal fun failureMessage(e: Throwable?, port: Int): String =
+    if (e?.isBindFailure() == true) portInUse(port) else "The pen server could not start. Restart the app."
+
+private fun portInUse(port: Int) = "port $port is in use by something else"
