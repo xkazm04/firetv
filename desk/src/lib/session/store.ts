@@ -652,7 +652,13 @@ function step(s: Session, e: Event): Session {
     // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
     case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) { const who = awayWith(s, (x) => x.hint?.key === e.key); if (!who) return s;
         toAway(s, n, who, (x) => ({ ...x, lesson: e.lesson && { ...e.lesson, owner: who }, noLesson: !e.lesson })); break; }
-      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me }; n.noLesson = !e.lesson;
+      // a lesson a screen chose (no key) is one the library holds, and plays the library's own video under its own title:
+      // a posted id or video the library does not hold never reaches the TV's player
+      if (e.key === undefined && e.lesson) { const lib = LESSONS.find((x) => x.id === e.lesson!.id); if (!lib) return s;
+        n.lesson = { ...e.lesson, title: lib.title, t: Number.isFinite(e.lesson.t) && e.lesson.t >= 0 ? e.lesson.t : 0, owner: s.hint?.owner ?? me };
+        if (lib.youtube) n.lesson.youtube = lib.youtube; else delete n.lesson.youtube; }
+      else n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me };
+      n.noLesson = !e.lesson;
       // a new lesson opens playing (the embed autoplays): the last one's Pause is not this one's
       if (e.lesson && e.lesson.id !== s.lesson?.id) n.lessonPaused = false; break;
     case "lesson.watched": if (s.watch && watchDue(s.watch, Date.now())) n.watch = { ...s.watch, logged: true }; break;

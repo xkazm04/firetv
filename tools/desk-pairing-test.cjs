@@ -827,3 +827,12 @@ test('OPT-5: a watched lesson whose line cannot be written to the learner file s
   assert.ok(!lines.some((l)=>/watched/i.test(l)),'a written line says nothing: '+lines.join('|'));
  }finally{mock.restoreAll();if(had===null)fs.rmSync(lf,{force:true});else fs.writeFileSync(lf,had);}
 });
+test('OPT-7: a lesson chosen on a screen (no key) is a library lesson, played from the library\'s own video - a posted id or video the library does not hold never reaches the TV',async()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
+ const {LESSONS}=require(src('lib/library/lessons.data.ts'));const lib=LESSONS.find((l)=>l.youtube);
+ let r=await post({type:'lesson.set',lesson:{id:'not-a-lesson',title:'Anything',t:0,text:'',why:'',youtube:'aaaaaaaaaaa'}},'phone');assert.equal(r.status,200);
+ assert.equal(store.getSession().lesson,null,'an id the library does not hold is not put on the desk');
+ r=await post({type:'lesson.set',lesson:{id:lib.id,title:'Other title',t:12,text:'x',why:'y',youtube:'aaaaaaaaaaa'}},'phone');
+ const l=store.getSession().lesson;assert.equal(l.id,lib.id);assert.equal(l.youtube,lib.youtube,'the library\'s video, not the posted one');assert.equal(l.title,lib.title,'the library\'s title');assert.equal(l.t,12);
+ store.dispatch({type:'lesson.set',lesson:null});assert.equal(store.getSession().lesson,null,'no lesson still clears');
+});
