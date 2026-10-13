@@ -41,6 +41,14 @@ const TV_WORDS: Record<Session["screen"], string> = {
 };
 /** The desk refuses a name longer than this (PROFILE_NAME_MAX in the session store, which is server-only and cannot be imported here); the input stops at it so the phone shows what the TV keeps. */
 const NAME_MAX = 40;
+/**
+ * Jobs that run one after another: a job starts when the one before it has finished, whether that one worked or not.
+ * The name field posts through one, so a slow early post cannot reach the desk after a later one and leave a prefix.
+ */
+function inOrder() {
+  let tail: Promise<unknown> = Promise.resolve();
+  return (job: () => Promise<unknown>): Promise<unknown> => { tail = tail.then(job).catch(() => undefined); return tail; };
+}
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
 const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
 const FRESH_SENTENCE = "I have gone to school yesterday.";
@@ -87,6 +95,8 @@ export default function Phone() {
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
+  /** The profile name's posts, in the order typed (inOrder). */
+  const [nameQueue] = useState(inOrder);
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
   /** The shot lives on the phone until the user says Use this page. Nothing is sent before that. */
@@ -498,8 +508,8 @@ export default function Phone() {
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
-            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => post({ type: "profile.save" })}>Save</button>
+            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); void nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => void nameQueue(() => post({ type: "profile.save" }))}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
