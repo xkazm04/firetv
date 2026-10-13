@@ -445,3 +445,12 @@ test('sweep case 4: the validator checks minimum and maximum, the two number key
  assert.equal(validate(9,difficulty).length,1,'over the maximum');assert.equal(validate(0,difficulty).length,1,'under the minimum');
  assert.deepEqual(validate({pieces:12},{type:'object',properties:{pieces:{type:'integer',minimum:2,maximum:10}}})[0][0],'pieces','the path names the field');
 });
+
+test('sweep case 5: embed() holds one answer\'s vectors to one length; a ragged answer is a shape EngineError, never a NaN score later',async()=>{
+ const {embed,cosine}=load('engines/embed.ts');
+ assert(Number.isNaN(cosine([1,0,0],[1,0])),'a ragged pair scores NaN, which is why the engine refuses it');
+ reg().useProvider('embed',{name:'stub',run:async()=>({raw:[[1,0,0],[1,0]]})});
+ await assert.rejects(embed({texts:['a','b']}),isShape(''));
+ reg().useProvider('embed',{name:'stub',run:async()=>({raw:[[1,0],[0,1]]})});
+ assert.deepEqual((await embed({texts:['a','b']})).json,[[1,0],[0,1]]);
+});
