@@ -122,3 +122,68 @@ test('live-ui-test and relay-test open the companion as one phone (device.mjs PH
     assert.doesNotMatch(src, /deviceScaleFactor/, `${t}.mjs sets its own deviceScaleFactor`);
   }
 });
+
+// dev.ps1's live stage used to run `npm install | Out-Null` only when tools/node_modules was missing, never looked
+// at npm's exit code, and never installed Chromium, so a fresh machine failed inside live-ui-test with "Executable
+// doesn't exist". Initialize-LiveTools is that setup as a function; this runs it (cut out of dev.ps1 by the
+// PowerShell parser) in a temp tools folder with npm and npx stubbed, so nothing installs and nothing touches a
+// network. Windows PowerShell only: skipped where powershell.exe is absent.
+test('dev.ps1 Initialize-LiveTools: installs what is missing, names a failed step, installs Chromium once', (t) => {
+  const cp = require('node:child_process'), os = require('node:os');
+  const ps = cp.spawnSync('powershell', ['-NoProfile', '-Command', '$PSVersionTable.PSVersion.Major'], { encoding: 'utf8' });
+  if (ps.error || ps.status !== 0) return t.skip('powershell is not available');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'dev-live-'));
+  const driver = path.join(dir, 'driver.ps1');
+  fs.writeFileSync(driver, [
+    "$ErrorActionPreference = 'Stop'",
+    "$errs = $null",
+    "$ast = [System.Management.Automation.Language.Parser]::ParseFile($env:DEV_PS1, [ref]$null, [ref]$errs)",
+    "$fn = $ast.Find({ param($n) $n -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $n.Name -eq 'Initialize-LiveTools' }, $true)",
+    "if (-not $fn) { Write-Output 'MISSING'; exit 3 }",
+    ". ([scriptblock]::Create($fn.Extent.Text))",
+    "$global:log = Join-Path $env:WORK 'calls.txt'",
+    "$global:npmExit = 0; $global:npxExit = 0",
+    "function npm { Add-Content $global:log ('npm ' + ($args -join ' ')); if ($args -contains 'install') { New-Item -ItemType Directory -Force node_modules | Out-Null }; $global:LASTEXITCODE = $global:npmExit }",
+    "function npx { Add-Content $global:log ('npx ' + ($args -join ' ')); $global:LASTEXITCODE = $global:npxExit }",
+    "function Run($name) {",
+    "  Remove-Item $global:log -ErrorAction SilentlyContinue",
+    "  $msg = ''",
+    "  try { Initialize-LiveTools -ToolsDir $env:WORK | Out-Null } catch { $msg = $_.Exception.Message }",
+    "  $calls = if (Test-Path $global:log) { (Get-Content $global:log) -join ';' } else { '' }",
+    "  Write-Output ($name + '|' + $calls + '|' + $msg)",
+    "}",
+    "Set-Content (Join-Path $env:WORK 'package-lock.json') '{}'",
+    "Run 'fresh'",
+    "Run 'again'",
+    "(Get-Item (Join-Path $env:WORK 'package-lock.json')).LastWriteTime = (Get-Date).AddMinutes(5)",
+    "Run 'bumped'",
+    "Remove-Item (Join-Path $env:WORK 'node_modules') -Recurse -Force",
+    "$global:npmExit = 1",
+    "Run 'npmfail'",
+    "$global:npmExit = 0; $global:npxExit = 1",
+    "Run 'browserfail'",
+  ].join('\n'));
+  const work = path.join(dir, 'tools');
+  fs.mkdirSync(work);
+  try {
+    const r = cp.spawnSync('powershell', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', driver], {
+      encoding: 'utf8', env: { ...process.env, DEV_PS1: path.join(__dirname, '..', 'scripts', 'dev.ps1'), WORK: work },
+    });
+    const rows = Object.fromEntries(r.stdout.split(/\r?\n/).filter((l) => l.includes('|')).map((l) => {
+      const [name, calls, msg] = l.split('|');
+      return [name, { calls: calls ? calls.split(';') : [], msg: msg || '' }];
+    }));
+    assert.doesNotMatch(r.stdout, /MISSING/, 'dev.ps1 has no Initialize-LiveTools: the live stage setup is inline and cannot be exercised');
+    const install = 'npm install --no-audit --no-fund', browser = 'npx playwright install chromium';
+    assert.deepEqual(rows.fresh.calls, [install, browser], 'a fresh folder installs packages, then Chromium');
+    assert.equal(rows.fresh.msg, '');
+    assert.deepEqual(rows.again.calls, [], 'nothing changed: no npm, no browser download');
+    assert.deepEqual(rows.bumped.calls, [install, browser], 'a lockfile newer than node_modules reinstalls, and re-checks Chromium');
+    assert.deepEqual(rows.npmfail.calls, [install], 'a failed install stops before the browser step');
+    assert.match(rows.npmfail.msg, /npm install.*exit 1/, 'the failure names the step and its exit code');
+    assert.deepEqual(rows.browserfail.calls, [install, browser]);
+    assert.match(rows.browserfail.msg, /playwright install chromium.*exit 1/);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
