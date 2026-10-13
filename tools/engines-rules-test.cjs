@@ -437,3 +437,11 @@ test('sweep case 3: a transcriber is "on this machine" only at a loopback host; 
   }
  }finally{globalThis.fetch=real;if(prior===undefined)delete process.env.STT_URL;else process.env.STT_URL=prior;}
 });
+
+test('sweep case 4: the validator checks minimum and maximum, the two number keywords the desk writes (items.ts difficulty and pieces)',()=>{
+ const {validate}=load('engines/shape.ts');
+ const difficulty={type:'integer',minimum:1,maximum:5};
+ assert.deepEqual(validate(3,difficulty),[]);assert.deepEqual(validate(1,difficulty),[]);assert.deepEqual(validate(5,difficulty),[]);
+ assert.equal(validate(9,difficulty).length,1,'over the maximum');assert.equal(validate(0,difficulty).length,1,'under the minimum');
+ assert.deepEqual(validate({pieces:12},{type:'object',properties:{pieces:{type:'integer',minimum:2,maximum:10}}})[0][0],'pieces','the path names the field');
+});

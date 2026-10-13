@@ -4,8 +4,8 @@
  * means is still decided by the caller and by lib/rules.
  *
  * The validator covers exactly the JSON-schema subset the desk writes: type (object, string, integer, number,
- * boolean, array), properties, required, additionalProperties: false, enum, minLength/maxLength (counted in
- * characters), minItems/maxItems, items. Any other keyword is not checked.
+ * boolean, array), properties, required, additionalProperties: false, enum, minimum/maximum, minLength/maxLength
+ * (counted in characters), minItems/maxItems, items. Any other keyword is not checked.
  */
 import { call } from "./call";
 import { EngineError, type EngineKind, type EngineResult, type JSONSchema, type Provider } from "./types";
@@ -40,6 +40,10 @@ export function validate(value: unknown, s: JSONSchema, path = ""): Array<[strin
   if (!typeOk(s.type, value)) return [[path, `expected ${s.type}, got ${kindOf(value)}`]];
   if (Array.isArray(s.enum) && !s.enum.includes(value)) return [[path, `${JSON.stringify(value)} is not one of ${s.enum.join("|")}`]];
   const out: Array<[string, string]> = [];
+  if (typeof value === "number") {
+    if (typeof s.maximum === "number" && value > s.maximum) out.push([path, `${value} is over the maximum ${s.maximum}`]);
+    if (typeof s.minimum === "number" && value < s.minimum) out.push([path, `${value} is under the minimum ${s.minimum}`]);
+  }
   if (typeof value === "string") {
     const n = [...value].length;
     if (typeof s.maxLength === "number" && n > s.maxLength) out.push([path, `${n} characters, at most ${s.maxLength}`]);
