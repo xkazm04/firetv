@@ -14,6 +14,7 @@ import json
 import os
 import sys
 import time
+import urllib.error
 import urllib.request
 
 # The model answers with whatever characters it likes, and a Windows console defaults to cp1250,
@@ -52,17 +53,29 @@ def ask(images, prompt, schema=None, timeout=600):
     except urllib.error.HTTPError:
         # A model with no thinking mode rejects the key outright. One retry without it; anything
         # else is a real error and should surface.
-        res = _post(body, timeout)
+        res = _post(body, timeout, final=True)
     return res["message"]["content"], time.time() - started
 
 
-def _post(body, timeout):
+def _post(body, timeout, final=False):
+    """One POST to /api/chat. The final attempt's failure is said the way desk's engine says it (host, model, the
+    command to run - desk/src/lib/engines/vision.ts ollamaProbe), with Ollama's own reply kept, not a bare traceback."""
     req = urllib.request.Request(
         f"{HOST}/api/chat",
         data=json.dumps(body).encode(),
         headers={"Content-Type": "application/json"},
     )
-    return json.load(urllib.request.urlopen(req, timeout=timeout))
+    try:
+        return json.load(urllib.request.urlopen(req, timeout=timeout))
+    except urllib.error.HTTPError as e:
+        if not final:
+            raise
+        said = e.read().decode("utf-8", "replace")[:300]
+        hint = f": run `ollama pull {MODEL}`" if e.code == 404 else ""
+        raise RuntimeError(f"ollama at {HOST} answered {e.code} for {MODEL}{hint}. It said: {said}") from None
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"ollama is not reachable at {HOST} ({e.reason}): start it with `ollama serve`, "
+                           f"or point OLLAMA_HOST at it.") from None
 
 
 def b64(path):
