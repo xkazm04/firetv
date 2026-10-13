@@ -183,6 +183,39 @@ test('retry: a hint that failed is asked again for the same item and the same qu
  assert(prompt.includes('What do I do first?'));assert.equal(s.jobs.hint.phase,'done');
 });
 
+test('retry: a lesson (teach) that failed is asked again for the same topic through /api/worked',async()=>{
+ blank();
+ const W=require(src('lib/desk/worked.ts'));const real=W.teachTopic;
+ let topics=[];
+ try{
+  W.teachTopic=async(topic,...rest)=>{topics.push(topic);if(topics.length===1)throw new Error('boom');return real(topic,...rest);};
+  stubText({other:()=>({idea:'It is about sharing equally.'})});
+  const r1=await post('worked',{topic:'frac-equivalent'});assert.equal(r1.status,502);
+  assert.equal(store.getSession().jobs.teach.phase,'failed');
+  const again=await retry({kind:'teach'});
+  assert.equal(again.status,200,'the lesson is asked again, not refused with nothing to try again');
+  assert.deepEqual(topics,['frac-equivalent','frac-equivalent'],'the same topic, held on the job');
+  assert.equal(store.getSession().jobs.teach.phase,'done');
+ }finally{W.teachTopic=real;}
+});
+
+test('size caps: a 100k-character Linga sentence and a 30 MB photo are refused in desk words - no job, no engine call',async()=>{
+ blank();let calls=0;
+ stubText({other:()=>{calls++;return {};}});stubVision(()=>{calls++;return READ3;});
+ const long=await post('analyse',{kind:'english',sentence:'a'.repeat(100000)});
+ assert.equal(long.status,400);deskWorded((await long.json()).error);
+ assert.equal(store.getSession().jobs.analyse,undefined,'no analyse job started');
+ const big=await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(30*1024*1024)});
+ assert.equal(big.status,400);deskWorded((await big.json()).error);
+ assert.equal(store.getSession().pages.length,0,'no page kept');assert.equal(store.getSession().jobs.read,undefined,'no read job started');
+ assert.equal(calls,0,'no engine reached');
+ // what the phone sends (1280 px JPEG) and an ordinary sentence still go through
+ stubText({other:()=>({})});
+ assert.notEqual((await post('analyse',{kind:'english',sentence:'a'.repeat(900)})).status,400,'a long but ordinary sentence is read');
+ stubVision(()=>READ3);
+ assert.equal((await post('read',{...SNAP,image:'data:image/jpeg;base64,'+'A'.repeat(6*1024*1024)})).status,200,'a 6 MB photo, above what the phone makes, is read');
+});
+
 test('retry: with nothing failed there is nothing to retry, and no engine is called',async()=>{
  onPage();
  let asked=0;stubText({items:()=>{asked++;return {items:STATED};},hint:()=>{asked++;return {hint:'x',what_to_try_next:'y'};}});
@@ -828,6 +861,17 @@ test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write 
   const kept=L.getLearner('jobs-memory-b').memory.length;
   assert(kept===0||kept===3,`a failed write kept ${kept} of 3 lines: a Try again would write the kept ones twice`);
  }finally{fs.renameSync=real;}
+});
+
+test('a memory line the notes already hold - or said twice tonight - is not written again',async()=>{
+ const {writeMemory}=require(src('lib/desk/memory.ts'));const L=require(src('lib/session/learners.ts'));
+ stubText({other:()=>({lines:['They undo the constant first.','They like one step at a time.']})});
+ const first=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(first,['They undo the constant first.','They like one step at a time.']);
+ stubText({other:()=>({lines:['  they UNDO the   constant first. ','They check by substituting.','They check by  substituting.']})});
+ const second=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(second,['They check by substituting.'],'only what tonight added is returned');
+ assert.deepEqual(L.getLearner('jobs-memory-dup').memory,['They undo the constant first.','They like one step at a time.','They check by substituting.']);
 });
 
 test('case 6d: a snap whose title is not text is read under the desk\'s own title - the learner file is written, and no "could not write" is said',async()=>{

@@ -10,6 +10,7 @@ import { BUSY, blocksRun, refused, runJob } from "@/lib/desk/job";
 import { essayTooLong, NOT_ENGLISH_LINE, paragraphIsEnglish, paragraphsOf, pieceAgainProblem, pieceBeingRead, pieceProblem, revise, REWRITE_WHILE_READING, rewriteUnruledLine, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { addPiece, addVersion, noticed, TEXT_NOTICE } from "@/lib/session/texts";
 import { learnerAge } from "@/lib/rules/voice";
+import { sentenceProblem } from "@/lib/rules/english";
 
 export const dynamic = "force-dynamic";
 type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType } | { kind: "rewrite"; n: number; text: string }
@@ -32,6 +33,8 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as Body | null;
   if (!body || typeof body !== "object" || !KINDS.includes(body.kind)) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
   if ((body.kind === "english" && blank(body.sentence)) || (body.kind === "essay" && blank(body.text))) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
+  const sentenceLong = body.kind === "english" ? sentenceProblem(body.sentence) : null;
+  if (sentenceLong) return refusedWithLine(sentenceLong);
   // a reading is somebody's: with no one at the desk there is no one to read it for
   const who = getSession().learner;
   // the tutor's voice fits the seated profile's age (rules/voice); no age known speaks as it always has

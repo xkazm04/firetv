@@ -2,7 +2,7 @@
  * Try again, in place: a failed run is asked again with what it was asked the first time, which the desk holds
  * on the job (`Job.input`). A read is read again on the same page id with the image the session already has -
  * no second page, no re-snap; a hint is asked again for the same item and the same question; a practice set is
- * written again on the same topic. The run goes through the kind's own route, so it is the same job
+ * written again on the same topic; a lesson is asked again for the same topic. The run goes through the kind's own route, so it is the same job
  * (one at a time, a desk-worded failure, a late result dropped).
  */
 import { NextResponse } from "next/server";
@@ -11,6 +11,7 @@ import { MOVED_ON, NOTHING } from "@/lib/desk/job";
 import { POST as read } from "../../read/route";
 import { POST as hint } from "../../hint/route";
 import { POST as practice } from "../../practice/route";
+import { POST as worked } from "../../worked/route";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ const ROUTES: Partial<Record<JobKind, { path: string; post: (req: Request) => Pr
   read: { path: "read", post: read },
   hint: { path: "hint", post: hint },
   practice: { path: "practice", post: practice },
+  teach: { path: "worked", post: worked },
 };
 
 export async function POST(req: Request) {

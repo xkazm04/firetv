@@ -252,6 +252,7 @@ async function openRecap(){
 }
 const backToDesk=()=>{for(const e of keys().tvKey(store().getSession(),'back',LOCAL).events)store().dispatch(e);};
 const lined=()=>JSON.stringify({lines:['They undo the constant first once they see it.']});
+const linedNew=()=>JSON.stringify({lines:['They read an argument one sentence at a time.']});
 
 test('follow-up 1: the recap opens with the text engine down - every tile and the caption drawn',async()=>{
  const {recapRows,recapCaption}=recap();
@@ -293,9 +294,9 @@ const noMaths={practice:null,topic:null,log:{started:null,minutes:0,problems:[],
 
 test('M2: an Essay-only evening and a Linga-only evening are written down too; the prompt carries counts and lens names, never a learner text',async()=>{
  try{
-  seat({...noMaths,englishLearning:noEnglish,history:[{at:Date.now()-1000,kind:'writing',label:'Argument',detail:'1 of 5 sentences to fix, 1 fixed'}]});engine(lined);
+  seat({...noMaths,englishLearning:noEnglish,history:[{at:Date.now()-1000,kind:'writing',label:'Argument',detail:'1 of 5 sentences to fix, 1 fixed'}]});engine(linedNew);
   let r=await memoryPost();
-  assert.equal(r.status,200);assert.deepEqual(r.body,{lines:['They undo the constant first once they see it.'],asked:true});
+  assert.equal(r.status,200);assert.deepEqual(r.body,{lines:['They read an argument one sentence at a time.'],asked:true});
   assert.equal(asked,1,'an Essay line is work');
   assert.match(lastReq.prompt,/Essay Master tonight/);assert.match(lastReq.prompt,/Argument lens: 5 sentences read, 2 to fix when read, 1 after rewrites/);
   assert.doesNotMatch(lastReq.prompt,/Topic worked on tonight/,'no maths section for an evening with no maths');

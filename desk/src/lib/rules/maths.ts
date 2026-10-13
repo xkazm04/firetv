@@ -104,6 +104,15 @@ export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().repl
 export const TYPED_ANSWERS_MAX = 12;
 /** 120 holds a quotient-rule derivative; the readers' own limits keep a longer answer unsure, never wrong. */
 export const TYPED_ANSWER_MAX = 120;
+/**
+ * The most a snapped page may weigh, as the data URL the phone posts. The phone draws every photo at 1280 px wide as JPEG 0.85
+ * (phone/page.tsx toJpeg): a full portrait page of fine print is well under 6 MB as text, so 12 MB leaves room and stops the rest.
+ */
+export const READ_IMAGE_MAX = 12 * 1024 * 1024;
+/** Why a photo is refused before any run, in the desk's words; null when it can be read. */
+export function readImageProblem(image: unknown): string | null {
+  return typeof image === "string" && image.length > READ_IMAGE_MAX ? "That photo is too big for the desk to read. Snap the page again, closer or in better light." : null;
+}
 /** The longest question the hint route takes with a hint (the explain transcript's cap, X5): a longer one is refused, never cut. */
 export const HINT_QUESTION_MAX = 1000;
 /** Why a hint question is refused before any run, in the desk's words; null when it can be asked (absent is no question). */
@@ -478,6 +487,12 @@ export function leaksByForm(question: string, line: string, system?: SchoolSyste
   if (eq || isSum(ex!)) {
     const root = (n: string) => { const v = evaluate(n, 0); return v !== null && (answers(v) || answers(-v)); };
     for (const m of spoken(line).matchAll(PAIR)) if (root(m[1]) && root(m[2])) return true;
+    // one root named alone as the answer ("one of the numbers is 3", "one root is x = -4", "one bracket is x + 4"): half the answer
+    for (const m of line.matchAll(/\b(?:one|first|second|other|another)\b[^.?!;:]{0,40}?\b(?:is|are|equals?)\b(.*)/gi)) {
+      const t = spoken(m[1]), n = t.match(/^\s*(?:x\s*=\s*)?(-?\d+(?:\.\d+)?)(?![\d\/]|\.\d)/), b = t.match(/^\s*\(?\s*(x\s*[+-]\s*\d+)\s*\)?/);
+      if (n && root(n[1])) return true;
+      if (b && !own.includes(compact(b[0])) && linearRoot(b[1]) !== null && answers(linearRoot(b[1])!)) return true;
+    }
   }
   if (ex) for (const f of masked.split(/[|,;:!?"“”‘’'$=\{}]|\.(?!\d)/)) {
     const frag = f.trim();

@@ -25,6 +25,13 @@ export function notesBlock(memory: readonly string[]): string {
   return memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "";
 }
 
+/** A filter that drops a line equal (case, runs of space) to a held note or to an earlier line of the same answer. */
+function distinctFrom(held: readonly string[]): (l: string) => boolean {
+  const norm = (l: string) => l.toLowerCase().replace(/\s+/g, " ").trim();
+  const seen = new Set(held.map(norm));
+  return (l) => { const k = norm(l); if (seen.has(k)) return false; seen.add(k); return true; };
+}
+
 export async function writeMemory(
   learnerId: string,
   session: { topic?: string; items?: PracticeItem[]; hintsUsed?: number } & Partial<Evening>,
@@ -74,6 +81,7 @@ export async function writeMemory(
     .filter((l): l is string => typeof l === "string")
     .map((l) => l.trim().replace(/^[-*\d.\s]+/, ""))
     .filter(Boolean)
+    .filter(distinctFrom(existing))
     .slice(0, 3);
   // WD10: the lines are added in ONE save (read fresh: the record may have moved while the model wrote), so a failed write keeps none and a Try again writes each once
   if (lines.length) { const l = getLearner(learnerId); saveLearner({ ...l, memory: [...l.memory, ...lines] }); }

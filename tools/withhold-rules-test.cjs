@@ -285,3 +285,60 @@ test('case 16: the lesson picker\'s "why" passes the hint path\'s own leak check
  for(let i=0;i<40;i++)await new Promise((r)=>setImmediate(r));
  assert.equal(store.getSession().lesson?.why,built,'the route handed pickLesson the cz system');
 });
+
+test('case 17: the explain reply passes the hint path\'s one leak rule (leaksLine) - over the school units, Calculus shapes and the lab\'s equations, no line passes explainItem that leaksLine stops',async()=>{
+ const X=load('desk/explain.ts'),{makeSchoolItems}=load('desk/items.ts'),S=load('rules/school.ts'),C=load('rules/calc.ts'),{kindOfSpec}=load('rules/kinds.ts'),{leaksLine}=load('desk/hint.ts');
+ const L=load('session/learners.ts');
+ const ONES=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'],TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+ const word=(a)=>{if(!/^\d+$/.test(a))return null;const n=Number(a);if(n>99)return null;return n<20?ONES[n]:TENS[Math.floor(n/10)]+(n%10?'-'+ONES[n%10]:'');};
+ /** One answer in the forms a tutor line states it: figures, words, cz notation (decimal comma). */
+ const linesFor=(a)=>{const out=[`The answer is ${a}.`,`So you get ${a} here.`,`It works out to ${a}`,`Your result should be ${a}.`];
+  const w=word(a);if(w)out.push(`The answer is ${w}.`,`So it comes to ${w}.`);
+  if(/\./.test(a)){const c=a.replace('.',',');out.push(`Výsledek je ${c}.`,`The answer is ${c}.`);}
+  out.push(`x = ${a}`,`you end up with ${a} in total`,`the result: ${a}`,`${a}`);
+  const neg=a.startsWith('-')?a.slice(1):null;if(neg){out.push(`minus ${word(neg)??neg}`,`negative ${neg}`,`${a.replace('-','−')}`);}
+  const fr=a.match(/^(-?\d+)\/(\d+)$/);if(fr)out.push(`${fr[1]} over ${fr[2]}`,`${word(fr[1])??fr[1]} over ${word(fr[2])??fr[2]}`);
+  const pc=a.match(/^(\d+(?:\.\d+)?)%?$/);if(pc)out.push(`${pc[1]} percent`,`${pc[1]}%`);
+  const hl=a.match(/^(\d+)\.5$/);if(hl)out.push(`${word(hl[1])??hl[1]} and a half`);
+  const w2=a.split(/[\s:,]+/).filter(Boolean);if(w2.length>1)out.push(w2.join(' and '));
+  return out;};
+ const corpus=[];
+ for(const topic of Object.keys(S.SCHOOL_GENERATORS)){
+  const {items}=makeSchoolItems(topic,6,12345);
+  for(const it of items){const a=S.workedAnswer(it.spec);if(a)corpus.push({topic,item:{n:it.n,question:it.question,spec:it.spec,verdict:'unsure'},answer:a});}
+ }
+ const CALC=[[{shape:'evaluate',f:'x^2+1',at:3},'10'],[{shape:'derivative-at',f:'x^3',at:2},'12'],[{shape:'definite-integral',f:'x^2',a:0,b:3},'9'],[{shape:'limit',f:'(x^2-1)/(x-1)',at:1},'2'],[{shape:'critical-point',f:'x^2-4*x',on:[0,5]},'2'],[{shape:'derivative',f:'x^3'},'3x^2'],[{shape:'antiderivative',f:'2*x'},'x^2 + C']];
+ for(const [spec,a] of CALC){const q=C.question(spec);if(q)corpus.push({topic:'calc1-rules',item:{n:1,question:q.plain,spec,verdict:'unsure'},answer:a});}
+ for(const n of EQUATIONS)corpus.push({topic:'linear-two-step',item:{n:1,question:item(n).text,verdict:'unsure'},answer:ANSWERS[n]});
+ assert.ok(corpus.length>=40,`a corpus worth counting: ${corpus.length}`);
+ let lines=0,differ=[],statE=0,statL=0;
+ for(const {topic,item:it,answer} of corpus){
+  const k=kindOfSpec(it.spec),specs={calc:k==='calc'?it.spec:null,school:k==='school'?it.spec:null,parts:null};
+  for(const line of linesFor(answer)){
+   lines++;
+   stub({reply:line,slip:'unclear',value:''});
+   const r=await X.explainItem(it,'I did it in my head',topic,'hl17-scratch',()=>false,12);
+   const passedExplain=r.reply===line||r.reply.includes(line);
+   statE+=passedExplain?0:1;statL+=leaksLine(it.question,specs,line)?1:0;
+   if(passedExplain&&leaksLine(it.question,specs,line))differ.push(`${topic} | ${it.question} | ${line}`);
+  }
+ }
+assert.equal(statE,statL,`explainItem stops ${statE} of ${lines} lines, leaksLine ${statL}`);
+ assert.ok(lines>=150,`lines counted: ${lines}`);
+ assert.deepEqual(differ,[],`${differ.length} of ${lines} lines pass explainItem that leaksLine stops: ${differ.slice(0,5).join(' // ')}`);
+});
+
+test('case 18: a single factor root named alone leaks on a factor item (8 phrasings x 4 items), and method talk about the same numbers stays clean',()=>{
+ // [item, the two roots as the equation or the brackets give them]
+ const ITEMS=[['Solve for x:  x² − 7x + 12 = 0',[3,4]],['Factor completely: x² + 7x + 12',[-3,-4]],['x² + 7x + 12 = 0',[-3,-4]],['Factor: x² + x − 12',[3,-4]]];
+ const WORD={3:'three',4:'four'};
+ const bracket=(r)=>`x ${r<0?'+':'−'} ${Math.abs(r)}`;
+ const phrasings=([a,b])=>[`one of the numbers is ${a}`,`one number is ${a}`,`one root is ${b}`,`one bracket is ${bracket(b)}`,`one of them is ${a}`,`one solution is x = ${b}`,`the first number is ${WORD[Math.abs(a)]}`,`one of the factors is (${bracket(a)})`];
+ let caught=0,total=0;const missed=[];
+ for(const [q,roots] of ITEMS)for(const l of phrasings(roots)){total++;if(maths.leaks(q,l))caught++;else missed.push(`${q} | ${l}`);}
+ assert.equal(total,32);
+ assert.deepEqual(missed,[],`${caught}/${total} single-root phrasings caught`);
+ // method talk about the same numbers is not the answer
+ const CLEAN=['What multiplies to 12?','Which two numbers multiply to 12 and add to 7?','One number has to be positive and the other negative, so look at the signs.','The first thing to do is look at the 12.','One thing to notice is 12 is the last term.','The first pair to try is 2 and 6.','The first pair to try is 1 and 12, then 2 and 6.','Another way is to try the factor pairs of 12.','Your clues are 12 and 7.'];
+ for(const [q] of ITEMS)for(const l of CLEAN)assert.equal(maths.leaks(q,l),false,`${q} | ${l}`);
+});

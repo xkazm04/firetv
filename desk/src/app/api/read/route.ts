@@ -8,6 +8,7 @@ import { dispatch, getSession, NOBODY_AT_DESK, READ_NOT_KEPT, READ_NOT_SAVED, se
 import { missingNumbers, readPage, type ReadWho } from "@/lib/desk/read";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
+import { readImageProblem } from "@/lib/rules/maths";
 import { TYPE_WORDS, systemOf } from "@/tv/profileRows";
 import { missingLine } from "@/tv/pageLines";
 import { getLearner, saveLearner, withDigest, withHistory } from "@/lib/session/learners";
@@ -26,6 +27,8 @@ export async function POST(req: Request) {
   // a new page needs the size of its photo: every position on it is a fraction of that size
   if (!held && !(Number.isFinite(w) && w > 0 && Number.isFinite(h) && h > 0)) return NextResponse.json({ error: "The desk could not tell how big that photo is. Snap the page again." }, { status: 400 });
   const id = held?.id ?? `${subject}-${Date.now()}`;
+  const heavy = held ? null : readImageProblem(image);
+  if (heavy) return NextResponse.json({ error: heavy }, { status: 400 });
   // the page is the learner's who snapped it: stamped now, and its history line goes to them even if the desk changes hands mid-read
   const owner = held?.owner ?? getSession().learner?.id;
   if (!owner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
