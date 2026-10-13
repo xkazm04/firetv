@@ -89,9 +89,9 @@
     <canvas id="cv"></canvas>
     <div id="hint">draw here</div>
     <div id="tagbox">
-      <input id="tagtext" type="text" placeholder="#10 Novák" autocomplete="off" enterkeyhint="done">
+      <input id="tagtext" type="text" placeholder="#10 Novák" aria-label="Name tag" autocomplete="off" enterkeyhint="done">
       <button id="tagok" style="flex:0 0 64px">Add</button>
-      <button id="tagcancel" style="flex:0 0 64px">✕</button>
+      <button id="tagcancel" style="flex:0 0 64px" aria-label="Cancel">✕</button>
     </div>
   </div>
 </div>
@@ -107,11 +107,11 @@
   </div>
 
   <div class="row" id="colors">
-    <button class="swatch" data-color="#FFD400" aria-pressed="true"  style="background:#FFD400"></button>
-    <button class="swatch" data-color="#FF3B30" aria-pressed="false" style="background:#FF3B30"></button>
-    <button class="swatch" data-color="#00E5FF" aria-pressed="false" style="background:#00E5FF"></button>
-    <button class="swatch" data-color="#32D74B" aria-pressed="false" style="background:#32D74B"></button>
-    <button class="swatch" data-color="#FFFFFF" aria-pressed="false" style="background:#FFFFFF"></button>
+    <button class="swatch" data-color="#FFD400" aria-label="Yellow" aria-pressed="true"  style="background:#FFD400"></button>
+    <button class="swatch" data-color="#FF3B30" aria-label="Red" aria-pressed="false" style="background:#FF3B30"></button>
+    <button class="swatch" data-color="#00E5FF" aria-label="Cyan" aria-pressed="false" style="background:#00E5FF"></button>
+    <button class="swatch" data-color="#32D74B" aria-label="Green" aria-pressed="false" style="background:#32D74B"></button>
+    <button class="swatch" data-color="#FFFFFF" aria-label="White" aria-pressed="false" style="background:#FFFFFF"></button>
     <button id="btn-hold" aria-pressed="false" title="Keep drawings until cleared">Pin</button>
   </div>
 
@@ -144,7 +144,7 @@
   <div class="row">
     <span class="lbl" id="scrub-t">0.0s</span>
     <div id="scrubwrap">
-      <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+      <input id="scrub" type="range" aria-label="Position in the clip" min="0" max="1000" value="0" step="1">
       <div id="marks"></div>
     </div>
   </div>

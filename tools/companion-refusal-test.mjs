@@ -170,6 +170,18 @@ try {
     const tv = await page.evaluate(() => window.__tv);
     const url = (tv && tv.urls[0]) || '';
     check('lan: a page served over http still dials ws://', url.startsWith('ws://'), url || 'no socket');
+
+    // ---- every control has a name a screen reader can say ---------------------------------
+    // A name made only of symbols (a lone ✕) is read as the symbol, so it counts as unnamed.
+    const unnamed = await page.evaluate(() =>
+      [...document.querySelectorAll('button, input')]
+        .filter((el) => {
+          const name = (el.getAttribute('aria-label') || el.textContent || el.title || '').trim();
+          return !/[\p{L}\p{N}]/u.test(name);
+        })
+        .map((el) => el.outerHTML.slice(0, 60)),
+    );
+    check('a11y: every button and input has a spoken name', unnamed.length === 0, `${unnamed.length} unnamed ${unnamed.join(' | ')}`);
     await page.close();
   }
 } finally {
