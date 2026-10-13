@@ -16,10 +16,11 @@ import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
-  const body = (await req.json().catch(() => ({}))) as { id?: string; image?: string; subject?: Subject; title?: string; w?: number; h?: number };
+  const body = (await req.json().catch(() => ({}))) as { id?: string; image?: string; subject?: Subject; title?: unknown; w?: number; h?: number };
   const held = body.id ? getSession().pages.find((p) => p.id === body.id) : undefined;
   if (body.id && !held) return NextResponse.json({ error: "That page is no longer on the desk." }, { status: 409 });
-  const { img: image, subject, title, w, h } = held ?? { img: body.image ?? "", subject: body.subject ?? "maths", title: body.title ?? "Page", w: body.w ?? 0, h: body.h ?? 0 };
+  // a title that is not text is the desk's own: it labels the page and the learner's history line, and a number there broke the history write
+  const { img: image, subject, title, w, h } = held ?? { img: body.image ?? "", subject: body.subject ?? "maths", title: typeof body.title === "string" && body.title.trim() ? body.title : "Page", w: body.w ?? 0, h: body.h ?? 0 };
   if (!image) return NextResponse.json({ error: "Photograph a page first." }, { status: 400 });
   if (!["maths", "english", "essay"].includes(subject)) return NextResponse.json({ error: "The desk reads Math Buddy, Linga and Essay Master pages. Pick one of them." }, { status: 400 });
   // a new page needs the size of its photo: every position on it is a fraction of that size

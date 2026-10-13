@@ -830,6 +830,18 @@ test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write 
  }finally{fs.renameSync=real;}
 });
 
+test('case 6d: a snap whose title is not text is read under the desk\'s own title - the learner file is written, and no "could not write" is said',async()=>{
+ blank();stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.3,x:0.5}]}));
+ const L=require(src('lib/session/learners.ts'));
+ for(const title of [42,{t:'x'},null]){
+  const had=L.getLearner('jobs-scratch').history.length;
+  const r=await post('read',{...SNAP,title});const j=await r.json();
+  assert.equal(r.status,200);assert.equal(j.saved,true,`title ${JSON.stringify(title)}: the read was saved`);
+  assert.equal(store.getSession().pages.at(-1).title,'Page');
+  assert.equal(L.getLearner('jobs-scratch').history.length,had+1,'one history line');assert.equal(L.getLearner('jobs-scratch').history.at(-1).label,'Page');
+ }
+});
+
 test('case 6c: an onFail that throws still records the failure, and its own error reaches the server log (one door, never none)',async()=>{
  onPage();
  const {runJob}=require(src('lib/desk/job.ts'));
