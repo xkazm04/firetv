@@ -22,8 +22,16 @@ function refusedWithLine(error: string) {
   return NextResponse.json({ error }, { status: 400 });
 }
 
+/** The kinds of reading this route answers; a body naming none of them is not a reading. */
+const KINDS: ReadonlyArray<Body["kind"]> = ["english", "essay", "rewrite", "piece-again", "piece"];
+const NOT_A_READING = "The desk did not get anything to read. Send it again from the phone.";
+const blank = (t: unknown) => typeof t !== "string" || !t.trim();
+
 export async function POST(req: Request) {
-  const body = (await req.json()) as Body;
+  // a body that is not one of the readings is refused in desk words before any run: never a 500, never a failed job
+  const body = (await req.json().catch(() => null)) as Body | null;
+  if (!body || typeof body !== "object" || !KINDS.includes(body.kind)) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
+  if ((body.kind === "english" && blank(body.sentence)) || (body.kind === "essay" && blank(body.text))) return NextResponse.json({ error: NOT_A_READING }, { status: 400 });
   // a reading is somebody's: with no one at the desk there is no one to read it for
   const who = getSession().learner;
   // the tutor's voice fits the seated profile's age (rules/voice); no age known speaks as it always has

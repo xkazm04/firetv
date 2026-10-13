@@ -772,6 +772,17 @@ test('the analyse route asks essayTooLong before it starts a run, on the essay b
  assert.match(src.slice(at,at+200),/refusedWithLine\(tooLong\)/);
  assert.match(src,/function refusedWithLine[\s\S]{0,200}status: 400/);
 });
+test('the analyse route refuses a body that is not a reading - not JSON, null, no kind, an unknown kind, no text - with a 400 in desk words: no run, no failed job, no model call',async()=>{
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
+ const asked=seen.length;answer=()=>{throw new Error('no model may be asked');};
+ const raw=(body)=>require(path.join(root,'src/app/api/analyse/route.ts')).POST(new Request('http://desk/api/analyse',{method:'POST',body}));
+ for(const body of ['not json','null','[]','{}','{"kind":"bogus","text":"A paragraph."}','{"kind":"english"}','{"kind":"english","sentence":42}','{"kind":"english","sentence":"   "}','{"kind":"essay","type":"evidence"}','{"kind":"essay","text":42,"type":"evidence"}','{"kind":"essay","text":"  ","type":"evidence"}']){
+  let r;try{r=await raw(body);}catch(e){assert.fail(`${body}: the route threw ${e.constructor.name} (a 500)`);}
+  assert.equal(r.status,400,body);deskWorded((await r.json()).error);
+  assert.equal(getSession().jobs?.analyse,undefined,`${body}: no analyse job was started`);
+ }
+ assert.equal(seen.length,asked,'no model call');
+});
 test('the phone page: no essay in the capture picker, no essay sample, the file picker takes .txt and .md, and it uses the pure rules',()=>{
  const src=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
  const capture=src.slice(src.indexOf('{screen === "capture" && ('),src.indexOf('{screen === "practice" && s'));
