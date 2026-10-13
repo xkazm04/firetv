@@ -31,12 +31,12 @@ const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   // no essay page: Essay Master takes text (a file or a message on the Essay panel), never a photo of handwriting
 ];
 
-/** The TV's screens in the user's words, for the phone's status line. */
-const TV_WORDS: Partial<Record<Session["screen"], string>> = {
+/** The TV's screens in the user's words, for the phone's status line. Every screen has one: a new screen is a type error here, not a raw id on the phone. */
+const TV_WORDS: Record<Session["screen"], string> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "Essay Master", essayplan: "your plan", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
