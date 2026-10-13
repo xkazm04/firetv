@@ -1641,3 +1641,52 @@ test('LG-12: the tag Try it again ends with the first reply after a replay',asyn
  assert.equal(getSession().conversation.phase,'conversation','LG-12: the first reply after a replay ends the replay');
  assert.equal(V.lingaView(getSession(),{}).tag,'Conversation','LG-12: the TV tag says Conversation again');
 });
+
+// ---- LG-20: the minor boundary on partner lines is code, not only the prompt (gate.ts partnerLine)
+const {REDIRECT_LINE,partnerLine}=require(path.join(root,'src/lib/english/gate.ts'));
+const DATING='Would you like to go on a date with me tonight?',NEVERLINE='Let me show you something nude and explicit.';
+/** an engine that gives `line` as the opening and as every reply, with a help ladder written for that line */
+function says(line){answer=async req=>({json:{title:'A booking',goal:'Fix a booking.',opening:line,reply:line,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'Say yes.',meaning:'a date: a romantic meeting',starter:'I would like to'},before:'I booked',after:'I booked two nights',note:'Clear.'},provider:'test',ms:1});}
+const partnerSaid=()=>getSession().conversation.turns.filter(t=>t.role==='partner').map(t=>t.text);
+test('LG-20: the redirect is one plain sentence, no em dash, and itself passes the gate',()=>{
+ assert.doesNotMatch(REDIRECT_LINE,/—|–/);assert.equal(REDIRECT_LINE.split(/[.!?]/).filter(Boolean).length,1);
+ assert.equal(partnerLine(REDIRECT_LINE,false),REDIRECT_LINE);
+ assert.equal(partnerLine('a bar of chocolate',false),'a bar of chocolate');
+ assert.equal(partnerLine('Which hotel is it?',false),'Which hotel is it?');
+});
+for(const [name,line] of [['dating',DATING],['never-list',NEVERLINE]]){
+ test(`LG-20: a ${name} line to a 13-year-old is replaced at the opening, a turn and a replay, shown and stored as the redirect`,async()=>{
+  fresh();getSession().profiles.find(p=>p.id==='ema').age=13;
+  says(line);await command('start',{sceneId:'booking',replace:true});
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE],'opening');assert.equal(getSession().conversation.help?.simpler,undefined,'no help written for the held line');
+  await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE],'turn');assert.equal(getSession().conversation.phase,'conversation','the scene goes on');
+  await command('coach');await command('replay');
+  assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE,REDIRECT_LINE],'replay');
+  assert(!JSON.stringify(getSession().conversation).includes(line),'the model text is stored nowhere on the conversation');
+ });
+}
+test('LG-20: the same lines pass unchanged to an adult outside Family mode, and are held again in Family mode',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ for(const line of [DATING,NEVERLINE]){
+  says(line);await command('start',{sceneId:'booking',replace:true});
+  await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+  await command('coach');await command('replay');
+  assert.deepEqual(partnerSaid(),[line,line,line]);
+ }
+ getSession().profiles.find(p=>p.id==='jakub').mode='family';
+ says(DATING);await command('start',{sceneId:'booking',replace:true});
+ await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ assert.deepEqual(partnerSaid(),[REDIRECT_LINE,REDIRECT_LINE],'Family mode holds it at 18+');
+});
+test('LG-20: the Take Two cast line is held too when the desk went to Family mode after the take began',async()=>{
+ const calls=await cutTake();
+ await command('take-two',{note:0});
+ answer=async()=>({json:{reply:DATING,help:{simpler:'',meaning:'',starter:''}},provider:'test',ms:1});
+ getSession().profiles.find(p=>p.id==='jakub').mode='family';
+ const c=getSession().conversation;
+ await command('turn',{text:'Yesterday I booked a room here.',mode:'speech',lastTurnId:c.takes[0].turns.at(-1).id});
+ assert.equal(getSession().conversation.takes[0].turns.at(-1).text,REDIRECT_LINE);
+ assert(!JSON.stringify(getSession().conversation).includes(DATING));
+});
