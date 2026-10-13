@@ -571,7 +571,7 @@ stage.addEventListener("keydown", (e) => {
   }
   if (S.screen === "lesson") {
     if (k === " ") { S.paused = !S.paused; renderLesson(); status(S.paused ? "paused — circle on the phone to ask about this frame" : "playing"); }
-    if (k === "ArrowRight") { lessonT += 10; renderLesson(); } if (k === "ArrowLeft") { lessonT = Math.max(0, lessonT - 10); renderLesson(); }
+    if (k === "ArrowRight") { lessonT = Math.min(DATA.lessons[S.lesson.vid].duration, lessonT + 10); renderLesson(); } if (k === "ArrowLeft") { lessonT = Math.max(0, lessonT - 10); renderLesson(); }
     if (k === "Backspace" || k === "Escape") { clearInterval(lessonTick); show("hint"); S.focus = 1; renderFocus(); }
     return;
   }
