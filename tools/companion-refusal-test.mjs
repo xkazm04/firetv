@@ -143,6 +143,34 @@ try {
     await page.close();
   }
 
+  // ---- drawing while not paired ------------------------------------------------------------
+  // Nothing reaches the TV until it welcomes the pen, so ink under the finger then is a lie:
+  // the pad must not echo it, and must say why.
+  {
+    const page = await browser.newPage();
+    await page.addInitScript(fakeTv, { pin: TV_PIN, dropFirst: false });
+    await page.goto(PAGE + '?pin=0000');
+    await page.waitForFunction(() => window.__tv && window.__tv.refused > 0, null, { timeout: 5000 });
+    const box = await page.locator('#pad').boundingBox();
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.3);
+    await page.mouse.down();
+    for (let i = 1; i <= 10; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.03), box.y + box.height * 0.5);
+    const ink = await page.evaluate(() => {
+      const c = document.getElementById('cv');
+      const px = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0;
+      for (let i = 3; i < px.length; i += 4) if (px[i] > 0) n++;
+      return n;
+    });
+    await page.mouse.up();
+    const hint = await page.evaluate(() => {
+      const h = document.getElementById('hint');
+      return h.classList.contains('hide') ? '' : h.textContent;
+    });
+    check('unpaired: a stroke draws no ink and the pad says why', ink === 0 && /PIN|connect/i.test(hint), `${ink} ink pixels, hint "${hint}"`);
+    await page.close();
+  }
+
   // ---- locked (too many wrong PINs) ----------------------------------------------------------
   // During the TV's cooldown the right PIN is refused too, so "type the PIN" is a remedy that
   // cannot help yet: the page must say to wait.
@@ -184,6 +212,22 @@ try {
     const tv = await page.evaluate(() => window.__tv);
     const url = (tv && tv.urls[0]) || '';
     check('lan: a page served over http still dials ws://', url.startsWith('ws://'), url || 'no socket');
+
+    // GUARD for the unpaired case: once welcomed, a stroke inks under the finger.
+    await page.waitForFunction(() => window.__pen.isConnected(), null, { timeout: 3000 }).catch(() => {});
+    const box = await page.locator('#pad').boundingBox();
+    await page.mouse.move(box.x + box.width * 0.3, box.y + box.height * 0.3);
+    await page.mouse.down();
+    for (let i = 1; i <= 10; i++) await page.mouse.move(box.x + box.width * (0.3 + i * 0.03), box.y + box.height * 0.5);
+    const ink = await page.evaluate(() => {
+      const c = document.getElementById('cv');
+      const px = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+      let n = 0;
+      for (let i = 3; i < px.length; i += 4) if (px[i] > 0) n++;
+      return n;
+    });
+    await page.mouse.up();
+    check('paired: a stroke inks under the finger', ink > 0, `${ink} ink pixels`);
 
     // ---- every control has a name a screen reader can say ---------------------------------
     // A name made only of symbols (a lone ✕) is read as the symbol, so it counts as unnamed.

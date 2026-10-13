@@ -207,6 +207,7 @@
         return;
       }
       paired = true;
+      hint.textContent = 'draw here';
       statusEl.classList.remove('bad');
       dot.classList.add('on');
       // Match the TV's video aspect so the pad and the picture share one coordinate space.
@@ -341,6 +342,12 @@
 
   pad.addEventListener('pointerdown', (e) => {
     if (tagbox.classList.contains('show')) return;
+    // Nothing reaches the TV before it welcomes this pen, so ink here would be a lie. Say why.
+    if (!paired) {
+      hint.textContent = refused ? 'type the PIN above to draw' : 'not connected to the TV yet';
+      hint.classList.remove('hide');
+      return;
+    }
     pad.setPointerCapture(e.pointerId);
     const n = norm(e);
     start = last = n;
