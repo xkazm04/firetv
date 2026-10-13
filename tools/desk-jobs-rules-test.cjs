@@ -830,6 +830,17 @@ test('case 6b (WD10): tonight\'s memory lines are written in ONE save - a write 
  }finally{fs.renameSync=real;}
 });
 
+test('a memory line the notes already hold - or said twice tonight - is not written again',async()=>{
+ const {writeMemory}=require(src('lib/desk/memory.ts'));const L=require(src('lib/session/learners.ts'));
+ stubText({other:()=>({lines:['They undo the constant first.','They like one step at a time.']})});
+ const first=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(first,['They undo the constant first.','They like one step at a time.']);
+ stubText({other:()=>({lines:['  they UNDO the   constant first. ','They check by substituting.','They check by  substituting.']})});
+ const second=await writeMemory('jobs-memory-dup',{topic:'linear-one-step',hintsUsed:2});
+ assert.deepEqual(second,['They check by substituting.'],'only what tonight added is returned');
+ assert.deepEqual(L.getLearner('jobs-memory-dup').memory,['They undo the constant first.','They like one step at a time.','They check by substituting.']);
+});
+
 test('case 6d: a snap whose title is not text is read under the desk\'s own title - the learner file is written, and no "could not write" is said',async()=>{
  blank();stubVision(()=>({items:[{number:1,text:'2x+3=11',y:0.3,x:0.5}]}));
  const L=require(src('lib/session/learners.ts'));
