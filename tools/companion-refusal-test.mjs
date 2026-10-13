@@ -116,6 +116,9 @@ try {
     );
     const prompt = await pinPrompt(page);
     check('refuse: the page asks for the PIN', prompt !== null, `status "${status}"`);
+    // live-ui-test check 15 (a phone with the wrong PIN is refused) on the page's real refusal state.
+    const intruder = { status, bad: await page.locator('#status.bad').count() > 0, prompt: prompt !== null };
+    check('refuse: live-ui-test check 15 passes for a refused intruder', /not paired/i.test(intruder.status), `status "${status}"`);
     if (prompt) {
       await prompt.fill(TV_PIN);
       await prompt.press('Enter');
