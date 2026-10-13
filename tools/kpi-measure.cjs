@@ -1,7 +1,7 @@
 /**
  * Prints every one of the project's KPI readings. Run with `npm run measure` in desk/ (directly: node tools/kpi-measure.cjs).
- * Read-only: the suites it shells out to use their own scratch data dir, tsc runs with --noEmit and no build info,
- * and nothing here writes. `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
+ * Writes nothing itself and never touches desk/data: tsc runs with --noEmit and no build info, and the one suite it shells
+ * out to (linga-rules-test) sets its own DESK_DATA_DIR, which it leaves behind as artifacts/linga-rules/<ms>/. `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
  * A reading it could not take is null and says why — never a 0, because a 0 recorded as a measurement is a claim.
  */
 const fs = require("node:fs"), path = require("node:path"), { spawnSync } = require("node:child_process");
