@@ -30,6 +30,10 @@ enum class Hold(val ms: Long) {
  *
  * Pure JVM by design (decision D7): the entire pen-to-document behaviour is unit-testable without
  * an emulator, and the Android layer only feeds it messages and reads [doc].
+ *
+ * Thread-safe: the shell applies messages on the pen's receive thread while the frame loop reads
+ * [doc] and the heartbeat reads the counts and [undoAt], so every public member holds this
+ * instance's lock. Without it a read could copy a list mid-write and hand the renderer a null.
  */
 class PenEngine(
     private val clipId: String,
@@ -59,7 +63,7 @@ class PenEngine(
     private val livePoints = mutableListOf<List<Double>>()
 
     val doc: AnnotationDoc
-        get() {
+        @Synchronized get() {
             val live = liveMeta?.copy(points = livePoints.toList())
             return AnnotationDoc(
                 clipId = clipId,
@@ -68,9 +72,9 @@ class PenEngine(
             )
         }
 
-    val annotationCount: Int get() = committed.size + (if (liveMeta != null) 1 else 0)
-    val canUndo: Boolean get() = history.canUndo
-    val canRedo: Boolean get() = history.canRedo
+    val annotationCount: Int @Synchronized get() = committed.size + (if (liveMeta != null) 1 else 0)
+    val canUndo: Boolean @Synchronized get() = history.canUndo
+    val canRedo: Boolean @Synchronized get() = history.canRedo
 
     private fun nextId(): String = "a${ids.incrementAndGet()}"
 
@@ -78,6 +82,7 @@ class PenEngine(
         overrideHoldMs ?: (if (requested == null) defaultHold else Hold.parse(requested)).ms
 
     /** @param mediaTimeMs the player position the drawing is anchored to. */
+    @Synchronized
     fun accept(msg: PenMessage, mediaTimeMs: Long) {
         when (msg) {
             is PenMessage.Pen -> handlePen(msg, mediaTimeMs)
@@ -118,9 +123,11 @@ class PenEngine(
      * is nothing to undo. The transport plan turns a non-null answer into a trip there, paused, so
      * no edit ever changes ink the viewer cannot see (the rule the eraser already follows).
      */
+    @Synchronized
     fun undoAt(tMs: Long): Long? = frameOf(history.peekUndo(), tMs)
 
     /** As [undoAt], for the next redo. */
+    @Synchronized
     fun redoAt(tMs: Long): Long? = frameOf(history.peekRedo(), tMs)
 
     private fun frameOf(op: Op?, tMs: Long): Long? {
