@@ -21,11 +21,9 @@
  */
 import WebSocket from 'ws';
 import net from 'node:net';
-import { pairingPin, TV_HOST } from './device.mjs';
+import { pairingPin, parseArgs, TV_HOST } from './device.mjs';
 
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const host = args.host ?? TV_HOST;
 const ip = host.split(':')[0];
 const seconds = Number(args.seconds ?? 15);

@@ -22,10 +22,8 @@ import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, pinFromLogcat } from './device.mjs';
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+import { makeAdb, TV_HOST, IS_TUNNELLED, hostAddressForDevice, parseArgs, pinFromLogcat } from './device.mjs';
+const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 // How the TV addresses this machine. The emulator has a fixed host alias; a Stick on Wi-Fi has to
 // be handed this machine's LAN address, or it dials into its own loopback and nothing happens.

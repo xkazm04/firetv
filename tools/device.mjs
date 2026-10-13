@@ -79,6 +79,14 @@ export function hostAddressForDevice(tvHost = TV_HOST) {
   return candidates.sort((a, b) => shared(b, deviceIp) - shared(a, deviceIp))[0];
 }
 
+/**
+ * `--name value` pairs off the command line, the one parser every tool here uses. A flag with
+ * nothing after it reads as undefined; a bare switch (`--idle`, `--nopause`) is tested with
+ * `process.argv.includes` by the tool that has one.
+ */
+export const parseArgs = (argv = process.argv.slice(2)) =>
+  Object.fromEntries(argv.flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : [])));
+
 /** The PIN in the last pairing line MainActivity logged (`transport=... pairing=<url>?pin=NNNN`), or undefined. */
 export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&]pin=(\d{4})/g)].at(-1)?.[1];
 

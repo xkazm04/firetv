@@ -14,12 +14,10 @@ import { chromium } from 'playwright';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import path from 'node:path';
-import { makeAdb, pairingPin, TV_BASE } from './device.mjs';
+import { makeAdb, pairingPin, parseArgs, TV_BASE } from './device.mjs';
 
 const BASE = TV_BASE;
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const OUT = path.resolve(args.out ?? '../artifacts');
 mkdirSync(OUT, { recursive: true });
 

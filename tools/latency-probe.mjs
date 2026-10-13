@@ -8,11 +8,9 @@
  * Usage: node latency-probe.mjs [--host <ip>:8765] [--seconds 6] [--pin <PIN>]
  */
 import WebSocket from 'ws';
-import { pairingPin, TV_HOST } from './device.mjs';
+import { pairingPin, parseArgs, TV_HOST } from './device.mjs';
 
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const host = args.host ?? TV_HOST;
 const seconds = Number(args.seconds ?? 6);
 // --idle measures the same socket with no pen traffic, to separate transport jitter from

@@ -21,11 +21,10 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { WebSocketServer } from 'ws';
+import { parseArgs } from './device.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const args = Object.fromEntries(
-  process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
-);
+const args = parseArgs();
 const PORT = Number(args.port ?? 9787);
 
 // Served from the repo so the relay path exercises the same page the TV serves over LAN.
