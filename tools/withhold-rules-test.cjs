@@ -327,3 +327,18 @@ assert.equal(statE,statL,`explainItem stops ${statE} of ${lines} lines, leaksLin
  assert.ok(lines>=150,`lines counted: ${lines}`);
  assert.deepEqual(differ,[],`${differ.length} of ${lines} lines pass explainItem that leaksLine stops: ${differ.slice(0,5).join(' // ')}`);
 });
+
+test('case 18: a single factor root named alone leaks on a factor item (8 phrasings x 4 items), and method talk about the same numbers stays clean',()=>{
+ // [item, the two roots as the equation or the brackets give them]
+ const ITEMS=[['Solve for x:  x² − 7x + 12 = 0',[3,4]],['Factor completely: x² + 7x + 12',[-3,-4]],['x² + 7x + 12 = 0',[-3,-4]],['Factor: x² + x − 12',[3,-4]]];
+ const WORD={3:'three',4:'four'};
+ const bracket=(r)=>`x ${r<0?'+':'−'} ${Math.abs(r)}`;
+ const phrasings=([a,b])=>[`one of the numbers is ${a}`,`one number is ${a}`,`one root is ${b}`,`one bracket is ${bracket(b)}`,`one of them is ${a}`,`one solution is x = ${b}`,`the first number is ${WORD[Math.abs(a)]}`,`one of the factors is (${bracket(a)})`];
+ let caught=0,total=0;const missed=[];
+ for(const [q,roots] of ITEMS)for(const l of phrasings(roots)){total++;if(maths.leaks(q,l))caught++;else missed.push(`${q} | ${l}`);}
+ assert.equal(total,32);
+ assert.deepEqual(missed,[],`${caught}/${total} single-root phrasings caught`);
+ // method talk about the same numbers is not the answer
+ const CLEAN=['What multiplies to 12?','Which two numbers multiply to 12 and add to 7?','One number has to be positive and the other negative, so look at the signs.','The first thing to do is look at the 12.','One thing to notice is 12 is the last term.','The first pair to try is 2 and 6.','The first pair to try is 1 and 12, then 2 and 6.','Another way is to try the factor pairs of 12.','Your clues are 12 and 7.'];
+ for(const [q] of ITEMS)for(const l of CLEAN)assert.equal(maths.leaks(q,l),false,`${q} | ${l}`);
+});
