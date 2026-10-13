@@ -183,6 +183,22 @@ test('retry: a hint that failed is asked again for the same item and the same qu
  assert(prompt.includes('What do I do first?'));assert.equal(s.jobs.hint.phase,'done');
 });
 
+test('retry: a lesson (teach) that failed is asked again for the same topic through /api/worked',async()=>{
+ blank();
+ const W=require(src('lib/desk/worked.ts'));const real=W.teachTopic;
+ let topics=[];
+ try{
+  W.teachTopic=async(topic,...rest)=>{topics.push(topic);if(topics.length===1)throw new Error('boom');return real(topic,...rest);};
+  stubText({other:()=>({idea:'It is about sharing equally.'})});
+  const r1=await post('worked',{topic:'frac-equivalent'});assert.equal(r1.status,502);
+  assert.equal(store.getSession().jobs.teach.phase,'failed');
+  const again=await retry({kind:'teach'});
+  assert.equal(again.status,200,'the lesson is asked again, not refused with nothing to try again');
+  assert.deepEqual(topics,['frac-equivalent','frac-equivalent'],'the same topic, held on the job');
+  assert.equal(store.getSession().jobs.teach.phase,'done');
+ }finally{W.teachTopic=real;}
+});
+
 test('retry: with nothing failed there is nothing to retry, and no engine is called',async()=>{
  onPage();
  let asked=0;stubText({items:()=>{asked++;return {items:STATED};},hint:()=>{asked++;return {hint:'x',what_to_try_next:'y'};}});
