@@ -39,6 +39,16 @@ const TV_WORDS: Record<Session["screen"], string> = {
   topics: "Math Buddy's topics", prepare: "getting ready for school", paper: "your paper", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item", worked: "a worked lesson", workroom: "the Workroom",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation", "linga-cert": "your certificate", "linga-certs": "your certificates",
 };
+/** The desk refuses a name longer than this (PROFILE_NAME_MAX in the session store, which is server-only and cannot be imported here); the input stops at it so the phone shows what the TV keeps. */
+const NAME_MAX = 40;
+/**
+ * Jobs that run one after another: a job starts when the one before it has finished, whether that one worked or not.
+ * The name field posts through one, so a slow early post cannot reach the desk after a later one and leave a prefix.
+ */
+function inOrder() {
+  let tail: Promise<unknown> = Promise.resolve();
+  return (job: () => Promise<unknown>): Promise<unknown> => { tail = tail.then(job).catch(() => undefined); return tail; };
+}
 /** What a fresh page load holds in the Essay and Say panels: a new learner in the seat starts from these. */
 const FRESH_PARAS = ["Many students are tired. Sleep is important. Schools start early. This is bad."];
 const FRESH_SENTENCE = "I have gone to school yesterday.";
@@ -85,6 +95,9 @@ export default function Phone() {
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
+  const ending = useRef(false);
+  /** The profile name's posts, in the order typed (inOrder). */
+  const [nameQueue] = useState(inOrder);
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
   /** The shot lives on the phone until the user says Use this page. Nothing is sent before that. */
@@ -432,18 +445,22 @@ export default function Phone() {
     } catch (e) { if (!moved()) setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /**
-   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written while busy
-   * shows "Writing tonight down…". A session.end that fails is said in the status line, and the memory is still written.
+   * The evening ends first, as the TV's Menu does (tv/keys.ts): the recap opens, then the memory is written. Busy shows
+   * "Writing tonight down…" from the first tap, and a second tap before the first is done does nothing (the ref answers
+   * at once; the disabled button waits for a render). A session.end that fails is said in the status line, and the
+   * memory is still written.
    */
   const endSession = async () => {
-    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
+    if (ending.current) return;
+    ending.current = true;
     setBusy(true);
+    try { await post({ type: "session.end" }); } catch (e) { setMsg(`The evening could not be closed: ${String(e)}`); }
     try {
       const r = await call("/api/memory", {}), j = await r.json().catch(() => ({} as { lines?: unknown; asked?: boolean; already?: boolean; error?: string }));
       setMemory(r.ok ? { lines: Array.isArray(j.lines) ? j.lines.filter((l: unknown): l is string => typeof l === "string") : [], asked: j.asked !== false, already: j.already === true }
         : { error: j.error ?? `The desk could not write tonight down (${r.status}).` });
     } catch { setMemory({ error: "The desk could not be reached, so tonight was not written down." }); }
-    finally { setBusy(false); }
+    finally { setBusy(false); ending.current = false; }
   };
 
   // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
@@ -496,8 +513,8 @@ export default function Phone() {
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
-            <div className="field"><input placeholder="Name" value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => post({ type: "profile.save" })}>Save</button>
+            <div className="field"><input placeholder="Name" maxLength={NAME_MAX} value={pname} onChange={(e) => { setPname(e.target.value); void nameQueue(() => post({ type: "profile.draft", patch: { name: e.target.value } })); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => void nameQueue(() => post({ type: "profile.save" }))}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 

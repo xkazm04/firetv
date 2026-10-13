@@ -870,3 +870,57 @@ test('SW11: the status line every handler writes to is a polite live region; the
  assert.match(status[0],/aria-live="polite"/);
  assert.equal((tree.match(/role="alert"/g)||[]).length,2,'unchanged: the Essay panel\'s two alerts');
 });
+
+// ---- PH-A/B (scan-sweep optimize Lane B 2026-10-13): the phone's name field, Linga's fields, End session ----
+/** A slice of the page's source, comments removed, as TypeScript turned to JS: a harness for a handler without a browser. */
+const pageJs=(src)=>ts.transpileModule(src,{compilerOptions:{target:ts.ScriptTarget.ES2020,module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.Preserve}}).outputText;
+const pageSlice=(re,what)=>{const m=re.exec(code(PAGE));assert.ok(m,`${what} is in page.tsx`);return m[0];};
+test('PH-LINGA: the Linga panel\'s typed fields are 16 px or more, as SW3 holds for the rest of the phone',()=>{
+ const css=fs.readFileSync(path.join(SRC,'design/linga.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rule=ruleOf(css,'.linga-phone input, .linga-phone select, .linga-phone textarea');
+ assert.ok(pxOf(rule,'font-size')>=16,'.linga-phone input, select, textarea carry a 16 px font-size (font: inherit alone is the phone\'s 15 px)');
+});
+test('PH-NAMEMAX: the phone name input cannot type past the desk\'s cap',()=>{
+ const store=code(path.join(SRC,'lib/session/store.ts')),max=Number((/export const PROFILE_NAME_MAX = (\d+);/.exec(store)||[])[1]);
+ assert.ok(max>0,'the desk\'s cap is found');
+ const page=code(PAGE),mine=Number((/const NAME_MAX = (\d+);/.exec(page)||[])[1]);
+ assert.equal(mine,max,'the page restates the desk\'s cap (the store is server-only and cannot be imported into the page)');
+ assert.match(page,/placeholder="Name" maxLength=\{NAME_MAX\}/,'the profile name input carries maxLength={NAME_MAX}');
+});
+test('PH-NAMEORDER: the profile name posts go out one at a time, so a slow early post cannot land last',async()=>{
+ const js=pageJs(pageSlice(/function inOrder\(\)[\s\S]*?\n\}\n/,'inOrder'));
+ const inOrder=new Function(js+';return inOrder;')();
+ // a server that applies a post when it ARRIVES; an earlier post is slower than a later one
+ const run=async(queued)=>{
+  const applied=[];let n=0;const want='Ema Novak'.split('').map((_,i)=>'Ema Novak'.slice(0,i+1));
+  const post=(name)=>{const k=n++;return new Promise((res)=>setTimeout(()=>{applied.push(name);res();},(want.length-k)*3));};
+  const q=queued?inOrder():(job)=>job();
+  await Promise.all(want.map((name)=>q(()=>post(name))));
+  return applied[applied.length-1];
+ };
+ assert.notEqual(await run(false),'Ema Novak','control: un-awaited posts land out of order and the draft keeps a prefix');
+ assert.equal(await run(true),'Ema Novak','queued: the draft holds the name as typed');
+ const page=code(PAGE);
+ assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.draft", patch: \{ name: e\.target\.value \} \}\)\)/,'the Profile input posts through the queue');
+ assert.match(page,/nameQueue\(\(\) => post\(\{ type: "profile\.save" \}\)\)/,'Save waits behind the name posts');
+});
+test('PH-ENDTWICE: a second tap on End session before the first returns posts nothing',async()=>{
+ const body=pageSlice(/const endSession = async \(\) => \{[\s\S]*?\n    \};/,'endSession');
+ const js=pageJs(body);
+ const make=()=>{
+  const posts=[],calls=[],busy=[];let release;const gate=new Promise((r)=>{release=r;});
+  const env={post:async(e)=>{posts.push(e.type);await gate;},call:async(u)=>{calls.push(u);return {ok:true,json:async()=>({lines:[]})};},
+   setBusy:(b)=>busy.push(b),setMsg:()=>{},setMemory:()=>{},ending:{current:false}};
+  const fn=new Function(...Object.keys(env),js+';return endSession;')(...Object.values(env));
+  return {fn,posts,calls,busy,release};
+ };
+ const t=make(),a=t.fn(),b=t.fn();
+ await new Promise((r)=>setTimeout(r,5));
+ assert.deepEqual(t.posts,['session.end'],'one session.end for two taps');
+ t.release();await Promise.all([a,b]);
+ assert.equal(t.calls.length,1,'one /api/memory call');
+ assert.equal(t.busy[0],true,'busy is on from the first tap');
+ assert.equal(t.busy[t.busy.length-1],false,'and off when it is done');
+ const again=t.fn();await again;
+ assert.equal(t.posts.length,2,'after it finished, a later tap ends again (the guard is released)');
+});

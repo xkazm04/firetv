@@ -661,7 +661,7 @@
 
 /* ---------------------------------------------------------------- the phone (not the TV) */
 .linga-phone label { display: flex; flex-direction: column; gap: 6px; color: #425365; }
-.linga-phone input, .linga-phone select, .linga-phone textarea { width: 100%; padding: 12px; border: 1px solid #b8c5cf; border-radius: 3px; background: #fff; color: #1b2632; font: inherit; }
+.linga-phone input, .linga-phone select, .linga-phone textarea { width: 100%; padding: 12px; border: 1px solid #b8c5cf; border-radius: 3px; background: #fff; color: #1b2632; font: inherit; font-size: 16px; }
 .linga-phone textarea { min-height: 100px; resize: vertical; }
 .linga-phone .linga-check { flex-direction: row; align-items: start; }
 .linga-phone .linga-check input { width: auto; margin-top: 4px; }
