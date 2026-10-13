@@ -35,6 +35,13 @@ import kotlin.math.sin
 @Composable
 fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modifier) {
     val strokes = remember { StrokeCache() }
+    // One Paint for every name tag, kept between frames: a frame must not allocate on this Stick.
+    val tagPaint = remember {
+        android.graphics.Paint().apply {
+            isAntiAlias = true
+            typeface = android.graphics.Typeface.DEFAULT_BOLD
+        }
+    }
     Canvas(modifier = modifier) {
         val started = System.nanoTime()
         val rect = ContentRect.fit(size.width, size.height, doc.videoAspect)
@@ -49,7 +56,7 @@ fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modi
                 is Annotation.Stroke -> drawStroke(a, rect, strokes)
                 is Annotation.Arrow -> drawArrow(a, rect)
                 is Annotation.Circle -> drawRing(a, rect)
-                is Annotation.NameTag -> drawNameTag(a, rect)
+                is Annotation.NameTag -> drawNameTag(a, rect, tagPaint)
                 is Annotation.Spotlight -> Unit
             }
         }
@@ -58,8 +65,14 @@ fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modi
     }
 }
 
-private fun parseColor(hex: String): Color =
+/** Colour strings repeat on every annotation of a style, so each is parsed once. Draw thread only. */
+private val parsedColors = HashMap<String, Color>()
+
+private fun parseColor(hex: String): Color = parsedColors.getOrPut(hex) {
+    // The phone chooses these strings; a bounded table keeps a stream of odd ones from growing it.
+    if (parsedColors.size >= 64) parsedColors.clear()
     runCatching { Color(android.graphics.Color.parseColor(hex)) }.getOrDefault(Color.Yellow)
+}
 
 private fun widthPx(rect: ContentRect, w: Double) = rect.w(w).coerceAtLeast(2f)
 
@@ -146,18 +159,14 @@ private fun DrawScope.drawSpotlight(a: Annotation.Spotlight, rect: ContentRect) 
  * Broadcast-style name tag: a leader line down to the anchor, then a filled label above it, so the
  * text never sits on top of the player it is naming.
  */
-private fun DrawScope.drawNameTag(a: Annotation.NameTag, rect: ContentRect) {
+private fun DrawScope.drawNameTag(a: Annotation.NameTag, rect: ContentRect, paint: android.graphics.Paint) {
     val anchorX = rect.x(a.anchor[0])
     val anchorY = rect.y(a.anchor[1])
     val textSize = rect.height * 0.042f
     val lift = textSize * 1.8f
     val accent = parseColor(a.style.color)
 
-    val paint = android.graphics.Paint().apply {
-        isAntiAlias = true
-        this.textSize = textSize
-        typeface = android.graphics.Typeface.DEFAULT_BOLD
-    }
+    paint.textSize = textSize
     val textWidth = paint.measureText(a.label)
     val padX = textSize * 0.45f
     val padY = textSize * 0.3f
