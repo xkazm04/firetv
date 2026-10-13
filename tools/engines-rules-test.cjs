@@ -409,3 +409,17 @@ test('sweep case 1: fit() counts characters as the schema check does: a reply at
  assert.equal(fit(reply,230,()=>new Error('does not fit')),reply,'fit accepts what the schema accepted');
  assert.throws(()=>fit('a'.repeat(230)+'\u{1F600}',230,()=>new Error('does not fit')),/does not fit/,'one character over is still refused');
 });
+
+test('sweep case 2: findBinary finds what a spawn without a shell would start: on Windows an npm sh shim with no extension is not installed',()=>{
+ const {findBinary}=load('engines/types.ts');
+ const dir=fs.mkdtempSync(path.join(os.tmpdir(),'eng-bin-'));const prior=process.env.PATH,priorW=process.env.Path;
+ try{
+  fs.writeFileSync(path.join(dir,'deskshim'),'#!/bin/sh\necho hi\n');
+  fs.writeFileSync(path.join(dir,'deskreal.exe'),'');
+  process.env.PATH=dir;if(priorW!==undefined)process.env.Path=dir;
+  assert.equal(findBinary('deskreal'),path.join(dir,'deskreal.exe'),'a bare name finds its .exe');
+  assert.equal(findBinary('deskreal.exe'),path.join(dir,'deskreal.exe'),'a name with its extension is found as it is');
+  if(process.platform==='win32')assert.equal(findBinary('deskshim'),null,'spawn("deskshim") is ENOENT on Windows, so the probe must not say installed');
+  else assert.equal(findBinary('deskshim'),path.join(dir,'deskshim'));
+ }finally{process.env.PATH=prior;if(priorW!==undefined)process.env.Path=priorW;fs.rmSync(dir,{recursive:true,force:true});}
+});

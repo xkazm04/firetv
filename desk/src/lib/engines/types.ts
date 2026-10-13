@@ -66,7 +66,9 @@ export function findBinary(bin: string): string | null {
   if (!bin) return null;
   const isFile = (f: string) => { try { return statSync(f).isFile(); } catch { return false; } };
   if (/[\\/]/.test(bin)) return isFile(bin) ? bin : null;
-  const exts = process.platform === "win32" ? ["", ".exe", ".com"] : [""];
+  // Windows spawn (libuv) tries a name as it is only when it has an extension, then appends .com and .exe:
+  // an extensionless npm sh shim beside its .cmd is never started, so it is not found here either.
+  const exts = process.platform === "win32" ? [...(path.extname(bin) ? [""] : []), ".com", ".exe"] : [""];
   for (const dir of (process.env.PATH ?? process.env.Path ?? "").split(path.delimiter).filter(Boolean))
     for (const ext of exts) { const f = path.join(dir, bin + ext); if (isFile(f)) return f; }
   return null;
