@@ -154,3 +154,14 @@ test('case 10: the leak tally is the gate hint() applies (desk/hint leaksLine), 
  const src=fs.readFileSync(BENCH,'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,'');
  assert.doesNotMatch(src,/maths\.leaks\(/,'one leak rule: the bench scores with the gate hint() uses');
 });
+
+test('case 11: the replay follows hint()\'s re-ask - the call is counted as one, and the recorded re-ask is what it answers',async()=>{
+ // the replay tells a re-ask from a first ask by hint()'s own prompt wording; if that wording moves, this goes red
+ const q='Solve for x: 3x - 7 = 11';
+ const r=await runBench({replay:{hints:{[q]:{hint1:{hint:'x = 6',what_to_try_next:'Check it.'},reask1:{hint:'What undoes the $- 7$?',what_to_try_next:'Write both sides again.'}}}}});
+ assert.equal(r.hints.reasked,1,'one re-ask, seen by the recorder');
+ assert.equal(r.hints.leaked,1);
+ assert.equal(r.hints.reached,0,'the clean re-ask is what reaches the TV');
+ // the re-ask's line was shown, not the withheld fallback: its LaTeX is counted on this problem
+ assert.equal(r.hints.problems.find((p)=>p.q===q)?.latex,true,'the recorded reask1 answered the re-ask');
+});
