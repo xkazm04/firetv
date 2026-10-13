@@ -39,7 +39,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
   phone page itself so `ws://` is same-origin) or *dials out* to a relay. Both are exercised by
   tests. The second exists because a platform may not let an app listen at all — see
   [docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md).
-- Pairing QR + rotating PIN; a phone with the wrong PIN is refused.
+- Pairing QR + a PIN drawn per launch; a phone with the wrong PIN is refused.
 - Fire TV remote keys drive playback, undo and clear.
 
 ## Layout
