@@ -153,8 +153,8 @@ function Shelf({ view }: { view: LandingView }) {
         ))}
       </div>
       <div className="pp-actions">
-        <div className="pp-cont" role="button" data-role="desk-continue"><span>{view.primary}</span>{Icon.arrow}</div>
-        <div className="pp-else" role="button" data-role="desk-place-card" data-focused={at === "place" ? "true" : undefined}>{Icon.swap}<span>{view.place}</span></div>
+        <div className="pp-cont" data-role="desk-continue"><span>{view.primary}</span>{Icon.arrow}</div>
+        <div className="pp-else" data-role="desk-place-card" data-focused={at === "place" ? "true" : undefined}>{Icon.swap}<span>{view.place}</span></div>
       </div>
     </div>
   );
