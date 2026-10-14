@@ -182,10 +182,12 @@ const TASKS=[
  ['Find the sum of 2/3 and 1/5','2/3 + 1/5'],['Work out 1/2 + 3/4. Give your answer as a decimal.','1/2 + 3/4','decimal'],['c) 2 / 3 + 1 / 5','2/3 + 1/5'],
  // W7: multiply and divide fractions is a unit now, so these two (refused in W5b) read as its specs
  ['3/4 × 1/6','3/4 × 1/6'],['3/4 ÷ 1/6','3/4 ÷ 1/6'],
+ // MB-B20: a mixed number is a fraction operand now (the step-up's top rung prints them), so this one (refused before) reads
+ ['1 1/2 + 3/4','1 1/2 + 3/4'],['Work out 3 1/2 - 1 3/4.','3 1/2 - 1 3/4'],['1 3/2 + 1/4',null],['0 1/2 + 1/4',null],['1-1/2 + 1/4',null],
  // refused: not two fractions combined, or not read with one meaning
  // W7 batch 2: '0.5 + 0.25' (refused in W5b) reads as "Add, subtract and multiply decimals" now; its row is in W7b 4 below
  ['3 + 4',null],['1/2 + 1/3 + 1/4',null],['three quarters plus one sixth',null],['3/4 + x',null],['Solve x + 1/2 = 3/4',null],
- ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['1 1/2 + 3/4',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
+ ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
  ['3/0 + 1/6',null],['Find the difference between 3/4 and 1/6',null],['',null],['3/4 + 1/6 and 1/2',null],['2 + 3/4',null],['Work out 3/4 + 1/6 please',null],
  ['3/1 + 1/6',null],['03/4 + 1/6',null],['Differentiate x^2 + 1/2',null],['Solve for x:  3x − 7 = 11',null],['Work out 1/3 + 1/5. Give your answer as a decimal.',null],
  ['3/4 - 3/4',null],['1/2 + 1/2 + ',null],['Add 3/4',null],['1/2 + 1/4 = 3/4 ?',null],
@@ -654,7 +656,9 @@ const W7_TASKS={
   ['Divide 3/4 by 1/2',cs('3/4 ÷ 1/2')],['Work out 2/3 × 3/4. Give your answer in its simplest form.',cs('2/3 × 3/4',{form:'simplest'})],['2/3 × 3/4 =',cs('2/3 × 3/4')],
   ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],['3/4 : 1/2',cs('3/4 ÷ 1/2')],
   // refused
-  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2/3',null],['2/3 × 3/4 = 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
+  // MB-B20: a mixed number is a fraction operand now (refused before W8's top rung)
+  ['1 1/2 × 2/3',cs('1 1/2 × 2/3')],['4 1/2 ÷ 3/4',cs('4 1/2 ÷ 3/4')],
+  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2 3/3',null],['2/3 × 3/4 = 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
   ['2x/3 × 3/4',null],['(2/3) × (3/4)',null],['2/3 × 3/4 please',null],['Multiply 2/3 by 3/4 by 1/2',null],['2/3 ÷ 3/1',null],['Find the quotient of 3/4 and 1/2',null],['2/3 of 3/4',null],
  ],
 };

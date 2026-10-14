@@ -336,7 +336,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
  *     fractions (a/b ± c/d), multiply and divide fractions (a/b × c/d, a/b ÷ c/d, Family W7), add, subtract and
  *     multiply decimals (4.35 + 2.8, 3.6 × 0.4; W7 batch 2), where a € or £ `unit` prints its sign before each amount
- *     ("Work out €4.35 + €2.80.", "Work out £3.45 × 4.": the count is not money).
+ *     ("Work out €4.35 + €2.80.", "Work out £3.45 × 4.": the count is not money). MB-B20, the top rung of a step up on
+ *     the two fractions units: an operand may be a mixed number ("1 3/4 + 2 1/3", "4 1/2 ÷ 3/4"), and an expr that starts
+ *     with a story's id ("walk 1 3/4 + 2 1/3", `unit` km) is printed as that word problem (STORIES) - still no store key.
  *   - fraction-of (W7, "A fraction of an amount"): expr "a/b of N", a proper fraction of a whole amount, "Find 3/5 of
  *     40 kg."; `unit` is the amount's unit (and the answer's). The value is a/b × N, exactly.
  *   - missing (W7, "Equivalent fractions"): expr "a/b = ?/d" or "a/b = c/?", one number missing on the right, "Fill in
@@ -422,6 +424,8 @@ type Op = "+" | "-" | "×" | "÷";
 type Node =
   | { k: "num"; q: Q; s: string; whole: boolean }
   | { k: "frac"; n: bigint; d: bigint }
+  // MB-B20: a mixed number "w n/d" (a whole part, a space, a fraction), worth w + n/d; read() asks for w >= 1 and 0 < n < d
+  | { k: "mixed"; w: bigint; n: bigint; d: bigint }
   | { k: "neg"; a: Node }
   | { k: "op"; op: Op; a: Node; b: Node }
   | { k: "par"; a: Node };
@@ -430,7 +434,8 @@ class Unreadable extends Error {}
 
 /**
  * expr := term (('+'|'-') term)*;  term := unary (('×'|'*'|'÷') unary)*;  unary := '-' unary | atom;
- * atom := int '/' int (a fraction: '/' binds only two whole numbers, so 3/4 ÷ 2/3 is (3/4) ÷ (2/3)) | number | '(' expr ')'.
+ * atom := int '/' int (a fraction: '/' binds only two whole numbers, so 3/4 ÷ 2/3 is (3/4) ÷ (2/3)) | int int '/' int (a
+ * mixed number, MB-B20: "1 3/4", a whole number and a fraction with only a space between them) | number | '(' expr ')'.
  */
 function parseExpr(src: string): Node | null {
   if (typeof src !== "string" || !src.trim() || src.length > MAX_EXPR) return null;
@@ -474,6 +479,12 @@ function parseExpr(src: string): Node | null {
     if (!/^\d/.test(t)) throw new Unreadable();
     i++;
     const whole = !t.includes(".");
+    // MB-B20: a whole number straight before a fraction is a mixed number's whole part ("1 3/4"): no sign joins them
+    if (whole && /^\d+$/.test(peek() ?? "") && toks[i + 1] === "/" && /^\d+$/.test(toks[i + 2] ?? "")) {
+      const n = toks[i], d = toks[i + 2];
+      i += 3;
+      return { k: "mixed", w: BigInt(t), n: BigInt(n), d: BigInt(d) };
+    }
     if (peek() === "/") {
       const b = toks[i + 1];
       if (!whole || b === undefined || !/^\d+$/.test(b)) throw new Unreadable();
@@ -496,6 +507,7 @@ function evalNode(n: Node): Q | null {
   switch (n.k) {
     case "num": return n.q;
     case "frac": return mk(n.n, n.d);
+    case "mixed": return mk(n.w * n.d + n.n, n.d);
     case "par": return evalNode(n.a);
     case "neg": { const a = evalNode(n.a); return a ? { n: -a.n, d: a.d } : null; }
     case "op": {
@@ -514,7 +526,7 @@ function countOps(n: Node): number {
   }
 }
 function literals(n: Node, out: Node[] = []): Node[] {
-  if (n.k === "num" || n.k === "frac") out.push(n);
+  if (n.k === "num" || n.k === "frac" || n.k === "mixed") out.push(n);
   else if (n.k === "op") { literals(n.a, out); literals(n.b, out); }
   else literals(n.a, out);
   return out;
@@ -570,6 +582,7 @@ const REJECT = {
   probCertain: "The probability is nothing or a whole: a certain or an impossible event is not asked here.",
   probRange: "A stated probability is above nothing and below a whole.",
   probSame: "The probability asked for equals the one given, so the question would print its own answer.",
+  story: "The word problem does not fit the expression: its operation, its two fractions or its unit.",
 } as const;
 
 /**
@@ -577,7 +590,8 @@ const REJECT = {
  * number (a/b = ?/d or a/b = c/?: `known` is d or c, `slot` says which is missing), or a fraction to simplify.
  */
 type Kind =
-  | { k: "compute" }
+  // MB-B20: `story` names the word problem the computation is printed in (STORIES), when it is one
+  | { k: "compute"; story?: StoryId }
   | { k: "of"; a: bigint; b: bigint; N: bigint }
   | { k: "missing"; a: bigint; b: bigint; known: bigint; slot: "top" | "bottom" }
   | { k: "simplify"; a: bigint; b: bigint }
@@ -644,6 +658,24 @@ const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
 
+/**
+ * MB-B20: the word problems a top-rung fractions item may be printed in, a closed list. A story spec is a `compute` whose
+ * expr starts with the story's id ("walk 1 3/4 + 2 1/3"), so it adds no store key: the operation must be the story's own,
+ * both operands a fraction or a mixed number, and `unit` the story's (the answer's unit; the rope's answer is a count, no
+ * unit). `{A}` and `{B}` are the expression's two operands in its order. Each says one situation and asks one question; no
+ * number word stands in a text (the leak check reads words as numbers), and every number in it is an operand.
+ */
+export const STORIES = {
+  walk: { op: "+", unit: "km", text: "A walk is {A} km to the lake and {B} km back. How far is the whole walk?" },
+  apples: { op: "+", unit: "kg", text: "A bag holds {A} kg of apples and a box holds {B} kg. How much do they hold together?" },
+  ribbon: { op: "-", unit: "m", text: "A ribbon is {A} metres long and {B} metres is cut off. How much ribbon is left?" },
+  juice: { op: "-", unit: "l", text: "A jug holds {A} litres of juice and {B} litres are poured out. How much juice is left?" },
+  rice: { op: "×", unit: "kg", text: "A sack holds {A} kg of rice. How much rice is {B} of the sack?" },
+  rope: { op: "÷", unit: undefined, text: "A rope {A} metres long is cut into pieces {B} metres long. How many pieces are there?" },
+} as const satisfies Record<string, { op: Op; unit: Unit | undefined; text: string }>;
+export type StoryId = keyof typeof STORIES;
+const isStoryId = (x: unknown): x is StoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(STORIES, x);
+
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
 function structure(spec: unknown): Structure {
   const shape = spec && typeof spec === "object" ? (spec as { shape?: unknown }).shape : undefined;
@@ -657,6 +689,14 @@ function structure(spec: unknown): Structure {
     if (s.unit !== undefined && !(UNITS as readonly unknown[]).includes(s.unit)) return { ok: false, why: REJECT.unit };
     if (s.allowNegative !== undefined && s.allowNegative !== true) return { ok: false, why: REJECT.flag };
     const node = parseExpr(s.expr as string);
+    // MB-B20: a word problem, "walk 1 3/4 + 2 1/3": the story's operation on two fractions or mixed numbers, in its unit
+    const sm = typeof s.expr === "string" && s.expr.length <= MAX_EXPR ? /^([a-z]+) (.+)$/.exec(s.expr) : null;
+    if (sm && isStoryId(sm[1])) {
+      const story = STORIES[sm[1]], node = parseExpr(sm[2]), operand = (x: Node) => x.k === "frac" || x.k === "mixed";
+      if (!node || node.k !== "op" || node.op !== story.op || !operand(node.a) || !operand(node.b)) return { ok: false, why: REJECT.story };
+      if (s.form !== undefined || s.allowNegative !== undefined || s.unit !== story.unit) return { ok: false, why: REJECT.story };
+      return { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute", story: sm[1] } };
+    }
     return node ? { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute" } } : { ok: false, why: REJECT.read };
   }
   // the W7 shapes take no form and no sign flag; only an amount (a fraction or a percent of it) takes a unit
@@ -972,6 +1012,12 @@ function read(spec: unknown): Read {
       if (l.d === Z) return { ok: false, why: REJECT.divZero };
       if (l.n > lim) return { ok: false, why: REJECT.big };
       if (l.d === ONE || l.d > dlim) return { ok: false, why: REJECT.denominator };
+    } else if (l.k === "mixed") {
+      // MB-B20: a whole part 1..1000 and a proper fraction n/d, 0 < n < d, with a bottom 2..100
+      if (l.d === Z) return { ok: false, why: REJECT.divZero };
+      if (l.w > lim || l.n > lim) return { ok: false, why: REJECT.big };
+      if (l.d === ONE || l.d > dlim) return { ok: false, why: REJECT.denominator };
+      if (l.w < ONE || l.n < ONE || l.n >= l.d) return { ok: false, why: REJECT.proper };
     } else if (l.k === "num") {
       if (babs(l.q.n) > lim * l.q.d) return { ok: false, why: REJECT.big };
       if (!l.whole && l.s.split(".")[1].length > MAX_LITERAL_PLACES) return { ok: false, why: REJECT.places };
@@ -1020,6 +1066,7 @@ function plainOf(n: Node): string {
   switch (n.k) {
     case "num": return n.s;
     case "frac": return `${n.n}/${n.d}`;
+    case "mixed": return `${n.w} ${n.n}/${n.d}`;
     case "neg": return `-${plainOf(n.a)}`;
     case "par": return `(${plainOf(n.a)})`;
     case "op": return `${plainOf(n.a)} ${OP_PLAIN[n.op]} ${plainOf(n.b)}`;
@@ -1029,6 +1076,7 @@ function texOf(n: Node): string {
   switch (n.k) {
     case "num": return n.s;
     case "frac": return `\\frac{${n.n}}{${n.d}}`;
+    case "mixed": return `${n.w}\\frac{${n.n}}{${n.d}}`;
     case "neg": return `-${texOf(n.a)}`;
     case "par": return `(${texOf(n.a)})`;
     case "op": return `${texOf(n.a)} ${OP_TEX[n.op]} ${texOf(n.b)}`;
@@ -1223,6 +1271,14 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
       return { plain: `Write ${K.text} ${asked}.`, tex: `\\text{Write } ${tex} \\text{ ${asked}.}` };
     }
     const { node } = st, s = st.spec as ComputeSpec;
+    // MB-B20: a word problem, its words around the two operands: "A walk is 1 3/4 km to the lake and 2 1/3 km back. ..."
+    if (K.k === "compute" && K.story && node.k === "op") {
+      const parts = STORIES[K.story].text.split(/(\{A\}|\{B\})/), at = (x: string) => (x === "{A}" ? node.a : node.b);
+      return {
+        plain: parts.map((x) => (x === "{A}" || x === "{B}" ? plainOf(at(x)) : x)).join(""),
+        tex: parts.filter((x) => x !== "").map((x) => (x === "{A}" || x === "{B}" ? texOf(at(x)) : `\\text{${x}}`)).join(" "),
+      };
+    }
     // money (W7 batch 2): "Work out €4.35 + €2.80.", "Work out £3.45 × 4." - the sign on each amount, never on a count
     const money = s.unit ? moneyLine(node, s.unit, system) : null;
     if (money && !s.form) return { plain: `Work out ${money.plain}.`, tex: `\\text{Work out } ${money.tex}.` };
@@ -2105,14 +2161,16 @@ function leakProfile(r: ReadOk): LeakProfile {
   const restated: LeakProfile["restated"] = [];
   const n0 = r.node;
   if (n0.k === "op") {
-    const operand = (n: Node): Q | null => (n.k === "frac" || n.k === "num" ? evalNode(n) : null);
+    const operand = (n: Node): Q | null => (n.k === "frac" || n.k === "mixed" || n.k === "num" ? evalNode(n) : null);
     const a = operand(n0.a), b = operand(n0.b);
     if (a && b) {
       restated.push({ p: qabs(a), o: n0.op, q: qabs(b), both: n0.op === "+" || n0.op === "×" });
       if (n0.op === "÷" && b.n !== Z) restated.push({ p: qabs(a), o: "×", q: qabs(mk(b.d, b.n)!), both: true });
     }
-    if (n0.a.k === "frac" && n0.b.k === "frac") {
-      const [q1, s2, t2] = [n0.a.d, n0.b.n, n0.b.d];
+    // MB-B20: a mixed number works as its improper fraction (1 3/4 is 7/4): its top is the improper top
+    const top = (n: Node) => (n.k === "mixed" ? n.w * n.d + n.n : n.k === "frac" ? n.n : Z);
+    if ((n0.a.k === "frac" || n0.a.k === "mixed") && (n0.b.k === "frac" || n0.b.k === "mixed")) {
+      const [q1, s2, t2] = [n0.a.d, top(n0.b), n0.b.d];
       if (n0.op === "+" || n0.op === "-") { dens.add((q1 * t2) / bgcd(q1, t2)); dens.add(q1 * t2); }
       else if (n0.op === "×") dens.add(q1 * t2);
       else dens.add(q1 * s2);
@@ -2450,6 +2508,122 @@ export function genMulDiv(seed: unknown, tier: unknown): SchoolSpec | null {
     if (fair(spec)) return spec;
   }
   return tier === 1 ? { shape: "compute", expr: "2/3 × 3/4" } : { shape: "compute", expr: "3/4 ÷ 2/5" };
+}
+
+// ------------------------------------------------------------------ MB-B20: the top rung of the two fractions units
+
+/** A mixed number w n/d as an expression writes it ("1 3/4"), or the proper fraction n/d when w is 0. */
+const mixedText = (w: number, n: number, d: number) => (w > 0 ? `${w} ${n}/${d}` : `${n}/${d}`);
+/** An improper n/d (n > d, d not 1) as a mixed number in lowest terms, or null when it is whole or proper. */
+function asMixed(n: number, d: number): string | null {
+  const g = gcdN(n, d), N = n / g, D = d / g;
+  return D === 1 || N < D ? null : mixedText(Math.floor(N / D), N % D, D);
+}
+/** A seed the top rung takes: a whole number 0..2^32 - 1. */
+const topSeed = (seed: unknown): seed is number => typeof seed === "number" && Number.isInteger(seed) && seed >= 0 && seed <= 0xffffffff;
+/**
+ * Does the item print its own answer in a part of a number? The value, or its fractional part, equal to an operand, an
+ * operand's fractional part or (for ÷) the turned-over divisor: "3 1/2 - 1 3/4" printing 3/4 when the answer is 1 3/4.
+ */
+function echoes(r: ReadOk): boolean {
+  const part = (x: Q) => (x.n > x.d && x.d !== ONE ? mk(x.n % x.d, x.d)! : x);
+  const T = r.truth, mine = [T, part(T)];
+  const seen = literals(r.node).flatMap((l) => { const v = evalNode(l); return v ? [v, part(v), ...(v.n > Z ? [mk(v.d, v.n)!] : [])] : []; });
+  return seen.some((x) => mine.some((y) => eq(x, y)));
+}
+
+/**
+ * The top rung of "Add and subtract fractions" (MB-B20), from a seed: a mixed number added to or taken from a mixed number
+ * or a proper fraction - whole parts 1..5 and 0..3, bottoms 2..12 like or unlike, each fraction part proper and in lowest
+ * terms, their common bottom at most 36; a subtraction is ordered so its value is above zero (it may need a whole broken into parts). An odd seed sets it
+ * as a word problem from STORIES (a walk or a bag of apples to add, a ribbon or a jug to take from, in km, kg, metres or
+ * litres), an even seed as a bare sum. A value that is whole, or that echoes a printed number (`echoes`), is drawn again,
+ * and the item must be `fair`. Pure and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genMixedAddSub(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed1609) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const story = seed % 2 === 1, pairs = [...PAIRS[1], ...PAIRS[2]];
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [b, d] = pick(pairs), a = pick(tops(b)), c = pick(tops(d));
+    // a common bottom of at most 36: the rung is about the whole parts, not a larger multiple than tier 2 already asks (MB-B37)
+    if ((b * d) / gcdN(b, d) > 36) continue;
+    let A: [number, number, number] = [1 + Math.floor(rnd() * 5), a, b], B: [number, number, number] = [Math.floor(rnd() * 4), c, d];
+    const minus = rnd() < 0.5, size = (x: [number, number, number]) => (x[0] * x[2] + x[1]) / x[2];
+    if (minus) { if (size(A) === size(B)) continue; if (size(A) < size(B)) [A, B] = [B, A]; }
+    else if (rnd() < 0.5) [A, B] = [B, A];
+    const id: StoryId | null = story ? pick(minus ? (["ribbon", "juice"] as const) : (["walk", "apples"] as const)) : null;
+    const expr = `${id ? `${id} ` : ""}${mixedText(...A)} ${minus ? "-" : "+"} ${mixedText(...B)}`;
+    const unit = id ? STORIES[id].unit : undefined;
+    const spec: SchoolSpec = unit ? { shape: "compute", expr, unit } : { shape: "compute", expr };
+    const r = read(spec);
+    if (!r.ok || r.truth.d === ONE || echoes(r)) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "compute", expr: "walk 1 3/4 + 2 1/3", unit: "km" } : { shape: "compute", expr: "1 3/4 + 2 1/3" };
+}
+
+/**
+ * The top rung of "Multiply and divide fractions" (MB-B20), from a seed. An even seed: a mixed number (whole part 1..3)
+ * multiplied by or divided by a mixed number (1..2) or a proper fraction, bottoms 2..10 in lowest terms; a whole value, or
+ * one whose bottom in lowest terms is above 60, is drawn again. An odd seed, a word problem from STORIES: a fraction of a sack of rice (a mixed number of kg times a proper
+ * fraction, "How much rice is 2/3 of the sack?") or a rope cut into equal pieces (a mixed number of metres divided by a
+ * piece of a proper fraction or a mixed number, the rope's length made as 2..9 pieces so the answer is a whole count),
+ * its answer's bottom at most 12.
+ * A value that echoes a printed number (`echoes`) is drawn again, and the item must be `fair`. Pure and seeded; null for a
+ * seed that is not a whole number 0..2^32 - 1.
+ */
+export function genMixedMulDiv(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed170a) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const story = seed % 2 === 1, fracs = properLowest(2, 10);
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (story && rnd() < 0.5) {
+      const [a, b] = pick(fracs), [c, d] = pick(fracs);
+      spec = { shape: "compute", expr: `rice ${mixedText(1 + Math.floor(rnd() * 9), a, b)} × ${c}/${d}`, unit: "kg" };
+    } else if (story) {
+      const [c, d] = pick(properLowest(2, 8)), w = Math.floor(rnd() * 3), k = 2 + Math.floor(rnd() * 8);
+      const rope = asMixed(k * (w * d + c), d);
+      if (!rope) continue;
+      spec = { shape: "compute", expr: `rope ${rope} ÷ ${mixedText(w, c, d)}` };
+    } else {
+      const [a, b] = pick(fracs), [c, d] = pick(fracs), times = rnd() < 0.5;
+      let A = mixedText(1 + Math.floor(rnd() * 3), a, b), B = mixedText(Math.floor(rnd() * 3), c, d);
+      if (times && rnd() < 0.5) [A, B] = [B, A];
+      spec = { shape: "compute", expr: `${A} ${times ? "×" : "÷"} ${B}` };
+    }
+    const r = read(spec);
+    // a bare item's answer has a bottom of at most 60 in lowest terms (3 7/9 × 2 4/5 = 10 26/45 is drawn again)
+    // and a word problem's answer a bottom of at most 12 (a rope's is a whole count)
+    if (!r.ok || (!story && (r.truth.d === ONE || r.truth.d > BigInt(60))) || (story && r.truth.d > BigInt(12)) || echoes(r)) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "compute", expr: "rope 4 1/2 ÷ 3/4" } : { shape: "compute", expr: "2 1/4 × 1 2/3" };
+}
+
+/**
+ * The units with a top rung (MB-B20), by topic id, each with its generator: the two fractions units whose top items carry
+ * mixed numbers and word problems. A step up on one of them ("harder", rules/stretch tierCounts) asks for tier 3 here; no
+ * other set does, so a usual set and every other unit's sets are exactly as before.
+ */
+export const TOP_TIER_GENERATORS: Readonly<Record<string, (seed: number) => SchoolSpec | null>> = {
+  "frac-add-sub": (seed) => genMixedAddSub(seed),
+  "frac-mul-div": (seed) => genMixedMulDiv(seed),
+};
+/** The top-rung generator for a topic id, or null: an own key only. */
+export const topGeneratorFor = (topicId: unknown) =>
+  typeof topicId === "string" && Object.prototype.hasOwnProperty.call(TOP_TIER_GENERATORS, topicId) ? TOP_TIER_GENERATORS[topicId] : null;
+/** The word problem a school spec is printed in (MB-B20), or null: a well-formed compute spec with a story. */
+export function storyOf(spec: unknown): StoryId | null {
+  try {
+    const st = structure(spec);
+    return st.ok && st.kind.k === "compute" && st.kind.story ? st.kind.story : null;
+  } catch {
+    return null;
+  }
 }
 
 // ------------------------------------------------------------------ the W7 batch 2 generators: decimals and percent
@@ -2974,6 +3148,41 @@ function readCombined(t0: string): SchoolSpec | null {
   return null;
 }
 
+/** One operand of a top-rung item (MB-B20): a mixed number "1 3/4" (a space between the whole part and the fraction) or a fraction. */
+const MIXED_SRC = String.raw`((?:[1-9]\d{0,2} )?[1-9]\d{0,2}\/[1-9]\d{0,2})`;
+
+/**
+ * Two numbers combined where at least one is a mixed number (MB-B20): '1 3/4 + 2 1/3', 'Work out 3 1/2 - 5/6', '2 1/4 ×
+ * 1 2/3', '4 1/2 ÷ 3/4' (the operation as a sign or a word, after the verbs readCombined takes, with its instruction after
+ * it); or null. Two plain fractions are readCombined's, never read here.
+ */
+function readMixed(t0: string): SchoolSpec | null {
+  let t = t0;
+  let form: ComputeSpec["form"];
+  const tail = /[.?!]?\s*(?:(give your answer in its (?:simplest form|lowest terms)|simplify your answer)|(give your answer as a decimal))\.?$/i.exec(t);
+  if (tail) { form = tail[1] ? "simplest" : "decimal"; t = t.slice(0, tail.index).trim(); }
+  t = t.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+  const m = new RegExp(String.raw`^(?:${VERB_SRC}\s*:?\s*)?${MIXED_SRC}\s*(\+|-|plus|minus|×|x|\*|times|÷|divided by)\s*${MIXED_SRC}$`, "i").exec(t);
+  if (!m || !(/ /.test(m[1]) || / /.test(m[3]))) return null;
+  const op: Op = /^(?:-|minus)$/i.test(m[2]) ? "-" : /^(?:\+|plus)$/i.test(m[2]) ? "+" : /^(?:÷|divided by)$/i.test(m[2]) ? "÷" : "×";
+  const spec: SchoolSpec = { shape: "compute", expr: `${m[1]} ${op} ${m[3]}`, ...(form ? { form } : {}) };
+  return read(spec).ok ? spec : null;
+}
+
+/** A word problem of STORIES (MB-B20) exactly as `question` prints it, each operand a fraction or a mixed number; or null. */
+function readStory(t0: string): SchoolSpec | null {
+  const t = t0.trim();
+  for (const id of Object.keys(STORIES) as StoryId[]) {
+    const story = STORIES[id];
+    const src = story.text.split(/(\{A\}|\{B\})/).map((x) => (x === "{A}" || x === "{B}" ? MIXED_SRC : x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).join("");
+    const m = new RegExp(`^${src.replace(/\\\?$/, "\\??")}$`, "i").exec(t);
+    if (!m) continue;
+    const spec: SchoolSpec = story.unit ? { shape: "compute", expr: `${id} ${m[1]} ${story.op} ${m[2]}`, unit: story.unit } : { shape: "compute", expr: `${id} ${m[1]} ${story.op} ${m[2]}` };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
 /** Words that are maths, not a count noun after an amount ('40 sweets' reads; '40 percent', '40 and 2' do not). */
 const NOT_A_NOUN = /^(?:percent|per|cent|pounds?|pence|of|and|or|plus|minus|times|divided|over|squared|cubed|more|less|then|point|halves|half|thirds?|quarters?|fifths?|sixths?|sevenths?|eighths?|ninths?|tenths?|twelfths?|hundredths?|lots|groups|parts?|x)$/i;
 
@@ -3343,7 +3552,10 @@ function readProbability(t0: string): SchoolSpec | null {
  *   - unit rates (W7 batch 3): `readRate`'s phrasings, a statement and one question, never a story;
  *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit;
  *   - mean and range (W7 batch 3): `readStat`'s phrasings, a list with a comma and a space between its numbers.
- * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
+ *   - mixed numbers (MB-B20): `readMixed`'s two operands, at least one a mixed number '1 3/4' (the top rung of a step up), and a
+ *     word problem of STORIES exactly as `question` prints it (`readStory`).
+ * Null for: whole numbers as operands (a whole amount after 'of' excepted), a mixed number written with a hyphen or with a
+ * fraction part that is not proper, a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
  * amount, two gaps or none, any other word, and a spec wellFormed refuses (a subtraction below zero, a simplify of a
@@ -3355,7 +3567,7 @@ function specOnce(text: unknown): SchoolSpec | null {
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readMixed(t) ?? readStory(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
       ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t);
   } catch {
     return null;
@@ -3389,7 +3601,9 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "prob" || r.kind.k === "prob-comp") return "probability";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
-    if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
+    // MB-B20: a mixed number is a fraction operand too (1 3/4 + 2/3 is add and subtract fractions)
+    const fr = (x: Node) => x.k === "frac" || x.k === "mixed";
+    if (n.k !== "op" || !fr(n.a) || !fr(n.b)) return null;
     return n.op === "+" || n.op === "-" ? "frac-add-sub" : "frac-mul-div";
   } catch {
     return null;
@@ -3471,7 +3685,10 @@ export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYS
   // the form the question speaks in comes first: a question with a decimal, a percent or a unit is answered as a
   // decimal (31.2 litres, not 156/5); a fraction question keeps its fraction. `check` still decides which forms pass.
   const expr = String((r.spec as { expr?: unknown }).expr ?? "");
-  if (unit || /[.%]/.test(expr) || ["percent-of", "percent-change", "rate", "area", "stat"].includes(r.spec.shape)) {
+  // MB-B20: a question with a mixed number in it, or a word problem, is answered as a mixed number (4 1/12, not 49/12)
+  const mixedAsked = K.k === "compute" && (!!K.story || literals(r.node).some((l) => l.k === "mixed"));
+  if (mixedAsked) candidates = [...candidates.filter((c) => / /.test(c)), ...candidates.filter((c) => !/ /.test(c))];
+  else if (unit || /[.%]/.test(expr) || ["percent-of", "percent-change", "rate", "area", "stat"].includes(r.spec.shape)) {
     const dec = (c: string) => /^-?\d+\.\d+$/.test(c);
     candidates = [...candidates.filter(dec), ...candidates.filter((c) => !dec(c))];
   }
