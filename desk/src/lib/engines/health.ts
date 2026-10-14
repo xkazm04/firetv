@@ -91,12 +91,12 @@ export async function engineCheck(opts: { live?: boolean; sample?: string; budge
   if (!opts.live) return engineStatus(opts.budgetMs);
   const budget = opts.budgetMs ?? BUDGET_MS, sample = opts.sample;
   const runs: Record<EngineKind, Promise<EngineRow>> = {
-    text: liveRow("text", () => text({ system: "Answer in JSON.", prompt: "Set ok to the word yes.", schema: { type: "object", properties: { ok: { type: "string" } }, required: ["ok"] } })),
+    text: liveRow("text", () => text({ system: "Answer in JSON.", prompt: "Set ok to the word yes.", schema: { type: "object", properties: { ok: { type: "string" } }, required: ["ok"] }, use: "smoke" })),
     vision: sample
-      ? liveRow("vision", () => vision({ imageBase64: sample, prompt: "What is the title printed at the top of this page?", schema: { type: "object", properties: { title: { type: "string" } }, required: ["title"] } }))
+      ? liveRow("vision", () => vision({ imageBase64: sample, prompt: "What is the title printed at the top of this page?", schema: { type: "object", properties: { title: { type: "string" } }, required: ["title"] }, use: "smoke" }))
       : probeRow("vision", budget),
-    embed: liveRow("embed", () => embed({ texts: ["factoring quadratics"] })),
-    speak: liveRow("speak", () => speak({ text: "The desk can speak." })),
+    embed: liveRow("embed", () => embed({ texts: ["factoring quadratics"], use: "smoke" })),
+    speak: liveRow("speak", () => speak({ text: "The desk can speak.", use: "smoke" })),
     listen: probeRow("listen", budget),
   };
   return Promise.all(KINDS.map((k) => runs[k]));
