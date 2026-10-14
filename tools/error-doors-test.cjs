@@ -144,3 +144,38 @@ test('crash door: onRequestError logs where and what (never the body); /api/faul
  assert(fs.existsSync(path.join(src,'app/global-error.tsx')),'a screen that crashes while drawing has a last screen');
  assert.doesNotMatch(fs.readFileSync(path.join(src,'app/global-error.tsx'),'utf8'),/error\.message|\{error\}|String\(error\)/,'the last screen never shows the error text');
 });
+test('the last screen reloads the page itself: Next 16 names the boundary prop retry, so a reset() call would be undefined',()=>{
+ const t=fs.readFileSync(path.join(src,'app/global-error.tsx'),'utf8');
+ assert.doesNotMatch(t,/\breset\b/,'no reset prop');assert.match(t,/location\.reload\(\)/);
+});
+
+// ---- 6. unreadable is not absent: the twin's state and the text shelf
+test('a twin.json the desk cannot read is put aside and said, never taken for "none" and written over',()=>{
+ require('./ts-load.cjs');
+ const {twinState,excludedOf,saveTwinState}=require(path.join(src,'lib/twin/state.ts'));
+ const dir=path.join(data,'texts','L1');fs.mkdirSync(dir,{recursive:true});
+ saveTwinState('L1',{cardId:'card-1',createdAt:'2026-10-01T00:00:00Z',excluded:['t-aaaaaaaaaaaa']});
+ assert.deepEqual(excludedOf('L1'),['t-aaaaaaaaaaaa']);
+ assert.deepEqual(fs.readdirSync(dir),['twin.json'],'the save leaves no temporary file');
+ fs.writeFileSync(path.join(dir,'twin.json'),'{"cardId":"card-1","excluded":["t-aaaa');
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ let st;try{assert.deepEqual(excludedOf('L1'),[]);st=twinState('L1');}finally{console.error=was;}
+ assert.notEqual(st.cardId,'card-1');
+ assert(said.some(l=>/desk twin: .*twin\.json was not used, it is not readable JSON/.test(l)),'the unreadable file reaches the log');
+ const bad=fs.readdirSync(dir).filter(f=>f.startsWith('twin.json.bad-'));
+ assert.equal(bad.length,1,'the unreadable file is put aside beside itself');
+ assert.equal(fs.readFileSync(path.join(dir,bad[0]),'utf8'),'{"cardId":"card-1","excluded":["t-aaaa','byte for byte');
+});
+test('a kept piece the desk cannot read is left off the shelf and said; a missing folder is an empty shelf and says nothing',()=>{
+ require('./ts-load.cjs');
+ const {listPieces,getPiece}=require(path.join(src,'lib/session/texts.ts'));
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ try{
+  assert.deepEqual(listPieces('L2'),[]);assert.deepEqual(said,[],'no folder yet is not a failure');
+  const dir=path.join(data,'texts','L2');fs.mkdirSync(dir,{recursive:true});
+  fs.writeFileSync(path.join(dir,'t-bbbbbbbbbbbb.json'),'{"id":"t-bbbb');
+  assert.deepEqual(listPieces('L2'),[]);assert.equal(getPiece('L2','t-bbbbbbbbbbbb'),null);
+ }finally{console.error=was;}
+ assert.equal(said.length,1,'said once, not once per read');assert.match(said[0],/desk texts: .*t-bbbbbbbbbbbb\.json is not readable JSON, so it is left off the shelf/);
+ assert.equal(fs.readFileSync(path.join(data,'texts','L2','t-bbbbbbbbbbbb.json'),'utf8'),'{"id":"t-bbbb','and left as it was');
+});
