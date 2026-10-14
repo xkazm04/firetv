@@ -692,3 +692,19 @@ test('X5 route: an empty, blank, non-JSON, non-string or 1001-character transcri
  const ok=await post(JSON.stringify({transcript:'a'.repeat(1000),n:3}));
  assert.equal(ok.status,200,'exactly 1000 characters is heard');assert.equal(seen.length,1);
 });
+
+// ---- MB-B1: the marks vocabulary - skipped is read off an unsure item with no answer, never stored ----
+test('MB-B1 marks: markOf reads right, wrong, unsure and skipped; a blank unsure item is skipped, an absent verdict is the desk\'s doubt',()=>{
+ const MK=require(path.join(root,'src/lib/rules/marks.ts'));
+ assert.deepEqual([...MK.MARKS],['right','wrong','unsure','skipped'],'the order a set is counted and drawn');
+ const rows=[
+  [{verdict:'right',studentAnswer:'4'},'right'],[{verdict:'right'},'right'],
+  [{verdict:'wrong',studentAnswer:'5'},'wrong'],[{verdict:'wrong',studentAnswer:''},'wrong'],
+  [{verdict:'unsure',studentAnswer:'4/22'},'unsure'],
+  [{verdict:'unsure',studentAnswer:''},'skipped'],[{verdict:'unsure',studentAnswer:'   '},'skipped'],[{verdict:'unsure'},'skipped'],
+  [{},'unsure'],[{studentAnswer:''},'unsure'],[{verdict:'maybe',studentAnswer:''},'unsure'],
+ ];
+ for(const [it,want] of rows)assert.equal(MK.markOf(it),want,JSON.stringify(it));
+ assert.deepEqual(MK.markCounts(rows.map(r=>r[0])),{right:2,wrong:2,unsure:4,skipped:3});
+ assert.deepEqual(MK.markCounts([]),{right:0,wrong:0,unsure:0,skipped:0});
+});

@@ -20,6 +20,7 @@ import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf,
 import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
+import { DISAGREES } from "./marks";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
 export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
@@ -154,12 +155,15 @@ export interface Settled { verdict: "right" | "wrong"; slip?: string; said: stri
 
 /**
  * The verdict the substitution gave, and the line that goes with it. A slip survives only on a wrong
- * item and only from this topic's closed vocabulary; a wrong item with no slip asks. Never a value.
+ * item and only from this topic's closed vocabulary. A wrong item with no slip says its checker's own reason
+ * (`why`, a fixed sentence: "A derivative has no arbitrary constant in it.") when it has one beyond the plain
+ * disagreement (rules/marks DISAGREES), and asks how the learner got there when it has none (MB-B1). Never a value.
  */
-export function settled(n: number, right: boolean, slipId: unknown, topicId: string): Settled {
+export function settled(n: number, right: boolean, slipId: unknown, topicId: string, why?: string): Settled {
   const id = typeof slipId === "string" ? slipId.trim() : "";
   const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id);
-  return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : ASK(n) };
+  const reason = typeof why === "string" && why.trim() && why !== DISAGREES ? why.trim() : "";
+  return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : reason || ASK(n) };
 }
 
 /** Is this a Calculus spec by its shape - a Calculus 1 shape or a Calculus 2 one (rules/calc2.ts)? A school spec never is (the shape lists share no name). */
@@ -187,12 +191,12 @@ export function judgeSpec(n: number, spec: unknown, answer: unknown, slipId: unk
   if (isSchoolSpec(spec)) {
     const v = schoolCheck(spec, typeof answer === "string" ? answer : "", system);
     if (v.verdict === "unsure") return { verdict: "unsure", why: v.why };
-    return settled(n, v.verdict === "right", v.slip, topicId);
+    return settled(n, v.verdict === "right", v.slip, topicId, v.why);
   }
   if (!isCalcSpec(spec)) return { verdict: "unsure" };
   const c = checkAnswer(spec, typeof answer === "string" ? answer : "", system);
   if (c.verdict === "unsure") return { verdict: "unsure", why: c.why };
-  return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);
+  return settled(n, c.verdict === "right", c.slip ?? slipId, topicId, c.why);
 }
 
 /**

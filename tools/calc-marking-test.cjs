@@ -422,3 +422,28 @@ test('MK10: a Calculus item the desk is not sure of says why, in the engine\'s w
  // (c) a blank
  assert.equal(judge(third,'  ').said,M.BLANK(1));
 });
+
+test('MB-B1 (b): a wrong item with no slip says its checker\'s own reason; a plain disagreement still asks; every engine\'s plain disagreement is the one sentence',()=>{
+ const K=require(src('lib/rules/kinds.ts')),MK=require(src('lib/rules/marks.ts'));
+ const judge=(s,a,topic)=>K.judgeSet({topic,items:[{n:1,question:question(s),spec:s}]},[{n:1,studentAnswer:a}],{topic,system:'uk',typed:true}).items[0];
+ const D=spec({shape:'derivative',f:'x^2'});
+ // an extra constant on a derivative: wrong, no slip, and the reason is the engine's own fixed sentence
+ const c=C.checkAnswer(D,'2x + C','uk');
+ assert.deepEqual([c.verdict,c.slip],['wrong',undefined]);assert.equal(c.why,'A derivative has no arbitrary constant in it.');
+ const x=judge(D,'2x + C','calc1-rules');
+ assert.deepEqual([x.verdict,x.slip,x.said],['wrong',undefined,c.why],'the reason, not "something different"');
+ assert.doesNotMatch(x.said,/something different|2x/);
+ // a plain wrong answer: the checker only disagrees, so the desk still asks how they got there
+ const w=judge(D,'3x','calc1-rules');
+ assert.equal(C.checkAnswer(D,'3x','uk').why,MK.DISAGREES);
+ assert.deepEqual([w.verdict,w.said],['wrong',M.ASK(1)],'a genuine disagreement asks');
+ // settleSpec carries the same line (an explanation settles through it)
+ assert.equal(M.settleSpec(1,D,'2x + C',null,'calc1-rules','uk').said,c.why);
+ assert.equal(M.settled(1,false,null,'calc1-rules',MK.DISAGREES).said,M.ASK(1));
+ assert.equal(M.settled(1,false,null,'calc1-rules','  ').said,M.ASK(1));
+ // the three engines' plain disagreement is DISAGREES itself, so the rule above reads every engine alike
+ const C2=require(src('lib/rules/calc2.ts')),S=require(src('lib/rules/school.ts'));
+ assert.equal(C2.calc2CheckAnswer({shape:'sequence-limit',f:'(2x + 1)/x'},'7').why,MK.DISAGREES);
+ const sv=S.check({shape:'compute',expr:'3/4 ÷ 2/3'},'1/8','uk');
+ assert.deepEqual([sv.verdict,sv.slip,sv.why],['wrong',undefined,MK.DISAGREES],'a school wrong answer with no slip disagrees plainly');
+});
