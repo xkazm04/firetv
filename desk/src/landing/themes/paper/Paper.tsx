@@ -68,10 +68,14 @@ function Title({ name, unpaired, seq, still }: { name: string; unpaired: boolean
 
 // ---------------------------------------------------------------- the light and the paper grain
 
-/** Warm motes drifting up through the scene: a small canvas the stage scales, still under reduced motion. */
+/**
+ * Warm motes drifting up through the scene: a small canvas the stage scales. Under reduced motion they hold still -
+ * one frame, painted again when the app in the light changes their tint - and the setting is followed while the
+ * landing is up, not only read when it mounts.
+ */
 function Motes({ glow }: { glow: string }) {
-  const cv = useRef<HTMLCanvasElement>(null), rgb = useRef(glow);
-  useEffect(() => { rgb.current = glow; }, [glow]);
+  const cv = useRef<HTMLCanvasElement>(null), rgb = useRef(glow), still = useRef<(() => void) | null>(null);
+  useEffect(() => { rgb.current = glow; still.current?.(); }, [glow]);
   useEffect(() => {
     const c = cv.current, x = c?.getContext("2d"); if (!c || !x) return;
     let r = 1234567; const rnd = () => { r = (r * 16807) % 2147483647; return r / 2147483647; };
@@ -85,13 +89,15 @@ function Motes({ glow }: { glow: string }) {
         x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.2832); x.fill();
       }
     };
-    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (still) { draw(0); return; }
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)");
     let raf = 0;
-    const loop = (t: number) => { if (document.hidden) { raf = 0; return; } draw(t); raf = requestAnimationFrame(loop); };
-    const wake = () => { if (!document.hidden && !raf) raf = requestAnimationFrame(loop); };
-    document.addEventListener("visibilitychange", wake); wake();
-    return () => { document.removeEventListener("visibilitychange", wake); cancelAnimationFrame(raf); };
+    const loop = (t: number) => { if (document.hidden || reduce.matches) { raf = 0; return; } draw(t); raf = requestAnimationFrame(loop); };
+    const wake = () => { if (!document.hidden && !reduce.matches && !raf) raf = requestAnimationFrame(loop); };
+    const settle = () => { if (reduce.matches) { cancelAnimationFrame(raf); raf = 0; draw(0); } else wake(); };
+    still.current = () => { if (reduce.matches) draw(0); };
+    reduce.addEventListener?.("change", settle);
+    document.addEventListener("visibilitychange", wake); settle();
+    return () => { reduce.removeEventListener?.("change", settle); document.removeEventListener("visibilitychange", wake); cancelAnimationFrame(raf); still.current = null; };
   }, []);
   return <canvas ref={cv} className="pp-fx" width={960} height={540} aria-hidden="true" />;
 }
