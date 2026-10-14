@@ -9,8 +9,14 @@
  *   - `int`   an antiderivative of the line before (its derivative is that line); the last indefinite line needs +C;
  *   - `at`    the value of the line before at `x`;
  *   - `lim`   the limit of the line before as x -> `x` (a number, 'inf' or '-inf'; `side` for one side);
- *   - `solve0` a line `x = c` (or `c`) where the line before is zero at c.
- * `of` names the line a line follows when it is not the one before (a root found from an earlier derivative). A line
+ *   - `solve0` a line `x = c` (or `c`) where the line before is zero at c;
+ *   - `between` the value of the line before (an antiderivative) from `x` to `to`: F(to) - F(x) (MB-B29, MB3-14);
+ *   - `limeq` an expression with the same limit as x -> `x` as the line before (`lim A = lim B`: L'Hopital's body is
+ *     not the same function, only the same limit). Two finite limits that clearly differ are false; any other pair
+ *     the desk cannot tell apart cleanly (an infinity, no limit) is null. `also` names a second body the same line
+ *     asserts against the same line before (the A of `lim A = lim B`): the line is false if either is.
+ * `of` names the line a line follows when it is not the one before (a root found from an earlier derivative). An
+ * `aside` line (u' = 2x under a u = x^2 binding) is checked against its `of` and leaves the chain where it was. A line
  * with two sides (`x^2 = 1`) is null; a one-sided label ('f(x) =', "f'(x) =", 'y =') or a leading '=' is allowed. The
  * function relations compare one way (D2): a line undefined where what it follows is defined is null, never true.
  * The first line follows `opts.from` (the item's own function, code's) and is null when there is none.
@@ -18,7 +24,7 @@
  * The second half reads a Calculus item's own working lines and tags them from the item's spec (`tagLines`), so the
  * server that places the pen and the paper that ticks the lines read the same chain.
  */
-import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, type Expr } from "./calc-expr";
+import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, toPlain, type Expr, type FnName, type Limit, type Node } from "./calc-expr";
 import { FUNCTION_TOL, ROUNDED_CLOSE, type CalcSpec } from "./calc";
 import { isCalc2Spec } from "./calc2";
 
@@ -33,6 +39,12 @@ export interface ChainLine {
   of?: string;
   /** A line in words: it asserts nothing, is null, and the next line follows the last line that did. */
   skip?: boolean;
+  /** For `between`: the upper bound. */
+  to?: number | string;
+  /** A second body the line asserts against the same line before (the A of `lim A = lim B`). */
+  also?: string;
+  /** Checked against `of`; the next line still follows the line before this one. */
+  aside?: boolean;
 }
 export interface ChainOpts {
   /** The variable the learner writes (default x); the engine reads x only. */
@@ -107,7 +119,10 @@ function oneWay(line: (x: number) => number | null, before: (x: number) => numbe
 /** `=`: the same function (or the same value) as the line before. */
 function equals(a: Expr, b: Expr, written: string): ChainResult {
   if (!a.usesX && !b.usesX) return sameValue(a.at(), b.at(), written, SAME_REL);
-  return oneWay((x) => b.at(x), (x) => a.at(x), SAME_REL);
+  const r = oneWay((x) => b.at(x), (x) => a.at(x), SAME_REL);
+  // a function then a constant (or the reverse) under = is a value put in at a point the line does not name: the desk
+  // cannot tell what was substituted, so it is never rung (MB3-14: "= 3^2 + 1" after x^2 + 1)
+  return a.usesX !== b.usesX && r === false ? null : r;
 }
 
 /** `d/dx`: the line b is the derivative of the line before, a. */
@@ -118,10 +133,26 @@ const antiderivativeOf = (a: Expr, b: Expr): ChainResult => oneWay((x) => deriva
 const INF = /^\s*([+-]?)\s*(?:inf|infinity|∞)\s*$/i;
 const DNE = /^\s*(?:dne|does not exist)\s*$/i;
 
-function limitLine(a: Expr, line: ChainLine, body: string): ChainResult {
+function limitOf(a: Expr, line: ChainLine): Limit | null {
   const at = line.x === "inf" || line.x === "-inf" ? line.x : constantValue(line.x);
   if (at === null) return null;
-  const lim = at === "inf" ? limitInf(a, 1) : at === "-inf" ? limitInf(a, -1) : limitAt(a, at, line.side);
+  return at === "inf" ? limitInf(a, 1) : at === "-inf" ? limitInf(a, -1) : limitAt(a, at, line.side);
+}
+
+/** Limits that differ by more than this, relatively, are different; nearer but not within VALUE_TOL is null. */
+const LIMIT_APART = 1e-3;
+/** `limeq`: the same limit. Only two finite limits that clearly differ are false; an infinity or no limit is null. */
+function sameLimit(a: Expr, b: Expr, line: ChainLine): ChainResult {
+  const la = limitOf(a, line), lb = limitOf(b, line);
+  if (!la || !lb) return null;
+  if (la.kind === "inf" && lb.kind === "inf") return la.sign === lb.sign ? true : null;
+  if (la.kind !== "value" || lb.kind !== "value") return null;
+  const d = Math.abs(la.v - lb.v), scale = Math.max(1, Math.abs(la.v), Math.abs(lb.v));
+  return d <= VALUE_TOL * scale ? true : d > LIMIT_APART * scale ? false : null;
+}
+
+function limitLine(a: Expr, line: ChainLine, body: string): ChainResult {
+  const lim = limitOf(a, line);
   if (!lim) return null;
   const m = INF.exec(body);
   if (m) return lim.kind === "inf" ? lim.sign === (m[1] === "-" ? -1 : 1) : false;
@@ -144,6 +175,13 @@ function relate(line: ChainLine, a: Expr, bodySrc: string, letter: string): Chai
       return Number.isFinite(v) ? sameValue(v, b.at(), bodySrc, VALUE_TOL) : null;
     }
     case "lim": return limitLine(a, line, bodySrc);
+    case "limeq": return b ? sameLimit(a, b, line) : null;
+    case "between": {
+      const lo = constantValue(line.x), hi = constantValue(line.to);
+      if (lo === null || hi === null || !b || b.usesX) return null;
+      const v = a.at(hi) - a.at(lo);
+      return Number.isFinite(v) ? sameValue(v, b.at(), bodySrc, VALUE_TOL) : null;
+    }
     default: return null;
   }
 }
@@ -178,12 +216,17 @@ export function checkChain(lines: readonly ChainLine[], opts: ChainOpts = {}): C
           body = bodyOf(line.text, letter);
           const src = line.of ?? prev, a = body === null || src === null ? null : compile(withLetter(src, letter));
           if (a && body !== null) result = relate(line, a, body, letter);
+          if (a && typeof line.also === "string" && result !== false) {
+            const r2 = relate(line, a, line.also, letter);
+            result = r2 === false ? false : r2 === null ? null : result;
+          }
         }
       }
     } catch {
       result = null;
     }
     out.push(result);
+    if (line?.aside) { bodies.push(null); continue; }
     bodies.push(body);
     prev = body;
   }
@@ -212,10 +255,117 @@ const D1_LABEL = new RegExp(`^(?:[a-zA-Z]\\s*${PRIMES}(?:\\s*\\(\\s*x\\s*\\))?|d
 const AT_LABEL = /^[a-zA-Z]\s*\(\s*([^()]+?)\s*\)$/;
 const D1_AT_LABEL = new RegExp(`^[a-zA-Z]\\s*${PRIMES}\\s*\\(\\s*([^()]+?)\\s*\\)$`);
 const INTEGRAL = /^(?:∫|int)\s*(.+?)\s*d\s*x$/;
-const LIM = /^lim(?:it)?\s*_?\{?\s*x\s*(?:->|→|\\to)\s*([^\s}]+?)\}?\s+(.+)$/i;
+const ARROW = String.raw`\s*x\s*(?:->|→|\\to)\s*`;
+/** "lim x->2 body", "lim_{x->0} body", "lim_(x->0) body" (MB-B29): the point and the body. */
+const LIM = new RegExp(String.raw`^lim(?:it)?\s*_?\s*(?:[{(]${ARROW}([^\s})]+)\s*[})]\s*|${ARROW}(\S+?)\s+)(.+)$`, "i");
+const limOf = (s: string): { at: string; body: string } | null => {
+  const m = LIM.exec(s);
+  return m ? { at: m[1] ?? m[2], body: m[3].trim() } : null;
+};
 
 type Kind = "fn" | "deriv" | "anti" | "value" | "limbody" | "zeroeq" | "solve" | null;
 const num = (n: string | number): number | null => constantValue(n);
+
+// ---- prime notation (MB-B29): "(B)'" is the derivative of B, worked out exactly from B's reading
+
+const K = (v: number): Node => ({ k: "num", v, s: String(v) });
+const isK = (n: Node, v: number) => n.k === "num" && n.v === v;
+const hasX = (n: Node): boolean =>
+  n.k === "x" ? true : n.k === "num" || n.k === "const" ? false : n.k === "neg" ? hasX(n.a) : n.k === "fn" ? hasX(n.arg) || (!!n.base && hasX(n.base)) : hasX(n.a) || hasX(n.b);
+const add = (a: Node, b: Node): Node => (isK(a, 0) ? b : isK(b, 0) ? a : { k: "add", a, b });
+const sub = (a: Node, b: Node): Node => (isK(b, 0) ? a : a.k === "num" && b.k === "num" ? K(a.v - b.v) : { k: "sub", a, b });
+const mul = (a: Node, b: Node): Node =>
+  isK(a, 0) || isK(b, 0) ? K(0) : isK(a, 1) ? b : isK(b, 1) ? a : { k: "mul", a, b, implicit: false };
+const div = (a: Node, b: Node): Node => (isK(a, 0) ? K(0) : isK(b, 1) ? a : { k: "div", a, b });
+const neg = (a: Node): Node => (isK(a, 0) ? a : { k: "neg", a });
+const pow = (a: Node, b: Node): Node => ({ k: "pow", a, b });
+const fn = (name: FnName, arg: Node): Node => ({ k: "fn", name, arg });
+
+/** The outer derivative of each function at its argument g. */
+const OUTER: Record<FnName, (g: Node) => Node> = {
+  sin: (g) => fn("cos", g), cos: (g) => neg(fn("sin", g)), tan: (g) => div(K(1), pow(fn("cos", g), K(2))),
+  sec: (g) => mul(fn("sec", g), fn("tan", g)), csc: (g) => neg(mul(fn("csc", g), fn("cot", g))), cot: (g) => neg(div(K(1), pow(fn("sin", g), K(2)))),
+  asin: (g) => div(K(1), fn("sqrt", sub(K(1), pow(g, K(2))))), acos: (g) => neg(div(K(1), fn("sqrt", sub(K(1), pow(g, K(2)))))),
+  atan: (g) => div(K(1), add(K(1), pow(g, K(2)))), sinh: (g) => fn("cosh", g), cosh: (g) => fn("sinh", g),
+  tanh: (g) => div(K(1), pow(fn("cosh", g), K(2))), ln: (g) => div(K(1), g), log: (g) => div(K(1), g), exp: (g) => fn("exp", g),
+  sqrt: (g) => div(K(1), mul(K(2), fn("sqrt", g))), cbrt: (g) => div(K(1), mul(K(3), pow(fn("cbrt", g), K(2)))), abs: (g) => div(g, fn("abs", g)),
+};
+
+/** d/dx of a reading, or null (a log whose base has x in it). Exact rules; nothing is estimated. */
+function dNode(n: Node): Node | null {
+  switch (n.k) {
+    case "num": case "const": return K(0);
+    case "x": return K(1);
+    case "neg": { const d = dNode(n.a); return d && neg(d); }
+    case "add": case "sub": {
+      const da = dNode(n.a), db = dNode(n.b);
+      return da && db ? (n.k === "add" ? add(da, db) : sub(da, db)) : null;
+    }
+    case "mul": {
+      const da = dNode(n.a), db = dNode(n.b);
+      return da && db ? add(mul(da, n.b), mul(n.a, db)) : null;
+    }
+    case "div": {
+      const da = dNode(n.a), db = dNode(n.b);
+      return da && db ? div(sub(mul(da, n.b), mul(n.a, db)), pow(n.b, K(2))) : null;
+    }
+    case "pow": {
+      const da = dNode(n.a), db = dNode(n.b);
+      if (!da || !db) return null;
+      if (!hasX(n.b)) return mul(mul(n.b, pow(n.a, sub(n.b, K(1)))), da);
+      if (!hasX(n.a)) return mul(mul(n, fn("ln", n.a)), db);
+      return mul(n, add(mul(db, fn("ln", n.a)), div(mul(n.b, da), n.a)));
+    }
+    case "fn": {
+      const da = dNode(n.arg);
+      if (!da) return null;
+      if (n.base) return hasX(n.base) ? null : div(da, mul(n.arg, fn("ln", n.base)));
+      return mul(OUTER[n.name](n.arg), da);
+    }
+  }
+}
+
+const PRIME = /[′']/;
+const FN_BEFORE = /(?<![A-Za-z])(?:arcsin|arccos|arctan|asin|acos|atan|sinh|cosh|tanh|sin|cos|tan|sec|csc|cot|ln|log|exp|sqrt|cbrt|abs)\s*$/;
+/**
+ * Each "(B)'" (or "sin(B)'") in a line replaced by the derivative of what is primed, in brackets; the line unchanged when
+ * it has no such prime; null when a primed bracket cannot be read (a letter before it that is not a function name -
+ * "x(x^2)'" is not guessed - or a B the engine cannot read).
+ */
+function expandPrimes(s: string): string | null {
+  for (let guard = 0; guard < 12; guard++) {
+    let i = -1;
+    for (let k = 1; k < s.length; k++) if (PRIME.test(s[k]) && s[k - 1] === ")") { i = k; break; }
+    if (i < 0) return s;
+    let depth = 0, j = -1;
+    for (let k = i - 1; k >= 0; k--) {
+      if (s[k] === ")") depth++;
+      else if (s[k] === "(" && --depth === 0) { j = k; break; }
+    }
+    if (j < 0) return null;
+    const name = FN_BEFORE.exec(s.slice(0, j));
+    const start = name ? j - name[0].length : j;
+    if (!name && j > 0 && /[A-Za-z_]/.test(s[j - 1])) return null;
+    const e = compile(s.slice(start, i));
+    const d = e && !e.constant ? dNode(e.node) : null;
+    if (!d) return null;
+    s = `${s.slice(0, start)}(${toPlain({ node: d } as Expr)})${s.slice(i + 1)}`;
+  }
+  return null;
+}
+
+/** The letters a working may bind by substitution ("u = x^2"); never x, y, e or a function's label. */
+const BIND = /^([uvwtz])\s*([′'])?\s*=\s*(.+)$/;
+type Binds = Map<string, string>;
+/** A part of a line with every bound letter (and its prime) put back in x, then its primes worked out. */
+function resolve(part: string, binds: Binds): string | null {
+  let s = part;
+  for (const [u, g] of binds) {
+    s = s.replace(new RegExp(`(?<![A-Za-z])${u}\\s*[′']`, "g"), `((${g})')`);
+    s = s.replace(new RegExp(`(?<![A-Za-z])${u}(?![A-Za-z(])`, "g"), `(${g})`);
+  }
+  return expandPrimes(s);
+}
 
 /** The spec's own function, which anchors line 0. Code's, never the model's read. */
 const anchorOf = (spec: CalcSpec): string | null =>
@@ -241,27 +391,58 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
     const u = num(s), v = specAt === null ? null : num(specAt);
     return u !== null && v !== null && Math.abs(u - v) <= 1e-9;
   };
+  const point: string | number | null = spec.shape === "evaluate" || spec.shape === "derivative-at" ? spec.at : null;
+  const derives = spec.shape === "derivative" || spec.shape === "derivative-at" || root;
+  const limAt = specAt !== null ? { x: specAt, ...(side ? { side } : {}) } : null;
   let kind: Kind = from ? "fn" : null;
   let lastFn = from, lastDeriv: string | null = null;
+  // nothing the learner wrote has been read yet: the line before is the spec's own function, not a line on the page
+  let wrote = false;
+  const binds: Binds = new Map();
   const out: ChainLine[] = [];
   for (const raw of lines) {
     const none = (): ChainLine => { kind = null; return { tag: NONE, text: raw }; };
-    const t = typeof raw === "string" ? raw.trim() : "";
-    const parts = t.split("=").map((p) => p.trim());
+    const t0 = typeof raw === "string" ? raw.trim() : "";
+    // a substitution (MB-B29): "u = x^2" binds u for the lines after it and asserts nothing; "u' = 2x" is checked as the
+    // derivative of what u is, aside, so the next line still follows the line before the binding
+    const clauses = t0 ? t0.split(",").map((c) => BIND.exec(c.trim())) : [];
+    if (clauses.length && clauses.every((c) => c)) {
+      let aside: ChainLine | null = null, ok = true;
+      for (const c of clauses as RegExpExecArray[]) {
+        const rhs = resolve(c[3].trim(), binds), e = rhs === null ? null : compile(rhs);
+        if (!e) { ok = false; break; }
+        if (!c[2]) binds.set(c[1], rhs!);
+        else if (binds.has(c[1]) && !aside) aside = { tag: "d/dx", text: rhs!, of: binds.get(c[1]), aside: true };
+        else { ok = false; break; }
+      }
+      if (ok) { out.push(aside ?? { tag: NONE, text: raw, skip: true }); continue; }
+      out.push(none());
+      continue;
+    }
+    const split = t0.split("=").map((p) => p.trim());
+    // bound letters put back in x and "(B)'" worked out; a part that cannot be is left as written (and reads as null)
+    const parts = split.map((p) => resolve(p, binds) ?? p);
+    const t = parts.join(" = ");
     let line: ChainLine | null = null;
-    if (!t || parts.length > 2) { out.push(none()); continue; }
+    if (!t0 || parts.length > 2) { wrote = true; out.push(none()); continue; }
     // a line in words asserts nothing: it is null, and the next line follows the last line that did
     if (parts.length === 1 && !compile(t) && !LIM.test(t) && !INTEGRAL.test(t)) { out.push({ tag: NONE, text: raw, skip: true }); continue; }
+    const first = !wrote;
+    wrote = true;
 
     const lead = parts.length === 2 && parts[0] === "";
-    const lim = LIM.exec(lead ? parts[1] : parts[0]);
+    const lim = limOf(lead ? parts[1] : parts[0]);
+    const lim2 = parts.length === 2 && !lead ? limOf(parts[1]) : null;
     if (lim) {
-      if (specAt === null || !sameAt(lim[1])) { out.push(none()); continue; }
-      if (parts.length === 2 && !lead) {
-        line = { tag: "lim", text: parts[1], of: lim[2], x: specAt ?? lim[1], ...(side ? { side } : {}) };
+      if (limAt === null || !sameAt(lim.at) || (lim2 && !sameAt(lim2.at))) { out.push(none()); continue; }
+      if (lim2) {
+        // "lim A = lim B": both have the limit of the line before (L'Hopital's B is not A, only its limit is)
+        if (kind === "fn" || kind === "limbody") { line = { tag: "limeq", text: lim2.body, also: lim.body, ...limAt }; kind = "limbody"; }
+      } else if (parts.length === 2 && !lead) {
+        line = { tag: "lim", text: parts[1], of: lim.body, ...limAt };
         kind = "value";
       } else if (kind === "fn" || kind === "limbody") {
-        line = { tag: "=", text: lim[2] };
+        line = { tag: "limeq", text: lim.body, ...limAt };
         kind = "limbody";
       }
     } else if (parts.length === 1) {
@@ -270,8 +451,24 @@ export function tagLines(spec: CalcSpec, lines: readonly string[]): { lines: Cha
     } else if (parts[0] === "") {
       // a leading '=': the same thing as the line before
       const rest = parts[1], e = compile(rest);
-      if (e && kind === "limbody" && !e.usesX && specAt !== null) { line = { tag: "lim", text: rest, x: specAt, ...(side ? { side } : {}) }; kind = "value"; }
-      else if (e && (kind === "fn" || kind === "deriv" || kind === "anti" || kind === "value" || kind === "limbody")) { line = { tag: "=", text: rest }; if (kind === "fn") lastFn = rest; else if (kind === "deriv") lastDeriv = rest; }
+      if (!e) { /* unread */ }
+      else if (!e.usesX && (kind === "limbody" || kind === "fn") && limAt !== null) { line = { tag: "lim", text: rest, ...limAt }; kind = "value"; }
+      else if (kind === "limbody") line = { tag: "limeq", text: rest, ...limAt! };
+      // a value after an antiderivative on a definite integral is F(b) - F(a); after the function (or its derivative
+      // on a derivative-at item) it is the value at the item's point (MB3-14: never "the same function")
+      else if (!e.usesX && kind === "anti" && spec.shape === "definite-integral") { line = { tag: "between", text: rest, x: spec.a, to: spec.b }; kind = "value"; }
+      else if (!e.usesX && kind === "fn" && spec.shape === "evaluate" && point !== null) { line = { tag: "at", text: rest, of: lastFn ?? undefined, x: point }; kind = "value"; }
+      else if (!e.usesX && kind === "deriv" && spec.shape === "derivative-at" && point !== null) { line = { tag: "at", text: rest, of: lastDeriv ?? undefined, x: point }; kind = "value"; }
+      else if (first && kind === "fn" && from !== null) {
+        // the first line read follows the spec's own function, which the learner did not write: "= 3x^2" may be the
+        // function or its derivative. The tag is the relation that holds; when none does, the line is not guessed
+        const a = compile(from);
+        const holds = (r: ChainResult) => r === true;
+        if (a && holds(equals(a, e, rest))) { line = { tag: "=", text: rest }; lastFn = rest; }
+        else if (a && derives && e.usesX && holds(derivativeOf(a, e))) { line = { tag: "d/dx", text: rest }; kind = "deriv"; lastDeriv = rest; }
+        else if (a && integrates && e.usesX && holds(antiderivativeOf(a, e))) { line = { tag: "int", text: rest }; kind = "anti"; }
+      }
+      else if (kind === "fn" || kind === "deriv" || kind === "anti" || kind === "value") { line = { tag: "=", text: rest }; if (kind === "fn") lastFn = rest; else if (kind === "deriv") lastDeriv = rest; }
     } else if (parts[1] === "0" && !LABEL.test(parts[0]) && compile(parts[0])) {
       kind = "zeroeq";
       out.push({ tag: NONE, text: raw });

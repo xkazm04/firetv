@@ -129,3 +129,93 @@ test('tagger: a line in words is null and the next line still follows the last l
   assert.deepEqual(chainChecks(spec,['f(x) = x^2 sin x','use the product rule',"f'(x) = 2x sin x + x^2 cos x"]),[true,null,true]);
   assert.deepEqual(chainChecks(spec,['f(x) = x^2 sin x','use the product rule',"f'(x) = 2x cos x"]),[true,null,false]);
 });
+
+// ---- MB-B29: prime notation, u = lines and lim = lim lines are read; the pen never lands on a correct line (MB3-14)
+test('MB-B29: a line "A · (B)\'" is A times the derivative of B, and the pen goes on the slipped line',()=>{
+  const spec={shape:'derivative',f:'sin(x^2)'};
+  assert.deepEqual(chainChecks(spec,["y' = cos(x^2) · (x^2)'","y' = cos(x^2) · x"]),[true,false]);
+  assert.equal(chainPen(spec,["y' = cos(x^2) · (x^2)'","y' = cos(x^2) · x"]),1);
+  assert.deepEqual(chainChecks(spec,["y' = cos(x^2) · (x^2)'","y' = 2x cos(x^2)"]),[true,true]);
+  assert.deepEqual(chainChecks(spec,["y' = (sin(x^2))'","= cos(x^2)·(x^2)'","= 2x·cos(x^2)"]),[true,true,true]);
+  assert.deepEqual(chainChecks(spec,["y' = sin(x^2)'","= 2x·cos(x^2)"]),[true,true],'a function name before the bracket is part of what is primed');
+  assert.deepEqual(chainChecks({shape:'derivative',f:'(3x^2+1)^5'},["y' = 5(3x^2+1)^4 · (3x^2+1)'","= 5(3x^2+1)^4 · 6x","= 30x(3x^2+1)^4"]),[true,true,true]);
+  assert.deepEqual(chainChecks({shape:'derivative',f:'ln(x^2+1)'},["y' = 1/(x^2+1) · (x^2+1)'","= -2x/(x^2+1)"]),[true,false],'a sign slip is pinned to its line');
+  assert.deepEqual(chainChecks(spec,["y' = cos(x^2) · x(x^2)'"]),[null],'a letter before the bracket that is not a function name is not guessed');
+  // every function the engine reads: "(f)'" is worked out exactly, so it agrees with the numeric derivative of f
+  for(const f of ['cos(3x+1)','tan(x/3)','sec(x/2)','csc(x+5)','cot(x/4+2)','asin(x/5)','acos(x/5)','atan(x^2)','sinh(x/2)','cosh(x/2)','tanh(x)','ln(x^2+1)','log(x^2+2)','e^(2x)','exp(x/3)','sqrt(x^2+1)','cbrt(x+7)','abs(x)','x^x','2^x','x^3/(x^2+1)','log_2(x^2+1)'])
+    assert.deepEqual(chainChecks({shape:'derivative',f},[`y' = (${f})'`]),[true],f);
+});
+test('MB-B29: a "u = g(x)" line binds u for the lines after it; "u\' = ..." is checked as the derivative of g',()=>{
+  const spec={shape:'derivative',f:'sin(x^2)'};
+  const w=["u = x^2, u' = 2x","y' = cos(u) · u'","y' = cos(x^2) · x"];
+  assert.deepEqual(chainChecks(spec,w),[true,true,false]);
+  assert.equal(chainPen(spec,w),2);
+  assert.equal(chainPen(spec,["u = x^2, u' = x","y' = cos(u) · u'","y' = cos(x^2) · x"]),0,'a wrong u\' is the slip, on its own line');
+  assert.deepEqual(chainChecks(spec,['u = x^2',"u' = 2x","y' = cos(u)·u'","= 2x cos(x^2)"]),[null,true,true,true],'the binding alone asserts nothing');
+  assert.deepEqual(chainChecks(spec,['u = x^2','y = sin(u)',"y' = cos(u)·u'"]),[null,true,true]);
+  assert.deepEqual(chainChecks({shape:'antiderivative',f:'2x cos(x^2)'},['u = x^2','F = sin(u) + C']),[null,true],'a substitution read back in x');
+  assert.ok(!chainChecks({shape:'antiderivative',f:'2x cos(x^2)'},['u = x^2, du = 2x dx','= ∫ cos(u) du','= sin(u) + C','= sin(x^2) + C']).includes(false),'a du line is not read and rings nothing');
+});
+test('MB-B29: "lim … = lim …" is an = between the two limits, so L\'Hopital is not rung and a slip is',()=>{
+  const spec={shape:'limit',f:'sin(3x)/x',at:0};
+  assert.deepEqual(chainChecks(spec,['lim_(x->0) sin(3x)/x = lim_(x->0) 3cos(3x)/1','= 3']),[true,true]);
+  assert.deepEqual(chainChecks(spec,['lim_(x->0) sin(3x)/x = lim_(x->0) 3cos(3x)','= lim_(x->0) cos(3x)','= 1']),[true,false,true]);
+  assert.equal(chainPen(spec,['lim_(x->0) sin(3x)/x = lim_(x->0) 3cos(3x)','= lim_(x->0) cos(3x)','= 1']),1);
+  assert.deepEqual(chainChecks(spec,['lim_(x->0) sin(3x)/x','= lim_(x->0) 3cos(3x)/1','= 3']),[true,true,true],'a leading = lim line after L\'Hopital');
+  assert.deepEqual(chainChecks(spec,['lim_{x->0} sin(3x)/x = lim_{x->0} cos(3x)']),[false]);
+  assert.deepEqual(chainChecks(spec,['lim_(x->1) sin(3x)/x = lim_(x->1) 3cos(3x)']),[null],'another point than the spec\'s is not checked');
+});
+test('MB3-14: the pen never lands on a correct evaluation or a correct first line written with a leading =',()=>{
+  const di={shape:'definite-integral',f:'x^2',a:0,b:3};
+  assert.deepEqual(chainChecks(di,['∫ x^2 dx = x^3/3','= 3^3/3 - 0','= 8']),[true,true,false]);
+  assert.equal(chainPen(di,['∫ x^2 dx = x^3/3','= 3^3/3 - 0','= 8']),2);
+  assert.equal(chainPen(di,['∫ x^2 dx = x^3/3','= 3^3/3 - 0','= 9']),null);
+  assert.equal(chainPen(di,['∫ x^2 dx = x^3/3','= 3^3/2 - 0','= 13.5']),1);
+  const ev={shape:'evaluate',f:'x^2+1',at:3};
+  assert.deepEqual(chainChecks(ev,['= 3^2 + 1','= 11']),[true,false]);
+  assert.equal(chainPen(ev,['= 3^2 + 1','= 11']),1);
+  assert.deepEqual(chainChecks({shape:'derivative',f:'x^3'},['= 3x^2','= 3*x*x']),[true,true]);
+  assert.deepEqual(chainChecks({shape:'derivative',f:'x^3'},['= x*x^2','= x^3']),[true,true],'after the function\'s own rewrite a leading = is =');
+  assert.equal(chainPen({shape:'derivative',f:'x^3'},['= 3x^2 + 1']),null,'a first leading = line that is neither the function nor its derivative is not guessed');
+  const at={shape:'derivative-at',f:'x^3-2x',at:2};
+  assert.deepEqual(chainChecks(at,["f'(x) = 3x^2 - 2",'= 3*2^2 - 2','= 10']),[true,true,true]);
+  assert.equal(chainPen(at,["f'(x) = 3x^2 - 2",'= 3*2^2 - 2','= 11']),2);
+  assert.equal(checkChain([{tag:'=',text:'7'}],{from:'x^2'})[0],null,'a function then a constant under = is not rung: it cannot tell what was substituted');
+});
+
+// the property: for a correct working, every line holds given the line before it, and the pen is null
+const mulberry=(a)=>()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+const CORRECT=[
+  [{shape:'derivative',f:'sin(x^2)'},["y' = cos(x^2) · (x^2)'","= 2x cos(x^2)"]],
+  [{shape:'derivative',f:'sin(x^2)'},["u = x^2, u' = 2x","y' = cos(u) · u'","= 2x cos(x^2)"]],
+  [{shape:'derivative',f:'(3x^2+1)^5'},["y' = 5(3x^2+1)^4 · (3x^2+1)'","= 5(3x^2+1)^4 · 6x","= 30x(3x^2+1)^4"]],
+  [{shape:'derivative',f:'x^2 sin x'},['f(x) = x^2 sin x',"f'(x) = (x^2)' sin x + x^2 (sin x)'","= 2x sin x + x^2 cos x"]],
+  [{shape:'derivative',f:'e^(3x)'},['= e^(3x)',"y' = e^(3x)·(3x)'",'= 3e^(3x)']],
+  [{shape:'derivative',f:'x^3'},['= 3x^2']],
+  [{shape:'derivative-at',f:'x^3-2x',at:2},["f'(x) = 3x^2 - 2",'= 3*2^2 - 2','= 10']],
+  [{shape:'evaluate',f:'x^2+1',at:3},['= 3^2 + 1','= 10']],
+  [{shape:'evaluate',f:'x^2+3x',at:2},['f(2) = 2^2 + 3*2','= 10']],
+  [{shape:'definite-integral',f:'x^2',a:0,b:3},['∫ x^2 dx = x^3/3','= 3^3/3 - 0','= 9']],
+  [{shape:'definite-integral',f:'3x^2',a:1,b:2},['F(x) = x^3','= 8 - 1','= 7']],
+  [{shape:'antiderivative',f:'2x cos(x^2)'},['u = x^2','F = sin(u) + C','= sin(x^2) + C']],
+  [{shape:'limit',f:'sin(3x)/x',at:0},['lim_(x->0) sin(3x)/x = lim_(x->0) 3cos(3x)/1','= 3']],
+  [{shape:'limit',f:'(x^2-4)/(x-2)',at:2},['lim x->2 (x^2-4)/(x-2)','= lim x->2 (x+2)','= 4']],
+  [{shape:'limit',f:'(e^x-1)/x',at:0},['lim_(x->0) (e^x-1)/x = lim_(x->0) e^x','= 1']],
+  [{shape:'critical-point',f:'x^3-12x',on:[-5,5]},["f'(x) = 3x^2 - 12",'3x^2 - 12 = 0','x = 2']],
+];
+// a rewrite of a line's own expression that is the same function (or value): a correct "=" line to follow it
+const REWRITES=[(e)=>`(${e})*1`,(e)=>`(${e}) + 0`,(e)=>`2(${e})/2`,(e)=>`((${e}))`,(e)=>`(${e}) + x - x`];
+const exprOf=(line)=>{const p=line.split('=');if(p.length!==2||/^\s*[uvwtz]\s*['′]?\s*$/.test(p[0])||/^\s*x\s*$/.test(p[0])||/lim|∫/.test(p[1])||/\d\s*$/.test(p[0]))return null;const r=p[1].trim();return r&&!/[,']/.test(r)&&!/\+ C$/.test(r)?r:null;};
+test('MB3-14 property: for 400 correct workings (every line equal to, or following, the line before), chainPen is null',()=>{
+  const rnd=mulberry(29);let n=0;
+  for(let k=0;k<400;k++){
+    const [spec,base]=CORRECT[k%CORRECT.length],w=[];
+    for(const line of base){w.push(line);const e=exprOf(line);if(e&&rnd()<0.6)w.push('= '+REWRITES[Math.floor(rnd()*REWRITES.length)](e));}
+    const r=chainChecks(spec,w);
+    assert.ok(!r.includes(false),`a correct working was rung: ${JSON.stringify(spec)} ${JSON.stringify(w)} -> ${JSON.stringify(r)}`);
+    assert.equal(chainPen(spec,w),null);n++;
+  }
+  // the base workings are read, not merely null: the pen has something to stand on
+  for(const [spec,base] of CORRECT)assert.ok(chainChecks(spec,base).some((v)=>v===true),`unread: ${JSON.stringify(base)}`);
+  assert.equal(n,400);
+});

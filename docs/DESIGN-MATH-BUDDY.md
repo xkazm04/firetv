@@ -160,7 +160,13 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
 **A Calculus item is located by the chain checker (M4c).** `locate` reads linear lines only, so a Calculus set
 ([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) is located by `rules/chain` instead: the item's working lines are read
 from its own spec (`tagLines`; line 0 follows the spec's function, a line whose relation the tagger cannot tell, or a
-line in words, is null and never blamed) and each line is checked numerically against the line before it. A wrong
+line in words, is null and never blamed) and each line is checked numerically against the line before it. The
+tagger reads the notation a learner writes (MB-B29): `(B)'` is the derivative of B, worked out exactly from B; a
+`u = g(x)` line binds u for the lines after it and asserts nothing, while `u' = ...` is checked as the derivative of
+g; `lim A = lim B` asks only that the two limits agree (L'Hopital's B is not A). A value after a function is never
+"the same function" (MB3-14): on a definite integral it is F(b) - F(a), on an evaluate or derivative-at item the
+value at the item's point, and otherwise null; a first line written with a leading `=` is tagged by the relation
+that holds to the spec's function (itself, or its derivative), and is null when neither does. A wrong
 item with working gets `slipAt` at the FIRST line the chain rings (`judgeItem`, the existing field, no new one); the
 verdict stays `checkAnswer`'s. `working.ts` ticks a Calculus line before the pen only where the chain says it
 holds (it computes the same chain; the school and linear lines keep the arithmetic tick); a null line gets neither
