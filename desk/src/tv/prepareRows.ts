@@ -65,14 +65,16 @@ export function choicesFor(worked: boolean): { cell: -1 | 0 | 1; id: string; t: 
 export const LESSON_WRITING = "Writing the worked lesson.";
 
 /**
- * The step up's sentence on a unit with a top rung (MB-B20: mixed numbers and a word problem join the set). It names what
- * is new and says it is still school level, so a learner past the unit's year is not told it is more than it is.
+ * The step up's sentence on the two fractions units with a top rung (MB-B20: mixed numbers and a word problem join the set).
+ * It names what is new and says it is still school level, so a learner past the unit's year is not told it is more than it is.
  */
 export const TOP_RUNG_LINE = "Mixed numbers and a word problem join the harder ones, still school level, and a secure step up draws a second line.";
 /** The step up's sentence by unit with a top rung (MB-B20): each names what its rung adds. A top unit with none keeps the usual step-up sentence. */
 export const TOP_RUNG_LINES: Readonly<Record<string, string>> = {
   "frac-add-sub": TOP_RUNG_LINE,
   "frac-mul-div": TOP_RUNG_LINE,
+  "pct-change": "Reverse and repeated percentage changes and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
+  "pythagoras": "Sides with decimals, answers rounded and a word problem join the harder ones, still school level, and a secure step up draws a second line.",
 };
 
 /** The one sentence under the cells, for the lit one; `topic` the unit asked about (a top-rung unit says what its step up adds). */

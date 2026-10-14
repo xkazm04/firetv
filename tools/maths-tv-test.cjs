@@ -594,17 +594,24 @@ test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card u
 });
 
 test('W8 prepare 4: the words - one sentence per caption slot, 25 words or fewer, no digit, no em dash, no points; two cells, "The usual" first',()=>{
- const {PREPARE_CHOICES,PREPARE_DOOR,TOP_RUNG_LINE,choiceLine}=PR();
+ const {PREPARE_CHOICES,PREPARE_DOOR,TOP_RUNG_LINE,TOP_RUNG_LINES,choiceLine}=PR();
  assert.deepEqual(PREPARE_CHOICES.map((c)=>c.t),['The usual','A step up']);
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
+ const tops=Object.values(TOP_RUNG_LINES);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...tops,...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
   assert.ok(wordsOf(line)<=25,line);assert.doesNotMatch(line,/[0-9]|—|point|score|%/i,line);
  }
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...tops])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
  assert.notEqual(choiceLine(0),choiceLine(1));
  // MB-B20: on a unit with a top rung the step up says what it adds and that it is still school level; elsewhere, and for the usual set, as before
  for(const id of ['frac-add-sub','frac-mul-div']){assert.equal(choiceLine(1,id),TOP_RUNG_LINE);assert.equal(choiceLine(0,id),choiceLine(0));}
  assert.match(TOP_RUNG_LINE,/mixed numbers/i);assert.match(TOP_RUNG_LINE,/word problem/i);assert.match(TOP_RUNG_LINE,/still school level/);
- for(const id of ['pct-change','frac-equivalent','linear-one-step',undefined])assert.equal(choiceLine(1,id),choiceLine(1),String(id));
+ // every unit with a top rung has its own sentence, and each names a word problem and says it is still school level
+ const S=require(path.join(root,'src/lib/rules/school.ts'));
+ assert.deepEqual(Object.keys(TOP_RUNG_LINES).sort(),Object.keys(S.TOP_TIER_GENERATORS).sort());
+ for(const [id,line] of Object.entries(TOP_RUNG_LINES)){assert.equal(choiceLine(1,id),line);assert.equal(choiceLine(0,id),choiceLine(0));assert.match(line,/word problem/i,id);assert.match(line,/still school level/,id);}
+ assert.match(choiceLine(1,'pct-change'),/reverse/i);assert.match(choiceLine(1,'pct-change'),/repeated/i);
+ assert.match(choiceLine(1,'pythagoras'),/decimals/i);assert.match(choiceLine(1,'pythagoras'),/rounded/i);
+ for(const id of ['ratio-share','frac-equivalent','linear-one-step',undefined])assert.equal(choiceLine(1,id),choiceLine(1),String(id));
 });
 
 test('W8 ruler 1: stretchSecure reads the latched step-up record alone, on the learner\'s path - whatever the usual record says',()=>{

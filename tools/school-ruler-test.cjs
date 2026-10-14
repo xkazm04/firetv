@@ -297,15 +297,16 @@ test('W8 2: Get ready for school lists the units by strand with the learner\'s o
   assert.ok(html.includes(PR.choiceLine(ask,PR.prepareStops(s)[plain].id)),'the lit cell\'s sentence (MB-B20: the unit\'s own step-up line)');
   assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
  }
- // MB-B20: a step up on a fractions unit with a top rung says what it adds and that it is still school level, with no number
- for(const id of ['frac-add-sub','frac-mul-div']){
+ // MB-B20: a step up on a unit with a top rung (fractions, percent change, Pythagoras) says what it adds and that it is still school level, with no number
+ for(const id of ['frac-add-sub','frac-mul-div','pct-change','pythagoras']){
   const at=PR.prepareStops(s0).findIndex((u)=>u.id===id);assert.ok(at>=0,id);
   const st={...seated({system:'uk'}),screen:'prepare',focus:at,skills:{}},cells=PR.choicesFor(hasWorked(id)).length;
   const html=drawW8(st,1);
-  assert.ok(html.includes(PR.TOP_RUNG_LINE),`${id}: the top rung's sentence under A step up`);
+  assert.ok(html.includes(PR.TOP_RUNG_LINES[id]),`${id}: the top rung's own sentence under A step up`);
   assert.ok(drawW8(st,0).includes(PR.choiceLine(0)),`${id}: the usual set's sentence is unchanged`);
   assert.equal(count(html,/class="mb-cell2"/g),cells);
-  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+  // (an escaped apostrophe, "Pythagoras&#x27; theorem", is the unit's name, not a number)
+  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]).replace(/&#x?[0-9a-f]+;/gi,"'"),/[0-9]/,'no number anywhere on the question');
  }
  // a unit with a worked lesson: three cells, "See how first" first, the lit one follows the ask
  const lessonAt=PR.prepareStops(s0).findIndex((u)=>hasWorked(u.id));
