@@ -209,6 +209,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Motes rgb={glow} />
       <div className="bp-sheetframe"><SheetFrame /></div>
       <div className="bp-flood" />
+      <div className="bp-sr" data-role="desk-announce" aria-live="polite" aria-atomic="true">{view.say}</div>
 
       {fr && (
         <div className="bp-phone" data-role="desk-phone" data-paired="false" data-focused={at === "phone"}>

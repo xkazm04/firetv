@@ -273,6 +273,7 @@ export function PaperLanding({ view, zoom, boot }: ThemeLandingProps) {
       <Shelf view={view} />
       <Chrome view={view} />
       {zoom && <Zoom view={view} stop={zoom} />}
+      <div className="pp-sr" data-role="desk-announce" aria-live="polite" aria-atomic="true">{view.say}</div>
       <Grain />
     </div>
   );

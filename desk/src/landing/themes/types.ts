@@ -7,7 +7,8 @@
  * Hooks every theme keeps (the TV's automation and the tests read them): the root `data-role="desk-scene"` with
  * `data-lit` (the stop the D-pad is on), each app's `data-role="desk-object"` + `data-app` + `data-focused`, the big
  * action `desk-continue`, the second action `desk-place-card`, the phone `desk-phone` (+ `desk-pin`), the caption
- * `desk-caption`, and the zoom `desk-zoom`.
+ * `desk-caption`, the zoom `desk-zoom`, and `desk-announce`: a visually hidden aria-live="polite" region holding
+ * view.say, the only way a screen reader learns which stop the lamp is on.
  */
 import type { ReactElement } from "react";
 import type { LandingStop } from "@/tv/landingRows";
