@@ -768,7 +768,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-8
   - recommendation: build — `checkAnswer` names sign and lost-constant only (`lib/rules/calc.ts:179-184`); "forgot-chain" is only a vision-model pick, so typed "cos(x^2)" for d/dx sin(x^2) is wrong with the generic ASK(n), although the slip vocabulary for calc1-chain holds forgot-chain. For a derivative spec whose f is a composition g(h(x)), an answer equal to g'(h(x)) at the samples is wrong with slip forgot-chain, decided in code
   - owner: practice-generation-marking (Approval with the operator)
-  - status: open
+  - status: built (4a8d4dac): checkAnswer reads each composition site of a derivative spec (fn(inside), base^(inside), (inside)^n; inside not x and its derivative not 1) and an answer equal at the samples to f' with one inside, or all, taken as slope 1 is wrong with slip forgot-chain; right and sign are checked first, so a right answer never gets it; settleSpec shows the slip's line. Calc 2 has no derivative judge to mirror; derivative-at (a number) is not covered. Not screenshot-verified on the TV
   - ceiling: only the single dropped factor is named; a wrong inner derivative stays the generic line
 - **MB-B39** — Get ready for school, the road the paper sends the learner down, skips the worked lesson
   - origin: 2026-10-09-maths-l1/L1-owen-17-MB2-8
