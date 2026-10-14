@@ -18,7 +18,7 @@
  * calc.ts (which imports this file). A few lines of calc.ts are written again here for that reason (num, BAD_SPEC).
  */
 import { compile, integrate, limitInf, toPlain, toTex, type Expr } from "./calc-expr";
-import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 /** A comma system writes its decimals with a comma (taskText.ts commaSystem, written again here: this file imports no taskText, calc2-seam-test pins it). */
 const commaSystem = (system?: string) => system === "cz" || system === "de";
 
@@ -244,7 +244,8 @@ function readsAsDecimal(ans: string): boolean {
  *   - any other number is 'wrong': there is no 'unsure' band;
  *   - an empty, unreadable or non-finite answer, an answer in x, or a spec the desk cannot work out, is 'unsure'.
  * The `why` is a fixed sentence of the desk's, with no value in it.
- * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4).
+ * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4), and the answer as a
+ * Czech school writes it (calc-read czechAnswer, MB-B36).
  */
 export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown, system?: string): Calc2Verdict {
   if (isSequence(spec)) return sequenceCheck(spec, studentAnswer, system);
@@ -253,7 +254,7 @@ export function calc2CheckAnswer(spec: unknown, studentAnswer: unknown, system?:
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
-  if (commaSystem(system)) ans = oneNumberComma(ans);
+  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans));
   const e = compile(ans);
   if (!e) return verdict("unsure", WHY.unreadable);
   if (e.constant) return verdict("unsure", WHY.unreadable);
@@ -514,7 +515,7 @@ function sequenceCheck(spec: SequenceSpec, studentAnswer: unknown, system?: stri
   if (typeof studentAnswer !== "string" || !studentAnswer.trim()) return verdict("unsure", WHY.empty);
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
-  if (commaSystem(system)) ans = oneNumberComma(ans);
+  if (commaSystem(system)) ans = czechAnswer(oneNumberComma(ans));
   const { truth } = r;
   const inf = infinityOf(ans);
   if (inf !== null) {

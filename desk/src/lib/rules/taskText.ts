@@ -5,9 +5,10 @@
  * rules/school specFromQuestion, rules/maths equationOf and expressionOf) first reads the text exactly as it is; only
  * when that reads as nothing is it offered again in these forms, so a text read today is read as it was.
  *
- * Pure: no store, no engine; imports only the diacritics fold and a type.
+ * Pure: no store, no engine; imports only the diacritics fold, the Czech function names (calc-read) and a type.
  */
 import { fold } from "./numberWords";
+import { czechNames } from "./calc-read";
 import type { SchoolSystem } from "../session/store";
 export type { SchoolSystem };
 
@@ -44,7 +45,8 @@ export const commaSystem = (system?: SchoolSystem) => system === "cz" || system 
 
 /**
  * The text with a middle dot read as ×, a colon between two fractions as ÷, and - only where the school system says so
- * - a decimal comma as a point ('0,3' is 0.3). With no system the comma is left as it was.
+ * - a decimal comma as a point ('0,3' is 0.3) and the Czech function names tg, cotg, arctg, arccotg as tan, cot, arctan and
+ * pi/2 - arctan (calc-read czechNames, MB-B36). With no system the comma and the names are left as they were.
  */
 export function plainTask(text: string, system?: SchoolSystem): string {
   let t = text.replace(/[·⋅∙]/g, "×")
@@ -52,7 +54,7 @@ export function plainTask(text: string, system?: SchoolSystem): string {
     .replace(/^(\s*)kolik\s+je\s+/i, "$1What is ")
     .replace(/(\d+(?:[.,]\d+)?)\s*(?:%|procent(?:a|o|ech|y)?)(?![\p{L}\d])/giu, "$1%")
     .replace(/(\d+\s*\/\s*\d+|\d+%)\s+(?:z|ze)\s+(?=\d)/gi, "$1 of ").replace(/(\d+\s*\/\s*\d+)\s*:\s*(?=\d+\s*\/\s*\d+)/g, "$1 ÷ ");
-  if (commaSystem(system)) t = t.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2");
+  if (commaSystem(system)) t = czechNames(t.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2"));
   return t;
 }
 

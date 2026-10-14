@@ -16,6 +16,53 @@ export const cleanAnswer = (a: string) => {
 };
 /** A one-number answer (optional sign, digits, one comma, digits; no space at the comma) read as a point ('2,718' is 2.718, '-0,38' is -0.38); any other answer comes back unchanged. */
 export const oneNumberComma = (ans: string) => /^[+\-−]?\s*\d+,\d+$/.test(ans.trim()) ? ans.replace(/\s+/g, "").replace(",", ".") : ans;
+/**
+ * The Czech function names (MB-B36): tg, cotg, arctg, arccotg, as a Czech school writes tan, cot, arctan and arccot. A name
+ * touches no other letter but an x ('tgx' is tg x; 'atgx' is not read), longest first, any case.
+ */
+const CZECH_FN = /(?<!(?!x)\p{L})(arccotg|arctg|cotg|tg)(?!(?!x(?!\p{L}))\p{L})/giu;
+const CZECH_NAME: Record<string, string> = { arctg: "arctan", cotg: "cot", tg: "tan" };
+/** The argument after arccotg: a bracketed group (its own closing bracket found) or a bare x, number or a number times x, with a whole-number power. */
+const BARE_ARG = /^\s*((?:\d+(?:\.\d+)?)?x(?:\^\d+)?|\d+(?:\.\d+)?)/;
+/**
+ * A task or an answer with the Czech function names as the desk's reader reads them: tg is tan, cotg is cot, arctg is
+ * arctan, and arccotg u is (pi/2 - arctan(u)) - arccot as Czech schools and Stewart define it, with values in (0, pi). An
+ * arccotg whose argument is neither bracketed nor a bare x or number is left as written, so it stays unread.
+ */
+export function czechNames(text: string): string {
+  let out = "", from = 0;
+  for (const m of text.matchAll(CZECH_FN)) {
+    const at = m.index!, name = m[1].toLowerCase();
+    out += text.slice(from, at);
+    from = at + m[0].length;
+    if (name !== "arccotg") { out += CZECH_NAME[name]; continue; }
+    const rest = text.slice(from), open = /^\s*\(/.exec(rest);
+    let arg: string | null = null, used = 0;
+    if (open) {
+      let depth = 0;
+      for (let i = open[0].length - 1; i < rest.length; i++) {
+        if (rest[i] === "(") depth++;
+        else if (rest[i] === ")" && --depth === 0) { arg = rest.slice(open[0].length - 1, i + 1); used = i + 1; break; }
+      }
+    } else {
+      const b = BARE_ARG.exec(rest);
+      if (b) { arg = `(${b[1]})`; used = b[0].length; }
+    }
+    if (arg === null) { out += m[0]; continue; }
+    out += `(pi/2 - arctan${arg})`;
+    from += used;
+  }
+  return out + text.slice(from);
+}
+/** A trailing arbitrary constant by another letter, as a Czech school writes it: + K, + k, + C1, + C_1, + C₁. */
+const OTHER_CONSTANT = /([+\-−])\s*(?:K|k|C\s*_?\s*\(?\s*\d+\s*\)?|C[₀-₉]+)\s*$/;
+/**
+ * A Calculus answer in a comma system (cz, de; MB-B36), as the reader reads it: a decimal comma between digits is a point
+ * ('0,5x^2' is 0.5x^2, as taskText plainTask reads a task; '1,2,3' and '0, 5' are left alone), the Czech function names
+ * (czechNames), and a trailing constant by another letter is the arbitrary constant C. Anything else comes back unchanged.
+ */
+export const czechAnswer = (ans: string) =>
+  czechNames(ans.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2")).replace(OTHER_CONSTANT, "$1 C");
 /** A lone digit,digit in a line read as a point ('2,72' is 2.72); a list ('1,2,3', '1, 2') is left alone (maths.ts decimalComma's pattern). */
 export const pointForComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
 /** An infinity as a learner writes it: inf, infinity, ∞, with an optional sign. */

@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -417,7 +417,9 @@ function judgeNumber(shape: keyof typeof TOLERANCE, truth: number, s: number, wr
  *   - an empty, unreadable or non-finite answer, an answer in x for a number, or a spec the desk cannot work out, is
  *     'unsure': the desk does not guess.
  * The `why` is a fixed sentence of the desk's, with no value in it.
- * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4); never a function answer.
+ * With a cz or de `system`, a one-number answer with a decimal comma ('2,718') is read as a point (MK4), and any answer is read
+ * as a Czech school writes it (calc-read czechAnswer, MB-B36): a decimal comma between digits, tg, cotg, arctg, arccotg, and
+ * + K or + C1 as the arbitrary constant. With uk, us or no system the answer is read exactly as before.
  */
 export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: SchoolSystem): CalcVerdict {
   if (isCalc2Spec(spec)) return calc2CheckAnswer(spec, studentAnswer, system);
@@ -427,7 +429,7 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: Scho
   let ans = cleanAnswer(studentAnswer);
   if (!ans) return verdict("unsure", WHY.empty);
   const { truth } = r;
-  if (commaSystem(system) && truth.kind !== "derivative" && truth.kind !== "antiderivative") ans = oneNumberComma(ans);
+  if (commaSystem(system)) ans = czechAnswer(truth.kind !== "derivative" && truth.kind !== "antiderivative" ? oneNumberComma(ans) : ans);
   if (truth.kind === "inf" || r.spec.shape === "limit") {
     const inf = infinityOf(ans);
     if (inf !== null) {

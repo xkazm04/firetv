@@ -339,6 +339,14 @@ takes "Kč" (and "korun") as a unit, and "cm squared", "sq cm" and "square cm" a
 weight). Every printed question still reads back to its own spec, and code still marks the answer. The TV sets "Kč" as
 one upright word, never the variable K.
 
+**Calculus answers in Czech notation (MB-B36, 2026-10-14).** In cz and de `checkAnswer` reads a Calculus answer as a
+Czech school writes it (`rules/calc-read` `czechAnswer`): a decimal comma between digits is a point in any answer
+("0,5x^2 + C", not only a lone "2,718"), tg, cotg, arctg and arccotg are tan, cot, arctan and arccot (arccotg u is
+pi/2 - arctan u, values in (0, pi)), and a trailing "+ K", "+ k", "+ C1", "+ C_1" or "+ C₁" is the arbitrary constant. A
+printed task with those names reads into its spec the same way ("Derivujte: y = arctg(x)"). A comma that is not between
+two digits ("0, 5", "1,2,3") is not read, and an arccotg whose argument is neither bracketed nor a bare x or number stays
+unread: the desk is not sure rather than guessing. A uk, us or unset profile reads every answer exactly as before.
+
 ## Calculus graphs (v2 M4a, 2026-10-07)
 
 A Calculus item open on `walk` shows its graph under the card (`maths/plotting.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),

@@ -524,6 +524,47 @@ test('MK4: a cz or de learner\'s one-number answer with a decimal comma reads as
  for(const [spec,a] of [[E,'2,718,1'],[E,'1, 2'],[D,'2,5x']])assert.equal(v(spec,a,'cz'),v(spec,a),`${a} is not read`);
 });
 
+test('MB-B36: a cz or de Calculus answer reads the decimal comma, tg, cotg, arctg, arccotg and a constant other than C; uk, us and no system leave each unsure',()=>{
+ const v=(spec,a,sys)=>{const r=C.checkAnswer(spec,a,sys);return r.verdict+(r.slip?'/'+r.slip:'');};
+ const TAN={shape:'derivative',f:'tan(x)'},COT={shape:'derivative',f:'cot(x)'},ATAN={shape:'antiderivative',f:'1/(1+x^2)'},ACOT={shape:'antiderivative',f:'-1/(1+x^2)'};
+ const EX2={shape:'antiderivative',f:'x*e^(x^2)'},X={shape:'antiderivative',f:'x'},LH={shape:'limit',f:'sin(x)/(2x)',at:0},IE={shape:'definite-integral',f:'e^x',a:0,b:1};
+ const DTG={shape:'derivative',f:'x^2'};
+ const rows=[
+  // the decimal comma, in a number and inside a function
+  [LH,'0,5','right'],[IE,'1,718','right'],[IE,'1,72','right'],[IE,'1,8','wrong'],[X,'0,5x^2 + C','right'],[X,'0,5x^2','wrong/lost-constant'],
+  // the Czech function names, bracketed, bare and glued, with a power
+  [TAN,'tg(x)^2+1','right'],[TAN,'1/cos(x)^2','right'],[TAN,'tg^2 x + 1','right'],[{shape:'antiderivative',f:'sec(x)^2'},'tgx + C','right'],[COT,'-1/sin(x)^2','right'],[COT,'-(1 + cotg(x)^2)','right'],[COT,'-cotg^2 x - 1','right'],
+  [ATAN,'arctg(x) + C','right'],[ATAN,'arctg x + C','right'],[ATAN,'arctg x','wrong/lost-constant'],[ATAN,'-arctg(x) + C','wrong/sign'],
+  [ACOT,'arccotg(x) + C','right'],[ACOT,'arccotg x + C','right'],[ACOT,'-arctg(x) + C','right'],[ATAN,'arccotg(x) + C','wrong/sign'],
+  [{shape:'derivative',f:'atan(x^2)'},'2x/(1+x^4)','right'],
+  // the arbitrary constant by another letter
+  [EX2,'e^(x^2)/2 + K','right'],[EX2,'e^(x^2)/2 + C1','right'],[EX2,'e^(x^2)/2 + C_1','right'],[EX2,'e^(x^2)/2 + C₁','right'],[EX2,'e^(x^2)/2 + k','right'],[EX2,'e^(x^2)/2 + c','right'],[EX2,'e^(x^2)/2 - K','right'],
+  [DTG,'2x + K','wrong'],[EX2,'K + e^(x^2)/2','unsure'],[EX2,'e^(x^2)/2 + K x','unsure'],
+ ];
+ for(const [spec,a,want] of rows){
+  for(const sys of ['cz','de'])assert.equal(v(spec,a,sys),want,`${spec.shape} ${spec.f} '${a}' ${sys}`);
+ }
+ // uk, us and no system: every one of these Czech forms stays as it was (unsure), and the English forms are untouched
+ for(const [spec,a] of rows.filter(([,a])=>/,\d|tg|K|k\b|C_?1|C₁/.test(a))){
+  for(const sys of ['uk','us',undefined])assert.equal(v(spec,a,sys),'unsure',`${spec.f} '${a}' ${sys} stays unsure`);
+ }
+ // arccotg in a learner's answer: its value is pi/2 - arctan (range 0..pi), so arccotg(-1) is 3pi/4
+ assert.equal(v({shape:'evaluate',f:'3pi/4 + 0*x',at:0},'arccotg(-1)','cz'),'right');
+ // a comma that is not a decimal between digits is not read
+ for(const [spec,a] of [[X,'0, 5x^2 + C'],[X,'0,5,1x^2 + C']])assert.equal(v(spec,a,'cz'),'unsure',`${a} is not read`);
+});
+
+test('MB-B36: a cz or de Calculus task with tg, cotg, arctg or arccotg reads as its spec; uk leaves it unread',()=>{
+ const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
+ const same=(a,b)=>{const ea=E.compile(a),eb=E.compile(b);return [0.3,0.7,1.2].every(x=>Math.abs(ea.at(x)-eb.at(x))<1e-9);};
+ for(const [text,f] of [['Derivujte: y = arctg(x)','atan(x)'],['Derivujte: y = tg(2x)','tan(2x)'],['Derivujte: y = x·cotg x','x*cot(x)'],['Derivujte: y = arccotg(x^2)','pi/2 - atan(x^2)']]){
+  for(const sys of ['cz','de']){const s=C.specFromQuestion(text,sys);assert.ok(s&&s.shape==='derivative',`${text} ${sys}`);assert.ok(same(s.f,f),`${text} ${sys}: ${s.f}`);}
+  for(const sys of ['uk','us',undefined])assert.equal(C.specFromQuestion(text,sys),null,`${text} ${sys} stays unread`);
+ }
+ // a Czech word with the letters tg in it is not a function name
+ assert.equal(C.specFromQuestion('Derivujte: y = atgx',  'cz'),null);
+});
+
 test('MK14: a long right answer is taken whole (MB-B32)',()=>{
  const M=require(path.join(root,'src/lib/rules/maths.ts'));
  const QUOTIENT='(2x*cos(x^2)*(x^3+1)-3x^2*sin(x^2))/(x^3+1)^2';
