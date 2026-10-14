@@ -59,6 +59,35 @@ test('case 1: a practice set that fails is a failed job with a desk-worded error
  assert.equal(store.getSession().practice.items.length,6);
 });
 
+// ---- architect 2026-10-15 (error-handling: taxonomy-design, structured-propagation): why a run failed travels as a value
+test('case F1: a failed run carries its failure and whether asking again can help - on the job, in the 502 body, and at the retry route',async()=>{
+ const {EngineError}=require(src('lib/engines/types.ts'));
+ const {NOT_AGAIN}=require(src('lib/desk/job.ts'));
+ onPage();
+ stubText({items:()=>{throw new EngineError('declined','stub','no');}});
+ const bad=await post('practice',{topic:'linear-one-step'});
+ assert.equal(bad.status,502);
+ const body=await bad.json();deskWorded(body.error);
+ assert.deepEqual([body.failure,body.retry],['declined',false],'the body says why, as a value, beside the sentence');
+ const job=store.getSession().jobs.practice;
+ assert.deepEqual([job.phase,job.failure,job.retry],['failed','declined',false]);
+ const again=await retry({kind:'practice'});
+ assert.equal(again.status,409,'a refusal is not asked again with the same input');
+ assert.equal((await again.json()).error,NOT_AGAIN);
+ stubText({items:()=>{throw new EngineError('timeout','stub','slow');}});
+ const slow=await post('practice',{topic:'linear-one-step'});
+ assert.deepEqual([(await slow.json()).failure,store.getSession().jobs.practice.retry],['timeout',true],'a slow engine can answer next time: Try again is offered');
+ stubText({items:()=>({items:STATED})});
+ const ok=await retry({kind:'practice'});
+ assert.equal(ok.status,200,'and the retry route asks it again');
+});
+test('case F2: the phone and both TV hint lines offer Try again only where the job says asking again can help',()=>{
+ const phone=fs.readFileSync(src('app/phone/page.tsx'),'utf8');
+ assert.match(phone,/const failed = \(kind: JobKind\) => \{[^\n]*j\.retry !== false/,'the phone panels read job.retry');
+ assert.match(phone,/const readAgain = [^\n]*retry !== false/);
+ for(const f of ['tv/screens.tsx','maths/MathsTV.tsx'])assert.match(fs.readFileSync(src(f),'utf8'),/hj\.retry === false \? "[Nn]o hint for this one/,`${f} words a hint that will not change`);
+});
+
 test('case 2: two hints at once for one item: the second is refused with 409, and one hint is counted',async()=>{
  onPage();
  const gate=held();let asked=0;

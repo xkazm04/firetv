@@ -148,7 +148,7 @@ export default function Phone() {
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
   // (a read that failed and can be asked again offers Try again on this panel, not a camera: the same test as `failed("read")` below)
-  const readAgain = s?.jobs?.read?.phase === "failed" && !!s.jobs.read.input && s.jobs.read.id !== passed;
+  const readAgain = s?.jobs?.read?.phase === "failed" && !!s.jobs.read.input && s.jobs.read.retry !== false && s.jobs.read.id !== passed;
   const camWanted = (screen === "capture" && !readAgain) || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
@@ -326,7 +326,8 @@ export default function Phone() {
       setMsg((j as { error?: string }).error ?? `The desk could not check that sentence (${r.status}).`); }
     catch { if (!moved()) setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   /** The desk's failed run of this kind that can be asked again in place: it holds what it was asked with. */
-  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.id !== passed ? j : null; };
+  // a failure asking again cannot change (job.retry false: failure.ts) is not offered again; the panel goes back to its own step
+  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.retry !== false && j.id !== passed ? j : null; };
   /** A hint that failed for the item the TV is on. */
   const hintAgain = (() => { const h = failed("hint"); return h && page && h.key === page.items[s?.itemIx ?? 0]?.key ? h : null; })();
   /** One press: the desk asks again with what it holds — the same page, the same item and question, the same topic. */
