@@ -454,7 +454,7 @@ test('follow-up 4, the scan bites: a seeded import cycle is found, and the same 
 });
 
 // ---- S76 (cx): the desk's "not sure" reaches the recap - a dashed ring, never a slip; an older line draws as it always did
-const TONIGHT=[{verdict:'right'},{verdict:'right'},{verdict:'right'},{verdict:'wrong'},{verdict:'unsure'},{verdict:'unsure'}];
+const TONIGHT=[{verdict:'right'},{verdict:'right'},{verdict:'right'},{verdict:'wrong'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:'1.33'}]; // MB-B1: answers the desk could not call (an unsure item with no answer is skipped)
 const marksOf=(html)=>[...html.matchAll(/data-role="recap-set">(.*?)<\/div>/g)].map((m)=>[...m[1].matchAll(/data-v="(\w+)"><svg class="(rc-\w+)"/g)].map((x)=>`${x[1]}:${x[2]}`));
 test('S76 case 1: a set marked 3 right, 1 wrong, 2 not sure draws 3 ticks, 1 pen ring and 2 dashed rings',()=>{
  const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapCaption}=recap();
@@ -763,4 +763,37 @@ test('SW10: every class On Air styles is drawn by some screen - no dead rules sh
  assert.deepEqual(deadIn(css+'\n.sw-seeded-dead { color: red; }',used),['sw-seeded-dead']);
  assert.deepEqual(deadIn(css+'\n/* .sw-seeded-dead { color: red; } */',used),[]);
  assert.ok(used.has('rc-tile')&&used.has('band-corner')&&used.has('btn'),'control: classes the screens draw are seen');
+});
+
+// ---- MB-B1: an item left empty is skipped - counted and said apart from the desk's doubt, never a slip, never "all right"
+const SKIPPY=[{verdict:'right',studentAnswer:'4'},{verdict:'right',studentAnswer:'5'},{verdict:'right',studentAnswer:'6'},{verdict:'right',studentAnswer:'7'},{verdict:'unsure',studentAnswer:''}];
+test('MB-B1 recap 1: "4 of 5 right, 1 skipped" - the recap says "4 right, 1 skipped", not "1 the desk was not sure of", and never "all of it right"',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapLine,recapCaption,toLook,slipsOf}=recap();
+ const line=rightLine(SKIPPY);
+ assert.equal(line,'4 of 5 right, 1 skipped');
+ assert.deepEqual(parseDetail('practice',line),{right:4,of:5,skipped:1});
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:line}],log:{...evening().log,hints:0,hard:[]}});
+ const rows=recapRows(s,NOW);
+ assert.deepEqual(rows[0].sets,[{right:4,of:5,skipped:1}]);assert.equal(slipsOf(rows[0].sets[0]),0,'no slip');
+ assert.equal(recapLine(rows[0]),'Math Buddy - one set: 4 right, 1 skipped');
+ assert.doesNotMatch(recapLine(rows[0]),/not sure|slip/);
+ assert.doesNotMatch(recapCaption(rows),/all of it right/,'a skipped item is not right');
+ assert.ok(toLook(rows)>=1,'the skipped item is still one to go through together');
+});
+test('MB-B1 recap 2: a set with a slip, a doubt and a skip says all three apart; an all-skipped set; an older line keeps its "not sure"',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapLine}=recap();
+ const mix=[{verdict:'right',studentAnswer:'4'},{verdict:'wrong',studentAnswer:'5'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:' '}];
+ assert.equal(rightLine(mix),'1 of 4 right, 1 not sure, 1 skipped');
+ assert.deepEqual(parseDetail('practice','1 of 4 right, 1 not sure, 1 skipped'),{right:1,of:4,unsure:1,skipped:1});
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:rightLine(mix)}]});
+ assert.match(recapLine(recapRows(s,NOW)[0]),/one set: 1 right, 1 slip, 1 the desk was not sure of, 1 skipped;/);
+ const none=[{verdict:'unsure',studentAnswer:''},{verdict:'unsure'}];
+ assert.equal(rightLine(none),'0 of 2 right, 2 skipped');
+ assert.deepEqual(parseDetail('practice','0 of 2 right, 2 skipped'),{right:0,of:2,skipped:2});
+ const all=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'0 of 2 right, 2 skipped'}]});
+ assert.match(recapLine(recapRows(all,NOW)[0]),/one set: 0 right, 2 skipped;/);
+ // counts past the set, out of order, or unparseable give nothing, as before
+ for(const d of ['1 of 2 right, 1 not sure, 1 skipped','1 of 4 right, 1 skipped, 1 not sure','1 of 4 right, skipped','1 of 4 right, 1 skip'])assert.deepEqual(parseDetail('practice',d),{},d);
+ // a line written before skipped existed still reads as it did: its blanks stay in its "not sure"
+ assert.deepEqual(parseDetail('practice','3 of 6 right, 2 not sure'),{right:3,of:6,unsure:2});
 });

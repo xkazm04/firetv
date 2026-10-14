@@ -447,3 +447,18 @@ test('13-i RC6: the Sunday page lists lenses where their first reading falls, wh
  const lines=words([R(23,18,'argument',3,1),R(21,18,'structure',3,1),R(22,18,'language',3,1),R(24,18,'structure',3,1)]);
  assert.ok(lines.some((x)=>x.text==='Four paragraph readings, through Structure, Language and Argument.'),texts(lines).join(' | '));
 });
+
+// ------------------------------------------------------------------ MB-B1: a unit's skipped count, said apart from its not sure
+test('MB-B1 week: a unit line says skipped apart from not sure; a line with both drops "last set" before it passes LINE_WORDS',()=>{
+ const unitText=(l)=>words(l).find((x)=>x.section==='maths'&&/^One-step equations:/.test(x.text)).text;
+ assert.equal(unitText([M(24,18,'linear-one-step',4,5,{skipped:1})]),'One-step equations: 4 of 5 right, 1 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',3,6,{notSure:2,skipped:1})]),'One-step equations: 3 of 6 right, 2 not sure, 1 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',0,2,{skipped:2})]),'One-step equations: 0 of 2 right, 2 skipped, last set.');
+ assert.equal(unitText([M(24,18,'linear-one-step',4,6,{notSure:1})]),'One-step equations: 4 of 6 right, 1 not sure, last set.','no skipped: the line as before');
+ // every unit on every path fits LINE_WORDS with both counts
+ for(const t of ALL_TOPICS){
+  const line=words([M(24,18,t.id,10,25,{notSure:7,skipped:5})]).find((l)=>l.section==='maths'&&/ 5 skipped/.test(l.text));
+  assert.ok(line,`${t.id}: a unit line`);assert.ok(W.wordsIn(line.text)<=W.LINE_WORDS,`${t.id}: ${line.text}`);
+  assert.match(line.text,/: 10 of 25 right, 7 not sure, 5 skipped(, last set)?\.$/,'the counts are never cut');
+ }
+});

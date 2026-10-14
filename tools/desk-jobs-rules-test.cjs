@@ -457,11 +457,11 @@ test('mark case 2: a normal mark lands as before; marking the same set again is 
  let seen=0;stubVision(()=>{seen++;return MARKS;});
  const r=await post('mark',PHOTO);
  assert.equal(r.status,200);const b=await r.json();
- assert.deepEqual([b.right,b.wrong,b.unsure],[4,1,1]);
+ assert.deepEqual([b.right,b.wrong,b.unsure,b.skipped],[4,1,0,1],'MB-B1: number 3 was read empty, so it is skipped, not one the desk could not call');
  let s=store.getSession();assert.equal(s.practice.marked,true);assert.equal(s.screen,'sheet');
  assert.deepEqual(s.practice.items.map((i)=>i.verdict),['right','wrong','unsure','right','right','right']);
- assert.equal(record('jobs-scratch').lines,was.lines+1,'one history line');assert.equal(s.history.at(-1).detail,'4 of 6 right, 1 not sure');
- assert.equal(s.status,'4 right, 1 to look at, 1 to talk through');
+ assert.equal(record('jobs-scratch').lines,was.lines+1,'one history line');assert.equal(s.history.at(-1).detail,'4 of 6 right, 1 skipped');
+ assert.equal(s.status,'4 right, 1 to look at, 1 skipped');
  const after=record('jobs-scratch');
  const again=await post('mark',PHOTO);
  assert.equal(again.status,409);deskWorded((await again.json()).error);

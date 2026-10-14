@@ -6,7 +6,8 @@
  * One entry per thing done, written where the thing lands:
  *   - maths:   one per marked set (desk/mark.ts `land`, the typed and the photo path alike), restated in place when an
  *              explanation settles an unsure item of that set (session/store.ts restateMarked): the unit, how many right,
- *              how many the desk was not sure of, how many in all, whether the set was asked for as "a step up", and
+ *              how many the desk was not sure of, how many were left empty (MB-B1: `skipped`, absent when none and on
+ *              every entry written before it), how many in all, whether the set was asked for as "a step up", and
  *              the most frequent CODE-detected slip of the set with how many items showed it;
  *   - english: one per finished Linga conversation (english/conversation.ts "finish"): the scene, its skill, the replies;
  *   - essay:   one per paragraph reading (desk/essay.ts): the lens, the sentences, how many came back to fix;
@@ -25,11 +26,14 @@ import { ESSAY_TYPES } from "../library/lessons.data";
 import { AUTHORED_SCENES, ENGLISH_SKILLS } from "../english/curriculum";
 import type { SkillId } from "../english/types";
 import { SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS } from "./school";
+import { markCounts, type Markable } from "./marks";
 
 /** A marked maths set. `slip` is a code-detected school slip (rules/school), `slipN` the items of the set that showed it. */
 export interface MathsDigest {
   at: number; kind: "maths"; topic: string;
   right: number; notSure: number; total: number;
+  /** Items left empty (rules/marks skipped): counted apart from notSure. Absent when none. */
+  skipped?: number;
   stretch?: true; slip?: string; slipN?: number;
 }
 /** A finished Linga conversation: the scene (an authored scene id, or a plan topic's id), its skill, the learner's replies. */
@@ -69,19 +73,20 @@ const unitSlips = (topic: string): readonly string[] => (own(SCHOOL_UNIT_SLIPS, 
 export const knownSlip = (topic: string, slip: unknown): slip is string => typeof slip === "string" && unitSlips(topic).includes(slip);
 
 /**
- * The digest entry for one marked set, from its items' verdicts as they stand: right, not sure (unsure or no verdict,
- * as rules/maths rightLine counts it), all; the step-up flag; and the most frequent code-detected slip of the set -
- * a slip on a wrong item from the unit's closed list, ties broken by that list's order - with its count. Pure.
+ * The digest entry for one marked set, from the marks its items read as (rules/marks, as rules/maths rightLine counts
+ * them): right, not sure (unsure or no verdict), skipped (left empty), all; the step-up flag; and the most frequent
+ * code-detected slip of the set - a slip on a wrong item from the unit's closed list, ties broken by that list's order -
+ * with its count. Pure.
  */
-export function mathsEntry(topic: string, items: readonly { verdict?: string; slip?: string }[], stretch: boolean, at: number): MathsDigest {
-  const right = items.filter((i) => i.verdict === "right").length;
-  const notSure = items.filter((i) => i.verdict !== "right" && i.verdict !== "wrong").length;
+export function mathsEntry(topic: string, items: readonly (Markable & { slip?: string })[], stretch: boolean, at: number): MathsDigest {
+  const c = markCounts(items), right = c.right, notSure = c.unsure, skipped = c.skipped;
   const counts = new Map<string, number>();
   for (const i of items) if (i.verdict === "wrong" && knownSlip(topic, i.slip)) counts.set(i.slip!, (counts.get(i.slip!) ?? 0) + 1);
   let slip: string | undefined, slipN = 0;
   for (const id of unitSlips(topic)) { const n = counts.get(id) ?? 0; if (n > slipN) { slip = id; slipN = n; } }
   return {
     at, kind: "maths", topic, right, notSure, total: items.length,
+    ...(skipped ? { skipped } : {}),
     ...(stretch ? { stretch: true as const } : {}),
     ...(slip ? { slip, slipN } : {}),
   };
@@ -100,10 +105,11 @@ export function cleanEntry(raw: unknown): DigestEntry | null {
     if (!total) return null;
     const right = Math.min(total, whole(o.right, MAX_ITEMS) ?? 0);
     const notSure = Math.min(total - right, whole(o.notSure, MAX_ITEMS) ?? 0);
-    const wrong = total - right - notSure;
+    const skipped = Math.min(total - right - notSure, whole(o.skipped, MAX_ITEMS) ?? 0);
+    const wrong = total - right - notSure - skipped;
     const slip = wrong > 0 && knownSlip(topic, o.slip) ? o.slip : undefined;
     const slipN = slip ? Math.max(1, Math.min(wrong, whole(o.slipN, MAX_ITEMS) ?? 1)) : 0;
-    return { at, kind: "maths", topic, right, notSure, total, ...(o.stretch === true ? { stretch: true as const } : {}), ...(slip ? { slip, slipN } : {}) };
+    return { at, kind: "maths", topic, right, notSure, total, ...(skipped ? { skipped } : {}), ...(o.stretch === true ? { stretch: true as const } : {}), ...(slip ? { slip, slipN } : {}) };
   }
   if (o.kind === "english") {
     const sceneId = typeof o.sceneId === "string" && (SCENES.has(o.sceneId) || PLAN_ID.test(o.sceneId)) ? o.sceneId : "";

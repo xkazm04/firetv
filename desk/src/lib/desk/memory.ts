@@ -12,6 +12,7 @@ import { getLearner, saveLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
 import { askedText } from "../rules/calc-word";
+import { markCounts, markOf } from "../rules/marks";
 import type { Evening } from "../../tv/recapRows";
 
 const SCHEMA = {
@@ -42,14 +43,13 @@ export async function writeMemory(
 
   const rows = items.map((i) => {
     const s = i.slip ? slipById(i.slip, session.topic) : undefined;
-    return `${i.n}. ${askedText(i)} — ${i.verdict ?? "not marked"}` +
+    return `${i.n}. ${askedText(i)} — ${i.verdict ? markOf(i) : "not marked"}` +
       (s ? ` (${s.id}: ${s.says})` : "") +
       (i.studentWorking ? ` — their working: ${i.studentWorking}` : "");
   }).join("\n");
 
-  const right = items.filter((i) => i.verdict === "right").length;
-  const wrong = items.filter((i) => i.verdict === "wrong").length;
-  const unsure = items.filter((i) => i.verdict === "unsure").length;
+  // an item left empty is its own count (rules/marks skipped), not one the desk could not call
+  const { right, wrong, unsure, skipped } = markCounts(items.filter((i) => i.verdict));
 
   const system =
     "You keep a tutor's private notes on one student. You write one to three plain sentences in the third person about " +
@@ -60,7 +60,7 @@ export async function writeMemory(
   // one section per app that had work tonight; counts, lens names and the closed slip vocabulary only
   const maths = items.length || session.hintsUsed
     ? `Topic worked on tonight: ${t?.name ?? session.topic ?? "unknown"}\n` +
-      `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call.\n` +
+      `Marked: ${right} right, ${wrong} wrong, ${unsure} the desk could not call${skipped ? `, ${skipped} skipped` : ""}.\n` +
       `Hints asked for: ${session.hintsUsed ?? 0}\n\n` + (rows ? `The set:\n${rows}\n\n` : "")
     : "";
   const essay = (session.essay ?? []).length

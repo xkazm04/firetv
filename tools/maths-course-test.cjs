@@ -168,10 +168,10 @@ test('7: settleOwners and restateMarked name a calc topic by its name (and the s
   store.dispatch({type:'profile.draft',patch:{...CALC_P,id:'restate-calc'}});store.dispatch({type:'profile.save'});
   const items=Array.from({length:6},(_,i)=>({n:i+1,question:`Differentiate f(x) = x^${i+2}.`}));
   store.dispatch({type:'practice.set',practice:{topic:'calc1-chain',items,marked:false}});
-  store.dispatch({type:'practice.marked',items:items.map((it,i)=>({...it,verdict:i===0?'right':'unsure'}))});
+  store.dispatch({type:'practice.marked',items:items.map((it,i)=>({...it,verdict:i===0?'right':'unsure'}))}); // unsure with no answer: skipped (MB-B1)
   learners.addHistory('restate-calc',{at:Date.now(),kind:'practice',label,detail:'1 of 6 right, 5 not sure'});
   store.dispatch({type:'practice.settle',n:2,reply:'Right.',verdict:'right'});
-  assert.equal(learners.getLearner('restate-calc').history.findLast((h)=>h.kind==='practice').detail,'2 of 6 right, 4 not sure',`label ${label}`);
+  assert.equal(learners.getLearner('restate-calc').history.findLast((h)=>h.kind==='practice').detail,'2 of 6 right, 4 skipped',`label ${label}`);
  }
 });
 

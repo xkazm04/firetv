@@ -14,6 +14,7 @@ import { dispatch, getSession, NOBODY_AT_DESK, type Practice } from "@/lib/sessi
 import { markSet, markTyped } from "@/lib/desk/mark";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
 import { typedAnswersProblem } from "@/lib/rules/maths";
+import { markCounts } from "@/lib/rules/marks";
 import { learnerSystem } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
@@ -60,15 +61,15 @@ export async function POST(req: Request) {
   const r = await runJob("mark", async (run) => {
     const still = () => run.current() && same();
     // a school item's answer is read by the seated learner's school system ('0,5' is a half in cz and de)
-    const { items, provider, ms, unsure, landed } = typed
+    const { items, provider, ms, landed } = typed
       ? markTyped(body.answers as string[], practice, who.id, still, learnerSystem(s))
       : await markSet(b64, practice, who.id, still, learnerSystem(s));
     if (!landed || !still()) return null;
     dispatch({ type: "practice.marked", items, owner });
-    const right = items.filter((i) => i.verdict === "right").length;
-    const wrong = items.filter((i) => i.verdict === "wrong").length;
-    return { right, wrong, unsure, provider, ms };
-  }, { start: START, done: (m) => (m ? `${m.right} right, ${m.wrong} to look at${m.unsure ? `, ${m.unsure} to talk through` : ""}` : "") });
+    // the counts the sheet draws (rules/marks): an item left empty is skipped, not one to talk through
+    const { right, wrong, unsure, skipped } = markCounts(items);
+    return { right, wrong, unsure, skipped, provider, ms };
+  }, { start: START, done: (m) => (m ? `${m.right} right, ${m.wrong} to look at${m.unsure ? `, ${m.unsure} to talk through` : ""}${m.skipped ? `, ${m.skipped} skipped` : ""}` : "") });
   if (!r.ok) return refused(r);
   if (!r.value) {
     // the dropped run's start line is not left saying the desk is still marking

@@ -69,10 +69,10 @@ test('1: a typed set writes ONE digest entry - counts, the unit, the most freque
  const d=digest();assert.equal(d.length,1,'one entry for one set');
  const e=d[0];
  assert.ok(e.at>=t0&&e.at<=Date.now(),'dated');
- assert.deepEqual({...e,at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:2,total:6,slip:'tops-and-bottoms',slipN:2});
+ assert.deepEqual({...e,at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:1,total:6,skipped:1,slip:'tops-and-bottoms',slipN:2});
  assert.equal(e.stretch,undefined,'a usual set carries no step-up flag');
  const h=learners.getLearner(LEARNER).history;assert.equal(h.length,before+1,'the history line is written as before');
- assert.equal(h.at(-1).detail,'1 of 6 right, 2 not sure','the history line keeps its shape');
+ assert.equal(h.at(-1).detail,'1 of 6 right, 1 not sure, 1 skipped','the history line keeps its shape; MB-B1: the blank 6th is skipped, apart from the doubt of the desk');
  // the session is never sent the digest
  assert.equal(store.getSession().digest,undefined,'the session carries no digest');
  assert.ok(!JSON.stringify(store.getSession()).includes('"slipN"'),'nothing of the digest is hydrated into the session');
@@ -85,7 +85,7 @@ test('2: a photographed set (vision stubbed) writes one entry the same way; the 
  const r=await post('mark',PHOTO);assert.equal(r.status,200);
  assert.equal(seenVision.length,1,'one vision call per sheet, as before');assert.equal(calls.length,0);
  const d=digest();assert.equal(d.length,1);
- assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:2,total:6,slip:'tops-and-bottoms',slipN:2},'code decides, not the stub');
+ assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:1,notSure:1,total:6,skipped:1,slip:'tops-and-bottoms',slipN:2},'code decides, not the stub');
  // a second set on the same learner appends
  setOn(SIX);visionThrows();await post('mark',{answers:['11/12','11/12','11/12','11/12','3/4','11/12']});
  assert.equal(digest().length,2,'one entry per marked set');assert.deepEqual({...digest()[1],at:0},{at:0,kind:'maths',topic:UNIT,right:6,notSure:0,total:6});
@@ -108,8 +108,8 @@ test('4: an explanation that settles an unsure item restates the set\'s entry in
  // item 5 (0,75 under uk) was unsure; the learner explains and it settles right
  store.dispatch({type:'practice.settle',n:5,reply:'You got it.',verdict:'right',said:'Number 5 is right.'});
  let d=digest();assert.equal(d.length,1,'a recount, not a new entry');
- assert.deepEqual(d[0],{...was,right:2,notSure:1},'right up by one, not sure down by one; date, step-up flag and slip kept');
- // item 6 (blank) settles wrong with a code slip: the slip count follows the items
+ assert.deepEqual(d[0],{...was,right:2,notSure:0},'right up by one, not sure down by one (the skipped 6th stays skipped); date, step-up flag and slip kept');
+ // item 6 (blank, skipped) settles wrong with a code slip: the slip count follows the items
  store.dispatch({type:'practice.settle',n:6,reply:'Look again.',verdict:'wrong',slip:'tops-and-bottoms',said:'x'});
  d=digest();assert.deepEqual({...d[0],at:0},{at:0,kind:'maths',topic:UNIT,right:2,notSure:0,total:6,stretch:true,slip:'tops-and-bottoms',slipN:3});
  // a settle with no verdict (a reply only) changes nothing
@@ -131,7 +131,7 @@ test('5: mathsEntry picks the most frequent code-detected slip, ties by the unit
  for(const unit of Object.keys(S.SCHOOL_UNIT_SLIPS)){const list=S.SCHOOL_UNIT_SLIPS[unit];
   assert.deepEqual(e(list.map(W),unit),[list[0],1],`${unit}: all tied, the first on the list`);
   assert.deepEqual(e([...list.map(W),W(list.at(-1))],unit),[list.at(-1),2],`${unit}: the most frequent wins`);}
- assert.deepEqual(D.mathsEntry(UNIT,[R,U,{verdict:'wrong'},{}],true,7),{at:7,kind:'maths',topic:UNIT,right:1,notSure:2,total:4,stretch:true},'no verdict counts as not sure, as rightLine does');
+ assert.deepEqual(D.mathsEntry(UNIT,[R,U,{verdict:'wrong'},{}],true,7),{at:7,kind:'maths',topic:UNIT,right:1,notSure:1,skipped:1,total:4,stretch:true},'no verdict counts as not sure, as rightLine does; an unsure item with no answer is skipped');
 });
 
 // ------------------------------------------------------------------ 6. Linga and Essay
@@ -288,7 +288,7 @@ test('11: privacy - a simulated week\'s serialised digest holds no percent, no p
  for(const x of questions)assert.ok(!text.includes(x),`no question text: ${x}`);
  for(const a of answers.filter((a)=>/[\/,.%\s]/.test(a)))assert.ok(!text.includes(a),`no typed answer: ${a}`);
  for(const w of ['summer','lake','vague','sharper','Work out'])assert.ok(!text.includes(w),`no ${w}`);
- const KEYS={maths:['at','kind','topic','right','notSure','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty','paragraphs']};
+ const KEYS={maths:['at','kind','topic','right','notSure','skipped','total','stretch','slip','slipN'],english:['at','kind','sceneId','skill','turns'],essay:['at','kind','lens','sentences','faulty','paragraphs']};
  for(const e of d){for(const k of Object.keys(e))assert.ok(KEYS[e.kind].includes(k),`${e.kind}.${k} is on the whitelist`);
   for(const [k,v] of Object.entries(e))if(typeof v==='number')assert.ok(Number.isInteger(v)&&v>=0,`${k} is a whole count or a date`);}
  // every string is an id from a closed list
@@ -599,4 +599,18 @@ test('13-i RC5: cleanDigest keeps a valid paragraphs on an essay entry and drops
  assert.deepEqual(D.cleanDigest([{...e,paragraphs:9}]),[{...e,paragraphs:9}],'as many paragraphs as sentences is the most');
  for(const bad of [0,2.5,'3',10,-1,NaN,null])assert.deepEqual(D.cleanDigest([{...e,paragraphs:bad}]),[e],`paragraphs ${JSON.stringify(bad)} dropped, entry kept`);
  assert.deepEqual(D.cleanDigest([e]),[e],'an entry from before the count stays without it');
+});
+
+// ------------------------------------------------------------------ MB-B1: skipped is its own count in the digest
+test('MB-B1 digest: cleanDigest keeps skipped as a whole count inside the set, apart from notSure; an entry without it is unchanged',()=>{
+ const ok={at:1700000000000,kind:'maths',topic:UNIT,right:3,notSure:1,total:6,slip:'top-not-scaled',slipN:2};
+ assert.deepEqual(D.cleanDigest([ok]),[ok],'an entry written before skipped existed reads as it did');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1}]),[{...ok,skipped:1,slipN:1}],'a skipped item is not a wrong one: slipN at most 6 - 3 - 1 - 1');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:0}]),[ok],'none skipped: no key');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:9}]),[{...ok,skipped:2,slip:undefined,slipN:undefined}].map(({slip,slipN,...x})=>x),'clamped to what right and notSure leave; then no wrong item is left, so no slip');
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1.6}]),[{...ok,skipped:1,slipN:1}]);assert.deepEqual(D.cleanDigest([{...ok,skipped:'2'}]),[ok]);
+ assert.deepEqual(D.cleanDigest([{...ok,skipped:1,slipN:9}]),[{...ok,skipped:1,slipN:1}],'slipN at most the wrong items: 6 - 3 - 1 - 1');
+ // mathsEntry over an all-skipped set and a mixed one
+ assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'unsure',studentAnswer:''},{verdict:'unsure'}],false,5),{at:5,kind:'maths',topic:UNIT,right:0,notSure:0,total:2,skipped:2});
+ assert.deepEqual(D.mathsEntry(UNIT,[{verdict:'right'},{verdict:'unsure',studentAnswer:'4/22'},{verdict:'unsure',studentAnswer:''},{verdict:'wrong',slip:'top-not-scaled'}],false,5),{at:5,kind:'maths',topic:UNIT,right:1,notSure:1,total:4,skipped:1,slip:'top-not-scaled',slipN:1});
 });

@@ -20,7 +20,7 @@ import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf,
 import { calcTopics, judgeOfTopic } from "../library/paths";
 import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec, specFromQuestion as schoolSpecOf } from "./school";
 import type { SchoolSystem } from "../session/store";
-import { DISAGREES } from "./marks";
+import { DISAGREES, markCounts, type Markable } from "./marks";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
 export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
@@ -214,20 +214,21 @@ export function settle(item: { n: number; question: string } & Pick<PracticeItem
 }
 
 /**
- * The set's line in the learner's history: "k of n right", and ", u not sure" when the desk could not decide u of
- * them (Lamplight's dashed ring: an unsure item is neither a tick nor a slip, and the recap draws it as one).
- * Counted from the verdicts the substitution set on the items, never from a model's word. With no unsure item
- * the line is the old "k of n right" exactly, so older lines and newer ones read alike. Marking writes it; a
- * settle restates it from the same verdicts - a recount, not a count-up, so an item settled twice is still one item.
+ * The set's line in the learner's history: "k of n right", ", u not sure" when the desk could not decide u of them
+ * (Lamplight's dashed ring: an unsure item is neither a tick nor a slip, and the recap draws it as one), and
+ * ", s skipped" when s were left empty (MB-B1: the child's choice, not the desk's doubt; rules/marks reads it).
+ * Counted from the marks the items read as, never from a model's word. With nothing unsure or skipped the line is
+ * the old "k of n right" exactly, so older lines and newer ones read alike. Marking writes it; a settle restates it
+ * from the same marks - a recount, not a count-up, so an item settled twice is still one item.
  */
-export const rightLine = (items: readonly { verdict?: string }[]) => {
-  const u = items.filter((i) => i.verdict !== "right" && i.verdict !== "wrong").length; // unsure, or no verdict: never drawn as a slip
-  return `${items.filter((i) => i.verdict === "right").length} of ${items.length} right${u ? `, ${u} not sure` : ""}`;
+export const rightLine = (items: readonly Markable[]) => {
+  const c = markCounts(items); // unsure, or no verdict: never drawn as a slip; skipped: never drawn as doubt
+  return `${c.right} of ${items.length} right${c.unsure ? `, ${c.unsure} not sure` : ""}${c.skipped ? `, ${c.skipped} skipped` : ""}`;
 };
 
-/** The restated line for a history entry that is this set's line (same n, either form), or null when it is not. */
-export function restatedLine(detail: string, items: readonly { verdict?: string }[]): string | null {
-  const m = /^\d+ of (\d+) right(?:, \d+ not sure)?$/.exec(detail);
+/** The restated line for a history entry that is this set's line (same n, any of its forms), or null when it is not. */
+export function restatedLine(detail: string, items: readonly Markable[]): string | null {
+  const m = /^\d+ of (\d+) right(?:, \d+ not sure)?(?:, \d+ skipped)?$/.exec(detail);
   return m && Number(m[1]) === items.length ? rightLine(items) : null;
 }
 

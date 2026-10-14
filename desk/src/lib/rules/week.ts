@@ -105,7 +105,7 @@ export const WEEK_HEADS: Readonly<Record<Exclude<WeekSection, "week">, string>> 
   maths: "Math Buddy", look: "One thing to look at", english: "Linga", essay: "Essay Master", try: "One thing to try together",
 };
 
-export interface WeekUnit { id: string; name: string; sets: number; right: number; notSure: number; total: number; stretch: boolean; latest: number }
+export interface WeekUnit { id: string; name: string; sets: number; right: number; notSure: number; skipped: number; total: number; stretch: boolean; latest: number }
 /** The page as rows: what the words are made of. Counts and names only; empty when nothing was done this week. */
 export interface SundayPage {
   name: string;
@@ -142,6 +142,17 @@ const low = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 const times = (n: number, one: string, many = `${one}s`) => `${num(n)} ${n === 1 ? one : many}`;
 /** Words in a line, as a reader counts them. */
 export const wordsIn = (line: string) => line.split(/\s+/).filter(Boolean).length;
+/**
+ * A unit's line from its latest set: "Mean and range: 2 of 6 right, 1 not sure, last set.", with ", 1 skipped" when
+ * items were left empty (MB-B1, counted apart from the desk's doubt). A unit's name is chosen so its line with one
+ * count fits LINE_WORDS (SUNDAY_NAMES); a line carrying both counts and running past it drops "last set" instead of
+ * the count, so the two words the second count costs are paid by the qualifier, never by a number.
+ */
+export function unitLine(u: Pick<WeekUnit, "name" | "right" | "total" | "notSure" | "skipped">): string {
+  const counts = `${u.right} of ${u.total} right${u.notSure ? `, ${u.notSure} not sure` : ""}${u.skipped ? `, ${u.skipped} skipped` : ""}`;
+  const full = `${u.name}: ${counts}, last set.`;
+  return wordsIn(full) <= LINE_WORDS ? full : `${u.name}: ${counts}.`;
+}
 
 /** A Linga scene's name: the authored scene's, or the learner's own plan topic's title as the desk stores it; else none. */
 function sceneName(id: string, learner: Pick<Learner, "english">): string | null {
@@ -166,9 +177,9 @@ export function sundayPage(learner: Pick<Learner, "digest" | "english">, profile
   const maths = week.filter((e): e is MathsDigest => e.kind === "maths" && !!topicIn(e.topic));
   const byUnit = new Map<string, WeekUnit>();
   maths.forEach((e) => {
-    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, notSure: 0, total: 0, stretch: false, latest: -1 };
+    const u = byUnit.get(e.topic) ?? { id: e.topic, name: unitName(e.topic)!, sets: 0, right: 0, notSure: 0, skipped: 0, total: 0, stretch: false, latest: -1 };
     u.sets++; if (e.stretch) u.stretch = true;
-    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.notSure = e.notSure; u.total = e.total; }
+    if (e.at >= u.latest) { u.latest = e.at; u.right = e.right; u.notSure = e.notSure; u.skipped = e.skipped ?? 0; u.total = e.total; }
     byUnit.set(e.topic, u);
   });
   page.units = [...byUnit.values()].sort((a, b) => b.sets - a.sets || b.latest - a.latest || a.id.localeCompare(b.id));
@@ -242,7 +253,7 @@ function linesOf(page: SundayPage, t: Trim): WeekLine[] {
   if (page.homework) out.push({ section: "maths", text: homeworkLine(page.homework, t.hints) });
   if (page.units.length) {
     const shown = page.units.slice(0, t.units);
-    for (const u of shown) out.push({ section: "maths", text: `${u.name}: ${u.right} of ${u.total} right${u.notSure ? `, ${u.notSure} not sure` : ""}, last set.` });
+    for (const u of shown) out.push({ section: "maths", text: unitLine(u) });
     const more = page.units.length - shown.length;
     if (more) out.push({ section: "maths", text: `And ${times(more, "more unit")}.` });
     if (page.stepUps.length === 1 && t.stepNames && wordsIn(`A step up taken in ${page.stepUps[0]}.`) <= LINE_WORDS) out.push({ section: "maths", text: `A step up taken in ${page.stepUps[0]}.` });

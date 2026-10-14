@@ -31,6 +31,9 @@ const C=require(src('lib/rules/calc.ts'));
 const M=require(src('lib/rules/maths.ts'));
 /** The line on an item that is neither right nor slipped: a blank has no answer yet, an unsure one gives the engine's reason, a wrong one with no slip asks. */
 const elseLine=(verdict,a,n)=>verdict!=='unsure'?M.ASK(n):a.trim()===''?M.BLANK(n):null;
+/** MB-B1: the set's history line - an unsure item with a blank answer is skipped, counted apart from the not sure. */
+const LINE=(right,n,unsure,skipped)=>`${right} of ${n} right${unsure?`, ${unsure} not sure`:''}${skipped?`, ${skipped} skipped`:''}`;
+const blanks=(page,want)=>page.filter((p)=>want(p)==='unsure'&&!String(p.a??'').trim()).length;
 const assertElse=(it,verdict,a,n,msg)=>{const want=elseLine(verdict,a,n);if(want!==null)return assert.equal(it.said,want,msg);assert.ok(it.said.startsWith(`The desk is not sure about number ${n}. `)&&!it.said.endsWith('How did you get there?'),`${msg||''} ${it.said}`);};
 const H=require(src('lib/desk/hint.ts'));
 const X=require(src('lib/desk/explain.ts'));
@@ -163,7 +166,7 @@ for(const system of ['uk','cz','us']){
   const rec=learners.getLearner(LEARNER).skills[UNIT];
   assert.equal(rec.seen,settledN,'only settled items reach the record');
   const h=learners.getLearner(LEARNER).history.filter((e)=>e.kind==='practice').pop();
-  assert.equal(h.label,'Add and subtract fractions');assert.equal(h.detail,`${right} of ${PAGE.length} right, ${unsure} not sure`);
+  assert.equal(h.label,'Add and subtract fractions');assert.equal(h.detail,LINE(right,PAGE.length,unsure-blanks(PAGE,(p)=>p[system][0]),blanks(PAGE,(p)=>p[system][0])));
   for(const v of [store.getSession()])assert.ok(!keysIn(v).includes('solution')&&!keysIn(v).includes('answer'),'the model\'s solution never lands');
  });
 }
@@ -492,7 +495,7 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
  seat('uk');setOn();noModel();
  const good=await raw({answers:typedOf()});assert.equal(good.status,200);
  const body=await good.json();
- assert.deepEqual([body.right,body.wrong,body.unsure,body.provider,body.ms],[1,5,3,'code',0]);
+ assert.deepEqual([body.right,body.wrong,body.unsure,body.skipped,body.provider,body.ms],[1,5,2,1,'code',0],'MB-B1: the blank answer is skipped, not one to talk through');
  assert.equal(seenVision.length+seenText.length,0,'no model call on the way');
 });
 
@@ -515,7 +518,7 @@ test('11: a typed set is marked as a photographed one is fed the same strings - 
    assert.equal(typed[i].verdict,verdict,`${system} #${i+1} "${p.a||'(blank)'}"`);assert.equal(typed[i].slip,slip,`${system} #${i+1}: the slip code detected`);
   });
   // the history line: the same form as a photographed set's, "k of n right, u not sure"
-  assert.equal(lastLine().detail,photoLine);assert.match(lastLine().detail,/^\d+ of 9 right(, \d+ not sure)?$/);
+  assert.equal(lastLine().detail,photoLine);assert.match(lastLine().detail,/^\d+ of 9 right(, \d+ not sure)?(, \d+ skipped)?$/);
   assert.equal(lastLine().label,'Add and subtract fractions');
   const sk=learners.getLearner(LEARNER).skills[UNIT];
   assert.equal(sk.seen,photoSkill.seen,'the same attempts reach the learner record');assert.equal(sk.right,photoSkill.right);
@@ -544,7 +547,7 @@ test('12: a typed decimal comma is read by the seated learner\'s system: 0,75 is
  const it=store.getSession().practice.items[1];
  assert.deepEqual([it.verdict,it.said,it.studentAnswer,it.slip],['unsure',M.BLANK(2),'',undefined],'whitespace only is a blank');
  assert.equal(learners.getLearner(LEARNER).skills[UNIT]?.seen??0,0);
- assert.equal(lastLine().detail,'0 of 2 right, 2 not sure');
+ assert.equal(lastLine().detail,'0 of 2 right, 1 not sure, 1 skipped','MB-B1: the blank is skipped, the unreadable one not sure');
  // a newline or tab typed into a box is the keyboard's: the answer is read on one line
  seat('uk');store.dispatch({type:'practice.set',practice:{topic:UNIT,marked:false,items:[{n:1,question:question(A),spec:A,tier:1}]}});noModel();
  await post('mark',{answers:[' 11/12\n\t']});
@@ -563,7 +566,7 @@ test('13: a Calculus set typed in x^2 style is settled by checkAnswer as its pho
  assert.equal(seenVision.length+seenText.length,0);
  assert.deepEqual(verdicts(),photo,'the same verdicts, slips and words as the photo path');
  assert.deepEqual(verdicts().map((v)=>v.verdict),ITEMS.map((x)=>x[2]));
- assert.equal(lastLine().detail,photoLine);assert.equal(lastLine().detail,'3 of 6 right, 2 not sure');
+ assert.equal(lastLine().detail,photoLine);assert.equal(lastLine().detail,'3 of 6 right, 1 not sure, 1 skipped','MB-B1: the blank is skipped, the junk not sure');
  assert.equal(lastLine().label,topicIn(topic).name);
  assert.ok(store.getSession().practice.items.every((it)=>it.slipAt===undefined&&it.studentWorking===''));
 });
@@ -729,7 +732,7 @@ for(const unit of Object.keys(W7_PAGES)){
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
   assert.deepEqual([...sk.slips].sort(),[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))].sort(),'the record keeps the slips code named');
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   assert.equal(lastLine().label,topicIn(unit)?.name??unit,'the history line names the unit as the path does');
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
  });
@@ -885,7 +888,7 @@ for(const unit of Object.keys(B2_PAGES)){
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
   assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });
@@ -1073,7 +1076,7 @@ for(const unit of Object.keys(B3_PAGES)){
   const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
   const sk=learners.getLearner(LEARNER).skills[unit];
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
-  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().detail,LINE(right,page.length,page.length-settledN-blanks(page,(p)=>p.want[0]),blanks(page,(p)=>p.want[0])));
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
   assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });

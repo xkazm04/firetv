@@ -235,7 +235,7 @@ test('2: the school path through the same routes - linear-two-step practice, mar
   {n:6,studentAnswer:'3',studentWorking:'6x = 18',verdict:'right',solution:'3',slip:'unclear'},
  ]};
  r=await step('school mark',()=>post('mark',PHOTO));
- assert.equal(r.status,200);assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure],[4,1,1]);
+ assert.equal(r.status,200);assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure,r.body.skipped],[4,1,0,1],'MB-B1: number 3 was read empty: skipped');
  s=store.getSession();
  const undo=M.slipsFor('linear-two-step').find((x)=>x.id==='undo-wrong-order');
  assert.deepEqual(s.practice.items.map((i)=>i.verdict),['right','wrong','unsure','right','right','right']);
@@ -294,7 +294,8 @@ test('3: the whole Calculus 1 course - 22 topics practised, marked, explained, h
   r=await step(`${topic} mark`,()=>post('mark',PHOTO));
   assert.equal(r.status,200,`${topic}: ${JSON.stringify(r.body)}`);
   const count=(v)=>verdicts.filter((x)=>x===v).length;
-  assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure],[count('right'),count('wrong'),count('unsure')],`${topic}: the counts are code's`);
+  const blanks=plan.filter((p)=>p==='blank').length; // MB-B1: a blank is unsure as a verdict and counted skipped, apart from the desk's doubt
+  assert.deepEqual([r.body.right,r.body.wrong,r.body.unsure,r.body.skipped],[count('right'),count('wrong'),count('unsure')-blanks,blanks],`${topic}: the counts are code's`);
   s=store.getSession();
   assert.deepEqual(s.practice.items.map((i)=>i.verdict),verdicts,`${topic}: every verdict is checkAnswer's`);
   const vocab=M.slipsFor(topic);

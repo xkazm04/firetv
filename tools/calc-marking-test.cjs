@@ -137,8 +137,9 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
   const res=await post('mark',PHOTO);
   assert.equal(res.status,200,fx.topic);
   const body=await res.json();
-  const wrong=rows.filter((r)=>r.verdict==='wrong').length,unsure=rows.filter((r)=>r.verdict==='unsure').length;
-  assert.deepEqual([body.right,body.wrong,body.unsure],[1,wrong,unsure],`${fx.topic}: the counts are code's`);
+  // MB-B1: an unsure row read empty is skipped, counted apart from the desk's doubt
+  const wrong=rows.filter((r)=>r.verdict==='wrong').length,skipped=rows.filter((r)=>r.verdict==='unsure'&&!r.a).length,unsure=rows.filter((r)=>r.verdict==='unsure').length-skipped;
+  assert.deepEqual([body.right,body.wrong,body.unsure,body.skipped],[1,wrong,unsure,skipped],`${fx.topic}: the counts are code's`);
 
   // the one vision call asks only to READ the page
   assert.equal(seenVision.length,1);
@@ -170,7 +171,7 @@ test('2: a photographed page on each shape is marked by checkAnswer; the model\'
   assert.equal(h.length,lines+1,`${fx.topic}: one history line`);
   assert.equal(h.at(-1).label,topicIn(fx.topic).name,`${fx.topic}: labelled with the topic's name`);
   assert.equal(h.at(-1).detail,M.rightLine(items),`${fx.topic}: the restated line`);
-  assert.equal(h.at(-1).detail,`1 of ${rows.length} right, 2 not sure`);
+  assert.equal(h.at(-1).detail,`1 of ${rows.length} right, ${unsure} not sure, ${skipped} skipped`);
 
   // no view of the marked set holds a truth or an answer key; the volunteered solution went nowhere
   for(const [where,v] of [['tv',view(s,'tv')],['phone',view(s,'phone')]]){

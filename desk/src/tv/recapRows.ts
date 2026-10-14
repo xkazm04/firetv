@@ -13,8 +13,12 @@ import { BRAND } from "@/tv/profileRows";
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
 
-/** A marked set: `right` ticks, then `of - right - unsure` slips, then `unsure` items the desk could not decide. */
-export interface MathsTile { app: "maths"; empty: string | null; sets: Array<{ right: number; of: number; unsure?: number }>; pages: number; hints: number; second: number }
+/**
+ * A marked set: `right` ticks, then `of - right - unsure - skipped` slips, then `unsure` items the desk could not decide,
+ * then `skipped` items the child left empty (MB-B1, rules/marks). Each is drawn by its own mark (tv/screens RECAP_PEN).
+ */
+export interface MathsSet { right: number; of: number; unsure?: number; skipped?: number }
+export interface MathsTile { app: "maths"; empty: string | null; sets: MathsSet[]; pages: number; hints: number; second: number }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
 export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number; fixed?: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
@@ -22,14 +26,15 @@ export type RecapTile = MathsTile | LingaTile | EssayTile;
 /**
  * The counts a history line carries, by its kind; a line this does not know gives none, and nothing is guessed.
  * A practice line is "k of n right" (rules/maths rightLine), with ", u not sure" when the desk could not decide u
- * items; a line without it (every line written before it existed) gives no unsure count and draws as it always did.
+ * items and ", s skipped" when s were left empty; a line without them (every line written before they existed) gives
+ * no such count and draws as it always did - a blank on a line older than skipped stays in its "not sure".
  */
-export interface Detail { right?: number; of?: number; unsure?: number; pages?: number; problems?: number; against?: number; fixed?: number }
+export interface Detail { right?: number; of?: number; unsure?: number; skipped?: number; pages?: number; problems?: number; against?: number; fixed?: number }
 export function parseDetail(kind: string, detail: string): Detail {
   const d = (detail ?? "").trim();
   if (kind === "practice") {
-    const m = /^(\d+) of (\d+) right(?:, (\d+) not sure)?$/.exec(d), u = m?.[3] ? +m[3] : 0;
-    if (m && +m[1] + u <= +m[2]) return u ? { right: +m[1], of: +m[2], unsure: u } : { right: +m[1], of: +m[2] };
+    const m = /^(\d+) of (\d+) right(?:, (\d+) not sure)?(?:, (\d+) skipped)?$/.exec(d), u = m?.[3] ? +m[3] : 0, k = m?.[4] ? +m[4] : 0;
+    if (m && +m[1] + u + k <= +m[2]) return { right: +m[1], of: +m[2], ...(u ? { unsure: u } : {}), ...(k ? { skipped: k } : {}) };
   }
   if (kind === "homework") { const m = /^(\d+) problems? read$/.exec(d); if (m) return { pages: 1, problems: +m[1] }; }
   if (kind === "writing") {
@@ -53,7 +58,7 @@ export function recapRows(s: Session, now: number): RecapTile[] {
       let pages = 0;
       for (const h of mine) {
         const c = parseDetail(h.kind, h.detail);
-        if (c.right !== undefined && c.of !== undefined) sets.push(c.unsure ? { right: c.right, of: c.of, unsure: c.unsure } : { right: c.right, of: c.of });
+        if (c.right !== undefined && c.of !== undefined) sets.push({ right: c.right, of: c.of, ...(c.unsure ? { unsure: c.unsure } : {}), ...(c.skipped ? { skipped: c.skipped } : {}) });
         if (c.pages) pages += c.pages;
       }
       const hints = s.log?.hints ?? 0, second = s.log?.hard?.length ?? 0;
@@ -69,6 +74,9 @@ export function recapRows(s: Session, now: number): RecapTile[] {
     return { app, empty: mine.length ? null : RECAP_EMPTY, readings };
   });
 }
+
+/** A set's slips: what is neither right, nor the desk's doubt, nor left empty. */
+export const slipsOf = (x: MathsSet): number => x.of - x.right - (x.unsure ?? 0) - (x.skipped ?? 0);
 
 /** How many readings or sets the TV tile draws, and the phone line lists. */
 export const RECAP_READINGS = 3;
@@ -87,8 +95,9 @@ export function railOf(of: number, against: number): { arrows: number; back: num
 }
 const NUMBER = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 /**
- * How many things tonight came back to look at together: the sets' slips and the items the desk was not sure of
- * (both want talking through; the picture tells them apart), and the readings' sentences to fix.
+ * How many things tonight came back to look at together: the sets' slips, the items the desk was not sure of and the
+ * ones left empty (all want going through; the picture and the phone line tell them apart), and the readings' sentences
+ * to fix.
  */
 export function toLook(tiles: RecapTile[]): number {
   let n = 0;
@@ -104,7 +113,7 @@ export function toLook(tiles: RecapTile[]): number {
 }
 /**
  * The caption slot's one sentence. The picture carries the rest. "All of it right" is said only of an evening where at
- * least one item was marked and none is wrong or unsure; an evening with nothing marked says what it was instead.
+ * least one item was marked and none is wrong, unsure or skipped; an evening with nothing marked says what it was instead.
  */
 export function recapCaption(tiles: RecapTile[]): string {
   if (tiles.every((t) => t.empty)) return "A quiet evening.";
@@ -125,7 +134,7 @@ const times = (n: number, one: string, many = `${one}s`) => `${NUMBER[n] ?? n} $
 
 /**
  * The parent's phone reads the same evening in words: one short line per tile, the app's name then its counts -
- * "Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint", "Linga - not tonight".
+ * "Math Buddy - one set: 3 right, 1 slip, 1 the desk was not sure of, 1 skipped; 3 pages; 1 hint", "Linga - not tonight".
  * Built from recapRows' tiles only, so it carries what the picture carries and nothing more: counts and a lens
  * name, never a problem, a question, an answer or a verb form.
  */
@@ -135,11 +144,13 @@ export function recapLine(t: RecapTile): string {
   const parts: string[] = [];
   if (t.app === "maths") {
     if (t.sets.length) {
-      const right = t.sets.reduce((a, x) => a + x.right, 0), unsure = t.sets.reduce((a, x) => a + (x.unsure ?? 0), 0);
-      const slips = t.sets.reduce((a, x) => a + x.of - x.right - (x.unsure ?? 0), 0);
+      const sum = (f: (x: MathsSet) => number) => t.sets.reduce((a, x) => a + f(x), 0);
+      const right = sum((x) => x.right), unsure = sum((x) => x.unsure ?? 0), skipped = sum((x) => x.skipped ?? 0);
+      const slips = sum((x) => slipsOf(x));
       const said = [`${right} right`];
       if (slips) said.push(counted(slips, "slip"));
       if (unsure) said.push(`${unsure} the desk was not sure of`);
+      if (skipped) said.push(`${skipped} skipped`);
       parts.push(`${times(t.sets.length, "set")}: ${said.join(", ")}`);
     }
     if (t.pages) parts.push(counted(t.pages, "page"));
