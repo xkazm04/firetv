@@ -723,7 +723,7 @@ Drained from `2026-10-09-maths-l1` (Math Buddy read in code by five Characters, 
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-9
   - recommendation: build — hypothesis (`uncertain`: it depends on what the model writes). The model sees the topic name and blurb and "Spread the questions evenly across the usual ways this topic goes wrong" (`lib/desk/items.ts:230-253`, `askCalc`), and `makeCalcItems` keeps a spec when it is on the topic's shape list and well formed; nothing checks that a chain-rule item is a composition. A topic may name a structural requirement (calc1-chain: the function is a composition) that code checks on each spec, and set fit for six chain-rule sets is 5 of 6 or more each
   - owner: practice-generation-marking (Approval with the operator)
-  - status: open
+  - status: built in part (friend-math-202658): calc1-chain names `requires: 'composition'` on the spine and makeCalcItems drops a non-composite spec in code (rules/calc meetsRequirement, the forgot-chain sites; x + c inside is not a composition); the prompt is unchanged (tools/calc-sets-frozen.json), and the live set fit of six chain-rule sets (tools/calc-model-yield.cjs) is not measured
   - ceiling: a composition check is structural; a set of six compositions can still all be the same shape
 - **MB-B31** — Implicit differentiation cannot be practised: the chain-rule topic sets only y = f(x) derivatives
   - origin: 2026-10-09-maths-l1/L1-matyas-19-MB3-3; "The topic says 'chain rule and implicit differentiation' and then only ever gives me y = f(x). That's half the test." (matyas-19, 2026-10-09-maths-l1)
