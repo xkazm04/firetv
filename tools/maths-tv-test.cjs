@@ -594,13 +594,17 @@ test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card u
 });
 
 test('W8 prepare 4: the words - one sentence per caption slot, 25 words or fewer, no digit, no em dash, no points; two cells, "The usual" first',()=>{
- const {PREPARE_CHOICES,PREPARE_DOOR,choiceLine}=PR();
+ const {PREPARE_CHOICES,PREPARE_DOOR,TOP_RUNG_LINE,choiceLine}=PR();
  assert.deepEqual(PREPARE_CHOICES.map((c)=>c.t),['The usual','A step up']);
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE,...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
   assert.ok(wordsOf(line)<=25,line);assert.doesNotMatch(line,/[0-9]|—|point|score|%/i,line);
  }
- for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1)])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),TOP_RUNG_LINE])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
  assert.notEqual(choiceLine(0),choiceLine(1));
+ // MB-B20: on a unit with a top rung the step up says what it adds and that it is still school level; elsewhere, and for the usual set, as before
+ for(const id of ['frac-add-sub','frac-mul-div']){assert.equal(choiceLine(1,id),TOP_RUNG_LINE);assert.equal(choiceLine(0,id),choiceLine(0));}
+ assert.match(TOP_RUNG_LINE,/mixed numbers/i);assert.match(TOP_RUNG_LINE,/word problem/i);assert.match(TOP_RUNG_LINE,/still school level/);
+ for(const id of ['pct-change','frac-equivalent','linear-one-step',undefined])assert.equal(choiceLine(1,id),choiceLine(1),String(id));
 });
 
 test('W8 ruler 1: stretchSecure reads the latched step-up record alone, on the learner\'s path - whatever the usual record says',()=>{

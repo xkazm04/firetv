@@ -669,7 +669,7 @@ export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: num
             </div>
           ))}
         </div>
-        <p>{busy ? (ask === -1 ? LESSON_WRITING : PREP[step]) : failed ?? choiceLine(ask)}</p>
+        <p>{busy ? (ask === -1 ? LESSON_WRITING : PREP[step]) : failed ?? choiceLine(ask, at.id)}</p>
       </> : <>
         <div className="mb-kick">{at.strand} · six questions a set</div>
         <p>{at.blurb}</p>

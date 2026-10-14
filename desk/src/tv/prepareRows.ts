@@ -6,11 +6,13 @@
  * no gap line - only the units and the learner's own school-year word for each. Select on a unit asks "The usual" or
  * "A step up" (rules/stretch sets how hard each is) and writes the set the way Topics does.
  *
- * Pure: types, and the path data (client-safe library data), are all it imports - never the store or the filesystem.
+ * Pure: types, the path data (client-safe library data) and which units have a top rung (rules/school, pure) are all it
+ * imports - never the store or the filesystem.
  */
 import type { SchoolSystem, Session } from "@/lib/session/store";
 import { PATHS, expectedOn, learnerPath, topicsOf, type PathTopic } from "@/lib/library/paths";
 import { systemOf } from "@/tv/profileRows";
+import { topGeneratorFor } from "@/lib/rules/school";
 
 /** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
 export const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
@@ -62,9 +64,16 @@ export function choicesFor(worked: boolean): { cell: -1 | 0 | 1; id: string; t: 
 /** What is shown, instead of the choice line, while the worked lesson is being written. */
 export const LESSON_WRITING = "Writing the worked lesson.";
 
-/** The one sentence under the cells, for the lit one. */
-export function choiceLine(cell: number): string {
+/**
+ * The step up's sentence on a unit with a top rung (MB-B20: mixed numbers and a word problem join the set). It names what
+ * is new and says it is still school level, so a learner past the unit's year is not told it is more than it is.
+ */
+export const TOP_RUNG_LINE = "Mixed numbers and a word problem join the harder ones, still school level, and a secure step up draws a second line.";
+
+/** The one sentence under the cells, for the lit one; `topic` the unit asked about (a top-rung unit says what its step up adds). */
+export function choiceLine(cell: number, topic?: string): string {
   if (cell === -1) return "A short worked example first, then six questions at your usual level.";
+  if (cell === 1 && topGeneratorFor(topic)) return TOP_RUNG_LINE;
   return cell === 1
     ? "Six questions with more of the harder kind, and a secure step up draws a second line on its topic."
     : "Six questions at your usual level, marked by the desk when you snap or type your answers.";
