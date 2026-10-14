@@ -5,8 +5,11 @@
  * Property over 2000 seeds per unit: every item is well formed, belongs to its own unit, carries a mixed number, prints in
  * all four systems and reads back to its own spec, never leaks its answer, and is judged right on its answer worked here
  * BY HAND (improper fractions, BigInt) in every system - and wrong one top off. Plus the reader and the leak rule on mixed
- * numbers, and the stories' shape rule. Run with npm test in desk/ (directly: node tools/school-toprung-test.cjs). Pure: no
- * model, no store, no filesystem.
+ * numbers, and the stories' shape rule. The top rungs of percent change (genPercentTop: the amount before a change, two
+ * changes in turn, a change over the years; a money story on every odd seed) and Pythagoras (genPythagorasTop: sides with
+ * a decimal, the answer rounded to the places asked; a ladder, a screen or a field on every odd seed) take the same property
+ * over 2000 seeds, their answers worked by hand in BigInt, a rounded side judged by the rulings MK5 / D2 R1a. Run with npm
+ * test in desk/ (directly: node tools/school-toprung-test.cjs). Pure: no model, no store, no filesystem.
  */
 const path=require('node:path'),assert=require('node:assert/strict');
 const {test}=require('node:test');
@@ -137,4 +140,148 @@ test('MB-B20 the leak rule on a mixed-number item: the answer in any form and it
  const rope={shape:'compute',expr:'rope 4 1/2 ÷ 3/4'}; // 6 pieces
  assert.equal(S.leaksSchool(rope,'That makes 6 pieces.'),true);
  assert.equal(S.leaksSchool(rope,'Write the rope as 9/2 and turn 3/4 over.'),false);
+});
+
+// ------------------------------------------------------------------ MB-B20, the top rung of percent change and Pythagoras
+
+const isqrt=(n)=>{if(n<2n)return n;let x=n,y=(x+1n)/2n;while(y<x){x=y;y=(x+n/x)/2n;}return x;};
+/** A percent change worked by hand from its expr: the reverse, two changes, or the years; [N, D] in lowest terms. */
+function pctByHand(expr){
+ const m=/^(?:([a-z]+) )?(?:before (increase|decrease) (\d+) by (\d+)%|(increase|decrease) (\d+) by (\d+)%(?: then (increase|decrease) by (\d+)%| for (\d) years))$/.exec(expr);assert.ok(m,expr);
+ const B=BigInt,f=(v,p)=>[100n+(v==='increase'?B(p):-B(p)),100n];
+ let N,D;
+ if(m[2]){const [a,b]=f(m[2],m[4]);N=B(m[3])*b;D=a;}
+ else if(m[8]){const [a,b]=f(m[5],m[7]),[c,d]=f(m[8],m[9]);N=B(m[6])*a*c;D=b*d;}
+ else{const [a,b]=f(m[5],m[7]);N=B(m[6]);D=1n;for(let i=0;i<Number(m[10]);i++){N*=a;D*=b;}}
+ const g=gcd(N,D);return {story:m[1],form:m[2]?'before':m[8]?'then':'years',N:N/g,D:D/g};
+}
+/** A value to two places at most as a learner writes it: '450', '176.4', '2405.7'. */
+function plainOf({N,D}){
+ for(const k of [0,1,2]){const s=10n**BigInt(k);if((N*s)%D===0n){if(k===0)return String((N*s)/D);const v=String((N*s)/D).padStart(k+1,'0');return `${v.slice(0,-k)}.${v.slice(-k)}`;}}
+ assert.fail(`${N}/${D} is not to the cent`);
+}
+/** The side worked by hand: the sides in tenths squared (BigInt), then √ rounded half up to `dp` places, as a string. */
+function sideByHand(expr){
+ const m=/^(longest|shorter|ladder|screen|field) ([\d.]+) ([\d.]+) dp([12])$/.exec(expr);assert.ok(m,expr);
+ const t=(s)=>BigInt(Math.round(Number(s)*10)),x=t(m[2]),y=t(m[3]),dp=Number(m[4]);
+ const find=m[1]==='ladder'||m[1]==='shorter'?'shorter':'longest',S100=find==='longest'?x*x+y*y:x*x-y*y;
+ const at=(k)=>{const M=S100*10n**BigInt(2*k-2),f=isqrt(M);const r=(2n*f+1n)**2n<=4n*M?f+1n:f;const s=String(r).padStart(k+1,'0');return `${s.slice(0,-k)}.${s.slice(-k)}`;};
+ return {story:['ladder','screen','field'].includes(m[1])?m[1]:undefined,find,dp,x,y,S100,answer:at(dp),finer:at(dp+1),exact:isqrt(S100)**2n===S100};
+}
+const comma=(s,sys)=>(sys==='cz'||sys==='de'?s.replace('.',','):s);
+
+test(`MB-B20 pct-change: ${SEEDS} seeds - a reverse, two changes or the years, its own unit, a story on every odd seed, printed and read back in all four systems, no leak, judged right by a hand-worked answer`,()=>{
+ const stories=new Set(),forms=new Set();
+ for(let seed=0;seed<SEEDS;seed++){
+  const spec=S.genPercentTop(seed);
+  assert.deepEqual(S.genPercentTop(seed),spec,'pure: same seed, same spec');
+  assert.ok(S.wellFormed(spec).ok,JSON.stringify(spec));
+  assert.equal(S.unitOf(spec),'pct-change',spec.expr);
+  const h=pctByHand(spec.expr);forms.add(h.form);
+  assert.equal(!!S.storyOf(spec),seed%2===1,`${spec.expr}: a word problem on an odd seed only`);
+  if(h.story){stories.add(h.story);assert.equal(S.storyOf(spec),h.story);assert.ok(['€','£'].includes(spec.unit),'a story is money');}
+  else forms.add(`bare ${h.form}`);
+  const ans=plainOf(h),cents=/\.\d$/.test(ans)?`${ans}0`:ans;
+  for(const sys of SYSTEMS){
+   const q=S.question(spec,sys);assert.ok(q&&q.plain&&q.tex,`${spec.expr} prints in ${sys}`);
+   assert.deepEqual(S.specFromQuestion(q.plain,sys),spec,`${sys}: ${q.plain} reads back`);
+   assert.equal(S.leaksSchool(spec,q.plain),false,`${sys}: ${q.plain} does not give its answer away`);
+   assert.doesNotMatch(q.plain,/\{|\}/,'every placeholder filled');
+   if(h.D===1n)assert.ok(!(q.plain.match(/\d+/g)||[]).includes(String(h.N)),q.plain);
+   for(const w of [ans,cents])assert.equal(S.check(spec,comma(w,sys),sys).verdict,'right',`${sys}: ${comma(w,sys)} for ${q.plain}`);
+   assert.equal(S.check(spec,`${comma(cents,sys)} ${spec.unit}`,sys).verdict,'right',`${sys}: with its unit`);
+   assert.equal(S.check(spec,comma(plainOf({N:h.N+h.D,D:h.D}),sys),sys).verdict,'wrong',`${sys}: one more is wrong`);
+   assert.equal(S.check(spec,`${comma(ans,sys)}%`,sys).verdict,'unsure',`${sys}: an amount as a percentage is unsure`);
+  }
+  const shown=S.workedAnswer(spec,'uk');assert.ok(shown,spec.expr);assert.equal(S.check(spec,shown,'uk').verdict,'right');
+  assert.ok(shown.replace(/[^\d.]/g,'')===cents||shown.replace(/[^\d.]/g,'')===ans,`${spec.expr}: ${shown}`);
+ }
+ assert.deepEqual([...stories].sort(),['bike','car','rise','sale','savings']);
+ for(const f of ['before','then','years'])assert.ok(forms.has(`bare ${f}`),`a bare ${f}`);
+});
+
+test(`MB-B20 pythagoras: ${SEEDS} seeds - sides with decimals or a word problem, the answer rounded to the places asked, printed and read back in all four systems, no leak, judged by the rounding rulings`,()=>{
+ const stories=new Set();let decimalSides=0,shorter=0,two=0;
+ for(let seed=0;seed<SEEDS;seed++){
+  const spec=S.genPythagorasTop(seed);
+  assert.deepEqual(S.genPythagorasTop(seed),spec,'pure: same seed, same spec');
+  assert.ok(S.wellFormed(spec).ok,JSON.stringify(spec));
+  assert.equal(S.unitOf(spec),'pythagoras',spec.expr);
+  const h=sideByHand(spec.expr);
+  assert.equal(h.exact,false,`${spec.expr}: the side is no whole number, nor any exact decimal`);
+  assert.equal(!!S.storyOf(spec),seed%2===1,`${spec.expr}: a word problem on an odd seed only`);
+  if(h.story){stories.add(h.story);assert.equal(h.dp,1);}
+  else{assert.ok(/\./.test(spec.expr.split(' dp')[0]),`${spec.expr}: a side with a decimal`);decimalSides++;}
+  if(h.find==='shorter')shorter++;if(h.dp===2)two++;
+  assert.doesNotMatch(h.answer,/0$/,'the rounded side ends in no zero');assert.ok(Number(h.answer)>=1);
+  for(const sys of SYSTEMS){
+   const q=S.question(spec,sys);assert.ok(q&&q.plain&&q.tex,`${spec.expr} prints in ${sys}`);
+   assert.match(q.plain,h.dp===1?/Give your answer to 1 decimal place\.$/:/Give your answer to 2 decimal places\.$/);
+   assert.deepEqual(S.specFromQuestion(q.plain,sys),spec,`${sys}: ${q.plain} reads back`);
+   assert.equal(S.leaksSchool(spec,q.plain),false,`${sys}: ${q.plain} does not give its answer away`);
+   const unitWord=spec.unit==='m'?'metres':spec.unit;
+   for(const w of [h.answer,h.finer,`${h.answer} ${spec.unit}`,`${h.answer} ${unitWord}`])
+    assert.equal(S.check(spec,comma(w,sys),sys).verdict,'right',`${sys}: ${comma(w,sys)} for ${q.plain}`);
+   // the leak rule refuses the side and any finer rounding of it
+   for(const w of [h.answer,h.finer])assert.equal(S.leaksSchool(spec,`The side is ${comma(w,sys)} ${spec.unit}.`),true,`${sys}: ${w} leaks`);
+   // two units of the last place off is no rounding: wrong; a fraction is unsure
+   // (two units up, or three when two would end in a zero, which the old path reads at one place fewer)
+   const up=(n)=>(Number(h.answer)+n*10**-h.dp).toFixed(h.dp),off=/0$/.test(up(2))?up(3):up(2);
+   assert.equal(S.check(spec,comma(off,sys),sys).verdict,'wrong',`${sys}: ${off} is wrong`);
+   assert.equal(S.check(spec,'1/3',sys).verdict,'unsure');
+  }
+  const shown=S.workedAnswer(spec,'uk');assert.ok(shown,spec.expr);
+  assert.ok(shown===`${h.answer} ${spec.unit}`||shown===h.answer,`${spec.expr}: ${shown}`);
+ }
+ assert.deepEqual([...stories].sort(),['field','ladder','screen']);
+ assert.ok(decimalSides===SEEDS/2&&shorter>SEEDS/8&&two>SEEDS/8,`${decimalSides} ${shorter} ${two}`);
+});
+
+test('MB-B20 the rounding rulings on a rounded side (MK5 / D2 R1a, the school rounding rule as the old path), and its slips',()=>{
+ const spec={shape:'pythagoras',expr:'longest 4 6 dp1',unit:'cm'}; // the root of 52 = 7.2111...
+ assert.equal(S.wellFormed({shape:'pythagoras',expr:'longest 4 6',unit:'cm'}).ok,false,'tier 1/2 asks for whole sides only, as before');
+ const v=(a,sys='uk')=>S.check(spec,a,sys);
+ for(const a of ['7.2','7.21','7.211','7.2 cm','x = 7.2','c = 7.21 cm'])assert.equal(v(a).verdict,'right',a);
+ assert.equal(v('7,2','cz').verdict,'right');assert.equal(v('7,2','uk').verdict,'unsure','a comma is no decimal in uk');
+ // a correct rounding of fewer than two figures, or a whole number, is never wrong: unsure
+ assert.equal(v('7').verdict,'unsure');
+ // not a correct rounding: within one unit of its last place (trailing zeros aside) unsure, else wrong
+ for(const a of ['7.3','7.20','7.22'])assert.equal(v(a).verdict,'unsure',a);
+ for(const a of ['7.1','7.4','8.2','7.23'])assert.equal(v(a).verdict,'wrong',a);
+ assert.equal(v('36/5').verdict,'unsure','a fraction: the question asks for a decimal');
+ assert.equal(v('720%').verdict,'unsure');assert.equal(v('7.2 kg').verdict,'unsure');
+ assert.deepEqual([v('52').slip,v('10').slip],['pyth-no-root','pyth-sides-added']);
+ const sh={shape:'pythagoras',expr:'shorter 6 4 dp1',unit:'cm'}; // the root of 20 = 4.472...
+ assert.equal(S.check(sh,'4.5','uk').verdict,'right');assert.equal(S.check(sh,'4.47','uk').verdict,'right');
+ assert.deepEqual(['7.2','20','52'].map((a)=>S.check(sh,a,'uk').slip),['pyth-squares-added','pyth-no-root','pyth-squares-added']);
+ // bounds: an exact side, a rounded side ending in a zero, a side past 100, a trailing zero, a shorter side not shorter
+ for(const bad of ['longest 3 4 dp1','longest 1.5 2 dp1','longest 4 6 dp3','longest 101 6 dp1','longest 4.0 6 dp1','shorter 4 6 dp1'])
+  assert.equal(S.wellFormed({shape:'pythagoras',expr:bad,unit:'cm'}).ok,false,bad);
+ assert.equal(S.wellFormed({shape:'pythagoras',expr:'ladder 6 2.5 dp1',unit:'cm'}).ok,false);assert.ok(S.wellFormed({shape:'pythagoras',expr:'ladder 6 2.5 dp1',unit:'m'}).ok);
+ // the leak rule: the side, a finer rounding, a value within a tenth, the squared total under a root (in any system)
+ const ROOT='√';
+ for(const hint of ['It comes to about 7.2 cm.','Roughly 7.21.','Close to 7.3.',`The side is ${ROOT}52.`,'Take the square root of 52.','Odmocni 52.'])assert.equal(S.leaksSchool(spec,hint),true,hint);
+ for(const hint of ['Square both sides: 16 and 36.','Add the squares: 16 + 36 = 52.','Then take the square root of the total.','Round at the end, not before.'])assert.equal(S.leaksSchool(spec,hint),false,hint);
+ const dec={shape:'pythagoras',expr:'longest 2.5 6.3 dp2',unit:'m'}; // 6.25 + 39.69 = 45.94
+ assert.equal(S.leaksSchool(dec,'The square root of 45,94 is the side.'),true,'a decimal comma total under a root');
+});
+
+test('MB-B20 the reverse, the two changes and the years on percent change: values, bounds and the leak rule',()=>{
+ const pc=(expr,unit)=>({shape:'percent-change',expr,...(unit?{unit}:{})}),val=(spec)=>S.workedAnswer(spec,'uk');
+ assert.equal(val(pc('before increase 540 by 20%','€')),'€450');
+ assert.equal(val(pc('increase 200 by 10% then decrease by 20%')),'176');
+ assert.equal(val(pc('savings increase 800 by 5% for 2 years','£')),'£882');
+ assert.equal(val(pc('sale before decrease 540 by 10%','Kč')),'600 Kč');
+ for(const bad of [pc('before increase 540 by 7%'),pc('increase 333 by 3% for 5 years'),pc('rise before decrease 540 by 10%','€'),pc('savings increase 800 by 5% for 2 years','kg'),pc('sale before decrease 540 by 10%'),pc('increase 200 by 10% for 6 years'),pc('before decrease 540 by 100%'),pc('march before increase 540 by 20%','€')])
+  assert.equal(S.wellFormed(bad).ok,false,JSON.stringify(bad));
+ // the tier-1/2 expr is read exactly as before
+ assert.ok(S.wellFormed(pc('increase 60 by 15%','€')).ok);assert.equal(S.storyOf(pc('increase 60 by 15%','€')),null);
+ const spec=pc('before increase 540 by 20%','€');
+ for(const hint of ['It was €450.','Divide 540 by 1.2 to get it.','540 ÷ 1.2 = 450.'])assert.equal(S.leaksSchool(spec,hint),true,hint);
+ for(const hint of ['The new price is 120% of the old one.','Think of 540 as 120% of the price before.','Do not take 20% off the new price.'])assert.equal(S.leaksSchool(spec,hint),false,hint);
+ // the stories: one situation and one question, no number word
+ for(const [id,st] of [...Object.entries(S.PCT_STORIES),...Object.entries(S.PYTH_STORIES)]){
+  assert.match(st.text,/^[A-Z][^?]*\?$/,id);
+  assert.doesNotMatch(st.text,/\b(?:one|two|three|four|five|six|seven|eight|nine|ten|half|quarter|third|once|twice)\b|\d/i,id);
+ }
 });

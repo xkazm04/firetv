@@ -354,8 +354,11 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     (and the answer's). The value is p × N / 100 exactly, to at most two decimal places.
  *   - percent-change (W7 batch 2, "Percent increase and decrease"): expr "increase B by p%" or "decrease B by p%", a whole
  *     amount 1 to 1000 changed by a percent above 0 (at most 100 up, below 100 down), "Increase 60 by 15%.", "Decrease
- *     €80 by 25%."; `unit` as for an amount. The value is B × (100 ± p) / 100 exactly: the change applied to the whole,
- *     never a reverse percentage (finding the original), which is a later unit.
+ *     €80 by 25%."; `unit` as for an amount. The value is B × (100 ± p) / 100 exactly: the change applied to the whole.
+ *     MB-B20, the top rung of a step up (`pct-top`, still no store key): "before increase 540 by 20%" (the amount before
+ *     the change, a reverse percentage), "increase 200 by 10% then decrease by 20%" (two changes in turn), "increase 800
+ *     by 5% for 3 years" (one change over 2..5 years), each optionally after a story's id (PCT_STORIES, money only); the
+ *     value exact to two places.
  *   - ratio (W7 batch 3, "Ratio and sharing"), two-part ratios of whole numbers only: expr "12:18" (write it in its
  *     simplest form: the answer is a RATIO, 2:3), "60 in 2:3" (share 60 in the ratio 2:3: the answer is a PAIR of amounts,
  *     24 and 36, in the ratio's order; `unit` is the amount's, optional, as for a fraction of an amount) or "2:3 = ?:15" /
@@ -377,6 +380,10 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     (the two shorter sides 6 and 8 are given: find the longest) or "shorter 10 6" (the longest side 10 and one shorter side 6
  *     are given: find the other shorter side); `unit` mm, cm or m, required: the answer's own. All three sides are whole numbers,
  *     at most 100 (a scaled Pythagorean triple); the truth is an exact integer square root, never a floating point root.
+ *     MB-B20, the top rung of a step up (`pyth-dp`): "longest 2.5 6 dp1", "shorter 9.5 4.2 dp2" or a story's id
+ *     (PYTH_STORIES: "ladder 6 2.5 dp1", "screen 52 29 dp1", "field 80 45 dp1") - sides whole or to one place, at most 100,
+ *     the side asked no rational, its answer rounded to 1 or 2 places as the question says (`checkRounded` judges it by the
+ *     rounding rulings MK5 / D2 R1a). The truth is that rounding, decided in bigints; the exact square rides the kind.
  *   - probability (v2 M2b, the probability of an event in a single experiment): expr "bag red 3, blue 5, green 2 ask red" (a bag
  *     of two to four different colours, at most 20 counters, one taken at random; ask a colour, "not red", or "red or blue") or
  *     "complement red 0.35" / "complement red 35%" (the probability of a colour is stated, as a decimal or a percent: find the
@@ -583,6 +590,11 @@ const REJECT = {
   probRange: "A stated probability is above nothing and below a whole.",
   probSame: "The probability asked for equals the one given, so the question would print its own answer.",
   story: "The word problem does not fit the expression: its operation, its two fractions or its unit.",
+  pctStory: "The word problem does not fit the change: its kind, its direction or its money.",
+  pythSide: "A side is above nothing, at most 100, and written to one decimal place at most with no trailing zero.",
+  pythExact: "The missing side is exact: there is nothing to round.",
+  pythRound: "The side rounded to the places asked ends in a zero, or has fewer than two figures.",
+  pythStory: "The word problem does not fit the sides: its kind or its unit.",
 } as const;
 
 /**
@@ -613,7 +625,13 @@ type Kind =
   // M2b: a bag's colours with their counts in the order printed, and the colour(s) asked about (mode: one, not one, either of two)
   | { k: "prob"; mode: "colour" | "not" | "or"; counts: [string, bigint][]; ask: string[] }
   // M2b: the stated probability p of a colour; the probability it does not happen
-  | { k: "prob-comp"; colour: string; p: Q; ptext: string };
+  | { k: "prob-comp"; colour: string; p: Q; ptext: string }
+  // MB-B20, the percent-change top rung: the amount before a change (`before`: `base` is the amount after it), two changes
+  // in turn (`then`), or one change `years` times over (`years`); `story` the word problem it is printed in (PCT_STORIES)
+  | { k: "pct-top"; form: PctForm; base: bigint; steps: { up: boolean; p: Q; ptext: string }[]; years: number; story?: PctStoryId }
+  // MB-B20, the Pythagoras top rung: sides x and y as written (xt, yt; a decimal allowed), the side asked rounded to `dp`
+  // places; `sq` is that side's exact square, never a whole or a rational square; `story` its word problem (PYTH_STORIES)
+  | { k: "pyth-dp"; find: "longest" | "shorter"; x: Q; y: Q; xt: string; yt: string; dp: 1 | 2; sq: Q; story?: PythStoryId };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -675,6 +693,105 @@ export const STORIES = {
 } as const satisfies Record<string, { op: Op; unit: Unit | undefined; text: string }>;
 export type StoryId = keyof typeof STORIES;
 const isStoryId = (x: unknown): x is StoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(STORIES, x);
+
+/** MB-B20: the three kinds of a top-rung percent change - the amount before a change, two changes in turn, one change over the years. */
+export type PctForm = "before" | "then" | "years";
+type PctText = { form: PctForm; up: boolean | undefined; text: string };
+/**
+ * MB-B20: the word problems a top-rung percent-change item may be printed in, a closed list, each with its kind and (for a
+ * single change) its direction. A story spec's expr starts with the story's id ("sale before decrease 540 by 20%") and its
+ * `unit` is money (€, £, $ or Kč, the learner's own via localMoney). Placeholders: {A} the amount, {P} and {Q} the percents,
+ * {D} and {E} "up" or "down", {N} the years. One situation and one question each; no number word in a text.
+ */
+export const PCT_STORIES = {
+  sale: { form: "before", up: false, text: "In a sale, a coat costs {A} after {P} off. What did it cost before the sale?" },
+  rise: { form: "before", up: true, text: "After a {P} rise, a train ticket costs {A}. What did it cost before the rise?" },
+  bike: { form: "then", up: undefined, text: "A bike costs {A}. Its price goes {D} by {P} and then {E} by {Q}. What does it cost now?" },
+  savings: { form: "years", up: true, text: "A savings account holds {A} and earns {P} interest each year. How much is in it after {N} years?" },
+  car: { form: "years", up: false, text: "A car is worth {A} and loses {P} of its value each year. What is it worth after {N} years?" },
+} as const satisfies Record<string, PctText>;
+export type PctStoryId = keyof typeof PCT_STORIES;
+const isPctStory = (x: unknown): x is PctStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PCT_STORIES, x);
+/** MB-B20: the bare top-rung percent changes as a question prints them ({U} and {V} "Increase"/"increase" or "Decrease"/"decrease"). */
+const PCT_BARE: readonly PctText[] = [
+  { form: "before", up: true, text: "After an increase of {P}, an amount is {A}. What was the amount before the increase?" },
+  { form: "before", up: false, text: "After a decrease of {P}, an amount is {A}. What was the amount before the decrease?" },
+  { form: "then", up: undefined, text: "{U} {A} by {P}, then {V} the result by {Q}." },
+  { form: "years", up: undefined, text: "{U} {A} by {P} each year for {N} years." },
+];
+/** "before increase 540 by 20%", "increase 200 by 10% then decrease by 20%", "increase 800 by 5% for 3 years" (MB-B20). */
+const PCT_BEFORE_RE = new RegExp(String.raw`^before (increase|decrease) (${W4}) by ${PCT_SRC}%$`);
+const PCT_THEN_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PCT_SRC}% then (increase|decrease) by ${PCT_SRC}%$`);
+const PCT_YEARS_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PCT_SRC}% for ([2-5]) years$`);
+const pctQ = (t: string): Q => { const [w, f = ""] = t.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
+
+/** MB-B20: a top-rung percent change's structure (a story id first, when it is one), or why not. */
+function pctTopStructure(s: Record<string, unknown>): Structure {
+  let expr = s.expr as string, story: PctStoryId | undefined;
+  const sm = /^([a-z]+) (.+)$/.exec(expr);
+  if (sm && isPctStory(sm[1])) { story = sm[1]; expr = sm[2]; }
+  const step = (verb: string, p: string) => ({ up: verb === "increase", p: pctQ(p), ptext: p });
+  let kind: Extract<Kind, { k: "pct-top" }> | null = null, m: RegExpExecArray | null;
+  if ((m = PCT_BEFORE_RE.exec(expr))) kind = { k: "pct-top", form: "before", base: BigInt(m[2]), steps: [step(m[1], m[3])], years: 1 };
+  else if ((m = PCT_THEN_RE.exec(expr))) kind = { k: "pct-top", form: "then", base: BigInt(m[2]), steps: [step(m[1], m[3]), step(m[4], m[5])], years: 1 };
+  else if ((m = PCT_YEARS_RE.exec(expr))) kind = { k: "pct-top", form: "years", base: BigInt(m[2]), steps: [step(m[1], m[3])], years: Number(m[4]) };
+  if (!kind) return { ok: false, why: story ? REJECT.pctStory : REJECT.read };
+  if (story) {
+    const st: PctText = PCT_STORIES[story];
+    if (st.form !== kind.form || (st.up !== undefined && st.up !== kind.steps[0].up) || !(isMoney(s.unit) || s.unit === "$")) return { ok: false, why: REJECT.pctStory };
+    kind.story = story;
+  }
+  return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+}
+
+/**
+ * MB-B20: the word problems a top-rung Pythagoras item may be printed in, a closed list: which side is asked and the unit the
+ * sides and the answer are in. {X} and {Y} are the two sides of the expr in its order ("ladder 6 2.5 dp1": the ladder 6
+ * metres, its foot 2.5 metres out, the height up the wall asked). One situation and one question each; no number word.
+ */
+export const PYTH_STORIES = {
+  ladder: { find: "shorter", unit: "m", text: "A ladder {X} long leans against a wall, its foot {Y} from the wall. How high up the wall does it reach?" },
+  screen: { find: "longest", unit: "cm", text: "A screen is {X} wide and {Y} high. How long is its diagonal?" },
+  field: { find: "longest", unit: "m", text: "A rectangular field is {X} long and {Y} wide. How long is its diagonal?" },
+} as const satisfies Record<string, { find: "longest" | "shorter"; unit: Unit; text: string }>;
+export type PythStoryId = keyof typeof PYTH_STORIES;
+const isPythStory = (x: unknown): x is PythStoryId => typeof x === "string" && Object.prototype.hasOwnProperty.call(PYTH_STORIES, x);
+/** MB-B20: the bare top-rung Pythagoras questions, the same sentences as tiers 1 and 2; the places asked follow them. */
+const PYTH_BARE = {
+  longest: "A right-angled triangle has shorter sides {X} and {Y}. Find the longest side.",
+  shorter: "A right-angled triangle has longest side {X} and a shorter side {Y}. Find the other shorter side.",
+} as const;
+/** "longest 2.5 6 dp1", "shorter 9.5 4.2 dp2", "ladder 6 2.5 dp1": a side whole or to one place, the places asked 1 or 2 (MB-B20). */
+const PYTH_DP_SIDE = String.raw`(?:[1-9]\d{0,2}|0)(?:\.\d)?`;
+const PYTH_DP_RE = new RegExp(String.raw`^(longest|shorter|ladder|screen|field) (${PYTH_DP_SIDE}) (${PYTH_DP_SIDE}) dp([12])$`);
+/** The sentence after a top-rung Pythagoras question: the places its answer is rounded to. */
+const placesLine = (dp: 1 | 2) => `Give your answer to ${dp} decimal place${dp === 1 ? "" : "s"}.`;
+
+/** MB-B20: a top-rung Pythagoras item's structure, or why not. */
+function pythDpStructure(s: Record<string, unknown>): Structure {
+  const m = PYTH_DP_RE.exec(s.expr as string);
+  if (!m) return { ok: false, why: REJECT.read };
+  const story = isPythStory(m[1]) ? m[1] : undefined, find = story ? PYTH_STORIES[story].find : (m[1] as "longest" | "shorter");
+  const [x, y] = [sideQ(m[2]), sideQ(m[3])], xx = mul(x, x), yy = mul(y, y);
+  const kind: Kind = { k: "pyth-dp", find, x, y, xt: m[2], yt: m[3], dp: m[4] === "1" ? 1 : 2, sq: find === "longest" ? add(xx, yy) : sub(xx, yy), ...(story ? { story } : {}) };
+  return { ok: true, spec: s as SchoolSpec, node: fracNode(ONE, ONE), kind };
+}
+
+/** |v - √S| < h, decided exactly for S above nothing that is no rational square (so the distance is never exactly h). */
+function nearRoot(v: Q, S: Q, h: Q): boolean {
+  const lo = sub(v, h), hi = add(v, h), below = (a: Q, b: Q) => a.n * b.d < b.n * a.d;
+  if (hi.n <= Z || !below(S, mul(hi, hi))) return false;
+  return lo.n <= Z || below(mul(lo, lo), S);
+}
+/** √S rounded to dp places, half up, exactly: floor(√(4·S·10^2dp)) halved up (no floating point). */
+function rootRounded(S: Q, dp: number): Q {
+  const r = (isqrt((S.n * pow10(2 * dp) * BigInt(4)) / S.d) + ONE) / BigInt(2);
+  return mk(r, pow10(dp))!;
+}
+/** Is S the square of a rational (its top and bottom in lowest terms both squares)? */
+const ratSquare = (S: Q) => S.n >= Z && isqrt(S.n) ** BigInt(2) === S.n && isqrt(S.d) ** BigInt(2) === S.d;
+/** Half a unit and a whole unit of the k-th decimal place. */
+const halfPlace = (k: number) => mk(BigInt(5), pow10(k + 1))!, onePlace = (k: number) => mk(ONE, pow10(k))!;
 
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
 function structure(spec: unknown): Structure {
@@ -764,7 +881,8 @@ function structure(spec: unknown): Structure {
   }
   if (shape === "pythagoras") {
     const m = PYTH_RE.exec(s.expr);
-    if (!m) return { ok: false, why: REJECT.read };
+    // MB-B20: anything else may be a top-rung item, its answer rounded ("longest 2.5 6 dp1")
+    if (!m) return pythDpStructure(s);
     const [x, y] = [BigInt(m[2]), BigInt(m[3])];
     return { ok: true, spec: s as SchoolSpec, node: fracNode(x, y), kind: { k: "pyth", find: m[1] as "longest" | "shorter", x, y } };
   }
@@ -802,7 +920,8 @@ function structure(spec: unknown): Structure {
   }
   if (shape === "percent-change") {
     const m = PCT_CHANGE_RE.exec(s.expr);
-    if (!m) return { ok: false, why: REJECT.read };
+    // MB-B20: anything else may be a top-rung item (a reverse percentage, two changes, a change over the years)
+    if (!m) return pctTopStructure(s);
     const [w, f = ""] = m[3].split("."), p = mk(BigInt(w + f), pow10(f.length))!, base = BigInt(m[2]), up = m[1] === "increase";
     const H = BigInt(100), factor = up ? add(qi(H), p) : sub(qi(H), p);
     const node: Node = { k: "op", op: "×", a: { k: "num", q: qi(base), s: m[2], whole: true }, b: { k: "num", q: div(factor, qi(H))!, s: m[3], whole: true } };
@@ -896,6 +1015,35 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     const truth = mk(K.base * (K.up ? H * K.p.d + K.p.n : H * K.p.d - K.p.n), H * K.p.d)!;
     if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
     if (eq(truth, qi(K.base)) || eq(truth, K.p)) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
+  if (K.k === "pct-top") {
+    // MB-B20: the amount before the change (after ÷ (100 ± p)/100), two changes in turn, one change `years` times over;
+    // each percent as a lone change takes it, the value to two places at most, never a number the question prints
+    const H = BigInt(100), factor = (x: { up: boolean; p: Q }) => div(x.up ? add(qi(H), x.p) : sub(qi(H), x.p), qi(H))!;
+    if (K.steps.some((x) => x.ptext.endsWith(".0"))) return { ok: false, why: REJECT.trailing };
+    if (K.steps.some((x) => x.p.n <= Z || (x.up ? x.p.n > H * x.p.d : x.p.n >= H * x.p.d))) return { ok: false, why: REJECT.changeRange };
+    let truth: Q;
+    if (K.form === "before") truth = div(qi(K.base), factor(K.steps[0]))!;
+    else if (K.form === "then") truth = mul(mul(qi(K.base), factor(K.steps[0])), factor(K.steps[1]));
+    else { truth = qi(K.base); for (let i = 0; i < K.years; i++) truth = mul(truth, factor(K.steps[0])); }
+    if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
+    if (truth.n > BigInt(MAX_RESULT) * truth.d) return { ok: false, why: REJECT.result };
+    if (eq(truth, qi(K.base)) || K.steps.some((x) => eq(truth, x.p)) || (K.form === "years" && eq(truth, qi(BigInt(K.years))))) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
+  if (K.k === "pyth-dp") {
+    // MB-B20: the side asked is √sq, never a rational (so a rounding has no tie); the truth is it rounded to `dp` places,
+    // ending in no zero and of two figures or more, so it is written to exactly the places asked and a rounding of it is right
+    const u = (st.spec as { unit?: Unit }).unit;
+    if (K.story ? u !== PYTH_STORIES[K.story].unit : u !== "mm" && u !== "cm" && u !== "m") return { ok: false, why: K.story ? REJECT.pythStory : REJECT.pythUnit };
+    const top = qi(BigInt(100));
+    if ([K.xt, K.yt].some((t) => t.endsWith(".0")) || [K.x, K.y].some((x) => x.n <= Z || x.n > top.n * x.d)) return { ok: false, why: REJECT.pythSide };
+    if (K.find === "shorter" && K.y.n * K.x.d >= K.x.n * K.y.d) return { ok: false, why: REJECT.pythTriangle };
+    if (ratSquare(K.sq)) return { ok: false, why: REJECT.pythExact };
+    const truth = rootRounded(K.sq, K.dp);
+    if (exactAt(truth, K.dp - 1) || truth.n < truth.d) return { ok: false, why: REJECT.pythRound };
+    if (eq(truth, K.x) || eq(truth, K.y)) return { ok: false, why: REJECT.prints };
     return ok(truth);
   }
   if (K.k === "ratio-simplify") {
@@ -1113,6 +1261,18 @@ function amountText(N: string, u: Unit | undefined, system?: SchoolSystem): { pl
 }
 
 /**
+ * A template with {X} placeholders filled (MB-B20 word problems): the plain text, and the TeX with each run of words in
+ * \text{} and each value as its own TeX, in order.
+ */
+function fillText(text: string, vals: Record<string, { plain: string; tex: string }>): { plain: string; tex: string } {
+  const parts = text.split(/(\{[A-Z]\})/), has = (x: string) => Object.prototype.hasOwnProperty.call(vals, x);
+  return {
+    plain: parts.map((x) => (has(x) ? vals[x].plain : x)).join(""),
+    tex: parts.filter((x) => x !== "").map((x) => (has(x) ? vals[x].tex : `\\text{${x}}`)).join(" "),
+  };
+}
+
+/**
  * How a conversion question names the form it asks for (W7 batch 2): "percentage" as a UK sheet says it (the reader takes
  * "percent" too), and "a simplified fraction", which fits one printed row where "a fraction in its simplest form" does not.
  */
@@ -1237,6 +1397,25 @@ function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; t
         plain: bits.map((x) => (typeof x === "string" ? x : x.n)).join(""),
         tex: bits.map((x) => (typeof x === "string" ? `\\text{${x}}` : x.tex ?? x.n)).join(" "),
       };
+    }
+    if (K.k === "pct-top") {
+      // MB-B20: "After a 20% rise, a train ticket costs €540. What did it cost before the rise?", "Increase 200 by 10%, then
+      // decrease the result by 20%.", "A savings account holds €800 and earns 5% interest each year. How much is in it after 3 years?"
+      const [P, Q2] = K.steps, word = (x: string) => ({ plain: x, tex: /^\d+$/.test(x) ? x : `\\text{${x}}` });
+      const pct = (x: { ptext: string }) => ({ plain: `${x.ptext}%`, tex: `${x.ptext}\\%` });
+      const verb = (x: { up: boolean }) => (x.up ? "increase" : "decrease"), cap = (x: string) => x[0].toUpperCase() + x.slice(1);
+      const vals: Record<string, { plain: string; tex: string }> = { "{A}": amountText(String(K.base), specUnit(st.spec), system), "{P}": pct(P), "{N}": word(String(K.years)), "{U}": word(cap(verb(P))) };
+      if (Q2) Object.assign(vals, { "{Q}": pct(Q2), "{V}": word(verb(Q2)), "{D}": word(P.up ? "up" : "down"), "{E}": word(Q2.up ? "up" : "down") });
+      const text = K.story ? PCT_STORIES[K.story].text : PCT_BARE.find((b) => b.form === K.form && (b.up === undefined || b.up === P.up))!.text;
+      return fillText(text, vals);
+    }
+    if (K.k === "pyth-dp") {
+      // MB-B20: the tier-1/2 sentence or a word problem, the sides as written ("2.5 cm", "6 metres"), then the places asked
+      const u = specUnit(st.spec);
+      if (u !== "mm" && u !== "cm" && u !== "m") return null;
+      const side = (x: string) => (u === "m" ? { plain: `${x} metres`, tex: `${x} \\text{ metres}` } : { plain: `${x} ${u}`, tex: `${x} \\text{ ${u}}` });
+      const body = fillText(K.story ? PYTH_STORIES[K.story].text : PYTH_BARE[K.find], { "{X}": side(K.xt), "{Y}": side(K.yt) }), tail = placesLine(K.dp);
+      return { plain: `${body.plain} ${tail}`, tex: `${body.tex} \\text{ ${tail}}` };
     }
     if (K.k === "pyth") {
       // M2b: "A right-angled triangle has shorter sides 6 cm and 8 cm. Find the longest side." - one plain sentence, no diagram;
@@ -1502,6 +1681,15 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     if (K.mode === "not") cands.push(["prob-own", mk(ev, total)!]);
     return distinctSlips(cands, r.truth);
   }
+  // MB-B20: no slip of the percent-change list is named on a top-rung change (its own slips are not written yet)
+  if (K.k === "pct-top") return [];
+  if (K.k === "pyth-dp") {
+    // MB-B20: the tier-1/2 slips from the sides as written, exact; the rooted squares-added slip is judged in `check` (a rounding)
+    const xx = mul(K.x, K.x), yy = mul(K.y, K.y);
+    const cands: [string, Q][] = [["pyth-sides-added", add(K.x, K.y)], ["pyth-no-root", K.sq]];
+    if (K.find === "shorter") cands.push(["pyth-squares-added", add(xx, yy)]);
+    return distinctSlips(cands, r.truth);
+  }
   if (K.k === "pyth") {
     // M2b: the two given sides added (a + b, or c + b); the squares combined and the root not taken (a² + b², or c² − b²); for a
     // shorter side the squares added instead of taken away, c² + b² (its root is no whole number, so only the unrooted value is
@@ -1613,6 +1801,9 @@ const WHY = {
   lengthUnit: "This area carries a length unit, not a square one; the desk does not mark a unit wrong, and asks.",
   givenRatio: "This is a ratio equal to the one given; the question asks for the missing number.",
   notCompleting: "This ratio does not complete the one given, and the desk does not guess which number was meant.",
+  placesAsked: "This is a fraction; the question asks for a decimal rounded to the places it names, and the desk does not guess.",
+  fewFigures: "This is a correct rounding, but to fewer figures than the question asks for, and the desk does not guess.",
+  roughly: "This is close to the side, but it is not the side rounded correctly, and the desk does not guess.",
 } as const;
 
 /**
@@ -1740,6 +1931,37 @@ const placesOf = (r: NumberReading, value: Q): number => {
 };
 
 /**
+ * MB-B20, the verdict on a top-rung Pythagoras answer, whose side √sq is no rational. Rulings MK5 and D2 R1a, as calc-read
+ * decimalCall decides a limit, with this file's own rounding rule as R1a's "old path":
+ *   - a decimal that is √sq correctly rounded at its own written places (trailing zeros counted) is never wrong: right with
+ *     two significant figures or more (7.2 and 7.21 for √52, whether one place or two was asked), unsure with fewer;
+ *   - a whole number that is a correct rounding (7 for √52) is unsure: R1a speaks of decimals, and it is never wrong;
+ *   - any other decimal within one unit of its last written place of √sq is unsure (7.3 for √52), as a rounding is
+ *     everywhere in this file (its places counted trailing zeros aside: 7.20 is a tenth); a fraction or a mixed number is
+ *     unsure (the question asks for a decimal to its places);
+ *   - else wrong, naming a slip for a slip's exact value or a rounding of it, or (a shorter side) for a correct rounding of
+ *     the squares added and rooted.
+ */
+function checkRounded(r: ReadOk, K: Extract<Kind, { k: "pyth-dp" }>, reading: NumberReading): SchoolVerdict {
+  const form = reading.form, v = fromRat(reading.value);
+  if (form === "fraction" || form === "mixed") return { verdict: "unsure", form, why: WHY.placesAsked };
+  const k = form === "decimal" ? reading.places ?? 0 : 0;
+  if (nearRoot(v, K.sq, halfPlace(k))) {
+    const figures = String(babs(mul(v, qi(pow10(k))).n)).replace(/^0+/, "").length;
+    return form === "decimal" && figures >= 2 ? { verdict: "right", form, why: WHY.right } : { verdict: "unsure", form, why: WHY.fewFigures };
+  }
+  // the old path counts places as this file always has, trailing zeros aside (7.20 is within a tenth of √52)
+  const kk = form === "decimal" ? placesOf(reading, v) : 0;
+  if (kk > 0 && nearRoot(v, K.sq, onePlace(kk))) return { verdict: "unsure", form, why: WHY.roughly };
+  const rounds = (c: Q) => kk > 0 && !exactAt(c, kk) && withinPlace(v, c, kk);
+  const slips = slipCandidates(r).filter(([, c]) => !eq(c, r.truth));
+  const named = slips.find(([, c]) => eq(c, v)) ?? slips.find(([, c]) => rounds(c));
+  if (named) return { verdict: "wrong", slip: named[0], form, why: WHY.slip };
+  if (K.find === "shorter" && k > 0 && nearRoot(v, add(mul(K.x, K.x), mul(K.y, K.y)), halfPlace(k))) return { verdict: "wrong", slip: "pyth-squares-added", form, why: WHY.slip };
+  return { verdict: "wrong", form, why: WHY.wrong };
+}
+
+/**
  * The verdict on what a learner wrote, from the spec alone (the truth is recomputed, never stored):
  *   - the same value in any written form is right: 22/24, 0.75 and 75% for 3/4, 1 1/2 for 3/2;
  *   - `form: "simplest"`: right only as a whole number, a fraction or a mixed number in lowest terms (an improper
@@ -1803,10 +2025,11 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     }
     // W7 batch 2: an amount written with a percent sign - 28% for 35% of 80 = 28, or 2800% (equal in value, from 35 × 80) -
     // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
-    if ((K.k === "pct-of" || K.k === "pct-change") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "pct-of" || K.k === "pct-change" || K.k === "pct-top") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
     // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "rate" || K.k === "area" || K.k === "stat" || K.k === "pyth" || K.k === "pyth-dp") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if (K.k === "pyth-dp") return checkRounded(r, K, reading);
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
@@ -2054,6 +2277,8 @@ interface LeakProfile {
   ratioLowest?: boolean;
   /** Values beside T that an operation in the hint must not make (rule 6): a share's second amount. */
   alsoT?: Q[];
+  /** MB-B20, a rounded side: its exact square. Any decimal within one unit of its last place of √root gives it away. */
+  root?: Q;
 }
 
 function leakProfile(r: ReadOk): LeakProfile {
@@ -2101,6 +2326,19 @@ function leakProfile(r: ReadOk): LeakProfile {
       if (K.mode === "or") restated.push({ p: mk(got[0], total)!, o: "+", q: mk(got[1], total)!, both: true });
     }
     return { T, targets: [T], lowestOnly: false, bare: new Set(), restated, written: [] };
+  }
+  if (K.k === "pyth-dp") {
+    // MB-B20: the rounded side, any decimal close to the root at its last place (7.2, 7.21, 7.211 for √52), and the squared
+    // total under a root (leaksSchool). The squares, their total and the given sides are steps and pass
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [], root: K.sq };
+  }
+  if (K.k === "pct-top") {
+    // MB-B20: the amount in any form, and its digits with the point left out; every step on the way (a single change, the
+    // amount after the first change or after a year, a multiplier) passes, and the last operation that makes it is refused
+    const bare = new Set<string>(), h = mul(T, qi(BigInt(100)));
+    if (h.d === ONE) bare.add(String(h.n));
+    if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
+    return { T, targets: [T], lowestOnly: false, bare, restated: [], written: [] };
   }
   if (K.k === "pyth") {
     // M2b: the side in any form. The squares, their sum or difference, and the given sides are steps and pass; the root of the
@@ -2269,6 +2507,8 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
         }
         return false;
       }
+      // MB-B20, a rounded side: a decimal within one unit of its last written place of the root gives it away (7.2, 7.21 for √52)
+      if (pr.root && rd.form === "decimal" && (rd.places ?? 0) > 0 && nearRoot(v, pr.root, onePlace(rd.places ?? 0))) return true;
       // simplify: an equal fraction that is not in lowest terms is a step on the way, not the answer
       const step = pr.lowestOnly && (rd.form === "fraction" || rd.form === "mixed") && rd.lowest === false;
       if (!step && targets.some((x) => eq(v, x))) return true;
@@ -2303,6 +2543,9 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
       const values = readingsOf(run).flatMap((rd) => (rd.kind === "number" ? [qabs(fromRat(rd.value))] : []));
       runs.push({ s: m.index ?? 0, e: (m.index ?? 0) + run.length, values });
     }
+    // MB-B20, a rounded side: its squared total in a line with a root (X1a's rule, the total read in any system: 42,25 too)
+    const sq = pr.root;
+    if (sq && /square\s+root|\broot|sqrt|√|odmocn/.test(text) && runs.some((x) => x.values.some((v) => eq(v, sq)))) return true;
     // rule 6: two numbers joined by an operation whose value is the answer (or, for two whole numbers, a bare number of rule 4)
     const joinAt = (i: number) => joiner(text.slice(runs[i].e, runs[i + 1].s).trim(), text.slice(i > 0 ? runs[i - 1].e : 0, runs[i].s));
     const orient = (j: Joiner, x: Q, y: Q): [Q, Q, Op] => (j === "less" ? [y, x, "-"] : j === "into" ? [y, x, "÷"] : [x, y, j]);
@@ -2616,11 +2859,16 @@ export const TOP_TIER_GENERATORS: Readonly<Record<string, (seed: number) => Scho
 /** The top-rung generator for a topic id, or null: an own key only. */
 export const topGeneratorFor = (topicId: unknown) =>
   typeof topicId === "string" && Object.prototype.hasOwnProperty.call(TOP_TIER_GENERATORS, topicId) ? TOP_TIER_GENERATORS[topicId] : null;
-/** The word problem a school spec is printed in (MB-B20), or null: a well-formed compute spec with a story. */
-export function storyOf(spec: unknown): StoryId | null {
+/**
+ * The word problem a school spec is printed in (MB-B20), or null: a compute spec with a story (STORIES), a top-rung percent
+ * change (PCT_STORIES) or a top-rung Pythagoras item (PYTH_STORIES) with one.
+ */
+export function storyOf(spec: unknown): StoryId | PctStoryId | PythStoryId | null {
   try {
     const st = structure(spec);
-    return st.ok && st.kind.k === "compute" && st.kind.story ? st.kind.story : null;
+    if (!st.ok) return null;
+    const K = st.kind;
+    return (K.k === "compute" || K.k === "pct-top" || K.k === "pyth-dp") && K.story ? K.story : null;
   } catch {
     return null;
   }
@@ -2788,6 +3036,49 @@ export function genPercentChange(seed: unknown, tier: unknown): SchoolSpec | nul
     if (fair(spec)) return spec;
   }
   return tier === 1 ? { shape: "percent-change", expr: "increase 60 by 25%" } : { shape: "percent-change", expr: "increase 60 by 15%", unit: "€" };
+}
+
+/**
+ * The top rung of "Percent increase and decrease" (MB-B20), from a seed, each answer exact to the cent:
+ *   - the amount BEFORE a change (a reverse percentage): the answer a whole 20..900, the change a whole percent (5..80 off,
+ *     5..75 on) that leaves a whole amount: "After an increase of 20%, an amount is 540. What was the amount before the increase?";
+ *   - TWO changes in turn, each up or down by 5..50%, on a multiple of 10 up to 1000: "Increase 200 by 10%, then decrease the
+ *     result by 20%." (the same percent up then down is drawn too: it is not the amount it started at);
+ *   - one change over 2..5 YEARS (compound growth or loss; small percents over more years), on a multiple of 100 up to 5000.
+ * An even seed draws the three bare kinds with a unit as tier 2 does (money in most); an odd seed a word problem from
+ * PCT_STORIES (a sale, a fare rise, a bike's price, savings, a car's value), in € or £, which `localMoney` makes the
+ * learner's own. The value is to two places at most, never a number the question prints, and the item must be `fair`. Pure
+ * and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genPercentTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed1408) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const verb = (up: boolean) => (up ? "increase" : "decrease"), story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const id: PctStoryId | null = story ? pick(Object.keys(PCT_STORIES) as PctStoryId[]) : null;
+    const form: PctForm = id ? PCT_STORIES[id].form : pick(["before", "then", "years"] as const);
+    const fixed: boolean | undefined = id ? PCT_STORIES[id].up : undefined, up = fixed ?? rnd() < 0.5;
+    let expr: string;
+    if (form === "before") {
+      const p = pick(up ? [5, 10, 15, 20, 25, 30, 40, 50, 60, 75] : [5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 75, 80]), was = 10 * int(2, 90);
+      const now = (was * (100 + (up ? p : -p))) / 100;
+      if (!Number.isInteger(now)) continue;
+      expr = `before ${verb(up)} ${now} by ${p}%`;
+    } else if (form === "then") {
+      const steps = [5, 10, 15, 20, 25, 30, 40, 50];
+      expr = `${verb(up)} ${10 * int(5, 100)} by ${pick(steps)}% then ${verb(rnd() < 0.5)} by ${pick(steps)}%`;
+    } else {
+      const p = pick(up ? [2, 3, 4, 5, 10, 20] : [5, 10, 20, 25, 50]), years = p <= 5 ? int(2, 4) : int(2, 3);
+      expr = `${verb(up)} ${100 * int(1, 50)} by ${p}% for ${years} years`;
+    }
+    const unit: Unit = id ? pick(["€", "£"] as const) : pick(PERCENT_UNITS);
+    const spec: SchoolSpec = { shape: "percent-change", expr: id ? `${id} ${expr}` : expr, unit };
+    if (!read(spec).ok) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "percent-change", expr: "rise before increase 540 by 20%", unit: "€" } : { shape: "percent-change", expr: "before increase 540 by 20%", unit: "€" };
 }
 
 // ------------------------------------------------------------------ the W7 batch 3 generators: ratio, rates, area, mean and range
@@ -2981,6 +3272,45 @@ export function genPythagoras(seed: unknown, tier: unknown): SchoolSpec | null {
     if (fair(spec)) return spec;
   }
   return tier === 1 ? { shape: "pythagoras", expr: "longest 6 8", unit: "cm" } : { shape: "pythagoras", expr: "shorter 10 6", unit: "cm" };
+}
+
+/** A count of tenths as a side is written: 25 is "2.5", 60 is "6". */
+const tenthsText = (t: number) => (t % 10 === 0 ? String(t / 10) : `${Math.floor(t / 10)}.${t % 10}`);
+
+/**
+ * The top rung of "Pythagoras' theorem" (MB-B20), from a seed: the side asked is no whole number, so the answer is rounded
+ * to the places the question names. An even seed: the longest side from two shorter sides 1..30, or a shorter side from a
+ * longest side 5..40 and the other shorter side, at least one side written to one decimal place, the answer to one or two
+ * places, in cm, mm or metres. An odd seed, a word problem from PYTH_STORIES to one place: a ladder 3..10 metres (whole or a
+ * half) with its foot out from the wall (a shorter side, with decimals), a screen's diagonal (cm, about sixteen by nine) or a
+ * rectangular field's (metres). Drawn again: an exact side, a rounded answer ending in a zero or below one, and an item that
+ * is not `fair`. Pure and seeded; null for a seed that is not a whole number 0..2^32 - 1.
+ */
+export function genPythagorasTop(seed: unknown): SchoolSpec | null {
+  if (!topSeed(seed)) return null;
+  const rnd = prng(((seed * 2 + 3) ^ 0x5eed2b04) >>> 0);
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd() * (hi - lo + 1));
+  const story = seed % 2 === 1;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (story) {
+      const id = pick(Object.keys(PYTH_STORIES) as PythStoryId[]);
+      let x: number, y: number;
+      if (id === "ladder") { x = 5 * int(6, 20); y = int(5, Math.floor(x / 2)); }
+      else if (id === "screen") { x = 10 * int(40, 140); y = 10 * (Math.round((x / 10) * 9 / 16) + int(-2, 2)); }
+      else { x = 10 * int(20, 100); y = 10 * int(10, x / 10 - 5); }
+      spec = { shape: "pythagoras", expr: `${id} ${tenthsText(x)} ${tenthsText(y)} dp1`, unit: PYTH_STORIES[id].unit };
+    } else {
+      const longest = rnd() < 0.5, dp = rnd() < 0.5 ? 1 : 2, u = rnd(), unit: Unit = u < 0.5 ? "cm" : u < 0.75 ? "mm" : "m";
+      const x = longest ? int(10, 300) : int(50, 400), y = longest ? int(10, 300) : int(10, x - 10);
+      if (x % 10 === 0 && y % 10 === 0) continue;
+      spec = { shape: "pythagoras", expr: `${longest ? "longest" : "shorter"} ${tenthsText(x)} ${tenthsText(y)} dp${dp}`, unit };
+    }
+    if (!read(spec).ok) continue;
+    if (fair(spec)) return spec;
+  }
+  return story ? { shape: "pythagoras", expr: "ladder 6 2.5 dp1", unit: "m" } : { shape: "pythagoras", expr: "longest 2.5 7 dp1", unit: "cm" };
 }
 
 /**
@@ -3504,6 +3834,66 @@ function readPythagoras(t0: string): SchoolSpec | null {
 }
 
 /**
+ * A printed template read back (MB-B20): each placeholder by its pattern (no group of its own inside), the words as printed
+ * with the case free and the last mark optional. The text each placeholder matched, or null.
+ */
+function readTemplate(text: string, pats: Record<string, string>, t: string): Record<string, string> | null {
+  const keys: string[] = [];
+  const src = text.split(/(\{[A-Z]\})/).map((x) => (Object.prototype.hasOwnProperty.call(pats, x) ? (keys.push(x), `(${pats[x]})`) : x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))).join("");
+  const m = new RegExp(`^${src.replace(/\\[.?]$/, "")}[.?]?$`, "i").exec(t.trim());
+  return m ? Object.fromEntries(keys.map((k, i) => [k, m[i + 1]])) : null;
+}
+
+/** A percent as a top-rung question prints it, with or without a space before the sign: '20%', '20 %' (MB-B20). */
+const PCT_WORD = String.raw`(?:0|[1-9]\d{0,2})(?:\.\d)?\s?%`;
+const PCT_PATS: Record<string, string> = { "{A}": ".+?", "{P}": PCT_WORD, "{Q}": PCT_WORD, "{N}": "[2-5]", "{U}": "increase|decrease", "{V}": "increase|decrease", "{D}": "up|down", "{E}": "up|down" };
+
+/**
+ * A top-rung percent change (MB-B20) exactly as `question` prints it - a bare reverse percentage, two changes in turn, a
+ * change over the years, or a word problem of PCT_STORIES - the amount as `amountOf` reads it; or null.
+ */
+function readPercentTop(t0: string): SchoolSpec | null {
+  const forms: [PctStoryId | null, PctText][] = [...PCT_BARE.map((b): [null, PctText] => [null, b]), ...(Object.keys(PCT_STORIES) as PctStoryId[]).map((id): [PctStoryId, PctText] => [id, PCT_STORIES[id]])];
+  for (const [id, tp] of forms) {
+    const g = readTemplate(tp.text, PCT_PATS, t0);
+    if (!g) continue;
+    const got = amountOf(g["{A}"].trim());
+    if (!got) return null;
+    const pc = (x: string) => x.replace(/\s?%$/, ""), dir = (x: string) => (/^(?:increase|up)$/i.test(x) ? "increase" : "decrease");
+    const first = tp.up === undefined ? dir(g["{U}"] ?? g["{D}"]) : tp.up ? "increase" : "decrease";
+    const expr = tp.form === "before" ? `before ${first} ${got.N} by ${pc(g["{P}"])}%`
+      : tp.form === "then" ? `${first} ${got.N} by ${pc(g["{P}"])}% then ${dir(g["{V}"] ?? g["{E}"])} by ${pc(g["{Q}"])}%`
+      : `${first} ${got.N} by ${pc(g["{P}"])}% for ${g["{N}"]} years`;
+    const spec: SchoolSpec = { shape: "percent-change", expr: id ? `${id} ${expr}` : expr, ...(got.unit ? { unit: got.unit } : {}) };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+/** A top-rung side with its unit: '2.5 cm', '6 metres' (MB-B20). */
+const PY_DP_SIDE = String.raw`(?:[1-9]\d{0,2}|0)(?:\.\d)?\s?(?:mm|millimetres?|cm|centimetres?|m|metres?)`;
+/**
+ * A top-rung Pythagoras task (MB-B20) exactly as `question` prints it, or null: a tier-1/2 sentence or a word problem of
+ * PYTH_STORIES, its sides whole or to one place with one unit, then 'Give your answer to 1 decimal place.' (or 2 places).
+ */
+function readPythagorasDp(t0: string): SchoolSpec | null {
+  const t = t0.trim(), tail = /\s*give your answer to ([12]) decimal places?\.?$/i.exec(t);
+  if (!tail) return null;
+  const body = t.slice(0, tail.index);
+  const forms: [string, string][] = [...(Object.keys(PYTH_BARE) as (keyof typeof PYTH_BARE)[]).map((f): [string, string] => [f, PYTH_BARE[f]]), ...(Object.keys(PYTH_STORIES) as PythStoryId[]).map((id): [string, string] => [id, PYTH_STORIES[id].text])];
+  for (const [id, text] of forms) {
+    const g = readTemplate(text, { "{X}": PY_DP_SIDE, "{Y}": PY_DP_SIDE }, body);
+    if (!g) continue;
+    const side = (x: string) => { const m = /^([\d.]+)\s?([a-z]+)$/i.exec(x.trim()); return m ? { n: m[1], u: pyUnitOf(m[2]) } : null; };
+    const X = side(g["{X}"]), Y = side(g["{Y}"]);
+    if (!X || !Y || X.u !== Y.u) return null;
+    const spec: SchoolSpec = { shape: "pythagoras", expr: `${id} ${X.n} ${Y.n} dp${tail[1]}`, unit: X.u };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
+/**
  * A probability task (v2 M2b), or null: 'A bag has 3 red, 5 blue and 2 green counters. Find the probability that one taken at random
  * is red.' (also 'is not red', 'is red or blue'; two to four colours from PROB_COLOURS, each with its count, at most 20 in all) or
  * 'The probability that a spinner lands on red is 0.35. What is the probability it does not land on red?' (a decimal or a whole
@@ -3553,7 +3943,8 @@ function readProbability(t0: string): SchoolSpec | null {
  *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit;
  *   - mean and range (W7 batch 3): `readStat`'s phrasings, a list with a comma and a space between its numbers.
  *   - mixed numbers (MB-B20): `readMixed`'s two operands, at least one a mixed number '1 3/4' (the top rung of a step up), and a
- *     word problem of STORIES exactly as `question` prints it (`readStory`).
+ *     word problem of STORIES exactly as `question` prints it (`readStory`); the top rungs of percent change and Pythagoras
+ *     exactly as `question` prints them (`readPercentTop`, `readPythagorasDp`), a decimal comma read by readTask.
  * Null for: whole numbers as operands (a whole amount after 'of' excepted), a mixed number written with a hyphen or with a
  * fraction part that is not proper, a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
@@ -3568,7 +3959,7 @@ function specOnce(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readMixed(t) ?? readStory(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t);
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t) ?? readPythagoras(t) ?? readProbability(t) ?? readPercentTop(t) ?? readPythagorasDp(t);
   } catch {
     return null;
   }
@@ -3592,7 +3983,8 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     if (r.kind.k === "convert") return "dec-convert";
     if (r.kind.k === "pct-of") return "pct-of-amount";
-    if (r.kind.k === "pct-change") return "pct-change";
+    if (r.kind.k === "pct-change" || r.kind.k === "pct-top") return "pct-change";
+    if (r.kind.k === "pyth-dp") return "pythagoras";
     if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return "ratio-share";
     if (r.kind.k === "rate") return "unit-rate";
     if (r.kind.k === "area") return "area";
