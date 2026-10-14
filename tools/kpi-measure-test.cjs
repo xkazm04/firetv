@@ -102,6 +102,7 @@ test('a missing desk/node_modules is linked to the donor, and the link is what t
  assert.equal(preflight.usable(dest),true,'tsc and the rules suites find the compiler through it');
  const o=said();assert.equal(preflight.run(r,o),0);
  assert.equal(o.lines.length,1,'one line, not a stack');assert.match(o.lines[0],/^desk\/node_modules was missing — linked it to /);
+ assert.match(o.lines[0],/Unlink it before removing this worktree: `git worktree remove --force` follows the link and empties /,'removing the worktree through the link empties the donor; the one line says so');
  assert.equal(preflight.ensure({env:{},checkout:wt,main:null,levels:1,link:never}).action,'present','a second run is a no-op');
 });
 test('no donor anywhere is one instruction and a non-zero exit, never a stack',()=>{

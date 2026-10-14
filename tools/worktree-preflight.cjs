@@ -6,6 +6,8 @@
  * rules suites resolve modules the way they do in the operator's checkout. No donor, or a real directory in the
  * way, is one line telling the human to run `npm install` in desk/ and a non-zero exit — never an unreadable stack.
  * Read-only towards every donor: it creates a link, and never writes into or deletes anything it did not create.
+ * The link it leaves is not: `git worktree remove --force` (and rm -rf) follow it and empty the donor's install
+ * (git 2.43 on Windows, measured 2026-10-14), so the line it prints says to unlink first.
  */
 const fs = require("node:fs"), path = require("node:path");
 // The main worktree is the operator's checkout; an autopilot worktree is cut from it and it is the likeliest donor.
@@ -78,7 +80,7 @@ function linkDir(from, to) { fs.symlinkSync(from, to, process.platform === "win3
 /** One line at most, and only when something happened. Anything it cannot fix is one instruction, then exit 1. */
 function run(result = ensure(), out = console) {
   if (result.action === "present") return 0;
-  if (result.action === "linked") { out.log(`desk/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in desk/ for an install of its own.`); return 0; }
+  if (result.action === "linked") { out.log(`desk/node_modules was missing — linked it to ${result.donor.modules} (${result.donor.source}). Remove the link and run \`npm install\` in desk/ for an install of its own. Unlink it before removing this worktree: \`git worktree remove --force\` follows the link and empties ${result.donor.modules}.`); return 0; }
   out.error(`desk/node_modules cannot run the gate: ${result.reason}. Run \`npm install\` in desk/, then \`npm test\`.`);
   return 1;
 }
