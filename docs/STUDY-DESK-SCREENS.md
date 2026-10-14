@@ -147,13 +147,15 @@ accidentally cancel). When the break runs out, or is skipped, the TV returns to 
 #### `recap` · "Tonight, done"
 End of session, reached from the phone's End session or Menu on the landing. The whole evening as one
 picture: a tile per app on the profile, each in its own app's language, from tonight's work only —
-Math Buddy's marked sets as ticks and rings (a dashed ring where the desk was not sure), pages read, hints
+Math Buddy's marked sets as ticks and rings (a dashed ring where the desk was not sure, an empty pencil line where
+the learner skipped one - MB-B1), pages read, hints
 (second hints ringed); Linga's conversations as marks sized by their replies; Essay Master's readings as arrows,
 the ones to fix reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
 Left/Right walk the tiles, then **"Back to the desk"**. Select on a tile opens what that app still has on the desk
 (the same `openWaiting` as the landing's Select: Math Buddy's continue card, else `tonight`; Essay Master's reading →
 `forensic` when it is this learner's, else `essaytype` on the lens last read; Linga → `linga`); the desk (and Back) is the landing at rest. The parent's copy is the phone's Recap
-tab, shown as a chip, not a button.
+tab, shown as a chip, not a button; its Math Buddy line counts slips, the desk's doubt and skipped items apart ("one
+set: 4 right, 1 skipped", MB-B1), and the phone's marked-set line reads "4 right. 1 to look at (1 skipped).".
 *Feeds:* history, englishLearning.sessions, session log (`desk/src/tv/recapRows.ts`). Tests: `tools/tv-recap-test.cjs`.
 
 ### 5.3 Math Buddy (Lamplight, `desk/src/maths/MathsTV.tsx`)
@@ -181,7 +183,7 @@ Where a practice set lands when the phone's photo of it comes back marked. The w
 learner's paper under the lamp (Lamplight, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)): each item
 folded to its printed question and the one line of their working the desk's pen is on - a right item
 is its question and a tick, a wrong one its marked line (the pen inside the line where the data places
-it; on a Calculus item the first line its working stops holding, with a tick on each earlier line that checks, none on a line the desk cannot check - M4c), an unsure one its last line and "not sure". Never an answer the learner did not write. The title counts what to look at ("Two to look at", "All six right"); the caption
+it; on a Calculus item the first line its working stops holding, with a tick on each earlier line that checks, none on a line the desk cannot check - M4c), an unsure one its last line and "not sure", a skipped one (an answer left empty: `rules/marks`, MB-B1) "nothing on the line" and "skipped" in pencil grey with no ring on its number; the Walk's card on it says "Skipped", "Number N was skipped" and "Work it on paper, then tell the desk on the phone what you got." Never an answer the learner did not write. The title counts what to look at ("Two to look at", "All six right"); the caption
 names the focused item and where to start looking (the slip's `points`), the only prose on screen.
 Two actions: **Six more** (a new set on the same topic, written by the same `/api/practice` job
 as Topics and aimed at the learner's recorded slips) and **Put the sheet away** (clears the set).

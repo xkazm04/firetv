@@ -99,6 +99,7 @@
 .maths-tv .mb-tm[data-v="right"] svg path { stroke: rgba(255, 177, 61, .8); stroke-width: 4; }
 .maths-tv .mb-tm[data-v="wrong"] svg path { stroke: rgba(217, 116, 26, .6); stroke-width: 3.5; }
 .maths-tv .mb-tm[data-v="unsure"] svg path { stroke: rgba(143, 184, 255, .7); stroke-width: 3; stroke-dasharray: 6 6; }
+.maths-tv .mb-tm[data-v="skipped"] svg path { stroke: rgba(245, 238, 223, .45); stroke-width: 4; } /* MB-B1: the empty answer line, no ring */
 .maths-tv .mb-tm[data-v="right"] span { transform: translateX(-9px); }
 .maths-tv .mb-tm[data-second="right"] svg + svg path { stroke: var(--mb-amber-2); stroke-width: 4.5; }
 .maths-tv .mb-tm[data-second="wrong"] svg + svg { transform: rotate(21deg) scale(1.12); transform-origin: 50% 50%; }
@@ -359,6 +360,7 @@
 .maths-tv .mb-box .tk path { stroke-width: 5.5; }
 .maths-tv .mb-box[data-look="true"] { background: rgba(255, 197, 107, .28); box-shadow: 0 0 0 3px rgba(255, 177, 61, .6), 0 0 24px rgba(255, 177, 61, .5); }
 .maths-tv .mb-box[data-v="unsure"] .la { color: #5B78B8; }
+.maths-tv .mb-box[data-v="skipped"] .la { color: rgba(39, 48, 74, .55); }
 .maths-tv .mb-pencil { position: absolute; left: 444px; top: 96px; width: 34px; height: 290px; transform: rotate(-16deg); filter: drop-shadow(10px 16px 10px rgba(0, 0, 0, .5)); }
 .maths-tv .mb-empty { position: absolute; left: 84px; right: 30px; top: 120px; font-family: var(--mb-hand); font-size: 38px; font-weight: 600; line-height: 1.25; color: rgba(39, 48, 74, .55); white-space: normal; }
 .maths-tv .mb-startline { position: absolute; left: 84px; right: 40px; top: 210px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #E08A1E, rgba(224, 138, 30, .1)); box-shadow: 0 0 16px rgba(255, 177, 61, .6); }
@@ -565,6 +567,7 @@
 .maths-tv .mb-item[data-focused="true"]::before { content: ""; position: absolute; left: 70px; right: 24px; top: -10px; bottom: -6px; border-radius: 14px; background: rgba(255, 197, 107, .22); box-shadow: 0 0 0 4px rgba(255, 177, 61, .75), 0 0 34px rgba(255, 177, 61, .45); }
 .maths-tv .mb-item .lookword { font-family: var(--mb-hand); font-size: 44px; font-weight: 700; color: var(--mb-pen); margin-left: .6em; }
 .maths-tv .mb-item[data-v="unsure"] .lookword { color: #5B78B8; }
+.maths-tv .mb-item[data-v="skipped"] .lookword { color: rgba(39, 48, 74, .55); } /* MB-B1: the paper's pencil grey: not the pen's slip, not the desk's blue doubt */
 .maths-tv .mb-item .ok { position: absolute; right: 44px; top: 50%; margin-top: -30px; display: flex; align-items: center; gap: 12px; padding: 4px 22px 4px 4px; border-radius: 34px; background: linear-gradient(160deg, var(--mb-amber-lo), var(--mb-amber-2)); color: var(--mb-navy); box-shadow: 0 8px 30px rgba(255, 177, 61, .45); z-index: 2; }
 .maths-tv .mb-item .ok b { text-transform: uppercase; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--mb-navy); color: var(--mb-amber); font-size: 20px; letter-spacing: .06em; }
 .maths-tv .mb-item .ok .mb-lab { color: var(--mb-navy); }

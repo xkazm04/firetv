@@ -16,6 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { hasWorked } from "@/lib/library/worked";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
+import { markOf, type Mark as ItemMark } from "@/lib/rules/marks";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
 import { MathsCollection } from "./MathsCollection";
 import { Plot } from "./Plot";
@@ -100,6 +101,8 @@ const KIND_ICON: Record<string, ReactNode> = {
   line: <svg viewBox="0 0 52 40"><path d="M4 18 H48" opacity=".5" /><path d="M4 30 C 10 24, 16 36, 22 30 S 34 24, 40 30 S 46 34, 49 29" /></svg>,
   right: <svg viewBox="0 0 52 40"><path d="M10 21 L22 33 L44 7" /></svg>,
   unsure: <svg viewBox="0 0 52 40"><path d="M18 12 C 18 4, 34 4, 34 12 C 34 18, 26 19, 26 25" /><path d="M26 33 V34" /></svg>,
+  // MB-B1: an item left empty - the empty answer line, dashed
+  skipped: <svg viewBox="0 0 52 40"><path d="M6 30 H46" strokeDasharray="7 6" /></svg>,
   six: <svg viewBox="0 0 52 40"><path d="M8 6 H22 V14 H8 Z M30 6 H44 V14 H30 Z M8 18 H22 V26 H8 Z M30 18 H44 V26 H30 Z M8 30 H22 V38 H8 Z M30 30 H44 V38 H30 Z" /></svg>,
 };
 
@@ -477,6 +480,18 @@ const Pencil = ({ style }: { style?: React.CSSProperties }) => (
 const TALLY_TICK = <svg viewBox="0 0 40 40"><path d="M6 21 L16 31 L35 8" stroke="#FFB13D" strokeWidth="4.5" /></svg>;
 const TALLY_RING = <svg viewBox="0 0 40 40"><path d="M10 12 C 16 4, 32 5, 35 16 C 38 28, 26 36, 16 34 C 6 32, 3 20, 9 12 C 12 9, 15 8, 18 8" stroke="#D9741A" strokeWidth="4" /></svg>;
 const TALLY_ASK = <svg viewBox="0 0 40 40"><path d="M10 12 C 16 4, 32 5, 35 16 C 38 28, 26 36, 16 34 C 6 32, 3 20, 9 12" stroke="#8FB8FF" strokeWidth="3.5" strokeDasharray="5 5" /></svg>;
+/** MB-B1: an item left empty - a short empty answer line, no ring: not a slip and not the desk's doubt. */
+const TALLY_SKIP = <svg viewBox="0 0 40 40"><path d="M8 30 H32" stroke="#8A93AD" strokeWidth="4" /></svg>;
+/**
+ * What each mark (rules/marks) draws on the paper: the folded word, the Continue card's tally, and whether the number
+ * wears the pen's ring. Keyed by Mark, so a fifth mark is a compile error here, not a ring on a blank.
+ */
+const MARK_DRAW: Record<ItemMark, { look: string | null; tally: ReactNode; ring: boolean }> = {
+  right: { look: null, tally: TALLY_TICK, ring: false },
+  wrong: { look: "look again", tally: TALLY_RING, ring: true },
+  unsure: { look: "not sure", tally: TALLY_ASK, ring: true },
+  skipped: { look: "skipped", tally: TALLY_SKIP, ring: false },
+};
 const RING_BOX = <svg className="ring" viewBox="0 0 200 110" preserveAspectRatio="none" aria-hidden="true"><path d="M18 30 C 40 6, 150 4, 186 26 C 204 44, 190 90, 120 100 C 60 106, 10 96, 8 62 C 6 44, 16 32, 34 24" /></svg>;
 const TICK_BOX = <svg className="tk" viewBox="0 0 60 50" aria-hidden="true"><path d="M6 27 L22 42 L54 6" /></svg>;
 
@@ -502,17 +517,17 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(name)}
         <div className="mb-boxes">{p.items.slice(0, 6).map((it, i) => {
-          const v = it.verdict ?? "unsure";
+          const v = markOf(it);
           return (
             <div key={it.n} className="mb-box" data-v={v} data-look={i === first || undefined}>
               <span className="qx"><MathText text={it.question} voice="hand" />{v === "wrong" && RING_BOX}</span>
-              {v === "right" ? TICK_BOX : <span className="la">{v === "wrong" ? "look again" : "not sure"}</span>}
+              {v === "right" ? TICK_BOX : <span className="la">{MARK_DRAW[v].look}</span>}
             </div>
           );
         })}</div>
       </div>
     );
-    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{it.verdict === "right" ? TALLY_TICK : it.verdict === "wrong" ? TALLY_RING : TALLY_ASK}</span>)}</span>;
+    detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{MARK_DRAW[markOf(it)].tally}</span>)}</span>;
   } else if (cont.go === "practice" && p) {
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(topicName(p.topic))}
@@ -812,12 +827,15 @@ const TALLY_R = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M36 40 L42 
 const TALLY_W = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M18 20 C 22 10, 42 10, 46 22 C 50 36, 40 52, 28 50 C 16 49, 11 38, 13 26 C 14 22, 17 19, 22 17" /></svg>;
 /** A tally mark's name: the item's number, or a part's question number and letter run together (5a), to fit the mark. */
 const tallyName = (items: PracticeItem[], i: number) => { const at = partPlace(items, i); return at ? `${at.q}${at.label}` : String(items[i].n); };
-/** The set as six numbers in the top bar: ticked, ringed, or dashed when the desk is not sure; the one in hand lit. */
+const TALLY_S = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M14 52 H44" /></svg>;
+/** The top bar's mark per ItemMark: a tick, a ring (dashed by CSS when the desk is not sure), an empty line when skipped. */
+const TOP_TALLY: Record<ItemMark, ReactNode> = { right: TALLY_R, wrong: TALLY_W, unsure: TALLY_W, skipped: TALLY_S };
+/** The set as six numbers in the top bar: ticked, ringed, dashed when the desk is not sure, underlined empty when skipped; the one in hand lit. */
 function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
   return (
     <div className="mb-tally" aria-label="the set">
-      {items.map((it, i) => { const v = it.verdict ?? "unsure"; return (
-        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{v === "right" ? TALLY_R : TALLY_W}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{tallyName(items, i)}</span></div>
+      {items.map((it, i) => { const v = markOf(it); return (
+        <div key={it.n} className="mb-tm" data-v={v} data-second={it.second} data-cur={i === cur || undefined}>{TOP_TALLY[v]}{it.second === "right" ? TALLY_R : it.second === "wrong" ? TALLY_W : null}<span>{tallyName(items, i)}</span></div>
       ); })}
     </div>
   );
@@ -826,18 +844,24 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
 function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: number; points?: string; job?: JobLine | null }) {
   const it = items[ix], name = itemName(items, ix);
-  const v = it.verdict ?? "unsure", w = working(it);
-  const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
-  const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
+  const v = markOf(it), w = working(it);
+  const kind = v === "wrong" ? w.mark?.kind ?? "line" : v;
   // a part is named as the paper names it, 5(b) (v2 M3a); a single item's name is its number, so its lines are as before
   const nm = name;
+  // the kicker, the title and the arrow line per mark (rules/marks): keyed by ItemMark, so no mark falls through to a slip's words
+  const SIDE: Record<ItemMark, () => { word: string; title: string; next: string | null }> = {
+    right: () => ({ word: "Right", title: `Number ${nm} came back right`, next: null }),
+    wrong: () => ({ word: KIND_WORD[kind as keyof typeof KIND_WORD], title: it.slip ? slipName(it.slip) : `Number ${nm} needs another look`, next: secondLine(it) ?? lookAt(it, points) }),
+    unsure: () => ({ word: "Not sure", title: "The desk is not sure", next: "Tell the desk on the phone how you got there." }),
+    skipped: () => ({ word: "Skipped", title: `Number ${nm} was skipped`, next: "Work it on paper, then tell the desk on the phone what you got." }),
+  };
+  const { word, title, next } = SIDE[v]();
   const said = deskLine(items, ix, it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one."));
-  const next = v === "wrong" ? secondLine(it) ?? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
       <div className="mb-khead"><div className="mb-kick">{KIND_ICON[kind]}{word}</div></div>
       <div className="mb-stitle" data-role="maths-slip">
-        <Amber text={v === "right" ? `Number ${nm} came back right` : v === "unsure" ? "The desk is not sure" : it.slip ? slipName(it.slip) : `Number ${nm} needs another look`} />
+        <Amber text={title} />
       </div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">{it.reply ? "The desk replied" : "The desk says"}</span></div>
@@ -853,13 +877,13 @@ function SlipSide({ items, ix, points, job }: { items: PracticeItem[]; ix: numbe
 
 /** An item on the marked paper. Open: the question and every line of working; folded: the question, and the line the pen is on. */
 function MarkedItem({ it, at, open, focused, cur, dim, okLabel }: { it: PracticeItem; at?: PartPlace | null; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
-  const v = it.verdict ?? "unsure";
+  const v = markOf(it);
   const w = working(it);
   const rows: ReactNode[] = [];
   if (v === "right") {
     if (open) w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} tick={w.ticks[k]} />));
   } else if (!w.lines.length) {
-    rows.push(<div key="none" className="mb-row w"><span className="rin"><span className="mx hand" data-role="maths-hand"><span className="mt">nothing on the line</span></span><span className="lookword">{v === "wrong" ? "look again" : "not sure"}</span></span></div>);
+    rows.push(<div key="none" className="mb-row w"><span className="rin"><span className="mx hand" data-role="maths-hand"><span className="mt">nothing on the line</span></span><span className="lookword">{MARK_DRAW[v].look}</span></span></div>);
   } else if (open) {
     w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} mark={k === w.at ? w.mark : null} tick={w.ticks[k]} after={w.at !== null && k > w.at} arrow={k === w.at} />));
   } else {
@@ -867,13 +891,13 @@ function MarkedItem({ it, at, open, focused, cur, dim, okLabel }: { it: Practice
     rows.push(
       <div key="pen" className="mb-row w" data-tall={isTall(parseMath(w.lines[k]))}>
         {w.at !== null && <MarginArrow />}
-        <span className="rin"><MathText text={w.lines[k]} voice="hand" mark={k === w.at ? w.mark : null} />{v === "unsure" && <span className="lookword">not sure</span>}</span>
+        <span className="rin"><MathText text={w.lines[k]} voice="hand" mark={k === w.at ? w.mark : null} />{v !== "wrong" && <span className="lookword">{MARK_DRAW[v].look}</span>}</span>
       </div>,
     );
   }
   return (
     <section className="mb-item" data-v={v} data-open={open || undefined} data-focused={focused || undefined} data-cur={cur || undefined} data-dim={dim || undefined} data-part={at?.label}>
-      <div className="num" data-second={it.second}>{at ? `(${at.label})` : it.n}{v !== "right" && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
+      <div className="num" data-second={it.second}>{at ? `(${at.label})` : it.n}{MARK_DRAW[v].ring && <NumRing />}{it.second === "wrong" && <NumRing again />}{it.second === "right" && <Tick className="second" />}</div>
       {at ? <ProseRow text={it.question} tick={v === "right" && !open} role="maths-part" /> : <PrintRow text={it.question} tick={v === "right" && !open} />}
       {rows}
       {focused && okLabel && <div className="ok"><b>OK</b><span className="mb-lab">{okLabel}</span></div>}

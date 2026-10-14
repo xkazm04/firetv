@@ -14,7 +14,8 @@ import { fmt } from "./useSession";
 import { playerCommand, stopAt, learnerStops, switchEndsLine, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
 import { pathOf } from "@/lib/library/paths";
-import { recapRows, recapCaption, railOf, RECAP_READINGS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import { recapRows, recapCaption, railOf, setMarks, RECAP_READINGS, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import type { Mark } from "@/lib/rules/marks";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
 import { Mark as LingaMark } from "@/english/OpenDoor";
@@ -351,6 +352,12 @@ const PEN_TICK = <svg className="rc-tk" viewBox="0 0 46 40" aria-hidden="true"><
 const PEN_RING = <svg className="rc-ring" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
 /** Lamplight's unsure mark: no tick and no slip, the pen's ring dashed in the paper's "not sure" blue. */
 const PEN_ASK = <svg className="rc-ask" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
+/** MB-B1: an item left empty - the empty answer line, neither a slip's ring nor the desk's dashed doubt. */
+const PEN_SKIP = <svg className="rc-skip" viewBox="0 0 46 40" aria-hidden="true"><path d="M8 32 H38" /></svg>;
+/** Each mark's pen on the recap's paper, keyed by Mark (rules/marks): a slip keeps its old data-v, "look". */
+const RECAP_PEN: Record<Mark, { v: string; pen: React.ReactNode }> = {
+  right: { v: "right", pen: PEN_TICK }, wrong: { v: "look", pen: PEN_RING }, unsure: { v: "unsure", pen: PEN_ASK }, skipped: { v: "skipped", pen: PEN_SKIP },
+};
 const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
 /** The one small line under a tile that drew its last three: how many came before them. Nothing when none did. */
 function Earlier({ n }: { n: number }) {
@@ -363,7 +370,7 @@ function RecapMaths({ t }: { t: MathsTile }) {
     <div className="rc-sheet">
       {t.empty ? <div className="rc-none">{t.empty}</div> : <>
         {t.sets.slice(-RECAP_READINGS).map((x, k) => (
-          <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => { const v = i < x.right ? "right" : i >= x.of - (x.unsure ?? 0) ? "unsure" : "look"; return <i key={i} data-v={v}>{v === "right" ? PEN_TICK : v === "unsure" ? PEN_ASK : PEN_RING}</i>; })}</div>
+          <div key={k} className="rc-set" data-role="recap-set">{setMarks(x).map((m, i) => <i key={i} data-v={RECAP_PEN[m].v}>{RECAP_PEN[m].pen}</i>)}</div>
         ))}
         <Earlier n={t.sets.length - RECAP_READINGS} />
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}

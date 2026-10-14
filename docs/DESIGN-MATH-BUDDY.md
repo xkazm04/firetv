@@ -35,7 +35,9 @@ look again. Never the answer.
 4. **Ticks are claims, so they are earned.** A tick follows a line only when the marking vouches for it: the
    answer line of a right item (the substitution checked the value, or on a Calculus item `checkAnswer` did), and
    the lines before a slip the data places. An unsure item gets no tick and no mark, just a dashed ring and "not
-   sure".
+   sure". A skipped item (its answer left empty, MB-B1: `rules/marks` reads it off an unsure verdict with no answer)
+   is neither: no tick, no ring, an empty answer line and "skipped" in pencil grey, counted apart everywhere ("4 of 5
+   right, 1 skipped"), and never "all of it right".
 5. **One lamp, one thing in its light.** The item in hand sits under the lamp (the paper pans to it); the rest of
    the set is dimmed or folded. Exactly one element looks focused: the amber door, the amber pill, the lifted
    sheet, the ringed topic on the ruler, or the item on the paper with its OK chip.
@@ -174,6 +176,8 @@ school system) and has no pen position either: a wrong one gets the wavy underli
 from the unit's closed list ("Added the tops and the bottoms", "The top not scaled with the bottom", "Added the tops,
 kept one bottom", "Subtracted the wrong way round") only when code detected it, and otherwise the desk asks. An answer
 the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal) is the dashed ring, "not sure".
+A wrong item with no slip says its checker's own fixed reason when it has one ("A derivative has no arbitrary
+constant in it."); only a plain disagreement asks "I got something different for number N" (MB-B1).
 
 **A typed set** (Family W6) is marked by the same code from the strings the learner typed on the phone instead of strings a model read from a photo (`markTyped` in `desk/src/lib/desk/mark.ts`, `POST /api/mark` with `answers`): one string per question, a school or Calculus item by `settleSpec` under the seated learner's system, a linear item by the substitution rule when the desk can solve the equation itself. A blank or unreadable answer is "not sure", never wrong, exactly as a photographed empty answer is. There is no working and no pen position, so a wrong typed item gets the wavy underline on its answer line. No vision call and no model call is made; the history line and the learner record are the ones a photographed sheet writes.
 
@@ -271,8 +275,8 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   on smaller squares (48 down to 36 px, `paperSquare`) until all of it is on screen. On a snapped Page every problem
   keeps clear of the lit item's OK · Hint badge. `maths-sheet`.
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.
-- **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure; the current one
-  lit.
+- **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure, an empty pencil
+  line under the number when skipped (MB-B1); the current one lit.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
   step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner

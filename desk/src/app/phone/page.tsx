@@ -18,6 +18,7 @@ import { dayOf } from "@/tv/mathsRows";
 import { counted, recapCaption, recapLine, recapRows, startOfDay, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
+import { markCounts } from "@/lib/rules/marks";
 import { itemName, partPlace } from "@/lib/rules/calc-word";
 import { PaperPanel } from "./PaperPanel";
 import { ExplainTalk } from "./ExplainTalk";
@@ -620,13 +621,14 @@ export default function Phone() {
           </div>;
 
           // marked: the count, and not one verdict. The walk itself belongs to the TV.
-          const right = pr.items.filter((i) => i.verdict === "right").length;
+          // the marks the sheet draws (rules/marks): an item left empty is to look at too, and named apart (MB-B1)
+          const { right, skipped } = markCounts(pr.items);
           const look = pr.items.length - right;
           const item = s.screen === "walk" ? pr.items[s.walkIx] : undefined;
           // an item the explanation just settled keeps the reply up; the verdict itself is the TV's to show
           const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure" || !!reply);
           return <div className="pscreen"><h3>Practice</h3>
-            <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
+            <p><b>{right} right.</b> {look ? `${look} to look at${skipped ? ` (${skipped} skipped)` : ""}.` : "Nothing to look at."}</p>
             <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
             {item?.verdict === "wrong" && (item.second
               ? <p data-role="second-sent">Your second go is on the TV.</p>

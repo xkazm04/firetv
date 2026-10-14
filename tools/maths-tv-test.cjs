@@ -1168,3 +1168,40 @@ test('RP6 left out: the score card says how many typed questions the phone left 
   assert.ok(!t.includes(String.fromCharCode(8212))&&!t.includes(String.fromCharCode(8211)),'no em or en dash');
  }
 });
+
+// ---- MB-B1: an item left empty draws as skipped - its own word and mark, no ring, never the desk's "not sure"
+test('MB-B1 TV: the Sheet, the Walk and the Continue card draw a skipped item as skipped, apart from a not-sure one; an old stored blank draws the same',()=>{
+ const Mth=require(path.join(root,'src/lib/rules/maths.ts'));
+ const items=[
+  {n:1,question:'x + 2 = 6',studentAnswer:'4',studentWorking:'',verdict:'right',said:Mth.RIGHT(1)},
+  {n:2,question:'x + 3 = 5',studentAnswer:'5',studentWorking:'',verdict:'wrong',slip:'sign-lost-moving',said:'Check the sign.'},
+  {n:3,question:'x + 4 = 9',studentAnswer:'4/22',studentWorking:'',verdict:'unsure',said:Mth.NOT_SURE(3)},
+  {n:4,question:'x + 5 = 9',studentAnswer:'',studentWorking:'',verdict:'unsure',said:Mth.BLANK(4)},
+  {n:5,question:'x + 6 = 9',verdict:'unsure',said:Mth.NOT_SURE(5)}, // an older stored blank: no answer field at all
+ ];
+ const base=secondSession(null,'sheet',{practice:{topic:'linear-one-step',marked:true,items}});
+ const sheet=drawMaths('Sheet',{...base,focus:0});
+ assert.deepEqual(tags(sheet,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['right','wrong','unsure','skipped','skipped'],'the top bar: the mark each item reads as');
+ const items4=[...sheet.matchAll(/<section class="mb-item" data-v="(\w+)"[\s\S]*?<\/section>/g)];
+ assert.deepEqual(items4.map((m)=>m[1]),['right','wrong','unsure','skipped','skipped']);
+ const [,w,u,k,old]=items4.map((m)=>m[0]);
+ assert.match(w,/class="nr"/,'a slip wears the ring');assert.match(u,/class="nr"/,'the desk\'s doubt keeps its ring, as before');
+ for(const x of [k,old]){assert.doesNotMatch(x,/class="nr"/,'no ring on a skipped item');assert.match(x,/class="lookword">skipped</);assert.doesNotMatch(x,/not sure|look again/);}
+ assert.match(u,/class="lookword">not sure</);
+ // the Walk's card on the skipped item: its own kicker, title and arrow line, the stored line kept
+ const walk=drawMaths('Walk',{...base,screen:'walk',walkIx:3,focus:3});
+ const side=walk.slice(walk.indexOf('<aside class="mb-side"'),walk.indexOf('</aside>'));
+ assert.match(side,/Skipped/);assert.match(side,/Number 4 was <em>skipped<\/em>/);assert.match(side,/Number 4 has no answer yet\./);assert.match(side,/Work it on paper, then tell the desk on the phone what you got\./);
+ assert.doesNotMatch(side,/not sure|something different|needs another look/i);
+ // the not-sure one still reads as the desk's doubt
+ const walkU=drawMaths('Walk',{...base,screen:'walk',walkIx:2,focus:2});
+ const sideU=walkU.slice(walkU.indexOf('<aside class="mb-side"'),walkU.indexOf('</aside>'));
+ assert.match(sideU,/The desk is not sure/);assert.doesNotMatch(sideU,/skipped/i);
+ // the Continue card on Tonight: the box's word and the tally, per mark
+ const tonight=drawMaths('Tonight',{...base,screen:'tonight',focus:0});
+ const boxes=tonight.split('<div class="mb-box" ').slice(1).map((c)=>`${/^data-v="(\w+)"/.exec(c)[1]}:${/<span class="la">([^<]*)<\/span>/.exec(c)?.[1]??'tick'}`);
+ assert.deepEqual(boxes,['right:tick','wrong:look again','unsure:not sure','skipped:skipped','skipped:skipped'],'a skipped box says skipped, not not sure');
+ // an all-skipped set: every mark is skipped, no ring anywhere on the paper
+ const none=drawMaths('Sheet',{...secondSession(null,'sheet',{practice:{topic:'linear-one-step',marked:true,items:items.slice(3)}}),focus:0});
+ assert.deepEqual(tags(none,'mb-tm').map((t)=>/data-v="(\w+)"/.exec(t)[1]),['skipped','skipped']);assert.doesNotMatch(none,/class="nr"/);
+});

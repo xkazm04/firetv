@@ -797,3 +797,14 @@ test('MB-B1 recap 2: a set with a slip, a doubt and a skip says all three apart;
  // a line written before skipped existed still reads as it did: its blanks stay in its "not sure"
  assert.deepEqual(parseDetail('practice','3 of 6 right, 2 not sure'),{right:3,of:6,unsure:2});
 });
+test('MB-B1 recap 3: the TV tile draws a skipped item as the empty answer line, after the slips and the doubt, never a ring',()=>{
+ const {setMarks}=recap();
+ assert.deepEqual(setMarks({right:1,of:4,unsure:1,skipped:1}),['right','wrong','unsure','skipped']);
+ assert.deepEqual(setMarks({right:0,of:2,skipped:2}),['skipped','skipped']);
+ assert.deepEqual(setMarks({right:3,of:6}),['right','right','right','wrong','wrong','wrong'],'an older line: as before');
+ assert.equal(setMarks({right:10,of:20,skipped:5}).length,12,'at most twelve marks a set');
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'1 of 4 right, 1 not sure, 1 skipped'}]});
+ assert.deepEqual(marksOf(draw(s,NOW)),[['right:rc-tk','look:rc-ring','unsure:rc-ask','skipped:rc-skip']]);
+ const all=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'0 of 2 right, 2 skipped'}]});
+ assert.deepEqual(marksOf(draw(all,NOW)),[['skipped:rc-skip','skipped:rc-skip']],'an all-skipped set: no ring, no tick');
+});

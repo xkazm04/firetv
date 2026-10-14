@@ -9,6 +9,7 @@
 import type { Session, Subject, Task } from "@/lib/session/store";
 import { landingModules } from "@/tv/landingRows";
 import { BRAND } from "@/tv/profileRows";
+import { MARKS, type Mark } from "@/lib/rules/marks";
 
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
@@ -77,6 +78,11 @@ export function recapRows(s: Session, now: number): RecapTile[] {
 
 /** A set's slips: what is neither right, nor the desk's doubt, nor left empty. */
 export const slipsOf = (x: MathsSet): number => x.of - x.right - (x.unsure ?? 0) - (x.skipped ?? 0);
+/** The marks a set's tile draws, one per item in rules/marks order (ticks, slips, doubt, skipped), at most RAIL_MAX. */
+export function setMarks(x: MathsSet): Mark[] {
+  const n: Record<Mark, number> = { right: x.right, wrong: slipsOf(x), unsure: x.unsure ?? 0, skipped: x.skipped ?? 0 };
+  return MARKS.flatMap((m) => Array.from({ length: Math.max(0, n[m]) }, () => m)).slice(0, RAIL_MAX);
+}
 
 /** How many readings or sets the TV tile draws, and the phone line lists. */
 export const RECAP_READINGS = 3;
