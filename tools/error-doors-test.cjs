@@ -9,10 +9,13 @@
  *      fails, a fixed one must leave the list (probe P1: a new empty catch was unseen).
  * No model is called; nothing is written. Run with npm test in desk/ (directly: node tools/error-doors-test.cjs).
  */
-const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict');
 const {test}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 const src=path.join(root,'src');
+// never desk/data: anything that reaches the session writes under a scratch directory
+const data=path.join(os.tmpdir(),`error-doors-${process.pid}`);process.env.DESK_DATA_DIR=data;
+require('node:test').after(()=>fs.rmSync(data,{recursive:true,force:true}));
 const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):/\.tsx?$/.test(e.name)?[path.join(d,e.name)]:[]);
 const rel=(f)=>path.relative(root,f).split(path.sep).join('/');
 const files=walk(src).map(f=>({file:rel(f),text:fs.readFileSync(f,'utf8')}));
@@ -121,4 +124,23 @@ test('checkerFault: an Unreadable is the expected verdict and says nothing; any 
  assert.deepEqual(said,['[rules] checker fault in canary: TypeError: x is undefined','[rules] checker fault in canary: RangeError: Division by zero']);
  // the parsers throw the shared class, so a parse failure in school.ts or calc-expr.ts is never logged as a fault
  for(const f of ['school.ts','calc-expr.ts']){const t=fs.readFileSync(path.join(src,'lib/rules',f),'utf8');assert(!/class Unreadable/.test(t),`${f} uses the Unreadable from fault.ts`);}
+});
+
+// ---- 5. the outermost door: a request that throws past its handler, and a screen that crashes while it draws
+test('crash door: onRequestError logs where and what (never the body); /api/fault logs short labels only and answers 204',async()=>{
+ require('./ts-load.cjs');
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ try{
+  const {onRequestError}=require(path.join(src,'instrumentation.ts'));
+  await onRequestError(Object.assign(new TypeError('boom'),{digest:'d1'}),{path:'/api/mark',method:'POST',headers:{}},{routerKind:'App Router',routePath:'/api/mark',routeType:'route'});
+  const {POST}=require(path.join(src,'app/api/fault/route.ts'));
+  const r=await POST(new Request('http://desk/api/fault',{method:'POST',body:JSON.stringify({where:'/tv <x=42>',name:'TypeError',digest:'abc123'})}));
+  assert.equal(r.status,204);
+  const bad=await POST(new Request('http://desk/api/fault',{method:'POST',body:'7'}));
+  assert.equal(bad.status,400);
+ }finally{console.error=was;}
+ assert.match(said[0],/^\[crash\] POST \/api\/mark \(route \/api\/mark\): TypeError: boom/);assert.match(said[0],/digest d1/);
+ assert.equal(said[1],'[crash] screen /tvx42: TypeError digest abc123','labels keep only word characters, slashes, dots, colons and dashes');
+ assert(fs.existsSync(path.join(src,'app/global-error.tsx')),'a screen that crashes while drawing has a last screen');
+ assert.doesNotMatch(fs.readFileSync(path.join(src,'app/global-error.tsx'),'utf8'),/error\.message|\{error\}|String\(error\)/,'the last screen never shows the error text');
 });

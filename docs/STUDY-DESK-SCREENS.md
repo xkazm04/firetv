@@ -156,6 +156,13 @@ Left/Right walk the tiles, then **"Back to the desk"**. Select on a tile opens w
 tab, shown as a chip, not a button.
 *Feeds:* history, englishLearning.sessions, session log (`desk/src/tv/recapRows.ts`). Tests: `tools/tv-recap-test.cjs`.
 
+#### `fault` · the last screen
+Any screen, TV or phone, that throws while it draws. Charcoal, one red rule, **"The desk hit a fault"** and
+"Nothing you saved is lost. Reload to carry on.", one focused **Reload** (no typing). It never shows the error's text
+(it can carry an answer). It posts where it happened to `/api/fault`, which writes one `[crash] screen …` line to the
+server log; a request that throws past its handler is logged the same way by `onRequestError` (`desk/src/instrumentation.ts`).
+*Feeds:* nothing. *Code:* `desk/src/app/global-error.tsx`, `desk/src/app/api/fault/route.ts`. Tests: `tools/error-doors-test.cjs`.
+
 ### 5.3 Math Buddy (Lamplight, `desk/src/maths/MathsTV.tsx`)
 
 | Screen | What it is | Reached | D-pad → next |
