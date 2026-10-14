@@ -16,7 +16,7 @@
  * asked only to READ the page - the final answer as plain text, the working line by line, a slip id from the topic's
  * list - never to solve and never for a verdict; a verdict or a solution it volunteers is never read. The verdict is
  * checkAnswer(spec, studentAnswer) (rules/maths settleSpec): right, wrong, or unsure when the answer cannot be read or
- * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant) where it names one, else the model's
+ * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant, forgot-chain) where it names one, else the model's
  * pick from the topic's vocabulary, only on a wrong item. A Calculus item has no pen position (locate reads linear lines).
  *
  * A school item (a `spec` of a school shape, rules/school; Family W5b and W7: every school unit, fractions to mean and range) is marked by CODE

@@ -287,8 +287,8 @@
    "arithmetic-slip"
   ]
  },
- "specs": 166,
- "calls": 3756,
+ "specs": 175,
+ "calls": 3954,
  "rows": [
   {
    "spec": {
@@ -4099,6 +4099,133 @@
   {
    "spec": {
     "shape": "definite-integral",
+    "f": "3x/4",
+    "a": 0,
+    "b": 1
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Evaluate int_0^1 3x/4 dx.",
+    "tex": "\\text{Evaluate } \\int_{0}^{1} \\frac{3x}{4}\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find an antiderivative first, then take its value at the lower limit from its value at the upper limit.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "definite-integral",
+    "f": "3x/4",
+    "a": 0,
+    "b": 1
+   }
+  },
+  {
+   "spec": {
+    "shape": "definite-integral",
     "f": "3x^2",
     "a": 0,
     "b": 2
@@ -4353,6 +4480,133 @@
   {
    "spec": {
     "shape": "definite-integral",
+    "f": "5.35x",
+    "a": 0,
+    "b": 1
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Evaluate int_0^1 5.35x dx.",
+    "tex": "\\text{Evaluate } \\int_{0}^{1} 5.35x\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find an antiderivative first, then take its value at the lower limit from its value at the upper limit.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "definite-integral",
+    "f": "5.35x",
+    "a": 0,
+    "b": 1
+   }
+  },
+  {
+   "spec": {
+    "shape": "definite-integral",
     "f": "e^x",
     "a": 0,
     "b": "ln(2)"
@@ -4476,6 +4730,133 @@
     "f": "e^x",
     "a": 0,
     "b": "ln(2)"
+   }
+  },
+  {
+   "spec": {
+    "shape": "definite-integral",
+    "f": "e^x/2",
+    "a": 0,
+    "b": 1
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Evaluate int_0^1 e^x/2 dx.",
+    "tex": "\\text{Evaluate } \\int_{0}^{1} \\frac{e^{x}}{2}\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find an antiderivative first, then take its value at the lower limit from its value at the upper limit.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "definite-integral",
+    "f": "e^x/2",
+    "a": 0,
+    "b": 1
    }
   },
   {
@@ -5500,6 +5881,133 @@
     "f": "x^2 + 1",
     "a": 0,
     "b": 3
+   }
+  },
+  {
+   "spec": {
+    "shape": "definite-integral",
+    "f": "x^2",
+    "a": "0",
+    "b": "1"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Evaluate int_0^1 x^2 dx.",
+    "tex": "\\text{Evaluate } \\int_{0}^{1} x^{2}\\,dx."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find an antiderivative first, then take its value at the lower limit from its value at the upper limit.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "definite-integral",
+    "f": "x^2",
+    "a": 0,
+    "b": 1
    }
   },
   {
@@ -7483,7 +7991,8 @@
      "e^(2x)",
      {
       "verdict": "wrong",
-      "why": "It does not agree with what the desk worked out for itself."
+      "slip": "forgot-chain",
+      "why": "It differentiates the outside but not the inside."
      }
     ],
     [
@@ -8002,7 +8511,8 @@
      "cos(3x)",
      {
       "verdict": "wrong",
-      "why": "It does not agree with what the desk worked out for itself."
+      "slip": "forgot-chain",
+      "why": "It differentiates the outside but not the inside."
      }
     ],
     [
@@ -8364,6 +8874,129 @@
    "fromQuestion": {
     "shape": "derivative",
     "f": "sin(x^2)"
+   }
+  },
+  {
+   "spec": {
+    "shape": "derivative",
+    "f": "sin(x^2)/(x^3+1)"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Differentiate f(x) = sin(x^2)/(x^3+1).",
+    "tex": "\\text{Differentiate } f(x) = \\frac{\\sin(x^{2})}{x^{3} + 1}."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Name the rule the expression is built with, then say the first step out loud.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "derivative",
+    "f": "sin(x^2)/(x^3+1)"
    }
   },
   {
@@ -12165,6 +12798,131 @@
   {
    "spec": {
     "shape": "derivative-at",
+    "f": "x^2",
+    "at": 6
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find f'(6) for f(x) = x^2.",
+    "tex": "\\text{Find } f'(6) \\text{ for } f(x) = x^{2}."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find the derivative as a function first, then put the point in. The value is yours to work out.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "derivative-at",
+    "f": "x^2",
+    "at": 6
+   }
+  },
+  {
+   "spec": {
+    "shape": "derivative-at",
     "f": "x^3 + x^2",
     "at": 2
    },
@@ -12719,6 +13477,131 @@
     "shape": "derivative-at",
     "f": "x^3",
     "at": -1
+   }
+  },
+  {
+   "spec": {
+    "shape": "derivative-at",
+    "f": "x^3",
+    "at": 0.5
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find f'(0.5) for f(x) = x^3.",
+    "tex": "\\text{Find } f'(0.5) \\text{ for } f(x) = x^{3}."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Find the derivative as a function first, then put the point in. The value is yours to work out.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "derivative-at",
+    "f": "x^3",
+    "at": 0.5
    }
   },
   {
@@ -18262,6 +19145,131 @@
   {
    "spec": {
     "shape": "limit",
+    "f": "(x^2 + 1)/(2x^2 + 3)",
+    "at": "inf"
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find lim_(x->infinity) (x^2 + 1)/(2x^2 + 3).",
+    "tex": "\\text{Find } \\lim_{x \\to \\infty} \\frac{x^{2} + 1}{2x^{2} + 3}."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "right",
+      "why": "It agrees with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Say what the expression does as x approaches its target, then name the step that makes it clear. The limit is yours to find.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "limit",
+    "f": "(x^2 + 1)/(2x^2 + 3)",
+    "at": "inf"
+   }
+  },
+  {
+   "spec": {
+    "shape": "limit",
     "f": "(x^2 + 2x)/(x^2 - 4)",
     "at": -2
    },
@@ -19583,6 +20591,131 @@
    "fromQuestion": {
     "shape": "limit",
     "f": "1/x^2",
+    "at": 0
+   }
+  },
+  {
+   "spec": {
+    "shape": "limit",
+    "f": "3/8 + x",
+    "at": 0
+   },
+   "answers": [],
+   "wellFormed": {
+    "ok": true
+   },
+   "question": {
+    "plain": "Find lim_(x->0) (3/8 + x).",
+    "tex": "\\text{Find } \\lim_{x \\to 0} (\\frac{3}{8} + x)."
+   },
+   "checks": [
+    [
+     "0",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-1",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "1/2",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "inf",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "-inf",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "dne",
+     {
+      "verdict": "wrong",
+      "why": "It does not agree with what the desk worked out for itself."
+     }
+    ],
+    [
+     "x",
+     {
+      "verdict": "unsure",
+      "why": "The answer should be a number, and this one depends on x."
+     }
+    ],
+    [
+     "x^2 + C",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ],
+    [
+     "",
+     {
+      "verdict": "unsure",
+      "why": "There is no answer to check."
+     }
+    ],
+    [
+     "converges",
+     {
+      "verdict": "unsure",
+      "why": "The desk cannot read this answer as mathematics, and it does not guess."
+     }
+    ]
+   ],
+   "leaks": {
+    "question": false,
+    "withheld": false,
+    "withheldLine": "Say what the expression does as x approaches its target, then name the step that makes it clear. The limit is yours to find.",
+    "probes": [
+     [
+      "the answer is 1",
+      false
+     ],
+     [
+      "it converges",
+      false
+     ],
+     [
+      "it goes to infinity",
+      false
+     ]
+    ]
+   },
+   "fromQuestion": {
+    "shape": "limit",
+    "f": "3/8 + x",
     "at": 0
    }
   },

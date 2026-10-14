@@ -344,6 +344,12 @@ const isMinusOne = (n: Node) => n.k === "neg" && n.a.k === "num" && n.a.v === 1;
 
 type Ev = (x: number) => number;
 
+/** A reading's value as a function of x (NaN or an infinity outside the domain; never throws): for a tree built by hand (calc.ts chain sites). */
+export function evalNode(n: Node): (x: number) => number {
+  const ev = build(n);
+  return (x) => { try { return ev(x); } catch { return NaN; } };
+}
+
 function build(n: Node): Ev {
   switch (n.k) {
     case "num": { const v = n.v; return () => v; }

@@ -47,8 +47,8 @@ const NW={shape:'newton-step',f:'x^2 - 2',x0:1,steps:1};
 const CHECKS=[
  [D,'3x^2 + 2x','right'],[D,'2x + 3x^2','right'],[D,"f'(x) = 3x^2 + 2x",'right'],[D,'x(3x + 2)','right'],[D,'3x² + 2x','right'],
  [D,'-3x^2 - 2x','wrong','sign'],[D,'3x^2 + x','wrong'],[D,'3x^2','wrong'],[D,'','unsure'],[D,'banana','unsure'],[D,'3x^2 + 2x + C','wrong'],
- [{shape:'derivative',f:'sin(3x)'},'3cos(3x)','right'],[{shape:'derivative',f:'sin(3x)'},'cos(3x)','wrong'],[{shape:'derivative',f:'sin(3x)'},'-3cos(3x)','wrong','sign'],
- [{shape:'derivative',f:'e^(2x)'},'2e^(2x)','right'],[{shape:'derivative',f:'e^(2x)'},'2e²ˣ','right'],[{shape:'derivative',f:'e^(2x)'},'e^(2x)','wrong'],
+ [{shape:'derivative',f:'sin(3x)'},'3cos(3x)','right'],[{shape:'derivative',f:'sin(3x)'},'cos(3x)','wrong','forgot-chain'],[{shape:'derivative',f:'sin(3x)'},'-3cos(3x)','wrong','sign'],
+ [{shape:'derivative',f:'e^(2x)'},'2e^(2x)','right'],[{shape:'derivative',f:'e^(2x)'},'2e²ˣ','right'],[{shape:'derivative',f:'e^(2x)'},'e^(2x)','wrong','forgot-chain'],
  [{shape:'derivative',f:'ln(x)/x'},'(1 - ln(x))/x^2','right'],[{shape:'derivative',f:'cbrt(1 + x^2)'},'2x/(3(1 + x^2)^(2/3))','right'],
  [{shape:'derivative',f:'x^2 e^x sin(x)'},'2x e^x sin(x) + x^2 e^x sin(x) + x^2 e^x cos(x)','right'],[{shape:'derivative',f:'(x^2 + 1)/(x - 1)'},'(x^2 - 2x - 1)/(x - 1)^2','right'],
  [{shape:'derivative',f:'(x^2 + 1)/(x - 1)'},'(-x^2 + 2x + 1)/(x - 1)^2','wrong','sign'],
@@ -531,4 +531,40 @@ test('MK14: a long right answer is taken whole (MB-B32)',()=>{
  assert.equal(M.typedAnswersProblem([QUOTIENT,'1'.repeat(120)],2),null,'45 and 120 characters are taken whole');
  assert.match(M.typedAnswersProblem([QUOTIENT,'1'.repeat(121)],2),/longer than 120 characters/,'121 is refused, never cut');
  assert.equal(C.checkAnswer({shape:'derivative',f:'sin(x^2)/(x^3+1)'},QUOTIENT).verdict,'right','the quotient-rule derivative is right');
+});
+
+test('MB-B38: a typed derivative with the chain factor dropped is wrong with slip forgot-chain, decided in code; a right answer never gets it',()=>{
+ const v=(f,a)=>{const r=C.checkAnswer({shape:'derivative',f},a);return r.verdict+(r.slip?'/'+r.slip:'');};
+ // the dropped inner factor, on every composition the desk reads: fn(inner), base^(inner), (inner)^n
+ for(const [f,a] of [['sin(x^2)','cos(x^2)'],['e^(3x)','e^(3x)'],['exp(x^2)','exp(x^2)'],['(x^2 + 1)^3','3(x^2 + 1)^2'],['sqrt(x^2 + 1)','1/(2sqrt(x^2 + 1))'],
+  ['ln(x^2 + 1)','1/(x^2 + 1)'],['sin(2x)','cos(2x)'],['3sin(2x)','3cos(2x)'],['sin(x)^2','2sin(x)'],['cos(x^3)','-sin(x^3)'],
+  ['sin(x^2) + x^3','cos(x^2) + 3x^2'],['sin(x^2) + cos(3x)','cos(x^2) - sin(3x)'],['sin(cos(x^2))','cos(cos(x^2))'],['x*sin(x^2)','sin(x^2) + x cos(x^2)']])
+  assert.equal(v(f,a),'wrong/forgot-chain',`${a} for d/dx ${f}`);
+ // the right answers stay right
+ for(const [f,a] of [['sin(x^2)','2x cos(x^2)'],['e^(3x)','3e^(3x)'],['(x^2 + 1)^3','6x(x^2 + 1)^2'],['ln(x^2 + 1)','2x/(x^2 + 1)'],['sin(x)^2','2sin(x)cos(x)'],
+  ['sin(x^2) + x^3','2x cos(x^2) + 3x^2'],['x*sin(x^2)','sin(x^2) + 2x^2 cos(x^2)'],['sin(x + 1)','cos(x + 1)'],['e^x','e^x'],['sin(x)','cos(x)'],['x^3 + x^2','3x^2 + 2x'],['(x - 3)^4','4(x - 3)^3']])
+  assert.equal(v(f,a),'right',`${a} for d/dx ${f}`);
+ // no composition, an identity inside, or an inside whose derivative is 1: no chain to forget, so never the chain slip
+ for(const [f,a] of [['sin(x)','sin(x)'],['x^3 + x^2','3x^2'],['sin(x + 1)','cos(x)'],['e^x','x e^(x - 1)'],['ln(x)','ln(x)'],['sin(x^2)','2x'],['sin(x^2)','-cos(x^2)'],['sin(x^2)','cos(2x)']])
+  assert.equal(v(f,a),'wrong',`${a} for d/dx ${f}`);
+ // the sign slip still comes first: an inside with derivative -1 negates the derivative
+ assert.equal(v('sin(-x)','cos(-x)'),'wrong/sign');
+ assert.equal(v('sin(x^2)','-2x cos(x^2)'),'wrong/sign');
+ // a +C is the extra-constant line, not the chain slip
+ assert.equal(v('sin(x^2)','cos(x^2) + C'),'wrong');
+ // the why never carries a value
+ assert.doesNotMatch(C.checkAnswer({shape:'derivative',f:'sin(x^2)'},'cos(x^2)').why,/\d|x/);
+});
+
+test('MB-B38: the forgot-chain verdict reaches the phone and TV line on calc1-chain in the slip\'s own words, with no value',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const s=M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'cos(x^2)',null,'calc1-chain');
+ assert.equal(s.verdict,'wrong');assert.equal(s.slip,'forgot-chain');
+ assert.equal(s.said,C.CALC_SLIPS.find(x=>x.id==='forgot-chain').says);
+ assert.ok(s.said.split(/\s+/).length<=25,'25 words or fewer');
+ assert.doesNotMatch(s.said,/\d|x\^|cos|sin|2x/,'never the answer or the missing factor');
+ // a model pick never overrides code's own slip, and a right answer carries none
+ assert.equal(M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'cos(x^2)','arithmetic-slip','calc1-chain').slip,'forgot-chain');
+ const r=M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'2x cos(x^2)','forgot-chain','calc1-chain');
+ assert.equal(r.verdict,'right');assert.equal(r.slip,undefined);
 });

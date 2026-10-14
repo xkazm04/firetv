@@ -169,7 +169,7 @@ export const isCalcSpec = (spec: unknown): boolean =>
 /**
  * Settle an item with a spec from an answer as written or said, dispatched on the spec's shape - never both engines:
  *   - a Calculus spec: rules/calc checkAnswer decides, from the spec alone. The slip is checkAnswer's own where it names
- *     one (sign, lost-constant), else the pick offered;
+ *     one (sign, lost-constant, forgot-chain), else the pick offered;
  *   - a school spec (Family W5b): rules/school check(spec, answer, system) decides, reading the answer by the learner's
  *     school system (`system`, the desk's default UK when not given: '0,5' is a half in cz and de, unsure in us and
  *     uk). The slip is ONLY the one code detected from the spec's operands: a pick offered is ignored.

@@ -18,7 +18,7 @@
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
 import { DNE, cleanAnswer, decimalCall, infinityOf, isDecimal, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
-import { agreesWhereBoth, compile, derivativeAt, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit } from "./calc-expr";
+import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
 
@@ -89,6 +89,7 @@ const WHY = {
   sign: "It has the right size but the opposite sign.",
   lostConstant: "It differentiates back to the integrand, but an antiderivative needs its arbitrary constant.",
   extraConstant: "A derivative has no arbitrary constant in it.",
+  chain: "It differentiates the outside but not the inside.",
   empty: "There is no answer to check.",
   unreadable: "The desk cannot read this answer as mathematics, and it does not guess.",
   notNumber: "The answer should be a number, and this one depends on x.",
@@ -441,6 +442,7 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: Scho
     const g = (x: number) => truth.at.get(x) ?? NaN;
     if (agreesWhereBoth(e, g, FUNCTION_TOL)) return e.constant ? verdict("wrong", WHY.extraConstant) : undefinedWhereTrue(e, g) ? verdict("unsure", WHY.domain) : verdict("right", WHY.right);
     if (agreesWhereBoth(e, (x) => -g(x), FUNCTION_TOL)) return verdict("wrong", WHY.sign, "sign");
+    if (!e.constant && chainDropped(r.f, g).some((c) => agreesWhereBoth(e, c, FUNCTION_TOL))) return verdict("wrong", WHY.chain, "forgot-chain");
     return comparable((x) => e.at(x), g) ? verdict("wrong", WHY.wrong) : verdict("unsure", WHY.noCompare);
   }
   if (truth.kind === "antiderivative") {
@@ -455,6 +457,87 @@ export function checkAnswer(spec: unknown, studentAnswer: unknown, system?: Scho
   if (!fin(s)) return verdict("unsure", WHY.notFinite);
   if (truth.kind === "inf") return verdict("wrong", WHY.wrong);
   return judgeNumber(r.spec.shape as keyof typeof TOLERANCE, truth.v, s, ans);
+}
+
+// ------------------------------------------------------------------ the dropped chain factor (MB-B38)
+
+/** Most composition sites read in one function: a question's function is a line, and each site costs a pass of derivatives. */
+const MAX_CHAIN_SITES = 8;
+/** An inside whose derivative is within this of 1 at every sample (relative) is x + c: there is no chain factor to forget. */
+const UNIT_SLOPE = 1e-9;
+
+const nodeHasX = (n: Node): boolean => {
+  switch (n.k) {
+    case "x": return true;
+    case "num": case "const": return false;
+    case "neg": return nodeHasX(n.a);
+    case "fn": return nodeHasX(n.arg) || (!!n.base && nodeHasX(n.base));
+    default: return nodeHasX(n.a) || nodeHasX(n.b);
+  }
+};
+
+/**
+ * The composition sites of a reading: each node that is an outside function of an inside in x - fn(inside) with a
+ * constant base, base^(inside) with a constant base, (inside)^n with a constant power - whose inside is not x itself and
+ * whose derivative is not 1 at every sample (x + 1 has no chain factor to forget). x^x and log base x are not sites.
+ */
+function chainSites(root: Node): { at: Node; inner: Node }[] {
+  const out: { at: Node; inner: Node }[] = [];
+  const visit = (n: Node) => {
+    let inner: Node | null = null;
+    if (n.k === "fn" && !(n.base && nodeHasX(n.base))) inner = n.arg;
+    else if (n.k === "pow") inner = nodeHasX(n.a) && !nodeHasX(n.b) ? n.a : !nodeHasX(n.a) && nodeHasX(n.b) ? n.b : null;
+    if (inner && inner.k !== "x" && nodeHasX(inner)) {
+      const h = evalNode(inner);
+      const slopes = SAMPLES.map((x) => derivativeAt(h, x)).filter(fin);
+      if (slopes.length >= 3 && !slopes.every((d) => Math.abs(d - 1) <= UNIT_SLOPE * Math.max(1, Math.abs(d)))) out.push({ at: n, inner });
+    }
+    switch (n.k) {
+      case "x": case "num": case "const": return;
+      case "neg": return visit(n.a);
+      case "fn": visit(n.arg); if (n.base) visit(n.base); return;
+      default: visit(n.a); visit(n.b);
+    }
+  };
+  visit(root);
+  return out;
+}
+
+/** The tree with each site's inside frozen near x0: inside(x0) + (x - x0), so its derivative there is 1 and its value the same. */
+function frozen(n: Node, sites: Map<Node, Node>, x0: number): Node {
+  const inner = sites.get(n);
+  if (inner) {
+    const shift: Node = { k: "add", a: { k: "x" }, b: { k: "num", v: evalNode(inner)(x0) - x0, s: "" } };
+    if (n.k === "fn") return { ...n, arg: shift };
+    if (n.k === "pow") return n.a === inner ? { ...n, a: shift } : { ...n, b: shift };
+  }
+  switch (n.k) {
+    case "x": case "num": case "const": return n;
+    case "neg": return { ...n, a: frozen(n.a, sites, x0) };
+    case "fn": return n.base ? { ...n, arg: frozen(n.arg, sites, x0), base: frozen(n.base, sites, x0) } : { ...n, arg: frozen(n.arg, sites, x0) };
+    default: return { ...n, a: frozen(n.a, sites, x0), b: frozen(n.b, sites, x0) };
+  }
+}
+
+/**
+ * The derivatives a learner who forgot the chain rule would write: for each composition site of f, and for all of them
+ * at once, f' with that inside's derivative taken as 1 (sin(x^2) gives cos(x^2)) - sampled at SAMPLES like the truth `g`.
+ * A candidate that agrees with the truth is no slip and is left out, so a right answer can never be called this.
+ */
+function chainDropped(f: Expr, g: (x: number) => number): ((x: number) => number)[] {
+  const sites = chainSites(f.node);
+  if (!sites.length || sites.length > MAX_CHAIN_SITES) return [];
+  const sets = sites.map((s) => [s]);
+  if (sites.length > 1) sets.push(sites);
+  const out: ((x: number) => number)[] = [];
+  for (const set of sets) {
+    const map = new Map(set.map((s) => [s.at, s.inner] as [Node, Node]));
+    const at = new Map<number, number>();
+    for (const x of SAMPLES) at.set(x, derivativeAt(evalNode(frozen(f.node, map, x)), x) ?? NaN);
+    const c = (x: number) => at.get(x) ?? NaN;
+    if (comparable(c, g) && !agreesWhereBoth(c, g, FUNCTION_TOL)) out.push(c);
+  }
+  return out;
 }
 
 /** Can two functions be compared at all: at least three samples where both are defined? */
