@@ -138,6 +138,14 @@ function lex(src: string): Tok[] | null {
         const w = WORDS.find(([word]) => run.startsWith(word, p));
         if (!w) return null; // a letter the desk does not read (y, t, theta, dx)
         out.push(w[1]); p += w[0].length;
+        // log10 / log2: digits glued to the end of 'log' are its base (log_10), not a factor
+        if (w[0] === "log" && p === run.length && s[j] >= "0" && s[j] <= "9") {
+          let m = j;
+          while (m < s.length && s[m] >= "0" && s[m] <= "9") m++;
+          const text = s.slice(j, m);
+          out.push({ k: "op", v: "_" }, { k: "num", v: Number(text), s: text });
+          j = m;
+        }
       }
       i = j; continue;
     }

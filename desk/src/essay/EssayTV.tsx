@@ -9,7 +9,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, PLAYBOOK, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { paragraphCount, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
+import { paragraphCount, paragraphPending, paragraphState, pieceBeingRead, unruledCaption, refusalCaption, planFit, planSlots, rewriteState, summaryLine, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, planStops, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -338,7 +338,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} sn={sn} n={N} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} />
+    <Page key={sn.n} sn={sn} n={N} v={v} lens={lens} type={a.type} inked={holds} job={job} unruled={unruledCaption(a.piece, sn.para ?? 0)} pending={paragraphPending(a.piece, sn.para ?? 0)} />
     <nav className="em-acts">
       {FORENSIC_STOPS.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(FORENSIC_STOPS, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(FORENSIC_STOPS, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
@@ -381,7 +381,7 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ sn, n, v, lens, type, inked, job, unruled }: { sn: Sent; n: number; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null }) {
+function Page({ sn, n, v, lens, type, inked, job, unruled, pending }: { sn: Sent; n: number; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job; unruled?: { label: string; text: string } | null; pending?: boolean }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
   const vd = v?.verdict ?? "neutral", state = rewriteState(v);
@@ -411,6 +411,7 @@ function Page({ sn, n, v, lens, type, inked, job, unruled }: { sn: Sent; n: numb
   const noteCap = job?.phase === "running" ? { label: "Reading", text: `The desk is reading sentence ${sn.n} again.` }
     : job?.phase === "failed" && state === "none" ? { label: "Not read", text: job.error ?? "The sentence did not come back. Send it again from the phone." }
     : unruled ? unruled
+    : pending ? { label: "Being read", text: "The desk has not read this paragraph yet." }
     : state === "holds" ? { label: "Rewrite · it holds", text: note || "It makes the move now." }
     : state === "still" ? { label: "Rewrite · not yet", text: note || `Read it again through the ${lens.name} lens: ${lens.promise}` }
     : vd === "faulty" ? { label: "Look again · the problem", text: note || `Read it again through the ${lens.name} lens: ${lens.promise}` }

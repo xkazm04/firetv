@@ -92,6 +92,13 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
   }
 }
 
+/** A focus that quotes the learner must quote words they wrote or said: code checks it, a misquote is replaced. */
+export function quotedFocus(focus: string, tasks: PlacementTask[]): string {
+  const norm = (x: string) => x.toLowerCase().replace(/[\s"“”]+/g, " ").trim(), said = tasks.map(t => norm(t.response)).join(" | ");
+  const quotes = [...focus.matchAll(/["“]([^"”]{2,})["”]/g)].map(m => norm(m[1]));
+  return quotes.every(q => said.includes(q)) ? focus : "Say a little more in each answer";
+}
+
 /** Whatever the check is missing next, fetch it: the first question, the next task, the verdict, the topics. */
 async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelCheck> {
   const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner?.name ?? ctx.profile.name;
@@ -120,8 +127,8 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       });
     }
     return call(k, token, "Linga could not put your level together. Try again.", async () => {
-      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note })), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed. focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise.` }, summarySchema);
-      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: line(r.json.focus, 120), tasks: k.tasks };
+      const r = await ask(system, { step: "summary", band: ladder.band, confidence: ladder.confidence, tasks: k.tasks.map(t => ({ band: t.band, kind: t.kind, verdict: t.skipped ? "skipped" : t.verdict, note: t.note, answer: t.skipped ? "" : t.response.slice(0, 300) })), goal: (ctx.learning.preferences?.goal || k.goal).slice(0, 160), read: k.read, task: `The level check places the learner at ${ladder.band}. summary: one sentence to the learner, at most 160 characters, in English simple enough for ${ladder.band}, saying what they can do in English now, specific to what they showed, and where it fits tie it to their goal (goal). focus: the one thing that would help them most next, at most 120 characters, phrased as something to practise; if it points at something the learner wrote, quote those exact words in double quotes from an answer.` }, summarySchema);
+      const placement: Placement = { at: Date.now(), band: ladder.band, selfBand: k.selfBand, confidence: ladder.confidence, source: "check", summary: line(r.json.summary, 160), focus: quotedFocus(line(r.json.focus, 120), k.tasks), tasks: k.tasks };
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);

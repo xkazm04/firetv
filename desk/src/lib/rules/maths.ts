@@ -14,6 +14,7 @@ import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
 import { isCalc2Spec } from "./calc2";
+import { leaksMaturita, readsMaturita } from "./maturita";
 import { EN_CARD, figuresOfCzech, fold } from "./numberWords";
 import { CALC_SHAPES, CALC_SLIPS, checkAnswer, partsFromQuestion as calcPartsOf, slipsFor as calcSlipsFor, specFromQuestion as calcSpecOf } from "./calc";
 import { calcTopics, judgeOfTopic } from "../library/paths";
@@ -265,7 +266,8 @@ export function leaks(question: string, line: string, system?: SchoolSystem): bo
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
     .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
     || leaksByForm(question, line, system)
-    || unreadLeaks(question, line, system);
+    || unreadLeaks(question, line, system)
+    || leaksMaturita(question, decimalComma(said(line)));
 }
 
 // ---- the stricter fallback: an item no reader reads (MB-B2) ----
@@ -280,7 +282,7 @@ const SOLUTION = new RegExp(
 
 /** Does the item read as nothing: no equation, no expression, no Calculus or school spec, no parts? */
 function readsAsNothing(question: string, system?: SchoolSystem): boolean {
-  return !equationOf(question, system) && !expressionOf(question, system) && !calcSpecOf(question, system) && !calcPartsOf(question, system) && !schoolSpecOf(question, system);
+  return !equationOf(question, system) && !expressionOf(question, system) && !calcSpecOf(question, system) && !calcPartsOf(question, system) && !schoolSpecOf(question, system) && !readsMaturita(question);
 }
 
 /**

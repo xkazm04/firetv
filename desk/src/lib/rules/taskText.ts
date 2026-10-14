@@ -14,18 +14,29 @@ export type { SchoolSystem };
 /** A leading instruction in Czech or English, matched on the text with its diacritics folded: 'Řešte rovnici', 'Work out', 'Derivujte:'. */
 const INSTRUCTION = new RegExp(
   String.raw`^\s*(?:(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+)?` +
-  String.raw`(res(?:te)?|vypocit(?:ej|ejte)|vypoctete|spoctete|spocti(?:te)?|spocitej(?:te)?|derivuj(?:te)?|urcete|urci|najdete|najdi|solve|calculate|work out|find)\b` +
-  String.raw`(?:\s+(?:rovnici|priklad|ulohu|limitu|derivaci|hodnotu|vyraz|equation))?\s*:?\s*`,
+  String.raw`(res(?:te)?|vypocit(?:ej|ejte)|vypoctete|spoctete|spocti(?:te)?|spocitej(?:te)?|derivuj(?:te)?|urcete|urci|najdete|najdi|secti(?:te)?|odecti(?:te)?|vynasob(?:te)?|rozdel(?:te)?|zkrat(?:te)?|preved(?:te)?|solve|calculate|work out|find)\b` +
+  String.raw`(?:\s+(?:(?:rovnici|priklad|ulohu|limitu|hodnotu|vyraz|zlomek|equation)|(derivaci)(?:\s+funkce)?|(?:neurcity\s+)?integral(?:\s+funkce)?))?\s*:?\s*`,
   "i",
 );
 const DERIVE = /^deriv/i;
+/** The joiner a Czech two-operand verb stands for: 'Sečti 3/4 a 1/6' is 3/4 + 1/6. Only between plain numbers and fractions. */
+const VERB_OP: Record<string, string> = { secti: "+", odecti: "-", vynasob: "×", rozdel: "÷" };
+const NUMERIC = /^[\d\s/.,()%]+$/;
 
 /** The text without its leading instruction ('Derivujte: y = x^2' keeps its verb, as 'Differentiate y = x^2'); the text itself when it has none. */
 export function withoutInstruction(text: string): string {
   const t = text.normalize("NFC"), m = INSTRUCTION.exec(fold(t));
   if (!m || m[0].length === 0) return text;
-  const rest = t.slice(m[0].length);
-  return DERIVE.test(m[1]) ? `Differentiate ${rest}` : rest;
+  const rest = t.slice(m[0].length), verb = m[1].toLowerCase();
+  if (DERIVE.test(verb) || m[2]) return `Differentiate ${rest}`;
+  const pair = VERB_OP[verb.replace(/te$/, "")];
+  if (pair) { const j = /^(.+?)\s+a\s+(.+?)\s*\.?$/.exec(rest); return j && NUMERIC.test(j[1]) && NUMERIC.test(j[2]) ? `${j[1]} ${pair} ${j[2]}` : rest; }
+  if (/^zkrat/.test(verb)) return `Simplify ${rest}`;
+  if (/^preved/.test(verb)) {
+    const c = /^(.+?)\s+na\s+(desetinn\w*|zlomek|procent\w*|%)/.exec(fold(rest));
+    if (c) return `Convert ${rest.slice(0, c[1].length)} to ${/^desetinn/.test(c[2]) ? "a decimal" : /^zlomek/.test(c[2]) ? "a fraction" : "a percentage"}`;
+  }
+  return rest;
 }
 
 /** A comma system writes its decimals with a comma. */
@@ -36,7 +47,11 @@ export const commaSystem = (system?: SchoolSystem) => system === "cz" || system 
  * - a decimal comma as a point ('0,3' is 0.3). With no system the comma is left as it was.
  */
 export function plainTask(text: string, system?: SchoolSystem): string {
-  let t = text.replace(/[·⋅∙]/g, "×").replace(/(\d+\s*\/\s*\d+)\s*:\s*(?=\d+\s*\/\s*\d+)/g, "$1 ÷ ");
+  let t = text.replace(/[·⋅∙]/g, "×")
+    // Czech: 'Kolik je 3/4 z 20?' is 'What is 3/4 of 20?'; '20 procent ze 150' and '15 % ze 80' are percentages of an amount
+    .replace(/^(\s*)kolik\s+je\s+/i, "$1What is ")
+    .replace(/(\d+(?:[.,]\d+)?)\s*(?:%|procent(?:a|o|ech|y)?)(?![\p{L}\d])/giu, "$1%")
+    .replace(/(\d+\s*\/\s*\d+|\d+%)\s+(?:z|ze)\s+(?=\d)/gi, "$1 of ").replace(/(\d+\s*\/\s*\d+)\s*:\s*(?=\d+\s*\/\s*\d+)/g, "$1 ÷ ");
   if (commaSystem(system)) t = t.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2");
   return t;
 }

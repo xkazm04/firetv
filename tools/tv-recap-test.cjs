@@ -359,6 +359,7 @@ test('M5: the evening log belongs to one evening - the first event of a later da
   Date.now=()=>at(24,23);
   s=reduce(s,{type:'session.end'});
   assert.equal(s.log.hints,1,'session.end clears nothing: the recap still reads it');assert.equal(s.away.jakub.log.hints,2);assert.equal(s.log.endedAt,at(24,23));
+  {Date.now=()=>at(25,9);const e=reduce(s,{type:'session.end'}),{recapRows:rr,recapCaption:rc}=recap();assert.equal(e.log.hints,0,'UD-13: ending on a later day clears the old log first');assert.equal(rc(rr(e,at(25,10))),'A quiet evening.');Date.now=()=>at(24,23);}
   const same=reduce(s,{type:'focus',focus:0});assert.equal(same.log.hints,1,'later the same evening: kept');
   Date.now=()=>at(25,17);
   const next=reduce(s,{type:'focus',focus:0});

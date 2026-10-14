@@ -287,3 +287,22 @@ test('GUARD: the catalogue walks every Linga screen the session store declares, 
   const seeded = lingaScreensOf(store.replace('"linga" |', '"linga" | "linga-seeded" |'));
   assert.notDeepEqual([...surface().LINGA_SCREENS].sort(), seeded);
 });
+
+test('UD-23: a swap decision names its topic by id or by label; a param that matches nothing picks nothing, never list[0]', () => {
+  const S = surface();
+  const swap = (id, label) => ({ id: 'swap-topic', label, run: { command: { action: 'plan-swap', extra: { topicId: id } } } });
+  const sf = { offered: [swap('t1', 'Ordering food'), swap('t2', 'Booking a room'), { id: 'find-level', label: 'Find my level', run: { command: { action: 'x' } } }] };
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 't2' }).label, 'Booking a room', 'by id');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 'Booking a room' }).label, 'Booking a room', 'by label');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: 'No such topic' }), null, 'no match is null');
+  assert.equal(S.pick(sf, { action: 'swap-topic', topicId: '' }), null, 'empty param is null');
+  assert.equal(S.pick(sf, { action: 'find-level' }).id, 'find-level', 'a single entry needs no param');
+});
+
+test('UD-24: "done" is honoured whether or not it is offered; anything else must be offered', () => {
+  const S = surface();
+  const sf = { offered: [{ id: 'find-level', label: 'Find my level', run: {} }] };
+  assert.equal(S.gate(sf, { action: 'done' }), 'done');
+  assert.equal(S.gate(sf, { action: 'find-level' }), 'ok');
+  assert.equal(S.gate(sf, { action: 'pick-level' }), 'not-offered');
+});

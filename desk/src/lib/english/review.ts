@@ -17,10 +17,11 @@ export const USED_MAX = 180;
 
 /**
  * The one taught item due in the scene `episodeId` starts: from an earlier rehearsal, never used again, offered
- * fewer than REVIEW_OFFERS times, the oldest first. Null when none is left.
+ * fewer than REVIEW_OFFERS times, the oldest first. Null when none is left. `allowed` (curriculum.taughtAllowed) drops
+ * items this learner may not be shown now, such as a phrase taught in an adult-audience scene after a switch to Family.
  */
-export function dueTaught(taught: Taught[], episodeId: string): Taught | null {
-  return taught.filter(t => t.reusedAt === undefined && (t.offered ?? 0) < REVIEW_OFFERS && !t.turnId.startsWith(`${episodeId}:`))
+export function dueTaught(taught: Taught[], episodeId: string, allowed?: (t: Taught) => boolean): Taught | null {
+  return taught.filter(t => (!allowed || allowed(t)) && t.reusedAt === undefined && (t.offered ?? 0) < REVIEW_OFFERS && !t.turnId.startsWith(`${episodeId}:`))
     .sort((a, b) => a.at - b.at)[0] ?? null;
 }
 export function reviewOf(t: Taught): Review { return { id: t.id, kind: t.kind, better: t.better, fromTitle: t.title }; }

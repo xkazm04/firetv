@@ -169,6 +169,29 @@ test('the level check places the learner, keeps the answer key off the session, 
  assert.equal(getSession().screen,'linga-verdict');assert.equal(after.placement.band,'B1');assert.equal(after.placement.source,'check');assert.equal(after.preferences.level,'B1');
  assert.equal(after.evidence.length,before.evidence.length);assert.deepEqual(after.achievements,before.achievements);
 });
+// ---- UD-11: the level summary is built from what the learner wrote and said, and a focus that quotes is checked in code ----
+async function runCheck(summary){
+ fresh();let sent=null;
+ answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='summary'){sent=p;return summary;}return checkAnswer(req);});
+ await command('check-start');await answerAbout(3);
+ for(let guard=0;getSession().check.stage==='tasks'&&guard<8;guard++){
+  const k=getSession().check,t=k.task;
+  if(t.kind==='choose'){const right=t.options.indexOf(RIGHT);await command('check-task',{checkId:k.id,taskId:t.id,option:['A1','A2','B1'].includes(t.band)?right:1-right});}
+  else await command('check-task',{checkId:k.id,taskId:t.id,text:'I think it was on the bus this morning.',mode:'speech'});
+ }
+ return {sent,focus:getLearner('ema').english.placement.focus};
+}
+test('UD-11: the summary call carries each task\'s answer and the goal; a focus quoting words never written is cut',async()=>{
+ const ok=await runCheck({summary:'You get by in everyday talk.',focus:'Say more than "on the bus this morning" next time'});
+ assert.equal(ok.sent.goal,'talk with friends online');
+ assert(ok.sent.tasks.length>0&&ok.sent.tasks.every(t=>typeof t.answer==='string'),'every task carries an answer key');
+ assert(ok.sent.tasks.some(t=>t.answer==='I think it was on the bus this morning.'),'the answer is the learner\'s own words');
+ assert.match(ok.focus,/on the bus this morning/,'a quote found in the answers stays');
+ const bad=await runCheck({summary:'You get by in everyday talk.',focus:'Fix "I goed to the shop" next time'});
+ assert.doesNotMatch(bad.focus,/goed/,'a quote the learner never wrote is cut');
+ assert(bad.focus.length>0,'the placement still has a focus');
+});
+
 test('a judge that misquotes the learner saves nothing, and the same answer can be sent again',async()=>{
  fresh();answer=wrap(req=>{const p=JSON.parse(req.prompt);if(p.step==='about')return {...checkAnswer(req),selfBand:'C1'};if(p.step==='judge')return {answered:'yes',english:'B2',quote:'words never said',note:'x'};return checkAnswer(req);});
  await command('check-start');await answerAbout(3);
@@ -664,6 +687,13 @@ test('review case 4: the recap is the before-and-after picture when used, and th
  v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:REVIEW})})),{});
  assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.match(v.hero.subtitle,/1 spoken/);
  assert(V.viewText(v).includes('I have a booking'));assert(v.baseCaption.split(/\s+/).length<=25);
+});
+test('UD-15: the TV recap\'s track hero names the scene the brought-back sentence was taught in',()=>{
+ const V=view(),turns=convo().turns;
+ const v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:REVIEW})})),{});
+ assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.equal(v.hero.from,REVIEW.fromTitle);
+ const tv=fs.readFileSync(path.join(root,'src/english/LingaTV.tsx'),'utf8');
+ assert.match(tv,/label=\{h\.from\?`From \$\{h\.from\}`:"A sentence to take with you"\}/,'the card labels its source');
 });
 test('review case 5: withholding - during the scene the phrase is on no screen until the learner has used it',()=>{
  const V=view();
@@ -1517,7 +1547,7 @@ test('take case 4: one full stubbed run - a scene, Cut, Take Two on one note, th
  assert.equal(T.turnState(c),'finished');assert.equal(getSession().screen,'linga-recap');assert.equal(calls.length,before+2);
  assert.equal(take.length,2,'two calls: one per cast turn');assert(take.length<=3,'at most 3 calls');
  for(const x of take){assert.equal(x.thinking,false,'fast, thinking off');assert.equal(x.task,'Take');assert.equal(x.prompt.bringBack,undefined,'no taught phrase invited');assert.deepEqual(Object.keys(x.schema.properties).sort(),['help','reply'],'the replay schema: no observations, no moment');}
- assert.deepEqual(take[0].prompt.transcript.map(t=>t.text),[fork.text,fork.text,'Yesterday I booked a room here.'],"the scene up to the fork, then the take: the first take's noted line is not in it");
+ assert.deepEqual(take[0].prompt.transcript.map(t=>t.text),[fork.text],"the scene up to the fork, the fork line once (UD-17), the learner's line only as submittedReply; the first take's noted line is not in it");
  // never evidence, and the first take is as it was
  assert.deepEqual(getLearner('jakub').english,english0,"the learner record's english is deep-equal before and after");
  assert.deepEqual(c.turns,turns0,"the first take's turns are unchanged");assert.deepEqual(c.cut,cut0,'and its notes');
@@ -1689,4 +1719,27 @@ test('LG-20: the Take Two cast line is held too when the desk went to Family mod
  await command('turn',{text:'Yesterday I booked a room here.',mode:'speech',lastTurnId:c.takes[0].turns.at(-1).id});
  assert.equal(getSession().conversation.takes[0].turns.at(-1).text,REDIRECT_LINE);
  assert(!JSON.stringify(getSession().conversation).includes(DATING));
+});
+
+// ------------------------------------------------------------------ UAT 2026-10-14: UD-4 and UD-10 (conversation.ts)
+test('UD-4: a moment, a title, a goal and a coaching note carrying a list word never reach a 13-year-old; an adult keeps them',async()=>{
+ fresh();getSession().profiles.find(p=>p.id==='ema').age=13;
+ answer=async()=>({json:{title:'Beer with friends',goal:'Order a beer.',opening:'Hello. How can I help?'},provider:'test',ms:1});
+ await command('start',{sceneId:'booking',replace:true});let c=getSession().conversation;
+ assert.doesNotMatch(c.title+c.goal,/beer/i,'title and goal fall back to the scene');
+ answer=async()=>({json:{reply:'What name is it under?',observations:[],moment:{kind:'fix',said:'I have booking',better:'Have a beer!',why:'A drink.'}},provider:'test',ms:1});
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ c=getSession().conversation;assert.equal(c.moment,null);assert.equal(c.moments.length,0);
+ assert(!JSON.stringify(getLearner('ema').english.taught).includes('beer'),'not stored for review either');
+ answer=async()=>({json:{before:'I have booking',after:'I have a booking',note:'Next time, have a beer.'},provider:'test',ms:1});
+ await assert.rejects(command('coach'));assert.equal(getSession().conversation.coaching,null);
+});
+test('UD-10: context() carries this scene\'s moments as taughtThisScene, and the turn prompt sends them',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});let c=getSession().conversation;
+ answer=async()=>({json:{reply:'What date was it?',observations:[],moment:{kind:'fix',said:'I have booking',better:'I have a booking',why:'A booking takes "a".'}},provider:'test',ms:1});
+ await command('turn',{text:'I have booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});
+ await command('moment-done');c=getSession().conversation;
+ let sent;answer=async(req)=>{sent=JSON.parse(req.prompt);return {json:{before:'I have booking',after:'I have a booking',note:'Good.'},provider:'test',ms:1};};
+ await command('coach');
+ assert.deepEqual(sent.taughtThisScene,[{said:'I have booking',better:'I have a booking'}]);
 });

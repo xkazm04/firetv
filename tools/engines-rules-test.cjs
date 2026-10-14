@@ -458,3 +458,20 @@ test('sweep case 5: embed() holds one answer\'s vectors to one length; a ragged 
  reg().useProvider('embed',{name:'stub',run:async()=>({raw:[[1,0],[0,1]]})});
  assert.deepEqual((await embed({texts:['a','b']})).json,[[1,0],[0,1]]);
 });
+
+test('UD-22: after the one re-ask, a string still over its maxLength is cut at a word boundary; type and unbroken-run failures still fail',async()=>{
+ const {text}=load('engines/text.ts');
+ const S={type:'object',additionalProperties:false,properties:{premise:{type:'string',maxLength:400,minLength:1},skill:{type:'string',enum:['ask','tell']}},required:['premise','skill']};
+ const words='A teammate missed a deadline and you need to say what changed. '.repeat(9);
+ const prompts=stubSeq({premise:words,skill:'ask'},{premise:words,skill:'ask'});
+ const r=await text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true});
+ assert.equal(prompts.length,2,'still exactly one re-ask');
+ assert(r.json.premise.length<=400&&r.json.premise.length>340,`cut near the limit: ${r.json.premise.length}`);
+ assert(words.startsWith(r.json.premise)&&/[a-z.]$/.test(r.json.premise)&&/\s/.test(words[r.json.premise.length]),'a prefix that ends on a whole word');
+ // a second answer broken another way is not repaired
+ stubSeq({premise:words,skill:'ask'},{premise:words,skill:'sing'});
+ await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
+ // no boundary to cut at: the rejection stands
+ stubSeq({premise:'x'.repeat(450),skill:'ask'},{premise:'x'.repeat(450),skill:'ask'});
+ await assert.rejects(text({system:'s',prompt:'p',schema:S,isolated:true,shorten:true}),isShape('premise'));
+});

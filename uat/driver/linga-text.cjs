@@ -535,7 +535,8 @@ If the screen looks broken or confusing, react as this person would: retry, go b
       if (!d || typeof d !== 'object') { record.endedBy = 'character-model-failure'; break; }
       const args = Object.fromEntries(Object.entries({ text: d.text, option: d.option, topicId: d.topicId, sceneId: d.sceneId, band: d.band }).filter(([, v]) => v !== '' && v !== -1 && v !== undefined));
       const step = { n: i, screen: view.screen, shown: view.shown, offered: view.actions.map(a => a.id), ...(Object.values(view.coverage).some(x => x.length) ? { coverage: view.coverage } : {}), thought: d.thought, action: d.action, args, result: 'ok', ms: 0 };
-      if (!step.offered.includes(d.action)) { step.result = 'not-offered'; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (not offered)`); continue; }
+      if (SF.gate(view.surface, d) === 'done') { step.result = 'done'; steps.push(step); say(`${jid} #${i} ${view.screen} → done`); record.endedBy = 'character-stopped'; break; }
+      if (SF.gate(view.surface, d) !== 'ok') { step.result = 'not-offered'; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (not offered)`); continue; }
       const t0 = Date.now();
       try { await run(d, view); } catch (e) { step.result = e.status ? `refused ${e.status}` : 'engine-error'; step.message = String(e.message).slice(0, 300); }
       step.ms = Date.now() - t0;

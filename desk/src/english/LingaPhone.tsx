@@ -246,6 +246,7 @@ function StartPanel({s,learning,run,busy,list,pitch,takeTwo}:{s:Session;learning
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
       {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
+      {c.cut&&c.cut.notes.length===0&&c.cut.clean&&<div className="linga-transcript" data-role="linga-cut-clean"><b>{c.cut.clean}</b></div>}
       {c.cut&&c.cut.notes.length>0&&<div className="linga-transcript" data-role="linga-cut-notes"><b>Notes on your take</b>{c.cut.notes.map((n,i)=>{
         // Take Two (v2 L4): a held note is struck, an undecided one says so, an open one stays as it was; never a count
         const t=c.takes?.find(x=>x.note===i),again=t?.turns.find(x=>x.role==="learner"),a=takeTwo.find(x=>x.run.command?.extra?.note===i);

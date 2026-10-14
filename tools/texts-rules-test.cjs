@@ -129,3 +129,22 @@ test('a title is never the text of a message: a heading or a heading-like first 
   assert.equal(T.addPiece('ema', { text: '## Sleep\n\nOne line.' }).value.title, 'Sleep');
   T.deleteAll('ema');
 });
+test('UD-6: deleting a piece or all pieces clears the essay reading on the desk (EM-B9)', async () => {
+  const reading = { text: 'Ema wrote this.', type: 'structure', sentences: [{ n: 1, text: 'Ema wrote this.', words: 3, connectors: [], role: 'claim' }], stats: {}, verdicts: [], summary: '' };
+  for (const how of ['?all=1', 'piece']) {
+    seat('ema'); await route.POST(req('POST', '', { notice: true }));
+    const made = (await (await route.POST(req('POST', '', { text: PIECE }))).json());
+    assert.equal((await route.GET(req('GET', `?id=${made.id}`))).status, 200);
+    dispatch({ type: 'essay.set', analysis: reading, owner: 'ema' });
+    assert.equal(getSession().essay.text, 'Ema wrote this.');
+    assert.equal((await route.DELETE(req('DELETE', how === 'piece' ? `?id=${made.id}` : how))).status, 200);
+    assert.equal(getSession().essay, null, `${how}: the reading is gone with the text`);
+    assert.equal(getSession().essayAt ?? null, null);
+  }
+});
+test('UD-14: an email or a message never takes a title from a body line', () => {
+  assert.equal(T.addPiece('ema', { text: 'Running late\n\nBack in ten', format: 'message' }).value.title, 'Untitled message');
+  assert.equal(T.addPiece('ema', { text: 'Meeting notes\n\nSee attached', format: 'email' }).value.title, 'Untitled email');
+  assert.equal(T.addPiece('ema', { text: '# Hello\n\nx', format: 'email' }).value.title, 'Hello', 'an explicit heading still names it');
+  T.deleteAll('ema');
+});

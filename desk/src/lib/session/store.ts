@@ -331,7 +331,7 @@ export type Event =
   | { type: "lesson.watched" }
   | { type: "english.set"; analysis: EnglishAnalysis; owner?: string } | { type: "essay.type"; essayType: string; owner?: string } | { type: "worked.set"; worked: Worked; owner?: string } | { type: "workroom.set"; workroom: Workroom; open?: boolean } | { type: "essay.set"; analysis: EssayAnalysis; owner?: string } | { type: "essay.progress"; analysis: EssayAnalysis; owner?: string } | { type: "essay.at"; n: number | null }
   // the plan: the TV opens one on a lens; the phone posts one sentence for a slot (validated here, by rules/essay planFill)
-  | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
+  | { type: "essay.clear"; owner?: string } | { type: "essay.plan"; lens: string } | { type: "essay.slot"; i: number; text: string }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   // a paper typed on the phone (v2 M5b): the rows are as typed - the desk's own cleanPaper decides what stands (dispatch keeps it)
   | { type: "paper.enter"; rows: unknown }
@@ -371,7 +371,7 @@ const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { ty
   "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
   "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
   "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
-  "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
+  "essay.type": { essayType: f.str, owner: maybe(f.str) }, "essay.at": { n: (v) => v === null || f.int(v) }, "essay.clear": { owner: maybe(f.str) }, "essay.plan": { lens: f.str }, "essay.slot": { i: f.int, text: f.str },
   "paper.enter": { rows: () => true },
   "task.add": { name: f.name, sub: f.subject, min: f.num }, "task.done": { id: f.str, done: f.bool },
   "timer.start": {}, "timer.pause": {}, "timer.tick": { seconds: f.num }, "timer.skipbreak": {},
@@ -532,7 +532,7 @@ export function fresh(): Session {
  * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
  */
 const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
-  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
+  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "essay.clear", "essay.plan", "essay.slot", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle", "practice.second",
   "walk", "practice.clear", "paper.enter", "session.end",
   // tonight's list and the lesson's pause are a learner's (MathsSlot tasks, lessonPaused): seat() replaces them on the first sit-down
   "task.add", "task.done", "lesson.pause"]);
@@ -612,12 +612,13 @@ const loggedIn = (l: { problems: string[]; hints: number; hard: string[] }) => !
 /**
  * The evening log (problems, hints, hard, minutes, started) belongs to one evening: stamped with the server's local day
  * when it is first written, and cleared by the first event of a later day - the seated learner's and every away slot's.
- * session.end clears nothing, because the recap still reads the log it ends. A log from before the stamp is dated by
+ * session.end on the same day clears nothing, because the recap still reads the log it ends; one ending a later day
+ * clears the old log first (UD-13). A log from before the stamp is dated by
  * the day its timer started.
  */
 function dayed(s: Session, e: Event, now = Date.now()): Session {
   const today = dayOf(now), was = s.log.day ?? (s.log.started ? dayOf(s.log.started) : undefined);
-  if (e.type === "session.end" || !was || was === today) return s;
+  if (!was || was === today) return s;
   const away = s.away ? Object.fromEntries(Object.entries(s.away).map(([k, x]) => [k, { ...x, log: { problems: [], hints: 0, hard: [] } }])) : undefined;
   return { ...s, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, ...(away ? { away } : {}) };
 }
@@ -738,6 +739,8 @@ function step(s: Session, e: Event): Session {
     // a refused sentence changes nothing but the status line; a written one moves the caret to the first empty slot (or Read it)
     case "essay.slot": { if (!s.essayPlan) break; const r = planFill(s.essayPlan, e.i, e.text); if (!r.ok) { n.status = r.error; break; }
       n.essayPlan = r.plan; if (s.screen === "essayplan") { const open = r.plan.slots.findIndex((x) => !x); n.focus = open < 0 ? r.plan.slots.length : open; } break; }
+    case "essay.clear": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => ({ ...x, essay: null, essayAt: null })); break; }
+      n.essay = null; n.essayAt = null; if (n.screen === "forensic") n.screen = "landing"; break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
     // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch

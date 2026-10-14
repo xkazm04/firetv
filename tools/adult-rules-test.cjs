@@ -379,3 +379,45 @@ test('P6: an adult who chose Family is not offered the date scene, is refused it
   await seat('martin', { type: 'other', age: 45, mode: 'adult' });
   assert(eligibleScenes(martin(), defaultPreferences(martin())).some(s => s.id === 'date'), 'Adult mode: the date scene is back');
 });
+
+// ------------------------------------------------------------------ UAT 2026-10-14: UD-16 and UD-17 (conversation.ts)
+test('UD-16: Cut on a clean take (a valid answer with no notes) is not an error: the take ends with an empty notes list and a clean line', async () => {
+  await seat('martin', { type: 'other', age: 45 });
+  const { cut: _gone, ...live } = cutTake('martin');
+  const c = { ...live, phase: 'conversation' }; dispatch({ type: 'linga.changed', conversation: c, screen: 'linga-talk' });
+  answer = async () => ({ json: { notes: [] }, provider: 'test', ms: 1 });
+  await command('cut', { episodeId: c.id });
+  const after = getSession().conversation;
+  assert.deepEqual(after.cut.notes, [], 'a cut with no notes');
+  assert.equal(after.cut.clean, 'Nothing to flag in this take.');
+  assert.equal(after.phase, 'finished'); assert.equal(after.error, '');
+});
+test('UD-17: Take Two sends the fork line once and the learner\'s line once', async () => {
+  await seat('martin', { type: 'other', age: 45 });
+  const c = cutTake('martin'); dispatch({ type: 'linga.changed', conversation: c, screen: 'linga-recap' });
+  answer = async () => { throw new Error('no model call expected'); };
+  await command('take-two', { episodeId: c.id, note: 0 });
+  let sent = '';
+  answer = async (req) => { sent = req.prompt; return { json: { reply: 'Which night?' }, provider: 'test', ms: 1 }; };
+  const take = getSession().conversation.takes[0];
+  await command('turn', { episodeId: c.id, text: 'Yesterday I booked a room.', mode: 'text', lastTurnId: take.turns.at(-1).id });
+  const p = JSON.parse(sent);
+  assert.equal(p.transcript.filter(t => t.text === 'Hello. How can I help?').length, 1, 'the fork line once');
+  assert.equal(sent.split('Yesterday I booked a room.').length - 1, 1, 'the learner\'s line once');
+  assert.equal(p.submittedReply, 'Yesterday I booked a room.');
+});
+
+// ------------------------------------------------------------------ UD-5: a phrase taught in an adult-audience scene does not come back in Family mode
+test('UD-5: dueTaught skips an item taught in an adult-audience scene when adult content is off', () => {
+  const { dueTaught } = require(src('lib/english/review.ts'));
+  const { taughtAllowed } = require(src('lib/english/curriculum.ts'));
+  const item = (id, sceneId, at) => ({ id, kind: 'fix', said: 'x', better: `phrase ${id}`, why: 'w', turnId: `old:${id}`, sceneId, title: sceneId, at });
+  const taught = [item('a', 'date', 1), item('b', 'booking', 2)];
+  const adult = { id: 'p', name: 'p', type: 'other', age: 45, mode: 'adult' }, family = { ...adult, mode: 'family' };
+  const prefs = { ...defaultPreferences(adult), adultConfirmed: true };
+  const learning = { plan: null, pitches: [], taught };
+  assert.equal(dueTaught(taught, 'ep', taughtAllowed(adult, prefs, learning)).id, 'a', 'Adult mode: the oldest comes back');
+  assert.equal(dueTaught(taught, 'ep', taughtAllowed(family, prefs, learning)).id, 'b', 'Family mode: the adult-scene item is skipped');
+  assert.equal(dueTaught([taught[0]], 'ep', taughtAllowed(family, prefs, learning)), null, 'nothing else due');
+  assert.equal(dueTaught(taught, 'ep').id, 'a', 'no filter given: unchanged');
+});

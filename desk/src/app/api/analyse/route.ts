@@ -128,6 +128,8 @@ export async function POST(req: Request) {
   if (tooLong) return refusedWithLine(tooLong);
   // E3: code decides whether the paragraph is English before any run, and says so plainly when it is not
   if (!paragraphIsEnglish(body.text)) return refusedWithLine(NOT_ENGLISH_LINE);
+  // UD-7: the first paragraph read asks the same one-time notice as keep, before any run
+  if (!noticed(who.id)) return NextResponse.json({ error: TEXT_NOTICE, notice: true }, { status: 428 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type, owner: who.id });
     const a = await analyseEssay(body.text, body.type, who.id, age);

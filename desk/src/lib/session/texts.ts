@@ -73,7 +73,7 @@ function versionProblem(text: unknown): string | null {
 function titleOf(text: string, format: string): string {
   const ps = paragraphsOf(text), first = (ps[0] ?? "").trim();
   if (/^#{1,6}\s+\S/.test(first)) return first.replace(/^#{1,6}\s+/, "").slice(0, 80);
-  if (ps.length > 1 && first.length <= 80 && !/[.?!,;:…]$/.test(first) && !first.includes("\n")) return first;
+  if (format !== "email" && format !== "message" && ps.length > 1 && first.length <= 80 && !/[.?!,;:…]$/.test(first) && !first.includes("\n")) return first;
   return `Untitled ${format}`;
 }
 

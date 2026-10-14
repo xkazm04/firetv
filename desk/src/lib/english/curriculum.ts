@@ -88,6 +88,14 @@ export const AUTHORED_SCENES: EnglishScene[] = [...ENGLISH_SCENES, ...SPEAKING_P
 export function eligibleScenes(p: Profile | undefined, prefs: EnglishPreferences, l?: EnglishLearning | null): EnglishScene[] {
   return [...planScenes(l), ...(modeOf(p, prefs) === "adult" ? pitchScenes(l) : []), ...AUTHORED_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
 }
+/**
+ * Whether a taught item may be brought back: not when it came from an adult-audience scene and adult content is off
+ * (Family mode, or a minor). A scene no longer found is allowed, as before.
+ */
+export function taughtAllowed(p: Profile | undefined, prefs: EnglishPreferences, l?: EnglishLearning | null): (t: { sceneId: string }) => boolean {
+  const scenes = [...planScenes(l), ...pitchScenes(l), ...AUTHORED_SCENES];
+  return t => scenes.find(x => x.id === t.sceneId)?.audience !== "adult" || adultContent(p, prefs);
+}
 /** Every topic in the plan has been talked through at least once. */
 export function planDone(l: EnglishLearning): boolean {
   const topics = l.plan?.topics ?? [], started = new Set(l.sessions.map(x => x.sceneId));

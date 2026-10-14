@@ -10,7 +10,7 @@ import { keywordAudience, partnerLine } from "./gate";
 import { keepPitch, PITCH_MAX, PITCH_PREFIX, shapePitch } from "./pitch";
 import { BETTER_MAX, cleanNotes, NOTE_KINDS, NOTE_MAX, NOTES_MAX, QUOTE_MAX } from "./notes";
 import { modeOf } from "../rules/mode";
-import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, oldestDue } from "./curriculum";
+import { audienceAllowed, defaultPreferences, eligibleScenes, AUTHORED_SCENES, ENGLISH_SKILLS, oldestDue, taughtAllowed } from "./curriculum";
 import { adultContent, isAdult } from "../rules/mode";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
@@ -68,6 +68,15 @@ function partnerSays(c:Conversation,value:unknown,max?:number):string{
   const p=getSession().profiles.find(p=>p.id===c.learnerId);
   return partnerLine(line(value,max),adultContent(p,c.preferences));
 }
+/**
+ * UD-4: model text shown to a learner who is not an adult (or a desk in Family mode) goes through the same keyword gate as a
+ * partner line, wherever it lands: a moment, a title or goal, a coaching note, a mission step. null = held; the caller drops it.
+ */
+function audienceSafe(c:Conversation,value:string):string|null{
+  const p=getSession().profiles.find(p=>p.id===c.learnerId);
+  if(adultContent(p,c.preferences))return value;
+  const a=keywordAudience(value);return a===null||a==="adult"?null:value;
+}
 function tutorSystem(c:Conversation):string{
   const p=getSession().profiles.find(p=>p.id===c.learnerId),scene=sceneOf(c)!;
   const prefs=c.preferences,level=isBand(prefs.level)?prefs.level:"A1";
@@ -92,7 +101,7 @@ function context(c:Conversation,invite=true){
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
   const placement=learning.placement;
   const step=c.mission&&currentStep(c.mission);
-  return {scene:{title:c.title,goal:c.goal},...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{})};
+  return {scene:{title:c.title,goal:c.goal},...(step?{currentStep:step}:{}),preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{}),...(c.moments?.length?{taughtThisScene:c.moments.map(m=>({said:m.said,better:m.better}))}:{})};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
@@ -135,6 +144,7 @@ function endTake(c:Conversation,commandId:string){
   const earned=withCertificate(getLearner(learnerId).english,entry.at,words);if(earned.cert)saveEnglish(learnerId,earned.learning);
   commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");
 }
+const CLEAN_TAKE="Nothing to flag in this take.";
 const CUT_TASK=`Cut: this take is over. Give at most ${NOTES_MAX} notes on the learner's own lines in learnerTurns, the ones that would help most in a second take. Each note: turnId, the id of one learner turn; quote, an exact excerpt of that turn's text, copied character for character (at most ${QUOTE_MAX} characters); kind: meaning (what they said did not carry what they meant), form (a grammar form, such as a verb tense), word (a word or phrase choice) or register (too formal or too casual for this scene); note, one plain sentence to the learner, at most ${NOTE_MAX} characters, in English simple enough for their level; better, the same idea said well (at most ${BETTER_MAX} characters), or empty. Only real slips that matter; never a valid alternative, a style choice or the partner's words. Fewer notes are better than invented ones; never two on the same words.`;
 const cutSchema=schema({notes:{type:"array",maxItems:NOTES_MAX,items:schema({turnId:str(100),quote:str(QUOTE_MAX),kind:{type:"string",enum:[...NOTE_KINDS]},note:str(NOTE_MAX),better:str(BETTER_MAX,0)})}});
 // held to its list only: notes.ts drops a note that does not fit, rather than the whole cut failing
@@ -154,10 +164,10 @@ async function takeTurn(c:Conversation,input:Record<string,unknown>,commandId:st
   if(!["speech","text"].includes(String(input.mode)))throw new ConversationError("Choose a speech or typed reply.");
   const said={id:`${c.id}:${commandId}`,role:"learner" as const,text:reply,mode:input.mode as EvidenceMode};
   const held=take.turns.some(t=>t.role==="learner")?take.held:heldOf(note,reply,c.turns.find(t=>t.id===note.turnId)?.text);
-  const lines=[...take.turns,said],before=c.turns.slice(0,c.turns.findIndex(t=>t.id===take.from)+1);
+  const lines=[...take.turns,said],before=c.turns.slice(0,c.turns.findIndex(t=>t.id===take.from));
   commit({...c,pending:commandId,capture:false,error:""});
   try{
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...lines].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-take"});
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,false),transcript:[...before,...take.turns].slice(-18),task:TAKE_TASK,submittedReply:reply}),schema:replaySchema,accept:replayAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-take"});
     const current=checkCurrent(c,commandId);
     if(runningTake(current)?.note!==take.note)throw new ConversationError("This take has changed. Return to the current scene.",409);
     const turns=[...lines,{id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply)}];
@@ -233,7 +243,7 @@ export async function englishCommand(raw:unknown){
     if(s.conversation&&s.conversation.phase!=="finished"&&input.replace!==true)throw new ConversationError("Finish or leave the current scene before starting another.",409);
     const due=oldestDue(learning.evidence,scene.skill);
     // One taught item comes back (review.ts): code picks it, the partner makes room for it without saying it.
-    const id=randomUUID(),taught=dueTaught(learning.taught,id);
+    const id=randomUUID(),taught=dueTaught(learning.taught,id,taughtAllowed(profile,prefs,learning));
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};
     dispatch({type:"timer.pause"});commit(c,"linga-talk",parkCheck());
     try{
@@ -241,7 +251,9 @@ export async function englishCommand(raw:unknown){
       checkCurrent(c,commandId);
       const opening={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.opening)},openingHeld=opening.text===line(result.json.opening);
       if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
-      commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],...(()=>{const m=missionOf(scene,result.json.steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
+      const safeTitle=audienceSafe(c,line(result.json.title,70)),safeGoal=audienceSafe(c,line(result.json.goal,120));
+      const steps=Array.isArray(result.json.steps)?result.json.steps.filter(x=>typeof x!=="string"||audienceSafe(c,x)!==null):result.json.steps;
+      commit({...c,title:safeTitle??scene.name,goal:safeGoal??scene.goal,turns:[opening],...(()=>{const m=missionOf(scene,steps);return m?{mission:m}:{};})(),supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(openingHeld?result.json.help:undefined,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:"The scene could not be prepared. Try again or choose another situation."});}catch{/* superseded */}throw e;}
   }
@@ -293,8 +305,9 @@ export async function englishCommand(raw:unknown){
     try{
       const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({scene:{title:c.title,goal:c.goal},preferences:c.preferences,learnerTurns:lines,task:CUT_TASK}),schema:cutSchema,accept:cutAccept,model:"fast",timeoutMs:90000,isolated:true,shorten:true,thinking:false,use:"linga-cut"});
       const current=checkCurrent(c,commandId),notes=cleanNotes(result.json.notes,current.turns);
-      if(!notes.length)throw new ConversationError(failed,502);
-      endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes},provider:result.provider,responseMs:result.ms},commandId);return getSession();
+      // an empty list is a clean take; notes that all failed the quote check are not (UD-16); only a malformed answer is a failure
+      if(!notes.length&&(!Array.isArray(result.json.notes)||result.json.notes.length>0))throw new ConversationError(failed,502);
+      endTake({...current,pending:null,error:"",cut:{at:Date.now(),notes,...(notes.length?{}:{clean:CLEAN_TAKE})},provider:result.provider,responseMs:result.ms},commandId);return getSession();
     }catch(e){try{const current=checkCurrent(c,commandId);commit({...current,pending:null,error:failed});}catch{/* newer episode owns the UI */}throw e;}
   }
   if(action==="take-two"){
@@ -338,7 +351,8 @@ export async function englishCommand(raw:unknown){
       const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,shown:shownLines(c),skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
       // a reply read back from the partner's last line is supported: code can add support, never remove it
       const copied=copiesShown(reply,c.turns.filter(t=>t.role==="partner").slice(-1).map(t=>t.text));
-      const moment=mayStop?parseMoment(result.json.moment,reply,turnId):null;
+      const parsed=mayStop?parseMoment(result.json.moment,reply,turnId):null;
+      const moment=parsed&&[parsed.said,parsed.better,parsed.why].every(x=>audienceSafe(c,x)!==null)?parsed:null;
       // Reuse is decided here, in code (review.ts): the reply as sent, on the scene as it stood when it was sent.
       const reused=reuseOf(reply,c),learned=mergeEvidence(getLearner(learnerId).english,observations);
       const taught=moment?[...learned.taught,{...moment,sceneId:c.sceneId,title:c.title}].slice(-TAUGHT_CAP):learned.taught;
@@ -347,7 +361,8 @@ export async function englishCommand(raw:unknown){
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
       next={...next,...(c.phase==="replay"?{phase:"conversation" as const}:{}),turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported||copied},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(replyHeld?result.json.help:undefined,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(current.mission?{mission:applyStep(current.mission,result.json.step,reply,turnId)}:{}),...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
     }else if(action==="coach"){
-      const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
+      const before=line(result.json.before,180);
+      if(audienceSafe(c,line(result.json.after,180))===null||audienceSafe(c,line(result.json.note,220))===null)throw new Error("The coach note did not fit this learner.");if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};
     }else{
       const partner={id:randomUUID(),role:"partner" as const,text:partnerSays(c,result.json.reply)},replayHeld=partner.text===line(result.json.reply);

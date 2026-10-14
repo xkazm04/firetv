@@ -134,6 +134,16 @@ test('line breaks collapse, so a pasted paragraph is measured as one paragraph',
  assert.deepEqual(s.map(x=>x.text),['The first point.','The second point spans lines.']);
  assert.deepEqual(s.map(x=>x.words),[3,5],'words are counted after the whitespace collapses');
 });
+test('UD-19: below ENGLISH_MIN_WORDS a Czech-majority reading is not English; a short English one still is',()=>{
+ const R=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const t of ['Je škola důležitá?','Škola začíná','Žáci nemají rádi úkoly, protože jsou pro ně příliš dlouhé a nudné, ale učitelé je stejně dávají.'])assert.equal(R.paragraphIsEnglish(t),false,t);
+ for(const t of ['Hello there','Slavoj Žižek','Is school important?'])assert.equal(R.paragraphIsEnglish(t),true,t);
+});
+test('UD-18: LINK needs a word boundary: Some children walk to school is a claim, So it goes is a link',()=>{
+ assert.equal(splitSentences('Some children walk to school.')[0].role,'claim');
+ assert.equal(splitSentences('Therefore, children should walk.')[0].role,'link');
+ assert.equal(splitSentences('So children should walk.')[0].role,'link');
+});
 test('roles and connectors are counted from the text, and the stats add up',()=>{
  const s=splitSentences(THREE);
  assert.deepEqual(s.map(x=>x.role),['claim','evidence','link']);
@@ -1188,7 +1198,7 @@ test('E3-a: the rule says not English for the Czech paragraphs of the L1 run (R4
 });
 test('E3-a: the rule says English for accented names inside English, for a short paragraph, and for empty or odd input',()=>{
  const R=require(path.join(root,'src/lib/rules/essay.ts'));
- for(const t of ['Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.','Škola začíná','Dobrý den','Hello there',''])assert.equal(R.paragraphIsEnglish(t),true,JSON.stringify(t));
+ for(const t of ['Many critics praise the novel. Émile Zola disagreed with them.','Slavoj Žižek would call that ideology. Most of my classmates would not agree.','Hello there',''])assert.equal(R.paragraphIsEnglish(t),true,JSON.stringify(t));
  for(const t of [undefined,null,42,{}])assert.equal(R.paragraphIsEnglish(t),true,String(t));
 });
 test('E3-a: every English paragraph the two essay suites use reads as English; floors set on this corpus',()=>{

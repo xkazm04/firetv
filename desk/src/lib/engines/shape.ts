@@ -93,10 +93,32 @@ const LONG = /^\d+ characters, at most \d+$/;
 export const onlyTooLong = (broken: Array<[string, string]>) => broken.length > 0 && broken.every(([, why]) => LONG.test(why));
 
 /**
+ * `value` with every string over its maxLength cut at a word boundary (the last whole word that fits, trailing
+ * punctuation and space dropped). A string with no boundary inside its limit is left alone, so it still fails.
+ */
+export function cutLong(value: unknown, s: JSONSchema): unknown {
+  if (typeof value === "string") {
+    const chars = [...value];
+    if (typeof s.maxLength !== "number" || chars.length <= s.maxLength) return value;
+    const head = chars.slice(0, s.maxLength).join(""), whole = /\s/.test(chars[s.maxLength]);
+    const at = whole ? head.length : head.search(/\s\S*$/);
+    const cut = (at > 0 ? head.slice(0, at) : "").replace(/[\s,;:\-–—]+$/, "");
+    return cut || value;
+  }
+  if (Array.isArray(value) && s.items && typeof s.items === "object") return value.map(v => cutLong(v, s.items as JSONSchema));
+  if (kindOf(value) === "object") {
+    const o = value as Record<string, unknown>, props = object(s.properties);
+    return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, k in props ? cutLong(v, props[k] as JSONSchema) : v]));
+  }
+  return value;
+}
+
+/**
  * Run one provider and hold its answer to the request's schema: the whole of text() and vision().
  * With `shorten`, an answer broken ONLY by strings over their maxLength is asked for once more with each
  * overrun named; the second answer is held to the same schema, and if it fails too the first rejection
- * stands. No limit moves and nothing is cut here: the model rewrites its own strings or the call fails.
+ * stands. No limit moves. If the second answer is still broken ONLY by overlong strings, each is cut at a word
+ * boundary (cutLong) rather than failing the learner's screen; any other break, or a run with no boundary, fails.
  */
 export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number; use?: string }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
   const started = Date.now();
@@ -111,7 +133,13 @@ export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSch
   console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
   try {
     const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, 2);
-    return { json: conform<T>(b.raw, s, again), provider: again, ms: Date.now() - started, raw: b.audit };
+    const second = parse(b.raw, s, again), left = s ? validate(second, s) : [];
+    if (left.length && onlyTooLong(left)) {
+      const cut = cutLong(second, s!);
+      if (!validate(cut, s!).length) return { json: cut as T, provider: again, ms: Date.now() - started, raw: b.audit };
+    }
+    if (left.length) throw outside(again, left);
+    return { json: second as T, provider: again, ms: Date.now() - started, raw: b.audit };
   } catch {
     throw first;
   }

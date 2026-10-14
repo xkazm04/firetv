@@ -609,6 +609,18 @@ test('MB-B2 reader: tasks that read as nothing now read as a kind and a spec, an
   ['Solve 3(x - 2) = 2x + 5',undefined,'linear','x = 11.'],
   ['Vypočtěte lim x→0 sin(3x)/x',undefined,'calc','The limit is 3.'],
   ['Derivujte: y = sin(x^2)',undefined,'calc','The derivative is 2x cos(x^2).'],
+  // UD-9: Czech verbs, 'X z Y', the Calculus noun phrases and the percent words
+  ['Kolik je 3/4 z 20?','cz','school','Then you get 15.'],
+  ['Zkrať zlomek 18/24','cz','school','Then you get 3/4.'],
+  ['Spočtěte derivaci funkce f(x) = ln(x^2+1)',undefined,'calc','The derivative is 2x/(x^2+1).'],
+  ['Sečti 3/4 a 1/6','cz','school','The answer is 11/12.'],
+  ['Odečti 5/6 a 1/3','cz','school','The answer is 1/2.'],
+  ['Vynásob 2/3 a 9/4','cz','school','The answer is 3/2.'],
+  ['Rozděl 3/4 a 3/8','cz','school','The answer is 2.'],
+  ['Převeď 3/4 na desetinné číslo','cz','school','It is 0,75.'],
+  ['Vypočtěte neurčitý integrál ∫ 2x dx',undefined,'calc','The integral is x^2 + C.'],
+  ['Vypočítej 15 % ze 80','cz','school','Je to dvanáct.'],
+  ['Kolik je 20 procent ze 150?','cz','school','Je to třicet procent.'],
  ];
  for(const [q,sys,kind,line] of rows){
   const r=K.readQuestion(q,sys);
@@ -627,6 +639,28 @@ test('MB-B2 reader: tasks that read as nothing now read as a kind and a spec, an
  assert.ok(!/11/.test(h.hint+h.next),`the leaking hint is withheld: ${h.hint}`);
 });
 
+// ------------------------------------------------------------------ UD-26: Maturita-shaped tasks (an inequality, a sequence term, a line through two points)
+test('UD-26 maturita: an inequality, a sequence term and a line through two points are read, their answers leak, and a method line does not',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const leaking=[
+  ['Řešte nerovnici x^2 - 5x + 6 < 0','Takže x je mezi 2 a 3.'],['Řešte nerovnici x^2 - 5x + 6 < 0','Kořeny jsou dva a tři, takže (2, 3).'],
+  ['Solve the inequality x^2 - 5x + 6 < 0','The solution is 2 < x < 3.'],['Řešte nerovnici 2x - 3 > 5','Takže x > 4.'],['Řešte nerovnici x^2 - 4x - 5 ≥ 0','x ≤ -1 nebo x ≥ 5.'],
+  ['Aritmetická posloupnost má a1 = 3 a d = 4. Určete a10.','a10 = 39'],['Aritmetická posloupnost má a1 = 3 a d = 4. Určete a10.','Desátý člen je třicet devět.'],
+  ['Geometrická posloupnost má a1 = 2 a q = 3. Určete a5.','Je to 162.'],
+  ['Určete rovnici přímky procházející body A[1, 2] a B[3, 8].','y = 3x - 1'],['Určete rovnici přímky procházející body A[1, 2] a B[3, 8].','Směrnice je 3.'],
+ ];
+ for(const [q,l] of leaking)assert.equal(M.leaks(q,l,'cz'),true,`${q} | ${l}`);
+ // false positives matter: a hint that names the method, or only the task's own numbers, passes
+ const benign=[
+  ['Řešte nerovnici x^2 - 5x + 6 < 0','Přesuň vše na jednu stranu a rozlož levou stranu na součin.'],['Řešte nerovnici x^2 - 5x + 6 < 0','Find where the left side is zero first; the sign changes only there.'],
+  ['Řešte nerovnici 2x - 3 > 5','Divide both sides by 2, and remember the sign flips only for a negative number.'],
+  ['Aritmetická posloupnost má a1 = 3 a d = 4. Určete a10.','Použij vzorec a_n = a_1 + (n - 1)d a dosaď n = 10.'],['Aritmetická posloupnost má a1 = 3 a d = 4. Určete a10.','Add d nine times to a1.'],
+  ['Geometrická posloupnost má a1 = 2 a q = 3. Určete a5.','Multiply by q four times, starting from a1 = 2.'],
+  ['Určete rovnici přímky procházející body A[1, 2] a B[3, 8].','Nejdřív spočítej směrnici jako změnu y děleno změnou x.'],['Určete rovnici přímky procházející body A[1, 2] a B[3, 8].','Write y = kx + q and put one of the points in.'],
+  ['Kolik je 3/4 z 20?','Divide 20 into four equal parts first.'],['Zkrať zlomek 18/24','Find a number that divides both 18 and 24.'],['Sečti 3/4 a 1/6','Find a common denominator first.'],
+ ];
+ for(const [q,l] of benign)assert.equal(M.leaks(q,l,'cz'),false,`${q} | ${l}`);
+});
 // ------------------------------------------------------------------ MB-B2: the stricter fallback for an item no reader reads
 test('MB-B2 fallback: on an item no reader reads, a line stating a solution is refused; a plain method line passes; a read item is untouched',()=>{
  const M=require(path.join(root,'src/lib/rules/maths.ts'));

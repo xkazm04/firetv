@@ -68,9 +68,10 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const who = seated(req); if (who instanceof NextResponse) return who;
   const q = new URL(req.url).searchParams;
-  if (q.get("all") === "1") { const deleted = deleteAll(who.id); refresh(who.id); return NextResponse.json({ deleted }); }
+  const clear = () => { try { dispatch({ type: "essay.clear", owner: who.id }); } catch { /* the TV catches up on its next read */ } };
+  if (q.get("all") === "1") { const deleted = deleteAll(who.id); clear(); refresh(who.id); return NextResponse.json({ deleted }); }
   const id = q.get("id") ?? "";
   if (!deletePiece(who.id, id)) return NextResponse.json({ error: "That piece is not on your shelf." }, { status: 404 });
-  refresh(who.id);
+  clear(); refresh(who.id);
   return NextResponse.json({ deleted: true });
 }

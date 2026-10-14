@@ -129,7 +129,8 @@ export type NoteKind = "meaning" | "form" | "word" | "register";
  */
 export interface SceneNote { turnId: string; quote: string; kind: NoteKind; note: string; better?: string; reading?: boolean; }
 /** A take ended by Cut: when, and its notes, kept with their turnIds (v2 L4 Take Two forks from a note). */
-export interface Cut { at: number; notes: SceneNote[]; }
+/** `clean`: the line for a take with nothing to flag (UD-16): notes empty, the answer valid. */
+export interface Cut { at: number; notes: SceneNote[]; clean?: string; }
 /**
  * Take Two (v2 L4, adult C1, take.ts): one note's beat played again, forked inside the same conversation. The scene
  * went back to `from`, the partner line before the noted turn, and said it again; the learner says their line again,

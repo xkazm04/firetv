@@ -207,7 +207,7 @@ test('6: routes - api/hint and api/analyse voice the seated profile\'s age; 14+ 
   assert.equal((await post('hint',{stage:2})).status,200);await drain();
   assert.equal(systems.find((x)=>x.startsWith('You are '))===TODAY['hint.maths.1'],!young,`hint 2 at age ${age}`);
   // an essay reading
-  seat(`voice-essay-${age}`,age);
+  seat(`voice-essay-${age}`,age);require(src('lib/session/texts.ts')).markNoticed(`voice-essay-${age}`);
   systems=captureSystems();
   assert.equal((await post('analyse',{kind:'essay',text:PARA,type:'claim'})).status,200);await drain();
   assert.equal(systems.length,1);

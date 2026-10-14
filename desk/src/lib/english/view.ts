@@ -112,7 +112,9 @@ export type Hero =
       take?: boolean }
   | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
       /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
-      sentence?: string }
+      sentence?: string;
+      /** the scene that taught it, so the sentence is not read as one the learner said tonight */
+      from?: string }
   | { kind: "comparison"; before: { kicker: string; quote: string }; after: { kicker: string; quote: string }; note: string;
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string }
@@ -462,7 +464,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       hero = co
         ? { kind: "comparison", before: { kicker: "You said", quote: co.before }, after: { kicker: "One way to try it", quote: co.after }, note: co.note, art: "done", data: counts }
         : { kind: "comparison", before: { kicker: m!.kind === "fix" ? "You said" : "You wanted to say", quote: m!.said }, after: { kicker: m!.kind === "fix" ? "Try" : "In English", quote: m!.better }, note: m!.why, art: "done", data: counts };
-    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better } : {}) };
+    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better, from: rv.fromTitle.slice(0, 40) } : {}) };
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
     // the tape's pins come first: Left and Right walk them, and each one's note is its caption
     if (notes.length) actions = [...notes.map((n, i) => act("note", `Note ${i + 1}`, n.note, { focus: i })), ...actions];

@@ -12,7 +12,7 @@ export interface Sentence { n: number; text: string; words: number; connectors: 
 
 const CONNECTORS = /\b(because|therefore|however|although|which means|so that|as a result|for example|for instance|but|since|whereas|in contrast|this suggests|which suggests)\b/gi;
 const EVIDENCE = /\b(\d+%?|per cent|percent|research|study|studies|report(ed|s)?|found|data|measured|according to|for example|for instance)\b/i;
-const LINK = /^(therefore|so|this (means|shows|suggests)|as a result|in conclusion|which is why)/i;
+const LINK = /^(therefore|so|this (means|shows|suggests)|as a result|in conclusion|which is why)\b/i;
 
 /** Short forms whose full stop does not end a sentence, even when a capital follows. */
 const ABBREVIATION = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|etc|eg|ie|e\.g|i\.e|vs)\.$/i;
@@ -164,7 +164,9 @@ export const CZECH_FLOOR = 0.25;
 /** Whether a paragraph reads as English. It says no only when it can tell; anything else, a short paragraph included, is English. */
 export function paragraphIsEnglish(text: unknown): boolean {
   const r = englishReading(text);
-  return !(r.words >= ENGLISH_MIN_WORDS && r.english < ENGLISH_FLOOR && r.czech >= CZECH_FLOOR);
+  // UD-19: a paragraph under ENGLISH_MIN_WORDS is English unless it is mostly Czech
+  if (r.words < ENGLISH_MIN_WORDS) return !(r.words > 0 && r.english < ENGLISH_FLOOR && r.czech > 0.5);
+  return !(r.english < ENGLISH_FLOOR && r.czech >= CZECH_FLOOR);
 }
 
 /**

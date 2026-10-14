@@ -408,7 +408,7 @@ const { NOT_EVERY_SENTENCE } = require(src('lib/desk/essay.ts'));
 const quietly = async (fn) => { const log = console.error; console.error = () => {}; try { return await fn(); } finally { console.error = log; } };
 const E7_PARA = 'Homework should be shorter. Everyone agrees. Studies of sleep show teenagers need nine hours.';
 test('E7-4: POST analyse kind essay with a reading that misses sentence 1 answers 502 with the line, says it on the status line, records nothing', async () => {
-  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = [];
+  dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); seen = []; texts.markNoticed('ema');
   const before = JSON.stringify(getLearner('ema'));
   answer = async () => ({ json: { observations: [{ n: 2, support: 'opinion', note: 'x' }, { n: 3, support: 'context', note: 'y' }], summary: 's' }, provider: 'test', ms: 1 });
   const r = await quietly(() => post({ kind: 'essay', text: E7_PARA, type: 'evidence' }));
@@ -488,4 +488,20 @@ test('E9-4: one faulty sentence in paragraph 2: the summary ends "Start with par
   assert.equal(b.summary, R.summaryLine(b));
   assert(b.summary.endsWith(`Start with paragraph 2, sentence 4: ${b.verdicts.find(x => x.verdict === 'faulty').note}`), b.summary);
   assert.doesNotMatch(b.summary, /summary\./);
+});
+
+// ---- UD-20 (EM-B43): a paragraph still being read says so on the page, never "Neutral · Nothing flagged." ----
+test('UD-20: the TV page of a pending paragraph is captioned "Being read", before the neutral fallback', () => {
+  const tv = fs.readFileSync(path.join(root, 'src/essay/EssayTV.tsx'), 'utf8');
+  const i = tv.indexOf('label: "Being read"'), j = tv.indexOf('label: "Neutral"');
+  assert(i > 0, 'a pending caption exists'); assert(i < j, 'it is asked before the neutral fallback');
+  assert.match(tv, /pending=\{paragraphPending\(a\.piece, sn\.para \?\? 0\)\}/, 'the page is told its paragraph is pending');
+});
+
+// ---- UD-7 (EM-B9): the first paragraph read asks the same one-time notice as keep ----
+test('UD-7: a kind essay paragraph from a learner who has not noticed: 428 TEXT_NOTICE, no call, no job; after the notice it reads', async () => {
+  texts.deleteAll('ema'); seatAndMark();
+  let r = await post({ kind: 'essay', text: E7_PARA, type: 'evidence' });
+  assert.equal(r.status, 428); const body = await r.json(); assert.equal(body.notice, true); assert.equal(body.error, texts.TEXT_NOTICE);
+  assert.equal(seen.length, 0); assert.deepEqual(getSession().jobs, {}, 'no job'); assert.equal(status(), 'before');
 });

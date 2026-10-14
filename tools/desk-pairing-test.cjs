@@ -897,7 +897,7 @@ const SAMPLES={
  'walk':{type:'walk',ix:1},'practice.clear':{type:'practice.clear'},'practice.second':{type:'practice.second',n:1,verdict:'right'},
  'practice.settle':{type:'practice.settle',n:1,reply:'2',verdict:'right'},
  'job.start':{type:'job.start',kind:'read',id:'j1'},'job.done':{type:'job.done',kind:'read',id:'j1'},'job.failed':{type:'job.failed',kind:'read',id:'j1',error:'x'},
- 'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},
+ 'essay.clear':{type:'essay.clear'},'status':{type:'status',text:'hi'},'session.end':{type:'session.end'},'reset':{type:'reset'},'pin.turn':{type:'pin.turn'},
 };
 // seats a learner, or changes nothing a slot holds: these are not owed a place in NEEDS_LEARNER
 const SEATS_OR_CLEARS=new Set(['learner.set','reset']);

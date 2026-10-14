@@ -277,13 +277,26 @@ function choices(sf) {
   });
 }
 
-/** The offered action a decision names: by id, then by the value it carries. */
+/**
+ * The offered action a decision names: by id, then by the value it carries (an option, a topic or a scene, matched by
+ * its id or its label). When the entries differ by that value and the decision's value matches none, nothing is picked.
+ */
 function pick(sf, d) {
   const list = sf.offered.filter(a => a.id === d.action);
-  return list.find(x => x.run?.command?.extra?.option !== undefined && x.run.command.extra.option === d.option)
-    ?? list.find(x => x.run?.command?.extra?.topicId !== undefined && x.run.command.extra.topicId === d.topicId)
-    ?? list.find(x => x.run?.command?.extra?.sceneId !== undefined && x.run.command.extra.sceneId === d.sceneId)
-    ?? list[0] ?? null;
+  const norm = v => String(v ?? '').trim().toLowerCase();
+  for (const k of ['option', 'topicId', 'sceneId']) {
+    const val = x => x.run?.command?.extra?.[k];
+    if (new Set(list.map(val)).size < 2) continue;
+    const want = d[k];
+    return list.find(x => val(x) !== undefined && (val(x) === want || (typeof want === 'string' && want !== '' && norm(x.label) === norm(want)))) ?? null;
+  }
+  return list[0] ?? null;
 }
 
-module.exports = { surfaceOf, surfaceText, choices, pick, install, BY_DESIGN_UNMAPPED, LINGA_SCREENS };
+/** The step gate: "done" is always honoured (the Character may stop on any screen); any other action must be offered. */
+function gate(sf, d) {
+  if (d.action === 'done') return 'done';
+  return sf.offered.some(a => a.id === d.action) ? 'ok' : 'not-offered';
+}
+
+module.exports = { surfaceOf, surfaceText, choices, pick, gate, install, BY_DESIGN_UNMAPPED, LINGA_SCREENS };
