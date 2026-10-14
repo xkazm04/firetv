@@ -107,3 +107,18 @@ test('silent catches only shrink: no new one, and a fixed one leaves the list',(
  const shrunk=Object.entries(SILENT).filter(([f,n])=>(now[f]??0)<n).map(([f,n])=>`${f}: ${now[f]??0} now, ${n} pinned`);
  assert.deepEqual(shrunk,[],'a silent catch was fixed: lower its pin in SILENT so it cannot come back');
 });
+
+// ---- 4. a checker's own defect reaches the log; the learner's verdict does not change
+test('checkerFault: an Unreadable is the expected verdict and says nothing; any other throw is logged once per site and message',()=>{
+ require('./ts-load.cjs');
+ const {checkerFault,Unreadable}=require(path.join(src,'lib/rules/fault.ts'));
+ const said=[],was=console.error;console.error=(...a)=>said.push(a.join(' '));
+ try{
+  checkerFault('canary',new Unreadable());
+  checkerFault('canary',new TypeError('x is undefined'));checkerFault('canary',new TypeError('x is undefined'));
+  checkerFault('canary',new RangeError('Division by zero'));
+ }finally{console.error=was;}
+ assert.deepEqual(said,['[rules] checker fault in canary: TypeError: x is undefined','[rules] checker fault in canary: RangeError: Division by zero']);
+ // the parsers throw the shared class, so a parse failure in school.ts or calc-expr.ts is never logged as a fault
+ for(const f of ['school.ts','calc-expr.ts']){const t=fs.readFileSync(path.join(src,'lib/rules',f),'utf8');assert(!/class Unreadable/.test(t),`${f} uses the Unreadable from fault.ts`);}
+});

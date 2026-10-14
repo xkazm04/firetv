@@ -18,6 +18,7 @@
  * The second half reads a Calculus item's own working lines and tags them from the item's spec (`tagLines`), so the
  * server that places the pen and the paper that ticks the lines read the same chain.
  */
+import { checkerFault } from "./fault";
 import { compile, derivativeAt, limitAt, limitInf, SAMPLES, SAME_REL, type Expr } from "./calc-expr";
 import { FUNCTION_TOL, ROUNDED_CLOSE, type CalcSpec } from "./calc";
 import { isCalc2Spec } from "./calc2";
@@ -180,7 +181,7 @@ export function checkChain(lines: readonly ChainLine[], opts: ChainOpts = {}): C
           if (a && body !== null) result = relate(line, a, body, letter);
         }
       }
-    } catch {
+    } catch (e) { checkerFault("chain.checkChain line", e);
       result = null;
     }
     out.push(result);
@@ -317,7 +318,7 @@ export function chainChecks(spec: unknown, working: readonly string[]): ChainRes
   try {
     const tagged = tagLines(spec as CalcSpec, working);
     return checkChain(tagged.lines, { from: tagged.from ?? undefined, definite: tagged.definite });
-  } catch {
+  } catch (e) { checkerFault("chain.chainChecks", e);
     return working.map(() => null);
   }
 }
