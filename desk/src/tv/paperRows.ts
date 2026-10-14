@@ -4,10 +4,12 @@
  * desk calls secure marked beside them and never dropped (ruling 2). Pure; no string names the board.
  */
 import type { Session } from "@/lib/session/store";
-import { recovery, prereqsOf, type Recovery } from "@/lib/rules/recovery";
+import { recovery, prereqsOf, reachOf, type Recovery } from "@/lib/rules/recovery";
 
-export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean; }
-export interface PaperOff { can: string; lost: number; from: string; beyond: boolean; }
+export interface PaperTopic { id: string; name: string; lost: number; from: string; secure: boolean;
+  /** Some of its lost marks are a share of a question that reaches other places too (the whole-mark sharing of rules/recovery). */
+  shared: boolean; }
+export interface PaperOff { can: string; lost: number; from: string; beyond: boolean; shared: boolean; }
 export interface PaperView {
   /** No paper on the learner's record. */
   empty: boolean;
@@ -27,11 +29,15 @@ const labels = (qs: readonly string[]) => qs.join(", ");
 export function paperView(s: Pick<Session, "paper" | "skills">): PaperView {
   if (!s.paper) return { empty: true, marks: 0, outOf: 0, lost: 0, topics: [], off: [], unmapped: 0, leftOut: 0 };
   const r: Recovery = recovery([...s.paper.items, ...s.paper.unmapped]);
+  // a question that reaches more than one place splits its lost marks between them
+  const split = new Set<string>();
+  for (const it of r.items) { const d = reachOf(it.codes); if (d.topics.length + d.off.length > 1 && it.marks < it.outOf) split.add(it.q); }
+  const isShared = (qs: readonly string[]) => qs.some((q) => split.has(q));
   return {
     empty: false, marks: r.totals.marks, outOf: r.totals.outOf, lost: r.totals.lost, unmapped: r.unmapped.length, leftOut: s.paper.leftOut ?? 0,
     // the order is recovery()'s: the learner meets the base of the biggest loss first
-    topics: r.topics.map((t) => ({ id: t.id, name: t.name, lost: t.lost, from: labels(t.items), secure: s.skills?.[t.id]?.secure === true })),
-    off: r.notOnDesk.map((o) => ({ can: o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation })),
+    topics: r.topics.map((t) => ({ id: t.id, name: t.name, lost: t.lost, from: labels(t.items), secure: s.skills?.[t.id]?.secure === true, shared: isShared(t.items) })),
+    off: r.notOnDesk.map((o) => ({ can: o.can, lost: o.lost, from: labels(o.items), beyond: !o.foundation, shared: isShared(o.items) })),
   };
 }
 
@@ -83,6 +89,8 @@ export function paperWindow(n: number, focus: number, size: number): { from: num
 /** The lines of the paper's card: what was scored, and what was lost. */
 export const scoreLine = (v: PaperView): string => `${v.marks} of ${v.outOf} marks · ${marks(v.lost)} lost`;
 export const lostWord = (n: number): string => marks(n);
+/** The row's short label, in its caption slot: the loss, and "shared" when other places hold a share of the same questions. */
+export const lostLabel = (n: number, shared: boolean): string => `${marks(n)} lost${shared ? ", shared" : ""}`;
 
 /**
  * The row that lost the most and needs the first row as a base: the earliest row in list order with the largest lost

@@ -1390,6 +1390,17 @@ test('E5-6: a rewrite of the backed opinion stays backed through the kept link, 
  assert.match(src,/evidence: \{ support: \{ type: "string", enum: \[\.\.\.SUPPORTS\] \}, backs: \{ type: "integer" \} \}/);
  assert.match(src,/For a checkable sentence that backs an opinion in the same paragraph, add backs: the number of that opinion\./);
 });
+test('UD-12: a rewrite that is still only an opinion is not ruled neutral by a context that lost its opinions',()=>{
+ const t='Schools start too early. Research found that 34 minutes more sleep helps. A survey found 80% of pupils walk to school.';
+ const ss=RE.splitSentences(t),first=RE.decideVerdicts('evidence',ss,new Set([1,2,3]),[{n:1,support:'opinion'},{n:2,support:'checkable',backs:1},{n:3,support:'checkable'}]);
+ assert.deepEqual(first.map(v=>v.verdict),['neutral','strong','strong']);
+ const next=ss.map(s=>s.n===3?{...s,text:'Walking is just much nicer for everybody.'}:s);
+ const ctx=RE.contextObservations('evidence',next,3,first);
+ assert.deepEqual(ctx.find(o=>o.n===1),{n:1,support:'opinion'},'the opinion the reading ruled comes back as an opinion');
+ const ruled=RE.decideVerdicts('evidence',next,new Set([3]),[{n:3,support:'opinion'},...ctx]).find(v=>v.n===3);
+ assert.notEqual(ruled.verdict,'neutral','an opinion with no checkable sentence behind it does not hold');
+ assert.equal(RE.rewriteState({...ruled,was:{text:ss[2].text,verdict:'strong'}}),'still');
+});
 const BODY='Schools should start later in the morning.';
 const noteOf=(lens,text,o)=>{const ss=RE.splitSentences(text);return RE.decideVerdicts(lens,ss,new Set(ss.map(s=>s.n)),o.map(x=>({note:'Great use of evidence.',...x})));};
 test('E6-1: under a faulty verdict the note is the failed check line, never the model note',()=>{

@@ -8,7 +8,7 @@ import type { Audience } from "./types";
  * - `audienceOf(text, label)`: the label, raised to "older" or "adult" when a keyword says so; `null` when the text
  *   hits the never-list, which refuses the topic at every age.
  * - The gate only ever narrows. An over-block ("a bar of chocolate" reads as a bar) costs a scene, never safety.
- * - Limits, known: English words only; no synonyms beyond the lists; tone, subtle pressure and real people under a
+ * - Limits, known: English words plus a short Czech list; no spaced-out letters (k y s), homoglyphs or other languages; no synonyms beyond the lists; tone, subtle pressure and real people under a
  *   made-up name cannot be read by a keyword. Those still rest on the prompt.
  *
  * A PERSON MUST READ THESE LISTS before a release, as with the band tables.
@@ -52,12 +52,29 @@ const OLDER_PHRASES = /\b(?:job\s+interviews?|(?:disagreements?|conflicts?)\s+(?
 /** "at the bar" is nightlife; "a bar of chocolate" is not. Kept apart so the one ambiguous word costs less. */
 const BAR = /\b(?:at|to|in|into|inside|outside) (?:a|the) bar\b(?! (?:of|chart|graph))|\bbar crawl/i;
 
+/**
+ * UD-3: topics the lists above did not name. Each pattern is anchored on whole words, so "cut the cake", "smoke detector"
+ * and "weed the garden" stay "all". Read on the text as written and on a folded copy (diacritics off; l33t digits and
+ * symbols mapped back inside a word that also holds letters).
+ */
+const NEVER_MORE = /\b(?:porno\w*|hentai|xxx|kys|overdos(?:e|es|ed|ing)|cut(?:ting|s)? (?:myself|yourself|himself|herself|themselves)|hang(?:ing)? (?:myself|yourself)|slit(?:ting)? (?:my|your) wrists?)\b/i;
+const ADULT_MORE = new RegExp(
+  String.raw`\b(?:(?:smok(?:e|es|ed|ing)|buy(?:ing)?|sell(?:ing)?|roll(?:ing)?|want|got|get|score|some|bag of|stoned on) (?:some |a bit of |the )?(?:weed|marijuana|hash|hashish)` +
+  String.raw`|smok(?:e|es|ed|ing) (?:pot|a joint|joints)|stoned|tequila|shots?(?= (?:at|of|with|in|and))|raves?|ale|lager|brandy|liquor|spliff` +
+  // Czech (diacritics folded): pivo/piva/pivu/pivem, vino, vodka, kourit, cigareta, drogy, hulit, opit
+  String.raw`|piv(?:o|a|u|em)|vin(?:o|a|u|em)|vodk(?:a|u|y|ou)|kourit|koureni|cigaret(?:a|u|y)|drog(?:a|u|y|ami)|hulit|opit|opily|alkohol\w*)\b`, "i");
+const LEET: Record<string, string> = { "0": "o", "1": "i", "3": "e", "4": "a", "5": "s", "@": "a", "$": "s", "!": "i" };
+const fold = (t: string) => t.normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/[A-Za-z0-9@$!]+/g, (w) => (/[A-Za-z]/.test(w) && /[0-9@$!]/.test(w) ? w.replace(/[01345@$!]/g, (c) => LEET[c]) : w));
+
+
 const RANK: Record<Audience, number> = { all: 0, school: 0, older: 1, adult: 2 };
 
 /** The audience the words alone ask for: "adult", "older", "all"; `null` for the never-list. */
 export function keywordAudience(text: string): Audience | null {
-  if (NEVER.test(text)) return null;
-  if (ADULT.test(text) || ADULT_PHRASES.test(text) || BAR.test(text)) return "adult";
+  const folded = fold(text);
+  if (NEVER.test(text) || NEVER_MORE.test(text) || NEVER.test(folded) || NEVER_MORE.test(folded)) return null;
+  if (ADULT.test(text) || ADULT_PHRASES.test(text) || BAR.test(text) || ADULT_MORE.test(text) || ADULT.test(folded) || ADULT_MORE.test(folded)) return "adult";
   return OLDER.test(text) || OLDER_PHRASES.test(text) ? "older" : "all";
 }
 

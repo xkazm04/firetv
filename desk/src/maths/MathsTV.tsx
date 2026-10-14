@@ -27,7 +27,7 @@ import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarS
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
-import { leftOutLine, lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
+import { leftOutLine, lostLabel, lostWord, offCountLine, offSummary, paperCaption, paperNone, paperView, paperWindow, scoreLine } from "@/tv/paperRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
 import { missingLine } from "@/tv/pageLines";
@@ -715,7 +715,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
                 <div key={o.can} className="mb-prow mb-poffrow" data-focused={ix === offAt || undefined}>
                   <span className="n">{ix + 1}</span>
                   <span className="nm">{o.can}</span>
-                  <span className="lost">{lostWord(o.lost)} lost</span>
+                  <span className="lost">{lostLabel(o.lost, o.shared)}</span>
                   <span className="from">From {o.from}{o.beyond ? " · a harder statement" : ""}</span>
                 </div>
               );
@@ -731,7 +731,7 @@ export function PaperScreen({ s, focus }: { s: Session; focus: number }) {
               <div key={t.id} className="mb-prow" data-focused={ix === lamp || undefined} data-secure={t.secure || undefined} data-id={t.id}>
                 <span className="n">{ix + 1}</span>
                 <span className="nm">{t.name}</span>
-                <span className="lost">{lostWord(t.lost)} lost</span>
+                <span className="lost">{lostLabel(t.lost, t.shared)}</span>
                 <span className="from">From {t.from}</span>
                 {t.secure && <span className="sec" data-role="maths-paper-secure">Worth a recheck</span>}
               </div>

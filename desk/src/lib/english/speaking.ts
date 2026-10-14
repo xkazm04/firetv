@@ -16,8 +16,8 @@ import type { EnglishScene } from "./types";
 export const SPEAKING_PRACTICE: EnglishScene[] = [
   { id: "sp-about-you", name: "Speaking practice: about you", goal: "Answer questions about yourself, then give one longer answer.", partner: "Alex · Practice partner", skill: "contact", audience: "school", minutes: "6–8",
     practice: { exam: "a2-key-schools", part: 1 },
-    premise: "A practice partner (not an examiner) asks the learner short personal questions one at a time: name, where they live, school, daily life, what they like. After five or six, ask for one longer answer: \"Tell me something about your favourite place.\" Short answers are fine; praise nothing, mark nothing, never time anything.",
-    cue: "Try: I live in… I go to… I really like… because…",
+    premise: "A practice partner (not an examiner) asks the learner short personal questions one at a time: name, where they live, school, daily life, what they like. Answers about themselves may be made up: a fictional name, town and school are fine; never ask for a real full name, address, town or school name. After five or six, ask for one longer answer: \"Tell me something about your favourite place.\" Short answers are fine; praise nothing, mark nothing, never time anything.",
+    cue: "Try: My name is… I really like… because…",
     quiz: { question: "Which answer says a little more?", options: ["Football.", "I play football on Saturdays because my friends are in the team."], correct: 1 } },
   { id: "sp-pictures", name: "Speaking practice: pictures on one topic", goal: "Say which things you like and why, and ask your partner.", partner: "Sam · Practice partner", skill: "relate", audience: "school", minutes: "6–8",
     practice: { exam: "a2-key-schools", part: 2 },

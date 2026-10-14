@@ -63,8 +63,8 @@ export function modeChecked<T extends { mode?: unknown }>(p: T, allowAdult = tru
  * A draft that may not be Adult (under 18, or a school type with no age) loses "adult": the gate is re-checked on every
  * edit. A refused adult falls back to a "family" the draft already held, never erasing it.
  */
-function adultGated(p: Profile, before?: Profile | null): Profile {
-  if (p.mode !== "adult" || adultAllowed(p)) return p;
+function adultGated(p: Profile, before?: Profile | null, savedMinor = false): Profile {
+  if (p.mode !== "adult" || (adultAllowed(p) && !savedMinor)) return p;
   const q = { ...p }; delete q.mode;
   return before?.mode === "family" ? { ...q, mode: "family" } : q;
 }
@@ -659,7 +659,11 @@ function step(s: Session, e: Event): Session {
       const base: Profile = s.draft ?? s.profiles.find((p) => p.id === named) ?? { id: named ?? newProfileId(s), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] };
       const d: Profile = pathChecked({ ...base, ...modeChecked(patch), id: base.id });
       // the age first (a type change may clear it), then the Adult gate on what is left
-      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = adultGated(d, s.draft); break; }
+      // Other has no range, so a known age is kept as a fact (UD-1); a school type still drops an age outside its range
+      const r = AGE_RANGE[d.type]; if (r && d.age !== undefined && (d.age < r[0] || d.age > r[1])) delete d.age;
+      // a saved profile's age under 18 still gates Adult when the draft has lost its age to a type walk: only an age of 18+ typed in lifts it
+      const saved = s.profiles.find((p) => p.id === d.id);
+      n.draft = adultGated(d, s.draft, d.age === undefined && saved?.age !== undefined && saved.age < 18); break; }
     case "profile.save": { const d = s.draft; if (!d) break;
       const bad = profileProblem(d); if (bad) { n.status = SAVE_REFUSED + bad; break; }
       if (!d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);

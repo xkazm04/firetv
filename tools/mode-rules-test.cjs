@@ -118,6 +118,27 @@ test('modeChecked drops junk and keeps family; a draft patch may set adult only 
   assert.equal(s.profiles.find(p => p.name === 'Mia').mode, 'family', 'family survives the save');
 });
 
+test('UD-1: retyping a saved minor to Other keeps the age, so Adult stays refused until 18+ is entered', () => {
+  const kid = { id: 'ondrej', name: 'Ondrej', type: 'elementary', age: 13, system: 'cz', modules: ['maths'], mode: 'family' };
+  const base = { ...store.fresh(), learner: null, profiles: [kid], screen: 'learner', focus: 0 };
+  let s = store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } });
+  s = store.reduce(s, { type: 'profile.draft', patch: { type: 'other' } });
+  assert.equal(s.draft.age, 13, 'the age survives the type change');
+  s = store.reduce(s, { type: 'profile.draft', patch: { mode: 'adult' } });
+  assert.notEqual(s.draft.mode, 'adult', 'Adult refused for a saved 13-year-old');
+  s = store.reduce(s, { type: 'profile.save' });
+  assert.equal(modeOf(s.profiles.find(p => p.id === 'ondrej')), 'family', 'saved profile stays Family');
+  // a type walk that drops the age (13 is out of some school range) must not open the gate either
+  let w = store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } });
+  for (const type of ['high-school', 'elementary', 'other']) w = store.reduce(w, { type: 'profile.draft', patch: { type } });
+  w = store.reduce(w, { type: 'profile.draft', patch: { mode: 'adult' } });
+  assert.notEqual(w.draft.mode, 'adult', 'no type walk reaches Adult from a saved minor');
+  // 18+ entered: Adult is allowed; a new Other with no age still self-declares (owner ruling V2-O3)
+  let a = store.reduce(store.reduce(base, { type: 'profile.draft', patch: { id: 'ondrej' } }), { type: 'profile.draft', patch: { type: 'other', age: 19 } });
+  assert.equal(store.reduce(a, { type: 'profile.draft', patch: { mode: 'adult' } }).draft.mode, 'adult');
+  assert.equal(store.reduce(store.fresh(), { type: 'profile.draft', patch: { name: 'Ada', type: 'other', mode: 'adult' } }).draft.mode, 'adult');
+});
+
 test('an edit-save copies mode through the keys.ts list', () => {
   const p = { id: 'mia', name: 'Mia', type: 'elementary', age: 12, system: 'uk', modules: ['maths'], mode: 'family' };
   const s = { ...store.fresh(), learner: null, profiles: [p], screen: 'learner', focus: 0 };

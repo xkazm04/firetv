@@ -797,6 +797,21 @@ test('paper 1: the list is in recovery()\'s order - a prerequisite pulled ahead 
  assert.deepEqual(ids,v.topics.slice(0,ids.length).map(t=>t.id),'the screen draws them in that order');
 });
 
+test('paper 2b (UD-8): a topic whose lost marks are a share of a multi-topic question says "shared"; a whole loss does not',()=>{
+ const {paperView}=PAPER();
+ const shared=paperView(paperSession([it('7',0,2,['N12','N2']),it('9',0,2,['A1'])]));
+ const sh=shared.topics.find(x=>x.id==='pct-of-amount');
+ assert.ok(sh&&sh.shared===true,'N12 shares question 7 with another place');
+ const {STATEMENTS}=STM(),{reachOf}=REC();
+ const one=STATEMENTS.find(x=>{const r=reachOf([x.code]);return r.topics.length===1&&r.off.length===0;});
+ assert.ok(one,'a statement that reaches exactly one topic');
+ const whole=paperView(paperSession([it('7',0,2,[one.code])]));
+ assert.equal(whole.topics[0].shared,false,'a whole loss is not shared');
+ const html=drawMaths('PaperScreen',paperSession([it('7',0,2,['N12','N2']),it('9',0,2,['A1'])])).replace(/<[^>]*>/g,'');
+ assert.match(html,/1 mark lost, shared/);
+ assert.doesNotMatch(drawMaths('PaperScreen',paperSession([it('7',0,2,[one.code])])).replace(/<[^>]*>/g,''),/shared/);
+});
+
 test('paper 2: each topic shows its lost marks and the questions behind it; the paper shows its marks, out of and lost',()=>{
  const {paperView,scoreLine}=PAPER();
  const raw=[it('5(b)',1,3,['N12']),it('7',0,2,['N12','N2']),it('9',4,4,['A1'])];

@@ -65,6 +65,14 @@ test('L2 Speaking practice: one scene per Speaking part, in that part\'s skills,
     assert.match(sc.premise, /no timing|never time/i, `${sc.id}: no clock`);
     assert(sc.quiz.options.length === 2 && [0, 1].includes(sc.quiz.correct));
   }
+  // UD-2: a scene that asks a child about herself must say the answers are made up, and never ask for a real name, address, town or school
+  for (const sc of SPEAKING_PRACTICE) {
+    assert.doesNotMatch(sc.cue, /I live in|I go to/i, `${sc.id}: the cue does not invite a real town or school`);
+    if (/where they live|name, /i.test(sc.premise)) {
+      assert.match(sc.premise, /made[- ]up/i, `${sc.id}: answers about yourself may be made up`);
+      assert.match(sc.premise, /never (ask for )?a real (full )?name/i, `${sc.id}: never a real name, address, town or school`);
+    }
+  }
   assert.deepEqual(ENGLISH_SCENES.map(s => s.id).filter(id => id.startsWith('sp-')), [], 'the free scenes are untouched');
   const kid = { id: 'k', name: 'K', type: 'elementary', age: 12, modules: [] }, adult = { id: 'a', name: 'A', type: 'other', modules: [] };
   assert.equal(eligibleScenes(kid, defaultPreferences(kid)).filter(s => s.practice).length, 6, 'a 12-year-old can start all six');

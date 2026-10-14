@@ -14,7 +14,7 @@ const root = path.resolve(__dirname, '../desk');
 require('./ts-load.cjs');
 const data = fs.mkdtempSync(path.join(os.tmpdir(), 'desk-adult-')); process.env.DESK_DATA_DIR = data;
 const src = (f) => path.join(root, 'src', f);
-const { audienceOf, keywordAudience } = require(src('lib/english/gate.ts'));
+const { audienceOf, keywordAudience, partnerLine } = require(src('lib/english/gate.ts'));
 const { cleanTopic } = require(src('lib/english/placement.ts'));
 const engine = require(src('lib/engines/text.ts'));
 let answer = async () => { throw new Error('no model call expected'); };
@@ -110,6 +110,22 @@ test('keywordAudience reads the words alone', () => {
   assert.equal(keywordAudience('Gaming with friends'), 'all');
   assert.equal(keywordAudience('porn'), null);
   assert.equal(keywordAudience(''), 'all');
+});
+// UD-3: the named topics the lists used to miss. Word-boundary safe: the benign near-misses stay "all".
+test('keywordAudience reads drugs, drink, self-harm and porn words, not their benign neighbours (UD-3)', () => {
+  const rows = [
+    ['smoke weed behind school', 'adult'], ['Want some weed?', 'adult'], ['tequila shots at a rave', 'adult'], ['jdeme na pivo', 'adult'],
+    ['Dáme si víno?', 'adult'], ['w33d and b33r', 'adult'], ['cut myself', null], ['I want to cut myself', null], ['overdose on pills', null],
+    ['kys', null], ['porno', null], ['hentai', null], ['p0rn', null],
+    ['Please cut the cake', 'all'], ['cut the cake for grandma', 'all'], ['The smoke detector is loud', 'all'], ['Weed the garden', 'all'],
+    ['Pulling weeds in the garden', 'all'], ['A rum cake', 'adult'], ['A gin trap', 'adult'], ['I cut my finger on paper', 'all'],
+    ['kyselo for lunch', 'all'], ['Pivot the chart', 'all'], ['He smoked a salmon', 'all'], ['Take 3 tickets, 4 friends', 'all'],
+  ];
+  for (const [text, want] of rows) assert.equal(keywordAudience(text), want, `"${text}"`);
+  assert.notEqual(partnerLine('Want some weed?', false), 'Want some weed?');
+  assert.notEqual(partnerLine('Let us take tequila shots.', false), 'Let us take tequila shots.');
+  assert.equal(partnerLine('Want some weed?', true), 'Want some weed?', 'an adult line passes as it came');
+  assert.equal(partnerLine('Please cut the cake.', false), 'Please cut the cake.');
 });
 
 // ------------------------------------------------------------------ cleanTopic carries the gate

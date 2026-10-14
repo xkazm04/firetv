@@ -537,12 +537,16 @@ export function unruledLines(piece: PieceLike | undefined): string[] {
  * link beside its job, so a rewritten claim is ruled against what the evidence named in the first reading. Under Evidence
  * the same kept link comes back as a checkable sentence with `backs`, whatever its first-pass role.
  */
-export function contextObservations(lens: string, sentences: Sentence[], except: number, kept: Pick<VerdictLike, "n" | "supports">[] = []): Obs[] {
+export function contextObservations(lens: string, sentences: Sentence[], except: number, kept: (Pick<VerdictLike, "n" | "supports"> & Partial<Pick<VerdictLike, "note">>)[] = []): Obs[] {
   if (lens !== "structure" && lens !== "evidence") return [];
   return sentences.filter((s) => s.n !== except).flatMap((s): Obs[] => {
     if (lens !== "structure") {
-      const backs = kept.find((v) => v.n === s.n)?.supports;
-      return backs !== undefined ? [{ n: s.n, support: "checkable", backs }] : s.role === "evidence" ? [{ n: s.n, support: "checkable" }] : [];
+      const own = kept.find((v) => v.n === s.n), backs = own?.supports;
+      if (backs !== undefined) return [{ n: s.n, support: "checkable", backs }];
+      if (s.role === "evidence") return [{ n: s.n, support: "checkable" }];
+      // an opinion the reading ruled (flagged as one, or backed by a kept link) stays an opinion, so a link can resolve to it
+      const ruledOpinion = own?.note === CHECKS.opinion || own?.note === CHECKS.unbacked || kept.some((v) => v.supports === s.n);
+      return ruledOpinion ? [{ n: s.n, support: "opinion" }] : [];
     }
     const link = kept.find((v) => v.n === s.n)?.supports;
     return [{ n: s.n, job: link !== undefined && s.role !== "claim" ? "evidence" : s.role, ...(link !== undefined ? { supports: link } : {}) }];
