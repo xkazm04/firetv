@@ -8,12 +8,16 @@
  * word problem in parts (lib/desk/items.ts). `word: false` in the body (or `0`, as a failed run's input holds it) asks for
  * the model's single items alone - no screen sends it; the course walk (tools/calc-course-test.cjs) does, so its rows keep
  * pinning the model's set.
+ * A set asked for while Get ready for school is open on the unit a paper's recovery row carried (Session.paperAim, MB-B40)
+ * is aimed at that paper's lost statements on the unit: they go to the set writer and onto the set (Practice.aim), for the
+ * taped card. The body cannot ask for an aim; any other set is asked for exactly as before.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { makeItems } from "@/lib/desk/items";
 import { topicIn } from "@/lib/library/paths";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
+import { aimOf } from "@/lib/rules/recovery";
 
 export const dynamic = "force-dynamic";
 const START = "writing a practice set…";
@@ -30,14 +34,18 @@ export async function POST(req: Request) {
   // the seated profile's school year sets the mix: an age only for a learner at school (as the SCHOOL tick reads it)
   const me = getSession().profiles.find((p) => p.id === learner);
   const who = { age: me && me.type !== "other" ? me.age : undefined, system: me?.system };
+  // a set opened from the paper's recovery row (MB-B40): Get ready for school is open on the unit that row carried, and
+  // the paper's lost statements on it are the set's aim; read from the session here, never from the body
+  const s = getSession();
+  const aim = s.paperAim === topic && s.screen === "prepare" && s.paper ? aimOf([...s.paper.items, ...s.paper.unmapped], topic) : [];
   const r = await runJob("practice", async (run) => {
-    const made = await makeItems(topic, learner, 6, { ...who, stretch, word });
+    const made = await makeItems(topic, learner, 6, { ...who, stretch, word, ...(aim.length ? { aim } : {}) });
     // written for the learner who asked: after a learner change the run is superseded and the set is dropped
     if (!run.current() || getSession().learner?.id !== learner) return null;
     // two rounds and not one question the desk could check: a failed set (job.ts's practice sentence, "Try again."),
     // never an empty paper reported as ready - and the set on the desk stays as it was
     if (!made.items.length) throw new Error(`no verifiable question in ${made.tries} rounds`);
-    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}) } });
+    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner, ...(stretch ? { stretch: true as const } : {}), ...(aim.length ? { aim } : {}) } });
     return made;
   }, { key: topic, input: { topic, ...(stretch ? { stretch: 1 } : {}), ...(word ? {} : { word: 0 }) }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });
   if (!r.ok) return refused(r);

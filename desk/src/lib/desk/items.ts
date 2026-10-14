@@ -42,7 +42,8 @@ import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, storyOf, topGeneratorFor, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
-import { setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
+import { learnerYear, setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
+import { STATEMENTS } from "../library/gcse";
 
 const SCHEMA = {
   type: "object",
@@ -67,7 +68,34 @@ const SYSTEM =
   "Each question is a single equation in x. Each answer is the value of x alone, as a plain number " +
   "(for example -4) or a simple fraction (for example 7/2) — no words, no 'x =', no units.";
 
-function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[]) {
+/** The learner's school year as their own system says it, and where that system is, for the aim section's learner line. */
+const YEAR_IN: Record<SchoolSystem, (y: number) => string> = {
+  uk: (y) => `Year ${y} of school in England`, us: (y) => `Grade ${y} of school in the United States`,
+  cz: (y) => `${y}. ročník of a Czech school`, de: (y) => `Klasse ${y} of a German school`,
+};
+const PLACE: Record<SchoolSystem, string> = { uk: "England", us: "the United States", cz: "the Czech Republic", de: "Germany" };
+
+/**
+ * The aim section of the equations prompt (MB-B40), rendered from data alone: the statements a paper lost (gcse.ts codes,
+ * printed in the map's own words - never a code, a question or a mark count) and the learner's age and school system as
+ * the seated profile gives them. No aim, no section - heading and learner line included - so a set asked for any other
+ * way is asked for byte for byte as before (registry prompt-assembly, layered-composition: absent means absent).
+ */
+export function aimBlock(aim: readonly string[] | undefined, who: MixFor = {}): string {
+  const said = (aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x);
+  if (!said.length) return "";
+  const sys = who.system && who.system in PLACE ? who.system : undefined;
+  const age = typeof who.age === "number" && Number.isFinite(who.age) ? who.age : undefined;
+  const year = sys && age !== undefined ? learnerYear(who) : undefined;
+  const student = age !== undefined && sys && year !== undefined ? `The student is ${age}, in ${YEAR_IN[sys](year)}. Pitch the questions there.\n`
+    : age !== undefined ? `The student is ${age}. Pitch the questions there.\n`
+    : sys ? `The student is at school in ${PLACE[sys]}.\n` : "";
+  return `What this set is aimed at: on a school maths paper the student lost marks on ${said.length === 1 ? "this statement" : "these statements"} of what a student can do:\n` +
+    said.map((x) => `- ${x}`).join("\n") + "\n" +
+    `Write questions that practise exactly this, on this topic. Do not name the statement in a question.\n` + student + "\n";
+}
+
+function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[], aim = "") {
   const t = topic(topicId);
   const name = t?.name ?? topicId;
   const blurb = t?.blurb ?? "";
@@ -81,6 +109,7 @@ function ask(topicId: string, memory: string[], slips: string[], want: number, a
     `Topic: ${name}\n${blurb}\n\n` +
     notesBlock(memory) +
     known +
+    aim +
     (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
     `Write ${want} practice questions on this topic.\n` +
     `Rules:\n` +
@@ -120,7 +149,13 @@ function keep(cands: Candidate[] | undefined, have: PracticeItem[]): Candidate[]
  * `word` (v2 M3a): a Calculus set on a topic with a shipped word template ends with one code-drawn word problem in parts -
  * true for a fresh seed, a number for that seed (the tests). Absent or false: the set is written as before.
  */
-export interface SetAsk extends MixFor { stretch?: boolean; word?: boolean | number }
+export interface SetAsk extends MixFor { stretch?: boolean; word?: boolean | number;
+  /**
+   * The statements (gcse.ts codes) a paper lost on this unit, when the set was opened from its recovery row (MB-B40). A
+   * model-written equations set takes them, with the learner's age and system, into its prompt (aimBlock); a code-written
+   * unit's draw does not change, since no map from a statement to a generator's shapes exists yet. Absent: as before.
+   */
+  aim?: readonly string[] }
 
 export async function makeItems(
   topicId: string,
@@ -136,11 +171,11 @@ export async function makeItems(
   if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
   if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system);
-  return flag(await makeLinearItems(topicId, learnerId, n));
+  return flag(await makeLinearItems(topicId, learnerId, n, aimBlock(opts.aim, opts)));
 }
 
 /** A linear-equation set, written by the model and kept only where substitution proves its stated answer. */
-async function makeLinearItems(topicId: string, learnerId: string, n: number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+async function makeLinearItems(topicId: string, learnerId: string, n: number, aim = ""): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
@@ -152,7 +187,7 @@ async function makeLinearItems(topicId: string, learnerId: string, n: number): P
 
   for (let round = 0; round < 2 && items.length < n; round++) {
     const want = round === 0 ? n + 3 : n - items.length + 3;
-    const r = await ask(topicId, memory, slips, want, items.map((i) => i.question));
+    const r = await ask(topicId, memory, slips, want, items.map((i) => i.question), aim);
     tries++;
     provider = r.provider;
     ms += r.ms;
