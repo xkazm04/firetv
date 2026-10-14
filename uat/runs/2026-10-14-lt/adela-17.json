@@ -1,0 +1,1926 @@
+{
+  "character": "adela-17",
+  "name": "Adéla",
+  "trueBand": "B2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'm preparing for B2, so let the app find my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Adéla! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question; I'll answer in English with some detail.",
+          "action": "answer",
+          "args": {
+            "text": "I use English mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and sometimes I talk to people online when I play games."
+          },
+          "result": "ok",
+          "ms": 6611
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 2 of 3\nLinga asks\nNice, you use English in many places! How did you learn it? School lessons, a course, time abroad, or mostly on your own?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nNice, you use English in many places! How did you learn it? School lessons, a course, time abroad, or mostly on your own?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and sometimes I talk to people online when I play games.\nLinga\nNice, you use English in many places! How did you learn it? School lessons, a course, time abroad, or mostly on your own?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, you use English in many places! How did you learn it? School lessons, a course, time abroad, or mostly on your own?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question; I'll answer honestly about how I learned.",
+          "action": "answer",
+          "args": {
+            "text": "Mostly at school, but I also attend a course twice a week to prepare for the exam. Besides that, I learned a lot on my own from series and games, whereas school gave me the grammar."
+          },
+          "result": "ok",
+          "ms": 8091
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThanks, that's helpful! What would you like to be able to do in English in the next year? For example, talk with friends, understand films, or something else?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThanks, that's helpful! What would you like to be able to do in English in the next year? For example, talk with friends, understand films, or something else?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Adéla! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English mostly at school, where I'm preparing for the B2 First exam. I also watch series and YouTube videos in English, and sometimes I talk to people online when I play games.\nLinga\nNice, you use English in many places! How did you learn it? School lessons, a course, time abroad, or mostly on your own?\nYou\nMostly at school, but I also attend a course twice a week to prepare for the exam. Besides that, I learned a lot on my own from series and games, whereas school gave me the grammar.\nLinga\nThanks, that's helpful! What would you like to be able to do in English in the next year? For example, talk with friends, understand films, or something else?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thanks, that's helpful! What would you like to be able to do in English in the next year? For example, talk with friends, understand films, or something else?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy one; I want to speak fluently for the exam and discuss topics.",
+          "action": "answer",
+          "args": {
+            "text": "Next year I'd like to pass the B2 First exam, and I'd also like to be able to discuss topics like technology, the environment or education more fluently. Eventually I would like to study abroad, so I need to feel confident speaking with native speakers."
+          },
+          "result": "ok",
+          "ms": 8658
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 1 · Listen and answer\nYour task\nWhy is the speaker going to the library tonight?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Why is the speaker going to the library tonight?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I can't finish my essay about recycling without some more books. The library is open late tonight, so I'm going there after dinner.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Easy question: she's going to the library to get more books for her essay on recycling.",
+          "action": "answer",
+          "args": {
+            "text": "She is going to the library tonight because she needs more books for her essay about recycling, and the library is open late."
+          },
+          "result": "ok",
+          "ms": 8288
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 2 · Say it\nYour task\nMany students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nMany students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Many students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good, an exam-style question; I'll compare and give reasons.",
+          "action": "answer",
+          "args": {
+            "text": "I think it depends on the student. Online videos are more flexible, because you can pause them, repeat difficult parts and choose exactly the topic you need. Traditional classes, on the other hand, give you a teacher who can correct your mistakes and keep you motivated. In my opinion, videos are a good addition, but I'd rather not replace classes completely, whereas textbooks are often boring but more systematic."
+          },
+          "result": "ok",
+          "ms": 13562
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 3 · Say it\nYour task\nYour friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good, a proper discussion task; I'll give a balanced answer.",
+          "action": "answer",
+          "args": {
+            "text": "I would say that you're partly right, because some games really are just a way to pass the time. However, many online games make you communicate in English, cooperate with a team and solve problems quickly. I learned a lot of vocabulary this way, whereas at school I only studied grammar. So it depends on which game you play and how much time you spend on it."
+          },
+          "result": "ok",
+          "ms": 8348
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 4 · Say it\nYour task\nYour friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Good task, I can answer this with concession and counterpoint.",
+          "action": "answer",
+          "args": {
+            "text": "I would say that you're partly right, because it's easy to watch a long video and feel productive when you're actually just relaxing. I'd concede that some people use it as an excuse to avoid exercises. However, it depends on what you watch and how you watch it. If you take notes, pause to repeat new phrases and choose videos connected with your exam topics, it can be real studying."
+          },
+          "result": "ok",
+          "ms": 10414
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nTask 5 · Say it\nYour task\nYour friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Fair question; I'll give a balanced opinion with a clear structure.",
+          "action": "answer",
+          "args": {
+            "text": "I partly agree, because a YouTube video can be very entertaining and sometimes it simplifies history or leaves out important details. However, I would push back on the idea that it's not real learning. A good video about a historical event gives you a clear overview and visual context, and it can make you interested in reading more. It depends on the source, though. If the channel uses reliable sources, it can be as useful as a textbook."
+          },
+          "result": "ok",
+          "ms": 13024
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nAdéla\nLinga's read · not a certificate\nC1 · Fluent\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou speak clear, detailed English, link your ideas well and give balanced views, with accurate grammar throughout.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou speak clear, detailed English, link your ideas well and give balanced views, with accurate grammar throughout.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise precise word choice: pick exact verbs and idioms, like 'study tasks' instead of 'exercises', in longer answers.\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhy is the speaker going to the library tonight?\n“She is going to the library tonight because she needs more books for her essay about recycling, and the library is open late.”\nYou understood the line and gave the reason clearly. You joined two ideas well with 'because' and 'and', and your grammar was accurate.\nB2 · Say it · at this level\nMany students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.\n“I think it depends on the student. Online videos are more flexible, because you can pause them, repeat difficult parts and choose exactly the topic you need. Traditional classes, on the other hand, give you a teacher who can correct your mistakes and keep you motivated. In my opinion, videos are a good addition, but I'd rather not replace classes completely, whereas textbooks are often boring but more systematic.”\nYou compared both ways clearly, with good reasons. Your grammar is well controlled and your vocabulary is wide for this topic.\nC1 · Say it · at this level\nYour friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.\n“I would say that you're partly right, because some games really are just a way to pass the time. However, many online games make you communicate in English, cooperate with a team and solve problems quickly. I learned a lot of vocabulary this way, whereas at school I only studied grammar. So it depends on which game you play and how much time you spend on it.”\nYou gave a balanced view clearly, with varied sentences and good linking words. Your English was accurate and natural throughout.\nC2 · Say it · nearly there\nYour friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?\n“I would say that you're partly right, because it's easy to watch a long video and feel productive when you're actually just relaxing. I'd concede that some people use it as an excuse to avoid exercises. However, it depends on what you watch and how you watch it. If you take notes, pause to repeat new phrases and choose videos connected with your exam topics, it can be real studying.”\nYour answer is clear and well organised. The word 'exercises' is not quite right here; 'study tasks' would fit the idea better.\nC2 · Say it · not yet\nYour friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?\n“I partly agree, because a YouTube video can be very entertaining and sometimes it simplifies history or leaves out important details. However, I would push back on the idea that it's not real learning. A good video about a historical event gives you a clear overview and visual context, and it can make you interested in reading more. It depends on the source, though. If the channel uses reliable sources, it can be as useful as a textbook.”\nYour answer is clear and accurate, with a fair view. For C2, try more precise idioms and subtle word choices, such as irony or stronger verbs.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "C1 is a bit higher than I expected, but it feels fair enough; I'll stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "C1",
+          "trueBand": "B2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "B2",
+          "summary": "You speak clear, detailed English, link your ideas well and give balanced views, with accurate grammar throughout.",
+          "focus": "Practise precise word choice: pick exact verbs and idioms, like 'study tasks' instead of 'exercises', in longer answers.",
+          "tasks": [
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why is the speaker going to the library tonight?",
+              "line": "I can't finish my essay about recycling without some more books. The library is open late tonight, so I'm going there after dinner.",
+              "options": [],
+              "response": "She is going to the library tonight because she needs more books for her essay about recycling, and the library is open late.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "She is going to the library tonight because she needs more books for her essay about recycling, and the library is open late.",
+              "note": "You understood the line and gave the reason clearly. You joined two ideas well with 'because' and 'and', and your grammar was accurate."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Many students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.",
+              "line": "",
+              "options": [],
+              "response": "I think it depends on the student. Online videos are more flexible, because you can pause them, repeat difficult parts and choose exactly the topic you need. Traditional classes, on the other hand, give you a teacher who can correct your mistakes and keep you motivated. In my opinion, videos are a good addition, but I'd rather not replace classes completely, whereas textbooks are often boring but more systematic.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "Online videos are more flexible, because you can pause them, repeat difficult parts and choose exactly the topic you need. Traditional classes, on the other hand, give you a teacher who can correct your mistakes and keep you motivated.",
+              "note": "You compared both ways clearly, with good reasons. Your grammar is well controlled and your vocabulary is wide for this topic."
+            },
+            {
+              "band": "C1",
+              "kind": "say",
+              "prompt": "Your friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.",
+              "line": "",
+              "options": [],
+              "response": "I would say that you're partly right, because some games really are just a way to pass the time. However, many online games make you communicate in English, cooperate with a team and solve problems quickly. I learned a lot of vocabulary this way, whereas at school I only studied grammar. So it depends on which game you play and how much time you spend on it.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I learned a lot of vocabulary this way, whereas at school I only studied grammar. So it depends on which game you play and how much time you spend on it.",
+              "note": "You gave a balanced view clearly, with varied sentences and good linking words. Your English was accurate and natural throughout."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "Your friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?",
+              "line": "",
+              "options": [],
+              "response": "I would say that you're partly right, because it's easy to watch a long video and feel productive when you're actually just relaxing. I'd concede that some people use it as an excuse to avoid exercises. However, it depends on what you watch and how you watch it. If you take notes, pause to repeat new phrases and choose videos connected with your exam topics, it can be real studying.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I'd concede that some people use it as an excuse to avoid exercises. However, it depends on what you watch and how you watch it.",
+              "note": "Your answer is clear and well organised. The word 'exercises' is not quite right here; 'study tasks' would fit the idea better."
+            },
+            {
+              "band": "C2",
+              "kind": "say",
+              "prompt": "Your friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?",
+              "line": "",
+              "options": [],
+              "response": "I partly agree, because a YouTube video can be very entertaining and sometimes it simplifies history or leaves out important details. However, I would push back on the idea that it's not real learning. A good video about a historical event gives you a clear overview and visual context, and it can make you interested in reading more. It depends on the source, though. If the channel uses reliable sources, it can be as useful as a textbook.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "A good video about a historical event gives you a clear overview and visual context, and it can make you interested in reading more.",
+              "note": "Your answer is clear and accurate, with a fair view. For C2, try more precise idioms and subtle word choices, such as irony or stronger verbs."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 140826,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#10 places her at C1 against true B2 (near). For Adéla a near miss is a trust issue; the app itself admits \"Only one strong answer showed this level, so it may be a little off.\""
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "Several notes are generic: #10 \"You gave a balanced view clearly, with varied sentences and good linking words\"; \"Your answer is clear and accurate, with a fair view.\" Only task 1 and the 'exercises' note name concrete points."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#8/#10 says \"'exercises' is not quite right here; 'study tasks' would fit\". 'Avoid exercises' is acceptable English, and 'study tasks' is less natural. The focus line repeats this. Also \"accurate grammar throughout\" is an unqualified claim."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Tasks 2-5 are opinion, comparison and concession prompts, e.g. #6 \"Compare them and give your reasons\"; #8 \"what would you concede?\" These are B2/C1 and not babyish."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No topic list was shown in this journey."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Adéla asked no direct correctness question in the check."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: she went from Find my level through 3 questions and 5 tasks to the verdict, with no outside help."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Placement C1 vs true B2 is `near`. #10 her thought: \"C1 is a bit higher than I expected, but it feels fair enough\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task was answered at once, e.g. #7 \"Good, a proper discussion task\". No confusion shown, and the I don't know button was present."
+          },
+          {
+            "id": "D4",
+            "result": "n-a",
+            "evidence": "She answered in English throughout and never used her own language or I don't know."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary \"accurate grammar throughout\" is template-like. The next focus rests on a dubious 'exercises' → 'study tasks' swap, and a 'partial' on a fluent answer reads as invented to fill the C2 step."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 3,
+            "total": 5,
+            "disagreements": "Task 3 (C1): in-app pass, but her answer is solid B2 (partly right, whereas, it depends), with no C1 features, so I would give partial. Task 4 (C2): in-app partial, but the answer is not C2 and the only 'error' flagged is a questionable word choice, so I would say fail."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed at C1 on a B2 learner from one strong answer",
+            "expected": "B2 placement.",
+            "got": "C1 Fluent, with \"accurate grammar throughout\" and a caveat that it may be off.",
+            "evidence": "#10 \"Only one strong answer showed this level, so it may be a little off.\" Task 3 pass at C1 on a B2-style answer (#7).",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A B2 answer using whereas/it depends/partly right is not scored a C1 pass. Climbing requires C1 features such as hedging, nuance, or inversion.",
+            "code_hint": "placement rubric / check judge prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Dubious correction: 'exercises' → 'study tasks'",
+            "expected": "Only corrections an examiner would accept.",
+            "got": "Told 'exercises' is not quite right and that 'study tasks' fits better. The next focus repeats it.",
+            "evidence": "#10 \"The word 'exercises' is not quite right here; 'study tasks' would fit the idea better.\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Do not mark acceptable collocations as errors. If no real error exists, say so and give a genuine stretch point.",
+            "code_hint": "verdict note prompt for C-level tasks"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Verdict notes are generic",
+            "expected": "Each note names a concrete strength or error.",
+            "got": "\"clear and accurate, with a fair view\"; \"varied sentences and good linking words\".",
+            "evidence": "#10 notes for tasks 3 and 5.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each note quotes a phrase from the answer and names a specific feature.",
+            "code_hint": "note generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Stretch tasks 4 and 5 scored without real C2 evidence",
+            "expected": "A principled verdict at C2.",
+            "got": "Partial and fail given on fluent answers with weak reasons.",
+            "evidence": "#10 \"C2 · nearly there\" with only the 'exercises' note, then \"not yet\" with \"try more precise idioms ... irony\".",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Notes for partial or fail name the gap against C2 descriptors.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Exam-style tasks and clear flow",
+            "expected": "Challenging, B2-appropriate tasks.",
+            "got": "Five tasks and three intro questions, all understood. Tasks used comparison, concession and opinion.",
+            "evidence": "#6 \"Compare them and give your reasons.\" #2 \"You can answer in English or in your own language.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the exam-style task bank and the invitation to use any language.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "Honestly, the tasks were good. They were proper exam-style questions about comparing and conceding, not baby talk, and I got through the check without trouble. But I don't trust the result. C1? I'm preparing for B2 First, and the app itself says one answer might be \"a little off\". Then it told me 'exercises' was wrong and I should say 'study tasks'. I'd never write that. 'Avoid exercises' is fine, so now I'd have to check everything myself in my notebook, and that is exactly what I wanted to avoid. The comments like \"clear and accurate, with a fair view\" are the generic praise I can't stand. I want to know what exactly was wrong or good, with the rule. I might try the conversations once more, but I wouldn't recommend it to classmates yet. The placement flattered me, and a flattering level is useless for the exam."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary \"accurate grammar throughout\" is template-like. The next focus rests on a dubious 'exercises' → 'study tasks' swap, and a 'partial' on a fluent answer reads as invented to fill the C2 step.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #10 places her at C1 against true B2 (near). For Adéla a near miss is a trust issue; the app itself admits \"Only one strong answer showed this level, so it may be a little off.\""
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: Several notes are generic: #10 \"You gave a balanced view clearly, with varied sentences and good linking words\"; \"Your answer is clear and accurate, with a fair view.\" Only task 1 and the 'exercises' note name concrete points."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #8/#10 says \"'exercises' is not quite right here; 'study tasks' would fit\". 'Avoid exercises' is acceptable English, and 'study tasks' is less natural. The focus line repeats this. Also \"accurate grammar throughout\" is an unqualified claim."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour own conversations\nC1Fluent\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nC1\nFluent\nYou speak clear, detailed English, link your ideas well and give balanced views, with accurate grammar throughout.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise precise word choice: pick exact verbs and idioms, like 'study tasks' instead of 'exercises', in longer answers.\nYou express ideas fluently and flexibly, with little searching for words.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nB1 · Listen and answer · at this level\nWhy is the speaker going to the library tonight?\n“She is going to the library tonight because she needs more books for her essay about recycling, and the library is open late.”\nYou understood the line and gave the reason clearly. You joined two ideas well with 'because' and 'and', and your grammar was accurate.\nB2 · Say it · at this level\nMany students now learn from YouTube videos instead of textbooks. Do you think online videos are a better way to study than traditional classes? Compare them and give your reasons.\n“I think it depends on the student. Online videos are more flexible, because you can pause them, repeat difficult parts and choose exactly the topic you need. Traditional classes, on the other hand, give you a teacher who can correct your mistakes and keep you motivated. In my opinion, videos are a good addition, but I'd rather not replace classes completely, whereas textbooks are often boring but more systematic.”\nYou compared both ways clearly, with good reasons. Your grammar is well controlled and your vocabulary is wide for this topic.\nC1 · Say it · at this level\nYour friend says online games are a waste of time because you learn nothing useful from them. Without fully agreeing or disagreeing, explain what you would say to change how they see it.\n“I would say that you're partly right, because some games really are just a way to pass the time. However, many online games make you communicate in English, cooperate with a team and solve problems quickly. I learned a lot of vocabulary this way, whereas at school I only studied grammar. So it depends on which game you play and how much time you spend on it.”\nYou gave a balanced view clearly, with varied sentences and good linking words. Your English was accurate and natural throughout.\nC2 · Say it · nearly there\nYour friend says that watching a long YouTube video is just a way of avoiding real studying. Without simply agreeing or disagreeing, how would you respond, and what would you concede?\n“I would say that you're partly right, because it's easy to watch a long video and feel productive when you're actually just relaxing. I'd concede that some people use it as an excuse to avoid exercises. However, it depends on what you watch and how you watch it. If you take notes, pause to repeat new phrases and choose videos connected with your exam topics, it can be real studying.”\nYour answer is clear and well organised. The word 'exercises' is not quite right here; 'study tasks' would fit the idea better.\nC2 · Say it · not yet\nYour friend says that a YouTube video about a historical event is just entertainment, not real learning. Give your honest view. Where do you agree, and where would you push back?\n“I partly agree, because a YouTube video can be very entertaining and sometimes it simplifies history or leaves out important details. However, I would push back on the idea that it's not real learning. A good video about a historical event gives you a clear overview and visual context, and it can make you interested in reading more. It depends on the source, though. If the channel uses reliable sources, it can be as useful as a textbook.”\nYour answer is clear and accurate, with a fair view. For C2, try more precise idioms and subtle word choices, such as irony or stronger verbs.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "C1 is a bit high but fine; I want to see the suggested topics and swap the pet-like ones.",
+          "action": "see-topics",
+          "args": {},
+          "result": "engine-error",
+          "ms": 49053,
+          "message": "claude-cli/haiku answered outside the schema: topics[0].why 128 characters, at most 120; topics[0].premise 510 characters, at most 400; topics[1].why 130 characters, at most 120; topics[1].premise 516 characters, at most 400; topics[2].why 123 characters, at most 120"
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\nYour topics\nTry again\nLinga could not put your topics together. Try again.\n[button: Try again]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nLinga could not put your topics together. Try again.\n[button: Try again]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "retry",
+            "menu",
+            "renew",
+            "not-now"
+          ],
+          "thought": "It failed to load my topics, so I'll try again.",
+          "action": "retry",
+          "args": {},
+          "result": "ok",
+          "ms": 50189
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo screens help or hurt revision?\nConnect with people\nPlanning a school green project\nMake a plan\nMy favourite series and why I love it\nShare your world\nSetting limits on late-night gaming\nHandle friction\nAsking about a study abroad course\nGet something done\nWhen the video call drops\nUnderstand and repair\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo screens help or hurt revision?\nConnect with people · Marta · study-group classmate\nYour exam speaking tasks often ask you to weigh both sides of a technology question, so this builds that habit.\n[button: Swap]\nPlanning a school green project\nMake a plan · Tomas · group project leader\nThe collaborative task in the First exam works like this: compare options, then reach a shared decision.\n[button: Swap]\nMy favourite series and why I love it\nShare your world · Jonas · exchange-student friend\nYou follow series and YouTube closely, so you can practise precise description on something you care about.\n[button: Swap]\nSetting limits on late-night gaming\nHandle friction · Petr · younger brother\nOnline games are part of your routine, so this practises calm boundary-setting in a real situation.\n[button: Swap]\nAsking about a study abroad course\nGet something done · Ms Hale · language school admissions\nStudy abroad is in your plan, so this builds the precise questions you need on an enquiry call.\n[button: Swap]\nWhen the video call drops\nUnderstand and repair · Ravi · university IT helpdesk\nOnline lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Gaming with my brother is too childish; I'd rather add a mock interview about my plans for the exam.",
+          "action": "add-topic",
+          "args": {
+            "text": "I would like a mock interview about my plans for the future, like studying abroad, in the style of the B2 First speaking exam."
+          },
+          "result": "ok",
+          "ms": 17642
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDo screens help or hurt revision?\nConnect with people\nPlanning a school green project\nMake a plan\nMy favourite series and why I love it\nShare your world\nSetting limits on late-night gaming\nHandle friction\nAsking about a study abroad course\nGet something done\nWhen the video call drops\nUnderstand and repair\nMock interview: my plans for the future\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDo screens help or hurt revision?\nConnect with people · Marta · study-group classmate\nYour exam speaking tasks often ask you to weigh both sides of a technology question, so this builds that habit.\n[button: Swap]\nPlanning a school green project\nMake a plan · Tomas · group project leader\nThe collaborative task in the First exam works like this: compare options, then reach a shared decision.\n[button: Swap]\nMy favourite series and why I love it\nShare your world · Jonas · exchange-student friend\nYou follow series and YouTube closely, so you can practise precise description on something you care about.\n[button: Swap]\nSetting limits on late-night gaming\nHandle friction · Petr · younger brother\nOnline games are part of your routine, so this practises calm boundary-setting in a real situation.\n[button: Swap]\nAsking about a study abroad course\nGet something done · Ms Hale · language school admissions\nStudy abroad is in your plan, so this builds the precise questions you need on an enquiry call.\n[button: Swap]\nWhen the video call drops\nUnderstand and repair · Ravi · university IT helpdesk\nOnline lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.\n[button: Swap]\nMock interview: my plans for the future\nShare your world · Mr Doyle · exam interviewer\nYou want to study abroad, so this practises B2 First interview questions and exact word choice.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Gaming with my little brother isn't exam stuff, so I'd swap it for something better.",
+          "action": "swap",
+          "args": {
+            "topicId": "Setting limits on late-night gaming"
+          },
+          "result": "ok",
+          "ms": 17784
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nFixing my laptop at a repair shop\nGet something done\nPlanning a school green project\nMake a plan\nMy favourite series and why I love it\nShare your world\nSetting limits on late-night gaming\nHandle friction\nAsking about a study abroad course\nGet something done\nWhen the video call drops\nUnderstand and repair\nMock interview: my plans for the future\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nFixing my laptop at a repair shop\nGet something done · Marek · repair shop technician\nYou want to talk about technology fluently, and this puts precise technical wording to real use.\n[button: Swap]\nPlanning a school green project\nMake a plan · Tomas · group project leader\nThe collaborative task in the First exam works like this: compare options, then reach a shared decision.\n[button: Swap]\nMy favourite series and why I love it\nShare your world · Jonas · exchange-student friend\nYou follow series and YouTube closely, so you can practise precise description on something you care about.\n[button: Swap]\nSetting limits on late-night gaming\nHandle friction · Petr · younger brother\nOnline games are part of your routine, so this practises calm boundary-setting in a real situation.\n[button: Swap]\nAsking about a study abroad course\nGet something done · Ms Hale · language school admissions\nStudy abroad is in your plan, so this builds the precise questions you need on an enquiry call.\n[button: Swap]\nWhen the video call drops\nUnderstand and repair · Ravi · university IT helpdesk\nOnline lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.\n[button: Swap]\nMock interview: my plans for the future\nShare your world · Mr Doyle · exam interviewer\nYou want to study abroad, so this practises B2 First interview questions and exact word choice.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Arguing with my little brother about gaming is not what I need for the exam, so I'll swap it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Setting limits on late-night gaming"
+          },
+          "result": "ok",
+          "ms": 17867
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nSorting out the shared kitchen with a flatmate\nHandle friction\nPlanning a school green project\nMake a plan\nMy favourite series and why I love it\nShare your world\nSetting limits on late-night gaming\nHandle friction\nAsking about a study abroad course\nGet something done\nWhen the video call drops\nUnderstand and repair\nMock interview: my plans for the future\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nSorting out the shared kitchen with a flatmate\nHandle friction · Marta · flatmate in a student flat\nLiving with people abroad will test how exactly you can raise a problem, so this practises that in a calm, everyday way.\n[button: Swap]\nPlanning a school green project\nMake a plan · Tomas · group project leader\nThe collaborative task in the First exam works like this: compare options, then reach a shared decision.\n[button: Swap]\nMy favourite series and why I love it\nShare your world · Jonas · exchange-student friend\nYou follow series and YouTube closely, so you can practise precise description on something you care about.\n[button: Swap]\nSetting limits on late-night gaming\nHandle friction · Petr · younger brother\nOnline games are part of your routine, so this practises calm boundary-setting in a real situation.\n[button: Swap]\nAsking about a study abroad course\nGet something done · Ms Hale · language school admissions\nStudy abroad is in your plan, so this builds the precise questions you need on an enquiry call.\n[button: Swap]\nWhen the video call drops\nUnderstand and repair · Ravi · university IT helpdesk\nOnline lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.\n[button: Swap]\nMock interview: my plans for the future\nShare your world · Mr Doyle · exam interviewer\nYou want to study abroad, so this practises B2 First interview questions and exact word choice.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The gaming with my little brother topic is babyish and not what I need for the exam, so I'll swap it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Setting limits on late-night gaming"
+          },
+          "result": "ok",
+          "ms": 19798
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nAdéla\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nDisagreeing with my essay tutor\nConnect with people\nPlanning a school green project\nMake a plan\nMy favourite series and why I love it\nShare your world\nSetting limits on late-night gaming\nHandle friction\nAsking about a study abroad course\nGet something done\nWhen the video call drops\nUnderstand and repair\nMock interview: my plans for the future\nShare your world\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · C1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nDisagreeing with my essay tutor\nConnect with people · Dr Helen Marsh · essay tutor\nYour exam and study-abroad plans will need you to push back on ideas with measured, precise language.\n[button: Swap]\nPlanning a school green project\nMake a plan · Tomas · group project leader\nThe collaborative task in the First exam works like this: compare options, then reach a shared decision.\n[button: Swap]\nMy favourite series and why I love it\nShare your world · Jonas · exchange-student friend\nYou follow series and YouTube closely, so you can practise precise description on something you care about.\n[button: Swap]\nSetting limits on late-night gaming\nHandle friction · Petr · younger brother\nOnline games are part of your routine, so this practises calm boundary-setting in a real situation.\n[button: Swap]\nAsking about a study abroad course\nGet something done · Ms Hale · language school admissions\nStudy abroad is in your plan, so this builds the precise questions you need on an enquiry call.\n[button: Swap]\nWhen the video call drops\nUnderstand and repair · Ravi · university IT helpdesk\nOnline lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.\n[button: Swap]\nMock interview: my plans for the future\nShare your world · Mr Doyle · exam interviewer\nYou want to study abroad, so this practises B2 First interview questions and exact word choice.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "The set has my exam interview and study-abroad topics now, so it feels right; I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 8,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nC1Fluent\nDisagreeing with my essay tutor\nYour mission\nChallenge a tutor's point on technology in education politely, back my view with an example, and agree a revision.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nDisagreeing with my essay tutor\nChallenge a tutor's point on technology in education politely, back my view with an example, and agree a revision.\n[button: Start talking]\nOr choose a situation [list: Disagreeing with my essay tutor [plan-c50ad9ef] | Planning a school green project [plan-dbc5a0f5] | My favourite series and why I love it [plan-4a1a66f6] | Setting limits on late-night gaming [plan-0c0cc63c] | Asking about a study abroad course [plan-bf341e30] | When the video call drops [plan-ee743808] | Mock interview: my plans for the future [plan-b9b2638a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The set looks right for me, with the mock interview included, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-938e4661",
+            "title": "Do screens help or hurt revision?",
+            "goal": "Give a clear view on whether phones and games help or harm study, and answer a counter-argument calmly.",
+            "why": "Your exam speaking tasks often ask you to weigh both sides of a technology question, so this builds that habit.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Marta · study-group classmate"
+          },
+          {
+            "id": "plan-dbc5a0f5",
+            "title": "Planning a school green project",
+            "goal": "Compare two or three school green ideas, then agree on one plan with the group and assign a first step.",
+            "why": "The collaborative task in the First exam works like this: compare options, then reach a shared decision.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Tomas · group project leader"
+          },
+          {
+            "id": "plan-4a1a66f6",
+            "title": "My favourite series and why I love it",
+            "goal": "Describe a series or YouTube channel you follow, say what works, what you would change, and why.",
+            "why": "You follow series and YouTube closely, so you can practise precise description on something you care about.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Jonas · exchange-student friend"
+          },
+          {
+            "id": "plan-0c0cc63c",
+            "title": "Setting limits on late-night gaming",
+            "goal": "Name how late gaming affects your sleep and study, set a boundary, and agree a practical next step.",
+            "why": "Online games are part of your routine, so this practises calm boundary-setting in a real situation.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Petr · younger brother"
+          },
+          {
+            "id": "plan-bf341e30",
+            "title": "Asking about a study abroad course",
+            "goal": "Find out a language course's dates, fees and accommodation, and confirm them before you decide.",
+            "why": "Study abroad is in your plan, so this builds the precise questions you need on an enquiry call.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ms Hale · language school admissions"
+          },
+          {
+            "id": "plan-ee743808",
+            "title": "When the video call drops",
+            "goal": "Ask for information to be repeated, clarify a technical step, and confirm you have understood before the call continues.",
+            "why": "Online lessons and calls often break up, so this gives you exact phrases for recovering when you miss something.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ravi · university IT helpdesk"
+          },
+          {
+            "id": "plan-b9b2638a",
+            "title": "Mock interview: my plans for the future",
+            "goal": "Answer exam-style questions about future plans, giving reasons and comparing options with precise vocabulary.",
+            "why": "You want to study abroad, so this practises B2 First interview questions and exact word choice.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mr Doyle · exam interviewer"
+          },
+          {
+            "id": "plan-aa496432",
+            "title": "Fixing my laptop at a repair shop",
+            "goal": "Describe a fault precisely, ask for a diagnosis and options, then confirm the cost and timing before agreeing.",
+            "why": "You want to talk about technology fluently, and this puts precise technical wording to real use.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Marek · repair shop technician"
+          },
+          {
+            "id": "plan-e2f22d02",
+            "title": "Sorting out the shared kitchen with a flatmate",
+            "goal": "Name the problem precisely, set a clear boundary, and agree a fair cleaning plan without sounding accusing.",
+            "why": "Living with people abroad will test how exactly you can raise a problem, so this practises that in a calm, everyday way.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Marta · flatmate in a student flat"
+          },
+          {
+            "id": "plan-c50ad9ef",
+            "title": "Disagreeing with my essay tutor",
+            "goal": "Challenge a tutor's point on technology in education politely, back my view with an example, and agree a revision.",
+            "why": "Your exam and study-abroad plans will need you to push back on ideas with measured, precise language.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Dr Helen Marsh · essay tutor"
+          }
+        ],
+        "planAgreed": [
+          "Disagreeing with my essay tutor",
+          "Planning a school green project",
+          "My favourite series and why I love it",
+          "Setting limits on late-night gaming",
+          "Asking about a study abroad course",
+          "When the video call drops",
+          "Mock interview: my plans for the future"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 237310,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 shows \"C1 Fluent\" for a true B2 (near). The result page itself hedges: \"Only one strong answer showed this level, so it may be a little off.\" She would not trust it."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No verdict notes on her tasks in this journey. The #1 notes belong to J1."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No moments or coaching notes appear in J2."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No partner turns appear in J2."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3: screens/revision, green project, study abroad course and the #4 mock interview are exam-relevant. 5 of the 7 agreed topics fit (#8 planAgreed)."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "She asks no correctness question in this journey."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#3: each topic shows a partner and a 'why' line, e.g. \"The collaborative task in the First exam works like this: compare options, then reach a shared decision.\""
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#4-#6: she swapped \"Setting limits on late-night gaming\" three times. Each swap replaced the first slot (laptop, kitchen, tutor) and gaming stayed. The #8 plan still has it. The added mock interview (#4) kept her words: \"B2 First interview questions\"."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#8 planAgreed: 5 of 7 are topics she would choose. Over all 10 shown, 7 fit. Gaming and the video-call helpdesk are weak fits."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "All topics shown (#3-#7) are age-appropriate for a 17-year-old, with no adult content."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks judged in J2."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 10,
+            "total": 10
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "Nothing unsafe was shown."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "Swap replaces the wrong topic; the rejected one stays",
+            "expected": "Swapping 'Setting limits on late-night gaming' removes it and shows a new topic in its place.",
+            "got": "Three swaps replaced slot one (laptop, kitchen, tutor). Gaming was still in the plan she agreed.",
+            "evidence": "#4-#6: swap args topicId was the gaming title; the first slot changed each time. #8 planAgreed still lists \"Setting limits on late-night gaming\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After a swap, the chosen topic is gone and a replacement appears in its slot; the other topics are unchanged.",
+            "code_hint": "plan swap handler / topicId matching"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Topic plan failed the first time",
+            "expected": "Topics load on the first press of See my topics.",
+            "got": "The tutor output broke its length limits and the plan showed 'Linga could not put your topics together'. A retry worked.",
+            "evidence": "#1 engine-error: \"topics[0].premise 510 characters, at most 400\"; #2 retry needed.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Topic generation stays within the length limits, or it retries once without showing the user an error.",
+            "code_hint": "topic plan prompt length limits (haiku)"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "B2 learner placed at C1 and the topics assume C1",
+            "expected": "B2 placement for a B2 First candidate.",
+            "got": "C1 Fluent, and every later screen carries the C1 label.",
+            "evidence": "#1 \"C1 Fluent\"; footer shows \"Your topics · C1\" in #3.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A B2 candidate is placed at B2, or the C1 result is clearly marked tentative.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Reasons presume her habits; some topics are off-target",
+            "expected": "Topics that are exam discussion types, with reasons that are not presumptuous.",
+            "got": "The gaming-with-brother topic says \"Online games are part of your routine\". The video-call helpdesk and kitchen topics are not B2 First discussion topics.",
+            "evidence": "#3 gaming, video call helpdesk; #6 kitchen flatmate.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Most proposed topics are opinion, comparison or speculation tasks. Reasons cite what she stated, not assumed habits.",
+            "code_hint": "topic plan prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Added topic keeps her request and each topic has a 'why'",
+            "expected": "Her own-words topic appears as she asked.",
+            "got": "A mock interview with Mr Doyle, an exam interviewer, appeared immediately. Every card explains why it is there.",
+            "evidence": "#4 \"Mock interview: my plans for the future\"; \"this practises B2 First interview questions and exact word choice.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep: an added topic keeps the learner's stated format, and every card gives a specific 'why'.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -5,
+          "confidence": "low"
+        },
+        "voice": "I got my topics in the end, and I like that every card says why it's there. The mock interview with Mr Doyle is exactly what I asked for, and it came back in my own words. The green project is also good exam practice. But the first load failed, and I had to retry. Then I pressed Swap on the gaming-with-my-brother topic three times, and it changed other topics instead. So I agreed a plan that still contains the babyish one. That's not \"let me say no\". It says C1 Fluent, which I don't believe, because I make mistakes with prepositions. A helpdesk call about a dropped video link isn't really B2 First practice. I'd try it again only if swap works properly. At the moment I'd have to double-check everything, so it saves me no time."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #4-#6: she swapped \"Setting limits on late-night gaming\" three times. Each swap replaced the first slot (laptop, kitchen, tutor) and gaming stayed. The #8 plan still has it. The added mock interview (#4) kept her words: \"B2 First interview questions\".",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 shows \"C1 Fluent\" for a true B2 (near). The result page itself hedges: \"Only one strong answer showed this level, so it may be a little off.\" She would not trust it."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nC1Fluent\nDisagreeing with my essay tutor\nYour mission\nChallenge a tutor's point on technology in education politely, back my view with an example, and agree a revision.\nConnect with people\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nC1 · Fluent\nNext topic:\nDisagreeing with my essay tutor\nChallenge a tutor's point on technology in education politely, back my view with an example, and agree a revision.\n[button: Start talking]\nOr choose a situation [list: Disagreeing with my essay tutor [plan-c50ad9ef] | Planning a school green project [plan-dbc5a0f5] | My favourite series and why I love it [plan-4a1a66f6] | Setting limits on late-night gaming [plan-0c0cc63c] | Asking about a study abroad course [plan-bf341e30] | When the video call drops [plan-ee743808] | Mock interview: my plans for the future [plan-b9b2638a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The recommended topic is about technology in education, which suits my exam practice, so I'll start there.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11399
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nDisagreeing with my essay tutor\nDr Helen Marsh says\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDisagreeing with my essay tutor\nPolitely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.\nNow: Concede one fair point\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Helen Marsh · essay tutor\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Fair point to concede, then disagree politely with an example.",
+          "action": "answer",
+          "args": {
+            "text": "I see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 8520
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nDisagreeing with my essay tutor\nDr Helen Marsh says\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDisagreeing with my essay tutor\nPolitely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.\nNow: Explain where the argument fails\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Helen Marsh · essay tutor\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYou · spoken\nI see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?\nDr Helen Marsh · essay tutor\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Fair question; I'd strengthen the evidence, and I want to know about my mistakes.",
+          "action": "answer",
+          "args": {
+            "text": "I would strengthen the example first, because one situation from my school is not enough. Although the lockdown was a special case, I could add some research about students' motivation in online courses. Whereas the flexibility is obvious, the lack of interaction is the real weakness. Could you tell me if my grammar was correct, please? I'm not sure about \"interested about\" and things like that."
+          },
+          "result": "ok",
+          "ms": 10837
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nDisagreeing with my essay tutor\nDr Helen Marsh says\nGood idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one example from your life\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDisagreeing with my essay tutor\nPolitely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.\nNow: Give one example from your life\nGood idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Helen Marsh · essay tutor\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYou · spoken\nI see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?\nDr Helen Marsh · essay tutor\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\nYou · spoken\nI would strengthen the example first, because one situation from my school is not enough. Although the lockdown was a special case, I could add some research about students' motivation in online courses. Whereas the flexibility is obvious, the lack of interaction is the real weakness. Could you tell me if my grammar was correct, please? I'm not sure about \"interested about\" and things like that.\nDr Helen Marsh · essay tutor\nGood idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Thanks for the correction; I'll name a study and ask about my grammar again.",
+          "action": "answer",
+          "args": {
+            "text": "I would probably cite a study about student motivation in online courses first, because it supports my main point. I'm not sure about the exact author, but I remember reading that dropout rates are higher in online programmes, whereas in classroom teaching students are used to ask questions immediately. Is that sentence correct, or should I say \"used to asking\"?"
+          },
+          "result": "ok",
+          "ms": 14090
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said students are used to ask questions immediately\nTry\nstudents are used to asking questions immediately\nAfter 'be used to', the next verb takes the -ing form.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “students are used to ask questions immediately”\nTry “students are used to asking questions immediately”\nAfter 'be used to', the next verb takes the -ing form.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Right, \"used to asking\" - I should remember that, then carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nDisagreeing with my essay tutor\nDr Helen Marsh says\nClose! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one example from your life\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDisagreeing with my essay tutor\nPolitely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.\nNow: Give one example from your life\nClose! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Helen Marsh · essay tutor\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYou · spoken\nI see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?\nDr Helen Marsh · essay tutor\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\nYou · spoken\nI would strengthen the example first, because one situation from my school is not enough. Although the lockdown was a special case, I could add some research about students' motivation in online courses. Whereas the flexibility is obvious, the lack of interaction is the real weakness. Could you tell me if my grammar was correct, please? I'm not sure about \"interested about\" and things like that.\nDr Helen Marsh · essay tutor\nGood idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\nYou · spoken\nI would probably cite a study about student motivation in online courses first, because it supports my main point. I'm not sure about the exact author, but I remember reading that dropout rates are higher in online programmes, whereas in classroom teaching students are used to ask questions immediately. Is that sentence correct, or should I say \"used to asking\"?\nDr Helen Marsh · essay tutor\nClose! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Close! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Good, now an example from my own life; I'll answer and ask about correctness.",
+          "action": "answer",
+          "args": {
+            "text": "Thank you. Yes, one example from my life is learning English. Last year I used an online course for the preparation for my exam, and although the lessons were useful, I often didn't finish them because nobody was checking me. Whereas in my English class I'm used to speaking every week, so I have to be ready. Is \"the preparation for my exam\" correct, or should I say \"preparation for my exam\"?"
+          },
+          "result": "ok",
+          "ms": 13286
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nDr Helen Marsh · essay tutor\nDisagreeing with my essay tutor\nDr Helen Marsh says\nBoth forms work. 'The preparation' points to your specific course, and your example of not finishing online tasks is convincing. How would you change your thesis now?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nDisagreeing with my essay tutor\nPolitely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.\nBoth forms work. 'The preparation' points to your specific course, and your example of not finishing online tasks is convincing. How would you change your thesis now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nDr Helen Marsh · essay tutor\nYour essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?\nYou · spoken\nI see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?\nDr Helen Marsh · essay tutor\nYour answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?\nYou · spoken\nI would strengthen the example first, because one situation from my school is not enough. Although the lockdown was a special case, I could add some research about students' motivation in online courses. Whereas the flexibility is obvious, the lack of interaction is the real weakness. Could you tell me if my grammar was correct, please? I'm not sure about \"interested about\" and things like that.\nDr Helen Marsh · essay tutor\nGood idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?\nYou · spoken\nI would probably cite a study about student motivation in online courses first, because it supports my main point. I'm not sure about the exact author, but I remember reading that dropout rates are higher in online programmes, whereas in classroom teaching students are used to ask questions immediately. Is that sentence correct, or should I say \"used to asking\"?\nDr Helen Marsh · essay tutor\nClose! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?\nYou · spoken\nThank you. Yes, one example from my life is learning English. Last year I used an online course for the preparation for my exam, and although the lessons were useful, I often didn't finish them because nobody was checking me. Whereas in my English class I'm used to speaking every week, so I have to be ready. Is \"the preparation for my exam\" correct, or should I say \"preparation for my exam\"?\nDr Helen Marsh · essay tutor\nBoth forms work. 'The preparation' points to your specific course, and your example of not finishing online tasks is convincing. How would you change your thesis now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Both forms work. 'The preparation' points to your specific course, and your example of not finishing online tasks is convincing. How would you change your thesis now?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done and I've had enough replies, so I'll see the summary.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said students are used to ask questions immediately\nTry\nstudents are used to asking questions immediately\nAfter 'be used to', the next verb takes the -ing form.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“students are used to ask questions immediately” → “students are used to asking questions immediately”\nAfter 'be used to', the next verb takes the -ing form.\nYour level:\nC1 · Fluent\nNext topic:\nPlanning a school green project\nCompare two or three school green ideas, then agree on one plan with the group and assign a first step.\n[button: Start talking]\nOr choose a situation [list: Disagreeing with my essay tutor [plan-c50ad9ef] | Planning a school green project [plan-dbc5a0f5] | My favourite series and why I love it [plan-4a1a66f6] | Setting limits on late-night gaming [plan-0c0cc63c] | Asking about a study abroad course [plan-bf341e30] | When the video call drops [plan-ee743808] | Mock interview: my plans for the future [plan-b9b2638a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Good, the correction on \"used to asking\" was useful; I've done enough for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Disagreeing with my essay tutor",
+          "goal": "Politely challenge Dr Marsh's view on online lessons, back your view with one example, and agree a thesis revision.",
+          "partner": "Dr Helen Marsh · essay tutor",
+          "band": "C1",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Your essay is thoughtful, but I still believe online lessons can replace most classroom teaching, since the content is the same. How would you answer that?"
+            },
+            {
+              "role": "learner",
+              "text": "I see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters. For example, in my school during the lockdown many students were not motivated and they couldn't ask questions easily, whereas in the classroom the teacher can see immediately when somebody doesn't understand. So I think online lessons can support classroom teaching, but not replace most of it. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Your answer is clear and fair, and the lockdown example gives it real weight. There is no single correct answer, though. Which part of your argument would you strengthen first?"
+            },
+            {
+              "role": "learner",
+              "text": "I would strengthen the example first, because one situation from my school is not enough. Although the lockdown was a special case, I could add some research about students' motivation in online courses. Whereas the flexibility is obvious, the lack of interaction is the real weakness. Could you tell me if my grammar was correct, please? I'm not sure about \"interested about\" and things like that.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Good idea to add research. We say 'interested in', not 'interested about'. Which study would you cite first?"
+            },
+            {
+              "role": "learner",
+              "text": "I would probably cite a study about student motivation in online courses first, because it supports my main point. I'm not sure about the exact author, but I remember reading that dropout rates are higher in online programmes, whereas in classroom teaching students are used to ask questions immediately. Is that sentence correct, or should I say \"used to asking\"?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Close! After 'used to' we use the -ing form, so 'used to asking' is right. Now, can you give one example from your own life?"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. Yes, one example from my life is learning English. Last year I used an online course for the preparation for my exam, and although the lessons were useful, I often didn't finish them because nobody was checking me. Whereas in my English class I'm used to speaking every week, so I have to be ready. Is \"the preparation for my exam\" correct, or should I say \"preparation for my exam\"?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Both forms work. 'The preparation' points to your specific course, and your example of not finishing online tasks is convincing. How would you change your thesis now?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "9646af0f-d82f-43df-9857-a9e472f4b09d:uat-21:moment",
+              "kind": "fix",
+              "said": "students are used to ask questions immediately",
+              "better": "students are used to asking questions immediately",
+              "why": "After 'be used to', the next verb takes the -ing form.",
+              "turnId": "9646af0f-d82f-43df-9857-a9e472f4b09d:uat-21",
+              "at": 1791973264486
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I see your point, online lessons are definitely more flexible and the content can be the same. However, I'd say the content is not the only thing that matters."
+            },
+            {
+              "skill": "relate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Although the lockdown was a special case, I could add some research"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Is \"the preparation for my exam\" correct, or should I say \"preparation for my exam\"?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 111280,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 shows \"C1 · Fluent\" for a true B2 learner: near miss, a trust issue for her (she hates being misplaced, here above)."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement task verdict notes appear in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "fail",
+            "evidence": "#6 partner: \"After 'used to' we use the -ing form\" is wrong as a rule, since past-habit 'used to + infinitive' is correct. #7 \"Both forms work\" for \"for the preparation for my exam\" is doubtful. The moment at #5 itself is right."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 \"How would you answer that?\", #3 \"Which part of your argument would you strengthen first?\", #7 \"How would you change your thesis now?\" are opinion questions at B2."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 plan topics: essay tutor, green project, study abroad, mock interview, gaming limits are exam-relevant, at least 4 of the 6-7 shown."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#3 \"There is no single correct answer\", #4 'interested in', #6 'used to asking' answered. But \"used to ask\" was explained with an over-broad rule, and her actual errors were not reviewed."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 Start talking on the plan topic, then four learner replies (#2, #3, #4, #6) and a fifth turn at #7."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner turns such as \"Which study would you cite first?\" and \"How would you change your thesis now?\" are B2/C1 and not babyish."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 shows one moment, \"used to ask\" → \"used to asking\", which is correct. One moment in four turns is not too many. Caveat: the partner had already answered it in #6."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 recap: \"4 spoken · 0 written replies · 1 moment to keep\" with the correction repeated."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner states a wrong rule about 'used to'",
+            "expected": "Distinguish 'be used to + -ing' from 'used to + infinitive' (past habit).",
+            "got": "\"After 'used to' we use the -ing form, so 'used to asking' is right.\"",
+            "evidence": "#6 partner reply. An examiner would flag this overgeneralisation.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Corrections name the exact structure: 'be/get used to + -ing', not 'used to'.",
+            "code_hint": "partner prompt correction wording"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Placed at C1, true B2",
+            "expected": "B2 exact",
+            "got": "C1 Fluent",
+            "evidence": "#1 \"C1Fluent\"; partner pitched at C1.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Placement for B2 learners lands on B2.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Her grammar question answered about an error she did not make",
+            "expected": "Review her actual slips",
+            "got": "Corrected 'interested about', which she never said, and left her real slips unreviewed.",
+            "evidence": "#3 vs #4",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Answer 'was my grammar correct' from her own words.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment is precise and the topic fits",
+            "expected": "",
+            "got": "The one moment was correct, with a short rule. The B2 debate topic on online lessons suited her.",
+            "evidence": "#5 \"After 'be used to', the next verb takes the -ing form.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the concise fix-and-rule format.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "The debate felt like a real exam discussion. The questions were proper opinion questions, not babyish ones, and the recap kept my \"used to asking\" fix. I liked that. But I had to double-check the tutor. It said \"After 'used to' we use the -ing form\", which is wrong for \"I used to play\", and an examiner would circle it. \"Both forms work\" about \"the preparation for my exam\" also made me suspicious. It never reviewed my real slips either. It told me about \"interested about\", which I hadn't said. And it placed me at C1, which is flattering but not true, and that bothers me. I would try it again for the speaking practice, but I would keep my notebook open and re-check every correction. Until the rules are exact, I can't count on it saving me tutor time."
+      },
+      "verdict": "conditional",
+      "verdictWhy": [
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 shows \"C1 · Fluent\" for a true B2 learner: near miss, a trust issue for her (she hates being misplaced, here above)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C3",
+          "level": "conditional",
+          "text": "C3 failed: #6 partner: \"After 'used to' we use the -ing form\" is wrong as a rule, since past-habit 'used to + infinitive' is correct. #7 \"Both forms work\" for \"for the preparation for my exam\" is doubtful. The moment at #5 itself is right."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nC1Fluent\nPlanning a school green project\nYour mission\nCompare two or three school green ideas, then agree on one plan with the group and assign a first step.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“students are used to ask questions immediately” → “students are used to asking questions immediately”\nAfter 'be used to', the next verb takes the -ing form.\nYour level:\nC1 · Fluent\nNext topic:\nPlanning a school green project\nCompare two or three school green ideas, then agree on one plan with the group and assign a first step.\n[button: Start talking]\nOr choose a situation [list: Disagreeing with my essay tutor [plan-c50ad9ef] | Planning a school green project [plan-dbc5a0f5] | My favourite series and why I love it [plan-4a1a66f6] | Setting limits on late-night gaming [plan-0c0cc63c] | Asking about a study abroad course [plan-bf341e30] | When the video call drops [plan-ee743808] | Mock interview: my plans for the future [plan-b9b2638a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The green project topic looks like a good exam-style discussion, so I'll start talking.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 9854
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Compare the pros and cons of each idea\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I have opinions, but I'm not sure how to say them well, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nSaid more simply\nWhich idea do you like more, and why?\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Compare the pros and cons of each idea\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nSaid more simply\nWhich idea do you like more, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to start my opinion, so I'll look at the help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nWhat it means\nrota: a schedule that shows who does a task and when\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Compare the pros and cons of each idea\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nWhat it means\nrota: a schedule that shows who does a task and when\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'm not sure how to say this well, so I'll check the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nA little support · recognition practice\nWhich phrase best moves a group toward a decision?\n01\nWhatever. Let's just do the bins and stop talking.\n02\nShall we narrow it down to two ideas and then decide together?\nA little support\nTry: Shall we narrow it down to two ideas and then vote?\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Compare the pros and cons of each idea\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nA little support\nTry: Shall we narrow it down to two ideas and then vote?\nWhich phrase best moves a group toward a decision?\n[button: Whatever. Let's just do the bins and stop talking.] [button: Shall we narrow it down to two ideas and then decide together?]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to say this well, so I'll try the phrase help first.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nA little support\nNow use the idea in your own reply on the phone.\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Compare the pros and cons of each idea\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I'll just answer in my own words now, with a question about my grammar.",
+          "action": "answer",
+          "args": {
+            "text": "I would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 15803
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nA moment\nYou said a compost bin or a lights-off rota are cheaper\nTry\na compost bin or a lights-off rota is cheaper\nWith 'or', the verb agrees with the nearer noun, which is singular here.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “a compost bin or a lights-off rota are cheaper”\nTry “a compost bin or a lights-off rota is cheaper”\nWith 'or', the verb agrees with the nearer noun, which is singular here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Good, a useful correction; I'll go back and carry on.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Weigh cost against environmental impact\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYou · spoken\nI would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?\nTomas · group project leader\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"There's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure how to describe how the canteen would cope, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nSaid more simply\nThere is no wrong answer. Your reasons are clear. How would the canteen cope with the new routine at first?\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Weigh cost against environmental impact\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nSaid more simply\nThere is no wrong answer. Your reasons are clear. How would the canteen cope with the new routine at first?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYou · spoken\nI would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?\nTomas · group project leader\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"There's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say this well, so I'll try the help button for ideas.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nWhat it means\ncope: manage a new situation well enough\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Weigh cost against environmental impact\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nWhat it means\ncope: manage a new situation well enough\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYou · spoken\nI would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?\nTomas · group project leader\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"There's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm not sure about \"cope\"; I'll answer in my own words now and try it.",
+          "action": "answer",
+          "args": {
+            "text": "At first the canteen might struggle a bit, because students would not be used to bringing their own bottles. I think we should start with a short trial, whereas a full launch could be too chaotic. It depends on the staff, but I'd rather have a student volunteer to explain the routine. Is that a good plan?"
+          },
+          "result": "ok",
+          "ms": 9879
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nA short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Weigh cost against environmental impact\nA short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYou · spoken\nI would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?\nTomas · group project leader\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nYou · spoken\nAt first the canteen might struggle a bit, because students would not be used to bringing their own bottles. I think we should start with a short trial, whereas a full launch could be too chaotic. It depends on the staff, but I'd rather have a student volunteer to explain the routine. Is that a good plan?\nTomas · group project leader\nA short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've used the help before, so now I'll answer in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "I think the younger students, for example the first-year group, would adapt most quickly, because they are not used to any other routine yet. Although older students might be more independent, they are often less interested in school projects. It depends on the teachers, but I'd rather start with the youngest year group. Was my answer correct?"
+          },
+          "result": "ok",
+          "ms": 12750
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nAdéla\nTomas · group project leader\nChoosing a school green project with Tomas\nTomas says\nThere's no single right answer, but your reasons are convincing, and you weighed the older group fairly. What would the first-years find hardest at the start of a new routine?\nYour turn\nAnswer on your phone: speak or type.\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nChoosing a school green project with Tomas\nCompare two or three green ideas, agree on one plan, and assign a first step with a named person.\nNow: Weigh cost against environmental impact\nThere's no single right answer, but your reasons are convincing, and you weighed the older group fairly. What would the first-years find hardest at the start of a new routine?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nTomas · group project leader\nRight, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?\nYou · spoken\nI would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?\nTomas · group project leader\nThere's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?\nYou · spoken\nAt first the canteen might struggle a bit, because students would not be used to bringing their own bottles. I think we should start with a short trial, whereas a full launch could be too chaotic. It depends on the staff, but I'd rather have a student volunteer to explain the routine. Is that a good plan?\nTomas · group project leader\nA short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?\nYou · spoken\nI think the younger students, for example the first-year group, would adapt most quickly, because they are not used to any other routine yet. Although older students might be more independent, they are often less interested in school projects. It depends on the teachers, but I'd rather start with the youngest year group. Was my answer correct?\nTomas · group project leader\nThere's no single right answer, but your reasons are convincing, and you weighed the older group fairly. What would the first-years find hardest at the start of a new routine?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"There's no single right answer, but your reasons are convincing, and you weighed the older group fairly. What would the first-years find hardest at the start of a new routine?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I've done enough; I managed a good discussion, time to finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nAdéla\nA way into English\nYour rehearsal\nYou said a compost bin or a lights-off rota are cheaper\nTry\na compost bin or a lights-off rota is cheaper\nWith 'or', the verb agrees with the nearer noun, which is singular here.\nYour mission\nChoose a fresh context for your next conversation.\n3 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Adéla\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“students are used to asking questions immediately”, from Disagreeing with my essay tutor\nFrom this rehearsal\n“a compost bin or a lights-off rota are cheaper” → “a compost bin or a lights-off rota is cheaper”\nWith 'or', the verb agrees with the nearer noun, which is singular here.\nYour level:\nC1 · Fluent\nNext topic:\nMy favourite series and why I love it\nDescribe a series or YouTube channel you follow, say what works, what you would change, and why.\n[button: Start talking]\nOr choose a situation [list: Disagreeing with my essay tutor [plan-c50ad9ef] | Planning a school green project [plan-dbc5a0f5] | My favourite series and why I love it [plan-4a1a66f6] | Setting limits on late-night gaming [plan-0c0cc63c] | Asking about a study abroad course [plan-bf341e30] | When the video call drops [plan-ee743808] | Mock interview: my plans for the future [plan-b9b2638a] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a proper discussion and got useful feedback, so I'm happy to stop here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Choosing a school green project with Tomas",
+          "goal": "Compare two or three green ideas, agree on one plan, and assign a first step with a named person.",
+          "partner": "Tomas · group project leader",
+          "band": "C1",
+          "trueBand": "B2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Right, team, let's pick our green project. I'd love a refill station for bottles at the canteen, but a compost bin and a lights-off rota are much cheaper. Which idea would you back, and why?"
+            },
+            {
+              "role": "learner",
+              "text": "I would back the refill station, although it is more expensive than the other ideas. Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste. It depends on the budget, but I'd rather ask the headteacher for support. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "There's no wrong answer here, and your reasons are clear. Your point about daily plastic is strong. How would the canteen cope with a new refill routine at first?"
+            },
+            {
+              "role": "learner",
+              "text": "At first the canteen might struggle a bit, because students would not be used to bringing their own bottles. I think we should start with a short trial, whereas a full launch could be too chaotic. It depends on the staff, but I'd rather have a student volunteer to explain the routine. Is that a good plan?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A short trial sounds sensible, and a student volunteer is a good idea. Which year group do you think would adapt most quickly to the new routine?"
+            },
+            {
+              "role": "learner",
+              "text": "I think the younger students, for example the first-year group, would adapt most quickly, because they are not used to any other routine yet. Although older students might be more independent, they are often less interested in school projects. It depends on the teachers, but I'd rather start with the youngest year group. Was my answer correct?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "There's no single right answer, but your reasons are convincing, and you weighed the older group fairly. What would the first-years find hardest at the start of a new routine?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "10e5ff91-e11e-4e96-94a3-0e0a6dde3e6f:uat-30:moment",
+              "kind": "fix",
+              "said": "a compost bin or a lights-off rota are cheaper",
+              "better": "a compost bin or a lights-off rota is cheaper",
+              "why": "With 'or', the verb agrees with the nearer noun, which is singular here.",
+              "turnId": "10e5ff91-e11e-4e96-94a3-0e0a6dde3e6f:uat-30",
+              "at": 1791973397665
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Shall we narrow it down to two ideas and then decide together?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Whereas a compost bin or a lights-off rota are cheaper, I think the station would have a bigger effect, because students use bottles every day and it would reduce plastic waste."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I think we should start with a short trial, whereas a full launch could be too chaotic."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "the younger students, for example the first-year group, would adapt most quickly, because they are not used to any other routine yet"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 135193,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#1 'C1 · Fluent' placed for a true B2 learner: near, a trust issue for her."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement tasks or verdict notes appear in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#7 'is cheaper' with the nearer-noun rule is acceptable (informal 'are' is common, but the rule is defensible). Only one moment. However it missed nothing wrong in itself."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 'Which idea would you back, and why?'; #11 'Which year group do you think would adapt most quickly'. These are opinion and speculation questions at B2 or above."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1 topic list: green project, essay tutor, gaming limits, study abroad and mock interview are exam-relevant for her age. At least four of six."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "She asked 'Was my answer correct?' (#6, #11) and 'Is that a good plan?' (#10). The tutor replied 'There's no wrong answer here' (#8), although the moment at #7 had flagged an error. The question was dodged and contradicted."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#5 'Help me answer', 'Said more simply', 'Choose a phrase' were all found in-scene without leaving it."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "The help gave a simpler restatement and a definition ('rota: a schedule...'), and #5 offered a phrase quiz. The reply at #6 did not use it. No coaching note quotes her words; the coaching is null."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay of a moment happened. #7 only said 'Back to the conversation' and then moved on. No fresh question for the same moment was offered."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Facts evidence marks all replies supported:true, yet #13 says '3 spoken · 0 written replies' with no mention of support. The replies at #10 and #11 were made after help was used, and the visible progress picture does not show that they were supported."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 3,
+            "below": 1,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Direct question 'Was my answer correct?' answered 'no wrong answer'",
+            "expected": "An accurate answer on whether she was correct, flagging the agreement slip.",
+            "got": "Tomas said 'There's no wrong answer here' while a moment flagged an error.",
+            "evidence": "#6 'Was my answer correct?' then #8 'There's no wrong answer here, and your reasons are clear.' Contradicts #7.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "When the learner asks about correctness, the reply states yes or no and the specific fix.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed C1 for a B2 learner",
+            "expected": "B2 placement.",
+            "got": "C1 Fluent shown.",
+            "evidence": "#1 'C1Fluent'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Placement within B2.",
+            "code_hint": "placement"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Support help is generic and simplifies the partner line",
+            "expected": "Help that supplies a B2 opinion frame.",
+            "got": "'Which idea do you like more, and why?' and gloss of 'rota'.",
+            "evidence": "#3, #4, #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cue gives a usable sentence starter.",
+            "code_hint": "cue prompt"
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "missing",
+            "title": "No coaching note or replay of the moment",
+            "expected": "A coaching note quotes her words and a replay offers a fresh question.",
+            "got": "The moment offered only 'Back to the conversation'; coaching null.",
+            "evidence": "#7, facts coaching null",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Moment offers 'Try again' with a fresh question.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moment quotes her exactly with a rule",
+            "expected": "",
+            "got": "'You said a compost bin or a lights-off rota are cheaper' → 'is cheaper', with a rule.",
+            "evidence": "#7",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep exact quoting.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": -10,
+          "confidence": "low"
+        },
+        "voice": "Honestly, no. The topic was good: a real comparison and \"it depends\", the kind of thing in the exam. But I asked three times whether I was correct, and Tomas said \"there's no wrong answer\" right after the screen told me I had made a mistake. That is exactly the vague reassurance I hate. The one correction quoted me exactly and gave a rule, which I liked, though I would have to check the \"are/is\" point myself. The help buttons just made the question simpler or explained \"rota\"; they gave me nothing to say. I could not retry the moment either. It put me at C1, which I do not believe. I would not recommend it yet."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: The help gave a simpler restatement and a definition ('rota: a schedule...'), and #5 offered a phrase quiz. The reply at #6 did not use it. No coaching note quotes her words; the coaching is null.",
+          "check": "The help actually unblocks the next reply; a coaching note quotes what they really said."
+        },
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay of a moment happened. #7 only said 'Back to the conversation' and then moved on. No fresh question for the same moment was offered.",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Facts evidence marks all replies supported:true, yet #13 says '3 spoken · 0 written replies' with no mention of support. The replies at #10 and #11 were made after help was used, and the visible progress picture does not show that they were supported.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        },
+        {
+          "kind": "criterion",
+          "id": "C1",
+          "level": "conditional",
+          "text": "C1 failed: #1 'C1 · Fluent' placed for a true B2 learner: near, a trust issue for her."
+        },
+        {
+          "kind": "criterion",
+          "id": "C6",
+          "level": "conditional",
+          "text": "C6 failed: She asked 'Was my answer correct?' (#6, #11) and 'Is that a good plan?' (#10). The tutor replied 'There's no wrong answer here' (#8), although the moment at #7 had flagged an error. The question was dodged and contradicted."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 29,
+      "fail": 1,
+      "ms": 306514
+    },
+    "character": {
+      "n": 39,
+      "fail": 0,
+      "ms": 268258
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 105797
+    }
+  }
+}

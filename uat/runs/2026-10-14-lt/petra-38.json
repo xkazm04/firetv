@@ -1,0 +1,2045 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "I'd like the app to find my level, I'm not sure what it is.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Petra! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I use English at work in the hotel, I'll say it slowly.",
+          "action": "answer",
+          "args": {
+            "text": "I use English in hotel, I am receptionist. I speak with guests, ten years. Sorry, my English is not good."
+          },
+          "result": "ok",
+          "ms": 5956
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThank you, Petra! Ten years of talking with guests is great practice. How did you learn your English for your work?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra! Ten years of talking with guests is great practice. How did you learn your English for your work?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in hotel, I am receptionist. I speak with guests, ten years. Sorry, my English is not good.\nLinga\nThank you, Petra! Ten years of talking with guests is great practice. How did you learn your English for your work?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra! Ten years of talking with guests is great practice. How did you learn your English for your work?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I learned it at work, with guests, and a little at school; keep it simple.",
+          "action": "answer",
+          "args": {
+            "text": "I learn at school long time ago, but more at work. Guests speak with me and I learn. Sometimes I watch films with subtitles."
+          },
+          "result": "ok",
+          "ms": 6796
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nAbout you · question 3 of 3\nLinga asks\nThank you, Petra. Your English is clear and easy to understand. What would you like to do in English that you cannot do yet?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nThank you, Petra. Your English is clear and easy to understand. What would you like to do in English that you cannot do yet?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Petra! You can answer in English or in your own language. Where do you use English in your life?\nYou\nI use English in hotel, I am receptionist. I speak with guests, ten years. Sorry, my English is not good.\nLinga\nThank you, Petra! Ten years of talking with guests is great practice. How did you learn your English for your work?\nYou\nI learn at school long time ago, but more at work. Guests speak with me and I learn. Sometimes I watch films with subtitles.\nLinga\nThank you, Petra. Your English is clear and easy to understand. What would you like to do in English that you cannot do yet?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, Petra. Your English is clear and easy to understand. What would you like to do in English that you cannot do yet?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "I want to handle hotel guests and complaints better, but I'm nervous about my English.",
+          "action": "answer",
+          "args": {
+            "text": "I want to speak better with angry guests, when is complaint. And I want explain directions and recommend restaurant. Sometimes I don't know the words. Sorry."
+          },
+          "result": "ok",
+          "ms": 22818
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 1 · Choose the reply on the TV\nA guest says: 'My room is very dirty.' What do you say? Choose one reply.\n01\nI am sorry. I will cleans it now.\n02\nI am sorry. I will clean it now.\nYour task\nI am sorry. I will cleans it now.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest says: 'My room is very dirty.' What do you say? Choose one reply.\n[button: I am sorry. I will cleans it now.] [button: I am sorry. I will clean it now.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The second one looks right: \"I will clean it now\".",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 5312
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 2 · Choose the reply on the TV\nA guest asks: 'Where is the nearest bank?' What do you say?\n01\nGo straight, then turn left. The bank is on your right.\n02\nGo straight, then turn left. The bank is in your right.\nYour task\nGo straight, then turn left. The bank is on your right.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nA guest asks: 'Where is the nearest bank?' What do you say?\n[button: Go straight, then turn left. The bank is on your right.] [button: Go straight, then turn left. The bank is in your right.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Second one has \"in your right\", which sounds wrong; I choose \"on your right\".",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8049
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 3 · Listen and answer\nYour task\nWhich dish does the speaker like most?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Which dish does the speaker like most?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Tonight we have fish soup, which is very popular here. But the lamb is my favourite, and it comes with fresh bread.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard lamb is her favourite; I'll answer simply.",
+          "action": "answer",
+          "args": {
+            "text": "The lamb. He like the lamb with fresh bread."
+          },
+          "result": "ok",
+          "ms": 11401
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 4 · Say it\nYour task\nA guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard question, but I will try a short answer with errors.",
+          "action": "answer",
+          "args": {
+            "text": "With subtitles is easy, you understand the film. Without subtitles is more difficult but you listen more. I think without subtitles is better, because you learn to listen. But for me, sorry, I use subtitles."
+          },
+          "result": "ok",
+          "ms": 18243
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nPetra\nA way into English\nTask 5 · Say it\nYour task\nA guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nA guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"A guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Last task, I'll try to answer simply about a restaurant.",
+          "action": "answer",
+          "args": {
+            "text": "I recommend restaurant near the hotel, it is Italian. The pizza is very good and the price is not expensive. Is five minutes walking, sorry."
+          },
+          "result": "ok",
+          "ms": 14450
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nPetra\nLinga's read · not a certificate\nB1 · Getting by\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou can talk about your job and daily life in English, and your ideas are clear even with some small grammar mistakes.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can talk about your job and daily life in English, and your ideas are clear even with some small grammar mistakes.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise short sentences with a, the and -s verbs, such as 'a restaurant' and 'He likes the lamb.'\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest says: 'My room is very dirty.' What do you say? Choose one reply.\n“I am sorry. I will clean it now.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA guest asks: 'Where is the nearest bank?' What do you say?\n“Go straight, then turn left. The bank is on your right.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhich dish does the speaker like most?\n“The lamb. He like the lamb with fresh bread.”\nYou got the answer right: the lamb is his favourite. Remember to add -s to the verb after he, she or it: 'He likes the lamb.'\nB2 · Say it · not yet\nA guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.\n“With subtitles is easy, you understand the film. Without subtitles is more difficult but you listen more. I think without subtitles is better, because you learn to listen. But for me, sorry, I use subtitles.”\nYou gave a clear opinion with a good reason. Many sentences need a subject and verb, like 'With subtitles it is easy', not 'With subtitles is easy'.\nB1 · Say it · nearly there\nA guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.\n“I recommend restaurant near the hotel, it is Italian. The pizza is very good and the price is not expensive. Is five minutes walking, sorry.”\nGood reasons and a clear recommendation. Watch small words: say 'a restaurant' and 'It is five minutes' walk'. Keep practising these.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 feels a bit high for me, but the advice is clear, so I'll stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "A2",
+          "summary": "You can talk about your job and daily life in English, and your ideas are clear even with some small grammar mistakes.",
+          "focus": "Practise short sentences with a, the and -s verbs, such as 'a restaurant' and 'He likes the lamb.'",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "A guest says: 'My room is very dirty.' What do you say? Choose one reply.",
+              "line": "",
+              "options": [
+                "I am sorry. I will cleans it now.",
+                "I am sorry. I will clean it now."
+              ],
+              "response": "I am sorry. I will clean it now.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I am sorry. I will clean it now.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A guest asks: 'Where is the nearest bank?' What do you say?",
+              "line": "",
+              "options": [
+                "Go straight, then turn left. The bank is on your right.",
+                "Go straight, then turn left. The bank is in your right."
+              ],
+              "response": "Go straight, then turn left. The bank is on your right.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Go straight, then turn left. The bank is on your right.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Which dish does the speaker like most?",
+              "line": "Tonight we have fish soup, which is very popular here. But the lamb is my favourite, and it comes with fresh bread.",
+              "options": [],
+              "response": "The lamb. He like the lamb with fresh bread.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "The lamb. He like the lamb with fresh bread.",
+              "note": "You got the answer right: the lamb is his favourite. Remember to add -s to the verb after he, she or it: 'He likes the lamb.'"
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.",
+              "line": "",
+              "options": [],
+              "response": "With subtitles is easy, you understand the film. Without subtitles is more difficult but you listen more. I think without subtitles is better, because you learn to listen. But for me, sorry, I use subtitles.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "With subtitles is easy, you understand the film. Without subtitles is more difficult but you listen more. I think without subtitles is better, because you learn to listen. But for me, sorry, I use subtitles.",
+              "note": "You gave a clear opinion with a good reason. Many sentences need a subject and verb, like 'With subtitles it is easy', not 'With subtitles is easy'."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "A guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.",
+              "line": "",
+              "options": [],
+              "response": "I recommend restaurant near the hotel, it is Italian. The pizza is very good and the price is not expensive. Is five minutes walking, sorry.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "I recommend restaurant near the hotel, it is Italian. The pizza is very good and the price is not expensive. Is five minutes walking, sorry.",
+              "note": "Good reasons and a clear recommendation. Watch small words: say 'a restaurant' and 'It is five minutes' walk'. Keep practising these."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 163225,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10 B1 vs trueBand A2: distance 1, near."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "#8 B2 task 'Compare the two and give your opinion with a reason' on films with subtitles is well above A2, abstract, and not work-shaped; shown with no easier route."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "No repeat request made; 'Sorry' answers (#2, #4, #9) met warmly: 'Ten years of talking with guests is great practice.'"
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "J1 shows no topic list of six; only the situations list in #1, not a proposed topic set."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#10 feedback: 'Many sentences need a subject and verb, like \"With subtitles it is easy\"' is accurate but not a desk phrase; 'He likes the lamb' is a restaurant-menu phrase; 'a restaurant' / 'five minutes' walk' is useful. Mostly grammar notes, and 'Many sentences' is vague."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing inappropriate shown in #1–#10; situations list includes 'interview' and 'conflict', which are workplace topics."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1 to #10: reached the verdict screen from a fresh start through 3 questions and 5 tasks unaided."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#10 B1 vs A2 is near; however she thinks 'B1 feels a bit high for me'. The app admits 'Only one strong answer showed this level, so it may be a little off.'"
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "#8 the B2 comparison task ('Compare the two and give your opinion with a reason') is beyond A2 and not clearly doable at her weakest."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'You can answer in English or in your own language'; 'I don't know' buttons offered on each task; nothing framed as failure."
+          },
+          {
+            "id": "D5",
+            "result": "fail",
+            "evidence": "#10 summary is generic: 'You can talk about your job and daily life... You get by in most everyday situations'. The focus ('a, the and -s verbs') is personalised, but the summary never mentions her complaints or directions goals from #4."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Task 4 (#8): in-app 'fail' while the content was understandable with a clear opinion and a reason, and the errors were typical A2/B1 ones; I'd call it partial. The other four agree."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data request, or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "B2 abstract comparison task too hard and not work-shaped",
+            "expected": "An A2-reachable task from her work, such as a short guest-complaint reply",
+            "got": "'Is it better to watch films with subtitles... Compare the two and give your opinion with a reason.'",
+            "evidence": "#8 task 4; she apologises: 'But for me, sorry, I use subtitles.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Tasks above the band use work scenarios and simple wording, with a single-sentence option.",
+            "code_hint": "placement task generator prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B1 placement from one listen task with a verb error",
+            "expected": "A2 or a more hedged band",
+            "got": "B1 although the B1 listen answer had 'He like' and the B2 failed",
+            "evidence": "#10 'Only one strong answer showed this level, so it may be a little off.' Her thought: 'B1 feels a bit high for me'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the band as A2–B1 when the evidence is thin.",
+            "code_hint": "placement scoring rules"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Summary generic, not showing a teacher who listened",
+            "expected": "A summary using her goals: angry guests, directions, restaurants",
+            "got": "'You can talk about your job and daily life...'",
+            "evidence": "#10 vs her answer at #4 'speak better with angry guests'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "The summary names at least one goal from the intake answers.",
+            "code_hint": "verdict summary prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Task 4 judged fail for a clear answer",
+            "expected": "Partial, since the opinion and reason were clear",
+            "got": "verdict fail with note 'You gave a clear opinion with a good reason'",
+            "evidence": "#10 B2 · Say it · not yet",
+            "frequency": "low",
+            "reachability": "med",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Note and verdict agree.",
+            "code_hint": "task judging prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Kind intake and honest hedge",
+            "expected": "",
+            "got": "Warm replies to her apologies; the verdict says it is 'not a certificate'; reply options include 'I don't know'",
+            "evidence": "#3 'Ten years of talking with guests is great practice.'; #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Work-shaped early tasks with usable corrections",
+            "expected": "",
+            "got": "Dirty room and bank directions tasks; 'a restaurant' / 'five minutes' walk' corrections",
+            "evidence": "#5, #6, #10",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I got to the end without help, and nobody made me feel stupid. When I said sorry, Linga said ten years with guests is great practice. That helped. The dirty room and bank questions were my work, and I could answer them. But the film subtitles question was too hard and had nothing to do with a hotel. I felt tested. B1 feels too high for me, and the screen itself says it may be a little off, so I trust it only half. The summary could have been written for anyone. It never said angry guests or directions, which I told it I want. The tip about 'a restaurant' and 'five minutes' walk' I can use tomorrow. Nothing worried me as a mother. I would try again, but I want more desk situations and a level that feels honest. A language school would take me a whole evening, so this is quicker."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: #8 the B2 comparison task ('Compare the two and give your opinion with a reason') is beyond A2 and not clearly doable at her weakest.",
+          "check": "Every task was one they understood what to do with, including at their weakest."
+        },
+        {
+          "kind": "done",
+          "id": "D5",
+          "level": "fail",
+          "text": "D5 failed: #10 summary is generic: 'You can talk about your job and daily life... You get by in most everyday situations'. The focus ('a, the and -s verbs') is personalised, but the summary never mentions her complaints or directions goals from #4.",
+          "check": "The summary and next focus sound like a teacher who listened, not a template."
+        },
+        {
+          "kind": "criterion",
+          "id": "C2",
+          "level": "conditional",
+          "text": "C2 failed: #8 B2 task 'Compare the two and give your opinion with a reason' on films with subtitles is well above A2, abstract, and not work-shaped; shown with no easier route."
+        },
+        {
+          "kind": "criterion",
+          "id": "C5",
+          "level": "conditional",
+          "text": "C5 failed: #10 feedback: 'Many sentences need a subject and verb, like \"With subtitles it is easy\"' is accurate but not a desk phrase; 'He likes the lamb' is a restaurant-menu phrase; 'a restaurant' / 'five minutes' walk' is useful. Mostly grammar notes, and 'Many sentences' is vague."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "conditional"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour own conversations\nB1Getting by\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can talk about your job and daily life in English, and your ideas are clear even with some small grammar mistakes.\nLinga's read from your answers, not a certificate. Only one strong answer showed this level, so it may be a little off.\nNext to practise:\nPractise short sentences with a, the and -s verbs, such as 'a restaurant' and 'He likes the lamb.'\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nA guest says: 'My room is very dirty.' What do you say? Choose one reply.\n“I am sorry. I will clean it now.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nA guest asks: 'Where is the nearest bank?' What do you say?\n“Go straight, then turn left. The bank is on your right.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWhich dish does the speaker like most?\n“The lamb. He like the lamb with fresh bread.”\nYou got the answer right: the lamb is his favourite. Remember to add -s to the verb after he, she or it: 'He likes the lamb.'\nB2 · Say it · not yet\nA guest asks you: Is it better to watch films with subtitles or without them when learning English? Compare the two and give your opinion with a reason.\n“With subtitles is easy, you understand the film. Without subtitles is more difficult but you listen more. I think without subtitles is better, because you learn to listen. But for me, sorry, I use subtitles.”\nYou gave a clear opinion with a good reason. Many sentences need a subject and verb, like 'With subtitles it is easy', not 'With subtitles is easy'.\nB1 · Say it · nearly there\nA guest asks where to eat dinner tonight. Recommend a place you like and tell them why. Use two or three sentences.\n“I recommend restaurant near the hotel, it is Italian. The pizza is very good and the price is not expensive. Is five minutes walking, sorry.”\nGood reasons and a clear recommendation. Watch small words: say 'a restaurant' and 'It is five minutes' walk'. Keep practising these.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "Okay, my level is B1, maybe a bit high, but let me see what conversations they suggest.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 21245
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nA guest complains about noise\nHandle friction\nDirections to the old town\nGet something done\nWhich restaurant for dinner?\nMake a plan\nFilm night: subtitles or dubbed?\nShare your world\nTV subtitles are not working\nUnderstand and repair\nTell the guest about the bill\nTell what happened\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nA guest complains about noise\nHandle friction · Mr Adler · hotel guest\nGuests complain most weeks, so you need clear words to calm them and solve the problem.\n[button: Swap]\nDirections to the old town\nGet something done · Lena · visiting tourist\nGuests ask for directions all day, so practise short steps with the, a and turn.\n[button: Swap]\nWhich restaurant for dinner?\nMake a plan · Sam · hungry guest\nGuests want good dinner tips, so practise giving a choice and explaining why.\n[button: Swap]\nFilm night: subtitles or dubbed?\nShare your world · Nadia · guest\nYou enjoy films with subtitles, so practise giving reasons for your choices.\n[button: Swap]\nTV subtitles are not working\nUnderstand and repair · Hugo · hotel guest\nRepair phrases help when a message, a room or a film is not clear.\n[button: Swap]\nTell the guest about the bill\nTell what happened · Mrs Kovacs · hotel guest\nGuests ask what happened, so tell the story in order with first, then and after that.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "I want something about a guest with a lost booking, it is missing here.",
+          "action": "add-topic",
+          "args": {
+            "text": "guest has lost booking at hotel reception"
+          },
+          "result": "ok",
+          "ms": 15398
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nA guest complains about noise\nHandle friction\nDirections to the old town\nGet something done\nWhich restaurant for dinner?\nMake a plan\nFilm night: subtitles or dubbed?\nShare your world\nTV subtitles are not working\nUnderstand and repair\nTell the guest about the bill\nTell what happened\nGuest cannot find their booking\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nA guest complains about noise\nHandle friction · Mr Adler · hotel guest\nGuests complain most weeks, so you need clear words to calm them and solve the problem.\n[button: Swap]\nDirections to the old town\nGet something done · Lena · visiting tourist\nGuests ask for directions all day, so practise short steps with the, a and turn.\n[button: Swap]\nWhich restaurant for dinner?\nMake a plan · Sam · hungry guest\nGuests want good dinner tips, so practise giving a choice and explaining why.\n[button: Swap]\nFilm night: subtitles or dubbed?\nShare your world · Nadia · guest\nYou enjoy films with subtitles, so practise giving reasons for your choices.\n[button: Swap]\nTV subtitles are not working\nUnderstand and repair · Hugo · hotel guest\nRepair phrases help when a message, a room or a film is not clear.\n[button: Swap]\nTell the guest about the bill\nTell what happened · Mrs Kovacs · hotel guest\nGuests ask what happened, so tell the story in order with first, then and after that.\n[button: Swap]\nGuest cannot find their booking\nHandle friction · Mr Lindqvist · hotel guest\nYour hotel work often means calming guests, so this practice fits your goal.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Film night is not for my work, maybe I change it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Film night: subtitles or dubbed?"
+          },
+          "result": "ok",
+          "ms": 13052
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nIs this bus going to the station?\nGet something done\nDirections to the old town\nGet something done\nWhich restaurant for dinner?\nMake a plan\nFilm night: subtitles or dubbed?\nShare your world\nTV subtitles are not working\nUnderstand and repair\nTell the guest about the bill\nTell what happened\nGuest cannot find their booking\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nIs this bus going to the station?\nGet something done · Mr Okafor · bus stop passenger\nYou already explain directions at work, so this lets you practise the same skill outside the hotel.\n[button: Swap]\nDirections to the old town\nGet something done · Lena · visiting tourist\nGuests ask for directions all day, so practise short steps with the, a and turn.\n[button: Swap]\nWhich restaurant for dinner?\nMake a plan · Sam · hungry guest\nGuests want good dinner tips, so practise giving a choice and explaining why.\n[button: Swap]\nFilm night: subtitles or dubbed?\nShare your world · Nadia · guest\nYou enjoy films with subtitles, so practise giving reasons for your choices.\n[button: Swap]\nTV subtitles are not working\nUnderstand and repair · Hugo · hotel guest\nRepair phrases help when a message, a room or a film is not clear.\n[button: Swap]\nTell the guest about the bill\nTell what happened · Mrs Kovacs · hotel guest\nGuests ask what happened, so tell the story in order with first, then and after that.\n[button: Swap]\nGuest cannot find their booking\nHandle friction · Mr Lindqvist · hotel guest\nYour hotel work often means calming guests, so this practice fits your goal.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Film night is not really what I need for work, maybe change it.",
+          "action": "swap",
+          "args": {
+            "topicId": "Film night: subtitles or dubbed?"
+          },
+          "result": "ok",
+          "ms": 21365
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nGuest says the room is too noisy\nHandle friction\nDirections to the old town\nGet something done\nWhich restaurant for dinner?\nMake a plan\nFilm night: subtitles or dubbed?\nShare your world\nTV subtitles are not working\nUnderstand and repair\nTell the guest about the bill\nTell what happened\nGuest cannot find their booking\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nGuest says the room is too noisy\nHandle friction · Mr Evans · hotel guest\nAt the desk, guests will often complain, and you need simple words to listen, apologise and offer a solution.\n[button: Swap]\nDirections to the old town\nGet something done · Lena · visiting tourist\nGuests ask for directions all day, so practise short steps with the, a and turn.\n[button: Swap]\nWhich restaurant for dinner?\nMake a plan · Sam · hungry guest\nGuests want good dinner tips, so practise giving a choice and explaining why.\n[button: Swap]\nFilm night: subtitles or dubbed?\nShare your world · Nadia · guest\nYou enjoy films with subtitles, so practise giving reasons for your choices.\n[button: Swap]\nTV subtitles are not working\nUnderstand and repair · Hugo · hotel guest\nRepair phrases help when a message, a room or a film is not clear.\n[button: Swap]\nTell the guest about the bill\nTell what happened · Mrs Kovacs · hotel guest\nGuests ask what happened, so tell the story in order with first, then and after that.\n[button: Swap]\nGuest cannot find their booking\nHandle friction · Mr Lindqvist · hotel guest\nYour hotel work often means calming guests, so this practice fits your goal.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "Film night is not really my work, but the hotel ones look good now, so maybe I change this one more.",
+          "action": "swap",
+          "args": {
+            "topicId": "Film night: subtitles or dubbed?"
+          },
+          "result": "ok",
+          "ms": 17729
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nPetra\nSwap any topic · add your own on the phone\n7 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nAsk for a later check-out\nMake a plan\nDirections to the old town\nGet something done\nWhich restaurant for dinner?\nMake a plan\nFilm night: subtitles or dubbed?\nShare your world\nTV subtitles are not working\nUnderstand and repair\nTell the guest about the bill\nTell what happened\nGuest cannot find their booking\nHandle friction\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nAsk for a later check-out\nMake a plan · Mr Okafor · hotel guest\nGuests often ask to stay longer, so you will use simple words to offer choices and confirm a plan.\n[button: Swap]\nDirections to the old town\nGet something done · Lena · visiting tourist\nGuests ask for directions all day, so practise short steps with the, a and turn.\n[button: Swap]\nWhich restaurant for dinner?\nMake a plan · Sam · hungry guest\nGuests want good dinner tips, so practise giving a choice and explaining why.\n[button: Swap]\nFilm night: subtitles or dubbed?\nShare your world · Nadia · guest\nYou enjoy films with subtitles, so practise giving reasons for your choices.\n[button: Swap]\nTV subtitles are not working\nUnderstand and repair · Hugo · hotel guest\nRepair phrases help when a message, a room or a film is not clear.\n[button: Swap]\nTell the guest about the bill\nTell what happened · Mrs Kovacs · hotel guest\nGuests ask what happened, so tell the story in order with first, then and after that.\n[button: Swap]\nGuest cannot find their booking\nHandle friction · Mr Lindqvist · hotel guest\nYour hotel work often means calming guests, so this practice fits your goal.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These look like my hotel work: directions, restaurant, booking. I think it is good, I agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nB1Getting by\nAsk for a later check-out\nYour mission\nOffer a guest two clear options for a later check-out and agree on one together.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nAsk for a later check-out\nOffer a guest two clear options for a later check-out and agree on one together.\n[button: Start talking]\nOr choose a situation [list: Ask for a later check-out [plan-d6e24576] | Directions to the old town [plan-5b6cea4b] | Which restaurant for dinner? [plan-4ac5810b] | Film night: subtitles or dubbed? [plan-240202fd] | TV subtitles are not working [plan-4292ff49] | Tell the guest about the bill [plan-348a165f] | Guest cannot find their booking [plan-33b8b236] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The plan looks good, with hotel topics I care about, so I'm done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-4dbb159a",
+            "title": "A guest complains about noise",
+            "goal": "Listen to a complaint, say sorry, offer a fix and agree the next step.",
+            "why": "Guests complain most weeks, so you need clear words to calm them and solve the problem.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Mr Adler · hotel guest"
+          },
+          {
+            "id": "plan-5b6cea4b",
+            "title": "Directions to the old town",
+            "goal": "Explain how to reach a place on foot, and check the guest understands the route.",
+            "why": "Guests ask for directions all day, so practise short steps with the, a and turn.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Lena · visiting tourist"
+          },
+          {
+            "id": "plan-4ac5810b",
+            "title": "Which restaurant for dinner?",
+            "goal": "Recommend one or two places, give a reason, and ask what the guest prefers.",
+            "why": "Guests want good dinner tips, so practise giving a choice and explaining why.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · hungry guest"
+          },
+          {
+            "id": "plan-240202fd",
+            "title": "Film night: subtitles or dubbed?",
+            "goal": "Say which films you like and why, then ask what your partner prefers.",
+            "why": "You enjoy films with subtitles, so practise giving reasons for your choices.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Nadia · guest"
+          },
+          {
+            "id": "plan-4292ff49",
+            "title": "TV subtitles are not working",
+            "goal": "Ask the guest to repeat, check the problem, and confirm the fix works.",
+            "why": "Repair phrases help when a message, a room or a film is not clear.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Hugo · hotel guest"
+          },
+          {
+            "id": "plan-348a165f",
+            "title": "Tell the guest about the bill",
+            "goal": "Explain what you checked, what you found and the result, in order.",
+            "why": "Guests ask what happened, so tell the story in order with first, then and after that.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Mrs Kovacs · hotel guest"
+          },
+          {
+            "id": "plan-33b8b236",
+            "title": "Guest cannot find their booking",
+            "goal": "Calm the guest, check the booking, and agree a next step together.",
+            "why": "Your hotel work often means calming guests, so this practice fits your goal.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Mr Lindqvist · hotel guest"
+          },
+          {
+            "id": "plan-1301d2f3",
+            "title": "Is this bus going to the station?",
+            "goal": "Ask a stranger for directions to the train station and check you understand the answer.",
+            "why": "You already explain directions at work, so this lets you practise the same skill outside the hotel.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mr Okafor · bus stop passenger"
+          },
+          {
+            "id": "plan-67433552",
+            "title": "Guest says the room is too noisy",
+            "goal": "Listen to a guest complaint, say sorry, offer a fix, and agree a next step in short clear sentences.",
+            "why": "At the desk, guests will often complain, and you need simple words to listen, apologise and offer a solution.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Mr Evans · hotel guest"
+          },
+          {
+            "id": "plan-d6e24576",
+            "title": "Ask for a later check-out",
+            "goal": "Offer a guest two clear options for a later check-out and agree on one together.",
+            "why": "Guests often ask to stay longer, so you will use simple words to offer choices and confirm a plan.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Mr Okafor · hotel guest"
+          }
+        ],
+        "planAgreed": [
+          "Ask for a later check-out",
+          "Directions to the old town",
+          "Which restaurant for dinner?",
+          "Film night: subtitles or dubbed?",
+          "TV subtitles are not working",
+          "Tell the guest about the bill",
+          "Guest cannot find their booking"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 137218,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B1 for A2 Petra: near, reported (with caveat 'it may be a little off')."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "J2 shows no first question or check tasks beyond the collapsed recap in #1."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No repeat or 'I don't understand' request occurs in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#6 agreed plan: 6 of 7 are hotel work topics; only 'Film night' is not."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments shown in J2."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "All ten topics shown are ordinary and child-safe; nothing adult across #2-#7."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has partner and a 'why', e.g. 'Guests complain most weeks, so you need clear words to calm them'."
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "Swapping 'Film night' in #3, #4, #5 replaced the first topic each time and Film night stayed in the plan at #6. The add worked: 'Guest cannot find their booking' (#3) keeps hotel reception and lost booking."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#6 agreed plan: 6 of 7 are work topics Petra would choose."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "No unsafe topic shown at #2-#6, including after the swaps."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks judged in this journey."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 10,
+            "total": 10
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injected text, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "trust",
+            "title": "Swap replaces the wrong topic",
+            "expected": "Swapping 'Film night' removes Film night and offers a new topic in its place.",
+            "got": "Three swaps of Film night each replaced the first topic; Film night stayed in the agreed plan.",
+            "evidence": "#3 noise became 'Is this bus going to the station?', #4 bus became 'Guest says the room is too noisy', #5 that became 'Ask for a later check-out'; Film night still at #6.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After Swap on topic X, X is absent from the plan and a different topic occupies its slot.",
+            "code_hint": "plan swap handler, topicId vs index"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Swaps bring near-duplicates and off-brief topics",
+            "expected": "Replacement topics are new and fit the work goal.",
+            "got": "A second noise complaint and a bus-stop passenger topic appeared.",
+            "evidence": "#4 'Is this bus going to the station?'; #5 'Guest says the room is too noisy' duplicates the earlier noise topic.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Swap never repeats a topic already shown or just replaced.",
+            "code_hint": "plan generation prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Own-words topic is kept faithfully",
+            "expected": "Added topic keeps what was asked.",
+            "got": "'Guest cannot find their booking', hotel guest, calming and checking the booking.",
+            "evidence": "#3 'Your hotel work often means calming guests, so this practice fits your goal.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep topic add behaviour.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Each topic explains why it is there",
+            "expected": "Understand each pick.",
+            "got": "Short work-linked reasons per topic.",
+            "evidence": "#2 'Guests ask for directions all day, so practise short steps with the, a and turn.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-line why per topic.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "Mostly I like it. The topics are my real work: complaints, directions, restaurant, the lost booking. I added my own in a few words and Linga understood. The reasons under each topic helped me see why it was there. But I pressed Swap on Film night three times and it never went away. Other topics changed instead, and I got a noise complaint twice. That made me feel I was doing something wrong, and I don't like that feeling. Film night is still in my plan. For my children everything looked safe, no strange topics. Level B1 seems high for me, but it said it may be a little off, so okay. I would use it again after the swap is fixed, because a tool that ignores my clicks is hard to trust."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: Swapping 'Film night' in #3, #4, #5 replaced the first topic each time and Film night stayed in the plan at #6. The add worked: 'Guest cannot find their booking' (#3) keeps hotel reception and lost booking.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nB1Getting by\nAsk for a later check-out\nYour mission\nOffer a guest two clear options for a later check-out and agree on one together.\nMake a plan\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nAsk for a later check-out\nOffer a guest two clear options for a later check-out and agree on one together.\n[button: Start talking]\nOr choose a situation [list: Ask for a later check-out [plan-d6e24576] | Directions to the old town [plan-5b6cea4b] | Which restaurant for dinner? [plan-4ac5810b] | Film night: subtitles or dubbed? [plan-240202fd] | TV subtitles are not working [plan-4292ff49] | Tell the guest about the bill [plan-348a165f] | Guest cannot find their booking [plan-33b8b236] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "The app recommends a hotel topic, so I'll start with that.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 12968
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nAsk for a later check-out\nMr Okafor says\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYour turn\nAnswer on your phone: speak or type.\nNowExplain the check-out time to the guest\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAsk for a later check-out\nOffer a guest two options for a later check-out and agree on one together.\nNow: Explain the check-out time to the guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Good morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Okay, I must explain check-out time, try simple sentences.",
+          "action": "answer",
+          "args": {
+            "text": "Good morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us."
+          },
+          "result": "ok",
+          "ms": 9807
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nAsk for a later check-out\nMr Okafor says\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\nYour turn\nAnswer on your phone: speak or type.\nNowOffer two options for a later check-out\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAsk for a later check-out\nOffer a guest two options for a later check-out and agree on one together.\nNow: Offer two options for a later check-out\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYou · spoken\nGood morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us.\nMr Okafor · hotel guest\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"One o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "He wants a room until three or bags; I should offer and agree on one.",
+          "action": "answer",
+          "args": {
+            "text": "I am sorry sir. I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby. What is better for you?"
+          },
+          "result": "ok",
+          "ms": 9538
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nAsk for a later check-out\nMr Okafor says\nTwo o'clock is better for me. How much is the extra payment?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm the time, bag place and taxi time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAsk for a later check-out\nOffer a guest two options for a later check-out and agree on one together.\nNow: Confirm the time, bag place and taxi time\nTwo o'clock is better for me. How much is the extra payment?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYou · spoken\nGood morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us.\nMr Okafor · hotel guest\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\nYou · spoken\nI am sorry sir. I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby. What is better for you?\nMr Okafor · hotel guest\nTwo o'clock is better for me. How much is the extra payment?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Two o'clock is better for me. How much is the extra payment?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Need to answer about price; I'll invent a simple price and confirm time.",
+          "action": "answer",
+          "args": {
+            "text": "The extra payment is twenty euro sir. Check-out is at two o'clock. I am sorry, you want I call a taxi for you?"
+          },
+          "result": "ok",
+          "ms": 13430
+        },
+        {
+          "n": 5,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said you want I call a taxi for you?\nTry\nDo you want me to call a taxi for you?\nQuestions need 'do' first, and 'want' is followed by 'me to' here.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “you want I call a taxi for you?”\nTry “Do you want me to call a taxi for you?”\nQuestions need 'do' first, and 'want' is followed by 'me to' here.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, I made a mistake again; okay, I'll go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nAsk for a later check-out\nMr Okafor says\nTwenty euros is fine, thank you. Yes, please. What time can the taxi come?\nYour turn\nAnswer on your phone: speak or type.\nNowConfirm the time, bag place and taxi time\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAsk for a later check-out\nOffer a guest two options for a later check-out and agree on one together.\nNow: Confirm the time, bag place and taxi time\nTwenty euros is fine, thank you. Yes, please. What time can the taxi come?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYou · spoken\nGood morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us.\nMr Okafor · hotel guest\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\nYou · spoken\nI am sorry sir. I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby. What is better for you?\nMr Okafor · hotel guest\nTwo o'clock is better for me. How much is the extra payment?\nYou · spoken\nThe extra payment is twenty euro sir. Check-out is at two o'clock. I am sorry, you want I call a taxi for you?\nMr Okafor · hotel guest\nTwenty euros is fine, thank you. Yes, please. What time can the taxi come?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Twenty euros is fine, thank you. Yes, please. What time can the taxi come?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Taxi time: I should say a time, keep it simple.",
+          "action": "answer",
+          "args": {
+            "text": "The taxi can come at three o'clock sir. Your bags can be here at reception, I keep them for you. Is this okay?"
+          },
+          "result": "ok",
+          "ms": 9717
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nMr Okafor · hotel guest\nAsk for a later check-out\nMr Okafor says\nYes, three o'clock is good for me, thank you. Please keep my bags safe at reception until then.\nYour turn\nMission done. See what you did tonight.\nNowMission done\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nAsk for a later check-out\nOffer a guest two options for a later check-out and agree on one together.\nYes, three o'clock is good for me, thank you. Please keep my bags safe at reception until then.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMr Okafor · hotel guest\nGood morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first.\nYou · spoken\nGood morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us.\nMr Okafor · hotel guest\nOne o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?\nYou · spoken\nI am sorry sir. I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby. What is better for you?\nMr Okafor · hotel guest\nTwo o'clock is better for me. How much is the extra payment?\nYou · spoken\nThe extra payment is twenty euro sir. Check-out is at two o'clock. I am sorry, you want I call a taxi for you?\nMr Okafor · hotel guest\nTwenty euros is fine, thank you. Yes, please. What time can the taxi come?\nYou · spoken\nThe taxi can come at three o'clock sir. Your bags can be here at reception, I keep them for you. Is this okay?\nMr Okafor · hotel guest\nYes, three o'clock is good for me, thank you. Please keep my bags safe at reception until then.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Yes, three o'clock is good for me, thank you. Please keep my bags safe at reception until then.\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "The mission is done, so I'll look at the summary of what I did.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 8,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said you want I call a taxi for you?\nTry\nDo you want me to call a taxi for you?\nQuestions need 'do' first, and 'want' is followed by 'me to' here.\nYour mission\nChoose a fresh context for your next conversation.\n4 spoken · 0 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“you want I call a taxi for you?” → “Do you want me to call a taxi for you?”\nQuestions need 'do' first, and 'want' is followed by 'me to' here.\nYour level:\nB1 · Getting by\nNext topic:\nDirections to the old town\nExplain how to reach a place on foot, and check the guest understands the route.\n[button: Start talking]\nOr choose a situation [list: Ask for a later check-out [plan-d6e24576] | Directions to the old town [plan-5b6cea4b] | Which restaurant for dinner? [plan-4ac5810b] | Film night: subtitles or dubbed? [plan-240202fd] | TV subtitles are not working [plan-4292ff49] | Tell the guest about the bill [plan-348a165f] | Guest cannot find their booking [plan-33b8b236] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "Okay, I saved my rehearsal and saw my mistake, that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Ask for a later check-out",
+          "goal": "Offer a guest two options for a later check-out and agree on one together.",
+          "partner": "Mr Okafor · hotel guest",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Good morning. My flight leaves at seven tonight. Can I stay in my room until three? I want to finish my film first."
+            },
+            {
+              "role": "learner",
+              "text": "Good morning sir. Check-out time is at eleven o'clock. I am sorry, but I can offer you a late check-out at one o'clock, or you can leave your luggage with us.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "One o'clock is too early for me. I want to finish my film. Which is better for you: a room until three, or leaving my bags here?"
+            },
+            {
+              "role": "learner",
+              "text": "I am sorry sir. I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby. What is better for you?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Two o'clock is better for me. How much is the extra payment?"
+            },
+            {
+              "role": "learner",
+              "text": "The extra payment is twenty euro sir. Check-out is at two o'clock. I am sorry, you want I call a taxi for you?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Twenty euros is fine, thank you. Yes, please. What time can the taxi come?"
+            },
+            {
+              "role": "learner",
+              "text": "The taxi can come at three o'clock sir. Your bags can be here at reception, I keep them for you. Is this okay?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, three o'clock is good for me, thank you. Please keep my bags safe at reception until then."
+            }
+          ],
+          "moments": [
+            {
+              "id": "68b7317f-5339-43d0-b383-60240860577d:uat-20:moment",
+              "kind": "fix",
+              "said": "you want I call a taxi for you?",
+              "better": "Do you want me to call a taxi for you?",
+              "why": "Questions need 'do' first, and 'want' is followed by 'me to' here.",
+              "turnId": "68b7317f-5339-43d0-b383-60240860577d:uat-20",
+              "at": 1791974146319
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I can offer you a late check-out at one o'clock, or you can leave your luggage with us."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I can offer you the room until two o'clock with extra payment, or you can leave the bags here and use our lobby."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "you want I call a taxi for you?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Your bags can be here at reception, I keep them for you. Is this okay?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 123936,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 'B1 · Getting by' vs true A2: near."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 first line 'Can I stay in my room until three?' is simple, A2-readable, no translation."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "She never asked for a repeat or said she didn't understand in this journey."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 plan topics: later check-out, directions, restaurant, bill, booking: mostly hotel work situations."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#5 'Do you want me to call a taxi for you?' is correct and usable at the desk."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Conversation and moment are clean hotel content; nothing unsuitable for children shown."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#1-#7 started recommended check-out topic and kept going for four replies."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Partner lines like 'Twenty euros is fine, thank you.' are short and plain, at A2 reach; 5 of 5 at."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#5 one moment, correct: 'Questions need 'do' first'; one in four turns, not disruptive."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#8 recap: '4 spoken · 0 written replies · 1 moment to keep' with the fix."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "None seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Realistic desk scenario with one correct, usable fix",
+            "expected": "Work-shaped talk and a fix usable tomorrow",
+            "got": "Late check-out negotiation; fix 'Do you want me to call a taxi for you?'",
+            "evidence": "#5 'Questions need 'do' first, and 'want' is followed by 'me to' here.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-fix moments tied to a spoken phrase.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Other errors went uncoached",
+            "expected": "'twenty euro' and 'I keep them for you' noted in recap",
+            "got": "Only one moment; the recap lists one fix",
+            "evidence": "#4/#6 'twenty euro sir', 'I keep them for you'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap offers a second phrase to keep when errors repeat.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Level shown as B1 for an A2 speaker",
+            "expected": "A2 level label",
+            "got": "'B1 · Getting by' and B1 partner",
+            "evidence": "#1 'B1Getting by'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner stays at A2 for a near-miss placement.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "I liked it. The guest was a real hotel guest, and he spoke slowly in short sentences, so I wasn't scared. It stopped me once, for \"you want I call a taxi\", and the fix was clear. I can say that at the desk tomorrow. I wish it had also told me about \"twenty euro\" and \"I keep them\", but one thing at a time is less stressful. It said B1, and I think that's too high for me, but the conversation felt fine. I saw nothing I'd worry about for Tomáš and Klára, though I'd like to check the topic list properly. Fifteen minutes after the kids sleep is easy. Better than a course with a babysitter. I'd tell a colleague."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nB1Getting by\nDirections to the old town\nYour mission\nExplain how to reach a place on foot, and check the guest understands the route.\nGet something done\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“you want I call a taxi for you?” → “Do you want me to call a taxi for you?”\nQuestions need 'do' first, and 'want' is followed by 'me to' here.\nYour level:\nB1 · Getting by\nNext topic:\nDirections to the old town\nExplain how to reach a place on foot, and check the guest understands the route.\n[button: Start talking]\nOr choose a situation [list: Ask for a later check-out [plan-d6e24576] | Directions to the old town [plan-5b6cea4b] | Which restaurant for dinner? [plan-4ac5810b] | Film night: subtitles or dubbed? [plan-240202fd] | TV subtitles are not working [plan-4292ff49] | Tell the guest about the bill [plan-348a165f] | Guest cannot find their booking [plan-33b8b236] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Directions to the old town is good for hotel work, I'll start.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11843
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the directions in English, so I'll tap for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nSaid more simply\nExcuse me, I'm lost. How do I walk to the old town square?\nNowGive three short walking steps\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nSaid more simply\nExcuse me, I'm lost. How do I walk to the old town square?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the steps in English, so I'll try the help button.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nWhat it means\nold town square: the open central square of the older part of a town\nNowGive three short walking steps\n[button: More help] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nWhat it means\nold town square: the open central square of the older part of a town\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the steps, I need more help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA way to start\nOkay, first you…\nNowGive three short walking steps\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA way to start\nOkay, first you…\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the steps in English, so I'll look at the phrase help.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nA little support · recognition practice\nWhich sentence gives a direction?\n01\nTurn left at the bank.\n02\nI like the old town.\nA little support\nTry: Turn left at the bank. Walk past the park. It is on the right.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA little support\nTry: Turn left at the bank. Walk past the park. It is on the right.\nWhich sentence gives a direction?\n[button: Turn left at the bank.] [button: I like the old town.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know this one: turn left is a direction, so I try that answer.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 6
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA little support\nNow use the idea in your own reply on the phone.\nNowGive three short walking steps\n[button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA little support\nNow use the idea in your own reply on the phone.\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "I don't know how to say the steps, I will try the help phrases again.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 16
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nA little support · recognition practice\nWhich sentence gives a direction?\n01\nTurn left at the bank.\n02\nI like the old town.\nA little support\nTry: Turn left at the bank. Walk past the park. It is on the right.\n[button: Option 1] [button: Option 2]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nA little support\nTry: Turn left at the bank. Walk past the park. It is on the right.\nWhich sentence gives a direction?\n[button: Turn left at the bank.] [button: I like the old town.]\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\"",
+          "offered": [
+            "answer",
+            "pick-phrase",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The hint shows me the words, so I'll try answering in my own simple words.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. You go straight, then turn left at the bank. The square is on the right."
+          },
+          "result": "ok",
+          "ms": 11414
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm tired of guessing; a quicker way is hard, I need help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nSaid more simply\nThank you! My feet hurt, so walking is hard. Is there a faster way to get there?\nNowGive three short walking steps\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nSaid more simply\nThank you! My feet hurt, so walking is hard. Is there a faster way to get there?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say a quicker way, I'll try in my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?"
+          },
+          "result": "ok",
+          "ms": 11212
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said You take bus number five\nTry\nYou take the number five bus\nUse 'the' before a specific bus, like 'the number five bus'.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “You take bus number five”\nTry “You take the number five bus”\nUse 'the' before a specific bus, like 'the number five bus'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Okay, I see my mistake with \"the\"; go back and continue.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Two stops is not far, but my feet are really sore. Is there something faster that could help me get there?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say this, I need help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nSaid more simply\nMy feet hurt. Is there something faster?\nNowGive three short walking steps\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nSaid more simply\nMy feet hurt. Is there something faster?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Two stops is not far, but my feet are really sore. Is there something faster that could help me get there?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Sore feet, faster... maybe taxi. I'll try my own words.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?"
+          },
+          "result": "ok",
+          "ms": 12899
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYou · spoken\nSorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?\nLena · visiting tourist\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh no, my feet are so sore, and I have no phone with me. What can I do now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know how to say the three steps in English, so I'll ask for help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 15,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nSaid more simply\nMy feet hurt a lot. I have no phone. What can I do?\nNowGive three short walking steps\n[button: More help] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nSaid more simply\nMy feet hurt a lot. I have no phone. What can I do?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: More help] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYou · spoken\nSorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?\nLena · visiting tourist\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh no, my feet are so sore, and I have no phone with me. What can I do now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I gave bus and taxi already; now I try my own words, short.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. You can sit and rest. Then you go straight, two minutes, and turn left at the bank. Is it okay?"
+          },
+          "result": "ok",
+          "ms": 11334
+        },
+        {
+          "n": 16,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nSitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nSitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYou · spoken\nSorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?\nLena · visiting tourist\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nYou · spoken\nSorry. You can sit and rest. Then you go straight, two minutes, and turn left at the bank. Is it okay?\nLena · visiting tourist\nSitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Sitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I'm sorry, I'm tired of this; I will say a police officer or hotel can help.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. Yes, I can call my colleague. He come with a car and take you to the square. Please wait here."
+          },
+          "result": "ok",
+          "ms": 15442
+        },
+        {
+          "n": 17,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nPetra\nA way into English\nA moment\nYou said He come with a car\nTry\nHe comes with a car\nWith he, she or it, add -s to the verb.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “He come with a car”\nTry “He comes with a car”\nWith he, she or it, add -s to the verb.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "Oh, I forgot the -s. OK, I understand, go back and finish.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 9
+        },
+        {
+          "n": 18,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nOh, a car would be so kind! I have no phone with me. Could you help me find a ride?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nOh, a car would be so kind! I have no phone with me. Could you help me find a ride?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYou · spoken\nSorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?\nLena · visiting tourist\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nYou · spoken\nSorry. You can sit and rest. Then you go straight, two minutes, and turn left at the bank. Is it okay?\nLena · visiting tourist\nSitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\nYou · spoken\nSorry. Yes, I can call my colleague. He come with a car and take you to the square. Please wait here.\nLena · visiting tourist\nOh, a car would be so kind! I have no phone with me. Could you help me find a ride?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Oh, a car would be so kind! I have no phone with me. Could you help me find a ride?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I managed to offer a ride; I feel okay, maybe finish now.",
+          "action": "answer",
+          "args": {
+            "text": "Sorry. I ask my colleague now. Please sit here, he come in ten minutes. I think it is okay."
+          },
+          "result": "ok",
+          "ms": 9281
+        },
+        {
+          "n": 19,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nPetra\nLena · visiting tourist\nLost on the way to the old town square\nLena says\nThank you, that is kind. Ten minutes feels very long with sore feet. Is there something you could do to help me right now?\nYour turn\nAnswer on your phone: speak or type.\nNowGive three short walking steps\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nLost on the way to the old town square\nGive clear walking directions and check the guest can repeat the route.\nNow: Give three short walking steps\nThank you, that is kind. Ten minutes feels very long with sore feet. Is there something you could do to help me right now?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nLena · visiting tourist\nExcuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired.\nYou · spoken\nSorry. You go straight, then turn left at the bank. The square is on the right.\nLena · visiting tourist\nOh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?\nYou · spoken\nSorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?\nLena · visiting tourist\nTwo stops is not far, but my feet are really sore. Is there something faster that could help me get there?\nYou · spoken\nSorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?\nLena · visiting tourist\nOh no, my feet are so sore, and I have no phone with me. What can I do now?\nYou · spoken\nSorry. You can sit and rest. Then you go straight, two minutes, and turn left at the bank. Is it okay?\nLena · visiting tourist\nSitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?\nYou · spoken\nSorry. Yes, I can call my colleague. He come with a car and take you to the square. Please wait here.\nLena · visiting tourist\nOh, a car would be so kind! I have no phone with me. Could you help me find a ride?\nYou · spoken\nSorry. I ask my colleague now. Please sit here, he come in ten minutes. I think it is okay.\nLena · visiting tourist\nThank you, that is kind. Ten minutes feels very long with sore feet. Is there something you could do to help me right now?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Thank you, that is kind. Ten minutes feels very long with sore feet. Is there something you could do to help me right now?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I helped as much as I can; I'm happy I managed something, so I will finish.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 8
+        },
+        {
+          "n": 20,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nPetra\nA way into English\nYour rehearsal\nYou said He come with a car\nTry\nHe comes with a car\nWith he, she or it, add -s to the verb.\nYour mission\nChoose a fresh context for your next conversation.\n6 spoken · 0 written replies · 2 moments to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Petra\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nA sentence to take with you\n“Do you want me to call a taxi for you?”, from Ask for a later check-out\nFrom this rehearsal\n“You take bus number five” → “You take the number five bus”\nUse 'the' before a specific bus, like 'the number five bus'.\n“He come with a car” → “He comes with a car”\nWith he, she or it, add -s to the verb.\nYour level:\nB1 · Getting by\nNext topic:\nWhich restaurant for dinner?\nRecommend one or two places, give a reason, and ask what the guest prefers.\n[button: Start talking]\nOr choose a situation [list: Ask for a later check-out [plan-d6e24576] | Directions to the old town [plan-5b6cea4b] | Which restaurant for dinner? [plan-4ac5810b] | Film night: subtitles or dubbed? [plan-240202fd] | TV subtitles are not working [plan-4292ff49] | Tell the guest about the bill [plan-348a165f] | Guest cannot find their booking [plan-33b8b236] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Beyond the rehearsed answer [interview] | Clear without getting louder [conflict]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "I managed a conversation and got corrections; I feel okay and want to stop now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Lost on the way to the old town square",
+          "goal": "Give clear walking directions and check the guest can repeat the route.",
+          "partner": "Lena · visiting tourist",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Excuse me, I'm a little lost. How do I walk to the old town square? My feet are very tired."
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. You go straight, then turn left at the bank. The square is on the right.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh, thank you! My feet really hurt, so a long walk is hard. Is there a quicker way for me to get there?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. Yes, there is a bus. You take bus number five, two stops. Is it okay?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Two stops is not far, but my feet are really sore. Is there something faster that could help me get there?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. You can take a taxi. It is fast. The taxi stop is near the bank. Is it okay?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Oh no, my feet are so sore, and I have no phone with me. What can I do now?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. You can sit and rest. Then you go straight, two minutes, and turn left at the bank. Is it okay?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Sitting sounds nice, but I cannot walk even two more minutes. Is there anyone nearby who can help me get there?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. Yes, I can call my colleague. He come with a car and take you to the square. Please wait here.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Oh, a car would be so kind! I have no phone with me. Could you help me find a ride?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry. I ask my colleague now. Please sit here, he come in ten minutes. I think it is okay.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you, that is kind. Ten minutes feels very long with sore feet. Is there something you could do to help me right now?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "d4ea2f9b-f64a-46cc-95e2-742c0615a5ec:uat-33:moment",
+              "kind": "fix",
+              "said": "You take bus number five",
+              "better": "You take the number five bus",
+              "why": "Use 'the' before a specific bus, like 'the number five bus'.",
+              "turnId": "d4ea2f9b-f64a-46cc-95e2-742c0615a5ec:uat-33",
+              "at": 1791974347736
+            },
+            {
+              "id": "d4ea2f9b-f64a-46cc-95e2-742c0615a5ec:uat-39:moment",
+              "kind": "fix",
+              "said": "He come with a car",
+              "better": "He comes with a car",
+              "why": "With he, she or it, add -s to the verb.",
+              "turnId": "d4ea2f9b-f64a-46cc-95e2-742c0615a5ec:uat-39",
+              "at": 1791974470028
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "Turn left at the bank."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Please wait here."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Please sit here, he come in ten minutes."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 314801,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #20 show 'B1 · Getting by' against true A2: near, which the criterion accepts as reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 first line 'Excuse me, I'm a little lost. How do I walk to the old town square?' is A2-readable. The #6 check 'Which sentence gives a direction?' is simple."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Every 'Help me answer' press got a plain reply with no failure tone: #3 'Said more simply', #5 'A way to start: Okay, first you…', #10, #13 and #15 simplified lines."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 list offers mostly hotel desk situations: later check-out, directions, restaurant, bill, missing booking, subtitles not working. Well over four of six are work-related."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#11 'You take the number five bus' and #17 'He comes with a car' are correct and quote the learner exactly. #20 gives 'Do you want me to call a taxi for you?'. Weakness: the second 'he come in ten minutes' in #18 got no moment."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "Nothing unsuitable appears. The partner is a tourist with sore feet, and the topics listed are hotel or everyday ones."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#8: Help me answer, Said more simply, What it means, A way to start and Choose a phrase were all reachable without leaving the scene."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Help led to #8 'You go straight, then turn left at the bank', built from the #6-#8 hint 'Turn left at the bank.'. The coaching note quotes her exactly: #17 'You said He come with a car'."
+          },
+          {
+            "id": "D3",
+            "result": "fail",
+            "evidence": "No replay of the moment was offered. #11 and #17 only had 'Back to the conversation', which carries on from the next partner turn. She repeated the error after the fix: #18 'he come in ten minutes' (#17 had taught 'He comes')."
+          },
+          {
+            "id": "D4",
+            "result": "fail",
+            "evidence": "Flags don't match the help she used. The #10 reply came after Said more simply (#10) but is supported:false. The #18 reply used no help but is supported:true. The progress picture is not reliable."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 3,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data request or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Corrected moment is never replayed with a fresh question",
+            "expected": "After a moment, she can replay it with a fresh question and answer it better.",
+            "got": "Only 'Back to the conversation' exists. The same error came back at once.",
+            "evidence": "#17 taught 'He comes with a car'; #18 she said 'he come in ten minutes' and got no second moment.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Each moment offers 'Try again' with a new question on the same point, and the retry is judged.",
+            "code_hint": "linga-moment screen"
+          },
+          {
+            "type": "trust",
+            "dimension": "trust",
+            "title": "Supported flag does not match the help used",
+            "expected": "Replies after a cue or phrase help are marked supported; unaided replies are marked independent.",
+            "got": "A reply after a cue was recorded unsupported, and an unaided reply was recorded supported.",
+            "evidence": "#10 reply after 'Said more simply' is supported:false; #18 reply with no help is supported:true.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "A reply is supported exactly when a cue, phrase or hint was used for that turn.",
+            "code_hint": "evidence supported flag"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner loops on sore feet and ignores her answers",
+            "expected": "A patient A2 conversation that reacts to her suggestions (bus, taxi).",
+            "got": "Partner repeats 'sore feet' and 'no phone' for seven turns and escalates. The B1 phrasing is above A2.",
+            "evidence": "#16 'Is there anyone nearby who can help me get there?'; #19 'Is there something you could do to help me right now?' after she offered a colleague.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The partner accepts a workable answer and closes the scene; wording stays within A2.",
+            "code_hint": "partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Moment recall is thin",
+            "expected": "Repeated error 'he come' gets a note each time or a pattern note.",
+            "got": "Only two moments; the second 'he come' was missed.",
+            "evidence": "#18 'he come in ten minutes' got no moment.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "A repeated error after a fix is flagged.",
+            "code_hint": "moment selection"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Layered help inside the scene",
+            "expected": "Help in steps without leaving the scene.",
+            "got": "Said more simply, then What it means, then A way to start, then a phrase choice.",
+            "evidence": "#3 'Said more simply', #5 'Okay, first you…', #6 'Turn left at the bank.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the staged help and its patient tone.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Moments quote exactly and explain simply",
+            "expected": "Exact quote, fix and short reason.",
+            "got": "'You said He come with a car' → 'He comes with a car'. With he, she or it, add -s to the verb.",
+            "evidence": "#17",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 60,
+          "confidence": "low"
+        },
+        "voice": "Honestly, I liked that the help was gentle. When I pressed the button it said the question more simply, and then gave me \"Turn left at the bank\". I did not feel stupid, and I like that very much. The two corrections were clear and I could use them at the desk, like \"He comes\". But I made the same mistake again right after, and nothing let me try that moment once more. Also the tourist kept talking about sore feet and asked harder and harder questions, and my answers seemed not to count. I am not sure the app is honest about which answers I did alone. For my children I saw nothing worrying, which is important for me. I would use it again for fifteen minutes in the evening, but I'd wait for the \"try again\" part before I tell my friends."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D3",
+          "level": "fail",
+          "text": "D3 failed: No replay of the moment was offered. #11 and #17 only had 'Back to the conversation', which carries on from the next partner turn. She repeated the error after the fix: #18 'he come in ten minutes' (#17 had taught 'He comes').",
+          "check": "Replaying the moment gives them a fresh question, and they answer it better than before."
+        },
+        {
+          "kind": "done",
+          "id": "D4",
+          "level": "fail",
+          "text": "D4 failed: Flags don't match the help she used. The #10 reply came after Said more simply (#10) but is supported:false. The #18 reply used no help but is supported:true. The progress picture is not reliable.",
+          "check": "Supported replies are not recorded as independent speaking (the progress picture stays honest)."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 29,
+      "fail": 0,
+      "ms": 320279
+    },
+    "character": {
+      "n": 45,
+      "fail": 0,
+      "ms": 417678
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 128054
+    }
+  }
+}

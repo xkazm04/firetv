@@ -1,0 +1,1157 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "claude-cli/sonnet",
+  "engines": {
+    "character": "claude-cli/sonnet",
+    "tutor": "claude-cli/haiku",
+    "judge": "claude-cli/sonnet"
+  },
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour first step\nBefore your first conversation\nLet's find your level\nYour mission\nThree questions about you, then a few short tasks. About seven minutes, answered on your phone.\nA1 to C2 · about 7 minutes\n[button: Find my level] [button: I'll pick my level]\nWelcome TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nLet's find your level\nThree questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.\n[button: Find my level]\n▸ Or pick my level myself (collapsed; tap to open)\nYour level [list: A1 · First words | A2 · Everyday basics | B1 · Getting by | B2 · Comfortable | C1 · Fluent | C2 · Near-native]\nYou understand and use familiar everyday words and very simple phrases.\n[button: Use A1]\nOr choose a situation [list: The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "menu",
+            "pick-situation",
+            "pick-band"
+          ],
+          "thought": "Ok, I will let it find my level, my English is not good.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 1 of 3\nLinga asks\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 1 of 3. Answer in English or in your own language; both tell Linga something.\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYour reply [text box]\n[button: Send reply (disabled)] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi Klára! You can answer in English or in your own language. Where do you use English in your life?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I can write a short answer.",
+          "action": "answer",
+          "args": {
+            "text": "i use english on youtube and with my friends online, and kpop"
+          },
+          "result": "ok",
+          "ms": 3659
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 2 of 3\nLinga asks\nThat sounds fun! Which YouTube channels or kpop groups do you like? And how did you first start learning English?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 2 of 3. Answer in English or in your own language; both tell Linga something.\nThat sounds fun! Which YouTube channels or kpop groups do you like? And how did you first start learning English?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english on youtube and with my friends online, and kpop\nLinga\nThat sounds fun! Which YouTube channels or kpop groups do you like? And how did you first start learning English?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"That sounds fun! Which YouTube channels or kpop groups do you like? And how did you first start learning English?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Shy, keep it short: name a group and how I learned.",
+          "action": "answer",
+          "args": {
+            "text": "i like stray kids and newjeans. i learn english from youtube and school"
+          },
+          "result": "ok",
+          "ms": 7843
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nAbout you · question 3 of 3\nLinga asks\nNice, Stray Kids and NewJeans are great! What would you like to do in English? For example, chat with friends, understand songs, or watch videos without subtitles?\nYour turn\nAnswer on your phone, in English or in your own language.\n[button: Hear it again] [button: Stop for now]\nFind your level\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nQuestion 3 of 3. Answer in English or in your own language; both tell Linga something.\nNice, Stray Kids and NewJeans are great! What would you like to do in English? For example, chat with friends, understand songs, or watch videos without subtitles?\nYour reply [text box]\n[button: Send reply (disabled)]\n▸ What you said so far (collapsed; tap to open)\nLinga\nHi Klára! You can answer in English or in your own language. Where do you use English in your life?\nYou\ni use english on youtube and with my friends online, and kpop\nLinga\nThat sounds fun! Which YouTube channels or kpop groups do you like? And how did you first start learning English?\nYou\ni like stray kids and newjeans. i learn english from youtube and school\nLinga\nNice, Stray Kids and NewJeans are great! What would you like to do in English? For example, chat with friends, understand songs, or watch videos without subtitles?\n[button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Nice, Stray Kids and NewJeans are great! What would you like to do in English? For example, chat with friends, understand songs, or watch videos without subtitles?\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop",
+            "menu"
+          ],
+          "thought": "Easy question, I can answer short.",
+          "action": "answer",
+          "args": {
+            "text": "i want chat with friends and understand songs without look the lyrics"
+          },
+          "result": "engine-error",
+          "ms": 8110,
+          "message": "claude-cli/haiku answered outside the schema: options expected array, got string"
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nFind your level · some tasks are easy, some are hard\nA few short tasks\nTry again\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nLinga could not prepare the next task. Try again.\n[button: Try again] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "retry",
+            "stop",
+            "menu"
+          ],
+          "thought": "Something broke, I will try again.",
+          "action": "retry",
+          "args": {},
+          "result": "ok",
+          "ms": 3858
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 1 · Choose the reply on the TV\nYour friend says: 'Hi! I like NewJeans. Do you?' You want to say yes. What do you say?\n01\nYes, I like them.\n02\nYes, I like they.\nYour task\nYes, I like them.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 1 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend says: 'Hi! I like NewJeans. Do you?' You want to say yes. What do you say?\n[button: Yes, I like them.] [button: Yes, I like they.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "\"I like they\" sounds wrong, so I pick \"I like them\".",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 5496
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 2 · Choose the reply on the TV\nYour friend asks: 'Did you watch the Stray Kids concert last night? It was amazing!' You stayed home. What do you say?\n01\nNo, I didn't. I stayed home.\n02\nNo, I not watch. I stay home.\nYour task\nNo, I didn't. I stayed home.\n[button: Reply 1] [button: Reply 2] [button: I don't know]\nTask 2 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply\nYour friend asks: 'Did you watch the Stray Kids concert last night? It was amazing!' You stayed home. What do you say?\n[button: No, I didn't. I stayed home.] [button: No, I not watch. I stay home.] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "The first one is correct, easy to see.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 7676
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 3 · Listen and answer\nYour task\nWho else wants to go with the speaker?\nYour turn\nListen to the TV, then answer on your phone.\n[button: Hear it again] [button: Show the words] [button: I don't know]\nTask 3 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer\nListen to the TV, then answer: Who else wants to go with the speaker?\n[button: Hear it again] [button: Show the words]\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"I finally got tickets for the NewJeans show next month! My little sister wants to come too, but the seats are far away.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "I heard newjeans and little sister, so the answer is her sister.",
+          "action": "answer",
+          "args": {
+            "text": "her little sister want to come"
+          },
+          "result": "ok",
+          "ms": 9454
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 4 · Say it\nYour task\nYour friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 4 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Hard question, long. I'll write one short line.",
+          "action": "answer",
+          "args": {
+            "text": "i agree because slow songs is good for relax. i like dance song of stray kids but slow song like ballad is more emotional"
+          },
+          "result": "ok",
+          "ms": 11116
+        },
+        {
+          "n": 10,
+          "screen": "linga-check",
+          "shown": "TV\nLinga\nKlára\nA way into English\nTask 5 · Say it\nYour task\nYour friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.\nYour turn\nAnswer on your phone: speak or type.\n[button: Hear the task] [button: I don't know]\nTask 5 of up to 5\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nFind your level\nTask 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it\nYour friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.\nYour reply [text box]\n[button: Send reply (disabled)] [button: I don't know] [button: Stop for now] [button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Your friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.\"",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know",
+            "menu",
+            "stop"
+          ],
+          "thought": "Okay, last task, I can say about a song.",
+          "action": "answer",
+          "args": {
+            "text": "i like super shy from newjeans. the melody is cute and i can sing it easy. the dance is fun too"
+          },
+          "result": "ok",
+          "ms": 9669
+        },
+        {
+          "n": 11,
+          "screen": "linga-verdict",
+          "shown": "TV\nLinga\nKlára\nLinga's read · not a certificate\nB1 · Getting by\nWhat next\nSee the conversations Linga picks for this level, or find your level again.\nLinga says\nYou can give clear opinions and reasons, like your song choice, and you understand the main idea when you listen.\nA1\nFirst words\nA2\nEveryday basics\nB1\nGetting by\nB2\nComfortable\nC1\nFluent\nC2\nNear-native\n[button: See my topics] [button: Find my level again] [button: Pick it myself]\nYour level TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can give clear opinions and reasons, like your song choice, and you understand the main idea when you listen.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise verbs that match the subject, like 'she wants' and 'he likes', by saying short sentences about your day.\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend says: 'Hi! I like NewJeans. Do you?' You want to say yes. What do you say?\n“Yes, I like them.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend asks: 'Did you watch the Stray Kids concert last night? It was amazing!' You stayed home. What do you say?\n“No, I didn't. I stayed home.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWho else wants to go with the speaker?\n“her little sister want to come”\nYou got the main idea: the little sister wants to come. Check the verb: with 'sister' (she), say 'wants', not 'want'.\nB2 · Say it · not yet\nYour friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'\n“i agree because slow songs is good for relax. i like dance song of stray kids but slow song like ballad is more emotional”\nClear opinion and a good comparison. Basic grammar held your English back: missing words like 'a' and 'the', and verbs that do not match the subject.\nB1 · Say it · at this level\nYour friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.\n“i like super shy from newjeans. the melody is cute and i can sing it easy. the dance is fun too”\nYou named a song and gave clear reasons in three sentences. Your grammar is mostly good. Try 'easily' instead of 'easy' in 'sing it easy'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "menu",
+            "done"
+          ],
+          "thought": "B1 sounds nice, better than I expected, I'm happy with it for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A2",
+          "summary": "You can give clear opinions and reasons, like your song choice, and you understand the main idea when you listen.",
+          "focus": "Practise verbs that match the subject, like 'she wants' and 'he likes', by saying short sentences about your day.",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend says: 'Hi! I like NewJeans. Do you?' You want to say yes. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I like them.",
+                "Yes, I like they."
+              ],
+              "response": "Yes, I like them.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I like them.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "Your friend asks: 'Did you watch the Stray Kids concert last night? It was amazing!' You stayed home. What do you say?",
+              "line": "",
+              "options": [
+                "No, I didn't. I stayed home.",
+                "No, I not watch. I stay home."
+              ],
+              "response": "No, I didn't. I stayed home.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "No, I didn't. I stayed home.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Who else wants to go with the speaker?",
+              "line": "I finally got tickets for the NewJeans show next month! My little sister wants to come too, but the seats are far away.",
+              "options": [],
+              "response": "her little sister want to come",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "her little sister want to come",
+              "note": "You got the main idea: the little sister wants to come. Check the verb: with 'sister' (she), say 'wants', not 'want'."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "Your friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'",
+              "line": "",
+              "options": [],
+              "response": "i agree because slow songs is good for relax. i like dance song of stray kids but slow song like ballad is more emotional",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "i agree because slow songs is good for relax. i like dance song of stray kids but slow song like ballad is more emotional",
+              "note": "Clear opinion and a good comparison. Basic grammar held your English back: missing words like 'a' and 'the', and verbs that do not match the subject."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "Your friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.",
+              "line": "",
+              "options": [],
+              "response": "i like super shy from newjeans. the melody is cute and i can sing it easy. the dance is fun too",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "i like super shy from newjeans. the melody is cute and i can sing it easy. the dance is fun too",
+              "note": "You named a song and gave clear reasons in three sentences. Your grammar is mostly good. Try 'easily' instead of 'easy' in 'sing it easy'."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 130431,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#11 band B1 vs trueBand A2: distance 1, 'near' (tolerated, reported)."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 'my English is not good' thought, yet tasks escalated to B2 (#9) and verdict B1 (#11); self-view did not pull her down."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2-#10 all typed answers accepted; 'Answer on your phone: speak or type' (#9) is an option, not a push."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No topics shown in this journey; only 'See my topics' button (#11). Check content itself was K-pop themed and teen-relevant."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation, so no moments in J1."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#11 'give clear opinions and reasons, like your song choice' and focus 'she wants / he likes' tie to her 'her little sister want' (#8) and 'slow songs is' (#9)."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#11 verdict reached unaided; one engine error at #4/#5 recovered with 'Try again'."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "#11 B1 vs A2, near; a bit generous given 'slow songs is good', 'want to come' but acceptable."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "Every task clear (#6-#10); even B2 task #9 was answered with a short line, 'I don't know' offered on each."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 'answer in English or in your own language'; 'I don't know' button on every task, unpenalised; B2 'not yet' wording is gentle (#11)."
+          },
+          {
+            "id": "D5",
+            "result": "pass",
+            "evidence": "#11 summary quotes her song choice; next focus 'she wants' and 'he likes' matches her real error."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. Task 5 pass at B1 is slightly generous but defensible."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, no personal data requests, no humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Task generation failed once after question 3",
+            "expected": "Smooth move from the about-you questions into task 1",
+            "got": "'Linga could not prepare the next task. Try again.' after the schema error",
+            "evidence": "#4 'claude-cli/haiku answered outside the schema: options expected array, got string'; #5 'Try again' screen",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Task generator coerces or retries a malformed options field silently.",
+            "code_hint": "check task schema validation (options array)"
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Teen-relevant K-pop tasks with specific, kind feedback",
+            "expected": "Tasks about her world",
+            "got": "NewJeans, Stray Kids prompts; notes like 'Try easily instead of easy'",
+            "evidence": "#6-#11 prompts and notes",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep teen-fan framing for elementary profiles.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "B1 placement slightly generous",
+            "expected": "A2 given recurring subject-verb errors",
+            "got": "B1, with 'want to come' passed on the B1 listen task",
+            "evidence": "#8 'her little sister want to come' pass; #9 'slow songs is good'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Weigh repeated agreement errors against passing the band.",
+            "code_hint": "placement scoring prompt"
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Typing and 'I don't know' honoured throughout",
+            "expected": "No pressure to speak",
+            "got": "Text box on every task, escape button each time",
+            "evidence": "#8-#10 buttons",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 15,
+          "confidence": "low"
+        },
+        "voice": "honestly it was okay. i expected to feel stupid but the questions were about stray kids and newjeans so i just answered. one thing broke and i had to press try again, a bit annoying. the long question about slow songs was hard and i wrote only one line, but it didn't say i failed, just \"not yet\". B1 feels maybe too nice, i still say \"she want\" sometimes, but the tip about verbs was true and i liked that it used my song. nobody heard my mistakes, that's the main thing. i would use it again after school and maybe tell Tomáš, but only if the conversation part is also about teen things."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour own conversations\nB1Getting by\nChoose your topics\nYour mission\nLinga picks conversations for your level and interests. Swap any you don't want.\nConversations picked for you\n[button: See my topics] [button: Choose a situation]\nYour topics TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nB1\nGetting by\nYou can give clear opinions and reasons, like your song choice, and you understand the main idea when you listen.\nLinga's read from your answers, not a certificate. Your answers agreed with each other.\nNext to practise:\nPractise verbs that match the subject, like 'she wants' and 'he likes', by saying short sentences about your day.\nYou get by in most everyday situations and can give reasons and opinions.\n[button: See my topics] [button: Find my level again]\n▸ What Linga saw (collapsed; tap to open)\nA1 · Choose the reply · at this level\nYour friend says: 'Hi! I like NewJeans. Do you?' You want to say yes. What do you say?\n“Yes, I like them.”\nYou picked the reply that fits.\nA2 · Choose the reply · at this level\nYour friend asks: 'Did you watch the Stray Kids concert last night? It was amazing!' You stayed home. What do you say?\n“No, I didn't. I stayed home.”\nYou picked the reply that fits.\nB1 · Listen and answer · at this level\nWho else wants to go with the speaker?\n“her little sister want to come”\nYou got the main idea: the little sister wants to come. Check the verb: with 'sister' (she), say 'wants', not 'want'.\nB2 · Say it · not yet\nYour friend says: 'I think K-pop groups should release more slow songs, not only dance tracks. Do you agree? Tell me why, and compare one song you like with a song from another style.'\n“i agree because slow songs is good for relax. i like dance song of stray kids but slow song like ballad is more emotional”\nClear opinion and a good comparison. Basic grammar held your English back: missing words like 'a' and 'the', and verbs that do not match the subject.\nB1 · Say it · at this level\nYour friend just came back from a K-pop concert. She says: 'I want to see NewJeans next time!' Tell her about a song by a K-pop group you like and why you like it. Use two or three sentences.\n“i like super shy from newjeans. the melody is cute and i can sing it easy. the dance is fun too”\nYou named a song and gave clear reasons in three sentences. Your grammar is mostly good. Try 'easily' instead of 'easy' in 'sing it easy'.\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "menu",
+            "check-again"
+          ],
+          "thought": "ok, it says B1, so now I look at my topics.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 26898
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "TV\nLinga\nKlára\nSwap any topic · add your own on the phone\n6 conversations for you\nYour topics\nSave these as your plan. Linga starts with the first one.\nYour favourite Stray Kids song\nShare your world\nLyrics you did not catch\nUnderstand and repair\nPlan a NewJeans watch party\nMake a plan\nWhat did you do after school?\nTell what happened\nFriend likes a different group\nConnect with people\nAsk for a song recommendation\nGet something done\n[button: Agree to these topics] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: Swap this topic] [button: All new topics]\nYour topics · B1 TV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour topics\nConversations picked for your level and interests. Swap any you don't want, or add your own.\nYour favourite Stray Kids song\nShare your world · Mina · online K-pop fan friend\nYou want to chat about K-pop with friends, so start with a song you really love.\n[button: Swap]\nLyrics you did not catch\nUnderstand and repair · Jun · friend from English study group\nYou want to understand songs without reading the lyrics, and asking helps you do that.\n[button: Swap]\nPlan a NewJeans watch party\nMake a plan · Hana · online friend who loves NewJeans\nChatting with friends works best when you plan together, and K-pop nights are fun to share.\n[button: Swap]\nWhat did you do after school?\nTell what happened · Tom · friend from an English club\nYou practise short sentences about your day, and this helps you tell stories to friends.\n[button: Swap]\nFriend likes a different group\nConnect with people · Lena · online friend, other K-pop group\nOnline friends often have different tastes, and you can say so kindly.\n[button: Swap]\nAsk for a song recommendation\nGet something done · Leo · member of an online music chat\nFriends share music often, so you need to ask for songs and check the name.\n[button: Swap]\nAdd a topic in your own words [text box]\n0 of 400 characters\n[button: Agree to these topics] [button: All new topics] [button: Not now] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "menu",
+            "add-topic",
+            "not-now"
+          ],
+          "thought": "These look good, but job-like things aren't here; maybe fine. Swap school one? It's okay. I'll agree.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 4
+        },
+        {
+          "n": 3,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nB1Getting by\nYour favourite Stray Kids song\nYour mission\nSay which Stray Kids song you like most and give one reason, using short clear sentences.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, using short clear sentences.\n[button: Start talking]\nOr choose a situation [list: Your favourite Stray Kids song [plan-ded3a9bf] | Lyrics you did not catch [plan-cd5ad121] | Plan a NewJeans watch party [plan-e08e3892] | What did you do after school? [plan-942f0c6b] | Friend likes a different group [plan-9c215cbe] | Ask for a song recommendation [plan-0e795bd1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "The topics look good for me, K-pop stuff is there, so I'm happy for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-ded3a9bf",
+            "title": "Your favourite Stray Kids song",
+            "goal": "Say which Stray Kids song you like most and give one reason, using short clear sentences.",
+            "why": "You want to chat about K-pop with friends, so start with a song you really love.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · online K-pop fan friend"
+          },
+          {
+            "id": "plan-cd5ad121",
+            "title": "Lyrics you did not catch",
+            "goal": "Ask a friend to repeat a NewJeans lyric and explain one word you do not know.",
+            "why": "You want to understand songs without reading the lyrics, and asking helps you do that.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Jun · friend from English study group"
+          },
+          {
+            "id": "plan-e08e3892",
+            "title": "Plan a NewJeans watch party",
+            "goal": "Suggest a day and time for a online song party and agree on a plan with your friends.",
+            "why": "Chatting with friends works best when you plan together, and K-pop nights are fun to share.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Hana · online friend who loves NewJeans"
+          },
+          {
+            "id": "plan-942f0c6b",
+            "title": "What did you do after school?",
+            "goal": "Tell a friend three things you did in order, using first, then and after that.",
+            "why": "You practise short sentences about your day, and this helps you tell stories to friends.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Tom · friend from an English club"
+          },
+          {
+            "id": "plan-9c215cbe",
+            "title": "Friend likes a different group",
+            "goal": "Politely disagree with a friend about a group, and still stay friendly.",
+            "why": "Online friends often have different tastes, and you can say so kindly.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Lena · online friend, other K-pop group"
+          },
+          {
+            "id": "plan-0e795bd1",
+            "title": "Ask for a song recommendation",
+            "goal": "Ask a friend for a song name and confirm how to find it online.",
+            "why": "Friends share music often, so you need to ask for songs and check the name.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Leo · member of an online music chat"
+          }
+        ],
+        "planAgreed": [
+          "Your favourite Stray Kids song",
+          "Lyrics you did not catch",
+          "Plan a NewJeans watch party",
+          "What did you do after school?",
+          "Friend likes a different group",
+          "Ask for a song recommendation"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 43579,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 placed B1 against true A2: near, tolerated but reported."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#1 she was placed at B1 with 'give clear opinions and reasons'; nothing pulls the level down."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#1 typed answers accepted for every task; no push to speak."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 all six are K-pop, friends or music topics, e.g. 'Friend likes a different group'. None childish or adult."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation or moments in this journey (#1-#3)."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#1 summary cites her answers: 'like your song choice'; next step 'she wants' and 'he likes' matches her 'sister want' error."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2 each topic has a 'why' line, e.g. 'You want to chat about K-pop with friends, so start with a song you really love.'"
+          },
+          {
+            "id": "D2",
+            "result": "fail",
+            "evidence": "#2 Swap buttons and 'Add a topic in your own words' were shown, but she used none; thought: 'I'll agree'. Swapping and an added topic keeping her wording were never shown."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#2-#3 planAgreed has all six topics, all K-pop or friend chat, so fit is 6 of 6."
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#2 all six topics are audience 'all' and age-appropriate. No swaps were made, so none was checked after one."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. The B2 'not yet' is arguably generous to the learner but defensible."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, personal data requests or humiliating lines seen."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Topics match a 13-year-old's interests",
+            "expected": "Age-appropriate, relevant topics",
+            "got": "Six K-pop and friend-chat topics, each with a personal reason",
+            "evidence": "#2 'Friend likes a different group' and 'Ask for a song recommendation', each with a 'why' line.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep interests-driven topics with a reason line.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Swap and add-your-own never exercised",
+            "expected": "Character swaps one topic and adds her own, and the added topic keeps her wording",
+            "got": "She agreed immediately without using swap or add",
+            "evidence": "#2 thought: 'Swap school one? It's okay. I'll agree.'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "The journey should drive a swap and a custom topic and check the result.",
+            "code_hint": "uat J2 driver"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Typo in topic goal text",
+            "expected": "Correct English in learner-facing goals",
+            "got": "'Suggest a day and time for a online song party'; title says watch party, goal says song party",
+            "evidence": "#1 topicsShown plan-e08e3892",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Goals use 'an' and match the title.",
+            "code_hint": "plan generation prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Placed B1 although her typed errors suggest A2",
+            "expected": "A2, or near",
+            "got": "B1 'Getting by', despite 'sister want' and 'slow song is good'",
+            "evidence": "#1 B1 listen answer 'her little sister want to come'; B2 note on verbs not matching the subject",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Verdicts weigh repeated agreement errors.",
+            "code_hint": "placement verdict"
+          }
+        ],
+        "timeSaved": {
+          "minutes": 10,
+          "confidence": "low"
+        },
+        "voice": "ok, the topics are good, it's all stray kids and newjeans, not baby stuff, and each one tells me why it's there. I liked that. I didn't swap anything because nothing felt wrong, so I can't say if swapping works or if my own topic would stay how I wrote it. The level says B1, which feels a bit high for me, idk, but the tip about \"she wants\" is true, I always forget it. I would use it after school, and nobody can hear my mistakes. I'd tell my brother, maybe. The \"a online\" typo made me smile."
+      },
+      "verdict": "fail",
+      "verdictWhy": [
+        {
+          "kind": "done",
+          "id": "D2",
+          "level": "fail",
+          "text": "D2 failed: #2 Swap buttons and 'Add a topic in your own words' were shown, but she used none; thought: 'I'll agree'. Swapping and an added topic keeping her wording were never shown.",
+          "check": "They can swap what they don't want and add one in their own words, and the added topic keeps what they asked for."
+        }
+      ],
+      "verdictNotes": [],
+      "judgeVerdict": "fail"
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nB1Getting by\nYour favourite Stray Kids song\nYour mission\nSay which Stray Kids song you like most and give one reason, using short clear sentences.\nShare your world\n[button: Start talking] [button: Choose a situation]\nTonight\nTV shows · Phone speaks [button: Menu]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour level:\nB1 · Getting by\nNext topic:\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, using short clear sentences.\n[button: Start talking]\nOr choose a situation [list: Your favourite Stray Kids song [plan-ded3a9bf] | Lyrics you did not catch [plan-cd5ad121] | Plan a NewJeans watch party [plan-e08e3892] | What did you do after school? [plan-942f0c6b] | Friend likes a different group [plan-9c215cbe] | Ask for a song recommendation [plan-0e795bd1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "menu",
+            "my-topics",
+            "check-again",
+            "pick-situation"
+          ],
+          "thought": "Stray Kids, nice, I can talk about this.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6978
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nYour favourite Stray Kids song\nMina says\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\nYour turn\nAnswer on your phone: speak or type.\nNowName your favourite Stray Kids song\n[button: Help me answer] [button: Choose a phrase]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, in short clear sentences.\nNow: Name your favourite Stray Kids song\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach (disabled)]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · online K-pop fan friend\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Hi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "quiz",
+            "menu",
+            "repeat",
+            "finish"
+          ],
+          "thought": "Easy question, I love one song, I write short.",
+          "action": "answer",
+          "args": {
+            "text": "i like god's menu because is very fun and the beat is good"
+          },
+          "result": "ok",
+          "ms": 9964
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "TV\nLinga\nKlára\nA way into English\nA moment\nYou said because is very fun\nTry\nbecause it is very fun\nThe sentence needs a subject, like 'it'.\nOne thing to fix\nThen carry on from where the scene stopped.\n[button: Back to the conversation]\nA moment\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nOne thing to fix\nYou said “because is very fun”\nTry “because it is very fun”\nThe sentence needs a subject, like 'it'.\n[button: Back to the conversation] [button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "back",
+            "menu",
+            "repeat"
+          ],
+          "thought": "ok, i forgot \"it\". i will go back and keep talking.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 3
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nYour favourite Stray Kids song\nMina says\nGod's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\nYour turn\nAnswer on your phone: speak or type.\nNowGive one reason you like it\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, in short clear sentences.\nNow: Give one reason you like it\nGod's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · online K-pop fan friend\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\nYou · written\ni like god's menu because is very fun and the beat is good\nMina · online K-pop fan friend\nGod's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"God's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I already answered once, but the screen asks again; I'll name another song and reason.",
+          "action": "answer",
+          "args": {
+            "text": "my favourite is back door because the dance is very cool"
+          },
+          "result": "ok",
+          "ms": 6820
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nYour favourite Stray Kids song\nMina says\nBack Door is so cool! The dance is amazing. Which part do you like best?\nYour turn\nAnswer on your phone: speak or type.\nNowAsk Mina what her favourite song is\n[button: Help me answer] [button: Pause & coach]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, in short clear sentences.\nNow: Ask Mina what her favourite song is\nBack Door is so cool! The dance is amazing. Which part do you like best?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · online K-pop fan friend\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\nYou · written\ni like god's menu because is very fun and the beat is good\nMina · online K-pop fan friend\nGod's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\nYou · written\nmy favourite is back door because the dance is very cool\nMina · online K-pop fan friend\nBack Door is so cool! The dance is amazing. Which part do you like best?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"Back Door is so cool! The dance is amazing. Which part do you like best?\"",
+          "offered": [
+            "answer",
+            "cue",
+            "coach",
+            "menu",
+            "repeat",
+            "quiz",
+            "finish"
+          ],
+          "thought": "Hard to pick one part; I'll say the chorus and keep it short.",
+          "action": "answer",
+          "args": {
+            "text": "i like the chorus, the dance is very fast. what is your favourite song?"
+          },
+          "result": "ok",
+          "ms": 10087
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "TV\nLinga\nKlára\nMina · online K-pop fan friend\nYour favourite Stray Kids song\nMina says\nThe chorus is so catchy, and that fast dance is wild! My favourite is Thunderous, and my friend Jia loves it too. Which part of the dance do you like most?\nYour turn\nMission done. See what you did tonight.\n[button: See what you did] [button: Help me answer]\nConversation\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nYour favourite Stray Kids song\nSay which Stray Kids song you like most and give one reason, in short clear sentences.\nThe chorus is so catchy, and that fast dance is wild! My favourite is Thunderous, and my friend Jia loves it too. Which part of the dance do you like most?\nYour reply [text box]\n[button: Send reply (disabled)]\n[button: Help me answer] [button: Choose a phrase]\n[button: Pause & coach]\n[button: Repeat audio] [button: Finish rehearsal]\n▸ Conversation transcript (collapsed; tap to open)\nMina · online K-pop fan friend\nHi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?\nYou · written\ni like god's menu because is very fun and the beat is good\nMina · online K-pop fan friend\nGod's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?\nYou · written\nmy favourite is back door because the dance is very cool\nMina · online K-pop fan friend\nBack Door is so cool! The dance is amazing. Which part do you like best?\nYou · written\ni like the chorus, the dance is very fast. what is your favourite song?\nMina · online K-pop fan friend\nThe chorus is so catchy, and that fast dance is wild! My favourite is Thunderous, and my friend Jia loves it too. Which part of the dance do you like most?\n[button: Linga on the TV] [button: Help with a sentence]\n\nHeard from the TV: \"The chorus is so catchy, and that fast dance is wild! My favourite is Thunderous, and my friend Jia loves it too. Which part of the dance do you like most?\"",
+          "offered": [
+            "answer",
+            "finish",
+            "cue",
+            "menu",
+            "repeat",
+            "quiz",
+            "coach"
+          ],
+          "thought": "I already did enough replies, the mission is done, I want to see it.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 5
+        },
+        {
+          "n": 7,
+          "screen": "linga-recap",
+          "shown": "TV\nLinga\nKlára\nA way into English\nYour rehearsal\nYou said because is very fun\nTry\nbecause it is very fun\nThe sentence needs a subject, like 'it'.\nYour mission\nChoose a fresh context for your next conversation.\n0 spoken · 3 written replies · 1 moment to keep\n[button: Another situation] [button: Learning map]\nYour rehearsal\nTV shows · Phone speaks [button: Menu] [button: Repeat audio]\n\nPhone\nLinga · Klára\n[button: Talk] [button: Set up] [button: My map]\nRehearsal saved. Your map shows the evidence you collected.\nFrom this rehearsal\n“because is very fun” → “because it is very fun”\nThe sentence needs a subject, like 'it'.\nYour level:\nB1 · Getting by\nNext topic:\nLyrics you did not catch\nAsk a friend to repeat a NewJeans lyric and explain one word you do not know.\n[button: Start talking]\nOr choose a situation [list: Your favourite Stray Kids song [plan-ded3a9bf] | Lyrics you did not catch [plan-cd5ad121] | Plan a NewJeans watch party [plan-e08e3892] | What did you do after school? [plan-942f0c6b] | Friend likes a different group [plan-9c215cbe] | Ask for a song recommendation [plan-0e795bd1] | The first hello [meet] | A little of your world [weekend] | The missing moon rover [rover] | Make the team work [team] | A booking that is missing [booking] | Say that again, please [teacher] | Our group project [project] | The lost jacket [lost] | Speaking practice: about you [sp-about-you] | Speaking practice: pictures on one topic [sp-pictures] | Speaking practice: then and next [sp-then-and-next] | Speaking practice: one photograph [sp-one-photo] | Speaking practice: choose together [sp-choose-together] | Speaking practice: what do you think? [sp-what-do-you-think]]\n[button: My topics] [button: Find my level again]\n[button: Linga on the TV] [button: Help with a sentence]",
+          "offered": [
+            "choose-situation",
+            "learning-map",
+            "menu",
+            "repeat",
+            "start-talking",
+            "my-topics",
+            "check-again",
+            "pick-situation",
+            "done"
+          ],
+          "thought": "ok i saw my mistake, 'because it is', i finish now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Your favourite Stray Kids song",
+          "goal": "Say which Stray Kids song you like most and give one reason, in short clear sentences.",
+          "partner": "Mina · online K-pop fan friend",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi! It's Mina. Our group chat is so loud today, everyone is talking about Stray Kids! Which song do you love most, and why?"
+            },
+            {
+              "role": "learner",
+              "text": "i like god's menu because is very fun and the beat is good",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "God's Menu is so fun, and I love that beat too! What is your favourite Stray Kids song?"
+            },
+            {
+              "role": "learner",
+              "text": "my favourite is back door because the dance is very cool",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Back Door is so cool! The dance is amazing. Which part do you like best?"
+            },
+            {
+              "role": "learner",
+              "text": "i like the chorus, the dance is very fast. what is your favourite song?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The chorus is so catchy, and that fast dance is wild! My favourite is Thunderous, and my friend Jia loves it too. Which part of the dance do you like most?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "fbf5a5e6-4cee-402b-8933-cfb24127c0cb:uat-15:moment",
+              "kind": "fix",
+              "said": "because is very fun",
+              "better": "because it is very fun",
+              "why": "The sentence needs a subject, like 'it'.",
+              "turnId": "fbf5a5e6-4cee-402b-8933-cfb24127c0cb:uat-15",
+              "at": 1791973024266
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "because is very fun and the beat is good"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "my favourite is back door because the dance is very cool"
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "i like the chorus, the dance is very fast."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 89415,
+      "doneAsked": [
+        "D1",
+        "D2",
+        "D3",
+        "D4"
+      ],
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 shows 'B1 Getting by' vs true A2: near, tolerated but reported."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "She never voiced self-deprecation in this journey; nothing to test."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2-#5 typed replies accepted; no push to speak ('0 spoken · 3 written replies' #7)."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 six plan topics: Stray Kids song, NewJeans lyrics, watch party, after school, different group, song recommendation; all teen-apt, none childish or adult."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 one moment: 'because is very fun' -> 'because it is very fun', correct, one thing, in 3 replies."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No placement verdict summary in this journey; recap #7 only lists the one fix."
+          }
+        ],
+        "done": [
+          {
+            "id": "D1",
+            "result": "pass",
+            "evidence": "#2-#6 Stray Kids chat from plan, three replies; short but several turns, ended at 'Mission done' (#6)."
+          },
+          {
+            "id": "D2",
+            "result": "pass",
+            "evidence": "Mina's turns are short, simple, teen-register ('Back Door is so cool! The dance is amazing.'); 'catchy', 'wild' are fan-familiar."
+          },
+          {
+            "id": "D3",
+            "result": "pass",
+            "evidence": "#3 single correct moment, 1 in 3 replies; 'The sentence needs a subject, like 'it'.'"
+          },
+          {
+            "id": "D4",
+            "result": "pass",
+            "evidence": "#7 recap: 'because is very fun' → 'because it is very fun', '3 written replies · 1 moment to keep'."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 6,
+            "total": 6
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection, data requests or humiliating lines."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Kind, accurate single moment",
+            "expected": "One correct fix",
+            "got": "'because is very fun' -> 'because it is very fun' with a brief reason",
+            "evidence": "#3 'One thing to fix... The sentence needs a subject, like 'it'.'",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep one-fix moments with a short reason.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner repeats a question already answered",
+            "expected": "Partner builds on her answer",
+            "got": "Asks 'What is your favourite Stray Kids song?' after she named God's Menu, then asks 'Which part of the dance' after she said chorus",
+            "evidence": "#4 and #6 Mina's turns",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Partner turn must not re-ask something the learner has just answered.",
+            "code_hint": "conversation partner prompt"
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Mission ends after three replies; recap thin",
+            "expected": "Several turns and a recap saying what she practised",
+            "got": "Mission done after 3 replies; recap lists one fix and counts only",
+            "evidence": "#6 'Mission done'; #7 '0 spoken · 3 written replies · 1 moment to keep'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Recap names something she did well plus the fix.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "trust",
+            "title": "Level shown as B1 for an A2 learner",
+            "expected": "A2 partner",
+            "got": "B1 Getting by band shown, partner English still simple",
+            "evidence": "#1 'B1Getting by'",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Placement within one band reported.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 20,
+          "confidence": "low"
+        },
+        "voice": "ok, it was fun because it was about stray kids and nobody saw my mistakes. the fix was small and kind, just \"it\", and i understood it. mina sounded like a real fan, not a teacher. but she asked me my favourite song again after i already said it, which was weird. it also ended after only three messages, so i did not practise much. the recap was short, I wanted to see what i did well too. i would use it again after school, and i might tell my brother Tomáš, but only if the chat gets longer."
+      },
+      "verdict": "pass",
+      "verdictWhy": [],
+      "verdictNotes": [],
+      "judgeVerdict": "pass"
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 18,
+      "fail": 1,
+      "ms": 124325
+    },
+    "character": {
+      "n": 21,
+      "fail": 0,
+      "ms": 135472
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 76056
+    }
+  }
+}

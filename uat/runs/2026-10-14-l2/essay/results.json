@@ -1,0 +1,153 @@
+{
+  "passed": true,
+  "steps": {
+    "W1": {
+      "verdict": "pass",
+      "learner": "essay-browser-teen"
+    },
+    "W2": {
+      "verdict": "pass",
+      "enterToEssaytypeMs": 619,
+      "zoomMs": 560,
+      "exceededZoom": true
+    },
+    "W3": {
+      "verdict": "pass",
+      "analyseMs": 9702,
+      "provider": "claude-cli/sonnet",
+      "lens": "evidence",
+      "sentences": 5
+    },
+    "W4": {
+      "verdict": "pass",
+      "reading": {
+        "type": "evidence",
+        "provider": "claude-cli/sonnet",
+        "summary": "1 of 5 sentences to fix. Start with sentence 4: No checkable sentence here backs this opinion.",
+        "sentences": [
+          {
+            "n": 1,
+            "text": "Schools should start later in the morning."
+          },
+          {
+            "n": 2,
+            "text": "During puberty, teenagers' body clocks shift later, so many cannot fall asleep before 11 pm."
+          },
+          {
+            "n": 3,
+            "text": "When Seattle moved its high-school start from 7:50 to 8:45 in 2016, students slept about 34 minutes more each night."
+          },
+          {
+            "n": 4,
+            "text": "Also it is just better and everyone knows it."
+          },
+          {
+            "n": 5,
+            "text": "That is why a later start would help students learn."
+          }
+        ],
+        "verdicts": [
+          {
+            "n": 1,
+            "verdict": "neutral",
+            "note": "This is your claim; it states a position but gives no support itself.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 2,
+            "verdict": "strong",
+            "note": "You give a mechanism, body clocks shifting in puberty, plus a time a reader could check; name where this finding comes from.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 3,
+            "verdict": "strong",
+            "note": "A named place, year, start times and a 34-minute figure a reader could look up; add the source.",
+            "fix": null,
+            "was": null
+          },
+          {
+            "n": 4,
+            "verdict": "faulty",
+            "note": "No checkable sentence here backs this opinion.",
+            "fix": {
+              "move": "Replace assertion with a benefit",
+              "pattern": "A later start also matters because [specific effect], shown by [number or example]."
+            },
+            "was": null
+          },
+          {
+            "n": 5,
+            "verdict": "neutral",
+            "note": "This links sleep to learning but gives no grades, attendance or test evidence to show learning improved.",
+            "fix": null,
+            "was": null
+          }
+        ]
+      },
+      "tvTextFirstScreen": "Study Desk · TV\n←↑↓→ D-pad · Enter Select · Backspace Back · M Menu · Space Play/Pause\nVoice\nClock ×60\nReset session\nFake phone\nDesk display\nFullscreen\n1 of 5 sentences to fix. Start with sentence 4: No checkable sentence here backs this opinion.\nESSAYMASTER\nMENU\nTable\nFOCUS\n25:00\nPhone joined\nS\nSam\nPARAGRAPH\n1\n2\n3\n4\n5\nEVIDENCE\n· SENTENCE 4 OF 5 · CLAIM\n“\nAlso it is just better and everyone knows it.\nLOOK AGAIN · THE PROBLEM\n\nNo checkable sentence here backs this opinion.\n\nTHE MOVE\nREPLACE ASSERTION WITH A BENEFIT\nREPLACE ASSERTION WITH A BENEFIT\nTHE PATTERN\nA later start also matters because\nspecific effect\n, shown by\nnumber or example\n.\nRewrite on my phone\nWhy this matters\nNext sentence\nBack to the paragraph",
+      "textsThatContainAWholeLearnerSentence": []
+    },
+    "W5": {
+      "verdict": "pass",
+      "rewriteMs": 7157,
+      "provider": "claude-cli/sonnet",
+      "sentence4": {
+        "before": {
+          "verdict": "faulty",
+          "note": "No checkable sentence here backs this opinion.",
+          "fix": {
+            "move": "Replace assertion with a benefit",
+            "pattern": "A later start also matters because [specific effect], shown by [number or example]."
+          }
+        },
+        "after": {
+          "verdict": "strong",
+          "note": "This names a specific effect, higher grades in first class, and ties it to the Seattle study from sentence 3, but it gives no number a reader could check.",
+          "fix": null,
+          "was": {
+            "text": "Also it is just better and everyone knows it.",
+            "verdict": "faulty",
+            "fix": {
+              "move": "Replace assertion with a benefit",
+              "pattern": "A later start also matters because [specific effect], shown by [number or example]."
+            }
+          }
+        }
+      },
+      "everyOtherVerdictKept": true
+    },
+    "W6": {
+      "verdict": "pass",
+      "endSessionMs": 49,
+      "phoneRecap": "Sam, tonight\nMath Buddy - not tonight\nLinga - not tonight\nEssay Master - one reading (Evidence): 0 of 5 sentences to fix, 1 fixed tonight\n\nRead through; nothing to fix."
+    },
+    "W7": {
+      "verdict": "pass",
+      "history": [
+        {
+          "kind": "writing",
+          "label": "Evidence",
+          "detail": "0 of 5 sentences to fix, 1 fixed"
+        }
+      ],
+      "writingEvidence": {
+        "topic": "evidence",
+        "seen": 1,
+        "right": 1,
+        "estimate": 0.3,
+        "secure": false,
+        "lastSeen": 1791972967618,
+        "slips": []
+      }
+    },
+    "W8": {
+      "verdict": "pass",
+      "pageErrors": []
+    }
+  },
+  "errors": [],
+  "note": "No model judgement is asserted; verdicts are recorded for a reader. A physical phone, heard audio and the owner's reading are not covered."
+}

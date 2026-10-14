@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "resumedAfter": "real model replay timed out, then succeeded on explicit retry",
+  "checks": [
+    "persisted typed and supported speech turns",
+    "real generated coaching and replay",
+    "synchronised finish and saved recap",
+    "eight skills on phone and print map",
+    "mobile width",
+    "Math and Essay navigation"
+  ],
+  "errors": [],
+  "speech": "Earlier browser run simulated recognition; physical ASR not tested."
+}
