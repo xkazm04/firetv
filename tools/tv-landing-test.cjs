@@ -105,6 +105,7 @@ test('paper 1: the default look draws each scenario with its hooks and its real 
  const f=html('firstRun');assert.match(f,/data-role="desk-pin"[^>]*>4711</,'the pairing code is the session\'s');assert.match(f,/10\.0\.0\.7:3000\/phone/);
  // a screen reader hears "Code 4711": the label is a hidden word, not an aria-label on a plain div (ARIA drops those)
  assert.match(f,/class="pp-sr">Code <\/span><div class="pp-pin"/);assert.doesNotMatch(f,/aria-label="Code/);
+ assert.match(f,/class="pp-sr">No phone paired</);assert.match(html('returning'),/class="pp-sr">Phone paired</,'the phone chip says its state in words, not only in its drawing');
  assert.match(html('nobody'),/Whose desk\?/);
  const z=html('returning','maths');assert.match(z,/data-role="desk-zoom"[^>]*data-app="maths"/,'Select plays the hand-off of the lit app');assert.match(z,/Opening/);
  assert.doesNotMatch(r,/dangerouslySetInnerHTML|<script/);
