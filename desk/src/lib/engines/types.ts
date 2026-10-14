@@ -47,10 +47,16 @@ export type EngineKind = keyof Providers;
 /**
  * Why an engine call failed. shape: the answer does not match the caller's schema (`path` names the first
  * field, "" for the whole answer); timeout: no answer in time; exit: the provider ran and failed (a non-zero
- * exit or an error status); unreachable: the provider could not be started or reached, or none is configured.
+ * exit or an error status); unreachable: the provider could not be started or reached, or none is configured;
+ * cutoff: a ceiling ended the answer before it was finished (an output limit, a length stop) - a fact about the
+ * request, never evidence about the model's quality; declined: the model, or a policy layer beside it, stopped
+ * without an answer to judge (a refusal stop). Only shape speaks about the answer; the other five speak about the
+ * attempt (model-call-outcome-integrity: unattempted-is-not-failed).
  */
-export type EngineErrorKind = "shape" | "timeout" | "exit" | "unreachable";
+export type EngineErrorKind = "shape" | "timeout" | "exit" | "unreachable" | "cutoff" | "declined";
 export class EngineError extends Error {
+  /** What the provider reported it used before it failed, when it reported anything: the ledger books it (call.ts). */
+  usage?: Usage;
   constructor(public kind: EngineErrorKind, public provider: string, message: string, public path?: string) {
     super(message);
     this.name = "EngineError";

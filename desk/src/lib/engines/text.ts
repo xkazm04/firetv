@@ -43,6 +43,18 @@ export function usageOf(envelope: unknown): Usage {
 }
 
 /** The Claude CLI. It only produces the answer; text() parses and checks it, as for every provider. */
+/**
+ * Why the CLI's turn ended without an answer to judge, read from its envelope, or null when it answered: max_tokens is
+ * a ceiling (cutoff), refusal is a decline, is_error is the run failing (exit). The stop reasons are the API's own,
+ * passed through by the CLI (end_turn and stop_sequence are seen in this repo's captured envelopes and mean it answered).
+ */
+export function stopOf(envelope: { stop_reason?: unknown; is_error?: unknown; subtype?: unknown }): { kind: "cutoff" | "declined" | "exit"; why: string } | null {
+  if (envelope.stop_reason === "max_tokens") return { kind: "cutoff", why: "claude stopped at its output limit before the answer was finished" };
+  if (envelope.stop_reason === "refusal") return { kind: "declined", why: "claude declined to answer" };
+  if (envelope.is_error === true) return { kind: "exit", why: `claude reported an error (${String(envelope.subtype ?? "no subtype")})` };
+  return null;
+}
+
 export const claudeCli: Provider<TextRequest, unknown> = {
   name: "claude-cli",
   async run(req, ctx) {
@@ -72,13 +84,23 @@ export const claudeCli: Provider<TextRequest, unknown> = {
       child.stdout.on("data", (d) => (stdout += d));
       child.stderr.on("data", (d) => (stderr += d));
       child.on("error", (e) => { reject(new EngineError("unreachable", reported, `claude could not start: ${e.message}`)); });
-      child.on("close", (code) => { ctx?.signal.removeEventListener("abort", stop); code === 0 ? resolve(stdout) : reject(new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`)); });
+      child.on("close", (code) => {
+        ctx?.signal.removeEventListener("abort", stop);
+        if (code === 0) return resolve(stdout);
+        // a failed run can still print its envelope, and with it what the attempt cost: the ledger books that spend
+        const failed = new EngineError(ctx?.signal.aborted ? "timeout" : "exit", reported, `claude exited ${code}: ${stderr.slice(0, 400)}`);
+        try { failed.usage = usageOf(JSON.parse(stdout)); } catch { /* no envelope on stdout: the spend is unknown (null), never 0 */ }
+        reject(failed);
+      });
       child.stdin.on("error", (e) => { reject(new EngineError("exit", reported, `claude closed its input: ${e.message}`)); });
       child.stdin.end(req.prompt);
     }).finally(() => rm(dir, { recursive: true, force: true }).catch(() => {}));
 
-    let envelope: { structured_output?: unknown; result?: unknown };
+    let envelope: { structured_output?: unknown; result?: unknown; stop_reason?: unknown; is_error?: unknown; subtype?: unknown };
     try { envelope = JSON.parse(out); } catch { throw new EngineError("exit", reported, `claude answered without its JSON envelope: ${out.slice(0, 200)}`); }
+    // why the turn ended is read before the answer is: a ceiling or a refusal is not a malformed answer (unattempted-is-not-failed)
+    const stop = stopOf(envelope);
+    if (stop) { const e = new EngineError(stop.kind, reported, stop.why); e.usage = usageOf(envelope); throw e; }
     // With --json-schema the CLI has already parsed the answer; otherwise it is the model's text.
     return { raw: envelope.structured_output ?? envelope.result, provider: reported, audit: out.slice(0, 2000), usage: usageOf(envelope) };
   },

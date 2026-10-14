@@ -57,6 +57,42 @@ test('case b: a throwing provider is ok false / exit; a provider past its timeou
  assert(!fs.readFileSync(LEDGER,'utf8').includes('boom'));
 });
 
+// ---- architect 2026-10-15 (model-call-outcome-integrity): what a finished call may claim about itself
+const USE={tokens:{input:10,output:20,cacheRead:null,cacheWrite:null},notionalUsd:0.002};
+test('case b2: an answer outside the schema is booked as shape with the spend it cost, never as ok',async()=>{
+ stub('stub','Sure! Here is prose.',{usage:USE});
+ await assert.rejects(()=>text({system:'s',prompt:'p',schema:{type:'object',properties:{hint:{type:'string'}},required:['hint']},use:'hint'}),(e)=>e instanceof EngineError&&e.kind==='shape');
+ const r=rows();assert.equal(r.length,1);
+ assert.deepEqual([r[0].ok,r[0].error,r[0].use],[false,'shape','hint']);
+ assert.deepEqual(r[0].tokens,USE.tokens,'the failed answer was still paid for, and the row says what it cost');
+});
+test('case b3: a provider that fails after reporting its usage has that usage on the failure row (spend precedes the error)',async()=>{
+ reg.useProvider('text',{name:'stub',run:async()=>{const e=new EngineError('exit','stub','exited 1');e.usage=USE;throw e;}});
+ await assert.rejects(()=>text({system:'s',prompt:'p',use:'hint'}),(e)=>e.kind==='exit');
+ const [r]=rows();assert.deepEqual([r.ok,r.error],[false,'exit']);assert.deepEqual(r.tokens,USE.tokens);
+});
+test('case b4: a cut-off or declined attempt is its own kind on the row and to the caller, never shape',async()=>{
+ for(const kind of ['cutoff','declined']){
+  fs.rmSync(LEDGER,{force:true});
+  reg.useProvider('text',{name:'stub',run:async()=>{const e=new EngineError(kind,'stub','stopped');e.usage=USE;throw e;}});
+  await assert.rejects(()=>text({system:'s',prompt:'p',schema:{type:'object'},use:'hint'}),(e)=>e instanceof EngineError&&e.kind===kind);
+  const [r]=rows();assert.deepEqual([r.ok,r.error],[false,kind]);assert.deepEqual(r.tokens,USE.tokens);
+ }
+});
+test('case b5: the claude envelope is read for why the turn ended before its answer is',()=>{
+ const {stopOf}=load('engines/text.ts');
+ assert.deepEqual(stopOf({stop_reason:'end_turn'}),null);assert.deepEqual(stopOf({stop_reason:'stop_sequence'}),null);
+ assert.equal(stopOf({stop_reason:'max_tokens'}).kind,'cutoff');
+ assert.equal(stopOf({stop_reason:'refusal'}).kind,'declined');
+ assert.equal(stopOf({is_error:true,subtype:'error_during_execution'}).kind,'exit');
+ assert.match(stopOf({is_error:true,subtype:'error_during_execution'}).why,/error_during_execution/);
+});
+test('case b6: the job and smoke copy name every kind, and a cut-off is never worded as an answer in pieces',()=>{
+ const {jobError}=load('desk/job.ts');
+ const cut=jobError('hint',new EngineError('cutoff','stub','x')),no=jobError('hint',new EngineError('declined','stub','x')),shape=jobError('hint',new EngineError('shape','stub','x'));
+ assert.notEqual(cut,shape);assert.notEqual(no,shape);assert.doesNotMatch(cut,/pieces/);assert.doesNotMatch(no,/pieces/);
+});
+
 test('case c: a shorten re-ask gives two rows, try 1 and try 2, with the same use',async()=>{
  let n=0;
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({hint:n++===0?'far too long a hint':'ok'})})});

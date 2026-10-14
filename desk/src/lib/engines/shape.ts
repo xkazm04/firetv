@@ -123,12 +123,20 @@ export function cutLong(value: unknown, s: JSONSchema): unknown {
  */
 export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number; use?: string }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
   const started = Date.now(), deadline = deadlineFor(kind, p, req);
-  const { answer: a, provider: name } = await call(kind, p, req);
   const s = req.accept ?? req.schema;
-  const value = parse(a.raw, s, name);
-  const broken = s ? validate(value, s) : [];
-  if (!broken.length) return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit };
-  const first = outside(name, broken);
+  // the answer is parsed and held to the schema inside call(), so the ledger row says shape when it is (call.ts accept)
+  let value: unknown, broken: Break[] = [], name = "";
+  let first: EngineError;
+  try {
+    const { answer: a } = await call(kind, p, req, 1, undefined, (got, provider) => {
+      name = provider; value = parse(got.raw, s, provider); broken = s ? validate(value, s) : [];
+      if (broken.length) throw outside(provider, broken);
+    });
+    return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit };
+  } catch (e) {
+    if (!(e instanceof EngineError) || e.kind !== "shape" || !broken.length) throw e;
+    first = e;
+  }
   if (!req.shorten || typeof req.prompt !== "string" || !onlyTooLong(broken)) throw first;
   const named = broken.map(([path, why]) => `${path || "(answer)"} is ${why}`).join("; ");
   console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
@@ -136,14 +144,15 @@ export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSch
   const remaining = deadline - (Date.now() - started);
   if (remaining <= 0) throw first;
   try {
-    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, 2, remaining);
-    const second = parse(b.raw, s, again), left = s ? validate(second, s) : [];
-    if (left.length && onlyTooLong(left)) {
-      const cut = cutLong(second, s!);
-      if (!validate(cut, s!).length) return { json: cut as T, provider: again, ms: Date.now() - started, raw: b.audit };
-    }
-    if (left.length) throw outside(again, left);
-    return { json: second as T, provider: again, ms: Date.now() - started, raw: b.audit };
+    // the second answer, or its word-boundary cut when only lengths still break; anything else is a shape row for try 2
+    let kept: unknown;
+    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, 2, remaining, (got, provider) => {
+      const second = parse(got.raw, s, provider), left = s ? validate(second, s) : [];
+      kept = second;
+      if (left.length && onlyTooLong(left)) { const cut = cutLong(second, s!); if (!validate(cut, s!).length) { kept = cut; return; } }
+      if (left.length) throw outside(provider, left);
+    });
+    return { json: kept as T, provider: again, ms: Date.now() - started, raw: b.audit };
   } catch (e) {
     // a second answer that is still malformed leaves the first, clearer rejection; a re-ask that timed out, exited or
     // could not be reached is that, as the ledger row for try 2 already says - never relabelled as the first's shape

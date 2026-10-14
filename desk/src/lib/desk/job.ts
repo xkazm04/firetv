@@ -59,6 +59,8 @@ const WHY: Record<EngineErrorKind, string> = {
   unreachable: "The engine behind it is not answering.",
   exit: "The engine behind it stopped part way.",
   shape: "The answer came back in pieces.",
+  cutoff: "The answer ran past its length limit.",
+  declined: "The engine would not answer that one.",
 };
 /** A read that came back with nothing on the page: the job fails with this, and Try again reads the same page again. */
 export const EMPTY_READ = "The desk found nothing to read on that page. Try again.";

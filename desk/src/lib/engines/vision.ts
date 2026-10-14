@@ -50,6 +50,8 @@ export const ollamaVision: Provider<VisionRequest, unknown> = {
     if (!res.ok) throw new EngineError("exit", reported, `ollama ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const data = await res.json();
     const content: string = data.message?.content ?? "";
+    // ollama names why it stopped: "length" is a ceiling, not a malformed answer (unattempted-is-not-failed)
+    if (data.done_reason === "length") throw new EngineError("cutoff", reported, "ollama stopped at its length limit before the answer was finished");
     return { raw: content, provider: reported, audit: content.slice(0, 2000) };
   },
   probe: () => ollamaProbe(HOST, MODEL),

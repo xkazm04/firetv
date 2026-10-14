@@ -39,6 +39,8 @@ const WHY: Record<EngineErrorKind, string> = {
   unreachable: "It is not answering.",
   exit: "It stopped part way.",
   shape: "It answered in pieces.",
+  cutoff: "It was cut off at a limit.",
+  declined: "It declined to answer.",
 };
 
 const NO_PROBE = "No probe for this one: add ?live=1 to run it for real.";
