@@ -90,7 +90,9 @@ test('5: the spine is small and carries no examples or answers - exactly the eig
  assert.ok(Buffer.byteLength(json,'utf8')<24*1024,`CALC1_SPINE serialises to ${Buffer.byteLength(json,'utf8')} bytes`);
  for(const t of CALC1_SPINE){
   assert.ok(!('examples' in t)&&!('answer' in t),`${t.id} carries examples or an answer`);
-  assert.deepEqual(Object.keys(t).sort(),SPINE_KEYS,`${t.id}: exactly the spine fields`);
+  // MB-B30: a topic may also name a structural requirement (calc1-chain: composition), and nothing else
+  assert.deepEqual(Object.keys(t).filter(k=>k!=='requires').sort(),SPINE_KEYS,`${t.id}: exactly the spine fields`);
+  if('requires' in t)assert.equal(t.requires,'composition',`${t.id}: a requirement rules/calc checks`);
  }
  assert.doesNotMatch(json,/"(examples|answer)"\s*:/,'no examples or answer key anywhere in the spine');
 });

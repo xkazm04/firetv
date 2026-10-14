@@ -609,3 +609,17 @@ test('MB-B38: the forgot-chain verdict reaches the phone and TV line on calc1-ch
  const r=M.settleSpec(3,{shape:'derivative',f:'sin(x^2)'},'2x cos(x^2)','forgot-chain','calc1-chain');
  assert.equal(r.verdict,'right');assert.equal(r.slip,undefined);
 });
+
+test('MB-B30: a composition is read by the same sites the forgot-chain check uses - an outside function of an inside that is neither x nor x + c',()=>{
+ for(const f of ['sin(x^2)','(2x + 1)^3','e^(3x)','sqrt(1 + x^2)','ln(x^2 + 1)','cos(x)^2','3sin(2x) + x','x^2 e^(-x)','tan(5x)','2^(x^2)'])assert.equal(C.isComposition(f),true,f);
+ // no inside at all, an inside of x, an inside of x + c (no chain factor to show), a product or quotient of plain pieces
+ for(const f of ['x^3 + 2x','sin(x)','e^x','ln(x)','sqrt(x)','(x + 1)^3','sin(x + pi/4)','(x^2 + 1)(x - 3)','x/(x^2 + 1)','x sin(x)','x^^2',''])assert.equal(C.isComposition(f),false,f);
+ // a requirement on a spec: none passes anything, composition reads the spec's function, an unknown name passes nothing
+ assert.deepEqual([...C.CALC_REQUIREMENTS],['composition']);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'x^2'}),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'sin(x^2)'},'composition'),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'x^2 + 1'},'composition'),false);
+ assert.equal(C.meetsRequirement({shape:'derivative-at',f:'(3x - 1)^4',at:1},'composition'),true);
+ assert.equal(C.meetsRequirement({shape:'derivative',f:'sin(x^2)'},'nope'),false);
+ assert.equal(C.meetsRequirement(null,'composition'),false);
+});

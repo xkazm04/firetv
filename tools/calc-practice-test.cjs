@@ -321,3 +321,49 @@ test('M3a 4: the route asks for the word problem unless the body says word: fals
  // no screen or phone code sends word
  for(const f of ['tv/keys.ts','tv/screens.tsx','maths/MathsTV.tsx','app/phone/page.tsx'])assert.doesNotMatch(fs.readFileSync(src(f),'utf8'),/word:\s*(false|0)/,f);
 });
+
+// ------------------------------------------------------------------ MB-B30: a chain-rule set is compositions only
+
+const P=require(src('lib/library/paths.ts'));
+const COMPOSITE=[S('derivative','sin(x^2)',{},1),S('derivative','(2x + 1)^3',{},1),S('derivative','e^(3x)',{},2),S('derivative','sqrt(1 + x^2)',{},3),S('derivative','ln(x^2 + 1)',{},4),S('derivative','cos(x)^2',{},5)];
+const PLAIN=[S('derivative','x^3 + 2x',{},1),S('derivative','(x^2 + 1)(x - 3)',{},2),S('derivative','x/(x^2 + 1)',{},3),S('derivative','(x + 1)^3',{},2)];
+
+test('MB-B30 1: calc1-chain names the composition requirement on its definition, and it is one rules/calc checks; no other topic names one',()=>{
+ assert.equal(CALC1_SPINE.find((t)=>t.id==='calc1-chain').requires,'composition');
+ assert.equal(P.requirementOfTopic('calc1-chain'),'composition');
+ for(const t of CALC1_SPINE.filter((x)=>x.id!=='calc1-chain')){assert.equal('requires' in t,false,t.id);assert.equal(P.requirementOfTopic(t.id),undefined,t.id);}
+ for(const t of P.calcTopics())if(t.requires)assert.ok(C.CALC_REQUIREMENTS.includes(t.requires),`${t.id}: ${t.requires}`);
+ assert.equal(P.requirementOfTopic('linear-one-step'),undefined,'a school topic names none');
+});
+
+test('MB-B30 2: a stubbed reply mixing compositions and plain functions on calc1-chain makes a set of the compositions only, easy to hard',async()=>{
+ seat();
+ stub({specs:[PLAIN[0],COMPOSITE[0],COMPOSITE[1],PLAIN[1],COMPOSITE[2],COMPOSITE[3],PLAIN[2],COMPOSITE[4],COMPOSITE[5]]});
+ const made=await makeItems('calc1-chain',LEARNER,6,{word:false});
+ assert.equal(seen.length,1,'six compositions in the first round: one call');
+ assert.deepEqual(made.items.map((i)=>i.question),byEase(COMPOSITE).map(questionOf));
+ for(const it of made.items)assert.ok(C.isComposition(it.spec.f),it.question);
+});
+
+test('MB-B30 3: a first round short of compositions asks again, and a set still short after two rounds ships what it kept, exactly as a malformed drop does',async()=>{
+ seat();
+ stub({specs:[...PLAIN,COMPOSITE[0],COMPOSITE[1],COMPOSITE[2]]},{specs:[PLAIN[0],COMPOSITE[3],COMPOSITE[4],COMPOSITE[5]]});
+ const made=await makeItems('calc1-chain',LEARNER,6,{word:false});
+ assert.equal(made.tries,2);assert.equal(seen[1].schema.properties.specs.maxItems,6,'n - have + 3');
+ for(const c of COMPOSITE.slice(0,3))assert.ok(seen[1].prompt.includes(questionOf(c)),`round two avoids ${questionOf(c)}`);
+ assert.deepEqual(made.items.map((i)=>i.question),byEase(COMPOSITE).map(questionOf));
+ // plain functions only, twice: no set at all, the route's 502 path
+ stub({specs:PLAIN},{specs:PLAIN});
+ assert.equal((await post({topic:'calc1-chain'})).status,502);
+ // two compositions in two rounds: the set holds the two, as any short set does
+ stub({specs:[...PLAIN,COMPOSITE[0]]},{specs:[PLAIN[1],COMPOSITE[1]]});
+ assert.deepEqual((await makeItems('calc1-chain',LEARNER,6,{word:false})).items.map((i)=>i.question),[COMPOSITE[0],COMPOSITE[1]].map(questionOf));
+});
+
+test('MB-B30 4: a topic with no requirement keeps a plain function, and the request on calc1-chain is the one it sent before',async()=>{
+ seat();
+ stub({specs:[...PLAIN.slice(0,3),S('derivative','5x^2 - 3x + 7',{},1),S('derivative','3x^4 - x^2',{},2),S('derivative','x^5',{},3)]});
+ assert.equal((await makeItems('calc1-rules',LEARNER,6,{word:false})).items.length,6,'calc1-rules keeps plain derivatives');
+ stub({specs:COMPOSITE});await makeItems('calc1-chain',LEARNER,6,{word:false});
+ assert.doesNotMatch(seen[0].prompt,/composition/i,'the check is code\'s; the prompt is unchanged (tools/calc-sets-frozen.json)');
+});

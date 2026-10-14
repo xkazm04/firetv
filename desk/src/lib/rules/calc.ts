@@ -505,6 +505,34 @@ function chainSites(root: Node): { at: Node; inner: Node }[] {
   return out;
 }
 
+// ------------------------------------------------------------------ a topic's structural requirement (MB-B30)
+
+/**
+ * The structural requirements a Calculus topic may name on its definition (the spine's `requires`), each checked in code
+ * on every spec a set keeps: 'composition' - the function has a composition site (chainSites, the same sites the
+ * forgot-chain check reads), so a chain-rule question really asks for the chain rule.
+ */
+export const CALC_REQUIREMENTS = ["composition"] as const;
+export type CalcRequirement = (typeof CALC_REQUIREMENTS)[number];
+
+/**
+ * True when a function in the plain notation is a composition with a chain factor to show: an outside function of an
+ * inside that is neither x nor x + c (sin(x^2), (2x + 1)^3, e^(3x)); false for sin(x), (x + 1)^3, a product or quotient
+ * of plain pieces, and anything the desk cannot read.
+ */
+export function isComposition(f: string): boolean {
+  const e = typeof f === "string" ? compile(f) : null;
+  return !!e && chainSites(e.node).length > 0;
+}
+
+/** Does a spec meet a topic's requirement: always with none, never for an unknown name or a spec with no function. */
+export function meetsRequirement(spec: unknown, requirement?: string): boolean {
+  if (requirement === undefined) return true;
+  const f = spec && typeof spec === "object" ? (spec as { f?: unknown }).f : undefined;
+  if (typeof f !== "string") return false;
+  return requirement === "composition" ? isComposition(f) : false;
+}
+
 /** The tree with each site's inside frozen near x0: inside(x0) + (x - x0), so its derivative there is 1 and its value the same. */
 function frozen(n: Node, sites: Map<Node, Node>, x0: number): Node {
   const inner = sites.get(n);

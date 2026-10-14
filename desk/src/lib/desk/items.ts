@@ -35,9 +35,9 @@ import { notesBlock } from "./memory";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem, SchoolSystem } from "../session/store";
-import { calcWordsOf, pathOfTopic, shapesOfTopic, topicIn } from "../library/paths";
+import { calcWordsOf, pathOfTopic, requirementOfTopic, shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
-import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import { CALC_SLIPS, leaksCalc, meetsRequirement, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
 import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, storyOf, topGeneratorFor, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
@@ -290,9 +290,10 @@ const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
 
 /**
  * A Calculus 1 set: at most n + 3 specs asked for (the topic's own shapes, typed parameters, a difficulty, no result
- * anywhere), each kept only when it is on the topic's list, well formed (rules/calc), printable, not stating its own
- * result in its question, and not a question already kept; then ordered by difficulty and the expression's length,
- * and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
+ * anywhere), each kept only when it is on the topic's list, well formed (rules/calc), meets the topic's structural
+ * requirement if it names one (MB-B30: calc1-chain keeps compositions only, rules/calc meetsRequirement), printable,
+ * not stating its own result in its question, and not a question already kept; then ordered by difficulty and the
+ * expression's length, and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
  * { n, question: the printed question, spec } - the spec carries only what the question prints.
  */
 async function makeCalcItems(topicId: string, learnerId: string, n: number, word?: boolean | number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
@@ -300,6 +301,7 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
   const memory = me.memory;
   const slips = me.skills[topicId]?.slips ?? [];
   const shapes = shapesOf(topicId);
+  const requires = requirementOfTopic(topicId);
   const kept: { spec: CalcSpec | Calc2Spec; question: string; difficulty: number }[] = [];
   const seen = new Set<string>();
   let provider = "";
@@ -316,6 +318,8 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
       const c = toSpec(raw, shapes);
       // wellFormed first: question() is only asked of a spec the desk can read whole
       if (!c || !wellFormed(c.spec).ok) continue;
+      // the topic's own structural requirement (MB-B30: a chain-rule function is a composition), dropped like a malformed spec
+      if (!meetsRequirement(c.spec, requires)) continue;
       const q = printed(c.spec);
       // a question that prints its own result (differentiate e^x) is no question
       if (!q || leaksCalc(c.spec, q.plain)) continue;

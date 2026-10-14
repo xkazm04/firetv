@@ -33,7 +33,11 @@ The Calculus 1 course itself (its source, its 22 topics, the reader baseline and
 says how the path's items are judged: `'school'` (a unit with a code generator is a school item, any other topic a
 linear one) or `'calc'` (every topic is a Calculus item on its own shapes). Each `PathTopic` has an id, a name, a
 strand, a blurb, its prerequisites (earlier topics of the same path), on the school path only a lesson id and a `year`
-per school system, and on a path judged `'calc'` only its practice `shapes` (the spine's own list).
+per school system, and on a path judged `'calc'` only its practice `shapes` (the spine's own list) and, where the spine
+names one, a structural `requires` (MB-B30): `calc1-chain` requires `'composition'`, so a set on it keeps only a spec
+whose function has a chain factor to show (`rules/calc` `meetsRequirement`, read off the same composition sites as the
+forgot-chain check; sin(x) and (x + 1)^3 are not compositions there). A spec that fails it is dropped like a malformed
+one, the second round asks for what is missing, and a set still short ships what it kept, as any short set does.
 
 | path | name | topics | `school` | `judge` | built from |
 |---|---|---|---|---|---|

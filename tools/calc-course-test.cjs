@@ -66,6 +66,9 @@ const TABLE=[
  R('calc1-trig-derivatives',3,{shape:'derivative',f:'tan(x) + cos(x)'},'1/cos(x)^2 - sin(x)','1 + sin(x)'),
  R('calc1-chain',2,{shape:'derivative',f:'(2x + 1)^3'},'6(2x + 1)^2','3(2x + 1)^2'),
  R('calc1-chain',3,{shape:'derivative',f:'sin(x^2)'},'2x cos(x^2)','cos(x^2)'),
+ // MB-B30: calc1-chain keeps compositions only, and the other topics' derivatives the stub adds are not, so it has four of its own
+ R('calc1-chain',1,{shape:'derivative',f:'e^(3x)'},'3e^(3x)','e^(3x)'),
+ R('calc1-chain',4,{shape:'derivative',f:'sqrt(x^2 + 1)'},'x/sqrt(x^2 + 1)','1/(2sqrt(x^2 + 1))'),
  R('calc1-log-derivative',4,{shape:'derivative',f:'ln(x)/x'},'1/x^2 - ln(x)/x^2','1/x'),
  R('calc1-log-derivative',2,{shape:'derivative-at',f:'x e^x',at:0},'e^0','0'),
  R('calc1-related-rates',3,{shape:'derivative-at',f:'(4/3) pi x^3',at:3},'pi*36','12pi'),
@@ -99,8 +102,8 @@ const questionOf=(spec)=>C.question(spec).plain;
 const byQuestion=new Map(TABLE.map((r)=>[questionOf(r.spec),r]));
 /** What the stub returns for a topic: its own specs first, then the table's others of shapes on its list - at most n + 3. */
 const specsFor=(topic)=>[...TABLE.filter((r)=>r.topic===topic),...TABLE.filter((r)=>r.topic!==topic&&shapesOf(topic).includes(r.spec.shape))].slice(0,9);
-/** The set the desk should make of them: easy to hard - difficulty, then the function's length - the first six. */
-const expectedSet=(topic)=>[...specsFor(topic)].sort((a,b)=>a.difficulty-b.difficulty||a.spec.f.length-b.spec.f.length).slice(0,6);
+/** The set the desk should make of them: those meeting the topic's requirement (MB-B30), easy to hard - difficulty, then the function's length - the first six. */
+const expectedSet=(topic)=>specsFor(topic).filter((r)=>C.meetsRequirement(r.spec,P.requirementOfTopic(topic))).sort((a,b)=>a.difficulty-b.difficulty||a.spec.f.length-b.spec.f.length).slice(0,6);
 
 // ------------------------------------------------------------------ the typeset check (as tools/calc-practice-test.cjs)
 const UNI={'⁰':'0','¹':'1','²':'2','³':'3','⁴':'4','⁵':'5','⁶':'6','⁷':'7','⁸':'8','⁹':'9','ˣ':'x','ⁿ':'n','₀':'0','₁':'1','₂':'2','₃':'3','ₙ':'n','½':'12','¼':'14','¾':'34','⅓':'13'};

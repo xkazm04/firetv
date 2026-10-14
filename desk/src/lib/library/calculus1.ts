@@ -213,7 +213,7 @@ export const CALCULUS_1 = {
     url: "https://www.math.columbia.edu/programs-math/undergraduate-program/calculus-classes/calculus-i/calculus-1-sample-syllabus",
     textbook: "James Stewart, Calculus: Early Transcendentals, 9th edition",
   },
-  topics: CALC1_SPINE.map(({ shapes: _shapes, ...spine }): CalcTopic => ({ ...spine, examples: EXAMPLES[spine.id] ?? [] })),
+  topics: CALC1_SPINE.map(({ shapes: _shapes, requires: _requires, ...spine }): CalcTopic => ({ ...spine, examples: EXAMPLES[spine.id] ?? [] })),
   /** The syllabus's review and midterm sessions: no topic of their own. */
   nonTopicSessions: [8, 9, 21, 22, 28],
 };

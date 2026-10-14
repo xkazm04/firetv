@@ -38,6 +38,8 @@ export interface PathTopic {
   year?: { us: number; uk: number; cz: number; de: number };
   /** The practice shapes the Calculus engine may set - topics of a path judged 'calc' only, the spine's own list. */
   shapes?: (CalcShape | Calc2SpecShape)[];
+  /** A structural requirement every practice spec must meet (MB-B30), from the spine - Calculus topics only, and few of them. */
+  requires?: "composition";
 }
 
 /**
@@ -87,7 +89,7 @@ export const PATHS: Record<MathPath, PathInfo> = {
     school: false,
     judge: "calc",
     calcWords: { desk: "Calculus 1", course: "Calculus I", methods: "limits, the derivative rules, antiderivatives and the Fundamental Theorem" },
-    topics: CALC1_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice() })),
+    topics: CALC1_SPINE.map((t): PathTopic => ({ id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq, shapes: t.shapes.slice(), ...(t.requires ? { requires: t.requires } : {}) })),
   },
   calc2: {
     id: "calc2",
@@ -140,6 +142,11 @@ export function calcTopics(): PathTopic[] {
 /** A Calculus topic's practice shapes (a copy); empty for a topic on no path judged 'calc'. */
 export function shapesOfTopic(id: string): (CalcShape | Calc2SpecShape)[] {
   return judgeOfTopic(id) === "calc" ? (topicIn(id)?.shapes?.slice() ?? []) : [];
+}
+
+/** A Calculus topic's structural requirement (rules/calc meetsRequirement checks it on each spec); undefined for most topics. */
+export function requirementOfTopic(id: string): "composition" | undefined {
+  return judgeOfTopic(id) === "calc" ? topicIn(id)?.requires : undefined;
 }
 
 export function topicsOf(path: MathPath): PathTopic[] {
