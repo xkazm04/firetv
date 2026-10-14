@@ -388,7 +388,11 @@
           "revision": 43,
           "changedAt": "2026-10-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/english/conversation.ts:346 The Linga conversation tutor constructs prompts through ad-hoc object merging and string interpolation without an owned, budgeted layered assembler or prompt fingerprinting.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "mcp-tools",
@@ -634,7 +638,11 @@
           "revision": 43,
           "changedAt": "2026-10-02",
           "confidence": "probable",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/desk/hint.ts:166 The desk pipelines assemble prompts via ad-hoc string concatenation and late call-site string appending (`prompt + extra`) rather than through an owned, budgeted, and sealed layered prompt assembler.",
+          "evaluatedAt": "2026-10-14",
+          "evaluatedAgainst": "sha256-b2:ad13b2ee69c25e8d",
+          "evaluatedRevision": 44
         },
         {
           "subject": "client-fetch-cache",
