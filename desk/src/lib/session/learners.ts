@@ -316,7 +316,7 @@ export function saveEnglish(id: string, english: EnglishLearning): void {
  * `tier` as code set it. The record is chosen by `stretch` alone - a step-up set holds tier-1 items too, and each of its
  * attempts counts toward the step-up record - so the tier is carried for the caller's sake and never read as a lever.
  */
-export interface AttemptSet { stretch?: boolean; tier?: 1 | 2; /** the slips the item shows (school items only): a usual right attempt counts toward rubbing them out */ shows?: string[] }
+export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 | 3; /** the slips the item shows (school items only): a usual right attempt counts toward rubbing them out */ shows?: string[] }
 
 /**
  * One attempt at one topic. The estimate moves 30% of the way toward the outcome (1 right,

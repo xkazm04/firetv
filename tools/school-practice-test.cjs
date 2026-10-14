@@ -214,7 +214,8 @@ test('6: the store cleans a school spec by its own rules - an answer key stops, 
  for(const bad of [{shape:'compute',expr:'3/4 +'},{shape:'compute',expr:'3/0 + 1/2'},{shape:'compute',expr:'1/2 - 3/4'},{shape:'compute',expr:'3/4 + 1/6',form:'fancy'},{shape:'compute',expr:'3/4 + 1/6',unit:'parsec'},{shape:'compute',expr:'3/4 + 1/6',allowNegative:false},{shape:'compute'},{shape:'percent',expr:'25% of 80'}]){
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
- assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:3}).tier,undefined,'a tier is 1 or 2');
+ assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:4}).tier,undefined,'a tier is 1, 2 or 3 (MB-B20: 3 is the top rung of a step up)');
+ assert.equal(put({shape:'compute',expr:'1 3/4 + 2/3'},{tier:3}).tier,3,'the top rung tier is kept');
  assert.equal(put({shape:'compute',expr:'3/4 + 1/6'},{tier:'2'}).tier,undefined);
  // the Calculus spec keeps exactly what it kept before W5b
  const calc={shape:'limit',f:'sin(3x)/x',at:0,side:'+',answer:'3'};

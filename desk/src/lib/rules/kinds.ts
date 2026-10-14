@@ -133,10 +133,10 @@ export function judgeItem(item: { n: number; question: string; spec?: unknown },
  * (math-buddy-A): the slips a school item's spec shows, by code (rules/slips slipsShown) - what a right answer here counts
  * toward rubbing out; absent on a linear or Calculus item and on one that shows none.
  */
-export interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2; shows?: string[] }
+export interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2 | 3; shows?: string[] }
 /** How an item was set, as its attempt carries it: the step-up flag and the tier, both code's own (absent is a usual item). */
-const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 } => ({
-  ...(item.stretch === true ? { stretch: true } : {}), ...(item.tier === 1 || item.tier === 2 ? { tier: item.tier } : {}),
+const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 | 3 } => ({
+  ...(item.stretch === true ? { stretch: true } : {}), ...(item.tier === 1 || item.tier === 2 || item.tier === 3 ? { tier: item.tier } : {}),
 });
 
 /** A set judged: its items as the desk keeps them, the attempts to record (settled items only) and how many it asked about. */

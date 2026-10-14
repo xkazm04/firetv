@@ -119,8 +119,8 @@ export interface PracticeItem {
    * shape is never read by school code, a school shape never by Calculus code.
    */
   spec?: CalcSpec | Calc2Spec | SchoolSpec;
-  /** A school item's tier (1 or 2), as the generator that wrote it was asked for: computed by code, never a model's number. */
-  tier?: 1 | 2;
+  /** A school item's tier (1 or 2; 3 the top rung of a step up, MB-B20), as the generator that wrote it was asked for: computed by code, never a model's number. */
+  tier?: 1 | 2 | 3;
   /**
    * Set by code when the set was asked for as "a step up" (Family W8, rules/stretch): marking records this item's attempt
    * on the step-up record only (lib/session/learners.ts `stretch`), never on the usual one. Absent is a usual item.
@@ -152,7 +152,7 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
  * A worked lesson (v2 M1, lib/desk/worked.ts): the idea (the model's words when `own`, else the authored one), the three
  * method steps, and examples written and answered by code. `owner` is the learner it was written for.
  */
-export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 }[]; owner?: string; }
+export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 | 3 }[]; owner?: string; }
 /** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
 
@@ -203,7 +203,7 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (verdict === "wrong" && (second === "right" || second === "wrong")) item.second = second;
   const sp = specShown(spec);
   if (sp) item.spec = sp;
-  if (sp && (tier === 1 || tier === 2)) item.tier = tier;
+  if (sp && (tier === 1 || tier === 2 || tier === 3)) item.tier = tier;
   // the step-up flag is code's own and only ever true: anything else on an event or an older file is a usual item
   if (stretch === true) item.stretch = true;
   // a part keeps its stem and letter together, or neither (junk on an event or an older file is a single item)

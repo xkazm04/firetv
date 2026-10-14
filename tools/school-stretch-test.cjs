@@ -50,10 +50,21 @@ function seat(patch={}){
 }
 const tiers=(items)=>items.map((i)=>i.tier);
 const twos=(items)=>items.filter((i)=>i.tier===2).length;
+/** The items above tier 1 (MB-B20: a top-rung unit's step up gives two of its tier-2 slots to tier 3). */
+const beyond=(items)=>items.filter((i)=>i.tier>=2).length;
+/** The tiers of a step-up set from the standard baseline: two, two and two on a unit with a top rung (MB-B20), else two and four. */
+const harderTiers=(unit)=>(S.topGeneratorFor(unit)?[1,1,2,2,3,3]:[1,1,2,2,2,2]);
 /** The usual record's own fields, as JSON: everything but the step-up record. */
 const usual=(rec)=>{if(!rec)return 'none';const {stretch,...rest}=rec;return JSON.stringify(rest);};
-/** A right answer to a generated a/b +- c/d, unsimplified (gen asks no simplest form). */
-const answerOf=(spec)=>{const m=/^(\d+)\/(\d+) ([-+]) (\d+)\/(\d+)$/.exec(spec.expr);assert.ok(m,spec.expr);const [a,b,c,d]=[+m[1],+m[2],+m[4],+m[5]];return `${m[3]==='+'?a*d+c*b:a*d-c*b}/${b*d}`;};
+/**
+ * A right answer to a generated a/b +- c/d, unsimplified (gen asks no simplest form); since MB-B20 also a top-rung item's, whose
+ * operands may be mixed numbers (w a/b) and whose expr may start with a story's id: worked here as improper fractions, by hand.
+ */
+const answerOf=(spec)=>{
+ const m=/^(?:[a-z]+ )?(?:(\d+) )?(\d+)\/(\d+) ([-+×÷]) (?:(\d+) )?(\d+)\/(\d+)$/.exec(spec.expr);assert.ok(m,spec.expr);
+ const [b,d]=[+m[3],+m[7]],a=(+(m[1]||0))*b+(+m[2]),c=(+(m[5]||0))*d+(+m[6]);
+ const [N,D]={'+':[a*d+c*b,b*d],'-':[a*d-c*b,b*d],'×':[a*c,b*d],'÷':[a*d,b*c]}[m[4]];return `${N}/${D}`;
+};
 
 // ------------------------------------------------------------------ 1. the baseline mix, by code
 test('1: the baseline mix - four and two when the unit is ahead of the learner\'s school year, three and three at or past it and when the year is unknown - across every unit, year and system',()=>{
@@ -95,16 +106,25 @@ test('1: the baseline mix - four and two when the unit is ahead of the learner\'
 test('2: a step-up set is strictly harder than the baseline for every unit with a generator, for every learner - still six distinct items, and no model call',async()=>{
  for(const unit of UNITS)for(const system of SYSTEMS)for(const age of [10,11,12,13,14,undefined]){
   const base=R.tierCounts(R.setMix(unit,{age,system},false)),up=R.tierCounts(R.setMix(unit,{age,system},true));
+  // MB-B20: with a top rung the harder counts move two tier-2 slots to tier 3 and keep tier 1; the easier and standard counts never hold tier 3
+  const top=!!S.topGeneratorFor(unit),upTop=R.tierCounts(R.setMix(unit,{age,system},true),6,top),baseTop=R.tierCounts(R.setMix(unit,{age,system},false),6,top);
+  assert.equal(upTop.tier1,up.tier1);assert.equal(upTop.tier1+upTop.tier2+(upTop.tier3??0),6);assert.equal(baseTop.tier3??0,0,`${unit}: a baseline never holds tier 3`);
+  assert.equal(upTop.tier3??0,top&&R.setMix(unit,{age,system},true)==='harder'?2:0,`${unit} ${system} ${age}: tier 3 only on a top unit's harder set`);
   assert.ok(up.tier2>base.tier2&&up.tier1+up.tier2===6,`${unit} ${system} ${age}: ${JSON.stringify(base)} -> ${JSON.stringify(up)}`);
  }
  seat();noModel();
  for(const unit of UNITS){
-  for(const [who,wantBase,wantUp] of [[{age:12,system:'uk'},null,null],[{age:10,system:'de'},null,null],[{},[1,1,1,2,2,2],[1,1,2,2,2,2]]]){
+  for(const [who,wantBase,wantUp] of [[{age:12,system:'uk'},null,null],[{age:10,system:'de'},null,null],[{},[1,1,1,2,2,2],harderTiers(unit)]]){
    const b=await makeItems(unit,LEARNER,6,who),u=await makeItems(unit,LEARNER,6,{...who,stretch:true});
    assert.equal(seen.length,0,'no engine was called');
    for(const r of [b,u]){assert.equal(r.provider,'code');assert.equal(r.tries,0);assert.equal(r.items.length,6,`${unit}: six items`);assert.equal(new Set(r.items.map((i)=>i.question)).size,6,`${unit}: six distinct`);
-    for(const it of r.items){assert.equal(S.unitOf(it.spec),unit,'the same unit: the mix, not new content');assert.ok(S.wellFormed(it.spec).ok);}}
-   assert.ok(twos(u.items)>twos(b.items),`${unit} ${JSON.stringify(who)}: ${tiers(b.items)} -> ${tiers(u.items)}`);
+    for(const it of r.items){assert.equal(S.unitOf(it.spec),unit,'the same unit (MB-B20: a top rung is new content inside it)');assert.ok(S.wellFormed(it.spec).ok);}}
+   assert.ok(beyond(u.items)>beyond(b.items),`${unit} ${JSON.stringify(who)}: ${tiers(b.items)} -> ${tiers(u.items)}`);
+   assert.ok(b.items.every((i)=>i.tier!==3),'a usual set never holds tier 3');
+   // MB-B20: a top unit's harder set holds mixed numbers and a word problem; every other unit's holds no tier 3
+   const threes=u.items.filter((i)=>i.tier===3);
+   if(S.topGeneratorFor(unit)&&tiers(u.items).includes(3)){assert.equal(threes.length,2);assert.ok(threes.every((i)=>/\d \d+\//.test(i.question)),`${unit}: mixed numbers`);assert.ok(threes.some((i)=>S.storyOf(i.spec)),`${unit}: a word problem`);}
+   else assert.equal(threes.length,0,`${unit}: no top rung`);
    if(wantBase){assert.deepEqual(tiers(b.items),wantBase);assert.deepEqual(tiers(u.items),wantUp);}
    assert.ok(b.items.every((i)=>!('stretch' in i)),'a usual item carries no flag');
    assert.ok(u.items.every((i)=>i.stretch===true),'every step-up item carries the flag beside its tier');
@@ -113,7 +133,8 @@ test('2: a step-up set is strictly harder than the baseline for every unit with 
  // the pure writer at each rung, from one seed
  assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11,'easier').items),[1,1,1,1,2,2]);
  assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11).items),[1,1,1,2,2,2],'the default is the standard mix');
- assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11,'harder',true).items),[1,1,2,2,2,2]);
+ assert.deepEqual(tiers(makeSchoolItems(UNIT,6,11,'harder',true).items),[1,1,2,2,3,3],'MB-B20: the top rung on add and subtract fractions');
+ assert.deepEqual(tiers(makeSchoolItems('pct-change',6,11,'harder',true).items),[1,1,2,2,2,2],'a unit with no top rung: two and four as before');
 });
 
 test('2b: the practice route writes a step up from the seated profile\'s year - the set and each item flagged, zero calls - and a usual set exactly as before',async()=>{
@@ -122,7 +143,7 @@ test('2b: the practice route writes a step up from the seated profile\'s year - 
  assert.equal(r.status,200);assert.deepEqual(await r.json().then((b)=>[b.items,b.provider,b.tries]),[6,'code',0]);
  assert.equal(seen.length,0,'the engine was never reached');
  let p=store.getSession().practice;
- assert.equal(p.stretch,true);assert.deepEqual(tiers(p.items),[1,1,2,2,2,2],'a UK Year 8 on a Year 6 unit: a step up from three and three');
+ assert.equal(p.stretch,true);assert.deepEqual(tiers(p.items),[1,1,2,2,3,3],'a UK Year 8 on a Year 6 unit: a step up from three and three, its top rung two of six (MB-B20)');
  assert.ok(p.items.every((i)=>i.stretch===true));
  assert.deepEqual(store.getSession().jobs.practice.input,{topic:UNIT,stretch:1},'a failed step up is retried as a step up (a job input keeps numbers)');
  r=await post('practice',{topic:UNIT});p=store.getSession().practice;
@@ -328,6 +349,6 @@ test('8: Get ready for school end to end - the keys\' own call writes the usual 
   const n=store.getSession(),p=n.practice;
   assert.equal(n.screen,'practice');assert.equal(p.topic,UNIT);
   assert.equal(p.stretch===true,flag);assert.ok(p.items.every((i)=>(i.stretch===true)===flag));
-  assert.deepEqual(tiers(p.items),flag?[1,1,2,2,2,2]:[1,1,1,2,2,2]);
+  assert.deepEqual(tiers(p.items),flag?[1,1,2,2,3,3]:[1,1,1,2,2,2]);
  }
 });

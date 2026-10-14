@@ -40,7 +40,7 @@ import { kindOfTopic } from "../rules/kinds";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import type { Calc2Spec, Calc2SpecShape } from "../rules/calc2";
 import { drawWord, wordItems, wordTemplateFor } from "../rules/calc-word";
-import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
+import { SCHOOL_UNIT_SLIPS, generatorFor, leaksSchool, question as schoolQuestion, slipShows, storyOf, topGeneratorFor, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 import { setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
 
@@ -337,6 +337,21 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number, word
 
 // ------------------------------------------------------------------ school units: written by code, no model call
 
+/**
+ * The tiers a set draws, in order, with how many of each (rules/stretch tierCounts): tier 1 and tier 2, and tier 3 on a
+ * unit with a top rung (MB-B20) when the rung asks for any. Tiers with none are left out.
+ */
+function tierPlan(topicId: string, mix: Mix, n: number): [1 | 2 | 3, number][] {
+  const { tier1, tier2, tier3 = 0 } = tierCounts(mix, n, !!topGeneratorFor(topicId));
+  return ([[1, tier1], [2, tier2], [3, tier3]] as [1 | 2 | 3, number][]).filter(([t, want]) => t !== 3 || want > 0);
+}
+/** One spec for a seed and a tier: tiers 1 and 2 from the unit's generator (in the learner's money), tier 3 from its top rung. */
+function drawerFor(topicId: string, system?: SchoolSystem): ((seed: number, tier: 1 | 2 | 3) => SchoolSpec | null) | null {
+  const make = generatorFor(topicId), top = topGeneratorFor(topicId);
+  if (!make) return null;
+  return (seed, tier) => (tier === 3 ? (top ? top(seed) : null) : make(seed, tier, system));
+}
+
 /** The seeds one set may try per tier before it stops: far more than a unit's generator needs for three distinct items. */
 const SCHOOL_TRIES = 400;
 /** A fresh seed for a set: any whole number the generators take (0 .. 2^32 - 1). */
@@ -359,21 +374,26 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  *
  * `system` (MB-B4): the learner's school system. The generator's money is the system's own (Kč in cz, € in de, £ in uk) and
  * each question is printed in the system's writing (a decimal comma in cz and de); none prints the set as it always was.
+ *
+ * MB-B20: on a unit with a top rung (rules/school TOP_TIER_GENERATORS) a "harder" set holds tier-3 items too (rules/stretch
+ * tierCounts with `top`): mixed numbers, and at least one of them a word problem (the last tier-3 slot takes only a story
+ * while none is kept). Every other set asks for no tier 3 and is drawn exactly as before.
  */
 export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
   const t0 = Date.now();
   const own = Object.prototype.hasOwnProperty.call(SCHOOL_UNIT_SLIPS, topicId) ? SCHOOL_UNIT_SLIPS[topicId] : [];
   const live = (Array.isArray(aim) ? aim : []).filter((id): id is string => typeof id === "string" && own.includes(id));
   if (live.length) return aimedSchoolItems(topicId, n, seed, mix, stretch, live, t0, system);
-  const make = generatorFor(topicId);
-  const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 }[] = [];
+  const draw = drawerFor(topicId, system);
+  const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 | 3 }[] = [];
   const seen = new Set<string>();
-  const { tier1, tier2 } = tierCounts(mix, n);
-  for (const [tier, want] of [[1, tier1], [2, tier2]] as const) {
-    let got = 0;
-    for (let k = 0; make && k < SCHOOL_TRIES && got < want; k++) {
-      const spec = make((seed + k) % 0x100000000, tier, system);
+  for (const [tier, want] of tierPlan(topicId, mix, n)) {
+    let got = 0, stories = 0;
+    for (let k = 0; draw && k < SCHOOL_TRIES && got < want; k++) {
+      const spec = draw((seed + k) % 0x100000000, tier);
       if (!spec || !schoolWellFormed(spec).ok) continue;
+      // MB-B20: the last tier-3 slot takes only a word problem while none is kept, so a top-rung pair holds one
+      if (tier === 3 && got === want - 1 && stories === 0 && !storyOf(spec)) continue;
       // the leak check reads the question as the desk prints it with no system: a decimal comma or '63 %' split at its comma
       // or space is the question's own number, not its answer (MB-B4), and the numbers printed are the same
       const q = schoolQuestion(spec, system);
@@ -383,6 +403,7 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
       seen.add(key);
       kept.push({ spec, question: q.plain, tier });
       got++;
+      if (storyOf(spec)) stories++;
     }
   }
   return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier, ...(stretch ? { stretch: true as const } : {}) })), provider: "code", ms: Date.now() - t0, tries: 0 };
@@ -394,14 +415,13 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
  * filled to its mix from its other specs, and from more hits when it has no others. In draw order within a tier.
  */
 function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, stretch: boolean, aim: readonly string[], t0: number, system?: SchoolSystem): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
-  const make = generatorFor(topicId);
-  type Drawn = { spec: SchoolSpec; question: string; tier: 1 | 2; k: number };
+  const draw = drawerFor(topicId, system);
+  type Drawn = { spec: SchoolSpec; question: string; tier: 1 | 2 | 3; k: number };
   const seen = new Set<string>();
-  const { tier1, tier2 } = tierCounts(mix, n);
-  const pools = ([[1, tier1], [2, tier2]] as const).map(([tier, want]) => {
+  const pools = tierPlan(topicId, mix, n).map(([tier, want]) => {
     const hits: Drawn[] = [], rest: Drawn[] = [];
-    for (let k = 0; make && k < SCHOOL_TRIES && (hits.length < want || rest.length < want); k++) {
-      const spec = make((seed + k) % 0x100000000, tier, system);
+    for (let k = 0; draw && k < SCHOOL_TRIES && (hits.length < want || rest.length < want); k++) {
+      const spec = draw((seed + k) % 0x100000000, tier);
       if (!spec || !schoolWellFormed(spec).ok) continue;
       // the leak check reads the question as the desk prints it with no system: a decimal comma or '63 %' split at its comma
       // or space is the question's own number, not its answer (MB-B4), and the numbers printed are the same
@@ -409,6 +429,8 @@ function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, st
       if (!q || leaksSchool(spec, schoolQuestion(spec)?.plain)) continue;
       const hit = aim.some((id) => slipShows(spec, id));
       if ((hit ? hits : rest).length >= want) continue;
+      // MB-B20: no slip shows on a tier-3 item, so its pair is the rest: its last slot takes only a word problem while none is kept
+      if (tier === 3 && !hit && rest.length === want - 1 && !rest.some((d) => storyOf(d.spec)) && !storyOf(spec)) continue;
       const key = sameKey(q.plain);
       if (seen.has(key)) continue;
       seen.add(key);
