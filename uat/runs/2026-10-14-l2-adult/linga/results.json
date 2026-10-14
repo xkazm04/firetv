@@ -1,0 +1,327 @@
+{
+  "passed": true,
+  "adult": true,
+  "checks": [
+    {
+      "id": "A0 seat: Adult learner (type other, no age, mode adult) seated through profile.draft/save",
+      "verdict": "pass",
+      "detail": {
+        "profile": {
+          "id": "linga-browser-adult",
+          "name": "Ada",
+          "type": "other",
+          "modules": [
+            "english",
+            "maths",
+            "essay"
+          ],
+          "mode": "adult"
+        }
+      }
+    },
+    {
+      "id": "A1 phone offers Pitch a scene in Adult mode",
+      "verdict": "pass",
+      "detail": {
+        "pitchBox": true
+      }
+    },
+    {
+      "id": "A2 Pitch a scene: Linga shapes and starts it (real model)",
+      "verdict": "pass",
+      "detail": {
+        "sceneId": "pitch-8a56ec1f",
+        "title": "A dragon opens a bank account",
+        "partner": "Mara · bank clerk",
+        "opening": "Welcome to City Bank, I am Mara! What can I do for your friend today?"
+      }
+    },
+    {
+      "id": "A3 three typed learner turns (real model)",
+      "verdict": "pass",
+      "detail": {
+        "learnerLines": [
+          "I am a translator and a dragon want open bank account.",
+          "He say the bank do not accept fire as money, so I explain him the rule.",
+          "Yesterday I go to the manager and I ask for a special agreement."
+        ]
+      }
+    },
+    {
+      "id": "A4 Cut: offered on the phone and run (real model)",
+      "verdict": "pass",
+      "detail": {
+        "notes": [
+          {
+            "turnId": "bb28c4de-9933-4ada-8645-08f575c8908c:fed915ab-501a-4ff2-ae0c-750a2f53e662",
+            "quote": "a dragon want open bank account",
+            "kind": "meaning",
+            "note": "Use 'wants' with one dragon, and add 'to' before 'open'.",
+            "better": "I am a translator and a dragon wants to open a bank account.",
+            "reading": true
+          },
+          {
+            "turnId": "bb28c4de-9933-4ada-8645-08f575c8908c:2838e6c1-cba5-4bc1-a433-1c8696f55662",
+            "quote": "He say the bank do not accept fire",
+            "kind": "meaning",
+            "note": "Use 'says' with he, and 'does not' with the bank.",
+            "better": "He says the bank does not accept fire as money.",
+            "reading": true
+          },
+          {
+            "turnId": "bb28c4de-9933-4ada-8645-08f575c8908c:10166d5d-ebd5-4c04-ac34-9f255bcdacc6",
+            "quote": "Yesterday I go to the manager",
+            "kind": "form",
+            "note": "For something that happened yesterday, use the past form: went.",
+            "better": "Yesterday I went to the manager and asked for a special agreement."
+          }
+        ],
+        "clean": null,
+        "screen": "linga-recap"
+      }
+    },
+    {
+      "id": "A5 every Cut note quotes a learner line (substring of what the learner typed)",
+      "verdict": "pass",
+      "detail": {
+        "rows": [
+          {
+            "quote": "a dragon want open bank account",
+            "inALearnerLine": true
+          },
+          {
+            "quote": "He say the bank do not accept fire",
+            "inALearnerLine": true
+          },
+          {
+            "quote": "Yesterday I go to the manager",
+            "inALearnerLine": true
+          }
+        ],
+        "learnerLines": [
+          "I am a translator and a dragon want open bank account.",
+          "He say the bank do not accept fire as money, so I explain him the rule.",
+          "Yesterday I go to the manager and I ask for a special agreement."
+        ]
+      }
+    },
+    {
+      "id": "A6 Take Two on note 1: replayed, one learner line, back to the notes (real model)",
+      "verdict": "pass",
+      "detail": {
+        "take": {
+          "note": 0,
+          "from": "32533a3e-706c-4358-be5f-475355a649ed",
+          "turns": [
+            {
+              "id": "32533a3e-706c-4358-be5f-475355a649ed:take",
+              "role": "partner",
+              "text": "Welcome to City Bank, I am Mara! What can I do for your friend today?"
+            },
+            {
+              "id": "bb28c4de-9933-4ada-8645-08f575c8908c:a0b743b5-2d45-4b69-9a12-3264a945c2e0",
+              "role": "learner",
+              "text": "Yesterday I went to the manager and asked for a special agreement.",
+              "mode": "text"
+            },
+            {
+              "id": "3ec32762-5e03-43fd-97c9-126421273d37",
+              "role": "partner",
+              "text": "Oh, a special agreement is nice! Let's open a bank account today first. What is your friend's name?"
+            }
+          ],
+          "held": null,
+          "at": 1791982669800,
+          "endedAt": 1791982677881
+        },
+        "evidenceBefore": 1,
+        "evidenceAfter": 1
+      }
+    },
+    {
+      "id": "A7 Family-mode 18+ profile (age 22, mode family): seated",
+      "verdict": "pass",
+      "detail": {
+        "profile": {
+          "id": "linga-browser-family22",
+          "name": "Fia",
+          "type": "other",
+          "modules": [
+            "english",
+            "maths",
+            "essay"
+          ],
+          "age": 22,
+          "mode": "family"
+        }
+      }
+    },
+    {
+      "id": "A8 Family-mode 18+: starting the adult scene \"date\" is refused (not 200)",
+      "verdict": "pass",
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "id": "A9 Family-mode 18+: Pitch is refused (not 200)",
+      "verdict": "pass",
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "id": "A10 Family-mode 18+: the phone shows no Pitch box and the situation list has no adult scene",
+      "verdict": "pass",
+      "detail": {
+        "pitchBoxes": 0,
+        "options": [
+          "A1 · First words",
+          "A2 · Everyday basics",
+          "B1 · Getting by",
+          "B2 · Comfortable",
+          "C1 · Fluent",
+          "C2 · Near-native",
+          "Choose…",
+          "The first hello",
+          "A little of your world",
+          "The missing moon rover",
+          "Make the team work",
+          "A booking that is missing",
+          "Beyond the rehearsed answer",
+          "Clear without getting louder"
+        ]
+      }
+    },
+    {
+      "id": "A11 spoken reply in Adult",
+      "verdict": "skipped",
+      "detail": "speech is simulated only in the Family pass; no microphone or ASR is driven here"
+    },
+    {
+      "id": "A12 heard audio / voice",
+      "verdict": "skipped",
+      "detail": "headless browser: the Voice footer event is recorded in timings.json, heard audio is not driven"
+    },
+    {
+      "id": "A13 no page errors",
+      "verdict": "pass",
+      "detail": []
+    }
+  ],
+  "timings": [
+    {
+      "action": "pitch",
+      "ms": 29192,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 10380,
+      "sendToLineMs": 29211,
+      "lineToVoiceMs": 873,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "turn",
+      "ms": 16068,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 16011,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "the partner line did not change within 120 s"
+    },
+    {
+      "action": "moment-done",
+      "ms": 43,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 16011,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "taking a moment gives no new partner line"
+    },
+    {
+      "action": "turn",
+      "ms": 10546,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 10483,
+      "sendToLineMs": 10563,
+      "lineToVoiceMs": 1357,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "turn",
+      "ms": 9678,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 9621,
+      "sendToLineMs": 9679,
+      "lineToVoiceMs": 1207,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "cut",
+      "ms": 7061,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 6923,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "Cut ends the take: no new partner line"
+    },
+    {
+      "action": "take-two",
+      "ms": 61,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 6923,
+      "sendToLineMs": 73,
+      "lineToVoiceMs": 844,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "turn",
+      "ms": 5788,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 5739,
+      "sendToLineMs": 5795,
+      "lineToVoiceMs": 1131,
+      "voiceStatus": "Partner speaking"
+    },
+    {
+      "action": "take-end",
+      "ms": 39,
+      "initialStatus": 200,
+      "status": 200,
+      "modelMs": 5739,
+      "sendToLineMs": null,
+      "lineToVoiceMs": null,
+      "voiceStatus": null,
+      "reason": "ending a take gives no new partner line"
+    }
+  ],
+  "moments": [
+    {
+      "after": "adult turn 1",
+      "fired": true,
+      "kind": "fix",
+      "said": "a dragon want open bank account",
+      "better": "a dragon wants to open a bank account",
+      "why": "One dragon needs 'wants', and 'to' goes before 'open'."
+    },
+    {
+      "after": "adult turn 2",
+      "fired": false
+    },
+    {
+      "after": "adult turn 3",
+      "fired": false
+    }
+  ],
+  "errors": []
+}

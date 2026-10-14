@@ -1,0 +1,298 @@
+{
+  "passed": true,
+  "adult": true,
+  "checks": [
+    {
+      "id": "E0 seat: Adult learner (type other, no age, mode adult) through profile.draft/save",
+      "verdict": "pass",
+      "detail": {
+        "profile": {
+          "id": "essay-browser-adult",
+          "name": "Ada",
+          "type": "other",
+          "modules": [
+            "maths",
+            "english",
+            "essay"
+          ],
+          "mode": "adult"
+        }
+      }
+    },
+    {
+      "id": "E1 phone and PC page join the desk",
+      "verdict": "pass",
+      "detail": {
+        "pcNeededJoin": true
+      }
+    },
+    {
+      "id": "E2 Workroom, nothing kept: the TV opens the Workroom (empty) via the PC page button",
+      "verdict": "pass",
+      "detail": {
+        "screen": "workroom",
+        "body": "WORKROOM · YOUR PIECES\n\nNothing kept yet. On a PC, open http://10.0.0.140:3251/drop, join with the code, and keep a few of your messages or emails."
+      }
+    },
+    {
+      "id": "E3 keep a TITLED text on the PC page: the one-time notice comes first (428), nothing is kept before it is accepted",
+      "verdict": "pass",
+      "detail": {
+        "notice": "To read your writing, the desk sends it to its text engine: Claude, through the command line on this computer. Pieces you keep stay on this desk under your name until you delete them.\n\nI UNDERSTAND, KEEP IT\nREAD WITHOUT KEEPING",
+        "piece": {
+          "id": "t-a559b897be41",
+          "format": "essay",
+          "title": "Letter to the harbour board",
+          "versions": 1,
+          "paragraphs": 3,
+          "updated": 1791982736243
+        }
+      }
+    },
+    {
+      "id": "E4 Workroom on the TV after the keep: the title and counts show, no kept sentence",
+      "verdict": "pass",
+      "detail": {
+        "tvText": "Study Desk · TV\n←↑↓→ D-pad · Enter Select · Backspace Back · M Menu · Space Play/Pause\nVoice\nClock ×60\nReset session\nFake phone\nDesk display\nFullscreen\n3 of 8 sentences to fix across 3 paragraphs. Start with paragraph 1, sentence 1: This claim has no evidence after it tha\nESSAYMASTER\nMENU\nLenses\nA\nAda\nWORKROOM · YOUR PIECES\nLetter to the harbour board\nESSAY\nversion 1 · 3 paragraphs\nYOUR TWIN\nEssay",
+        "workroom": {
+          "owner": "essay-browser-adult",
+          "pieces": [
+            {
+              "id": "t-a559b897be41",
+              "format": "essay",
+              "title": "Letter to the harbour board",
+              "versions": 1,
+              "paragraphs": 3,
+              "updated": 1791982736243,
+              "diff": null
+            }
+          ],
+          "channels": [
+            {
+              "channel": "generic",
+              "pieces": 1,
+              "born": false,
+              "words": [
+                {
+                  "dim": "formality",
+                  "level": 3,
+                  "word": "consultative"
+                },
+                {
+                  "dim": "warmth",
+                  "level": 1,
+                  "word": "detached"
+                },
+                {
+                  "dim": "humor",
+                  "level": 1,
+                  "word": "none"
+                },
+                {
+                  "dim": "energy",
+                  "level": 1,
+                  "word": "matter-of-fact"
+                },
+                {
+                  "dim": "length",
+                  "level": 4,
+                  "word": "full"
+                },
+                {
+                  "dim": "directness",
+                  "level": 5,
+                  "word": "indirect"
+                },
+                {
+                  "dim": "expressiveness",
+                  "level": 1,
+                  "word": "none"
+                },
+                {
+                  "dim": "detail",
+                  "level": 4,
+                  "word": "thorough"
+                }
+              ]
+            }
+          ],
+          "born": false,
+          "need": 3
+        }
+      }
+    },
+    {
+      "id": "E5 read it: open from the phone shelf and read the whole piece on the TV (real model, 3 paragraphs)",
+      "verdict": "pass",
+      "detail": {
+        "readMs": 20293,
+        "provider": "claude-cli/sonnet",
+        "type": "structure",
+        "sentences": 8,
+        "piece": {
+          "paragraphs": 3,
+          "read": [
+            0,
+            1,
+            2
+          ],
+          "failed": [],
+          "notEnglish": []
+        },
+        "shelfAfter": [
+          {
+            "title": "Letter to the harbour board",
+            "versions": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "E6 the TV on the forensic page shows the read text only because it was read there (recorded, not a curtain breach); the Workroom curtain stays clean",
+      "verdict": "pass",
+      "detail": {
+        "forensicPageShowedMarkers": [
+          "marmalade lighthouse"
+        ],
+        "workroomText": "WORKROOM · YOUR PIECES\nLetter to the harbour board\nESSAY\nversion 1 · 3 paragraphs"
+      }
+    },
+    {
+      "id": "E7 TV role is refused the texts API (the TV never reads a text)",
+      "verdict": "pass",
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "id": "E8 Twin portrait (phone/PC) with one essay: not born, no exemplar text on the TV role",
+      "verdict": "pass",
+      "detail": {
+        "portrait": {
+          "adult": true,
+          "born": false,
+          "need": 3,
+          "channels": [
+            {
+              "channel": "generic",
+              "pieces": 1,
+              "born": false,
+              "exemplars": 1
+            }
+          ]
+        },
+        "tvTwin": {
+          "status": 200,
+          "body": {
+            "pieces": 1,
+            "born": false
+          }
+        }
+      }
+    },
+    {
+      "id": "E9 Twin card before the twin is born: 409 with the keep-more line (Adult, phone/PC role)",
+      "verdict": "pass",
+      "detail": {
+        "status": 409,
+        "error": "Your twin is born after 3 kept messages or emails in one kind. Keep a few more."
+      }
+    },
+    {
+      "id": "E10 Twin card with the TV key is refused (403)",
+      "verdict": "pass",
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "id": "E11 keep three messages (titled): the message twin is born; the card downloads as Twin Card JSON",
+      "verdict": "pass",
+      "detail": {
+        "contentType": "application/vnd.twin-card+json",
+        "disposition": "attachment; filename=\"ada.twin.json\"",
+        "topKeys": [
+          "$schema",
+          "spec",
+          "spec_version",
+          "card_id",
+          "created_at",
+          "exported_at",
+          "generator",
+          "identity",
+          "voice",
+          "evidence",
+          "integrity"
+        ],
+        "portraitChannels": [
+          {
+            "channel": "chat",
+            "pieces": 3,
+            "born": true
+          },
+          {
+            "channel": "generic",
+            "pieces": 1,
+            "born": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "E12 the born twin on the TV Workroom: level words and Born mark, still no kept text",
+      "verdict": "pass",
+      "detail": {
+        "tvText": "Study Desk · TV\n←↑↓→ D-pad · Enter Select · Backspace Back · M Menu · Space Play/Pause\nVoice\nClock ×60\nReset session\nFake phone\nDesk display\nFullscreen\n2 of 8 sentences to fix across 3 paragraphs. Start with paragraph 1, sentence 1: This claim has no evidence after it tha\nESSAYMASTER\nMENU\nLenses\nA\nAda\nWORKROOM · YOUR PIECES\nNote 3\nMESSAGE\nversion 1 · 1 paragraph\nNote 2\nMESSAGE\nversion 1 · 1 paragraph\nNote 1\nMESSAGE\nversion 1 · 1 paragraph\nLetter to the harbour board\nESSAY\nversion 1 · 3 paragraph"
+      }
+    },
+    {
+      "id": "E13 delete all (phone shelf, second press confirms): shelf empty, session text cleared (UD-6)",
+      "verdict": "pass",
+      "detail": {
+        "say": "Everything you kept is deleted.",
+        "screenAfter": "workroom",
+        "workroom": {
+          "owner": "essay-browser-adult",
+          "pieces": [],
+          "channels": [],
+          "born": false,
+          "need": 3
+        }
+      }
+    },
+    {
+      "id": "E14 after delete: TV shows no kept text; twin is gone (card 409 or portrait unborn)",
+      "verdict": "pass",
+      "detail": {
+        "portraitBorn": false,
+        "cardStatus": 409
+      }
+    },
+    {
+      "id": "E15 nothing of the kept text remains anywhere in the data dir after delete-all (session.json, learners.json, texts)",
+      "verdict": "pass",
+      "detail": {
+        "scanned": "C:\\Users\\kazda\\AppData\\Local\\Temp\\ud25-adult-data"
+      }
+    },
+    {
+      "id": "E16 Family-mode 18+ (age 22, mode family): the card is refused (403) and the portrait says not Adult",
+      "verdict": "pass",
+      "detail": {
+        "cardStatus": 403,
+        "portraitAdult": false
+      }
+    },
+    {
+      "id": "E17 dictation / .docx upload / camera reading",
+      "verdict": "skipped",
+      "detail": "dictation needs a microphone and ASR, the .docx path needs a file fixture, the camera needs a device: none is driven here"
+    },
+    {
+      "id": "E18 no page errors",
+      "verdict": "pass",
+      "detail": []
+    }
+  ],
+  "errors": []
+}

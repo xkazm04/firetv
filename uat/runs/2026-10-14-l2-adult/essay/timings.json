@@ -1,0 +1,87 @@
+[
+  {
+    "step": "E0 seat: Adult learner (type other, no age, mode adult) through profile.draft/save",
+    "ms": 34,
+    "verdict": "pass"
+  },
+  {
+    "step": "E1 phone and PC page join the desk",
+    "ms": 1695,
+    "verdict": "pass"
+  },
+  {
+    "step": "E2 Workroom, nothing kept: the TV opens the Workroom (empty) via the PC page button",
+    "ms": 1053,
+    "verdict": "pass"
+  },
+  {
+    "step": "E3 keep a TITLED text on the PC page: the one-time notice comes first (428), nothing is kept before it is accepted",
+    "ms": 321,
+    "verdict": "pass"
+  },
+  {
+    "step": "E4 Workroom on the TV after the keep: the title and counts show, no kept sentence",
+    "ms": 1167,
+    "verdict": "pass"
+  },
+  {
+    "step": "E5 read it: open from the phone shelf and read the whole piece on the TV (real model, 3 paragraphs)",
+    "ms": 20418,
+    "verdict": "pass"
+  },
+  {
+    "step": "E6 the TV on the forensic page shows the read text only because it was read there (recorded, not a curtain breach); the Workroom curtain stays clean",
+    "ms": 827,
+    "verdict": "pass"
+  },
+  {
+    "step": "E7 TV role is refused the texts API (the TV never reads a text)",
+    "ms": 10,
+    "verdict": "pass"
+  },
+  {
+    "step": "E8 Twin portrait (phone/PC) with one essay: not born, no exemplar text on the TV role",
+    "ms": 21,
+    "verdict": "pass"
+  },
+  {
+    "step": "E9 Twin card before the twin is born: 409 with the keep-more line (Adult, phone/PC role)",
+    "ms": 15,
+    "verdict": "pass"
+  },
+  {
+    "step": "E10 Twin card with the TV key is refused (403)",
+    "ms": 6,
+    "verdict": "pass"
+  },
+  {
+    "step": "E11 keep three messages (titled): the message twin is born; the card downloads as Twin Card JSON",
+    "ms": 72,
+    "verdict": "pass"
+  },
+  {
+    "step": "E12 the born twin on the TV Workroom: level words and Born mark, still no kept text",
+    "ms": 1672,
+    "verdict": "pass"
+  },
+  {
+    "step": "E13 delete all (phone shelf, second press confirms): shelf empty, session text cleared (UD-6)",
+    "ms": 139,
+    "verdict": "pass"
+  },
+  {
+    "step": "E14 after delete: TV shows no kept text; twin is gone (card 409 or portrait unborn)",
+    "ms": 1675,
+    "verdict": "pass"
+  },
+  {
+    "step": "E15 nothing of the kept text remains anywhere in the data dir after delete-all (session.json, learners.json, texts)",
+    "ms": 1,
+    "verdict": "pass"
+  },
+  {
+    "step": "E16 Family-mode 18+ (age 22, mode family): the card is refused (403) and the portrait says not Adult",
+    "ms": 58,
+    "verdict": "pass"
+  }
+]

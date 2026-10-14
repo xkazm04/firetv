@@ -30,7 +30,8 @@ const key=JSON.parse(fs.readFileSync(path.join(process.env.DESK_DATA_DIR,'pairin
 let tvCookie='';
 async function asTheTV(){const r=await fetch(base+'/tv?key='+encodeURIComponent(key),{redirect:'manual'});tvCookie=(r.headers.getSetCookie?.()??[]).map(c=>c.split(';')[0]).filter(c=>c.startsWith('desk-tv=')).join('; ');assert.ok(tvCookie,'the desk took its key');}
 const json=(b)=>({method:'POST',headers:{'Content-Type':'application/json',cookie:tvCookie},body:JSON.stringify(b)});
-const out=path.resolve(__dirname,'../artifacts/linga-integration');fs.mkdirSync(out,{recursive:true});
+const ADULT=process.env.ADULT==='1';
+const out=path.resolve(__dirname,ADULT?'../artifacts/linga-integration-adult':'../artifacts/linga-integration');fs.mkdirSync(out,{recursive:true});
 const timings=[],errors=[],moments=[],entrances=[];
 const SCENE='The missing moon rover',SAID='[data-role="linga-said"] .lo-card-text',STATUS='.linga-footer .lo-status',VOICE_WAIT=15000,LINE_WAIT=120000;
 let tvPage;
@@ -79,10 +80,106 @@ async function entrance(name,focus,arrived){
  if(!(await attempt(false)))await attempt(true);
  assert.ok(entrances.at(-1).reached,'the '+name+' entrance was reached');
 }
+/** ADULT=1 (UD-25): an Adult learner (type other, no age, mode adult) walks Pitch -> turns -> Cut -> Take Two; a Family-mode 18+ profile is offered no adult scene.
+ * Each check is recorded pass / fail / skipped (a skip always carries its reason and is never a pass). A failed check is a finding: nothing here is loosened. */
+async function adultPass(){
+ const checks=[];const rec=(id,verdict,detail)=>{checks.push({id,verdict,detail});console.log(JSON.stringify({id,verdict,detail}));fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({passed:checks.every(c=>c.verdict!=='fail'),adult:true,checks,timings,moments,errors},null,2));};
+ const check=async(id,fn)=>{try{const d=await fn();rec(id,'pass',d??null);return true;}catch(e){rec(id,'fail',String(e.message||e).slice(0,700));return false;}};
+ const skip=(id,reason)=>rec(id,'skipped',reason);
+ const ID='linga-browser-adult';
+ const browser=await chromium.launch({headless:true,args:['--autoplay-policy=no-user-gesture-required']});try{
+ const tv=await browser.newPage({viewport:{width:1920,height:1150}}),phone=await (await browser.newContext({viewport:{width:390,height:844}})).newPage();tvPage=tv;
+ for(const page of [tv,phone])page.on('pageerror',e=>errors.push(e.message));
+ await check('A0 seat: Adult learner (type other, no age, mode adult) seated through profile.draft/save',async()=>{
+  await event({type:'profile.draft',patch:{id:ID,name:'Ada',type:'other',mode:'adult',modules:['english','maths','essay']}});await event({type:'profile.save'});
+  const s=await current();const p=s.profiles.find(x=>x.id===ID);assert.ok(p,'the profile was saved');assert.equal(p.type,'other');assert.equal(p.age,undefined);assert.equal(p.mode,'adult','the stored mode is adult');assert.equal(s.learner.id,ID);return{profile:p};});
+ await phone.goto(base+'/phone?pin='+(await current()).pin);await phone.waitForFunction(async()=>(await(await fetch('/api/session')).json()).viewer==='phone');
+ for(let i=0;i<200&&!(await current()).joined;i++)await new Promise(r=>setTimeout(r,50));assert.ok((await current()).joined,'the phone joined');
+ await event({type:'nav',screen:'landing',focus:1});
+ await tv.goto(base+'/tv?key='+encodeURIComponent(key));await tv.waitForSelector('[data-role="desk-object"]');await tv.locator('.stage').click({position:{x:20,y:20}});await tv.keyboard.press('Enter');await tv.waitForSelector('.linga-tv');
+ await phone.waitForSelector('.linga-phone');
+ await check('A1 phone offers Pitch a scene in Adult mode',async()=>{await phone.getByLabel('Pitch a scene').waitFor({timeout:30000});return{pitchBox:true};});
+ const SAIDLINES=['I am a translator and a dragon want open bank account.','He say the bank do not accept fire as money, so I explain him the rule.','Yesterday I go to the manager and I ask for a special agreement.'];
+ let pitched=false;
+ await check('A2 Pitch a scene: Linga shapes and starts it (real model)',async()=>{
+  await phone.getByLabel('Pitch a scene').fill('A dragon opens a bank account, and I translate for the dragon.');
+  await waitCommand(phone,()=>phone.getByRole('button',{name:'Play this scene',exact:true}).click(),'pitch');
+  const s=await current();assert.ok(s.conversation,'a conversation started');assert.ok(s.conversation.turns.length>=1,'the partner opened');pitched=true;
+  await tv.waitForSelector('.linga-speaker');await tv.screenshot({path:path.join(out,'tv-pitch.png')});
+  return{sceneId:s.conversation.sceneId,title:s.conversation.title,partner:s.conversation.partner,opening:s.conversation.turns[0]?.text};});
+ if(!pitched){for(const id of ['A3 turns','A4 Cut','A5 Cut notes quote the learner lines','A6 Take Two'])skip(id,'no scene started: Pitch failed');}
+ else{
+  let turned=0;
+  await check('A3 three typed learner turns (real model)',async()=>{
+   for(const line of SAIDLINES){
+    await phone.getByLabel('Your reply',{exact:true}).fill(line);
+    await waitCommand(phone,()=>phone.getByRole('button',{name:'Send reply',exact:true}).click(),'turn');turned++;
+    await takeMoment(phone,'adult turn '+turned);
+   }
+   const s=await current();const mine=s.conversation.turns.filter(t=>t.role==='learner').map(t=>t.text);assert.equal(mine.length,3);return{learnerLines:mine};});
+  let cut=null;
+  await check('A4 Cut: offered on the phone and run (real model)',async()=>{
+   const btn=phone.getByRole('button',{name:/^Cut/});await btn.waitFor({timeout:30000});
+   await waitCommand(phone,()=>btn.click(),'cut',{expectLine:false,noLine:'Cut ends the take: no new partner line'});
+   for(let i=0;i<240&&!(await current()).conversation?.cut;i++)await new Promise(r=>setTimeout(r,250));
+   const s=await current();cut=s.conversation.cut;assert.ok(cut,'the conversation carries a cut');
+   await tv.screenshot({path:path.join(out,'tv-cut.png')});await phone.screenshot({path:path.join(out,'phone-cut.png')});
+   return{notes:cut.notes,clean:cut.clean??null,screen:s.screen};});
+  await check('A5 every Cut note quotes a learner line (substring of what the learner typed)',async()=>{
+   assert.ok(cut,'no cut to read');
+   const s=await current();const mine=s.conversation.turns.filter(t=>t.role==='learner').map(t=>t.text);
+   const norm=x=>x.replace(/\s+/g,' ').trim();
+   if(!cut.notes.length)throw new Error('the Cut returned no notes (clean="'+(cut.clean??'')+'") for three lines written with errors; nothing to check the quote of');
+   const rows=cut.notes.map(n=>({quote:n.quote,inALearnerLine:mine.some(l=>norm(l).includes(norm(n.quote)))}));
+   const bad=rows.filter(r=>!r.inALearnerLine);assert.equal(bad.length,0,'quotes not in any learner line: '+JSON.stringify(bad));
+   return{rows,learnerLines:mine};});
+  if(!cut||!cut.notes.length)skip('A6 Take Two on one note','no Cut notes to play again');
+  else await check('A6 Take Two on note 1: replayed, one learner line, back to the notes (real model)',async()=>{
+   const btn=phone.getByRole('button',{name:/^Take Two · note 1/});await btn.waitFor({timeout:30000});
+   await waitCommand(phone,()=>btn.click(),'take-two',{match:b=>b.note===0});
+   let s=await current();assert.ok(s.conversation.takes?.length>=1,'a take was recorded on the conversation');
+   const before=s.englishLearning.evidence.length;
+   await tv.screenshot({path:path.join(out,'tv-take-two.png')});
+   await phone.getByLabel('Your reply',{exact:true}).fill('Yesterday I went to the manager and asked for a special agreement.');
+   await waitCommand(phone,()=>phone.getByRole('button',{name:'Send reply',exact:true}).click(),'turn');
+   s=await current();const after=s.englishLearning.evidence.length;
+   await waitCommand(phone,()=>phone.getByRole('button',{name:'Back to the notes',exact:true}).click(),'take-end',{expectLine:false,noLine:'ending a take gives no new partner line'});
+   await phone.locator('[data-role="linga-cut-notes"]').waitFor({timeout:30000});
+   s=await current();const t=s.conversation.takes.find(x=>x.note===0);
+   assert.equal(after,before,'a take is practice only: no new evidence while it runs (the phone says so)');
+   return{take:t,evidenceBefore:before,evidenceAfter:after};});
+ }
+ // Family-mode 18+: a profile of 22 who chose Family is offered no adult scene (mode decides, mode.ts adultContent)
+ const FID='linga-browser-family22';
+ await check('A7 Family-mode 18+ profile (age 22, mode family): seated',async()=>{
+  await event({type:'profile.draft',patch:{id:FID,name:'Fia',type:'other',age:22,mode:'family',modules:['english','maths','essay']}});await event({type:'profile.save'});
+  const s=await current();const p=s.profiles.find(x=>x.id===FID);assert.ok(p);assert.equal(p.mode,'family');assert.equal(s.learner.id,FID);return{profile:p};});
+ await check('A8 Family-mode 18+: starting the adult scene "date" is refused (not 200)',async()=>{
+  const r=await fetch(base+'/api/english',json({action:'start',learnerId:FID,sceneId:'date',commandId:'fam-date'}));
+  assert.notEqual(r.status,200,'the adult scene started for a Family-mode learner');return{status:r.status};});
+ await check('A9 Family-mode 18+: Pitch is refused (not 200)',async()=>{
+  const r=await fetch(base+'/api/english',json({action:'pitch',learnerId:FID,text:'A dragon opens a bank account, and I translate.',commandId:'fam-pitch'}));
+  assert.notEqual(r.status,200,'a pitch was accepted for a Family-mode learner');return{status:r.status};});
+ await check('A10 Family-mode 18+: the phone shows no Pitch box and the situation list has no adult scene',async()=>{
+  await event({type:'subject',subject:'english'});await event({type:'nav',screen:'linga',focus:0});await phone.reload();await phone.getByRole('button',{name:'Linga',exact:true}).click();await phone.waitForSelector('.linga-phone');await phone.waitForTimeout(1500);
+  const pitch=await phone.getByLabel('Pitch a scene').count();
+  const opts=await phone.locator('.linga-phone select option').allTextContents();
+  assert.equal(pitch,0,'a Pitch box is on the phone');assert.ok(!opts.some(o=>/Different tastes/.test(o)),'the adult scene is in the list: '+JSON.stringify(opts));return{pitchBoxes:pitch,options:opts};});
+ skip('A11 spoken reply in Adult','speech is simulated only in the Family pass; no microphone or ASR is driven here');
+ skip('A12 heard audio / voice','headless browser: the Voice footer event is recorded in timings.json, heard audio is not driven');
+ rec('A13 no page errors',errors.length?'fail':'pass',errors);
+ }finally{
+  fs.writeFileSync(path.join(out,'timings.json'),JSON.stringify(timings,null,2));
+  await browser.close();
+  console.log(JSON.stringify({adult:true,summary:checks.map(c=>c.id.split(' ')[0]+':'+c.verdict)}));
+  if(checks.some(c=>c.verdict==='fail'))process.exitCode=1;
+ }
+}
 const num=a=>a.filter(x=>typeof x==='number'&&Number.isFinite(x));
 const stat=a=>{const v=num(a).sort((x,y)=>x-y);return v.length?{n:v.length,median:v.length%2?v[(v.length-1)/2]:Math.round((v[v.length/2-1]+v[v.length/2])/2),max:v.at(-1)}:{n:0,median:null,max:null};};
 (async()=>{
  await asTheTV();
+ if(ADULT)return adultPass();
  const existing=await current();
  const reuse=process.env.LINGA_TEST_RESUME==='1'&&existing.learner.id==='linga-browser-child'&&existing.conversation?.sceneId==='rover'&&existing.conversation.turns.length===1&&!existing.conversation.pending;
  if(!reuse){
