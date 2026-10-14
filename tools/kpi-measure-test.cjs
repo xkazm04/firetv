@@ -108,8 +108,33 @@ test('a missing desk/node_modules is linked to the donor, and the link is what t
 test('no donor anywhere is one instruction and a non-zero exit, never a stack',()=>{
  const r=preflight.ensure({env:{},checkout:bare('worktree-alone'),main:null,levels:0});
  const o=said();assert.equal(r.action,'unavailable');assert.equal(preflight.run(r,o),1);
- assert.match(r.reason,/no checkout near /);
+ assert.match(r.reason,/no worktree of this repository has a desk\/node_modules with typescript in it/);
  assert.equal(o.lines.length,1,'one line, not a stack');assert.match(o.lines[0],/Run `npm install` in desk\/, then `npm test`\.$/);
+});
+// A donor's code runs under npm test, so by default only what git says is this repository may donate. The crawl up the
+// tree reached C:\Users\Public and the drive root (2026-10-14): directories any local user can plant an install in.
+test('by default no directory is crawled: a sibling with the compiler is not a donor unless levels is asked for',()=>{
+ install('donor-sibling-uninvited');const wt=bare('worktree-no-crawl');
+ assert.equal(preflight.findDonor({env:{},checkout:wt,main:null}),null,'the default walks no parent directory');
+ assert.deepEqual(preflight.donorCandidates({env:{},checkout:wt,main:null}),[],'and names no candidate at all');
+ assert.match(preflight.findDonor({env:{},checkout:wt,main:null,levels:1}).source,/^sibling checkout /,'the crawl is still there when it is asked for');
+});
+test('the worktrees of this repository are the donors, the main one first, this checkout never',()=>{
+ const main=bare('main-without-install'),other=install('worktree-with-install'),wt=bare('worktree-needing-a-donor');
+ const c=preflight.donorCandidates({env:{},checkout:wt,trees:[main,wt,other.dir]});
+ assert.deepEqual(c.map(x=>x.source),['main checkout',`worktree ${path.resolve(other.dir)}`],'main once, then the others in git\'s order, not itself');
+ assert.equal(preflight.findDonor({env:{},checkout:wt,trees:[main,wt,other.dir]}).modules,path.resolve(other.modules),'a main without the compiler is passed over');
+});
+test('worktrees() lists what git lists for a real repository, the main worktree first',()=>{
+ const {spawnSync}=require('node:child_process'),{worktrees}=require('./checkout.cjs');
+ const repo=path.join(scratch,'git-main'),wt=path.join(scratch,'git-linked');fs.mkdirSync(repo,{recursive:true});
+ const git=(...a)=>spawnSync('git',['-c','user.email=t@t','-c','user.name=t',...a],{cwd:repo,encoding:'utf8'});
+ git('init','-q');fs.writeFileSync(path.join(repo,'f'),'x');git('add','f');git('commit','-qm','i');
+ assert.equal(git('worktree','add','-q',wt).status,0,'a linked worktree');
+ const same=(a,b)=>fs.realpathSync(a).toLowerCase()===fs.realpathSync(b).toLowerCase();
+ const listed=worktrees(wt);assert.equal(listed.length,2);assert.ok(same(listed[0],repo),'main first');assert.ok(same(listed[1],wt));
+ assert.deepEqual(worktrees(bare('not-a-repo')),[],'no git here, no worktrees');
+ git('worktree','remove','--force',wt);
 });
 // The gate's typecheck must start the compiler the preflight checked for. A bare `tsc` resolves through node_modules/.bin,
 // which the preflight never looks at: a linked donor without .bin (the main checkout, measured 2026-10-13) passes the
