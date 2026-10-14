@@ -124,7 +124,7 @@ function Postcard({ view }: { view: LandingView }) {
     <div className="pp-postcard" data-role="desk-phone" data-paired={false} data-focused={view.at === "phone" ? "true" : undefined}>
       <div className="pp-pcd">
         <PostcardArt />
-        <div className="pp-pin" data-role="desk-pin" aria-label={`Code ${pin}`}>{pin}</div>
+        <span className="pp-sr">Code </span><div className="pp-pin" data-role="desk-pin">{pin}</div>
         <div className="pp-url">{url}</div>
         <div className="pp-dots" aria-hidden="true"><i /><i /><i /></div>
       </div>

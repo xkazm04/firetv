@@ -103,6 +103,8 @@ test('paper 1: the default look draws each scenario with its hooks and its real 
  assert.doesNotMatch(r,/data-role="desk-pin"/,'a paired phone shows no code');
  assert.equal((html('someoneElse').match(/data-role="desk-object"/g)||[]).length,2);
  const f=html('firstRun');assert.match(f,/data-role="desk-pin"[^>]*>4711</,'the pairing code is the session\'s');assert.match(f,/10\.0\.0\.7:3000\/phone/);
+ // a screen reader hears "Code 4711": the label is a hidden word, not an aria-label on a plain div (ARIA drops those)
+ assert.match(f,/class="pp-sr">Code <\/span><div class="pp-pin"/);assert.doesNotMatch(f,/aria-label="Code/);
  assert.match(html('nobody'),/Whose desk\?/);
  const z=html('returning','maths');assert.match(z,/data-role="desk-zoom"[^>]*data-app="maths"/,'Select plays the hand-off of the lit app');assert.match(z,/Opening/);
  assert.doesNotMatch(r,/dangerouslySetInnerHTML|<script/);
@@ -123,7 +125,7 @@ test('lock 1: the blueprint theme renders when a test instantiates it explicitly
   assert.match(html,/data-theme="blueprint"/,k);assert.match(html,/data-role="desk-scene"/,k);
   const apps=(html.match(/data-role="desk-object"/g)||[]).length;assert.equal(apps,k==='someoneElse'?2:3,`${k}: one entry per app on the profile`);
  }
- const f=draw(bp,landingView(SCENARIOS.firstRun()));assert.match(f,/data-role="desk-pin"/);assert.match(f,/4711/);
+ const f=draw(bp,landingView(SCENARIOS.firstRun()));assert.match(f,/data-role="desk-pin"/);assert.match(f,/4711/);assert.match(f,/<span>PIN<\/span>/,'its visible PIN label names the code');
  assert.match(draw(bp,landingView(SCENARIOS.returning())),/Two-step equations/,'the same words as paper');
  assert.match(draw(bp,landingView(SCENARIOS.returning()),'maths'),/data-role="desk-zoom"|data-zoom/,'and the same hand-off');
 });

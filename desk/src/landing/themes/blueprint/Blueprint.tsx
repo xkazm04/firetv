@@ -214,7 +214,7 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
         <div className="bp-phone" data-role="desk-phone" data-paired="false" data-focused={at === "phone"}>
           <div className="ph"><div className="scr">
             <div className="pl">{I.lock}<span>PIN</span></div>
-            <div className="pin" data-role="desk-pin" aria-label={`Code ${phone.pin}`}>{phone.pin}</div>
+            <div className="pin" data-role="desk-pin">{phone.pin}</div>
             <div className="pdots" aria-hidden="true"><i /><i /><i /></div>
           </div></div>
           <div className="url">{phone.url}</div>
