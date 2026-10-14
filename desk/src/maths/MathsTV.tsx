@@ -23,7 +23,7 @@ import { Plot } from "./Plot";
 import { CALC_SHAPES, type CalcSpec } from "@/lib/rules/calc";
 import { deskLine, itemName, partPlace, type PartPlace } from "@/lib/rules/calc-word";
 const isCalcSpec = (spec: unknown): spec is CalcSpec => !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { aimLine, calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, itemTitle, likePill, markLine, mathPlaced, moreLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, tonightsSheet, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { playerCommand, running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, WORKED_STOPS, type TonightStop } from "@/tv/keys";
 import { LESSON_WRITING, PREPARE_DOOR, SYS_WORD, choiceLine, choicesFor, pastPathEnd, pathEndsLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf, firstToLook, lookCount, secondLine } from "@/tv/sheetRows";
@@ -793,6 +793,8 @@ export function PracticeScreen({ s }: { s: Session }) {
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
   const name = topicName(p.topic);
   const job = markLine(s);
+  // a set opened from a paper's recovery row says what it aims at, in the caption slot (MB-B40); any other set, nothing
+  const aim = aimLine(p);
   return (<>
     <Top s={s} crumb={name} />
     <div className="mb-practice" ref={pan}>
@@ -811,6 +813,7 @@ export function PracticeScreen({ s }: { s: Session }) {
       <div className="mb-stitle" data-role="maths-title">Work these on <em>paper</em></div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">What to do</span></div>
+        {aim && <div className="aim" data-role="maths-practice-aim">{aim}</div>}
         <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
         {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
       </div>

@@ -440,6 +440,17 @@ Typed entry is the door that ships; the photo path is M5c's.
   open (a set is two presses from the list, three when the unit has a worked lesson); Select on a statement does nothing.
   Back or Menu land on a topic's unit, or on the first unit from a statement. The list is opened from the
   phone (the Paper panel sends the paper, or shows the last one); Get ready for school's own keys are unchanged.
+- The set aims at what the paper lost (MB-B40, 2026-10-15). Select on a topic row carries that unit into the session as
+  the paper's aim (`Session.paperAim`, the `nav` event's `aim`). A set asked for on that unit while Get ready for school is
+  open (The usual or A step up, also after its worked lesson) is aimed at the statements that gave the topic its lost marks
+  (`aimOf` in `lib/rules/recovery.ts`): on an equations unit the model's prompt gets them in the map's own words, with the
+  learner's age and school year in their own system (`aimBlock` in `lib/desk/items.ts`), and the code still checks every
+  answer; a code-written unit draws as before, since no statement maps to a generator's shapes yet. The set carries the
+  codes (`Practice.aim`), and the Practice screen's taped card opens with one line, at most 25 words (`aimLine` in
+  `tv/mathsRows.ts`, `maths-practice-aim`, 30 px, pen-red over a dashed rule): "Aimed at what the paper lost: solve linear
+  equations in one unknown, including the unknown on both sides." The aim is a statement, never the question, its marks
+  or a code. It is gone on any other screen, a new paper, a learner switch, a new evening and once the set is written; a
+  set opened any other way is asked for, and drawn, exactly as before. Six more on the sheet is not aimed.
 - The slip card (`SlipSide`) now says its line through `deskLine`, the one place a part is named as the paper names it;
   the text is the same as before for every item.
 - A paper whose rows were fine but could not be written to the learner file says so (v2 M5c, ruling 11): "That paper

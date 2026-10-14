@@ -307,6 +307,8 @@
 .maths-tv .mb-card .pips i { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--mb-pen-d); }
 .maths-tv .mb-card .pips i.on { background: var(--mb-pen); border-color: var(--mb-pen); }
 .maths-tv .mb-card .ht { margin-top: 10px; font-size: 34px; line-height: 1.3; font-weight: 600; text-wrap: pretty; }
+/* MB-B40: what a set opened from a paper aims at, the first line of the Practice card (tv/mathsRows aimLine, at most 25 words) */
+.maths-tv .mb-card .aim { margin-top: 10px; padding-bottom: 12px; border-bottom: 2px dashed rgba(39, 48, 74, .22); font-size: 30px; line-height: 1.26; font-weight: 700; color: var(--mb-pen-d); text-wrap: pretty; }
 .maths-tv .mb-card .nx { margin-top: 14px; display: flex; align-items: flex-start; gap: 14px; font-family: var(--mb-hand); font-size: 48px; font-weight: 700; line-height: 1.02; color: var(--mb-pen-d); text-wrap: balance; }
 .maths-tv .mb-card .nx svg { width: 44px; height: 30px; flex: 0 0 44px; margin-top: 10px; }
 /* a job's state on the card (marking the set, thinking over what was said, or its failure): the desk's own voice in

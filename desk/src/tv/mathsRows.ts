@@ -2,7 +2,8 @@
  * Math Buddy's pure rows: what the session alone says is open. Shared by the Tonight screen and
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
-import type { Screen, Session } from "@/lib/session/store";
+import type { Practice, Screen, Session } from "@/lib/session/store";
+import { STATEMENTS } from "@/lib/library/gcse";
 import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
 import { slip as slipById } from "@/lib/rules/maths";
@@ -358,4 +359,28 @@ export function likePill(s: Pick<Session, "jobs"> & InHand): { label: string; bu
 export function itemTitle(n: number, text: string, s: Pick<Session, "profiles" | "learner">): string {
   const unit = likeTopic(text, learnerPath(s));
   return unit ? `Number ${n} · ${topicName(unit)}` : `Number ${n}`;
+}
+
+/** The most words the Practice card's aim line may take (MB-B40): the caption slot's budget. */
+export const AIM_WORDS = 25;
+const AIM_HEAD = "Aimed at what the paper lost:";
+const MORE_WORD = ["", "one", "two", "three", "four", "five"];
+const moreOf = (n: number) => (n ? ` and ${MORE_WORD[n] ?? "several"} more` : "");
+const aimWords = (t: string) => t.split(/\s+/).filter(Boolean).length;
+/**
+ * What a set opened from a paper's recovery row aims at (MB-B40), for the Practice card: "Aimed at what the paper lost:"
+ * and the lost statements in the GCSE map's own words, as many whole as fit in AIM_WORDS, then "and one more". Null for a
+ * set with no aim, or none the map knows. Statements only: never a question, a mark or a code.
+ */
+export function aimLine(p: Pick<Practice, "aim"> | null | undefined): string | null {
+  const said = (p?.aim ?? []).map((c) => STATEMENTS.find((x) => x.code === c)?.can).filter((x): x is string => !!x)
+    .map((x) => x.charAt(0).toLowerCase() + x.slice(1));
+  if (!said.length) return null;
+  const kept: string[] = [];
+  for (let i = 0; i < said.length; i++) {
+    const tail = moreOf(said.length - i - 1);
+    if (kept.length && aimWords(`${AIM_HEAD} ${[...kept, said[i]].join("; ")}${tail}`) > AIM_WORDS) break;
+    kept.push(said[i]);
+  }
+  return `${AIM_HEAD} ${kept.join("; ")}${moreOf(said.length - kept.length)}.`;
 }
