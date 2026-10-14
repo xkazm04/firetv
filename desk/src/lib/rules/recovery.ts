@@ -246,3 +246,12 @@ export function recovery(raw: unknown): Recovery {
   const notOnDesk = [...off.values()].sort((a, b) => b.lost - a.lost || Number(!a.foundation) - Number(!b.foundation) || order.get(a.code)! - order.get(b.code)!);
   return { ...clean, topics: placed, notOnDesk, totals };
 }
+
+/**
+ * What a set on `topicId` opened from this paper's recovery row is aimed at (MB-B40): the codes of the statements that
+ * gave the topic lost marks, in recovery()'s order of them; empty when the topic lost none on this paper. Statements only:
+ * never a question's label, its marks or its wording - a set is aimed at a statement, and cannot repeat the question.
+ */
+export function aimOf(raw: unknown, topicId: string): string[] {
+  return [...(recovery(raw).topics.find((t) => t.id === topicId)?.codes ?? [])];
+}

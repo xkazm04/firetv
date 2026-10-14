@@ -979,7 +979,7 @@ test('RP1: Select on a recovery row opens Get ready for school on its unit with 
   const id=topics[f].id,ix=stops.findIndex(u=>u.id===id),pf={...p,focus:f};
   assert.ok(ix>=0);
   const sel=K.tvKey(pf,'select',K.LOCAL);
-  assert.deepEqual(sel.events,[{type:'nav',screen:'prepare',focus:ix}],`select ${f}`);
+  assert.deepEqual(sel.events,[{type:'nav',screen:'prepare',focus:ix,aim:id}],`select ${f}: the unit goes as the paper's aim (MB-B40)`);
   assert.deepEqual(sel.local,{prepareAsk:hasWorked(id)?-1:0});assert.deepEqual(sel.calls,[]);
   for(const k of ['back','menu']){
    const r=K.tvKey(pf,k,K.LOCAL);
@@ -994,7 +994,7 @@ test('RP1: Select on a recovery row opens Get ready for school on its unit with 
  }
  // while a set is written Select still goes to the unit, with no question
  const busy=K.tvKey({...p,focus:0},'select',{...K.LOCAL,busy:true});
- assert.deepEqual(busy.events,[{type:'nav',screen:'prepare',focus:stops.findIndex(u=>u.id===topics[0].id)}]);
+ assert.deepEqual(busy.events,[{type:'nav',screen:'prepare',focus:stops.findIndex(u=>u.id===topics[0].id),aim:topics[0].id}]);
  assert.deepEqual(busy.local,{prepareAsk:null});
  // a paper with no topics: Select does nothing, Back still goes to the first unit
  const none=mk([it('1',2,2,['N12'])]);

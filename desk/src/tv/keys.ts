@@ -530,7 +530,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   // the recovery from a paper (v2 M5b), opened from the phone's Paper panel: Up/Down or Left/Right walk the topics.
   // Then the off-desk statements, one walk (Select there does nothing; Back and Menu go to the first unit).
   // Select on a topic opens Get ready for school on that unit with its question open, as Select there would (or just on
-  // the unit while a set or lesson is written). Back or Menu land on that unit, or the first when the list is empty.
+  // the unit while a set or lesson is written), carrying the unit as the paper's aim (MB-B40). Back or Menu land on that unit, or the first when the list is empty.
   paper: (s, k, local, o) => {
     const n = paperStopCount(s);
     if (k === "down" || k === "right") o.move(n, 1); if (k === "up" || k === "left") o.move(n, -1);
@@ -539,7 +539,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "select" && t && ix >= 0) {
       const writing = local.busy || running(s, "practice") || running(s, "teach");
       o.local.prepareAsk = writing ? null : hasWorked(t.id) ? -1 : 0;
-      o.nav("prepare", ix);
+      // the unit goes with it as the paper's aim (MB-B40): the set asked for on it is aimed at what this paper lost
+      o.ev({ type: "nav", screen: "prepare", focus: ix, aim: t.id });
     }
     if (k === "back" || k === "menu") { o.local.prepareAsk = null; o.nav("prepare", Math.max(0, ix)); }
   },

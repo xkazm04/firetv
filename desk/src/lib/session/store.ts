@@ -31,6 +31,7 @@ import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "
 import { planFill, planSlots, type Fix, type Plan, type Sentence, type Was } from "../rules/essay";
 import { adultAllowed, type Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
+import { STATEMENTS } from "../library/gcse";
 
 export type Subject = "maths" | "english" | "essay";
 export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "essayplan" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "paper" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment" | "linga-cert" | "linga-certs" | "worked" | "workroom";
@@ -154,8 +155,14 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
  */
 export interface Worked { topic: string; title: string; idea: string; own: boolean; steps: string[]; examples: { question: string; answer: string; tier: 1 | 2 | 3 }[]; owner?: string; }
 /** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
-export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
+export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true;
+  /** The statements (gcse.ts codes) a set opened from a paper's recovery row is aimed at (MB-B40); absent on any other set. */
+  aim?: string[]; }
 
+/** The statement codes a set may be aimed at (MB-B40): the GCSE map's own, nothing else. */
+const STATEMENT_CODES = new Set(STATEMENTS.map((x) => x.code));
+/** The screens the paper's aim lasts across (MB-B40): Get ready for school and the worked lesson it opens. */
+const AIM_KEEPS = new Set<Screen>(["prepare", "worked"]);
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
 const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps", "pieces", "rule"] as const;
 /**
@@ -213,8 +220,10 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
 /** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */
 const shownPractice = (p: Practice | null | undefined): Practice | null => {
   if (!p) return null;
-  const { stretch, ...rest } = p;
-  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}) };
+  const { stretch, aim, ...rest } = p;
+  // an aim is kept only as statement codes the desk knows (MB-B40): never text, never a question
+  const aimed = Array.isArray(aim) ? aim.filter((c): c is string => typeof c === "string" && STATEMENT_CODES.has(c)) : [];
+  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}), ...(aimed.length ? { aim: aimed } : {}) };
 };
 /**
  * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,
@@ -280,6 +289,13 @@ export interface Session {
   check: LevelCheck | null;
   /** the open maths topic, the practice set on it, and where the walk has got to */
   topic: string | null; practice: Practice | null; walkIx: number;
+  /**
+   * The unit a paper's recovery row opened Get ready for school on (MB-B40, by Select there: tv/keys paper). A set asked
+   * for on that unit while Get ready for school is open is aimed at the paper's lost statements (api/practice). It lasts
+   * while Get ready for school and its worked lesson are open; any other screen, a new paper, a learner switch, a new
+   * evening and the set itself clear it.
+   */
+  paperAim?: string | null;
   /** The worked lesson on the desk (v2 M1); cleared when another learner sits down. */
   worked?: Worked | null;
   /** The Workroom as the TV may see it (v2 T2, lib/twin/workroom.ts): titles, counts, marks, level words; never text. */
@@ -318,7 +334,7 @@ export interface Session {
 export type Event =
   | { type: "linga.changed"; conversation?: Conversation | null; check?: LevelCheck | null; screen?: Screen; focus?: number }
   // a join carries the code the phone was given; the session route checks it (lib/session/pairing.ts), the reducer does not
-  | { type: "join"; code?: string } | { type: "leave" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
+  | { type: "join"; code?: string } | { type: "leave" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen; aim?: string } | { type: "focus"; focus: number }
   | { type: "subject"; subject: Subject }
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
@@ -367,7 +383,7 @@ const f = {
 const maybe = (c: Field): Field => (v) => v === undefined || c(v);
 const lessonPick: Field = (v) => v === null || (f.object(v) && ["id", "title", "text", "why"].every((k) => f.str((v as Record<string, unknown>)[k])) && f.num((v as Record<string, unknown>).t) && maybe(f.str)((v as Record<string, unknown>).youtube));
 const SHAPES: { [K in Event["type"]]?: { [P in Exclude<keyof Extract<Event, { type: K }>, "type">]-?: Field } } = {
-  join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen) }, focus: { focus: f.int }, subject: { subject: f.subject },
+  join: { code: maybe(f.str) }, leave: {}, nav: { screen: f.screen, focus: maybe(f.int), from: maybe(f.screen), aim: maybe(f.str) }, focus: { focus: f.int }, subject: { subject: f.subject },
   "learner.set": { id: f.name }, "profile.draft": { patch: f.object }, "profile.save": {}, "profile.discard": {},
   "page.ask": { subject: f.subject }, "page.unask": {}, "page.select": { pageIx: f.int, itemIx: maybe(f.int) }, item: { itemIx: f.int }, view: { view: (v) => v === "band" || v === "overview" },
   "lesson.set": { lesson: lessonPick, key: maybe(f.str) }, "lesson.pause": { paused: f.bool },
@@ -593,7 +609,7 @@ function newProfileId(s: Session): string {
 }
 /** The learner at the desk changed: what belonged to the one who left is cleared, and so are the failed runs and the analyse run in flight (a failed read is not the next learner's to retry; a late reading is dropped by its id). */
 function switchedFrom(s: Session, n: Session): void {
-  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null;
+  n.conversation = null; n.check = null; n.english = null; n.worked = null; n.workroom = null; if (s.paperAim) n.paperAim = null;
   const jobs = { ...(s.jobs ?? {}) } as Jobs;
   for (const k of Object.keys(jobs) as JobKind[]) {
     const j = jobs[k];
@@ -620,7 +636,7 @@ function dayed(s: Session, e: Event, now = Date.now()): Session {
   const today = dayOf(now), was = s.log.day ?? (s.log.started ? dayOf(s.log.started) : undefined);
   if (!was || was === today) return s;
   const away = s.away ? Object.fromEntries(Object.entries(s.away).map(([k, x]) => [k, { ...x, log: { problems: [], hints: 0, hard: [] } }])) : undefined;
-  return { ...s, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, ...(away ? { away } : {}) };
+  return { ...s, log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, ...(away ? { away } : {}), ...(s.paperAim ? { paperAim: null } : {}) };
 }
 function stamped(n: Session, now = Date.now()): Session {
   if (n.log.day || !(loggedIn(n.log) || n.log.minutes || n.log.started || Object.values(n.away ?? {}).some((x) => loggedIn(x.log)))) return n;
@@ -648,7 +664,10 @@ function step(s: Session, e: Event): Session {
     case "pin.turn": { let pin = drawPin(); while (pin === s.pin) pin = drawPin(); n.pin = pin; break; }
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
     case "nav": if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
-      n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
+      n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from;
+      // the paper's aim (MB-B40): set by the recovery row's Select, kept between Get ready for school and its lesson, else gone
+      { const aim = e.aim && e.screen === "prepare" ? e.aim : AIM_KEEPS.has(s.screen) && AIM_KEEPS.has(e.screen) ? s.paperAim ?? null : null;
+        if (aim !== (s.paperAim ?? null)) n.paperAim = aim; } break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) switchedFrom(s, n); seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
@@ -756,7 +775,7 @@ function step(s: Session, e: Event): Session {
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
     // the paper is kept by dispatch (the reducer writes no file); the TV is then on its recovery list
-    case "paper.enter": n.subject = "maths"; n.screen = "paper"; n.focus = 0; break;
+    case "paper.enter": n.subject = "maths"; n.screen = "paper"; n.focus = 0; if (s.paperAim) n.paperAim = null; break;
     // a worked lesson lands for the learner who asked, and only while they are at the desk
     case "worked.set": if (e.owner && e.owner !== me) break; n.worked = { ...e.worked, owner: e.owner ?? me }; n.topic = e.worked.topic; n.subject = "maths"; n.screen = "worked"; n.focus = 0; break;
     // the Workroom summary for the learner at the desk; `open` also puts it on the TV
@@ -764,7 +783,7 @@ function step(s: Session, e: Event): Session {
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
     case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
-    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
+    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; if (s.paperAim) n.paperAim = null; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
     case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
       if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
