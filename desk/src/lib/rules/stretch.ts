@@ -19,8 +19,9 @@
  * distinct questions.
  *
  * MB-B20, a step up that steps up: on a unit with a TOP rung (rules/school TOP_TIER_GENERATORS: add and subtract fractions,
- * multiply and divide fractions) "harder" is two tier-1, two tier-2 and two tier-3 items, and tier 3 is new content inside
- * the school curriculum - mixed numbers, one item of the two a word problem. Every other unit's harder set is two and
+ * multiply and divide fractions, percent increase and decrease, Pythagoras' theorem) "harder" is two tier-1, two tier-2 and
+ * two tier-3 items, and tier 3 is new content inside the school curriculum - mixed numbers; the amount before a change, two
+ * changes in turn, a change over the years; sides with decimals and a rounded answer - one item of the two a word problem. Every other unit's harder set is two and
  * four as before, and the easier and standard rungs never hold tier 3, so a usual set is exactly what it was. The learner's school year is read from their age and system
  * (library/syllabus `schoolYear`, the rule behind the SCHOOL tick); the unit's year is its syllabus year in that system.
  *

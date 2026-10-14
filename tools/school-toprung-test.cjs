@@ -88,10 +88,21 @@ for(const [unit,gen] of Object.entries(GENS)){
  });
 }
 
-test('MB-B20 the top rung belongs to the two fractions units only, and a bad seed is null',()=>{
- assert.deepEqual(Object.keys(S.TOP_TIER_GENERATORS).sort(),['frac-add-sub','frac-mul-div']);
- assert.equal(S.topGeneratorFor('pct-change'),null);assert.equal(S.topGeneratorFor('constructor'),null);
- for(const bad of [-1,1.5,NaN,'1',null,undefined,2**32])for(const g of Object.values(GENS))assert.equal(g(bad),null);
+test('MB-B20 the top rung belongs to the two fractions units, percent change and Pythagoras only, and a bad seed is null',()=>{
+ assert.deepEqual(Object.keys(S.TOP_TIER_GENERATORS).sort(),['frac-add-sub','frac-mul-div','pct-change','pythagoras']);
+ assert.equal(S.topGeneratorFor('ratio-share'),null);assert.equal(S.topGeneratorFor('constructor'),null);
+ for(const bad of [-1,1.5,NaN,'1',null,undefined,2**32])for(const g of [...Object.values(GENS),S.genPercentTop,S.genPythagorasTop])assert.equal(g(bad),null);
+ // the registered top rungs are the generators themselves, a money amount in the learner's own currency (MB-B4)
+ for(let seed=0;seed<200;seed++){
+  assert.deepEqual(S.TOP_TIER_GENERATORS.pythagoras(seed,'cz'),S.genPythagorasTop(seed));
+  const raw=S.genPercentTop(seed);
+  for(const [sys,own] of [['cz','Kč'],['de','€'],['uk','£']]){
+   const got=S.TOP_TIER_GENERATORS['pct-change'](seed,sys);
+   assert.deepEqual(got,['€','£','$'].includes(raw.unit)?{...raw,unit:own}:raw,`${sys} ${seed}`);
+   assert.ok(S.wellFormed(got).ok);
+  }
+  assert.deepEqual(S.TOP_TIER_GENERATORS['pct-change'](seed),raw,'no system: as drawn');
+ }
  // tiers 1 and 2 are untouched: the unit generators still refuse tier 3
  assert.equal(S.gen(1,3),null);assert.equal(S.genMulDiv(1,3),null);
 });

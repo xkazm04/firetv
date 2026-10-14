@@ -69,11 +69,16 @@ export const LESSON_WRITING = "Writing the worked lesson.";
  * is new and says it is still school level, so a learner past the unit's year is not told it is more than it is.
  */
 export const TOP_RUNG_LINE = "Mixed numbers and a word problem join the harder ones, still school level, and a secure step up draws a second line.";
+/** The step up's sentence by unit with a top rung (MB-B20): each names what its rung adds. A top unit with none keeps the usual step-up sentence. */
+export const TOP_RUNG_LINES: Readonly<Record<string, string>> = {
+  "frac-add-sub": TOP_RUNG_LINE,
+  "frac-mul-div": TOP_RUNG_LINE,
+};
 
 /** The one sentence under the cells, for the lit one; `topic` the unit asked about (a top-rung unit says what its step up adds). */
 export function choiceLine(cell: number, topic?: string): string {
   if (cell === -1) return "A short worked example first, then six questions at your usual level.";
-  if (cell === 1 && topGeneratorFor(topic)) return TOP_RUNG_LINE;
+  if (cell === 1 && topGeneratorFor(topic) && Object.prototype.hasOwnProperty.call(TOP_RUNG_LINES, topic as string)) return TOP_RUNG_LINES[topic as string];
   return cell === 1
     ? "Six questions with more of the harder kind, and a secure step up draws a second line on its topic."
     : "Six questions at your usual level, marked by the desk when you snap or type your answers.";

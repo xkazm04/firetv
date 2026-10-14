@@ -384,11 +384,11 @@ function tierPlan(topicId: string, mix: Mix, n: number): [1 | 2 | 3, number][] {
   const { tier1, tier2, tier3 = 0 } = tierCounts(mix, n, !!topGeneratorFor(topicId));
   return ([[1, tier1], [2, tier2], [3, tier3]] as [1 | 2 | 3, number][]).filter(([t, want]) => t !== 3 || want > 0);
 }
-/** One spec for a seed and a tier: tiers 1 and 2 from the unit's generator (in the learner's money), tier 3 from its top rung. */
+/** One spec for a seed and a tier: tiers 1 and 2 from the unit's generator, tier 3 from its top rung, each in the learner's money. */
 function drawerFor(topicId: string, system?: SchoolSystem): ((seed: number, tier: 1 | 2 | 3) => SchoolSpec | null) | null {
   const make = generatorFor(topicId), top = topGeneratorFor(topicId);
   if (!make) return null;
-  return (seed, tier) => (tier === 3 ? (top ? top(seed) : null) : make(seed, tier, system));
+  return (seed, tier) => (tier === 3 ? (top ? top(seed, system) : null) : make(seed, tier, system));
 }
 
 /** The seeds one set may try per tier before it stops: far more than a unit's generator needs for three distinct items. */
@@ -415,7 +415,8 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  * each question is printed in the system's writing (a decimal comma in cz and de); none prints the set as it always was.
  *
  * MB-B20: on a unit with a top rung (rules/school TOP_TIER_GENERATORS) a "harder" set holds tier-3 items too (rules/stretch
- * tierCounts with `top`): mixed numbers, and at least one of them a word problem (the last tier-3 slot takes only a story
+ * tierCounts with `top`): the rung's own content (mixed numbers on the fractions units, a reverse percentage, two changes
+ * or the years on percent change, a rounded side on Pythagoras), and at least one of them a word problem (the last tier-3 slot takes only a story
  * while none is kept). Every other set asks for no tier 3 and is drawn exactly as before.
  */
 export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem): { items: PracticeItem[]; provider: string; ms: number; tries: number } {

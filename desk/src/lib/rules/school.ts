@@ -2849,12 +2849,16 @@ export function genMixedMulDiv(seed: unknown): SchoolSpec | null {
 
 /**
  * The units with a top rung (MB-B20), by topic id, each with its generator: the two fractions units whose top items carry
- * mixed numbers and word problems. A step up on one of them ("harder", rules/stretch tierCounts) asks for tier 3 here; no
- * other set does, so a usual set and every other unit's sets are exactly as before.
+ * mixed numbers and word problems, percent change (the amount before a change, two changes, a change over the years) and
+ * Pythagoras (sides with a decimal, the side rounded to the places asked). A step up on one of them ("harder",
+ * rules/stretch tierCounts) asks for tier 3 here; no other set does, so a usual set and every other unit's sets are exactly
+ * as before. `system` makes a money amount the learner's own (localMoney, MB-B4), as the unit generators do.
  */
-export const TOP_TIER_GENERATORS: Readonly<Record<string, (seed: number) => SchoolSpec | null>> = {
+export const TOP_TIER_GENERATORS: Readonly<Record<string, (seed: number, system?: SchoolSystem) => SchoolSpec | null>> = {
   "frac-add-sub": (seed) => genMixedAddSub(seed),
   "frac-mul-div": (seed) => genMixedMulDiv(seed),
+  "pct-change": (seed, system) => localMoney(genPercentTop(seed), system),
+  "pythagoras": (seed) => genPythagorasTop(seed),
 };
 /** The top-rung generator for a topic id, or null: an own key only. */
 export const topGeneratorFor = (topicId: unknown) =>
