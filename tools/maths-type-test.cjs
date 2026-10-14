@@ -467,3 +467,11 @@ test('M4c: a Calculus paper ticks the lines the chain checker says hold, leaves 
  const school={n:3,question:'Work out 3/4 + 1/6',spec:{shape:'compute',expr:'3/4 + 1/6'},studentAnswer:'5/10',verdict:'wrong'};
  assert.deepEqual(W.working({...school,studentWorking:'3/4 = 9/12\n1/6 = 2/12\n9/12 + 2/12 = 5/10',slipAt:{line:2}}).ticks,[true,true,false]);
 });
+
+test('MB-B4: a cz question sets Kč as one upright word and keeps the decimal comma inside the number line',()=>{
+ const n=T.parseMath('Work out 12,12\u00a0Kč × 5.');
+ assert.ok(n.some((x)=>x.t==='text'&&x.v==='Kč'),'Kč is a word');
+ assert.ok(!n.some((x)=>x.t==='var'&&x.v==='K'),'never the variable K');
+ assert.equal(flat('Work out 38,2 - 18,38.'),'Work out 38,2−18,38.');
+ assert.ok(T.parseMath('Kčx').some((x)=>x.t!=='text'||x.v!=='Kč'),'a longer run is not the crown');
+});

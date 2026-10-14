@@ -328,6 +328,17 @@ returns. The linear and Calculus topics still go straight to their set. Measured
 both tiers, four systems, 200 seeds): every one has a worked answer `check` confirms. Route `/api/worked`, job kind
 `teach`.
 
+**Questions in the learner's own numbers (MB-B4, 2026-10-14).** A code-written question (practice set and worked
+lesson alike) is printed for the seated profile's school system: `rules/school` `question(spec, system)`. In cz and de
+every decimal takes the decimal comma ("Work out 38,2 - 18,38.") and a percent stands after a no-break space ("34 %"),
+as Czech typesetting writes them (registry: localization czech, typography-and-spacing). Money is the learner's own: the
+generators' euros, pounds and dollars become Kč in cz, € in de and £ in uk (the numbers are not retuned, so a Kč amount
+reads small), and in cz and de the sign stands after the amount with a no-break space ("12,12 Kč × 5", "4,35 € +
+2,80 €"); uk keeps "£12.12 × 5". A us profile, or a profile with no system, gets the set exactly as before. The reader
+takes "Kč" (and "korun") as a unit, and "cm squared", "sq cm" and "square cm" as cm2; "liber" stays unsure (money or
+weight). Every printed question still reads back to its own spec, and code still marks the answer. The TV sets "Kč" as
+one upright word, never the variable K.
+
 ## Calculus graphs (v2 M4a, 2026-10-07)
 
 A Calculus item open on `walk` shows its graph under the card (`maths/plotting.ts`, `maths/Plot.tsx`, `data-role="maths-plot"`),

@@ -41,7 +41,7 @@ test('answers read as the school writes them', () => {
   assert.equal(S.workedAnswer({ shape: 'convert', expr: '15/8', to: 'decimal' }, 'uk'), '1.875');
   const money = S.SCHOOL_GENERATORS['pct-of-amount'](2, 2), shape = S.SCHOOL_GENERATORS['area'](1, 2);
   assert.equal(S.question(money).plain, 'Find 54% of £130.'); assert.equal(S.workedAnswer(money, 'uk'), '£70.20', 'money to the cent');
-  assert.equal(S.workedAnswer(money, 'cz'), '£70,20');
+  assert.equal(S.workedAnswer(money, 'cz'), '70,20\u00a0£', 'a comma system writes the sign after the amount, as its question prints it (MB-B4)');
   assert.match(S.workedAnswer(shape, 'uk') ?? '', /cm2$/, 'the unit kept');
   assert.equal(S.workedAnswer({ shape: 'compute', expr: '2/3 - 1/8' }, 'uk'), '13/24', 'a fraction question keeps its fraction');
   assert.equal(S.workedAnswer({ shape: 'nonsense' }, 'uk'), null);
@@ -91,4 +91,14 @@ test('keys: Select on a school unit asks for its lesson; on a linear topic, its 
   assert.equal(tvKey({ ...lesson, focus: 1 }, 'select').events.find(e => e.type === 'nav')?.screen, 'topics', 'Back to the topics');
   assert.deepEqual(tvKey({ ...lesson, focus: 1 }, 'select').calls, []);
   assert.equal(tvKey(lesson, 'back').events[0].screen, 'topics');
+});
+
+test('MB-B4: a cz lesson prints its examples in Kč with the decimal comma, and each answer is one check marks right for cz', () => {
+  let money = 0;
+  for (const seed of [1, 2, 3, 4, 5, 6]) for (const ex of W.workedExamples('dec-arith', 'cz', seed)) {
+    assert.ok(!/\d\.\d/.test(ex.question) && !/[£€$]/.test(ex.question), ex.question);
+    assert.ok(!/\d\.\d/.test(ex.answer), ex.answer);
+    if (/Kč/.test(ex.question)) { money++; assert.match(ex.answer, /^\d+,\d\d\u00a0Kč$/); }
+  }
+  assert.ok(money > 0, 'a money example in Kč');
 });

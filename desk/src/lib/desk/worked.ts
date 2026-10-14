@@ -26,7 +26,7 @@ export function cleanIdea(raw: unknown): string | null {
 
 /** The examples, by code only. `seed` is fixed by the tests; a fresh one otherwise (items.ts). */
 export function workedExamples(topic: string, system: SchoolSystem, seed?: number): Worked["examples"] {
-  const made = makeSchoolItems(topic, 3, seed);
+  const made = makeSchoolItems(topic, 3, seed, "standard", false, [], system);
   return made.items.flatMap((it) => {
     const answer = workedAnswer(it.spec, system);
     return answer ? [{ question: it.question, answer, tier: it.tier ?? 1 }] : [];

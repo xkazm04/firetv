@@ -38,8 +38,9 @@
  *     brackets or '='), `answer:`, `ans:` or `=`, one trailing full stop, spaces. A two-letter or segment name, a name
  *     with a digit, two names and an equation stay null. Ceiling: the check compares values, not names, so a wrong
  *     name with the right value (`a = 10` where c is asked) is right; a school spec names no unknown to compare to;
- *   - a unit from the closed list UNITS (and the English words for them) after the number, or a currency sign before
- *     or after it, is returned as `unit` and never changes the number; any other trailing word is null;
+ *   - a unit from the closed list UNITS (and the English words for them; "cm squared", "sq cm", "square cm" are cm2, and
+ *     "Kč" or "korun" the Czech crown, MB-B4) after the number, or a currency sign before or after it, is returned as
+ *     `unit` and never changes the number; any other trailing word is null;
  *   - us and uk: '.' is the decimal point; ',' only separates thousands in the strict 1,234 / 12,345,678 grouping, and
  *     any other comma (`0,5`, `1,5`, `1,00`) is null (a comma is also a list: `0,5` may be "0 and 5"); a space inside
  *     a number (`1 000`) is null;
@@ -83,7 +84,7 @@
  *
  * Pure: no React, no filesystem, no model, no network; imports only a type from the store.
  */
-import { readTask } from "./taskText";
+import { commaSystem, readTask } from "./taskText";
 import type { SchoolSystem } from "@/lib/session/store";
 import { EN_CARD, EN_ORD, figuresOfCzech } from "./numberWords";
 
@@ -143,7 +144,7 @@ export const SCHOOL_SYSTEMS: readonly SchoolSystem[] = ["us", "uk", "cz", "de"];
 const isSystem = (s: unknown): s is SchoolSystem => typeof s === "string" && (SCHOOL_SYSTEMS as readonly string[]).includes(s);
 
 /** The closed unit list, as the desk writes each one. */
-export const UNITS = ["cm", "m", "km", "mm", "cm2", "m2", "kg", "g", "l", "ml", "min", "h", "s", "€", "$", "£"] as const;
+export const UNITS = ["cm", "m", "km", "mm", "cm2", "m2", "kg", "g", "l", "ml", "min", "h", "s", "€", "$", "£", "Kč"] as const;
 export type Unit = (typeof UNITS)[number];
 
 /** Every spelling the reader takes for a unit, longest first so 'cm2' is never 'm2' and 'min' never 'm'. */
@@ -151,8 +152,9 @@ const UNIT_SPELLINGS: [string, Unit][] = (() => {
   const out: [string, Unit][] = [];
   const add = (u: Unit, ...s: string[]) => s.forEach((w) => out.push([w, u]));
   const len = (_u: Unit, stem: string) => [`${stem}res`, `${stem}re`, `${stem}ers`, `${stem}er`];
-  add("cm2", "cm2", "cm^2", "cm²", ...len("cm2", "square centimet"));
-  add("m2", "m2", "m^2", "m²", ...len("m2", "square met"));
+  // MB-B4: "cm squared", "sq cm" and "square cm" are how a UK learner writes cm2 (and the same for m2)
+  add("cm2", "cm2", "cm^2", "cm²", "cm squared", "sq cm", "square cm", ...len("cm2", "square centimet"));
+  add("m2", "m2", "m^2", "m²", "m squared", "sq m", "square m", ...len("m2", "square met"));
   add("cm", "cm", ...len("cm", "centimet"));
   add("mm", "mm", ...len("mm", "millimet"));
   add("km", "km", ...len("km", "kilomet"));
@@ -167,6 +169,8 @@ const UNIT_SPELLINGS: [string, Unit][] = (() => {
   add("€", "€", "euros", "euro");
   add("$", "$", "dollars", "dollar");
   add("£", "£"); // not "pounds": money or weight
+  // MB-B4: the Czech crown after the amount ("12,50 Kč", matched lower-cased); not "liber" (pounds: money or weight)
+  add("Kč", "kč", "czk", "korun", "koruny", "koruna");
   return out.sort((a, b) => b[0].length - a[0].length);
 })();
 
@@ -886,7 +890,7 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
   if (K.k === "rate") {
     // W7 batch 3: q2 of them at p for q1 is p × q2 / q1; a cost in € or £, a distance in km; to the penny at most
     const u = (st.spec as { unit?: Unit }).unit;
-    if (K.measure === "cost" ? u !== "€" && u !== "£" : u !== "km") return { ok: false, why: REJECT.rateUnit };
+    if (K.measure === "cost" ? !isMoney(u) : u !== "km") return { ok: false, why: REJECT.rateUnit };
     if (K.q1 < BigInt(2)) return { ok: false, why: REJECT.rateOne };
     if (K.q2 === K.q1) return { ok: false, why: REJECT.sameRate };
     if (K.q1 > lim || K.q2 > lim || K.p.n > lim * K.p.d) return { ok: false, why: REJECT.big };
@@ -1030,7 +1034,7 @@ function texOf(n: Node): string {
     case "op": return `${texOf(n.a)} ${OP_TEX[n.op]} ${texOf(n.b)}`;
   }
 }
-const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", cm2: "cm²", m2: "m²", kg: "kg", g: "g", l: "litres", ml: "ml", min: "minutes", h: "hours", s: "seconds", "€": "euros", $: "dollars", "£": "pounds" };
+const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", cm2: "cm²", m2: "m²", kg: "kg", g: "g", l: "litres", ml: "ml", min: "minutes", h: "hours", s: "seconds", "€": "euros", $: "dollars", "£": "pounds", "Kč": "Kč" };
 /**
  * An amount's unit as a fraction-of question prints it after the number: a one-letter unit as its word, because the
  * typesetter sets a lone letter as a variable (40 m would read as 40 times m). € and £ are printed as a sign before
@@ -1038,13 +1042,25 @@ const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", 
  */
 const AMOUNT_WORD: Record<Unit, string> = { ...UNIT_WORD, m: "metres", g: "grams", l: "litres", h: "hours", s: "seconds" };
 
+/** The money units a question prints as a sign (MB-B4: the Czech crown with € and £). */
+const isMoney = (u: unknown): u is "€" | "£" | "Kč" => u === "€" || u === "£" || u === "Kč";
+/** The no-break space: a number and its unit never part at a line end (Czech typography, CS-NBSP). */
+const NBSP = "\u00a0";
+/** Does the money sign go after the amount? Kč always; € and £ in a comma system too (12,50 Kč, 12,50 €); never in us or uk (£12.50). */
+const signAfter = (u: Unit, system?: SchoolSystem) => u === "Kč" || commaSystem(system);
+/** One money amount: '£60', or after it with a no-break space, '60 Kč' (TeX: '60~\text{Kč}', ~ the no-break space). */
+function moneyText(N: string, u: "€" | "£" | "Kč", system?: SchoolSystem): { plain: string; tex: string } {
+  return signAfter(u, system) ? { plain: `${N}${NBSP}${u}`, tex: `${N}~\\text{${u}}` } : { plain: `${u}${N}`, tex: `${u}${N}` };
+}
+
 /**
- * An amount as a question prints it: € and £ as a sign before the number (€60); any other unit as its word after it (60
- * kg, 60 metres), a dollar as "60 dollars" since the typesetter reads a plain '$' as TeX's math delimiter and drops it.
+ * An amount as a question prints it: € and £ as a sign before the number (€60), after it in a comma system and always
+ * for Kč (60 Kč, MB-B4); any other unit as its word after it (60 kg, 60 metres), a dollar as "60 dollars" since the
+ * typesetter reads a plain '$' as TeX's math delimiter and drops it.
  */
-function amountText(N: string, u: Unit | undefined): { plain: string; tex: string } {
+function amountText(N: string, u: Unit | undefined, system?: SchoolSystem): { plain: string; tex: string } {
   if (!u) return { plain: N, tex: N };
-  if (u === "€" || u === "£") return { plain: `${u}${N}`, tex: `${u}${N}` };
+  if (isMoney(u)) return moneyText(N, u, system);
   return { plain: `${N} ${AMOUNT_WORD[u]}`, tex: `${N} \\text{ ${AMOUNT_WORD[u]}}` };
 }
 
@@ -1073,36 +1089,56 @@ const workingPlaces = (d: DecOp) => (d.op === "×" ? d.pa + d.pb : Math.max(d.pa
  * ("€4.35 + €2.80"), and before the amount only of an amount times a whole count ("£3.45 × 4"); null otherwise (another
  * unit, a fraction, a count that is not whole), and the question then names the unit after it as before.
  */
-function moneyLine(n: Node, unit: Unit): { plain: string; tex: string } | null {
-  if ((unit !== "€" && unit !== "£") || n.k !== "op" || n.a.k !== "num" || n.b.k !== "num") return null;
-  if (n.op === "+" || n.op === "-") return { plain: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}`, tex: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}` };
-  if (n.op === "×" && n.b.whole) return { plain: `${unit}${n.a.s} × ${n.b.s}`, tex: `${unit}${n.a.s} \\times ${n.b.s}` };
+function moneyLine(n: Node, unit: Unit, system?: SchoolSystem): { plain: string; tex: string } | null {
+  if (!isMoney(unit) || n.k !== "op" || n.a.k !== "num" || n.b.k !== "num") return null;
+  const A = moneyText(n.a.s, unit, system), B = moneyText(n.b.s, unit, system);
+  if (n.op === "+" || n.op === "-") return { plain: `${A.plain} ${n.op} ${B.plain}`, tex: `${A.tex} ${n.op} ${B.tex}` };
+  if (n.op === "×" && n.b.whole) return { plain: `${A.plain} × ${n.b.s}`, tex: `${A.tex} \\times ${n.b.s}` };
   return null;
+}
+
+/**
+ * A question in the learner's own number writing (MB-B4): in a comma system (cz, de) every point between two digits is
+ * the decimal comma (38,2; '{,}' in TeX, so the typesetter adds no space after it) and a percent sign stands after a
+ * no-break space (34 %), as Czech and German typesetting write them. us and uk are returned exactly as printed.
+ */
+function inSystem(q: { plain: string; tex: string }, system?: SchoolSystem): { plain: string; tex: string } {
+  if (!commaSystem(system)) return q;
+  return {
+    plain: q.plain.replace(/(\d)\.(?=\d)/g, "$1,").replace(/(\d)%/g, `$1${NBSP}%`),
+    tex: q.tex.replace(/(\d)\.(?=\d)/g, "$1{,}").replace(/(\d)\\%/g, "$1~\\%"),
+  };
 }
 
 /**
  * The question, printed by code from the spec, as plain text and the TeX the typesetter reads: 'Work out 3/4 + 1/6.'
  * and '\text{Work out } \frac{3}{4} + \frac{1}{6}.', with 'Give your answer in its simplest form.' (or 'as a
  * decimal.', or 'in cm.') after it when the spec asks. Null when the spec is malformed; never a throw, never the
- * answer (the spec has none, and only its own numbers are printed).
+ * answer (the spec has none, and only its own numbers are printed). `system` (MB-B4): the learner's school system; in cz
+ * and de the question is written as they write numbers (inSystem: 38,2; 34 %; money signs after the amount); no system,
+ * us and uk print it as it always was. specFromQuestion(text, system) reads every printed question back to its spec.
  */
-export function question(spec: unknown): { plain: string; tex: string } | null {
+export function question(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
+  const sys = isSystem(system) ? system : undefined, q = printQuestion(spec, sys);
+  return q && inSystem(q, sys);
+}
+function printQuestion(spec: unknown, system?: SchoolSystem): { plain: string; tex: string } | null {
   try {
     const st = structure(spec);
     if (!st.ok) return null;
     const K = st.kind;
     if (K.k === "of") {
-      const am = amountText(String(K.N), specUnit(st.spec));
+      const am = amountText(String(K.N), specUnit(st.spec), system);
       return { plain: `Find ${K.a}/${K.b} of ${am.plain}.`, tex: `\\text{Find } \\frac{${K.a}}{${K.b}} \\text{ of } ${am.tex}.` };
     }
     if (K.k === "pct-of") {
       // W7 batch 2: "Find 35% of 80.", "Find 15% of €60.", "Find 12% of 250 kg."
-      const am = amountText(String(K.N), specUnit(st.spec));
+      const am = amountText(String(K.N), specUnit(st.spec), system);
       return { plain: `Find ${K.ptext}% of ${am.plain}.`, tex: `\\text{Find } ${K.ptext}\\% \\text{ of } ${am.tex}.` };
     }
     if (K.k === "pct-change") {
       // W7 batch 2: "Increase 60 by 15%.", "Decrease €80 by 25%.", "Decrease 250 kg by 12%."
-      const am = amountText(String(K.base), specUnit(st.spec)), verb = K.up ? "Increase" : "Decrease";
+      const am = amountText(String(K.base), specUnit(st.spec), system), verb = K.up ? "Increase" : "Decrease";
       return { plain: `${verb} ${am.plain} by ${K.ptext}%.`, tex: `\\text{${verb} } ${am.tex} \\text{ by } ${K.ptext}\\%.` };
     }
     if (K.k === "missing") {
@@ -1113,7 +1149,7 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     // W7 batch 3: "Write 12:18 in its simplest form.", "Share €60 in the ratio 2:3.", "Fill in the missing number: 2:3 = ?:15."
     if (K.k === "ratio-simplify") return { plain: `Write ${K.a}:${K.b} in its simplest form.`, tex: `\\text{Write } ${K.a}:${K.b} \\text{ in its simplest form.}` };
     if (K.k === "ratio-share") {
-      const am = amountText(String(K.T), specUnit(st.spec));
+      const am = amountText(String(K.T), specUnit(st.spec), system);
       return { plain: `Share ${am.plain} in the ratio ${K.a}:${K.b}.`, tex: `\\text{Share } ${am.tex} \\text{ in the ratio } ${K.a}:${K.b}.` };
     }
     if (K.k === "stat") {
@@ -1170,7 +1206,7 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
         const hrs = (n: bigint) => (n === ONE ? "hour" : "hours");
         return { plain: `${K.ptext} km in ${K.q1} hours. How far in ${K.q2} ${hrs(K.q2)}?`, tex: `${K.ptext} \\text{ km in } ${K.q1} \\text{ hours. How far in } ${K.q2} \\text{ ${hrs(K.q2)}?}` };
       }
-      const am = amountText(K.ptext, specUnit(st.spec)), one = K.q2 === ONE, item = one ? RATE_NOUNS[K.noun] : K.noun;
+      const am = amountText(K.ptext, specUnit(st.spec), system), one = K.q2 === ONE, item = one ? RATE_NOUNS[K.noun] : K.noun;
       return {
         plain: `${K.q1} ${K.noun} cost ${am.plain}. What ${one ? "does" : "do"} ${K.q2} ${item} cost?`,
         tex: `${K.q1} \\text{ ${K.noun} cost } ${am.tex}. \\text{ What ${one ? "does" : "do"} } ${K.q2} \\text{ ${item} cost?}`,
@@ -1188,7 +1224,7 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     }
     const { node } = st, s = st.spec as ComputeSpec;
     // money (W7 batch 2): "Work out €4.35 + €2.80.", "Work out £3.45 × 4." - the sign on each amount, never on a count
-    const money = s.unit ? moneyLine(node, s.unit) : null;
+    const money = s.unit ? moneyLine(node, s.unit, system) : null;
     if (money && !s.form) return { plain: `Work out ${money.plain}.`, tex: `\\text{Work out } ${money.tex}.` };
     const tail = s.form === "simplest" ? "Give your answer in its simplest form." : s.form === "decimal" ? "Give your answer as a decimal." : s.unit ? `Give your answer in ${UNIT_WORD[s.unit]}.` : "";
     return {
@@ -2824,6 +2860,17 @@ export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2
   "probability": (seed, tier) => genProbability(seed, tier),
 };
 
+/** The money a learner's own school counts in (MB-B4): Kč in cz, € in de, £ in uk; us keeps what the generator drew. */
+const LOCAL_MONEY: Partial<Record<SchoolSystem, Unit>> = { cz: "Kč", de: "€", uk: "£" };
+/**
+ * A generated spec in the learner's money (MB-B4): a €, £ or $ amount becomes the system's own currency, the numbers
+ * untouched (the ceiling: a Kč figure is not retuned to Kč sizes). No system, us, or a spec with no money: as drawn.
+ */
+function localMoney(spec: SchoolSpec | null, system?: SchoolSystem): SchoolSpec | null {
+  const own = isSystem(system) ? LOCAL_MONEY[system] : undefined, u = (spec as { unit?: Unit } | null)?.unit;
+  return spec && own && (u === "€" || u === "£" || u === "$") && u !== own ? { ...spec, unit: own } as SchoolSpec : spec;
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
@@ -2831,19 +2878,19 @@ export const GCSE_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2
  * probability, once their sweep passed). A topic not here is written as
  * it always was.
  */
-export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
-  "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
-  "frac-of-amount": (seed, tier) => genOfAmount(seed, tier),
-  "frac-add-sub": (seed, tier) => gen(seed, tier),
-  "frac-mul-div": (seed, tier) => genMulDiv(seed, tier),
-  "dec-arith": (seed, tier) => genDecimal(seed, tier),
-  "dec-convert": (seed, tier) => genConvert(seed, tier),
-  "pct-of-amount": (seed, tier) => genPercentOf(seed, tier),
-  "pct-change": (seed, tier) => genPercentChange(seed, tier),
-  "ratio-share": (seed, tier) => genRatio(seed, tier),
-  "unit-rate": (seed, tier) => genRate(seed, tier),
-  "area": (seed, tier) => genArea(seed, tier),
-  "mean-range": (seed, tier) => genStat(seed, tier),
+export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2, system?: SchoolSystem) => SchoolSpec | null>> = {
+  "frac-equivalent": (seed, tier, system) => localMoney(genEquivalent(seed, tier), system),
+  "frac-of-amount": (seed, tier, system) => localMoney(genOfAmount(seed, tier), system),
+  "frac-add-sub": (seed, tier, system) => localMoney(gen(seed, tier), system),
+  "frac-mul-div": (seed, tier, system) => localMoney(genMulDiv(seed, tier), system),
+  "dec-arith": (seed, tier, system) => localMoney(genDecimal(seed, tier), system),
+  "dec-convert": (seed, tier, system) => localMoney(genConvert(seed, tier), system),
+  "pct-of-amount": (seed, tier, system) => localMoney(genPercentOf(seed, tier), system),
+  "pct-change": (seed, tier, system) => localMoney(genPercentChange(seed, tier), system),
+  "ratio-share": (seed, tier, system) => localMoney(genRatio(seed, tier), system),
+  "unit-rate": (seed, tier, system) => localMoney(genRate(seed, tier), system),
+  "area": (seed, tier, system) => localMoney(genArea(seed, tier), system),
+  "mean-range": (seed, tier, system) => localMoney(genStat(seed, tier), system),
   // v2 M2b: the units that passed the sweep (tools/gcse-units-test.cjs); a unit that fails stays out of GCSE_GENERATORS' spread here
   ...GCSE_GENERATORS,
 };
@@ -2997,8 +3044,10 @@ function readSimplify(t0: string): SchoolSpec | null {
   return null;
 }
 
-/** A decimal or whole number as a worksheet prints it, an optional € or £ before it: 4.35, 0.4, 12, €2.80 (m[sign], m[number]). */
-const MONEY_DEC_SRC = String.raw`([€£])?\s?((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)`;
+/** A decimal or whole number as a worksheet prints it, an optional €, £ or Kč before it: 4.35, 0.4, 12, €2.80 (m[sign], m[number]). */
+const MONEY_DEC_SRC = String.raw`(€|£|Kč)?\s?((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)`;
+/** A money sign written after its amount ('2.80 €', '3.45 Kč', MB-B4) put before it, as MONEY_DEC_SRC reads it ('€2.80'). */
+const signFirst = (t: string) => t.replace(/((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)\s?(€|£|Kč)(?![\p{L}\d])/giu, (_, n: string, c: string) => `${/^k/i.test(c) ? "Kč" : c}${n}`);
 /** The phrasings of two numbers added, subtracted or multiplied, each giving sign and number (m[1..2], m[4..5]) and the operation word m[3]. */
 const DEC_TASKS: { re: RegExp; op: (w: string) => "+" | "-" | "×"; swap?: boolean }[] = [
   // '4.35 + 2.8', 'Work out 3.6 × 0.4', 'Calculate €4.35 + €2.80', '3.6 x 0.4', '4.35 plus 2.8'
@@ -3017,11 +3066,12 @@ const DEC_TASKS: { re: RegExp; op: (w: string) => "+" | "-" | "×"; swap?: boole
  * whole count ('£3.45 × 4'); any other placing of a sign is null.
  */
 function readDecimal(t0: string): SchoolSpec | null {
-  const t = t0.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+  const t = signFirst(t0.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim());
   for (const { re, op, swap } of DEC_TASKS) {
     const m = re.exec(t);
     if (!m) continue;
-    let [sa, a, sb, b] = [m[1], m[2], m[4], m[5]];
+    const crown = (x: string | undefined) => (x && /^k/i.test(x) ? "Kč" : x);
+    let [sa, a, sb, b] = [crown(m[1]), m[2], crown(m[4]), m[5]];
     if (swap) [sa, a, sb, b] = [sb, b, sa, a];
     const o = op(m[3]);
     if (!a.includes(".") && !b.includes(".")) return null;
@@ -3136,8 +3186,8 @@ function readRatio(t0: string): SchoolSpec | null {
   return spec && read(spec).ok ? spec : null;
 }
 
-/** A price in a rate task: '€3.50', '£3.50', '3.50 euros', '30 euro' (pounds is money or weight: never read). */
-const RATE_PRICE = String.raw`(?:([€£])\s?((?:0|[1-9]\d{0,3})(?:\.\d\d)?)|((?:0|[1-9]\d{0,3})(?:\.\d\d)?)\s?(?:euros?|€))`;
+/** A price in a rate task: '€3.50', '£3.50', '3.50 euros', '30 euro', '3.50 €', '3.50 £', '3.50 Kč' (pounds is money or weight: never read). */
+const RATE_PRICE = String.raw`(?:([€£])\s?((?:0|[1-9]\d{0,3})(?:\.\d\d)?)|((?:0|[1-9]\d{0,3})(?:\.\d\d)?)\s?(euros?|€|£|Kč))`;
 /** How the question part of a cost asks it, the count and the item: 'What do 8 pens cost', 'Find the cost of 8 pens', 'What is the price of 1 kg'. */
 const RATE_ASK = String.raw`(?:what\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|how\s+much\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|(?:find|what\s+is)\s+the\s+(?:cost|price)\s+of\s+([1-9]\d{0,2})\s+([a-z]+))`;
 
@@ -3153,8 +3203,8 @@ function readRate(t0: string): SchoolSpec | null {
   const t = t0.replace(/[.?!]$/, "").trim();
   let m = new RegExp(String.raw`^(?:if\s+)?([1-9]\d{0,2})\s+([a-z]+)\s+cost\s+${RATE_PRICE}\s*[.,]\s*${RATE_ASK}$`, "i").exec(t);
   if (m) {
-    const [q1, noun] = [m[1], m[2].toLowerCase()], unit = (m[3] ?? "€") as Unit, price = m[4] ?? m[5];
-    const q2 = m[6] ?? m[8] ?? m[10], item = (m[7] ?? m[9] ?? m[11]).toLowerCase();
+    const [q1, noun] = [m[1], m[2].toLowerCase()], unit = (m[3] ?? (/^euro/i.test(m[6]) ? "€" : /^k/i.test(m[6]) ? "Kč" : m[6])) as Unit, price = m[4] ?? m[5];
+    const q2 = m[7] ?? m[9] ?? m[11], item = (m[8] ?? m[10] ?? m[12]).toLowerCase();
     if (!Object.prototype.hasOwnProperty.call(RATE_NOUNS, noun) || item !== (q2 === "1" ? RATE_NOUNS[noun] : noun)) return null;
     const spec: SchoolSpec = { shape: "rate", expr: `${q1} ${noun} cost ${price}, ${q2}`, unit };
     return read(spec).ok ? spec : null;
@@ -3427,7 +3477,10 @@ export function workedAnswer(spec: unknown, system: unknown = DEFAULT_SCHOOL_SYS
   }
   // money is written to the cent: £70.20, not £70.2
   const cents = (c: string) => (/^-?\d+[.,]\d$/.test(c) ? `${c}0` : c);
-  const withUnit = (c: string) => (!unit ? [] : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
+  // a money sign after the amount first where the question prints it there (12,50 Kč; 12,50 € in a comma system, MB-B4)
+  const after = (c: string) => [`${cents(c)}${NBSP}${unit}`, `${c}${NBSP}${unit}`];
+  const withUnit = (c: string) => (!unit ? [] : unit === "Kč" ? after(c) : isMoney(unit) && commaSystem(system as SchoolSystem) ? [...after(c), `${unit}${cents(c)}`, `${unit}${c}`]
+    : ["€", "$", "£"].includes(unit) ? [`${unit}${cents(c)}`, `${unit}${c}`, `${c} ${unit}`] : [`${c} ${unit}`]);
   // a decimal is written the way the learner's school writes it: a comma first where the system uses one (cz, de)
   const comma = system === "cz" || system === "de";
   const local = (c: string) => (/\d\.\d/.test(c) ? (comma ? [c.replace(".", ","), c] : [c, c.replace(".", ",")]) : [c]);

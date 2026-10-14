@@ -68,7 +68,7 @@ const TEX_TEXT = new Set(["text", "mathrm", "textrm", "mbox", "textit", "operato
 /** Commands that only say how to set what follows; the reader sets it its own way. */
 const TEX_QUIET = /^\\(limits|nolimits|displaystyle|textstyle|scriptstyle)(?![a-zA-Z])/;
 /** Two-letter runs that are English, not a product of two variables (`dx`, `xy` and `uv` stay maths). */
-const WORD2 = new Set(["or", "of", "to", "in", "is", "if", "by", "an", "at", "as", "on", "be", "it", "so", "no", "up", "we", "do", "go", "me", "my", "am", "cm", "mm", "km", "kg", "ml", "Or", "Of", "To", "In", "Is", "If", "By", "An", "At", "As", "On", "It", "So", "No", "Up", "We", "Do"]);
+const WORD2 = new Set(["or", "of", "to", "in", "is", "if", "by", "an", "at", "as", "on", "be", "it", "so", "no", "up", "we", "do", "go", "me", "my", "am", "cm", "mm", "km", "kg", "ml", "Kč", "Or", "Of", "To", "In", "Is", "If", "By", "An", "At", "As", "On", "It", "So", "No", "Up", "We", "Do"]);
 /** A root sign and its index: √ is square, ∛ cube, ∜ fourth. */
 const ROOT_GLYPH: Record<string, string | undefined> = { "√": undefined, "∛": "3", "∜": "4" };
 const SUP: Record<string, string> = { "⁰": "0", "¹": "1", "²": "2", "³": "3", "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "⁺": "+", "⁻": "-", "⁼": "=", "⁽": "(", "⁾": ")", "ⁿ": "n", "ˣ": "x", "ʸ": "y", "ⁱ": "i", "ᵏ": "k", "ᵃ": "a", "ᵇ": "b", "ᵗ": "t" };
@@ -281,6 +281,8 @@ function tokens(s: string): Tok[] {
     const c = s[i];
     if (/\s/.test(c)) { let j = i; while (j < s.length && /\s/.test(s[j])) j++; out.push({ k: "ws", n: j - i }); i = j; continue; }
     if (/[0-9]/.test(c) || (c === "." && /[0-9]/.test(s[i + 1] ?? ""))) { const m = /^[0-9]*\.?[0-9]+|^[0-9]+/.exec(s.slice(i))!; out.push({ k: "num", v: m[0] }); i += m[0].length; continue; }
+    // the Czech crown is one upright word, never K beside a letter (MB-B4: "12,50 Kč" on a cz learner's question)
+    if (s.startsWith("Kč", i) && !/[\p{L}\d]/u.test(s[i + 2] ?? "")) { out.push({ k: "let", v: "Kč" }); i += 2; continue; }
     if (/[a-zA-Z]/.test(c)) { const m = /^[a-zA-Z]+/.exec(s.slice(i))!; out.push({ k: "let", v: m[0] }); i += m[0].length; continue; }
     if (c in SUP) { let v = ""; while (i < s.length && s[i] in SUP) v += SUP[s[i++]]; out.push({ k: "sup", v }); continue; }
     if (c in SUB) { let v = ""; while (i < s.length && s[i] in SUB) v += SUB[s[i++]]; out.push({ k: "sub", v }); continue; }

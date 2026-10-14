@@ -1257,7 +1257,7 @@ const B3_SPELLINGS={
   // is unsure, never wrong - the desk does not teach units by marking them wrong; a bare number that differs is wrong
   [AR1,'28','uk','right'],[AR1,'28 cm2','uk','right'],[AR1,'28cm2','uk','right'],[AR1,'28 cm^2','uk','right'],[AR1,'28 cm²','uk','right'],[AR1,'28 square centimetres','uk','right'],[AR1,'x = 28','uk','right'],[AR1,'28.0','uk','right'],
   [AR1,'28 cm','uk','unsure'],[AR1,'28 m2','uk','unsure'],[AR1,'28 m','uk','unsure'],[AR1,'0.28 m2','uk','unsure'],[AR1,'28%','uk','unsure'],[AR1,'twenty-eight','uk','unsure'],[AR1,'','uk','unsure'],
-  [AR1,'28 cm3','uk','unsure'],[AR1,'28 square cm','uk','unsure'],[AR1,'22 cm','uk','unsure'],
+  [AR1,'28 cm3','uk','unsure'],[AR1,'28 square cm','uk','right'],[AR1,'22 cm','uk','unsure'],
   [AR1,'11','uk','wrong','area-added-sides'],[AR1,'22','uk','wrong','area-added-sides'],[AR1,'14','uk','wrong'],[AR1,'27','uk','wrong'],[AR1,'29','uk','wrong'],
   // 12 m by 9 m = 108 m2
   [AR2,'108','uk','right'],[AR2,'108 m2','uk','right'],[AR2,'108 m²','uk','right'],[AR2,'108 square metres','uk','right'],[AR2,'108 cm2','uk','unsure'],[AR2,'42 m','uk','unsure'],
@@ -2042,4 +2042,67 @@ test('MK13: a right answer written with its name is read (MB-B25)',()=>{
  for (const w of ['P = 3/10','P(A) = 3/10','p(red) = 0.3']) assert.equal(S.check(QA,w,'uk').verdict,'right',`QA ${w}`);
  assert.equal(S.check(S1,'c = 9/12','uk').verdict,'unsure');
  assert.equal(S.check(S1,'c = 3/4','uk').verdict,'right');
+});
+
+// ------------------------------------------------------------------ MB-B4: a question in the learner's own decimals and money
+test('MB-B4 question(spec, system): a comma system prints the decimal comma; us and uk print the point as before',()=>{
+ const D=cs('38.2 - 18.38');
+ assert.equal(S.question(D,'cz').plain,'Work out 38,2 - 18,38.');
+ assert.equal(S.question(D,'de').plain,'Work out 38,2 - 18,38.');
+ assert.equal(S.question(D,'cz').tex,'\\text{Work out } 38{,}2 - 18{,}38.');
+ for (const sys of ['uk','us',undefined,'xx']) assert.equal(S.question(D,sys).plain,'Work out 38.2 - 18.38.',String(sys));
+ // a percent stands after a no-break space in cz and de (34 %), the decimal comma in it too
+ assert.equal(S.question({shape:'percent-of',expr:'12.5% of 80'},'cz').plain,'Find 12,5\u00a0% of 80.');
+ assert.equal(S.question({shape:'percent-of',expr:'12.5% of 80'},'uk').plain,'Find 12.5% of 80.');
+ assert.equal(S.question({shape:'probability',expr:'complement red 0.35'},'cz').plain,'The probability that a spinner lands on red is 0,35. What is the probability it does not land on red?');
+});
+test('MB-B4 question(spec, system): money in Kč after the amount with a no-break space; € after it in a comma system; £ before it in uk',()=>{
+ const K=cs('12.12 × 5',{unit:'Kč'}),P=cs('12.12 × 5',{unit:'£'}),E=cs('4.35 + 2.80',{unit:'€'});
+ assert.equal(S.question(K,'cz').plain,'Work out 12,12\u00a0Kč × 5.');
+ assert.equal(S.question(K,'cz').tex,'\\text{Work out } 12{,}12~\\text{Kč} \\times 5.');
+ assert.equal(S.question(P,'uk').plain,'Work out £12.12 × 5.');
+ assert.equal(S.question(E,'de').plain,'Work out 4,35\u00a0€ + 2,80\u00a0€.');
+ assert.equal(S.question(E,'uk').plain,'Work out €4.35 + €2.80.');
+ assert.equal(S.question({shape:'percent-change',expr:'increase 400 by 34%',unit:'Kč'},'cz').plain,'Increase 400\u00a0Kč by 34\u00a0%.');
+ assert.equal(S.question({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'},'cz').plain,'5 pens cost 3,50\u00a0Kč. What do 8 pens cost?');
+ assert.equal(S.question({shape:'ratio',expr:'60 in 2:3',unit:'Kč'},'cz').plain,'Share 60\u00a0Kč in the ratio 2:3.');
+ assert.equal(S.question({shape:'fraction-of',expr:'3/4 of 60',unit:'Kč'},'cz').plain,'Find 3/4 of 60\u00a0Kč.');
+ assert.ok(S.wellFormed({shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'}).ok,'a cost in Kč is a rate the desk sets');
+});
+test("MB-B4 generators: money is the system's own (Kč cz, € de, £ uk), us and no system as drawn; every printed question reads back to its spec",()=>{
+ const own={cz:'Kč',de:'€',uk:'£'};
+ for (const sys of ['cz','de','uk','us']) for (const [id,g] of Object.entries(S.SCHOOL_GENERATORS)) for (const tier of [1,2]) for (let seed=0;seed<60;seed++){
+  const spec=g(seed,tier,sys),drawn=g(seed,tier);
+  if (!spec) continue;
+  assert.ok(S.wellFormed(spec).ok,`${sys} ${id} well formed`);
+  assert.equal(spec.expr,drawn.expr,`${sys} ${id}: the numbers are the generator's`);
+  if (own[sys] && ['€','£','$'].includes(drawn.unit)) assert.equal(spec.unit,own[sys],`${sys} ${id} ${drawn.unit}`);
+  else assert.equal(spec.unit,drawn.unit,`${sys} ${id} unit as drawn`);
+  const q=S.question(spec,sys);
+  if (sys==='cz'||sys==='de') assert.ok(!/\d\.\d/.test(q.plain),`${sys} no decimal point: ${q.plain}`);
+  assert.deepEqual(S.specFromQuestion(q.plain,sys),spec,`${sys}: ${q.plain} reads back`);
+  // the leak check reads the system-free print (items.ts): the same numbers, no comma or no-break space to split at
+  assert.equal(S.leaksSchool(spec,S.question(spec).plain),false,`${sys}: ${q.plain} does not state its answer`);
+  if (S.workedAnswer(drawn,'uk')) assert.ok(S.workedAnswer(spec,sys),`${sys}: ${q.plain} has a worked answer check marks right`);
+ }
+});
+test('MB-B4 readNumber and check: Kč is a unit; cm squared, sq cm and square cm are cm2; liber stays unsure',()=>{
+ const r=S.readNumber('536 Kč','cz');assert.ok(r&&r.value.n===536&&r.unit==='Kč');
+ assert.equal(S.readNumber('60,60\u00a0Kč','cz').unit,'Kč');assert.equal(S.readNumber('12 korun','cz').unit,'Kč');
+ assert.equal(S.readNumber('536 liber','cz'),null);
+ for (const w of ['28 cm squared','28 sq cm','28 square cm','28 cm2']) assert.equal(S.readNumber(w,'uk').unit,'cm2',w);
+ for (const w of ['28 m squared','28 sq m','28 square m']) assert.equal(S.readNumber(w,'uk').unit,'m2',w);
+ const AR={shape:'area',expr:'rectangle 7 by 4',unit:'cm2'};
+ for (const w of ['28 cm squared','28 sq cm','28 square cm']) assert.equal(S.check(AR,w,'uk').verdict,'right',w);
+ assert.equal(S.check(AR,'28 cm','uk').verdict,'unsure');
+ const K=cs('12.12 × 5',{unit:'Kč'});
+ for (const w of ['60,60 Kč','60,6 Kč','60,60\u00a0Kč','60,60']) assert.equal(S.check(K,w,'cz').verdict,'right',w);
+ assert.equal(S.check(K,'60,60 €','cz').verdict,'unsure','another currency is unsure, never converted');
+ assert.equal(S.workedAnswer(K,'cz'),'60,60\u00a0Kč');
+ assert.equal(S.workedAnswer(cs('12.12 × 5',{unit:'£'}),'uk'),'£60.60');
+ // the readers take a sign after the amount as worksheets print it
+ assert.deepEqual(S.specFromQuestion('Work out 4,35 Kč + 2,80 Kč.','cz'),cs('4.35 + 2.80',{unit:'Kč'}));
+ assert.deepEqual(S.specFromQuestion('Work out 3.45 € × 4.','de'),cs('3.45 × 4',{unit:'€'}));
+ assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),cs('4.35 + 2.80',{unit:'€'}));
+ assert.deepEqual(S.specFromQuestion('5 pens cost 3,50 Kč. What do 8 pens cost?','cz'),{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'Kč'});
 });

@@ -34,7 +34,7 @@ import { getLearner } from "../session/learners";
 import { notesBlock } from "./memory";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
-import type { PracticeItem } from "../session/store";
+import type { PracticeItem, SchoolSystem } from "../session/store";
 import { calcWordsOf, pathOfTopic, shapesOfTopic, topicIn } from "../library/paths";
 import { kindOfTopic } from "../rules/kinds";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
@@ -135,7 +135,7 @@ export async function makeItems(
   const kind = kindOfTopic(topicId);
   if (kind === "calc") return flag(await makeCalcItems(topicId, learnerId, n, opts.word));
   // a school unit's set is aimed at the learner's live slips on it, newest first (the record keeps them newest last)
-  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse());
+  if (kind === "school") return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch, [...(getLearner(learnerId).skills[topicId]?.slips ?? [])].reverse(), opts.system);
   return flag(await makeLinearItems(topicId, learnerId, n));
 }
 
@@ -356,12 +356,15 @@ const freshSeed = () => Math.floor(Math.random() * 0x100000000);
  * the set (three of six) is drawn where an aimed slip SHOWS (rules/school slipShows, pinned to the desk's own check), the
  * hits shared between the tiers, the tier mix and the six distinct questions kept, still no engine call. With no aim (none,
  * an empty list, or ids the unit cannot show) the set is exactly what it was.
+ *
+ * `system` (MB-B4): the learner's school system. The generator's money is the system's own (Kč in cz, € in de, £ in uk) and
+ * each question is printed in the system's writing (a decimal comma in cz and de); none prints the set as it always was.
  */
-export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = []): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false, aim: readonly string[] = [], system?: SchoolSystem): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
   const t0 = Date.now();
   const own = Object.prototype.hasOwnProperty.call(SCHOOL_UNIT_SLIPS, topicId) ? SCHOOL_UNIT_SLIPS[topicId] : [];
   const live = (Array.isArray(aim) ? aim : []).filter((id): id is string => typeof id === "string" && own.includes(id));
-  if (live.length) return aimedSchoolItems(topicId, n, seed, mix, stretch, live, t0);
+  if (live.length) return aimedSchoolItems(topicId, n, seed, mix, stretch, live, t0, system);
   const make = generatorFor(topicId);
   const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 }[] = [];
   const seen = new Set<string>();
@@ -369,10 +372,12 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
   for (const [tier, want] of [[1, tier1], [2, tier2]] as const) {
     let got = 0;
     for (let k = 0; make && k < SCHOOL_TRIES && got < want; k++) {
-      const spec = make((seed + k) % 0x100000000, tier);
+      const spec = make((seed + k) % 0x100000000, tier, system);
       if (!spec || !schoolWellFormed(spec).ok) continue;
-      const q = schoolQuestion(spec);
-      if (!q || leaksSchool(spec, q.plain)) continue;
+      // the leak check reads the question as the desk prints it with no system: a decimal comma or '63 %' split at its comma
+      // or space is the question's own number, not its answer (MB-B4), and the numbers printed are the same
+      const q = schoolQuestion(spec, system);
+      if (!q || leaksSchool(spec, schoolQuestion(spec)?.plain)) continue;
       const key = sameKey(q.plain);
       if (seen.has(key)) continue;
       seen.add(key);
@@ -388,7 +393,7 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
  * rest. Half the set (rounded up) is taken from the hits, alternating the tiers while both have some, then each tier is
  * filled to its mix from its other specs, and from more hits when it has no others. In draw order within a tier.
  */
-function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, stretch: boolean, aim: readonly string[], t0: number): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, stretch: boolean, aim: readonly string[], t0: number, system?: SchoolSystem): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
   const make = generatorFor(topicId);
   type Drawn = { spec: SchoolSpec; question: string; tier: 1 | 2; k: number };
   const seen = new Set<string>();
@@ -396,10 +401,12 @@ function aimedSchoolItems(topicId: string, n: number, seed: number, mix: Mix, st
   const pools = ([[1, tier1], [2, tier2]] as const).map(([tier, want]) => {
     const hits: Drawn[] = [], rest: Drawn[] = [];
     for (let k = 0; make && k < SCHOOL_TRIES && (hits.length < want || rest.length < want); k++) {
-      const spec = make((seed + k) % 0x100000000, tier);
+      const spec = make((seed + k) % 0x100000000, tier, system);
       if (!spec || !schoolWellFormed(spec).ok) continue;
-      const q = schoolQuestion(spec);
-      if (!q || leaksSchool(spec, q.plain)) continue;
+      // the leak check reads the question as the desk prints it with no system: a decimal comma or '63 %' split at its comma
+      // or space is the question's own number, not its answer (MB-B4), and the numbers printed are the same
+      const q = schoolQuestion(spec, system);
+      if (!q || leaksSchool(spec, schoolQuestion(spec)?.plain)) continue;
       const hit = aim.some((id) => slipShows(spec, id));
       if ((hit ? hits : rest).length >= want) continue;
       const key = sameKey(q.plain);

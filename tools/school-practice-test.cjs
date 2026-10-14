@@ -606,3 +606,21 @@ test('M2b 1: the path grows by two units after the equations - their names, stra
  const src2=fs.readFileSync(src('lib/library/syllabus.ts'),'utf8');
  assert.match(src2,/HELD LATER THAN USUAL in three systems/);assert.match(src2,/a teacher reads these four before release/);
 });
+
+test('MB-B4: a set for a cz learner prints the decimal comma and Kč; the uk set prints £; no system prints the set as before',async()=>{
+ noModel();
+ const cz=makeSchoolItems('dec-arith',6,3,'standard',false,[],'cz'),uk=makeSchoolItems('dec-arith',6,3,'standard',false,[],'uk'),none=makeSchoolItems('dec-arith',6,3);
+ assert.equal(cz.items.length,6);assert.equal(uk.items.length,6);
+ for (const it of cz.items){assert.ok(!/\d\.\d/.test(it.question)&&!/[£€$]/.test(it.question),it.question);assert.deepEqual(S.specFromQuestion(it.question,'cz'),it.spec);}
+ assert.ok(cz.items.some((it)=>/\d,\d\d\u00a0Kč/.test(it.question)),'a money item in Kč');
+ for (const it of uk.items) assert.ok(!/[€$]|Kč/.test(it.question),it.question);
+ assert.ok(uk.items.some((it)=>/£\d/.test(it.question)),'a money item in £');
+ assert.deepEqual(none.items.map((i)=>i.spec.expr),uk.items.map((i)=>i.spec.expr),'the numbers are the same set');
+ // makeItems threads the asked system (the practice route passes the seated profile's)
+ const made=await makeItems('pct-change',LEARNER,6,{system:'cz'});
+ assert.ok(made.items.length>0);
+ for (const it of made.items) assert.ok(!/\d\.\d/.test(it.question)&&!/[£€$]/.test(it.question),it.question);
+ // every unit's set is full in every system: the decimal comma and '63 %' never read as the answer given away
+ for (const sys of ['cz','de','uk','us']) for (const id of Object.keys(S.SCHOOL_GENERATORS)) for (const seed of [1,2,3]) assert.equal(makeSchoolItems(id,6,seed,'standard',false,[],sys).items.length,6,`${sys} ${id} ${seed}`);
+ assert.equal(seen.length,0,'no engine call');
+});
