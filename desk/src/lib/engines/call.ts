@@ -25,12 +25,15 @@ export interface Called<R> { answer: ProviderAnswer<R>; provider: string; ms: nu
 
 const firstLine = (e: unknown) => String((e as { message?: unknown } | null)?.message ?? e).split(/\r?\n/)[0].trim() || "The engine failed.";
 
-/** Run one provider under its deadline. Resolves with its answer, or rejects with an EngineError, always. */
-export async function call<Req extends { timeoutMs?: number; use?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1): Promise<Called<R>> {
+/**
+ * Run one provider under its deadline. Resolves with its answer, or rejects with an EngineError, always. `budgetMs`,
+ * when set, is the deadline itself: what is left of an earlier attempt's (shape.ts re-ask), so attempts share one.
+ */
+export async function call<Req extends { timeoutMs?: number; use?: string }, R>(kind: EngineKind, p: Provider<Req, R>, req: Req, attempt = 1, budgetMs?: number): Promise<Called<R>> {
   const started = Date.now(), ctl = new AbortController();
   let timer: ReturnType<typeof setTimeout> | undefined;
   const late = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => { ctl.abort(); reject(new EngineError("timeout", p.name, `The ${kind} engine took too long. Please retry.`)); }, deadlineFor(kind, p, req));
+    timer = setTimeout(() => { ctl.abort(); reject(new EngineError("timeout", p.name, `The ${kind} engine took too long. Please retry.`)); }, budgetMs ?? deadlineFor(kind, p, req));
   });
   // A provider that settles after the deadline has already lost the race; its late rejection is not an unhandled one.
   const ran = Promise.resolve().then(() => p.run(req, { signal: ctl.signal }));
