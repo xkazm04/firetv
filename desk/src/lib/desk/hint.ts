@@ -21,6 +21,7 @@
  * checked by the general rule alone, as before.
  */
 import { text } from "../engines/text";
+import { EngineError, type Again } from "../engines/types";
 import { cardText, type RuleCard } from "../rules/english";
 import { equationOf, expressionOf, leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, withheldCalc } from "../rules/calc";
@@ -163,7 +164,7 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const maths = subject === "maths";
   const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}` +
     (maths ? `\nKeep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.` : "") + (maths && opts.ground ? `\n${opts.ground}` : "");
-  const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast", use: "hint" });
+  const ask = (extra: string, after?: Again) => text<Said>({ system, prompt: prompt + extra, schema: maths ? MATHS_SCHEMA : SCHEMA, model: "fast", use: "hint" }, after);
   const first = await ask("");
   const leaked = maths ? leakedIn(problem, spec, first.json, opts.system) : null, long = maths ? longIn(first.json) : null;
   if (!leaked && !long) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
@@ -171,7 +172,11 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const told = leaked && !long ? `Your previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`
     : `Your previous hint ${[leaked && `gave the answer away (in ${leaked})`, long && `was over ${MAX_HINT_WORDS} words (in ${long})`].filter(Boolean).join(" and ")}. ` +
       `Write it again: one step, ${leaked ? "stop short of the answer, " : ""}and keep the hint and what_to_try_next to ${MAX_HINT_WORDS} words or fewer each.`;
-  const again = await ask(`\n\n${told}`).catch(() => null);
+  // the re-ask spends what is left of the first call's deadline and is booked as its next try; a failed one leaves the first answer
+  const again = await ask(`\n\n${told}`, first.again).catch((e: unknown) => {
+    console.warn(`[hint] the re-ask failed (${e instanceof EngineError ? e.kind : "unknown"}); the first answer decides.`);
+    return null;
+  });
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
   // after the re-ask a leak is still withheld (a safety rule); a line only too long is shown (length is a value rule)
   if (again && !leakedIn(problem, spec, again.json, opts.system)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };

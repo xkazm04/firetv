@@ -19,7 +19,7 @@ import path from "node:path";
 import { codexCli } from "./codex";
 import { provider, register } from "./registry";
 import { answer } from "./shape";
-import { EngineError, findBinary, type EngineResult, type Provider, type TextRequest, type Usage } from "./types";
+import { EngineError, findBinary, type Again, type EngineResult, type Provider, type TextRequest, type Usage } from "./types";
 
 const BIN = process.env.CLAUDE_BIN || "claude";
 const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
@@ -115,8 +115,9 @@ register("text", [claudeCli, codexCli], () => (process.env.DESK_TEXT_ENGINE === 
 
 /**
  * One text call. The registry picks the provider (UAT text-live runs set DESK_TEXT_ENGINE=codex in their own
- * processes; the dev server never does); the answer is held to req.schema whichever one ran.
+ * processes; the dev server never does); the answer is held to req.schema whichever one ran. A caller asking again
+ * after judging an answer passes that answer's `again`: the re-ask spends what is left of its deadline (types.ts Again).
  */
-export async function text<T = unknown>(req: TextRequest): Promise<EngineResult<T>> {
-  return answer<TextRequest, T>(provider("text"), req);
+export async function text<T = unknown>(req: TextRequest, after?: Again): Promise<EngineResult<T>> {
+  return answer<TextRequest, T>(provider("text"), req, "text", after);
 }

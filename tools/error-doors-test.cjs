@@ -81,7 +81,6 @@ const SILENT={
  'src/essay/EssayTV.tsx':2,
  'src/landing/themes/blueprint/Blueprint.tsx':2,
  'src/landing/themes/paper/Paper.tsx':1,
- 'src/lib/desk/hint.ts':1,
  'src/lib/engines/call.ts':1,
  'src/lib/engines/codex.ts':1,
  'src/lib/engines/health.ts':1,

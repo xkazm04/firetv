@@ -19,7 +19,13 @@ export interface EmbedRequest { texts: string[]; timeoutMs?: number; use: string
 export interface ListenRequest { audio: Blob; filename: string; timeoutMs?: number; use: string; }
 export interface Heard { text: string; language?: string; }
 
-export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; }
+/**
+ * What a caller's own re-ask of a finished answer is owed: when that call's deadline ends and which try the re-ask is.
+ * Handed back to the seam (text(req, first.again)), the re-ask spends only what is left and is booked as that try, so a
+ * judged-then-asked-again turn ends inside one deadline (model-call-outcome-integrity: one-deadline-across-attempts).
+ */
+export interface Again { deadlineAt: number; try: number; }
+export interface EngineResult<T> { json: T; provider: string; ms: number; raw?: string; again?: Again; }
 
 /**
  * What a provider hands back: its raw answer (a string to parse, or an already parsed value), the provider

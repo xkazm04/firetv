@@ -8,7 +8,7 @@
  * (counted in characters), minItems/maxItems, items. Any other keyword is not checked.
  */
 import { call, deadlineFor } from "./call";
-import { EngineError, type EngineKind, type EngineResult, type JSONSchema, type Provider } from "./types";
+import { EngineError, type Again, type EngineKind, type EngineResult, type JSONSchema, type Provider } from "./types";
 
 // ---- schema builders, shared by the callers that write their schemas inline
 
@@ -121,18 +121,21 @@ export function cutLong(value: unknown, s: JSONSchema): unknown {
  * stands. No limit moves. If the second answer is still broken ONLY by overlong strings, each is cut at a word
  * boundary (cutLong) rather than failing the learner's screen; any other break, or a run with no boundary, fails.
  */
-export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number; use?: string }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text"): Promise<EngineResult<T>> {
-  const started = Date.now(), deadline = deadlineFor(kind, p, req);
+export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean; timeoutMs?: number; use?: string }, T>(p: Provider<Req, unknown>, req: Req, kind: EngineKind = "text", after?: Again): Promise<EngineResult<T>> {
+  // one deadline across every attempt: a caller's re-ask (after) spends what is left of its first call's, never a fresh one,
+  // and is not started when nothing is left - no attempt, so no ledger row
+  const started = Date.now(), deadlineAt = after ? after.deadlineAt : started + deadlineFor(kind, p, req), tried = after?.try ?? 1;
+  if (deadlineAt <= started) throw new EngineError("timeout", p.name, `The ${kind} engine took too long. Please retry.`);
   const s = req.accept ?? req.schema;
   // the answer is parsed and held to the schema inside call(), so the ledger row says shape when it is (call.ts accept)
   let value: unknown, broken: Break[] = [], name = "";
   let first: EngineError;
   try {
-    const { answer: a } = await call(kind, p, req, 1, undefined, (got, provider) => {
+    const { answer: a } = await call(kind, p, req, tried, after ? deadlineAt - started : undefined, (got, provider) => {
       name = provider; value = parse(got.raw, s, provider); broken = s ? validate(value, s) : [];
       if (broken.length) throw outside(provider, broken);
     });
-    return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit };
+    return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit, again: { deadlineAt, try: tried + 1 } };
   } catch (e) {
     if (!(e instanceof EngineError) || e.kind !== "shape" || !broken.length) throw e;
     first = e;
@@ -141,18 +144,18 @@ export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSch
   const named = broken.map(([path, why]) => `${path || "(answer)"} is ${why}`).join("; ");
   console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
   // one deadline across both attempts: the re-ask gets what is left of the first one's, never a fresh one
-  const remaining = deadline - (Date.now() - started);
+  const remaining = deadlineAt - Date.now();
   if (remaining <= 0) throw first;
   try {
     // the second answer, or its word-boundary cut when only lengths still break; anything else is a shape row for try 2
     let kept: unknown;
-    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, 2, remaining, (got, provider) => {
+    const { answer: b, provider: again } = await call(kind, p, { ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` }, tried + 1, remaining, (got, provider) => {
       const second = parse(got.raw, s, provider), left = s ? validate(second, s) : [];
       kept = second;
       if (left.length && onlyTooLong(left)) { const cut = cutLong(second, s!); if (!validate(cut, s!).length) { kept = cut; return; } }
       if (left.length) throw outside(provider, left);
     });
-    return { json: kept as T, provider: again, ms: Date.now() - started, raw: b.audit };
+    return { json: kept as T, provider: again, ms: Date.now() - started, raw: b.audit, again: { deadlineAt, try: tried + 2 } };
   } catch (e) {
     // a second answer that is still malformed leaves the first, clearer rejection; a re-ask that timed out, exited or
     // could not be reached is that, as the ledger row for try 2 already says - never relabelled as the first's shape

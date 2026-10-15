@@ -10,7 +10,7 @@ const {cleanEnglish,mergeEvidence,validateObservations}=require(path.join(root,'
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});
 const realText=engine.text;
-engine.text=(req)=>answer(req);
+engine.text=(req,after)=>answer(req,after);
 const {englishCommand}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
@@ -251,7 +251,7 @@ test('an optional moment or observation that overruns its limit is dropped, and 
   moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'w'.repeat(300)}})})});
  engine.text=realText;
  try{await command('turn',{text:'I has booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});}
- finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  const after=getSession().conversation;
  assert.equal(after.error,'');assert.equal(after.turns.length,3);assert.equal(after.turns.at(-1).text,'What name is it under?');
  assert.equal(after.moment,null,'the over-long moment is dropped, not the turn');
@@ -312,6 +312,15 @@ test('a topic touches the interest when its title or premise names one of the in
  const plan=[scene('Share your idea in a team meeting'),scene('Summarise a project update'),scene('Cooking for your team'),scene('Planning a trip')];
  assert.equal(plan.filter(t=>P.touchesInterest(t,w)).length,1);
  assert.equal(plan.slice(0,2).filter(t=>P.touchesInterest(t,w)).length,0);
+});
+test("the interest re-ask spends what is left of the plan call's deadline: it carries that answer's ticket",async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest:'travelling and cooking'},notes:[]});
+ const work=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ const ticket={deadlineAt:Date.now()+60000,try:2},seen=[];
+ answer=async(req,after)=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);seen.push(after);return {json:{topics:work.slice(0,p.count)},provider:'test',ms:1,again:ticket};};
+ await command('plan-propose');
+ assert.equal(seen.length,2);assert.equal(seen[0],undefined,'the first plan call starts its own deadline');assert.equal(seen[1],ticket,"the re-ask is handed the first answer's ticket");
 });
 test('a plan that misses a known interest is asked for once more with the gap named; no topic is written by the desk',async()=>{
  const setUp=async interest=>{fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
@@ -510,7 +519,7 @@ test('ladder case 5: help.ts drops a malformed rung and the turn still lands; wi
  const reg=require(path.join(root,'src/lib/engines/registry.ts'));
  reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
  engine.text=realText;
- try{await reply('For Friday.');}finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ try{await reply('For Friday.');}finally{engine.text=(req,after)=>answer(req,after);reg.resetProviders();}
  c=getSession().conversation;assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,'And for how many nights?');
  await command('cue');assert.equal(getSession().conversation.cue,'nights: how many times you sleep there');
 });

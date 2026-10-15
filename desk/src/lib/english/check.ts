@@ -8,6 +8,7 @@
 import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
+import type { Again } from "../engines/types";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS } from "./curriculum";
@@ -71,8 +72,8 @@ function blank(learnerId: string, stage: LevelCheck["stage"]): LevelCheck {
 }
 
 interface Ctx { profile: Profile; learning: EnglishLearning; adult: boolean; commandId: string; }
-const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000) =>
-  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" });
+const ask = (system: string, prompt: Record<string, unknown>, shape: Record<string, unknown>, timeoutMs = 90000, after?: Again) =>
+  text<Record<string, unknown>>({ system, prompt: JSON.stringify(prompt), schema: shape, model: "fast", timeoutMs, isolated: true, shorten: true, use: "linga-check" }, after);
 
 /**
  * One model call against the check. Pending while it runs; the result lands only on the same check,
@@ -216,7 +217,8 @@ async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, sw
       const gap = `Your previous answer had no topic set in the learner's interest (learner.interest): ${fresh.map(t => t.title).join("; ")}. Answer again under the same rules, with ${count > 1 ? "at least two topics" : "the topic"} set in that interest,${inInterest}${count > 1 ? ", still with the two closest to their goal first" : ""}.`;
       console.info("Linga plan: no topic carried the learner's interest; asked once more.");
       try {
-        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000), second = pick(again.json);
+        // asked again inside the first call's deadline, booked as its next try (types.ts Again)
+        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000, r.again), second = pick(again.json);
         ms += again.ms;
         if (second.some(t => touchesInterest(t, stems))) { fresh = second; provider = again.provider; }
         else console.warn("Linga plan: the second answer missed the interest too; the first is kept.");

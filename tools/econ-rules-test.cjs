@@ -183,6 +183,15 @@ test('case h: pickLesson, the hint ask, makeItems, markSet and the lessons embed
  assert(!fs.readFileSync(LEDGER,'utf8').includes('econ-mark'),'no learner id in the ledger');
 });
 
+test('case h2: a hint asked again for a leak leaves two hint rows, try 1 and try 2: the caller re-ask is booked as one turn',async()=>{
+ let n=0;
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify(n++===0?{hint:'So x = 6.',what_to_try_next:'Write x = 6.'}:{hint:'What undoes the minus 7?',what_to_try_next:'Write your answer under the line.'})})});
+ const {hint}=load('desk/hint.ts');
+ let got;const r=await rowsOf(async()=>{got=await hint('maths','Solve for x:  3x − 7 = 11',{});});
+ assert.equal(n,2,'the leak was asked again');assert.equal(got.hint,'What undoes the minus 7?');
+ assert.deepEqual(r.map((x)=>[x.use,x.try]),[['hint',1],['hint',2]]);
+});
+
 // ---- case i: the rest of the labelled call sites
 const src=(f)=>fs.readFileSync(path.join(root,'src',f),'utf8');
 
@@ -211,7 +220,7 @@ test('case i2: the explain functions, the Linga check ask and the speak route la
  const ex=src('lib/desk/explain.ts');
  assert.equal((ex.match(/use: 'explain'|use: "explain"/g)||[]).length,3);
  assert.equal((ex.match(/text<[^\n]*model: "best", use: "explain" \}\)/g)||[]).length,3,'each explain label sits inside a text request');
- assert(/text<Record<string, unknown>>\(\{[^\n]*use: "linga-check" \}\)/.test(src('lib/english/check.ts')),'check.ts ask: linga-check');
+ assert(/text<Record<string, unknown>>\(\{[^\n]*use: "linga-check" \}(, after)?\)/.test(src('lib/english/check.ts')),'check.ts ask: linga-check');
  assert(/speak\(\{ text: [^\n]*use: "speak" \}\)/.test(src('app/api/speak/route.ts')),'speak route: speak');
 });
 

@@ -224,6 +224,25 @@ test('case 17b: the re-ask gets what is left of the first deadline, not a fresh 
  assert.equal(calls,2);
  assert(took<200+60,`ended inside the one 200 ms deadline (plus scheduling), not 120 + a fresh 200: took ${took} ms`);
 });
+test('case 17d: a caller\'s re-ask handed the first answer\'s ticket ends inside that call\'s deadline, not a fresh one',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;if(calls===1){await new Promise(r=>setTimeout(r,120));return {raw:ANSWER.text};}return new Promise(()=>{});}});
+ const {text}=load('engines/text.ts');
+ const t0=Date.now();
+ const first=await text({system:'s',prompt:'p',timeoutMs:200});
+ assert.equal(first.again.try,2);assert(Math.abs(first.again.deadlineAt-(t0+200))<30,'the ticket names the first call\'s own deadline');
+ await assert.rejects(within(text({system:'s',prompt:'p again',timeoutMs:200},first.again),1000),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ const took=Date.now()-t0;
+ assert.equal(calls,2);
+ assert(took<200+60,`the turn ended inside the one 200 ms deadline (plus scheduling), not 120 + a fresh 200: took ${took} ms`);
+});
+test('case 17e: a re-ask whose ticket has no time left is not started: timeout, and the provider is never called',async()=>{
+ let calls=0;
+ reg().useProvider('text',{name:'stub',run:async()=>{calls++;return {raw:ANSWER.text};}});
+ const {text}=load('engines/text.ts');
+ await assert.rejects(text({system:'s',prompt:'p'},{deadlineAt:Date.now()-1,try:2}),(e)=>e instanceof engineError()&&e.kind==='timeout');
+ assert.equal(calls,0);
+});
 test('case 17c: the re-ask is chosen from the code validate() sets, not from its wording',()=>{
  const {validate,onlyTooLong}=load('engines/shape.ts');
  const b=validate({why:'x'.repeat(25)},{type:'object',properties:{why:{type:'string',maxLength:20}}});
