@@ -608,6 +608,40 @@ test('MB-B36: a cz or de Calculus task with tg, cotg, arctg or arccotg reads as 
  assert.equal(C.specFromQuestion('Derivujte: y = atgx',  'cz'),null);
 });
 
+test('MB-B36 log: a cz task reads a bare log and lg as base 10, a de task lg only; uk, us and none read the text as before',()=>{
+ const E=require(path.join(root,'src/lib/rules/calc-expr.ts'));
+ const same=(a,b)=>{const ea=E.compile(a),eb=E.compile(b);return [0.3,0.7,1.2,5].every(x=>Math.abs(ea.at(x)-eb.at(x))<1e-9);};
+ const LOG10='log(x)/log(10)',LN='log(x)';
+ // [text, cz, de, uk/us/none] - the function each reads, null where it reads nothing
+ const rows=[
+  ['Derivujte: y = log x',LOG10,LN,LN],['Differentiate f(x) = log(x)',LOG10,LN,LN],['Find f(100) for f(x) = log(x)',LOG10,LN,LN],
+  ['Find the integral of log(x)',LOG10,LN,LN],['Derivujte: y = lg x',LOG10,LOG10,null],['Derivujte: y = LG(x)',LOG10,LOG10,null],
+  // a log with its own base keeps it, and ln is natural, everywhere
+  ['Differentiate f(x) = log_2(x)','log(x)/log(2)','log(x)/log(2)','log(x)/log(2)'],['Differentiate f(x) = ln(x)',LN,LN,LN],
+ ];
+ for(const [text,cz,de,rest] of rows){
+  for(const [sys,want] of [['cz',cz],['de',de],['uk',rest],['us',rest],[undefined,rest]]){
+   const s=C.specFromQuestion(text,sys);
+   if(want===null){assert.equal(s,null,`${text} ${sys} stays unread`);continue;}
+   assert.ok(s,`${text} ${sys} reads`);assert.ok(same(s.f,want),`${text} ${sys}: ${s.f}`);
+  }
+  // uk, us and none: byte for byte the spec the text read before (no system at all)
+  for(const sys of ['uk','us'])assert.deepEqual(C.specFromQuestion(text,sys),C.specFromQuestion(text),`${text} ${sys} as before`);
+ }
+ // the decimal comma still reads as a point around a cz log, and the cz learner's answer is judged in the same base
+ const at=C.specFromQuestion('Find f(1,5) for f(x) = log x','cz');
+ assert.equal(at.at,1.5);assert.ok(same(at.f,LOG10),at.f);
+ const ev=C.specFromQuestion('Find f(100) for f(x) = log(x)','cz');
+ assert.equal(C.checkAnswer(ev,'2','cz').verdict,'right','the cz page\'s log 100 is 2');
+ assert.equal(C.checkAnswer(ev,'log 100','cz').verdict,'right');
+ assert.equal(C.checkAnswer(C.specFromQuestion('Find f(100) for f(x) = log(x)','uk'),'2','uk').verdict,'wrong','uk keeps the natural log');
+ // a word with the letters log in it is not a log
+ assert.equal(C.specFromQuestion('Derivujte: y = dialog x','cz'),C.specFromQuestion('Derivujte: y = dialog x'));
+ // the printed question carries the base, so the screen says which log it is
+ const q=C.question(C.specFromQuestion('Differentiate f(x) = log(x)','cz'),'cz');
+ assert.ok(q&&/log_\(?10/.test(q.plain)&&!/(?<![a-z\\])log(?![_\d])/.test(q.plain),q&&q.plain);
+});
+
 test('MK14: a long right answer is taken whole (MB-B32)',()=>{
  const M=require(path.join(root,'src/lib/rules/maths.ts'));
  const QUOTIENT='(2x*cos(x^2)*(x^3+1)-3x^2*sin(x^2))/(x^3+1)^2';

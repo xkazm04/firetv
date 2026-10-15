@@ -66,6 +66,14 @@ const BARE_LOG = /(?<!(?!x)\p{L})log(?![_\d₀-₉])(?!(?!x(?!\p{L}))\p{L})/giu;
 /** The base 10 as the engine reads it (calc-expr log_b): bracketed, so a number after it ('lg 2', 'lg2') stays its argument. */
 const LOG10 = "log_(10)";
 /**
+ * The base-10 logs of a comma system written with their base (MB-B36 log): `lg` in cz and de, a bare `log` in cz only, as
+ * log_(10). The one table an answer (czechAnswer) and a task (calc specFromQuestion) are read by; anything else unchanged.
+ */
+export const systemLogs = (text: string, system?: string) => {
+  const s = text.replace(LG, LOG10);
+  return system === "cz" ? s.replace(BARE_LOG, LOG10) : s;
+};
+/**
  * A Calculus answer in a comma system (cz, de; MB-B36), as the reader reads it: a decimal comma between digits is a point
  * ('0,5x^2' is 0.5x^2, as taskText plainTask reads a task; '1,2,3' and '0, 5' are left alone), the Czech function names
  * (czechNames), and a trailing constant by another letter is the arbitrary constant C. `lg` is the base-10 log, and in
@@ -74,8 +82,7 @@ const LOG10 = "log_(10)";
  * Anything else comes back unchanged.
  */
 export const czechAnswer = (ans: string, system?: string) => {
-  let s = ans.replace(LG, LOG10);
-  if (system === "cz") s = s.replace(BARE_LOG, LOG10);
+  const s = systemLogs(ans, system);
   return czechNames(s.replace(/(?<![\d.,])(\d+),(\d+)(?![\d,])/g, "$1.$2")).replace(OTHER_CONSTANT, "$1 C");
 };
 /**

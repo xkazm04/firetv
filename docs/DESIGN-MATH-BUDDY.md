@@ -415,8 +415,13 @@ of a bare `log` is safe there: de keeps it natural, as before. The one table rea
 text: a model's spec "log(x)" stays natural, and a question printed for a cz or de learner (`question(spec, system)`,
 which the Calculus set passes) shows that natural log as `ln`, so the screen never says `log` for a function the cz
 learner reads differently; the read and hint prompts name log/lg for base 10 and ln for natural in the notation line.
-uk, us and no system read and print exactly as before. A task read from a cz page still reads a bare `log` as natural
-when its text reads as written (readTask tries the text as it is first); that stays open.
+uk, us and no system read and print exactly as before. A task read from a page goes through the same table first
+(2026-10-15): `specFromQuestion` and `partsFromQuestion` hand `readTask` the text with its logs in the system's base
+(`calc-read` `systemLogs`, the table `czechAnswer` reads by), so a cz "Derivujte: y = log x" is log_(10) x even though
+the raw text would parse as the natural log, and a de "y = lg x" reads where it read nothing before. Only the log names
+change before readTask, so its as-written-first order - kept so a text read today is read as it was (MB-B2) - still
+decides the decimal comma ("f(1,5)" is f(1.5)) and anything else. The spec then carries the base, and the question
+prints it ("log_(10)(x)"), so the screen names which log it is.
 
 ## Calculus graphs (v2 M4a, 2026-10-07)
 

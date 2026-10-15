@@ -17,7 +17,7 @@
  */
 import { commaSystem, readTask, type SchoolSystem } from "./taskText";
 import { calc2CheckAnswer, calc2LeaksCalc, calc2Question, calc2SlipsFor, calc2SpecFromQuestion, calc2WellFormed, calc2Withheld, isCalc2Spec, type Calc2Spec } from "./calc2";
-import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, withinRel } from "./calc-read";
+import { DNE, cleanAnswer, czechAnswer, decimalCall, infinityOf, isDecimal, naturalAsLn, oneNumberComma, piecePattern, pointForComma, roundingRight, spoken, systemLogs, withinRel } from "./calc-read";
 import { agreesWhereBoth, compile, derivativeAt, evalNode, extremumIn, integrate, limitAt, limitInf, rootsIn, SAMPLES, undefinedWhereTrue, toTex, type Expr, type Limit, type Node } from "./calc-expr";
 
 // ------------------------------------------------------------------ the shapes
@@ -1037,8 +1037,17 @@ function specOnce(text: unknown): CalcSpec | Calc2Spec | null {
   return calc2SpecFromQuestion(normalQuestion(text));
 }
 
-/** The spec a printed Calculus task is. `system` is the learner's school system: with it a decimal comma reads as a point; an instruction in front ('Derivujte:', 'Vypočtěte') is set aside (MB-B2). */
-export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | Calc2Spec | null => readTask(text, system, specOnce);
+/**
+ * A task's text with its logs as the learner's system means them (MB-B36 log, calc-read systemLogs): in cz a bare log and
+ * lg are base 10, in de lg is. Done before readTask's as-written-first reading, so a Czech page's log is never read as
+ * the natural log because the raw text happened to parse; only log names change, so the decimal comma and a list of
+ * roots keep readTask's order. uk, us and no system get the text untouched.
+ */
+const logsOfSystem = (text: unknown, system?: SchoolSystem) =>
+  typeof text === "string" && commaSystem(system) ? systemLogs(text, system) : text;
+
+/** The spec a printed Calculus task is. `system` is the learner's school system: with it a decimal comma reads as a point; an instruction in front ('Derivujte:', 'Vypočtěte') is set aside (MB-B2); a log reads in the system's base (logsOfSystem). */
+export const specFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec | Calc2Spec | null => readTask(logsOfSystem(text, system), system, specOnce);
 
 const MAX_WORDS = String.raw`(?:absolute\s+|global\s+)?(maximum|max|largest|greatest)`;
 const MIN_WORDS = String.raw`(?:absolute\s+|global\s+)?(minimum|min|smallest|least)`;
@@ -1071,7 +1080,7 @@ function partsOnce(text: unknown): CalcSpec[] | null {
 }
 
 /** The parts a printed multi-part Calculus task is, read as specFromQuestion reads (MB-B2). */
-export const partsFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec[] | null => readTask(text, system, partsOnce);
+export const partsFromQuestion = (text: unknown, system?: SchoolSystem): CalcSpec[] | null => readTask(logsOfSystem(text, system), system, partsOnce);
 
 // ------------------------------------------------------------------ the line when a hint gave the answer away twice
 
