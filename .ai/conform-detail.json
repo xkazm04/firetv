@@ -284,6 +284,100 @@
         "at": "2026-10-15T00:44:14.541633+00:00",
         "reason": "reviewer (sonnet): The 'four-member outcome vocabulary without an inconclusive member' claim could not be confirmed: verdict.cjs yields pass/conditional/fail, with per-item and recertify 'not-evaluable'/'uncertain' states that act as inconclusive, and the cited line 517 records its synthesized state as an explicit 'fi"
       }
+    },
+    "desk-platform/engines/voice-io": {
+      "context": "engines",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:14:47.550Z",
+      "worker": "9edc4e26-0b60-459c-a453-7db22a1802a5",
+      "techniques": [
+        {
+          "technique": "engine-abstraction",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/types.ts:36 Provider interface declares name, run, and probe, but omits queryable engine capabilities and retired-engine normalization; downstream route branches directly on provider name prefix."
+        },
+        {
+          "technique": "real-time-synthesis-budget",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:48 piperSpeak spawns a new piper process per utterance instead of maintaining a resident daemon, paying CLI startup and model reload cost on every synthesis call."
+        },
+        {
+          "technique": "portable-provider-package",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:32 Engines directly read process.env instead of using an engine host seam or standard discovery conventions."
+        },
+        {
+          "technique": "render-acceptance",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/voice.ts:61 Audio payload is returned without inspecting for internal silence, empty headers, or corrupt audio buffers."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/types.ts:17 SpeakRequest passes raw text to synthesis without normalising markdown, suppressing code blocks, or expanding spoken abbreviations."
+        },
+        {
+          "technique": "decode-time-vocabulary-biasing",
+          "verdict": "deviation",
+          "evidence": "desk/src/lib/engines/listen.ts:48 Listen request passes raw audio without phrase biasing or vocabulary hints even when context vocabulary is known."
+        },
+        {
+          "technique": "on-device-vs-cloud",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/engines/listen.ts:9 Defaults to local on-device transcription, requiring explicit environment configuration for cloud services with no silent fallback."
+        }
+      ],
+      "registryProposal": "Clarify in engine-abstraction how resident process lifecycles (like CLI TTS binaries) should be managed within generic stateless provider contracts."
+    },
+    "desk-linga/linga/voice-io": {
+      "context": "linga",
+      "subject": "voice-io",
+      "bundle": "software-engineering",
+      "state": "deviation",
+      "evaluatedAt": "2026-10-15",
+      "evaluatedTs": "2026-10-15T01:14:47.550Z",
+      "worker": "9edc4e26-0b60-459c-a453-7db22a1802a5",
+      "techniques": [
+        {
+          "technique": "stt-pipeline",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/ReplyBox.tsx:61 Interim recognition results are joined directly into draft text rather than displayed provisionally, and capture lacks live audio level metering."
+        },
+        {
+          "technique": "tts-pipeline",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/useEnglishAudio.ts:28 Audio synthesis fetches entire unsegmented sentences; fallback to browser speech synthesis masks failure behind the same speaking state."
+        },
+        {
+          "technique": "engine-abstraction",
+          "verdict": "deviation",
+          "evidence": "desk/src/english/useEnglishAudio.ts:20 Frontend code directly references browser window.speechSynthesis rather than abstracting it behind a unified audio provider seam."
+        },
+        {
+          "technique": "voice-ux-integration",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/useEnglishAudio.ts:29 Speech playback promptly cancels and revokes audio resources on component cleanup, pause, or screen navigation."
+        },
+        {
+          "technique": "transcript-normalization",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/ReplyBox.tsx:70 Transcribed draft is handed directly to the conversational agent without destructive intermediate normalizer rewrites."
+        },
+        {
+          "technique": "on-device-vs-cloud",
+          "verdict": "conformant",
+          "evidence": "desk/src/english/ReplyBox.tsx:73 Explicit privacy notice informs the user that the browser may send speech to a remote recognition service prior to initiating capture."
+        },
+        {
+          "technique": "speech-ready-text",
+          "verdict": "conformant",
+          "evidence": "desk/src/lib/english/conversation.ts:92 Tutor prompts strictly mandate plain English without markdown formatting and limit output to 1-2 short sentences for optimal synthesis readiness."
+        }
+      ],
+      "registryProposal": "Document how educational language learning interfaces should handle student speech review workflows alongside real-time level metering."
     }
   }
 }

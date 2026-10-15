@@ -372,7 +372,11 @@
           "revision": 20,
           "changedAt": "2026-10-12",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/english/ReplyBox.tsx:61 Speech capture concatenates interim recognition results into editable draft text without a live audio level meter, deviating from STT pipeline requirements.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
+          "evaluatedRevision": 21
         },
         {
           "subject": "prompt-assembly",
@@ -1616,7 +1620,11 @@
           "revision": 20,
           "changedAt": "2026-10-12",
           "confidence": "strong",
-          "state": "unknown"
+          "state": "deviation",
+          "evidence": "desk/src/lib/engines/types.ts:36 Generic provider interface lacks declared capability querying, resident synthesis process lifecycle management, and render acceptance verification.",
+          "evaluatedAt": "2026-10-15",
+          "evaluatedAgainst": "sha256-b2:fa03abeab38c89c7",
+          "evaluatedRevision": 21
         },
         {
           "subject": "translation-quality-measurement",
